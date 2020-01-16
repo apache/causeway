@@ -1,6 +1,0 @@
-| isis.persistor. +
-enforce-safe-semantics
-| 
-|  Default is `false</code> only for backward compatibility (to avoid lots of breakages in existing code); in future might change to `true</code>.  +
-     currently disabled (in ISIS-921); to reinstate in ISIS-922? else delete.  @deprecated
-

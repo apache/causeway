@@ -54,29 +54,36 @@ class PropertyGroup {
 
 List<PropertyGroup> groups = []
 groups+= new PropertyGroup() {{
-    prefix = "isis.reflector"
-    name = "Reflector"
+    prefix = "isis.applib"
+    name = "Applib"
+    description = "Default configuration for applib annotations"
+    searchOrder = 2
+}}
+
+groups+= new PropertyGroup() {{
+    prefix = "isis.metamodel"
+    name = "Metamodel"
     description = "The component responsible for building up the metamodel"
     searchOrder = 2
 }}
 
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.reflector.facet"
-    name = "Individual Reflector Facets"
-    description = "Configuration of specific facet implementations"
+    prefix = "isis.metamodel.introspector"
+    name = "MetaModel Introspection"
+    description = "MetaModel Introspection"
     searchOrder = 1
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.reflector.validator"
-    name = "Reflector Validator"
+    prefix = "isis.metamodel.validator"
+    name = "MetaModel Validator"
     description = "Configuration of the validator that checks the well-formedness of the inferred metamodel (how strict to be etc.)"
     searchOrder = 1
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.authentication.shiro"
+    prefix = "isis.security.shiro"
     name = "Shiro Security Implementation"
     description = "Configuration of the Shiro implementation of the Authenticator and Authorizor APIs"
     properties: []
@@ -84,31 +91,15 @@ groups+= new PropertyGroup() {{
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.authentication"
-    name = "Security Configuration (general)"
-    description = "Configuration of the Shiro implementation of the Authenticator and Authorizor APIs"
-    properties: []
-    searchOrder = 2
-}}
-
-groups+= new PropertyGroup() {{
-    prefix = "isis.persistor"
-    name = "Object Store configuration (general)"
-    description = "Configuration settings relating to all Object Store implementations"
-    properties: []
-    searchOrder = 520
-}}
-
-groups+= new PropertyGroup() {{
-    prefix = "isis.persistor.datanucleus"
-    name = "DataNucleus Object Store"
-    description = "Configuration settings of the DataNucleus Object Store itself (the Apache Isis component that wraps DataNucleus library)"
+    prefix = "isis.persistence.jdo-datanucleus"
+    name = "JDO DataNucleus"
+    description = "Configuration settings of the DataNucleus JDO persistence (the Apache Isis component that wraps DataNucleus library)"
     properties: []
     searchOrder = 510
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.persistor.datanucleus.impl"
+    prefix = "isis.persistence.jdo-datanucleus.impl"
     name = "DataNucleus Configuration"
     description = "Passed thru directly to DataNucleus, for the most part unused by Apache Isis itself"
     properties: []
@@ -116,15 +107,7 @@ groups+= new PropertyGroup() {{
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.service.email"
-    name = "Email Domain Service configuration"
-    description = "Configuration of the Email domain services"
-    properties: []
-    searchOrder = 502
-}}
-
-groups+= new PropertyGroup() {{
-    prefix = "isis.services"
+    prefix = "isis.runtimeservices"
     name = "Domain Service configurations"
     description = "Configuration of individual domain services"
     properties: []
@@ -142,13 +125,6 @@ groups+= new PropertyGroup() {{
     prefix = "isis.viewer.wicket"
     name = "Wicket Viewer"
     description = "Configuration of the Wicket viewer"
-    searchOrder = 501
-}}
-
-groups+= new PropertyGroup() {{
-    prefix = "isis.viewers"
-    name = "Viewers Configuration (General)"
-    description = "Configuration that applies to viewers"
     searchOrder = 501
 }}
 

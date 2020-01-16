@@ -3,8 +3,113 @@
 
 
 
+== Applib
 
-== Shiro Authentication
+
+[cols="2a,2a,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+include::refguide:config:example$generated/isis.applib.adoc[]
+
+|===
+
+
+== Metamodel
+
+General configuration:
+
+[cols="2a,2a,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+include::refguide:config:example$generated/isis.metamodel.adoc[]
+
+|===
+
+=== Introspection
+
+[cols="2a,2a,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+include::refguide:config:example$generated/isis.metamodel.introspector.adoc[]
+
+|===
+
+=== Validator
+
+[cols="2a,2a,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+include::refguide:config:example$generated/isis.metamodel.validator.adoc[]
+
+|===
+
+
+
+
+== Runtime Services
+
+[cols="2a,2a,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+include::refguide:config:example$generated/isis.runtimeservices.adoc[]
+
+|===
+
+
+
+
+
+== JDO DataNucleus Persistence
+
+[cols="2a,2a,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+include::refguide:config:example$generated/isis.persistence.jdo-datanucleus.adoc[]
+
+
+|===
+
+
+
+== JDO DataNucleus Persistence Pass-thru Settings
+
+[cols="2a,2a,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+include::refguide:config:example$generated/isis.persistence.jdo-datanucleus.impl.adoc[]
+
+|===
+
+
+== Shiro Security
 
 [cols="2a,2a,3a", options="header"]
 |===
@@ -14,128 +119,7 @@
 |Description
 
 
-include::refguide:config:example$generated/isis.authentication.shiro.adoc[]
-
-|===
-
-
-== Persistors (in general)
-
-[cols="2a,2a,3a", options="header"]
-|===
-|Property
-|Value +
-(default value)
-|Description
-
-include::refguide:config:example$generated/isis.persistor.adoc[]
-
-|===
-
-
-== DataNucleus Persistor
-
-[cols="2a,2a,3a", options="header"]
-|===
-|Property
-|Value +
-(default value)
-|Description
-
-include::refguide:config:example$generated/isis.persistor.datanucleus.adoc[]
-
-
-|===
-
-
-
-== DataNucleus Persistor Pass-thru Settings
-
-[cols="2a,2a,3a", options="header"]
-|===
-|Property
-|Value +
-(default value)
-|Description
-
-include::refguide:config:example$generated/isis.persistor.datanucleus.impl.adoc[]
-
-|===
-
-
-
-== Metamodel Reflector
-
-[cols="2a,2a,3a", options="header"]
-|===
-|Property
-|Value +
-(default value)
-|Description
-
-include::refguide:config:example$generated/isis.reflector.adoc[]
-
-|===
-
-
-
-
-== MetaModel Facets
-
-[cols="2a,2a,3a", options="header"]
-|===
-|Property
-|Value +
-(default value)
-|Description
-
-include::refguide:config:example$generated/isis.reflector.facet.adoc[]
-
-|===
-
-
-
-
-== Metamodel Validation
-
-[cols="2a,2a,3a", options="header"]
-|===
-|Property
-|Value +
-(default value)
-|Description
-
-include::refguide:config:example$generated/isis.reflector.validator.adoc[]
-
-|===
-
-
-
-== Individual Domain Services
-
-[cols="2a,2a,3a", options="header"]
-|===
-|Property
-|Value +
-(default value)
-|Description
-
-include::refguide:config:example$generated/isis.service.email.adoc[]
-
-|===
-
-
-
-== Domain Services (in general)
-
-[cols="2a,2a,3a", options="header"]
-|===
-|Property
-|Value +
-(default value)
-|Description
-
-include::refguide:config:example$generated/isis.services.adoc[]
+include::refguide:config:example$generated/isis.security.shiro.adoc[]
 
 |===
 
@@ -170,19 +154,6 @@ include::refguide:config:example$generated/isis.viewer.wicket.adoc[]
 |===
 
 
-
-== Viewers (in general)
-
-[cols="2a,2a,3a", options="header"]
-|===
-|Property
-|Value +
-(default value)
-|Description
-
-include::refguide:config:example$generated/isis.viewers.adoc[]
-
-|===
 
 
 == RestEasy
