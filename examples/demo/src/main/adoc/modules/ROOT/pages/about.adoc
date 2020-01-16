@@ -6,8 +6,6 @@ It allows you to learn the very basics and also to discover some of the more adv
 
 == Getting Started (Docker)
 
-== Docker
-
 NOTE: Further on *<tag>* is used as a placeholder for the docker image tag of your choice. When omitted the latest version is used. Actual tag names might be changed without notice. Currently we have tag *nightly*. See https://hub.docker.com/r/apacheisis/demo-springboot/tags/[apacheisis/demo-springboot] (Docker-Hub)
 
 === Prereqs
@@ -16,57 +14,47 @@ Install https://www.docker.com/community-edition[Docker] on your computer.
 
 === Pulling the Docker Image
 
-Pull the demo image using:
-
-[source]
+.pull the Demo image
 ----
 docker pull apacheisis/demo-springboot:<tag>
 ----
 
 === Running the Docker Image
 
-Run the demo image using:
-
-[source]
+.run the Demo image
 ----
 docker run --name demo --detach -p8080:8080 apacheisis/demo-springboot:<tag>
 ----
 
-This will start a new Docker container named 'demo'.
+This will start a new Docker container named `demo`.
 
-The demo-app can then be accessed at http://localhost:8080/wicket/[].
+The Demo can then be accessed at http://localhost:8080/wicket/[].
 Login with `sven:pass`.
 
-To stop and remove the container named 'demo' use:
-
-[source]
+.stop and remove the container named `demo`
 ----
 docker stop demo && docker rm demo
 ----
 
-=== Customization - ContextPath
+=== Customization (Context Path)
 
-To run the _Demo_ using a _context-path_, add an environment variable eg. `ContextPath=/demo`.
-
-[source]
+.run using a _context-path_, add an environment variable eg. `ContextPath=/demo`
 ----
 docker run --name demo --detach -p8080:8080 -eContextPath=/demo apacheisis/demo-springboot:<tag>
 ----
 
-=== Customization - Prototyping
+=== Customization (Prototyping)
 
-To run the _Demo_ in _prototyping_ mode, add an environment variable `PROTOTYPING=true`.
-
-[source]
+.run in _prototyping_ mode, add an environment variable `PROTOTYPING=true`.
 ----
 docker run --name demo --detach -p8080:8080 -ePROTOTYPING=true apacheisis/demo-springboot:<tag>
 ----
 
-=== Customization - Attached Console
+=== Customization (Attached Console)
 
-To run the container with your console attached, replace the '--detach' argument with '-it'. (Use CTRL-C to stop and detach.)
+To run the container with your console attached, replace the '--detach' argument with '-it'.
 
-[source]
+.use CTRL-C to stop and detach
 ----
 docker run --name demo -it -p8080:8080 apacheisis/demo-springboot:<tag>
 ----
