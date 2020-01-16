@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.runtimeservices.homepage;
 
+import java.util.function.BiFunction;
+
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -138,18 +140,24 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
             return viewModelPojo;
         }
         
-        // lookup my 'homePage' method as action object 
-        private static ObjectAction homePageMethodAsAction(
+        // lookup my 'homePage' method as action object
+        // if usable as HomePageAction, then
+        // programmatically make the MM aware of the 'homePage' action to be used as THE App's home-page action
+        private static HomePageAction homePageActionIfUsable(
                 Class<?> viewModelType, 
-                ObjectSpecification spec) {
+                SpecificationLoader specLoader,
+                BiFunction<ObjectAction, ObjectSpecification, HomePageAction> toHomePageActionIfUsable) {
             
-            HomePageActionContainer.viewModelType = viewModelType;
-            val homePageMethodAsAction = spec.streamObjectActions(Contributed.EXCLUDED)
+            val mySpec = specLoader.loadSpecification(HomePageActionContainer.class);
+            val homePageMethodAsAction = mySpec.streamObjectActions(Contributed.EXCLUDED)
                     .filter(objectAction->objectAction.getId().equals("homePage"))
                     .peek(objectAction->objectAction.addFacet(new HomePageFacetImpl(objectAction)))
                     .findAny()
                     .orElseThrow(_Exceptions::unexpectedCodeReach);
-            return homePageMethodAsAction;
+            
+            HomePageActionContainer.viewModelType = viewModelType;
+            
+            return toHomePageActionIfUsable.apply(homePageMethodAsAction, mySpec);
         }
     }
 
@@ -164,19 +172,15 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
             return null;
         }
 
-        val containerSpec = specLoader.loadSpecification(HomePageActionContainer.class);
-        val homePageMethodAsAction = HomePageActionContainer.homePageMethodAsAction(type, containerSpec);
-                
-        // if usable
-        // programmatically make the MM aware of the 'homePage' action to be used as THE home-page action
-        val homePageActionIfUsable = homePageActionIfUsable(homePageMethodAsAction, containerSpec);
+        val homePageAction = HomePageActionContainer.homePageActionIfUsable(
+                type, specLoader, this::homePageActionIfUsable);
 
-        return homePageActionIfUsable;
+        return homePageAction;
     }
 
     protected HomePageAction homePageActionIfUsable(
-            @Nullable ObjectAction objectAction, 
-            ObjectSpecification spec) {
+            final @Nullable ObjectAction objectAction, 
+            final ObjectSpecification spec) {
 
         if (objectAction==null || !objectAction.containsNonFallbackFacet(HomePageFacet.class)) {
             return null;
