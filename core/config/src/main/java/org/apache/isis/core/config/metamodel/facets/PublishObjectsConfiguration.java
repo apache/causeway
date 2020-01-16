@@ -25,6 +25,6 @@ public enum PublishObjectsConfiguration {
     NONE;
 
     public static PublishObjectsConfiguration from(IsisConfiguration configuration) {
-        return configuration.getServices().getPublish().getObjects();
+        return configuration.getApplib().getAnnotation().getDomainObject().getPublishing();
     }
 }

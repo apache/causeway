@@ -35,7 +35,7 @@ public class PublishedObjectFacetForDomainObjectAnnotation extends PublishedObje
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final PublishObjectsConfiguration setting = configuration.getServices().getPublish().getObjects();
+        final PublishObjectsConfiguration setting = configuration.getApplib().getAnnotation().getDomainObject().getPublishing();
         
         return publishingIfAny.map(publishing -> {
             switch (publishing) {

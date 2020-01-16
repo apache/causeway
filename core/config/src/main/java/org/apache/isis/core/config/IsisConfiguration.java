@@ -105,6 +105,8 @@ public class IsisConfiguration {
 
                 private EditingObjectsConfiguration editing = EditingObjectsConfiguration.TRUE;
 
+                private PublishObjectsConfiguration publishing = PublishObjectsConfiguration.NONE;
+
                 private final CreatedLifecycleEvent createdLifecycleEvent = new CreatedLifecycleEvent();
                 @Data
                 public static class CreatedLifecycleEvent {
@@ -741,7 +743,6 @@ public class IsisConfiguration {
         private final Publish publish = new Publish();
         @Data
         public static class Publish {
-            private PublishObjectsConfiguration objects = PublishObjectsConfiguration.NONE;
             private PublishPropertiesConfiguration properties = PublishPropertiesConfiguration.NONE;
         }
 

@@ -105,7 +105,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
     void allowingPublishObjectsToReturn(PublishObjectsConfiguration value) {
         if(value!=null) {
             val config = super.metaModelContext.getConfiguration();
-            config.getServices().getPublish().setObjects(value);
+            config.getApplib().getAnnotation().getDomainObject().setPublishing(value);
         }
     }
     

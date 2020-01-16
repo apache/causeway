@@ -566,6 +566,11 @@ standalone-collection.bulk-load
 |isis.applib.annotation. +
 {nbsp}{nbsp}action.publishing
 
+|isis.services.publishing. +
+{nbsp}{nbsp}objects
+|isis.applib.annotation. +
+{nbsp}{nbsp}domain-object.publishing
+
 
 |
 |
