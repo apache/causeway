@@ -581,6 +581,11 @@ standalone-collection.bulk-load
 |isis.core.runtime-services. +
 {nbsp}{nbsp}translation.po.mode
 
+|isis.viewers. +
+{nbsp}{nbsp}collectionLayout.defaultView
+|isis.applib.annotation. +
+{nbsp}{nbsp}collectionLayout.defaultView
+
 
 |
 |

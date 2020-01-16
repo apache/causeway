@@ -42,7 +42,7 @@ public class DefaultViewFacetForCollectionLayoutAnnotation extends DefaultViewFa
         final String defaultView = collectionLayoutIfAny
                 .map(CollectionLayout::defaultView)
                 .filter(_Strings::isNotEmpty)
-                .orElseGet(() -> configuration.getViewers().getCollectionLayout().getDefaultView().toNameLower());
+                .orElseGet(() -> configuration.getApplib().getAnnotation().getCollectionLayout().getDefaultView().toNameLower());
         return new DefaultViewFacetForCollectionLayoutAnnotation(defaultView, holder);
     }
 }

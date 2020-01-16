@@ -29,7 +29,7 @@ public enum DefaultViewConfiguration {
     }
 
     public static DefaultViewConfiguration from(IsisConfiguration configuration) {
-        return configuration.getViewers().getCollectionLayout().getDefaultView();
+        return configuration.getApplib().getAnnotation().getCollectionLayout().getDefaultView();
     }
 
 

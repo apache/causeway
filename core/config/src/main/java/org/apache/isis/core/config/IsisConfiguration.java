@@ -248,6 +248,12 @@ public class IsisConfiguration {
                 }
             }
 
+            private final CollectionLayout collectionLayout = new CollectionLayout();
+            @Data
+            public static class CollectionLayout {
+                private DefaultViewConfiguration defaultView = DefaultViewConfiguration.HIDDEN;
+            }
+
             private final ViewModel viewModel = new ViewModel();
             @Data
             public static class ViewModel {
@@ -1143,11 +1149,6 @@ public class IsisConfiguration {
     @Data
     public static class Viewers {
 
-        private final CollectionLayout collectionLayout = new CollectionLayout();
-        @Data
-        public static class CollectionLayout {
-            private DefaultViewConfiguration defaultView = DefaultViewConfiguration.HIDDEN;
-        }
 
         private final Paged paged = new Paged();
         @Data
