@@ -736,14 +736,6 @@ public class IsisConfiguration {
     @Data
     public static class Services {
 
-
-        private final Injector injector = new Injector();
-        @Data
-        public static class Injector {
-            private boolean setPrefix = false;
-            private boolean injectPrefix = true;
-        }
-
         private final Publish publish = new Publish();
         @Data
         public static class Publish {

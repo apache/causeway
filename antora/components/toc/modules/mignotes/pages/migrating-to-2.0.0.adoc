@@ -555,6 +555,11 @@ standalone-collection.bulk-load
 {nbsp}{nbsp}exception-recognizer.jdo. +
 {nbsp}{nbsp}{nbsp}{nbsp}disable
 
+|isis.services.injector.setPrefix
+|(removed)
+
+|isis.services.injector.injectPrefix
+|(removed)
 
 |
 |
