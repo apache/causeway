@@ -1183,10 +1183,18 @@ public class IsisConfiguration {
         private final JavaLang javaLang = new JavaLang();
         @Data
         public static class JavaLang {
+
             // capitalized to avoid clash with keyword
             private final Byte Byte = new Byte();
             @Data
             public static class Byte {
+                private String format;
+            }
+
+            // capitalized to avoid clash with keyword
+            private final Double Double = new Double();
+            @Data
+            public static class Double {
                 private String format;
             }
         }
@@ -1259,7 +1267,7 @@ public class IsisConfiguration {
             TIMESTAMP, 
             TIME,
             
-            DOUBLE, FLOAT, LONG, SHORT,
+            FLOAT, LONG, SHORT,
             PERCENTAGE
         }
         
