@@ -26,9 +26,7 @@ import java.util.Map;
 
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
@@ -76,17 +74,13 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
 
         val collectionAdapter = getObjectManager().adapt(options);
 
-        final FacetedMethod facetedMethod = (FacetedMethod) getFacetHolder();
-        final Class<?> propertyType = facetedMethod.getType();
-
-        val visiblePojoStream = ManagedObject.VisibilityUtil
-                .streamVisiblePojos(collectionAdapter, interactionInitiatedBy);
-
-        val propertySpec = getSpecification(propertyType);
-        return CollectionFacet.Utils.collectAsPojoArray(visiblePojoStream, propertySpec, getObjectManager());
+        val visiblePojos = ManagedObject.VisibilityUtil
+                .visiblePojosAsArray(collectionAdapter, interactionInitiatedBy);
+        
+        return visiblePojos;
         
         
-        //XXX legacy of
+        //XXX legacy of, (not checking visibility)
 
 //        final Object options = ManagedObject.InvokeUtil.invoke(method, owningAdapter);
 //        if (options == null) {

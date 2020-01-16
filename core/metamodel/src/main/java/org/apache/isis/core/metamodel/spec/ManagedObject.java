@@ -379,7 +379,7 @@ public interface ManagedObject {
                     .filter(VisibilityUtil.filterOn(interactionInitiatedBy));
         }
         
-        public static Stream<Object> streamVisiblePojos(
+        private static Stream<Object> streamVisiblePojos(
                 final ManagedObject collectionAdapter,
                 final InteractionInitiatedBy interactionInitiatedBy) {
     
@@ -387,6 +387,26 @@ public interface ManagedObject {
                     .filter(VisibilityUtil.filterOn(interactionInitiatedBy))
                     .map(ManagedObject::unwrapSingle);
         }
+        
+        public static Object[] visiblePojosAsArray(
+                final ManagedObject collectionAdapter,
+                final InteractionInitiatedBy interactionInitiatedBy) {
+    
+            return streamVisiblePojos(collectionAdapter, interactionInitiatedBy)
+                    .collect(_Arrays.toArray(Object.class));
+        }
+        
+        public static Object visiblePojosAutofit(
+                final ManagedObject collectionAdapter,
+                final InteractionInitiatedBy interactionInitiatedBy,
+                final Class<?> requiredContainerType) {
+            
+            val visiblePojoStream = streamVisiblePojos(collectionAdapter, interactionInitiatedBy);
+            val autofittedObjectContainer = CollectionFacet.AutofitUtils
+                    .collect(visiblePojoStream, requiredContainerType);
+            return autofittedObjectContainer;
+        }
+        
         
         /**
          * @param adapter - an adapter around the domain object whose visibility is being checked

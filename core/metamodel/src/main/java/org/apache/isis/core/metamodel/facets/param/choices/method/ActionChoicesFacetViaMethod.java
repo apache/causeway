@@ -27,7 +27,6 @@ import java.util.Map;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -95,11 +94,10 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
         }
 
         val collectionAdapter = getObjectManager().adapt(collectionOrArray);
-        val visiblePojoStream = ManagedObject.VisibilityUtil
-                .streamVisiblePojos(collectionAdapter, interactionInitiatedBy);
-
-        val parameterSpec = getSpecification(parameterType);
-        return CollectionFacet.Utils.collectAsPojoArray(visiblePojoStream, parameterSpec, getObjectManager());
+        val visiblePojos = ManagedObject.VisibilityUtil
+                .visiblePojosAsArray(collectionAdapter, interactionInitiatedBy);
+        
+        return visiblePojos;
     }
 
     @Override

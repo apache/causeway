@@ -78,7 +78,7 @@ public class CollectionFacetUtilsTest {
                 Collection.class
                 );
         for (Class<?> collectionType : collectionTypes) {
-            Object o = CollectionFacet.Utils.collect(iterable.stream(), collectionType);
+            Object o = CollectionFacet.AutofitUtils.collect(iterable.stream(), collectionType);
             assertThat(o, is(not(nullValue())));
             assertThat(collectionType.isAssignableFrom(o.getClass()), is(true));
 
@@ -91,7 +91,7 @@ public class CollectionFacetUtilsTest {
 
     @Test
     public void whenArray() throws Exception {
-        Object o = CollectionFacet.Utils.collect(iterable.stream(), String[].class);
+        Object o = CollectionFacet.AutofitUtils.collect(iterable.stream(), String[].class);
         assertThat(o instanceof String[], is(true));
 
         String[] copy = (String[])o;
@@ -100,7 +100,7 @@ public class CollectionFacetUtilsTest {
 
     @Test
     public void whenNotSupported() throws Exception {
-        Object o = CollectionFacet.Utils.collect(iterable.stream(), Map.class);
+        Object o = CollectionFacet.AutofitUtils.collect(iterable.stream(), Map.class);
         assertThat(o, is(nullValue()));
     }
 
@@ -109,7 +109,7 @@ public class CollectionFacetUtilsTest {
 
         expectedException.expect(IllegalArgumentException.class);
 
-        CollectionFacet.Utils.collect(iterable.stream(), null);
+        CollectionFacet.AutofitUtils.collect(iterable.stream(), null);
     }
 
     @Test
@@ -117,7 +117,7 @@ public class CollectionFacetUtilsTest {
 
         expectedException.expect(IllegalArgumentException.class);
 
-        CollectionFacet.Utils.collect(null, List.class);
+        CollectionFacet.AutofitUtils.collect(null, List.class);
     }
 
 

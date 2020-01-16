@@ -27,9 +27,7 @@ import java.util.Map;
 import org.apache.isis.core.commons.internal._Constants;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
@@ -72,21 +70,18 @@ implements ImperativeFacet {
             final List<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        final Object choices =
-                ManagedObject.InvokeUtil.invokeAutofit(
-                        method, owningAdapter, pendingArgs);
+        final Object choices = ManagedObject.InvokeUtil
+                .invokeAutofit(method, owningAdapter, pendingArgs);
         if (choices == null) {
             return _Constants.emptyObjects;
         }
-        final ManagedObject objectAdapter = getObjectManager().adapt(choices);
-        final FacetedMethodParameter facetedMethodParameter = (FacetedMethodParameter) getFacetHolder();
-        final Class<?> parameterType = facetedMethodParameter.getType();
+        
+        val objectAdapter = getObjectManager().adapt(choices);
 
-        val visiblePjoStream = ManagedObject.VisibilityUtil
-                .streamVisiblePojos(objectAdapter, interactionInitiatedBy);
+        val visiblePojos = ManagedObject.VisibilityUtil
+                .visiblePojosAsArray(objectAdapter, interactionInitiatedBy);
 
-        val parameterSpec = getSpecification(parameterType);
-        return CollectionFacet.Utils.collectAsPojoArray(visiblePjoStream, parameterSpec, getObjectManager());
+        return visiblePojos;
     }
 
     @Override

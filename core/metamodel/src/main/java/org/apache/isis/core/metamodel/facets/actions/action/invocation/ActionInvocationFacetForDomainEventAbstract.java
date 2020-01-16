@@ -59,7 +59,6 @@ import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
 import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
@@ -362,13 +361,11 @@ implements ImperativeFacet {
 
             val requiredContainerType = method.getReturnType();
             
-            val visiblePojoStream = ManagedObject.VisibilityUtil
-                    .streamVisiblePojos(resultAdapter, interactionInitiatedBy);
-            
-            final Object visibleObjects = CollectionFacet.Utils.collect(visiblePojoStream, requiredContainerType); 
+            val autofittedObjectContainer = ManagedObject.VisibilityUtil
+                    .visiblePojosAutofit(resultAdapter, interactionInitiatedBy, requiredContainerType); 
 
-            if (visibleObjects != null) {
-                return getObjectManager().adapt(visibleObjects);
+            if (autofittedObjectContainer != null) {
+                return getObjectManager().adapt(autofittedObjectContainer);
             }
 
             // would be null if unable to take a copy (unrecognized return type)

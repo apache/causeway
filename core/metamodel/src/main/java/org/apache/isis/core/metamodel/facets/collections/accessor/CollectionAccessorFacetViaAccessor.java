@@ -27,7 +27,6 @@ import java.util.Map;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -76,13 +75,11 @@ implements ImperativeFacet {
         final boolean filterForVisibility = getConfiguration().getCore().getMetaModel().isFilterVisibility();
         if(filterForVisibility) {
             
-            val visiblePojoStream = ManagedObject.VisibilityUtil
-                    .streamVisiblePojos(collectionAdapter, interactionInitiatedBy);
+            val autofittedObjectContainer = ManagedObject.VisibilityUtil
+                    .visiblePojosAutofit(collectionAdapter, interactionInitiatedBy, method.getReturnType());
             
-            final Object visibleObjects = CollectionFacet.Utils.collect(visiblePojoStream, method.getReturnType());
-            
-            if (visibleObjects != null) {
-                return visibleObjects;
+            if (autofittedObjectContainer != null) {
+                return autofittedObjectContainer;
             }
             // would be null if unable to take a copy (unrecognized return type)
             // fallback to returning the original adapter, without filtering for visibility

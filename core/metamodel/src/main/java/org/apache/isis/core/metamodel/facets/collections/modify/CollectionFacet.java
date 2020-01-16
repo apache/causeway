@@ -47,7 +47,6 @@ import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -131,7 +130,7 @@ public interface CollectionFacet extends Facet {
     }
 
     @UtilityClass
-    public static class Utils {
+    public static class AutofitUtils {
         
         /**
          * Copies the iterable into the specified type.
@@ -164,16 +163,6 @@ public interface CollectionFacet extends Facet {
 
         }
 
-        public static Object[] collectAsPojoArray(
-                final Stream<Object> pojoStream, 
-                final ObjectSpecification spec, 
-                final ObjectManager objectManger) {
-            
-            val optionPojo = pojoStream.collect(Collectors.toList());
-            final ManagedObject collection = objectManger.adapt(optionPojo);
-            return toArrayOfPojos(collection);
-        }
-        
         
         // -- HELPER
         
