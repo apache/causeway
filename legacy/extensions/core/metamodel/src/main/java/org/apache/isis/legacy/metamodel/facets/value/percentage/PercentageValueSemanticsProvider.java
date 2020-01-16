@@ -61,8 +61,7 @@ implements FloatingPointValueFacet {
     public PercentageValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, Percentage.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
 
-        final String formatRequired = getConfiguration()
-                .getValue().getFormatOrElse(FormatIdentifier.PERCENTAGE, null);
+        final String formatRequired = getConfiguration().getLegacy().getValueTypes().getPercentage().getFormat();
                 
         if (formatRequired == null) {
             format = PERCENTAGE_FORMAT;

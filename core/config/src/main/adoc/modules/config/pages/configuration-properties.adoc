@@ -244,7 +244,6 @@ include::refguide:config:example$generated/isis.incubator.adoc[]
 
 endif::[]
 
-ifdef::env-this-stuff-is-currently-disabled[]
 
 == Legacy
 
@@ -258,8 +257,6 @@ ifdef::env-this-stuff-is-currently-disabled[]
 include::refguide:config:example$generated/isis.legacy.adoc[]
 
 |===
-
-endif::[]
 
 
 == 3rd Party

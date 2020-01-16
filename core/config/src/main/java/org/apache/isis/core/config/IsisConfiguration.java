@@ -1253,8 +1253,21 @@ public class IsisConfiguration {
         public static class Joda {
 
         }
+    }
 
+    private final Legacy legacy = new Legacy();
+    @Data
+    public static class Legacy {
 
+        private final ValueTypes valueTypes = new ValueTypes();
+        @Data
+        public static class ValueTypes {
+            private final Percentage percentage = new Percentage();
+            @Data
+            public static class Percentage {
+                private String format;
+            }
+        }
     }
 
     //TODO no meta data yet ... https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-configuration-metadata.html#configuration-metadata-property-attributes

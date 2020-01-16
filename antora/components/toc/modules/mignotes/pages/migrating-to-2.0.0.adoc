@@ -648,6 +648,10 @@ isis.value-types. +
 |isis.value-types. +
 {nbsp}{nbsp}java-lang.short.format
 
+|isis.value.format["percentage"]
+|isis.legacy.value-types. +
+{nbsp}{nbsp}percentage.format
+
 |
 |
 
