@@ -66,8 +66,8 @@ public class ServiceInjectorLegacy implements ServiceInjector {
 
     @PostConstruct
     public void init() {
-        autowireSetters = configuration.getServices().getInjector().isSetPrefix();
-        autowireInject = configuration.getServices().getInjector().isInjectPrefix();
+        autowireSetters = false;
+        autowireInject = true;
     }
 
     // -- HELPERS
