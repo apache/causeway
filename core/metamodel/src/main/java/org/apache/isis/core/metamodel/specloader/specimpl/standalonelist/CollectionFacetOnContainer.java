@@ -25,11 +25,9 @@ import java.util.stream.Stream;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacetAbstract;
-import org.apache.isis.core.metamodel.spec.FreeStandingList;
+import org.apache.isis.core.metamodel.spec.Container;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-
-import lombok.val;
 
 public class CollectionFacetOnContainer extends CollectionFacetAbstract {
 
@@ -38,9 +36,8 @@ public class CollectionFacetOnContainer extends CollectionFacetAbstract {
     }
 
     @Override
-    public Stream<ManagedObject> stream(ManagedObject container) {
-        val list = unwrap(container);
-        return list.stream();
+    public Stream<ManagedObject> stream(ManagedObject wrappedContainer) {
+        return unwrap(wrappedContainer).stream();
     }
 
     /**
@@ -48,8 +45,8 @@ public class CollectionFacetOnContainer extends CollectionFacetAbstract {
      * {@link FreeStandingList}.
      */
     @Override
-    public int size(final ManagedObject wrappedInstanceCollectionVector) {
-        return unwrap(wrappedInstanceCollectionVector).size();
+    public int size(final ManagedObject wrappedContainer) {
+        return unwrap(wrappedContainer).size();
     }
 
     @Override
@@ -64,8 +61,8 @@ public class CollectionFacetOnContainer extends CollectionFacetAbstract {
 
     // -- HELPER
 
-    private FreeStandingList unwrap(final ManagedObject wrappedObjectList) {
-        return (FreeStandingList) wrappedObjectList.getPojo();
+    private Container unwrap(final ManagedObject wrappedContainer) {
+        return (Container) wrappedContainer.getPojo();
     }
 
 }

@@ -18,8 +18,10 @@
  */
 package org.apache.isis.core.metamodel.spec;
 
+import java.util.stream.Stream;
+
 /**
- * possibly just temporary for refactoring
+ * Possibly just temporary for refactoring, as of FreeStandingList being removed.
  * 
  * @since 2.0
  */
@@ -28,5 +30,9 @@ public interface Container {
     ObjectSpecification getElementSpecification();
 
     String titleString();
+
+    Stream<ManagedObject> stream();
+
+    int size();
 
 }

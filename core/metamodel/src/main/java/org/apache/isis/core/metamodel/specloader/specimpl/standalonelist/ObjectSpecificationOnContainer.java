@@ -71,8 +71,7 @@ public class ObjectSpecificationOnContainer extends ObjectSpecificationAbstract 
         loadSpecOfSuperclass(Object.class);
 
         addFacet(new CollectionFacetOnContainer(this));
-        addFacet(new TypeOfFacetDefaultToObject(this) {
-        });
+        addFacet(new TypeOfFacetDefaultToObject(this) {});
 
         // ObjectList specific
         FacetUtil.addFacet(new NamedFacetOnStandaloneList(NAME, this));
