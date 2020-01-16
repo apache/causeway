@@ -291,7 +291,7 @@ public class WrapperFactoryDefault_wrappedObject_Test {
 
         allowingEmployeeHasSmithAdapter();
 
-        _Config.put("isis.reflector.facet.filterVisibility", true);
+        _Config.put("isis.core.meta-model.filter-visibility", true);
 
         context.checking(new Expectations() {{
 
@@ -332,7 +332,7 @@ public class WrapperFactoryDefault_wrappedObject_Test {
 
         allowingJonesStringValueAdapter();
 
-        _Config.put("isis.reflector.facet.filterVisibility", true);
+        _Config.put("isis.core.meta-model.filter-visibility", true);
 
         context.checking(new Expectations() {
             {

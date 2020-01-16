@@ -92,7 +92,7 @@ implements MethodPrefixBasedFacetFactory {
                                                     && (MethodLiteralConstants.HIDE_PREFIX.equals(prefix)
                                                     || MethodLiteralConstants.DISABLE_PREFIX.equals(prefix))
                                                     ? " (such methods must have no parameters, '"
-                                                    + "isis.reflector.validator.no-params-only"
+                                                    + "isis.core.meta-model.validator.no-params-only"
                                                     + "' config property)"
                                                     : "";
 

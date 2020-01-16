@@ -26,7 +26,7 @@ public abstract class ObjectUpdatedEvent<S> extends AbstractLifecycleEvent<S> {
     /**
      * This class is the default for the
      * {@link org.apache.isis.applib.annotation.DomainObject#updatedLifecycleEvent()} annotation attribute.  Whether this
-     * raises an event or not depends upon the <tt>isis.reflector.facet.domainObjectAnnotation.updatedLifecycleEvent.postForDefault</tt>
+     * raises an event or not depends upon the <tt>isis.core.meta-model.annotation.domain-object.updated-lifecycle-event.post-for-default</tt>
      * configuration property.
      */
     public static class Default extends ObjectUpdatedEvent<Object> {}

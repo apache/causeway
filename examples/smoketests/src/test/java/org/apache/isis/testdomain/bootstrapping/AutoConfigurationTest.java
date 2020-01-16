@@ -59,7 +59,7 @@ import lombok.val;
         },
         properties = {
                 "logging.config=log4j2-test.xml",
-                // "isis.reflector.introspector.parallelize=false",
+                // "isis.core.meta-model.introspector.parallelize=false",
                 // "logging.level.ObjectSpecificationAbstract=TRACE"
         })
 @TestPropertySource({

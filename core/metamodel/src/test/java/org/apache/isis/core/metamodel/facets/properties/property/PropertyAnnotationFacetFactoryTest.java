@@ -235,7 +235,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             allowingLoadSpecificationRequestsFor(cls, propertyMethod.getReturnType());
             context.checking(new Expectations() {{
                 //[ahuber] never called during this test ...             	
-                //oneOf(mockConfiguration).getBoolean("isis.reflector.facet.propertyAnnotation.domainEvent.postForDefault", true);
+                //oneOf(mockConfiguration).getBoolean("isis.core.meta-model.annotation.property.domain-event.post-for-default", true);
                 //will(returnValue(true));
 
                 allowing(mockTypeSpec).getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
@@ -395,7 +395,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             }
 
             // given
-            _Config.put("isis.reflector.facet.propertyAnnotation.domainEvent.postForDefault", true);
+            _Config.put("isis.core.meta-model.annotation.property.domain-event.post-for-default", true);
 
             final Class<?> cls = Customer.class;
             propertyMethod = findMethod(Customer.class, "getName");

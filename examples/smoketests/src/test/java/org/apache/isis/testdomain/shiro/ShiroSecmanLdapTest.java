@@ -64,7 +64,7 @@ import lombok.val;
                 //"logging.config=log4j2-test.xml",
                 "logging.config=log4j2-debug-persistence.xml",
                 //IsisPresets.DebugPersistence,
-                "isis.persistor.datanucleus.impl.datanucleus.schema.autoCreateDatabase=true",
+                "isis.persistence.jdo-datanucleus.impl.datanucleus.schema.autoCreateDatabase=true",
         })
 @Import({
 

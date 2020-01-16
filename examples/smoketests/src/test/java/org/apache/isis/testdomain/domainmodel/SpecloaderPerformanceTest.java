@@ -47,8 +47,8 @@ import lombok.extern.log4j.Log4j2;
                 Configuration_usingValidDomain.class
         }, 
         properties = {
-                "isis.reflector.introspector.mode=FULL",
-                "isis.reflector.validator.explicitObjectType=FALSE", // does not override any of the imports
+                "isis.core.meta-model.introspector.mode=FULL",
+                "isis.core.meta-model.validator.explicit-object-type=FALSE", // does not override any of the imports
         })
 @TestPropertySource({
     IsisPresets.SilenceMetaModel,

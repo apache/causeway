@@ -79,7 +79,7 @@ implements MetaModelRefiner {
         val natureOfService = domainServiceFacet.getNatureOfService();
         
         // Note: mixinOnlyValidator is only added to metaModelValidator if config option
-        // isis.reflector.validator.mixinsOnly == true
+        // isis.core.meta-model.validator.mixinsOnly == true
         // see code at the end of #refineMetaModelValidator(...)
         
         switch (natureOfService) {
@@ -88,7 +88,7 @@ implements MetaModelRefiner {
                     + " convert into a mixin (@Mixin annotation) instead",
                     cls.getName(),
                     natureOfService,
-                    "'isis.reflector.validator.mixinsOnly'");
+                    "'isis.core.meta-model.validator.mixinsOnly'");
             
             mixinOnlyValidator.onFailure(facetHolder, Identifier.classIdentifier(cls), msg);
             break;
@@ -136,7 +136,7 @@ implements MetaModelRefiner {
                             thisSpec.getIdentifier(),
                             "%s: services can only have actions ('%s' config property), not properties or collections; annotate with @Programmatic if required.  Found: %s",
                             thisSpec.getFullIdentifier(),
-                            "'isis.reflector.validator.serviceActionsOnly'",
+                            "'isis.core.meta-model.validator.serviceActionsOnly'",
                             associationNames);
                 }
             });

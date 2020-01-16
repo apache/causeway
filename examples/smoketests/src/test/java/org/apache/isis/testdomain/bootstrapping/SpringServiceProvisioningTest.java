@@ -56,7 +56,7 @@ import lombok.val;
                 Configuration_usingJdo.class, 
         },
         properties = {
-                // "isis.reflector.introspector.parallelize=false",
+                // "isis.core.meta-model.introspector.parallelize=false",
                 // "logging.level.ObjectSpecificationAbstract=TRACE"
         })
 @TestPropertySource({

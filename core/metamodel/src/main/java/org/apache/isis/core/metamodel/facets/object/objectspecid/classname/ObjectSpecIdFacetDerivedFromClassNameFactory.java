@@ -150,7 +150,7 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
                                         + "Use @Discriminator, @DomainObject(objectType=...) or "
                                         + "@PersistenceCapable(schema=...) to specify explicitly.",
                                         objectSpec.getFullIdentifier(),
-                                "isis.reflector.validator.explicit-object-type");
+                                "isis.core.meta-model.validator.explicit-object-type");
                     }
                 }
     

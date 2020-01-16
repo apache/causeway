@@ -49,8 +49,8 @@ import lombok.val;
                 Configuration_usingInvalidDomain_noActionEnforced.class
         }, 
         properties = {
-                "isis.reflector.explicitAnnotations.action=false",
-                "isis.reflector.introspector.mode=FULL"
+                "isis.applib.annotation.action.explicit=false",
+                "isis.core.meta-model.introspector.mode=FULL"
         })
 @TestPropertySource({
     //IsisPresets.DebugMetaModel,

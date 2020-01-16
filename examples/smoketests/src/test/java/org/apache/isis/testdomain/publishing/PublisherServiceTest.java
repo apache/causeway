@@ -66,7 +66,7 @@ import lombok.val;
         }, 
         properties = {
                 "logging.level.org.apache.isis.incubator.IsisPlatformTransactionManagerForJdo=DEBUG",
-                // "isis.reflector.introspector.parallelize=false",
+                // "isis.core.meta-model.introspector.parallelize=false",
                 // "logging.level.ObjectSpecificationAbstract=TRACE"
         })
 @TestPropertySource({

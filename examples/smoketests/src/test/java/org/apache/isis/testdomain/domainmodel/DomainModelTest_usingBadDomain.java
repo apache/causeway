@@ -53,7 +53,7 @@ import lombok.val;
                 Configuration_usingInvalidDomain.class
         }, 
         properties = {
-                "isis.reflector.introspector.mode=FULL"
+                "isis.core.meta-model.introspector.mode=FULL"
         })
 @TestPropertySource({
     //IsisPresets.DebugMetaModel,

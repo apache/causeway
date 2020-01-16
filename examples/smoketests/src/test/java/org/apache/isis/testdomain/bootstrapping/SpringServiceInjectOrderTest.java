@@ -68,7 +68,7 @@ import lombok.val;
                 SpringServiceInjectOrderTest.DummyService.class
         },
         properties = {
-                // "isis.reflector.introspector.parallelize=false",
+                // "isis.core.meta-model.introspector.parallelize=false",
                 // "logging.level.ObjectSpecificationAbstract=TRACE"
         })
 @TestPropertySource({
