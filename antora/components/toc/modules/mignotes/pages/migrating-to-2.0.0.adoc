@@ -644,6 +644,10 @@ isis.value-types. +
 |isis.value-types. +
 {nbsp}{nbsp}java-lang.long.format
 
+|isis.value.format["short"]
+|isis.value-types. +
+{nbsp}{nbsp}java-lang.short.format
+
 |
 |
 

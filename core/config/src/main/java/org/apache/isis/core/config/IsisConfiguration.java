@@ -1211,6 +1211,13 @@ public class IsisConfiguration {
             public static class Long {
                 private String format;
             }
+
+            // capitalized to avoid clash with keyword
+            private final Short Short = new Short();
+            @Data
+            public static class Short {
+                private String format;
+            }
         }
 
         private final JavaMath javaMath = new JavaMath();
@@ -1281,7 +1288,6 @@ public class IsisConfiguration {
             TIMESTAMP, 
             TIME,
             
-            SHORT,
             PERCENTAGE
         }
         

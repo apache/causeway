@@ -22,9 +22,11 @@ package org.apache.isis.core.metamodel.facets.value.shortint;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.isis.core.config.IsisConfiguration.Value.FormatIdentifier;
+import org.apache.isis.core.metamodel.commons.LocaleUtil;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -46,7 +48,14 @@ public class ShortValueSemanticsProviderAbstract extends ValueSemanticsProviderA
 
     public ShortValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Short> adaptedClass) {
         super(type(), holder, adaptedClass, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
-        format = determineNumberFormat(FormatIdentifier.SHORT);
+        format = xdetermineNumberFormat();
+    }
+    protected NumberFormat xdetermineNumberFormat() {
+        final String formatRequired = getConfiguration().getValue().getFormat().get("short");
+
+        return formatRequired != null
+                ? new DecimalFormat(formatRequired)
+                : NumberFormat.getNumberInstance(getConfiguration().getCore().getRuntime().getLocale().map(LocaleUtil::findLocale).orElse(Locale.getDefault()));
     }
 
     // //////////////////////////////////////////////////////////////////
