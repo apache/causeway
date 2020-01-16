@@ -36,7 +36,6 @@ import lombok.Setter;
 public abstract class TimeValueSemanticsProviderAbstract<T> 
 extends ValueSemanticsProviderAbstractTemporal<T> {
 
-    private static final Object DEFAULT_VALUE = null; // no default
     private static final int TYPICAL_LENGTH = 8;
 
     protected static void initFormats(final Map<String, DateFormat> formats) {
@@ -53,7 +52,7 @@ extends ValueSemanticsProviderAbstractTemporal<T> {
 
     @SuppressWarnings("unchecked")
     public TimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass) {
-        this(FormatIdentifier.TIME, holder, adaptedClass, TYPICAL_LENGTH, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE);
+        this(FormatIdentifier.TIME, holder, adaptedClass, 8, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) null);
 
         configuredFormat = getConfiguration().getValue().getFormat().getOrDefault("time", "short").toLowerCase().trim();
 
