@@ -1201,7 +1201,7 @@ public class IsisConfiguration {
         }
         
         public String getFormatOrElse(FormatIdentifier formatIdentifier, String defaultFormat) {
-            return format.getOrDefault(formatIdentifier.name().toLowerCase(), defaultFormat);
+            return getFormat().getOrDefault(formatIdentifier.name().toLowerCase(), defaultFormat);
         }
         
         private final Money money = new Money();

@@ -22,9 +22,11 @@ package org.apache.isis.core.metamodel.facets.value.integer;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.isis.core.config.IsisConfiguration.Value.FormatIdentifier;
+import org.apache.isis.core.metamodel.commons.LocaleUtil;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -46,7 +48,17 @@ public abstract class IntValueSemanticsProviderAbstract extends ValueSemanticsPr
 
     public IntValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Integer> adaptedClass) {
         super(type(), holder, adaptedClass, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
-        format = determineNumberFormat(FormatIdentifier.INT);
+        final String formatRequired =
+                getConfiguration().getValue().getFormat().getOrDefault(FormatIdentifier.INT.name().toLowerCase(), null);
+
+        NumberFormat result;
+        if (formatRequired != null) {
+            result = new DecimalFormat(formatRequired);
+        } else {
+            final Locale inLocale = getConfiguration().getCore().getRuntime().getLocale().map(LocaleUtil::findLocale).orElse(Locale.getDefault());
+            result = NumberFormat.getNumberInstance(inLocale);
+        }
+        format = result;
     }
 
     // //////////////////////////////////////////////////////////////////

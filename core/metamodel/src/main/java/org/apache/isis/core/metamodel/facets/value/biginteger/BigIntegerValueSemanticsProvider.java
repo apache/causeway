@@ -22,11 +22,13 @@ package org.apache.isis.core.metamodel.facets.value.biginteger;
 import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.config.IsisConfiguration.Value.FormatIdentifier;
+import org.apache.isis.core.metamodel.commons.LocaleUtil;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -56,8 +58,19 @@ public class BigIntegerValueSemanticsProvider extends ValueSemanticsProviderAndF
     public BigIntegerValueSemanticsProvider(final FacetHolder holder) {
 
         super(type(), holder, BigInteger.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
-        format = determineNumberFormat(FormatIdentifier.INT);
+        final String formatRequired =
+                getConfiguration().getValue().getFormat().getOrDefault(FormatIdentifier.INT.name().toLowerCase(), null);
+
+        NumberFormat result;
+        if (formatRequired != null) {
+            result = new DecimalFormat(formatRequired);
+        } else {
+            final Locale inLocale = getConfiguration().getCore().getRuntime().getLocale().map(LocaleUtil::findLocale).orElse(Locale.getDefault());
+            result = NumberFormat.getNumberInstance(inLocale);
+        }
+        format = result;
     }
+
 
     // //////////////////////////////////////////////////////////////////
     // Parser
