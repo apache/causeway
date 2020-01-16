@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.runtimeservices.homepage;
 
-import javax.enterprise.inject.Vetoed;
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -43,6 +43,7 @@ import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.actions.homepage.HomePageFacet;
+import org.apache.isis.core.metamodel.facets.actions.homepage.HomePageFacetImpl;
 import org.apache.isis.core.metamodel.services.homepage.HomePageAction;
 import org.apache.isis.core.metamodel.services.homepage.HomePageResolverService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -123,7 +124,6 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
         return homePageAction;
     }
 
-    @Vetoed
     @DomainObject(
             nature = Nature.INMEMORY_ENTITY, 
             objectType = "isisRuntimeServices.HomePageResolverServiceDefault.HomePageActionContainer")
@@ -132,10 +132,24 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
         @Inject private FactoryService factoryService;
         private static Class<?> viewModelType;
 
-        @Action @HomePage
+        @Action
         public Object homePage() {
             val viewModelPojo = factoryService.instantiate(viewModelType);
             return viewModelPojo;
+        }
+        
+        // lookup my 'homePage' method as action object 
+        private static ObjectAction homePageMethodAsAction(
+                Class<?> viewModelType, 
+                ObjectSpecification spec) {
+            
+            HomePageActionContainer.viewModelType = viewModelType;
+            val homePageMethodAsAction = spec.streamObjectActions(Contributed.EXCLUDED)
+                    .filter(objectAction->objectAction.getId().equals("homePage"))
+                    .peek(objectAction->objectAction.addFacet(new HomePageFacetImpl(objectAction)))
+                    .findAny()
+                    .orElseThrow(_Exceptions::unexpectedCodeReach);
+            return homePageMethodAsAction;
         }
     }
 
@@ -150,22 +164,21 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
             return null;
         }
 
-        HomePageActionContainer.viewModelType = type;
-
         val containerSpec = specLoader.loadSpecification(HomePageActionContainer.class);
+        val homePageMethodAsAction = HomePageActionContainer.homePageMethodAsAction(type, containerSpec);
+                
+        // if usable
+        // programmatically make the MM aware of the 'homePage' action to be used as THE home-page action
+        val homePageActionIfUsable = homePageActionIfUsable(homePageMethodAsAction, containerSpec);
 
-        val homePageAction = containerSpec.streamObjectActions(Contributed.EXCLUDED)
-                .map(objectAction->homePageActionIfUsable(objectAction, containerSpec))
-                .filter(_NullSafe::isPresent)
-                .findAny()
-                .orElse(null);
-
-        return homePageAction;
+        return homePageActionIfUsable;
     }
 
-    protected HomePageAction homePageActionIfUsable(ObjectAction objectAction, ObjectSpecification spec) {
+    protected HomePageAction homePageActionIfUsable(
+            @Nullable ObjectAction objectAction, 
+            ObjectSpecification spec) {
 
-        if (!objectAction.containsNonFallbackFacet(HomePageFacet.class)) {
+        if (objectAction==null || !objectAction.containsNonFallbackFacet(HomePageFacet.class)) {
             return null;
         }
 
