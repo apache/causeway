@@ -220,13 +220,13 @@ public class FakeDataServiceTest {
 
     @Test
     public void jodaDateTimes_any() throws Exception {
-        final OffsetDateTime any = fakeDataService.jodaDateTimes().any();
+        final OffsetDateTime any = fakeDataService.j8DateTimes().any();
         assertThat(any).isNotNull();
     }
 
     @Test
     public void jodaLocalDates_any() throws Exception {
-        final LocalDate any = fakeDataService.jodaLocalDates().any();
+        final LocalDate any = fakeDataService.j8LocalDates().any();
         assertThat(any).isNotNull();
     }
 

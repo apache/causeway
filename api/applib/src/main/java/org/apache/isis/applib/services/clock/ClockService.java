@@ -22,10 +22,12 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.util.TimeZone;
 
 import javax.inject.Named;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
@@ -75,4 +77,8 @@ public class ClockService {
         return Clock.getTimeAsJodaDateTime();
     }
 
+    public org.joda.time.LocalDate nowAsJodaLocalDate() {
+        final DateTimeZone timeZone = DateTimeZone.forTimeZone(TimeZone.getDefault());
+        return new org.joda.time.LocalDate(nowAsMillis(), timeZone);
+    }
 }

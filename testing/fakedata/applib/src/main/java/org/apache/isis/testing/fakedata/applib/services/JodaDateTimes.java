@@ -1,0 +1,36 @@
+package org.apache.isis.testing.fakedata.applib.services;
+
+import org.joda.time.DateTime;
+import org.joda.time.Period;
+import org.apache.isis.applib.annotation.Programmatic;
+
+public class JodaDateTimes extends AbstractRandomValueGenerator{
+
+    public JodaDateTimes(final FakeDataService fakeDataService) {
+        super(fakeDataService);
+    }
+
+    @Programmatic
+    public DateTime around(final Period period) {
+        final DateTime now = fake.clockService.nowAsJodaDateTime();
+        return fake.booleans().coinFlip() ? before(period) : after(period);
+    }
+
+    @Programmatic
+    public DateTime before(final Period period) {
+        final DateTime now = fake.clockService.nowAsJodaDateTime();
+        return now.minus(period);
+    }
+
+    @Programmatic
+    public DateTime after(final Period period) {
+        final DateTime now = fake.clockService.nowAsJodaDateTime();
+        return now.plus(period);
+    }
+
+    @Programmatic
+    public DateTime any() {
+        final Period upTo5Years = fake.jodaPeriods().yearsUpTo(5);
+        return around(upTo5Years);
+    }
+}

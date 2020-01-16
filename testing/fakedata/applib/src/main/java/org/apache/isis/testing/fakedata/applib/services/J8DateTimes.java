@@ -30,7 +30,7 @@ public class J8DateTimes extends AbstractRandomValueGenerator {
 
     @Programmatic
     public OffsetDateTime any() {
-        final Period upTo5Years = fake.jodaPeriods().yearsUpTo(5);
+        final Period upTo5Years = fake.j8Periods().yearsUpTo(5);
         return around(upTo5Years);
     }
 }

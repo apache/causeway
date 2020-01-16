@@ -13,7 +13,7 @@ public class JavaSqlDates extends AbstractRandomValueGenerator {
 
     @Programmatic
     public java.sql.Date any() {
-        final OffsetDateTime dateTime = fake.jodaDateTimes().any();
+        final OffsetDateTime dateTime = fake.j8DateTimes().any();
         final Date sqldt = asSqlDate(dateTime);
         return sqldt;
     }

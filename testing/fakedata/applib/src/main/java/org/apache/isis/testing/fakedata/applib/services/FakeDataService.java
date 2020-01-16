@@ -91,9 +91,14 @@ public class FakeDataService {
         this.javaUtilDates = new JavaUtilDates(this);
         this.javaSqlDates = new JavaSqlDates(this);
         this.javaSqlTimestamps = new JavaSqlTimestamps(this);
-        this.jodaDateTimes = new J8DateTimes(this);
-        this.jodaLocalDates = new J8LocalDates(this);
-        this.jodaPeriods = new J8Periods(this);
+
+        this.j8DateTimes = new J8DateTimes(this);
+        this.j8LocalDates = new J8LocalDates(this);
+        this.j8Periods = new J8Periods(this);
+
+        this.jodaDateTimes = new JodaDateTimes(this);
+        this.jodaLocalDates = new JodaLocalDates(this);
+        this.jodaPeriods = new JodaPeriods(this);
 
         this.bigDecimals = new BigDecimals(this);
         this.bigIntegers = new BigIntegers(this);
@@ -130,9 +135,13 @@ public class FakeDataService {
     private JavaSqlDates javaSqlDates;
     private JavaSqlTimestamps javaSqlTimestamps;
 
-    private J8DateTimes jodaDateTimes;
-    private J8LocalDates jodaLocalDates;
-    private J8Periods jodaPeriods;
+    private J8DateTimes j8DateTimes;
+    private J8LocalDates j8LocalDates;
+    private J8Periods j8Periods;
+
+    private JodaDateTimes jodaDateTimes;
+    private JodaLocalDates jodaLocalDates;
+    private JodaPeriods jodaPeriods;
 
     private BigDecimals bigDecimals;
     private BigIntegers bigIntegers;
@@ -231,15 +240,27 @@ public class FakeDataService {
         return javaSqlTimestamps;
     }
 
-    public J8LocalDates jodaLocalDates() {
+    public J8LocalDates j8LocalDates() {
+        return j8LocalDates;
+    }
+
+    public J8DateTimes j8DateTimes() {
+        return j8DateTimes;
+    }
+
+    public J8Periods j8Periods() {
+        return j8Periods;
+    }
+
+    public JodaLocalDates jodaLocalDates() {
         return jodaLocalDates;
     }
 
-    public J8DateTimes jodaDateTimes() {
+    public JodaDateTimes jodaDateTimes() {
         return jodaDateTimes;
     }
 
-    public J8Periods jodaPeriods() {
+    public JodaPeriods jodaPeriods() {
         return jodaPeriods;
     }
 

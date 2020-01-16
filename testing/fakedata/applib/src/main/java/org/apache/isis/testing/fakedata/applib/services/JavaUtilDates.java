@@ -14,7 +14,7 @@ public class JavaUtilDates extends AbstractRandomValueGenerator {
 
     @Programmatic
     public java.util.Date any() {
-        final OffsetDateTime dateTime = fake.jodaDateTimes().any();
+        final OffsetDateTime dateTime = fake.j8DateTimes().any();
         val epochMillis = dateTime.toInstant().toEpochMilli();
         return new java.util.Date(epochMillis); 
     }
