@@ -387,7 +387,7 @@ public class DomainEventHelper {
                                 .and(paramAssignableFromValue(2, value))
                                 );
                 for (val constructor : eventConstructors) {
-                    val event = constructor.newInstance(source, identifier, of, value);
+                    val event = constructor.newInstance(source, identifier, value);
                     return uncheckedCast(event);
                 }
             }
