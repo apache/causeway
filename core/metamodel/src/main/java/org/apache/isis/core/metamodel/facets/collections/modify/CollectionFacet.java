@@ -117,13 +117,13 @@ public interface CollectionFacet extends Facet {
                 .orElse(0);
     }
     
-    public static Stream<ManagedObject> streamAdapters(ManagedObject container) {
+    public static Stream<ManagedObject> streamAdapters(@Nullable ManagedObject container) {
         return lookup(container)
                 .map(collectionFacet->collectionFacet.stream(container))
                 .orElse(Stream.empty());
     }
     
-    public static Object[] toArrayOfPojos(ManagedObject container) {
+    public static Object[] toArrayOfPojos(@Nullable ManagedObject container) {
         val elementAdapters = streamAdapters(container)
                 .collect(Collectors.toList());
         return ManagedObject.unwrapMultipleAsArray(elementAdapters);

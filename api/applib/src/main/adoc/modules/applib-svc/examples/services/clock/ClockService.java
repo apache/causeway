@@ -22,9 +22,12 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.util.TimeZone;
 
 import javax.inject.Named;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
@@ -46,19 +49,19 @@ import org.apache.isis.applib.clock.Clock;
 @Qualifier("Default")
 public class ClockService {
 
-    public LocalDate now() {
+    public java.time.LocalDate now() {
         return Clock.getTimeAsLocalDate();
     }
 
-    public LocalDateTime nowAsLocalDateTime() {
+    public java.time.LocalDateTime nowAsLocalDateTime() {
         return Clock.getTimeAsLocalDateTime();
     }
 
-    public OffsetDateTime nowAsOffsetDateTime() {
+    public java.time.OffsetDateTime nowAsOffsetDateTime() {
         return Clock.getTimeAsOffsetDateTime();
     }
 
-    public Timestamp nowAsJavaSqlTimestamp() {
+    public java.sql.Timestamp nowAsJavaSqlTimestamp() {
         return Clock.getTimeAsJavaSqlTimestamp();
     }
 
@@ -70,4 +73,12 @@ public class ClockService {
         return new java.util.Date(nowAsMillis());
     }
 
+    public org.joda.time.DateTime nowAsJodaDateTime() {
+        return Clock.getTimeAsJodaDateTime();
+    }
+
+    public org.joda.time.LocalDate nowAsJodaLocalDate() {
+        final DateTimeZone timeZone = DateTimeZone.forTimeZone(TimeZone.getDefault());
+        return new org.joda.time.LocalDate(nowAsMillis(), timeZone);
+    }
 }
