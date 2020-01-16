@@ -61,29 +61,37 @@ groups+= new PropertyGroup() {{
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.core.metamodel"
-    name = "Core Metamodel"
-    description = "The component responsible for building up the metamodel"
+    prefix = "isis.core.meta-model"
+    name = "Core MetaModel"
+    description = "The component responsible for building and validating the metamodel"
     searchOrder = 2
 }}
 
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.core.metamodel.introspector"
-    name = "MetaModel Introspection"
-    description = "MetaModel Introspection"
+    prefix = "isis.core.meta-model.introspector"
+    name = "Core MetaModel Introspection"
+    description = "Configuration of the introspector component that actually builds the metamodel by introspecting the domain object classes"
     searchOrder = 1
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.core.metamodel.validator"
+    prefix = "isis.core.meta-model.validator"
     name = "MetaModel Validator"
-    description = "Configuration of the validator that checks the well-formedness of the inferred metamodel (how strict to be etc.)"
+    description = "Configuration of the validator component that checks the well-formedness of the built metamodel (how strict to be etc.)"
     searchOrder = 1
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.core.runtimeservices"
+    prefix = "isis.core.runtime"
+    name = "Core Runtime Services configurations"
+    description = "Configuration of runtime (locale, timezone etc)."
+    properties: []
+    searchOrder = 501
+}}
+
+groups+= new PropertyGroup() {{
+    prefix = "isis.core.runtime-services"
     name = "Core Runtime Services configurations"
     description = "Configuration of individual domain services"
     properties: []
@@ -132,6 +140,41 @@ groups+= new PropertyGroup() {{
     prefix = "isis.extensions"
     name = "Extensions"
     description = "Configuration that applies to the catalogue of extensions to the framework"
+    searchOrder = 501
+}}
+
+groups+= new PropertyGroup() {{
+    prefix = "isis.value"
+    name = "Value types"
+    description = "Configuration that applies to value type definitions"
+    searchOrder = 501
+}}
+
+groups+= new PropertyGroup() {{
+    prefix = "isis.subdomains"
+    name = "Subdomains"
+    description = "Configuration that applies to value type definitions"
+    searchOrder = 501
+}}
+
+groups+= new PropertyGroup() {{
+    prefix = "isis.mappings"
+    name = "Bounded Context Mappings"
+    description = "Configuration that applies to utilities and libraries for integrating (mapping between) bounded contexts"
+    searchOrder = 501
+}}
+
+groups+= new PropertyGroup() {{
+    prefix = "isis.incubator"
+    name = "Incubator"
+    description = "Configuration that applies to incubating components"
+    searchOrder = 501
+}}
+
+groups+= new PropertyGroup() {{
+    prefix = "isis.legacy"
+    name = "Legacy"
+    description = "Configuration that applies to legacy components"
     searchOrder = 501
 }}
 

@@ -18,7 +18,7 @@ include::refguide:config:example$generated/isis.applib.adoc[]
 |===
 
 
-== Metamodel
+== Core Meta Model
 
 General configuration:
 
@@ -29,7 +29,7 @@ General configuration:
 (default value)
 |Description
 
-include::refguide:config:example$generated/isis.metamodel.adoc[]
+include::refguide:config:example$generated/isis.core.meta-model.adoc[]
 
 |===
 
@@ -42,7 +42,7 @@ include::refguide:config:example$generated/isis.metamodel.adoc[]
 (default value)
 |Description
 
-include::refguide:config:example$generated/isis.metamodel.introspector.adoc[]
+include::refguide:config:example$generated/isis.core.meta-model.introspector.adoc[]
 
 |===
 
@@ -55,14 +55,14 @@ include::refguide:config:example$generated/isis.metamodel.introspector.adoc[]
 (default value)
 |Description
 
-include::refguide:config:example$generated/isis.metamodel.validator.adoc[]
+include::refguide:config:example$generated/isis.core.meta-model.validator.adoc[]
 
 |===
 
 
 
 
-== Runtime Services
+== Core Runtime
 
 [cols="2a,2a,3a", options="header"]
 |===
@@ -71,7 +71,23 @@ include::refguide:config:example$generated/isis.metamodel.validator.adoc[]
 (default value)
 |Description
 
-include::refguide:config:example$generated/isis.runtimeservices.adoc[]
+include::refguide:config:example$generated/isis.core.runtime.adoc[]
+
+|===
+
+
+
+
+== Core Runtime Services
+
+[cols="2a,2a,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+include::refguide:config:example$generated/isis.core.runtime-services.adoc[]
 
 |===
 
@@ -154,9 +170,7 @@ include::refguide:config:example$generated/isis.viewer.wicket.adoc[]
 |===
 
 
-
-
-== RestEasy
+== Value Types
 
 [cols="2a,2a,3a", options="header"]
 |===
@@ -165,11 +179,40 @@ include::refguide:config:example$generated/isis.viewer.wicket.adoc[]
 (default value)
 |Description
 
-include::refguide:config:example$generated/resteasy.adoc[]
+include::refguide:config:example$generated/isis.value.adoc[]
 
 |===
 
 
+ifdef::env-this-stuff-is-currently-disabled[]
+
+== Subdomains
+
+[cols="2a,2a,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+include::refguide:config:example$generated/isis.subdomains.adoc[]
+
+|===
+
+== Mappings
+
+[cols="2a,2a,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+include::refguide:config:example$generated/isis.mappings.adoc[]
+
+|===
+
+endif::[]
 
 == Extensions
 
@@ -183,6 +226,60 @@ include::refguide:config:example$generated/resteasy.adoc[]
 include::refguide:config:example$generated/isis.extensions.adoc[]
 
 |===
+
+ifdef::env-this-stuff-is-currently-disabled[]
+
+== Incubator
+
+[cols="2a,2a,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+include::refguide:config:example$generated/isis.incubator.adoc[]
+
+|===
+
+endif::[]
+
+ifdef::env-this-stuff-is-currently-disabled[]
+
+== Legacy
+
+[cols="2a,2a,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+include::refguide:config:example$generated/isis.legacy.adoc[]
+
+|===
+
+endif::[]
+
+
+== 3rd Party
+
+These configuration options are defined by 3rd party libraries (dependency of the Apache Isis framework) that nevertheless significantly impact the behaviour of the framework.
+
+=== RestEasy
+
+[cols="2a,2a,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+include::refguide:config:example$generated/resteasy.adoc[]
+
+|===
+
+
 
 
 
