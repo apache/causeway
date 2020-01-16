@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.collections;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.jmock.Expectations;
@@ -84,7 +85,7 @@ public class JavaCollectionFacetTest {
 
             }
         });
-        assertThat(facet.firstElement(mockCollection), is(nullValue()));
+        assertThat(facet.firstElement(mockCollection), is(Optional.empty()));
     }
 
 }
