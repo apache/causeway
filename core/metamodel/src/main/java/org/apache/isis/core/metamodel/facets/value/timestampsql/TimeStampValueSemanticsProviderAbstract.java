@@ -46,9 +46,13 @@ abstract class TimeStampValueSemanticsProviderAbstract<T> extends ValueSemantics
     @Getter @Setter
     private String configuredFormat;
 
+    public TimeStampValueSemanticsProviderAbstract(final FormatIdentifier formatIdentifier, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue) {
+        super(formatIdentifier, formatIdentifier.name().toLowerCase(), type(), holder, adaptedClass, typicalLength, immutability, equalByContent, defaultValue);
+    }
+
     @SuppressWarnings("unchecked")
     public TimeStampValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass) {
-        super(FormatIdentifier.TIMESTAMP, FormatIdentifier.TIMESTAMP.name().toLowerCase(), holder, adaptedClass, TYPICAL_LENGTH, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE);
+        this(FormatIdentifier.TIMESTAMP, holder, adaptedClass, TYPICAL_LENGTH, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE);
 
         configuredFormat = getConfiguration()
                 .getValue().getFormat().getOrDefault(FormatIdentifier.TIMESTAMP.name().toLowerCase(), defaultFormat()).toLowerCase().trim();

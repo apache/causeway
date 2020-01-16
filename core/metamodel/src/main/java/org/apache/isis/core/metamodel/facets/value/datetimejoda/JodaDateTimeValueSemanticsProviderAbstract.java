@@ -47,8 +47,12 @@ public abstract class JodaDateTimeValueSemanticsProviderAbstract<T> extends Valu
     @Getter @Setter
     private String configuredFormat;
 
+    public JodaDateTimeValueSemanticsProviderAbstract(final FormatIdentifier formatIdentifier, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue) {
+        super(formatIdentifier, formatIdentifier.name().toLowerCase(), type(), holder, adaptedClass, typicalLength, immutability, equalByContent, defaultValue);
+    }
+
     public JodaDateTimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final T defaultValue) {
-        super(FormatIdentifier.DATE, FormatIdentifier.DATE.name().toLowerCase(), holder, adaptedClass, 12, Immutability.IMMUTABLE, EqualByContent.HONOURED, defaultValue);
+        this(FormatIdentifier.DATE, holder, adaptedClass, 12, Immutability.IMMUTABLE, EqualByContent.HONOURED, defaultValue);
 
         configuredFormat = getConfiguration()
                 .getValue().getFormat().getOrDefault(FormatIdentifier.DATE.name().toLowerCase(), defaultFormat()).toLowerCase().trim();

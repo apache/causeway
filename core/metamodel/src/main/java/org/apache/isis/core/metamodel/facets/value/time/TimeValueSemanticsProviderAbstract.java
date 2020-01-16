@@ -47,9 +47,13 @@ extends ValueSemanticsProviderAbstractTemporal<T> {
     @Getter @Setter
     private String configuredFormat;
 
+    public TimeValueSemanticsProviderAbstract(final FormatIdentifier formatIdentifier, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue) {
+        super(formatIdentifier, formatIdentifier.name().toLowerCase(), type(), holder, adaptedClass, typicalLength, immutability, equalByContent, defaultValue);
+    }
+
     @SuppressWarnings("unchecked")
     public TimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass) {
-        super(FormatIdentifier.TIME, FormatIdentifier.TIME.name().toLowerCase(), holder, adaptedClass, TYPICAL_LENGTH, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE);
+        this(FormatIdentifier.TIME, holder, adaptedClass, TYPICAL_LENGTH, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE);
 
         configuredFormat = getConfiguration()
                 .getValue().getFormat().getOrDefault(FormatIdentifier.TIME.name().toLowerCase(), defaultFormat()).toLowerCase().trim();
