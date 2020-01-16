@@ -58,8 +58,7 @@ public class BigIntegerValueSemanticsProvider extends ValueSemanticsProviderAndF
     public BigIntegerValueSemanticsProvider(final FacetHolder holder) {
 
         super(type(), holder, BigInteger.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
-        final String formatRequired =
-                getConfiguration().getValue().getFormat().get(FormatIdentifier.INT.name().toLowerCase());
+        final String formatRequired = getConfiguration().getValue().getFormat().get("int");
 
         NumberFormat result;
         if (formatRequired != null) {
