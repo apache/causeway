@@ -736,10 +736,6 @@ public class IsisConfiguration {
     @Data
     public static class Services {
 
-        private final ExceptionRecognizerCompositeForJdoObjectStore exceptionRecognizerCompositeForJdoObjectStore = new ExceptionRecognizerCompositeForJdoObjectStore();
-        @Data
-        public static class ExceptionRecognizerCompositeForJdoObjectStore {
-        }
 
         private final Injector injector = new Injector();
         @Data
