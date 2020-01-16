@@ -1179,53 +1179,7 @@ public class IsisConfiguration {
         }
     }
 
-    @Component
-    @Named("isisConfig.PatternsConverter")
-    @ConfigurationPropertiesBinding
-    public static class PatternsConverter implements Converter<String, Map<Pattern, String>> {
-        @Override
-        public Map<Pattern, String> convert(String source) {
-            return toPatternMap(source);
-        }
 
-        /**
-         * The pattern matches definitions like:
-         * <ul>
-         * <li>methodNameRegex:value</li>
-         * </ul>
-         *
-         * <p>
-         *     Used for associating cssClass and cssClassFa (font awesome icon) values to method pattern names.
-         * </p>
-         */
-        private final static Pattern PATTERN_FOR_COLON_SEPARATED_PAIR = Pattern.compile("(?<methodRegex>[^:]+):(?<value>.+)");
-
-        private static Map<Pattern, String> toPatternMap(String cssClassPatterns) {
-            final Map<Pattern,String> valueByPattern = _Maps.newLinkedHashMap();
-            if(cssClassPatterns != null) {
-                final StringTokenizer regexToCssClasses = new StringTokenizer(cssClassPatterns, ",");
-                final Map<String,String> valueByRegex = _Maps.newLinkedHashMap();
-                while (regexToCssClasses.hasMoreTokens()) {
-                    String regexToCssClass = regexToCssClasses.nextToken().trim();
-                    if (_Strings.isNullOrEmpty(regexToCssClass)) {
-                        continue;
-                    }
-                    final Matcher matcher = PATTERN_FOR_COLON_SEPARATED_PAIR.matcher(regexToCssClass);
-                    if(matcher.matches()) {
-                        valueByRegex.put(matcher.group("methodRegex"), matcher.group("value"));
-                    }
-                }
-                for (Map.Entry<String, String> entry : valueByRegex.entrySet()) {
-                    final String regex = entry.getKey();
-                    final String cssClass = entry.getValue();
-                    valueByPattern.put(Pattern.compile(regex), cssClass);
-                }
-            }
-            return valueByPattern;
-        }
-
-    }
-    
     //TODO no meta data yet ... https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-configuration-metadata.html#configuration-metadata-property-attributes
     private String timezone;
     
