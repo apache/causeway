@@ -652,6 +652,10 @@ isis.value-types. +
 |isis.legacy.value-types. +
 {nbsp}{nbsp}percentage.format
 
+|isis.value.format["datetime"]
+|isis.value-types. +
+{nbsp}{nbsp}joda.local-date-time.format
+
 |
 |
 

@@ -133,7 +133,7 @@ implements JodaLocalDateTimeValueFacet {
         super(type(), holder, LocalDateTime.class, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
 
         String configuredNameOrPattern = getConfiguration()
-                .getValue().getFormatOrElse(FormatIdentifier.DATETIME, "medium");
+                .getValueTypes().getJoda().getLocalDateTime().getFormat();
         updateTitleStringFormatter(configuredNameOrPattern);
     }
 

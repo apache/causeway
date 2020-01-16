@@ -1251,7 +1251,11 @@ public class IsisConfiguration {
         private final Joda joda = new Joda();
         @Data
         public static class Joda {
-
+            private final LocalDateTime localDateTime = new LocalDateTime();
+            @Data
+            public static class LocalDateTime {
+                private String format = "medium";
+            }
         }
     }
 
@@ -1300,8 +1304,6 @@ public class IsisConfiguration {
             DATE, 
             TIMESTAMP, 
             TIME,
-            
-            PERCENTAGE
         }
         
         public String getFormatOrElse(FormatIdentifier formatIdentifier, String defaultFormat) {
