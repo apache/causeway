@@ -62,8 +62,11 @@ public class Bookmark implements Serializable {
         }
         val tokenizer = new StringTokenizer(str, SEPARATOR);
         int tokenCount = tokenizer.countTokens();
-        if(tokenCount>1) {
+        if(tokenCount==2) {
             return Optional.of(Bookmark.of(tokenizer.nextToken(), tokenizer.nextToken()));            
+        }
+        if(tokenCount>2) {
+            return Optional.of(Bookmark.of(tokenizer.nextToken(), tokenizer.nextToken("").substring(1)));            
         }
         return Optional.empty();
 
