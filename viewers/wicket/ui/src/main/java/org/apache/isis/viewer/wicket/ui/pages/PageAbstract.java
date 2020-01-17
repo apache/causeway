@@ -276,10 +276,9 @@ public abstract class PageAbstract extends WebPageBase implements ActionPromptPr
             response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
         }
 
-        String liveReloadUrl = getCommonContext().getConfiguration().getViewer().getWicket().getLiveReloadUrl();
-        if(liveReloadUrl != null) {
+        getCommonContext().getConfiguration().getViewer().getWicket().getLiveReloadUrl().ifPresent(liveReloadUrl -> {
             response.render(JavaScriptReferenceHeaderItem.forUrl(liveReloadUrl));
-        }
+        });
         if(isModernBrowser()) {
             addBootLint(response);
         }

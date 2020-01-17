@@ -1350,7 +1350,7 @@ public class IsisConfiguration {
              */
             private boolean ajaxDebugMode = false;
 
-            @javax.validation.constraints.Pattern(regexp="^[/].*[/]$")
+            @javax.validation.constraints.Pattern(regexp="^[/].*[/]$") @NotNull @NotEmpty
             private String basePath = "/wicket/";
 
             private boolean clearOriginalDestination = false;
@@ -1365,6 +1365,7 @@ public class IsisConfiguration {
              * component (which uses <a href="http://momentjs.com/docs/#/parsing/string-format/">Moment.js formats</a>, rather
              * than those of regular Java code).
              */
+            @NotNull @NotEmpty
             private String datePattern = "dd-MM-yyyy";
 
             /**
@@ -1377,13 +1378,14 @@ public class IsisConfiguration {
              * component (which uses <a href="http://momentjs.com/docs/#/parsing/string-format/">Moment.js formats</a>, rather
              * than those of regular Java code).
              */
+            @NotNull @NotEmpty
             private String dateTimePattern = "dd-MM-yyyy HH:mm";
 
             private DialogMode dialogMode = DialogMode.SIDEBAR;
 
             private DialogMode dialogModeForMenu = DialogMode.MODAL;
 
-            private String liveReloadUrl;
+            private Optional<String> liveReloadUrl;
 
             private int maxTitleLengthInTables = 12;
 
@@ -1471,6 +1473,7 @@ public class IsisConfiguration {
             /**
              * The pattern used for rendering and parsing timestamps.
              */
+            @NotNull @NotEmpty
             private String timestampPattern = "yyyy-MM-dd HH:mm:ss.SSS";
 
             /**
@@ -1501,16 +1504,18 @@ public class IsisConfiguration {
             public static class Application {
                 
                 /**
-                 * Label used on the about page. If not specified, then {@link Application#name} 
-                 * is used instead.
+                 * Label used on the about page.
                  */
                 private String about;
                 
                 /**
                  * Either the location of the image file (relative to the class-path resource root), 
                  * or an absolute URL.
+                 *
+                 * <p>
                  * This is rendered on the header panel. An image with a size of 160x40 works well.
                  * If not specified, the application.name is used instead.
+                 * </p>
                  */
                 private String brandLogoHeader;
                 
@@ -1538,16 +1543,20 @@ public class IsisConfiguration {
                  * URL of file to read any custom Javascript, relative to the class-path resource root.
                  */
                 private String js;
-                
-                // since 2.0
-                private String menubarsLayoutXml = "menubars.layout.xml"; 
-                
+
+                /**
+                 *
+                 */
+                @NotNull @NotEmpty
+                private String menubarsLayoutXml = "menubars.layout.xml";
+
                 /**
                  * Identifies the application on the sign-in page
-                 * (unless a {@link Application#brandLogoSignin} image is configured) and 
-                 * on top-left in the header 
+                 * (unless a {@link Application#brandLogoSignin} image is configured) and
+                 * on top-left in the header
                  * (unless a {@link Application#brandLogoHeader} image is configured).
                  */
+                @NotNull @NotEmpty
                 private String name = "Apache Isis ™";
                 
                 /**
@@ -1556,7 +1565,6 @@ public class IsisConfiguration {
                  * about page.
                  */
                 private String version;
-                
             }
             
             private final BookmarkedPages bookmarkedPages = new BookmarkedPages();
@@ -1606,11 +1614,13 @@ public class IsisConfiguration {
                 /**
                  * As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in ISO format (per https://github.com/moment/moment/issues/1407).
                  */
+                @NotEmpty @NotNull
                 private String minDate = "1900-01-01T00:00:00.000Z";
 
                 /**
                  * As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in ISO format (per https://github.com/moment/moment/issues/1407).
                  */
+                @NotEmpty @NotNull
                 private String maxDate = "2100-01-01T00:00:00.000Z";
             }
 
@@ -1652,8 +1662,10 @@ public class IsisConfiguration {
                  *     Expected to be in the list of {@link #getEnabled()} themes.
                  * </p>
                  */
+                @NotEmpty @NotNull
                 private String initial = "Flatly";
 
+                @NotEmpty @NotNull
                 private String provider = "org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.IsisWicketThemeSupportDefault";
 
                 /**
@@ -1682,9 +1694,6 @@ public class IsisConfiguration {
                 private boolean enabled = true;
                 private int maxParentChainLength = 64;
             }
-
-            
-            
         }
     }
 
@@ -1888,13 +1897,6 @@ public class IsisConfiguration {
 
     }
 
-    //TODO no meta data yet ... https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-configuration-metadata.html#configuration-metadata-property-attributes
-    private final Value value = new Value();
-    @Data
-    public static class Value {
-
-
-    }
 
     private final Extensions extensions = new Extensions();
     @Data
