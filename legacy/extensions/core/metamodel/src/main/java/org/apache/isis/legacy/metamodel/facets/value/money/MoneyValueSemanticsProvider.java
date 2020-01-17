@@ -80,7 +80,7 @@ implements MoneyValueFacet {
         super(type(), holder, Money.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
 
         defaultCurrencyCode =
-                getConfiguration().getValue().getMoney().getCurrency()
+                getConfiguration().getLegacy().getValueTypes().getMoney().getCurrency()
                     .filter(_Strings::isNotEmpty)
                     .orElse(LOCAL_CURRENCY_CODE);
     }

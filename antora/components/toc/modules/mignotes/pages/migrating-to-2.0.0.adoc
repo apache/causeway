@@ -693,8 +693,8 @@ isis.value-types. +
 {nbsp}{nbsp}java-sql.timestamp.format
 
 
-|
-|
+|isis.value.money.current
+|isis.legacy.value-types.money.current
 
 |===
 

@@ -1354,7 +1354,15 @@ public class IsisConfiguration {
             public static class Percentage {
                 private String format;
             }
+
+            private final Money money = new Money();
+            @Data
+            public static class Money {
+                private Optional<String> currency = Optional.empty();
+            }
         }
+
+
     }
 
     //TODO no meta data yet ... https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-configuration-metadata.html#configuration-metadata-property-attributes
@@ -1362,16 +1370,6 @@ public class IsisConfiguration {
     @Data
     public static class Value {
 
-        private Map<String, String> format = new HashMap<>();
-        
-        public enum FormatIdentifier {
-        }
-
-        private final Money money = new Money();
-        @Data
-        public static class Money {
-            private Optional<String> currency = Optional.empty();
-        }
 
     }
 
