@@ -306,6 +306,6 @@ class
 JDOPersistenceManagerFactory
 | See also `additional-spring-configuration-metadata.json` (camelCasing instead of kebab-casing).
 
-@implNote - changing this property from its default is used to enable the flyway extension (in combination with \{@link Datanucleus.Schema#isAutoCreateAll()}
+@implNote - changing this property from its default is used to enable the flyway extension (in combination with `Datanucleus.Schema#isAutoCreateAll()`
 
 

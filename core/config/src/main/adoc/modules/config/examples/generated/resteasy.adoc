@@ -13,7 +13,7 @@ registration
 
 | resteasy.jaxrs.default-path
 |  /restful
-| Note that this is used rather than `resteasy.servlet.mapping.prefix` because there is _NO_ implementation of \{@link javax.ws.rs.core.Application}, so we rely on it being automatically created.
+| Note that this is used rather than `resteasy.servlet.mapping.prefix` because there is _NO_ implementation of `javax.ws.rs.core.Application`, so we rely on it being automatically created.
 
 
 | resteasy.resteasy-settings

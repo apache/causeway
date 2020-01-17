@@ -27,7 +27,7 @@ This is rendered on the header panel. An image with a size of 160x40 works well.
 | isis.viewer.wicket. +
 application.brand-logo-signin
 | 
-| Either the location of the image file (relative to the class-path resource root), or an absolute URL. This is rendered on the sign-in page. An image with a size of 400x40 works well. If not specified, the \{@link Application#name} is used instead.
+| Either the location of the image file (relative to the class-path resource root), or an absolute URL. This is rendered on the sign-in page. An image with a size of 400x40 works well. If not specified, the `Application#name` is used instead.
 
 
 | isis.viewer.wicket. +
@@ -62,7 +62,7 @@ menubars-layout-xml
 | isis.viewer.wicket. +
 application.name
 |  Apache Isis ™
-| Identifies the application on the sign-in page (unless a \{@link Application#brandLogoSignin} image is configured) and on top-left in the header (unless a \{@link Application#brandLogoHeader} image is configured).
+| Identifies the application on the sign-in page (unless a image is configured) and on top-left in the header (unless a \{@link Application#brandLogoHeader image is configured).
 
 
 | isis.viewer.wicket. +
@@ -127,7 +127,7 @@ date-time-pattern
 |  dd-MM-yyyy HH:mm
 | The pattern used for rendering and parsing date/times.
 
-Each Date scalar panel will use \{@link Wicket#getDatePattern()} or \{@link Wicket#getDateTimePattern()} depending on its date type. In the case of panels with a date time picker, the pattern will be dynamically adjusted so that it can be used by the https://github.com/Eonasdan/bootstrap-datetimepicker[Bootstrap Datetime Picker] component (which uses http://momentjs.com/docs/#/parsing/string-format/[Moment.js formats], rather than those of regular Java code).
+Each Date scalar panel will use or \{@link Wicket#getDateTimePattern() depending on its date type. In the case of panels with a date time picker, the pattern will be dynamically adjusted so that it can be used by the https://github.com/Eonasdan/bootstrap-datetimepicker[Bootstrap Datetime Picker] component (which uses http://momentjs.com/docs/#/parsing/string-format/[Moment.js formats], rather than those of regular Java code).
 
 
 | isis.viewer.wicket. +
@@ -252,7 +252,7 @@ initial
 |  Flatly
 | The initial theme to use.
 
-Expected to be in the list of \{@link #getEnabled()} themes.
+Expected to be in the list of `#getEnabled()` themes.
 
 
 | isis.viewer.wicket.themes. +

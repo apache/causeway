@@ -261,6 +261,8 @@ System.out.println("");
 static String toAsciidoc(String str) {
 
     System.out.print(".");
+    str = str.replaceAll( /\{@link[ ]+?(.+?)[ ]+(.+?)[ ]*?}/, '$2')
+    str = str.replaceAll( /\{@link[ ]+?(.+?)[ ]*?}/, '`$1`')
 
     File tf = File.createTempFile("input",".html")
     tf.write(str)   // write to the file
