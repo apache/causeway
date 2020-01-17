@@ -34,6 +34,7 @@ import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.isis.extensions.cors.impl.IsisModuleExtCorsImpl;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationServiceAllowBeatsVeto;
@@ -100,6 +101,9 @@ public class DemoApp extends SpringBootServletInitializer {
         // REST
         IsisModuleViewerRestfulObjectsViewer.class,
         IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,
+        
+        // CORS
+        IsisModuleExtCorsImpl.class,
 
         // Security Manager Extension (secman)
         IsisModuleExtSecmanModel.class,
