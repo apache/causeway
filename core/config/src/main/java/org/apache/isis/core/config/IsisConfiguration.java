@@ -1275,6 +1275,13 @@ public class IsisConfiguration {
                 // lower case
                 private String format = "medium";
             }
+            private final Time time = new Time();
+            @Data
+            public static class Time {
+                // lower case
+                private String format = "short";
+            }
+
         }
 
         private final Joda joda = new Joda();
@@ -1283,6 +1290,8 @@ public class IsisConfiguration {
             private final LocalDateTime localDateTime = new LocalDateTime();
             @Data
             public static class LocalDateTime {
+                // lower case
+                private String format = "medium";
             }
             private final DateTime dateTime = new DateTime();
             @Data
@@ -1316,16 +1325,6 @@ public class IsisConfiguration {
         private Map<String, String> format = new HashMap<>();
         
         public enum FormatIdentifier {
-            /**
-             * Key to indicate how LocalDateTime should be parsed/rendered.
-             * <p>
-             * eg: {@code isis.value.format.datetime=iso}
-             * <p>
-             * A pre-determined list of values is available, specifically 'iso_encoding', 'iso' and 'medium' (see
-             * <code>org.apache.isis.core.metamodel.facets.value.datetimejdk8local.Jdk8LocalDateTimeValueSemanticsProvider#NAMED_TITLE_FORMATTERS</code>).
-             * Alternatively, can also specify a mask, eg <tt>dd-MMM-yyyy</tt>.
-             */
-            DATETIME,
             /**
              * Key to indicate how LocalDate should be parsed/rendered.
              * <p>

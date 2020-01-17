@@ -63,15 +63,11 @@ public class JavaSqlTimeValueSemanticsProvider extends ValueSemanticsProviderAbs
     public JavaSqlTimeValueSemanticsProvider(final FacetHolder holder) {
         super("time", type(), holder, java.sql.Time.class, 8, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, null);
 
-        configuredFormat = getConfiguration().getValue().getFormat().getOrDefault("time", "short").toLowerCase().trim();
-
-        buildFormat(configuredFormat);
-
-        final String formatRequired = getConfiguration().getValue().getFormat().get("time");
-        if (formatRequired == null) {
-            format = formats().get("short");
-        } else {
-            setMask(formatRequired);
+        final Map<String, DateFormat> formats = formats();
+        configuredFormat = getConfiguration().getValueTypes().getJavaSql().getTime().getFormat();
+        format = formats.get(configuredFormat);
+        if (format == null) {
+            setMask(configuredFormat);
         }
     }
 
