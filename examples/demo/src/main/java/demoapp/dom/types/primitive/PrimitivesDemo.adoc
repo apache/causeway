@@ -18,4 +18,4 @@ Also note how *null* and *void* are handled regarding action results or properti
 ----
 
 See the primitives demo
-link:${SOURCES_DEMO}/demoapp/dom/types/primitives[sources].
+link:${SOURCES_DEMO}/demoapp/dom/types/primitive[sources].
