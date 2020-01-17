@@ -456,12 +456,20 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         if(isMetamodelFullyIntrospected() 
                 && isisConfiguration.getCore().getMetaModel().getIntrospector().isLockAfterFullIntrospection()) {
-            throw _Exceptions.illegalState(
-                    "Cannot introspect class '%s' because the metamodel has been fully introspected and is now locked. " +
-                    "One reason this can happen is if you are attempting to invoke an action through the WrapperFactory " +
-                    "on a service class incorrectly annotated with Spring's @Service annotation instead of " +
-                    "@DomainService.",
-                    cls.getName());
+            
+            val typeRegistry = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
+            
+            log.warn("Missed class '{}' when the metamodel was fully introspected.", cls.getName());
+            
+            typeRegistry.ifToBeInspectedThen(cls, sort->{
+            
+                throw _Exceptions.illegalState(
+                        "Cannot introspect class '%s' of sort %s, because the metamodel has been fully introspected and is now locked. " +
+                        "One reason this can happen is if you are attempting to invoke an action through the WrapperFactory " +
+                        "on a service class incorrectly annotated with Spring's @Service annotation instead of " +
+                        "@DomainService.",
+                        cls.getName(), sort);
+            });
         }
 
         // ... and create the specs
