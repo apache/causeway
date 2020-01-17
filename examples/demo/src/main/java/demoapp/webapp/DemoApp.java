@@ -41,6 +41,7 @@ import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleExtSecmanE
 import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanRealmShiro;
+import org.apache.isis.extensions.viewer.wicket.exceldownload.ui.IsisModuleExtExcelDownloadUi;
 import org.apache.isis.incubator.model.metamodel.IsisModuleIncModelMetaModel;
 import org.apache.isis.persistence.jdo.datanucleus5.IsisModuleJdoDataNucleus5;
 import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
@@ -109,6 +110,7 @@ public class DemoApp extends SpringBootServletInitializer {
         IsisModuleTestingFixturesApplib.class,
 
         IsisModuleIncModelMetaModel.class, // @Model support (incubator)
+        IsisModuleExtExcelDownloadUi.class, // allows for collection download as excel
         
         LibraryPreloadingService.class // just a performance enhancement
 

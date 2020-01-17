@@ -30,7 +30,6 @@ import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -39,8 +38,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.validation.annotation.Validated;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -1385,7 +1382,7 @@ public class IsisConfiguration {
 
             private DialogMode dialogModeForMenu = DialogMode.MODAL;
 
-            private Optional<String> liveReloadUrl;
+            private Optional<String> liveReloadUrl = Optional.empty();
 
             private int maxTitleLengthInTables = 12;
 
