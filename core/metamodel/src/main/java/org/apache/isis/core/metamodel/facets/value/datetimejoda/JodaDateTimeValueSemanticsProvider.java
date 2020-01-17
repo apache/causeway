@@ -78,7 +78,7 @@ public class JodaDateTimeValueSemanticsProvider extends ValueSemanticsProviderAb
         String formatRequired = getConfiguration().getValue().getFormat().get("date");
 
         if (formatRequired == null) {
-            format = formats().get(defaultFormat());
+            format = formats().get("medium");
         } else {
             setMask(formatRequired); //TODO fails when using format names eg 'medium'
         }
@@ -101,11 +101,6 @@ public class JodaDateTimeValueSemanticsProvider extends ValueSemanticsProviderAb
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.AM_PM, 0);
         cal.set(Calendar.MILLISECOND, 0);
-    }
-
-    @Override
-    protected String defaultFormat() {
-        return "medium";
     }
 
     @Override

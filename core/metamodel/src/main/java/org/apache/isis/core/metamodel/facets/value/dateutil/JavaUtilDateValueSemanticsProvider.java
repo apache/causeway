@@ -79,7 +79,7 @@ public class JavaUtilDateValueSemanticsProvider extends ValueSemanticsProviderAb
         final String formatRequired = getConfiguration().getValue().getFormat().get("datetime");
 
         if (formatRequired == null) {
-            format = formats().get(defaultFormat());
+            format = formats().get("medium");
         } else {
             setMask(formatRequired);
         }
@@ -89,11 +89,6 @@ public class JavaUtilDateValueSemanticsProvider extends ValueSemanticsProviderAb
     // //////////////////////////////////////////////////////////////////
     // temporal-specific stuff
     // //////////////////////////////////////////////////////////////////
-
-    @Override
-    protected String defaultFormat() {
-        return "medium";
-    }
 
     @Override
     protected Map<String, DateFormat> formats() {

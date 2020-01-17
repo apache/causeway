@@ -69,7 +69,7 @@ public class JavaSqlTimeValueSemanticsProvider extends ValueSemanticsProviderAbs
 
         final String formatRequired = getConfiguration().getValue().getFormat().get("time");
         if (formatRequired == null) {
-            format = formats().get(defaultFormat());
+            format = formats().get("short");
         } else {
             setMask(formatRequired);
         }
@@ -80,11 +80,6 @@ public class JavaSqlTimeValueSemanticsProvider extends ValueSemanticsProviderAbs
         cal.set(Calendar.YEAR, 1970);
         cal.set(Calendar.MONTH, 0);
         cal.set(Calendar.DAY_OF_MONTH, 1);
-    }
-
-    @Override
-    protected String defaultFormat() {
-        return "short";
     }
 
     @Override

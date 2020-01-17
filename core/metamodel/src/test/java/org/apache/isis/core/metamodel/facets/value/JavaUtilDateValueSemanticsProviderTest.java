@@ -54,10 +54,6 @@ public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProvid
         ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
         
         setValue(new JavaUtilDateValueSemanticsProvider(holder) {
-            @Override
-            protected String defaultFormat() {
-                return "iso";
-            }
         });
     }
 

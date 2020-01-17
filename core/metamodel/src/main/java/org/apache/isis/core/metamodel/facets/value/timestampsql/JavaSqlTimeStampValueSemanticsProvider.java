@@ -43,8 +43,6 @@ import lombok.Setter;
 public class JavaSqlTimeStampValueSemanticsProvider
 extends ValueSemanticsProviderAbstractTemporal<Timestamp> {
 
-    private static final Object DEFAULT_VALUE = null; // no default
-    private static final int TYPICAL_LENGTH = 25;
 
     protected static void initFormats(final Map<String, DateFormat> formats) {
         formats.put(ISO_ENCODING_FORMAT, createDateEncodingFormat("yyyyMMdd'T'HHmmssSSS"));
@@ -73,7 +71,7 @@ extends ValueSemanticsProviderAbstractTemporal<Timestamp> {
         final String formatRequired = getConfiguration().getValue().getFormat().get("timestamp");
 
         if (formatRequired == null) {
-            format = formats().get(defaultFormat());
+            format = formats().get("short");
         } else {
             setMask(formatRequired);
         }
@@ -86,11 +84,6 @@ extends ValueSemanticsProviderAbstractTemporal<Timestamp> {
     @Override
     protected Timestamp add(final Timestamp original, final int years, final int months, final int days, final int hours, final int minutes) {
         return original;
-    }
-
-    @Override
-    protected String defaultFormat() {
-        return "short";
     }
 
     @Override

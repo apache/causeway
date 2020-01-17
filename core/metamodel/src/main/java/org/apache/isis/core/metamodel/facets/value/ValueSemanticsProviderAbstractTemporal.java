@@ -333,8 +333,6 @@ implements DateValueFacet {
 
     protected abstract Date dateValue(Object value);
 
-    protected abstract String defaultFormat();
-
     protected abstract Map<String, DateFormat> formats();
 
     protected boolean ignoreTimeZone() {

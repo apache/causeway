@@ -55,10 +55,6 @@ public class JavaSqlDateValueSemanticsProviderTest extends ValueSemanticsProvide
         ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
         
         setValue(adapter = new JavaSqlDateValueSemanticsProvider(holder) {
-            @Override
-            protected String defaultFormat() {
-                return "iso";
-            }
         });
     }
 

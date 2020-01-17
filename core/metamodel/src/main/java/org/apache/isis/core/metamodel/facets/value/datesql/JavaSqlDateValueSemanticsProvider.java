@@ -77,7 +77,7 @@ public class JavaSqlDateValueSemanticsProvider extends ValueSemanticsProviderAbs
 
         final String formatRequired = getConfiguration().getValue().getFormat().get("date");
         if (formatRequired == null) {
-            format = formats().get(defaultFormat());
+            format = formats().get("medium");
         } else {
             setMask(formatRequired); //TODO fails when using format names eg 'medium'
         }
@@ -97,10 +97,6 @@ public class JavaSqlDateValueSemanticsProvider extends ValueSemanticsProviderAbs
         cal.set(Calendar.MILLISECOND, 0);
     }
 
-    @Override
-    protected String defaultFormat() {
-        return "medium";
-    }
 
     @Override
     protected boolean ignoreTimeZone() {
