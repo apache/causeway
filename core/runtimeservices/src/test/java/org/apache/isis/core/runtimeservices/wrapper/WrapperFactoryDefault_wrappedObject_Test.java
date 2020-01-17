@@ -162,6 +162,9 @@ public class WrapperFactoryDefault_wrappedObject_Test {
                 allowing(mockEmployeeSpec).isManagedBean();
                 will(returnValue(true));
                 
+                allowing(mockEmployeeSpec).isIdentifiable();
+                will(returnValue(true));
+                
                 allowing(mockEmployeeSpec).getCorrespondingClass();
                 will(returnValue(Employee.class));
 
