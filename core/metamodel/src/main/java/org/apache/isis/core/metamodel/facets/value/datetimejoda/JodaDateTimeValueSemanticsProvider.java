@@ -35,7 +35,6 @@ import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.commons.internal.collections._Maps;
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstractTemporal;
 
@@ -64,12 +63,9 @@ public class JodaDateTimeValueSemanticsProvider extends ValueSemanticsProviderAb
         this(null);
     }
 
-    public JodaDateTimeValueSemanticsProvider(final FacetHolder holder) {
-        this(holder, null);
-    }
-
-    private JodaDateTimeValueSemanticsProvider(final FacetHolder holder, final DateTime defaultValue) {
-        this("date", holder, defaultValue);
+    public JodaDateTimeValueSemanticsProvider(
+            final FacetHolder holder) {
+        super("date", type(), holder, DateTime.class, 12, Immutability.IMMUTABLE, EqualByContent.HONOURED, null);
 
         configuredFormat = getConfiguration().getValue().getFormat().getOrDefault("date", "medium").toLowerCase().trim();
 
@@ -84,10 +80,6 @@ public class JodaDateTimeValueSemanticsProvider extends ValueSemanticsProviderAb
         }
     }
 
-    private JodaDateTimeValueSemanticsProvider(
-            final String propertyType, final FacetHolder holder, final DateTime defaultValue) {
-        super(propertyType, type(), holder, DateTime.class, 12, Immutability.IMMUTABLE, EqualByContent.HONOURED, defaultValue);
-    }
 
     // //////////////////////////////////////////////////////////////////
     // temporal-specific stuff

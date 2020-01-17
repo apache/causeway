@@ -321,11 +321,6 @@ implements DateValueFacet {
         return getObjectManager().adapt(setDate(date));
     }
 
-
-    // //////////////////////////////////////////////////////////////////
-    // temporal-specific stuff
-    // //////////////////////////////////////////////////////////////////
-
     protected abstract T add(T original, int years, int months, int days, int hours, int minutes);
 
     protected void clearFields(final Calendar cal) {
@@ -349,11 +344,8 @@ implements DateValueFacet {
         format.setLenient(false);
     }
 
-    protected boolean isEmpty() {
-        return false;
-    }
-
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("propertyType", propertyType);
     }

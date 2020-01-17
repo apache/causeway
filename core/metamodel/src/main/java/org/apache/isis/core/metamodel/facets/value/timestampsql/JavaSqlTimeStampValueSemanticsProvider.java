@@ -31,7 +31,6 @@ import java.util.TimeZone;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.commons.internal.collections._Maps;
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.InvalidEntryException;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
@@ -62,7 +61,7 @@ extends ValueSemanticsProviderAbstractTemporal<Timestamp> {
 
     @SuppressWarnings("unchecked")
     public JavaSqlTimeStampValueSemanticsProvider(final FacetHolder holder) {
-        this(IsisConfiguration.Value.FormatIdentifier.TIMESTAMP, holder, 25, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, null);
+        super("timestamp", type(), holder, java.sql.Timestamp.class, 25, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, null);
 
         configuredFormat = getConfiguration().getValue().getFormat().getOrDefault("timestamp", "short").toLowerCase().trim();
 
@@ -75,10 +74,6 @@ extends ValueSemanticsProviderAbstractTemporal<Timestamp> {
         } else {
             setMask(formatRequired);
         }
-    }
-
-    private JavaSqlTimeStampValueSemanticsProvider(final IsisConfiguration.Value.FormatIdentifier formatIdentifier, final FacetHolder holder, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final Timestamp defaultValue) {
-        super(formatIdentifier.name().toLowerCase(), type(), holder, java.sql.Timestamp.class, typicalLength, immutability, equalByContent, defaultValue);
     }
 
     @Override
