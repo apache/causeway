@@ -28,7 +28,7 @@ public class InteractionDtoUtilsTest_deriveLogicalMemberId {
 
     @Test
     public void happy_case() throws Exception {
-        String s = InteractionDtoUtils.deriveLogicalMemberId(new Bookmark("customer.Order", "1234"),
+        String s = InteractionDtoUtils.deriveLogicalMemberId(Bookmark.of("customer.Order", "1234"),
                 "com.mycompany.customer.Order#placeOrder");
         assertThat(s, is(equalTo("customer.Order#placeOrder")));
     }

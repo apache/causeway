@@ -35,14 +35,12 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
 import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Category;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Recognition;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
-import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -301,26 +299,10 @@ implements FormExecutor {
             final ObjectMemento targetOam,
             final ObjectMemento resultOam) {
 
-        final Bookmark resultBookmark = resultOam != null ? resultOam.asHintingBookmarkIfSupported() : null;
-        final Bookmark targetBookmark = targetOam != null ? targetOam.asHintingBookmarkIfSupported() : null;
+        val resultBookmark = resultOam != null ? resultOam.asHintingBookmarkIfSupported() : null;
+        val targetBookmark = targetOam != null ? targetOam.asHintingBookmarkIfSupported() : null;
 
-        return differs(targetBookmark, resultBookmark);
-    }
-
-    private static boolean differs(
-            final Bookmark targetBookmark,
-            final Bookmark resultBookmark) {
-
-        if(resultBookmark == null && targetBookmark == null) {
-            return true;
-        }
-        if (resultBookmark == null || targetBookmark == null) {
-            return true;
-        }
-        final String resultBookmarkStr = asStr(resultBookmark);
-        final String targetBookmarkStr = asStr(targetBookmark);
-
-        return !Objects.equals(resultBookmarkStr, targetBookmarkStr);
+        return !Objects.equals(resultBookmark, targetBookmark);
     }
 
     private boolean hasBlobsOrClobs(final Page page) {
@@ -344,12 +326,6 @@ implements FormExecutor {
 
         });
         return hasBlobsOrClobs != null;
-    }
-
-    private static String asStr(final Bookmark bookmark) {
-        return bookmark instanceof HintStore.BookmarkWithHintId
-                ? ((HintStore.BookmarkWithHintId) bookmark).toStringUsingHintId()
-                        : bookmark.toString();
     }
 
 //    private void forwardOnConcurrencyException(

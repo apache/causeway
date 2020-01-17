@@ -23,31 +23,8 @@ import java.util.Set;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 
-import lombok.Getter;
-
 @Programmatic
 public interface HintStore {
-
-    public static class BookmarkWithHintId extends Bookmark {
-
-        private static final long serialVersionUID = -459431279406553124L;
-
-        @Getter private final String hintId;
-
-        public BookmarkWithHintId(final Bookmark bookmark, final String hintId) {
-            super(bookmark.toString());
-            this.hintId = hintId;
-        }
-
-        /**
-         * Similar to {@link #toString()}, but using {@link #hintId} rather than {@link #identifier}.
-         */
-        public String toStringUsingHintId() {
-            return super.getObjectType() 
-                    + SEPARATOR 
-                    + hintId;
-        }
-    }
 
     interface HintIdProvider {
         String hintId();

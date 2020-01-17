@@ -96,7 +96,7 @@ public class MementosTest {
         memento.put("someLocalDate", LocalDate.of(2013,9,3));
         memento.put("someJavaUtilDate", new Date(300_000_000));
 
-        memento.put("someBookmark", new Bookmark("CUS", "12345"));
+        memento.put("someBookmark", Bookmark.of("CUS", "12345"));
         memento.put("someNullValue", null);
 
         memento.put("someEnum", DOW.Wed);
@@ -119,7 +119,7 @@ public class MementosTest {
         assertThat(memento2.get("someBigDecimal", BigDecimal.class), is(new BigDecimal("123456789012345678901234567890.123456789")));
         assertThat(memento2.get("someLocalDate", LocalDate.class), is(LocalDate.of(2013,9,3)));
         assertThat(memento2.get("someJavaUtilDate", Date.class), is(new Date(300_000_000)));
-        assertThat(memento2.get("someBookmark", Bookmark.class), is(new Bookmark("CUS", "12345")));
+        assertThat(memento2.get("someBookmark", Bookmark.class), is(Bookmark.of("CUS", "12345")));
 
         // a nullValue can be grabbed as any type, will always succeed
         assertThat(memento2.get("someNullValue", Integer.class), is(nullValue()));

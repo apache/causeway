@@ -58,17 +58,19 @@ final class _Strings_KeyValuePair implements _Strings.KeyValuePair {
     }
 
     /**
-     * Parses a string assumed to be of the form <kbd>key=value</kbd> into its parts.
-     *
-     * @return a non-empty Optional, if (and only if) the {@code keyValueLiteral} does contain at least one '='
+     * Parses a string assumed to be of the form <kbd>key[separator]value</kbd> into its parts.
+     * @param keyValueLiteral
+     * @param separator
+     * @return a non-empty Optional, if (and only if) the {@code keyValueLiteral} 
+     * does contain at least one {@code separator}
      */
-    public static Optional<_Strings.KeyValuePair> parse(String keyValueLiteral) {
+    public static Optional<_Strings.KeyValuePair> parse(String keyValueLiteral, char separator) {
 
         if(_Strings.isNullOrEmpty(keyValueLiteral)) {
             return Optional.empty();
         }
 
-        final int equalsIndex = keyValueLiteral.indexOf('=');
+        final int equalsIndex = keyValueLiteral.indexOf(separator);
         if (equalsIndex == -1) {
             return Optional.empty();
         }

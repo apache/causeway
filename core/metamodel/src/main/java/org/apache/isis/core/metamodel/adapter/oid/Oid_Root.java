@@ -86,7 +86,7 @@ final class Oid_Root implements RootOid {
     public Bookmark asBookmark() {
         val objectType = getObjectSpecId().asString();
         val identifier = getIdentifier();
-        return new Bookmark(objectType, identifier);
+        return Bookmark.of(objectType, identifier);
     }
 
     @Override

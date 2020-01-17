@@ -2,11 +2,10 @@ package org.apache.isis.extensions.viewer.wicket.pdfjs.applib.spi;
 
 import java.io.Serializable;
 
-import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.Scale;
-
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.value.Blob;
+import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.Scale;
 
 /**
  * SPI service interface.
@@ -31,6 +30,8 @@ public interface PdfJsViewerAdvisor {
      */
     class InstanceKey implements Serializable {
 
+        private static final long serialVersionUID = 1L;
+        
         private final TypeKey typeKey;
         private final String identifier;
 
@@ -63,7 +64,7 @@ public interface PdfJsViewerAdvisor {
 
         @Programmatic
         public Bookmark asBookmark() {
-            return new Bookmark(typeKey.objectType, identifier);
+            return Bookmark.of(typeKey.objectType, identifier);
         }
 
         @Override
@@ -104,6 +105,8 @@ public interface PdfJsViewerAdvisor {
          */
         public static class TypeKey implements Serializable {
 
+            private static final long serialVersionUID = 1L;
+            
             private final String objectType;
             private final String propertyId;
             private final String userName;
@@ -184,6 +187,8 @@ public interface PdfJsViewerAdvisor {
      */
     class Advice implements Serializable {
 
+        private static final long serialVersionUID = 1L;
+        
         private final Integer pageNum;
         private final TypeAdvice typeAdvice;
 
@@ -247,6 +252,8 @@ public interface PdfJsViewerAdvisor {
          */
         public static class TypeAdvice implements Serializable {
 
+            private static final long serialVersionUID = 1L;
+            
             private final Scale scale;
             private final Integer height;
 

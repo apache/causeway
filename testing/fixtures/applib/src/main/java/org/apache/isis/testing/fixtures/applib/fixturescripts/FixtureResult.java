@@ -75,7 +75,7 @@ public class FixtureResult {
     @PropertyLayout(named="Result")
     @Title(sequence="2")
     public Object getObject() {
-        return bookmarkService.lookup(new Bookmark(objectBookmark));
+        return bookmarkService.lookup(Bookmark.parse(objectBookmark).orElse(null));
     }
 
     public void setObject(Object object) {

@@ -475,7 +475,7 @@ final class CellMarshaller {
             return null;
         }
         final String bookmarkStr = commentRts.getString();
-        final Bookmark bookmark = new Bookmark(bookmarkStr);
+        final Bookmark bookmark = Bookmark.parse(bookmarkStr).orElse(null);
         return bookmarkService.lookup(bookmark, requiredType);
     }
     

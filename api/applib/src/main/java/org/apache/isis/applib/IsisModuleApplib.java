@@ -21,7 +21,6 @@ package org.apache.isis.applib;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.applib.mixins.dto.DtoMappingHelper;
 import org.apache.isis.applib.mixins.dto.Dto_downloadXml;
 import org.apache.isis.applib.mixins.dto.Dto_downloadXsd;
 import org.apache.isis.applib.mixins.layout.Object_downloadLayoutXml;
@@ -77,7 +76,6 @@ import org.apache.isis.schema.IsisModuleSchema;
         CommandContext.class,
         ContentMappingServiceForCommandDto.class,
         ContentMappingServiceForCommandsDto.class,
-        DtoMappingHelper.class,
         InteractionContext.class,
         JaxbServiceDefault.class,
         PublisherServiceLogging.class,

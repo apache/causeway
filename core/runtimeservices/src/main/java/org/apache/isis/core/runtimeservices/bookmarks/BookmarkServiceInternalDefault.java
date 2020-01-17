@@ -156,7 +156,7 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
     public Bookmark bookmarkFor(Class<?> cls, String identifier) {
         val spec = specificationLoader.loadSpecification(cls);
         val objectType = spec.getSpecId().asString();
-        return new Bookmark(objectType, identifier);
+        return Bookmark.of(objectType, identifier);
     }
 
     //FIXME[2112] why would we ever store Service Beans as Bookmarks?

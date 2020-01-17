@@ -415,7 +415,7 @@ final class ObjectMementoLegacy implements Serializable {
     Bookmark asHintingBookmark() {
         val bookmark = asBookmark();
         return hintId != null && bookmark != null
-                ? new HintStore.BookmarkWithHintId(bookmark, hintId)
+                ? bookmark.withHintId(hintId)
                         : bookmark;
     }
 

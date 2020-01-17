@@ -19,109 +19,87 @@
 package org.apache.isis.applib.services.bookmark;
 
 import java.io.Serializable;
-import java.util.Iterator;
-import java.util.Objects;
+import java.util.Optional;
+import java.util.StringTokenizer;
+
+import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.schema.common.v2.OidDto;
 
-import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- * String representation of any persistent object managed by the framework.
+ * String representation of any persistable or re-createable object managed by the framework.
  *
  * <p>
  * Analogous to the <tt>RootOid</tt>.
  */
-@Value
+@Value @lombok.Value @RequiredArgsConstructor
 public class Bookmark implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     protected static final String SEPARATOR = ":";
     
-    @Getter private final String objectType;
-    @Getter private final String identifier;
+    @NonNull  private final String objectType;
+    @NonNull  private final String identifier;
+    @Nullable private final String hintId;
 
-
-    public static Bookmark create(String str) {
-        return str != null? new Bookmark(str): null;
+    public static Bookmark of(String objectType, String identifier) {
+        return new Bookmark(objectType, identifier, /*hintId*/ null);
     }
-
-    public OidDto toOidDto() {
-        final OidDto oidDto = new OidDto();
-
-        oidDto.setType(getObjectType());
-        oidDto.setId(getIdentifier());
-
-        return oidDto;
-    }
-
-    public static Bookmark from(OidDto oidDto) {
-        val objectType = coalesce(oidDto.getType(), oidDto.getObjectType());
-        val objectId = coalesce(oidDto.getId(), oidDto.getObjectIdentifier());
-        val bookmark = new Bookmark(objectType, objectId);
-        return bookmark;
-    }
-
+    
     /**
      * Round-trip with {@link #toString()} representation.
      */
-    public Bookmark(final String toString) {
-        this(_Strings.splitThenStream(toString, SEPARATOR).iterator());
-    }
-
-    private Bookmark(final Iterator<String> split) {
-        this(split.next(), split.next());
-    }
-
-    public Bookmark(final String objectType, final String identifier) {
-        this.objectType = objectType;
-        this.identifier = identifier;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.getIdentifier(), this.getObjectType());
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (this.getClass() != obj.getClass()) return false;
-        
-        val other = (Bookmark) obj;
-        
-        if(! Objects.equals(this.identifier, other.identifier)) {
-            return false;
+    public static Optional<Bookmark> parse(@Nullable String str) {
+        if(str==null) {
+            return Optional.empty();
         }
-        if(! Objects.equals(this.objectType, other.objectType)) {
-            return false;
+        val tokenizer = new StringTokenizer(str, SEPARATOR);
+        int tokenCount = tokenizer.countTokens();
+        if(tokenCount>1) {
+            return Optional.of(Bookmark.of(tokenizer.nextToken(), tokenizer.nextToken()));            
         }
-        
-        return true;
+        return Optional.empty();
+
     }
 
+    public OidDto toOidDto() {
+        val oidDto = new OidDto();
+        oidDto.setType(getObjectType());
+        oidDto.setId(getIdentifier());
+        return oidDto;
+    }
+
+    public static Bookmark from(@NonNull OidDto oidDto) {
+        return Bookmark.of(oidDto.getType(), oidDto.getId());
+    }
+    
     /**
-     * The canonical form of the {@link Bookmark}, that is &quot;{@link #getObjectType() objectType}{@value #SEPARATOR}{@link #getIdentifier()}&quot;.
+     * The canonical form of the {@link Bookmark}, that is 
+     * &quot;{@link #getObjectType() objectType}{@value #SEPARATOR}{@link #getIdentifier()}&quot;.
      *
      * <p>
-     * This is parseable by the {@link #Bookmark(String) string constructor}.
+     * This is parseable by the {@link #parse(String)}.
      */
     @Override
     public String toString() {
         return objectType + SEPARATOR + identifier;
     }
 
-    // -- HELPER
+    // -- HINT-ID EXTENSION
     
-    private static String coalesce(final String first, final String second) {
-        return first != null? first: second;
+    public Bookmark withHintId(@NonNull String hintId) {
+        return new Bookmark(this.getObjectType(), this.getIdentifier(), hintId); 
     }
 
+    public String toStringUsingIdentifier(String id) {
+        return objectType + SEPARATOR + id;
+    }
     
 
 }

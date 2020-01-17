@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.viewer.services;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.inject.Named;
@@ -34,6 +35,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.core.commons.internal.collections._Maps;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
@@ -102,11 +104,11 @@ public class HintStoreUsingWicketSession implements HintStore {
     }
 
     protected String sessionAttributeFor(final Bookmark bookmark) {
-        return "hint-" + (
-                bookmark instanceof BookmarkWithHintId
-                ? ((BookmarkWithHintId) bookmark).toStringUsingHintId()
-                        : bookmark.toString()
-                );
+        
+        val id = Optional.ofNullable(bookmark.getHintId())
+                    .orElse(bookmark.getIdentifier());
+        
+        return "hint-" + bookmark.toStringUsingIdentifier(id);
     }
 
 }

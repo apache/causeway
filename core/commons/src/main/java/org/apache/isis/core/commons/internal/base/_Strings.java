@@ -88,14 +88,16 @@ public final class _Strings {
     }
 
     /**
-     * Parses a string assumed to be of the form <kbd>key=value</kbd> into its parts.
-     *
-     * @return a non-empty Optional, if (and only if) the {@code keyValueLiteral} does contain at least one '='
+     * Parses a string assumed to be of the form <kbd>key[separator]value</kbd> into its parts.
+     * @param keyValueLiteral
+     * @param separator
+     * @return a non-empty Optional, if (and only if) the {@code keyValueLiteral} 
+     * does contain at least one {@code separator}
      */
-    public static Optional<KeyValuePair> parseKeyValuePair(@Nullable String keyValueLiteral) {
-        return _Strings_KeyValuePair.parse(keyValueLiteral);
+    public static Optional<KeyValuePair> parseKeyValuePair(@Nullable String keyValueLiteral, char separator) {
+        return _Strings_KeyValuePair.parse(keyValueLiteral, separator);
     }
-
+    
     // -- FILLING
 
     public static String of(int length, char c) {

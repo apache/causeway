@@ -48,7 +48,7 @@ public class AdapterAndProperty {
 
         final String objectType = oid.getObjectSpecId().asString();
         final String identifier = oid.getIdentifier();
-        bookmark = new Bookmark(objectType, identifier);
+        bookmark = Bookmark.of(objectType, identifier);
         bookmarkStr = bookmark.toString();
 
         propertyId = property.getId();
