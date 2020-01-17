@@ -102,16 +102,6 @@ public interface Oid extends Serializable {
             return Oid_Root.of(objectSpecId, mementoStr);
         }
         
-        @Deprecated
-        public static RootOid persistentOf(ObjectSpecId objectSpecId, String mementoStr) {
-            return of(objectSpecId, mementoStr);
-        }
-
-        @Deprecated
-        public static RootOid transientOf(ObjectSpecId objectSpecId, String identifier) {
-            return of(objectSpecId, identifier);
-        }
-        
         // -- PARENTED COLLECTIONS
 
         public static ParentedOid parentedOfOneToMany(RootOid parentRootOid, OneToManyAssociation oneToMany) {

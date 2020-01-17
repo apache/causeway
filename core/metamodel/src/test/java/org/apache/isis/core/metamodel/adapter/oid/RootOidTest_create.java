@@ -31,24 +31,7 @@ public class RootOidTest_create {
     @Test
     public void create() throws Exception {
         ObjectSpecId objectSpecId = ObjectSpecId.of("CUS");
-        RootOid oid = Oid.Factory.persistentOf(objectSpecId, "123");
-        assertThat(oid.getObjectSpecId(), is(objectSpecId));
-        assertThat(oid.getIdentifier(), is("123"));
-    }
-
-    @Test
-    public void createTransient() throws Exception {
-        ObjectSpecId objectSpecId = ObjectSpecId.of("CUS");
-        RootOid oid = Oid.Factory.transientOf(objectSpecId, "123");
-        assertThat(oid.getObjectSpecId(), is(objectSpecId));
-        assertThat(oid.getIdentifier(), is("123"));
-    }
-
-
-    @Test
-    public void createPersistent() throws Exception {
-        ObjectSpecId objectSpecId = ObjectSpecId.of("CUS");
-        RootOid oid = Oid.Factory.persistentOf(objectSpecId, "123");
+        RootOid oid = Oid.Factory.of(objectSpecId, "123");
         assertThat(oid.getObjectSpecId(), is(objectSpecId));
         assertThat(oid.getIdentifier(), is("123"));
     }

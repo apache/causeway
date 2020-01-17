@@ -60,7 +60,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
@@ -75,7 +74,6 @@ public class ObjectMemberAbstractTest {
     private ObjectMemberAbstractImpl testMember;
 
     private ObjectAdapter persistentAdapter;
-    private ObjectAdapter transientAdapter;
     protected MetaModelContext metaModelContext;
 
     @Mock private AuthenticationSessionProvider mockAuthenticationSessionProvider;
@@ -100,15 +98,8 @@ public class ObjectMemberAbstractTest {
 
         persistentAdapter = PojoAdapter.of(
                 mockPersistable,
-                Factory.persistentOf(ObjectSpecId.of("CUS"), "1"),
+                Factory.of(ObjectSpecId.of("CUS"), "1"),
                 mockSpecificationLoader);
-
-
-        transientAdapter = PojoAdapterBuilder.create()
-                .with(mockSpecificationLoader)
-                .with(PojoAdapterBuilder.Persistence.TRANSIENT)
-                .withPojo(mockPersistable)
-                .build();
 
         testMember = new ObjectMemberAbstractImpl(metaModelContext, "id");
         
@@ -154,7 +145,7 @@ public class ObjectMemberAbstractTest {
         testMember.addFacet(new HideForContextFacetNone(testMember));
         testMember.addFacet(new HiddenFacetAbstractImpl(Where.ANYWHERE, testMember){});
 
-        final Consent visible = testMember.isVisible(transientAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        final Consent visible = testMember.isVisible(persistentAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
         assertFalse(visible.isAllowed());
     }
 

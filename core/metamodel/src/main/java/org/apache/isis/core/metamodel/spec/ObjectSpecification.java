@@ -74,7 +74,7 @@ import lombok.val;
  * {@link ObjectSpecification}s as we need them, and then introspect them later.
  */
 public interface ObjectSpecification extends Specification, ObjectActionContainer,
-        ObjectAssociationContainer, Hierarchical,  DefaultProvider {
+        ObjectAssociationContainer, Hierarchical, DefaultProvider {
 
     final class Comparators{
         private Comparators(){}

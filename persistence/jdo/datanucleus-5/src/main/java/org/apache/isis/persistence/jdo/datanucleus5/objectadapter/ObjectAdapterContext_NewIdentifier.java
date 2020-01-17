@@ -58,7 +58,7 @@ class ObjectAdapterContext_NewIdentifier {
         final String identifier = persistenceSession.identifierFor(pojo);
 
         final ObjectSpecId objectSpecId = spec.getSpecId();
-        return Oid.Factory.persistentOf(objectSpecId, identifier);
+        return Oid.Factory.of(objectSpecId, identifier);
     }
 
 }

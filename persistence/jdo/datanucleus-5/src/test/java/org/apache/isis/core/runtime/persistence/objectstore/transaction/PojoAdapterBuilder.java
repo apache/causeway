@@ -49,12 +49,6 @@ public class PojoAdapterBuilder {
     private Persistence persistence = Persistence.PERSISTENT;
 
     public enum Persistence {
-        TRANSIENT {
-            @Override
-            RootOid createOid(ObjectSpecId objectSpecId, String identifier) {
-                return Factory.transientOf(objectSpecId, identifier);
-            }
-        },
         PERSISTENT {
             @Override
             RootOid createOid(ObjectSpecId objectSpecId, String identifier) {

@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.adapter.oid;
 
 import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.core.commons.internal.url.UrlDecoderUtil;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 import static org.apache.isis.core.metamodel.adapter.oid.Oid.unmarshaller;
@@ -43,11 +42,6 @@ public interface ParentedOid extends Oid {
     String getName();
 
     // -- DECODE FROM STRING
-
-    public static ParentedOid deStringEncoded(final String urlEncodedOidStr) {
-        final String oidStr = UrlDecoderUtil.urlDecode(urlEncodedOidStr);
-        return deString(oidStr);
-    }
 
     public static ParentedOid deString(String enString) {
         return unmarshaller().unmarshal(enString, ParentedOid.class);

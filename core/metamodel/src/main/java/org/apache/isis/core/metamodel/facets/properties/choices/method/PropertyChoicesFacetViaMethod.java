@@ -78,19 +78,6 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
                 .visiblePojosAsArray(collectionAdapter, interactionInitiatedBy);
         
         return visiblePojos;
-        
-        
-        //XXX legacy of, (not checking visibility)
-
-//        final Object options = ManagedObject.InvokeUtil.invoke(method, owningAdapter);
-//        if (options == null) {
-//            return null;
-//        }
-//        if (options.getClass().isArray()) {
-//            return ObjectExtensions.asArray(options);
-//        }
-//        final ObjectSpecification specification = getSpecificationLoader().loadSpecification(choicesClass);
-//        return CollectionUtils.getCollectionAsObjectArray(options, specification, getObjectManager());
     }
 
     @Override

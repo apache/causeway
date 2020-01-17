@@ -21,14 +21,12 @@ package org.apache.isis.core.runtime.persistence.adapter;
 
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.internal.base._Lazy;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.commons.ToString;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.session.IsisSession;
@@ -57,11 +55,6 @@ public final class PojoAdapter implements ObjectAdapter {
     public static PojoAdapter ofValue(Serializable value) {
         val oid = Oid.Factory.value();
         return PojoAdapter.of(value, oid);
-    }
-
-    public static ObjectAdapter ofTransient(Object pojo, ObjectSpecId specId) {
-        val identifier = UUID.randomUUID().toString();
-        return PojoAdapter.of(pojo, Oid.Factory.transientOf(specId, identifier));
     }
 
     public static PojoAdapter of(
