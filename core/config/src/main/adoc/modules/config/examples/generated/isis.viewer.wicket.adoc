@@ -93,7 +93,7 @@ clear-original-destination
 date-pattern
 |  dd-MM-yyyy
 |  The pattern used for rendering and parsing dates.  +
- Each Date scalar panel will use {@ #getDatePattern()} or {@linkplain #getDateTimePattern()} depending on its date type.  In the case of panels with a date picker, the pattern will be dynamically adjusted so that it can be used by the <a href="https://github.com/Eonasdan/bootstrap-datetimepicker">Bootstrap Datetime Picker</a> component (which uses <a href="http://momentjs.com/docs/#/parsing/string-format/">Moment.js formats</a>, rather than those of regular Java code).
+ Each Date scalar panel will use {#getDatePattern()} or {@linkplain #getDateTimePattern()} depending on its date type.  In the case of panels with a date picker, the pattern will be dynamically adjusted so that it can be used by the <a href="https://github.com/Eonasdan/bootstrap-datetimepicker">Bootstrap Datetime Picker</a> component (which uses <a href="http://momentjs.com/docs/#/parsing/string-format/">Moment.js formats</a>, rather than those of regular Java code).
 
 | isis.viewer.wicket. +
 date-picker.max-date
