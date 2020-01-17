@@ -76,7 +76,8 @@ validator.no-params-only
 | isis.core.meta-model. +
 validator.parallelize
 |  true
-|  Whether to perform metamodel validation in parallel.
+| Whether to perform metamodel validation in parallel.
+
 
 | isis.core.meta-model. +
 validator.mixins-only

@@ -1,6 +1,7 @@
 | isis.core.runtime.locale
 | 
-|  Set to override {@link Locale#getDefault()}
+| Set to override \{@link Locale#getDefault()}
+
 
 | isis.core.runtime.timezone
 | 
