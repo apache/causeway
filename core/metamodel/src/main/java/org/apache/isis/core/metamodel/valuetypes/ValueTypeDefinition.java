@@ -22,9 +22,9 @@ import java.util.Map;
 
 import org.apache.isis.schema.common.v2.ValueType;
 
-import lombok.Data;
+import lombok.Value;
 
-@Data
+@Value
 public class ValueTypeDefinition {
 
     public static ValueTypeDefinition collection(Class<?> clazz) {

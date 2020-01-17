@@ -40,6 +40,7 @@ public class ClassSubstitutorForCollections implements ClassSubstitutor {
 
     @Override
     public Class<?> getClass(@lombok.NonNull @org.springframework.lang.NonNull Class<?> cls) {
+
         if(Container.class.isAssignableFrom(cls)) {
             return Container.class;
         }
