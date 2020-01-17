@@ -129,26 +129,17 @@ public class OneToManyAssociationDefaultTest {
                 oneOf(mockOwnerAdapter).getSpecification();
                 will(returnValue(mockOwnerAdapterSpec));
                 
-                oneOf(mockOwnerAdapterSpec).isManagedBean();
-                will(returnValue(false));
-                
-                oneOf(mockOwnerAdapterSpec).isViewModel();
-                will(returnValue(true));
-                
                 oneOf(mockOwnerAdapterSpec).isParented();
                 will(returnValue(false));
                 
                 oneOf(mockOwnerAdapterSpec).isEntity();
                 will(returnValue(false));
                 
+                oneOf(mockOwnerAdapterSpec).isIdentifiable();
+                will(returnValue(true));
+                
                 oneOf(mockAssociatedAdapter).getSpecification();
                 will(returnValue(mockOwnerAdapterSpec));
-                
-//                oneOf(mockOwnerAdapter).isRepresentingPersistent();
-//                will(returnValue(true));
-//
-//                oneOf(mockAssociatedAdapter).isTransient();
-//                will(returnValue(false));
 
                 oneOf(mockPeer).getFacet(CollectionAddToFacet.class);
                 will(returnValue(mockCollectionAddToFacet));
