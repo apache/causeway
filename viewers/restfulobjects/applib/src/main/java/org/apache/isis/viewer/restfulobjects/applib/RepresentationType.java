@@ -199,16 +199,6 @@ public enum RepresentationType {
         return getJsonMediaType(Collections.singletonMap(parameter, paramValue));
     }
 
-    /**
-     * Clones the (immutable) {@link #getMediaType() media type}, adding all provided
-     * parameters.
-     *
-     * @deprecated - use {@link #getJsonMediaType(Map)} instead.
-     */
-    @Deprecated
-    public MediaType getMediaType(Map<String, String> mediaTypeParams) {
-        return getJsonMediaType(mediaTypeParams);
-    }
     public MediaType getJsonMediaType(Map<String, String> mediaTypeParams) {
         Map<String, String> parameters = new HashMap<>(jsonMediaType.getParameters());
         parameters.putAll(mediaTypeParams);

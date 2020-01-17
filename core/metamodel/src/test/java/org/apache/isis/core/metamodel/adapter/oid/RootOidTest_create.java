@@ -31,7 +31,7 @@ public class RootOidTest_create {
     @Test
     public void create() throws Exception {
         ObjectSpecId objectSpecId = ObjectSpecId.of("CUS");
-        RootOid oid = Oid.Factory.of(objectSpecId, "123");
+        RootOid oid = Oid.Factory.root(objectSpecId, "123");
         assertThat(oid.getObjectSpecId(), is(objectSpecId));
         assertThat(oid.getIdentifier(), is("123"));
     }

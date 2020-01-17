@@ -139,7 +139,7 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
             return null;
         }
         val adapter = objectManager.adapt(unwrapped(domainObject)); 
-        if(!ManagedObject.isBookmarkable(adapter)){
+        if(!ManagedObject.isIdentifiable(adapter)){
             // eg values cannot be bookmarked
             return null;
         }

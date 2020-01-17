@@ -53,7 +53,7 @@ public class ObjectAdapterForBean implements ObjectAdapter {
     @Override
     public Oid getOid() {
         val spec = getSpecification();
-        return Oid.Factory.of(spec.getSpecId(), bean.getId());
+        return Oid.Factory.root(spec.getSpecId(), bean.getId());
     }
 
 //    @Override

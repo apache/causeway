@@ -336,16 +336,16 @@ public interface ManagedObject {
         return adapter.getSpecification().isValue();
     }
 
-    static boolean isBookmarkable(ManagedObject adapter) {
+    /**
+     * @return whether the corresponding type can be mapped onto a REFERENCE (schema) or an Oid,
+     * that is the type is 'identifiable' (aka 'referencable' or 'bookmarkable') 
+     */
+    static boolean isIdentifiable(ManagedObject adapter) {
         if(adapter==null) {
             return false;
         }
         val spec = adapter.getSpecification();
-        if(spec.isManagedBean() || spec.isViewModel() || spec.isEntity()) {
-            // services and view models are book-markable
-            return true;
-        }
-        return false;
+        return spec.isIdentifiable();
     }
 
     static boolean isNull(ManagedObject adapter) {
@@ -631,12 +631,11 @@ public interface ManagedObject {
         return _entityState(adapter) == EntityState.persistable_Destroyed;
     }
 
-    @Deprecated
-    static void _whenFirstIsBookmarkable_ensureSecondIsNotTransient(
+    static void _whenFirstIsBookmarkable_ensureSecondIsAsWell(
             ManagedObject first,
             ManagedObject second) {
 
-        if(ManagedObject.isBookmarkable(first) && second!=null) {
+        if(ManagedObject.isIdentifiable(first) && second!=null) {
 
             val refSpec = second.getSpecification();
 

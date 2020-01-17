@@ -90,26 +90,24 @@ public interface Oid extends Serializable {
             return Oid_Value.INSTANCE;
         }
 
-        // -- LEGACY
-
         public static RootOid ofBookmark(Bookmark bookmark) {
             return Oid_Root.of(
                     ObjectSpecId.of(bookmark.getObjectType()), 
                     bookmark.getIdentifier());
         }
 
-        public static RootOid of(ObjectSpecId objectSpecId, String mementoStr) {
-            return Oid_Root.of(objectSpecId, mementoStr);
+        public static RootOid root(ObjectSpecId objectSpecId, String identifier) {
+            return Oid_Root.of(objectSpecId, identifier);
         }
         
         // -- PARENTED COLLECTIONS
 
-        public static ParentedOid parentedOfOneToMany(RootOid parentRootOid, OneToManyAssociation oneToMany) {
-            return Oid_Parented.ofOneToManyId(parentRootOid, oneToMany.getId());
+        public static ParentedOid parented(RootOid parent, OneToManyAssociation oneToMany) {
+            return Oid_Parented.ofOneToManyId(parent, oneToMany.getId());
         }
 
-        public static ParentedOid parentedOfOneToManyId(RootOid parentRootOid, String oneToManyId) {
-            return Oid_Parented.ofOneToManyId(parentRootOid, oneToManyId);
+        public static ParentedOid parentedForTesting(RootOid parent, String oneToManyId) {
+            return Oid_Parented.ofOneToManyId(parent, oneToManyId);
         }
         
     }

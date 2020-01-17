@@ -76,7 +76,7 @@ implements ObjectAdapterModel, UiHintContainer {
     public static PageParameters createPageParameters(ManagedObject adapter) {
 
         val pageParameters = PageParametersUtils.newPageParameters();
-        val isEntity = ManagedObject.isBookmarkable(adapter);
+        val isEntity = ManagedObject.isIdentifiable(adapter);
 
         if (isEntity) {
             val oidStr = ManagedObject._identify(adapter).enString();

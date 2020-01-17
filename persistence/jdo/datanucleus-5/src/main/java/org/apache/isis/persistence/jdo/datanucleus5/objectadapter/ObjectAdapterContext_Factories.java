@@ -66,7 +66,7 @@ class ObjectAdapterContext_Factories implements ObjectAdapterFactories {
         _Assert.assertNotNull(pojo);
 
         // persistence of collection follows the parent
-        final ParentedOid collectionOid = Oid.Factory.parentedOfOneToMany(parentOid, otma);
+        final ParentedOid collectionOid = Oid.Factory.parented(parentOid, otma);
         final ObjectAdapter collectionAdapter = createCollectionAdapter(pojo, collectionOid);
         return collectionAdapter;
     }

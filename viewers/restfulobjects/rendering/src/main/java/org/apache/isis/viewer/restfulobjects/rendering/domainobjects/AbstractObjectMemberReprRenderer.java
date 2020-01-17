@@ -256,7 +256,7 @@ extends ReprRendererAbstract<R, ObjectAndMember<T>> {
     }
 
     private void addDetailsLinkIfPersistent() {
-        if (!ManagedObject.isBookmarkable(objectAdapter)) {
+        if (!ManagedObject.isIdentifiable(objectAdapter)) {
             return;
         }
         final JsonRepresentation link = linkTo.memberBuilder(Rel.DETAILS, objectMemberType, objectMember).build();

@@ -201,7 +201,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
             return;
         }
         
-        ManagedObject._whenFirstIsBookmarkable_ensureSecondIsNotTransient(ownerAdapter, newReferencedAdapter);
+        ManagedObject._whenFirstIsBookmarkable_ensureSecondIsAsWell(ownerAdapter, newReferencedAdapter);
 
         propertySetterFacet.setProperty(this, ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
     }

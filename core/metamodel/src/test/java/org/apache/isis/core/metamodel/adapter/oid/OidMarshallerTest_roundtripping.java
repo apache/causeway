@@ -30,7 +30,7 @@ public class OidMarshallerTest_roundtripping {
 
     @Test
     public void rootOid() {
-        RootOid oid = Oid.Factory.of(ObjectSpecId.of("CUS"), "123");
+        RootOid oid = Oid.Factory.root(ObjectSpecId.of("CUS"), "123");
 
         final String enString = oid.enString();
         final RootOid deString = RootOid.deString(enString);
@@ -39,8 +39,8 @@ public class OidMarshallerTest_roundtripping {
 
     @Test
     public void collectionOid() {
-        RootOid parentOid = Oid.Factory.of(ObjectSpecId.of("CUS"), "123");
-        ParentedOid oid = Oid.Factory.parentedOfOneToManyId(parentOid, "items");
+        RootOid parentOid = Oid.Factory.root(ObjectSpecId.of("CUS"), "123");
+        ParentedOid oid = Oid.Factory.parentedForTesting(parentOid, "items");
 
         final String enString = oid.enString();
         final ParentedOid deString = ParentedOid.deString(enString);
@@ -49,7 +49,7 @@ public class OidMarshallerTest_roundtripping {
     
     @Test
     public void rootOid_withLegacyVersionIgnored() {
-        RootOid oid = Oid.Factory.of(ObjectSpecId.of("CUS"), "123");
+        RootOid oid = Oid.Factory.root(ObjectSpecId.of("CUS"), "123");
 
         final String enString = oid.enString();
         final RootOid deString = RootOid.deString(enString + "^" + 90807L);

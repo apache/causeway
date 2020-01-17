@@ -98,7 +98,7 @@ public class ObjectMemberAbstractTest {
 
         persistentAdapter = PojoAdapter.of(
                 mockPersistable,
-                Factory.of(ObjectSpecId.of("CUS"), "1"),
+                Factory.root(ObjectSpecId.of("CUS"), "1"),
                 mockSpecificationLoader);
 
         testMember = new ObjectMemberAbstractImpl(metaModelContext, "id");

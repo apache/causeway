@@ -26,22 +26,22 @@ import org.apache.isis.core.unittestsupport.value.ValueTypeContractTestAbstract;
 
 public class CollectionOidTest_valueSemantics extends ValueTypeContractTestAbstract<ParentedOid> {
 
-    private final RootOid parent = Oid.Factory.of(ObjectSpecId.of("CUS"), "123");
-    private final RootOid otherParent = Oid.Factory.of(ObjectSpecId.of("CUS"), "124");
+    private final RootOid parent = Oid.Factory.root(ObjectSpecId.of("CUS"), "123");
+    private final RootOid otherParent = Oid.Factory.root(ObjectSpecId.of("CUS"), "124");
 
     @Override
     protected List<ParentedOid> getObjectsWithSameValue() {
         return Arrays.asList(
-                Oid.Factory.parentedOfOneToManyId(parent, "456"),
-                Oid.Factory.parentedOfOneToManyId(parent, "456"),
-                Oid.Factory.parentedOfOneToManyId(parent, "456"));
+                Oid.Factory.parentedForTesting(parent, "456"),
+                Oid.Factory.parentedForTesting(parent, "456"),
+                Oid.Factory.parentedForTesting(parent, "456"));
     }
 
     @Override
     protected List<ParentedOid> getObjectsWithDifferentValue() {
         return Arrays.asList(
-                Oid.Factory.parentedOfOneToManyId(otherParent, "456"),
-                Oid.Factory.parentedOfOneToManyId(parent, "457"));
+                Oid.Factory.parentedForTesting(otherParent, "456"),
+                Oid.Factory.parentedForTesting(parent, "457"));
     }
 
 }

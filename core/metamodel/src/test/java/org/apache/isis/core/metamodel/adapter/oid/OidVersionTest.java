@@ -36,24 +36,24 @@ public class OidVersionTest  {
 
     @Test
     public void whenEquivalent() throws Exception {
-        oid1 = Oid.Factory.of(cusObjectSpecId, "123");
-        oid2 = Oid.Factory.of(cusObjectSpecId, "123");
+        oid1 = Oid.Factory.root(cusObjectSpecId, "123");
+        oid2 = Oid.Factory.root(cusObjectSpecId, "123");
 
         assertThat(oid1, is(equalTo(oid2)));
     }
 
     @Test
     public void whenNotEquivalentById() throws Exception {
-        oid1 = Oid.Factory.of(cusObjectSpecId, "123");
-        oid2 = Oid.Factory.of(cusObjectSpecId, "124");
+        oid1 = Oid.Factory.root(cusObjectSpecId, "123");
+        oid2 = Oid.Factory.root(cusObjectSpecId, "124");
 
         assertThat(oid1, is(not(equalTo(oid2))));
     }
 
     @Test
     public void whenNotEquivalentByObjectSpecId() throws Exception {
-        oid1 = Oid.Factory.of(cusObjectSpecId, "123");
-        oid2 = Oid.Factory.of(ordObjectSpecId, "123");
+        oid1 = Oid.Factory.root(cusObjectSpecId, "123");
+        oid2 = Oid.Factory.root(ordObjectSpecId, "123");
 
         assertThat(oid1, is(not(equalTo(oid2))));
     }

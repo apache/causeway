@@ -434,12 +434,19 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
 
     /**
      * Introspecting up to the level required.
-     * @since 2.0
      * @return whether it's necessary to re-run validations.
+     * @since 2.0
      */
     void introspectUpTo(IntrospectionState upTo);
 
-
+    /**
+     * @return whether the corresponding type can be mapped onto a REFERENCE (schema) or an Oid,
+     * that is the type is 'identifiable' (aka 'referencable' or 'bookmarkable') 
+     * @since 2.0
+     */
+    default boolean isIdentifiable() {
+        return isManagedBean() || isViewModel() || isEntity();
+    }
 
 
 }

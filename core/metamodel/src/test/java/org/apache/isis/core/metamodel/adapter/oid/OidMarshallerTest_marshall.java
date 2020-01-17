@@ -37,7 +37,7 @@ public class OidMarshallerTest_marshall {
 
     @Test
     public void rootOid() {
-        final String marshal = oidMarshaller.marshal(Oid.Factory.of(ObjectSpecId.of("CUS"),  "123"));
+        final String marshal = oidMarshaller.marshal(Oid.Factory.root(ObjectSpecId.of("CUS"),  "123"));
         assertThat(marshal, equalTo("CUS:123"));
     }
 

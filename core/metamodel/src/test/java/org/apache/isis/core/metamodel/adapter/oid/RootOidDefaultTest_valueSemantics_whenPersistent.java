@@ -29,17 +29,17 @@ public class RootOidDefaultTest_valueSemantics_whenPersistent extends ValueTypeC
     @Override
     protected List<RootOid> getObjectsWithSameValue() {
         return Arrays.asList(
-                Oid.Factory.of(ObjectSpecId.of("CUS"), "123"),
-                Oid.Factory.of(ObjectSpecId.of("CUS"), "123"),
-                Oid.Factory.of(ObjectSpecId.of("CUS"), "123"));
+                Oid.Factory.root(ObjectSpecId.of("CUS"), "123"),
+                Oid.Factory.root(ObjectSpecId.of("CUS"), "123"),
+                Oid.Factory.root(ObjectSpecId.of("CUS"), "123"));
     }
 
     @Override
     protected List<RootOid> getObjectsWithDifferentValue() {
         return Arrays.asList(
                 //Oid.Factory.of(ObjectSpecId.of("CUS"), "123"),
-                Oid.Factory.of(ObjectSpecId.of("CUS"), "124"),
-                Oid.Factory.of(ObjectSpecId.of("CUX"), "123"));
+                Oid.Factory.root(ObjectSpecId.of("CUS"), "124"),
+                Oid.Factory.root(ObjectSpecId.of("CUX"), "123"));
     }
 
 }

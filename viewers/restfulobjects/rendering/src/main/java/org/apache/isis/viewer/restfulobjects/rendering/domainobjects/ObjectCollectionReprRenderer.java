@@ -67,7 +67,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         final LinkFollowSpecs followValue = getLinkFollowSpecs().follow("value");
         boolean eagerlyRender = resourceContext.honorUiHints() && renderEagerly() || !followValue.isTerminated();
 
-        if ((mode.isInline() && eagerlyRender) || mode.isStandalone() || mode.isMutated() || mode.isEventSerialization() || !ManagedObject.isBookmarkable(objectAdapter)) {
+        if ((mode.isInline() && eagerlyRender) || mode.isStandalone() || mode.isMutated() || mode.isEventSerialization() || !ManagedObject.isIdentifiable(objectAdapter)) {
             addValue(followValue);
         }
         if(!mode.isEventSerialization()) {

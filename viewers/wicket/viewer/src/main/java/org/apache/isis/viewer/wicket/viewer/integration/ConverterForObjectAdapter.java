@@ -69,7 +69,7 @@ public class ConverterForObjectAdapter implements IConverter<ManagedObject> {
     @Override
     public String convertToString(final ManagedObject adapter, final Locale locale) {
         
-        if(!ManagedObject.isBookmarkable(adapter)) {
+        if(!ManagedObject.isIdentifiable(adapter)) {
             // eg. values don't have an Oid
             return null;
         }

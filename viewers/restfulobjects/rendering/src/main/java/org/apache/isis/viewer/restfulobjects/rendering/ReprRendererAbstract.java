@@ -92,7 +92,7 @@ implements ReprRenderer<R, T> {
 
     @Override
     public MediaType getMediaType() {
-        return representationType.getMediaType(mediaTypeParams);
+        return representationType.getJsonMediaType(mediaTypeParams);
     }
 
     protected void addMediaTypeParams(String param, String paramValue) {

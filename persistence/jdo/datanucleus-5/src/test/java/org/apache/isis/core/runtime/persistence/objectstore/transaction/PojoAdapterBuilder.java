@@ -52,7 +52,7 @@ public class PojoAdapterBuilder {
         PERSISTENT {
             @Override
             RootOid createOid(ObjectSpecId objectSpecId, String identifier) {
-                return Factory.of(objectSpecId, identifier);
+                return Factory.root(objectSpecId, identifier);
             }
         },
         VALUE {
@@ -73,7 +73,7 @@ public class PojoAdapterBuilder {
         }, COLLECTION {
             @Override
             Oid oidFor(RootOid rootOid, ObjectSpecId objectSpecId, String collectionId) {
-                return Oid.Factory.parentedOfOneToManyId(rootOid, collectionId);
+                return Oid.Factory.parentedForTesting(rootOid, collectionId);
             }
         }, VALUE {
             @Override

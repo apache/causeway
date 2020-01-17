@@ -51,7 +51,7 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
 
 
         
-        val isBookmarkable = ManagedObject.isBookmarkable(objectAdapter);
+        val isBookmarkable = ManagedObject.isIdentifiable(objectAdapter);
         if (!isBookmarkable) {
             throw new IllegalArgumentException(String.format(
                     "Object '%s' is not persistent/bookmarkable.", objectAdapter.titleString(null)));

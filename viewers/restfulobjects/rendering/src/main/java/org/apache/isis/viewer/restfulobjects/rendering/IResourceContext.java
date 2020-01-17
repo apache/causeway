@@ -25,6 +25,8 @@ import javax.ws.rs.core.MediaType;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -33,6 +35,8 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
+
+import lombok.val;
 
 public interface IResourceContext {
 
@@ -85,15 +89,17 @@ public interface IResourceContext {
 
     @Deprecated
     default ManagedObject getObjectAdapterElseNull(String oidFromHref) {
-        return OidUtils.getObjectAdapterElseNull(this, oidFromHref);
+        String oidStrUnencoded = UrlDecoderUtils.urlDecode(oidFromHref);
+        val rootOid = RootOid.deString(oidStrUnencoded);
+        return ManagedObject._adapterOfRootOid(getSpecificationLoader(), rootOid);
     }
 
     @Deprecated
     default ManagedObject getObjectAdapterElseNull(String domainType, String instanceIdEncoded) {
-        return OidUtils.getObjectAdapterElseNull(this, domainType, instanceIdEncoded);
+        final String instanceIdUnencoded = UrlDecoderUtils.urlDecode(instanceIdEncoded);
+        String oidStrUnencoded = Oid.marshaller().joinAsOid(domainType, instanceIdUnencoded);
+        val rootOid = RootOid.deString(oidStrUnencoded);
+        return ManagedObject._adapterOfRootOid(getSpecificationLoader(), rootOid);
     }
-
-    
-    
 
 }

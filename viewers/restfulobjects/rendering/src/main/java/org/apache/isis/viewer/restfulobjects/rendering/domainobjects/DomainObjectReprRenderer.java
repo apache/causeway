@@ -163,7 +163,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         if (!(mode.isArgs())) {
 
             // self, extensions.oid
-            if (ManagedObject.isBookmarkable(objectAdapter)) {
+            if (ManagedObject.isIdentifiable(objectAdapter)) {
                 if (includesSelf) {
                     addLinkToSelf();
                 }
@@ -210,7 +210,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
             // extensions
             getExtensions().mapPut("isService", isService);
-            getExtensions().mapPut("isPersistent", ManagedObject.isBookmarkable(objectAdapter));
+            getExtensions().mapPut("isPersistent", ManagedObject.isIdentifiable(objectAdapter));
             if(isService) {
                 final ObjectSpecification objectSpec = objectAdapter.getSpecification();
                 final DomainServiceLayoutFacet layoutFacet =
@@ -400,7 +400,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     private void addPersistLinkIfTransientAndPersistable() {
-        if (ManagedObject.isBookmarkable(objectAdapter)) {
+        if (ManagedObject.isIdentifiable(objectAdapter)) {
             return;
         }
         final DomainObjectReprRenderer renderer =
@@ -433,7 +433,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         if(mode.isEventSerialization()) {
             return;
         }
-        if (!ManagedObject.isBookmarkable(objectAdapter)) {
+        if (!ManagedObject.isIdentifiable(objectAdapter)) {
             return;
         }
         final boolean isService = objectAdapter.getSpecification().isManagedBean();

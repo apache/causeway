@@ -54,7 +54,7 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
         }
         
         val persistenceSession = super.getPersistenceSessionJdo();
-        val rootOid = Oid.Factory.of(spec.getSpecId(), identifier);
+        val rootOid = Oid.Factory.root(spec.getSpecId(), identifier);
         
         val pojo = persistenceSession.fetchPersistentPojo(rootOid);
         

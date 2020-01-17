@@ -193,7 +193,7 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
         }
         if (readWrite()) {
             
-            ManagedObject._whenFirstIsBookmarkable_ensureSecondIsNotTransient(
+            ManagedObject._whenFirstIsBookmarkable_ensureSecondIsAsWell(
                     ownerAdapter, 
                     referencedAdapter);
                     

@@ -53,7 +53,7 @@ public class PojoAdapterTest {
 
         adapter = PojoAdapter.of(
                 domainObject, 
-                Factory.of(ObjectSpecId.of("CUS"), "1"),
+                Factory.root(ObjectSpecId.of("CUS"), "1"),
                 mockSpecificationLoader);
 
         allowUnimportantMethodCallsOn();
@@ -70,7 +70,7 @@ public class PojoAdapterTest {
 
     @Test
     public void getOid_initially() {
-        assertEquals(Factory.of(ObjectSpecId.of("CUS"), "1"), adapter.getOid());
+        assertEquals(Factory.root(ObjectSpecId.of("CUS"), "1"), adapter.getOid());
     }
 
     @Test
