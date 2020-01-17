@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.config;
 
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -40,7 +39,6 @@ import org.springframework.validation.annotation.Validated;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.config.metamodel.facets.AuditObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.CommandActionsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.CommandPropertiesConfiguration;
@@ -836,7 +834,7 @@ public class IsisConfiguration {
              * The pattern used for rendering and parsing dates.
              *
              * <p>
-             * Each Date scalar panel will use {@ #getDatePattern()} or {@linkplain #getDateTimePattern()} depending on its
+             * Each Date scalar panel will use {#getDatePattern()} or {@linkplain #getDateTimePattern()} depending on its
              * date type.  In the case of panels with a date picker, the pattern will be dynamically adjusted so that it can be
              * used by the <a href="https://github.com/Eonasdan/bootstrap-datetimepicker">Bootstrap Datetime Picker</a>
              * component (which uses <a href="http://momentjs.com/docs/#/parsing/string-format/">Moment.js formats</a>, rather
