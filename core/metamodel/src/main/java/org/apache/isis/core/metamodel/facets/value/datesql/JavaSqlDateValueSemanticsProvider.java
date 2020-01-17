@@ -56,8 +56,7 @@ public class JavaSqlDateValueSemanticsProvider extends ValueSemanticsProviderAbs
         formats.put("medium", DateFormat.getDateInstance(DateFormat.MEDIUM));
     }
 
-    @Getter
-    @Setter
+    @Getter @Setter
     private String configuredFormat;
 
     /**
@@ -71,15 +70,11 @@ public class JavaSqlDateValueSemanticsProvider extends ValueSemanticsProviderAbs
     public JavaSqlDateValueSemanticsProvider(final FacetHolder holder) {
         super("date", type(), holder, Date.class, 12, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, null);
 
-        configuredFormat = getConfiguration().getValue().getFormat().getOrDefault("date", "medium").toLowerCase().trim();
-
-        buildFormat(configuredFormat);
-
-        final String formatRequired = getConfiguration().getValue().getFormat().get("date");
-        if (formatRequired == null) {
-            format = formats().get("medium");
-        } else {
-            setMask(formatRequired); //TODO fails when using format names eg 'medium'
+        final Map<String, DateFormat> formats = formats();
+        configuredFormat = getConfiguration().getValueTypes().getJavaSql().getDate().getFormat();
+        format = formats.get(configuredFormat);
+        if (format == null) {
+            setMask(configuredFormat);
         }
     }
 

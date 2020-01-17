@@ -662,6 +662,10 @@ isis.value-types. +
 isis.value-types. +
 {nbsp}{nbsp}java-time.offset-date-time.format
 
+|isis.value.format["date"]
+|isis.value-types. +
+{nbsp}{nbsp}java-sql.date.format
+
 
 |
 |

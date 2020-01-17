@@ -1257,6 +1257,17 @@ public class IsisConfiguration {
         @Data
         public static class JavaUtil {
 
+
+        }
+        private final JavaSql javaSql = new JavaSql();
+        @Data
+        public static class JavaSql {
+            private final Date date = new Date();
+            @Data
+            public static class Date {
+                // lower case
+                private String format = "medium";
+            }
         }
 
         private final Joda joda = new Joda();
