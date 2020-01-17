@@ -38,7 +38,8 @@ import lombok.val;
  * <p>
  * Analogous to the <tt>RootOid</tt>.
  */
-@Value @lombok.Value @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@Value 
+@lombok.Value @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class Bookmark implements Serializable {
 
     private static final long serialVersionUID = 2L;

@@ -38,7 +38,8 @@ import lombok.val;
  * <p>
  * Analogous to the <tt>RootOid</tt>.
  */
-@Value @lombok.Value @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@Value 
+@lombok.Value @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class Bookmark implements Serializable {
 
     private static final long serialVersionUID = 2L;
@@ -62,8 +63,11 @@ public class Bookmark implements Serializable {
         }
         val tokenizer = new StringTokenizer(str, SEPARATOR);
         int tokenCount = tokenizer.countTokens();
-        if(tokenCount>1) {
+        if(tokenCount==2) {
             return Optional.of(Bookmark.of(tokenizer.nextToken(), tokenizer.nextToken()));            
+        }
+        if(tokenCount>2) {
+            return Optional.of(Bookmark.of(tokenizer.nextToken(), tokenizer.nextToken("").substring(1)));            
         }
         return Optional.empty();
 
