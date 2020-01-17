@@ -1069,6 +1069,7 @@ public class IsisConfiguration {
                 @Data
                 public static class Datanucleus {
 
+
                     /**
                      * 	The JNDI name for a connection factory for transactional connections.
                      *
@@ -1077,7 +1078,7 @@ public class IsisConfiguration {
                      * 	</p>
                      *
                      * <p>
-                     *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
+                     *     See also <tt>additional-spring-configuration-metadata.json</tt> (PascalCasing instead of kebab-casing).
                      * </p>
                      *
                      * @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
@@ -1092,7 +1093,7 @@ public class IsisConfiguration {
                      * 	</p>
                      *
                      * <p>
-                     *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
+                     *     See also <tt>additional-spring-configuration-metadata.json</tt> (PascalCasing instead of kebab-casing).
                      * </p>
                      *
                      * @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
@@ -1105,7 +1106,7 @@ public class IsisConfiguration {
                      * and should only be specified if the password is encrypted in the persistence properties.
                      *
                      * <p>
-                     *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
+                     *     See also <tt>additional-spring-configuration-metadata.json</tt> (camelCasing instead of kebab-casing).
                      * </p>
                      *
                      * @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
@@ -1124,7 +1125,7 @@ public class IsisConfiguration {
                      * </p>
                      *
                      * <p>
-                     *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
+                     *     See also <tt>additional-spring-configuration-metadata.json</tt> (camelCasing instead of kebab-casing).
                      * </p>
                      *
                      * @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
@@ -1144,7 +1145,7 @@ public class IsisConfiguration {
                      * </p>
                      *
                      * <p>
-                     *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
+                     *     See also <tt>additional-spring-configuration-metadata.json</tt> (camelCasing instead of kebab-casing).
                      * </p>
                      *
                      * @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
@@ -1179,10 +1180,10 @@ public class IsisConfiguration {
                     @Data
                     public static class ObjectProvider {
                         /**
-                         * New feature in DN 3.2.3; enables dependency injection into entities
+                         * Enables dependency injection into entities
                          *
                          * <p>
-                         *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
+                         *     See also <tt>additional-spring-configuration-metadata.json</tt> (camelCasing instead of kebab-casing).
                          * </p>
                          */
                         @NotNull @NotEmpty
@@ -1201,7 +1202,7 @@ public class IsisConfiguration {
                          * </p>
                          *
                          * <p>
-                         *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
+                         *     See also <tt>additional-spring-configuration-metadata.json</tt> (camelCasing instead of kebab-casing).
                          * </p>
                          *
                          *
@@ -1214,7 +1215,7 @@ public class IsisConfiguration {
                          * to be modified
                          *
                          * <p>
-                         *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
+                         *     See also <tt>additional-spring-configuration-metadata.json</tt> (camelCasing instead of kebab-casing).
                          * </p>
                          *
                          * @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
@@ -1223,7 +1224,7 @@ public class IsisConfiguration {
 
                         /**
                          * <p>
-                         *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
+                         *     See also <tt>additional-spring-configuration-metadata.json</tt> (camelCasing instead of kebab-casing).
                          * </p>
                          *
                          * @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
@@ -1240,7 +1241,7 @@ public class IsisConfiguration {
 
                         /**
                          * <p>
-                         *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
+                         *     See also <tt>additional-spring-configuration-metadata.json</tt> (camelCasing instead of kebab-casing).
                          * </p>
                          *
                          * @implNote - changing this property from its default is used to enable the flyway extension (in combination with {@link Datanucleus.Schema#isAutoCreateAll()}
@@ -1255,7 +1256,7 @@ public class IsisConfiguration {
                              * JDBC driver used by DataNucleus Object store to connect.
                              *
                              * <p>
-                             *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
+                             *     See also <tt>additional-spring-configuration-metadata.json</tt> (PascalCasing instead of kebab-casing).
                              * </p>
                              *
                              * @implNote - this config property isn't used by the framework, but provided as a convenience for IDE autocomplete (and is mandatory if using JDO Datanucleus).
@@ -1265,7 +1266,7 @@ public class IsisConfiguration {
                              * URL used by DataNucleus Object store to connect.
                              *
                              * <p>
-                             *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
+                             *     See also <tt>additional-spring-configuration-metadata.json</tt> (PascalCasing instead of kebab-casing).
                              * </p>
                              *
                              * @implNote - some extensions (H2Console, MsqlDbManager) peek at this URL to determine if they should be enabled.  Note that it is also mandatory if using JDO Datanucleus.
@@ -1275,7 +1276,7 @@ public class IsisConfiguration {
                              * User account used by DataNucleus Object store to connect.
                              *
                              * <p>
-                             *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
+                             *     See also <tt>additional-spring-configuration-metadata.json</tt> (PascalCasing instead of kebab-casing).
                              * </p>
                              *
                              * @implNote - this config property isn't used by the framework, but provided as a convenience for IDE autocomplete (and is mandatory if using JDO Datanucleus).
@@ -1285,7 +1286,7 @@ public class IsisConfiguration {
                              * Password for the user account used by DataNucleus Object store to connect.
                              *
                              * <p>
-                             *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
+                             *     See also <tt>additional-spring-configuration-metadata.json</tt> (PascalCasing instead of kebab-casing).
                              * </p>
                              *
                              * @implNote - this config property isn't used by the framework, but provided as a convenience for IDE autocomplete.  It is not necessarily mandatory, some databases accept an empty password.
