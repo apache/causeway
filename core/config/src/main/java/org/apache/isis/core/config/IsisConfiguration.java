@@ -31,6 +31,8 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -1169,6 +1171,7 @@ public class IsisConfiguration {
                              *
                              * @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
                              */
+                            @NotNull @NotEmpty
                             private String type = "none";
                         }
                     }
@@ -1182,6 +1185,7 @@ public class IsisConfiguration {
                          *     See also <tt>additional-spring-configuration-metadata.json</tt> (change casing).
                          * </p>
                          */
+                        @NotNull @NotEmpty
                         private String className = "org.apache.isis.persistence.jdo.datanucleus5.datanucleus.JDOStateManagerForIsis";
                     }
                     private final Schema schema = new Schema();
@@ -1241,6 +1245,7 @@ public class IsisConfiguration {
                          *
                          * @implNote - changing this property from its default is used to enable the flyway extension (in combination with {@link Datanucleus.Schema#isAutoCreateAll()}
                          */
+                        @NotNull @NotEmpty
                         private String persistenceManagerFactoryClass = "org.datanucleus.api.jdo.JDOPersistenceManagerFactory";
 
                         private final Option option = new Option();

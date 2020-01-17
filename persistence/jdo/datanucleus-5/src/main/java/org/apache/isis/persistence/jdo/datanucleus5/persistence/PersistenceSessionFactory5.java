@@ -135,19 +135,6 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
         props.putAll(dnSettings.getAsMap());
         DataNucleusContextUtil.putMetaModelContext(props, metaModelContext);
 
-        // new feature in DN 3.2.3; enables dependency injection into entities
-        putIfNotPresent(props, PropertyNames.PROPERTY_OBJECT_PROVIDER_CLASS_NAME, JDOStateManagerForIsis.class.getName());
-        
-        putIfNotPresent(props, "javax.jdo.PersistenceManagerFactoryClass", JDOPersistenceManagerFactory.class.getName());
-
-        // previously we defaulted this property to "true", but that could cause the target database to be modified
-        putIfNotPresent(props, PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_DATABASE, Boolean.FALSE.toString());
-
-        putIfNotPresent(props, PropertyNames.PROPERTY_SCHEMA_VALIDATE_ALL, Boolean.TRUE.toString());
-        putIfNotPresent(props, PropertyNames.PROPERTY_CACHE_L2_TYPE, "none");
-
-        putIfNotPresent(props, PropertyNames.PROPERTY_PERSISTENCE_UNIT_LOAD_CLASSES, Boolean.TRUE.toString());
-
         String connectionFactoryName = (String) props.get(PropertyNames.PROPERTY_CONNECTION_FACTORY_NAME);
         if(connectionFactoryName != null) {
             String connectionFactory2Name = (String) props.get(PropertyNames.PROPERTY_CONNECTION_FACTORY2_NAME);
@@ -180,8 +167,6 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
                 log.info("using JDBC connection '{}'", 
                         props.get("javax.jdo.option.ConnectionURL"));
             }
-
-
         }
         
         return props;
