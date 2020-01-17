@@ -255,25 +255,22 @@ for (PropertyGroup group in groups) {
         outputFile.write(buf.toString())
     }
 }
+System.out.println("");
+System.out.println("");
 
 static String toAsciidoc(String str) {
 
-    String lineFeed = " +\n";
+    System.out.print(".");
 
-    // simple html -> asciidoc substitutions
-    str = str.replace("<p>", lineFeed);
-    str = str.replace("</p>", "");
+    File tf = File.createTempFile("input",".html")
+    tf.write(str)   // write to the file
 
-    str = str.replace("<i>", "_");
-    str = str.replace("<b>", "*");
-    //str = str.replaceAll("<a href=\"(.*)\">(.*?)</a>", "link:$1[$2]");
+    String cmd = "pandoc --wrap=none -f html -t asciidoc " + tf.getCanonicalPath()
+    String adoc = cmd.execute().text
 
-    str = str.replace("<code>", "`");
-    str = str.replace("<\\code>", "`");
-    str = str.replace("<tt>", "`");
-    str = str.replace("<\\tt>", "`");
+    tf.delete()
 
-    return str;
+    return adoc;
 }
 
 static String format(String str, int len = 30) {
