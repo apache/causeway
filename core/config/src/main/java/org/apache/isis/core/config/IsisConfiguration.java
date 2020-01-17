@@ -36,9 +36,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.validation.annotation.Validated;
 
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.core.config.metamodel.facets.AuditObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.CommandActionsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.CommandPropertiesConfiguration;
@@ -78,6 +81,14 @@ public class IsisConfiguration {
         private final Shiro shiro = new Shiro();
         @Data
         public static class Shiro {
+            /**
+             * If the Shiro subject is found to be still authenticated, then will be logged out anyway and then
+             * re-authenticated.
+             *
+             * <p>
+             * Applies only to the Restful Objects viewer.
+             * </p>
+             */
             private boolean autoLogoutIfAlreadyAuthenticated = false;
         }
     }
@@ -99,51 +110,305 @@ public class IsisConfiguration {
             @Data
             public static class DomainObject {
 
+                /**
+                 * The default for whether <i>domain entities</i> should be audited or not (meaning that any changes are
+                 * sent through to the {@link org.apache.isis.applib.services.audit.AuditerService}.
+                 *
+                 * <p>
+                 * This setting can be overridden on a case-by-case basis using {@link DomainObject#getAuditing() DomainObject#getAuditing()}
+                 * </p>
+                 *
+                 * <p>
+                 *     Note: this applies only to domain entities, not view models.
+                 * </p>
+                 */
                 private AuditObjectsConfiguration auditing = AuditObjectsConfiguration.NONE;
 
+                /**
+                 * The default for whether the properties of domain objects can be edited, or whether instead they
+                 * can be modified only using actions (or programmatically as a side-effect of actions on other objects).
+                 *
+                 * <p>
+                 * This setting can be overridden on a case-by-case basis using {@link DomainObject#getEditing()  DomainObject#getEditing()}
+                 * </p>
+                 */
                 private EditingObjectsConfiguration editing = EditingObjectsConfiguration.TRUE;
 
+                /**
+                 * The default for whether the properties of domain objects can be edited, or whether instead changed
+                 * objects should be sent through to the {@link org.apache.isis.applib.services.publish.PublisherService}
+                 * for publishing.
+                 *
+                 * <p>
+                 *     The service's {@link org.apache.isis.applib.services.publish.PublisherService#publish(PublishedObjects) publish}
+                 *     method is called only once per transaction, with {@link PublishedObjects} collecting details of
+                 *     all changed domain objects.
+                 * </p>
+                 *
+                 * <p>
+                 *  This setting can be overridden on a case-by-case basis using {@link DomainObject#getPublishing() DomainObject#getPublishing()}.
+                 * </p>
+                 */
                 private PublishObjectsConfiguration publishing = PublishObjectsConfiguration.NONE;
 
                 private final CreatedLifecycleEvent createdLifecycleEvent = new CreatedLifecycleEvent();
                 @Data
                 public static class CreatedLifecycleEvent {
+                    /**
+                     * Influences whether an {@link org.apache.isis.applib.events.lifecycle.ObjectCreatedEvent} should
+                     * be published (on the internal {@link org.apache.isis.applib.services.eventbus.EventBusService})
+                     * whenever a domain object has been created using {@link org.apache.isis.applib.services.factory.FactoryService}..
+                     *
+                     * <p>
+                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     {@link org.apache.isis.applib.annotation.DomainObject#createdLifecycleEvent() @DomainObject(createdLifecycleEvent=...)} for the
+                     *     domain object in question.
+                     * </p>
+                     *
+                     * <ul>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.lifecycle.ObjectCreatedEvent.Noop ObjectCreatedEvent.Noop},
+                     *         then <i>no</i> event is sent.
+                     *     </li>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.lifecycle.ObjectCreatedEvent.Default ObjectCreatedEvent.Default},
+                     *         then an event is sent <i>if and only if</i> this configuration setting is set.
+                     *     </li>
+                     *     <li>
+                     *         If set to any other subtype, then an event <i>is</i> sent.
+                     *     </li>
+                     * </ul>
+                     */
                     private boolean postForDefault = true;
                 }
 
                 private final LoadedLifecycleEvent loadedLifecycleEvent = new LoadedLifecycleEvent();
                 @Data
                 public static class LoadedLifecycleEvent {
+                    /**
+                     * Influences whether an {@link org.apache.isis.applib.events.lifecycle.ObjectLoadedEvent} should
+                     * be published (on the internal {@link org.apache.isis.applib.services.eventbus.EventBusService})
+                     * whenever a domain <i>entity</i> has been loaded from the persistence store.
+                     *
+                     * <p>
+                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     {@link org.apache.isis.applib.annotation.DomainObject#loadedLifecycleEvent() @DomainObject(loadedLifecycleEvent=...)} for the
+                     *     domain object in question.
+                     * </p>
+                     *
+                     * <ul>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.lifecycle.ObjectLoadedEvent.Noop ObjectLoadedEvent.Noop},
+                     *         then <i>no</i> event is sent.
+                     *     </li>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.lifecycle.ObjectLoadedEvent.Default ObjectCreatedEvent.Default},
+                     *         then an event is sent <i>if and only if</i> this configuration setting is set.
+                     *     </li>
+                     *     <li>
+                     *         If set to any other subtype, then an event <i>is</i> sent.
+                     *     </li>
+                     * </ul>
+                     *
+                     * <p>
+                     *     Note: this applies only to domain entities, not to view models.
+                     * </p>
+                     */
                     private boolean postForDefault = true;
                 }
 
                 private final PersistingLifecycleEvent persistingLifecycleEvent = new PersistingLifecycleEvent();
                 @Data
                 public static class PersistingLifecycleEvent {
+                    /**
+                     * Influences whether an {@link org.apache.isis.applib.events.lifecycle.ObjectPersistingEvent} should
+                     * be published (on the internal {@link org.apache.isis.applib.services.eventbus.EventBusService})
+                     * whenever a domain <i>entity</i> is about to be persisting (for the first time) to the persistence store.
+                     *
+                     * <p>
+                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     {@link org.apache.isis.applib.annotation.DomainObject#persistingLifecycleEvent() @DomainObject(persistingLifecycleEvent=...)} for the
+                     *     domain object in question.
+                     * </p>
+                     *
+                     * <ul>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.lifecycle.ObjectPersistingEvent.Noop ObjectPersistingEvent.Noop},
+                     *         then <i>no</i> event is sent.
+                     *     </li>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.lifecycle.ObjectPersistingEvent.Default ObjectCreatedEvent.Default},
+                     *         then an event is sent <i>if and only if</i> this configuration setting is set.
+                     *     </li>
+                     *     <li>
+                     *         If set to any other subtype, then an event <i>is</i> sent.
+                     *     </li>
+                     * </ul>
+                     *
+                     * <p>
+                     *     Note: this applies only to domain entities, not to view models.
+                     * </p>
+                     */
                     private boolean postForDefault = true;
                 }
 
                 private final PersistedLifecycleEvent persistedLifecycleEvent = new PersistedLifecycleEvent();
                 @Data
                 public static class PersistedLifecycleEvent {
+                    /**
+                     * Influences whether an {@link org.apache.isis.applib.events.lifecycle.ObjectPersistedEvent} should
+                     * be published (on the internal {@link org.apache.isis.applib.services.eventbus.EventBusService})
+                     * whenever a domain <i>entity</i> has been persisted (for the first time) to the persistence store.
+                     *
+                     * <p>
+                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     {@link org.apache.isis.applib.annotation.DomainObject#persistedLifecycleEvent() @DomainObject(persistedLifecycleEvent=...)} for the
+                     *     domain object in question.
+                     * </p>
+                     *
+                     * <ul>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.lifecycle.ObjectPersistedEvent.Noop ObjectPersistedEvent.Noop},
+                     *         then <i>no</i> event is sent.
+                     *     </li>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.lifecycle.ObjectPersistedEvent.Default ObjectCreatedEvent.Default},
+                     *         then an event is sent <i>if and only if</i> this configuration setting is set.
+                     *     </li>
+                     *     <li>
+                     *         If set to any other subtype, then an event <i>is</i> sent.
+                     *     </li>
+                     * </ul>
+                     *
+                     * <p>
+                     *     Note: this applies only to domain entities, not to view models.
+                     * </p>
+                     */
                     private boolean postForDefault = true;
                 }
 
                 private final RemovingLifecycleEvent removingLifecycleEvent = new RemovingLifecycleEvent();
                 @Data
                 public static class RemovingLifecycleEvent {
+                    /**
+                     * Influences whether an {@link org.apache.isis.applib.events.lifecycle.ObjectRemovingEvent} should
+                     * be published (on the internal {@link org.apache.isis.applib.services.eventbus.EventBusService})
+                     * whenever a persistent domain <i>entity</i> is about to be removed (that is, deleted)
+                     * from the persistence store.
+                     *
+                     * <p>
+                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     {@link org.apache.isis.applib.annotation.DomainObject#removingLifecycleEvent() @DomainObject(removingLifecycleEvent=...)} for the
+                     *     domain object in question.
+                     * </p>
+                     *
+                     * <ul>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.lifecycle.ObjectRemovingEvent.Noop ObjectRemovingEvent.Noop},
+                     *         then <i>no</i> event is sent.
+                     *     </li>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.lifecycle.ObjectRemovingEvent.Default ObjectCreatedEvent.Default},
+                     *         then an event is sent <i>if and only if</i> this configuration setting is set.
+                     *     </li>
+                     *     <li>
+                     *         If set to any other subtype, then an event <i>is</i> sent.
+                     *     </li>
+                     * </ul>
+                     *
+                     * <p>
+                     *     Note: this applies only to domain entities, not to view models.
+                     * </p>
+                     *
+                     * <p>
+                     *     Note: There is no corresponding <code>removed</code> callback, because (for the JDO persistence store at least)
+                     *     it is not possible to interact with a domain entity once it has been deleted.
+                     * </p>
+                     */
                     private boolean postForDefault = true;
                 }
 
                 private final UpdatedLifecycleEvent updatedLifecycleEvent = new UpdatedLifecycleEvent();
                 @Data
                 public static class UpdatedLifecycleEvent {
+                    /**
+                     * Influences whether an {@link org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent} should
+                     * be published (on the internal {@link org.apache.isis.applib.services.eventbus.EventBusService})
+                     * whenever a persistent domain <i>entity</i> has been updated in the persistence store.
+                     *
+                     * <p>
+                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     {@link org.apache.isis.applib.annotation.DomainObject#updatedLifecycleEvent() @DomainObject(updatedLifecycleEvent=...)} for the
+                     *     domain object in question.
+                     * </p>
+                     *
+                     * <ul>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent.Noop ObjectUpdatedEvent.Noop},
+                     *         then <i>no</i> event is sent.
+                     *     </li>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent.Default ObjectCreatedEvent.Default},
+                     *         then an event is sent <i>if and only if</i> this configuration setting is set.
+                     *     </li>
+                     *     <li>
+                     *         If set to any other subtype, then an event <i>is</i> sent.
+                     *     </li>
+                     * </ul>
+                     *
+                     * <p>
+                     *     Note: this applies only to domain entities, not to view models.
+                     * </p>
+                     */
                     private boolean postForDefault = true;
                 }
 
                 private final UpdatingLifecycleEvent updatingLifecycleEvent = new UpdatingLifecycleEvent();
                 @Data
                 public static class UpdatingLifecycleEvent {
+                    /**
+                     * Influences whether an {@link org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent} should
+                     * be published (on the internal {@link org.apache.isis.applib.services.eventbus.EventBusService})
+                     * whenever a persistent domain <i>entity</i> is about to be updated in the persistence store.
+                     *
+                     * <p>
+                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     {@link org.apache.isis.applib.annotation.DomainObject#updatingLifecycleEvent() @DomainObject(updatingLifecycleEvent=...)} for the
+                     *     domain object in question.
+                     * </p>
+                     *
+                     * <ul>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent.Noop ObjectUpdatingEvent.Noop},
+                     *         then <i>no</i> event is sent.
+                     *     </li>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent.Default ObjectCreatedEvent.Default},
+                     *         then an event is sent <i>if and only if</i> this configuration setting is set.
+                     *     </li>
+                     *     <li>
+                     *         If set to any other subtype, then an event <i>is</i> sent.
+                     *     </li>
+                     * </ul>
+                     *
+                     * <p>
+                     *     Note: this applies only to domain entities, not to view models.
+                     * </p>
+                     */
                     private boolean postForDefault = true;
                 }
 
@@ -158,24 +423,145 @@ public class IsisConfiguration {
                 private final CssClassUiEvent cssClassUiEvent = new CssClassUiEvent();
                 @Data
                 public static class CssClassUiEvent {
+                    /**
+                     * Influences whether an {@link org.apache.isis.applib.events.ui.CssClassUiEvent} should
+                     * be published (on the internal {@link org.apache.isis.applib.services.eventbus.EventBusService})
+                     * whenever a domain object is about to be rendered in the UI - thereby allowing subscribers to
+                     * optionally {@link org.apache.isis.applib.events.ui.CssClassUiEvent#setCssClass(String)} change)
+                     * the CSS classes that are used.
+                     *
+                     * <p>
+                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     {@link org.apache.isis.applib.annotation.DomainObjectLayout#cssClassUiEvent()}  @DomainObjectLayout(cssClassEvent=...)} for the
+                     *     domain object in question.
+                     * </p>
+                     *
+                     * <ul>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.ui.CssClassUiEvent.Noop CssClassUiEvent.Noop},
+                     *         then <i>no</i> event is sent.
+                     *     </li>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.ui.CssClassUiEvent.Default CssClassUiEvent.Default},
+                     *         then an event is sent <i>if and only if</i> this configuration setting is set.
+                     *     </li>
+                     *     <li>
+                     *         If set to any other subtype, then an event <i>is</i> sent.
+                     *     </li>
+                     * </ul>
+                     */
                     private boolean postForDefault = true;
                 }
 
                 private final IconUiEvent iconUiEvent = new IconUiEvent();
                 @Data
                 public static class IconUiEvent {
+                    /**
+                     * Influences whether an {@link org.apache.isis.applib.events.ui.IconUiEvent} should
+                     * be published (on the internal {@link org.apache.isis.applib.services.eventbus.EventBusService})
+                     * whenever a domain object is about to be rendered in the UI - thereby allowing subscribers to
+                     * optionally {@link org.apache.isis.applib.events.ui.IconUiEvent#setIconName(String)} change)
+                     * the icon that is used.
+                     *
+                     * <p>
+                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     {@link org.apache.isis.applib.annotation.DomainObjectLayout#iconUiEvent()}  @DomainObjectLayout(iconEvent=...)} for the
+                     *     domain object in question.
+                     * </p>
+                     *
+                     * <ul>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.ui.IconUiEvent.Noop IconUiEvent.Noop},
+                     *         then <i>no</i> event is sent.
+                     *     </li>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.ui.IconUiEvent.Default IconUiEvent.Default},
+                     *         then an event is sent <i>if and only if</i> this configuration setting is set.
+                     *     </li>
+                     *     <li>
+                     *         If set to any other subtype, then an event <i>is</i> sent.
+                     *     </li>
+                     * </ul>
+                     */
                     private boolean postForDefault = true;
                 }
 
                 private final LayoutUiEvent layoutUiEvent = new LayoutUiEvent();
                 @Data
                 public static class LayoutUiEvent {
+                    /**
+                     * Influences whether an {@link org.apache.isis.applib.events.ui.LayoutUiEvent} should
+                     * be published (on the internal {@link org.apache.isis.applib.services.eventbus.EventBusService})
+                     * whenever a domain object is about to be rendered in the UI - thereby allowing subscribers to
+                     * optionally {@link org.apache.isis.applib.events.ui.LayoutUiEvent#setLayout(String)} change)
+                     * the layout that is used.
+                     *
+                     * <p>
+                     *     If a different layout value has been set, then a layout in the form <code>Xxx.layout-zzz.xml</code>
+                     *     use used (where <code>zzz</code> is the name of the layout).
+                     * </p>
+                     *
+                     * <p>
+                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     {@link org.apache.isis.applib.annotation.DomainObjectLayout#layoutUiEvent()}  @DomainObjectLayout(layoutEvent=...)} for the
+                     *     domain object in question.
+                     * </p>
+                     *
+                     * <ul>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.ui.LayoutUiEvent.Noop LayoutUiEvent.Noop},
+                     *         then <i>no</i> event is sent.
+                     *     </li>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.ui.LayoutUiEvent.Default LayoutUiEvent.Default},
+                     *         then an event is sent <i>if and only if</i> this configuration setting is set.
+                     *     </li>
+                     *     <li>
+                     *         If set to any other subtype, then an event <i>is</i> sent.
+                     *     </li>
+                     * </ul>
+                     */
                     private boolean postForDefault = true;
                 }
 
                 private final TitleUiEvent titleUiEvent = new TitleUiEvent();
                 @Data
                 public static class TitleUiEvent {
+                    /**
+                     * Influences whether an {@link org.apache.isis.applib.events.ui.TitleUiEvent} should
+                     * be published (on the internal {@link org.apache.isis.applib.services.eventbus.EventBusService})
+                     * whenever a domain object is about to be rendered in the UI - thereby allowing subscribers to
+                     * optionally {@link org.apache.isis.applib.events.ui.TitleUiEvent#setTitle(String)} change)
+                     * the title that is used.
+                     *
+                     * <p>
+                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     {@link org.apache.isis.applib.annotation.DomainObjectLayout#titleUiEvent()}  @DomainObjectLayout(titleEvent=...)} for the
+                     *     domain object in question.
+                     * </p>
+                     *
+                     * <ul>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.ui.TitleUiEvent.Noop TitleUiEvent.Noop},
+                     *         then <i>no</i> event is sent.
+                     *     </li>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.ui.TitleUiEvent.Default TitleUiEvent.Default},
+                     *         then an event is sent <i>if and only if</i> this configuration setting is set.
+                     *     </li>
+                     *     <li>
+                     *         If set to any other subtype, then an event <i>is</i> sent.
+                     *     </li>
+                     * </ul>
+                     */
                     private boolean postForDefault = true;
                 }
 
@@ -283,24 +669,152 @@ public class IsisConfiguration {
                 private final CssClassUiEvent cssClassUiEvent = new CssClassUiEvent();
                 @Data
                 public static class CssClassUiEvent {
+                    /**
+                     * Influences whether an {@link org.apache.isis.applib.events.ui.CssClassUiEvent} should
+                     * be published (on the internal {@link org.apache.isis.applib.services.eventbus.EventBusService})
+                     * whenever a view model (annotated with
+                     * {@link org.apache.isis.applib.annotation.ViewModel @ViewModel}) is about to be rendered in the
+                     * UI - thereby allowing subscribers to optionally
+                     * {@link org.apache.isis.applib.events.ui.CssClassUiEvent#setCssClass(String)} change) the CSS
+                     * classes that are used.
+                     *
+                     * <p>
+                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     {@link org.apache.isis.applib.annotation.ViewModelLayout#cssClassUiEvent()}  @ViewModelLayout(cssClassEvent=...)} for the
+                     *     domain object in question.
+                     * </p>
+                     *
+                     * <ul>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.ui.CssClassUiEvent.Noop CssClassUiEvent.Noop},
+                     *         then <i>no</i> event is sent.
+                     *     </li>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.ui.CssClassUiEvent.Default CssClassUiEvent.Default},
+                     *         then an event is sent <i>if and only if</i> this configuration setting is set.
+                     *     </li>
+                     *     <li>
+                     *         If set to any other subtype, then an event <i>is</i> sent.
+                     *     </li>
+                     * </ul>
+                     */
                     private boolean postForDefault =true;
                 }
 
                 private final IconUiEvent iconUiEvent = new IconUiEvent();
                 @Data
                 public static class IconUiEvent {
+                    /**
+                     * Influences whether an {@link org.apache.isis.applib.events.ui.IconUiEvent} should
+                     * be published (on the internal {@link org.apache.isis.applib.services.eventbus.EventBusService})
+                     * whenever a view model (annotated with
+                     * {@link org.apache.isis.applib.annotation.ViewModel @ViewModel}) is about to be rendered in the
+                     * UI - thereby allowing subscribers to optionally
+                     * {@link org.apache.isis.applib.events.ui.IconUiEvent#setIconName(String)} change) the icon that
+                     * is used.
+                     *
+                     * <p>
+                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     {@link org.apache.isis.applib.annotation.ViewModelLayout#iconUiEvent()}  @ViewModelLayout(iconEvent=...)} for the
+                     *     domain object in question.
+                     * </p>
+                     *
+                     * <ul>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.ui.IconUiEvent.Noop IconUiEvent.Noop},
+                     *         then <i>no</i> event is sent.
+                     *     </li>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.ui.IconUiEvent.Default IconUiEvent.Default},
+                     *         then an event is sent <i>if and only if</i> this configuration setting is set.
+                     *     </li>
+                     *     <li>
+                     *         If set to any other subtype, then an event <i>is</i> sent.
+                     *     </li>
+                     * </ul>
+                     */
                     private boolean postForDefault =true;
                 }
 
                 private final LayoutUiEvent layoutUiEvent = new LayoutUiEvent();
                 @Data
                 public static class LayoutUiEvent {
+                    /**
+                     * Influences whether an {@link org.apache.isis.applib.events.ui.LayoutUiEvent} should
+                     * be published (on the internal {@link org.apache.isis.applib.services.eventbus.EventBusService})
+                     * whenever a view model (annotated with
+                     * {@link org.apache.isis.applib.annotation.ViewModel @ViewModel}) is about to be rendered in the
+                     * UI - thereby allowing subscribers to optionally
+                     * {@link org.apache.isis.applib.events.ui.LayoutUiEvent#setLayout(String)} change) the layout that is used.
+                     *
+                     * <p>
+                     *     If a different layout value has been set, then a layout in the form <code>Xxx.layout-zzz.xml</code>
+                     *     use used (where <code>zzz</code> is the name of the layout).
+                     * </p>
+                     *
+                     * <p>
+                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     {@link org.apache.isis.applib.annotation.ViewModelLayout#layoutUiEvent()}  @ViewModelLayout(layoutEvent=...)} for the
+                     *     domain object in question.
+                     * </p>
+                     *
+                     * <ul>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.ui.LayoutUiEvent.Noop LayoutUiEvent.Noop},
+                     *         then <i>no</i> event is sent.
+                     *     </li>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.ui.LayoutUiEvent.Default LayoutUiEvent.Default},
+                     *         then an event is sent <i>if and only if</i> this configuration setting is set.
+                     *     </li>
+                     *     <li>
+                     *         If set to any other subtype, then an event <i>is</i> sent.
+                     *     </li>
+                     * </ul>
+                     */
                     private boolean postForDefault =true;
                 }
 
                 private final TitleUiEvent titleUiEvent = new TitleUiEvent();
                 @Data
                 public static class TitleUiEvent {
+                    /**
+                     * Influences whether an {@link org.apache.isis.applib.events.ui.TitleUiEvent} should
+                     * be published (on the internal {@link org.apache.isis.applib.services.eventbus.EventBusService})
+                     * whenever a view model (annotated with
+                     * {@link org.apache.isis.applib.annotation.ViewModel @ViewModel}) is about to be rendered in the
+                     * UI - thereby allowing subscribers to
+                     * optionally {@link org.apache.isis.applib.events.ui.TitleUiEvent#setTitle(String)} change)
+                     * the title that is used.
+                     *
+                     * <p>
+                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     {@link org.apache.isis.applib.annotation.ViewModelLayout#titleUiEvent()}  @ViewModelLayout(titleEvent=...)} for the
+                     *     domain object in question.
+                     * </p>
+                     *
+                     * <ul>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.ui.TitleUiEvent.Noop TitleUiEvent.Noop},
+                     *         then <i>no</i> event is sent.
+                     *     </li>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.ui.TitleUiEvent.Default TitleUiEvent.Default},
+                     *         then an event is sent <i>if and only if</i> this configuration setting is set.
+                     *     </li>
+                     *     <li>
+                     *         If set to any other subtype, then an event <i>is</i> sent.
+                     *     </li>
+                     * </ul>
+                     */
                     private boolean postForDefault =true;
                 }
             }
