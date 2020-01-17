@@ -72,16 +72,11 @@ public class JavaUtilDateValueSemanticsProvider extends ValueSemanticsProviderAb
     public JavaUtilDateValueSemanticsProvider(final FacetHolder holder) {
         super("datetime", type(), holder, Date.class, 18, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, null);
 
-        configuredFormat = getConfiguration().getValue().getFormat().getOrDefault("datetime", "medium").toLowerCase().trim();
-
-        buildFormat(configuredFormat);
-
-        final String formatRequired = getConfiguration().getValue().getFormat().get("datetime");
-
-        if (formatRequired == null) {
-            format = formats().get("medium");
-        } else {
-            setMask(formatRequired);
+        final Map<String, DateFormat> formats = formats();
+        configuredFormat = getConfiguration().getValueTypes().getJavaUtil().getDate().getFormat();
+        format = formats.get(configuredFormat);
+        if (format == null) {
+            setMask(configuredFormat);
         }
     }
 
