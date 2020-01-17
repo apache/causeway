@@ -6,7 +6,3 @@
 | 
 | 
 
-| isis.timezone
-| 
-| 
-

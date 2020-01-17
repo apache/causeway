@@ -1,0 +1,10 @@
+| isis.legacy.value-types.money. +
+currency
+| 
+| 
+
+| isis.legacy.value-types. +
+percentage.format
+| 
+| 
+

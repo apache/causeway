@@ -1,0 +1,110 @@
+| isis.value-types.java-lang. +
+byte.format
+| 
+| 
+
+| isis.value-types.java-lang. +
+double.format
+| 
+| 
+
+| isis.value-types.java-lang. +
+float.format
+| 
+| 
+
+| isis.value-types.java-lang. +
+long.format
+| 
+| 
+
+| isis.value-types.java-lang. +
+short.format
+| 
+| 
+
+| isis.value-types.java-math. +
+big-decimal.format
+| 
+| 
+
+| isis.value-types.java-math. +
+big-integer.format
+| 
+| 
+
+| isis.value-types.java-sql. +
+date.format
+|  medium
+| 
+
+| isis.value-types.java-sql. +
+time.format
+|  short
+| 
+
+| isis.value-types.java-sql. +
+timestamp.format
+|  short
+| 
+
+| isis.value-types.java-time. +
+local-date-time.format
+|  medium
+| 
+
+| isis.value-types.java-time. +
+local-date.format
+|  medium
+| 
+
+| isis.value-types.java-time. +
+local-time.format
+|  medium
+| 
+
+| isis.value-types.java-time. +
+offset-date-time.format
+|  medium
+| 
+
+| isis.value-types.java-time. +
+offset-time.format
+|  medium
+| 
+
+| isis.value-types.java-time. +
+zoned-date-time.format
+|  medium
+| 
+
+| isis.value-types.java-util. +
+date.format
+|  medium
+| 
+
+| isis.value-types.joda. +
+date-time.format
+|  medium
+| 
+
+| isis.value-types.joda. +
+local-date-time.format
+|  medium
+| 
+
+| isis.value-types.joda. +
+local-date.format
+|  medium
+| 
+
+| isis.value-types.primitives. +
+int.format
+| 
+| 
+
+| isis.value-types.primitives. +
+integer.format
+| 
+| 
+
