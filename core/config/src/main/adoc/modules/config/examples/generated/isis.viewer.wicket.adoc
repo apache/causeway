@@ -12,12 +12,13 @@ IsisWicketApplication
 | isis.viewer.wicket. +
 application.about
 | 
-|  Label used on the about page. If not specified, then {@link Application#name}  is used instead.
+|  Label used on the about page.
 
 | isis.viewer.wicket. +
 application.brand-logo-header
 | 
-|  Either the location of the image file (relative to the class-path resource root),  or an absolute URL. This is rendered on the header panel. An image with a size of 160x40 works well. If not specified, the application.name is used instead.
+|  Either the location of the image file (relative to the class-path resource root),  or an absolute URL.  +
+ This is rendered on the header panel. An image with a size of 160x40 works well. If not specified, the application.name is used instead. 
 
 | isis.viewer.wicket. +
 application.brand-logo-signin
@@ -54,7 +55,7 @@ menubars-layout-xml
 | isis.viewer.wicket. +
 application.name
 |  Apache Isis ™
-|  Identifies the application on the sign-in page (unless a {@link Application#brandLogoSignin} image is configured) and  on top-left in the header  (unless a {@link Application#brandLogoHeader} image is configured).
+|  Identifies the application on the sign-in page (unless a {@link Application#brandLogoSignin} image is configured) and on top-left in the header (unless a {@link Application#brandLogoHeader} image is configured).
 
 | isis.viewer.wicket. +
 application.version

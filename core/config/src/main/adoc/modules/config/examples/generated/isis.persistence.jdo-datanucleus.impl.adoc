@@ -47,7 +47,7 @@ connection-factory-name
 | 
 |  The JNDI name for a connection factory for transactional connections. 	 +
  	    For RBDMS, it must be a JNDI name that points to a javax.sql.DataSource object. 	  +
-     See also `additional-spring-configuration-metadata.json</tt> (change casing).  @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
+     See also `additional-spring-configuration-metadata.json</tt> (PascalCasing instead of kebab-casing).  @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
 
 | isis.persistence. +
 jdo-datanucleus.impl. +
@@ -56,7 +56,7 @@ connection-factory2-name
 | 
 |  The JNDI name for a connection factory for non-transactional connections. 	 +
  	    For RBDMS, it must be a JNDI name that points to a javax.sql.DataSource object. 	  +
-     See also `additional-spring-configuration-metadata.json</tt> (change casing).  @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
+     See also `additional-spring-configuration-metadata.json</tt> (PascalCasing instead of kebab-casing).  @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
 
 | isis.persistence. +
 jdo-datanucleus.impl. +
@@ -64,7 +64,7 @@ datanucleus. +
 connection-password-decrypter
 | 
 |  Name of a class that implements `org.datanucleus.store.connection.DecryptionProvider</tt> and should only be specified if the password is encrypted in the persistence properties.  +
-     See also `additional-spring-configuration-metadata.json</tt> (change casing).  @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
+     See also `additional-spring-configuration-metadata.json</tt> (camelCasing instead of kebab-casing).  @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
 
 | isis.persistence. +
 jdo-datanucleus.impl. +
@@ -79,8 +79,8 @@ class-name
 |  org.apache.isis.persistence. +
 jdo.datanucleus5.datanucleus. +
 JDOStateManagerForIsis
-|  New feature in DN 3.2.3; enables dependency injection into entities  +
-     See also `additional-spring-configuration-metadata.json</tt> (change casing). 
+|  Enables dependency injection into entities  +
+     See also `additional-spring-configuration-metadata.json</tt> (camelCasing instead of kebab-casing). 
 
 | isis.persistence. +
 jdo-datanucleus.impl. +
@@ -96,7 +96,7 @@ persistence-unit-load-classes
 |  true
 |  Used when we have specified the persistence-unit name for a PMF/EMF and where we want the 	datastore "tables" for all classes of that persistence-unit loading up into the StoreManager.  +
      Defaults to true, which is the opposite of DataNucleus' own default.     (The reason that DN defaults to false is because some databases are slow so such an     operation would slow down the startup process).   +
-     See also `additional-spring-configuration-metadata.json</tt> (change casing).  @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
+     See also `additional-spring-configuration-metadata.json</tt> (camelCasing instead of kebab-casing).  @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
 
 | isis.persistence. +
 jdo-datanucleus.impl. +
@@ -113,7 +113,7 @@ auto-create-all
 | 
 |  Whether DN should automatically create the database schema on bootstrapping.  +
      This should be set to `true</tt> when running against an in-memory database, but     set to `false</tt> when running against a persistent database (use something like     flyway instead to manage schema evolution).   +
-     See also `additional-spring-configuration-metadata.json</tt> (change casing).  @implNote - this config property isn't used by the core framework, but is used by one the flyway extension.
+     See also `additional-spring-configuration-metadata.json</tt> (camelCasing instead of kebab-casing).  @implNote - this config property isn't used by the core framework, but is used by one the flyway extension.
 
 | isis.persistence. +
 jdo-datanucleus.impl. +
@@ -121,7 +121,7 @@ datanucleus.schema. +
 auto-create-database
 | 
 |  Previously we defaulted this property to "true", but that could cause the target database to be modified  +
-     See also `additional-spring-configuration-metadata.json</tt> (change casing).  @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
+     See also `additional-spring-configuration-metadata.json</tt> (camelCasing instead of kebab-casing).  @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
 
 | isis.persistence. +
 jdo-datanucleus.impl. +
@@ -143,7 +143,7 @@ datanucleus.schema. +
 validate-all
 |  true
 |   +
-     See also `additional-spring-configuration-metadata.json</tt> (change casing).  @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
+     See also `additional-spring-configuration-metadata.json</tt> (camelCasing instead of kebab-casing).  @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
 
 | isis.persistence. +
 jdo-datanucleus.impl. +
@@ -172,7 +172,7 @@ datanucleus.transaction-type
 | 
 |  Type of transaction to use.  +
  If running under JavaSE the default is RESOURCE_LOCAL, and if running under JavaEE the default is JTA.   +
-     See also `additional-spring-configuration-metadata.json</tt> (change casing).  @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
+     See also `additional-spring-configuration-metadata.json</tt> (camelCasing instead of kebab-casing).  @implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
 
 | isis.persistence. +
 jdo-datanucleus.impl.javax. +
@@ -213,7 +213,7 @@ jdo.option. +
 connection-driver-name
 | 
 |  JDBC driver used by DataNucleus Object store to connect.  +
-     See also `additional-spring-configuration-metadata.json</tt> (change casing).  @implNote - this config property isn't used by the framework, but provided as a convenience for IDE autocomplete (and is mandatory if using JDO Datanucleus).
+     See also `additional-spring-configuration-metadata.json</tt> (PascalCasing instead of kebab-casing).  @implNote - this config property isn't used by the framework, but provided as a convenience for IDE autocomplete (and is mandatory if using JDO Datanucleus).
 
 | isis.persistence. +
 jdo-datanucleus.impl.javax. +
@@ -221,14 +221,14 @@ jdo.option. +
 connection-password
 | 
 |  Password for the user account used by DataNucleus Object store to connect.  +
-     See also `additional-spring-configuration-metadata.json</tt> (change casing).  @implNote - this config property isn't used by the framework, but provided as a convenience for IDE autocomplete.  It is not necessarily mandatory, some databases accept an empty password.
+     See also `additional-spring-configuration-metadata.json</tt> (PascalCasing instead of kebab-casing).  @implNote - this config property isn't used by the framework, but provided as a convenience for IDE autocomplete.  It is not necessarily mandatory, some databases accept an empty password.
 
 | isis.persistence. +
 jdo-datanucleus.impl.javax. +
 jdo.option.connection-url
 | 
 |  URL used by DataNucleus Object store to connect.  +
-     See also `additional-spring-configuration-metadata.json</tt> (change casing).  @implNote - some extensions (H2Console, MsqlDbManager) peek at this URL to determine if they should be enabled.  Note that it is also mandatory if using JDO Datanucleus.
+     See also `additional-spring-configuration-metadata.json</tt> (PascalCasing instead of kebab-casing).  @implNote - some extensions (H2Console, MsqlDbManager) peek at this URL to determine if they should be enabled.  Note that it is also mandatory if using JDO Datanucleus.
 
 | isis.persistence. +
 jdo-datanucleus.impl.javax. +
@@ -236,7 +236,7 @@ jdo.option. +
 connection-user-name
 | 
 |  User account used by DataNucleus Object store to connect.  +
-     See also `additional-spring-configuration-metadata.json</tt> (change casing).  @implNote - this config property isn't used by the framework, but provided as a convenience for IDE autocomplete (and is mandatory if using JDO Datanucleus).
+     See also `additional-spring-configuration-metadata.json</tt> (PascalCasing instead of kebab-casing).  @implNote - this config property isn't used by the framework, but provided as a convenience for IDE autocomplete (and is mandatory if using JDO Datanucleus).
 
 | isis.persistence. +
 jdo-datanucleus.impl.javax. +
@@ -246,5 +246,5 @@ class
 |  org.datanucleus.api.jdo. +
 JDOPersistenceManagerFactory
 |   +
-     See also `additional-spring-configuration-metadata.json</tt> (change casing).  @implNote - changing this property from its default is used to enable the flyway extension (in combination with {@link Datanucleus.Schema#isAutoCreateAll()}
+     See also `additional-spring-configuration-metadata.json</tt> (camelCasing instead of kebab-casing).  @implNote - changing this property from its default is used to enable the flyway extension (in combination with {@link Datanucleus.Schema#isAutoCreateAll()}
 
