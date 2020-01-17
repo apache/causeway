@@ -34,7 +34,6 @@ import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -117,26 +116,7 @@ implements TemporalValueFacet<T> {
                 .orElseThrow(()->_Exceptions.noSuchElement("unknown format name %s", formatName));
     }
     
-    protected DateTimeFormatter formatterFromConfig(FormatIdentifier formatIdentifier, String namedFallback) {
 
-        val configuredNameOrPattern = getConfiguration()
-                .getValue().getFormat().getOrDefault(formatIdentifier.name().toLowerCase(), namedFallback);
-        
-        val formatter = lookupNamedFormatter(configuredNameOrPattern).orElse(null);
-        if(formatter!=null) {
-            return formatter;
-        }
-        
-        try {
-            return DateTimeFormatter.ofPattern(configuredNameOrPattern, Locale.getDefault());
-        } catch (Exception e) {
-            log.warn(e);
-        }
-        
-        return lookupNamedFormatterElseFail(namedFallback);
-
-    }
-    
     
     protected void updateParsers() {
         parsers = Can.ofCollection(namedFormatters.values())

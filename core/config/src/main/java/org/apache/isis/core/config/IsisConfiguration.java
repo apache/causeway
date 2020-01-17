@@ -1251,6 +1251,31 @@ public class IsisConfiguration {
             public static class OffsetDateTime {
                 private String format = "medium";
             }
+
+            private final OffsetTime offsetTime = new OffsetTime();
+            @Data
+            public static class OffsetTime {
+                private String format = "medium";
+            }
+
+            private final LocalDate localDate = new LocalDate();
+            @Data
+            public static class LocalDate {
+                // lower case
+                private String format = "medium";
+            }
+
+            private final LocalTime localTime = new LocalTime();
+            @Data
+            public static class LocalTime {
+                private String format = "medium";
+            }
+
+            private final ZonedDateTime zonedDateTime = new ZonedDateTime();
+            @Data
+            public static class ZonedDateTime {
+                private String format = "medium";
+            }
         }
 
         private final JavaUtil javaUtil = new JavaUtil();
@@ -1282,6 +1307,13 @@ public class IsisConfiguration {
                 private String format = "short";
             }
 
+            private final Timestamp timestamp = new Timestamp();
+            @Data
+            public static class Timestamp {
+                // lower case
+                private String format = "short";
+            }
+
         }
 
         private final Joda joda = new Joda();
@@ -1293,6 +1325,14 @@ public class IsisConfiguration {
                 // lower case
                 private String format = "medium";
             }
+
+            private final LocalDate localDate = new LocalDate();
+            @Data
+            public static class LocalDate {
+                // lower case
+                private String format = "medium";
+            }
+
             private final DateTime dateTime = new DateTime();
             @Data
             public static class DateTime {
@@ -1325,18 +1365,6 @@ public class IsisConfiguration {
         private Map<String, String> format = new HashMap<>();
         
         public enum FormatIdentifier {
-            /**
-             * Key to indicate how LocalDate should be parsed/rendered.
-             * <p>
-             * eg: {@code isis.value.format.date=iso}
-             * <p>
-             * A pre-determined list of values is available, specifically 'iso_encoding', 'iso' and 'medium' (see
-             * <code>org.apache.isis.core.metamodel.facets.value.datejdk8local.Jdk8LocalDateValueSemanticsProvider.NAMED_TITLE_FORMATTERS</code>).
-             * Alternatively,  can also specify a mask, eg <tt>dd-MMM-yyyy</tt>.
-             */
-            DATE, 
-            TIMESTAMP, 
-            TIME,
         }
 
         private final Money money = new Money();

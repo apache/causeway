@@ -32,7 +32,6 @@ import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Maps;
-import org.apache.isis.core.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
@@ -129,8 +128,7 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
     public JodaLocalDateValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, LocalDate.class, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
 
-        String configuredNameOrPattern = getConfiguration()
-                .getValue().getFormat().getOrDefault(FormatIdentifier.DATE.name().toLowerCase(), "medium");
+        String configuredNameOrPattern = getConfiguration().getValueTypes().getJoda().getLocalDate().getFormat();
         
         updateTitleStringFormatter(configuredNameOrPattern);
     }

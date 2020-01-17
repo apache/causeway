@@ -672,9 +672,26 @@ isis.value-types. +
 isis.value-types. +
 {nbsp}{nbsp}joda.date-time.format
 
+isis.value-types. +
+{nbsp}{nbsp}joda.local-date.format
+
 |isis.value.format["time"]
 |isis.value-types. +
 {nbsp}{nbsp}java-sql.time.format
+
+isis.value-types. +
+{nbsp}{nbsp}java-time.offset-time.format
+
+isis.value-types. +
+{nbsp}{nbsp}java-time.local-time.format
+
+isis.value-types. +
+{nbsp}{nbsp}zoned-date-time.local-time.format
+
+|isis.value.format["timestamp"]
+|isis.value-types. +
+{nbsp}{nbsp}java-sql.timestamp.format
+
 
 |
 |

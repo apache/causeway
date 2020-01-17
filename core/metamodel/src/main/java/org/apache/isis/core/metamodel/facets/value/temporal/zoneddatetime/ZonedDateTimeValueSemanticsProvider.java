@@ -20,17 +20,20 @@
 package org.apache.isis.core.metamodel.facets.value.temporal.zoneddatetime;
 
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
-import org.apache.isis.core.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalAdjust;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueSemanticsProviderAbstract;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 
-public class ZonedDateTimeValueSemanticsProvider 
+@Log4j2
+public class ZonedDateTimeValueSemanticsProvider
 extends TemporalValueSemanticsProviderAbstract<ZonedDateTime> {
 
     public static final int MAX_LENGTH = 36;
@@ -55,8 +58,28 @@ extends TemporalValueSemanticsProviderAbstract<ZonedDateTime> {
         super.updateParsers();
 
         setEncodingFormatter(lookupNamedFormatterElseFail("iso_encoding"));
-        setTitleFormatter(formatterFromConfig(FormatIdentifier.TIME, "medium"));
+        setTitleFormatter(formatterFromConfig());
         
     }
+
+    private DateTimeFormatter formatterFromConfig() {
+
+        val configuredNameOrPattern = getConfiguration().getValueTypes().getJavaTime().getZonedDateTime().getFormat();
+
+        val formatter = lookupNamedFormatter(configuredNameOrPattern).orElse(null);
+        if(formatter!=null) {
+            return formatter;
+        }
+
+        try {
+            return DateTimeFormatter.ofPattern(configuredNameOrPattern, Locale.getDefault());
+        } catch (Exception e) {
+            log.warn(e);
+        }
+
+        return lookupNamedFormatterElseFail("medium");
+
+    }
+
 
 }

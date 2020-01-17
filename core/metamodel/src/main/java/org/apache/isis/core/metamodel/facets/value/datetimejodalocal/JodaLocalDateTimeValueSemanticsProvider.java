@@ -33,7 +33,6 @@ import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Maps;
-import org.apache.isis.core.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;

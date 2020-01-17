@@ -20,13 +20,18 @@
 package org.apache.isis.core.metamodel.facets.value.temporal.localdate;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
-import org.apache.isis.core.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalAdjust;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueSemanticsProviderAbstract;
 
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 public class LocalDateValueSemanticsProvider
 extends TemporalValueSemanticsProviderAbstract<LocalDate> {
 
@@ -48,7 +53,25 @@ extends TemporalValueSemanticsProviderAbstract<LocalDate> {
         super.updateParsers();
 
         setEncodingFormatter(lookupNamedFormatterElseFail("iso_encoding"));
-        setTitleFormatter(formatterFromConfig(FormatIdentifier.DATE, "medium"));
+
+        val configuredNameOrPattern = getConfiguration().getValueTypes().getJavaTime().getLocalDate().getFormat();
+
+        val formatter = lookupNamedFormatter(configuredNameOrPattern).orElse(null);
+
+        setTitleFormatter(formatter != null ? formatter : formatterFrom(configuredNameOrPattern));
+    }
+
+    private DateTimeFormatter formatterFrom(String configuredNameOrPattern) {
+        DateTimeFormatter result = null;
+        try {
+            result = DateTimeFormatter.ofPattern(configuredNameOrPattern, Locale.getDefault());
+        } catch (Exception e) {
+            log.warn(e);
+        }
+        if (result == null) {
+            result = lookupNamedFormatterElseFail("medium");
+        }
+        return result;
     }
 
 

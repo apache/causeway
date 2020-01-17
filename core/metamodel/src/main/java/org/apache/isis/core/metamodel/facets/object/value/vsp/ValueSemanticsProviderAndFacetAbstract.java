@@ -19,10 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.value.vsp;
 
-import java.text.DecimalFormat;
 import java.text.Format;
-import java.text.NumberFormat;
-import java.util.Locale;
 import java.util.Map;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
@@ -31,8 +28,6 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
-import org.apache.isis.core.config.IsisConfiguration.Value.FormatIdentifier;
-import org.apache.isis.core.metamodel.commons.LocaleUtil;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -280,19 +275,6 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
     // ///////////////////////////////////////////////////////////////////////////
     // Helper: Locale handling
     // ///////////////////////////////////////////////////////////////////////////
-
-    protected NumberFormat determineNumberFormat(FormatIdentifier formatIdentifier) {
-        final String formatRequired = getConfiguration()
-                .getValue().getFormat().getOrDefault(formatIdentifier.name().toLowerCase(), null);
-
-        return formatRequired != null
-                ? new DecimalFormat(formatRequired)
-                : NumberFormat.getNumberInstance(findLocale());
-    }
-
-    private Locale findLocale() {
-        return getConfiguration().getCore().getRuntime().getLocale().map(LocaleUtil::findLocale).orElse(Locale.getDefault());
-    }
 
     // //////////////////////////////////////////////////////////
     // Helper: createAdapter

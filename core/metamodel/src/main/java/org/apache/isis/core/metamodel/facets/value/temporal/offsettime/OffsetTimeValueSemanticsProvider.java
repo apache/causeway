@@ -20,15 +20,18 @@
 package org.apache.isis.core.metamodel.facets.value.temporal.offsettime;
 
 import java.time.OffsetTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
-import org.apache.isis.core.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalAdjust;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueSemanticsProviderAbstract;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class OffsetTimeValueSemanticsProvider
 extends TemporalValueSemanticsProviderAbstract<OffsetTime> {
 
@@ -53,7 +56,28 @@ extends TemporalValueSemanticsProviderAbstract<OffsetTime> {
         super.updateParsers();
         
         setEncodingFormatter(lookupNamedFormatterElseFail("iso_encoding"));
-        setTitleFormatter(formatterFromConfig(FormatIdentifier.TIME, "medium"));
+        final DateTimeFormatter formatter = formatterFromConfig();
+
+        setTitleFormatter(formatter);
+    }
+
+    private DateTimeFormatter formatterFromConfig() {
+
+        val configuredNameOrPattern = getConfiguration().getValueTypes().getJavaTime().getOffsetTime().getFormat();
+
+        val formatter = lookupNamedFormatter(configuredNameOrPattern).orElse(null);
+        if(formatter!=null) {
+            return formatter;
+        }
+
+        try {
+            return DateTimeFormatter.ofPattern(configuredNameOrPattern, Locale.getDefault());
+        } catch (Exception e) {
+            log.warn(e);
+        }
+
+        return lookupNamedFormatterElseFail("medium");
+
     }
 
 

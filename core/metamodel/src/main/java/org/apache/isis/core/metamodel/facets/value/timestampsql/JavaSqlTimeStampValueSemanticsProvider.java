@@ -63,16 +63,12 @@ extends ValueSemanticsProviderAbstractTemporal<Timestamp> {
     public JavaSqlTimeStampValueSemanticsProvider(final FacetHolder holder) {
         super("timestamp", type(), holder, java.sql.Timestamp.class, 25, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, null);
 
-        configuredFormat = getConfiguration().getValue().getFormat().getOrDefault("timestamp", "short").toLowerCase().trim();
+        configuredFormat = getConfiguration().getValueTypes().getJavaSql().getTimestamp().getFormat();
 
-        buildFormat(configuredFormat);
-
-        final String formatRequired = getConfiguration().getValue().getFormat().get("timestamp");
-
-        if (formatRequired == null) {
-            format = formats().get("short");
-        } else {
-            setMask(formatRequired);
+        final Map<String, DateFormat> formats1 = formats();
+        format = formats1.get(configuredFormat);
+        if (format == null) {
+            setMask(configuredFormat);
         }
     }
 

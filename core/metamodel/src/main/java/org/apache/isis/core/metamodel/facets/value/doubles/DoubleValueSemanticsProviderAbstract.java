@@ -25,7 +25,6 @@ import java.text.ParseException;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.isis.core.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.core.metamodel.commons.LocaleUtil;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

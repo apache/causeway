@@ -23,7 +23,6 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-import org.apache.isis.core.config.IsisConfiguration.Value.FormatIdentifier;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalAdjust;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet;
