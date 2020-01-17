@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.validation.constraints.Email;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -970,8 +971,11 @@ public class IsisConfiguration {
                 private final Override override = new Override();
                 @Data
                 public static class Override {
+                    @javax.validation.constraints.Email
                     private String to;
+                    @javax.validation.constraints.Email
                     private String cc;
+                    @javax.validation.constraints.Email
                     private String bcc;
                 }
 
@@ -981,6 +985,7 @@ public class IsisConfiguration {
                     private String hostname;
                     private String username;
                     private String password;
+                    @javax.validation.constraints.Email
                     private String address;
                 }
 
