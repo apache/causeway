@@ -179,7 +179,7 @@ include::refguide:config:example$generated/isis.viewer.wicket.adoc[]
 (default value)
 |Description
 
-include::refguide:config:example$generated/isis.value.adoc[]
+include::refguide:config:example$generated/isis.value-types.adoc[]
 
 |===
 

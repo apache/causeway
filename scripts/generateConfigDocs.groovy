@@ -144,7 +144,7 @@ groups+= new PropertyGroup() {{
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.value"
+    prefix = "isis.value-types"
     name = "Value types"
     description = "Configuration that applies to value type definitions"
     searchOrder = 501
