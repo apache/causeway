@@ -1240,7 +1240,7 @@ public class IsisConfiguration {
         private final JavaTime javaTime = new JavaTime();
         @Data
         public static class JavaTime {
-            private final Joda.LocalDateTime localDateTime = new Joda.LocalDateTime();
+            private final LocalDateTime localDateTime = new LocalDateTime();
             @Data
             public static class LocalDateTime {
                 private String format = "medium";
@@ -1276,6 +1276,11 @@ public class IsisConfiguration {
             private final LocalDateTime localDateTime = new LocalDateTime();
             @Data
             public static class LocalDateTime {
+            }
+            private final DateTime dateTime = new DateTime();
+            @Data
+            public static class DateTime {
+                // lower case
                 private String format = "medium";
             }
         }

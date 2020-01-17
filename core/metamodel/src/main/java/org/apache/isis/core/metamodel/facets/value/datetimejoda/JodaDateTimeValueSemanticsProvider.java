@@ -51,8 +51,7 @@ public class JodaDateTimeValueSemanticsProvider extends ValueSemanticsProviderAb
         FORMATS.put("medium", DateFormat.getDateInstance(DateFormat.MEDIUM));
     }
 
-    @Getter
-    @Setter
+    @Getter @Setter
     private String configuredFormat;
 
     /**
@@ -67,18 +66,14 @@ public class JodaDateTimeValueSemanticsProvider extends ValueSemanticsProviderAb
             final FacetHolder holder) {
         super("date", type(), holder, DateTime.class, 12, Immutability.IMMUTABLE, EqualByContent.HONOURED, null);
 
-        configuredFormat = getConfiguration().getValue().getFormat().getOrDefault("date", "medium").toLowerCase().trim();
-
-        buildFormat(configuredFormat);
-
-        String formatRequired = getConfiguration().getValue().getFormat().get("date");
-
-        if (formatRequired == null) {
-            format = formats().get("medium");
-        } else {
-            setMask(formatRequired); //TODO fails when using format names eg 'medium'
+        final Map<String, DateFormat> formats = formats();
+        configuredFormat = getConfiguration().getValueTypes().getJoda().getDateTime().getFormat();
+        format = formats.get(configuredFormat);
+        if (format == null) {
+            setMask(configuredFormat);
         }
     }
+
 
 
     // //////////////////////////////////////////////////////////////////
