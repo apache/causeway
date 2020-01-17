@@ -27,6 +27,7 @@ import javax.annotation.Nullable;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.schema.common.v2.OidDto;
 
+import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -37,7 +38,7 @@ import lombok.val;
  * <p>
  * Analogous to the <tt>RootOid</tt>.
  */
-@Value @lombok.Value @RequiredArgsConstructor
+@Value @lombok.Value @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class Bookmark implements Serializable {
 
     private static final long serialVersionUID = 2L;

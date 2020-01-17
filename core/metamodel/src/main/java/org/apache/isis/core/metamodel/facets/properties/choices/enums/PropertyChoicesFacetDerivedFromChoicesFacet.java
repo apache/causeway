@@ -26,7 +26,8 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+
+import lombok.val;
 
 public class PropertyChoicesFacetDerivedFromChoicesFacet extends PropertyChoicesFacetAbstract {
 
@@ -39,10 +40,9 @@ public class PropertyChoicesFacetDerivedFromChoicesFacet extends PropertyChoices
             final ManagedObject adapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final FacetHolder facetHolder = getFacetHolder();
-        final FacetedMethod facetedMethod = (FacetedMethod) facetHolder;
-        final ObjectSpecification noSpec = getSpecification(facetedMethod.getType());
-        final ChoicesFacet choicesFacet = noSpec.getFacet(ChoicesFacet.class);
+        val facetedMethod = (FacetedMethod) getFacetHolder();
+        val methodSpec = getSpecification(facetedMethod.getType());
+        val choicesFacet = methodSpec.getFacet(ChoicesFacet.class);
         if (choicesFacet == null) {
             return _Constants.emptyObjects;
         }
