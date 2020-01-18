@@ -37,16 +37,14 @@ public class CollectionFacetOnContainer extends CollectionFacetAbstract {
 
     @Override
     public Stream<ManagedObject> stream(ManagedObject wrappedContainer) {
-        return unwrap(wrappedContainer).stream();
+        // TODO instead create and subclass a ContainerFacet
+        return unwrap(wrappedContainer).stream(null);
     }
 
-    /**
-     * Expected to be called with a {@link ManagedObject} wrapping a
-     * {@link FreeStandingList}.
-     */
     @Override
     public int size(final ManagedObject wrappedContainer) {
-        return unwrap(wrappedContainer).size();
+        // TODO instead create and subclass a ContainerFacet
+        throw _Exceptions.unsupportedOperation(); 
     }
 
     @Override

@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.util.snapshot;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**

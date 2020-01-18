@@ -31,6 +31,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.core.metamodel.spec.Container;
 
 import lombok.NonNull;
 
@@ -41,6 +42,9 @@ public class ClassSubstitutorForCollections implements ClassSubstitutor {
 
     @Override
     public Substitution getSubstitution(@NonNull Class<?> cls) {
+        if(Container.class.isAssignableFrom(cls)) {
+            return Substitution.replaceClass(Container.class);
+        }
         if(Vector.class.isAssignableFrom(cls)) {
             return Substitution.replaceClass(Vector.class);
         }

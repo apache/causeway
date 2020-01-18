@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.collections.modify;
+package org.apache.isis.core.metamodel.facets.collections;
 
 import java.util.AbstractList;
 import java.util.AbstractSet;

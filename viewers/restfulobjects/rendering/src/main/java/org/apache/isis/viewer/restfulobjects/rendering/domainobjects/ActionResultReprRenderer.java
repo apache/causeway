@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 
 import com.fasterxml.jackson.databind.node.NullNode;
 
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;

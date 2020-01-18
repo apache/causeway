@@ -31,8 +31,6 @@ public interface Container {
 
     String titleString();
 
-    Stream<ManagedObject> stream();
-
-    int size();
+    Stream<ManagedObject> stream(Object query);
 
 }

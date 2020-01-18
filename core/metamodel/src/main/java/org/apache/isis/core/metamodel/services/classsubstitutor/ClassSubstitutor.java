@@ -72,7 +72,7 @@ public interface ClassSubstitutor {
         }
         
         /**
-         * @return whether to be the replacement be an identity operation (do nothing) 
+         * @return whether the replacement is an identity operation (do nothing) 
          */
         public boolean isDoNotReplace() {
             return type == Type.DO_NOT_REPLACE;
