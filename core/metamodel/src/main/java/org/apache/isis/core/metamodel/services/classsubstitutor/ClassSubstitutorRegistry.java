@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.services.classsubstitutor;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -30,7 +30,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor.Substitution;
 
 /**
  * Aggregates all {@link ClassSubstitutor}s.
@@ -47,34 +49,25 @@ public class ClassSubstitutorRegistry {
         this.classSubstitutors = classSubstitutors;
     }
 
-    private final Map<Class<?>, Optional<Class<?>>> cache = _Maps.newHashMap();
+    private final Map<Class<?>, Substitution> cache = _Maps.newConcurrentHashMap();
 
-    // TODO: it would be preferable to return an Optional here.
-    public Class<?> getClass(final Class<?> originalClass) {
+    public Substitution getSubstitution(@Nullable final Class<?> originalClass) {
         if(originalClass == null) {
-            return null;
+            return Substitution.dontReplaceClass();
         }
-
-        Optional<Class<?>> substitutedClass = cache.get(originalClass);
-
-
-        cacheMiss:
-        //noinspection OptionalAssignedToNull
-        if(substitutedClass == null) {
-            // don't yet know if this class needs to be substituted
-            for (ClassSubstitutor classSubstitutor : classSubstitutors) {
-                final Class<?> substitutedType = classSubstitutor.getClass(originalClass);
-                if(substitutedType != originalClass) {
-                    // one of the substitutors has made a substitution
-                    // (though note, it might have substituted it with null).
-                    substitutedClass = Optional.ofNullable(substitutedType);
-                    break cacheMiss;
-                }
-            }
-            // no substitution
-            substitutedClass = Optional.of(originalClass);
-            cache.put(originalClass, substitutedClass);
-        }
-        return substitutedClass.orElse(null);
+        return cache.computeIfAbsent(originalClass, this::findSubstitutionFor);
     }
+    
+    // -- HELPER 
+    
+    private Substitution findSubstitutionFor(final Class<?> originalClass) {
+        
+        return classSubstitutors.stream()
+        .map(classSubstitutor->classSubstitutor.getSubstitution(originalClass))
+        .filter(_NullSafe::isPresent)
+        .findFirst()
+        .orElse(Substitution.dontReplaceClass());
+         
+    }
+    
 }

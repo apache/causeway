@@ -24,16 +24,22 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
+import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
+
+import lombok.val;
 
 public class ClassSubstitutorTest_getClass {
 
     private ClassSubstitutor classSubstitutor;
+    private ClassSubstitutorRegistry classSubstitutorReg;
 
     @Before
     public void setUp() throws Exception {
         classSubstitutor = new ClassSubstitutorDefault();
+        classSubstitutorReg = new ClassSubstitutorRegistry(_Lists.of(classSubstitutor));
     }
 
     public static class SomeDomainObject {
@@ -50,20 +56,23 @@ public class ClassSubstitutorTest_getClass {
 
     @Test
     public void regularDomainObject() throws Exception {
-        Class<?> cls = classSubstitutor.getClass(SomeDomainObject.class);
-        assertEquals(SomeDomainObject.class, cls);
+        val input = SomeDomainObject.class;
+        val replacement = classSubstitutorReg.getSubstitution(input).replace(input);
+        assertEquals(input, replacement);
     }
 
     @Test
     public void someEnum() throws Exception {
-        Class<?> cls = classSubstitutor.getClass(SomeDomainObject.SomeEnum.class);
-        assertEquals(SomeDomainObject.SomeEnum.class, cls);
+        val input = SomeDomainObject.SomeEnum.class;
+        val replacement = classSubstitutorReg.getSubstitution(input).replace(input);
+        assertEquals(input, replacement);
     }
 
     @Test
     public void someAnonymousSubtypeOfEnum() throws Exception {
-        Class<?> cls = classSubstitutor.getClass(SomeDomainObject.SomeEnum.Foo.getClass());
-        assertEquals(SomeDomainObject.SomeEnum.class, cls);
+        val input = SomeDomainObject.SomeEnum.Foo.getClass();
+        val replacement = classSubstitutorReg.getSubstitution(input).replace(input);
+        assertEquals(SomeDomainObject.SomeEnum.class, replacement);
     }
 
 }

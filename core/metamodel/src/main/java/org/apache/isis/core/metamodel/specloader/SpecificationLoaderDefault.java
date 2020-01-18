@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.specloader;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Objects;
 import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
@@ -53,6 +52,7 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelService;
 import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor;
+import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor.Substitution;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorForCollections;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
@@ -356,8 +356,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     public boolean loadSpecifications(Class<?>... domainTypes) {
         // ensure that all types are loadable
         if (Arrays.stream(domainTypes)
-                .map(classSubstitutorRegistry::getClass)
-                .anyMatch(Objects::isNull)) {
+                .map(classSubstitutorRegistry::getSubstitution)
+                .anyMatch(Substitution::isIgnore)) {
             return false;
         }
         Arrays.stream(domainTypes).forEach(this::loadSpecification);
@@ -375,10 +375,12 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         requires(upTo, "upTo");
         
-        val substitutedType = classSubstitutorRegistry.getClass(type);
-        if (substitutedType == null) {
-            return null;
+        val substitute = classSubstitutorRegistry.getSubstitution(type);
+        if (substitute.isIgnore()) {
+            return null; // never inspect
         }
+        
+        val substitutedType = substitute.replace(type);
         
         val typeName = substitutedType.getName();
 
@@ -527,10 +529,13 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     private void invalidateCache(final Class<?> cls) {
 
-        val substitutedType = classSubstitutorRegistry.getClass(cls);
+        val substitute = classSubstitutorRegistry.getSubstitution(cls);
+        if(substitute.isIgnore()) {
+            return;
+        }
 
         ObjectSpecification spec = 
-                loadSpecification(substitutedType, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+                loadSpecification(substitute.replace(cls), IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         
         while(spec != null) {
             val type = spec.getCorrespondingClass();

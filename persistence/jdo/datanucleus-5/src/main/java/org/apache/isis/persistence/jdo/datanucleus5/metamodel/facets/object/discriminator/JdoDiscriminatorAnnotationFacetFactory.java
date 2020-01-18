@@ -34,6 +34,8 @@ import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.Objec
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoMetamodelUtil;
 
+import lombok.val;
+
 public class JdoDiscriminatorAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements ObjectSpecIdFacetFactory {
@@ -66,10 +68,16 @@ implements ObjectSpecIdFacetFactory {
             facet = new ObjectSpecIdFacetInferredFromJdoDiscriminatorValueAnnotation(
                     annotationValue, facetHolder);
         } else {
-            final Class<?> substitutedClass = classSubstitutorRegistry.getClass(cls);
-            facet = substitutedClass != null
-                        ? new ObjectSpecIdFacetDerivedFromClassName(substitutedClass.getCanonicalName(), facetHolder)
-                        : null;
+            val substitute = classSubstitutorRegistry.getSubstitution(cls);
+            if(substitute.isIgnore()) {
+                return;
+            }
+                   
+            val substituted = substitute.replace(cls);
+            facet = new ObjectSpecIdFacetDerivedFromClassName(
+                            substituted.getCanonicalName(), 
+                            facetHolder);
+                        
         }
         FacetUtil.addFacet(facet);
     }

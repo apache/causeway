@@ -27,12 +27,24 @@ import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.commons.ClassUtil;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ProxyEnhanced;
 
+import lombok.NonNull;
 import lombok.val;
 
 public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
 
     @Override
-    public Class<?> getClass(final Class<?> cls) {
+    public Substitution getSubstitution(@NonNull Class<?> cls) {
+        val replacement = getReplacement(cls);
+        if(replacement==null) {
+            return Substitution.ignoreClass();
+        }
+        if(cls.equals(replacement)) {
+            return null; // NOP
+        }
+        return Substitution.replaceClass(replacement) ;
+    }
+    
+    private Class<?> getReplacement(final Class<?> cls) {
 
         if(cls == null) {
             return null;
@@ -40,7 +52,7 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
 
         if(proxyPackageNamesToSkip.stream()
                 .anyMatch(packageName -> cls.getName().startsWith(packageName))) {
-            return getClass(cls.getSuperclass());
+            return getReplacement(cls.getSuperclass());
         }
 
         if (shouldIgnore(cls)) {
@@ -60,7 +72,7 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
         }
         if (ClassUtil.directlyImplements(cls, ProxyEnhanced.class)) {
             // REVIEW: arguably this should now go back to the ClassSubstitorRegistry
-            return getClass(cls.getSuperclass());
+            return getReplacement(cls.getSuperclass());
         }
 
         try {

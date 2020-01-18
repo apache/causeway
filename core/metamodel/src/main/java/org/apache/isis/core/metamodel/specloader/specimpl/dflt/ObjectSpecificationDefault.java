@@ -163,9 +163,9 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         final Class<?>[] interfaceTypes = getCorrespondingClass().getInterfaces();
         final List<ObjectSpecification> interfaceSpecList = _Lists.newArrayList();
         for (val interfaceType : interfaceTypes) {
-            val substitutedInterfaceType = classSubstitutorRegistry.getClass(interfaceType);
-            if (substitutedInterfaceType != null) {
-                val interfaceSpec = getSpecificationLoader().loadSpecification(substitutedInterfaceType);
+            val interfaceSubstitute = classSubstitutorRegistry.getSubstitution(interfaceType);
+            if (interfaceSubstitute.isReplace()) {
+                val interfaceSpec = getSpecificationLoader().loadSpecification(interfaceSubstitute.getReplacement());
                 interfaceSpecList.add(interfaceSpec);
             }
         }

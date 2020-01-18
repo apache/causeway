@@ -70,13 +70,12 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
         if(facetHolder.containsNonFallbackFacet(ObjectSpecIdFacet.class)) {
             return;
         }
-        final Class<?> cls = processClassContext.getCls();
-        final Class<?> substitutedClass = classSubstitutorRegistry.getClass(cls);
-        if(substitutedClass == null) {
+        val cls = processClassContext.getCls();
+        val substitute = classSubstitutorRegistry.getSubstitution(cls);
+        if(substitute.isIgnore()) {
             return;
         }
-
-        final ObjectSpecIdFacet objectSpecIdFacet = createObjectSpecIdFacet(facetHolder, substitutedClass);
+        val objectSpecIdFacet = createObjectSpecIdFacet(facetHolder, substitute.replace(cls));
         FacetUtil.addFacet(objectSpecIdFacet);
     }
 

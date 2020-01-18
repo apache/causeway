@@ -31,7 +31,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.core.metamodel.spec.Container;
+
+import lombok.NonNull;
 
 @Component
 @Named("isisMetaModel.ClassSubstitutorForCollections")
@@ -39,27 +40,22 @@ import org.apache.isis.core.metamodel.spec.Container;
 public class ClassSubstitutorForCollections implements ClassSubstitutor {
 
     @Override
-    public Class<?> getClass(@lombok.NonNull @org.springframework.lang.NonNull Class<?> cls) {
-
-        if(Container.class.isAssignableFrom(cls)) {
-            return Container.class;
-        }
-        // legacy
+    public Substitution getSubstitution(@NonNull Class<?> cls) {
         if(Vector.class.isAssignableFrom(cls)) {
-            return Vector.class;
+            return Substitution.replaceClass(Vector.class);
         }
         if(List.class.isAssignableFrom(cls)) {
-            return List.class;
+            return Substitution.replaceClass(List.class);
         }
         if(SortedSet.class.isAssignableFrom(cls)) {
-            return SortedSet.class;
+            return Substitution.replaceClass(SortedSet.class);
         }
         if(Set.class.isAssignableFrom(cls)) {
-            return Set.class;
+            return Substitution.replaceClass(Set.class);
         }
         if(Collection.class.isAssignableFrom(cls)) {
-            return Collection.class;
+            return Substitution.replaceClass(Collection.class);
         }
-        return cls;
+        return null; // NOP
     }
 }
