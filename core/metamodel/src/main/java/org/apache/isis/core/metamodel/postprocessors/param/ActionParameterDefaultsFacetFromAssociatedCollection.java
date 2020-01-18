@@ -43,7 +43,7 @@ public class ActionParameterDefaultsFacetFromAssociatedCollection extends Action
         } catch (Exception e) {
             throw new ApplicationException(e);
         } finally {
-            _selectedPojos.set(Can.empty());
+            _selectedPojos.remove();
         }
     }
 

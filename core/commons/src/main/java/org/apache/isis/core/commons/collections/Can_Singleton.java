@@ -29,6 +29,7 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -84,7 +85,7 @@ final class Can_Singleton<T> implements Can<T> {
             return this;
         }
         if(other.isCardinalityOne()) {
-            return add(other.getSingleton().get());
+            return add(other.getSingleton().orElseThrow(_Exceptions::unexpectedCodeReach));
         }
         val newElements = new ArrayList<T>(other.size()+1);
         newElements.add(element);

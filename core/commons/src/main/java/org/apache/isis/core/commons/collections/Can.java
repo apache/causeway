@@ -35,6 +35,7 @@ import javax.annotation.Nullable;
 import javax.enterprise.inject.Instance;
 
 import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
 
@@ -99,9 +100,23 @@ public interface Can<T> extends Iterable<T> {
     Optional<T> getFirst();
 
     /**
+     * Shortcut for {@code getFirst().orElseThrow(_Exceptions::unexpectedCodeReach)}
+     */
+    default T getFirstOrFail() {
+        return getFirst().orElseThrow(_Exceptions::unexpectedCodeReach);
+    }
+
+    /**
      * @return this Can's single element or an empty Optional if this Can has any cardinality other than ONE 
      */
     Optional<T> getSingleton();
+    
+    /**
+     * Shortcut for {@code getSingleton().orElseThrow(_Exceptions::unexpectedCodeReach)}
+     */
+    default T getSingletonOrFail() {
+        return getSingleton().orElseThrow(_Exceptions::unexpectedCodeReach);
+    }
 
     // -- FACTORIES
 
