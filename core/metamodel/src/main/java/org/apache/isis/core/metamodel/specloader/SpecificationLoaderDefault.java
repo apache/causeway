@@ -56,15 +56,12 @@ import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorForCollections;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
-import org.apache.isis.core.metamodel.spec.Container;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.postprocessor.PostProcessor;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
-import org.apache.isis.core.metamodel.specloader.specimpl.standalonelist.ObjectSpecificationOnContainer;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderDefault;
@@ -475,25 +472,17 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         }
 
         // ... and create the specs
-        final ObjectSpecificationAbstract objectSpec;
-        if (Container.class.isAssignableFrom(cls)) {
 
-            objectSpec = new ObjectSpecificationOnContainer(facetProcessor, postProcessor);
-            objectSpec.setMetaModelContext(metaModelContext);
+        val typeRegistry = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
 
-        } else {
-            
-            val typeRegistry = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
-
-            val managedBeanNameIfAny = typeRegistry.getManagedBeanNameForType(cls);
-            objectSpec = new ObjectSpecificationDefault(
-                            cls,
-                            metaModelContext,
-                            facetProcessor,
-                            managedBeanNameIfAny.orElse(null),
-                            postProcessor,
-                            classSubstitutorRegistry);
-        }
+        val managedBeanNameIfAny = typeRegistry.getManagedBeanNameForType(cls);
+        val objectSpec = new ObjectSpecificationDefault(
+                        cls,
+                        metaModelContext,
+                        facetProcessor,
+                        managedBeanNameIfAny.orElse(null),
+                        postProcessor,
+                        classSubstitutorRegistry);
 
         return objectSpec;
     }
