@@ -481,10 +481,6 @@ public class FacetedMethodsBuilder {
             
         } 
         
-        if(actionMethod.getName().equals("isEqualTo")) {
-            System.out.println("!!! why?");
-        }
-
         // exclude those that have eg. reserved prefixes
         if (getFacetProcessor().recognizes(actionMethod)) {
             // this is a potential orphan candidate, collect these, than use when validating
