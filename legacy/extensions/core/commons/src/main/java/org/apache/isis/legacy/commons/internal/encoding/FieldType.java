@@ -1294,7 +1294,8 @@ public abstract class FieldType<T> {
     // debugging
     // ///////////////////////////////////////////////////////
 
-    private static ThreadLocal<int[]> debugIndent = ThreadLocal.<int[]>withInitial(()->new int[1]);
+    //resource leak
+    //private static ThreadLocal<int[]> debugIndent = ThreadLocal.<int[]>withInitial(()->new int[1]);
 
     private static void log(final FieldType<?> fieldType, final StringBuilder buf) {
         buf.insert(0, ": ");
@@ -1324,17 +1325,17 @@ public abstract class FieldType<T> {
     }
 
     private static int currentDebugLevel() {
-        return debugIndent.get()[0];
+        return 0; //debugIndent.get()[0];
     }
 
     private static void incrementDebugLevel() {
-        final int[] indentLevel = debugIndent.get();
-        indentLevel[0] += 2;
+//        final int[] indentLevel = debugIndent.get();
+//        indentLevel[0] += 2;
     }
 
     private static void decrementDebugLevel() {
-        final int[] indentLevel = debugIndent.get();
-        indentLevel[0] -= 2;
+//        final int[] indentLevel = debugIndent.get();
+//        indentLevel[0] -= 2;
     }
 
     // ///////////////////////////////////////////////////////
