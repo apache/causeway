@@ -29,17 +29,15 @@ import org.apache.wicket.request.resource.ByteArrayResource;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.util.time.Duration;
-import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.PdfJsConfig;
 import org.wicketstuff.pdfjs.PdfJsPanel;
-import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.Scale;
 
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.value.Blob;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.PdfJsConfig;
+import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.Scale;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.spi.PdfJsViewerAdvisor;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.metamodel.facet.PdfJsViewerFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 
@@ -203,7 +201,9 @@ class PdfJsViewerPanel extends ScalarPanelAbstract implements IRequestListener {
         addOrReplace(containerIfRegular);
 
         final ManagedObject adapter = scalarModel.getObject();
-        if (adapter != null) {
+        val blob = getBlob();
+        
+        if (adapter != null && blob != null) {
             val pdfJsViewerFacet = scalarModel.getFacet(PdfJsViewerFacet.class);
             val instanceKey = buildKey();
             val pdfJsConfig = pdfJsViewerFacet != null
@@ -227,8 +227,7 @@ class PdfJsViewerPanel extends ScalarPanelAbstract implements IRequestListener {
             val printButton = createComponent("print", pdfJsConfig);
 
             //MarkupContainer downloadButton = createComponent("download", config);
-
-            val blob = getBlob();
+            
             val byteArrayResource = new ByteArrayResource(blob.getMimeType().getBaseType(), blob.getBytes(), blob.getName());
             val downloadResourceLink = new ResourceLink<>("download", byteArrayResource);
 
