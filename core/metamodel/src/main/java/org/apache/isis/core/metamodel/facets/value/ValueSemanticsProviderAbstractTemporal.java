@@ -32,7 +32,6 @@ import java.util.TimeZone;
 
 import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.core.commons.internal.base._Casts;
-import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -44,25 +43,8 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T>
 extends ValueSemanticsProviderAndFacetAbstract<T> 
 implements DateValueFacet {
 
-    /**
-     * Introduced to allow BDD tests to provide a different format string
-     * "mid-flight".
-     */
-    public static void setFormat(final String propertyType, final String formatStr) {
-        FORMATS.get().put(propertyType, formatStr);
-    }
-
-    private final static ThreadLocal<Map<String, String>> FORMATS = new ThreadLocal<Map<String, String>>() {
-        @Override
-        protected java.util.Map<String, String> initialValue() {
-            return _Maps.newHashMap();
-        }
-    };
-
     protected static final String ISO_ENCODING_FORMAT = "iso_encoding";
     protected static final TimeZone UTC_TIME_ZONE;
-
-    //public final static String FORMAT_KEY_PREFIX = ConfigurationConstants.ROOT + "value.format.";
 
     static {
         TimeZone timeZone = TimeZone.getTimeZone("Etc/UTC");
@@ -121,14 +103,7 @@ implements DateValueFacet {
     }
 
     protected void buildDefaultFormatIfRequired() {
-        final Map<String, String> map = FORMATS.get();
-        final String currentlyConfiguredFormat = map.get(propertyType);
-        if (currentlyConfiguredFormat == null || getConfiguredFormat().equals(currentlyConfiguredFormat)) {
-            return;
-        }
-
         // (re)create format
-        setConfiguredFormat(currentlyConfiguredFormat);
         buildFormat(getConfiguredFormat());
     }
 
