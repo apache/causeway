@@ -162,14 +162,16 @@ public final class _Plugin {
 
             ClassLoader parentCL = pluginInterfaceClass.getClassLoader();
             URL[] urls = {classPath.toURI().toURL()};
-            ClassLoader cl = URLClassLoader.newInstance(urls, parentCL);
-            Class<S> pluginClass = _Casts.uncheckedCast(
-                    cl.loadClass(pluginFullyQualifiedClassName));
-            S plugin = pluginClass.newInstance();
+            
+            try(URLClassLoader cl = URLClassLoader.newInstance(urls, parentCL)) {
+                Class<S> pluginClass = _Casts.uncheckedCast(
+                        cl.loadClass(pluginFullyQualifiedClassName));
+                S plugin = pluginClass.newInstance();
 
-            _Context.putSingleton(pluginInterfaceClass, plugin);
-
-            return plugin;
+                _Context.putSingleton(pluginInterfaceClass, plugin);
+                
+                return plugin;
+            }
 
         } catch (Exception e) {
             throw new PluginResolveException(
