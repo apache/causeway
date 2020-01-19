@@ -124,8 +124,11 @@ public class _ConcurrentTaskList {
                     try {
                         future.get();
                         tasksExecuted.increment();
-                    } catch (InterruptedException | ExecutionException e) {
+                    } catch (ExecutionException e) {
                         // ignore, continue waiting on tasks
+                    } catch (InterruptedException e) {
+                        // Restore interrupted state...
+                        Thread.currentThread().interrupt();
                     }
                     
                 }
