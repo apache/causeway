@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.properties.update;
 import java.lang.reflect.Method;
 
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -38,9 +37,7 @@ import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySe
 
 public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final Can<String> PREFIXES = Can.ofCollection(_Lists.of(
-            MethodLiteralConstants.SET_PREFIX, 
-            MethodLiteralConstants.CLEAR_PREFIX));
+    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.CLEAR_PREFIX);
 
     public PropertySetAndClearFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY, OrphanValidation.VALIDATE, PREFIXES);
@@ -69,7 +66,8 @@ public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFacto
         final Class<?> cls = processMethodContext.getCls();
         final Class<?> returnType = getMethod.getReturnType();
         final Class<?>[] paramTypes = new Class[] { returnType };
-        final Method setMethod = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.SET_PREFIX + capitalizedName, void.class, paramTypes);
+        final Method setMethod = MethodFinderUtils
+                .findMethod(cls, MethodLiteralConstants.SET_PREFIX + capitalizedName, void.class, paramTypes);
         processMethodContext.removeMethod(setMethod);
 
         final FacetHolder property = processMethodContext.getFacetHolder();

@@ -22,8 +22,6 @@ package org.apache.isis.core.metamodel.facets.actions;
 import java.lang.reflect.Method;
 import java.util.Iterator;
 
-import org.junit.Ignore;
-
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.ignore.javalang.IteratorFilteringFacetFactory;
@@ -67,11 +65,6 @@ public class IteratorFilteringFacetFactoryTest extends AbstractFacetFactoryTest 
         assertFalse(facetFactory.recognizes(actionMethod));
     }
 
-    /**
-     * Not tested; this facet factory is needed, I think, but only filters out
-     * stuff when generics are in use.
-     */
-    @Ignore
     public void xxxtestIterableIteratorMethodFiltered() {
         class Customer implements Iterable<Customer> {
             @SuppressWarnings("unused")

@@ -23,8 +23,8 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.commons.CanBeVoid;
+import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -33,11 +33,11 @@ import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+import lombok.val;
+
 public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
 
-    private static final Can<String> PREFIXES = Can.ofCollection(_Lists.of(
-            MethodLiteralConstants.GET_PREFIX, 
-            MethodLiteralConstants.IS_PREFIX));
+    private static final Can<String> PREFIXES = Can.empty();
 
     public PropertyAccessorFacetViaAccessorFactory() {
         super(FeatureType.PROPERTIES_ONLY, PREFIXES);
@@ -102,7 +102,8 @@ public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectio
     }
 
     private static void appendMatchingMethods(final MethodRemover methodRemover, final String prefix, final Class<?> returnType, final List<Method> methodListToAppendTo) {
-        methodRemover.removeMethods(prefix, returnType, CanBeVoid.FALSE, 0, methodListToAppendTo::add);
+        val filter = MethodUtil.Predicates.prefixed(prefix, returnType, CanBeVoid.FALSE, 0);
+        methodRemover.removeMethods(filter, methodListToAppendTo::add);
     }
 
     @Override

@@ -24,7 +24,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.metamodel.commons.CanBeVoid;
+import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 public class CollectionAccessorFacetViaAccessorFactory
 extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
 
-    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.GET_PREFIX);
+    private static final Can<String> PREFIXES = Can.empty();
 
     public CollectionAccessorFacetViaAccessorFactory() {
         super(FeatureType.COLLECTIONS_ONLY, PREFIXES);
@@ -96,10 +96,7 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
             final List<Method> methodListToAppendTo) {
 
         methodRemover.removeMethods(
-                MethodLiteralConstants.GET_PREFIX,
-                Collection.class,
-                CanBeVoid.FALSE,
-                0,
+                MethodUtil.Predicates.getter(Collection.class),
                 methodListToAppendTo::add
                 );
     }

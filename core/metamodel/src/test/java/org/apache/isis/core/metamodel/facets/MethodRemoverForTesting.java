@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import org.apache.isis.core.metamodel.commons.CanBeVoid;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
@@ -70,11 +71,11 @@ public class MethodRemoverForTesting implements MethodRemover {
         public int paramCount;
     }
 
-    private final List<RemoveMethodsArgs> removeMethodsArgs = new ArrayList<>();
+    
 
     @Override
-    public void removeMethods(final String prefix, final Class<?> returnType, final CanBeVoid canBeVoid, final int paramCount, Consumer<Method> onRemoval) {
-        removeMethodsArgs.add(new RemoveMethodsArgs(prefix, returnType, canBeVoid, paramCount));
+    public void removeMethods(Predicate<Method> filter, Consumer<Method> onRemoval) {
+        removeMethodArgsCalls.add(new RemoveMethodArgs("", void.class, new Class[0]));
     }
 
 

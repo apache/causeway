@@ -21,23 +21,20 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
-import org.apache.isis.core.metamodel.commons.CanBeVoid;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 
 public class MethodRemoverConstants {
 
     public static MethodRemover NOOP = new MethodRemover() {
-        @Override
-        public void removeMethods(final String prefix, final Class<?> returnType, final CanBeVoid canBeVoid, final int paramCount, Consumer<Method> onRemoval) {
-        }
-
-        @Override
-        public void removeMethod(final String methodName, final Class<?> returnType, final Class<?>[] parameterTypes) {
-        }
 
         @Override
         public void removeMethod(final Method method) {
+        }
+
+        @Override
+        public void removeMethods(Predicate<Method> filter, Consumer<Method> onRemoval) {
         }
 
     };

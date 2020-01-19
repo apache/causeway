@@ -86,6 +86,7 @@ implements MetaModelRefiner {
 
             // find reasons about why these are not recognized    
             notRecognizedMethods.forEach(notRecognizedMethod->{
+                
                 val unmetContraints = unmetContraints(spec, notRecognizedMethod);
 
                 val messageFormat = "%s#%s: is assumed to support "

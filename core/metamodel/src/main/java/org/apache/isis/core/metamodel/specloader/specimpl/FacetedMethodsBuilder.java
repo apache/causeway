@@ -69,38 +69,16 @@ public class FacetedMethodsBuilder {
     /* thread-safety ... make sure every methodsRemaining access is synchronized! */
     private static final class FacetedMethodsMethodRemover implements MethodRemover {
 
-        //private final Object $lock = new Object();
-        
         private final Set<Method> methodsRemaining;
 
         private FacetedMethodsMethodRemover(final Class<?> introspectedClass, Method[] methods) {
             this.methodsRemaining = Stream.of(methods)
                     .collect(Collectors.toCollection(_Sets::newConcurrentHashSet));
-                    //.collect(Collectors.toCollection(_Sets::newHashSet));
         }
-
+        
         @Override
-        public void removeMethod(
-                String methodName,
-                Class<?> returnType,
-                Class<?>[] parameterTypes) {
-            
-            //synchronized($lock) {
-                MethodUtil.removeMethod(methodsRemaining, methodName, returnType, parameterTypes);
-            //}
-        }
-
-        @Override
-        public void removeMethods(
-                String prefix,
-                Class<?> returnType,
-                CanBeVoid canBeVoid,
-                int paramCount,
-                Consumer<Method> onRemoval) {
-            
-            //synchronized($lock) {
-                MethodUtil.removeMethods(methodsRemaining, prefix, returnType, canBeVoid, paramCount, onRemoval);
-            //}
+        public void removeMethods(Predicate<Method> filter, Consumer<Method> onRemoval) {
+            MethodUtil.removeMethods(methodsRemaining, filter, onRemoval);
         }
 
         @Override
@@ -108,21 +86,15 @@ public class FacetedMethodsBuilder {
             if(method==null) {
                 return;
             }
-            //synchronized($lock) {
-                methodsRemaining.remove(method);    
-            //}
+            methodsRemaining.remove(method);    
         }
 
         void removeIf(Predicate<Method> matcher) {
-            //synchronized($lock) {
-                methodsRemaining.removeIf(matcher);
-            //}
+            methodsRemaining.removeIf(matcher);
         }
 
         void acceptRemaining(Consumer<Set<Method>> consumer) {
-            //synchronized($lock) {
-                consumer.accept(methodsRemaining);
-            //}
+            consumer.accept(methodsRemaining);
         }
         
     }
@@ -508,10 +480,15 @@ public class FacetedMethodsBuilder {
             return false;
             
         } 
+        
+        if(actionMethod.getName().equals("isEqualTo")) {
+            System.out.println("!!! why?");
+        }
 
         // exclude those that have eg. reserved prefixes
         if (getFacetProcessor().recognizes(actionMethod)) {
             // this is a potential orphan candidate, collect these, than use when validating
+            
             inspectedTypeSpec.getPotentialOrphans().add(actionMethod);
             return false;
         }
@@ -558,8 +535,10 @@ public class FacetedMethodsBuilder {
             final int paramCount,
             Consumer<Method> onMatch) {
         
+        val filter = MethodUtil.Predicates.prefixed(prefix, returnType, canBeVoid, paramCount);
+        
         methodRemover.acceptRemaining(methodsRemaining->{
-            MethodUtil.removeMethods(methodsRemaining, prefix, returnType, canBeVoid, paramCount, onMatch);
+            MethodUtil.removeMethods(methodsRemaining, filter, onMatch);
         });
         
     }

@@ -21,8 +21,9 @@ package org.apache.isis.core.metamodel.facetapi;
 
 import java.lang.reflect.Method;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
-import org.apache.isis.core.metamodel.commons.CanBeVoid;
+import org.apache.isis.core.metamodel.commons.MethodUtil;
 
 /**
  * Removes the methods from further processing by subsequent {@link Facet}s.
@@ -33,27 +34,18 @@ public interface MethodRemover {
      * Locate all methods (that the implementation should somehow know about)
      * that match the criteria and remove them from the implementation's list so
      * that they are not considered for subsequent scans.
-     * @param canBeVoid
+     * @param filter - predefined ones are available with MethodUtil
      * @param onRemoval receives any methods that were removed
      */
     void removeMethods(
-            String prefix,
-            Class<?> returnType,
-            CanBeVoid canBeVoid,
-            int paramCount,
-            Consumer<Method> onRemoval
-    );
-
-    /*variant with noop consumer*/
-    default void removeMethods(
-            String prefix,
-            Class<?> returnType,
-            CanBeVoid canBeVoid,
-            int paramCount) {
-        
-        removeMethods(prefix, returnType, canBeVoid, paramCount, removedMethod -> {});
-    }
+            Predicate<Method> filter,
+            Consumer<Method> onRemoval);
     
+    /** variant with noop consumer */
+    default void removeMethods(
+            Predicate<Method> filter) {
+        removeMethods(filter, removedMethod -> {});
+    }
     
     /**
      * Locate all methods (that the implementation should somehow know about)
@@ -61,11 +53,16 @@ public interface MethodRemover {
      * that they are not considered for subsequent scans.
      *
      */
-    void removeMethod(
+    default void removeMethod(
             String methodName,
             Class<?> returnType,
-            Class<?>[] parameterTypes);
+            Class<?>[] parameterTypes) {
+        
+        removeMethods(MethodUtil.Predicates.signature(methodName, returnType, parameterTypes));
+    }
 
     void removeMethod(Method method);
+    
+
 
 }

@@ -25,11 +25,11 @@ import java.lang.reflect.Parameter;
 import java.util.EnumSet;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.internal.reflection._Annotations;
-import org.apache.isis.core.metamodel.commons.CanBeVoid;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -111,20 +111,14 @@ public interface FacetFactory {
             return method;
         }
 
-
-        @Override
-        public void removeMethods(final String prefix, final Class<?> returnType, final CanBeVoid canBeVoid, final int paramCount, Consumer<Method> onRemoval) {
-            methodRemover.removeMethods(prefix, returnType, canBeVoid, paramCount, onRemoval);
-        }
-
-        @Override
-        public void removeMethod(final String methodName, final Class<?> returnType, final Class<?>[] parameterTypes) {
-            methodRemover.removeMethod(methodName, returnType, parameterTypes);
-        }
-
         @Override
         public void removeMethod(final Method method) {
             methodRemover.removeMethod(method);
+        }
+
+        @Override
+        public void removeMethods(Predicate<Method> filter, Consumer<Method> onRemoval) {
+            methodRemover.removeMethods(filter, onRemoval);
         }
 
     }
@@ -171,13 +165,8 @@ public interface FacetFactory {
         }
 
         @Override
-        public void removeMethods(final String prefix, final Class<?> returnType, final CanBeVoid canBeVoid, final int paramCount, Consumer<Method> onRemoval) {
-            methodRemover.removeMethods(prefix, returnType, canBeVoid, paramCount, onRemoval);
-        }
-
-        @Override
-        public void removeMethod(final String methodName, final Class<?> returnType, final Class<?>[] parameterTypes) {
-            methodRemover.removeMethod(methodName, returnType, parameterTypes);
+        public void removeMethods(Predicate<Method> filter, Consumer<Method> onRemoval) {
+            methodRemover.removeMethods(filter, onRemoval);
         }
 
     }
