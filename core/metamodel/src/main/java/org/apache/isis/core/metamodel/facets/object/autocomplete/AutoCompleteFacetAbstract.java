@@ -30,7 +30,6 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -88,11 +87,6 @@ implements AutoCompleteFacet {
                         }
                     }
                 });
-
-        // check a collection was returned
-        if(CollectionFacet.lookup(resultAdapter) == null) {
-            return Collections.emptyList();
-        }
 
         return ManagedObject.VisibilityUtil.streamVisibleAdapters(resultAdapter, interactionInitiatedBy)
                 .collect(Collectors.toList());
