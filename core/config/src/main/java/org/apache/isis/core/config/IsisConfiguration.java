@@ -1146,7 +1146,7 @@ public class IsisConfiguration {
             @Data
             public static class ParameterLayout implements Applib.Annotation.ConfigPropsForPropertyOrParameterLayout {
                 /**
-                 * Defines the default position for the label for an action parameter..
+                 * Defines the default position for the label for an action parameter.
                  *
                  * <p>
                  *     Can be overridden on a case-by-case basis using
@@ -1172,6 +1172,18 @@ public class IsisConfiguration {
         @Data
         public static class MetaModel {
 
+            /**
+             * Whether domain objects to which the current user does not have visibility access should be rendered
+             * within collections or drop-down choices/autocompletes.
+             *
+             * <p>
+             *     One reason this filtering may be necessary is for multi-tenanted applications, whereby an end-user
+             *     should only be able to "see" what data that they own.  For efficiency, the application should
+             *     only query for objects that the end-user owns.  This configuration property acts as a safety net to
+             *     prevent the end-user from viewing domain objects <i>even if</i> those domain objects were rehydrated
+             *     from the persistence store.
+             * </p>
+             */
             private boolean filterVisibility = true;
 
             private final ProgrammingModel programmingModel = new ProgrammingModel();
