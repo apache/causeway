@@ -70,7 +70,9 @@ public class AuthorizationManager {
             return true;
         }
 
-        if(session.getRoles().stream()
+        if(session!=null 
+                && session.getRoles()
+                .stream()
                 .anyMatch(roleName->authorizor.isUsableInRole(roleName, identifier)) ) {
             return true;
         }
