@@ -125,8 +125,8 @@ public class MethodInvocationPreprocessor {
 
         val sb = new StringBuilder();
         
-        val expectedParamCount = _NullSafe.size(parameterTypes);
-        val actualParamCount = _NullSafe.size(adaptedExecutionParameters);
+        final int expectedParamCount = _NullSafe.size(parameterTypes);
+        final int actualParamCount = _NullSafe.size(adaptedExecutionParameters);
         if(expectedParamCount!=actualParamCount) {
             sb.append(String.format("param-count mismatch: expected %d, got %d\n", 
                     expectedParamCount, actualParamCount));
