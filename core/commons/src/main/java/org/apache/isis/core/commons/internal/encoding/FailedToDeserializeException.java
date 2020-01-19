@@ -28,15 +28,9 @@ public class FailedToDeserializeException extends IOException {
 
     private static final long serialVersionUID = 1L;
 
-    private final Throwable cause;
-
     public FailedToDeserializeException(final ClassNotFoundException cause) {
-        this.cause = cause;
+        super(cause);
     }
 
-    @Override
-    public Throwable getCause() {
-        return cause;
-    }
 
 }
