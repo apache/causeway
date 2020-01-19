@@ -216,7 +216,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
             throw new IllegalArgumentException(
                     "getParameter(int): only " + parameters.size() + " parameters, position=" + position);
         }
-        return parameters.getOrThrow(position);
+        return parameters.getElseFail(position);
     }
 
 
@@ -304,7 +304,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         val actionParameters = getParameters();
         if (proposedArguments != null) {
             for (int i = 0; i < proposedArguments.size(); i++) {
-                final ValidityContext<?> ic = actionParameters.getOrThrow(i)
+                final ValidityContext<?> ic = actionParameters.getElseFail(i)
                         .createProposedArgumentInteractionContext(
                                 objectAdapter, proposedArguments, i, interactionInitiatedBy);
                 
@@ -451,7 +451,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
             for (int i = 0; i < parameterCount; i++) {
                 if (parameterDefaultPojos[i] != null) {
                     final ObjectSpecification componentSpec = getSpecificationLoader().loadSpecification(parameterDefaultPojos[i].getClass());
-                    final ObjectSpecification parameterSpec = parameters.getOrThrow(i).getSpecification();
+                    final ObjectSpecification parameterSpec = parameters.getElseFail(i).getSpecification();
                     // TODO: should implement this instead as a MetaModelValidator
                     if (!componentSpec.isOfType(parameterSpec)) {
                         throw new DomainModelException("Defaults type incompatible with parameter " + (i + 1) + " type; expected " + parameterSpec.getFullIdentifier() + ", but was " + componentSpec.getFullIdentifier());
@@ -463,7 +463,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
             // (the reflector will have made sure both aren't installed).
             parameterDefaultPojos = new Object[parameterCount];
             for (int i = 0; i < parameterCount; i++) {
-                final ActionParameterDefaultsFacet paramFacet = parameters.getOrThrow(i)
+                final ActionParameterDefaultsFacet paramFacet = parameters.getElseFail(i)
                         .getFacet(ActionParameterDefaultsFacet.class);
                 if (paramFacet != null && !paramFacet.isFallback()) {
                     parameterDefaultPojos[i] = paramFacet
@@ -479,7 +479,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
         final ManagedObject[] parameterDefaultAdapters = new ManagedObject[parameterCount];
         for (int i = 0; i < parameterCount; i++) {
-            val paramSpec = parameters.getOrThrow(i).getSpecification();
+            val paramSpec = parameters.getElseFail(i).getSpecification();
             parameterDefaultAdapters[i] = ManagedObject.of(paramSpec, parameterDefaultPojos[i]);
         }
 
@@ -541,7 +541,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
             parameterChoicesPojos = new Object[parameterCount][];
             for (int i = 0; i < parameterCount; i++) {
-                final ActionParameterChoicesFacet paramFacet = parameters.getOrThrow(i).getFacet(ActionParameterChoicesFacet.class);
+                final ActionParameterChoicesFacet paramFacet = parameters.getElseFail(i).getFacet(ActionParameterChoicesFacet.class);
                 if (paramFacet != null && !paramFacet.isFallback()) {
                     parameterChoicesPojos[i] = paramFacet.getChoices(target, null,
                             interactionInitiatedBy);
@@ -556,7 +556,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
             
             ManagedObject[] choices;
             
-            final ObjectSpecification paramSpec = parameters.getOrThrow(i).getSpecification();
+            final ObjectSpecification paramSpec = parameters.getElseFail(i).getSpecification();
 
             if (parameterChoicesPojos[i] != null && parameterChoicesPojos[i].length > 0) {
                 ObjectActionParameterAbstract.checkChoicesOrAutoCompleteType(
@@ -673,7 +673,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
             if (i > 0) {
                 sb.append(",");
             }
-            sb.append(getParameters().getOrThrow(i).getSpecification().getShortIdentifier());
+            sb.append(getParameters().getElseFail(i).getSpecification().getShortIdentifier());
         }
         sb.append("}]");
         return sb.toString();

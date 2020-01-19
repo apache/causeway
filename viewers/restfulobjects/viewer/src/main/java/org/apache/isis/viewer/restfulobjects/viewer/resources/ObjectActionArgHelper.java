@@ -62,13 +62,13 @@ public class ObjectActionArgHelper {
         boolean valid = true;
         for (int i = 0; i < argList.size(); i++) {
             final JsonRepresentation argRepr = argList.get(i);
-            final ObjectSpecification paramSpec = parameters.getOrThrow(i).getSpecification();
+            final ObjectSpecification paramSpec = parameters.getElseFail(i).getSpecification();
             try {
                 final ManagedObject argAdapter = new JsonParserHelper(resourceContext, paramSpec).objectAdapterFor(argRepr);
                 argAdapters.add(argAdapter);
 
                 // validate individual arg
-                final ObjectActionParameter parameter = parameters.getOrThrow(i);
+                final ObjectActionParameter parameter = parameters.getElseFail(i);
                 final Object argPojo = argAdapter!=null?argAdapter.getPojo():null;
                 final String reasonNotValid = parameter.isValid(objectAdapter, argPojo, InteractionInitiatedBy.USER);
                 if (reasonNotValid != null) {

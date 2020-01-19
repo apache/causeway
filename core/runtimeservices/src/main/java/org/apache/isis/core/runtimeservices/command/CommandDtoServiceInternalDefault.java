@@ -140,7 +140,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
 
         val actionParameters = objectAction.getParameters();
         for (int paramNum = 0; paramNum < actionParameters.size(); paramNum++) {
-            final ObjectActionParameter actionParameter = actionParameters.getOrThrow(paramNum);
+            final ObjectActionParameter actionParameter = actionParameters.getElseFail(paramNum);
             final String parameterName = actionParameter.getName();
             final Class<?> paramType = actionParameter.getSpecification().getCorrespondingClass();
             final ManagedObject argAdapter = argAdapters.get(paramNum);

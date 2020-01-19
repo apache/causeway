@@ -125,7 +125,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         final JsonRepresentation argMap = JsonRepresentation.newMap();
         val parameters = objectMember.getParameters();
         for (int i = 0; i < objectMember.getParameterCount(); i++) {
-            argMap.mapPut(parameters.getOrThrow(i).getId() + ".value", argValueFor(i));
+            argMap.mapPut(parameters.getElseFail(i).getId() + ".value", argValueFor(i));
         }
         return argMap;
     }
@@ -144,7 +144,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         if(gsoc2013) {
             final List<Object> parameters = _Lists.newArrayList();
             for (int i = 0; i < objectMember.getParameterCount(); i++) {
-                final ObjectActionParameter param = objectMember.getParameters().getOrThrow(i);
+                final ObjectActionParameter param = objectMember.getParameters().getElseFail(i);
                 final Object paramDetails = paramDetails(param, getInteractionInitiatedBy());
                 parameters.add(paramDetails);
             }
@@ -152,7 +152,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         } else {
             final Map<String,Object> parameters = _Maps.newLinkedHashMap();
             for (int i = 0; i < objectMember.getParameterCount(); i++) {
-                final ObjectActionParameter param = objectMember.getParameters().getOrThrow(i);
+                final ObjectActionParameter param = objectMember.getParameters().getElseFail(i);
                 final Object paramDetails = paramDetails(param, getInteractionInitiatedBy());
                 parameters.put(param.getId(), paramDetails);
             }

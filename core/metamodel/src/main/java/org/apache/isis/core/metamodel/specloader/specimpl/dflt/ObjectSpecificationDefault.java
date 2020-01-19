@@ -341,8 +341,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
         for (int j = 0; j < a.size(); j++) {
             
-            val elementA = a.get(j).get(); 
-            val elementB = b.get(j).get();
+            val elementA = a.getElseFail(j); 
+            val elementB = b.getElseFail(j);
             
             if (!elementA.isOfType(elementB.getSpecification())) {
                 return false;

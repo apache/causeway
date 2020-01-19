@@ -409,7 +409,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         final DefaultedFacet[] parameterTypeDefaultedFacets = new DefaultedFacet[parameterSpecs.size()];
         boolean hasAtLeastOneDefault = false;
         for (int i = 0; i < parameterSpecs.size(); i++) {
-            final ObjectSpecification parameterSpec = parameterSpecs.getOrThrow(i);
+            final ObjectSpecification parameterSpec = parameterSpecs.getElseFail(i);
             parameterTypeDefaultedFacets[i] = parameterSpec.getFacet(DefaultedFacet.class);
             hasAtLeastOneDefault = hasAtLeastOneDefault | (parameterTypeDefaultedFacets[i] != null);
         }

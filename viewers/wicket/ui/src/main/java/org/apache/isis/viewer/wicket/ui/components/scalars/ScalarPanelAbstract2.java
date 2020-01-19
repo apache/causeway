@@ -137,7 +137,7 @@ implements ScalarModelSubscriber2 {
         final List<ManagedObject> pendingArguments = actionModel.getArgumentsAsImmutable();
 
         // could almost certainly simplify this... (used by visibility and usability checks)
-        final ObjectActionParameter actionParameter = action.getParameters().getOrThrow(paramNumToPossiblyUpdate);
+        final ObjectActionParameter actionParameter = action.getParameters().getElseFail(paramNumToPossiblyUpdate);
         val targetAdapter = actionModel.getTargetAdapter();
         val realTargetAdapter = action.realTargetAdapter(targetAdapter);
 

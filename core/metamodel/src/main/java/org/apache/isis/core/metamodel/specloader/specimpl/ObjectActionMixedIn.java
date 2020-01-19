@@ -149,7 +149,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
         for(int paramIndex = 0; paramIndex < mixinActionParameters.size(); paramIndex++) {
 
             val mixinParameter =
-                    (ObjectActionParameterAbstract) mixinActionParameters.getOrThrow(paramIndex);
+                    (ObjectActionParameterAbstract) mixinActionParameters.getElseFail(paramIndex);
 
             final TypedHolder paramPeer = paramPeers.get(paramIndex);
             getSpecificationLoader().loadSpecification(paramPeer.getType());

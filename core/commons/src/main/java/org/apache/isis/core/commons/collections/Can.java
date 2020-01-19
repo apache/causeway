@@ -83,7 +83,7 @@ public interface Can<T> extends Iterable<T> {
      * @throws NoSuchElementException
      * @see {@link #get(int)} 
      */
-    default T getOrThrow(final int elementIndex) {
+    default T getElseFail(final int elementIndex) {
         return get(elementIndex)
                 .orElseThrow(()->new NoSuchElementException(
                         "no element with elementIndex = " + elementIndex));

@@ -74,7 +74,7 @@ public class ActionParameterMemento implements Serializable {
             final int paramIndex,
             final SpecificationLoader specificationLoader) {
         final ObjectAction action = actionMemento.getAction(specificationLoader);
-        return action.getParameters().getOrThrow(paramIndex);
+        return action.getParameters().getElseFail(paramIndex);
     }
 
     /**

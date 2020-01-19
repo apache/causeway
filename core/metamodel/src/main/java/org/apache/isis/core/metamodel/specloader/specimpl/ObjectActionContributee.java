@@ -114,7 +114,7 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
             }
 
             final ObjectActionParameterAbstract serviceParameter =
-                    (ObjectActionParameterAbstract) serviceParameters.getOrThrow(serviceParamNum);
+                    (ObjectActionParameterAbstract) serviceParameters.getElseFail(serviceParamNum);
 
             final ObjectActionParameterContributee contributedParam =
                     serviceParameter.getPeer().getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR

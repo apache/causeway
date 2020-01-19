@@ -319,7 +319,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
 
         for (int paramNum = 0; paramNum < args.size(); paramNum++) {
             final String encoded = args.get(paramNum);
-            setArgument(paramNum, parameterTypes.getOrThrow(paramNum), encoded);
+            setArgument(paramNum, parameterTypes.getElseFail(paramNum), encoded);
         }
     }
 
@@ -350,7 +350,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
         }
 
         final String encoded = mapEntry.getValue();
-        setArgument(paramNum, parameterTypes.getOrThrow(paramNum), encoded);
+        setArgument(paramNum, parameterTypes.getElseFail(paramNum), encoded);
 
         return true;
     }
@@ -395,7 +395,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
     private void setArgument(int paramNum, ManagedObject argumentAdapter) {
         
         final ObjectAction action = actionMemento.getAction(getSpecificationLoader());
-        final ObjectActionParameter actionParam = action.getParameters().getOrThrow(paramNum);
+        final ObjectActionParameter actionParam = action.getParameters().getElseFail(paramNum);
         final ActionParameterMemento apm = new ActionParameterMemento(actionParam);
         final ActionArgumentModel actionArgumentModel = getArgumentModel(apm);
         actionArgumentModel.setObject(argumentAdapter);
