@@ -171,12 +171,10 @@ public final class MethodFinderUtils {
             final Class<? extends Annotation> annotationClass,
             final Map<Class<?>, Optional<Method>> methods) {
 
-        final Class<?> clz = pojo.getClass();
-        Optional<Method> nullableMethod = methods.get(clz);
-        if(nullableMethod == null) {
-            nullableMethod = search(clz, annotationClass, methods);
-        }
-        return nullableMethod.orElse(null);
+        val clz = pojo.getClass();
+        val annotatedMethodIfAny = 
+                methods.computeIfAbsent(clz, __->search(clz, annotationClass, methods));
+        return annotatedMethodIfAny.orElse(null);
     }
 
     private static Optional<Method> search(
