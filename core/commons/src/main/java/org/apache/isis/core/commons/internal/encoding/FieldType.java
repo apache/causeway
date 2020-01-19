@@ -1294,7 +1294,7 @@ public abstract class FieldType<T> {
     // debugging
     // ///////////////////////////////////////////////////////
 
-    private static ThreadLocal<int[]> debugIndent = new ThreadLocal<int[]>();
+    private static ThreadLocal<int[]> debugIndent = ThreadLocal.<int[]>withInitial(()->new int[1]);
 
     private static void log(final FieldType<?> fieldType, final StringBuilder buf) {
         buf.insert(0, ": ");
@@ -1308,10 +1308,7 @@ public abstract class FieldType<T> {
     }
 
     private static void unlog(final FieldType<?> fieldType) {
-        unlog(fieldType, new StringBuilder());
-    }
-
-    private static void unlog(final FieldType<?> fieldType, final StringBuilder buf) {
+        final StringBuilder buf = new StringBuilder();
         if (fieldType.isIndentingAndOutdenting()) {
             buf.insert(0, "< ");
         }
@@ -1327,26 +1324,17 @@ public abstract class FieldType<T> {
     }
 
     private static int currentDebugLevel() {
-        return debugIndent()[0];
+        return debugIndent.get()[0];
     }
 
     private static void incrementDebugLevel() {
-        final int[] indentLevel = debugIndent();
+        final int[] indentLevel = debugIndent.get();
         indentLevel[0] += 2;
     }
 
     private static void decrementDebugLevel() {
-        final int[] indentLevel = debugIndent();
+        final int[] indentLevel = debugIndent.get();
         indentLevel[0] -= 2;
-    }
-
-    private static int[] debugIndent() {
-        int[] indentLevel = debugIndent.get();
-        if (indentLevel == null) {
-            indentLevel = new int[1];
-            debugIndent.set(indentLevel);
-        }
-        return indentLevel;
     }
 
     // ///////////////////////////////////////////////////////
