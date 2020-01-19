@@ -55,6 +55,11 @@ final class Oid_Value implements RootOid {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        return obj == INSTANCE;
+    }
+    
+    @Override
     public int hashCode() {
         return 0;
     }
