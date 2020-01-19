@@ -27,7 +27,6 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectStreamClass;
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nullable;
@@ -54,7 +53,7 @@ class _Mementos_MementoDefault implements _Mementos.Memento {
     private final EncoderDecoder codec;
     private final SerializingAdapter serializer;
 
-    private final Map<String, Serializable> valuesByKey;
+    private final HashMap<String, Serializable> valuesByKey; // we need a Serializable Map
 
     _Mementos_MementoDefault(EncoderDecoder codec, SerializingAdapter serializer) {
         this(codec, serializer, _Maps.newHashMap());
