@@ -42,7 +42,7 @@ import lombok.extern.log4j.Log4j2;
  * <p>
  * The {@link #write(DataOutputExtended, Object)} writes out field type and then
  * the data for that field type. The field type is represented by this
- * enumberation, with the {@link FieldType#getIdx() index} being what is written
+ * enumeration, with the {@link FieldType#getIdx() index} being what is written
  * to the stream (hence of type <tt>byte</tt> to keep small).
  *
  * <p>
@@ -228,7 +228,7 @@ public abstract class FieldType<T> {
         // rather than looping through the array,
         // we take advantage of optimization built into DataInputStream
         private void readBytes(final DataInputStream inputStream, final byte[] bytes) throws IOException {
-            inputStream.read(bytes);
+            inputStream.readFully(bytes);
         }
     };
 
