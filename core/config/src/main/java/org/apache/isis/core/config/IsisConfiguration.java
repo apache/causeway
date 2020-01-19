@@ -22,11 +22,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -38,10 +41,21 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.validation.annotation.Validated;
 
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.events.domain.ActionDomainEvent;
+import org.apache.isis.applib.services.command.CommandWithDto;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.publish.PublishedObjects;
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.config.metamodel.facets.AuditObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.CommandActionsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.CommandPropertiesConfiguration;
@@ -55,6 +69,7 @@ import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.config.viewer.wicket.DialogMode;
 
 import lombok.Data;
+import lombok.Value;
 
 
 /**
@@ -104,6 +119,14 @@ public class IsisConfiguration {
             private final DomainObject domainObject = new DomainObject();
 
             public interface ConfigPropsForPropertyOrParameterLayout {
+                /**
+                 * Defines the default position for the label if not specified through an annotation.
+                 *
+                 * <p>
+                 *     If left as {@link LabelPosition#NOT_SPECIFIED} and not overridden, then the position depends
+                 *     upon the viewer implementation.
+                 * </p>
+                 */
                 LabelPosition getLabelPosition();
             }
 
@@ -115,7 +138,7 @@ public class IsisConfiguration {
                  * sent through to the {@link org.apache.isis.applib.services.audit.AuditerService}.
                  *
                  * <p>
-                 * This setting can be overridden on a case-by-case basis using {@link DomainObject#getAuditing() DomainObject#getAuditing()}
+                 * This setting can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotation.DomainObject#auditing()} DomainObject#getAuditing()}
                  * </p>
                  *
                  * <p>
@@ -135,9 +158,8 @@ public class IsisConfiguration {
                 private EditingObjectsConfiguration editing = EditingObjectsConfiguration.TRUE;
 
                 /**
-                 * The default for whether the properties of domain objects can be edited, or whether instead changed
-                 * objects should be sent through to the {@link org.apache.isis.applib.services.publish.PublisherService}
-                 * for publishing.
+                 * The default for whether the identities of changed objects should be sent through to the
+                 * {@link org.apache.isis.applib.services.publish.PublisherService} for publishing.
                  *
                  * <p>
                  *     The service's {@link org.apache.isis.applib.services.publish.PublisherService#publish(PublishedObjects) publish}
@@ -146,7 +168,7 @@ public class IsisConfiguration {
                  * </p>
                  *
                  * <p>
-                 *  This setting can be overridden on a case-by-case basis using {@link DomainObject#getPublishing() DomainObject#getPublishing()}.
+                 *  This setting can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotation.DomainObject#publishing()}.
                  * </p>
                  */
                 private PublishObjectsConfiguration publishing = PublishObjectsConfiguration.NONE;
@@ -157,10 +179,10 @@ public class IsisConfiguration {
                     /**
                      * Influences whether an {@link org.apache.isis.applib.events.lifecycle.ObjectCreatedEvent} should
                      * be published (on the internal {@link org.apache.isis.applib.services.eventbus.EventBusService})
-                     * whenever a domain object has been created using {@link org.apache.isis.applib.services.factory.FactoryService}..
+                     * whenever a domain object has been created using {@link org.apache.isis.applib.services.factory.FactoryService}.
                      *
                      * <p>
-                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
                      *     {@link org.apache.isis.applib.annotation.DomainObject#createdLifecycleEvent() @DomainObject(createdLifecycleEvent=...)} for the
                      *     domain object in question.
                      * </p>
@@ -193,7 +215,7 @@ public class IsisConfiguration {
                      * whenever a domain <i>entity</i> has been loaded from the persistence store.
                      *
                      * <p>
-                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
                      *     {@link org.apache.isis.applib.annotation.DomainObject#loadedLifecycleEvent() @DomainObject(loadedLifecycleEvent=...)} for the
                      *     domain object in question.
                      * </p>
@@ -230,7 +252,7 @@ public class IsisConfiguration {
                      * whenever a domain <i>entity</i> is about to be persisting (for the first time) to the persistence store.
                      *
                      * <p>
-                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
                      *     {@link org.apache.isis.applib.annotation.DomainObject#persistingLifecycleEvent() @DomainObject(persistingLifecycleEvent=...)} for the
                      *     domain object in question.
                      * </p>
@@ -267,7 +289,7 @@ public class IsisConfiguration {
                      * whenever a domain <i>entity</i> has been persisted (for the first time) to the persistence store.
                      *
                      * <p>
-                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
                      *     {@link org.apache.isis.applib.annotation.DomainObject#persistedLifecycleEvent() @DomainObject(persistedLifecycleEvent=...)} for the
                      *     domain object in question.
                      * </p>
@@ -305,7 +327,7 @@ public class IsisConfiguration {
                      * from the persistence store.
                      *
                      * <p>
-                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
                      *     {@link org.apache.isis.applib.annotation.DomainObject#removingLifecycleEvent() @DomainObject(removingLifecycleEvent=...)} for the
                      *     domain object in question.
                      * </p>
@@ -347,7 +369,7 @@ public class IsisConfiguration {
                      * whenever a persistent domain <i>entity</i> has been updated in the persistence store.
                      *
                      * <p>
-                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
                      *     {@link org.apache.isis.applib.annotation.DomainObject#updatedLifecycleEvent() @DomainObject(updatedLifecycleEvent=...)} for the
                      *     domain object in question.
                      * </p>
@@ -384,7 +406,7 @@ public class IsisConfiguration {
                      * whenever a persistent domain <i>entity</i> is about to be updated in the persistence store.
                      *
                      * <p>
-                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
                      *     {@link org.apache.isis.applib.annotation.DomainObject#updatingLifecycleEvent() @DomainObject(updatingLifecycleEvent=...)} for the
                      *     domain object in question.
                      * </p>
@@ -418,6 +440,14 @@ public class IsisConfiguration {
             @Data
             public static class DomainObjectLayout {
 
+                /**
+                 * Defines the default number of objects that are shown in a &quot;standalone&quot; collection obtained as the
+                 * result of invoking an action.
+                 *
+                 * <p>
+                 *     This can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotation.DomainObjectLayout#paged()}.
+                 * </p>
+                 */
                 private int paged = 25;
 
                 private final CssClassUiEvent cssClassUiEvent = new CssClassUiEvent();
@@ -431,7 +461,7 @@ public class IsisConfiguration {
                      * the CSS classes that are used.
                      *
                      * <p>
-                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
                      *     {@link org.apache.isis.applib.annotation.DomainObjectLayout#cssClassUiEvent()}  @DomainObjectLayout(cssClassEvent=...)} for the
                      *     domain object in question.
                      * </p>
@@ -466,7 +496,7 @@ public class IsisConfiguration {
                      * the icon that is used.
                      *
                      * <p>
-                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
                      *     {@link org.apache.isis.applib.annotation.DomainObjectLayout#iconUiEvent()}  @DomainObjectLayout(iconEvent=...)} for the
                      *     domain object in question.
                      * </p>
@@ -506,7 +536,7 @@ public class IsisConfiguration {
                      * </p>
                      *
                      * <p>
-                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
                      *     {@link org.apache.isis.applib.annotation.DomainObjectLayout#layoutUiEvent()}  @DomainObjectLayout(layoutEvent=...)} for the
                      *     domain object in question.
                      * </p>
@@ -541,7 +571,7 @@ public class IsisConfiguration {
                      * the title that is used.
                      *
                      * <p>
-                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
                      *     {@link org.apache.isis.applib.annotation.DomainObjectLayout#titleUiEvent()}  @DomainObjectLayout(titleEvent=...)} for the
                      *     domain object in question.
                      * </p>
@@ -564,13 +594,31 @@ public class IsisConfiguration {
                      */
                     private boolean postForDefault = true;
                 }
-
             }
 
             private final Action action = new Action();
             @Data
             public static class Action {
 
+                /**
+                 * The default for whether action invocations should be reified as a
+                 * {@link org.apache.isis.applib.services.command.Command} using the
+                 * {@link org.apache.isis.applib.services.command.spi.CommandService}, possibly so that the actual
+                 * execution of the action can be deferred until later (background execution) or replayed against a
+                 * copy of the system.
+                 *
+                 * <p>
+                 *     In particular, the {@link org.apache.isis.applib.services.command.CommandWithDto} implementation
+                 *     of {@link org.apache.isis.applib.services.command.Command} represents the action invocation
+                 *     memento (obtained using {@link CommandWithDto#asDto()}) as a
+                 *     {@link org.apache.isis.schema.cmd.v2.CommandDto}.
+                 * </p>
+                 *
+                 * <p>
+                 *  This setting can be overridden on a case-by-case basis using
+                 *  {@link org.apache.isis.applib.annotation.Action#command()}.
+                 * </p>
+                 */
                 private CommandActionsConfiguration command = CommandActionsConfiguration.NONE;
 
                 /**
@@ -583,9 +631,59 @@ public class IsisConfiguration {
                 private final DomainEvent domainEvent = new DomainEvent();
                 @Data
                 public static class DomainEvent {
+                    /**
+                     * Influences whether an {@link org.apache.isis.applib.events.domain.ActionDomainEvent} should
+                     * be published (on the internal {@link org.apache.isis.applib.services.eventbus.EventBusService})
+                     * whenever an action is being interacted with.
+                     *
+                     * <p>
+                     *     Up to five different events can be fired during an interaction, with the event's
+                     *     {@link org.apache.isis.applib.events.domain.ActionDomainEvent#getEventPhase() phase}
+                     *     determining which (hide, disable, validate, executing and executed).  Subscribers can
+                     *     influence the behaviour at each of these phases.
+                     * </p>
+                     *
+                     * <p>
+                     *     The algorithm for determining whether (and what type of) an event is actually sent depends
+                     *     on the value of the {@link org.apache.isis.applib.annotation.Action#domainEvent()} for the
+                     *     action in question:
+                     * </p>
+                     *
+                     * <ul>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.domain.ActionDomainEvent.Noop ActionDomainEvent.Noop},
+                     *         then <i>no</i> event is sent.
+                     *     </li>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.domain.ActionDomainEvent.Default ActionDomainEvent.Default},
+                     *         then an event is sent <i>if and only if</i> this configuration setting is set.
+                     *     </li>
+                     *     <li>
+                     *         If set to any other subtype, then an event <i>is</i> sent.
+                     *     </li>
+                     * </ul>
+                     */
                     private boolean postForDefault = true;
                 }
 
+                /**
+                 * The default for whether action invocations should be sent through to the
+                 * {@link org.apache.isis.applib.services.publish.PublisherService} for publishing.
+                 *
+                 * <p>
+                 *     The service's {@link org.apache.isis.applib.services.publish.PublisherService#publish(Interaction.Execution) publish}
+                 *     method is called only once per transaction, with
+                 *     {@link org.apache.isis.applib.services.iactn.Interaction.Execution} collecting details of
+                 *     the identity of the target object, the action invoked, the action arguments and the returned
+                 *     object (if any).
+                 * </p>
+                 *
+                 * <p>
+                 *  This setting can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotation.Action#publishing()}.
+                 * </p>
+                 */
                 private PublishActionsConfiguration publishing = PublishActionsConfiguration.NONE;
 
             }
@@ -597,13 +695,91 @@ public class IsisConfiguration {
                 private final CssClass cssClass = new CssClass();
                 @Data
                 public static class CssClass {
-                    private Map<Pattern, String> patterns = new HashMap<>();
+                    /**
+                     * Provides a mapping of patterns to CSS classes, where the pattern is used to match against the
+                     * name of the action method in order to determine a CSS class to use, for example on the action's
+                     * button if rendered by the Wicket viewer.
+                     *
+                     * <p>
+                     *     Providing a default set of patterns encourages a common set of verbs to be used.
+                     * </p>
+                     *
+                     * <p>
+                     *     The CSS class for individual actions can be overridden using
+                     *     {@link org.apache.isis.applib.annotation.ActionLayout#cssClass()}.
+                     * </p>
+                     */
+                    private Map<Pattern, String> patterns = asMap(
+                                    "delete.*:btn-danger",
+                                    "discard.*:btn-warning",
+                                    "remove.*:btn-warning"
+                    );
                 }
 
                 private final CssClassFa cssClassFa = new CssClassFa();
                 @Data
                 public static class CssClassFa {
-                    private Map<Pattern, String> patterns = new HashMap<>();
+                    /**
+                     * Provides a mapping of patterns to font-awesome CSS classes, where the pattern is used to match
+                     * against the name of the action method in order to determine a CSS class to use, for example on
+                     * the action's menu icon if rendered by the Wicket viewer.
+                     *
+                     * <p>
+                     *     Providing a default set of patterns encourages a common set of verbs to be used.
+                     * </p>
+                     *
+                     * <p>
+                     *     The font awesome class for individual actions can be overridden using
+                     *     {@link org.apache.isis.applib.annotation.ActionLayout#cssClassFa()}.
+                     * </p>
+                     */
+                    private Map<Pattern, String> patterns = asMap(
+                            "add.*:fa-plus-square",
+                            "all.*:fa-list",
+                            "approve.*:fa-thumbs-o-up",
+                            "assign.*:fa-hand-o-right",
+                            "calculate.*:fa-calculator",
+                            "cancel.*:fa-stop",
+                            "categorise.*:fa-folder-open-o",
+                            "change.*:fa-edit",
+                            "clear.*:fa-remove",
+                            "copy.*:fa-copy",
+                            "create.*:fa-plus",
+                            "decline.*:fa-thumbs-o-down",
+                            "delete.*:fa-trash",
+                            "discard.*:fa-trash-o",
+                            "download.*:fa-download",
+                            "edit.*:fa-pencil-square-o",
+                            "execute.*:fa-bolt",
+                            "export.*:fa-download",
+                            "first.*:fa-star",
+                            "find.*:fa-search",
+                            "install.*:fa-wrench",
+                            "list.*:fa-list",
+                            "import.*:fa-upload",
+                            "lookup.*:fa-search",
+                            "maintain.*:fa-edit",
+                            "move.*:fa-exchange",
+                            "new.*:fa-plus",
+                            "next.*:fa-step-forward",
+                            "pause.*:fa-pause",
+                            "previous.*:fa-step-backward",
+                            "refresh.*:fa-refresh",
+                            "remove.*:fa-minus-square",
+                            "renew.*:fa-repeat",
+                            "reset.*:fa-repeat",
+                            "resume.*:fa-play",
+                            "run.*:fa-bolt",
+                            "save.*:fa-floppy-o",
+                            "search.*:fa-search",
+                            "stop.*:fa-stop",
+                            "suspend.*:fa-pause",
+                            "switch.*:fa-exchange",
+                            "terminate.*:fa-stop",
+                            "update.*:fa-edit",
+                            "upload.*:fa-upload",
+                            "verify.*:fa-check-circle",
+                            "view.*:fa-search");
                 }
             }
 
@@ -611,13 +787,82 @@ public class IsisConfiguration {
             @Data
             public static class Property {
 
+                /**
+                 * The default for whether property edits should be reified as a
+                 * {@link org.apache.isis.applib.services.command.Command} using the
+                 * {@link org.apache.isis.applib.services.command.spi.CommandService}, possibly so that the actual
+                 * execution of the property edit can be deferred until later (background execution) or replayed
+                 * against a copy of the system.
+                 *
+                 * <p>
+                 *     In particular, the {@link org.apache.isis.applib.services.command.CommandWithDto} implementation
+                 *     of {@link org.apache.isis.applib.services.command.Command} represents the action invocation
+                 *     memento (obtained using {@link CommandWithDto#asDto()}) as a
+                 *     {@link org.apache.isis.schema.cmd.v2.CommandDto}.
+                 * </p>
+                 *
+                 * <p>
+                 *  This setting can be overridden on a case-by-case basis using
+                 *  {@link org.apache.isis.applib.annotation.Action#command()}.
+                 * </p>
+                 */
                 private CommandPropertiesConfiguration command = CommandPropertiesConfiguration.NONE;
 
+                /**
+                 * The default for whether property edits should be sent through to the
+                 * {@link org.apache.isis.applib.services.publish.PublisherService} for publishing.
+                 *
+                 * <p>
+                 *     The service's {@link org.apache.isis.applib.services.publish.PublisherService#publish(Interaction.Execution) publish}
+                 *     method is called only once per transaction, with
+                 *     {@link org.apache.isis.applib.services.iactn.Interaction.Execution} collecting details of
+                 *     the identity of the target object, the property edited, and the new value of the property.
+                 * </p>
+                 *
+                 * <p>
+                 *  This setting can be overridden on a case-by-case basis using {
+                 *  @link org.apache.isis.applib.annotation.Property#publishing()}.
+                 * </p>
+                 */
                 private PublishPropertiesConfiguration publishing = PublishPropertiesConfiguration.NONE;
 
                 private final DomainEvent domainEvent = new DomainEvent();
                 @Data
                 public static class DomainEvent {
+                    /**
+                     * Influences whether an {@link org.apache.isis.applib.events.domain.PropertyDomainEvent} should
+                     * be published (on the internal {@link org.apache.isis.applib.services.eventbus.EventBusService})
+                     * whenever an property is being interacted with.
+                     *
+                     * <p>
+                     *     Up to five different events can be fired during an interaction, with the event's
+                     *     {@link org.apache.isis.applib.events.domain.PropertyDomainEvent#getEventPhase() phase}
+                     *     determining which (hide, disable, validate, executing and executed).  Subscribers can
+                     *     influence the behaviour at each of these phases.
+                     * </p>
+                     *
+                     * <p>
+                     *     The algorithm for determining whether (and what type of) an event is actually sent depends
+                     *     on the value of the {@link org.apache.isis.applib.annotation.Property#domainEvent()} for the
+                     *     property in question:
+                     * </p>
+                     *
+                     * <ul>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.domain.PropertyDomainEvent.Noop propertyDomainEvent.Noop},
+                     *         then <i>no</i> event is sent.
+                     *     </li>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.domain.PropertyDomainEvent.Default propertyDomainEvent.Default},
+                     *         then an event is sent <i>if and only if</i> this configuration setting is set.
+                     *     </li>
+                     *     <li>
+                     *         If set to any other subtype, then an event <i>is</i> sent.
+                     *     </li>
+                     * </ul>
+                     */
                     private boolean postForDefault = true;
                 }
 
@@ -626,6 +871,19 @@ public class IsisConfiguration {
             private final PropertyLayout propertyLayout = new PropertyLayout();
             @Data
             public static class PropertyLayout implements Applib.Annotation.ConfigPropsForPropertyOrParameterLayout {
+                /**
+                 * Defines the default position for the label for a domain object property.
+                 *
+                 * <p>
+                 *     Can be overridden on a case-by-case basis using
+                 *     {@link org.apache.isis.applib.annotation.ParameterLayout#labelPosition()}.
+                 * </p>
+                 *
+                 * <p>
+                 *     If left as {@link LabelPosition#NOT_SPECIFIED} and not overridden, then the position depends
+                 *     upon the viewer implementation.
+                 * </p>
+                 */
                 private LabelPosition labelPosition = LabelPosition.NOT_SPECIFIED;
             }
 
@@ -636,6 +894,40 @@ public class IsisConfiguration {
                 private final DomainEvent domainEvent = new DomainEvent();
                 @Data
                 public static class DomainEvent {
+                    /**
+                     * Influences whether an {@link org.apache.isis.applib.events.domain.CollectionDomainEvent} should
+                     * be published (on the internal {@link org.apache.isis.applib.services.eventbus.EventBusService})
+                     * whenever a collection is being interacted with.
+                     *
+                     * <p>
+                     *     Up to two different events can be fired during an interaction, with the event's
+                     *     {@link org.apache.isis.applib.events.domain.CollectionDomainEvent#getEventPhase() phase}
+                     *     determining which (hide, disable)Subscribers can influence the behaviour at each of these
+                     *     phases.
+                     * </p>
+                     *
+                     * <p>
+                     *     The algorithm for determining whether (and what type of) an event is actually sent depends
+                     *     on the value of the {@link org.apache.isis.applib.annotation.Collection#domainEvent()} for the
+                     *     collection action in question:
+                     * </p>
+                     *
+                     * <ul>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.domain.CollectionDomainEvent.Noop CollectionDomainEvent.Noop},
+                     *         then <i>no</i> event is sent.
+                     *     </li>
+                     *     <li>
+                     *         If set to some subtype of
+                     *         {@link org.apache.isis.applib.events.domain.CollectionDomainEvent.Default CollectionDomainEvent.Default},
+                     *         then an event is sent <i>if and only if</i> this configuration setting is set.
+                     *     </li>
+                     *     <li>
+                     *         If set to any other subtype, then an event <i>is</i> sent.
+                     *     </li>
+                     * </ul>
+                     */
                     private boolean postForDefault = true;
                 }
             }
@@ -643,8 +935,32 @@ public class IsisConfiguration {
             private final CollectionLayout collectionLayout = new CollectionLayout();
             @Data
             public static class CollectionLayout {
+
+                /**
+                 * Defines the initial view to display collections when rendered.
+                 *
+                 * <p>
+                 *     The value of this can be overridden on a case-by-case basis using
+                 *     {@link org.apache.isis.applib.annotation.CollectionLayout#defaultView()}.
+                 *     Note that this default configuration property is an enum and so defines only a fixed number of
+                 *     values, whereas the annotation returns a string; this is to allow for flexibility that
+                 *     individual viewers might support their own additional types.  For example, the Wicket viewer
+                 *     supports <codefullcalendar</code> which can render objects that have a date on top of a calendar
+                 *     view.
+                 * </p>
+                 */
                 private DefaultViewConfiguration defaultView = DefaultViewConfiguration.HIDDEN;
 
+                /**
+                 * Defines the default number of objects that are shown in a &quot;parented&quot; collection of a
+                 * domain object,
+                 * result of invoking an action.
+                 *
+                 * <p>
+                 *     This can be overridden on a case-by-case basis using
+                 *     {@link org.apache.isis.applib.annotation.CollectionLayout#paged()}.
+                 * </p>
+                 */
                 private int paged = 12;
             }
 
@@ -657,6 +973,13 @@ public class IsisConfiguration {
                     private final SemanticChecking semanticChecking = new SemanticChecking();
                     @Data
                     public static class SemanticChecking {
+                        /**
+                         * Whether to check for inconsistencies between the usage of
+                         * {@link org.apache.isis.applib.annotation.DomainObject},
+                         * {@link org.apache.isis.applib.annotation.ViewModel},
+                         * {@link org.apache.isis.applib.annotation.DomainObjectLayout} and
+                         * {@link org.apache.isis.applib.annotation.ViewModelLayout}.
+                          */
                         private boolean enable = false;
                     }
                 }
@@ -679,9 +1002,9 @@ public class IsisConfiguration {
                      * classes that are used.
                      *
                      * <p>
-                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
                      *     {@link org.apache.isis.applib.annotation.ViewModelLayout#cssClassUiEvent()}  @ViewModelLayout(cssClassEvent=...)} for the
-                     *     domain object in question.
+                     *     domain object in question:
                      * </p>
                      *
                      * <ul>
@@ -716,9 +1039,9 @@ public class IsisConfiguration {
                      * is used.
                      *
                      * <p>
-                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
                      *     {@link org.apache.isis.applib.annotation.ViewModelLayout#iconUiEvent()}  @ViewModelLayout(iconEvent=...)} for the
-                     *     domain object in question.
+                     *     domain object in question:
                      * </p>
                      *
                      * <ul>
@@ -757,9 +1080,9 @@ public class IsisConfiguration {
                      * </p>
                      *
                      * <p>
-                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
                      *     {@link org.apache.isis.applib.annotation.ViewModelLayout#layoutUiEvent()}  @ViewModelLayout(layoutEvent=...)} for the
-                     *     domain object in question.
+                     *     domain object in question:
                      * </p>
                      *
                      * <ul>
@@ -794,9 +1117,9 @@ public class IsisConfiguration {
                      * the title that is used.
                      *
                      * <p>
-                     *     The algorithm for determining whether an event is sent depends on the value of the
+                     *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
                      *     {@link org.apache.isis.applib.annotation.ViewModelLayout#titleUiEvent()}  @ViewModelLayout(titleEvent=...)} for the
-                     *     domain object in question.
+                     *     domain object in question:
                      * </p>
                      *
                      * <ul>
@@ -822,6 +1145,19 @@ public class IsisConfiguration {
             private final ParameterLayout parameterLayout = new ParameterLayout();
             @Data
             public static class ParameterLayout implements Applib.Annotation.ConfigPropsForPropertyOrParameterLayout {
+                /**
+                 * Defines the default position for the label for an action parameter..
+                 *
+                 * <p>
+                 *     Can be overridden on a case-by-case basis using
+                 *     {@link org.apache.isis.applib.annotation.ParameterLayout#labelPosition()}.
+                 * </p>
+                 *
+                 * <p>
+                 *     If left as {@link LabelPosition#NOT_SPECIFIED} and not overridden, then the position depends
+                 *     upon the viewer implementation.
+                 * </p>
+                 */
                 private LabelPosition labelPosition = LabelPosition.NOT_SPECIFIED;
             }
 
@@ -1890,8 +2226,6 @@ public class IsisConfiguration {
                 private Optional<String> currency = Optional.empty();
             }
         }
-
-
     }
 
 
@@ -1919,6 +2253,26 @@ public class IsisConfiguration {
 
     private static List<String> listOf(final String ...values) {
         return new ArrayList<>(Arrays.asList(values));
+    }
+
+    @Value
+    static class PatternToString {
+        private final Pattern pattern;
+        private final String string;
+    }
+    private static Map<Pattern, String> asMap(String... mappings) {
+        return new LinkedHashMap<>(Arrays.stream(mappings).map(mapping -> {
+            final String[] parts = mapping.split(":");
+            if (parts.length != 2) {
+                return null;
+            }
+            try {
+                return new PatternToString(Pattern.compile(parts[0]), parts[1]);
+            } catch(Exception ex) {
+                return null;
+            }
+        }).filter(Objects::nonNull)
+        .collect(Collectors.toMap(PatternToString::getPattern, PatternToString::getString)));
     }
 
 
