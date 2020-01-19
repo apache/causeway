@@ -24,6 +24,8 @@ import java.util.Iterator;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+
 /**
  *
  * package private mixin for utility class {@link _Strings}
@@ -63,6 +65,11 @@ final class _Strings_SplitIterator {
 
             @Override
             public String next() {
+                
+                if(!hasNext()) {
+                    throw _Exceptions.noSuchElement("end of string already reached");
+                }
+                
                 try {
                     return next;
                 } finally {
