@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.commons.internal.encoding;
+package org.apache.isis.legacy.commons.internal.encoding;
 
 import java.io.IOException;
 import java.io.PipedInputStream;
@@ -32,6 +32,12 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+
+import org.apache.isis.legacy.commons.internal.encoding.DataInputExtended;
+import org.apache.isis.legacy.commons.internal.encoding.DataInputStreamExtended;
+import org.apache.isis.legacy.commons.internal.encoding.DataOutputExtended;
+import org.apache.isis.legacy.commons.internal.encoding.DataOutputStreamExtended;
+import org.apache.isis.legacy.commons.internal.encoding.Encodable;
 
 public class ByteEncoderDecoderRoundtripTest {
 

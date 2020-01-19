@@ -17,24 +17,13 @@
  *  under the License.
  */
 
-package org.apache.isis.core.commons.internal.encoding;
+package org.apache.isis.legacy.commons.internal.encoding;
 
-import java.io.IOException;
+public class EncodingConstants {
 
-/**
- * This interface indicates that an object can be encoded into into a byte array
- * so it can be streamed.
- *
- * <p>
- * By implementing this interface you are agreeing to provide a constructor with
- * a single argument of type {@link DataInputExtended}, which create an instance
- * from the stream.
- */
-public interface Encodable {
+    static final String ENCODED_NULL_ARRAY = "$$.$null-array$.$$";
+    static final String ENCODED_BOOLEAN_FALSE = "$$.$false$.$$";
+    static final String ENCODED_BOOLEAN_TRUE = "$$.$true$.$$";
+    static final String ENCODED_NULL_OBJECT = "$$.$null$.$$";
 
-    /**
-     * Returns the domain object's value as an encoded byte array via the
-     * encoder.
-     */
-    void encode(DataOutputExtended outputStream) throws IOException;
 }

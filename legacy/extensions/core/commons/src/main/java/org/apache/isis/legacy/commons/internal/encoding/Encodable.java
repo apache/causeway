@@ -17,20 +17,24 @@
  *  under the License.
  */
 
-/**
- *
- */
-package org.apache.isis.core.commons.internal.encoding;
+package org.apache.isis.legacy.commons.internal.encoding;
 
 import java.io.IOException;
 
-public class FailedToDeserializeException extends IOException {
+/**
+ * This interface indicates that an object can be encoded into into a byte array
+ * so it can be streamed.
+ *
+ * <p>
+ * By implementing this interface you are agreeing to provide a constructor with
+ * a single argument of type {@link DataInputExtended}, which create an instance
+ * from the stream.
+ */
+public interface Encodable {
 
-    private static final long serialVersionUID = 1L;
-
-    public FailedToDeserializeException(final ClassNotFoundException cause) {
-        super(cause);
-    }
-
-
+    /**
+     * Returns the domain object's value as an encoded byte array via the
+     * encoder.
+     */
+    void encode(DataOutputExtended outputStream) throws IOException;
 }

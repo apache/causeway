@@ -20,7 +20,7 @@
 /**
  *
  */
-package org.apache.isis.core.commons.internal.encoding;
+package org.apache.isis.legacy.commons.internal.encoding;
 
 import java.io.IOException;
 

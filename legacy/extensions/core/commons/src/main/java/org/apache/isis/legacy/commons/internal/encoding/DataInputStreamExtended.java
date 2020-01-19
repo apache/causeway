@@ -17,22 +17,23 @@
  *  under the License.
  */
 
-package org.apache.isis.core.commons.internal.encoding;
+package org.apache.isis.legacy.commons.internal.encoding;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
-public class DataInputExtendedDecorator implements DataInputExtended {
+public class DataInputStreamExtended implements DataInputExtended {
 
-    private final DataInputExtended underlying;
+    private final DataInputStream dataInputStream;
 
-    public DataInputExtendedDecorator(final DataInputExtended underlying) {
-        this.underlying = underlying;
+    public DataInputStreamExtended(final InputStream inputStream) {
+        this.dataInputStream = new DataInputStream(inputStream);
     }
 
     @Override
     public DataInputStream getDataInputStream() {
-        return underlying.getDataInputStream();
+        return dataInputStream;
     }
 
     // ////////////////////////////////////////
@@ -41,22 +42,22 @@ public class DataInputExtendedDecorator implements DataInputExtended {
 
     @Override
     public boolean readBoolean() throws IOException {
-        return underlying.readBoolean();
+        return FieldType.BOOLEAN.read(this);
     }
 
     @Override
     public boolean[] readBooleans() throws IOException {
-        return underlying.readBooleans();
+        return FieldType.BOOLEAN_ARRAY.read(this);
     }
 
     @Override
     public char readChar() throws IOException {
-        return underlying.readChar();
+        return FieldType.CHAR.read(this);
     }
 
     @Override
     public char[] readChars() throws IOException {
-        return underlying.readChars();
+        return FieldType.CHAR_ARRAY.read(this);
     }
 
     // ////////////////////////////////////////
@@ -65,52 +66,52 @@ public class DataInputExtendedDecorator implements DataInputExtended {
 
     @Override
     public byte readByte() throws IOException {
-        return underlying.readByte();
-    }
-
-    @Override
-    public int readUnsignedByte() throws IOException {
-        return underlying.readUnsignedByte();
+        return FieldType.BYTE.read(this);
     }
 
     @Override
     public byte[] readBytes() throws IOException {
-        return underlying.readBytes();
+        return FieldType.BYTE_ARRAY.read(this);
     }
 
     @Override
     public short readShort() throws IOException {
-        return underlying.readShort();
-    }
-
-    @Override
-    public int readUnsignedShort() throws IOException {
-        return underlying.readUnsignedShort();
+        return FieldType.SHORT.read(this);
     }
 
     @Override
     public short[] readShorts() throws IOException {
-        return underlying.readShorts();
+        return FieldType.SHORT_ARRAY.read(this);
     }
 
     @Override
     public int readInt() throws IOException {
-        return underlying.readInt();
+        return FieldType.INTEGER.read(this);
+    }
+
+    @Override
+    public int readUnsignedByte() throws IOException {
+        return FieldType.UNSIGNED_BYTE.read(this);
+    }
+
+    @Override
+    public int readUnsignedShort() throws IOException {
+        return FieldType.UNSIGNED_SHORT.read(this);
     }
 
     @Override
     public int[] readInts() throws IOException {
-        return underlying.readInts();
-    }
-
-    @Override
-    public long[] readLongs() throws IOException {
-        return underlying.readLongs();
+        return FieldType.INTEGER_ARRAY.read(this);
     }
 
     @Override
     public long readLong() throws IOException {
-        return underlying.readLong();
+        return FieldType.LONG.read(this);
+    }
+
+    @Override
+    public long[] readLongs() throws IOException {
+        return FieldType.LONG_ARRAY.read(this);
     }
 
     // ////////////////////////////////////////
@@ -119,22 +120,22 @@ public class DataInputExtendedDecorator implements DataInputExtended {
 
     @Override
     public float readFloat() throws IOException {
-        return underlying.readFloat();
+        return FieldType.FLOAT.read(this);
     }
 
     @Override
     public float[] readFloats() throws IOException {
-        return underlying.readFloats();
+        return FieldType.FLOAT_ARRAY.read(this);
     }
 
     @Override
     public double readDouble() throws IOException {
-        return underlying.readDouble();
+        return FieldType.DOUBLE.read(this);
     }
 
     @Override
     public double[] readDoubles() throws IOException {
-        return underlying.readDoubles();
+        return FieldType.DOUBLE_ARRAY.read(this);
     }
 
     // ////////////////////////////////////////
@@ -143,12 +144,12 @@ public class DataInputExtendedDecorator implements DataInputExtended {
 
     @Override
     public String readUTF() throws IOException {
-        return underlying.readUTF();
+        return FieldType.STRING.read(this);
     }
 
     @Override
     public String[] readUTFs() throws IOException {
-        return underlying.readUTFs();
+        return FieldType.STRING_ARRAY.read(this);
     }
 
     // ////////////////////////////////////////
@@ -156,23 +157,25 @@ public class DataInputExtendedDecorator implements DataInputExtended {
     // ////////////////////////////////////////
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T> T readEncodable(final Class<T> encodableType) throws IOException {
-        return underlying.readEncodable(encodableType);
+        return (T) FieldType.ENCODABLE.read(this);
     }
 
     @Override
-    public <T> T[] readEncodables(final Class<T> encodableType) throws IOException {
-        return underlying.readEncodables(encodableType);
+    public <T> T[] readEncodables(final Class<T> elementType) throws IOException {
+        return FieldType.ENCODABLE_ARRAY.readArray(this, elementType);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T> T readSerializable(final Class<T> serializableType) throws IOException {
-        return underlying.readSerializable(serializableType);
+        return (T) FieldType.SERIALIZABLE.read(this);
     }
 
     @Override
-    public <T> T[] readSerializables(final Class<T> serializableType) throws IOException {
-        return underlying.readSerializables(serializableType);
+    public <T> T[] readSerializables(final Class<T> elementType) throws IOException {
+        return FieldType.SERIALIZABLE_ARRAY.readArray(this, elementType);
     }
 
     // ////////////////////////////////////////
@@ -181,23 +184,23 @@ public class DataInputExtendedDecorator implements DataInputExtended {
 
     @Override
     public void readFully(final byte[] b) throws IOException {
-        underlying.readFully(b);
+        dataInputStream.readFully(b);
     }
 
     @Override
     public void readFully(final byte[] b, final int off, final int len) throws IOException {
-        underlying.readFully(b, off, len);
+        dataInputStream.readFully(b, off, len);
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public String readLine() throws IOException {
-        return underlying.readLine();
+        return dataInputStream.readLine();
     }
 
     @Override
     public int skipBytes(final int n) throws IOException {
-        return underlying.skipBytes(n);
+        return dataInputStream.skipBytes(n);
     }
-
 
 }

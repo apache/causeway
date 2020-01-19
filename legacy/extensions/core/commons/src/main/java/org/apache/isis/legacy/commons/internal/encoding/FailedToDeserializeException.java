@@ -17,13 +17,20 @@
  *  under the License.
  */
 
-package org.apache.isis.core.commons.internal.encoding;
+/**
+ *
+ */
+package org.apache.isis.legacy.commons.internal.encoding;
 
-public class EncodingConstants {
+import java.io.IOException;
 
-    static final String ENCODED_NULL_ARRAY = "$$.$null-array$.$$";
-    static final String ENCODED_BOOLEAN_FALSE = "$$.$false$.$$";
-    static final String ENCODED_BOOLEAN_TRUE = "$$.$true$.$$";
-    static final String ENCODED_NULL_OBJECT = "$$.$null$.$$";
+public class FailedToDeserializeException extends IOException {
+
+    private static final long serialVersionUID = 1L;
+
+    public FailedToDeserializeException(final ClassNotFoundException cause) {
+        super(cause);
+    }
+
 
 }
