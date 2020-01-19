@@ -140,16 +140,6 @@ public class JodaDateTimeValueSemanticsProvider extends ValueSemanticsProviderAb
         attributeMap.put("configuredFormat", configuredFormat);
     }
 
-
-
-
-
-
-    // no default
-    private static final DateTime DEFAULT_VALUE = null;
-
-
-
     @Override
     protected DateTime add(final DateTime original, final int years, final int months, final int days, final int hours, final int minutes) {
         if(hours != 0 || minutes != 0) {
@@ -177,29 +167,24 @@ public class JodaDateTimeValueSemanticsProvider extends ValueSemanticsProviderAb
     // EncoderDecoder
     // //////////////////////////////////////////////////////////////////
 
-    private final DateTimeFormatter encodingFormatter = ISODateTimeFormat.basicDateTime();
+    private final static DateTimeFormatter encodingFormatter() {
+        return ISODateTimeFormat.basicDateTime();
+    }
 
     @Override
     protected String doEncode(final Object object) {
         final DateTime date = (DateTime) object;
-        return encode(date);
-    }
-
-    private synchronized String encode(final DateTime date) {
-        return encodingFormatter.print(date);
+        return encodingFormatter().print(date);
     }
 
     @Override
     protected DateTime doRestore(final String data) {
         try {
-            return parse(data);
+            return encodingFormatter().parseDateTime(data);
         } catch (final IllegalArgumentException e) {
             throw new EncodingException(e);
         }
     }
 
-    private synchronized DateTime parse(final String data) {
-        return encodingFormatter.parseDateTime(data);
-    }
 
 }
