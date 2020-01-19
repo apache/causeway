@@ -9,7 +9,7 @@ fi
 
 bash $SCRIPT_DIR/_print-environment.sh "build-site"
 
-if [[ "$SKIP_EXAMPLES" == "true" ]]; then
+if [ "$SKIP_EXAMPLES" == "true" ]; then
   echo "skipping examples"
   echo ""
 else
@@ -17,7 +17,7 @@ else
 fi
 
 
-if [[ "$SKIP_CONFIGS" == "true" ]]; then
+if [ "$SKIP_CONFIGS" == "true" ]; then
   echo "skipping config generation"
   echo ""
 else
