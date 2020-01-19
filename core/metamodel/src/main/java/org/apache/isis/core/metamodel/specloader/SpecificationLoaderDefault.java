@@ -462,12 +462,21 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             
             typeRegistry.ifToBeInspectedThen(cls, sort->{
             
-                throw _Exceptions.illegalState(
-                        "Cannot introspect class '%s' of sort %s, because the metamodel has been fully introspected and is now locked. " +
-                        "One reason this can happen is if you are attempting to invoke an action through the WrapperFactory " +
-                        "on a service class incorrectly annotated with Spring's @Service annotation instead of " +
-                        "@DomainService.",
+                log.error("Introspecting class '%s' of sort %s, after the metamodel had been fully introspected and is now locked. " +
+                      "One reason this can happen is if you are attempting to invoke an action through the WrapperFactory " +
+                      "on a service class incorrectly annotated with Spring's @Service annotation instead of " +
+                      "@DomainService.",
                         cls.getName(), sort);
+
+//                ISIS-2256: 'fail early' applies only during bootstrapping
+//                never do this when the application is already fully initialized and running    
+//                
+//                throw _Exceptions.illegalState(
+//                        "Cannot introspect class '%s' of sort %s, because the metamodel has been fully introspected and is now locked. " +
+//                        "One reason this can happen is if you are attempting to invoke an action through the WrapperFactory " +
+//                        "on a service class incorrectly annotated with Spring's @Service annotation instead of " +
+//                        "@DomainService.",
+//                        cls.getName(), sort);
             });
         }
 
