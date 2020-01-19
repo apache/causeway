@@ -28,22 +28,22 @@ public class ConfigUtil_mask_Test {
 
     @Test
     public void not_a_password() {
-        assertThat(ConfigUtil.maskIfProtected("foo", "bar"), is(equalTo("bar")));
+        assertThat(ValueMaskingUtil.maskIfProtected("foo", "bar"), is(equalTo("bar")));
     }
 
     @Test
     public void a_password() {
-        assertThat(ConfigUtil.maskIfProtected("xyz.password.abc", "bar"), is(equalTo("********")));
+        assertThat(ValueMaskingUtil.maskIfProtected("xyz.password.abc", "bar"), is(equalTo("********")));
     }
 
     @Test
     public void a_PassWord() {
-        assertThat(ConfigUtil.maskIfProtected("xyz.PassWord.abc", "bar"), is(equalTo("********")));
+        assertThat(ValueMaskingUtil.maskIfProtected("xyz.PassWord.abc", "bar"), is(equalTo("********")));
     }
 
     @Test
     public void is_null() {
-        assertThat(ConfigUtil.maskIfProtected(null, "bar"), is(equalTo("bar")));
+        assertThat(ValueMaskingUtil.maskIfProtected(null, "bar"), is(equalTo("bar")));
     }
 
 }

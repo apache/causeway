@@ -28,9 +28,9 @@ import org.apache.isis.core.commons.internal.collections._Lists;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class ConfigUtil {
+public class ValueMaskingUtil {
 
-    public static final List<String> PROTECTED_KEYS =
+    private static final List<String> PROTECTED_KEYS =
             _Lists.of("password", "apiKey", "authToken");
 
     public static Map<String, String> maskIfProtected(

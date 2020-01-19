@@ -42,7 +42,7 @@ import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.RestEasyConfiguration;
-import org.apache.isis.core.config.util.ConfigUtil;
+import org.apache.isis.core.config.util.ValueMaskingUtil;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -80,6 +80,11 @@ public class ConfigurationViewServiceDefault implements ConfigurationViewService
     @PostConstruct
     public void postConstruct() {
        log.info("\n\n" + toStringFormatted()); 
+    }
+    
+    @Override
+    public Optional<String> getRestfulPath() {
+        return Optional.ofNullable(restEasyConfiguration.getJaxrs().getDefaultPath());
     }
     
     // -- DUMP AS STRING 
@@ -136,14 +141,11 @@ public class ConfigurationViewServiceDefault implements ConfigurationViewService
 
     private static void add(String key, String value, Map<String, ConfigurationProperty> map) {
 
-        value = ConfigUtil.maskIfProtected(key, value);
+        value = ValueMaskingUtil.maskIfProtected(key, value);
 
         map.put(key, new ConfigurationProperty(key, value));
     }
 
 
-    @Override
-    public Optional<String> getRestfulPath() {
-        return Optional.ofNullable(restEasyConfiguration.getJaxrs().getDefaultPath());
-    }
+
 }

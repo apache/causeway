@@ -28,39 +28,39 @@ public class ConfigUtil_isProtected_Test {
 
     @Test
     public void null_is_not() {
-        assertFalse(ConfigUtil.isProtected(null));
+        assertFalse(ValueMaskingUtil.isProtected(null));
 
-        assertEquals("xxx", ConfigUtil.maskIfProtected(null, "xxx"));
+        assertEquals("xxx", ValueMaskingUtil.maskIfProtected(null, "xxx"));
     }
 
     @Test
     public void empty_is_not() {
-        assertFalse(ConfigUtil.isProtected(""));
+        assertFalse(ValueMaskingUtil.isProtected(""));
     }
 
     @Test
     public void password_is() {
-        assertTrue(ConfigUtil.isProtected("foo.PassWord.bar"));
-        assertTrue(ConfigUtil.isProtected("password.bar"));
-        assertTrue(ConfigUtil.isProtected("foo.PASSWORD"));
+        assertTrue(ValueMaskingUtil.isProtected("foo.PassWord.bar"));
+        assertTrue(ValueMaskingUtil.isProtected("password.bar"));
+        assertTrue(ValueMaskingUtil.isProtected("foo.PASSWORD"));
 
-        assertEquals("********", ConfigUtil.maskIfProtected("password", "xxx"));
+        assertEquals("********", ValueMaskingUtil.maskIfProtected("password", "xxx"));
     }
 
     @Test
     public void apiKey_is() {
-        assertTrue(ConfigUtil.isProtected("foo.apiKey.bar"));
-        assertTrue(ConfigUtil.isProtected("APIKEY.bar"));
-        assertTrue(ConfigUtil.isProtected("foo.apikey"));
+        assertTrue(ValueMaskingUtil.isProtected("foo.apiKey.bar"));
+        assertTrue(ValueMaskingUtil.isProtected("APIKEY.bar"));
+        assertTrue(ValueMaskingUtil.isProtected("foo.apikey"));
     }
     @Test
     public void authToken_is() {
-        assertTrue(ConfigUtil.isProtected("foo.authToken.bar"));
-        assertTrue(ConfigUtil.isProtected("AUTHTOKEN.bar"));
-        assertTrue(ConfigUtil.isProtected("foo.authtoken"));
+        assertTrue(ValueMaskingUtil.isProtected("foo.authToken.bar"));
+        assertTrue(ValueMaskingUtil.isProtected("AUTHTOKEN.bar"));
+        assertTrue(ValueMaskingUtil.isProtected("foo.authtoken"));
     }
     @Test
     public void otherwise_is_not() {
-        assertFalse(ConfigUtil.isProtected("foo"));
+        assertFalse(ValueMaskingUtil.isProtected("foo"));
     }
 }
