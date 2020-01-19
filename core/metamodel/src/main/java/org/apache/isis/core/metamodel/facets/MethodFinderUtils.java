@@ -192,7 +192,6 @@ public final class MethodFinderUtils {
                 break;
             }
         }
-        postConstructMethods.put(clz, nullableMethod);
         return nullableMethod;
     }
 
