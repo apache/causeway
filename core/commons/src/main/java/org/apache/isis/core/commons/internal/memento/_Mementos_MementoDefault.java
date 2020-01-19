@@ -26,6 +26,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.ObjectStreamClass;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,13 +34,13 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.base._With;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.core.commons.internal.memento._Mementos.EncoderDecoder;
 import org.apache.isis.core.commons.internal.memento._Mementos.Memento;
 import org.apache.isis.core.commons.internal.memento._Mementos.SerializingAdapter;
-import org.apache.isis.core.commons.internal.base._With;
 
 /**
  *
@@ -62,7 +63,7 @@ class _Mementos_MementoDefault implements _Mementos.Memento {
     private _Mementos_MementoDefault(
             EncoderDecoder codec,
             SerializingAdapter serializer,
-            Map<String, Serializable> valuesByKey) {
+            HashMap<String, Serializable> valuesByKey) { // we need a Serializable Map
 
         this.codec = _With.requires(codec, "codec");
         this.serializer = _With.requires(serializer, "serializer");
@@ -122,7 +123,7 @@ class _Mementos_MementoDefault implements _Mementos.Memento {
             }
         }) {
             // read in the entire map
-            final Map<String, Serializable> valuesByKey = _Casts.uncheckedCast(ois.readObject());
+            final HashMap<String, Serializable> valuesByKey = _Casts.uncheckedCast(ois.readObject());
             return new _Mementos_MementoDefault(codec, serializer, valuesByKey);
         } catch (Exception e) {
             throw new IllegalArgumentException("failed to parse memento from serialized string", e);
