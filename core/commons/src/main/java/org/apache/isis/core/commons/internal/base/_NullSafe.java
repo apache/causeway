@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Spliterator;
 import java.util.Spliterators;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -124,20 +125,24 @@ public final class _NullSafe {
      */
     public static <T> Stream<T> stream(final Enumeration<T> enumeration){
         return enumeration!=null
-                ? stream(toIterator(enumeration))
+                ? StreamSupport.stream(toSpliterator(enumeration), /*parallel*/false)
                         : Stream.empty();
     }
 
-    // [ahuber] not public, since one time use of enumeration only!
-    private static <T> Iterator<T> toIterator(final Enumeration<T> e){
-        return new Iterator<T>() {
-            @Override
-            public T next() {
-                return e.nextElement();
+    // not public, used internally for stream(Enumeration) only
+    private static <T> Spliterator<T> toSpliterator(final Enumeration<T> e){
+        return new Spliterators.AbstractSpliterator<T>(Long.MAX_VALUE, Spliterator.ORDERED) {
+            public boolean tryAdvance(Consumer<? super T> action) {
+                if(e.hasMoreElements()) {
+                    action.accept(e.nextElement());
+                    return true;
+                }
+                return false;
             }
-            @Override
-            public boolean hasNext() {
-                return e.hasMoreElements();
+            public void forEachRemaining(Consumer<? super T> action) {
+                while(e.hasMoreElements()) {
+                    action.accept(e.nextElement());
+                }
             }
         };
     }
