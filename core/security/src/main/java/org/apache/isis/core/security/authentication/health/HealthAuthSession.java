@@ -19,10 +19,8 @@
 
 package org.apache.isis.core.security.authentication.health;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
-import org.apache.isis.core.commons.internal.encoding.DataInputExtended;
 import org.apache.isis.core.security.authentication.AuthenticationSessionAbstract;
 
 public class HealthAuthSession extends AuthenticationSessionAbstract {
@@ -35,10 +33,6 @@ public class HealthAuthSession extends AuthenticationSessionAbstract {
 
     public HealthAuthSession() {
         super(USER_NAME, Stream.of(ROLE), CODE);
-    }
-
-    public HealthAuthSession(final DataInputExtended input) throws IOException {
-        super(input);
     }
 
 

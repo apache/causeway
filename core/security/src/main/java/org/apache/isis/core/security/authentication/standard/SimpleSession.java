@@ -19,11 +19,9 @@
 
 package org.apache.isis.core.security.authentication.standard;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.apache.isis.core.commons.internal.encoding.DataInputExtended;
 import org.apache.isis.core.security.authentication.AuthenticationSessionAbstract;
 
 import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
@@ -49,10 +47,6 @@ public class SimpleSession extends AuthenticationSessionAbstract {
 
     public SimpleSession(final String name, final Stream<String> roles, final String code) {
         super(name, roles, code);
-    }
-
-    public SimpleSession(final DataInputExtended input) throws IOException {
-        super(input);
     }
 
     @Getter @Setter

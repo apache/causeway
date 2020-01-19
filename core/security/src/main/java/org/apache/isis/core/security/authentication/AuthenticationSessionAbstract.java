@@ -19,9 +19,7 @@
 
 package org.apache.isis.core.security.authentication;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,8 +34,6 @@ import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Sets;
-import org.apache.isis.core.commons.internal.encoding.DataInputExtended;
-import org.apache.isis.core.commons.internal.encoding.DataOutputExtended;
 
 import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
@@ -70,24 +66,6 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         this.validationCode = validationCode;
         this.messageBroker = new MessageBroker();
         // nothing to do
-    }
-
-    public AuthenticationSessionAbstract(final DataInputExtended input) throws IOException {
-        this.name = input.readUTF();
-        this.roles.addAll(Arrays.asList(input.readUTFs()));
-        
-        this.validationCode = input.readUTF();
-        this.messageBroker = new MessageBroker();
-        // nothing to do
-    }
-
-    // -- encode
-
-    @Override
-    public void encode(final DataOutputExtended output) throws IOException {
-        output.writeUTF(getUserName());
-        output.writeUTFs(roles.toArray(new String[] {}));
-        output.writeUTF(validationCode);
     }
 
     // -- User Name

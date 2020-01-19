@@ -20,8 +20,11 @@
 package org.apache.isis.security;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.io.Serializable;
 
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -31,20 +34,17 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
-import org.apache.isis.core.commons.internal.encoding.DataInputExtended;
-import org.apache.isis.core.commons.internal.encoding.DataInputStreamExtended;
-import org.apache.isis.core.commons.internal.encoding.DataOutputStreamExtended;
-import org.apache.isis.core.commons.internal.encoding.Encodable;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
+
+import lombok.val;
 
 public abstract class EncodabilityContractTest {
 
     protected final Mockery context = new JUnit4Mockery();
     protected AuthenticationSession mockAuthSession;
 
-    protected Encodable encodable;
+    protected Serializable serializable;
 
     public EncodabilityContractTest() {
         super();
@@ -52,41 +52,33 @@ public abstract class EncodabilityContractTest {
 
     @Before
     public void setUp() throws Exception {
-        encodable = createEncodable();
+        serializable = createEncodable();
         mockAuthSession = context.mock(AuthenticationSession.class);
     }
 
     /**
      * Hook for subclasses to provide object to be tested.
      */
-    protected abstract Encodable createEncodable();
+    protected abstract Serializable createEncodable();
 
     @Test
     public void shouldImplementEncodeable() throws Exception {
-        assertThat(encodable, is(instanceOf(Encodable.class)));
+        assertThat(serializable, is(instanceOf(Serializable.class)));
     }
 
     @Test
-    public void shouldHaveOneArgConstructorThatAcceptsInput() {
-        final Object o = encodable;
-        try {
-            o.getClass().getConstructor(DataInputExtended.class);
-        } catch (final Exception e) {
-            fail("could not locate 1-arg constructor accepting a DataInputExtended instance");
-        }
-    }
-
-    @Test
-    public void shouldRoundTrip() throws IOException {
+    public void shouldRoundTrip() throws IOException, ClassNotFoundException {
         final PipedInputStream pipedInputStream = new PipedInputStream();
         final PipedOutputStream pipedOutputStream = new PipedOutputStream(pipedInputStream);
-        final DataOutputStreamExtended outputImpl = new DataOutputStreamExtended(pipedOutputStream);
-        final DataInputStreamExtended inputImpl = new DataInputStreamExtended(pipedInputStream);
+        
+        try(val out = new ObjectOutputStream(pipedOutputStream)) {
+            out.writeObject(serializable);
+        
+            val in = new ObjectInputStream(pipedInputStream);
+            val decodedObject = in.readObject();
 
-        outputImpl.writeEncodable(encodable);
-        final Object decodedEncodable = inputImpl.readEncodable(Object.class);
-
-        assertRoundtripped(decodedEncodable, encodable);
+            assertRoundtripped(decodedObject, serializable);
+        }
     }
 
     protected abstract void assertRoundtripped(Object decodedEncodable, Object originalEncodable);

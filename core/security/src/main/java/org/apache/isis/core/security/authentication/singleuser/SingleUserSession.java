@@ -19,14 +19,9 @@
 
 package org.apache.isis.core.security.authentication.singleuser;
 
-import java.io.IOException;
-
-import org.apache.isis.core.commons.internal.encoding.DataInputExtended;
-import org.apache.isis.core.commons.internal.encoding.DataOutputExtended;
-import org.apache.isis.core.commons.internal.encoding.Encodable;
 import org.apache.isis.core.security.authentication.AuthenticationSessionAbstract;
 
-public final class SingleUserSession extends AuthenticationSessionAbstract implements Encodable {
+public final class SingleUserSession extends AuthenticationSessionAbstract {
 
     private static final long serialVersionUID = 1L;
 
@@ -41,21 +36,6 @@ public final class SingleUserSession extends AuthenticationSessionAbstract imple
 
     public SingleUserSession(final String code) {
         super(DEFAULT_USER_NAME, code);
-        initialized();
-    }
-
-    public SingleUserSession(final DataInputExtended input) throws IOException {
-        super(input);
-        initialized();
-    }
-
-    @Override
-    public void encode(final DataOutputExtended output) throws IOException {
-        super.encode(output);
-    }
-
-    private void initialized() {
-        // nothing to do
     }
 
 }

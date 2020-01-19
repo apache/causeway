@@ -19,9 +19,6 @@
 
 package org.apache.isis.core.runtime.session.init;
 
-import java.io.IOException;
-
-import org.apache.isis.core.commons.internal.encoding.DataInputExtended;
 import org.apache.isis.core.security.authentication.AuthenticationSessionAbstract;
 
 public final class InitialisationSession extends AuthenticationSessionAbstract {
@@ -30,10 +27,6 @@ public final class InitialisationSession extends AuthenticationSessionAbstract {
 
     public InitialisationSession() {
         super("initialisation", "");
-    }
-
-    public InitialisationSession(final DataInputExtended input) throws IOException {
-        super(input);
     }
 
 }

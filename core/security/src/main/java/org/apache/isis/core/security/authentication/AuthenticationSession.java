@@ -23,13 +23,12 @@ import java.io.Serializable;
 
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal.encoding.Encodable;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
 /**
  * The representation within the system of an authenticated user.
  */
-public interface AuthenticationSession extends Encodable, Serializable {
+public interface AuthenticationSession extends Serializable {
 
     /**
      * The name of the authenticated user; for display purposes only.
