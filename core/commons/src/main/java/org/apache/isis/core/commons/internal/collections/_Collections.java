@@ -304,6 +304,9 @@ public final class _Collections {
      * @return inferred type or null if inference fails
      */
     public static @Nullable Class<?> inferElementTypeIfAny(@Nullable final Field field) {
+        if(field==null) {
+            return null;
+        }
         return inferElementTypeIfAny(field.getType(), field.getGenericType());
     }
 
