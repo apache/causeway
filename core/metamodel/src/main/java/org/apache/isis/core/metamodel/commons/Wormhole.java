@@ -19,18 +19,14 @@
 package org.apache.isis.core.metamodel.commons;
 
 /**
- * Provides a mechanism to avoid infinite loops whereby method A -&gt; method B -&gt; method C -&gt; method A and so on.
+ * Provides a mechanism to avoid infinite loops 
+ * whereby method A -&gt; method B -&gt; method C -&gt; method A and so on.
  */
 public final class Wormhole {
 
     private Wormhole(){}
 
-    private ThreadLocal<Boolean> inWormhole = new ThreadLocal<Boolean>() {
-        @Override
-        protected Boolean initialValue() {
-            return false;
-        }
-    };
+    private ThreadLocal<Boolean> inWormhole = ThreadLocal.<Boolean>withInitial(()->Boolean.FALSE);
 
     public void run(final Runnable runnable) {
         try {
@@ -40,7 +36,7 @@ public final class Wormhole {
             inWormhole.set(true);
             runnable.run();
         } finally {
-            inWormhole.set(false);
+            inWormhole.remove();
         }
     }
 
