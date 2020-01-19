@@ -354,7 +354,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         // ensure that all types are loadable
         if (Arrays.stream(domainTypes)
                 .map(classSubstitutorRegistry::getSubstitution)
-                .anyMatch(Substitution::isIgnore)) {
+                .anyMatch(Substitution::isNeverIntrospect)) {
             return false;
         }
         Arrays.stream(domainTypes).forEach(this::loadSpecification);
@@ -373,11 +373,11 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         requires(upTo, "upTo");
         
         val substitute = classSubstitutorRegistry.getSubstitution(type);
-        if (substitute.isIgnore()) {
+        if (substitute.isNeverIntrospect()) {
             return null; // never inspect
         }
         
-        val substitutedType = substitute.replace(type);
+        val substitutedType = substitute.apply(type);
         
         val typeName = substitutedType.getName();
 
@@ -519,12 +519,12 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     private void invalidateCache(final Class<?> cls) {
 
         val substitute = classSubstitutorRegistry.getSubstitution(cls);
-        if(substitute.isIgnore()) {
+        if(substitute.isNeverIntrospect()) {
             return;
         }
 
         ObjectSpecification spec = 
-                loadSpecification(substitute.replace(cls), IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+                loadSpecification(substitute.apply(cls), IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         
         while(spec != null) {
             val type = spec.getCorrespondingClass();

@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.services.classsubstitutor;
 
 import java.io.Serializable;
+import java.util.function.UnaryOperator;
 
 import javax.annotation.Nullable;
 
@@ -41,48 +42,71 @@ public interface ClassSubstitutor {
      * @since 2.0
      */
     @Value(staticConstructor = "of")
-    static class Substitution implements Serializable {
+    static class Substitution implements UnaryOperator<Class<?>>, Serializable {
         private static final long serialVersionUID = 1L;
-        private static final Substitution NOP = Substitution.of(Type.DO_NOT_REPLACE, null);
-        private static final Substitution IGNORE = Substitution.of(Type.IGNORE_CLASS, null);
+        private static final Substitution PASSTHROUGH = Substitution.of(Type.PASSTHROUGH, null);
+        private static final Substitution NEVER_REPLACE_CLASS = Substitution.of(Type.NEVER_REPLACE_CLASS, null);
+        private static final Substitution NEVER_INTROSPECT_CLASS = Substitution.of(Type.NEVER_INTROSPECT_CLASS, null);
         
         private static enum Type {
-            DO_NOT_REPLACE,
-            IGNORE_CLASS,
+            PASSTHROUGH,
+            NEVER_REPLACE_CLASS,
+            NEVER_INTROSPECT_CLASS,
             REPLACE_WITH_OTHER_CLASS,
         }
         
         @NonNull Type type;        
         @Nullable Class<?> replacement;
 
+        // -- FACTORIES
+
         /**
-         * for framework internal use only, not required for ClassSubstitutor implementations!
-         * (forces a class to be never replaced)
+         * The result type to be used for a ClassSubstitutor that does not feel responsible 
+         * for the (operand-) class, hence acts as a pass-through when aggregating.
          */
-        public static Substitution dontReplaceClass() {
-            return NOP;
+        public static Substitution passThrough() {
+            return PASSTHROUGH;
         }
         
-        public static Substitution ignoreClass() {
-            return IGNORE;
+        /**
+         * Forces the (operand-) class never to be replaced.
+         * 
+         * @implNote not required for ClassSubstitutor implementations!
+         * (for framework internal use when aggregating)
+         */
+        public static Substitution neverReplaceClass() {
+            return NEVER_REPLACE_CLASS;
         }
         
-        public static Substitution replaceClass(@lombok.NonNull @org.springframework.lang.NonNull Class<?> cls) {
+        public static Substitution neverIntrospect() {
+            return NEVER_INTROSPECT_CLASS;
+        }
+        
+        public static Substitution replaceWith(@lombok.NonNull @org.springframework.lang.NonNull Class<?> cls) {
             return of(Type.REPLACE_WITH_OTHER_CLASS, cls);
         }
         
+        // -- PREDICATES
+        
         /**
-         * @return whether the replacement is an identity operation (do nothing) 
+         *  @return whether to act as a pass-through (indifferent)
          */
-        public boolean isDoNotReplace() {
-            return type == Type.DO_NOT_REPLACE;
+        public boolean isPassThrough() {
+            return type == Type.PASSTHROUGH;
+        }
+        
+        /**
+         * @return whether to not replace the class (do nothing) 
+         */
+        public boolean isNeverReplace() {
+            return type == Type.NEVER_REPLACE_CLASS;
         }
         
         /**
          * @return whether to ignore the class (never introspect)
          */
-        public boolean isIgnore() {
-            return type == Type.IGNORE_CLASS;
+        public boolean isNeverIntrospect() {
+            return type == Type.NEVER_INTROSPECT_CLASS;
         }
 
         /**
@@ -92,8 +116,11 @@ public interface ClassSubstitutor {
             return type == Type.REPLACE_WITH_OTHER_CLASS;            
         }
 
-        public Class<?> replace(Class<?> cls) {
-            if(isIgnore()) {
+        // -- OPERATOR
+        
+        @Override
+        public Class<?> apply(Class<?> cls) {
+            if(isNeverIntrospect()) {
                 return null;
             }
             return isReplace() ? getReplacement() : cls;
@@ -105,12 +132,9 @@ public interface ClassSubstitutor {
     
     /**
      * @param cls
-     * @return Substitution for given {@code cls} if any
-     * or Substitution.ignore(), when {@code cls} shall be ignored 
-     * @implNote most likely do not return Substitution.dontReplaceClass(), return {@code null} instead
+     * @return (non-null) Substitution for given {@code cls} 
      * @since 2.0
      */
-    @Nullable
     Substitution getSubstitution(@lombok.NonNull @org.springframework.lang.NonNull Class<?> cls);
      
     

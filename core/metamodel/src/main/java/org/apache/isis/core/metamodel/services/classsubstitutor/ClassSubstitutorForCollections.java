@@ -42,20 +42,20 @@ public class ClassSubstitutorForCollections implements ClassSubstitutor {
     @Override
     public Substitution getSubstitution(@NonNull Class<?> cls) {
         if(Vector.class.isAssignableFrom(cls)) {
-            return Substitution.replaceClass(Vector.class);
+            return Substitution.replaceWith(Vector.class);
         }
         if(List.class.isAssignableFrom(cls)) {
-            return Substitution.replaceClass(List.class);
+            return Substitution.replaceWith(List.class);
         }
         if(SortedSet.class.isAssignableFrom(cls)) {
-            return Substitution.replaceClass(SortedSet.class);
+            return Substitution.replaceWith(SortedSet.class);
         }
         if(Set.class.isAssignableFrom(cls)) {
-            return Substitution.replaceClass(Set.class);
+            return Substitution.replaceWith(Set.class);
         }
         if(Collection.class.isAssignableFrom(cls)) {
-            return Substitution.replaceClass(Collection.class);
+            return Substitution.replaceWith(Collection.class);
         }
-        return null; // NOP
+        return Substitution.passThrough(); // indifferent
     }
 }

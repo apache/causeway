@@ -57,21 +57,21 @@ public class ClassSubstitutorTest_getClass {
     @Test
     public void regularDomainObject() throws Exception {
         val input = SomeDomainObject.class;
-        val replacement = classSubstitutorReg.getSubstitution(input).replace(input);
+        val replacement = classSubstitutorReg.getSubstitution(input).apply(input);
         assertEquals(input, replacement);
     }
 
     @Test
     public void someEnum() throws Exception {
         val input = SomeDomainObject.SomeEnum.class;
-        val replacement = classSubstitutorReg.getSubstitution(input).replace(input);
+        val replacement = classSubstitutorReg.getSubstitution(input).apply(input);
         assertEquals(input, replacement);
     }
 
     @Test
     public void someAnonymousSubtypeOfEnum() throws Exception {
         val input = SomeDomainObject.SomeEnum.Foo.getClass();
-        val replacement = classSubstitutorReg.getSubstitution(input).replace(input);
+        val replacement = classSubstitutorReg.getSubstitution(input).apply(input);
         assertEquals(SomeDomainObject.SomeEnum.class, replacement);
     }
 

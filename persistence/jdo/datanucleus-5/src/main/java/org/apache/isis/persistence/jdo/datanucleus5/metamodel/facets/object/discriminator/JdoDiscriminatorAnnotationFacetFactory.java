@@ -69,11 +69,11 @@ implements ObjectSpecIdFacetFactory {
                     annotationValue, facetHolder);
         } else {
             val substitute = classSubstitutorRegistry.getSubstitution(cls);
-            if(substitute.isIgnore()) {
+            if(substitute.isNeverIntrospect()) {
                 return;
             }
                    
-            val substituted = substitute.replace(cls);
+            val substituted = substitute.apply(cls);
             facet = new ObjectSpecIdFacetDerivedFromClassName(
                             substituted.getCanonicalName(), 
                             facetHolder);

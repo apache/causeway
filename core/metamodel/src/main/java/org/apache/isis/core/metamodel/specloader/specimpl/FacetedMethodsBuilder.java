@@ -315,7 +315,7 @@ public class FacetedMethodsBuilder {
             facetedMethod.setType(elementType);
 
             // skip if class substitutor says so.
-            if (classSubstitutorRegistry.getSubstitution(elementType).isIgnore()) {
+            if (classSubstitutorRegistry.getSubstitution(elementType).isNeverIntrospect()) {
                 continue;
             }
 
@@ -333,7 +333,7 @@ public class FacetedMethodsBuilder {
             final Class<?> returnType = accessorMethod.getReturnType();
 
             // skip if class strategy says so.
-            if (classSubstitutorRegistry.getSubstitution(returnType).isIgnore()) {
+            if (classSubstitutorRegistry.getSubstitution(returnType).isNeverIntrospect()) {
                 continue;
             }
 

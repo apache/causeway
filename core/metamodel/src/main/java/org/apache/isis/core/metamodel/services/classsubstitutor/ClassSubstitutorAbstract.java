@@ -33,18 +33,18 @@ import lombok.val;
 public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
 
     @Override
-    public Substitution getSubstitution(@NonNull Class<?> cls) {
+    public final Substitution getSubstitution(@NonNull Class<?> cls) {
         val replacement = getReplacement(cls);
         if(replacement==null) {
-            return Substitution.ignoreClass();
+            return Substitution.neverIntrospect();
         }
         if(cls.equals(replacement)) {
-            return null; // NOP
+            return Substitution.passThrough(); // indifferent
         }
-        return Substitution.replaceClass(replacement) ;
+        return Substitution.replaceWith(replacement) ;
     }
     
-    private Class<?> getReplacement(final Class<?> cls) {
+    protected Class<?> getReplacement(final Class<?> cls) {
 
         if(cls == null) {
             return null;

@@ -30,9 +30,12 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor.Substitution;
+
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Aggregates all {@link ClassSubstitutor}s.
@@ -40,6 +43,7 @@ import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor
 @Component
 @Named("isisMetaModel.ClassSubstitutorRegistry")
 @Order(OrderPrecedence.MIDPOINT)
+@Log4j2
 public class ClassSubstitutorRegistry {
 
     private final List<ClassSubstitutor> classSubstitutors;
@@ -51,9 +55,13 @@ public class ClassSubstitutorRegistry {
 
     private final Map<Class<?>, Substitution> cache = _Maps.newConcurrentHashMap();
 
+    /**
+     * @param originalClass
+     * @return (non-null) the aggregated Substitution that applies to given originalClass
+     */
     public Substitution getSubstitution(@Nullable final Class<?> originalClass) {
         if(originalClass == null) {
-            return Substitution.dontReplaceClass();
+            return Substitution.neverReplaceClass();
         }
         return cache.computeIfAbsent(originalClass, this::findSubstitutionFor);
     }
@@ -63,11 +71,24 @@ public class ClassSubstitutorRegistry {
     private Substitution findSubstitutionFor(final Class<?> originalClass) {
         
         return classSubstitutors.stream()
-        .map(classSubstitutor->classSubstitutor.getSubstitution(originalClass))
-        .filter(_NullSafe::isPresent)
+        .map(classSubstitutor->getSubstitutionElseWarn(classSubstitutor, originalClass))
+        .filter(_Predicates.not(Substitution::isPassThrough))
         .findFirst()
-        .orElse(Substitution.dontReplaceClass());
+        .orElse(Substitution.neverReplaceClass());
          
+    }
+    
+    private Substitution getSubstitutionElseWarn(ClassSubstitutor substitutor, Class<?> originalClass) {
+        val substitution = substitutor.getSubstitution(originalClass);
+        if(substitution == null) {
+            log.warn("ClassSubstitutor.getSubstitution(Class) must never return null! "
+                    + "However, substitutor {} just did for class argument {}. "
+                    + "Pass-through was applied instead.", 
+                    substitutor.getClass().getName(),
+                    originalClass.getClass().getName());
+            return Substitution.passThrough();
+        }
+        return substitution;
     }
     
 }

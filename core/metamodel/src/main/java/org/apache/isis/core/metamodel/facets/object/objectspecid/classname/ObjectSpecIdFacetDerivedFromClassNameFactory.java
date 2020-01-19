@@ -72,10 +72,10 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
         }
         val cls = processClassContext.getCls();
         val substitute = classSubstitutorRegistry.getSubstitution(cls);
-        if(substitute.isIgnore()) {
+        if(substitute.isNeverIntrospect()) {
             return;
         }
-        val objectSpecIdFacet = createObjectSpecIdFacet(facetHolder, substitute.replace(cls));
+        val objectSpecIdFacet = createObjectSpecIdFacet(facetHolder, substitute.apply(cls));
         FacetUtil.addFacet(objectSpecIdFacet);
     }
 
