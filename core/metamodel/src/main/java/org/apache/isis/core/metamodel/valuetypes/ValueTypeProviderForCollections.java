@@ -18,9 +18,7 @@
  */
 package org.apache.isis.core.metamodel.valuetypes;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
@@ -31,6 +29,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.core.commons.internal.collections._Lists;
 
 @Component
 @Named("isisMetaModel.ValueTypeProviderCollections")
@@ -39,11 +38,11 @@ public class ValueTypeProviderForCollections implements ValueTypeProvider {
 
     @Override
     public Collection<ValueTypeDefinition> definitions() {
-        return Collections.unmodifiableList(Arrays.asList(
+        return _Lists.of(
                     ValueTypeDefinition.collection(List.class),
                     ValueTypeDefinition.collection(Set.class),
                     ValueTypeDefinition.collection(SortedSet.class)
-                ));
+                );
     }
 
 }

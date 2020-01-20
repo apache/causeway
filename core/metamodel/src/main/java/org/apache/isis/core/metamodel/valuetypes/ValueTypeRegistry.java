@@ -81,7 +81,7 @@ public class ValueTypeRegistry {
         return ValueType.REFERENCE;
     }
 
-    public Stream<Class<?>> classes() {
+    public Stream<Class<?>> streamRegisteredClasses() {
         val classes = new LinkedHashSet<Class<?>>();
         valueTypeProviders.stream()
                 .map(ValueTypeProvider::definitions)

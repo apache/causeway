@@ -208,7 +208,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         val valueTypeSpecs = _Lists.<ObjectSpecification>newArrayList();
 
-        valueTypeRegistry.classes().forEach(clazz -> {
+        valueTypeRegistry.streamRegisteredClasses().forEach(clazz -> {
             val spec = loadSpecification(clazz, IntrospectionState.NOT_INTROSPECTED);
             if(spec!=null) {
                 knownSpecs.add(spec);

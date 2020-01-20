@@ -33,11 +33,12 @@ import lombok.Value;
 public interface ClassSubstitutor {
     
     /**
-     * Captures 3 possible directives:
+     * Captures 4 possible directives:
      * <ul>
-     * <li>do not replace the class (NOP)</li>
-     * <li>ignore the class, that is do not introspect ever</li>
-     * <li>replace the class with another (non-null)</li>
+     * <li>pass-through (indifferent)</li>
+     * <li>never replace the class</li>
+     * <li>never introspect the class</li>
+     * <li>replace the class with another</li>
      * </ul> 
      * @since 2.0
      */

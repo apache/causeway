@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.services.classsubstitutor;
 
+import java.util.Objects;
 import java.util.Set;
 
 import org.apache.isis.applib.annotation.Programmatic;
@@ -35,11 +36,11 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
     @Override
     public final Substitution getSubstitution(@NonNull Class<?> cls) {
         val replacement = getReplacement(cls);
+        if(Objects.equals(cls, replacement)) {
+            return Substitution.passThrough(); // indifferent
+        }
         if(replacement==null) {
             return Substitution.neverIntrospect();
-        }
-        if(cls.equals(replacement)) {
-            return Substitution.passThrough(); // indifferent
         }
         return Substitution.replaceWith(replacement) ;
     }
