@@ -1,4 +1,2 @@
 include::pjdo:ROOT:partial$module-nav.adoc[]
 
-* Extensions
-include::pjdo:flywayjdo:partial$module-nav.adoc[]

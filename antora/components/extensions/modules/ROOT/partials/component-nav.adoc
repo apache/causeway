@@ -1,8 +1,8 @@
 include::extensions:ROOT:partial$module-nav.adoc[]
 
-* JDO Persistence
+* Core
 
-include::pjdo:flywayjdo:partial$module-nav.adoc[]
+include::userguide:flyway:partial$module-nav.adoc[]
 
 * Security
 include::security:shiro-realm-ldap:partial$module-nav.adoc[]

@@ -3,6 +3,6 @@ include::userguide:btb:partial$module-nav.adoc[]
 
 * Extensions
 
-include::refguide:flyway:partial$module-nav.adoc[]
+include::userguide:flyway:partial$module-nav.adoc[]
 
 
