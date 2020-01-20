@@ -238,7 +238,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
                 typeRegistry.veto(type);
             }
 
-            if(sort.isToBeIntrospected()) {
+            if(sort.isManagedBean() || sort.isEntity() || sort.isViewModel() || sort.isMixin()) {
                 domainObjectSpecs.add(spec);   
             }
 
