@@ -124,7 +124,7 @@ public @interface Action {
      *
      * <p>
      *     Specifying a processor requires that the implementation of {@link CommandService} provides a
-     *     custom implementation of {@link org.apache.isis.applib.services.command.Command} that additional extends
+     *     custom implementation of {@link org.apache.isis.applib.services.command.Command} that additionally extends
      *     from {@link CommandWithDto}.
      * </p>
      *

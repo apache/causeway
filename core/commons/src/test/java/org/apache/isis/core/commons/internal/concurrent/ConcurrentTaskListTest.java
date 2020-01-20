@@ -32,8 +32,8 @@ class ConcurrentTaskListTest {
     void tasksShouldAllBeExecuted() {
         
         val counter = new LongAdder();
-        
-        val tasks = _ConcurrentTaskList.named("Test")
+
+        _ConcurrentTaskList tasks = _ConcurrentTaskList.named("Test")
                 .addRunnable("1", counter::increment)
                 .addRunnable("2", counter::increment)
                 .addRunnable("3", counter::increment)

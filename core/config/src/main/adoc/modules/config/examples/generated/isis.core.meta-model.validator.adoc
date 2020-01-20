@@ -3,12 +3,18 @@ validator. +
 action-collection-parameter- +
 choices
 |  true
-| 
+| Whether to validate that any actions that accept action parameters have either a corresponding choices or auto-complete for that action parameter, or are associated with a collection of the appropriate type.
+
 
 | isis.core.meta-model. +
 validator.allow-deprecated
 |  true
-| 
+| This setting is used to determine whether the use of such deprecated features is allowed.
+
+If not allowed, then metamodel validation errors will be flagged.
+
+Note that this settings has no effect if the programming model has been configured to ignore deprecated features (because in this case the programming model facets simply won't be included in the introspection process.
+
 
 | isis.core.meta-model. +
 validator.check-module-extent
@@ -19,13 +25,19 @@ validator.check-module-extent
 validator. +
 ensure-unique-object-types
 |  true
-| 
+| Whether to ensure that the object type of all objects (which can be set either explicitly using or `DomainService#objectType(), or can be inferred implicitly using a variety of mechanisms) must be unique with respect to all other object types.
+
+It is _highly advisable_ to leave this set as enabled (the default), and to also use explicit types (see \{@link #isExplicitObjectType()`.
+
 
 | isis.core.meta-model. +
 validator. +
 explicit-object-type
 | 
-| 
+| Whether to ensure that the object type of all objects must be specified explicitly, using either or `DomainService#objectType().
+
+It is _highly advisable_ to leave this set as enabled (the default). These object types should also (of course) be unique - that can be checked by setting the \{@link #isEnsureUniqueObjectTypes()` config property.
+
 
 | isis.core.meta-model. +
 validator.jaxb-view-model. +
@@ -71,7 +83,12 @@ variables-clause
 | isis.core.meta-model. +
 validator.no-params-only
 | 
-| 
+| If set, then checks that the supports `hideXxx` and `disableXxx` methods for actions do not have take parameters.
+
+Historically, the programming model allowed these methods to accept the same number of parameters as the action method to which they relate, the rationale being for similarity with the `validateXxx` method. However, since these parameters serve no function, the programming model has been simplified so that these supporting methods are discovered if they have exactly no parameters.
+
+Note that this aspect of the programming model relates to the `hideXxx` and `disableXxx` supporting methods that relate to the entire method. Do not confuse these with the `hideNXxx` and `disableNXxx` supporting methods, which relate to the N-th parameter, and allow up to N-1 parameters to be passed in (allowing the Nth parameter to be dynamically hidden or disabled).
+
 
 | isis.core.meta-model. +
 validator.parallelize
@@ -82,11 +99,13 @@ validator.parallelize
 | isis.core.meta-model. +
 validator.mixins-only
 |  true
-| 
+| If set, then domain services actions are not contributed to domain objects. @deprecated - in that in the future the programming model will simply not support contributed actions from domain services.
+
 
 | isis.core.meta-model. +
 validator. +
 service-actions-only
 |  true
-| 
+| If set, checks that any domain services have only actions associated with them, not properties or collections. @deprecated - in that in the future the programming model will simply not search for properties or collections of domain services.
+
 
