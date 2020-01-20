@@ -59,6 +59,7 @@ import lombok.val;
 @Qualifier("OrgApacheIsisV1")
 public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiationServiceAbstract {
 
+
     /**
      * Unlike RO v1.0, use a single content-type of <code>application/json;profile="urn:org.apache.isis/v1"</code>.
      *
@@ -97,7 +98,12 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
             + ";repr-type=\"list\""
             ;
 
-    private ContentNegotiationServiceForRestfulObjectsV1_0 restfulObjectsV1_0 = new ContentNegotiationServiceForRestfulObjectsV1_0();
+    private final ContentNegotiationServiceForRestfulObjectsV1_0 restfulObjectsV1_0;
+
+    public ContentNegotiationServiceOrgApacheIsisV1(final ContentNegotiationServiceForRestfulObjectsV1_0 restfulObjectsV1_0) {
+        this.restfulObjectsV1_0 = restfulObjectsV1_0;
+    }
+
 
     /**
      * Domain object is returned as a map with the RO 1.0 representation as a special '$$ro' property
