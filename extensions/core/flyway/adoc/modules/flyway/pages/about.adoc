@@ -1,0 +1,84 @@
+= Flyway (Extension)
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+This module provides an very thin layer to use Spring Boot's integration with https://flywaydb.org[Flyway]
+
+== Configuration
+
+Add the following dependency:
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.apache.isis.extensions</groupId>
+    <artifactId>isis-extensions-flyway-impl</artifactId>
+</dependency>
+----
+
+Also add the following module to your `AppManifest`:
+
+[source,java]
+----
+@Configuration
+@Import({
+    // ...
+    IsisModuleExtFlywayImpl.class,
+    // ...
+})
+public static class AppManifest {
+}
+----
+
+Also configure Flyway connection parameters to use those of JDO DataNucleus object store:
+
+[source,properties]
+.application.properties
+----
+spring.flyway.url=\
+  ${isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionURL}
+spring.flyway.user=\
+  ${isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionUserName}
+spring.flyway.password=\
+  ${isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionPassword}
+----
+
+If Flyway is enabled, then `autoCreateAll` should also be disabled:
+
+[source,properties]
+.application.properties
+----
+spring.flyway.enabled=true
+isis.persistence.jdo-datanucleus.impl.datanucleus.schema.autoCreateAll=false
+----
+
+
+== Using in-memory object stores
+
+When running with an in-memory object store - either for prototyping or integration tests - you will need the database tables to be created first.
+
+In normal circumstances this is most easily peformed using with `autoCreateAll` enabled (and Flyway disabled).
+If you want your tests to check your Flyway scripts beforehand, there is nothing to prevent you from using Flyway all the time, even for integration tests.
+
+One point to be aware of though is that the DDL syntax may vary between an in-memory database (such as H2) and a typical production database (such as PostgreSQL or SQL Server).
+Luckily, Spring Boot's Flyway integration allows different variants of scripts for different vendors to be stored, in `db.migration.{vendor}` package (where `{vendor}` is as defined by the https://github.com/spring-projects/spring-boot/blob/v2.2.3.RELEASE/spring-boot-project/spring-boot/src/main/java/org/springframework/boot/jdbc/DatabaseDriver.java[DatabaseDriver] class).
+The link:https://github.com/apache/isis-app-simpleapp[simpleapp starter app] also provides an example of this.
+
+
+=== Custom schemas
+
+In some circumstances DataNucleus -- when running with `autoCreateAll` enabled -- has been known to not create the prerequisite schema objects.
+
+If this occurs, consider enabling Flyway for in-memory tests, and then use a custom value of `spring.flyway.locations` property to pick up the custom schema files:
+
+[source,properties]
+----
+spring.flyway.locations=classpath:db/migration/custom-schema
+----
+
+This property could be configured for example using `@TestPropertySource`, or `@ActiveProfile`.
+
+
+== Reference
+
+* https://docs.spring.io/spring-boot/docs/current/reference/html/howto.html#howto-execute-flyway-database-migrations-on-startup[Spring Boot docs] for Flyway integration
+* https://www.baeldung.com/spring-boot-configure-data-source-programmatic[www.baeldung.com] docs on how to programmatically build a `DataSource`

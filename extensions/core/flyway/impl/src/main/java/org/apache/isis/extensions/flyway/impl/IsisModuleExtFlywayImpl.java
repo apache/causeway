@@ -16,13 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.flywayjdo.dom;
+package org.apache.isis.extensions.flyway.impl;
 
+import org.springframework.boot.autoconfigure.flyway.FlywayConfigurationCustomizer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.IsisModuleCoreConfig;
 
 @Configuration
-@ComponentScan
-public class IsisModuleExtFlywayJdo {
+public class IsisModuleExtFlywayImpl {
+
 
 }

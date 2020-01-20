@@ -70,6 +70,12 @@
 
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-flyway-impl</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-pdfjs-applib</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
@@ -146,6 +152,7 @@
 	</dependencies>
 
 	<modules>
+		<module>core/flyway</module>
 		<module>security/secman</module>
 		<module>security/shiro-realm-ldap</module>
 

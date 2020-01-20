@@ -7,17 +7,7 @@ The user guide breaks into two main sections:
 * xref:userguide:fun:about.adoc[Fundamentals]
 * xref:userguide:btb:about.adoc[Beyond the Basics]
 
-There are a number of other guides:
+It also includes some extensions:
 
-* xref:refguide:ROOT:about.adoc[Reference Guide]
-* xref:security:ROOT:about.adoc[Security Guide]
-* xref:testing:ROOT:about.adoc[Testing Guide]
-
-\... as well as components guides:
-
-* xref:vw:ROOT:about.adoc[Wicket viewer]
-* xref:vro:ROOT:about.adoc[Restful Objects viewer]
-* xref:pjdo:ROOT:about.adoc[DataNucleus object store]
-
-
+* xref:userguide:flyway:about.adoc[Flyway]
 

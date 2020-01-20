@@ -1,2 +1,0 @@
-include::pjdo:ROOT:partial$component-nav.adoc[]
-
