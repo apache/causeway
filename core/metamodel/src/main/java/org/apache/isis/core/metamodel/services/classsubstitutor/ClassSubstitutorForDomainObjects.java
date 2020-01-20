@@ -30,7 +30,6 @@ import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
 
 import lombok.NonNull;
-import lombok.val;
 
 @Component
 @Named("isisMetaModel.ClassSubstitutorForDomainObjects")
@@ -47,9 +46,10 @@ public class ClassSubstitutorForDomainObjects implements ClassSubstitutor {
     @Override
     public Substitution getSubstitution(@NonNull Class<?> cls) {
         
-        val beanSort = isisBeanTypeRegistry.quickClassify(cls);
-        
-        if(beanSort.isToBeIntrospected() && !beanSort.isCollection()) {
+        if(isisBeanTypeRegistry.getViewModelTypes().contains(cls)) {
+            return Substitution.neverReplaceClass();
+        }
+        if(isisBeanTypeRegistry.getEntityTypes().contains(cls)) {
             return Substitution.neverReplaceClass();
         }
         return Substitution.passThrough(); // indifferent
