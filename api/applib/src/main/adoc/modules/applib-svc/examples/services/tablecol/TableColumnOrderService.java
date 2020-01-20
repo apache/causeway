@@ -46,7 +46,7 @@ public interface TableColumnOrderService {
      */
     @Service
     @Named("isisApplib.TableColumnOrderService.Default")
-    @Order(OrderPrecedence.LOW)
+    @Order(OrderPrecedence.LATE)
     @Primary
     @Qualifier("Default")
     public static class Default implements TableColumnOrderService {

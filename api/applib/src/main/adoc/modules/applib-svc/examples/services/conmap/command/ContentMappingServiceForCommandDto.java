@@ -45,7 +45,7 @@ import org.apache.isis.schema.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarA
 
 @Service
 @Named("isisApplib.ContentMappingServiceForCommandDto")
-@Order(OrderPrecedence.HIGH)
+@Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("CommandDto")
 public class ContentMappingServiceForCommandDto implements ContentMappingService {
@@ -107,7 +107,7 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
     @Named("isisApplib.ContentMappingServiceForCommandDto.CopyOverFromCommand")
     // specify quite a high priority since custom processors will probably want to run after this one
     // (but can choose to run before if they wish)
-    @Order(OrderPrecedence.HIGH)
+    @Order(OrderPrecedence.EARLY)
     @Qualifier("Command")
     public static class CopyOverFromCommand implements CommandDtoProcessorService {
 

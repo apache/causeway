@@ -36,7 +36,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisApplib.AuditerServiceLogging")
-@Order(OrderPrecedence.LOW)
+@Order(OrderPrecedence.LATE)
 @Primary
 @Qualifier("logging")
 @Log4j2

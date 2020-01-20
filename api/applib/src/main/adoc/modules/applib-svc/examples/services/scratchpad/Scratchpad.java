@@ -43,7 +43,7 @@ import org.apache.isis.core.commons.internal.collections._Maps;
  */
 @Service
 @RequestScoped
-@Order(OrderPrecedence.HIGH)
+@Order(OrderPrecedence.EARLY)
 @Primary
 @Named("isisApplib.Scratchpad")
 @Qualifier("Default")

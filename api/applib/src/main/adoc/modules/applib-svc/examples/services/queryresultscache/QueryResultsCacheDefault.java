@@ -50,7 +50,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isisApplib.QueryResultsCacheInternal")
-@Order(OrderPrecedence.HIGH)
+@Order(OrderPrecedence.EARLY)
 @Primary
 @RequestScoped
 @Qualifier("Default")
