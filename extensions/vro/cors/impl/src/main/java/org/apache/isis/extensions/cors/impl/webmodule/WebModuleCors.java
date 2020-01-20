@@ -49,7 +49,7 @@ import lombok.Getter;
 @Service
 @Named("isisMapCors.WebModuleServerCors")
 @Qualifier("CORS")
-@Order(OrderPrecedence.HIGH)
+@Order(OrderPrecedence.EARLY)
 public final class WebModuleCors extends WebModuleAbstract {
 
     private final static String CORS_FILTER_NAME = "CORS Filter";

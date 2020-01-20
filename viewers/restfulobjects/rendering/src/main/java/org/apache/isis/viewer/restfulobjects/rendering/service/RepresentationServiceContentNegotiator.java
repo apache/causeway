@@ -47,7 +47,7 @@ import lombok.val;
 
 @Service
 @Named("isisRoRendering.RepresentationServiceContentNegotiator")
-@Order(OrderPrecedence.HIGH)
+@Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("ContentNegotiator")
 public class RepresentationServiceContentNegotiator implements RepresentationService {

@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.spec.InjectorMethodEvaluator;
 
 @Service
 @Named("isisMetaModel.InjectorMethodEvaluatorDefault")
-@Order(OrderPrecedence.HIGH)
+@Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
 public final class InjectorMethodEvaluatorDefault implements InjectorMethodEvaluator {

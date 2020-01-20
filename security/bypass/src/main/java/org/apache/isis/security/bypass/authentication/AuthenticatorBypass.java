@@ -34,7 +34,7 @@ import org.apache.isis.core.security.authentication.standard.AuthenticatorAbstra
  */
 @Service
 @Named("isisSecurityBypass.AuthenticatorBypass")
-@Order(OrderPrecedence.LOW)
+@Order(OrderPrecedence.LATE)
 @Qualifier("Bypass")
 public class AuthenticatorBypass extends AuthenticatorAbstract {
 

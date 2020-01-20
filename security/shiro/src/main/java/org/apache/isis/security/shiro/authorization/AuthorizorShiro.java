@@ -34,8 +34,6 @@ import org.apache.isis.core.security.authentication.standard.Authenticator;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
 import org.apache.isis.security.shiro.context.ShiroSecurityContext;
 
-import lombok.extern.log4j.Log4j2;
-
 /**
  * If Shiro is configured for both authentication and authorization (as recommended), then this class is
  * in the role of {@link Authorizor}.
@@ -47,7 +45,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isisSecurityShiro.AuthorizorShiro")
-@Order(OrderPrecedence.HIGH)
+@Order(OrderPrecedence.EARLY)
 @Qualifier("Shiro")
 public class AuthorizorShiro implements Authorizor {
 

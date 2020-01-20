@@ -57,7 +57,7 @@ import lombok.val;
  */
 @Service
 @Named("isisRoRendering.JsonValueEncoder")
-@Order(OrderPrecedence.HIGH)
+@Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
 @Singleton

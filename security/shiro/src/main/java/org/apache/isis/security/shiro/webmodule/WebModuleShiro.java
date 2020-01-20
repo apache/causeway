@@ -62,7 +62,7 @@ import lombok.val;
  */
 @Service
 @Named("isisSecurityKeycloak.WebModuleKeycloak")
-@Order(OrderPrecedence.HIGHEST + 200)
+@Order(OrderPrecedence.FIRST + 200)
 @Qualifier("Shiro")
 public class WebModuleShiro extends WebModuleAbstract {
     

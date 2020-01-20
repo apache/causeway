@@ -40,7 +40,7 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
  */
 @Service
 @Named("isisMetaModel.ServiceInjectorDefault")
-@Order(OrderPrecedence.HIGH)
+@Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
 public class ServiceInjectorDefault implements ServiceInjector {

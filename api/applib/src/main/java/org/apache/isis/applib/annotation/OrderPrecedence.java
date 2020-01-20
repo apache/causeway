@@ -33,7 +33,7 @@ public class OrderPrecedence {
      * @see java.lang.Integer#MIN_VALUE
      * @see Ordered#HIGHEST_PRECEDENCE
      */
-    public static final int HIGHEST = Ordered.HIGHEST_PRECEDENCE;
+    public static final int FIRST = Ordered.HIGHEST_PRECEDENCE;
 
     /**
      * Useful constant for the lowest precedence value.
@@ -41,12 +41,12 @@ public class OrderPrecedence {
      * @see java.lang.Integer#MAX_VALUE
      * @see Ordered#LOWEST_PRECEDENCE
      */
-    public static final int LOWEST = Ordered.LOWEST_PRECEDENCE;
+    public static final int LAST = Ordered.LOWEST_PRECEDENCE;
 
     /**
      * Used by framework services that are unlikely to be overridden by application code.
      */
-    public static final int HIGH = HIGHEST / 2;
+    public static final int EARLY = FIRST / 2;
     /**
      * Used by framework services that could be overridden by application code (though not commonly).
      */
@@ -54,7 +54,7 @@ public class OrderPrecedence {
     /**
      * Used by framework services that are expected to be overridden by application code, or that act as a fallback.
      */
-    public static final int LOW = OrderPrecedence.LOWEST / 2;
+    public static final int LATE = OrderPrecedence.LAST / 2;
 
 }
 // end::refguide[]

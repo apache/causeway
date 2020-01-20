@@ -43,7 +43,7 @@ import lombok.Getter;
  */
 @Service
 @Named("isisWebapp.WebModuleLogOnExceptionLogger")
-@Order(OrderPrecedence.HIGH - 100)
+@Order(OrderPrecedence.EARLY - 100)
 @Qualifier("LogOnExceptionLogger")
 public final class WebModuleLogOnExceptionLogger extends WebModuleAbstract {
 

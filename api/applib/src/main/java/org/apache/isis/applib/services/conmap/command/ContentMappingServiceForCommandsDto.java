@@ -36,7 +36,7 @@ import org.apache.isis.schema.cmd.v2.CommandsDto;
 
 @Service
 @Named("isisApplib.ContentMappingServiceForCommandsDto")
-@Order(OrderPrecedence.HIGH)
+@Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("CommandsDto")
 public class ContentMappingServiceForCommandsDto implements ContentMappingService {

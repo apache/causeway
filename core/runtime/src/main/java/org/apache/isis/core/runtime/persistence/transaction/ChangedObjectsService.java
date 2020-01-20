@@ -49,7 +49,7 @@ import lombok.val;
 
 @Service
 @Named("isisRuntime.ChangedObjectsService")
-@Order(OrderPrecedence.HIGH)
+@Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
 @RequestScoped

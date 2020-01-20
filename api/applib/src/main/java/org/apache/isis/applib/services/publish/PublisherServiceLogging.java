@@ -36,7 +36,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisApplib.PublisherServiceLogging")
-@Order(OrderPrecedence.LOW)
+@Order(OrderPrecedence.LATE)
 @Primary
 @Qualifier("Logging")
 @Log4j2

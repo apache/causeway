@@ -48,7 +48,7 @@ import lombok.val;
  */
 @Service
 @Named("isisRuntime.AuditerDispatchService")
-@Order(OrderPrecedence.HIGH)
+@Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
 public class AuditerDispatchService {

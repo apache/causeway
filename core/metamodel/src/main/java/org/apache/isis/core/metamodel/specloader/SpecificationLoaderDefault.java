@@ -91,7 +91,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("isisMetaModel.SpecificationLoaderDefault")
-@Order(OrderPrecedence.HIGH)
+@Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
 @Log4j2

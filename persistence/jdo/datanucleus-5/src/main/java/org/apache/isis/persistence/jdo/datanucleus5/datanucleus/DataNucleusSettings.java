@@ -35,7 +35,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
  */
 @Service
 @Named("isisJdoDn5.DataNucleusSettings")
-@Order(OrderPrecedence.HIGH)
+@Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
 public class DataNucleusSettings {

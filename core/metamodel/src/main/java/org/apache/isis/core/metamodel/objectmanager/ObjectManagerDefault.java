@@ -44,7 +44,7 @@ import lombok.val;
  */
 @Service
 @Named("isisMetaModel.ObjectManagerDefault")
-@Order(OrderPrecedence.HIGH)
+@Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("DEFAULT")
 public class ObjectManagerDefault implements ObjectManager {

@@ -46,7 +46,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
  */
 @Service
 @Named("isisWicketViewer.DeepLinkServiceWicket")
-@Order(OrderPrecedence.HIGH)
+@Order(OrderPrecedence.EARLY)
 @Qualifier("Wicket")
 public class DeepLinkServiceWicket implements DeepLinkService {
 

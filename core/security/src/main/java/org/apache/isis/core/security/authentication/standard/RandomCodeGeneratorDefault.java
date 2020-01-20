@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 
 @Component
 @Named("isisSecurityApi.RandomCodeGenerator10Chars")
-@Order(OrderPrecedence.LOW)
+@Order(OrderPrecedence.LATE)
 @Primary
 @Qualifier("Default")
 public class RandomCodeGeneratorDefault implements RandomCodeGenerator {

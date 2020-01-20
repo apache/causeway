@@ -33,7 +33,7 @@ import org.apache.isis.core.webapp.wormhole.AuthenticationSessionWormhole;
 
 @Service
 @Named("isisSecurityKeycloak.AuthenticatorKeycloak")
-@Order(OrderPrecedence.HIGH)
+@Order(OrderPrecedence.EARLY)
 @Qualifier("Keycloak")
 @Singleton
 public class AuthenticatorKeycloak implements Authenticator {
