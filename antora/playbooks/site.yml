@@ -104,7 +104,7 @@ content:
 
 # extensions
     - url: .
-      start_path: extensions/core/flyway/adoc # refguide
+      start_path: extensions/core/flyway/adoc # userguide
       branches: HEAD
 
     - url: .

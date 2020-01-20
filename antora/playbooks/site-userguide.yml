@@ -6,13 +6,17 @@ site:
 content:
   sources:
 
-# antora
+# antora/components
     - url: .
       start_path: antora/components/toc # toc
       branches: HEAD
-
     - url: .
       start_path: antora/components/userguide # userguide
+      branches: HEAD
+
+# extensions
+    - url: .
+      start_path: extensions/core/flyway/adoc # refguide
       branches: HEAD
 
 
