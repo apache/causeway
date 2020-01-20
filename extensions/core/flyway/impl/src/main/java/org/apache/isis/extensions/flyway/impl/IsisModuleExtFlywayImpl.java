@@ -26,18 +26,8 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.IsisModuleCoreConfig;
-import org.apache.isis.extensions.flyway.impl.config.FlywayConfigurationCustomizerFromIsisConfiguration;
-import org.apache.isis.extensions.flyway.impl.config.FlywayMigrationStrategyForIsis;
 
 @Configuration
-@Import({
-        // dependencies
-        IsisModuleCoreConfig.class,
-
-//        // @Component's
-        FlywayConfigurationCustomizerFromIsisConfiguration.class,
-//        FlywayMigrationStrategyForIsis.class,
-})
 public class IsisModuleExtFlywayImpl {
 
 
