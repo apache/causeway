@@ -33,7 +33,7 @@ public class EmailServiceDefaultTest_actually {
     @Test
     public void when_null() throws Exception {
 
-        final String[] actually = EmailServiceDefault.actually(null, null);
+        final String[] actually = EmailServiceDefault.originalUnlessOverridden(null, null);
 
         assertThat(actually, is(not(nullValue())));
         assertThat(actually.length, is(0));
@@ -42,7 +42,7 @@ public class EmailServiceDefaultTest_actually {
     @Test
     public void when_not_null_but_no_override() throws Exception {
 
-        final String[] actually = EmailServiceDefault.actually(_Lists.of("joey@tribiani.com", "rachel@green.com"), null);
+        final String[] actually = EmailServiceDefault.originalUnlessOverridden(_Lists.of("joey@tribiani.com", "rachel@green.com"), null);
 
         assertThat(actually, is(not(nullValue())));
         assertThat(actually.length, is(2));
@@ -51,7 +51,7 @@ public class EmailServiceDefaultTest_actually {
     @Test
     public void when_not_null_but_with_override() throws Exception {
 
-        final String[] actually = EmailServiceDefault.actually(_Lists.of("joey@tribiani.com", "rachel@green.com"), "ross@geller.com");
+        final String[] actually = EmailServiceDefault.originalUnlessOverridden(_Lists.of("joey@tribiani.com", "rachel@green.com"), "ross@geller.com");
 
         assertThat(actually, is(not(nullValue())));
         assertThat(actually.length, is(1));

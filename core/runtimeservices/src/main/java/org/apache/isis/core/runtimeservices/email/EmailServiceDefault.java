@@ -112,7 +112,7 @@ public class EmailServiceDefault implements EmailService {
         return configuration.getCore().getRuntimeServices().getEmail().getTls().isEnabled();
     }
 
-    protected Boolean isThrowExceptionOnFail() {
+    protected boolean isThrowExceptionOnFail() {
         return configuration.getCore().getRuntimeServices().getEmail().isThrowExceptionOnFail();
     }
 
@@ -144,7 +144,12 @@ public class EmailServiceDefault implements EmailService {
     }
 
     @Override
-    public boolean send(final List<String> toList, final List<String> ccList, final List<String> bccList, final String subject, final String body,
+    public boolean send(
+            final List<String> toList,
+            final List<String> ccList,
+            final List<String> bccList,
+            final String subject,
+            final String body,
             final DataSource... attachments) {
 
         try {
@@ -194,19 +199,19 @@ public class EmailServiceDefault implements EmailService {
             }
 
 
-            final String overrideTo = getEmailOverrideTo();
+            final String overrideToList = getEmailOverrideTo();
             final String overrideCc = getEmailOverrideCc();
             final String overrideBcc = getEmailOverrideBcc();
 
-            final String[] toListElseOverride = actually(toList, overrideTo);
+            final String[] toListElseOverride = originalUnlessOverridden(toList, overrideToList);
             if (notEmpty(toListElseOverride)) {
                 email.addTo(toListElseOverride);
             }
-            final String[] ccListElseOverride = actually(ccList, overrideCc);
+            final String[] ccListElseOverride = originalUnlessOverridden(ccList, overrideCc);
             if (notEmpty(ccListElseOverride)) {
                 email.addCc(ccListElseOverride);
             }
-            final String[] bccListElseOverride = actually(bccList, overrideBcc);
+            final String[] bccListElseOverride = originalUnlessOverridden(bccList, overrideBcc);
             if (notEmpty(bccListElseOverride)) {
                 email.addBcc(bccListElseOverride);
             }
@@ -227,7 +232,7 @@ public class EmailServiceDefault implements EmailService {
 
     // -- HELPER
 
-    static String[] actually(final List<String> original, final String overrideIfAny) {
+    static String[] originalUnlessOverridden(final List<String> original, final String overrideIfAny) {
         final List<String> addresses = _Strings.isNullOrEmpty(overrideIfAny)
                 ? original == null
                 ? Collections.<String>emptyList()

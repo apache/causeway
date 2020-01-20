@@ -71,10 +71,18 @@ import lombok.val;
 @Qualifier("RestfulObjectsV1_0")
 public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNegotiationService {
 
-    private boolean strictAcceptChecking;
 
-    @PostConstruct
-    public void init() {
+    protected final IsisConfiguration configuration;
+    protected final SpecificationLoader specificationLoader;
+
+    private final boolean strictAcceptChecking;
+
+    @Inject
+    public ContentNegotiationServiceForRestfulObjectsV1_0(
+            final IsisConfiguration configuration,
+            final SpecificationLoader specificationLoader) {
+        this.configuration = configuration;
+        this.specificationLoader = specificationLoader;
         this.strictAcceptChecking = configuration.getViewer().getRestfulobjects().isStrictAcceptChecking();
     }
 
@@ -407,7 +415,5 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
         return true;
     }
 
-    @Inject protected IsisConfiguration configuration;
-    @Inject protected SpecificationLoader specificationLoader;
 
 }
