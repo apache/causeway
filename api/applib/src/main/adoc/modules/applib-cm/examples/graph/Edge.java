@@ -16,38 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.tree;
+package org.apache.isis.applib.graph;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+/**
+ * Fundamental building block for graph structures. 
+ * 
+ * @since 2.0
+ *
+ * @param <T> type constraint for values contained by this edge's vertices
+ */
+public interface Edge<T> {
 
-class TreeNode_iteratorHierarchyUp<T> implements Iterator<TreeNode<T>> {
-
-    private TreeNode<T> next;
-
-    TreeNode_iteratorHierarchyUp(TreeNode<T> treeNode) {
-        next = treeNode;
-    }
-
-    @Override
-    public boolean hasNext() {
-        return next!=null;
-    }
-
-    @Override
-    public TreeNode<T> next() {
-        if(next==null) {
-            throw new NoSuchElementException("Iterator has run out of elements.");
-        }
-        final TreeNode<T> result = next;
-        next = fetchNext(next);
-        return result;
-    }
-
-    // -- HELPER
-
-    private TreeNode<T> fetchNext(TreeNode<T> current) {
-        return current.getParentIfAny();
-    }
+    public Vertex<T> getFrom();
+    public Vertex<T> getTo();
 
 }

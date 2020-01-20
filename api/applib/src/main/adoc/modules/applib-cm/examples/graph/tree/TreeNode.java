@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.tree;
+package org.apache.isis.applib.graph.tree;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -28,15 +28,36 @@ import java.util.stream.StreamSupport;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.graph.Edge;
+import org.apache.isis.applib.graph.SimpleEdge;
+import org.apache.isis.applib.graph.Vertex;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 
-//@Container
-public interface TreeNode<T> {
+/**
+ * Fundamental building block of Tree structures. 
+ * 
+ * @since 2.0
+ *
+ * @param <T> type constraint for values contained by this node
+ */
+public interface TreeNode<T> extends Vertex<T> {
 
-    // -- VALUE
-
-    public T getValue();
-
+    // -- VERTEX - IMPLEMENTATION
+    
+    default int getIncomingCount() {
+        return isRoot() ? 0 : 1;
+    }
+    default int getOutgoingCount() {
+        return getChildCount();
+    }
+    default Stream<Edge<T>> streamIncoming() {
+        return isRoot() ? Stream.empty() : Stream.of(SimpleEdge.<T>of(getParentIfAny(), this));
+    }
+    default Stream<Edge<T>> streamOutgoing() {
+        return streamChildren()
+                .map(to->SimpleEdge.<T>of(this, to));
+    }
+    
     // -- PARENT
 
     public @Nullable TreeNode<T> getParentIfAny();

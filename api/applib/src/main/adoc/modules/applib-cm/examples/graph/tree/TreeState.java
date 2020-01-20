@@ -16,19 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.tree;
+package org.apache.isis.applib.graph.tree;
 
-import java.util.HashSet;
+import java.io.Serializable;
 import java.util.Set;
 
-class TreeState_Default implements TreeState {
-    private static final long serialVersionUID = 7971539034663543462L;
+public interface TreeState extends Serializable {
 
-    private final Set<TreePath> expandedNodes = new HashSet<>();
-
-    @Override
-    public Set<TreePath> getExpandedNodePaths() {
-        return expandedNodes;
+    public static TreeState rootCollapsed() {
+        return new TreeState_Default();
     }
+
+    public Set<TreePath> getExpandedNodePaths();
 
 }

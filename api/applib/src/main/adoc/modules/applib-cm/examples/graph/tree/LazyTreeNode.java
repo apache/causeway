@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.tree;
+package org.apache.isis.applib.graph.tree;
 
 import java.util.Objects;
 import java.util.concurrent.atomic.LongAdder;
