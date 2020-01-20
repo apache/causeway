@@ -152,7 +152,7 @@
 	</dependencies>
 
 	<modules>
-		<module>core/flyway/impl</module>
+		<module>core/flyway</module>
 		<module>security/secman</module>
 		<module>security/shiro-realm-ldap</module>
 

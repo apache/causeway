@@ -4,7 +4,7 @@
 
 This module provides an very thin layer to use Spring Boot's integration with https://flywaydb.org[Flyway]
 
-== Dependencies
+== Configuration
 
 Add the following dependency:
 
@@ -16,18 +16,47 @@ Add the following dependency:
 </dependency>
 ----
 
+Also add the following module to your `AppManifest`:
+
+[source,java]
+----
+@Configuration
+@Import({
+        // ...
+        IsisModuleExtFlywayImpl.class,
+        // ...
+})
+public static class AppManifest {
+}
+----
+
 This will enable Spring Boot's integration with Flyway, and configure Flyway to pick up JDBC connection parameters from the `application.properties` (corresponding to `IsisConfiguration` class).
+
+* `isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionURL`
+* `isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionDriverName`
+* `isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionUserName`
+* `isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionPassword`
 
 Currently, only the form of persistence properties recognised are those of the JDO DataNucleus object store:
 
-isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionURL = jdbc:h2:mem:test
-isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionDriverName = org.h2.Driver
-isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionUserName = sa
-isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionPassword =
+For backward compatibility with v1, Flyway will be automatically disabled if JDO's `autoCreateAll` option is set:
+
+* `isis.persistor.datanucleus.impl.datanucleus.schema.autoCreateAll`
+
+** If `true`, then flyway is disabled
+** If `false`, then flyway is enabled
+
+Flyway can also be explicitly disabled using the Spring Boot config property:
+
+* `spring.flyway.enabled`
+
+** If `false`, then flyway is disabled
+** If `true`, the flyway is enabled (provided also that `autoCreateAll` is set to `false`, see above)
 
 
+== Automatic schema setup
 
-
+TODO...
 
 == Reference
 

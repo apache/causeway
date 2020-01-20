@@ -16,9 +16,8 @@
 
 	<parent>
 		<groupId>org.apache.isis.extensions</groupId>
-		<artifactId>isis-extensions</artifactId>
+		<artifactId>isis-extensions-flyway</artifactId>
 		<version>2.0.0-M3-SNAPSHOT</version>
-		<relativePath>../../../pom.xml</relativePath>
 	</parent>
 
 	<artifactId>isis-extensions-flyway-impl</artifactId>
@@ -48,6 +47,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-autoconfigure</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+		</dependency>
+
+
 	</dependencies>
 
 </project>

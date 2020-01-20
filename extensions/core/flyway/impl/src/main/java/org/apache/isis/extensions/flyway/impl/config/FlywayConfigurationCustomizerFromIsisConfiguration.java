@@ -1,5 +1,7 @@
 package org.apache.isis.extensions.flyway.impl.config;
 
+import java.util.Properties;
+
 import javax.sql.DataSource;
 
 import org.flywaydb.core.api.configuration.FluentConfiguration;
@@ -10,12 +12,13 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.IsisConfiguration.Persistence.JdoDatanucleus.Impl.Javax.Jdo;
 
 import lombok.Value;
 import lombok.val;
 
 @Component
-@Order(OrderPrecedence.HIGH)
+@Order(OrderPrecedence.EARLY)
 public class FlywayConfigurationCustomizerFromIsisConfiguration implements FlywayConfigurationCustomizer {
 
     private final IsisConfiguration isisConfiguration;
@@ -27,47 +30,19 @@ public class FlywayConfigurationCustomizerFromIsisConfiguration implements Flywa
 
     @Override
     public void customize(final FluentConfiguration configuration) {
-        val params = obtainParams(isisConfiguration);
-        val datasource = params.createDatasource();
 
-        configuration.dataSource(datasource);
-    }
-
-    /**
-     * Searches for JDO connection params.
-     *
-     * <p>
-     *     In the future, could also search for JPA etc.
-     * </p>
-     */
-    private static JdbcConnectionParams obtainParams(final IsisConfiguration isisConfiguration) {
-
-        val javaxJdoOption = isisConfiguration.getPersistence().getJdoDatanucleus().getImpl().getJavax().getJdo().getOption();
-
-        val connectionDriverName = javaxJdoOption.getConnectionDriverName();
-        val connectionUrl = javaxJdoOption.getConnectionUrl();
-        val connectionUserName = javaxJdoOption.getConnectionUserName();
-        val connectionPassword = javaxJdoOption.getConnectionPassword();
-
-        return new JdbcConnectionParams(connectionDriverName, connectionUrl, connectionUserName, connectionPassword);
-    }
-
-    @Value
-    static class JdbcConnectionParams {
-        private final String connectionDriverName;
-        private final String connectionUrl;
-        private final String connectionUserName;
-        private final String connectionPassword;
-
-        public DataSource createDatasource() {
-            val dataSourceBuilder = DataSourceBuilder.create();
-            dataSourceBuilder.driverClassName(connectionDriverName);
-            dataSourceBuilder.url(connectionUrl);
-            dataSourceBuilder.username(connectionUserName);
-            dataSourceBuilder.password(connectionPassword);
-            return dataSourceBuilder.build();
+        final boolean autoCreate =
+                isisConfiguration.getPersistence().getJdoDatanucleus().getImpl().getDatanucleus().getSchema().isAutoCreateAll();
+        if (autoCreate) {
+            Properties props = new Properties();
+            props.setProperty("spring.flyway.enabled", "false");
+            configuration.configuration(props);
+            return;
         }
+
+//        // else
+//        JdbcConnectionParams.from(isisConfiguration)
+//                .map(JdbcConnectionParams::createDatasource)
+//                .ifPresent(configuration::dataSource);
     }
-
-
 }
