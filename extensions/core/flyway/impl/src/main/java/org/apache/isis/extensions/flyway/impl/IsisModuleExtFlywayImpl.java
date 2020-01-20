@@ -18,10 +18,7 @@
  */
 package org.apache.isis.extensions.flyway.impl;
 
-import javax.sql.DataSource;
-
-import org.springframework.boot.autoconfigure.flyway.FlywayDataSource;
-import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.boot.autoconfigure.flyway.FlywayConfigurationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -29,9 +26,7 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.IsisModuleCoreConfig;
-
-import lombok.Value;
-import lombok.val;
+import org.apache.isis.extensions.flyway.impl.config.FlywayConfigurationCustomizerFromIsisConfiguration;
 
 @Configuration
 @Import({
@@ -40,50 +35,10 @@ import lombok.val;
 @ComponentScan
 public class IsisModuleExtFlywayImpl {
 
-    @Value
-    static class JdbcConnectionParams {
-        private final String connectionDriverName;
-        private final String connectionUrl;
-        private final String connectionUserName;
-        private final String connectionPassword;
-
-        public <T extends DataSource> DataSourceBuilder<T> configure(DataSourceBuilder<T> dataSourceBuilder) {
-            dataSourceBuilder.driverClassName(connectionDriverName);
-            dataSourceBuilder.url(connectionUrl);
-            dataSourceBuilder.username(connectionUserName);
-            dataSourceBuilder.password(connectionPassword);
-            return dataSourceBuilder;
-        }
-    }
-
     @Bean
-    @FlywayDataSource
-    public DataSource getDataSource(final IsisConfiguration isisConfiguration) {
-
-        JdbcConnectionParams params = obtainParams(isisConfiguration);
-
-        val dataSourceBuilder = DataSourceBuilder.create();
-        params.configure(dataSourceBuilder);
-        return dataSourceBuilder.build();
+    public FlywayConfigurationCustomizer flywayConfigurationCustomizer(final IsisConfiguration isisConfiguration) {
+        return new FlywayConfigurationCustomizerFromIsisConfiguration(isisConfiguration);
     }
 
-    /**
-     * Searches for JDO connection params.
-     *
-     * <p>
-     *     In the future, could also search for JPA etc.
-     * </p>
-     */
-    private static JdbcConnectionParams obtainParams(IsisConfiguration isisConfiguration) {
-
-        val javaxJdoOption = isisConfiguration.getPersistence().getJdoDatanucleus().getImpl().getJavax().getJdo().getOption();
-
-        val connectionDriverName = javaxJdoOption.getConnectionDriverName();
-        val connectionUrl = javaxJdoOption.getConnectionUrl();
-        val connectionUserName = javaxJdoOption.getConnectionUserName();
-        val connectionPassword = javaxJdoOption.getConnectionPassword();
-
-        return new JdbcConnectionParams(connectionDriverName, connectionUrl, connectionUserName, connectionPassword);
-    }
 
 }
