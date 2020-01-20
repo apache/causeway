@@ -1,74 +1,98 @@
 | isis.core.runtime-services. +
 application-features.init
 | 
-| 
+| Whether the (or the default implementation of that service, at least) should compute the set of `ApplicationFeature` that describe the metamodel \{@link ApplicationFeaturesInitConfiguration#EAGERLY eagerly, or lazily.
+
 
 | isis.core.runtime-services. +
 email.override.bcc
 | 
-| 
+| Intended for testing purposes only, if set then the requested `bcc:` of the email will be ignored, and instead sent to this email address instead.
+
 
 | isis.core.runtime-services. +
 email.override.cc
 | 
-| 
+| Intended for testing purposes only, if set then the requested `cc:` of the email will be ignored, and instead sent to this email address instead.
+
 
 | isis.core.runtime-services. +
 email.override.to
 | 
-| 
+| Intended for testing purposes only, if set then the requested `to:` of the email will be ignored, and instead sent to this email address instead.
+
 
 | isis.core.runtime-services. +
 email.port
 |  587
-| 
+| The port to use for sending email.
+
 
 | isis.core.runtime-services. +
 email.sender.address
 | 
-| 
+| Specifies the email address of the user sending the email.
+
+If the username is not specified, is also used as the username to connect to the SMTP service.
+
+This configuration property is mandatory (for the default implementation of the `org.apache.isis.applib.services.email.EmailService`, at least).
+
 
 | isis.core.runtime-services. +
 email.sender.hostname
 | 
-| 
+| Specifies the host running the SMTP service.
+
+If not specified, then the value used depends upon the email implementation. The default implementation will use the `mail.smtp.host` system property.
+
 
 | isis.core.runtime-services. +
 email.sender.password
 | 
-| 
+| Specifies the password (corresponding to the username to connect to the SMTP service.
+
+This configuration property is mandatory (for the default implementation of the `org.apache.isis.applib.services.email.EmailService`, at least).
+
 
 | isis.core.runtime-services. +
 email.sender.username
 | 
-| 
+| Specifies the username to use to connect to the SMTP service.
+
+If not specified, then the sender's email address will be used instead.
+
 
 | isis.core.runtime-services. +
 email. +
 socket-connection-timeout
 |  2000
-| 
+| The maximum number of millseconds to wait to obtain a socket connection before timing out.
+
 
 | isis.core.runtime-services. +
 email.socket-timeout
 |  2000
-| 
+| The maximum number of millseconds to wait to obtain a socket before timing out.
+
 
 | isis.core.runtime-services. +
 email.throw-exception-on-fail
 |  true
-| 
+| If an email fails to send, whether to propagate the exception (meaning that potentially the end-user might see the exception), or whether instead to just indicate failure through the return value of the method (\{@link org.apache.isis.applib.services.email.EmailService#send(List, List, List, String, String, DataSource...)) that's being called.
+
 
 | isis.core.runtime-services. +
 email.tls.enabled
 |  true
-| 
+| Whether TLS encryption should be started (that is, `STARTTLS`).
+
 
 | isis.core.runtime-services. +
 exception-recognizer.jdo. +
 disable
 | 
-| 
+| Whether the `org.apache.isis.applib.services.exceprecog.ExceptionRecognizer` implementation for JDO/DataNucleus object store - which attempts to sanitize any exceptions arising from that object store - should be disabled (meaning that exceptions will potentially propagate as more serious to the end user).
+
 
 | isis.core.runtime-services. +
 repository-service. +
@@ -84,5 +108,12 @@ Originally introduced as part of ISIS-1134 (fixing memory leaks in the objectsto
 | isis.core.runtime-services. +
 translation.po.mode
 | 
-| 
+| Specifies the initial mode for obtaining/discovering translations.
+
+There are three modes:
+
+* The default mode of write is appropriate for integration testing or prototyping, meaning that the service records any requests made of it but just returns the string unaltered. This is a good way to discover new strings that require translation.
+* The read mode is appropriate for production; the service looks up translations that have previously been captured.
+* The disabled performs no translation and simply returns the original string unchanged. Unlike the write mode, it does _not_ keep track of translation requests.
+
 

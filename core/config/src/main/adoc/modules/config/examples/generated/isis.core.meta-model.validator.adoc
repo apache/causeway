@@ -43,42 +43,49 @@ It is _highly advisable_ to leave this set as enabled (the default). These objec
 validator.jaxb-view-model. +
 date-time-type-adapter
 |  true
-| 
+| If set, then ensures that for all properties of JAXB-style view models where the property's type is a date or time, then that property has been correctly annotated with @`javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter` (so that the property's value can be converted into a serializable form).
+
 
 | isis.core.meta-model. +
 validator.jaxb-view-model. +
 no-arg-constructor
 | 
-| 
+| If set, then ensures that all JAXB-style view models have a no-arg constructor.
+
 
 | isis.core.meta-model. +
 validator.jaxb-view-model. +
 not-abstract
 |  true
-| 
+| If set, then ensures that all JAXB-style view models are concrete classes, not abstract.
+
 
 | isis.core.meta-model. +
 validator.jaxb-view-model. +
 not-inner-class
 |  true
-| 
+| If set, then ensures that all JAXB-style view models are either top-level classes or nested static classes (in other words, checks that they are not anonymous, local nor nested non-static classes).
+
 
 | isis.core.meta-model. +
 validator.jaxb-view-model. +
 reference-type-adapter
 |  true
-| 
+| If set, then ensures that for all properties of JAXB-style view models where the property's type is an entity, then that entity's type has been correctly annotated with @`javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter` (so that the property's value can be converted into a serializable form).
+
 
 | isis.core.meta-model. +
 validator.jdoql.from-clause
 |  true
-| 
+| If set, then ensures that the 'FROM' clause within any JDOQL `@Query`s annotations relates to a known entity type, and moreover that that type is compatible with the type on which the annotation appears: meaning its either a supertype of or the same type as the annotated type.
+
 
 | isis.core.meta-model. +
 validator.jdoql. +
 variables-clause
 |  true
-| 
+| If set, then ensures that the 'VARIABLES' clause within any JDOQL `@Query`s relates to a known entity type.
+
 
 | isis.core.meta-model. +
 validator.no-params-only
