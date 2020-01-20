@@ -258,6 +258,9 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         log.info(" - introspecting {} mixins", typeRegistry.getMixinTypes().size());
         log.info(" - introspecting {} entities", typeRegistry.getEntityTypes().size());
+        
+        System.out.println("!!! entities " + typeRegistry.getEntityTypes());
+        
         log.info(" - introspecting {} view models", typeRegistry.getViewModelTypes().size());
         introspect(domainObjectSpecs, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 

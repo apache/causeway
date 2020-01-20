@@ -35,7 +35,6 @@ implements DomainServiceFacet {
         return DomainServiceFacet.class;
     }
 
-    private final Class<?> repositoryFor;
     private final NatureOfService natureOfService;
 
     public DomainServiceFacetAbstract(
@@ -43,13 +42,7 @@ implements DomainServiceFacet {
             final Class<?> repositoryFor,
             final NatureOfService natureOfService) {
         super(DomainServiceFacetAbstract.type(), facetHolder, Derivation.NOT_DERIVED);
-        this.repositoryFor = repositoryFor;
         this.natureOfService = natureOfService;
-    }
-
-    @Override
-    public Class<?> getRepositoryFor() {
-        return repositoryFor;
     }
 
     @Override
@@ -59,7 +52,6 @@ implements DomainServiceFacet {
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
-        attributeMap.put("repositoryFor", repositoryFor);
         attributeMap.put("natureOfService", natureOfService);
     }
 }

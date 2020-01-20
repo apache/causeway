@@ -18,15 +18,11 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainservice.annotation;
 
-import org.junit.Assert;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
-
-import static org.apache.isis.core.metamodel.commons.matchers.IsisMatchers.classEqualTo;
 
 public class DomainServiceFacetAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
@@ -46,9 +42,8 @@ public class DomainServiceFacetAnnotationFactoryTest extends AbstractFacetFactor
     }
 
     public void testAggregatedAnnotationPickedUpOnClass() {
-        class Customer {
-        }
-        @DomainService(repositoryFor = Customer.class)
+
+        @DomainService
         class Customers {
         }
 
@@ -58,7 +53,7 @@ public class DomainServiceFacetAnnotationFactoryTest extends AbstractFacetFactor
         assertNotNull(facet);
         assertTrue(facet instanceof DomainServiceFacetAnnotation);
         DomainServiceFacetAnnotation domainServiceFacet = (DomainServiceFacetAnnotation) facet;
-        Assert.assertThat(domainServiceFacet.getRepositoryFor(), classEqualTo(Customer.class));
+        assertNotNull(domainServiceFacet);
 
         assertNoMethodsRemoved();
     }

@@ -31,15 +31,6 @@ import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServi
 public interface DomainServiceFacet extends Facet {
 
     /**
-     * Corresponds to {@link org.apache.isis.applib.annotation.DomainService#repositoryFor()}.
-     * <p/>
-     * <p>
-     * May be null.
-     * </p>
-     */
-    public Class<?> getRepositoryFor();
-
-    /**
      * Corresponds to {@link org.apache.isis.applib.annotation.DomainService#nature()}.
      *
      * <p>
