@@ -28,6 +28,11 @@ content:
       start_path: core/config/src/main/adoc # refguide
       branches: HEAD
 
+# extensions
+    - url: .
+      start_path: extensions/core/flyway/adoc # refguide
+      branches: HEAD
+
 
 ui:
   bundle:

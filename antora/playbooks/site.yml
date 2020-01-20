@@ -104,7 +104,7 @@ content:
 
 # extensions
     - url: .
-      start_path: extensions/persistence/jdo/flywayjdo/adoc # extensions
+      start_path: extensions/core/flyway/adoc # refguide
       branches: HEAD
 
     - url: .
