@@ -98,7 +98,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
                     val selectedMementos = toggledMementosProviderIfAny.getToggles();
                     val selectedPojos = selectedMementos
-                            .map(commonContext::reconstructObject)
+                            .map(super.getCommonContext()::reconstructObject)
                             .map(ManagedObject::getPojo);
                     
                     val actionPrompt = ActionParameterDefaultsFacetFromAssociatedCollection
