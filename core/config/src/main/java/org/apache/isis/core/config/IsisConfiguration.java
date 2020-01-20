@@ -2231,33 +2231,51 @@ public class IsisConfiguration {
              * Whether to suppress the sign-up link on the sign-in page.
              *
              * <p>
-             *     Although this is disabled by default (in other words the sign-up link is not suppressed), not that
+             *     Although this is disabled by default (in other words the sign-up link is not suppressed), note that
              *     in addition the application must provide an implementation of the
              *     {@link org.apache.isis.applib.services.userreg.UserRegistrationService} as well as a
-             *     configured {@link org.apache.isis.applib.services.userreg.EmailNotificationService}.
+             *     configured {@link org.apache.isis.applib.services.userreg.EmailNotificationService} (same conditions
+             *     as for the {@link #isSuppressPasswordReset()} password reset link).
              * </p>
              */
             private boolean suppressSignUp = false;
 
 
+            /**
+             * Whether to suppress the password reset link on the sign-in page.
+             *
+             * <p>
+             *     Although this is disabled by default (in other words the 'reset password' link is not suppressed),
+             *     note that in addition the application must provide an implementation of the
+             *     {@link org.apache.isis.applib.services.userreg.UserRegistrationService} as well as a
+             *     configured {@link org.apache.isis.applib.services.userreg.EmailNotificationService} (same conditions
+             *     as for the {@link #isSuppressSignUp()} sign-up link).
+             * </p>
+             */
             private boolean suppressPasswordReset = false;
 
             /**
-             * The pattern used for rendering and parsing timestamps.
+             * @deprecated - seemingly unused
              */
+            @Deprecated
             @NotNull @NotEmpty
             private String timestampPattern = "yyyy-MM-dd HH:mm:ss.SSS";
 
             /**
              * Whether to show an indicator for a form submit button that it has been clicked.
              *
-             * This behaviour is enabled by default, but can be disabled using this flag.
+             * <p>
+             * This behaviour is enabled by default.
+             * </p>
              */
             private boolean useIndicatorForFormSubmit = true;
+
             /**
              * Whether to show an indicator for a no-arg action button that it has been clicked.
              *
-             * This behaviour is enabled by default, but can be disabled using this flag.
+             * <p>
+             * This behaviour is enabled by default.
+             * </p>
              */
             private boolean useIndicatorForNoArgAction = true;
 
@@ -2265,7 +2283,8 @@ public class IsisConfiguration {
              * Whether the Wicket source plugin should be enabled; if so, the markup includes links to the Wicket source.
              *
              * <p>
-             *     Be aware that this can substantially impact performance.
+             *     This behaviour is disabled by default.  Please be aware that enabloing it can substantially impact
+             *     performance.
              * </p>
              */
             private boolean wicketSourcePlugin = false;
@@ -2300,8 +2319,13 @@ public class IsisConfiguration {
                 private String brandLogoSignin;
                 
                 /**
-                 * URL of file to read any custom CSS, relative to relative to the class-path resource 
-                 * root.
+                 * URL of file to read any custom CSS, relative to <code>static</code> package on the class path.
+                 *
+                 * <p>
+                 *     A typical value is <code>css/application.css</code>.  This will result in this file being read
+                 *     from the <code>static.css</code> package (because static resources such as CSS are mounted by
+                 *     Spring by default under <code>static</code> package).
+                 * </p>
                  */
                 private String css;
                 
@@ -2312,7 +2336,15 @@ public class IsisConfiguration {
                 private String faviconUrl;
                 
                 /**
-                 * URL of file to read any custom Javascript, relative to the class-path resource root.
+                 */
+                /**
+                 * URL of file to read any custom Javascript, relative to <code>static</code> package on the class path.
+                 *
+                 * <p>
+                 *     A typical value is <code>css/application.js</code>.  This will result in this file being read
+                 *     from the <code>static.js</code> package (because static resources such as CSS are mounted by
+                 *     Spring by default under <code>static</code> package).
+                 * </p>
                  */
                 private String js;
 

@@ -51,7 +51,10 @@ public interface WicketViewerSettings extends Serializable {
 
     /**
      * As per {@link IsisConfiguration.Viewer.Wicket#setTimestampPattern(String)}
+     *
+     * @deprecated - seemingly unused
      */
+    @Deprecated
     String getTimestampPattern();
 
     /**

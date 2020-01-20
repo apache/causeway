@@ -72,6 +72,10 @@ public class WicketViewerSettingsDefault implements WicketViewerSettings {
         return getConfiguration().getViewer().getWicket().getDateTimePattern();
     }
 
+    /**
+     * @deprecated - seemingly unused.
+     */
+    @Deprecated
     @Override
     public String getTimestampPattern() {
         return getConfiguration().getViewer().getWicket().getTimestampPattern();
