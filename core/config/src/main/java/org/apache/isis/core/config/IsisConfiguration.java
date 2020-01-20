@@ -47,6 +47,7 @@ import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -1189,6 +1190,11 @@ public class IsisConfiguration {
             private final ProgrammingModel programmingModel = new ProgrammingModel();
             @Data
             public static class ProgrammingModel {
+
+                /**
+                 * If set, then any aspects of the programming model (as implemented by <code>FacetFactory</code>s that
+                 * have been indicated as deprecated will simply be ignored/excluded from the metamodel.
+                 */
                 private boolean ignoreDeprecated = false;
             }
 
@@ -1256,17 +1262,92 @@ public class IsisConfiguration {
                  */
                 private boolean parallelize = true;
 
+                /**
+                 * This setting is used to determine whether the use of such deprecated features is
+                 * allowed.
+                 *
+                 * <p>
+                 *     If not allowed, then metamodel validation errors will be flagged.
+                 * </p>
+                 *
+                 * <p>
+                 *     Note that this settings has no effect if the programming model has been configured to
+                 *     {@link ProgrammingModel#isIgnoreDeprecated() ignore deprecated} features (because in this case
+                 *     the programming model facets simply won't be included in the introspection process.
+                 * </p>
+                 */
                 private boolean allowDeprecated = true;
+
+                /**
+                 * Whether to ensure that the object type of all objects (which can be set either explicitly using
+                 * {@link DomainObject#objectType()} or {@link DomainService#objectType()}, or can be inferred
+                 * implicitly using a variety of mechanisms) must be unique with respect to all other object types.
+                 *
+                 * <p>
+                 *     It is <i>highly advisable</i> to leave this set as enabled (the default), and to also use
+                 *     explicit types (see {@link #isExplicitObjectType()}.
+                 * </p>
+                 */
                 private boolean ensureUniqueObjectTypes = true;
+
+                // TODO: to remove
                 private boolean checkModuleExtent = true;
+                /**
+                 * If set, then checks that the supports <code>hideXxx</code> and <code>disableXxx</code> methods for
+                 * actions do not have take parameters.
+                 *
+                 * <p>
+                 *     Historically, the programming model allowed these methods to accept the same number of
+                 *     parameters as the action method to which they relate, the rationale being for similarity with
+                 *     the <code>validateXxx</code> method.  However, since these parameters serve no function, the
+                 *     programming model has been simplified so that these supporting methods are discovered if they
+                 *     have exactly no parameters.
+                 * </p>
+                 *
+                 * <p>
+                 *     Note that this aspect of the programming model relates to the <code>hideXxx</code> and
+                 *     <code>disableXxx</code> supporting methods that relate to the entire method.  Do not confuse
+                 *     these with the <code>hideNXxx</code> and <code>disableNXxx</code> supporting methods, which
+                 *     relate to the N-th parameter, and allow up to N-1 parameters to be passed in (allowing the Nth
+                 *     parameter to be dynamically hidden or disabled).
+                 * </p>
+                 */
                 private boolean noParamsOnly = false;
+
+                /**
+                 * Whether to validate that any actions that accept action parameters have either a corresponding
+                 * choices or auto-complete for that action parameter, or are associated with a collection of the
+                 * appropriate type.
+                 */
                 private boolean actionCollectionParameterChoices = true;
 
+                /**
+                 * If set, checks that any domain services have only actions associated with them, not properties
+                 * or collections.
+                 *
+                 * @deprecated - in that in the future the programming model will simply not search for properties or collections of domain services.
+                 */
                 @Deprecated
                 private boolean serviceActionsOnly = true;
+
+                /**
+                 * If set, then domain services actions are not contributed to domain objects.
+                 *
+                 * @deprecated - in that in the future the programming model will simply not support contributed actions from domain services.
+                 */
                 @Deprecated
                 private boolean mixinsOnly = true;
 
+                /**
+                 * Whether to ensure that the object type of all objects must be specified explicitly, using either
+                 * {@link DomainObject#objectType()} or {@link DomainService#objectType()}.
+                 *
+                 * <p>
+                 *     It is <i>highly advisable</i> to leave this set as enabled (the default).  These object types
+                 *     should also (of course) be unique - that can be checked by setting the
+                 *     {@link #isEnsureUniqueObjectTypes()} config property.
+                 * </p>
+                 */
                 private boolean explicitObjectType = false;
 
                 private final JaxbViewModel jaxbViewModel = new JaxbViewModel();

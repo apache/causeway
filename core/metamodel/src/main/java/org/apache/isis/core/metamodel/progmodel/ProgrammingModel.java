@@ -35,7 +35,7 @@ public interface ProgrammingModel {
 
     // -- ENUM TYPES
     
-    static enum Marker {
+    enum Marker {
         DEPRECATED, 
         INCUBATING,
         JDO,
@@ -49,7 +49,7 @@ public interface ProgrammingModel {
      * Order is defined by {@link FacetProcessingOrder#ordinal()}
      *
      */
-    static enum FacetProcessingOrder {
+    enum FacetProcessingOrder {
         
         A1_FALLBACK_DEFAULTS,
         A2_AFTER_FALLBACK_DEFAULTS,
@@ -85,7 +85,7 @@ public interface ProgrammingModel {
      * Order is defined by {@link ValidationOrder#ordinal()}
      *
      */
-    static enum ValidationOrder {
+    enum ValidationOrder {
         
         A0_BEFORE_BUILTIN,
         A1_BUILTIN,
@@ -101,7 +101,7 @@ public interface ProgrammingModel {
      * Order is defined by {@link PostProcessingOrder#ordinal()}
      *
      */
-    static enum PostProcessingOrder {
+    enum PostProcessingOrder {
         
         A0_BEFORE_BUILTIN,
         A1_BUILTIN,
@@ -134,7 +134,7 @@ public interface ProgrammingModel {
     
     // -- SHORTCUTS
     
-    /** shortcut for see {@link #addFactory(FacetProcessingOrder, Class, Supplier, Marker...)}*/
+    /** shortcut for see {@link #addFactory(FacetProcessingOrder, FacetFactory, Marker...)}*/
     default <T extends FacetFactory> void addFactory(
             FacetProcessingOrder order, 
             Class<T> type, 
@@ -144,7 +144,7 @@ public interface ProgrammingModel {
         addFactory(order, supplier.get(), markers);
     }
     
-    /** shortcut for see {@link #addValidator(ValidationOrder, Class, Supplier, Marker...)} */
+    /** shortcut for see {@link #addValidator(ValidationOrder, MetaModelValidator, Marker...)} */
     default void addValidator(
             MetaModelValidator validator, 
             Marker ... markers) {
@@ -154,7 +154,7 @@ public interface ProgrammingModel {
     }
 
     
-    /** shortcut for see {@link #addValidator(ValidationOrder, Class, Supplier, Marker...)} */
+    /** shortcut for see {@link #addValidator(MetaModelValidator, Marker...)} */
     default void addValidator(MetaModelValidatorVisiting.Visitor visitor, Marker ... markers) {
         addValidator(MetaModelValidatorVisiting.of(visitor), markers);
     }
@@ -165,7 +165,7 @@ public interface ProgrammingModel {
         addValidator(MetaModelValidatorVisiting.of(visitor, specPredicate), markers);
     }
 
-    /** shortcut for see {@link #addPostProcessor(PostProcessingOrder, Class, Supplier, Marker...)}*/
+    /** shortcut for see {@link #addPostProcessor(PostProcessingOrder, ObjectSpecificationPostProcessor, Marker...)}*/
     default <T extends ObjectSpecificationPostProcessor> void addPostProcessor(
             PostProcessingOrder order, 
             Class<T> type, 

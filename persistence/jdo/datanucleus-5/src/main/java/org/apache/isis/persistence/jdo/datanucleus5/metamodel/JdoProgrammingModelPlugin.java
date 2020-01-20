@@ -236,6 +236,7 @@ public class JdoProgrammingModelPlugin implements MetaModelRefiner {
                 }
                 final String packageName = aPackage.getName();
 
+                //noinspection StatementWithEmptyBody
                 if (objSpec.isValue() || objSpec.isAbstract() || objSpec.isMixin() ||
                         objSpec.isParentedOrFreeCollection() ||
                         objSpec.getFullIdentifier().startsWith("java") ||
@@ -243,11 +244,7 @@ public class JdoProgrammingModelPlugin implements MetaModelRefiner {
                         objSpec.getFullIdentifier().startsWith("org.apache.isis")) {
                     // ignore
                 } else {
-                    List<String> classNames = domainObjectClassNamesByPackage.get(packageName);
-                    if (classNames == null) {
-                        classNames = _Lists.newArrayList();
-                        domainObjectClassNamesByPackage.put(packageName, classNames);
-                    }
+                    List<String> classNames = domainObjectClassNamesByPackage.computeIfAbsent(packageName, k -> _Lists.newArrayList());
                     classNames.add(objSpec.getFullIdentifier());
                 }
                 return true;
