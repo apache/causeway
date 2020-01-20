@@ -53,7 +53,7 @@ public class TreePanelFactories {
 
             final ScalarModel scalarModel = (ScalarModel) model;
 
-            if(!scalarModel.isScalarTypeSubtypeOf(org.apache.isis.applib.tree.TreeNode.class)) {
+            if(!scalarModel.isScalarTypeSubtypeOf(org.apache.isis.applib.graph.tree.TreeNode.class)) {
                 return ApplicationAdvice.DOES_NOT_APPLY;
             }
 
@@ -88,7 +88,7 @@ public class TreePanelFactories {
                 return ApplicationAdvice.DOES_NOT_APPLY;
             }
 
-            return appliesIf( adapter.getPojo() instanceof org.apache.isis.applib.tree.TreeNode );
+            return appliesIf( adapter.getPojo() instanceof org.apache.isis.applib.graph.tree.TreeNode );
         }
 
         @Override

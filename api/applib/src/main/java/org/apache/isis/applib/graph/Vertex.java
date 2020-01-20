@@ -16,25 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.applib.graph;
 
-package org.apache.isis.core.metamodel.facets.value.treenode;
+import java.util.stream.Stream;
 
-import org.apache.isis.applib.graph.tree.TreeNode;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
+/**
+ * Fundamental building block for graph structures. 
+ * 
+ * @since 2.0
+ *
+ * @param <T> type constraint for values contained by this vertex
+ */
+public interface Vertex<T> {
 
-@SuppressWarnings("rawtypes")
-public class TreeNodeValueFacetUsingSemanticsProviderFactory
-extends ValueFacetUsingSemanticsProviderFactory<TreeNode> {
+    // -- VALUE
 
-    @Override
-    public void process(final ProcessClassContext processClassContext) {
-        final Class<?> type = processClassContext.getCls();
-        final FacetHolder holder = processClassContext.getFacetHolder();
+    public T getValue();
 
-        if (!TreeNode.class.isAssignableFrom(type)) {
-            return;
-        }
-        addFacets(new TreeNodeValueSemanticsProvider(holder));
-    }
+    // -- EDGES
+
+    public int getIncomingCount();
+    public int getOutgoingCount();
+
+    public Stream<Edge<T>> streamIncoming();
+    public Stream<Edge<T>> streamOutgoing();
+
+
 }

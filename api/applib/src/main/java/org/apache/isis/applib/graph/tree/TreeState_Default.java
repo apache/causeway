@@ -16,25 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.applib.graph.tree;
 
-package org.apache.isis.core.metamodel.facets.value.treenode;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.apache.isis.applib.graph.tree.TreeNode;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
+class TreeState_Default implements TreeState {
+    private static final long serialVersionUID = 7971539034663543462L;
 
-@SuppressWarnings("rawtypes")
-public class TreeNodeValueFacetUsingSemanticsProviderFactory
-extends ValueFacetUsingSemanticsProviderFactory<TreeNode> {
+    private final Set<TreePath> expandedNodes = new HashSet<>();
 
     @Override
-    public void process(final ProcessClassContext processClassContext) {
-        final Class<?> type = processClassContext.getCls();
-        final FacetHolder holder = processClassContext.getFacetHolder();
-
-        if (!TreeNode.class.isAssignableFrom(type)) {
-            return;
-        }
-        addFacets(new TreeNodeValueSemanticsProvider(holder));
+    public Set<TreePath> getExpandedNodePaths() {
+        return expandedNodes;
     }
+
 }

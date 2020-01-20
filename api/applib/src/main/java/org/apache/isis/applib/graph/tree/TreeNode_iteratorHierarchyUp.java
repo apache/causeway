@@ -16,17 +16,38 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.tree;
+package org.apache.isis.applib.graph.tree;
 
-import java.io.Serializable;
-import java.util.Set;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-public interface TreeState extends Serializable {
+class TreeNode_iteratorHierarchyUp<T> implements Iterator<TreeNode<T>> {
 
-    public static TreeState rootCollapsed() {
-        return new TreeState_Default();
+    private TreeNode<T> next;
+
+    TreeNode_iteratorHierarchyUp(TreeNode<T> treeNode) {
+        next = treeNode;
     }
 
-    public Set<TreePath> getExpandedNodePaths();
+    @Override
+    public boolean hasNext() {
+        return next!=null;
+    }
+
+    @Override
+    public TreeNode<T> next() {
+        if(next==null) {
+            throw new NoSuchElementException("Iterator has run out of elements.");
+        }
+        final TreeNode<T> result = next;
+        next = fetchNext(next);
+        return result;
+    }
+
+    // -- HELPER
+
+    private TreeNode<T> fetchNext(TreeNode<T> current) {
+        return current.getParentIfAny();
+    }
 
 }

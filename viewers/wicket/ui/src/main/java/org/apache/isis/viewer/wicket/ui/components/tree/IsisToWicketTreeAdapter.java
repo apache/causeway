@@ -40,10 +40,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.applib.graph.tree.TreeAdapter;
+import org.apache.isis.applib.graph.tree.TreeNode;
+import org.apache.isis.applib.graph.tree.TreePath;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.tree.TreeAdapter;
-import org.apache.isis.applib.tree.TreeNode;
-import org.apache.isis.applib.tree.TreePath;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.functions._Functions;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;

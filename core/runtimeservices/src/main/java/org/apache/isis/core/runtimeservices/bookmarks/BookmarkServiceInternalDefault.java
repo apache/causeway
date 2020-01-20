@@ -19,8 +19,6 @@
 package org.apache.isis.core.runtimeservices.bookmarks;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Set;
 
@@ -33,11 +31,11 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.graph.tree.TreeState;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.applib.tree.TreeState;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Sets;
@@ -210,18 +208,18 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
     private final static Set<Class<? extends Serializable>> serializableFinalTypes = _Sets.of(
             String.class, String[].class,
             Class.class, Class[].class,
-            Boolean.class, boolean.class, Boolean[].class, boolean[].class,
-            Byte.class, byte.class, Byte[].class, byte[].class,
-            Short.class, short.class, Short[].class, short[].class,
-            Integer.class, int.class, Integer[].class, int[].class,
-            Long.class, long.class, Long[].class, long[].class,
-            Float.class, float.class, Float[].class, float[].class,
-            Double.class, double.class, Double[].class, double[].class
+            Character.class, Character[].class, char[].class,
+            Boolean.class, Boolean[].class, boolean[].class,
+            // Numbers
+            Byte[].class, byte[].class,
+            Short[].class, short[].class,
+            Integer[].class, int[].class,
+            Long[].class, long[].class,
+            Float[].class, float[].class,
+            Double[].class, double[].class
             );
 
     private final static List<Class<? extends Serializable>> serializableTypes = _Lists.of(
-            BigDecimal.class,
-            BigInteger.class,
             java.util.Date.class,
             java.sql.Date.class,
             Enum.class,
@@ -232,6 +230,10 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
     private static boolean isPredefinedSerializable(final Class<?> cls) {
         if(!Serializable.class.isAssignableFrom(cls)) {
             return false;
+        }
+        // primitive ... boolean, byte, char, short, int, long, float, and double. 
+        if(cls.isPrimitive() || Number.class.isAssignableFrom(cls)) {
+            return true;
         }
         //[ahuber] any non-scalar values could be problematic, so we are careful with wild-cards here
         if(cls.getName().startsWith("java.time.")) {

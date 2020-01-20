@@ -22,8 +22,8 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.tree.TreeNode;
-import org.apache.isis.applib.tree.TreePath;
+import org.apache.isis.applib.graph.tree.TreeNode;
+import org.apache.isis.applib.graph.tree.TreePath;
 
 import lombok.val;
 

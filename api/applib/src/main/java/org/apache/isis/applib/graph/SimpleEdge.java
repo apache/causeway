@@ -16,25 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.applib.graph;
 
-package org.apache.isis.core.metamodel.facets.value.treenode;
+import lombok.Value;
 
-import org.apache.isis.applib.graph.tree.TreeNode;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
+/**
+ * Fundamental building block for graph structures. 
+ * 
+ * @since 2.0
+ *
+ * @param <T> type constraint for values contained by this edge's vertices
+ */
+@Value(staticConstructor = "of")
+public class SimpleEdge<T> implements Edge<T> {
 
-@SuppressWarnings("rawtypes")
-public class TreeNodeValueFacetUsingSemanticsProviderFactory
-extends ValueFacetUsingSemanticsProviderFactory<TreeNode> {
+    Vertex<T> from;
+    Vertex<T> to;
 
-    @Override
-    public void process(final ProcessClassContext processClassContext) {
-        final Class<?> type = processClassContext.getCls();
-        final FacetHolder holder = processClassContext.getFacetHolder();
-
-        if (!TreeNode.class.isAssignableFrom(type)) {
-            return;
-        }
-        addFacets(new TreeNodeValueSemanticsProvider(holder));
-    }
 }

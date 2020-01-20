@@ -22,7 +22,7 @@ import java.io.File;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.tree.TreeAdapter;
+import org.apache.isis.applib.graph.tree.TreeAdapter;
 
 import lombok.val;
 
