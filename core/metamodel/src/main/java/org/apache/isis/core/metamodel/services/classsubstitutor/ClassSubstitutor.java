@@ -71,9 +71,6 @@ public interface ClassSubstitutor {
         
         /**
          * Forces the (operand-) class never to be replaced.
-         * 
-         * @implNote not required for ClassSubstitutor implementations!
-         * (for framework internal use when aggregating)
          */
         public static Substitution neverReplaceClass() {
             return NEVER_REPLACE_CLASS;

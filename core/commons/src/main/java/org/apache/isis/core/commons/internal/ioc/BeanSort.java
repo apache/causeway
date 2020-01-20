@@ -44,9 +44,19 @@ public enum BeanSort {
     /**
      * Injectable object, associated with a lifecycle context 
      * (application-scoped, request-scoped, ...).
+     * <p>
+     * to be introspected: YES
      */
-    MANAGED_BEAN, 
+    MANAGED_BEAN_CONTRIBUTING, 
 
+    /**
+     * Injectable object, associated with a lifecycle context 
+     * (application-scoped, request-scoped, ...).
+     * <p>
+     * to be introspected: NO
+     */
+    MANAGED_BEAN_NOT_CONTRIBUTING,
+    
     /**
      * Object associated with an 'entity' or 'bean' to act as contributer of 
      * domain actions or properties. Might also be stateful similar to VIEW_MODEL.
@@ -64,9 +74,11 @@ public enum BeanSort {
     COLLECTION,
 
     UNKNOWN;
+    
+    // -- SIMPLE PREDICATES
 
     public boolean isManagedBean() {
-        return this == MANAGED_BEAN;
+        return this == MANAGED_BEAN_CONTRIBUTING || this == MANAGED_BEAN_NOT_CONTRIBUTING;
     }
 
     public boolean isMixin() {
@@ -92,5 +104,20 @@ public enum BeanSort {
     public boolean isUnknown() {
         return this == UNKNOWN;
     }
+    
+    // -- HIGER LEVEL PREDICATES
+    
+    public boolean isToBeIntrospected() {
+        
+        if(isUnknown()) {
+            return false;
+        }
+        if(this == MANAGED_BEAN_NOT_CONTRIBUTING) {
+            return false;
+        }
+        
+        return true;
+    }
+    
 
 }

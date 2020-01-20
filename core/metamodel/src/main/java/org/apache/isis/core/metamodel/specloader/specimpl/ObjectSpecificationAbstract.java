@@ -59,6 +59,7 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
@@ -1089,10 +1090,14 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 .getIsisBeanTypeRegistry();
     }
 
+    //TODO just make 'sort' a field of ObjectSpecification 
     protected BeanSort sortOf(ObjectSpecification spec) {
 
         if(isManagedBean()) { // <-- not a facet, because we get this information earlier (during class scanning)
-            return BeanSort.MANAGED_BEAN;
+            if(spec.getFacet(DomainServiceFacet.class)!=null) {
+                return BeanSort.MANAGED_BEAN_CONTRIBUTING;    
+            }
+            return BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING;
         }
         if(containsFacet(ValueFacet.class)) {
             return BeanSort.VALUE;

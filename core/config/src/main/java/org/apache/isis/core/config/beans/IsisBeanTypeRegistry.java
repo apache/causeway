@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Consumer;
 
 import javax.enterprise.inject.Vetoed;
 
@@ -108,26 +107,6 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
 
     // -- FILTER
     
-    public void ifToBeInspectedThen(Class<?> type, Consumer<BeanSort> onInspectionRequired) {
-        
-        val beanSort = quickClassify(type);
-        
-        val isManagedObjectToBeInspected = !beanSort.isManagedBean() 
-                && !beanSort.isUnknown();
-        
-        val isManagedBeanToBeInspected = beanSort.isManagedBean() 
-                && (findNearestAnnotation(type, DomainService.class).isPresent()
-                        // || findNearestAnnotation(type, Service.class).isPresent() 
-                        );
-
-        val isToBeInspected = isManagedBeanToBeInspected || isManagedObjectToBeInspected;
-        
-        if(isToBeInspected) {
-            onInspectionRequired.accept(beanSort);
-        }
-    }
-    
-
     @Override
     public void intercept(TypeMetaData typeMeta) {
         
@@ -143,18 +122,18 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
         } else {
             typeMeta.setBeanNameOverride(extractObjectType(type).orElse(null));
         }
-
-        ifToBeInspectedThen(type, beanSort->{
-
+        
+        val beanSort = quickClassify(type);
+        
+        if(beanSort.isToBeIntrospected()) {
             addIntrospectableType(beanSort, typeMeta);
             
             if(log.isDebugEnabled()) {
-                log.debug("to-be-inspected: {} [{}]",                        
+                log.debug("to-be-introspected: {} [{}]",                        
                                 type,
                                 beanSort.name());
             }
-            
-        });
+        }
         
     }
     
@@ -191,7 +170,8 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
             introspectableTypes.put(type, sort);
             
             switch (sort) {
-            case MANAGED_BEAN:
+            case MANAGED_BEAN_CONTRIBUTING:
+            case MANAGED_BEAN_NOT_CONTRIBUTING:
                 managedBeanNamesByType.put(type, typeMeta.getEffectiveBeanName());
                 return;
             case MIXIN:
@@ -214,7 +194,7 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
         }
     }
     
-    private BeanSort quickClassify(Class<?> type) {
+    public BeanSort quickClassify(Class<?> type) {
 
         requires(type, "type");
         
@@ -222,13 +202,9 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
             return BeanSort.UNKNOWN; // reject
         }
 
-        if(Collection.class.isAssignableFrom(type)) {
-            return BeanSort.COLLECTION;
-        }
-
         val aDomainService = findNearestAnnotation(type, DomainService.class);
         if(aDomainService.isPresent()) {
-            return BeanSort.MANAGED_BEAN;
+            return BeanSort.MANAGED_BEAN_CONTRIBUTING;
         }
 
         //this takes precedence over whatever @DomainObject has to say
@@ -264,7 +240,11 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
         }
 
         if(findNearestAnnotation(type, Component.class).isPresent()) {
-            return BeanSort.MANAGED_BEAN;
+            return BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING;
+        }
+        
+        if(Collection.class.isAssignableFrom(type)) {
+            return BeanSort.COLLECTION;
         }
 
         if(Serializable.class.isAssignableFrom(type)) {

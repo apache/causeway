@@ -36,10 +36,10 @@ import org.apache.isis.applib.services.factory.FactoryService;
 @Qualifier("Default")
 public class ApplicationFeatureFactory {
 
+    @Inject FactoryService factoryService;
+    
     public ApplicationFeature newApplicationFeature() {
         return factoryService.instantiate(ApplicationFeature.class);
     }
-
-    @Inject FactoryService factoryService;
 
 }

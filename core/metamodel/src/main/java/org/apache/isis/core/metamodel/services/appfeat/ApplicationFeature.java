@@ -28,6 +28,7 @@ import javax.enterprise.inject.Vetoed;
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.util.Equality;
@@ -45,6 +46,7 @@ import org.apache.isis.core.commons.internal.collections._Sets;
  *     {@link ApplicationFeatureRepository}, eg {@link ApplicationFeatureRepository#classNamesContainedIn(String, ApplicationMemberType)}.
  * </p>
  */
+@Value
 public class ApplicationFeature implements Comparable<ApplicationFeature> {
 
     public static abstract class PropertyDomainEvent<T> 

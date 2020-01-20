@@ -19,44 +19,40 @@
 
 package org.apache.isis.core.metamodel.services.classsubstitutor;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.Vector;
-
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
+import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
 
 import lombok.NonNull;
+import lombok.val;
 
 @Component
-@Named("isisMetaModel.ClassSubstitutorForCollections")
-@Order(OrderPrecedence.MIDPOINT - 10)
-public class ClassSubstitutorForCollections implements ClassSubstitutor {
+@Named("isisMetaModel.ClassSubstitutorForDomainObjects")
+@Order(OrderPrecedence.MIDPOINT - 20) // before ClassSubstitutorForCollections
+public class ClassSubstitutorForDomainObjects implements ClassSubstitutor {
 
+    private IsisBeanTypeRegistry isisBeanTypeRegistry;
+
+    @Inject
+    public ClassSubstitutorForDomainObjects(IsisBeanTypeRegistryHolder beanTypeRegistryHolder) {
+        this.isisBeanTypeRegistry = beanTypeRegistryHolder.getIsisBeanTypeRegistry();
+    }
+    
     @Override
     public Substitution getSubstitution(@NonNull Class<?> cls) {
-        if(Vector.class.isAssignableFrom(cls)) {
-            return Substitution.replaceWith(Vector.class);
-        }
-        if(List.class.isAssignableFrom(cls)) {
-            return Substitution.replaceWith(List.class);
-        }
-        if(SortedSet.class.isAssignableFrom(cls)) {
-            return Substitution.replaceWith(SortedSet.class);
-        }
-        if(Set.class.isAssignableFrom(cls)) {
-            return Substitution.replaceWith(Set.class);
-        }
-        if(Collection.class.isAssignableFrom(cls)) {
-            return Substitution.replaceWith(Collection.class);
-        }
         
+        val beanSort = isisBeanTypeRegistry.quickClassify(cls);
+        
+        if(beanSort.isToBeIntrospected() && !beanSort.isCollection()) {
+            return Substitution.neverReplaceClass();
+        }
         return Substitution.passThrough(); // indifferent
     }
+    
 }

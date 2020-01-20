@@ -59,7 +59,7 @@ final class ObjectLoader_builtinHandlers {
                 // eg "NONEXISTENT:123"
                 return true;
             }
-
+            
             // we don't guard against the identifier being null, because, this is ok 
             // for services and values
             return false;

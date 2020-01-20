@@ -25,6 +25,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.graph.tree.TreeAdapter;
 
 @Component
 @Named("isisMetaModel.ClassSubstitutorDefault")
@@ -39,7 +40,8 @@ public class ClassSubstitutorDefault extends ClassSubstitutorAbstract {
         ignoreSpringFramework();
         ignoreJacksonAndGson();
         skipDataNucleusProxy();
-
+        
+        ignoreClass(TreeAdapter.class.getName());
     }
 
     protected void ignoreCglib() {

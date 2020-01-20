@@ -166,7 +166,11 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
                 programmingModel, isisConfiguration, isisSystemEnvironment,
                 serviceRegistry, isisBeanTypeRegistryHolder,
                 new ValueTypeRegistry(Collections.singletonList(new ValueTypeProviderDefault())),
-                new ClassSubstitutorRegistry(Collections.unmodifiableList(Arrays.asList(new ClassSubstitutorDefault(), new ClassSubstitutorForCollections()))));
+                new ClassSubstitutorRegistry(_Lists.of(
+                        //new ClassSubstitutorForDomainObjects(),
+                        new ClassSubstitutorForCollections(),
+                        new ClassSubstitutorDefault() 
+                        )));
 
         instance.metaModelContext = serviceRegistry.lookupServiceElseFail(MetaModelContext.class);
         instance.facetProcessor = new FacetProcessor(programmingModel, instance.metaModelContext);
@@ -234,22 +238,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
                 typeRegistry.veto(type);
             }
 
-            switch (sort) {
-            case MANAGED_BEAN:
-                domainServiceSpecs.add(spec);
-                return;
-            case MIXIN:
-            case ENTITY:
-            case VIEW_MODEL:
-                domainObjectSpecs.add(spec);
-                return;
-
-            case VALUE:
-            case COLLECTION:
-                // handled by ValueTypeRegistry earlier
-            case UNKNOWN:
-            default:
-                // ignore
+            if(sort.isToBeIntrospected()) {
+                domainObjectSpecs.add(spec);   
             }
 
         });
@@ -380,7 +370,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         val substitutedType = substitute.apply(type);
         
         val typeName = substitutedType.getName();
-
+        
         final ObjectSpecification cachedSpec;
         
         // we try not to block on long running code ... 'spec.introspectUpTo(upTo);'
@@ -455,29 +445,26 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         if(isMetamodelFullyIntrospected() 
                 && isisConfiguration.getCore().getMetaModel().getIntrospector().isLockAfterFullIntrospection()) {
-            
+
             val typeRegistry = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
-            
+            val sort = typeRegistry.quickClassify(cls);
+
+//          ISIS-2256:
+//            throw _Exceptions.illegalState(
+//                    "Cannot introspect class '%s' of sort %s, because the metamodel has been fully introspected and is now locked. " +
+//                    "One reason this can happen is if you are attempting to invoke an action through the WrapperFactory " +
+//                    "on a service class incorrectly annotated with Spring's @Service annotation instead of " +
+//                    "@DomainService.",
+//                    cls.getName(), sort);
+
             log.warn("Missed class '{}' when the metamodel was fully introspected.", cls.getName());
-            
-            typeRegistry.ifToBeInspectedThen(cls, sort->{
-            
+            if(sort.isToBeIntrospected()) {
                 log.error("Introspecting class '%s' of sort %s, after the metamodel had been fully introspected and is now locked. " +
                       "One reason this can happen is if you are attempting to invoke an action through the WrapperFactory " +
                       "on a service class incorrectly annotated with Spring's @Service annotation instead of " +
                       "@DomainService.",
                         cls.getName(), sort);
-
-//                ISIS-2256: 'fail early' applies only during bootstrapping
-//                never do this when the application is already fully initialized and running    
-//                
-//                throw _Exceptions.illegalState(
-//                        "Cannot introspect class '%s' of sort %s, because the metamodel has been fully introspected and is now locked. " +
-//                        "One reason this can happen is if you are attempting to invoke an action through the WrapperFactory " +
-//                        "on a service class incorrectly annotated with Spring's @Service annotation instead of " +
-//                        "@DomainService.",
-//                        cls.getName(), sort);
-            });
+            }
         }
 
         // ... and create the specs

@@ -449,7 +449,7 @@ public abstract class PageAbstract extends WebPageBase implements ActionPromptPr
         case INLINE_AS_IF_EDIT:
         default:
             final DialogMode dialogMode =
-                    sort == BeanSort.MANAGED_BEAN
+                    sort.isManagedBean()
                             ? getCommonContext().getConfiguration().getViewer().getWicket().getDialogModeForMenu()
                             : getCommonContext().getConfiguration().getViewer().getWicket().getDialogMode();
             switch (dialogMode) {
