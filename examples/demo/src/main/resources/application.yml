@@ -81,8 +81,7 @@ isis:
         enable: false
       bookmarked-pages:
         show-chooser: false
-      breadcrumbs:
-        show-chooser: false
+        show-drop-down-on-footer: false
       dialog-mode: sidebar
       dialog-mode-for-menu: modal
 
