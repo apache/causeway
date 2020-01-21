@@ -26,6 +26,7 @@ import javax.inject.Named;
 
 import org.apache.wicket.markup.html.basic.Label;
 
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.viewer.wicket.model.models.AboutModel;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -77,11 +78,9 @@ public class AboutPanel extends PanelAbstract<AboutModel> {
     public AboutPanel(final String id) {
         super(id);
 
-        val webAppConfigBean = super.getWebAppConfigBean();
-        
-        add(new LabelVisibleOnlyIfNonEmpty(ID_APPLICATION_NAME, webAppConfigBean.getApplicationName()));
-        add(new LabelVisibleOnlyIfNonEmpty(ID_APPLICATION_VERSION, webAppConfigBean.getApplicationVersion()));
-        add(new LabelVisibleOnlyIfNonEmpty(ID_ABOUT_MESSAGE, webAppConfigBean.getAboutMessage()));
+        add(new LabelVisibleOnlyIfNonEmpty(ID_APPLICATION_NAME, getIsisConfiguration().getViewer().getWicket().getApplication().getName()));
+        add(new LabelVisibleOnlyIfNonEmpty(ID_APPLICATION_VERSION, getIsisConfiguration().getViewer().getWicket().getApplication().getVersion()));
+        add(new LabelVisibleOnlyIfNonEmpty(ID_ABOUT_MESSAGE, getIsisConfiguration().getViewer().getWicket().getApplication().getAbout()));
 
         if(jarManifestModel == null) {
             jarManifestModel = new JarManifestModel(super.getCommonContext(),  metaInfManifestIs);

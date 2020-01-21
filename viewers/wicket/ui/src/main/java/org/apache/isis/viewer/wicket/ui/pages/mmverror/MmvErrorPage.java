@@ -69,11 +69,11 @@ public class MmvErrorPage extends WebPageBase {
     }
 
     private MarkupContainer addPageTitle() {
-        return add(new Label(ID_PAGE_TITLE, getWebAppConfigBean().getApplicationName()));
+        return add(new Label(ID_PAGE_TITLE, getIsisConfiguration().getViewer().getWicket().getApplication().getName()));
     }
 
     private void addApplicationName() {
-        add(new Label(ID_APPLICATION_NAME, getWebAppConfigBean().getApplicationName()));
+        add(new Label(ID_APPLICATION_NAME, getIsisConfiguration().getViewer().getWicket().getApplication().getName()));
     }
 
     private void addValidationErrors() {

@@ -28,6 +28,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
@@ -55,6 +56,7 @@ public class PanelBase<T> extends GenericPanel<T> implements IsisWebAppCommonCon
 
     private transient WicketViewerSettings wicketViewerSettings;
     private transient WebAppConfiguration webAppConfigBean;
+    private transient IsisConfiguration isisConfiguration;
     private transient PageClassRegistry pageClassRegistry;
     private transient ImageResourceCache imageCache;
     private transient MetaModelContext metaModelContext;
@@ -89,6 +91,10 @@ public class PanelBase<T> extends GenericPanel<T> implements IsisWebAppCommonCon
         return webAppConfigBean = computeIfAbsent(WebAppConfiguration.class, webAppConfigBean);
     }
     
+    public IsisConfiguration getIsisConfiguration() {
+        return isisConfiguration = computeIfAbsent(IsisConfiguration.class, isisConfiguration);
+    }
+
     public PageClassRegistry getPageClassRegistry() {
         return pageClassRegistry = computeIfAbsent(PageClassRegistry.class, pageClassRegistry);
     }

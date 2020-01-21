@@ -103,8 +103,8 @@ public class RegistrationFormPanel extends PanelBase<Void> {
 
                 final EmailRegistrationEvent emailRegistrationEvent = new EmailRegistrationEvent(
                         email, 
-                        confirmationUrl, 
-                        webAppConfigBean.getApplicationName());
+                        confirmationUrl,
+                        getIsisConfiguration().getViewer().getWicket().getApplication().getName());
 
                 boolean emailSent = emailNotificationService.send(emailRegistrationEvent);
                 if (emailSent) {

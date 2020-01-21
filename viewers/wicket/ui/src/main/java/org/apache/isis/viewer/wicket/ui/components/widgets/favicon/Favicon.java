@@ -24,6 +24,7 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.util.string.Strings;
 
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppConfiguration;
 
 /**
@@ -34,6 +35,7 @@ public class Favicon extends WebComponent {
     private static final long serialVersionUID = 1L;
 
     @Inject private transient WebAppConfiguration webAppConfigBean;
+    @Inject private transient IsisConfiguration isisConfiguration;
 
     private String url;
     private String contentType;
@@ -42,7 +44,7 @@ public class Favicon extends WebComponent {
         super(id);
         if(webAppConfigBean!=null) {
             url = webAppConfigBean.getFaviconUrl();
-            contentType = webAppConfigBean.getFaviconContentType();
+            contentType = isisConfiguration.getViewer().getWicket().getApplication().getFaviconContentType();
         }
     }
 

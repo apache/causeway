@@ -153,7 +153,7 @@ public abstract class PageAbstract extends WebPageBase implements ActionPromptPr
 
             themeDiv = new WebMarkupContainer(ID_THEME);
             add(themeDiv);
-            String applicationName = getWebAppConfigBean().getApplicationName();
+            String applicationName = getIsisConfiguration().getViewer().getWicket().getApplication().getName();
             if(applicationName != null) {
                 themeDiv.add(new CssClassAppender(CssClassAppender.asCssStyle(applicationName)));
             }
@@ -241,7 +241,7 @@ public abstract class PageAbstract extends WebPageBase implements ActionPromptPr
     protected void setTitle(final String title) {
         addOrReplace(new Label(ID_PAGE_TITLE, title != null
                 ? title
-                        : getWebAppConfigBean().getApplicationName()));
+                        : getIsisConfiguration().getViewer().getWicket().getApplication().getName()));
     }
 
     private Class<? extends Page> getSignInPage() {

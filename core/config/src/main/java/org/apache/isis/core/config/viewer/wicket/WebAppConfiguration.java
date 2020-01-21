@@ -52,11 +52,6 @@ public class WebAppConfiguration {
 
     @Getter private AbstractResource menubarsLayoutXml;
     
-    @Getter private String applicationName;
-    @Getter private String applicationVersion;
-    @Getter private String aboutMessage;
-    @Getter private String faviconContentType;
-
     // URLs *not* sensitive to context path (remove any leading /)
     @Getter private String applicationCss;
     @Getter private String applicationJs;
@@ -78,33 +73,29 @@ public class WebAppConfiguration {
     @PostConstruct
     public void init() {
 
-        val application = isisConfiguration.getViewer().getWicket().getApplication();
+        this.menubarsLayoutXml = lookup(getIsisConfiguration().getViewer().getWicket().getApplication().getMenubarsLayoutXml());
         
-        this.menubarsLayoutXml = lookup(application.getMenubarsLayoutXml());
-        
-        this.applicationName = application.getName();
-        this.aboutMessage = application.getAbout();
-        this.applicationVersion = application.getVersion();
-        
-        this.applicationCss = ignoreLeadingSlash(application.getCss());
-        this.applicationJs = ignoreLeadingSlash(application.getJs());
+        this.applicationCss = ignoreLeadingSlash(getIsisConfiguration().getViewer().getWicket().getApplication().getCss());
+        this.applicationJs = ignoreLeadingSlash(getIsisConfiguration().getViewer().getWicket().getApplication().getJs());
 
-        this.brandLogoHeader = contextPathSensisitve(application.getBrandLogoHeader());
-        this.brandLogoSignin = contextPathSensisitve(application.getBrandLogoSignin());
-        this.faviconUrl = contextPathSensisitve(application.getFaviconUrl());
+        this.brandLogoHeader = contextPathSensitive(getIsisConfiguration().getViewer().getWicket().getApplication().getBrandLogoHeader());
+        this.brandLogoSignin = contextPathSensitive(getIsisConfiguration().getViewer().getWicket().getApplication().getBrandLogoSignin());
+        this.faviconUrl = contextPathSensitive(getIsisConfiguration().getViewer().getWicket().getApplication().getFaviconUrl());
         
-        this.faviconContentType = application.getFaviconContentType();
-        
-        val welcome = isisConfiguration.getViewer().getWicket().getWelcome();
+        val welcome = getIsisConfiguration().getViewer().getWicket().getWelcome();
         
         this.welcomeMessage = ignoreLeadingSlash(welcome.getText());
 
     }
 
+    private IsisConfiguration getIsisConfiguration() {
+        return isisConfiguration;
+    }
+
 
     // -- HELPER
 
-    private String contextPathSensisitve(String url) {
+    private String contextPathSensitive(String url) {
         return webAppContextPath.prependContextPathIfLocal(url); 
     }
     

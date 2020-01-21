@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppConfiguration;
 
 /**
@@ -35,6 +36,7 @@ public class BrandName extends Label {
     private final Placement placement;
 
     @Inject private transient WebAppConfiguration webAppConfigBean;
+    @Inject private transient IsisConfiguration isisConfiguration;
 
     private String logoHeaderUrl;
     private String logoSigninUrl;
@@ -51,7 +53,7 @@ public class BrandName extends Label {
         this.placement = placement;
         
         if(webAppConfigBean!=null) {
-            applicationName = webAppConfigBean.getApplicationName();
+            applicationName = isisConfiguration.getViewer().getWicket().getApplication().getName();
             logoHeaderUrl = webAppConfigBean.getBrandLogoHeader();
             logoSigninUrl = webAppConfigBean.getBrandLogoSignin();
         }

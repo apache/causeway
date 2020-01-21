@@ -98,7 +98,7 @@ public class AccountManagementPageAbstract extends WebPageBase {
 
 
     private MarkupContainer addPageTitle() {
-        String applicationName = getWebAppConfigBean().getApplicationName();
+        String applicationName = getIsisConfiguration().getViewer().getWicket().getApplication().getName();
         return add(new Label(ID_PAGE_TITLE, applicationName));
     }
 
