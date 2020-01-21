@@ -408,7 +408,7 @@ public abstract class PageAbstract extends WebPageBase implements ActionPromptPr
     }
 
     protected boolean isShowBreadcrumbs() {
-        return getCommonContext().getConfiguration().getViewer().getWicket().getBreadcrumbs().isShowChooser();
+        return getCommonContext().getConfiguration().getViewer().getWicket().getBookmarkedPages().isShowDropDownOnFooter();
     }
 
     protected void bookmarkPageIfShown(final BookmarkableModel<?> model) {

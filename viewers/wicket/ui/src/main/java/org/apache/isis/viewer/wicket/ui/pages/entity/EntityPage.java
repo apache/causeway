@@ -67,7 +67,7 @@ public class EntityPage extends PageAbstract {
 
     /**
      * Called reflectively, in support of {@link BookmarkablePageLink} links. 
-     * Specifically handled by {@link org.apache.isis.viewer.wicket.viewer.IsisWicketApplication_newPageFactory}
+     * Specifically handled by <code>IsisWicketApplication#newPageFactory()</code>
      */
     public static EntityPage bookmarked(
             IsisWebAppCommonContext commonContext, 
@@ -100,8 +100,7 @@ public class EntityPage extends PageAbstract {
     }
 
     /**
-     * Ensure that any {@link ConcurrencyException} that might have occurred already
-     * (eg from an action invocation) is show.
+     * Ensures that any exception that might have occurred already (eg from an action invocation) is shown.
      */
     public EntityPage(
             IsisWebAppCommonContext commonContext, 

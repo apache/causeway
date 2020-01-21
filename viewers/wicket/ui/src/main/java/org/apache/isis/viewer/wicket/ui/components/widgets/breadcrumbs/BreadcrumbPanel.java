@@ -151,7 +151,7 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
     protected void onConfigure() {
         super.onConfigure();
 
-        boolean shouldShow = getConfiguration().getViewer().getWicket().getBreadcrumbs().isShowChooser();
+        boolean shouldShow = getConfiguration().getViewer().getWicket().getBookmarkedPages().isShowDropDownOnFooter();
         setVisible(shouldShow);
     }
 

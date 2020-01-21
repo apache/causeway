@@ -2359,7 +2359,11 @@ public class IsisConfiguration {
                 private String js;
 
                 /**
+                 * Specifies the file name containing the menubars.
                  *
+                 * <p>
+                 *     This is expected to be a local resource.
+                 * </p>
                  */
                 @NotNull @NotEmpty
                 private String menubarsLayoutXml = "menubars.layout.xml";
@@ -2375,8 +2379,11 @@ public class IsisConfiguration {
                 
                 /**
                  * The version of the application, eg 1.0, 1.1, etc.
-                 * If present, then this will be shown in the footer on every page as well as on the 
+                 *
+                 * <p>
+                 * If present, then this will be shown in the footer on every page as well as on the
                  * about page.
+                 * </p>
                  */
                 private String version;
             }
@@ -2384,23 +2391,40 @@ public class IsisConfiguration {
             private final BookmarkedPages bookmarkedPages = new BookmarkedPages();
             @Data
             public static class BookmarkedPages {
+
                 /**
-                 * Determines whether the bookmarks should be available in the header.
+                 * Whether the panel providing linsk to previously visited object should be accessible from the top-left of the header.
                  */
                 private boolean showChooser = true;
 
+                /**
+                 * Specifies the maximum number of bookmarks to show.
+                 *
+                 * <p>
+                 *     These are aged out on an MRU-LRU basis.
+                 * </p>
+                 */
                 private int maxSize = 15;
+
+                /**
+                 * Whether the drop-down list of previously visited objects should be shown in the footer.
+                 */
+                private boolean showDropDownOnFooter = true;
+
             }
 
             private final Breadcrumbs breadcrumbs = new Breadcrumbs();
             @Data
             public static class Breadcrumbs {
                 /**
-                 * Determines whether the breadcrumbs should be available in the footer.
+                 * Whether to enable the 'where am i' feature, in other words the breadcrumbs.
                  */
-                private boolean showChooser = true;
+                private boolean enabled = true;
+                /**
+                 *
+                 */
+                private int maxParentChainLength = 64;
             }
-
 
             /**
              * IntelliJ unfortunately does not provide IDE completion for lists of classes; YMMV.
@@ -2500,14 +2524,7 @@ public class IsisConfiguration {
                  */
                 private String text;
             }
-            
-            
-            private final WhereAmI whereAmI = new WhereAmI();
-            @Data
-            public static class WhereAmI {
-                private boolean enabled = true;
-                private int maxParentChainLength = 64;
-            }
+
         }
     }
 

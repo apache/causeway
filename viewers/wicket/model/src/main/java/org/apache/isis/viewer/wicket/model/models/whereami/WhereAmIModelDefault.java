@@ -42,11 +42,11 @@ class WhereAmIModelDefault implements WhereAmIModel {
     private boolean isWhereAmIEnabled;
     private int maxChainLength;
     
-    public WhereAmIModelDefault(EntityModel startOfChain) {
+    public WhereAmIModelDefault(final EntityModel startOfChain) {
         this.startOfChain = startOfChain;
         this.commonContext = startOfChain.getCommonContext();
 
-        val settings = commonContext.getConfiguration().getViewer().getWicket().getWhereAmI();
+        val settings = commonContext.getConfiguration().getViewer().getWicket().getBreadcrumbs();
         this.isWhereAmIEnabled = settings.isEnabled();
         this.maxChainLength = settings.getMaxParentChainLength();
 

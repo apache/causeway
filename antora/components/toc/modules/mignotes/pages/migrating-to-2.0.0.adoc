@@ -581,6 +581,21 @@ standalone-collection.bulk-load
 |isis.core.runtime-services. +
 {nbsp}{nbsp}translation.po.mode
 
+|isis.viewer. +
+{nbsp}{nbsp}wicket.breadcrumbs.showChooser
+|isis.viewer. +
+{nbsp}{nbsp}wicket.bookmarks.show-drop-down-on-footer
+
+|isis.viewer. +
+{nbsp}{nbsp}wicket.whereAmI.enabled
+|isis.viewer. +
+{nbsp}{nbsp}wicket.breadcrumbs.enabled
+
+|isis.viewer. +
+{nbsp}{nbsp}wicket.whereAmI.maxParentChainLength
+|isis.viewer. +
+{nbsp}{nbsp}wicket.breadcrumbs.max-parent-chain-length
+
 |isis.viewers. +
 {nbsp}{nbsp}collectionLayout.defaultView
 |isis.applib.annotation. +
