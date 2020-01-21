@@ -232,11 +232,12 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             val sort = entry.getValue(); 
 
             val spec = loadSpecification(type, IntrospectionState.NOT_INTROSPECTED);
-            if(spec!=null) {
-                knownSpecs.add(spec);
-            } else {
+            if(spec==null) {
                 typeRegistry.veto(type);
-            }
+                return;
+            } 
+            
+            knownSpecs.add(spec);
 
             if(sort.isManagedBean() || sort.isEntity() || sort.isViewModel() || sort.isMixin()) {
                 domainObjectSpecs.add(spec);   
