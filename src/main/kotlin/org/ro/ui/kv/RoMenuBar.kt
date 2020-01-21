@@ -21,7 +21,7 @@ object RoMenuBar : SimplePanel() {
     init {
         vPanel() {
             val label = "" //IMPROVE use for branding
-            navbar = navbar(label, NavbarType.FIXEDTOP) {
+            navbar = navbar(label = label, type = NavbarType.FIXEDTOP) {
                 marginLeft = CssSize(-32, UNIT.px)
                 height = CssSize(40, UNIT.px)
                 nav = nav()
