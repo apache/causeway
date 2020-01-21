@@ -41,6 +41,7 @@ extends RecreatableObjectFacetDeclarativeInitializingAbstract {
                 .map(nature -> {
                     switch (nature) {
                     case NOT_SPECIFIED:
+                    case BEAN:
                     case JDO_ENTITY:
                     case MIXIN:
                         // not a recreatable object, so no facet

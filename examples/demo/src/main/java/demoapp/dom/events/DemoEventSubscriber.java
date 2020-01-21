@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +35,7 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+import demoapp.dom.events.DemoEventSubscriber.EventLogWriter;
 import demoapp.dom.events.EventsDemo.UiButtonEvent;
 
 import static demoapp.utils.DemoUtils.emphasize;
@@ -41,6 +43,9 @@ import static demoapp.utils.DemoUtils.emphasize;
 @Service
 @Named("demoapp.eventSubscriber")
 @Qualifier("demo")
+@Import({
+    EventLogWriter.class
+})
 @Log4j2
 public class DemoEventSubscriber {
 
@@ -60,7 +65,7 @@ public class DemoEventSubscriber {
     }
 
     @DomainObject(
-            nature = Nature.INMEMORY_ENTITY, 
+            nature = Nature.BEAN, 
             objectType = "demoapp.eventLogWriter")
     public static class EventLogWriter {
 

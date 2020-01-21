@@ -448,7 +448,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
                 && isisConfiguration.getCore().getMetaModel().getIntrospector().isLockAfterFullIntrospection()) {
 
             val typeRegistry = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
-            val sort = typeRegistry.quickClassify(cls);
+            val category = typeRegistry.quickClassify(cls);
+            val sort = category.getBeanSort();
 
 //          ISIS-2256:
 //            throw _Exceptions.illegalState(
