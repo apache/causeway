@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.favicon;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 
 import org.apache.wicket.markup.ComponentTag;
@@ -37,31 +39,36 @@ public class Favicon extends WebComponent {
     @Inject private transient IsisConfiguration isisConfiguration;
     @Inject private transient WebAppContextPath webAppContextPath;
 
-    private String url;
-    private String contentType;
+    private Optional<String> url = Optional.empty();
+    private Optional<String> contentType = Optional.empty();
     
     public Favicon(String id) {
         super(id);
-        if(webAppContextPath!=null) {
-            url = webAppContextPath.prependContextPathIfLocal(isisConfiguration.getViewer().getWicket().getApplication().getFaviconUrl());
-            contentType = isisConfiguration.getViewer().getWicket().getApplication().getFaviconContentType();
-        }
+
     }
 
     @Override
     protected void onConfigure() {
         super.onConfigure();
-        setVisible(!Strings.isEmpty(url));
+
+        if(webAppContextPath != null && isisConfiguration != null) {
+
+            url = isisConfiguration.getViewer().getWicket().getApplication().getFaviconUrl()
+                    .filter(x -> !Strings.isEmpty(x))
+                    .map(webAppContextPath::prependContextPathIfLocal);
+
+            contentType = isisConfiguration.getViewer().getWicket().getApplication().getFaviconContentType()
+                    .filter(x -> !Strings.isEmpty(x));
+        }
+
+        setVisible(url.isPresent());
     }
 
     @Override
     protected void onComponentTag(ComponentTag tag) {
         super.onComponentTag(tag);
 
-        tag.put("href", url);
-
-        if (!Strings.isEmpty(contentType)) {
-            tag.put("type", contentType);
-        }
+        url.ifPresent(url -> tag.put("href", url));
+        contentType.ifPresent(contentType -> tag.put("type", contentType));
     }
 }

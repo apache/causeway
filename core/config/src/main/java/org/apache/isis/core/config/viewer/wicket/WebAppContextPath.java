@@ -19,6 +19,7 @@
 package org.apache.isis.core.config.viewer.wicket;
 
 import java.io.Serializable;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
@@ -100,6 +101,10 @@ public class WebAppContextPath implements Serializable {
         return urlOrLocalPath;
     }
     
+    public Optional<String> prependContextPathIfLocal(final Optional<String> urlOrLocalPath) {
+        return urlOrLocalPath.map(this::prependContextPathIfLocal);
+    }
+
     // -- HELPER
     
     private final Pattern pattern = Pattern.compile("^[/]*(.+?)[/]*$");

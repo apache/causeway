@@ -2329,12 +2329,20 @@ public class IsisConfiguration {
                  */
                 @javax.validation.constraints.Pattern(regexp="^[^/].*$")
                 private String css;
-                
-                // since 2.0
-                private String faviconContentType;
-                
-                // since 2.0
-                private String faviconUrl;
+
+                /**
+                 * Specifies the content type of the favIcon, if any.
+                 */
+                private Optional<String> faviconContentType = Optional.empty();
+
+                /**
+                 * Specifies the URL to use of the favIcon.
+                 *
+                 * <p>
+                 *     This is expected to be a local resource.
+                 * </p>
+                 */
+                private Optional<String> faviconUrl = Optional.empty();
                 
                 /**
                  */
