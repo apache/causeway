@@ -1988,18 +1988,6 @@ public class IsisConfiguration {
              */
             @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?/([^/]+/)*$")
             private Optional<String> baseUri = Optional.empty();
-
-            @Deprecated
-            private final Gsoc2013 gsoc2013 = new Gsoc2013();
-            @Deprecated
-            @Data
-            public static class Gsoc2013 {
-                /**
-                 * @deprecated
-                 */
-                @Deprecated
-                private boolean legacyParamDetails = false;
-            }
         }
 
         private final Wicket wicket = new Wicket();

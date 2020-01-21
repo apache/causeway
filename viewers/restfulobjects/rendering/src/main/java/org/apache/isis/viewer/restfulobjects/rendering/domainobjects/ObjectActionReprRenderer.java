@@ -140,24 +140,13 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     // ///////////////////////////////////////////////////
 
     private ObjectActionReprRenderer addParameterDetails() {
-        boolean gsoc2013 = getResourceContext().getConfiguration().getViewer().getRestfulobjects().getGsoc2013().isLegacyParamDetails();
-        if(gsoc2013) {
-            final List<Object> parameters = _Lists.newArrayList();
-            for (int i = 0; i < objectMember.getParameterCount(); i++) {
-                final ObjectActionParameter param = objectMember.getParameters().getElseFail(i);
-                final Object paramDetails = paramDetails(param, getInteractionInitiatedBy());
-                parameters.add(paramDetails);
-            }
-            representation.mapPut("parameters", parameters);
-        } else {
-            final Map<String,Object> parameters = _Maps.newLinkedHashMap();
-            for (int i = 0; i < objectMember.getParameterCount(); i++) {
-                final ObjectActionParameter param = objectMember.getParameters().getElseFail(i);
-                final Object paramDetails = paramDetails(param, getInteractionInitiatedBy());
-                parameters.put(param.getId(), paramDetails);
-            }
-            representation.mapPut("parameters", parameters);
+        final Map<String,Object> parameters = _Maps.newLinkedHashMap();
+        for (int i = 0; i < objectMember.getParameterCount(); i++) {
+            final ObjectActionParameter param = objectMember.getParameters().getElseFail(i);
+            final Object paramDetails = paramDetails(param, getInteractionInitiatedBy());
+            parameters.put(param.getId(), paramDetails);
         }
+        representation.mapPut("parameters", parameters);
         return this;
     }
 
