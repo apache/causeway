@@ -96,7 +96,7 @@ public class WebAppContextPath implements Serializable {
             return null;
         }
         if(_Resources.isLocalResource(urlOrLocalPath)) {
-            return this.prependContextPath(urlOrLocalPath);
+            return _Strings.prefix(this.prependContextPath(urlOrLocalPath), "/");
         }
         return urlOrLocalPath;
     }

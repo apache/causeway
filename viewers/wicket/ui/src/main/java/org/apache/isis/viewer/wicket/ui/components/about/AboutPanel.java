@@ -26,12 +26,9 @@ import javax.inject.Named;
 
 import org.apache.wicket.markup.html.basic.Label;
 
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.viewer.wicket.model.models.AboutModel;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-
-import lombok.val;
 
 /**
  * {@link PanelAbstract Panel} displaying welcome message (as used on

@@ -34,7 +34,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket.Credit;
-import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.ThemeChooser;
@@ -86,7 +85,7 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
         
         if(hasAnyCredits) {
         
-            val webAppContextPath = getServiceRegistry().lookupServiceElseFail(WebAppContextPath.class);
+            val webAppContextPath = super.getWebAppContextPath();
             
             _NullSafe.stream(credits)
             .forEach(credit->{
@@ -98,7 +97,7 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
                 listItem.add(creditLink);
     
                 val imageUrl = webAppContextPath.prependContextPathIfLocal(credit.getImage());
-    
+                
                 creditLink.add(new CreditImage("creditImage", imageUrl));
                 creditLink.add(new CreditName("creditName", credit.getName()));
                 
