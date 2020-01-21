@@ -100,10 +100,11 @@ public interface Can<T> extends Iterable<T> {
     Optional<T> getFirst();
 
     /**
-     * Shortcut for {@code getFirst().orElseThrow(_Exceptions::unexpectedCodeReach)}
+     * Shortcut for {@code getFirst().orElseThrow(_Exceptions::noSuchElement)}
+     * @throws NoSuchElementException if result is empty
      */
     default T getFirstOrFail() {
-        return getFirst().orElseThrow(_Exceptions::unexpectedCodeReach);
+        return getFirst().orElseThrow(_Exceptions::noSuchElement);
     }
 
     /**
@@ -112,10 +113,11 @@ public interface Can<T> extends Iterable<T> {
     Optional<T> getSingleton();
     
     /**
-     * Shortcut for {@code getSingleton().orElseThrow(_Exceptions::unexpectedCodeReach)}
+     * Shortcut for {@code getSingleton().orElseThrow(_Exceptions::noSuchElement)}
+     * @throws NoSuchElementException if result is empty
      */
     default T getSingletonOrFail() {
-        return getSingleton().orElseThrow(_Exceptions::unexpectedCodeReach);
+        return getSingleton().orElseThrow(_Exceptions::noSuchElement);
     }
 
     // -- FACTORIES

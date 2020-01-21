@@ -19,6 +19,8 @@
 
 package org.apache.isis.applib.services.factory;
 
+import java.util.NoSuchElementException;
+
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -26,34 +28,20 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 public interface FactoryService {
 
     /**
-     * Creates a new instance of the specified class, but does not persist it.
-     *
-     * <p>
-     * It is recommended that the object be initially instantiated using
-     * this method, though the framework will also handle the case when
-     * the object is simply <i>new()</i>ed up.  The benefits of using
-     * {@link #instantiate(Class)} are:
-     * </p>
-     *
-     * <ul>
-     * <li>any services will be injected into the object immediately
-     *     (otherwise they will not be injected until the framework
-     *     becomes aware of the object, typically when it is
-     *     {@link RepositoryService#persist(Object) persist}ed</li>
-     * <li>the default value for any properties (usually as specified by
-     *     <tt>default<i>Xxx</i>()</tt> supporting methods) will not be
-     *     used</li>
-     * <li>the <tt>created()</tt> callback will not be called.
-     * </ul>
-     *
-     * <p>
-     * The corollary is: if your code never uses <tt>default<i>Xxx</i>()</tt>
-     * supporting methods or the <tt>created()</tt> callback, then you can
-     * alternatively just <i>new()</i> up the object rather than call this
-     * method.
-     * </p>
+     * Gets an instance of the specified {@code requiredType}, with injection points resolved 
+     * and any life-cycle callback processed.
+     * 
+     * @param <T>
+     * @param requiredType
+     * @return (non-null), if ambiguous picks the first best matching
+     * 
+     * @throws NoSuchElementException if result is empty
+     * 
+     * @apiNote does not force the requiredType to be added to the meta-model
+     * 
+     * @since 2.0
      */
-    <T> T instantiate(Class<T> domainClass);
+    <T> T get(Class<T> requiredType);
 
     /**
      * Creates a new Mixin instance.
@@ -82,6 +70,41 @@ public interface FactoryService {
     default <T> T viewModel(Class<T> viewModelClass) {
         return viewModel(viewModelClass, /*mementoStr*/null);
     }
+
+    // -- DEPRECATIONS
+    
+    /**
+     * Creates a new instance of the specified class, but does not persist it.
+     *
+     * <p>
+     * It is recommended that the object be initially instantiated using
+     * this method, though the framework will also handle the case when
+     * the object is simply <i>new()</i>ed up.  The benefits of using
+     * {@link #instantiate(Class)} are:
+     * </p>
+     *
+     * <ul>
+     * <li>any services will be injected into the object immediately
+     *     (otherwise they will not be injected until the framework
+     *     becomes aware of the object, typically when it is
+     *     {@link RepositoryService#persist(Object) persist}ed</li>
+     * <li>the default value for any properties (usually as specified by
+     *     <tt>default<i>Xxx</i>()</tt> supporting methods) will (since 2.0) be
+     *     used</li>
+     * <li>the <tt>created()</tt> callback will not be called.
+     * </ul>
+     *
+     * <p>
+     * The corollary is: if your code never uses <tt>default<i>Xxx</i>()</tt>
+     * supporting methods or the <tt>created()</tt> callback, then you can
+     * alternatively just <i>new()</i> up the object rather than call this
+     * method.
+     * </p>
+     * @deprecated with semantic changes since 2.0 previous behavior is no longer guaranteed, 
+     * instead consider use of {@link #get(Class)} if applicable
+     */
+    @Deprecated
+    <T> T instantiate(Class<T> domainClass);
 
 
 }

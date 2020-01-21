@@ -33,6 +33,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
@@ -57,12 +58,12 @@ public class FactoryServiceDefault implements FactoryService {
     @Inject IsisSessionFactory isisSessionFactory; // dependsOn
     @Inject private SpecificationLoader specificationLoader;
     @Inject private ServiceInjector serviceInjector;
+    @Inject private IsisSystemEnvironment isisSystemEnvironment; 
 
     @Override
-    public <T> T instantiate(final Class<T> domainClass) {
-        val spec = specificationLoader.loadSpecification(domainClass);
-        val adapter = ManagedObject._newTransientInstance(spec); 
-        return _Casts.uncheckedCast(adapter.getPojo());
+    public <T> T get(final Class<T> requiredType) {
+        val candidates = isisSystemEnvironment.getIocContainer().select(requiredType);
+        return candidates.getFirstOrFail();
     }
 
     @Override
@@ -111,9 +112,14 @@ public class FactoryServiceDefault implements FactoryService {
         return _Casts.uncheckedCast(viewModel);
     }
 
-
-
-
+    // -- DEPRECATIONS
+    
+    @Override
+    public <T> T instantiate(final Class<T> domainClass) {
+        val spec = specificationLoader.loadSpecification(domainClass);
+        val adapter = ManagedObject._newTransientInstance(spec); 
+        return _Casts.uncheckedCast(adapter.getPojo());
+    }
 
 
 }

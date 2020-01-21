@@ -33,11 +33,9 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.base._With;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.functions._Functions;
-import org.apache.isis.core.commons.internal.base._With;
-
-import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
 import lombok.val;
 
@@ -87,6 +85,10 @@ public final class _Exceptions {
         return new IllegalStateException(String.format(format, args));
     }
 
+    public static final NoSuchElementException noSuchElement() {
+        return new NoSuchElementException();
+    }
+    
     public static final NoSuchElementException noSuchElement(String msg) {
         return new NoSuchElementException(msg);
     }
