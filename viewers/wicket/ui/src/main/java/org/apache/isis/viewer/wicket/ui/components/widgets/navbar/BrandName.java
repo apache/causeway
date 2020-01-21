@@ -35,8 +35,8 @@ public class BrandName extends Label {
 
     private final Placement placement;
 
-    @Inject private IsisConfiguration isisConfiguration; // serializable
-    @Inject private WebAppContextPath webAppContextPath; // serializable
+    @Inject private transient IsisConfiguration isisConfiguration;
+    @Inject private transient WebAppContextPath webAppContextPath;
 
     private String logoHeaderUrl;
     private String logoSigninUrl;
@@ -58,6 +58,10 @@ public class BrandName extends Label {
     @Override
     protected void onConfigure() {
         super.onConfigure();
+        
+        if(isisConfiguration==null) {
+            return; // simply skip when de-serializing, since (non-transient) fields are already populated
+        }
 
         applicationName = isisConfiguration.getViewer().getWicket().getApplication().getName();
         logoHeaderUrl =

@@ -18,24 +18,19 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.favicon;
 
-import javax.inject.Inject;
-
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.util.string.Strings;
 
-import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
+import org.apache.isis.viewer.wicket.ui.components.WebComponentBase;
+
+import lombok.val;
 
 /**
  * A component for application favorite icon
  */
-public class Favicon extends WebComponent {
+public class Favicon extends WebComponentBase {
 
     private static final long serialVersionUID = 1L;
-
-    @Inject private IsisConfiguration isisConfiguration; // serializable
-    @Inject private WebAppContextPath webAppContextPath; // serializable
 
     private String url = null;
     private String contentType = null;
@@ -47,7 +42,10 @@ public class Favicon extends WebComponent {
     @Override
     protected void onConfigure() {
         super.onConfigure();
-
+        
+        val isisConfiguration = super.getIsisConfiguration();
+        val webAppContextPath = super.getWebAppContextPath();
+        
         url = isisConfiguration.getViewer().getWicket().getApplication().getFaviconUrl()
                 .filter(x -> !Strings.isEmpty(x))
                 .map(webAppContextPath::prependContextPathIfLocal)

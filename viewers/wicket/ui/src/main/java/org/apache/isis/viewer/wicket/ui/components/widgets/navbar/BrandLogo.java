@@ -18,25 +18,20 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.navbar;
 
-import javax.inject.Inject;
-
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.WebComponent;
 
-import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
+import org.apache.isis.viewer.wicket.ui.components.WebComponentBase;
+
+import lombok.val;
 
 /**
  * A component used as a brand logo in the top-left corner of the navigation bar
  */
-public class BrandLogo extends WebComponent {
+public class BrandLogo extends WebComponentBase {
 
     private static final long serialVersionUID = 1L;
 
     private final Placement placement;
-
-    @Inject private IsisConfiguration isisConfiguration; // serializable
-    @Inject private WebAppContextPath webAppContextPath; // serializable
 
     /**
      * Constructor.
@@ -63,6 +58,10 @@ public class BrandLogo extends WebComponent {
     }
 
     private String url() {
+        
+        val isisConfiguration = super.getIsisConfiguration();
+        val webAppContextPath = super.getWebAppContextPath();
+        
         final String logoHeaderUrl =
                 isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoHeader()
                     .map(webAppContextPath::prependContextPathIfLocal)
