@@ -8,7 +8,7 @@ ajax-debug-mode
 |  org.apache.isis.viewer. +
 wicket.viewer.wicketapp. +
 IsisWicketApplication
-| Specifies the subclass of < code>org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication that is used to bootstrap Wicket.
+| Specifies the subclass of `org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication` that is used to bootstrap Wicket.
 
 There is usually very little reason to change this from its default.
 
@@ -30,7 +30,9 @@ This is rendered on the header panel. An image with a size of 160x40 works well.
 | isis.viewer.wicket. +
 application.brand-logo-signin
 | 
-| Either the location of the image file (relative to the class-path resource root), or an absolute URL. This is rendered on the sign-in page. An image with a size of 400x40 works well. If not specified, the `Application#name` is used instead.
+| Either the location of the image file (relative to the class-path resource root), or an absolute URL.
+
+This is rendered on the sign-in page. An image with a size of 400x40 works well. If not specified, the application name is used instead.
 
 
 | isis.viewer.wicket. +
@@ -135,7 +137,11 @@ The default behaviour is to honour the original destination requested.
 
 | isis.viewer.wicket.credit
 | 
-| IntelliJ unfortunately does not provide IDE completion for lists of classes; YMMV. For further discussion, see for example this stackoverflow question: https://stackoverflow.com/questions/41417933/spring-configuration-properties-metadata-json-for-nested-list-of-objects and this wiki page: https://github.com/spring-projects/spring-boot/wiki/IDE-binding-features#simple-pojo and
+| List of organisations or individuals to give credit to, shown as links and icons in the footer. A maximum of 3 credits can be specified.
+
+IntelliJ unfortunately does not provide IDE completion for lists of classes; YMMV.
+
+NOTE: For further discussion, see for example https://stackoverflow.com/questions/41417933/spring-configuration-properties-metadata-json-for-nested-list-of-objects[this stackoverflow question] and https://github.com/spring-projects/spring-boot/wiki/IDE-binding-features#simple-pojo[this wiki page].
 
 
 | isis.viewer.wicket. +
@@ -143,7 +149,7 @@ date-pattern
 |  dd-MM-yyyy
 | The pattern used for rendering and parsing dates.
 
-Each Date scalar panel will use \{#getDatePattern()} or \{@linkplain #getDateTimePattern()} depending on its date type. In the case of panels with a date picker, the pattern will be dynamically adjusted so that it can be used by the https://github.com/Eonasdan/bootstrap-datetimepicker[Bootstrap Datetime Picker] component (which uses http://momentjs.com/docs/#/parsing/string-format/[Moment.js formats], rather than those of regular Java code).
+Each Date scalar panel will use ``#getDatePattern()`` or ``#getDateTimePattern()`` depending on its date type. In the case of panels with a date picker, the pattern will be dynamically adjusted so that it can be used by the https://github.com/Eonasdan/bootstrap-datetimepicker[Bootstrap Datetime Picker] component (which uses http://momentjs.com/docs/#/parsing/string-format/[Moment.js formats], rather than those of regular Java code).
 
 
 | isis.viewer.wicket. +
@@ -167,13 +173,13 @@ date-time-pattern
 |  dd-MM-yyyy HH:mm
 | The pattern used for rendering and parsing date/times.
 
-Each Date scalar panel will use `Wicket#getDatePattern()` or `Wicket#getDateTimePattern()` depending on its date type. In the case of panels with a date time picker, the pattern will be dynamically adjusted so that it can be used by the https://github.com/Eonasdan/bootstrap-datetimepicker[Bootstrap Datetime Picker] component (which uses http://momentjs.com/docs/#/parsing/string-format/[Moment.js formats], rather than those of regular Java code).
+Each Date scalar panel will use ``#getDatePattern()`` or ``#getDateTimePattern()`` depending on its date type. In the case of panels with a date time picker, the pattern will be dynamically adjusted so that it can be used by the https://github.com/Eonasdan/bootstrap-datetimepicker[Bootstrap Datetime Picker] component (which uses http://momentjs.com/docs/#/parsing/string-format/[Moment.js formats], rather than those of regular Java code).
 
 
 | isis.viewer.wicket. +
 development-utilities.enable
 | 
-| Determines whether debug bar and other stuff influenced by `org.apache.wicket.settings.DebugSettings#isDevelopmentUtilitiesEnabled()` is enabled or not.
+| Determines whether debug bar and other stuff influenced by `DebugSettings#isDevelopmentUtilitiesEnabled()` is enabled or not.
 
 By default, depends on the mode (prototyping = enabled, server = disabled). This property acts as an override.
 
@@ -183,7 +189,7 @@ dialog-mode
 | 
 | Whether the dialog mode rendered when invoking actions on domain objects should be to use the sidebar (the default) or to use a modal dialog.
 
-This can be overridden on a case-by-case basis using `ActionLayout#promptStyle()`.
+This can be overridden on a case-by-case basis using ``ActionLayout#promptStyle()``.
 
 
 | isis.viewer.wicket. +
@@ -191,7 +197,7 @@ dialog-mode-for-menu
 | 
 | Whether the dialog mode rendered when invoking actions on domain services (that is, menus) should be to use a modal dialog (the default) or to use the sidebar panel.
 
-This can be overridden on a case-by-case basis using `ActionLayout#promptStyle()`.
+This can be overridden on a case-by-case basis using ``ActionLayout#promptStyle()``.
 
 
 | isis.viewer.wicket. +
@@ -217,7 +223,7 @@ standalone-tables
 | isis.viewer.wicket. +
 max-title-length-in-tables
 |  12
-| The maximum number of characters to use to render the title of a domain object (alongside the icon) in any table, if not otherwise overridden by either `#getMaxTitleLengthInParentedTables()` or `#getMaxTitleLengthInStandaloneTables()`.
+| The maximum number of characters to use to render the title of a domain object (alongside the icon) in any table, if not otherwise overridden by either ``#getMaxTitleLengthInParentedTables()`` or ``#getMaxTitleLengthInStandaloneTables()``.
 
 If truncated, then the remainder of the title will be replaced with ellipses (...).
 
@@ -312,7 +318,7 @@ suppress-password-reset
 | 
 | Whether to suppress the password reset link on the sign-in page.
 
-Although this is disabled by default (in other words the 'reset password' link is not suppressed), note that in addition the application must provide an implementation of the `org.apache.isis.applib.services.userreg.UserRegistrationService` as well as a configured `org.apache.isis.applib.services.userreg.EmailNotificationService` (same conditions as for the `#isSuppressSignUp()` sign-up link).
+Although this is disabled by default (in other words the 'reset password' link is not suppressed), note that in addition the application must provide an implementation of the ``org.apache.isis.applib.services.userreg.UserRegistrationService`` as well as a configured ``org.apache.isis.applib.services.userreg.EmailNotificationService`` (same conditions as for the ``#isSuppressSignUp()`` sign-up link).
 
 
 | isis.viewer.wicket. +
@@ -320,7 +326,7 @@ suppress-sign-up
 | 
 | Whether to suppress the sign-up link on the sign-in page.
 
-Although this is disabled by default (in other words the sign-up link is not suppressed), note that in addition the application must provide an implementation of the `org.apache.isis.applib.services.userreg.UserRegistrationService` as well as a configured `org.apache.isis.applib.services.userreg.EmailNotificationService` (same conditions as for the `#isSuppressPasswordReset()` password reset link).
+Although this is disabled by default (in other words the sign-up link is not suppressed), note that in addition the application must provide an implementation of the ``org.apache.isis.applib.services.userreg.UserRegistrationService`` as well as a configured ``org.apache.isis.applib.services.userreg.EmailNotificationService`` (same conditions as for the ``#isSuppressPasswordReset()`` password reset link).
 
 
 | isis.viewer.wicket.themes. +
@@ -334,7 +340,7 @@ initial
 |  Flatly
 | The initial theme to use.
 
-Expected to be in the list of `#getEnabled()` themes.
+Expected to be in the list of ``#getEnabled()`` themes.
 
 
 | isis.viewer.wicket.themes. +

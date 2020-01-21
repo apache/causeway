@@ -43,7 +43,7 @@ Can be used to interface with external caching products. Use "none" to turn off 
 
 See also Cache docs for JDO, and for JPA
 
-@implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
+NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
 
 
 | isis.persistence. +
@@ -57,7 +57,7 @@ For RBDMS, it must be a JNDI name that points to a javax.sql.DataSource object.
 
 See also `additional-spring-configuration-metadata.json` (PascalCasing instead of kebab-casing).
 
-@implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
+NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
 
 
 | isis.persistence. +
@@ -71,7 +71,7 @@ For RBDMS, it must be a JNDI name that points to a javax.sql.DataSource object.
 
 See also `additional-spring-configuration-metadata.json` (PascalCasing instead of kebab-casing).
 
-@implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
+NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
 
 
 | isis.persistence. +
@@ -83,7 +83,7 @@ connection-password-decrypter
 
 See also `additional-spring-configuration-metadata.json` (camelCasing instead of kebab-casing).
 
-@implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
+NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
 
 
 | isis.persistence. +
@@ -122,7 +122,7 @@ Defaults to true, which is the opposite of DataNucleus' own default. (The reason
 
 See also `additional-spring-configuration-metadata.json` (camelCasing instead of kebab-casing).
 
-@implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
+NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
 
 
 | isis.persistence. +
@@ -144,7 +144,7 @@ This should be set to `true` when running against an in-memory database, but set
 
 See also `additional-spring-configuration-metadata.json` (camelCasing instead of kebab-casing).
 
-@implNote - this config property isn't used by the core framework, but is used by one the flyway extension.
+NOTE: this config property isn't used by the core framework, but is used by one the flyway extension.
 
 
 | isis.persistence. +
@@ -156,7 +156,7 @@ auto-create-database
 
 See also `additional-spring-configuration-metadata.json` (camelCasing instead of kebab-casing).
 
-@implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
+NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
 
 
 | isis.persistence. +
@@ -180,7 +180,7 @@ validate-all
 |  true
 | See also `additional-spring-configuration-metadata.json` (camelCasing instead of kebab-casing).
 
-@implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
+NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
 
 
 | isis.persistence. +
@@ -214,7 +214,7 @@ If running under JavaSE the default is RESOURCE_LOCAL, and if running under Java
 
 See also `additional-spring-configuration-metadata.json` (camelCasing instead of kebab-casing).
 
-@implNote - this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
+NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
 
 
 | isis.persistence. +
@@ -259,7 +259,7 @@ connection-driver-name
 
 See also `additional-spring-configuration-metadata.json` (PascalCasing instead of kebab-casing).
 
-@implNote - this config property isn't used by the framework, but provided as a convenience for IDE autocomplete (and is mandatory if using JDO Datanucleus).
+NOTE: this config property isn't used by the framework, but provided as a convenience for IDE autocomplete (and is mandatory if using JDO Datanucleus).
 
 
 | isis.persistence. +
@@ -271,7 +271,7 @@ connection-password
 
 See also `additional-spring-configuration-metadata.json` (PascalCasing instead of kebab-casing).
 
-@implNote - this config property isn't used by the framework, but provided as a convenience for IDE autocomplete. It is not necessarily mandatory, some databases accept an empty password.
+NOTE: this config property isn't used by the framework, but provided as a convenience for IDE autocomplete. It is not necessarily mandatory, some databases accept an empty password.
 
 
 | isis.persistence. +
@@ -282,7 +282,7 @@ jdo.option.connection-url
 
 See also `additional-spring-configuration-metadata.json` (PascalCasing instead of kebab-casing).
 
-@implNote - some extensions (H2Console, MsqlDbManager) peek at this URL to determine if they should be enabled. Note that it is also mandatory if using JDO Datanucleus.
+NOTE: some extensions (H2Console, MsqlDbManager) peek at this URL to determine if they should be enabled. Note that it is also mandatory if using JDO Datanucleus.
 
 
 | isis.persistence. +
@@ -294,7 +294,7 @@ connection-user-name
 
 See also `additional-spring-configuration-metadata.json` (PascalCasing instead of kebab-casing).
 
-@implNote - this config property isn't used by the framework, but provided as a convenience for IDE autocomplete (and is mandatory if using JDO Datanucleus).
+NOTE: this config property isn't used by the framework, but provided as a convenience for IDE autocomplete (and is mandatory if using JDO Datanucleus).
 
 
 | isis.persistence. +
@@ -306,6 +306,6 @@ class
 JDOPersistenceManagerFactory
 | See also `additional-spring-configuration-metadata.json` (camelCasing instead of kebab-casing).
 
-@implNote - changing this property from its default is used to enable the flyway extension (in combination with `Datanucleus.Schema#isAutoCreateAll()`
+NOTE: changing this property from its default is used to enable the flyway extension (in combination with ``Datanucleus.Schema#isAutoCreateAll()``
 
 

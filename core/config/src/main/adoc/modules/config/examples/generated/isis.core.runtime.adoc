@@ -1,6 +1,6 @@
 | isis.core.runtime.locale
 | 
-| If set, then overrides the application's `Locale#getDefault()`
+| If set, then overrides the application's ``Locale#getDefault()``
 
 
 | isis.core.runtime.timezone

@@ -2043,7 +2043,7 @@ public class IsisConfiguration {
              * The pattern used for rendering and parsing dates.
              *
              * <p>
-             * Each Date scalar panel will use {#getDatePattern()} or {@linkplain #getDateTimePattern()} depending on its
+             * Each Date scalar panel will use {@link #getDatePattern()} or {@link #getDateTimePattern()} depending on its
              * date type.  In the case of panels with a date picker, the pattern will be dynamically adjusted so that it can be
              * used by the <a href="https://github.com/Eonasdan/bootstrap-datetimepicker">Bootstrap Datetime Picker</a>
              * component (which uses <a href="http://momentjs.com/docs/#/parsing/string-format/">Moment.js formats</a>, rather
@@ -2056,7 +2056,7 @@ public class IsisConfiguration {
              * The pattern used for rendering and parsing date/times.
              *
              * <p>
-             * Each Date scalar panel will use {@link Wicket#getDatePattern()} or {@link Wicket#getDateTimePattern()}
+             * Each Date scalar panel will use {@link #getDatePattern()} or {@link #getDateTimePattern()}
              * depending on its date type.  In the case of panels with a date time picker, the pattern will be
              * dynamically adjusted so that it can be
              * used by the <a href="https://github.com/Eonasdan/bootstrap-datetimepicker">Bootstrap Datetime Picker</a>
@@ -2432,20 +2432,25 @@ public class IsisConfiguration {
             }
 
             /**
-             * IntelliJ unfortunately does not provide IDE completion for lists of classes; YMMV.
+             * List of organisations or individuals to give credit to, shown as links and icons in the footer.
+             * A maximum of 3 credits can be specified.
              *
-             * For further discussion, see for example this stackoverflow question:
-             * https://stackoverflow.com/questions/41417933/spring-configuration-properties-metadata-json-for-nested-list-of-objects
-             * and this wiki page: https://github.com/spring-projects/spring-boot/wiki/IDE-binding-features#simple-pojo and
-             * 
+             * <p>
+             * IntelliJ unfortunately does not provide IDE completion for lists of classes; YMMV.
+             * </p>
+             *
+             * <p>
+             * @implNote - For further discussion, see for example
+             * <a href="https://stackoverflow.com/questions/41417933/spring-configuration-properties-metadata-json-for-nested-list-of-objects">this stackoverflow question</a>
+             * and <a href="https://github.com/spring-projects/spring-boot/wiki/IDE-binding-features#simple-pojo">this wiki page</a>.
+             * </p>
              */
             private List<Credit> credit = new ArrayList<>();
-            
+
             @Data
             public static class Credit {
                 /**
                  * URL of an organisation or individual to give credit to, appearing as a link in the footer.
-                 * A maximum of 3 credits is supported.
                  *
                  * <p>
                  *     For the credit to appear, the {@link #getUrl() url} must be provided along with either
@@ -2456,7 +2461,6 @@ public class IsisConfiguration {
                 private String url;
                 /**
                  * URL of an organisation or individual to give credit to, appearing as text in the footer.
-                 * A maximum of 3 credits is supported.
                  *
                  * <p>
                  *     For the credit to appear, the {@link #getUrl() url} must be provided along with either
@@ -2466,7 +2470,6 @@ public class IsisConfiguration {
                 private String name;
                 /**
                  * Name of an image resource of an organisation or individual, appearing as an icon in the footer.
-                 * A maximum of 3 credits is supported.
                  *
                  * <p>
                  *     For the credit to appear, the {@link #getUrl() url} must be provided along with either

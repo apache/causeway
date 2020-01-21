@@ -1,7 +1,7 @@
 | isis.core.runtime-services. +
 application-features.init
 | 
-| Whether the `org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository` (or the default implementation of that service, at least) should compute the set of `ApplicationFeature` that describe the metamodel eagerly, or lazily.
+| Whether the ``org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository`` (or the default implementation of that service, at least) should compute the set of `ApplicationFeature` that describe the metamodel eagerly, or lazily.
 
 
 | isis.core.runtime-services. +
@@ -35,7 +35,7 @@ email.sender.address
 
 If the username is not specified, is also used as the username to connect to the SMTP service.
 
-This configuration property is mandatory (for the default implementation of the `org.apache.isis.applib.services.email.EmailService`, at least).
+This configuration property is mandatory (for the default implementation of the ``org.apache.isis.applib.services.email.EmailService``, at least).
 
 
 | isis.core.runtime-services. +
@@ -51,7 +51,7 @@ email.sender.password
 | 
 | Specifies the password (corresponding to the username to connect to the SMTP service.
 
-This configuration property is mandatory (for the default implementation of the `org.apache.isis.applib.services.email.EmailService`, at least).
+This configuration property is mandatory (for the default implementation of the ``org.apache.isis.applib.services.email.EmailService``, at least).
 
 
 | isis.core.runtime-services. +
@@ -91,7 +91,7 @@ email.tls.enabled
 exception-recognizer.jdo. +
 disable
 | 
-| Whether the `org.apache.isis.applib.services.exceprecog.ExceptionRecognizer` implementation for JDO/DataNucleus object store - which attempts to sanitize any exceptions arising from that object store - should be disabled (meaning that exceptions will potentially propagate as more serious to the end user).
+| Whether the ``org.apache.isis.applib.services.exceprecog.ExceptionRecognizer`` implementation for JDO/DataNucleus object store - which attempts to sanitize any exceptions arising from that object store - should be disabled (meaning that exceptions will potentially propagate as more serious to the end user).
 
 
 | isis.core.runtime-services. +

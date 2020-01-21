@@ -53,6 +53,7 @@ public interface FactoryService {
      * @param mixinClass
      * @param mixedIn
      * @return
+     * @apiNote forces the mixinClass to be added to the meta-model if not already
      */
     <T> T mixin(Class<T> mixinClass, Object mixedIn);
 
@@ -60,6 +61,7 @@ public interface FactoryService {
      * Creates a new ViewModel instance, and initializes according to the given {@code mementoStr} 
      * @param viewModelClass
      * @param mementoStr - ignored if {@code null}
+     * @apiNote forces the viewModelClass to be added to the meta-model if not already
      * @since 2.0
      */
     <T> T viewModel(Class<T> viewModelClass, @Nullable String mementoStr);
@@ -67,6 +69,7 @@ public interface FactoryService {
     /**
      * Creates a new ViewModel instance 
      * @param viewModelClass
+     * @apiNote forces the viewModelClass to be added to the meta-model if not already
      * @since 2.0
      */
     default <T> T viewModel(Class<T> viewModelClass) {
