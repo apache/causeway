@@ -1,7 +1,7 @@
 | isis.core.runtime-services. +
 application-features.init
 | 
-| Whether the (or the default implementation of that service, at least) should compute the set of `ApplicationFeature` that describe the metamodel \{@link ApplicationFeaturesInitConfiguration#EAGERLY eagerly, or lazily.
+| Whether the `org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository` (or the default implementation of that service, at least) should compute the set of `ApplicationFeature` that describe the metamodel eagerly, or lazily.
 
 
 | isis.core.runtime-services. +

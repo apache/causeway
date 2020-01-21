@@ -4,7 +4,7 @@ lock-after-full-introspection
 |  true
 | If true, then no new specifications will be allowed to be loaded once introspection has been complete.
 
-Only applies if the introspector is configured to perform full introspection up-front (either because of or \{@link IntrospectionMode#LAZY_UNLESS_PRODUCTION when in production); otherwise is ignored.
+Only applies if the introspector is configured to perform full introspection up-front (either because of `IntrospectionMode#FULL` or `IntrospectionMode#LAZY_UNLESS_PRODUCTION` when in production); otherwise is ignored.
 
 
 | isis.core.meta-model. +

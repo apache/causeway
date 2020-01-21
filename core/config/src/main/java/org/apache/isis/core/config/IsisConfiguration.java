@@ -1975,7 +1975,7 @@ public class IsisConfiguration {
 
             /**
              * If left unset (the default), then the RO viewer will use the {@link javax.ws.rs.core.UriInfo}
-             * injected using  @link javax.ws.rs.core.Context}) to figure out the base Uri (used to render
+             * (injected using {@link javax.ws.rs.core.Context}) to figure out the base Uri (used to render
              * <code>href</code>s).
              *
              * <p>
@@ -2007,8 +2007,8 @@ public class IsisConfiguration {
         public static class Wicket {
 
             /**
-             * Specifies the subclass of <
-             * code>org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication</code> that is used to
+             * Specifies the subclass of
+             * <code>org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication</code> that is used to
              * bootstrap Wicket.
              *
              * <p>
@@ -2056,11 +2056,13 @@ public class IsisConfiguration {
              * The pattern used for rendering and parsing date/times.
              *
              * <p>
-             * Each Date scalar panel will use {@link Wicket#getDatePattern()} or {@link Wicket#getDateTimePattern()} depending on its
-             * date type.  In the case of panels with a date time picker, the pattern will be dynamically adjusted so that it can be
+             * Each Date scalar panel will use {@link Wicket#getDatePattern()} or {@link Wicket#getDateTimePattern()}
+             * depending on its date type.  In the case of panels with a date time picker, the pattern will be
+             * dynamically adjusted so that it can be
              * used by the <a href="https://github.com/Eonasdan/bootstrap-datetimepicker">Bootstrap Datetime Picker</a>
              * component (which uses <a href="http://momentjs.com/docs/#/parsing/string-format/">Moment.js formats</a>, rather
              * than those of regular Java code).
+             * </p>
              */
             @NotNull @NotEmpty
             private String dateTimePattern = "dd-MM-yyyy HH:mm";
@@ -2308,15 +2310,18 @@ public class IsisConfiguration {
                  * If not specified, the application.name is used instead.
                  * </p>
                  */
-                private String brandLogoHeader;
+                private Optional<String> brandLogoHeader = Optional.empty();
                 
                 /**
                  * Either the location of the image file (relative to the class-path resource root), 
-                 * or an absolute URL. 
-                 * This is rendered on the sign-in page. An image with a size of 400x40 works well. 
-                 * If not specified, the {@link Application#name} is used instead.
+                 * or an absolute URL.
+                 *
+                 * <p>
+                 * This is rendered on the sign-in page. An image with a size of 400x40 works well.
+                 * If not specified, the {@link Application#getName() application name} is used instead.
+                 * </p>
                  */
-                private String brandLogoSignin;
+                private Optional<String> brandLogoSignin = Optional.empty();
                 
                 /**
                  * URL of file to read any custom CSS, relative to <code>static</code> package on the class path.
@@ -2507,7 +2512,8 @@ public class IsisConfiguration {
             public static class DevelopmentUtilities {
 
                 /**
-                 * Determines whether debug bar and other stuff influenced by <tt>org.apache.wicket.settings.DebugSettings#isDevelopmentUtilitiesEnabled()</tt> is enabled or not.
+                 * Determines whether debug bar and other stuff influenced by
+                 * <code>DebugSettings#isDevelopmentUtilitiesEnabled()</code> is enabled or not.
                  *
                  * <p>
                  *     By default, depends on the mode (prototyping = enabled, server = disabled).  This property acts as an override.

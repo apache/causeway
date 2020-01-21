@@ -1,7 +1,7 @@
 | isis.viewer.restfulobjects. +
 base-uri
 | 
-| If left unset (the default), then the RO viewer will use the injected using @link javax.ws.rs.core.Context) to figure out the base Uri (used to render `href`s).
+| If left unset (the default), then the RO viewer will use the `javax.ws.rs.core.UriInfo` injected using @link javax.ws.rs.core.Context}) to figure out the base Uri (used to render `href`s).
 
 This will be correct much of the time, but will almost certainly be wrong if there is a reverse proxy.
 

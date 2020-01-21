@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.navbar;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 
 import org.apache.wicket.markup.ComponentTag;
@@ -63,8 +65,15 @@ public class BrandLogo extends WebComponent {
     }
 
     private String url() {
-        String logoHeaderUrl = webAppContextPath.prependContextPathIfLocal(isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoHeader());
-        String logoSigninUrl = webAppContextPath.prependContextPathIfLocal(isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoSignin());
+        final String logoHeaderUrl =
+                isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoHeader()
+                    .map(webAppContextPath::prependContextPathIfLocal)
+                    .orElse(null);
+
+        String logoSigninUrl =
+                isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoSignin()
+                    .map(webAppContextPath::prependContextPathIfLocal)
+                    .orElse(null);
 
         return placement.urlFor(logoHeaderUrl, logoSigninUrl);
     }

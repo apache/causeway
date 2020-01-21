@@ -58,7 +58,12 @@
     },
     {
       "name": "isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionDriverName",
-      "type": "java.lang.String"
+      "providers": [{
+        "name": "class-reference",
+        "parameters": {
+          "target": "java.sql.Driver"
+        }
+      }]
     },
     {
       "name": "isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionURL",

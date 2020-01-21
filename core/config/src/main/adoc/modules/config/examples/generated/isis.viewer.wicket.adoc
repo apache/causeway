@@ -167,7 +167,7 @@ date-time-pattern
 |  dd-MM-yyyy HH:mm
 | The pattern used for rendering and parsing date/times.
 
-Each Date scalar panel will use or \{@link Wicket#getDateTimePattern() depending on its date type. In the case of panels with a date time picker, the pattern will be dynamically adjusted so that it can be used by the https://github.com/Eonasdan/bootstrap-datetimepicker[Bootstrap Datetime Picker] component (which uses http://momentjs.com/docs/#/parsing/string-format/[Moment.js formats], rather than those of regular Java code).
+Each Date scalar panel will use `Wicket#getDatePattern()` or `Wicket#getDateTimePattern()` depending on its date type. In the case of panels with a date time picker, the pattern will be dynamically adjusted so that it can be used by the https://github.com/Eonasdan/bootstrap-datetimepicker[Bootstrap Datetime Picker] component (which uses http://momentjs.com/docs/#/parsing/string-format/[Moment.js formats], rather than those of regular Java code).
 
 
 | isis.viewer.wicket. +
@@ -217,7 +217,7 @@ standalone-tables
 | isis.viewer.wicket. +
 max-title-length-in-tables
 |  12
-| The maximum number of characters to use to render the title of a domain object (alongside the icon) in any table, if not otherwise overridden by either or \{@link #getMaxTitleLengthInStandaloneTables().
+| The maximum number of characters to use to render the title of a domain object (alongside the icon) in any table, if not otherwise overridden by either `#getMaxTitleLengthInParentedTables()` or `#getMaxTitleLengthInStandaloneTables()`.
 
 If truncated, then the remainder of the title will be replaced with ellipses (...).
 
@@ -312,7 +312,7 @@ suppress-password-reset
 | 
 | Whether to suppress the password reset link on the sign-in page.
 
-Although this is disabled by default (in other words the 'reset password' link is not suppressed), note that in addition the application must provide an implementation of the as well as a configured `org.apache.isis.applib.services.userreg.EmailNotificationService (same conditions as for the \{@link #isSuppressSignUp()` sign-up link).
+Although this is disabled by default (in other words the 'reset password' link is not suppressed), note that in addition the application must provide an implementation of the `org.apache.isis.applib.services.userreg.UserRegistrationService` as well as a configured `org.apache.isis.applib.services.userreg.EmailNotificationService` (same conditions as for the `#isSuppressSignUp()` sign-up link).
 
 
 | isis.viewer.wicket. +
@@ -320,7 +320,7 @@ suppress-sign-up
 | 
 | Whether to suppress the sign-up link on the sign-in page.
 
-Although this is disabled by default (in other words the sign-up link is not suppressed), note that in addition the application must provide an implementation of the as well as a configured `org.apache.isis.applib.services.userreg.EmailNotificationService (same conditions as for the \{@link #isSuppressPasswordReset()` password reset link).
+Although this is disabled by default (in other words the sign-up link is not suppressed), note that in addition the application must provide an implementation of the `org.apache.isis.applib.services.userreg.UserRegistrationService` as well as a configured `org.apache.isis.applib.services.userreg.EmailNotificationService` (same conditions as for the `#isSuppressPasswordReset()` password reset link).
 
 
 | isis.viewer.wicket.themes. +

@@ -111,7 +111,16 @@ include::refguide:config:example$generated/isis.persistence.jdo-datanucleus.adoc
 
 
 
-== JDO DataNucleus Persistence Pass-thru Settings
+== JDO DN Pass-thru
+
+The values of these configuration properties are passed through unchanged, with the `isis.persistence.jdo-datanucleus.impl` prefix stripped off.
+
+[NOTE]
+====
+Configuration properties keys under `datanucleus` need to be specified in `camelCase`.
+
+Configuration properties keys under `javax.jdo.option` need to be specified in `PascalCase`.
+====
 
 [cols="2a,2a,3a", options="header"]
 |===

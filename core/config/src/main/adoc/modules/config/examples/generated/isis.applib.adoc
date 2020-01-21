@@ -23,23 +23,23 @@ The CSS class for individual actions can be overridden using `org.apache.isis.ap
 | isis.applib.annotation.action. +
 command
 | 
-| The default for whether action invocations should be reified as a using the `org.apache.isis.applib.services.command.spi.CommandService, possibly so that the actual execution of the action can be deferred until later (background execution) or replayed against a copy of the system.
+| The default for whether action invocations should be reified as a `org.apache.isis.applib.services.command.Command` using the `org.apache.isis.applib.services.command.spi.CommandService`, possibly so that the actual execution of the action can be deferred until later (background execution) or replayed against a copy of the system.
 
-In particular, the implementation of \{@link org.apache.isis.applib.services.command.Command represents the action invocation memento (obtained using as a \{@link org.apache.isis.schema.cmd.v2.CommandDto.
+In particular, the `org.apache.isis.applib.services.command.CommandWithDto` implementation of `org.apache.isis.applib.services.command.Command` represents the action invocation memento (obtained using `CommandWithDto#asDto()`) as a `org.apache.isis.schema.cmd.v2.CommandDto`.
 
-This setting can be overridden on a case-by-case basis using \{@link org.apache.isis.applib.annotation.Action#command()`.
+This setting can be overridden on a case-by-case basis using `org.apache.isis.applib.annotation.Action#command()`.
 
 
 | isis.applib.annotation.action. +
 domain-event.post-for-default
 |  true
-| Influences whether an should be published (on the internal \{@link org.apache.isis.applib.services.eventbus.EventBusService) whenever an action is being interacted with.
+| Influences whether an `org.apache.isis.applib.events.domain.ActionDomainEvent` should be published (on the internal `org.apache.isis.applib.services.eventbus.EventBusService`) whenever an action is being interacted with.
 
 Up to five different events can be fired during an interaction, with the event's phase determining which (hide, disable, validate, executing and executed). Subscribers can influence the behaviour at each of these phases.
 
-The algorithm for determining whether (and what type of) an event is actually sent depends on the value of the for the action in question:
+The algorithm for determining whether (and what type of) an event is actually sent depends on the value of the `org.apache.isis.applib.annotation.Action#domainEvent()` for the action in question:
 
-* If set to some subtype of \{@link org.apache.isis.applib.events.domain.ActionDomainEvent.Noop ActionDomainEvent.Noop, then _no_ event is sent.
+* If set to some subtype of ActionDomainEvent.Noop, then _no_ event is sent.
 * If set to some subtype of ActionDomainEvent.Default, then an event is sent _if and only if_ this configuration setting is set.
 * If set to any other subtype, then an event _is_ sent.
 
@@ -53,11 +53,11 @@ explicit
 | isis.applib.annotation.action. +
 publishing
 | 
-| The default for whether action invocations should be sent through to the for publishing.
+| The default for whether action invocations should be sent through to the `org.apache.isis.applib.services.publish.PublisherService` for publishing.
 
-The service's \{@link org.apache.isis.applib.services.publish.PublisherService#publish(Interaction.Execution) publish method is called only once per transaction, with collecting details of the identity of the target object, the action invoked, the action arguments and the returned object (if any).
+The service's publish method is called only once per transaction, with `org.apache.isis.applib.services.iactn.Interaction.Execution` collecting details of the identity of the target object, the action invoked, the action arguments and the returned object (if any).
 
-This setting can be overridden on a case-by-case basis using \{@link org.apache.isis.applib.annotation.Action#publishing().
+This setting can be overridden on a case-by-case basis using `org.apache.isis.applib.annotation.Action#publishing()`.
 
 
 | isis.applib.annotation. +
@@ -81,13 +81,13 @@ This can be overridden on a case-by-case basis using `org.apache.isis.applib.ann
 collection.domain-event. +
 post-for-default
 |  true
-| Influences whether an should be published (on the internal \{@link org.apache.isis.applib.services.eventbus.EventBusService) whenever a collection is being interacted with.
+| Influences whether an `org.apache.isis.applib.events.domain.CollectionDomainEvent` should be published (on the internal `org.apache.isis.applib.services.eventbus.EventBusService`) whenever a collection is being interacted with.
 
 Up to two different events can be fired during an interaction, with the event's phase determining which (hide, disable)Subscribers can influence the behaviour at each of these phases.
 
-The algorithm for determining whether (and what type of) an event is actually sent depends on the value of the for the collection action in question:
+The algorithm for determining whether (and what type of) an event is actually sent depends on the value of the `org.apache.isis.applib.annotation.Collection#domainEvent()` for the collection action in question:
 
-* If set to some subtype of \{@link org.apache.isis.applib.events.domain.CollectionDomainEvent.Noop CollectionDomainEvent.Noop, then _no_ event is sent.
+* If set to some subtype of CollectionDomainEvent.Noop, then _no_ event is sent.
 * If set to some subtype of CollectionDomainEvent.Default, then an event is sent _if and only if_ this configuration setting is set.
 * If set to any other subtype, then an event _is_ sent.
 
@@ -97,9 +97,9 @@ domain-object-layout. +
 css-class-ui-event. +
 post-for-default
 |  true
-| Influences whether an should be published (on the internal `org.apache.isis.applib.services.eventbus.EventBusService) whenever a domain object is about to be rendered in the UI - thereby allowing subscribers to optionally change) the CSS classes that are used.
+| Influences whether an `org.apache.isis.applib.events.ui.CssClassUiEvent` should be published (on the internal `org.apache.isis.applib.services.eventbus.EventBusService`) whenever a domain object is about to be rendered in the UI - thereby allowing subscribers to optionally `org.apache.isis.applib.events.ui.CssClassUiEvent#setCssClass(String)` change) the CSS classes that are used.
 
-The algorithm for determining whether (and what type of) an event is sent depends on the value of the \{@link org.apache.isis.applib.annotation.DomainObjectLayout#cssClassUiEvent() @DomainObjectLayout(cssClassEvent=...)` for the domain object in question.
+The algorithm for determining whether (and what type of) an event is sent depends on the value of the `org.apache.isis.applib.annotation.DomainObjectLayout#cssClassUiEvent()` @DomainObjectLayout(cssClassEvent=...)} for the domain object in question.
 
 * If set to some subtype of CssClassUiEvent.Noop, then _no_ event is sent.
 * If set to some subtype of CssClassUiEvent.Default, then an event is sent _if and only if_ this configuration setting is set.
@@ -111,9 +111,9 @@ domain-object-layout. +
 icon-ui-event. +
 post-for-default
 |  true
-| Influences whether an should be published (on the internal `org.apache.isis.applib.services.eventbus.EventBusService) whenever a domain object is about to be rendered in the UI - thereby allowing subscribers to optionally change) the icon that is used.
+| Influences whether an `org.apache.isis.applib.events.ui.IconUiEvent` should be published (on the internal `org.apache.isis.applib.services.eventbus.EventBusService`) whenever a domain object is about to be rendered in the UI - thereby allowing subscribers to optionally `org.apache.isis.applib.events.ui.IconUiEvent#setIconName(String)` change) the icon that is used.
 
-The algorithm for determining whether (and what type of) an event is sent depends on the value of the \{@link org.apache.isis.applib.annotation.DomainObjectLayout#iconUiEvent() @DomainObjectLayout(iconEvent=...)` for the domain object in question.
+The algorithm for determining whether (and what type of) an event is sent depends on the value of the `org.apache.isis.applib.annotation.DomainObjectLayout#iconUiEvent()` @DomainObjectLayout(iconEvent=...)} for the domain object in question.
 
 * If set to some subtype of IconUiEvent.Noop, then _no_ event is sent.
 * If set to some subtype of IconUiEvent.Default, then an event is sent _if and only if_ this configuration setting is set.
@@ -125,11 +125,11 @@ domain-object-layout. +
 layout-ui-event. +
 post-for-default
 |  true
-| Influences whether an should be published (on the internal `org.apache.isis.applib.services.eventbus.EventBusService) whenever a domain object is about to be rendered in the UI - thereby allowing subscribers to optionally change) the layout that is used.
+| Influences whether an `org.apache.isis.applib.events.ui.LayoutUiEvent` should be published (on the internal `org.apache.isis.applib.services.eventbus.EventBusService`) whenever a domain object is about to be rendered in the UI - thereby allowing subscribers to optionally `org.apache.isis.applib.events.ui.LayoutUiEvent#setLayout(String)` change) the layout that is used.
 
 If a different layout value has been set, then a layout in the form `Xxx.layout-zzz.xml` use used (where `zzz` is the name of the layout).
 
-The algorithm for determining whether (and what type of) an event is sent depends on the value of the \{@link org.apache.isis.applib.annotation.DomainObjectLayout#layoutUiEvent() @DomainObjectLayout(layoutEvent=...)` for the domain object in question.
+The algorithm for determining whether (and what type of) an event is sent depends on the value of the `org.apache.isis.applib.annotation.DomainObjectLayout#layoutUiEvent()` @DomainObjectLayout(layoutEvent=...)} for the domain object in question.
 
 * If set to some subtype of LayoutUiEvent.Noop, then _no_ event is sent.
 * If set to some subtype of LayoutUiEvent.Default, then an event is sent _if and only if_ this configuration setting is set.
@@ -149,9 +149,9 @@ domain-object-layout. +
 title-ui-event. +
 post-for-default
 |  true
-| Influences whether an should be published (on the internal `org.apache.isis.applib.services.eventbus.EventBusService) whenever a domain object is about to be rendered in the UI - thereby allowing subscribers to optionally change) the title that is used.
+| Influences whether an `org.apache.isis.applib.events.ui.TitleUiEvent` should be published (on the internal `org.apache.isis.applib.services.eventbus.EventBusService`) whenever a domain object is about to be rendered in the UI - thereby allowing subscribers to optionally `org.apache.isis.applib.events.ui.TitleUiEvent#setTitle(String)` change) the title that is used.
 
-The algorithm for determining whether (and what type of) an event is sent depends on the value of the \{@link org.apache.isis.applib.annotation.DomainObjectLayout#titleUiEvent() @DomainObjectLayout(titleEvent=...)` for the domain object in question.
+The algorithm for determining whether (and what type of) an event is sent depends on the value of the `org.apache.isis.applib.annotation.DomainObjectLayout#titleUiEvent()` @DomainObjectLayout(titleEvent=...)} for the domain object in question.
 
 * If set to some subtype of TitleUiEvent.Noop, then _no_ event is sent.
 * If set to some subtype of TitleUiEvent.Default, then an event is sent _if and only if_ this configuration setting is set.
@@ -161,9 +161,9 @@ The algorithm for determining whether (and what type of) an event is sent depend
 | isis.applib.annotation. +
 domain-object.auditing
 | 
-| The default for whether _domain entities_ should be audited or not (meaning that any changes are sent through to the
+| The default for whether _domain entities_ should be audited or not (meaning that any changes are sent through to the `org.apache.isis.applib.services.audit.AuditerService`.
 
-This setting can be overridden on a case-by-case basis using `org.apache.isis.applib.annotation.DomainObject#auditing() DomainObject#getAuditing()`
+This setting can be overridden on a case-by-case basis using `org.apache.isis.applib.annotation.DomainObject#auditing()` DomainObject#getAuditing()}
 
 Note: this applies only to domain entities, not view models.
 
@@ -173,9 +173,9 @@ domain-object. +
 created-lifecycle-event. +
 post-for-default
 |  true
-| Influences whether an should be published (on the internal \{@link org.apache.isis.applib.services.eventbus.EventBusService) whenever a domain object has been created using
+| Influences whether an `org.apache.isis.applib.events.lifecycle.ObjectCreatedEvent` should be published (on the internal `org.apache.isis.applib.services.eventbus.EventBusService`) whenever a domain object has been created using `org.apache.isis.applib.services.factory.FactoryService`.
 
-The algorithm for determining whether (and what type of) an event is sent depends on the value of the \{@link org.apache.isis.applib.annotation.DomainObject#createdLifecycleEvent() @DomainObject(createdLifecycleEvent=...) for the domain object in question.
+The algorithm for determining whether (and what type of) an event is sent depends on the value of the @DomainObject(createdLifecycleEvent=...) for the domain object in question.
 
 * If set to some subtype of ObjectCreatedEvent.Noop, then _no_ event is sent.
 * If set to some subtype of ObjectCreatedEvent.Default, then an event is sent _if and only if_ this configuration setting is set.
@@ -195,7 +195,7 @@ domain-object. +
 loaded-lifecycle-event. +
 post-for-default
 |  true
-| Influences whether an should be published (on the internal \{@link org.apache.isis.applib.services.eventbus.EventBusService) whenever a domain _entity_ has been loaded from the persistence store.
+| Influences whether an `org.apache.isis.applib.events.lifecycle.ObjectLoadedEvent` should be published (on the internal `org.apache.isis.applib.services.eventbus.EventBusService`) whenever a domain _entity_ has been loaded from the persistence store.
 
 The algorithm for determining whether (and what type of) an event is sent depends on the value of the @DomainObject(loadedLifecycleEvent=...) for the domain object in question.
 
@@ -211,7 +211,7 @@ domain-object. +
 persisted-lifecycle-event. +
 post-for-default
 |  true
-| Influences whether an should be published (on the internal \{@link org.apache.isis.applib.services.eventbus.EventBusService) whenever a domain _entity_ has been persisted (for the first time) to the persistence store.
+| Influences whether an `org.apache.isis.applib.events.lifecycle.ObjectPersistedEvent` should be published (on the internal `org.apache.isis.applib.services.eventbus.EventBusService`) whenever a domain _entity_ has been persisted (for the first time) to the persistence store.
 
 The algorithm for determining whether (and what type of) an event is sent depends on the value of the @DomainObject(persistedLifecycleEvent=...) for the domain object in question.
 
@@ -227,7 +227,7 @@ domain-object. +
 persisting-lifecycle-event. +
 post-for-default
 |  true
-| Influences whether an should be published (on the internal \{@link org.apache.isis.applib.services.eventbus.EventBusService) whenever a domain _entity_ is about to be persisting (for the first time) to the persistence store.
+| Influences whether an `org.apache.isis.applib.events.lifecycle.ObjectPersistingEvent` should be published (on the internal `org.apache.isis.applib.services.eventbus.EventBusService`) whenever a domain _entity_ is about to be persisting (for the first time) to the persistence store.
 
 The algorithm for determining whether (and what type of) an event is sent depends on the value of the @DomainObject(persistingLifecycleEvent=...) for the domain object in question.
 
@@ -241,11 +241,11 @@ Note: this applies only to domain entities, not to view models.
 | isis.applib.annotation. +
 domain-object.publishing
 | 
-| The default for whether the identities of changed objects should be sent through to the for publishing.
+| The default for whether the identities of changed objects should be sent through to the `org.apache.isis.applib.services.publish.PublisherService` for publishing.
 
-The service's \{@link org.apache.isis.applib.services.publish.PublisherService#publish(PublishedObjects) publish method is called only once per transaction, with collecting details of all changed domain objects.
+The service's publish method is called only once per transaction, with `PublishedObjects` collecting details of all changed domain objects.
 
-This setting can be overridden on a case-by-case basis using \{@link org.apache.isis.applib.annotation.DomainObject#publishing().
+This setting can be overridden on a case-by-case basis using `org.apache.isis.applib.annotation.DomainObject#publishing()`.
 
 
 | isis.applib.annotation. +
@@ -253,7 +253,7 @@ domain-object. +
 removing-lifecycle-event. +
 post-for-default
 |  true
-| Influences whether an should be published (on the internal \{@link org.apache.isis.applib.services.eventbus.EventBusService) whenever a persistent domain _entity_ is about to be removed (that is, deleted) from the persistence store.
+| Influences whether an `org.apache.isis.applib.events.lifecycle.ObjectRemovingEvent` should be published (on the internal `org.apache.isis.applib.services.eventbus.EventBusService`) whenever a persistent domain _entity_ is about to be removed (that is, deleted) from the persistence store.
 
 The algorithm for determining whether (and what type of) an event is sent depends on the value of the @DomainObject(removingLifecycleEvent=...) for the domain object in question.
 
@@ -271,7 +271,7 @@ domain-object. +
 updated-lifecycle-event. +
 post-for-default
 |  true
-| Influences whether an should be published (on the internal \{@link org.apache.isis.applib.services.eventbus.EventBusService) whenever a persistent domain _entity_ has been updated in the persistence store.
+| Influences whether an `org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent` should be published (on the internal `org.apache.isis.applib.services.eventbus.EventBusService`) whenever a persistent domain _entity_ has been updated in the persistence store.
 
 The algorithm for determining whether (and what type of) an event is sent depends on the value of the @DomainObject(updatedLifecycleEvent=...) for the domain object in question.
 
@@ -287,7 +287,7 @@ domain-object. +
 updating-lifecycle-event. +
 post-for-default
 |  true
-| Influences whether an should be published (on the internal \{@link org.apache.isis.applib.services.eventbus.EventBusService) whenever a persistent domain _entity_ is about to be updated in the persistence store.
+| Influences whether an `org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent` should be published (on the internal `org.apache.isis.applib.services.eventbus.EventBusService`) whenever a persistent domain _entity_ is about to be updated in the persistence store.
 
 The algorithm for determining whether (and what type of) an event is sent depends on the value of the @DomainObject(updatingLifecycleEvent=...) for the domain object in question.
 
@@ -304,9 +304,9 @@ label-position
 | 
 | Defines the default position for the label for an action parameter.
 
-Can be overridden on a case-by-case basis using
+Can be overridden on a case-by-case basis using `org.apache.isis.applib.annotation.ParameterLayout#labelPosition()`.
 
-If left as \{@link LabelPosition#NOT_SPECIFIED and not overridden, then the position depends upon the viewer implementation.
+If left as `LabelPosition#NOT_SPECIFIED` and not overridden, then the position depends upon the viewer implementation.
 
 
 | isis.applib.annotation. +
@@ -315,32 +315,32 @@ label-position
 | 
 | Defines the default position for the label for a domain object property.
 
-Can be overridden on a case-by-case basis using
+Can be overridden on a case-by-case basis using `org.apache.isis.applib.annotation.ParameterLayout#labelPosition()`.
 
-If left as \{@link LabelPosition#NOT_SPECIFIED and not overridden, then the position depends upon the viewer implementation.
+If left as `LabelPosition#NOT_SPECIFIED` and not overridden, then the position depends upon the viewer implementation.
 
 
 | isis.applib.annotation. +
 property.command
 | 
-| The default for whether property edits should be reified as a using the `org.apache.isis.applib.services.command.spi.CommandService, possibly so that the actual execution of the property edit can be deferred until later (background execution) or replayed against a copy of the system.
+| The default for whether property edits should be reified as a `org.apache.isis.applib.services.command.Command` using the `org.apache.isis.applib.services.command.spi.CommandService`, possibly so that the actual execution of the property edit can be deferred until later (background execution) or replayed against a copy of the system.
 
-In particular, the implementation of \{@link org.apache.isis.applib.services.command.Command represents the action invocation memento (obtained using as a \{@link org.apache.isis.schema.cmd.v2.CommandDto.
+In particular, the `org.apache.isis.applib.services.command.CommandWithDto` implementation of `org.apache.isis.applib.services.command.Command` represents the action invocation memento (obtained using `CommandWithDto#asDto()`) as a `org.apache.isis.schema.cmd.v2.CommandDto`.
 
-This setting can be overridden on a case-by-case basis using \{@link org.apache.isis.applib.annotation.Action#command()`.
+This setting can be overridden on a case-by-case basis using `org.apache.isis.applib.annotation.Action#command()`.
 
 
 | isis.applib.annotation. +
 property.domain-event. +
 post-for-default
 |  true
-| Influences whether an should be published (on the internal \{@link org.apache.isis.applib.services.eventbus.EventBusService) whenever an property is being interacted with.
+| Influences whether an `org.apache.isis.applib.events.domain.PropertyDomainEvent` should be published (on the internal `org.apache.isis.applib.services.eventbus.EventBusService`) whenever an property is being interacted with.
 
 Up to five different events can be fired during an interaction, with the event's phase determining which (hide, disable, validate, executing and executed). Subscribers can influence the behaviour at each of these phases.
 
-The algorithm for determining whether (and what type of) an event is actually sent depends on the value of the for the property in question:
+The algorithm for determining whether (and what type of) an event is actually sent depends on the value of the `org.apache.isis.applib.annotation.Property#domainEvent()` for the property in question:
 
-* If set to some subtype of \{@link org.apache.isis.applib.events.domain.PropertyDomainEvent.Noop propertyDomainEvent.Noop, then _no_ event is sent.
+* If set to some subtype of propertyDomainEvent.Noop, then _no_ event is sent.
 * If set to some subtype of propertyDomainEvent.Default, then an event is sent _if and only if_ this configuration setting is set.
 * If set to any other subtype, then an event _is_ sent.
 
@@ -348,11 +348,11 @@ The algorithm for determining whether (and what type of) an event is actually se
 | isis.applib.annotation. +
 property.publishing
 | 
-| The default for whether property edits should be sent through to the for publishing.
+| The default for whether property edits should be sent through to the `org.apache.isis.applib.services.publish.PublisherService` for publishing.
 
-The service's \{@link org.apache.isis.applib.services.publish.PublisherService#publish(Interaction.Execution) publish method is called only once per transaction, with collecting details of the identity of the target object, the property edited, and the new value of the property.
+The service's publish method is called only once per transaction, with `org.apache.isis.applib.services.iactn.Interaction.Execution` collecting details of the identity of the target object, the property edited, and the new value of the property.
 
-This setting can be overridden on a case-by-case basis using \{ @link org.apache.isis.applib.annotation.Property#publishing().
+This setting can be overridden on a case-by-case basis using \{ @link org.apache.isis.applib.annotation.Property#publishing()}.
 
 
 | isis.applib.annotation. +
@@ -360,9 +360,9 @@ view-model-layout. +
 css-class-ui-event. +
 post-for-default
 |  true
-| Influences whether an should be published (on the internal `org.apache.isis.applib.services.eventbus.EventBusService) whenever a view model (annotated with @ViewModel) is about to be rendered in the UI - thereby allowing subscribers to optionally change) the CSS classes that are used.
+| Influences whether an `org.apache.isis.applib.events.ui.CssClassUiEvent` should be published (on the internal `org.apache.isis.applib.services.eventbus.EventBusService`) whenever a view model (annotated with @ViewModel) is about to be rendered in the UI - thereby allowing subscribers to optionally `org.apache.isis.applib.events.ui.CssClassUiEvent#setCssClass(String)` change) the CSS classes that are used.
 
-The algorithm for determining whether (and what type of) an event is sent depends on the value of the \{@link org.apache.isis.applib.annotation.ViewModelLayout#cssClassUiEvent() @ViewModelLayout(cssClassEvent=...)` for the domain object in question:
+The algorithm for determining whether (and what type of) an event is sent depends on the value of the `org.apache.isis.applib.annotation.ViewModelLayout#cssClassUiEvent()` @ViewModelLayout(cssClassEvent=...)} for the domain object in question:
 
 * If set to some subtype of CssClassUiEvent.Noop, then _no_ event is sent.
 * If set to some subtype of CssClassUiEvent.Default, then an event is sent _if and only if_ this configuration setting is set.
@@ -374,9 +374,9 @@ view-model-layout. +
 icon-ui-event. +
 post-for-default
 |  true
-| Influences whether an should be published (on the internal `org.apache.isis.applib.services.eventbus.EventBusService) whenever a view model (annotated with @ViewModel) is about to be rendered in the UI - thereby allowing subscribers to optionally change) the icon that is used.
+| Influences whether an `org.apache.isis.applib.events.ui.IconUiEvent` should be published (on the internal `org.apache.isis.applib.services.eventbus.EventBusService`) whenever a view model (annotated with @ViewModel) is about to be rendered in the UI - thereby allowing subscribers to optionally `org.apache.isis.applib.events.ui.IconUiEvent#setIconName(String)` change) the icon that is used.
 
-The algorithm for determining whether (and what type of) an event is sent depends on the value of the \{@link org.apache.isis.applib.annotation.ViewModelLayout#iconUiEvent() @ViewModelLayout(iconEvent=...)` for the domain object in question:
+The algorithm for determining whether (and what type of) an event is sent depends on the value of the `org.apache.isis.applib.annotation.ViewModelLayout#iconUiEvent()` @ViewModelLayout(iconEvent=...)} for the domain object in question:
 
 * If set to some subtype of IconUiEvent.Noop, then _no_ event is sent.
 * If set to some subtype of IconUiEvent.Default, then an event is sent _if and only if_ this configuration setting is set.
@@ -388,11 +388,11 @@ view-model-layout. +
 layout-ui-event. +
 post-for-default
 |  true
-| Influences whether an should be published (on the internal `org.apache.isis.applib.services.eventbus.EventBusService) whenever a view model (annotated with @ViewModel) is about to be rendered in the UI - thereby allowing subscribers to optionally change) the layout that is used.
+| Influences whether an `org.apache.isis.applib.events.ui.LayoutUiEvent` should be published (on the internal `org.apache.isis.applib.services.eventbus.EventBusService`) whenever a view model (annotated with @ViewModel) is about to be rendered in the UI - thereby allowing subscribers to optionally `org.apache.isis.applib.events.ui.LayoutUiEvent#setLayout(String)` change) the layout that is used.
 
 If a different layout value has been set, then a layout in the form `Xxx.layout-zzz.xml` use used (where `zzz` is the name of the layout).
 
-The algorithm for determining whether (and what type of) an event is sent depends on the value of the \{@link org.apache.isis.applib.annotation.ViewModelLayout#layoutUiEvent() @ViewModelLayout(layoutEvent=...)` for the domain object in question:
+The algorithm for determining whether (and what type of) an event is sent depends on the value of the `org.apache.isis.applib.annotation.ViewModelLayout#layoutUiEvent()` @ViewModelLayout(layoutEvent=...)} for the domain object in question:
 
 * If set to some subtype of LayoutUiEvent.Noop, then _no_ event is sent.
 * If set to some subtype of LayoutUiEvent.Default, then an event is sent _if and only if_ this configuration setting is set.
@@ -404,9 +404,9 @@ view-model-layout. +
 title-ui-event. +
 post-for-default
 |  true
-| Influences whether an should be published (on the internal `org.apache.isis.applib.services.eventbus.EventBusService) whenever a view model (annotated with @ViewModel) is about to be rendered in the UI - thereby allowing subscribers to optionally change) the title that is used.
+| Influences whether an `org.apache.isis.applib.events.ui.TitleUiEvent` should be published (on the internal `org.apache.isis.applib.services.eventbus.EventBusService`) whenever a view model (annotated with @ViewModel) is about to be rendered in the UI - thereby allowing subscribers to optionally `org.apache.isis.applib.events.ui.TitleUiEvent#setTitle(String)` change) the title that is used.
 
-The algorithm for determining whether (and what type of) an event is sent depends on the value of the \{@link org.apache.isis.applib.annotation.ViewModelLayout#titleUiEvent() @ViewModelLayout(titleEvent=...)` for the domain object in question:
+The algorithm for determining whether (and what type of) an event is sent depends on the value of the `org.apache.isis.applib.annotation.ViewModelLayout#titleUiEvent()` @ViewModelLayout(titleEvent=...)} for the domain object in question:
 
 * If set to some subtype of TitleUiEvent.Noop, then _no_ event is sent.
 * If set to some subtype of TitleUiEvent.Default, then an event is sent _if and only if_ this configuration setting is set.
@@ -417,6 +417,6 @@ The algorithm for determining whether (and what type of) an event is sent depend
 view-model.validation. +
 semantic-checking.enable
 | 
-| Whether to check for inconsistencies between the usage of \{@link org.apache.isis.applib.annotation.ViewModel, and \{@link org.apache.isis.applib.annotation.ViewModelLayout.
+| Whether to check for inconsistencies between the usage of `org.apache.isis.applib.annotation.DomainObject`, `org.apache.isis.applib.annotation.ViewModel`, `org.apache.isis.applib.annotation.DomainObjectLayout` and `org.apache.isis.applib.annotation.ViewModelLayout`.
 
 

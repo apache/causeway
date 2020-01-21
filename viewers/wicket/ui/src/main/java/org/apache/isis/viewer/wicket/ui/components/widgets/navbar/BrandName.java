@@ -52,18 +52,25 @@ public class BrandName extends Label {
         super(id);
         this.placement = placement;
         
-        if(webAppContextPath!=null) {
-            applicationName = isisConfiguration.getViewer().getWicket().getApplication().getName();
-            logoHeaderUrl = webAppContextPath.prependContextPathIfLocal(isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoHeader());
-            logoSigninUrl = webAppContextPath.prependContextPathIfLocal(isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoSignin());
-        }
-
         setDefaultModel(Model.of(applicationName));
     }
 
     @Override
     protected void onConfigure() {
         super.onConfigure();
+
+        if(webAppContextPath != null && isisConfiguration != null) {
+
+            applicationName = isisConfiguration.getViewer().getWicket().getApplication().getName();
+            logoHeaderUrl =
+                    isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoHeader()
+                        .map(webAppContextPath::prependContextPathIfLocal)
+                        .orElse(null);
+            logoSigninUrl =
+                    isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoSignin()
+                        .map(webAppContextPath::prependContextPathIfLocal)
+                        .orElse(null);
+        }
 
         setVisible(placement.urlFor(logoHeaderUrl, logoSigninUrl) == null);
     }
