@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.isis.viewer.wicket.model.models.whereami;
+package org.apache.isis.viewer.wicket.model.modelhelpers;
 
 import java.util.LinkedList;
 import java.util.stream.Stream;
@@ -30,25 +30,28 @@ import lombok.val;
 
 /**
  *
+ * @implNote - previously this was called WhereAmIModel, but it isn't really a model in the Wicket sense (it's not serializable, for a start), hence renamed.
  * @since 2.0
- *
  */
-class WhereAmIModelDefault implements WhereAmIModel {
+public class WhereAmIHelper {
+
+    public static WhereAmIHelper of(EntityModel startOfChain) {
+        return new WhereAmIHelper(startOfChain);
+    }
 
     private final LinkedList<Object> reversedChainOfParents = new LinkedList<>();
     private final EntityModel startOfChain;
     private final IsisWebAppCommonContext commonContext;
 
-    private boolean isWhereAmIEnabled;
-    private int maxChainLength;
-    
-    public WhereAmIModelDefault(final EntityModel startOfChain) {
+    private final boolean isWhereAmIEnabled;
+
+    public WhereAmIHelper(final EntityModel startOfChain) {
         this.startOfChain = startOfChain;
         this.commonContext = startOfChain.getCommonContext();
 
         val settings = commonContext.getConfiguration().getViewer().getWicket().getBreadcrumbs();
         this.isWhereAmIEnabled = settings.isEnabled();
-        this.maxChainLength = settings.getMaxParentChainLength();
+        int maxChainLength = settings.getMaxParentChainLength();
 
         val adapter = startOfChain.getObject();
         final Object startNode = adapter.getPojo();
@@ -58,12 +61,18 @@ class WhereAmIModelDefault implements WhereAmIModel {
         .forEach(reversedChainOfParents::addFirst);
     }
 
-    @Override
+    /**
+     *
+     * @return the immutable start node of the navigable parent chain
+     */
     public EntityModel getStartOfChain() {
         return startOfChain;
     }
 
-    @Override
+    /**
+     * The navigable parent chain requires a minimum length of 2 in order to be shown.
+     * @return whether the where-am-I hint should be shown or hidden
+     */
     public boolean isShowWhereAmI() {
         if(!isWhereAmIEnabled) {
             return false; // this will prevent rendering
@@ -71,7 +80,10 @@ class WhereAmIModelDefault implements WhereAmIModel {
         return !reversedChainOfParents.isEmpty();
     }
 
-    @Override
+    /**
+     * Streams the linked nodes of this model's navigable parent chain in reverse order.
+     * @return reversed order stream of linked parent nodes, which does not include the start node
+     */
     public Stream<EntityModel> streamParentChainReversed() {
         if(!isWhereAmIEnabled)
             return Stream.empty(); //[ahuber] unexpected call, we could log a warning

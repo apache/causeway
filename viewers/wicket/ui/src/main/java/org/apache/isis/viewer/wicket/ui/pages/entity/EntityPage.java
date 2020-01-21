@@ -42,7 +42,7 @@ import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.models.whereami.WhereAmIModel;
+import org.apache.isis.viewer.wicket.model.modelhelpers.WhereAmIHelper;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
@@ -203,7 +203,7 @@ public class EntityPage extends PageAbstract {
 
         themeDiv.addOrReplace(entityPageContainer);
 
-        addWhereAmIIfShown(entityPageContainer, WhereAmIModel.of(model));
+        addWhereAmIIfShown(entityPageContainer, WhereAmIHelper.of(model));
 
         addChildComponents(entityPageContainer, model);
 
@@ -218,7 +218,7 @@ public class EntityPage extends PageAbstract {
 
     protected void addWhereAmIIfShown(
             WebMarkupContainer entityPageContainer,
-            WhereAmIModel whereAmIModel) {
+            WhereAmIHelper whereAmIModel) {
 
         val whereAmIContainer = new WebMarkupContainer("whereAmI-container");
         entityPageContainer.addOrReplace(whereAmIContainer);
