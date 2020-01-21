@@ -73,7 +73,7 @@
       <!--
               <h1><a href="#body" class="scrollto">Reve<span>al</span></a></h1>
       -->
-      <h1><a href="#body" class="scrollto">Apache Isis</a></h1>
+      <h1><a href="#body" class="scrollto"><img src="_/img/home/isis-logo-56x64.png"></img>Apache Isis</a></h1>
     </div>
 
     <nav id="nav-menu-container">
@@ -83,8 +83,8 @@
         <li class="menu-has-children">
           <a href="#portfolio">What?</a>
           <ul>
+            <li><a href="#testimonials">Reviews</a></li>
             <li><a href="#portfolio">Examples</a></li>
-            <li><a href="#testimonials">Testimonials</a></li>
           </ul>
         </li>
         <li class="menu-has-children">
@@ -110,8 +110,10 @@
         <li class="menu-has-children">
           <a href="">ASF</a>
           <ul>
+<!--
             <li><a href="#team">Our Committers</a></li>
             <li><hr/></li>
+-->
             <li><a href="https://www.apache.org/">Apache Home Page</a></li>
             <li><a href="https://www.apache.org/events/current-event">Events</a></li>
             <li><a href="https://www.apache.org/licenses/">Licenses</a></li>
@@ -130,14 +132,14 @@
 <section id="intro">
 
   <div class="intro-content">
-    <!--
-          <h2>Making <span>your ideas</span><br>happen!</h2>
-    -->
+    <h2>Software that<br/>reflects your business</h2>
+<!--
     <img src="_/img/home/isis-logo-568x286.png"/>
+-->
     <div>
       <p>
+        <a href="#testimonials" class="btn-projects scrollto">Reviews</a>
         <a href="#call-to-action" class="btn-get-started scrollto">Quick Start</a>
-        <a href="#testimonials" class="btn-projects scrollto">Testimonials</a>
       </p>
     </div>
   </div>
@@ -166,16 +168,14 @@
         </div>
 
         <div class="col-lg-6 content">
-          <h2>Domain Driven Apps, with a UI&nbsp;for&nbsp;Free</h2>
-          <h3>Apache Isis™ accelerates the feedback loop with your domain experts with a dynamically rendered web UI.</h3>
+          <h3><b>Apps built using Apache Isis™ automatically expose the concepts of your business domain in the user interface</b></h3>
 
           <ul>
-            <li><i class="ion-android-checkmark-circle"></i>Write your business logic in entities, domain services or view models.</li>
-            <li><i class="ion-android-checkmark-circle"></i>Your users access your business logic through a web UI that the framework dynamically renders from your domain model.</li>
-            <li><i class="ion-android-checkmark-circle"></i>Consume your domain model from other apps through REST API or the Swagger UI, also dynamically rendered.</li>
-            <li><i class="ion-android-checkmark-circle"></i>Integration test your domain model, on top of JUnit 5.  No need to write slow &amp; fragile Selenium tests, as the UI is automatically generated.</li>
+            <li><i class="ion-android-checkmark-circle"></i><span>Working on new apps, the business domain experts and the techies can work closely to learn, discover and then deliver.</span></li>
+            <li><i class="ion-android-checkmark-circle"></i><span>Existing apps are easy to modify - the extra UI code over and above the business domain is kept to a minimum.</span></li>
+            <li><i class="ion-android-checkmark-circle"></i><span>For business users, the app is easy to learn since the business concepts are clear and obvious</span></li>
+            <li><i class="ion-android-checkmark-circle"></i><span>When integrating to other systems, the development effort required is minimized through built-in mechanisms</span></li>
           </ul>
-
         </div>
       </div>
 
@@ -189,7 +189,7 @@
     <div class="container">
       <div class="section-header">
         <h2>Examples</h2>
-        <p>Some of the applications built using by the community using Apache Isis.  You can read more about these apps <a href="toc/powered-by/powered-by.html">here</a>.</p>
+        <p>Apache Isis apps are often (though not exclusively) line-of-business systems.  The section below shows some examples of built using by the Apache Isis user community.  You can read more about these apps <a href="toc/powered-by/powered-by.html">here</a>.</p>
       </div>
     </div>
 
@@ -251,7 +251,7 @@
   <section id="testimonials" class="wow fadeInUp">
     <div class="container">
       <div class="section-header">
-        <h2>Testimonials</h2>
+        <h2>Reviews</h2>
         <p>We gathered together some comments from current users of the framework.</p>
       </div>
       <div class="owl-carousel testimonials-carousel">
@@ -499,25 +499,34 @@ commented out Johan's, cos he's since come on board as a committer.
         <div class="col-lg-4">
           <div class="box wow fadeInUp">
             <h2>UI &amp; REST &ldquo;for free&rdquo;</h2>
-            <p class="description">Apache Isis dynamically builds both a generic UI and also a rich hypermedia REST API directly from the underlying domain objects. This makes for extremely rapid prototyping and a short feedback cycle, perfect for agile development. The UI can also be extended for specific use cases, and can be themed using Bootstrap.</p>
+            <p class="description">Apache Isis dynamically builds both a generic user interface and also a rich hypermedia REST API directly from the underlying domain objects. This makes for extremely rapid prototyping and a short feedback cycle, perfect for agile development. The UI can also be extended for specific use cases, and can be themed using Bootstrap.</p>
           </div>
         </div>
 
         <div class="col-lg-4">
           <div class="box wow fadeInUp" data-wow-delay="0.1s">
             <h2>Domain-Driven</h2>
-            <p class="description">The core of an Apache Isis application are the domain objects, either persisted entities or view models. Business rules can be associated directly with domain objects, or can be factored out into separate services. Apache Isis performs dependency injection everywhere to ensure that the application remains decoupled.</p>
+            <p class="description">The core of an Apache Isis application are the domain objects, either persisted entities or view models. Business rules can be associated directly with domain objects, or can be factored out into separate services. Apache Isis performs dependency injection everywhere to ensure that the application remains decoupled and testable.</p>
           </div>
         </div>
 
         <div class="col-lg-4">
           <div class="box wow fadeInUp" data-wow-delay="0.1s">
             <h2>Add-ons</h2>
-            <p class="description">Apache Isis has a large number of github-hosted add-on modules for security, auditing, command profiling, mail merge and other cross-cutting concerns. It also has a number of UI extensions for maps, calendars etc. as well as a catalog of generic subdomains such as documents, communications, notes and tasks. All are open source and designed for out-of-the-box use or to fork as you require.</p>
+            <p class="description">Apache Isis includes a large number of add-on modules for security, auditing, command profiling, mail merge and other cross-cutting concerns. It also has a number of UI extensions for maps, calendars etc. as well as a catalog of generic subdomains such as documents, communications, notes and tasks. All are open source and designed for out-of-the-box use or to modify as you require.</p>
           </div>
         </div>
 
       </div>
+
+<!--
+      <div>
+        <li><i class="ion-android-checkmark-circle"></i>Write your business logic in entities, domain services or view models.</li>
+        <li><i class="ion-android-checkmark-circle"></i>Your users access your business logic through a web UI that the framework dynamically renders from your domain model.</li>
+        <li><i class="ion-android-checkmark-circle"></i>Consume your domain model from other apps through REST API or the Swagger UI, also dynamically rendered.</li>
+        <li><i class="ion-android-checkmark-circle"></i>Integration test your domain model, on top of JUnit 5.  No need to write slow &amp; fragile Selenium tests, as the UI is automatically generated.</li>
+      </div>
+-->
 
     </div>
   </section>
@@ -710,9 +719,7 @@ mvn -pl webapp jetty:run</pre>
       </div>
     </div>
 
-    <!--==========================
-    Committers
-    ============================-->
+<!--
     <section id="team" class="wow fadeInUp">
       <div class="container">
         <div class="section-header">
@@ -783,6 +790,7 @@ mvn -pl webapp jetty:run</pre>
 
       </div>
     </section>
+-->
 
     <!--
           <div class="container mb-4">
