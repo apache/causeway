@@ -2,8 +2,7 @@ package org.ro.to
 
 import kotlinx.serialization.UnstableDefault
 import org.ro.handler.VersionHandler
-import org.ro.to.Version
-import org.ro.snapshots.ai1_16_0.RESTFUL_VERSION
+import org.ro.snapshots.simpleapp1_16_0.RESTFUL_VERSION
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

@@ -2,7 +2,7 @@ package org.ro.to
 
 import kotlinx.serialization.UnstableDefault
 import org.ro.handler.ActionHandler
-import org.ro.snapshots.ai1_16_0.*
+import org.ro.snapshots.simpleapp1_16_0.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull

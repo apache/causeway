@@ -4,7 +4,7 @@ import kotlinx.serialization.UnstableDefault
 import org.ro.IntegrationTest
 import org.ro.core.event.EventStore
 import org.ro.core.model.DisplayList
-import org.ro.snapshots.ai1_16_0.*
+import org.ro.snapshots.simpleapp1_16_0.*
 import org.ro.to.Property
 import org.ro.to.RelType
 import kotlin.test.Test

@@ -4,11 +4,13 @@ import org.ro.core.Utils
 
 object IconManager {
     val PREFIX = "fas fa-"
-    val DEFAULT_ICON = PREFIX + "cube"
+    val DEFAULT_ICON = PREFIX + "bolt"
 
     /* Recreate from configuration value*/
     val word2Icon = mapOf<String, String>(
+            "All" to "star",
             "Actions" to "ellipsis-v",
+            "blobs" to "cloud",
             "Create" to "plus",
             "Edit" to "pencil",
             "Delete" to "trash",
@@ -16,8 +18,10 @@ object IconManager {
             "List" to "list",
             "Download" to "download",
             "Open" to "book",
+            "Primitive" to "hash",
             "Run" to "rocket",
             "Simple" to "cubes",
+            "Tree" to "tree",
             "Configuration" to "wrench",
             "Manager" to "manager",
             "Switch" to "power-off",

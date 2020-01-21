@@ -2,7 +2,7 @@ package org.ro.core.event
 
 import org.ro.core.Utils
 import org.ro.core.aggregator.BaseAggregator
-import org.ro.to.TransferObject
+import org.ro.to.TObject
 import org.ro.ui.kv.UiManager
 import pl.treksoft.kvision.panel.SimplePanel
 import pl.treksoft.kvision.state.observableListOf
@@ -12,12 +12,12 @@ import pl.treksoft.kvision.state.observableListOf
  * Subsequent invocations are served from this cache.
  * UI events (Dialogs, Windows, etc.) are logged here as well.
  *
- * @See https://en.wikipedia.org/wiki/Proxy_pattern
- * @See https://martinfowler.com/eaaDev/EventSourcing.html
+ * @see https://en.wikipedia.org/wiki/Proxy_pattern
+ * @see https://martinfowler.com/eaaDev/EventSourcing.html
  */
 object EventStore {
     var log = observableListOf<LogEntry>()
-    var logStartTime: Int = 0
+    private var logStartTime: Int = 0
 
     private fun log(logEntry: LogEntry) {
         log.add(logEntry)
@@ -98,8 +98,14 @@ object EventStore {
         }
     }
 
-    fun find(to: TransferObject): LogEntry? {
-        return log.firstOrNull { it.obj == to }
+    fun find(tObject: TObject): LogEntry? {
+        log.forEach {
+            if (it.obj is TObject) {
+                if ((it.obj as TObject).instanceId == tObject.instanceId)
+                    return it
+            }
+        }
+        return null
     }
 
     private fun urlContains(url: String, search: String): Boolean {
@@ -124,14 +130,14 @@ object EventStore {
         val cl = Utils.removeHexCode(compareUrl)
         val searchList: List<String> = sl.split("/")
         val compareList: List<String> = cl.split("/")
-        if (searchList.size != compareList.size) {
+        if (compareList.size != searchList.size) {
             return false
         }
 
         var diffCnt = 0
         for ((i, s) in searchList.withIndex()) {
             val c = compareList[i]
-            if (!s.equals(c)) {
+            if (s != c) {
                 diffCnt++
                 val n = s.toIntOrNull()
                 // if the difference is a String, it is not allowed and counts double
@@ -156,7 +162,7 @@ object EventStore {
     }
 
     fun reset() {
-        log = observableListOf<LogEntry>()
+        log.removeAll(log)
     }
 
 }

@@ -2,8 +2,8 @@ package org.ro.core.model
 
 import kotlinx.serialization.UnstableDefault
 import org.ro.handler.TObjectHandler
-import org.ro.snapshots.ai1_16_0.CFG_1
-import org.ro.snapshots.ai1_16_0.SO_0
+import org.ro.snapshots.simpleapp1_16_0.CFG_1
+import org.ro.snapshots.simpleapp1_16_0.SO_0
 import org.ro.to.TObject
 import org.ro.to.Value
 import kotlin.test.Test

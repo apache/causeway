@@ -3,8 +3,8 @@ package org.ro.core.event
 import kotlinx.serialization.UnstableDefault
 import org.ro.core.aggregator.ObjectAggregator
 import org.ro.to.Method
-import org.ro.snapshots.ai1_16_0.RESTFUL
-import org.ro.snapshots.ai1_16_0.RESTFUL_SERVICES
+import org.ro.snapshots.simpleapp1_16_0.RESTFUL
+import org.ro.snapshots.simpleapp1_16_0.RESTFUL_SERVICES
 import pl.treksoft.kvision.panel.VPanel
 import kotlin.test.*
 

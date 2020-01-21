@@ -41,10 +41,18 @@ class DisplayObject(override val title: String) : BaseDisplayable() {
             val tObject = data!!.delegate
             val getLink = tObject.links.first()
             val href = getLink.href
+            //WATCHOUT this is sequence dependent: GET and PUT share the same URL - if called after PUTting, it may fail
+            val getLogEntry = EventStore.find(href)!!
+            getLogEntry.setReload()
+
             val putLink = Link(method = Method.PUT.operation, href = href)
             val logEntry = EventStore.find(href)
-            val aggDsp =  logEntry?.getAggregator()
-            aggDsp?.invoke(putLink)
+            val aggregator =  logEntry?.getAggregator()!!
+            aggregator.invoke(putLink)
+
+            // now data should be reloaded - wait for invoking PUT?
+            aggregator.invoke(getLink)
+            //refresh of display to be triggered?
         }
     }
 

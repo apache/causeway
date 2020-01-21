@@ -1,7 +1,7 @@
 package org.ro.handler
 
 import kotlinx.serialization.UnstableDefault
-import org.ro.snapshots.ai1_16_0.RESTFUL
+import org.ro.snapshots.simpleapp1_16_0.RESTFUL
 import org.ro.to.Restful
 import kotlin.test.Test
 import kotlin.test.assertEquals

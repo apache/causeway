@@ -3,7 +3,8 @@ package org.ro.to
 import kotlinx.serialization.UnstableDefault
 import org.ro.core.Utils
 import org.ro.handler.TObjectHandler
-import org.ro.snapshots.ai1_16_0.SO_0
+import org.ro.snapshots.demo2_0_0.ACTIONS_TEXT_INVOKE
+import org.ro.snapshots.simpleapp1_16_0.SO_0
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -51,7 +52,6 @@ class TObjectTest {
         assertEquals(10, members.size)
         assertEquals(4, properties.size)
 
-        //val matchingPredicate = { it.value == 0 }
         val namedMembers = properties.filter { it.id == "name" }
         assertEquals(1, namedMembers.size)
 
@@ -59,5 +59,28 @@ class TObjectTest {
         val content = nameMember.value!!.content as String
         assertEquals("Foo", content)
     }
+
+    @Test
+    fun testTextDemo() {
+        //given
+        val jsonStr = ACTIONS_TEXT_INVOKE.str
+        // when
+        val to = TObjectHandler().parse(jsonStr) as TObject
+        val members = to.members
+        val properties = to.getProperties()
+        // then
+        assertNotNull(to.links)
+        assertEquals("TextDemo", to.links[0].title)
+        assertEquals(6, members.size)
+        assertEquals(5, properties.size)
+
+        val filteredProperties = properties.filter { it.id == "description" }
+        assertEquals(1, filteredProperties.size)
+
+        val description = filteredProperties.first()
+        val content = description.value!!.content as String
+        assertTrue(content.startsWith("<div") && content.endsWith("div>"))
+    }
+
 
 }

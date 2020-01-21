@@ -8,7 +8,7 @@ import org.ro.core.aggregator.BaseAggregator
 import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
 import org.ro.handler.ResponseHandler
-import org.ro.snapshots.ai1_16_0.Response
+import org.ro.snapshots.Response
 import org.ro.to.Method
 import org.ro.ui.kv.UiManager
 import org.w3c.xhr.XMLHttpRequest

@@ -4,7 +4,7 @@ import kotlinx.serialization.UnstableDefault
 import org.ro.handler.LayoutHandler
 import org.ro.handler.TObjectHandler
 import org.ro.layout.Layout
-import org.ro.snapshots.ai1_16_0.*
+import org.ro.snapshots.simpleapp1_16_0.*
 import org.ro.to.TObject
 import kotlin.test.Test
 import kotlin.test.assertEquals

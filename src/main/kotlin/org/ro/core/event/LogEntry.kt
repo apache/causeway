@@ -16,11 +16,11 @@ enum class EventState(val id: String, val iconName: String, val style: ButtonSty
     ERROR("ERROR", "fas fa-exclamation-circle", ButtonStyle.DANGER),
     SUCCESS("SUCCESS", "fas fa-check-circle", ButtonStyle.SUCCESS),
     VIEW("VIEW", "fas fa-info-circle", ButtonStyle.INFO),
-    CACHE_USED("CACHE_USED", "fas fa-caret-circle-left", ButtonStyle.OUTLINESUCCESS),
-    CLOSED("CLOSED", "fas fa-times-circle", ButtonStyle.OUTLINEINFO)
-    //,OBSOLETE("OBSOLETE", "fa-times-circle", Col.LIGHTBLUE)
-    // IMPROVE list* need to be skipped, are never cached
-    // here are multiple aspects intermangled: req/resp, view, as well as cache
+    DUPLICATE("DUPLICATE", "fas fa-link", ButtonStyle.OUTLINESUCCESS),
+    CLOSED("CLOSED", "fas fa-times-circle", ButtonStyle.OUTLINEINFO),
+    RELOAD("RELOAD", "fas fa-retweet", ButtonStyle.OUTLINEWARNING)
+    // IMPROVE multiple aspects intermangled: req/resp, view, as well as cache
+    // encapsulate access with managers?
 }
 
 @Serializable
@@ -89,7 +89,11 @@ data class LogEntry(
     }
 
     fun setCached() {
-        state = EventState.CACHE_USED
+        state = EventState.DUPLICATE
+    }
+
+    fun setReload() {
+        state = EventState.RELOAD
     }
 
     fun getTransferObject(): TransferObject? {

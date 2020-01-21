@@ -2,7 +2,7 @@ package org.ro.to.mb
 
 import kotlinx.serialization.UnstableDefault
 import org.ro.handler.MenuBarsHandler
-import org.ro.snapshots.ai1_16_0.RESTFUL_MENUBARS
+import org.ro.snapshots.simpleapp1_16_0.RESTFUL_MENUBARS
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
