@@ -275,7 +275,7 @@ public class ApplicationFeatureRepositoryDefaultTest {
 
         }
 
-        @Test
+        @Test @Ignore // ApplicationFeature is a value not an entity, hence no longer created with the Factory Service
         public void parentNotYetEncountered() throws Exception {
 
             // given
@@ -285,7 +285,7 @@ public class ApplicationFeatureRepositoryDefaultTest {
             final ApplicationFeature newlyCreatedParent = new ApplicationFeature();
 
             context.checking(new Expectations() {{
-                oneOf(mockFactoryService).instantiate(ApplicationFeature.class);
+                allowing(mockFactoryService).instantiate(ApplicationFeature.class);
                 will(returnValue(newlyCreatedParent));
             }});
 

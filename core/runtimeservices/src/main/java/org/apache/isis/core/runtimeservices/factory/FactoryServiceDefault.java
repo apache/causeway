@@ -38,7 +38,9 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 
@@ -59,6 +61,7 @@ public class FactoryServiceDefault implements FactoryService {
     @Inject private SpecificationLoader specificationLoader;
     @Inject private ServiceInjector serviceInjector;
     @Inject private IsisSystemEnvironment isisSystemEnvironment; 
+    @Inject private ObjectManager objectManager;
 
     @Override
     public <T> T get(final Class<T> requiredType) {
@@ -68,11 +71,20 @@ public class FactoryServiceDefault implements FactoryService {
     }
 
     @Override
+    public <T> T detachedEntity(final Class<T> domainClass) {
+        val spec = specificationLoader.loadSpecification(domainClass);
+        if(!spec.isEntity()) {
+            throw _Exceptions.illegalArgument("Class '%s' is not an entity", domainClass.getName());
+        }
+        return _Casts.uncheckedCast(createObject(spec));
+    }
+    
+    @Override
     public <T> T mixin(final Class<T> mixinClass, final Object mixedIn) {
         val objectSpec = specificationLoader.loadSpecification(mixinClass);
         val mixinFacet = objectSpec.getFacet(MixinFacet.class);
         if(mixinFacet == null) {
-            throw _Exceptions.illegalArgument("Class '%s'  is not a mixin", mixinClass.getName());
+            throw _Exceptions.illegalArgument("Class '%s' is not a mixin", mixinClass.getName());
         }
         if(!mixinFacet.isMixinFor(mixedIn.getClass())) {
             throw _Exceptions.illegalArgument("Mixin class '%s' is not a mixin for supplied object '%s'",
@@ -108,18 +120,17 @@ public class FactoryServiceDefault implements FactoryService {
         }
 
         val viewModelFacet = spec.getFacet(ViewModelFacet.class);
-        val viewModel = viewModelFacet.createViewModelPojo(spec, mementoStr, __->instantiate(viewModelClass));
+        val viewModel = viewModelFacet.createViewModelPojo(spec, mementoStr, __->createObject(spec));
 
         return _Casts.uncheckedCast(viewModel);
     }
-
-    // -- DEPRECATIONS
     
-    @Override
-    public <T> T instantiate(final Class<T> domainClass) {
-        val spec = specificationLoader.loadSpecification(domainClass);
-        val adapter = ManagedObject._newTransientInstance(spec); 
-        return _Casts.uncheckedCast(adapter.getPojo());
+    // -- HELEPR    
+    
+    private Object createObject(ObjectSpecification spec) {
+        val objectCreateRequest = ObjectCreator.Request.of(spec);
+        val managedObject = objectManager.createObject(objectCreateRequest);
+        return _Casts.uncheckedCast(managedObject.getPojo());
     }
 
 

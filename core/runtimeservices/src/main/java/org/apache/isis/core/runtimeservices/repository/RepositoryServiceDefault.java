@@ -67,10 +67,9 @@ public class RepositoryServiceDefault implements RepositoryService {
         this.autoFlush = !disableAutoFlush;
     }
 
-
     @Override
-    public <T> T instantiate(final Class<T> domainClass) {
-        return factoryService.instantiate(domainClass);
+    public <T> T detachedEntity(final Class<T> domainClass) {
+        return factoryService.detachedEntity(domainClass);
     }
 
     @Override

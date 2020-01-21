@@ -266,7 +266,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
             return null;
         }
 
-        val permission = factory.instantiate(ApplicationPermission.class);
+        val permission = factory.detachedEntity(ApplicationPermission.class);
         permission.setRole(role);
         permission.setRule(rule);
         permission.setMode(mode);

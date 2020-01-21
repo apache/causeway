@@ -26,7 +26,6 @@ import java.util.function.Predicate;
 import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
@@ -36,6 +35,10 @@ import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.core.commons.internal.collections._Sets;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.UtilityClass;
 
 /**
  * Canonical application feature, identified by {@link ApplicationFeatureId},
@@ -74,139 +77,56 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
         setFeatureId(featureId);
     }
 
-
-    // -- featureId
+    @Getter @Setter
     private ApplicationFeatureId featureId;
-
-    @Programmatic
-    public ApplicationFeatureId getFeatureId() {
-        return featureId;
-    }
-
-    public void setFeatureId(final ApplicationFeatureId applicationFeatureId) {
-        this.featureId = applicationFeatureId;
-    }
-
-
-    // -- memberType
-    private ApplicationMemberType memberType;
 
     /**
      * Only for {@link ApplicationFeatureType#MEMBER member}s.
      */
-    @Programmatic
-    public ApplicationMemberType getMemberType() {
-        return memberType;
-    }
-
-    public void setMemberType(final ApplicationMemberType memberType) {
-        this.memberType = memberType;
-    }
-
-
-    // -- returnTypeName (for: properties, collections, actions)
-    private String returnTypeName;
+    @Getter @Setter
+    private ApplicationMemberType memberType;
 
     /**
      * Only for {@link ApplicationMemberType#ACTION action}s.
      */
-    @Programmatic
-    public String getReturnTypeName() {
-        return returnTypeName;
-    }
+    @Getter @Setter
+    private String returnTypeName;
 
-    public void setReturnTypeName(final String returnTypeName) {
-        this.returnTypeName = returnTypeName;
-    }
-
-
-    // -- contributed (for: properties, collections, actions)
+    @Getter @Setter
     private boolean contributed;
-
-    @Programmatic
-    public boolean isContributed() {
-        return contributed;
-    }
-
-    public void setContributed(final boolean contributed) {
-        this.contributed = contributed;
-    }
-
-
-    // -- derived (properties and collections)
-    private Boolean derived;
 
     /**
      * Only for {@link ApplicationMemberType#PROPERTY} and {@link ApplicationMemberType#COLLECTION}
      */
-    @Programmatic
-    public Boolean isDerived() {
-        return derived;
-    }
-
-    public void setDerived(final Boolean derived) {
-        this.derived = derived;
-    }
-
-
-    // -- propertyMaxLength (properties only)
-    private Integer propertyMaxLength;
+    @Getter @Setter
+    private Boolean derived;
 
     /**
      * Only for {@link ApplicationMemberType#ACTION action}s.
      */
-    @Programmatic
-    public Integer getPropertyMaxLength() {
-        return propertyMaxLength;
-    }
-
-    public void setPropertyMaxLength(final Integer propertyMaxLength) {
-        this.propertyMaxLength = propertyMaxLength;
-    }
-
-
-    // -- propertyTypicalLength (properties only)
+    @Getter @Setter
+    private Integer propertyMaxLength;
+    
+    /**
+     * Only for {@link ApplicationMemberType#ACTION action}s.
+     */
+    @Getter @Setter
     private Integer propertyTypicalLength;
 
     /**
      * Only for {@link ApplicationMemberType#ACTION action}s.
      */
-    @Programmatic
-    public Integer getPropertyTypicalLength() {
-        return propertyTypicalLength;
-    }
-
-    public void setPropertyTypicalLength(final Integer propertyTypicalLength) {
-        this.propertyTypicalLength = propertyTypicalLength;
-    }
-
-
-    // -- actionSemantics (actions only)
+    @Getter @Setter
     private SemanticsOf actionSemantics;
-
-    /**
-     * Only for {@link ApplicationMemberType#ACTION action}s.
-     */
-    @Programmatic
-    public SemanticsOf getActionSemantics() {
-        return actionSemantics;
-    }
-
-    public void setActionSemantics(final SemanticsOf actionSemantics) {
-        this.actionSemantics = actionSemantics;
-    }
-
 
     // -- packages: Contents
     private final SortedSet<ApplicationFeatureId> contents = _Sets.newTreeSet();
 
-    @Programmatic
     public SortedSet<ApplicationFeatureId> getContents() {
         ApplicationFeatureType.ensurePackage(this.getFeatureId());
         return contents;
     }
 
-    @Programmatic
     public void addToContents(final ApplicationFeatureId contentId) {
         ApplicationFeatureType.ensurePackage(this.getFeatureId());
         ApplicationFeatureType.ensurePackageOrClass(contentId);
@@ -217,7 +137,6 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     // -- classes: Properties, Collections, Actions
     private final SortedSet<ApplicationFeatureId> properties = _Sets.newTreeSet();
 
-    @Programmatic
     public SortedSet<ApplicationFeatureId> getProperties() {
         ApplicationFeatureType.ensureClass(this.getFeatureId());
         return properties;
@@ -225,7 +144,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
 
 
     private final SortedSet<ApplicationFeatureId> collections = _Sets.newTreeSet();
-    @Programmatic
+    
     public SortedSet<ApplicationFeatureId> getCollections() {
         ApplicationFeatureType.ensureClass(this.getFeatureId());
         return collections;
@@ -233,22 +152,19 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
 
 
     private final SortedSet<ApplicationFeatureId> actions = _Sets.newTreeSet();
-
-    @Programmatic
+    
     public SortedSet<ApplicationFeatureId> getActions() {
         ApplicationFeatureType.ensureClass(this.getFeatureId());
         return actions;
     }
-
-    @Programmatic
+    
     public void addToMembers(final ApplicationFeatureId memberId, final ApplicationMemberType memberType) {
         ApplicationFeatureType.ensureClass(this.getFeatureId());
         ApplicationFeatureType.ensureMember(memberId);
 
         membersOf(memberType).add(memberId);
     }
-
-    @Programmatic
+    
     public SortedSet<ApplicationFeatureId> membersOf(final ApplicationMemberType memberType) {
         ApplicationFeatureType.ensureClass(this.getFeatureId());
         switch (memberType) {
@@ -261,21 +177,18 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
         }
     }
 
-
     // -- Functions
 
-    @Vetoed
+    @Vetoed @UtilityClass
     public static class Functions {
-        private Functions(){}
 
         public static final Function<ApplicationFeature, String> GET_FQN = 
                 (ApplicationFeature input)->input.getFeatureId().getFullyQualifiedName();
 
     }
 
-    @Vetoed
+    @Vetoed @UtilityClass
     public static class Predicates {
-        private Predicates(){}
 
         public static Predicate<ApplicationFeature> packageContainingClasses(
                 final ApplicationMemberType memberType, 

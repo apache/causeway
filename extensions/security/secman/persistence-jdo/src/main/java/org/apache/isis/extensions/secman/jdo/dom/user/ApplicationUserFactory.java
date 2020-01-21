@@ -69,7 +69,7 @@ public interface ApplicationUserFactory {
         
         @Override
         public ApplicationUser newApplicationUser() {
-            return factory.instantiate(ApplicationUser.class);
+            return factory.detachedEntity(ApplicationUser.class);
         }
 
     }

@@ -64,13 +64,13 @@ public interface ApplicationTenancyFactory {
     @Primary
     @Qualifier("Default")
     public static class Default implements ApplicationTenancyFactory {
-
+        
+        @Inject FactoryService factory;
+        
         @Override
         public ApplicationTenancy newApplicationTenancy() {
-            return factory.instantiate(ApplicationTenancy.class);
+            return factory.detachedEntity(ApplicationTenancy.class);
         }
-
-        @Inject FactoryService factory;
 
     }
 

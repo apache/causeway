@@ -65,12 +65,12 @@ public interface ApplicationRoleFactory {
     @Qualifier("Default")
     public static class Default implements ApplicationRoleFactory {
 
+        @Inject FactoryService factory;
+        
         @Override
         public ApplicationRole newApplicationRole() {
-            return factory.instantiate(ApplicationRole.class);
+            return factory.detachedEntity(ApplicationRole.class);
         }
-
-        @Inject FactoryService factory;
 
     }
 

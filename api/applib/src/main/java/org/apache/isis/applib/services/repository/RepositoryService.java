@@ -28,10 +28,19 @@ import org.apache.isis.applib.query.Query;
 public interface RepositoryService {
 
     /**
-     * Same as {@link org.apache.isis.applib.services.factory.FactoryService#instantiate(Class)}; provided as a
+     * Same as {@link org.apache.isis.applib.services.factory.FactoryService#detachedEntity(Class)}; provided as a
      * convenience because instantiating and {@link #persist(Object) persisting} are often done together.
+     * @since 2.0
      */
-    <T> T instantiate(final Class<T> ofType);
+    <T> T detachedEntity(final Class<T> ofType);
+        
+    /**
+     * @deprecated if applicable use {@link #detachedEntity(Class)} instead 
+     */
+    @Deprecated
+    default <T> T instantiate(final Class<T> ofType) {
+        return detachedEntity(ofType);
+    }
 
     /**
      * Determines if the specified object is persistent (that it is stored permanently outside of the virtual machine

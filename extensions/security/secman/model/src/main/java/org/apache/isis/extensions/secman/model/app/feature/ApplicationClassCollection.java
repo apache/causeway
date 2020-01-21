@@ -71,7 +71,7 @@ public class ApplicationClassCollection extends ApplicationClassMember {
             )
     @MemberOrder(name="Detail", sequence = "2.7")
     public boolean isDerived() {
-        return getFeature().isDerived();
+        return Boolean.TRUE.equals(getFeature().getDerived());
     }
 
 

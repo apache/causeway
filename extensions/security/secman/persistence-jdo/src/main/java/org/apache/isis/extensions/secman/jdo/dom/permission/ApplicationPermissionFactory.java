@@ -66,12 +66,12 @@ public interface ApplicationPermissionFactory {
     @Qualifier("Default")
     public static class Default implements ApplicationPermissionFactory {
 
+        @Inject FactoryService factory;
+        
         @Override
         public ApplicationPermission newApplicationPermission() {
-            return factory.instantiate(ApplicationPermission.class);
+            return factory.detachedEntity(ApplicationPermission.class);
         }
-
-        @Inject FactoryService factory;
 
     }
 

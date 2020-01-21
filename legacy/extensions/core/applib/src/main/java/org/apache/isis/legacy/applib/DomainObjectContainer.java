@@ -185,7 +185,7 @@ public class DomainObjectContainer {
     @Deprecated
     @Programmatic
     public <T> T newTransientInstance(final Class<T> ofType) {
-    	return factoryService.instantiate(ofType);
+    	return factoryService.detachedEntity(ofType);
     }
 
     /**
@@ -202,7 +202,7 @@ public class DomainObjectContainer {
     	if(memento!=null) {
     		throw new IllegalArgumentException("parameter 'memento' is no longer supported");
     	}
-    	T obj = factoryService.instantiate(ofType);
+    	T obj = factoryService.viewModel(ofType);
     	serviceInjector.injectServicesInto(obj);
     	return obj;
     }

@@ -39,7 +39,10 @@ public class ApplicationFeatureFactory {
     @Inject FactoryService factoryService;
     
     public ApplicationFeature newApplicationFeature() {
-        return factoryService.instantiate(ApplicationFeature.class);
+        
+        return new ApplicationFeature(); // value type
+        
+        // return factoryService.instantiate(ApplicationFeature.class);
     }
 
 }
