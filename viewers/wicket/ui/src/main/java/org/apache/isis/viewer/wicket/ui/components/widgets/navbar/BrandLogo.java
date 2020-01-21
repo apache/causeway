@@ -65,17 +65,23 @@ public class BrandLogo extends WebComponent {
     }
 
     private String url() {
-        final String logoHeaderUrl =
-                isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoHeader()
-                    .map(webAppContextPath::prependContextPathIfLocal)
-                    .orElse(null);
 
-        String logoSigninUrl =
-                isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoSignin()
-                    .map(webAppContextPath::prependContextPathIfLocal)
-                    .orElse(null);
+        // TODO: sort this out, need to look up from service locator
+        //  see also BrandName
+        if(webAppContextPath != null && isisConfiguration != null) {
+            final String logoHeaderUrl =
+                    isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoHeader()
+                            .map(webAppContextPath::prependContextPathIfLocal)
+                            .orElse(null);
 
-        return placement.urlFor(logoHeaderUrl, logoSigninUrl);
+            String logoSigninUrl =
+                    isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoSignin()
+                            .map(webAppContextPath::prependContextPathIfLocal)
+                            .orElse(null);
+
+            return placement.urlFor(logoHeaderUrl, logoSigninUrl);
+        }
+        return null;
     }
 
 

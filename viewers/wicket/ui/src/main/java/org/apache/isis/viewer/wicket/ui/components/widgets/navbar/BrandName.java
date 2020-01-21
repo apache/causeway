@@ -59,6 +59,8 @@ public class BrandName extends Label {
     protected void onConfigure() {
         super.onConfigure();
 
+        // TODO: sort this out, need to look up from service locator
+        //  see also BrandLogo
         if(webAppContextPath != null && isisConfiguration != null) {
 
             applicationName = isisConfiguration.getViewer().getWicket().getApplication().getName();
