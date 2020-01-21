@@ -36,42 +36,55 @@ application.brand-logo-signin
 | isis.viewer.wicket. +
 application.css
 | 
-| URL of file to read any custom CSS, relative to relative to the class-path resource root.
+| URL of file to read any custom CSS, relative to `static` package on the class path.
+
+A typical value is `css/application.css`. This will result in this file being read from the `static.css` package (because static resources such as CSS are mounted by Spring by default under `static` package).
 
 
 | isis.viewer.wicket. +
 application. +
 favicon-content-type
 | 
-| 
+| Specifies the content type of the favIcon, if any.
+
 
 | isis.viewer.wicket. +
 application.favicon-url
 | 
-| 
+| Specifies the URL to use of the favIcon.
+
+This is expected to be a local resource.
+
 
 | isis.viewer.wicket. +
 application.js
 | 
-| URL of file to read any custom Javascript, relative to the class-path resource root.
+| URL of file to read any custom Javascript, relative to `static` package on the class path.
+
+A typical value is `css/application.js`. This will result in this file being read from the `static.js` package (because static resources such as CSS are mounted by Spring by default under `static` package).
 
 
 | isis.viewer.wicket. +
 application. +
 menubars-layout-xml
 |  menubars.layout.xml
-| 
+| Specifies the file name containing the menubars.
+
+This is expected to be a local resource.
+
 
 | isis.viewer.wicket. +
 application.name
 |  Apache Isis ™
-| Identifies the application on the sign-in page (unless a image is configured) and on top-left in the header (unless a \{@link Application#brandLogoHeader image is configured).
+| Identifies the application on the sign-in page (unless a sign-in image is configured) and on top-left in the header (unless a header image is configured).
 
 
 | isis.viewer.wicket. +
 application.version
 | 
-| The version of the application, eg 1.0, 1.1, etc. If present, then this will be shown in the footer on every page as well as on the about page.
+| The version of the application, eg 1.0, 1.1, etc.
+
+If present, then this will be shown in the footer on every page as well as on the about page.
 
 
 | isis.viewer.wicket.base-path
@@ -82,19 +95,35 @@ application.version
 | isis.viewer.wicket. +
 bookmarked-pages.max-size
 |  15
-| 
+| Specifies the maximum number of bookmarks to show.
+
+These are aged out on an MRU-LRU basis.
+
 
 | isis.viewer.wicket. +
 bookmarked-pages.show-chooser
 |  true
-| Determines whether the bookmarks should be available in the header.
+| Whether the panel providing linsk to previously visited object should be accessible from the top-left of the header.
 
 
 | isis.viewer.wicket. +
-breadcrumbs.show-chooser
+bookmarked-pages. +
+show-drop-down-on-footer
 |  true
-| Determines whether the breadcrumbs should be available in the footer.
+| Whether the drop-down list of previously visited objects should be shown in the footer.
 
+
+| isis.viewer.wicket. +
+breadcrumbs.enabled
+|  true
+| Whether to enable the 'where am i' feature, in other words the breadcrumbs.
+
+
+| isis.viewer.wicket. +
+breadcrumbs. +
+max-parent-chain-length
+|  64
+| 
 
 | isis.viewer.wicket. +
 clear-original-destination
@@ -120,13 +149,17 @@ Each Date scalar panel will use \{#getDatePattern()} or \{@linkplain #getDateTim
 | isis.viewer.wicket. +
 date-picker.max-date
 |  2100-01-01T00:00:00.000Z
-| As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in ISO format (per https://github.com/moment/moment/issues/1407).
+| Defines the first date available in the date picker.
+
+As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in ISO format (per https://github.com/moment/moment/issues/1407).
 
 
 | isis.viewer.wicket. +
 date-picker.min-date
 |  1900-01-01T00:00:00.000Z
-| As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in ISO format (per https://github.com/moment/moment/issues/1407).
+| Defines the first date available in the date picker.
+
+As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in ISO format (per https://github.com/moment/moment/issues/1407).
 
 
 | isis.viewer.wicket. +
@@ -226,17 +259,28 @@ This behaviour is disabled by default; the viewer will update the existing page 
 | isis.viewer.wicket. +
 remember-me.cookie-key
 |  isisWicketRememberMe
-| 
+| If the "remember me" feature is available, specifies the key to hold the encrypted credentials in the cookie.
+
 
 | isis.viewer.wicket. +
 remember-me.encryption-key
 | 
-| 
+| If the "remember me" feature is available, optionally specifies an encryption key (a complex string acting as salt to the encryption algorithm) for computing the encrypted credentials.
+
+If not set, then (in production mode) the Wicket viewer will compute a random key each time it is started. This will mean that any credentials stored between sessions will become invalid.
+
+Conversely, if set then (in production mode) then the same salt will be used each time the app is started, meaning that cached credentials can continue to be used across restarts.
+
+In prototype mode this setting is effectively ignored, because the same key will always be provided (either as set, or a fixed literal otherwise).
+
 
 | isis.viewer.wicket. +
 remember-me.suppress
 | 
-| 
+| Whether the sign-in page should have a "remember me" link (the default), or if it should be suppressed.
+
+If "remember me" is available and checked, then the viewer will allow users to login based on encrypted credentials stored in a cookie. An encryption key can optionally be specified.
+
 
 | isis.viewer.wicket. +
 replace-disabled-tag-with- +
@@ -266,14 +310,17 @@ By default this is enabled, in other words Wicket tags are stripped. Please be a
 | isis.viewer.wicket. +
 suppress-password-reset
 | 
-| 
+| Whether to suppress the password reset link on the sign-in page.
+
+Although this is disabled by default (in other words the 'reset password' link is not suppressed), note that in addition the application must provide an implementation of the as well as a configured `org.apache.isis.applib.services.userreg.EmailNotificationService (same conditions as for the \{@link #isSuppressSignUp()` sign-up link).
+
 
 | isis.viewer.wicket. +
 suppress-sign-up
 | 
 | Whether to suppress the sign-up link on the sign-in page.
 
-Although this is disabled by default (in other words the sign-up link is not suppressed), not that in addition the application must provide an implementation of the as well as a configured \{@link org.apache.isis.applib.services.userreg.EmailNotificationService.
+Although this is disabled by default (in other words the sign-up link is not suppressed), note that in addition the application must provide an implementation of the as well as a configured `org.apache.isis.applib.services.userreg.EmailNotificationService (same conditions as for the \{@link #isSuppressPasswordReset()` password reset link).
 
 
 | isis.viewer.wicket.themes. +
@@ -296,31 +343,30 @@ provider
 wicket.ui.components.widgets. +
 themepicker. +
 IsisWicketThemeSupportDefault
-| 
+| Specifies an implementation of `org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.IsisWicketThemeSupport`
+
 
 | isis.viewer.wicket.themes. +
 show-chooser
 | 
-| Whether the theme chooser should be available in the footer.
-
-
-| isis.viewer.wicket. +
-timestamp-pattern
-|  yyyy-MM-dd HH:mm:ss.SSS
-| The pattern used for rendering and parsing timestamps.
+| Whether the theme chooser widget should be available in the footer.
 
 
 | isis.viewer.wicket. +
 use-indicator-for-form-submit
 |  true
-| Whether to show an indicator for a form submit button that it has been clicked. This behaviour is enabled by default, but can be disabled using this flag.
+| Whether to show an indicator for a form submit button that it has been clicked.
+
+This behaviour is enabled by default.
 
 
 | isis.viewer.wicket. +
 use-indicator-for-no-arg- +
 action
 |  true
-| Whether to show an indicator for a no-arg action button that it has been clicked. This behaviour is enabled by default, but can be disabled using this flag.
+| Whether to show an indicator for a no-arg action button that it has been clicked.
+
+This behaviour is enabled by default.
 
 
 | isis.viewer.wicket.welcome. +
@@ -329,21 +375,17 @@ text
 | Text to be displayed on the application’s home page, used as a fallback if welcome.file is not specified. If a @HomePage action exists, then that will take precedence.
 
 
-| isis.viewer.wicket.where-am-i. +
-enabled
-|  true
-| 
-
-| isis.viewer.wicket.where-am-i. +
-max-parent-chain-length
-|  64
-| 
-
 | isis.viewer.wicket. +
 wicket-source-plugin
 | 
 | Whether the Wicket source plugin should be enabled; if so, the markup includes links to the Wicket source.
 
-Be aware that this can substantially impact performance.
+This behaviour is disabled by default. Please be aware that enabloing it can substantially impact performance.
+
+
+| isis.viewer.wicket. +
+timestamp-pattern
+|  yyyy-MM-dd HH:mm:ss.SSS
+| @deprecated - seemingly unused
 
 
