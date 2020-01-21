@@ -23,6 +23,8 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 import org.apache.isis.applib.ViewModel;
+import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.commons.MethodExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -30,6 +32,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
+
+import lombok.val;
 
 public abstract class RecreatableObjectFacetAbstract extends FacetAbstract implements ViewModelFacet {
 
@@ -81,7 +85,11 @@ public abstract class RecreatableObjectFacetAbstract extends FacetAbstract imple
         if (getRecreationMechanism() == RecreationMechanism.INITIALIZES) {
             throw new IllegalStateException("This view model instantiates rather than initializes");
         }
-        final Object viewModelPojo = doInstantiate(viewModelClass, mementoStr);
+        
+        val viewModelPojo = _Strings.isNullOrEmpty(mementoStr)
+                ? ClassExtensions.newInstance(viewModelClass)
+                : doInstantiate(viewModelClass, mementoStr);
+                
         getServiceInjector().injectServicesInto(viewModelPojo);
         invokePostConstructMethod(viewModelPojo);
         return viewModelPojo;

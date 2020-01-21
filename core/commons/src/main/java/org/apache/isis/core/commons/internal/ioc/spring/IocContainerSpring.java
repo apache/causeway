@@ -31,6 +31,7 @@ import org.springframework.core.ResolvableType;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Sets;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.internal.ioc.IocContainer;
 import org.apache.isis.core.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.core.commons.internal.base._With;
@@ -49,6 +50,16 @@ public class IocContainerSpring implements IocContainer {
     
     @NonNull private final ApplicationContext springContext;
 
+    @Override
+    public <T> Optional<T> get(Class<T> requiredType) {
+        val provider = springContext.getBeanProvider(requiredType);
+        try {
+            return Optional.ofNullable(provider.getIfUnique());
+        } catch (Exception cause) {
+            throw _Exceptions.unrecoverable("Failed to create an instance of type " + requiredType, cause);
+        }
+    }
+    
     @Override
     public Stream<ManagedBeanAdapter> streamAllBeans() {
 

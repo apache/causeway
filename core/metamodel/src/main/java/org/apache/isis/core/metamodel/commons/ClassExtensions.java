@@ -26,6 +26,7 @@ import java.lang.reflect.Modifier;
 import java.net.URL;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.internal._Constants;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.internal.resources._Resources;
@@ -38,6 +39,10 @@ public final class ClassExtensions {
     private ClassExtensions() {
     }
 
+    public static Object newInstance(final Class<?> type) {
+        return ClassExtensions.newInstance(type, _Constants.emptyClasses, _Constants.emptyObjects);
+    }
+    
     public static Object newInstance(final Class<?> extendee, final Class<?> constructorParamType, final Object constructorArg) {
         return ClassExtensions.newInstance(extendee, new Class[] { constructorParamType }, new Object[] { constructorArg });
     }

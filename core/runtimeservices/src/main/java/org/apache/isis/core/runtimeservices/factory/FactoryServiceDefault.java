@@ -62,8 +62,9 @@ public class FactoryServiceDefault implements FactoryService {
 
     @Override
     public <T> T get(final Class<T> requiredType) {
-        val candidates = isisSystemEnvironment.getIocContainer().select(requiredType);
-        return candidates.getFirstOrFail();
+        return isisSystemEnvironment.getIocContainer()
+                .get(requiredType)
+                .orElseThrow(_Exceptions::noSuchElement);
     }
 
     @Override

@@ -38,7 +38,7 @@ public class AssociatedActionMenu {
     @Action
     @ActionLayout(cssClassFa="fa-bolt")
     public AssociatedActionDemo associatedActions(){
-        val demo = factoryService.instantiate(AssociatedActionDemo.class);
+        val demo = factoryService.viewModel(AssociatedActionDemo.class);
         demo.initDefaults();
         return demo;
     }

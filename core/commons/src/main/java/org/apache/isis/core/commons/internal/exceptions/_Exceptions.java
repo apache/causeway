@@ -31,6 +31,7 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.base._With;
@@ -108,20 +109,20 @@ public final class _Exceptions {
 
     // -- UNRECOVERABLE
     
-    public static RuntimeException unrecoverable(Throwable cause) {
-        return new RuntimeException("unrecoverable error: with cause ...", cause);
+    public static IsisException unrecoverable(Throwable cause) {
+        return new IsisException("unrecoverable error: with cause ...", cause);
     }
 
-    public static RuntimeException unrecoverable(String msg) {
-        return new RuntimeException(String.format("unrecoverable error: '%s'", msg));
+    public static IsisException unrecoverable(String msg) {
+        return new IsisException(String.format("unrecoverable error: '%s'", msg));
     }
 
-    public static RuntimeException unrecoverable(String msg, Throwable cause) {
-        return new RuntimeException(String.format("unrecoverable error: '%s' with cause ...", msg), cause);
+    public static IsisException unrecoverable(String msg, Throwable cause) {
+        return new IsisException(String.format("unrecoverable error: '%s' with cause ...", msg), cause);
     }
     
-    public static RuntimeException unrecoverableFormatted(String format, Object ...args) {
-        return new RuntimeException(String.format("unrecoverable error: '%s'", 
+    public static IsisException unrecoverableFormatted(String format, Object ...args) {
+        return new IsisException(String.format("unrecoverable error: '%s'", 
                 String.format(format, args)));
     }
     

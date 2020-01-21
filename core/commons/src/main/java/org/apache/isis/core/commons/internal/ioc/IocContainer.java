@@ -27,6 +27,7 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 
 /**
@@ -40,6 +41,16 @@ public interface IocContainer {
 
     Optional<?> lookupById(final String id);
 
+    /**
+     * Return an instance (possibly shared or independent) of the object managed by the IoC container.
+     * @param <T>
+     * @param requiredType
+     * @return an instance of the bean, or null if not available or not unique
+     * (i.e. multiple candidates found with none marked as primary)
+     * @throws IsisException if instance creation failed
+     */
+    <T> Optional<T> get(Class<T> requiredType);    
+    
     <T> Can<T> select(Class<T> requiredType);
     
     <T> Can<T> select(Class<T> requiredType, Set<Annotation> qualifiersRequired);
