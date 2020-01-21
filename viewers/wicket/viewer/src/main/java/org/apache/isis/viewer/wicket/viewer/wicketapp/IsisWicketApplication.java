@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.wicket.viewer.wicketapp;
 
 import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
@@ -346,11 +347,9 @@ IsisWebAppCommonContext.Provider {
      * protected visibility to allow ad-hoc overriding of some other authentication strategy.
      */
     IAuthenticationStrategy newAuthenticationStrategy(IsisConfiguration configuration) {
-        final String cookieKey = configuration.getViewer().getWicket().getRememberMe().getCookieKey();
-        String encryptionKey = configuration.getViewer().getWicket().getRememberMe().getEncryptionKey();
-        if (encryptionKey == null) {
-            encryptionKey = defaultEncryptionKey();
-        }
+        val rememberMe = configuration.getViewer().getWicket().getRememberMe();
+        val cookieKey = rememberMe.getCookieKey();
+        val encryptionKey = rememberMe.getEncryptionKey().orElse(defaultEncryptionKey());
         return new DefaultAuthenticationStrategy(cookieKey, encryptionKey);
     }
 

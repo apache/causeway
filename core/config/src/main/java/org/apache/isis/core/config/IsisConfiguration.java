@@ -2370,9 +2370,9 @@ public class IsisConfiguration {
 
                 /**
                  * Identifies the application on the sign-in page
-                 * (unless a {@link Application#brandLogoSignin} image is configured) and
+                 * (unless a {@link Application#brandLogoSignin sign-in} image is configured) and
                  * on top-left in the header
-                 * (unless a {@link Application#brandLogoHeader} image is configured).
+                 * (unless a {@link Application#brandLogoHeader header} image is configured).
                  */
                 @NotNull @NotEmpty
                 private String name = "Apache Isis ™";
@@ -2438,10 +2438,43 @@ public class IsisConfiguration {
             
             @Data
             public static class Credit {
+                /**
+                 * URL of an organisation or individual to give credit to, appearing as a link in the footer.
+                 * A maximum of 3 credits is supported.
+                 *
+                 * <p>
+                 *     For the credit to appear, the {@link #getUrl() url} must be provided along with either
+                 *     {@link #getName() name} and/or {@link #getImage() image}.
+                 * </p>
+                 */
+                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?/([^/]+/)*$")
                 private String url;
+                /**
+                 * URL of an organisation or individual to give credit to, appearing as text in the footer.
+                 * A maximum of 3 credits is supported.
+                 *
+                 * <p>
+                 *     For the credit to appear, the {@link #getUrl() url} must be provided along with either
+                 *     {@link #getName() name} and/or {@link #getImage() image}.
+                 * </p>
+                 */
                 private String name;
+                /**
+                 * Name of an image resource of an organisation or individual, appearing as an icon in the footer.
+                 * A maximum of 3 credits is supported.
+                 *
+                 * <p>
+                 *     For the credit to appear, the {@link #getUrl() url} must be provided along with either
+                 *     {@link #getName() name} and/or {@link #getImage() image}.
+                 * </p>
+                 */
+                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
                 private String image;
-                
+
+                /**
+                 * Whether enough information has been defined for the credit to be appear.
+                 * @return
+                 */
                 public boolean isDefined() { return (name != null || image != null) && url != null; }
             }
             
@@ -2450,13 +2483,20 @@ public class IsisConfiguration {
             public static class DatePicker {
 
                 /**
+                 * Defines the first date available in the date picker.
+                 *
+                 * <p>
                  * As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in ISO format (per https://github.com/moment/moment/issues/1407).
+                 * </p>
                  */
                 @NotEmpty @NotNull
                 private String minDate = "1900-01-01T00:00:00.000Z";
 
                 /**
+                 * Defines the first date available in the date picker.
+                 * <p>
                  * As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in ISO format (per https://github.com/moment/moment/issues/1407).
+                 * </p>
                  */
                 @NotEmpty @NotNull
                 private String maxDate = "2100-01-01T00:00:00.000Z";
@@ -2479,9 +2519,44 @@ public class IsisConfiguration {
             private final RememberMe rememberMe = new RememberMe();
             @Data
             public static class RememberMe {
+                /**
+                 * Whether the sign-in page should have a &quot;remember me&quot; link (the default), or if it should
+                 * be suppressed.
+                 *
+                 * <p>
+                 *     If &quot;remember me&quot; is available and checked, then the viewer will allow users to login
+                 *     based on encrypted credentials stored in a cookie.  An {@link #getEncryptionKey() encryption key}
+                 *     can optionally be specified.
+                 * </p>
+                 */
                 private boolean suppress = false;
+
+                /**
+                 * If the &quot;remember me&quot; feature is available, specifies the key to hold the encrypted
+                 * credentials in the cookie.
+                 */
                 private String cookieKey = "isisWicketRememberMe";
-                private String encryptionKey;
+                /**
+                 * If the &quot;remember me&quot; feature is available, optionally specifies an encryption key
+                 * (a complex string acting as salt to the encryption algorithm) for computing the encrypted
+                 * credentials.
+                 *
+                 * <p>
+                 *     If not set, then (in production mode) the Wicket viewer will compute a random key each time it
+                 *     is started.  This will mean that any credentials stored between sessions will become invalid.
+                 * </p>
+                 *
+                 * <p>
+                 *     Conversely, if set then (in production mode) then the same salt will be used each time the app
+                 *     is started, meaning that cached credentials can continue to be used across restarts.
+                 * </p>
+                 *
+                 * <p>
+                 *     In prototype mode this setting is effectively ignored, because the same key will always be
+                 *     provided (either as set, or a fixed literal otherwise).
+                 * </p>
+                 */
+                private Optional<String> encryptionKey = Optional.empty();
             }
 
             private final Themes themes = new Themes();
@@ -2491,7 +2566,7 @@ public class IsisConfiguration {
                 /**
                  * A comma separated list of enabled theme names, as defined by https://bootswatch.com.
                  */
-                private List<String> enabled = new ArrayList<>();
+                private List<String> enabled = listOf("Cosmo","Flatly","Darkly","Sandstone","United");
 
                 /**
                  * The initial theme to use.
@@ -2503,16 +2578,19 @@ public class IsisConfiguration {
                 @NotEmpty @NotNull
                 private String initial = "Flatly";
 
+                /**
+                 * Specifies an implementation of <code>org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.IsisWicketThemeSupport</code>
+                 *
+                 */
                 @NotEmpty @NotNull
                 private String provider = "org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.IsisWicketThemeSupportDefault";
 
                 /**
-                 * Whether the theme chooser should be available in the footer.
+                 * Whether the theme chooser widget should be available in the footer.
                  */
                 private boolean showChooser = false;
             }
 
-            //TODO no meta data yet ... https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-configuration-metadata.html#configuration-metadata-property-attributes
             private final Welcome welcome = new Welcome();
             @Data
             public static class Welcome {
@@ -2524,7 +2602,6 @@ public class IsisConfiguration {
                  */
                 private String text;
             }
-
         }
     }
 
@@ -2540,6 +2617,12 @@ public class IsisConfiguration {
             private final Int Int = new Int();
             @Data
             public static class Int {
+                /**
+                 * Configures the number format understood by <code>IntValueSemanticsProviderAbstract</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
                 private String format;
             }
         }
@@ -2552,6 +2635,12 @@ public class IsisConfiguration {
             private final Byte Byte = new Byte();
             @Data
             public static class Byte {
+                /**
+                 * Configures the number format understood by <code>ByteValueSemanticsProviderAbstract</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
                 private String format;
             }
 
@@ -2559,6 +2648,12 @@ public class IsisConfiguration {
             private final Double Double = new Double();
             @Data
             public static class Double {
+                /**
+                 * Configures the number format understood by <code>DoubleValueSemanticsProviderAbstract</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
                 private String format;
             }
 
@@ -2566,6 +2661,12 @@ public class IsisConfiguration {
             private final Float Float = new Float();
             @Data
             public static class Float {
+                /**
+                 * Configures the number format understood by <code>FloatValueSemanticsProviderAbstract</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
                 private String format;
             }
 
@@ -2573,6 +2674,12 @@ public class IsisConfiguration {
             private final Long Long = new Long();
             @Data
             public static class Long {
+                /**
+                 * Configures the number format understood by <code>LongValueSemanticsProviderAbstract</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
                 private String format;
             }
 
@@ -2580,6 +2687,12 @@ public class IsisConfiguration {
             private final Short Short = new Short();
             @Data
             public static class Short {
+                /**
+                 * Configures the number format understood by <code>ShortValueSemanticsProviderAbstract</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
                 private String format;
             }
         }
@@ -2590,12 +2703,24 @@ public class IsisConfiguration {
             private final BigInteger bigInteger = new BigInteger();
             @Data
             public static class BigInteger {
+                /**
+                 * Configures the number format understood by <code>BigIntegerValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
                 private String format;
             }
 
             private final BigDecimal bigDecimal = new BigDecimal();
             @Data
             public static class BigDecimal {
+                /**
+                 * Configures the number format understood by <code>BigDecimalValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
                 private String format;
             }
         }
@@ -2606,37 +2731,72 @@ public class IsisConfiguration {
             private final LocalDateTime localDateTime = new LocalDateTime();
             @Data
             public static class LocalDateTime {
+                /**
+                 * Configures the formats understood by <code>LocalDateTimeValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
                 private String format = "medium";
             }
 
             private final OffsetDateTime offsetDateTime = new OffsetDateTime();
             @Data
             public static class OffsetDateTime {
+                /**
+                 * Configures the formats understood by <code>OffsetDateTimeValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
                 private String format = "medium";
             }
 
             private final OffsetTime offsetTime = new OffsetTime();
             @Data
             public static class OffsetTime {
+                /**
+                 * Configures the formats understood by <code>OffsetTimeValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
                 private String format = "medium";
             }
 
             private final LocalDate localDate = new LocalDate();
             @Data
             public static class LocalDate {
-                // lower case
+                /**
+                 * Configures the formats understood by <code>LocalDateValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
                 private String format = "medium";
             }
 
             private final LocalTime localTime = new LocalTime();
             @Data
             public static class LocalTime {
+                /**
+                 * Configures the formats understood by <code>LocalTimeValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
                 private String format = "medium";
             }
 
             private final ZonedDateTime zonedDateTime = new ZonedDateTime();
             @Data
             public static class ZonedDateTime {
+                /**
+                 * Configures the formats understood by <code>ZonedDateTimeValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
                 private String format = "medium";
             }
         }
@@ -2648,7 +2808,12 @@ public class IsisConfiguration {
             private final Date date = new Date();
             @Data
             public static class Date {
-                // lower case
+                /**
+                 * Configures the formats understood by <code>JavaUtilDateValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
                 private String format = "medium";
             }
 
@@ -2660,20 +2825,35 @@ public class IsisConfiguration {
             private final Date date = new Date();
             @Data
             public static class Date {
-                // lower case
+                /**
+                 * Configures the formats understood by <code>JavaSqlDateValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
                 private String format = "medium";
             }
             private final Time time = new Time();
             @Data
             public static class Time {
-                // lower case
+                /**
+                 * Configures the formats understood by <code>JavaSqlTimeValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
                 private String format = "short";
             }
 
             private final Timestamp timestamp = new Timestamp();
             @Data
             public static class Timestamp {
-                // lower case
+                /**
+                 * Configures the formats understood by <code>JavaSqlTimeStampValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
                 private String format = "short";
             }
 
@@ -2685,21 +2865,36 @@ public class IsisConfiguration {
             private final LocalDateTime localDateTime = new LocalDateTime();
             @Data
             public static class LocalDateTime {
-                // lower case
+                /**
+                 * Configures the formats understood by <code>JodaLocalDateTimeValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
                 private String format = "medium";
             }
 
             private final LocalDate localDate = new LocalDate();
             @Data
             public static class LocalDate {
-                // lower case
+                /**
+                 * Configures the formats understood by <code>JodaLocalDateValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
                 private String format = "medium";
             }
 
             private final DateTime dateTime = new DateTime();
             @Data
             public static class DateTime {
-                // lower case
+                /**
+                 * Configures the formats understood by <code>JodaDateTimeValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
                 private String format = "medium";
             }
         }
@@ -2715,12 +2910,24 @@ public class IsisConfiguration {
             private final Percentage percentage = new Percentage();
             @Data
             public static class Percentage {
+                /**
+                 * Configures the formats understood by <code>PercentageValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
                 private String format;
             }
 
             private final Money money = new Money();
             @Data
             public static class Money {
+                /**
+                 * Configures the default currency code used by <code>MoneyValueSemanticsProvider</code>.
+                 *
+                 * @deprecated
+                 */
+                @Deprecated
                 private Optional<String> currency = Optional.empty();
             }
         }
@@ -2733,7 +2940,28 @@ public class IsisConfiguration {
         private final Cors cors = new Cors();
         @Data
         public static class Cors {
+            /**
+             * Which origins are allowed to make CORS requests.
+             *
+             * <p>
+             *     The default is the wildcard (&quot;*&quot;) but this can be made more restrictive if necessary.
+             * </p>
+             *
+             * <p>
+             *     For more information, check the usage of the <code>cors.allowed.origins</code> init parameter
+             *     for <a href="https://github.com/eBay/cors-filter">EBay CORSFilter</a>.
+             * </p>
+             */
             private List<String> allowedOrigins = listOf("*");
+
+            /**
+             * Which HTTP headers are allowed in a CORS request.
+             *
+             * <p>
+             *     For more information, check the usage of the <code>cors.allowed.headers</code> init parameter
+             *     for <a href="https://github.com/eBay/cors-filter">EBay CORSFilter</a>.
+             * </p>
+             */
             private List<String> allowedHeaders = listOf(
                     "Content-Type",
                     "Accept",
@@ -2744,7 +2972,25 @@ public class IsisConfiguration {
                     "Cache-Control",
                     "If-Modified-Since",
                     "Pragma");
+
+            /**
+             * Which HTTP methods are permitted in a CORS request.
+             *
+             * <p>
+             *     For more information, check the usage of the <code>cors.allowed.methods</code> init parameter
+             *     for <a href="https://github.com/eBay/cors-filter">EBay CORSFilter</a>.
+             * </p>
+             */
             private List<String> allowedMethods = listOf("GET","PUT","DELETE","POST","OPTIONS");
+
+            /**
+             * Which HTTP headers are exposed in a CORS request.
+             *
+             * <p>
+             *     For more information, check the usage of the <code>cors.exposed.headers</code> init parameter
+             *     for <a href="https://github.com/eBay/cors-filter">EBay CORSFilter</a>.
+             * </p>
+             */
             private List<String> exposedHeaders = listOf("Authorization");
         }
     }

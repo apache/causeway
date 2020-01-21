@@ -66,29 +66,6 @@ public final class WebModuleCors extends WebModuleAbstract {
     }
 
 
-
-    /*
-    <filter>
-        <filter-name>CORS Filter</filter-name>
-        <filter-class>org.ebaysf.web.cors.CORSFilter</filter-class>
-        <init-param>
-            <param-name>cors.allowed.origins</param-name>
-            <param-value>*</param-value>
-        </init-param>
-        <init-param>
-            <param-name>cors.allowed.headers</param-name>
-            <param-value>Content-Type,Accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization,Cache-Control,If-Modified-Since,Pragma</param-value>
-        </init-param>
-        <init-param>
-            <param-name>cors.exposed.headers</param-name>
-            <param-value>Authorization</param-value>
-        </init-param>
-    </filter>
-    <filter-mapping>
-        <filter-name>CORS Filter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-     */
     @Override
     public Can<ServletContextListener> init(ServletContext ctx) throws ServletException {
 
