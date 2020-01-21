@@ -976,7 +976,7 @@ li.select2-results__option {
 
 .booleanPanel .form-control.scalarValueInlinePromptLink,
 .referencePanel .form-control.scalarValueInlinePromptLink {
-    display: inline-block;
+    display: inline-flex;
     width: 85%;
 }
 
