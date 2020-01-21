@@ -39,12 +39,11 @@ public class Favicon extends WebComponent {
     @Inject private transient IsisConfiguration isisConfiguration;
     @Inject private transient WebAppContextPath webAppContextPath;
 
-    private Optional<String> url = Optional.empty();
-    private Optional<String> contentType = Optional.empty();
-    
+    private String url = null;
+    private String contentType = null;
+
     public Favicon(String id) {
         super(id);
-
     }
 
     @Override
@@ -55,20 +54,27 @@ public class Favicon extends WebComponent {
 
             url = isisConfiguration.getViewer().getWicket().getApplication().getFaviconUrl()
                     .filter(x -> !Strings.isEmpty(x))
-                    .map(webAppContextPath::prependContextPathIfLocal);
+                    .map(webAppContextPath::prependContextPathIfLocal)
+                    .orElse(null);
 
             contentType = isisConfiguration.getViewer().getWicket().getApplication().getFaviconContentType()
-                    .filter(x -> !Strings.isEmpty(x));
+                    .filter(x -> !Strings.isEmpty(x))
+                    .orElse(null);;
         }
 
-        setVisible(url.isPresent());
+        setVisible(url != null);
     }
 
     @Override
     protected void onComponentTag(ComponentTag tag) {
         super.onComponentTag(tag);
 
-        url.ifPresent(url -> tag.put("href", url));
-        contentType.ifPresent(contentType -> tag.put("type", contentType));
+        if(url != null) {
+            tag.put("href", url);
+        }
+        if(contentType != null) {
+            tag.put("type", contentType);
+        }
+
     }
 }
