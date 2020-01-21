@@ -30,7 +30,6 @@ import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -41,6 +40,8 @@ import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+
+import lombok.val;
 
 public class RecreatableObjectFacetFactory extends FacetFactoryAbstract
 implements MetaModelRefiner, PostConstructMethodCache {
@@ -56,34 +57,41 @@ implements MetaModelRefiner, PostConstructMethodCache {
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
+        val facetHolder = processClassContext.getFacetHolder();
+        val type = processClassContext.getCls();
+        
         // ViewModel interface
         if (ViewModel.class.isAssignableFrom(processClassContext.getCls())) {
             final PostConstructMethodCache postConstructMethodCache = this;
             FacetUtil.addFacet(new RecreatableObjectFacetForRecreatableObjectInterface(
-                    processClassContext.getFacetHolder(), postConstructMethodCache));
+                    facetHolder, postConstructMethodCache));
         }
 
         // ViewModel annotation
-        final org.apache.isis.applib.annotation.ViewModel annotation = Annotations.getAnnotation(processClassContext.getCls(), org.apache.isis.applib.annotation.ViewModel.class);
-        FacetUtil.addFacet(create(annotation, processClassContext.getFacetHolder()));
-
-        // XmlRootElement annotation
-        final XmlRootElement xmlRootElement = Annotations.getAnnotation(processClassContext.getCls(), XmlRootElement.class);
-        FacetUtil.addFacet(create(xmlRootElement, processClassContext.getFacetHolder()));
-
+        final org.apache.isis.applib.annotation.ViewModel annotation = 
+                Annotations.getAnnotation(type, org.apache.isis.applib.annotation.ViewModel.class);
+        FacetUtil.addFacet(create(annotation, facetHolder));
+        
         // RecreatableDomainObject interface
-        if (RecreatableDomainObject.class.isAssignableFrom(processClassContext.getCls())) {
+        if (RecreatableDomainObject.class.isAssignableFrom(type)) {
             final PostConstructMethodCache postConstructMethodCache = this;
             FacetUtil.addFacet(new RecreatableObjectFacetForRecreatableDomainObjectInterface(
-                    processClassContext.getFacetHolder(), postConstructMethodCache));
+                    facetHolder, postConstructMethodCache));
         }
+        
+        // XmlRootElement annotation
+        final XmlRootElement xmlRootElement = Annotations.getAnnotation(type, XmlRootElement.class);
+        // handle with highest precedence
+        FacetUtil.replaceIfAlreadyPresent(create(xmlRootElement, facetHolder));
 
-        // DomainObject(nature=VIEW_MODEL) is managed by the DomainObjectFacetFactory
+        // DomainObject(nature=VIEW_MODEL) is managed by the DomainObjectAnnotationFacetFactory
     }
 
     private ViewModelFacet create(final org.apache.isis.applib.annotation.ViewModel annotation, final FacetHolder holder) {
         final PostConstructMethodCache postConstructMethodCache = this;
-        return annotation != null ? new RecreatableObjectFacetForViewModelAnnotation(holder, postConstructMethodCache) : null;
+        return annotation != null 
+                ? new RecreatableObjectFacetForViewModelAnnotation(holder, postConstructMethodCache) 
+                        : null;
     }
 
     private ViewModelFacet create(final XmlRootElement annotation, final FacetHolder holder) {
@@ -100,16 +108,19 @@ implements MetaModelRefiner, PostConstructMethodCache {
 
         programmingModel.addValidator((objectSpec, validate) -> {
 
-            final ViewModelFacet facet = objectSpec.getFacet(ViewModelFacet.class);
-            final Facet underlyingFacet = facet != null ? facet.getUnderlyingFacet() : null;
-            if(underlyingFacet != null && underlyingFacet.getClass() != facet.getClass()) {
+            val viewModelFacet = objectSpec.getFacet(ViewModelFacet.class);
+            val underlyingFacet = viewModelFacet != null ? viewModelFacet.getUnderlyingFacet() : null;
+            if(underlyingFacet == null) {
+                return true;    
+            }
+            if(underlyingFacet.getClass() != viewModelFacet.getClass()) {
                 validate.onFailure(
                         objectSpec,
                         objectSpec.getIdentifier(),
                         "%s: has multiple incompatible annotations/interfaces indicating that " +
                                 "it is a recreatable object of some sort (%s and %s)",
                                 objectSpec.getFullIdentifier(),
-                                facet.getClass().getSimpleName(),
+                                viewModelFacet.getClass().getSimpleName(),
                                 underlyingFacet.getClass().getSimpleName());
             }
             return true;

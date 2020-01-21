@@ -70,8 +70,8 @@ public enum Nature {
      * constructed from some sort of internal memory data structure.
      *
      * <p>
-     *     As for a {@link #EXTERNAL_ENTITY}, the identity of a synthetic entity is determined solely by the state of
-     *     object's properties (that have not been set to be ignored using
+     *     As for a {@link #EXTERNAL_ENTITY}, the identity of a synthetic entity is determined solely by the 
+     *     state of object's properties (that have not been set to be ignored using
      *     {@link org.apache.isis.applib.annotation.Property#notPersisted()}).
      * </p>
      *
@@ -82,7 +82,7 @@ public enum Nature {
      */
     INMEMORY_ENTITY,
     /**
-     * An object that is conceptually part of the application layer, and which surfaces behaviour and/or state that
+     * An object that is conceptually part of the application layer, and which surfaces behavior and/or state that
      * is aggregate of one or more domain entity.
      *
      * <p>

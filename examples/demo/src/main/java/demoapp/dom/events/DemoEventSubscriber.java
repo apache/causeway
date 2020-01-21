@@ -52,7 +52,7 @@ public class DemoEventSubscriber {
 
         log.info(emphasize("UiButtonEvent")); // <-- log to the console
         
-        val eventLogWriter = factoryService.instantiate(EventLogWriter.class); // <-- get a new writer
+        val eventLogWriter = factoryService.get(EventLogWriter.class); // <-- get a new writer
         
         wrapper.async(eventLogWriter)
             .run(EventLogWriter::storeEvent, event);

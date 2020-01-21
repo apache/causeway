@@ -24,7 +24,8 @@ import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 
-public class RecreatableObjectFacetForXmlRootElementAnnotation extends RecreatableObjectFacetAbstract {
+public class RecreatableObjectFacetForXmlRootElementAnnotation 
+extends RecreatableObjectFacetAbstract {
 
 
     public RecreatableObjectFacetForXmlRootElementAnnotation(

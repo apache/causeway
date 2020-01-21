@@ -28,8 +28,8 @@ import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetDeclarativeInitializingAbstract;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 
-public class RecreatableObjectFacetForDomainObjectAnnotation extends
-RecreatableObjectFacetDeclarativeInitializingAbstract {
+public class RecreatableObjectFacetForDomainObjectAnnotation 
+extends RecreatableObjectFacetDeclarativeInitializingAbstract {
 
     public static ViewModelFacet create(
             final Optional<DomainObject> domainObjectIfAny,
@@ -49,8 +49,7 @@ RecreatableObjectFacetDeclarativeInitializingAbstract {
                     case VIEW_MODEL:
                     case EXTERNAL_ENTITY:
                     case INMEMORY_ENTITY:
-                        final ViewModelFacet existingFacet = holder.getFacet(ViewModelFacet.class);
-                        if (existingFacet != null) {
+                        if (!holder.containsFacet(ViewModelFacet.class)) {
                             return null;
                         }
                         return new RecreatableObjectFacetForDomainObjectAnnotation(

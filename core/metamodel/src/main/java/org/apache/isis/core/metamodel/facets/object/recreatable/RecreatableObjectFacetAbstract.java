@@ -35,7 +35,9 @@ import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificati
 
 import lombok.val;
 
-public abstract class RecreatableObjectFacetAbstract extends FacetAbstract implements ViewModelFacet {
+public abstract class RecreatableObjectFacetAbstract 
+extends FacetAbstract 
+implements ViewModelFacet {
 
     private final PostConstructMethodCache postConstructMethodCache;
     private final ViewModelFacet.RecreationMechanism recreationMechanism;

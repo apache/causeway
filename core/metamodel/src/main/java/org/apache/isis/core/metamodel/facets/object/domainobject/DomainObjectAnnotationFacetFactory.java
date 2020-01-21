@@ -41,6 +41,7 @@ import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -300,7 +301,8 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                     postConstructMethodCache);
 
         if(recreatableObjectFacet != null) {
-            super.addFacet(recreatableObjectFacet);
+            // handle with least priority
+            FacetUtil.addIfNotAlreadyPresent(recreatableObjectFacet);
         } else {
 
             val mixinDomainObjectIfAny =

@@ -31,6 +31,27 @@ import lombok.val;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class FacetUtil {
 
+    public static void addIfNotAlreadyPresent(final Facet facet) {
+        if (facet == null) {
+            return;
+        }
+        val facetHolder = facet.getFacetHolder();
+        if(!facetHolder.containsFacet(facet.facetType())) {
+            facetHolder.addFacet(facet);    
+        }
+    }
+    
+    public static void replaceIfAlreadyPresent(final Facet facet) {
+        if (facet == null) {
+            return;
+        }
+        val facetHolder = facet.getFacetHolder();
+        facetHolder.addOrReplaceFacet(facet);
+        // second call sets the underlying facet as well to this type
+        // hacky, to pass validation
+        facetHolder.addOrReplaceFacet(facet); 
+    }
+    
 
     public static void addOrReplaceFacet(final Facet facet) {
         if (facet == null) {
