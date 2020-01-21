@@ -2457,7 +2457,7 @@ public class IsisConfiguration {
                  *     {@link #getName() name} and/or {@link #getImage() image}.
                  * </p>
                  */
-                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?/([^/]+/)*$")
+                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*$")
                 private String url;
                 /**
                  * URL of an organisation or individual to give credit to, appearing as text in the footer.
