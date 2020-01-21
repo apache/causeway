@@ -42,7 +42,6 @@ import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.ioc.BeanSort;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
-import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
@@ -187,10 +186,7 @@ public class MetaModelServiceDefault implements MetaModelService {
         }
         final ObjectSpecification objectSpec = specificationLoader.loadSpecification(domainType);
         if(objectSpec.isManagedBean()) {
-            if(objectSpec.getFacet(DomainServiceFacet.class)!=null) {
-                return BeanSort.MANAGED_BEAN_CONTRIBUTING;    
-            }
-            return BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING;
+            return BeanSort.MANAGED_BEAN_CONTRIBUTING;
         }
         if(objectSpec.isViewModel()) {
             return BeanSort.VIEW_MODEL;

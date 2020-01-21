@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.favicon;
 
-import java.util.Optional;
-
 import javax.inject.Inject;
 
 import org.apache.wicket.markup.ComponentTag;
@@ -36,8 +34,8 @@ public class Favicon extends WebComponent {
 
     private static final long serialVersionUID = 1L;
 
-    @Inject private transient IsisConfiguration isisConfiguration;
-    @Inject private transient WebAppContextPath webAppContextPath;
+    @Inject private IsisConfiguration isisConfiguration; // serializable
+    @Inject private WebAppContextPath webAppContextPath; // serializable
 
     private String url = null;
     private String contentType = null;
@@ -50,17 +48,14 @@ public class Favicon extends WebComponent {
     protected void onConfigure() {
         super.onConfigure();
 
-        if(webAppContextPath != null && isisConfiguration != null) {
+        url = isisConfiguration.getViewer().getWicket().getApplication().getFaviconUrl()
+                .filter(x -> !Strings.isEmpty(x))
+                .map(webAppContextPath::prependContextPathIfLocal)
+                .orElse(null);
 
-            url = isisConfiguration.getViewer().getWicket().getApplication().getFaviconUrl()
-                    .filter(x -> !Strings.isEmpty(x))
-                    .map(webAppContextPath::prependContextPathIfLocal)
-                    .orElse(null);
-
-            contentType = isisConfiguration.getViewer().getWicket().getApplication().getFaviconContentType()
-                    .filter(x -> !Strings.isEmpty(x))
-                    .orElse(null);;
-        }
+        contentType = isisConfiguration.getViewer().getWicket().getApplication().getFaviconContentType()
+                .filter(x -> !Strings.isEmpty(x))
+                .orElse(null);;
 
         setVisible(url != null);
     }

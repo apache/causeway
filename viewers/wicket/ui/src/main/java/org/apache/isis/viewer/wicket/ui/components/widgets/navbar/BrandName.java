@@ -35,8 +35,8 @@ public class BrandName extends Label {
 
     private final Placement placement;
 
-    @Inject private transient IsisConfiguration isisConfiguration;
-    @Inject private transient WebAppContextPath webAppContextPath;
+    @Inject private IsisConfiguration isisConfiguration; // serializable
+    @Inject private WebAppContextPath webAppContextPath; // serializable
 
     private String logoHeaderUrl;
     private String logoSigninUrl;
@@ -59,20 +59,15 @@ public class BrandName extends Label {
     protected void onConfigure() {
         super.onConfigure();
 
-        // TODO: sort this out, need to look up from service locator
-        //  see also BrandLogo
-        if(webAppContextPath != null && isisConfiguration != null) {
-
-            applicationName = isisConfiguration.getViewer().getWicket().getApplication().getName();
-            logoHeaderUrl =
-                    isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoHeader()
-                        .map(webAppContextPath::prependContextPathIfLocal)
-                        .orElse(null);
-            logoSigninUrl =
-                    isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoSignin()
-                        .map(webAppContextPath::prependContextPathIfLocal)
-                        .orElse(null);
-        }
+        applicationName = isisConfiguration.getViewer().getWicket().getApplication().getName();
+        logoHeaderUrl =
+                isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoHeader()
+                    .map(webAppContextPath::prependContextPathIfLocal)
+                    .orElse(null);
+        logoSigninUrl =
+                isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoSignin()
+                    .map(webAppContextPath::prependContextPathIfLocal)
+                    .orElse(null);
 
         setVisible(placement.urlFor(logoHeaderUrl, logoSigninUrl) == null);
     }

@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.navbar;
 
-import java.util.Optional;
-
 import javax.inject.Inject;
 
 import org.apache.wicket.markup.ComponentTag;
@@ -37,8 +35,8 @@ public class BrandLogo extends WebComponent {
 
     private final Placement placement;
 
-    @Inject private transient IsisConfiguration isisConfiguration;
-    @Inject private transient WebAppContextPath webAppContextPath;
+    @Inject private IsisConfiguration isisConfiguration; // serializable
+    @Inject private WebAppContextPath webAppContextPath; // serializable
 
     /**
      * Constructor.
@@ -65,23 +63,17 @@ public class BrandLogo extends WebComponent {
     }
 
     private String url() {
+        final String logoHeaderUrl =
+                isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoHeader()
+                    .map(webAppContextPath::prependContextPathIfLocal)
+                    .orElse(null);
 
-        // TODO: sort this out, need to look up from service locator
-        //  see also BrandName
-        if(webAppContextPath != null && isisConfiguration != null) {
-            final String logoHeaderUrl =
-                    isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoHeader()
-                            .map(webAppContextPath::prependContextPathIfLocal)
-                            .orElse(null);
+        String logoSigninUrl =
+                isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoSignin()
+                    .map(webAppContextPath::prependContextPathIfLocal)
+                    .orElse(null);
 
-            String logoSigninUrl =
-                    isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoSignin()
-                            .map(webAppContextPath::prependContextPathIfLocal)
-                            .orElse(null);
-
-            return placement.urlFor(logoHeaderUrl, logoSigninUrl);
-        }
-        return null;
+        return placement.urlFor(logoHeaderUrl, logoSigninUrl);
     }
 
 

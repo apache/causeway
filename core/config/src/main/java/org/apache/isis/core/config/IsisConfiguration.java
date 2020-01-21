@@ -18,10 +18,10 @@
  */
 package org.apache.isis.core.config;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -31,7 +31,6 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import javax.activation.DataSource;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.constraints.NotEmpty;
@@ -42,22 +41,15 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.validation.annotation.Validated;
 
-import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.command.CommandWithDto;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.publish.PublishedObjects;
-import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.config.metamodel.facets.AuditObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.CommandActionsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.CommandPropertiesConfiguration;
@@ -84,8 +76,10 @@ import lombok.Value;
 @ConfigurationProperties(IsisConfiguration.ROOT_PREFIX)
 @Data
 @Validated
-public class IsisConfiguration {
+public class IsisConfiguration implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    
     public static final String ROOT_PREFIX = "isis";
     @Autowired private ConfigurableEnvironment environment;
     
