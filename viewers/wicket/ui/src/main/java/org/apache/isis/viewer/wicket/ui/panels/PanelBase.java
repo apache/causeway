@@ -29,10 +29,11 @@ import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.viewer.wicket.WebAppConfiguration;
+import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.security.authentication.MessageBroker;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -44,7 +45,6 @@ import org.apache.isis.viewer.wicket.ui.components.tree.themes.TreeThemeProvider
 import org.apache.isis.viewer.wicket.ui.pages.EmailVerificationUrlService;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 /**
  * Provides the <em>common context</em> for all implementing sub-classes.
@@ -55,7 +55,7 @@ public class PanelBase<T> extends GenericPanel<T> implements IsisWebAppCommonCon
     private static final long serialVersionUID = 1L;
 
     private transient WicketViewerSettings wicketViewerSettings;
-    private transient WebAppConfiguration webAppConfigBean;
+    private transient WebAppContextPath webAppContextPath;
     private transient IsisConfiguration isisConfiguration;
     private transient PageClassRegistry pageClassRegistry;
     private transient ImageResourceCache imageCache;
@@ -86,9 +86,9 @@ public class PanelBase<T> extends GenericPanel<T> implements IsisWebAppCommonCon
     public WicketViewerSettings getWicketViewerSettings() {
         return wicketViewerSettings = computeIfAbsent(WicketViewerSettings.class, wicketViewerSettings);
     }
-    
-    public WebAppConfiguration getWebAppConfigBean() {
-        return webAppConfigBean = computeIfAbsent(WebAppConfiguration.class, webAppConfigBean);
+
+    public WebAppContextPath getWebAppContextPath() {
+        return webAppContextPath = computeIfAbsent(WebAppContextPath.class, webAppContextPath);
     }
     
     public IsisConfiguration getIsisConfiguration() {

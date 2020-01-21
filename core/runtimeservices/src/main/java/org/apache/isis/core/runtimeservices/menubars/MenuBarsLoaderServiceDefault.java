@@ -41,7 +41,7 @@ import org.apache.isis.applib.services.menu.MenuBarsLoaderService;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.viewer.wicket.WebAppConfiguration;
+import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -115,18 +115,16 @@ public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
         }
 
         log.warn( 
-                String.format("Configured '%s' failes to provide a readable resource for "
-                        + "the Menubars-Layout.", 
-                        WebAppConfiguration.class.getName()));
+                String.format("'%s': could not find readable resource for the Menubars-Layout.",
+                        WebAppContextPath.class.getName()));
         warnedOnce = true; 
     }
 
     private void severeCannotLoad(Exception cause) {
 
         log.error(
-                String.format("Configured '%s' failes to provide a readable resource for "
-                        + "the Menubars-Layout.", 
-                        WebAppConfiguration.class.getName()), 
+                String.format("'%s': could not find readable resource for the Menubars-Layout.",
+                        WebAppContextPath.class.getName()),
                 cause);
     }
 }

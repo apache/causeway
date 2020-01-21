@@ -31,7 +31,6 @@ import org.apache.isis.core.commons.IsisModuleCoreCommons;
 import org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.core.config.converters.PatternsConverter;
 import org.apache.isis.core.config.validators.PatternOptionalStringConstraintValidator;
-import org.apache.isis.core.config.viewer.wicket.WebAppConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 
 @Configuration
@@ -45,7 +44,6 @@ import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
     PatternOptionalStringConstraintValidator.class,
 
     // @Service's
-    WebAppConfiguration.class,
     WebAppContextPath.class,
 })
 @EnableConfigurationProperties({

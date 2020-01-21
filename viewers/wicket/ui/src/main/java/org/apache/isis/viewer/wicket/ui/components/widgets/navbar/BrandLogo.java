@@ -24,7 +24,7 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebComponent;
 
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.viewer.wicket.WebAppConfiguration;
+import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 
 /**
  * A component used as a brand logo in the top-left corner of the navigation bar
@@ -35,8 +35,8 @@ public class BrandLogo extends WebComponent {
 
     private final Placement placement;
 
-    @Inject private transient WebAppConfiguration webAppConfigBean;
     @Inject private transient IsisConfiguration isisConfiguration;
+    @Inject private transient WebAppContextPath webAppContextPath;
 
     /**
      * Constructor.
@@ -63,8 +63,8 @@ public class BrandLogo extends WebComponent {
     }
 
     private String url() {
-        String logoHeaderUrl = webAppConfigBean.contextPathSensitive(isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoHeader()) .getBrandLogoHeader();
-        String logoSigninUrl = webAppConfigBean.getBrandLogoSignin();
+        String logoHeaderUrl = webAppContextPath.prependContextPathIfLocal(isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoHeader());
+        String logoSigninUrl = webAppContextPath.prependContextPathIfLocal(isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoSignin());
 
         return placement.urlFor(logoHeaderUrl, logoSigninUrl);
     }

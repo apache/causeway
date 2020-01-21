@@ -23,10 +23,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.viewer.wicket.WebAppConfiguration;
+import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
-import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 
 /**
  * Provides all the system dependencies for sub-classes.
@@ -36,8 +36,8 @@ public abstract class WebPageBase extends WebPage implements IsisWebAppCommonCon
 
     private static final long serialVersionUID = 1L;
     
-    private transient WebAppConfiguration webAppConfigBean;
     private transient IsisConfiguration isisConfiguration;
+    private transient WebAppContextPath webAppContextPath;
     private transient PageClassRegistry pageClassRegistry;
     private transient IsisWebAppCommonContext commonContext;
     private transient IsisSessionFactory isisSessionFactory;
@@ -59,8 +59,8 @@ public abstract class WebPageBase extends WebPage implements IsisWebAppCommonCon
         return isisConfiguration = computeIfAbsent(IsisConfiguration.class, isisConfiguration);
     }
 
-    public WebAppConfiguration getWebAppConfigBean() {
-        return webAppConfigBean = computeIfAbsent(WebAppConfiguration.class, webAppConfigBean);
+    public WebAppContextPath getWebAppContextPath() {
+        return webAppContextPath = computeIfAbsent(WebAppContextPath.class, webAppContextPath);
     }
     
     public PageClassRegistry getPageClassRegistry() {

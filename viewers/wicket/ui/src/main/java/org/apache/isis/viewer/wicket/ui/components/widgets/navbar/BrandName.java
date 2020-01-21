@@ -24,7 +24,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.viewer.wicket.WebAppConfiguration;
+import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 
 /**
  * A component used as a brand logo in the top-left corner of the navigation bar
@@ -35,8 +35,8 @@ public class BrandName extends Label {
 
     private final Placement placement;
 
-    @Inject private transient WebAppConfiguration webAppConfigBean;
     @Inject private transient IsisConfiguration isisConfiguration;
+    @Inject private transient WebAppContextPath webAppContextPath;
 
     private String logoHeaderUrl;
     private String logoSigninUrl;
@@ -52,10 +52,10 @@ public class BrandName extends Label {
         super(id);
         this.placement = placement;
         
-        if(webAppConfigBean!=null) {
+        if(webAppContextPath!=null) {
             applicationName = isisConfiguration.getViewer().getWicket().getApplication().getName();
-            logoHeaderUrl = webAppConfigBean.contextPathSensitive(isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoHeader());
-            logoSigninUrl = webAppConfigBean.contextPathSensitive(isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoSignin());
+            logoHeaderUrl = webAppContextPath.prependContextPathIfLocal(isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoHeader());
+            logoSigninUrl = webAppContextPath.prependContextPathIfLocal(isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoSignin());
         }
 
         setDefaultModel(Model.of(applicationName));
