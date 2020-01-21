@@ -19,22 +19,33 @@
 
 package org.apache.isis.applib.services.factory;
 
+import java.util.NoSuchElementException;
+
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.core.commons.exceptions.IsisException;
 
 public interface FactoryService {
-    
+
     /**
-     * Gets an instance of the specified type, with injection points resolved 
-     * and life-cycle callbacks processed.
+     * Gets an instance (possibly shared or independent) of the specified {@code requiredType}, 
+     * with injection points resolved 
+     * and any life-cycle callback processed.
      * 
      * @param <T>
-     * @param type
-     * @return
+     * @param requiredType
+     * @return (non-null), an instance of {@code requiredType}, if available and unique
+     * (i.e. not multiple candidates found with none marked as primary)
+     * 
+     * @throws NoSuchElementException if result is empty
+     * @throws IsisException if instance creation failed
+     * 
+     * @apiNote does not force the requiredType to be added to the meta-model
+     * 
      * @since 2.0
      */
-    <T> T get(Class<T> type);
+    <T> T get(Class<T> requiredType);
 
     /**
      * Creates a new Mixin instance.
@@ -50,7 +61,6 @@ public interface FactoryService {
      * @param viewModelClass
      * @param mementoStr - ignored if {@code null}
      * @since 2.0
-     * @apiNote EXPERIMENTAL
      */
     <T> T viewModel(Class<T> viewModelClass, @Nullable String mementoStr);
 
@@ -58,7 +68,6 @@ public interface FactoryService {
      * Creates a new ViewModel instance 
      * @param viewModelClass
      * @since 2.0
-     * @apiNote EXPERIMENTAL
      */
     default <T> T viewModel(Class<T> viewModelClass) {
         return viewModel(viewModelClass, /*mementoStr*/null);
@@ -93,9 +102,11 @@ public interface FactoryService {
      * alternatively just <i>new()</i> up the object rather than call this
      * method.
      * </p>
-     * @deprecated with sematic changes since 2.0 previous behavior is no longer guaranteed
+     * @deprecated with semantic changes since 2.0 previous behavior is no longer guaranteed, 
+     * instead consider use of {@link #get(Class)} if applicable
      */
     @Deprecated
     <T> T instantiate(Class<T> domainClass);
-    
+
+
 }

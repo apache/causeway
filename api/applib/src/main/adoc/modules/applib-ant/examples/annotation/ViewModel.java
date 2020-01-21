@@ -27,6 +27,7 @@ import java.lang.annotation.Target;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
@@ -56,7 +57,7 @@ import org.springframework.stereotype.Component;
 @Inherited
 @Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@Component
+@Component @Scope("prototype")
 public @interface ViewModel {
 
 

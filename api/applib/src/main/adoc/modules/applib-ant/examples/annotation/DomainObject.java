@@ -24,6 +24,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
@@ -47,7 +48,7 @@ import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
 @Inherited
 @Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@Component
+@Component @Scope("prototype")
 public @interface DomainObject {
 
     /**
