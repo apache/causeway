@@ -29,7 +29,6 @@ import javax.inject.Singleton;
 import javax.jdo.listener.StoreLifecycleListener;
 
 import org.datanucleus.PropertyNames;
-import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
@@ -42,16 +41,15 @@ import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
+import org.apache.isis.core.runtime.persistence.session.PersistenceSessionFactory;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledState;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.DataNucleusContextUtil;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.DataNucleusSettings;
-import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.JDOStateManagerForIsis;
 import org.apache.isis.persistence.jdo.datanucleus5.entities.JdoEntityTypeRegistry;
 import org.apache.isis.persistence.jdo.datanucleus5.lifecycles.JdoStoreLifecycleListenerForIsis;
-import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
-import org.apache.isis.core.runtime.persistence.session.PersistenceSessionFactory;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -125,6 +123,9 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
     public void catalogNamedQueries() {
         val typeRegistry = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
         val classesToBePersisted = jdoEntityTypeRegistry.getEntityTypes(typeRegistry);
+        
+        log.debug("entity types discovered: " + classesToBePersisted);
+        
         DataNucleusApplicationComponents5.catalogNamedQueries(classesToBePersisted, 
                 metaModelContext.getSpecificationLoader());
     }
