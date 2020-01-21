@@ -2327,6 +2327,7 @@ public class IsisConfiguration {
                  *     Spring by default under <code>static</code> package).
                  * </p>
                  */
+                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
                 private String css;
                 
                 // since 2.0
@@ -2346,6 +2347,7 @@ public class IsisConfiguration {
                  *     Spring by default under <code>static</code> package).
                  * </p>
                  */
+                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
                 private String js;
 
                 /**

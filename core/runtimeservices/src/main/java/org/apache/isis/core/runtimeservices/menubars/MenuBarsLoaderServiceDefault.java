@@ -23,12 +23,15 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.AbstractResource;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
@@ -37,6 +40,7 @@ import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.menu.MenuBarsLoaderService;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppConfiguration;
 
 import lombok.val;
@@ -50,10 +54,23 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
 
-    @Inject private IsisSystemEnvironment isisSystemEnvironment;
-    @Inject private JaxbService jaxbService;
-    @Autowired(required = false) private WebAppConfiguration webAppConfigBean;
-    
+    private final IsisSystemEnvironment isisSystemEnvironment;
+    private final JaxbService jaxbService;
+
+    private final ClassPathResource menubarsLayoutXmlResource;
+
+    @Inject
+    public MenuBarsLoaderServiceDefault(
+            final IsisSystemEnvironment isisSystemEnvironment,
+            final JaxbService jaxbService,
+            final IsisConfiguration isisConfiguration) {
+        this.isisSystemEnvironment = isisSystemEnvironment;
+        this.jaxbService = jaxbService;
+
+        this.menubarsLayoutXmlResource =
+                new ClassPathResource(isisConfiguration.getViewer().getWicket().getApplication().getMenubarsLayoutXml());
+    }
+
     @Override
     public boolean supportsReloading() {
         return isisSystemEnvironment.isPrototyping();
@@ -62,17 +79,8 @@ public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
     @Override
     public BS3MenuBars menuBars() {
 
-        val menubarsLayoutResource = Optional.ofNullable(webAppConfigBean)
-                .map(WebAppConfiguration::getMenubarsLayoutXml)
-                .orElse(null);
-
-        if(menubarsLayoutResource==null) {
-            warnNotFound();
-            return null;
-        }
-
-        val xmlString = loadMenubarsLayoutResource(menubarsLayoutResource);
-        if(xmlString==null) {
+        val xmlString = loadMenubarsLayoutResource(menubarsLayoutXmlResource);
+        if(xmlString == null) {
             warnNotFound();
             return null;
         }
@@ -121,9 +129,5 @@ public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
                         WebAppConfiguration.class.getName()), 
                 cause);
     }
-
-    
-
-    
 }
 

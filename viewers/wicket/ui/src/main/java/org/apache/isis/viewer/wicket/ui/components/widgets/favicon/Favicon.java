@@ -43,7 +43,7 @@ public class Favicon extends WebComponent {
     public Favicon(String id) {
         super(id);
         if(webAppConfigBean!=null) {
-            url = webAppConfigBean.getFaviconUrl();
+            url = webAppConfigBean.contextPathSensitive(isisConfiguration.getViewer().getWicket().getApplication().getFaviconUrl());
             contentType = isisConfiguration.getViewer().getWicket().getApplication().getFaviconContentType();
         }
     }

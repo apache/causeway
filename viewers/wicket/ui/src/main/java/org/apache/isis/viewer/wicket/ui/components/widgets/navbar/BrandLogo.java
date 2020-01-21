@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebComponent;
 
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppConfiguration;
 
 /**
@@ -34,7 +35,8 @@ public class BrandLogo extends WebComponent {
 
     private final Placement placement;
 
-    @Inject private WebAppConfiguration webAppConfigBean;
+    @Inject private transient WebAppConfiguration webAppConfigBean;
+    @Inject private transient IsisConfiguration isisConfiguration;
 
     /**
      * Constructor.
@@ -61,7 +63,7 @@ public class BrandLogo extends WebComponent {
     }
 
     private String url() {
-        String logoHeaderUrl = webAppConfigBean.getBrandLogoHeader();
+        String logoHeaderUrl = webAppConfigBean.contextPathSensitive(isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoHeader()) .getBrandLogoHeader();
         String logoSigninUrl = webAppConfigBean.getBrandLogoSignin();
 
         return placement.urlFor(logoHeaderUrl, logoSigninUrl);

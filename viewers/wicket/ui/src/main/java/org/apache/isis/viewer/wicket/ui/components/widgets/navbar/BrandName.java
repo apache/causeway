@@ -54,8 +54,8 @@ public class BrandName extends Label {
         
         if(webAppConfigBean!=null) {
             applicationName = isisConfiguration.getViewer().getWicket().getApplication().getName();
-            logoHeaderUrl = webAppConfigBean.getBrandLogoHeader();
-            logoSigninUrl = webAppConfigBean.getBrandLogoSignin();
+            logoHeaderUrl = webAppConfigBean.contextPathSensitive(isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoHeader());
+            logoSigninUrl = webAppConfigBean.contextPathSensitive(isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoSignin());
         }
 
         setDefaultModel(Model.of(applicationName));

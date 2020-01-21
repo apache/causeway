@@ -43,7 +43,7 @@ public class WelcomePanel extends PanelAbstract<WelcomeModel> {
     public WelcomePanel(final String id, final WelcomeModel model) {
         super(id, model);
 
-        String welcomeMessage = webAppConfigBean.getWelcomeMessage();
+        String welcomeMessage = getIsisConfiguration().getViewer().getWicket().getWelcome().getText();
 
         model.setObject(welcomeMessage);
         final Label label = new Label(ID_MESSAGE, welcomeMessage);
