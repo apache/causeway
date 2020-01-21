@@ -38,7 +38,7 @@ public class AsyncActionMenu {
     @Action
     @ActionLayout(cssClassFa="fa-bolt")
     public AsyncActionDemo asyncActions(){
-        val demo = factoryService.instantiate(AsyncActionDemo.class);
+        val demo = factoryService.viewModel(AsyncActionDemo.class);
         demo.initDefaults();
         return demo;
     }

@@ -38,7 +38,7 @@ public class TabMenu {
             cssClassFa="fa-bolt",
             describedAs="Opens the Tabs-Demo page.")
     public TabDemo tabDemo(){
-        val demo = factoryService.instantiate(TabDemo.class);
+        val demo = factoryService.viewModel(TabDemo.class);
         demo.initDefaults();
         return demo;
     }

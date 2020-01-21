@@ -136,7 +136,7 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
 
         @Action
         public Object homePage() {
-            val viewModelPojo = factoryService.instantiate(viewModelType);
+            val viewModelPojo = factoryService.viewModel(viewModelType);
             return viewModelPojo;
         }
         
@@ -189,7 +189,7 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
         final ManagedObject adapterForHomePageActionDeclaringPojo;
 
         if(spec.isViewModel()) {
-            val viewModelPojo = factoryService.instantiate(spec.getCorrespondingClass());
+            val viewModelPojo = factoryService.viewModel(spec.getCorrespondingClass());
             adapterForHomePageActionDeclaringPojo = ManagedObject.of(spec, viewModelPojo);
         } else if(spec.isManagedBean()) {
 

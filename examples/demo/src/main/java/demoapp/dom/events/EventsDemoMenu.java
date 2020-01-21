@@ -38,7 +38,7 @@ public class EventsDemoMenu {
     @Action
     @ActionLayout(cssClassFa="fa-bolt")
     public EventsDemo eventsDemo(){
-        val demo = factoryService.instantiate(EventsDemo.class);
+        val demo = factoryService.viewModel(EventsDemo.class);
         demo.initDefaults();
         return demo;
     }

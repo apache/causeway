@@ -38,7 +38,7 @@ public class TooltipMenu {
             cssClassFa="fa-bolt",
             describedAs="Opens the Tooltip-Demo page.")
     public TooltipDemo tooltipDemo(){
-        val demo = factoryService.instantiate(TooltipDemo.class);
+        val demo = factoryService.viewModel(TooltipDemo.class);
         demo.initDefaults();
         return demo;
     }

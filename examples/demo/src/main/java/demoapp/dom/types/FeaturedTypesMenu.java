@@ -43,7 +43,7 @@ public class FeaturedTypesMenu {
     @Action
     @ActionLayout(cssClassFa="fa-font")
     public TextDemo text(){
-        val demo = factoryService.instantiate(TextDemo.class);
+        val demo = factoryService.viewModel(TextDemo.class);
         demo.initDefaults();  
         return demo;
     }
@@ -51,7 +51,7 @@ public class FeaturedTypesMenu {
     @Action
     @ActionLayout(cssClassFa="fa-hashtag")
     public PrimitivesDemo primitives(){
-        val demo = factoryService.instantiate(PrimitivesDemo.class);
+        val demo = factoryService.viewModel(PrimitivesDemo.class);
         demo.initDefaults();  
         return demo;
     }
@@ -59,7 +59,7 @@ public class FeaturedTypesMenu {
     @Action
     @ActionLayout(cssClassFa="fa-clock-o")
     public TemporalDemo temporals(){
-        val demo = factoryService.instantiate(TemporalDemo.class);
+        val demo = factoryService.viewModel(TemporalDemo.class);
         demo.initDefaults();  
         return demo;
     }
@@ -67,7 +67,7 @@ public class FeaturedTypesMenu {
     @Action
     @ActionLayout(cssClassFa="fa-cloud")
     public BlobDemo blobs(){
-        val demo = factoryService.instantiate(BlobDemo.class);
+        val demo = factoryService.viewModel(BlobDemo.class);
         demo.initDefaults();  
         return demo;
     }

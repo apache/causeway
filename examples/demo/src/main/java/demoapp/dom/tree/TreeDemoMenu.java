@@ -40,7 +40,7 @@ public class TreeDemoMenu {
     @Action
     @ActionLayout(cssClassFa="fa-tree")
     public DemoStub fileSystemTree(){
-        val demo = factoryService.instantiate(TreeDemo.class);
+        val demo = factoryService.viewModel(TreeDemo.class);
         demo.initDefaults();  
         return demo;
     }
