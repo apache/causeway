@@ -103,10 +103,17 @@ public enum Nature {
     VIEW_MODEL,
 
     /**
-     * An object that acts as a mix-in to some other object, contributing behaviour and/or derived state based on the
+     * An object that acts as a mix-in to some other object, contributing behavior and/or derived state based on the
      * domain object.
      *
      * @see Mixin
      */
-    MIXIN
+    MIXIN,
+    
+    /**
+     * An object that is entirely managed by the underlying IoC container. 
+     * @apiNote EXPERIMENTAL
+     */
+    BEAN,
+    
 }
