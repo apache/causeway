@@ -52,8 +52,8 @@ public class TreeDemo extends DemoStub {
      * 
      * @return the demo tree view model for standalone rendering (as action result)
      */
-    @Action
     @ActionLayout(cssClassFa="fa-tree")
+    @Action
     public TreeNode<FileNode> standalone(){
         return createTree();
     }

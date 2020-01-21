@@ -49,9 +49,7 @@ extends RecreatableObjectFacetDeclarativeInitializingAbstract {
                     case VIEW_MODEL:
                     case EXTERNAL_ENTITY:
                     case INMEMORY_ENTITY:
-                        if (!holder.containsFacet(ViewModelFacet.class)) {
-                            return null;
-                        }
+
                         return new RecreatableObjectFacetForDomainObjectAnnotation(
                                 holder, postConstructMethodCache);
                     }
