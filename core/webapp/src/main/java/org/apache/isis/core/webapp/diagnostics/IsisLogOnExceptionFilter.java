@@ -58,6 +58,13 @@ public class IsisLogOnExceptionFilter implements Filter {
         try {
             chain.doFilter(request, response);
         } catch (Exception ex) {
+            
+            if(ex instanceof IOException) {
+                if(((HttpServletRequest) request).getRequestURL().toString().endsWith(".css")) {
+                    throw ex; // don't log
+                }    
+            }
+            
             if(ex instanceof IOException
                     || ex instanceof ServletException
                     || ex instanceof RuntimeException) {
