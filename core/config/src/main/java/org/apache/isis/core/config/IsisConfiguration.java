@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.config;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -76,10 +75,8 @@ import lombok.Value;
 @ConfigurationProperties(IsisConfiguration.ROOT_PREFIX)
 @Data
 @Validated
-public class IsisConfiguration implements Serializable {
+public class IsisConfiguration {
 
-    private static final long serialVersionUID = 1L;
-    
     public static final String ROOT_PREFIX = "isis";
     @Autowired private ConfigurableEnvironment environment;
     

@@ -46,6 +46,15 @@ public interface FactoryService {
      * @since 2.0
      */
     <T> T get(Class<T> requiredType);
+    
+    /**
+     * Creates a new detached entity instance, with injection points resolved.
+     * @param <T>
+     * @param domainClass
+     * @return
+     * @apiNote forces the domainClass to be added to the meta-model if not already
+     */
+    <T> T detachedEntity(Class<T> domainClass);
 
     /**
      * Creates a new Mixin instance.
@@ -106,10 +115,12 @@ public interface FactoryService {
      * method.
      * </p>
      * @deprecated with semantic changes since 2.0 previous behavior is no longer guaranteed, 
-     * instead consider use of {@link #get(Class)} if applicable
+     * instead consider use of {@link #detachedEntity(Class)} if applicable
      */
     @Deprecated
-    <T> T instantiate(Class<T> domainClass);
+    default <T> T instantiate(Class<T> domainClass) {
+        return detachedEntity(domainClass);
+    }
 
 
 }

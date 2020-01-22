@@ -37,6 +37,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.commons.internal.base._Blackhole;
 import org.apache.isis.core.commons.internal.base._Lazy;
+import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
@@ -124,7 +125,11 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
         val typeRegistry = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry();
         val classesToBePersisted = jdoEntityTypeRegistry.getEntityTypes(typeRegistry);
         
-        log.debug("entity types discovered: " + classesToBePersisted);
+        if(log.isDebugEnabled()) {
+            log.debug("Entity types discovered:");
+            _NullSafe.stream(classesToBePersisted)
+                .forEach(entityClassName->log.debug(" - {}", entityClassName));
+        }
         
         DataNucleusApplicationComponents5.catalogNamedQueries(classesToBePersisted, 
                 metaModelContext.getSpecificationLoader());
