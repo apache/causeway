@@ -97,6 +97,17 @@
 
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-fullcalendar-applib</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-fullcalendar-ui</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-secman</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
@@ -159,6 +170,7 @@
 		<module>vro/cors</module>
 
 		<module>vw/exceldownload</module>
+		<module>vw/fullcalendar</module>
 		<module>vw/pdfjs</module>
 
 	</modules>

@@ -121,6 +121,9 @@ content:
       start_path: extensions/vw/exceldownload/adoc # vw
       branches: HEAD
     - url: .
+      start_path: extensions/vw/fullcalendar/adoc # vw
+      branches: HEAD
+    - url: .
       start_path: extensions/vw/pdfjs/adoc # vw
       branches: HEAD
 

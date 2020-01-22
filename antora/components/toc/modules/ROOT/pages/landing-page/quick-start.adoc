@@ -3,10 +3,10 @@
 
 To get started with a new application, use one of the two git repos on Github that provide a starter app.
 
-* link:https://github.com/apache/isis-app-helloworld[HelloWorld]
-+
-This is a very minimal app, intended just as a starting point to learn what the framework is all about.
-+
+== HelloWorld
+
+The helloworld app is  very minimal app, intended just as a starting point to learn what the framework is all about.
+
 [source,bash]
 ----
 REPO=isis-app-helloworld
@@ -20,10 +20,14 @@ mvn clean install
 mvn spring-boot:run
 ----
 
-* link:https://github.com/apache/isis-app-simpleapp[Simple App]
-+
+The source code can be found in this link:https://github.com/apache/isis-app-helloworld[git repo]
+
+
+== Simple App
+
+
 This app has the same functionality as _HelloWorld_, but is structured so it can be used as a starting point for developing your own applications.
-+
+
 [source,bash]
 ----
 REPO=isis-app-simpleapp
@@ -36,10 +40,15 @@ cd $REPO
 mvn clean install
 mvn -pl webapp spring-boot:run
 ----
-+
+
 It also includes some xref:testing:integtestsupport:about.adoc[integration tests], xref:testing:fixtures:about.adoc[fixtures], and xref:testing:specsupport[BDD (Cucumber)] specs.
 
-In both cases you can bump to newer versions of the framework just by updating the `<version>` of the `<parent>`:
+The source code can be found in this link:https://github.com/apache/isis-app-simpleapp[git repo]
+
+
+== Updating to Newer Versions
+
+For both apps you can bump to newer versions of the framework just by updating the `<version>` of the `<parent>`:
 
 [source,bash]
 .pom.xml

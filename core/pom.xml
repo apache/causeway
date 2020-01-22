@@ -174,7 +174,7 @@
 		<wicket-bootstrap.version>2.0.11</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap-core -->
 		<wicket-bootstrap-core.version>2.0.11</wicket-bootstrap-core.version>
 		<wicket-bootstrap-datetimepicker.version>4.17.37-1</wicket-bootstrap-datetimepicker.version>
-		<wicket-fullcalendar.version>2.2.0</wicket-fullcalendar.version>
+		<wicket-fullcalendar.version>4.2</wicket-fullcalendar.version>
 		<wicket-source.version>7.0.0</wicket-source.version>
 		<wicket-webjars.version>2.0.15</wicket-webjars.version>
 
@@ -1115,7 +1115,6 @@
 				<artifactId>wicket-fullcalendar-core</artifactId>
 				<version>${wicket-fullcalendar.version}</version>
 			</dependency>
-
 			<dependency>
 				<groupId>net.ftlines.wicket-source</groupId>
 				<!-- <groupId>com.github.jennybrown8.wicket-source</groupId> -->

@@ -1,0 +1,2 @@
+org.apache.isis.extensions.fullcalendar.ui.component.calendareventable.CalendarEventableCollectionAsFullCalendarFactory
+org.apache.isis.extensions.fullcalendar.ui.component.calendarable.CalendarableCollectionAsFullCalendarFactory
