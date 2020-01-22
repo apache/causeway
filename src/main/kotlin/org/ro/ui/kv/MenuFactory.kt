@@ -4,6 +4,7 @@ import org.ro.core.aggregator.ActionDispatcher
 import org.ro.to.Link
 import org.ro.to.Member
 import org.ro.to.TObject
+import org.ro.to.mb.Menu
 import org.ro.ui.IconManager
 import pl.treksoft.kvision.core.Component
 import pl.treksoft.kvision.dropdown.Direction
@@ -38,8 +39,7 @@ object MenuFactory {
         return dd
     }
 
-    fun buildFor(menuEntry: org.ro.to.mb.MenuEntry): DropDown {
-        val menu = menuEntry.menu.first()
+    fun buildFor(menu: Menu): DropDown {
         val title = menu.named
         val dd = DropDown(text = title, style = ButtonStyle.LIGHT, forNavbar = false)
         dd.icon = IconManager.find(title)
@@ -53,7 +53,6 @@ object MenuFactory {
         }
         return dd
     }
-
     private fun action(dd: DropDown, label: String, link: Link) {
         val icon = IconManager.find(label)
         val classes = IconManager.findStyleFor(label)

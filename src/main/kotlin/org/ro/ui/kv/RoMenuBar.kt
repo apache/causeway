@@ -67,10 +67,12 @@ object RoMenuBar : SimplePanel() {
     }
 
     fun amendMenu(menuBars: Menubars) {
-        nav.add(MenuFactory.buildFor(menuBars.primary))
-        //TODO handle all primaries seperately
-        nav.add(MenuFactory.buildFor(menuBars.secondary))
-        nav.add(MenuFactory.buildFor(menuBars.tertiary))
+        menuBars.primary.menu.forEach { m ->
+            nav.add(MenuFactory.buildFor(m))
+        }
+        //TODO handle secondary / tertiary as well
+        nav.add(MenuFactory.buildFor(menuBars.secondary.menu.first()))
+        nav.add(MenuFactory.buildFor(menuBars.tertiary.menu.first()))
     }
 
 }
