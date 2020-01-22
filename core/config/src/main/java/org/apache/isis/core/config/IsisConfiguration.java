@@ -1282,8 +1282,6 @@ public class IsisConfiguration {
                  */
                 private boolean ensureUniqueObjectTypes = true;
 
-                // TODO: to remove
-                private boolean checkModuleExtent = true;
                 /**
                  * If set, then checks that the supports <code>hideXxx</code> and <code>disableXxx</code> methods for
                  * actions do not have take parameters.

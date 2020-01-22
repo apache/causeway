@@ -111,10 +111,6 @@ public class JdoProgrammingModelPlugin implements MetaModelRefiner {
         if(config.getCore().getMetaModel().getValidator().isEnsureUniqueObjectTypes()) {
             addValidatorToEnsureUniqueObjectIds();
         }
-        
-        if(config.getCore().getMetaModel().getValidator().isCheckModuleExtent()) {
-            addValidatorToCheckModuleExtent();
-        }
 
     }
 
@@ -216,78 +212,6 @@ public class JdoProgrammingModelPlugin implements MetaModelRefiner {
         };
 
         pm.addValidator(ensureUniqueObjectIds);
-    }
-
-    private void addValidatorToCheckModuleExtent() {
-
-        final Map<String, List<String>> domainObjectClassNamesByPackage = _Maps.newConcurrentHashMap();
-
-        MetaModelValidatorVisiting.SummarizingVisitor visitor = new MetaModelValidatorVisiting.SummarizingVisitor(){
-
-            @Override
-            public boolean visit(ObjectSpecification objSpec, MetaModelValidator validator) {
-                Class<?> correspondingClass = objSpec.getCorrespondingClass();
-                if(correspondingClass == null) {
-                    return true;
-                }
-                Package aPackage = correspondingClass.getPackage();
-                if(aPackage == null) {
-                    return true;
-                }
-                final String packageName = aPackage.getName();
-
-                //noinspection StatementWithEmptyBody
-                if (objSpec.isValue() || objSpec.isAbstract() || objSpec.isMixin() ||
-                        objSpec.isParentedOrFreeCollection() ||
-                        objSpec.getFullIdentifier().startsWith("java") ||
-                        objSpec.getFullIdentifier().startsWith("org.joda") ||
-                        objSpec.getFullIdentifier().startsWith("org.apache.isis")) {
-                    // ignore
-                } else {
-                    List<String> classNames = domainObjectClassNamesByPackage.computeIfAbsent(packageName, k -> _Lists.newArrayList());
-                    classNames.add(objSpec.getFullIdentifier());
-                }
-                return true;
-            }
-
-            @Override
-            public void summarize(final MetaModelValidator validator) {
-                //FIXME[2112] module (legacy) specific, remove?
-                //                final Set<String> modulePackageNames = modulePackageNamesFrom(appManifest);
-                //
-                //                final Set<String> domainObjectPackageNames = domainObjectClassNamesByPackage.keySet();
-                //                for (final String pkg : domainObjectPackageNames) {
-                //                    List<String> domainObjectClassNames = domainObjectClassNamesByPackage.get(pkg);
-                //                    boolean withinSomeModule = isWithinSomeModule(modulePackageNames, pkg);
-                //                    if(!withinSomeModule) {
-                //                        String csv = stream(domainObjectClassNames)
-                //                                .collect(Collectors.joining(","));
-                //                        validationFailures.add(
-                //                                "Domain objects discovered in package '%s' are not in the set of modules obtained from "
-                //                                        + "the AppManifest's top-level module '%s'.  Classes are: %s",
-                //                                        pkg, topLevelModule.getClass().getName(), csv);
-                //                    }
-                //                }
-            }
-            //FIXME[2112] module (legacy) specific, remove?
-            //            private Set<String> modulePackageNamesFrom(final AppManifest appManifest) {
-            //                final List<Class<?>> modules = appManifest.getModules();
-            //                return modules.stream()
-            //                        .map(aClass->aClass.getPackage().getName())
-            //                        .collect(Collectors.toCollection(HashSet::new));
-            //            }
-            //
-            //            private boolean isWithinSomeModule(final Set<String> modulePackageNames, final String pkg) {
-            //                for (final String modulePackageName : modulePackageNames) {
-            //                    if(pkg.startsWith(modulePackageName)) {
-            //                        return true;
-            //                    }
-            //                }
-            //                return false;
-            //            }
-        };
-
-        pm.addValidator(visitor);
     }
 
 
