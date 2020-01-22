@@ -72,12 +72,14 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisMetaModel.GridSystemServiceBS3")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("BS3")
+@Log4j2
 public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
 
     public static final String TNS = "http://isis.apache.org/applib/layout/grid/bootstrap3";
@@ -517,9 +519,13 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                 if(!(memberOrderFacet instanceof MemberOrderFacetAnnotation)) {
                     // if binding not via annotation, then explicitly bind this
                     // action to the property
-                    final CollectionLayoutData collectionLayoutData = collectionLayoutDataById.get(id);
-                    final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
-                    addActionTo(collectionLayoutData, actionLayoutData);
+                    val collectionLayoutData = collectionLayoutDataById.get(id);
+                    if(collectionLayoutData==null) {
+                        log.warn("failed to lookup CollectionLayoutData by id '{}'", id);
+                    } else {
+                        val actionLayoutData = new ActionLayoutData(actionId);
+                        addActionTo(collectionLayoutData, actionLayoutData);
+                    }
                 }
                 continue;
             }
