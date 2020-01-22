@@ -79,9 +79,3 @@ suppress-update-link
 This is disabled by default. If enabled, then the representations returned are non-standard with respect to the RO Spec v1.0.
 
 
-| isis.viewer.restfulobjects. +
-gsoc2013.legacy-param-details
-| 
-| @deprecated
-
-

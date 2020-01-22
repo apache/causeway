@@ -17,11 +17,6 @@ Note that this settings has no effect if the programming model has been configur
 
 
 | isis.core.meta-model. +
-validator.check-module-extent
-|  true
-| 
-
-| isis.core.meta-model. +
 validator. +
 ensure-unique-object-types
 |  true
