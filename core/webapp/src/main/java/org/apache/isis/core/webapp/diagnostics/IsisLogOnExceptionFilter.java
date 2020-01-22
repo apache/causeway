@@ -28,6 +28,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import lombok.val;
 //import org.springframework.beans.factory.annotation.Autowired;
 //
 //import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
@@ -60,7 +61,9 @@ public class IsisLogOnExceptionFilter implements Filter {
         } catch (Exception ex) {
             
             if(ex instanceof IOException) {
-                if(((HttpServletRequest) request).getRequestURL().toString().endsWith(".css")) {
+                val url = ((HttpServletRequest) request).getRequestURL().toString();
+                if(url.endsWith(".css")
+                        || url.endsWith(".woff2")) {
                     throw ex; // don't log
                 }    
             }
@@ -71,29 +74,11 @@ public class IsisLogOnExceptionFilter implements Filter {
                 logRequestUrl(request, ex);
             }
             
-//            val recognition = exceptionRecognizerService.recognize(ex, Can.ofSingleton(connectionAbortRecognizer));
-//            
-//            if(recognition.isPresent()) {
-//                log.error(recognition.get().toMessage(null), ex);
-//                // swallow exception
-//                return;
-//            }
-            
             throw ex;
         } 
     }
     
     // -- HELPER
-    
-//    private final static ExceptionRecognizerForType connectionAbortRecognizer =
-//            new ExceptionRecognizerForType(IOException.class, originalMsg->{
-//                if(originalMsg!=null 
-//                        && originalMsg.contains("connection")
-//                        && originalMsg.contains("aborted")) {
-//                    return "client connection was aborted";
-//                }
-//                return null;
-//            });
 
     private static void logRequestUrl(ServletRequest request, Exception e) {
         if(!(request instanceof HttpServletRequest)) {

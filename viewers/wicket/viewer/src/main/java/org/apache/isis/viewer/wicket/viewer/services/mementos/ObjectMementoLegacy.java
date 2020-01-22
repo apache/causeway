@@ -41,8 +41,9 @@ import static org.apache.isis.core.commons.internal.base._With.requires;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
-
+@Log4j2
 final class ObjectMementoLegacy implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -220,6 +221,7 @@ final class ObjectMementoLegacy implements Serializable {
                 RootOid rootOid = Oid.unmarshaller().unmarshal(memento.persistentOidStr, RootOid.class);
                 try {
 
+                    log.debug("lookup by rootOid [{}]", rootOid);
                     return ManagedObject._adapterOfRootOid(specificationLoader, rootOid);
 
                 } finally {
