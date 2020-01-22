@@ -19,7 +19,6 @@
 package org.apache.isis.applib.layout.component;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -34,6 +33,7 @@ import org.apache.isis.applib.annotation.RenderDay;
 import org.apache.isis.applib.annotation.Repainting;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.links.Link;
+import org.apache.isis.core.commons.internal.concurrent._ConcurrentListWrapper;
 
 /**
  * Describes the layout of a single property, broadly corresponds to the {@link org.apache.isis.applib.annotation.PropertyLayout} annotation.
@@ -234,18 +234,22 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
         this.repainting = repainting;
     }
 
-    private List<ActionLayoutData> actions = new ArrayList<>();
+    private _ConcurrentListWrapper<ActionLayoutData> actions = new _ConcurrentListWrapper<>();
 
     // no wrapper
     @Override
     @XmlElement(name = "action", required = false)
     public List<ActionLayoutData> getActions() {
-        return actions;
+        return actions.snapshot();
     }
 
-    @Override
     public void setActions(List<ActionLayoutData> actionLayoutDatas) {
-        this.actions = actionLayoutDatas;
+        this.actions.replace(actionLayoutDatas);
+    }
+    
+    @Override
+    public void addAction(ActionLayoutData actionLayoutData) {
+        this.actions.add(actionLayoutData);
     }
 
 

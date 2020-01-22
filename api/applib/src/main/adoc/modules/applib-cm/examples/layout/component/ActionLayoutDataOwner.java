@@ -21,6 +21,8 @@ package org.apache.isis.applib.layout.component;
 import java.util.List;
 
 public interface ActionLayoutDataOwner extends Owner {
+    
     List<ActionLayoutData> getActions();
-    void setActions(List<ActionLayoutData> actions);
+    void addAction(ActionLayoutData actionLayoutData);
+    
 }
