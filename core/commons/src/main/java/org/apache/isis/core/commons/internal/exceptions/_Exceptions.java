@@ -31,6 +31,7 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.base._Strings;
@@ -132,6 +133,38 @@ public final class _Exceptions {
         return new UnsupportedOperationException("unrecoverable error: method call not allowed/supported");
     }
     
+    // -- MESSAGE
+    
+    public static String getMessage(Exception ex) {
+        if(ex==null) {
+            return "no exception present";
+        }
+        if(_Strings.isNotEmpty(ex.getMessage())) {
+            return ex.getMessage();
+        }
+        val sb = new StringBuilder();
+        val nestedMsg = streamCausalChain(ex)
+                .peek(throwable->{
+                    sb.append(throwable.getClass().getSimpleName()).append("/");
+                })
+                .map(Throwable::getMessage)
+                .filter(_NullSafe::isPresent)
+                .findFirst();
+        
+        if(nestedMsg.isPresent()) {
+            sb.append(nestedMsg.get());
+        } else {
+            
+            Can.ofArray(ex.getStackTrace())
+            .stream()
+            .limit(20)
+            .forEach(trace->sb.append("\n").append(trace));
+        }
+                
+        return sb.toString();
+    }
+    
+    // -- THROWING
     
     /**
      * Used to hide from the compiler the fact, that this call always throws.
