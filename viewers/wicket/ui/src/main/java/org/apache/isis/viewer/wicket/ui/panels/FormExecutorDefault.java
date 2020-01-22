@@ -166,9 +166,9 @@ implements FormExecutor {
                 redirectFacet = actionModel.getActionMemento().getAction(getSpecificationLoader()).getFacet(RedirectFacet.class);
             }
 
-            if (shouldRedirect(targetAdapter, resultAdapter, redirectFacet) ||
-                    hasBlobsOrClobs(page)                                       ||
-                    targetIfAny == null                                             ) {
+            if (shouldRedirect(targetAdapter, resultAdapter, redirectFacet) 
+                    || hasBlobsOrClobs(page)                                       
+                    || targetIfAny == null) {
 
                 redirectTo(resultAdapter, targetIfAny);
 

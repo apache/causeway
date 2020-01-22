@@ -19,7 +19,6 @@
 package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.persistencecapable;
 
 import java.lang.reflect.Method;
-import java.util.UUID;
 
 import javax.jdo.annotations.IdentityType;
 
@@ -64,7 +63,7 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
     @Override
     public String identifierFor(ObjectSpecification spec, Object pojo) {
 
-        //TODO simplify, spec is already loaded
+        //TODO simplify?, spec is already loaded
         
         if(pojo==null || !isPersistableType(pojo.getClass())) {
             return "?";
@@ -76,8 +75,15 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
             final String identifier = persistenceSession.identifierFor(pojo);
             return identifier;
         } else {
-            final String identifier = UUID.randomUUID().toString();
-            return identifier;    
+            
+            throw _Exceptions.illegalArgument(
+                    "The persistence layer does not recognize given object of type %s, "
+                    + "meaning the object has no identifier that associates it with the persistence layer. "
+                    + "(most likely, because the object is detached, eg. was not persisted after being new-ed up)", 
+                    pojo.getClass().getName());
+            
+            //final String identifier = UUID.randomUUID().toString();
+            //return identifier;    
         }
     }
 
