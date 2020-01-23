@@ -163,9 +163,9 @@ data class LogEntry(
 
     fun addAggregator(aggregator: BaseAggregator) {
         if (aggregators.size > 0) {
-            console.log("[LogEntry.addAggregator()]")
+ /*           console.log("[LogEntry.addAggregator()]")
             console.log(aggregators)
-            console.log(aggregator)
+            console.log(aggregator)*/
         }
         aggregators.add(aggregator)
     }

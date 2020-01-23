@@ -17,7 +17,8 @@ data class ActionLayout(var named: String? = "",
                         var hidden: String? = null,
                         var namedEscaped: String? = "",
                         var position: String? = "",
-                        var promptStyle: String? = ""
+                        var promptStyle: String? = "",
+                        val redirect: String? = null
 ) {
     constructor(action: Action) : this() {
         named = action.named

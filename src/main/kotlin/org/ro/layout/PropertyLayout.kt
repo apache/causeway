@@ -17,8 +17,10 @@ data class PropertyLayout(val named: String? = null,
                           val multiLine: Int? = 1,
                           val namedEscaped: Boolean? = false,
                           val promptStyle: String? = null,
+                          val renderDay: Boolean? = false,
                           val renderedAsDayBefore: Boolean? = false,
                           val typicalLength: Int? = null,
+                          val repainting: String? = null,
                           val unchanging: String? = null
 ) {
     constructor(property: Property) : this() {

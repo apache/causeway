@@ -2,7 +2,7 @@ package org.ro.snapshots.demo2_0_0
 
 import org.ro.snapshots.Response
 
-object MENUBARS : Response(){
+object DEMO_MENUBARS : Response(){
     override val url = "http://localhost:8080/restful/menuBars"
     override val str = """{
     "primary": {

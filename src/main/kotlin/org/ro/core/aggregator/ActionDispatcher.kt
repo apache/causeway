@@ -1,6 +1,7 @@
 package org.ro.core.aggregator
 
 import org.ro.core.event.LogEntry
+import org.ro.core.event.RoXmlHttpRequest
 import org.ro.to.Action
 import org.ro.to.Link
 import org.ro.to.Method
@@ -16,8 +17,8 @@ class ActionDispatcher(private val at: Point = Point(100,100)) : BaseAggregator(
             if (it.isInvokeAction()) {
                 when (it.method) {
                     Method.GET.name -> processGet(action, it)
-                    Method.POST.name -> processPost(action)
-                    Method.PUT.name -> processPut(action)
+                    Method.POST.name -> processPost(action, it)
+                    Method.PUT.name -> processPut(it)
                 }
             }
         }
@@ -34,20 +35,22 @@ class ActionDispatcher(private val at: Point = Point(100,100)) : BaseAggregator(
         if (link.hasArguments()) {
             ActionPrompt(action).open(at)
         } else {
-            this.invoke(link)
+            invoke(link)
         }
     }
 
-    private fun processPost(action: Action) {
-        ActionPrompt(action).open(at)
+    private fun processPost(action: Action, link: Link) {
+        console.log("[ActionDispatcher.processPost] link.hasArguments: ${link.hasArguments()}")
+        console.log(link)
+        if (link.hasArguments()) {
+            ActionPrompt(action).open(at)
+        } else {
+            RoXmlHttpRequest().invoke(link, ObjectAggregator(action.id))
+        }
     }
 
-    private fun processPut(action: Action) {
-        // sample:
-        // url: http://localhost:8080/restful/objects/simple.SimpleObject/0/properties/notes
-        // body:   {"value": "FoolOnTheHill"}
-        throw Exception("[ActionAggregator.processPut] notImplementedYet $action")
+    private fun processPut(link: Link) {
+        invoke(link)
     }
-
 
 }

@@ -2,7 +2,7 @@ package org.ro.to.mb
 
 import kotlinx.serialization.UnstableDefault
 import org.ro.handler.MenuBarsHandler
-import org.ro.snapshots.demo2_0_0.MENUBARS
+import org.ro.snapshots.demo2_0_0.DEMO_MENUBARS
 import org.ro.snapshots.simpleapp1_16_0.RESTFUL_MENUBARS
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -14,7 +14,7 @@ class MenubarsTest {
     @Test
     fun testDemoMenubars() {
         //given
-        val jsonStr = MENUBARS.str
+        val jsonStr = DEMO_MENUBARS.str
         //when
         val menuBars = MenuBarsHandler().parse(jsonStr) as Menubars
 

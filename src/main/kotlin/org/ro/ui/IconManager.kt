@@ -41,6 +41,7 @@ object IconManager {
             "Simple" to "cubes",
             "Switch" to "power-off",
             "Text" to "font",
+            "Toast" to "bread-slice", //comment-alt-plus/minus/exclamation
             "Tooltips" to "comment-alt",
             "Temporals" to "clock",
             "Trees" to "tree",
