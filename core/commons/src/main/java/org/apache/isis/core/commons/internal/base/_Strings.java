@@ -52,6 +52,8 @@ import static org.apache.isis.core.commons.internal.base._With.requires;
 import static org.apache.isis.core.commons.internal.base._With.requiresNotEmpty;
 import static org.apache.isis.core.commons.internal.functions._Predicates.not;
 
+import lombok.NonNull;
+
 /**
  * <h1>- internal use only -</h1>
  * <p>
@@ -432,6 +434,52 @@ public final class _Strings {
         return mapIfPresentElse(input, __->input.replaceAll("\\s+", replacement), null);
     }
 
+    /**
+     * ...xyz
+     * @param input
+     * @param maxLength
+     * @param ellipsis
+     * @return (non-null), ellipsified version of {@code input}, if {@code input} exceeds length {@code maxLength}
+     */
+    public static String ellipsifyAtStart(
+            @Nullable final CharSequence input, 
+            final int maxLength, 
+            @NonNull final CharSequence ellipsis) {
+        
+        if(input==null) {
+            return "";
+        }
+        if(input.length()<=maxLength) {   
+            return input.toString();
+        }
+        final int trimmedLength = maxLength - ellipsis.length();
+        final int end = input.length();
+        final int start = end - trimmedLength;
+        return String.join("", ellipsis, input.subSequence(start, end));
+    }
+    
+    /**
+     * abc...
+     * @param input
+     * @param maxLength
+     * @param ellipsis
+     * @return (non-null), ellipsified version of {@code input}, if {@code input} exceeds length {@code maxLength}
+     */
+    public static String ellipsifyAtEnd(
+            @Nullable final CharSequence input, 
+            final int maxLength, 
+            @NonNull final CharSequence ellipsis) {
+        
+        if(input==null) {
+            return "";
+        }
+        if(input.length()<=maxLength) {   
+            return input.toString();
+        }
+        final int trimmedLength = maxLength - ellipsis.length();
+        return String.join("", input.subSequence(0, trimmedLength), ellipsis);
+    }
+
     // -- READ FROM INPUT STREAM
 
     public static String read(@Nullable final InputStream input, Charset charset) {
@@ -577,7 +625,6 @@ public final class _Strings {
                 .map(String::trim)
                 .filter(not(String::isEmpty));
     }
-
 
 
 }
