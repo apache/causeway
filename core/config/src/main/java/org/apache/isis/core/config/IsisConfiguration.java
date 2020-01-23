@@ -1812,7 +1812,7 @@ public class IsisConfiguration {
                         @Data
                         public static class Option {
                             /**
-                             * JDBC driver used by DataNucleus Object store to connect.
+                             * JDBC driver used by JDO/DataNucleus object store to connect.
                              *
                              * <p>
                              *     See also <tt>additional-spring-configuration-metadata.json</tt> (PascalCasing instead of kebab-casing).
@@ -1822,7 +1822,7 @@ public class IsisConfiguration {
                              */
                             private String connectionDriverName;
                             /**
-                             * URL used by DataNucleus Object store to connect.
+                             * URL used by JDO/DataNucleus object store to connect.
                              *
                              * <p>
                              *     See also <tt>additional-spring-configuration-metadata.json</tt> (PascalCasing instead of kebab-casing).
@@ -1832,7 +1832,7 @@ public class IsisConfiguration {
                              */
                             private String connectionUrl;
                             /**
-                             * User account used by DataNucleus Object store to connect.
+                             * User account used by JDO/DataNucleus object store to connect.
                              *
                              * <p>
                              *     See also <tt>additional-spring-configuration-metadata.json</tt> (PascalCasing instead of kebab-casing).
@@ -1842,7 +1842,7 @@ public class IsisConfiguration {
                              */
                             private String connectionUserName;
                             /**
-                             * Password for the user account used by DataNucleus Object store to connect.
+                             * Password for the user account used by JDO/DataNucleus object store to connect.
                              *
                              * <p>
                              *     See also <tt>additional-spring-configuration-metadata.json</tt> (PascalCasing instead of kebab-casing).
@@ -2287,6 +2287,7 @@ public class IsisConfiguration {
                  * If not specified, the application.name is used instead.
                  * </p>
                  */
+                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
                 private Optional<String> brandLogoHeader = Optional.empty();
                 
                 /**
@@ -2298,6 +2299,7 @@ public class IsisConfiguration {
                  * If not specified, the {@link Application#getName() application name} is used instead.
                  * </p>
                  */
+                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
                 private Optional<String> brandLogoSignin = Optional.empty();
                 
                 /**
@@ -2305,12 +2307,12 @@ public class IsisConfiguration {
                  *
                  * <p>
                  *     A typical value is <code>css/application.css</code>.  This will result in this file being read
-                 *     from the <code>static.css</code> package (because static resources such as CSS are mounted by
+                 *     from the <code>static/css</code> directory (because static resources such as CSS are mounted by
                  *     Spring by default under <code>static</code> package).
                  * </p>
                  */
                 @javax.validation.constraints.Pattern(regexp="^[^/].*$")
-                private String css;
+                private Optional<String> css = Optional.empty();
 
                 /**
                  * Specifies the content type of the favIcon, if any.
@@ -2324,6 +2326,7 @@ public class IsisConfiguration {
                  *     This is expected to be a local resource.
                  * </p>
                  */
+                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
                 private Optional<String> faviconUrl = Optional.empty();
                 
                 /**
@@ -2332,13 +2335,13 @@ public class IsisConfiguration {
                  * URL of file to read any custom Javascript, relative to <code>static</code> package on the class path.
                  *
                  * <p>
-                 *     A typical value is <code>css/application.js</code>.  This will result in this file being read
-                 *     from the <code>static.js</code> package (because static resources such as CSS are mounted by
+                 *     A typical value is <code>js/application.js</code>.  This will result in this file being read
+                 *     from the <code>static/js</code> directory (because static resources such as CSS are mounted by
                  *     Spring by default under <code>static</code> package).
                  * </p>
                  */
                 @javax.validation.constraints.Pattern(regexp="^[^/].*$")
-                private String js;
+                private Optional<String> js = Optional.empty();
 
                 /**
                  * Specifies the file name containing the menubars.

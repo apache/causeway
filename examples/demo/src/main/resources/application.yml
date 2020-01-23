@@ -56,9 +56,9 @@ isis:
     wicket:
       application:
         menubars-layout-xml: demoapp/webapp/menubars.layout.xml
-        favicon-url: /images/favicon.png
-        brand-logo-header: /images/gift_48.png
-        brand-logo-signin: /images/gift_256.png
+        favicon-url: images/favicon.png
+        brand-logo-header: images/gift_48.png
+        brand-logo-signin: images/gift_256.png
         name: Apache Isis Demo App
         css: css/application.css
         js: scripts/application.js
