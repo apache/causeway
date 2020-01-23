@@ -1,10 +1,10 @@
-= DataNucleus Object Store
+= JDO/DataNucleus object store
 :page-toc: ~
 
-The DataNucleus Object Store enables domain objects to be persisted to relational as well as NoSQL databases.
+The JDO/DataNucleus object store enables domain objects to be persisted to relational as well as NoSQL databases.
 The object store is implemented using link:http://datanucleus.org[DataNucleus].
 
-This user guide discuss end-user features, configuration and customization of the DataNucleus object store.
+This user guide discuss end-user features, configuration and customization of the JDO/DataNucleus object store.
 
 
 

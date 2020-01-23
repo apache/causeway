@@ -25,7 +25,7 @@ The xref:security:ROOT:about.adoc[Security Guide] describes how to configure eac
 
 == Persistence
 
-The framework allows xref:userguide:fun:building-blocks/types-of-domain-objects/domain-entities.adoc[domain entities] to be persisted using the xref:pjdo:ROOT:about.adoc[DataNucleus Object Store], for use with the JDO API.
+The framework allows xref:userguide:fun:building-blocks/types-of-domain-objects/domain-entities.adoc[domain entities] to be persisted using the xref:pjdo:ROOT:about.adoc[JDO/DataNucleus object store], for use with the JDO API.
 
 Alternatively, if you restrict yourself to xref:userguide:fun:building-blocks/types-of-domain-objects/view-models.adoc[view models] then these can be persisted with any data persistence technology that is supported by Spring Boot.
 

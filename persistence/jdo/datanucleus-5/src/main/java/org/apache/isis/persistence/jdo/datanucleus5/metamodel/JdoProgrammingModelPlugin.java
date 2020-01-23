@@ -156,7 +156,7 @@ public class JdoProgrammingModelPlugin implements MetaModelRefiner {
                 validation.onFailure(
                         objSpec,
                         objSpec.getIdentifier(),
-                        "%s: DataNucleus object store currently does not supported Aggregated or EmbeddedOnly annotations",
+                        "%s: JDO/DataNucleus object store currently does not supported Aggregated or EmbeddedOnly annotations",
                         objSpec.getFullIdentifier());
             }
             return true;
