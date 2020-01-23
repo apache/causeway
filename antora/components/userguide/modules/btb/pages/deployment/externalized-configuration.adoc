@@ -231,7 +231,7 @@ The active profile can be overridden with a system property, eg:
 
 [source,bash]
 ----
--Dspring.active.profiles=prod
+-Dspring.profiles.active=prod
 ----
 
 
