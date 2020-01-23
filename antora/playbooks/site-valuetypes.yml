@@ -39,7 +39,6 @@ asciidoc:
     - asciidoctor-plantuml
     - ./antora/lib/lorem
     - ./antora/lib/jira-issue
-    - ./antora/lib/powershell
   attributes:
     experimental: ""
     idprefix: ""
