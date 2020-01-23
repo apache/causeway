@@ -43,17 +43,7 @@ Create a new directory, and `cd` into that directory.
 
 To build the app from the latest stable release, then run the following command:
 
-[source,bash,subs="attributes+"]
-----
-mvn archetype:generate  \
-    -D archetypeGroupId=org.apache.isis.archetype \
-    -D archetypeArtifactId=simpleapp-archetype \
-    -D archetypeVersion={isiscurr} \
-    -D groupId=com.mycompany \
-    -D artifactId=myapp \
-    -D version=1.0-SNAPSHOT \
-    -B
-----
+include::script.adoc[]
 
 where:
 

@@ -7,43 +7,28 @@ To get started with a new application, use one of the two git repos on Github th
 
 The helloworld app is  very minimal app, intended just as a starting point to learn what the framework is all about.
 
-[source,bash]
-----
-REPO=isis-app-helloworld
-BRANCH=master
+include::starters:helloworld:page$script.adoc[]
 
-curl "https://codeload.github.com/apache/$REPO/zip/$BRANCH" | jar xv
-mv $REPO-$BRANCH $REPO
-cd $REPO
 
-mvn clean install
-mvn spring-boot:run
-----
+Notes:
 
-The source code can be found in this link:https://github.com/apache/isis-app-helloworld[git repo]
+* more on the structure of the Hello World app can be found xref:starters:helloworld:about.adoc[here]
+* the source code can be found in this link:https://github.com/apache/isis-app-helloworld[git repo]
+
 
 
 == Simple App
 
-
 This app has the same functionality as _HelloWorld_, but is structured so it can be used as a starting point for developing your own applications.
 
-[source,bash]
-----
-REPO=isis-app-simpleapp
-BRANCH=master
-
-curl "https://codeload.github.com/apache/$REPO/zip/$BRANCH" | jar xv
-mv $REPO-$BRANCH $REPO
-cd $REPO
-
-mvn clean install
-mvn -pl webapp spring-boot:run
-----
+include::starters:simpleapp:page$script.adoc[]
 
 It also includes some xref:testing:integtestsupport:about.adoc[integration tests], xref:testing:fixtures:about.adoc[fixtures], and xref:testing:specsupport[BDD (Cucumber)] specs.
 
-The source code can be found in this link:https://github.com/apache/isis-app-simpleapp[git repo]
+Notes:
+
+* more on the structure of the Simple App app can be found xref:starters:simpleapp:about.adoc[here]
+* the source code can be found in this link:https://github.com/apache/isis-app-simpleapp[git repo]
 
 
 == Updating to Newer Versions
