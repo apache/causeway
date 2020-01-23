@@ -19,27 +19,14 @@
 
 package org.apache.isis.applib.adapters;
 
-import java.math.BigDecimal;
-
-import org.apache.isis.applib.annotation.Defaulted;
-import org.apache.isis.applib.annotation.EqualByContent;
 import org.apache.isis.applib.annotation.Value;
 
 /**
  * Provides a mechanism for providing a set of value semantics.
- *
- * <p>
- * As explained in the Javadoc of the {@link Value} annotation, value semantics
- * only actually implies that the type is {@link Aggregated aggregated}.
- * However, values are very often
- * {@link Immutable} and implement {@link EqualByContent} semantics. In
- * addition, there may be a {@link Defaulted default value}.
- *
  * <p>
  * This interface is used by {@link Value} to allow these semantics to be
  * provided through a single point. Alternatively, {@link Value} supports this
  * information being provided via the configuration files.
- *
  * <p>
  * Whatever the class that implements this interface, it must also expose either
  * a <tt>public</tt> no-arg constructor, or (for implementations that also are
@@ -71,20 +58,5 @@ public interface ValueSemanticsProvider<T> {
      * If not <tt>null</tt>, implies that the value has (or may have) a default.
      */
     DefaultsProvider<T> getDefaultsProvider();
-
-    /**
-     * Whether the value is {@link Immutable}.
-     */
-    boolean isImmutable();
-
-    /**
-     * Whether the value has {@link EqualByContent equal by content} semantics.
-     *
-     * <p>
-     * If so, then it must implement <tt>equals(Object)</tt> and
-     * <tt>hashCode()</tt> consistently. Examples in the Java language that do
-     * this are {@link String} and {@link BigDecimal}, for example.
-     */
-    boolean isEqualByContent();
 
 }

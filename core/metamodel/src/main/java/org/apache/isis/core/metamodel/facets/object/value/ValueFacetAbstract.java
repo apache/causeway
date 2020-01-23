@@ -107,17 +107,8 @@ public abstract class ValueFacetAbstract extends FacetAbstract implements ValueF
         // we used to add aggregated here, but this was wrong.
         // An immutable value is not aggregated, it is shared.
 
-        // ImmutableFacet, if appropriate
-        final boolean immutable = semanticsProvider == null || semanticsProvider.isImmutable();
-        if (immutable) {
-            this.addContributedFacet(new ImmutableFacetViaValueSemantics(holder));
-        }
-
-        // EqualByContentFacet, if appropriate
-        final boolean equalByContent = semanticsProvider == null || semanticsProvider.isEqualByContent();
-        if (equalByContent) {
-            this.addContributedFacet(new EqualByContentFacetViaValueSemantics(holder));
-        }
+        this.addContributedFacet(new ImmutableFacetViaValueSemantics(holder));
+        this.addContributedFacet(new EqualByContentFacetViaValueSemantics(holder));
 
         if (semanticsProvider != null) {
 

@@ -36,7 +36,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 
 
-public class BlobValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Blob> implements BlobValueFacet {
+public class BlobValueSemanticsProvider 
+extends ValueSemanticsProviderAndFacetAbstract<Blob> 
+implements BlobValueFacet {
 
     private static final int TYPICAL_LENGTH = 0;
 

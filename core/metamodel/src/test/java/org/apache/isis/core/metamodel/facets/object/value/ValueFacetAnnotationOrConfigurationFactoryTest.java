@@ -24,13 +24,13 @@ import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.annotcfg.ValueFacetAnnotation;
 import org.apache.isis.core.metamodel.facets.object.value.annotcfg.ValueFacetAnnotationOrConfigurationFactory;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderUtil;
@@ -128,47 +128,6 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         // no test, because compiler prevents us from nominating a class that
         // doesn't
         // implement ValueSemanticsProvider
-    }
-
-    @Value(semanticsProviderClass = MyValueSemanticsProviderWithoutNoArgConstructor.class)
-    public static class MyValueSemanticsProviderWithoutNoArgConstructor extends AbstractValueSemanticsProvider<MyValueSemanticsProviderWithoutNoArgConstructor> {
-
-        // no no-arg constructor
-
-        // pass in false for an immutable, which isn't the default
-        public MyValueSemanticsProviderWithoutNoArgConstructor(final int value) {
-            super(false, false);
-        }
-    }
-
-    public void testValueSemanticsProviderMustHaveANoArgConstructor() {
-        facetFactory.process(new ProcessClassContext(MyValueSemanticsProviderWithoutNoArgConstructor.class, methodRemover, facetedMethod));
-
-        // the fact that we have an immutable means that the provider wasn't
-        // picked up
-        assertNotNull(facetedMethod.getFacet(ImmutableFacet.class));
-    }
-
-    @Value(semanticsProviderClass = MyValueSemanticsProviderWithoutPublicNoArgConstructor.class)
-    public static class MyValueSemanticsProviderWithoutPublicNoArgConstructor extends AbstractValueSemanticsProvider<MyValueSemanticsProviderWithoutPublicNoArgConstructor> {
-
-        // no public no-arg constructor
-
-        // pass in false for an immutable, which isn't the default
-        MyValueSemanticsProviderWithoutPublicNoArgConstructor() {
-            super(false, false);
-        }
-
-        public MyValueSemanticsProviderWithoutPublicNoArgConstructor(final int value) {
-        }
-    }
-
-    public void testValueSemanticsProviderMustHaveAPublicNoArgConstructor() {
-        facetFactory.process(new ProcessClassContext(MyValueSemanticsProviderWithoutPublicNoArgConstructor.class, methodRemover, facetedMethod));
-
-        // the fact that we have an immutable means that the provider wasn't
-        // picked up
-        assertNotNull(facetedMethod.getFacet(ImmutableFacet.class));
     }
 
     public void testValueSemanticsProviderThatIsNotAParserDoesNotInstallParseableFacet() {
@@ -302,12 +261,6 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
     @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.object.value.ValueFacetAnnotationOrConfigurationFactoryTest$MyValueSemanticsProviderThatSpecifiesImmutableSemantic")
     public static class MyValueSemanticsProviderThatSpecifiesImmutableSemantic extends AbstractValueSemanticsProvider<MyValueSemanticsProviderThatSpecifiesImmutableSemantic> {
 
-        /**
-         * Required since is a ValueSemanticsProvider.
-         */
-        public MyValueSemanticsProviderThatSpecifiesImmutableSemantic() {
-            super(true, true);
-        }
     }
 
     public void testImmutableFacetsIsInstalledIfSpecifiesImmutable() {
@@ -316,25 +269,6 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
 
         final ImmutableFacet facet = facetedMethod.getFacet(ImmutableFacet.class);
         assertNotNull(facet);
-    }
-
-    @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.object.value.ValueFacetAnnotationOrConfigurationFactoryTest$MyValueSemanticsProviderThatSpecifiesNotImmutableSemantic")
-    public static class MyValueSemanticsProviderThatSpecifiesNotImmutableSemantic extends AbstractValueSemanticsProvider<MyValueSemanticsProviderThatSpecifiesNotImmutableSemantic> {
-
-        /**
-         * Required since is a ValueSemanticsProvider.
-         */
-        public MyValueSemanticsProviderThatSpecifiesNotImmutableSemantic() {
-            super(false, true);
-        }
-    }
-
-    public void testImmutableFacetsIsNotInstalledIfSpecifiesNotImmutable() {
-
-        facetFactory.process(new ProcessClassContext(MyValueSemanticsProviderThatSpecifiesNotImmutableSemantic.class, methodRemover, facetedMethod));
-
-        final ImmutableFacet facet = facetedMethod.getFacet(ImmutableFacet.class);
-        assertNull(facet);
     }
 
     public void testEqualByContentFacetsIsInstalledIfNoSemanticsProviderSpecified() {
@@ -351,13 +285,7 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
 
     @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.object.value.ValueFacetAnnotationOrConfigurationFactoryTest$MyValueSemanticsProviderThatSpecifiesEqualByContentSemantic")
     public static class MyValueSemanticsProviderThatSpecifiesEqualByContentSemantic extends AbstractValueSemanticsProvider<MyValueSemanticsProviderThatSpecifiesEqualByContentSemantic> {
-
-        /**
-         * Required since is a ValueSemanticsProvider.
-         */
-        public MyValueSemanticsProviderThatSpecifiesEqualByContentSemantic() {
-            super(true, true);
-        }
+        
     }
 
     public void testEqualByContentFacetsIsInstalledIfSpecifiesEqualByContent() {
@@ -366,25 +294,6 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
 
         final EqualByContentFacet facet = facetedMethod.getFacet(EqualByContentFacet.class);
         assertNotNull(facet);
-    }
-
-    @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.object.value.ValueFacetAnnotationOrConfigurationFactoryTest$MyValueSemanticsProviderThatSpecifiesNotEqualByContentSemantic")
-    public static class MyValueSemanticsProviderThatSpecifiesNotEqualByContentSemantic extends AbstractValueSemanticsProvider<MyValueSemanticsProviderThatSpecifiesNotEqualByContentSemantic> {
-
-        /**
-         * Required since is a ValueSemanticsProvider.
-         */
-        public MyValueSemanticsProviderThatSpecifiesNotEqualByContentSemantic() {
-            super(false, false);
-        }
-    }
-
-    public void testEqualByContentFacetsIsNotInstalledIfSpecifiesNotEqualByContent() {
-
-        facetFactory.process(new ProcessClassContext(MyValueSemanticsProviderThatSpecifiesNotEqualByContentSemantic.class, methodRemover, facetedMethod));
-
-        final EqualByContentFacet facet = facetedMethod.getFacet(EqualByContentFacet.class);
-        assertNull(facet);
     }
 
     @Value()

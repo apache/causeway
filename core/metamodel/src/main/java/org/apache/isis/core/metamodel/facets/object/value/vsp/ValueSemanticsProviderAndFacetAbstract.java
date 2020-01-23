@@ -139,16 +139,6 @@ implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProv
         return this;
     }
 
-    @Override
-    public boolean isEqualByContent() {
-        return equalByContent;
-    }
-
-    @Override
-    public boolean isImmutable() {
-        return immutable;
-    }
-
     // ///////////////////////////////////////////////////////////////////////////
     // Parser implementation
     // ///////////////////////////////////////////////////////////////////////////
