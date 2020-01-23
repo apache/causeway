@@ -8,5 +8,9 @@
 		<class name="EventLogEntry" />
 	</package>
 
+	<package name="demoapp.dom.types.tuple">
+		<class name="NumberConstant" />
+	</package>
+
 </jdo>
 
