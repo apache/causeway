@@ -22,8 +22,6 @@ import org.apache.wicket.markup.ComponentTag;
 
 import org.apache.isis.viewer.wicket.ui.components.WebComponentBase;
 
-import lombok.val;
-
 /**
  * A component used as a brand logo in the top-left corner of the navigation bar
  */
@@ -48,31 +46,15 @@ public class BrandLogo extends WebComponentBase {
     protected void onComponentTag(final ComponentTag tag) {
         super.onComponentTag(tag);
 
-        tag.put("src", url());
+        placement.configFrom(getIsisConfiguration())
+            .map(super.getWebAppContextPath()::prependContextPathIfLocal)
+            .ifPresent(url -> tag.put("src", url));
     }
 
     @Override
     protected void onConfigure() {
         super.onConfigure();
-        setVisible(url() != null);
-    }
-
-    private String url() {
-        
-        val isisConfiguration = super.getIsisConfiguration();
-        val webAppContextPath = super.getWebAppContextPath();
-        
-        final String logoHeaderUrl =
-                isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoHeader()
-                    .map(webAppContextPath::prependContextPathIfLocal)
-                    .orElse(null);
-
-        String logoSigninUrl =
-                isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoSignin()
-                    .map(webAppContextPath::prependContextPathIfLocal)
-                    .orElse(null);
-
-        return placement.urlFor(logoHeaderUrl, logoSigninUrl);
+        setVisible(placement.configFrom(getIsisConfiguration()).isPresent());
     }
 
 

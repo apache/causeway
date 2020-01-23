@@ -116,14 +116,10 @@ public class AccountManagementPageAbstract extends WebPageBase {
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(
                 BootstrapJavaScriptReference.instance())));
 
-        String applicationCss = getIsisConfiguration().getViewer().getWicket().getApplication().getCss();
-        if(applicationCss != null) {
-            response.render(CssReferenceHeaderItem.forUrl(applicationCss));
-        }
-        String applicationJs = getIsisConfiguration().getViewer().getWicket().getApplication().getJs();
-        if(applicationJs != null) {
-            response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
-        }
+        getIsisConfiguration().getViewer().getWicket().getApplication().getCss()
+                .ifPresent(css -> response.render(CssReferenceHeaderItem.forUrl(css)));
+        getIsisConfiguration().getViewer().getWicket().getApplication().getJs()
+                .ifPresent(js -> response.render(JavaScriptReferenceHeaderItem.forUrl(js)));
     }
 
 

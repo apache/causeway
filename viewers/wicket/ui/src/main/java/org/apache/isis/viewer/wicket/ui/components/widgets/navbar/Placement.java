@@ -18,11 +18,22 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.navbar;
 
+import java.util.Optional;
+
+import org.apache.isis.core.config.IsisConfiguration;
+
+import lombok.val;
+
 public enum Placement {
     HEADER,
     SIGNIN;
 
     String urlFor(final String logoHeaderUrl, final String logoSigninUrl) {
         return this == Placement.HEADER ? logoHeaderUrl : logoSigninUrl;
+    }
+
+    Optional<String> configFrom(IsisConfiguration isisConfiguration) {
+        val appConfig = isisConfiguration.getViewer().getWicket().getApplication();
+        return this == Placement.HEADER ? appConfig.getBrandLogoHeader() : appConfig.getBrandLogoSignin();
     }
 }

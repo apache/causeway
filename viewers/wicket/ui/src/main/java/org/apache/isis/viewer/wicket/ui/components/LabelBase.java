@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.wicket.ui.components;
 
 import org.apache.wicket.markup.html.WebComponent;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.config.IsisConfiguration;
@@ -30,20 +31,20 @@ import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
  * Provides all the system dependencies for sub-classes.
  * @since 2.0
  */
-public abstract class WebComponentBase
-extends WebComponent
+public abstract class LabelBase
+extends Label
 implements IsisWebAppCommonContext.Delegating {
 
-    public WebComponentBase(final String id) {
+    private static final long serialVersionUID = 1L;
+
+    public LabelBase(final String id) {
         super(id);
     }
 
-    public WebComponentBase(final String id, final IModel<?> model) {
+    public LabelBase(final String id, final IModel<?> model) {
         super(id, model);
     }
-    
-    private static final long serialVersionUID = 1L;
-    
+
     private transient IsisConfiguration isisConfiguration;
     private transient WebAppContextPath webAppContextPath;
     private transient IsisWebAppCommonContext commonContext;

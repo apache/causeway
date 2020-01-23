@@ -79,8 +79,7 @@ public class PanelBase<T> extends GenericPanel<T> implements IsisWebAppCommonCon
     
     @Override
     public IsisWebAppCommonContext getCommonContext() {
-        commonContext = CommonContextUtils.computeIfAbsent(commonContext);
-        return commonContext;
+        return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
     
     public WicketViewerSettings getWicketViewerSettings() {

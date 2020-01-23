@@ -267,14 +267,14 @@ public abstract class PageAbstract extends WebPageBase implements ActionPromptPr
         final JGrowlBehaviour jGrowlBehaviour = new JGrowlBehaviour(getCommonContext());
         jGrowlBehaviour.renderFeedbackMessages(response);
 
-        String applicationCss = getIsisConfiguration().getViewer().getWicket().getApplication().getCss();
-        if(applicationCss != null) {
-            response.render(CssReferenceHeaderItem.forUrl(applicationCss));
-        }
-        String applicationJs = getIsisConfiguration().getViewer().getWicket().getApplication().getJs();
-        if(applicationJs != null) {
-            response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
-        }
+        getIsisConfiguration().getViewer().getWicket().getApplication().getCss()
+                .ifPresent(applicationCss -> {
+                    response.render(CssReferenceHeaderItem.forUrl(applicationCss));
+                });
+        getIsisConfiguration().getViewer().getWicket().getApplication().getJs()
+                .ifPresent(applicationJs -> {
+                    response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
+                } );
 
         getCommonContext().getConfiguration().getViewer().getWicket().getLiveReloadUrl().ifPresent(liveReloadUrl -> {
             response.render(JavaScriptReferenceHeaderItem.forUrl(liveReloadUrl));

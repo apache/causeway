@@ -18,29 +18,21 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.navbar;
 
-import javax.inject.Inject;
+import java.util.Optional;
 
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
+import org.apache.isis.viewer.wicket.ui.components.LabelBase;
 
 /**
  * A component used as a brand logo in the top-left corner of the navigation bar
  */
-public class BrandName extends Label {
+public class BrandName extends LabelBase {
 
     private static final long serialVersionUID = 1L;
 
     private final Placement placement;
-
-    @Inject private transient IsisConfiguration isisConfiguration;
-    @Inject private transient WebAppContextPath webAppContextPath;
-
-    private String logoHeaderUrl;
-    private String logoSigninUrl;
-    private String applicationName;
+    private final String applicationName;
     
     /**
      * Constructor.
@@ -51,28 +43,17 @@ public class BrandName extends Label {
     public BrandName(final String id, final Placement placement) {
         super(id);
         this.placement = placement;
-        
+
+        applicationName = getIsisConfiguration().getViewer().getWicket().getApplication().getName();
+
         setDefaultModel(Model.of(applicationName));
     }
 
     @Override
     protected void onConfigure() {
         super.onConfigure();
-        
-        if(isisConfiguration==null) {
-            return; // simply skip when de-serializing, since (non-transient) fields are already populated
-        }
 
-        applicationName = isisConfiguration.getViewer().getWicket().getApplication().getName();
-        logoHeaderUrl =
-                isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoHeader()
-                    .map(webAppContextPath::prependContextPathIfLocal)
-                    .orElse(null);
-        logoSigninUrl =
-                isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoSignin()
-                    .map(webAppContextPath::prependContextPathIfLocal)
-                    .orElse(null);
-
-        setVisible(placement.urlFor(logoHeaderUrl, logoSigninUrl) == null);
+        setVisible(! placement.configFrom(getIsisConfiguration()).isPresent());
     }
+
 }
