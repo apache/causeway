@@ -54,7 +54,9 @@ public class InventoryResource {
 
     @Action
     public Book recommendedBookOfTheWeek() {
-        return Book.of("Book of the week", "An awesome Book", 12, "Author", "ISBN", "Publisher");
+        // for this test we do not care if we generate duplicates
+        val book = Book.of("Book of the week", "An awesome Book", 12, "Author", "ISBN", "Publisher");
+        return repository.persist(book);
     }
 
     @Action //TODO improve the REST client such that the param can be of type Book
