@@ -19,18 +19,17 @@
 package org.apache.isis.applib.layout.component;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.links.Link;
-import org.apache.isis.core.commons.internal.concurrent._ConcurrentListWrapper;
 
 /**
  * Describes the layout of a single collection, broadly corresponds to the {@link org.apache.isis.applib.annotation.CollectionLayout} annotation.
@@ -197,23 +196,23 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
         this.sortedBy = sortedBy;
     }
 
-    private _ConcurrentListWrapper<ActionLayoutData> actions = new _ConcurrentListWrapper<>();
+
+
+    private List<ActionLayoutData> actions = new ArrayList<>();
 
     // no wrapper
     @Override
-    @XmlElementRef(type = ActionLayoutData.class, name = "action", required = false)
+    @XmlElement(name = "action", required = false)
     public List<ActionLayoutData> getActions() {
-        return actions.snapshot();
+        return actions;
     }
 
-    public void setActions(List<ActionLayoutData> actionLayoutDatas) {
-        this.actions.replace(actionLayoutDatas);
-    }
-    
     @Override
-    public void addAction(ActionLayoutData actionLayoutData) {
-        this.actions.add(actionLayoutData);
+    public void setActions(List<ActionLayoutData> actionLayoutDatas) {
+        this.actions = actionLayoutDatas;
     }
+
+
 
     private CollectionLayoutDataOwner owner;
     /**

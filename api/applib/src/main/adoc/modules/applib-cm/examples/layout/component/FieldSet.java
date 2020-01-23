@@ -19,6 +19,7 @@
 package org.apache.isis.applib.layout.component;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -29,7 +30,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
-import org.apache.isis.core.commons.internal.concurrent._ConcurrentListWrapper;
 
 /**
  * A {@link MemberRegion region} of the page containing a set of
@@ -133,39 +133,36 @@ Serializable {
         this.name = name;
     }
 
-    private _ConcurrentListWrapper<ActionLayoutData> actions = new _ConcurrentListWrapper<>();
+
+
+    private List<ActionLayoutData> actions = new ArrayList<>();
 
     // no wrapper
     @Override
     @XmlElement(name = "action", required = false)
     public List<ActionLayoutData> getActions() {
-        return actions.snapshot();
+        return actions;
     }
 
-    public void setActions(List<ActionLayoutData> actionLayoutDatas) {
-        this.actions.replace(actionLayoutDatas);
-    }
-    
     @Override
-    public void addAction(ActionLayoutData actionLayoutData) {
-        this.actions.add(actionLayoutData);
+    public void setActions(List<ActionLayoutData> actionLayoutDatas) {
+        this.actions = actionLayoutDatas;
     }
-    
-    private _ConcurrentListWrapper<PropertyLayoutData> properties = new _ConcurrentListWrapper<>();
+
+
+
+    private List<PropertyLayoutData> properties = new ArrayList<>();
 
     // no wrapper; required=false because may be auto-generated
     @XmlElement(name = "property", required = false)
     public List<PropertyLayoutData> getProperties() {
-        return properties.snapshot();
+        return properties;
     }
 
     public void setProperties(List<PropertyLayoutData> properties) {
-        this.properties.replace(properties);
+        this.properties = properties;
     }
-    
-    public void addProperty(PropertyLayoutData actionLayoutData) {
-        this.properties.add(actionLayoutData);
-    }
+
 
     private FieldSetOwner owner;
     /**

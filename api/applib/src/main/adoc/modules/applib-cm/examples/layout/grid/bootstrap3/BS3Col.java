@@ -35,7 +35,6 @@ import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutDataOwner;
 import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.applib.layout.component.FieldSetOwner;
-import org.apache.isis.core.commons.internal.concurrent._ConcurrentListWrapper;
 
 /**
  * A column within a row which, depending on its {@link #getSpan()}, could be as narrow as 1/12th of the page's width, all the way up to spanning the entire page.
@@ -172,23 +171,21 @@ CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
     }
 
 
-    private _ConcurrentListWrapper<ActionLayoutData> actions = new _ConcurrentListWrapper<>();
+
+    private List<ActionLayoutData> actions = new ArrayList<>();
 
     // no wrapper
     @Override
     @XmlElementRef(type = ActionLayoutData.class, name = "action", required = false)
     public List<ActionLayoutData> getActions() {
-        return actions.snapshot();
+        return actions;
     }
 
-    public void setActions(List<ActionLayoutData> actionLayoutDatas) {
-        this.actions.replace(actionLayoutDatas);
-    }
-    
     @Override
-    public void addAction(ActionLayoutData actionLayoutData) {
-        this.actions.add(actionLayoutData);
+    public void setActions(final List<ActionLayoutData> actions) {
+        this.actions = actions;
     }
+
 
 
     private List<BS3Row> rows = new ArrayList<>();
