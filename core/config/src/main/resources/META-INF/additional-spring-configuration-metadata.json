@@ -1,6 +1,16 @@
 {
   "properties": [
     {
+      "name": "resteasy.jaxrs.app.registration",
+      "type": "java.lang.String",
+      "description": "How the implementation of the JAX-RS application is discovered."
+    },
+    {
+      "name": "resteasy.jaxrs.defaultPath",
+      "type": "java.lang.String",
+      "description": "The path at which the RO viewer should be mounted."
+    },
+    {
       "name": "isis.value-types.primitives.integer.format",
       "type": "java.lang.String"
     },

@@ -55,9 +55,13 @@ public class RestEasyConfiguration {
     public static class Jaxrs {
 
         /**
+         * The path at which the RO viewer should be mounted.
+         *
+         * <p>
          * Note that this is used rather than <code>resteasy.servlet.mapping.prefix</code>
          * because there is <i>NO</i> implementation of {@link javax.ws.rs.core.Application}, so we rely on it being
          * automatically created.
+         * </p>
          */
         @javax.validation.constraints.Pattern(regexp="^[/].*[^/]$")
         private String defaultPath = "/restful";
@@ -72,6 +76,18 @@ public class RestEasyConfiguration {
                 SCANNING,
                 AUTO,
             }
+
+            /**
+             * How the implementation of the JAX-RS application is discovered.
+             *
+             * <p>
+             *     There should be very little reason to change this from its default.
+             * </p>
+             *
+             * <p>
+             *     See <a href="https://github.com/resteasy/resteasy-spring-boot/blob/master/mds/USAGE.md#jax-rs-application-registration-methods">here</a> for more details.
+             * </p>
+             */
             private Registration registration = Registration.BEANS;
         }
     }
