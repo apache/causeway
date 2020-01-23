@@ -267,6 +267,10 @@ static String toAsciidoc(String str) {
     str = str.replaceAll( /@apiNote/, 'TIP:')
     str = str.replaceAll( /@implNote -/, 'NOTE:')
     str = str.replaceAll( /@implNote/, 'NOTE:')
+    str = str.replaceAll( /<tt>/, '`')
+    str = str.replaceAll( /<\/tt>/, '`')
+    str = str.replaceAll( /<code>/, '`')
+    str = str.replaceAll( /<\/code>/, '`')
 
     File tf = File.createTempFile("input",".html")
     tf.write(str)   // write to the file
