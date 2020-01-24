@@ -1,3 +1,21 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
 package org.apache.isis.extensions.fullcalendar.applib.value;
 
 import java.io.Serializable;
@@ -6,6 +24,7 @@ import org.joda.time.DateTime;
 
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.util.ObjectContracts;
+import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
 
 /**
  * Value type representing an event on a calendar.
@@ -15,7 +34,6 @@ public class CalendarEvent implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    private static final String KEY_FIELDS = "dateTime, calendarName";
 	static final CalendarEvent DEFAULT_VALUE = null; // no default
 	
     private final DateTime dateTime;
@@ -66,19 +84,25 @@ public class CalendarEvent implements Serializable {
 	    return new CalendarEvent(this.dateTime, this.calendarName, this.title, notes);
 	}
 
+	private final static ObjectContract<CalendarEvent> objectContract = 
+	    ObjectContracts.contract(CalendarEvent.class)
+	    .thenUse("dateTime", CalendarEvent::getDateTime)
+	    .thenUse("calendarName", CalendarEvent::getCalendarName);
+	
+	
 	@Override
     public int hashCode() {
-	    return ObjectContracts.hashCode(this, KEY_FIELDS);
+	    return objectContract.hashCode(this);
     }
 
     @Override
     public boolean equals(Object obj) {
-        return ObjectContracts.equals(this, obj, KEY_FIELDS);
+        return objectContract.equals(this, obj);
     }
 
     @Override
     public String toString() {
-        return ObjectContracts.toString(this, KEY_FIELDS);
+        return objectContract.toString(this);
     }
     
     public static int typicalLength() {
