@@ -16,10 +16,10 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Blob;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.subdomains.excel.applib.dom.ExcelService;
 import org.apache.isis.subdomains.excel.applib.dom.WorksheetSpec;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -121,7 +121,7 @@ public class ExcelFixture2 extends FixtureScript {
             @Override
             public T create() {
                 final T importLine =
-                        factoryService.instantiate(rowClass);
+                        factoryService.getOrCreate(rowClass);
                 // allow the line to interact with the calling fixture
                 if(importLine instanceof FixtureAwareRowHandler<?>) {
                     final FixtureAwareRowHandler<?> farh = (FixtureAwareRowHandler<?>) importLine;

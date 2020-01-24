@@ -180,43 +180,43 @@ public class ApplicationFeatureRepositoryDefaultTest {
             // then
             final Sequence sequence = context.sequence("loadSequence");
             context.checking(new Expectations() {{
-                oneOf(mockFactoryService).instantiate(ApplicationFeature.class);
+                oneOf(mockFactoryService).create(ApplicationFeature.class);
                 inSequence(sequence);
                 will(returnValue(new ApplicationFeature(ApplicationFeatureId.newClass(Bar.class.getName()))));
 
-                oneOf(mockFactoryService).instantiate(ApplicationFeature.class);
+                oneOf(mockFactoryService).create(ApplicationFeature.class);
                 inSequence(sequence);
                 will(returnValue(new ApplicationFeature(ApplicationFeatureId.newMember(Bar.class.getName(), "someProperty"))));
 
-                oneOf(mockFactoryService).instantiate(ApplicationFeature.class);
+                oneOf(mockFactoryService).create(ApplicationFeature.class);
                 inSequence(sequence);
                 will(returnValue(new ApplicationFeature(ApplicationFeatureId.newMember(Bar.class.getName(), "someCollection"))));
 
-                oneOf(mockFactoryService).instantiate(ApplicationFeature.class);
+                oneOf(mockFactoryService).create(ApplicationFeature.class);
                 inSequence(sequence);
                 will(returnValue(new ApplicationFeature(ApplicationFeatureId.newMember(Bar.class.getName(), "someAction"))));
 
-                oneOf(mockFactoryService).instantiate(ApplicationFeature.class);
+                oneOf(mockFactoryService).create(ApplicationFeature.class);
                 inSequence(sequence);
                 will(returnValue(new ApplicationFeature(ApplicationFeatureId.newPackage("org.isisaddons.module.security.dom.feature"))));
 
-                oneOf(mockFactoryService).instantiate(ApplicationFeature.class);
+                oneOf(mockFactoryService).create(ApplicationFeature.class);
                 inSequence(sequence);
                 will(returnValue(new ApplicationFeature(ApplicationFeatureId.newPackage("org.isisaddons.module.security.dom"))));
 
-                oneOf(mockFactoryService).instantiate(ApplicationFeature.class);
+                oneOf(mockFactoryService).create(ApplicationFeature.class);
                 inSequence(sequence);
                 will(returnValue(new ApplicationFeature(ApplicationFeatureId.newPackage("org.isisaddons.module.security"))));
 
-                oneOf(mockFactoryService).instantiate(ApplicationFeature.class);
+                oneOf(mockFactoryService).create(ApplicationFeature.class);
                 inSequence(sequence);
                 will(returnValue(new ApplicationFeature(ApplicationFeatureId.newPackage("org.isisaddons.module"))));
 
-                oneOf(mockFactoryService).instantiate(ApplicationFeature.class);
+                oneOf(mockFactoryService).create(ApplicationFeature.class);
                 inSequence(sequence);
                 will(returnValue(new ApplicationFeature(ApplicationFeatureId.newPackage("org.isisaddons"))));
 
-                oneOf(mockFactoryService).instantiate(ApplicationFeature.class);
+                oneOf(mockFactoryService).create(ApplicationFeature.class);
                 inSequence(sequence);
                 will(returnValue(new ApplicationFeature(ApplicationFeatureId.newPackage("org"))));
             }});
@@ -285,7 +285,7 @@ public class ApplicationFeatureRepositoryDefaultTest {
             final ApplicationFeature newlyCreatedParent = new ApplicationFeature();
 
             context.checking(new Expectations() {{
-                allowing(mockFactoryService).instantiate(ApplicationFeature.class);
+                allowing(mockFactoryService).create(ApplicationFeature.class);
                 will(returnValue(newlyCreatedParent));
             }});
 

@@ -48,6 +48,7 @@ import static org.apache.isis.core.commons.internal.base._With.requires;
 import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramAssignableFrom;
 import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramCount;
 
+import lombok.NonNull;
 import lombok.val;
 
 @Service
@@ -64,14 +65,23 @@ public class FactoryServiceDefault implements FactoryService {
     @Inject private ObjectManager objectManager;
 
     @Override
-    public <T> T get(final Class<T> requiredType) {
+    public <T> T getOrCreate(@NonNull Class<T> requiredType) {
+        val spec = specificationLoader.loadSpecification(requiredType);
+        if(spec.isManagedBean()) {
+            return get(requiredType);
+        }
+        return create(requiredType);
+    }
+    
+    @Override
+    public <T> T get(@NonNull Class<T> requiredType) {
         return isisSystemEnvironment.getIocContainer()
                 .get(requiredType)
                 .orElseThrow(_Exceptions::noSuchElement);
     }
 
     @Override
-    public <T> T detachedEntity(final Class<T> domainClass) {
+    public <T> T detachedEntity(@NonNull Class<T> domainClass) {
         val spec = specificationLoader.loadSpecification(domainClass);
         if(!spec.isEntity()) {
             throw _Exceptions.illegalArgument("Class '%s' is not an entity", domainClass.getName());
@@ -80,7 +90,7 @@ public class FactoryServiceDefault implements FactoryService {
     }
     
     @Override
-    public <T> T mixin(final Class<T> mixinClass, final Object mixedIn) {
+    public <T> T mixin(@NonNull Class<T> mixinClass, @NonNull Object mixedIn) {
         val objectSpec = specificationLoader.loadSpecification(mixinClass);
         val mixinFacet = objectSpec.getFacet(MixinFacet.class);
         if(mixinFacet == null) {
@@ -109,7 +119,7 @@ public class FactoryServiceDefault implements FactoryService {
     }
 
     @Override
-    public <T> T viewModel(Class<T> viewModelClass, String mementoStr) {
+    public <T> T viewModel(@NonNull Class<T> viewModelClass, String mementoStr) {
         requires(viewModelClass, "viewModelClass");
 
         val spec = specificationLoader.loadSpecification(viewModelClass);
@@ -125,6 +135,16 @@ public class FactoryServiceDefault implements FactoryService {
         return _Casts.uncheckedCast(viewModel);
     }
     
+    @Override
+    public <T> T create(@NonNull Class<T> domainClass) {
+        val spec = specificationLoader.loadSpecification(domainClass);
+        if(spec.isManagedBean()) {
+            throw _Exceptions.illegalArgument(
+                    "Class '%s' is managed by IoC container, use get() instead", domainClass.getName());
+        }
+        return _Casts.uncheckedCast(createObject(spec));
+    }
+    
     // -- HELEPR    
     
     private Object createObject(ObjectSpecification spec) {
@@ -132,6 +152,8 @@ public class FactoryServiceDefault implements FactoryService {
         val managedObject = objectManager.createObject(objectCreateRequest);
         return _Casts.uncheckedCast(managedObject.getPojo());
     }
+
+
 
 
 }

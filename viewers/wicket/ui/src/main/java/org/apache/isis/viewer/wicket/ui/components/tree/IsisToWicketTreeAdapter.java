@@ -261,7 +261,7 @@ class IsisToWicketTreeAdapter {
             }
             try {
                 ensureInit(); // in case we were de-serialzed
-                return wrappedTreeAdapter = factoryService.instantiate(treeAdapterClass);
+                return wrappedTreeAdapter = factoryService.getOrCreate(treeAdapterClass);
             } catch (Exception e) {
                 throw new RuntimeException("failed to instantiate tree adapter", e);
             }
