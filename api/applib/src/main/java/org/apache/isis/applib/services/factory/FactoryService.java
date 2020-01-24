@@ -38,6 +38,10 @@ public interface FactoryService {
      * @return
      * @throws NoSuchElementException if result is empty
      * @throws IsisException if instance creation failed
+     * @throws IllegalArgumentException if requiredType is not recognized by the meta-model
+     * 
+     * @since 2.0
+     * 
      */
     <T> T getOrCreate(Class<T> requiredType);
     
