@@ -34,7 +34,6 @@ import java.util.stream.Collectors;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -171,23 +170,18 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
             CellStyle dateCellStyle) {
 
         val valueAdapter = property.get(objectAdapter);
+        val valueAsObj = valueAdapter!=null ? valueAdapter.getPojo() : null;
 
         // null
-        if (valueAdapter == null) {
-            cell.setCellType(CellType.BLANK);
-            return;
-        } 
-        final Object valueAsObj = valueAdapter.getPojo();
         if(valueAsObj == null) {
-            cell.setCellType(CellType.BLANK);
+            cell.setBlank();
             return;
         }
 
         // boolean
-        if(valueAsObj instanceof Boolean) {
-            Boolean value = (Boolean) valueAsObj;
+        if(valueAsObj instanceof Boolean) { 
+            boolean value = (Boolean) valueAsObj;
             cell.setCellValue(value);
-            cell.setCellType(CellType.BOOLEAN);
             return;
         } 
 
@@ -260,13 +254,11 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
 
         final String objectAsStr = valueAdapter.titleString(null);
         cell.setCellValue(objectAsStr);
-        cell.setCellType(CellType.STRING);
         return;
     }
 
     private static void setCellValueForDouble(final Cell cell, double value2) {
         cell.setCellValue(value2);
-        cell.setCellType(CellType.NUMERIC);
     }
 
     private static void setCellValueForDate(final Cell cell, Date date, CellStyle dateCellStyle) {
