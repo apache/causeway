@@ -29,4 +29,3 @@ data class PropertyLayout(val named: String? = null,
     }
 
 }
-

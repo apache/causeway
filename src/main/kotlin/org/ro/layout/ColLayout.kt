@@ -2,11 +2,7 @@ package org.ro.layout
 
 import kotlinx.serialization.Serializable
 import org.ro.to.Link
-import org.ro.to.TObject
 import org.ro.to.bs3.Col
-import org.ro.ui.kv.RoDisplay
-import pl.treksoft.kvision.core.Component
-import pl.treksoft.kvision.panel.HPanel
 
 @Serializable
 data class ColLayout(val domainObject: DomainObjectLayout? = null,
@@ -35,20 +31,6 @@ data class ColLayout(val domainObject: DomainObjectLayout? = null,
         }
         val fs = col.fieldSet!!
         fieldSet.add(FieldSetLayout(fs))
-    }
-
-    fun build(tObject: TObject, dsp: RoDisplay): HPanel {
-        val result = HPanel()
-        var cpt: Component?
-        for (tgl in tabGroup) {
-            cpt = tgl.build(tObject, dsp)
-            result.add(cpt)
-        }
-        for (fsl in fieldSet) {
-            cpt = fsl.build(tObject, dsp)
-            result.add(cpt!!)
-        }
-        return result
     }
 
 }

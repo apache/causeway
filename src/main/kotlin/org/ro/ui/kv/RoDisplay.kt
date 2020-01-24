@@ -1,6 +1,7 @@
 package org.ro.ui.kv
 
 import org.ro.core.model.DisplayObject
+import org.ro.ui.builder.LayoutBuilder
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.FontStyle
 import pl.treksoft.kvision.core.FontWeight
@@ -18,7 +19,7 @@ class RoDisplay(val displayObject: DisplayObject) : VPanel() {
         if (ol != null) {
             val model = displayObject.data!!
             val tObject = model.delegate
-            objectPanel = ol.build(tObject, this)
+            objectPanel = LayoutBuilder().create(ol, tObject, this)
             objectPanel.width = CssSize(100, UNIT.perc)
             add(objectPanel)
         }
