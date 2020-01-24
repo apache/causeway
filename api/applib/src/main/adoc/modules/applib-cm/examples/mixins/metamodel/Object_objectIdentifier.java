@@ -30,6 +30,8 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.mixins.MixinConstants;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.core.commons.internal.base._Strings;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -39,6 +41,7 @@ import lombok.val;
 public class Object_objectIdentifier {
 
     @Inject private BookmarkService bookmarkService;
+    @Inject private MetaModelService mmService;
     
     private final Object holder;
 
@@ -56,10 +59,12 @@ public class Object_objectIdentifier {
     @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.2")
     public String prop() {
         val bookmark = bookmarkService.bookmarkForElseThrow(this.holder);
-        return bookmark.getIdentifier();
+        val sort = mmService.sortOf(bookmark, MetaModelService.Mode.RELAXED);
+        if(sort.isEntity()) {
+            return bookmark.getIdentifier();    
+        }
+        return _Strings.ellipsifyAtStart(bookmark.getIdentifier(), 16, "…");
     }
-
-
     
 
 }

@@ -46,6 +46,10 @@ public class Bookmark implements Serializable {
 
     protected static final String SEPARATOR = ":";
     
+    /**
+     * corresponds directly to the object's specification-id 
+     * @see <tt>RootOid</tt> 
+     */
     @NonNull  private final String objectType;
     @NonNull  private final String identifier;
     @Nullable private final String hintId;
