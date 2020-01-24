@@ -59,7 +59,6 @@ public interface FactoryService {
      * @throws IsisException if instance creation failed
      * 
      * @apiNote does not force the requiredType to be added to the meta-model
-     * 
      * @since 2.0
      */
     <T> T get(Class<T> requiredType);
@@ -72,6 +71,7 @@ public interface FactoryService {
      * @return
      * @throws IllegalArgumentException if domainClass is not an entity type  
      * @apiNote forces the domainClass to be added to the meta-model if not already
+     * @since 2.0
      */
     <T> T detachedEntity(Class<T> domainClass);
 
