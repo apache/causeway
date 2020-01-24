@@ -31,9 +31,9 @@ data class LogEntry(
         @ContextualSerialization val createdAt: Date = Date()) {
     var state = EventState.INITIAL
     var title: String = ""
-    private var requestLength: Int = 0
+    var requestLength: Int = 0 // must be accessible (public) for LogEntryTable
     var response = ""
-    private var responseLength: Int = 0
+    var responseLength: Int = 0 // must be accessible (public) for LogEntryTable
 
     init {
         state = EventState.RUNNING
