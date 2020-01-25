@@ -23,12 +23,12 @@ class FieldSetBuilder {
             var content: Any = ""
             val member = members.firstOrNull() { it.id == label }
             if (member != null) {
-                content = member.value?.content.toString()
+            content = member.value?.content.toString()
             }
             //TODO handle numbers, dates, etc. as well
             if (content is String) {
                 if (content.startsWith("<") && content.endsWith(">")) {
-                    type = "Html"
+                type = "Html"
                 }
             }
             if (content == "true") {
@@ -40,10 +40,10 @@ class FieldSetBuilder {
                 type = "Boolean"
             }
 
-            if (member?.extensions?.xIsisFormat == "number") {
+           /* if (member!!.extensions!!.xIsisFormat == "byte") {
                 content = content as Number
                 type = "Numeric"
-            }
+            }*/
 
             val description = p.describedAs
             val fi = FormItem(label, type, content,

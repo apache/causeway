@@ -9,7 +9,6 @@ import org.ro.to.bs3.Grid
  * Build UI Component tree.
  *
  * @See: https://en.wikipedia.org/wiki/Composite_pattern
- * //TODO eventually use Decorator
  */
 @Serializable
 data class Layout(val cssClass: String? = null,

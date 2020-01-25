@@ -6,8 +6,8 @@ import org.ro.to.TObject
 
 object Utils {
 
-    fun isXml(response: String): Boolean {
-        return response.startsWith("<") && response.endsWith(">")
+    fun isXml(input: String): Boolean {
+        return input.startsWith("<") && input.endsWith(">")
     }
 
     fun enCamel(input: String): String {

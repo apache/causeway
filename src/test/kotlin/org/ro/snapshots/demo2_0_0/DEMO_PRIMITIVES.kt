@@ -1,4 +1,10 @@
-{
+package org.ro.snapshots.demo2_0_0
+
+import org.ro.snapshots.Response
+
+object DEMO_PRIMITIVES : Response(){
+    override val url = "http://localhost:8080/restful/objects/demo.FeaturedTypesMenu/1/actions/primitives/invoke"
+    override val str = """{
     "links": [
         {
             "rel": "self",
@@ -551,4 +557,6 @@
             ]
         }
     }
+}
+"""
 }

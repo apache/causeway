@@ -1,16 +1,22 @@
 package org.ro.ui.kv
 
 import org.ro.ui.FormItem
+import pl.treksoft.kvision.core.Component
 import pl.treksoft.kvision.core.StringPair
 import pl.treksoft.kvision.core.onEvent
 import pl.treksoft.kvision.form.FormPanel
+import pl.treksoft.kvision.form.check.CheckBox
 import pl.treksoft.kvision.form.formPanel
 import pl.treksoft.kvision.form.select.SimpleSelect
+import pl.treksoft.kvision.form.spinner.Spinner
 import pl.treksoft.kvision.form.text.Password
 import pl.treksoft.kvision.form.text.Text
 import pl.treksoft.kvision.form.text.TextArea
+import pl.treksoft.kvision.form.time.DateTime
+import pl.treksoft.kvision.html.Iframe
 import pl.treksoft.kvision.panel.VPanel
 import pl.treksoft.kvision.utils.px
+import kotlin.js.Date
 
 class FormPanelFactory(items: List<FormItem>) : VPanel() {
 
@@ -25,9 +31,39 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
                     "Password" -> add(createPassword(fi))
                     "TextArea" -> add(createTextArea(fi))
                     "SimpleSelect" -> add(createSelect(fi))
+                    "Html" -> add(createHtml(fi))
+                    "Numeric" -> add(createNumeric(fi))
+                    "Date" -> add(createDate(fi))
+                    "Time" -> add(createTime(fi))
+                    "Boolean" -> add(createBoolean(fi))
                 }
             }
         }
+    }
+
+    private fun createBoolean(fi: FormItem): Component {
+        val item = CheckBox(label = fi.label, value = fi.content as Boolean)
+        return item
+    }
+
+    private fun createTime(fi: FormItem): Component {
+        val item = DateTime(format = "HH:mm", label = fi.label, value = fi.content as Date)
+        return item
+    }
+
+    private fun createDate(fi: FormItem): Component {
+        val item = DateTime(format = "YYYY-MM-DD", label = fi.label, value = fi.content as Date)
+        return item
+    }
+
+    private fun createNumeric(fi: FormItem): Component {
+        val item = Spinner(label = fi.label, min = 10, max = 20, value = fi.content as Number)
+        return item
+    }
+
+    private fun createHtml(fi: FormItem): Component {
+        val item = Iframe(name = fi.label, srcdoc = fi.content as String)
+        return item
     }
 
     private fun createText(fi: FormItem): Text {
