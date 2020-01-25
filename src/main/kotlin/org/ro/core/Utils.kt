@@ -3,6 +3,7 @@ package org.ro.core
 import org.ro.to.Argument
 import org.ro.to.Link
 import org.ro.to.TObject
+import kotlin.js.Date
 
 object Utils {
 
@@ -150,6 +151,11 @@ object Utils {
 
     private fun quote(s: String): String {
         return "\"" + s + "\""
+    }
+
+    fun toDate(dateStr: String): Date {
+        val millis = Date.parse(dateStr)
+        return Date(millis)
     }
 
 }

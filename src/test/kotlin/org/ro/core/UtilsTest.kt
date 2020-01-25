@@ -5,9 +5,23 @@ import org.ro.to.Link
 import org.ro.to.Method
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 // UnitTest
 class UtilsTest {
+
+    @Test
+    fun testDate() {
+        // given
+        val dateStr = "2020-01-25T13:07:05Z"
+        //when
+        val dateTime = Utils.toDate(dateStr)
+        // then
+        assertNotNull(dateTime)
+        assertEquals(2020, dateTime.getFullYear())
+        assertEquals(0, dateTime.getMonth()) // c braintwist strikes again
+        assertEquals(7, dateTime.getMinutes())
+    }
 
     // @Test
     fun test_argumentsAsBody() {

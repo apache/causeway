@@ -13,6 +13,7 @@ import pl.treksoft.kvision.form.text.Password
 import pl.treksoft.kvision.form.text.Text
 import pl.treksoft.kvision.form.text.TextArea
 import pl.treksoft.kvision.form.time.DateTime
+import pl.treksoft.kvision.form.time.dateTime
 import pl.treksoft.kvision.html.Iframe
 import pl.treksoft.kvision.panel.VPanel
 import pl.treksoft.kvision.utils.px
@@ -46,17 +47,21 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
         return item
     }
 
-    private fun createTime(fi: FormItem): Component {
-        val item = DateTime(format = "HH:mm", label = fi.label, value = fi.content as Date)
+    private fun createTime(fi: FormItem): DateTime {
+        val item = dateTime(format = "HH:mm", label = fi.label, value = fi.content as Date)
         return item
     }
 
-    private fun createDate(fi: FormItem): Component {
-        val item = DateTime(format = "YYYY-MM-DD", label = fi.label, value = fi.content as Date)
+    private fun createDate(fi: FormItem): DateTime {
+        val item = dateTime(
+                format = "YYYY-MM-DD",
+                label = fi.label,
+                value = fi.content as Date
+        )
         return item
     }
 
-    private fun createNumeric(fi: FormItem): Component {
+    private fun createNumeric(fi: FormItem): Spinner {
         val item = Spinner(label = fi.label, min = 10, max = 20, value = fi.content as Number)
         return item
     }

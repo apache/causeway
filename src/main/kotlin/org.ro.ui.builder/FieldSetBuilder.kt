@@ -1,5 +1,6 @@
 package org.ro.ui.builder
 
+import org.ro.core.Utils
 import org.ro.layout.FieldSetLayout
 import org.ro.to.TObject
 import org.ro.ui.FormItem
@@ -38,6 +39,11 @@ class FieldSetBuilder {
             if (content == "false") {
                 content = false
                 type = "Boolean"
+            }
+
+            if (member!!.isDate()) {
+                content = Utils.toDate(content as String)
+               type = "Date"
             }
 
            /* if (member!!.extensions!!.xIsisFormat == "byte") {

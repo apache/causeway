@@ -61,5 +61,13 @@ data class Member(val id: String,
         }
     }
 
+    fun isDate(): Boolean {
+        return when {
+            format == "date" -> true
+            format == "date-time" -> true
+            else -> false
+        }
+    }
+
 
 }
