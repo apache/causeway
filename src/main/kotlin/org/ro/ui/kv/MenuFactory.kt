@@ -1,5 +1,6 @@
 package org.ro.ui.kv
 
+import org.ro.core.Utils
 import org.ro.core.aggregator.ActionDispatcher
 import org.ro.to.Link
 import org.ro.to.Member
@@ -53,10 +54,12 @@ object MenuFactory {
         }
         return dd
     }
+
     private fun action(dd: DropDown, label: String, link: Link) {
         val icon = IconManager.find(label)
         val classes = IconManager.findStyleFor(label)
-        dd.ddLink(label, icon = icon, classes = classes).onClick {
+        val title = Utils.deCamel(label)
+        dd.ddLink(title, icon = icon, classes = classes).onClick {
             ActionDispatcher().invoke(link)
         }
     }
@@ -97,18 +100,13 @@ object MenuFactory {
         switchCssClass(undoItem, DISABLED, WARN)
     }
 
-    private fun switchCssClass(menuItem: Component, from:String, to:String) {
+    private fun switchCssClass(menuItem: Component, from: String, to: String) {
         menuItem.removeCssClass(from)
         menuItem.addCssClass(to)
     }
 
     fun Member.getInvokeLink(): Link? {
-        for (l in links) {
-            if (l.rel.indexOf(id) > 0) {
-                return l
-            }
-        }
-        return null
+        return links.firstOrNull { it.rel.indexOf(id) > 0 }
     }
 
 }

@@ -1,5 +1,6 @@
 package org.ro.core.aggregator
 
+import org.ro.core.Utils
 import org.ro.core.event.LogEntry
 import org.ro.core.event.RoXmlHttpRequest
 import org.ro.to.Action
@@ -42,10 +43,11 @@ class ActionDispatcher(private val at: Point = Point(100,100)) : BaseAggregator(
     private fun processPost(action: Action, link: Link) {
         console.log("[ActionDispatcher.processPost] link.hasArguments: ${link.hasArguments()}")
         console.log(link)
+        val title = Utils.deCamel(action.id)
         if (link.hasArguments()) {
             ActionPrompt(action).open(at)
         } else {
-            RoXmlHttpRequest().invoke(link, ObjectAggregator(action.id))
+            RoXmlHttpRequest().invoke(link, ObjectAggregator(title))
         }
     }
 
