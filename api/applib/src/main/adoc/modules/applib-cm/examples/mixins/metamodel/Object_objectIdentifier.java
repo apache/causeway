@@ -33,6 +33,7 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.core.commons.internal.base._Strings;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -60,10 +61,19 @@ public class Object_objectIdentifier {
     public String prop() {
         val bookmark = bookmarkService.bookmarkForElseThrow(this.holder);
         val sort = mmService.sortOf(bookmark, MetaModelService.Mode.RELAXED);
-        if(sort.isEntity()) {
-            return bookmark.getIdentifier();    
+        if(!sort.isEntity()) {
+            return shortend(bookmark.getIdentifier());
         }
-        return _Strings.ellipsifyAtStart(bookmark.getIdentifier(), 16, "…");
+        return bookmark.getIdentifier();
+    }
+
+    // -- HELPER
+    
+    private String shortend(@NonNull String identifier) {
+        
+        val hashHexed = Integer.toHexString(identifier.hashCode());
+        val hashPadded = _Strings.padStart(hashHexed, 8, '0');
+        return "»" + hashPadded;
     }
     
 
