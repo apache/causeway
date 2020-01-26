@@ -4,4 +4,17 @@
 
 This guide describes the configuration of the Keycloak implementation of Apache Isis' `Authenticator and `Authorizor` APIs.
 
-TODO: v2
+
+
+== FAQ
+
+How do I switch from using Shiro to using Keycloak?::
++
+* First, update the webapp's `pom.xml` to reference `org.apache.isis.security:isis-security-keycloak-impl` (instead of `o.a.i.security:isis-security-shiro-impl`)
+
+* Then change the `AppManifest` class to reference `IsisModuleSecurityKeycloak` instead of IsisModuleSecurityShiro`
+
++
+This will result in the `KeycloakFilter` (link:https://github.com/apache/isis/blob/master/security/keycloak/src/main/java/org/apache/isis/security/keycloak/webmodule/KeycloakFilter.java[code here]) being configured. +
+
+As you can see, it expects for Keycloak to set three `X-Auth-Xxx` headers, and it just blindly trusts them to create an appropriate `AuthenticationSession`.
