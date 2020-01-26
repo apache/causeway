@@ -26,6 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -59,6 +60,7 @@ public class ModuleWithFixturesService {
 
     private final SpringBeansService springBeansService;
 
+    @Inject
     public ModuleWithFixturesService(final SpringBeansService springBeansService) {
         this.springBeansService = springBeansService;
     }
