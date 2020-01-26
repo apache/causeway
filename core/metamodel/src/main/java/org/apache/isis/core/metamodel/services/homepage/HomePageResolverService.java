@@ -21,15 +21,11 @@ package org.apache.isis.core.metamodel.services.homepage;
 import org.apache.isis.applib.annotation.HomePage;
 
 /**
- * Resolves the home-page-providing action (if any).
+ * Returns a view model annotated with {@link HomePage}.
  * @since 2.0
  */
 public interface HomePageResolverService {
 
-    /**
-     * Returns meta information on the home-page-providing action 
-     * (an action of a managed bean annotated with {@link HomePage}.
-     */
-    HomePageAction getHomePageAction();
+    Object getHomePage();
 
 }

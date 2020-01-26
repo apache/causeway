@@ -22,7 +22,7 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.services.homepage.HomePageAction;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 
@@ -41,7 +41,6 @@ public interface RuntimeContext {
     SpecificationLoader getSpecificationLoader();
     ServiceInjector getServiceInjector();
     ServiceRegistry getServiceRegistry();
-    HomePageAction getHomePageAction();
 
     void logoutAuthenticationSession();
 

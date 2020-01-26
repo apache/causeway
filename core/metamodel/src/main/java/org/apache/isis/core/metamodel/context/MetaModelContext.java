@@ -30,7 +30,6 @@ import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.services.homepage.HomePageAction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -85,7 +84,7 @@ public interface MetaModelContext {
 
     TransactionState getTransactionState();
 
-    HomePageAction getHomePageAction();
+    ManagedObject getHomePageAdapter();
 
     Stream<ManagedObject> streamServiceAdapters();
 
@@ -175,8 +174,8 @@ public interface MetaModelContext {
         }
 
         @Override
-        public default HomePageAction getHomePageAction() {
-            return getMetaModelContext().getHomePageAction();
+        public default ManagedObject getHomePageAdapter() {
+            return getMetaModelContext().getHomePageAdapter();
         }
 
         @Override

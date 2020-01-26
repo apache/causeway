@@ -41,13 +41,7 @@ public class RoutingServiceDefault implements RoutingService {
 
     @Override
     public Object route(final Object original) {
-        if(original!=null) {
-            return original;
-        }
-        val homePageDescriptor = homePageProviderService.getHomePageAction();
-        return homePageDescriptor!=null
-                ? homePageDescriptor.getHomePagePojo()
-                        : null;
+        return original != null ? original : homePageProviderService.getHomePage();
     }
 
     

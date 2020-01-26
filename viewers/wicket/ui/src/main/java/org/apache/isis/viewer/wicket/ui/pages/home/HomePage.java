@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.wicket.ui.pages.home;
 
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.services.message.MessageService;
@@ -31,6 +32,7 @@ import org.apache.isis.viewer.wicket.ui.components.actions.ActionFormExecutorStr
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
+import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 
@@ -59,21 +61,12 @@ public class HomePage extends PageAbstract {
             super.getCommonContext().lookupServiceElseFail(MessageService.class)
             .informUser("Page timeout");
         }
-        
-        val isisSession = IsisSession.currentOrElseNull();
-        val homePageAction = isisSession.getHomePageAction();
-        if(homePageAction != null) {
-            val objectAdapter = homePageAction.getObjectAdapter();
-            val action = homePageAction.getObjectAction();
 
-            Components.permanentlyHide(themeDiv, ComponentType.WELCOME);
-            val actionModel = 
-                    ActionModel.create(
-                            EntityModel.ofAdapter(super.getCommonContext(), objectAdapter), action);
-            val formExecutor =
-                    new FormExecutorDefault<>( new ActionFormExecutorStrategy(actionModel));
+        val homePageAdapter = IsisSession.current().map(x -> x.getHomePageSupplier().get()).orElse(null);
 
-            formExecutor.executeAndProcessResults(getPage(), null, null, actionModel.isWithinPrompt());
+        if(homePageAdapter != null) {
+            final RequestCycle requestCycle = RequestCycle.get();
+            requestCycle.setResponsePage(new EntityPage(getCommonContext(), homePageAdapter));
 
         } else {
             Components.permanentlyHide(themeDiv, ComponentType.ACTION_PROMPT);

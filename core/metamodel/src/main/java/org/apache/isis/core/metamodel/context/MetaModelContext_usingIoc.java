@@ -38,7 +38,6 @@ import org.apache.isis.core.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
-import org.apache.isis.core.metamodel.services.homepage.HomePageAction;
 import org.apache.isis.core.metamodel.services.homepage.HomePageResolverService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -120,8 +119,9 @@ class MetaModelContext_usingIoc implements MetaModelContext {
     }
 
     @Override
-    public final HomePageAction getHomePageAction() {
-        return getHomePageResolverService().getHomePageAction();
+    public final ManagedObject getHomePageAdapter() {
+        final Object pojo = getHomePageResolverService().getHomePage();
+        return getObjectManager().adapt(pojo);
     }
 
     // -- SERVICE SUPPORT

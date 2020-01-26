@@ -26,7 +26,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.services.homepage.HomePageAction;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
@@ -51,7 +51,7 @@ public abstract class RuntimeContextBase implements RuntimeContext {
     @Getter(onMethod = @__(@Override)) protected final SpecificationLoader specificationLoader;
     
     @Getter protected final TransactionService transactionService;
-    @Getter protected final Supplier<HomePageAction> homePageActionResolver;
+    @Getter protected final Supplier<ManagedObject> homePageSupplier;
     @Getter protected final ObjectManager objectManager;
 
     // -- SINGLE ARG CONSTRUCTOR
@@ -64,7 +64,7 @@ public abstract class RuntimeContextBase implements RuntimeContext {
         this.specificationLoader = mmc.getSpecificationLoader();
         this.objectManager = mmc.getObjectManager();
         this.transactionService = mmc.getTransactionService();
-        this.homePageActionResolver = mmc::getHomePageAction;
+        this.homePageSupplier = mmc::getHomePageAdapter;
     }
     
     @Override
@@ -72,10 +72,6 @@ public abstract class RuntimeContextBase implements RuntimeContext {
         return metaModelContext.getAuthenticationSessionProvider().getAuthenticationSession();
     }
 
-    @Override
-    public HomePageAction getHomePageAction() {
-        return homePageActionResolver.get();
-    }
 
     // -- AUTH
 

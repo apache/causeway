@@ -44,7 +44,6 @@ import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
-import org.apache.isis.core.metamodel.services.homepage.HomePageAction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
@@ -62,7 +61,6 @@ import lombok.val;
 
 @Builder @Getter
 public final class MetaModelContext_forTesting implements MetaModelContext {
-    
     
     public static MetaModelContext buildDefault() {
         return MetaModelContext_forTesting.builder()
@@ -100,8 +98,6 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     private AuthenticationManager authenticationManager;
 
     private TitleService titleService;
-
-    private HomePageAction homePageAction;
 
     private RepositoryService repositoryService;
 
@@ -243,7 +239,13 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         }
         return specificationLoader;
     }
-    
+
+    @Override
+    public ManagedObject getHomePageAdapter() {
+        // not supported
+        return null;
+    }
+
     @Override
     public ObjectManager getObjectManager() {
         if(objectManager==null) {
