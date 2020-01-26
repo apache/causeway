@@ -24,6 +24,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
@@ -44,6 +46,17 @@ import org.apache.isis.core.runtime.persistence.transaction.events.TransactionAf
  */
 public abstract class IsisIntegrationTestAbstract {
 
+    /**
+     * If included as a service, then ensures that any {@link Command}s created (eg as a result of
+     * {@link Action#command()} set to {@link CommandReification#ENABLED}) will be appear to be created as
+     * user initiatied.
+     *
+     * <p>
+     *     Most integration tests won't be concerned with such details, but tests that verify the interaction with the
+     *     {@link org.apache.isis.applib.services.command.spi.CommandService} implementations may require this
+     *     behaviour.
+     * </p>
+     */
     @Service
     @Order(OrderPrecedence.MIDPOINT)
     public static class CommandSupport {
