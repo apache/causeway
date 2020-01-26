@@ -4,7 +4,7 @@
 
 The quickest way to start learning about Apache Isis is to use the `helloworld` starter app.
 
-This will generate a tiny Apache Isis app, consisting of a simple one-class domain model, called `HelloWorldObject`, and a supporting `HelloWorldObjects` domain service.
+This will download a tiny Apache Isis app, consisting of a simple one-class domain model, namely the `HelloWorldObject` entity and a supporting `HelloWorldObjects` domain service.
 Both the business logic and supporting bootstrapping classes are in a single Maven module (in different Java packages).
 
 [TIP]
@@ -30,11 +30,11 @@ This is implemented as a Maven plugin, so in the case of IntelliJ, it's easy eno
 It should be just as straightforward for NetBeans too.
 
 For Eclipse the maven integration story is a little less refined.
-All is not lost, however; DataNucleus also has an implementation of the enhancer as an Eclipse plugin, which usually works well enough.
+All is not lost, however; DataNucleus also has an implementation of the enhancer as an Eclipse plugin, which works well enough.
 
 
 
-== Downloading and Running the app
+== Downloading & Running
 
 Create a new directory, and `cd` into that directory.
 
@@ -50,11 +50,11 @@ Then browse to link:http://localhost:8080[], and read on.
 
 When you start the app, you'll be presented with a welcome page from which you can access the webapp using either the generic UI provided by xref:vw:ROOT:about.adoc[Wicket viewer] or use Swagger to access the xref:vro:ROOT:about.adoc[Restful Objects viewer]:
 
-image::using-hello-world/010-root-page.png[width="600px",link="{imagesdir}/using-hello-world/010-root-page.png"]
+image::using/010-root-page.png[width="600px",link="{imagesdir}/using/010-root-page.png"]
 
 Choose the generic Wicket UI, and navigate to the login page:
 
-image::using-hello-world/020-login-to-wicket-viewer.png[width="600px",link="{imagesdir}/using-hello-world/020-login-to-wicket-viewer.png"]
+image::using/020-login-to-wicket-viewer.png[width="600px",link="{imagesdir}/using/020-login-to-wicket-viewer.png"]
 
 The app itself is configured to run using xref:security:ROOT:about.adoc[shiro security], as configured in the `WEB-INF/shiro.ini` config file.
 You can login with:
@@ -62,26 +62,29 @@ You can login with:
 * username: _sven_
 * password: _pass_
 
+=== Wicket viewer
 
 Once you've logged in you'll see the default home page:
 
-image::using-hello-world/030-home-page.png[width="600px",link="{imagesdir}/using-hello-world/030-home-page.png"]
+image::using/030-home-page.png[width="600px",link="{imagesdir}/using/030-home-page.png"]
 
+
+==== Create an object
 
 The application is configured to run with an in-memory database, so initially there is no data.
 Create an object using the menu:
 
-image::using-hello-world/040-create-object-from-menu.png[width="600px",link="{imagesdir}/using-hello-world/040-create-object-from-menu.png"]
+image::using/040-create-object-from-menu.png[width="600px",link="{imagesdir}/using/040-create-object-from-menu.png"]
 
 which brings up a modal dialog:
 
-image::using-hello-world/050-create-object-from-menu-prompt.png[width="600px",link="{imagesdir}/using-hello-world/050-create-object-from-menu-prompt.png"]
+image::using/050-create-object-from-menu-prompt.png[width="600px",link="{imagesdir}/using/050-create-object-from-menu-prompt.png"]
 
 hitting OK returns the created object:
 
-image::using-hello-world/060-created-object.png[width="600px",link="{imagesdir}/using-hello-world/060-created-object.png"]
+image::using/060-created-object.png[width="600px",link="{imagesdir}/using/060-created-object.png"]
 
-The above functionality is implemented by link:https://github.com/apache/isis-app-helloworld/blob/master/src/main/java/domainapp/modules/hello/dom/impl/HelloWorldObjects.java#L26[this code]:
+The above functionality is implemented by this code:
 
 [source,java]
 ----
@@ -96,23 +99,21 @@ public String default0Create() {
 }
 ----
 
+==== Invoke an action
+
 The `HelloWorldObject` contains a couple of properties, and a single action to update that property.
 
-* The `name` property is read-only, and can only be modified using the `updateName` action. +
-+
-For example:
-+
-image::using-hello-world/070-update-name.png[width="600px",link="{imagesdir}/using-hello-world/070-update-name.png"]
-+
-The above functionality is implemented by link:https://github.com/apache/isis-app-helloworld/blob/master/src/main/java/domainapp/modules/hello/dom/impl/HelloWorldObject.java#L69[this code]: +
-+
+The `name` property is read-only, and can only be modified using the `updateName` action:
+
+image::using/070-update-name.png[width="600px",link="{imagesdir}/using/070-update-name.png"]
+
+The above functionality is implemented by this code:
+
 [source,java]
 ----
-@Action(
-        semantics = SemanticsOf.IDEMPOTENT,
+@Action(semantics = SemanticsOf.IDEMPOTENT,
         publishing = Publishing.ENABLED,
-        associateWith = "name"
-)
+        associateWith = "name")
 public HelloWorldObject updateName(
         @Name final String name) {
     setName(name);
@@ -123,29 +124,33 @@ public String default0UpdateName() {
 }
 ----
 
-* The `updateName` action is annotated with publishing enabled.
+The `updateName` action is annotated with publishing enabled.
 This means that the action invocation is converted into XML and dispatched to all configured implementations of the xref:refguide:applib-svc:persistence-layer-spi/PublisherService.adoc[PublisherService] SPI.
-+
+
 The framework provides a default implementation that just logs the interaction:
-+
-image::using-hello-world/075-logged-action.png[width="600px",link="{imagesdir}using-hello-world/075-logged-action.png.png"]
+
+image::using/075-logged-action.png[width="600px",link="{imagesdir}using/075-logged-action.png.png"]
 
 
-* The `notes` property is editable, and can be edited in-place. +
-+
+==== Edit a property
+
+The `notes` property is editable, and can be edited in-place.
 For example:
-+
-image::using-hello-world/080-edit-notes.png[width="600px",link="{imagesdir}/using-hello-world/080-edit-notes.png"]
 
-* It's also possible to delete an object:
-+
-image::using-hello-world/090-delete-object.png[width="600px",link="{imagesdir}/using-hello-world/090-delete-object.png"]
-+
+image::using/080-edit-notes.png[width="600px",link="{imagesdir}/using/080-edit-notes.png"]
+
+
+==== Actions requiring confirmations
+
+It's also possible to delete an object:
+
+image::using/090-delete-object.png[width="600px",link="{imagesdir}/using/090-delete-object.png"]
+
 The viewer displays a message confirming that the object has been deleted:
-+
-image::using-hello-world/100-object-deleted.png[width="600px",link="{imagesdir}/using-hello-world/100-object-deleted.png"]
 
-The above functionality is implemented by link:https://github.com/apache/isis-app-helloworld/blob/master/src/main/java/domainapp/modules/hello/dom/impl/HelloWorldObject.java#L81[this code]:
+image::using/100-object-deleted.png[width="600px",link="{imagesdir}/using/100-object-deleted.png"]
+
+The above functionality is implemented by this code:
 
 [source,java]
 ----
@@ -158,32 +163,37 @@ public void delete() {
 }
 ----
 
-This uses three services provided by the framework; these are injected into the domain object automatically.
+Note that this uses three services provided by the framework; these are injected into the domain object automatically.
+
+
+=== Swagger (Restful Objects)
 
 Using menu:Prototyping[Open Swagger UI] menu item (or just going back to the home page at link:http://localhost:8080[localhost:8080]) we can use link:https://swagger.io/[Swagger UI] as a front-end to the REST API provided by the Restful Objects viewer.
 
-image::using-hello-world/200-swagger-ui-before-reload.png[width="600px",link="{imagesdir}/using-hello-world/200-swagger-ui-before-reload.png"]
+image::using/200-swagger-ui-before-reload.png[width="600px",link="{imagesdir}/using/200-swagger-ui-before-reload.png"]
 
 The public API (where the calling client is assumed to be 3rd party) only exposes view models, not entities.
 If the API is private (or for prototyping), then resources corresponding to entities are also exposed:
 
-image::using-hello-world/210-helloworld-resources.png[width="600px",link="{imagesdir}/using-hello-world/210-helloworld-resources.png"]
+image::using/210-helloworld-resources.png[width="600px",link="{imagesdir}/using/210-helloworld-resources.png"]
 
 For example, an object can be created using the resource that represents the `HelloWorldObjects#create` action:
 
-image::using-hello-world/220-create-object-thru-rest-api.png[width="600px",link="{imagesdir}/using-hello-world/220-create-object-thru-rest-api.png"]
+image::using/220-create-object-thru-rest-api.png[width="600px",link="{imagesdir}/using/220-create-object-thru-rest-api.png"]
+
+CAUTION: if invoking the action returns a 401 (unauthorised), then navigate to the REST API directly (link:http://localhost:8080/restful[] to authenticate the browser first]).
 
 The response indicates that the object was successfully created:
 
-image::using-hello-world/230-create-object-thru-rest-api-response.png[width="600px",link="{imagesdir}/using-hello-world/230-create-object-thru-rest-api-response.png"]
+image::using/230-create-object-thru-rest-api-response.png[width="600px",link="{imagesdir}/using/230-create-object-thru-rest-api-response.png"]
 
 The Swagger UI also provides a resource to retrieve any object:
 
-image::using-hello-world/240-retrieve-object-using-rest-api.png[width="600px",link="{imagesdir}/using-hello-world/240-retrieve-object-using-rest-api.png"]
+image::using/240-retrieve-object-using-rest-api.png[width="600px",link="{imagesdir}/using/240-retrieve-object-using-rest-api.png"]
 
 This results in a representation of the domain object (as per the requested `Response Content Type`, ie `ACCEPT` header):
 
-image::using-hello-world/250-retrieve-object-using-rest-api-response.png[width="600px",link="{imagesdir}/using-hello-world/250-retrieve-object-using-rest-api-response.png"]
+image::using/250-retrieve-object-using-rest-api-response.png[width="600px",link="{imagesdir}/using/250-retrieve-object-using-rest-api-response.png"]
 
 
 The Swagger UI is provided as a convenience; the REST API is actually a complete hypermedia API (in other words you can follow the links to access all the behaviour exposed in the regular Wicket app).
@@ -193,7 +203,7 @@ The REST API implemented by Apache Isis is specified in the link:http://www.rest
 
 == Structure of the App
 
-The application generated by the helloworld starter app is deliberately simplified, with everything contained within a single Maven module.
+The helloworld starter app consists of a single Maven module.
 
 
 === src/main/java
@@ -204,20 +214,21 @@ Under `src/main/java` we have:
 ----
 src/main/java/
   domainapp/                            <!--1-->
-    modules/hello/                      <!--2-->
-      dom/                              <!--3-->
-        hwo/                            <!--4-->
-          HelloWorldObject.java
-          HelloWorldObject.layout.xml
-          HelloWorldObject.png
-          HelloWorldObjects.java
-      types/                            <!--5-->
-        Name.java
-        Notes.java
-    AppManifest.java                    <!--6-->
-    HelloWorldModule.java               <!--7-->
-  webapp/
-    HelloWorldApp.java                  <!--8-->
+    modules
+      hello/                            <!--2-->
+        dom/                            <!--3-->
+          hwo/                          <!--4-->
+            HelloWorldObject.java
+            HelloWorldObject.layout.xml
+            HelloWorldObject.png
+            HelloWorldObjects.java
+        types/                          <!--5-->
+          Name.java
+          Notes.java
+      HelloWorldModule.java             <!--6-->
+    webapp/
+      AppManifest.java                  <!--7-->
+      HelloWorldApp.java                <!--8-->
   META-INF/
     persistence.xml                     <!--9-->
 ----
@@ -226,14 +237,17 @@ Change as required.
 <2> Defines the 'hello' module.
 Apache Isis can be used for both microservice and monolithic architectures, but for the latter it encourages "modular monoliths" from the start.
 <3> The `dom` package holds the "domain object model" for this module.
-Modules may have other packages, common ones include ``type``s (as below), also ``api``s, ``contribution``s, ``fixture``s, ``spi``s
+Modules may have other packages, common ones include ``types`` (as below), also ``api``s, ``contribution``s, ``fixture``s, ``spi``s
 <4> Holds classes for the `hwo` ("hello world object") entity/aggregate, consisting of the entity definition itself (`HelloWorldObject`) and a corresponding repository (`HelloWorldObjects`).
 The associated `.layout.xml` and `.png` are optional but provide metadata/resources for rendering (Maven is configured to also treat `src/main/java` as a resource location).
 <5> The `types` package contains meta-annotations to describe the usage of common value types such as ``String``s.
-<6> `HelloWorldModule` is a Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] which allows the domain services and entities of the module to be located.
-<7> `AppManifest` is the top-level Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] that specifies the components of Apache Isis to use, along with the modules making up the application itself (ie `HelloWorldModule`).
+<6> `HelloWorldModule` is a Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] which allows the domain services and entities of the module to be located. +
+This is discussed in more detail below
+<7> `AppManifest` is the top-level Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] that specifies the components of Apache Isis to use, along with the modules making up the application itself (ie `HelloWorldModule`). +
+This is discussed in more detail below
 <8> `HelloWorldApp` is the link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/autoconfigure/SpringBootApplication.html[@SpringBootApplication] used to bootstrap the app.
-It's pretty much boilerplate - the important piece is that it references `AppManifest`.
+It's pretty much boilerplate - the important piece is that it references `AppManifest`. +
+This is discussed in more detail below
 <9> The `persistence.xml` file is required when using the JDO/DataNucleus object store (though it is basically boilerplate, an empty file).
 
 
@@ -246,6 +260,8 @@ In the case of `HelloWorldModule`, it is extremely simple:
 [source,java]
 .HelloWorldModule.java
 ----
+package domainapp.modules.hello;
+// ... imports omitted ...
 @Configuration
 @Import({})                         //<!--1-->
 @ComponentScan                      //<!--2-->
@@ -254,7 +270,7 @@ public class HelloWorldModule {
 ----
 <1> no dependencies.
 If there were, these would be expressed in terms of module classes (each being a Spring `@Configuration`)
-<2> specifies a root to scan for Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Component.html[@Component]s.
+<2> specifies this class' package as a root to scan for Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Component.html[@Component]s.
 
 The scanning mechanism is leveraged by Apache Isis to pick up three types of classes:
 
@@ -279,7 +295,7 @@ In the helloworld starter app, the only entity is `HelloWorldObject`.
 
 * all fixture scripts
 +
-These are classes that extend from the applib `FixtureScript` class, and are used to setup the database when running in prototype mode (against an in-memory database).
+These are classes that extend from the testing applib's `FixtureScript` class, and are used to setup the database when running in prototype mode (against an in-memory database).
 +
 The helloworld starter app doesn't provide any examples of these.
 
@@ -362,8 +378,8 @@ src/main/resources
   templates/                    <!--3-->
   application.yml               <!--4-->
   banner.txt                    <!--5-->
-  menubars.layout.xml           <!--6-->
-  log4j2-spring.xml             <!--7-->
+  log4j2-spring.xml             <!--6-->
+  menubars.layout.xml           <!--7-->
   shiro.ini                     <!--8-->
 ----
 <1> By convention, we use `config/application.properties` to hold configuration properties that change between environments (dev, test, prod).
@@ -372,14 +388,13 @@ Typically this just holds JDBC connection strings, etc.
 <3> The `templates` package holds a fallback error page, which is the link:https://www.baeldung.com/spring-thymeleaf-template-directory#change-default[default location] for pages rendered using Spring Boot's integration with Thymeleaf.
 <4> By convention, we use `application.yml` to hold configuration properties that do _not_ change between environments.
 <5> The `banner.txt` is shown when bootstrapping.
-<6> The `menubars.layout.xml` arranges the actions of the domain services into menus.
-<7> The `log4j2-spring.xml` configures log4j2 (the logging system used by Apache Isis)
-<8> The `shiro,ini` file configures Shiro security integration (see the `IsisModuleSecurityShiro` module imported in the `AppManifest`, above).
-
-
+<6> The `log4j2-spring.xml` configures log4j2 (the logging system used by Apache Isis)
+<7> The `menubars.layout.xml` arranges the actions of the domain services into menus.
+<8> The `shiro.ini` file configures Shiro security integration (see the `IsisModuleSecurityShiro` module imported in the `AppManifest`, above).
++
 [TIP]
 ====
-The security integration provided by Apache Isis and Shiro is quite sophisticated; to get started though you can just login using username: `sven`, password: `pass`.
+The xref:security:shiro:about.adoc[Shiro security] integration is much more flexible than simple file-based authentication.
 ====
 
 To call out some of the files under `static`:
@@ -407,15 +422,17 @@ Under `src/test/java` we have:
 ----
 src/test/java/
   domainapp/
-    modules/hello
-      dom/
-        hwo/
-          HelloWorldObjectTest_delete.java
-          HelloWorldObjectTest_updateName.java
+    modules/
+      hello/
+        dom/
+          hwo/                          <!--1-->
+            HelloWorldObject_Test.java
+            HelloWorldObjects_Test.java
 ----
+<1> These are very simple unit tests of `HelloWorldObject` and `HelloWorldObjects`, with the package structure the same as in `src/main/java`.
+They are written in JUnit 5 and use Mockito as the mocking library.
 
-These are very simple unit tests of `HelloWorldObject`, with the package structure the same as in `src/main/java`.
-They use JMock as the mocking library (with some minor extensions provided by Apache Isis itself).
+=== pom.xml
 
 Finally, at the root directory we of course have the `pom.xml`.
 This inherits from `isis-app-starter-parent`:
@@ -436,8 +453,6 @@ This means:
 * the set of third party dependencies declared have been validated as compatible by Spring Boot team
 * build plugins are declared and configured appropriately
 * imports to the Apache Isis dependencies are declared via `<dependencyManagement>`
-
-Now you know your way around the code generated by the starter app, lets see how to build the app and run it.
 
 
 
@@ -473,6 +488,5 @@ When you are ready to start working on your own app, we _don't_ recommend buildi
 
 Instead, we suggest that you start with the xref:starters:simpleapp:about.adoc[simpleapp starter app].
 Although a little more complex, it provides more structure and example tests, all of which will help guide you as your application grows.
-
 
 

@@ -1,2 +1,2 @@
-* xref:about.adoc[Hello World Starter App]
+* xref:about.adoc[Hello World]
 
