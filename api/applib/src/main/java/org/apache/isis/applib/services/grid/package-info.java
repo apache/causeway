@@ -21,6 +21,6 @@
  * The {@link org.apache.isis.applib.services.grid.GridService} encapsulates a single layout grid system which
  * can be used to customize the layout of domain objects.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_presentation-layer-spi_GridService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.grid;

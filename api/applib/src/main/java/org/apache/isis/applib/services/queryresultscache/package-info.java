@@ -22,6 +22,6 @@
  * response times to the user, by providing a request-scoped cache of the value of some (safe or idempotent) method
  * call. This will typically be as the result of running a query, but could be any expensive operation.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-api_QueryResultsCache">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.queryresultscache;

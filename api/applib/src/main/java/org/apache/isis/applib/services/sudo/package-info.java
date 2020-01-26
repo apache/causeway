@@ -24,6 +24,6 @@
  * another) and while running fixture scripts (eg setting up objects that would normally require several users to have
  * acted upon the objects).
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_testing_SudoService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.sudo;

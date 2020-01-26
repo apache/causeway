@@ -22,6 +22,6 @@
  * {@link org.apache.isis.applib.services.background.BackgroundCommandService2} SPI service, enable commands to be
  * persisted such that they may be invoked in the background
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_application-layer-api_BackgroundService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.background;

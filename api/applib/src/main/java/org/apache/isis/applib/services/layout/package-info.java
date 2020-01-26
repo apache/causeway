@@ -22,6 +22,6 @@
  * for a single domain object or for all domain objects. This functionality is surfaced through the user interface
  * through a related mixin and menu action.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_metadata-api_LayoutService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.layout;

@@ -21,6 +21,6 @@
  * The {@link org.apache.isis.applib.services.routing.RoutingService} provides the ability to return (and therefore
  * render) an alternative object from an action invocation.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_presentation-layer-spi_RoutingService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.routing;

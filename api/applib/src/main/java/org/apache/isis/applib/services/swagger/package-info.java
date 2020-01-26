@@ -21,6 +21,6 @@
  * The {@link SwaggerService} generates Swagger schema definition files to describe the public and/or private
  * RESTful APIs exposed by the RestfulObjects viewer.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_metadata-api_SwaggerService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.swagger;

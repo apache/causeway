@@ -22,6 +22,6 @@
  * sign-up to access an application by providing a valid email address, and also provides the capability for users to
  * reset their password if forgotten.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-spi_UserRegistrationService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.userreg;

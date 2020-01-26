@@ -23,6 +23,6 @@
  * to customize the appearance of the tertiary "Me" menu bar (top right). For example, rather than display the
  * username, instead the user’s first and last name could be displayed.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_presentation-layer-spi_UserProfileService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.userprof;

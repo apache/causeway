@@ -22,6 +22,6 @@
  * the invocation of an action on a domain object into an object itself. This reified information is encapsulated
  * within the {@link org.apache.isis.applib.services.command.Command} object.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_application-layer-api_CommandContext">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.command;

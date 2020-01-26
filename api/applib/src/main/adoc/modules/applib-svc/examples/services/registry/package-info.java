@@ -22,6 +22,6 @@
  * or looking up domain services (either provided by the framework or application-specific) currently known to the
  * runtime.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_metadata-api_ServiceRegistry">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.registry;

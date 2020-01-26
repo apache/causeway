@@ -22,6 +22,6 @@
  * serializable {@link org.apache.isis.applib.services.bookmark.Bookmark} for any (persisted) domain object, and to
  * lookup domain objects given a Bookmark. This can then in turn be converted to and from a string.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_integration-api_BookmarkService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.bookmark;

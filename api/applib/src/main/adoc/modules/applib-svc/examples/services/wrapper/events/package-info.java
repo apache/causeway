@@ -21,6 +21,6 @@
  * Interaction events, corresponding to gestures in the user interface; emitted only by the
  * {@link org.apache.isis.applib.services.wrapper.WrapperFactory}.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_application-layer-api_WrapperFactory">Reference Guide</a>
+ *
  */
 package org.apache.isis.applib.services.wrapper.events;

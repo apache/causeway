@@ -22,6 +22,6 @@
  * into the JDO/DataNucleus ObjectStore to provide a number of counters relating to numbers of object loaded,
  * dirtied etc.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-api_MetricsService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.metrics;

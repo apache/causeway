@@ -20,6 +20,6 @@
 /**
  * The {@link org.apache.isis.applib.services.title.TitleService} provides methods to programmatically obtain the title and icon of a domain object.
 
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_application-layer-api_TitleService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.title;

@@ -23,6 +23,6 @@
  * published are action invocations/property edits, and changed objects. A typical use case is to publish onto a
  * pub/sub bus such as ActiveMQ with Camel to keep other systems up to date.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-spi_PublisherService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.publish;

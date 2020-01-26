@@ -24,6 +24,6 @@
  * invoke an action on it), this URL is converted back into a view model memento, from which the view model can then
  * be hydrated
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_presentation-layer-spi_UrlEncodingService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.urlencoding;

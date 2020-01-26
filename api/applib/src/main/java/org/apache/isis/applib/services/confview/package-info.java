@@ -21,6 +21,6 @@
  * The {@link org.apache.isis.applib.services.confview.ConfigurationViewService} allows domain objects to read the
  * configuration properties aggregated from the various configuration files.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_core-domain-api_ConfigurationService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.confview;

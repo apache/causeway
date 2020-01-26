@@ -21,6 +21,6 @@
  * The {@link org.apache.isis.applib.services.audit.AuditerService} auditing service provides a simple mechanism to
  * capture changes to data. It is called for each property that has changed on any domain object, as a set of pre- and post-values.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-spi_AuditerService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.audit;

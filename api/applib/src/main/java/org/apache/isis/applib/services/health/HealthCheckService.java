@@ -20,9 +20,6 @@ package org.apache.isis.applib.services.health;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
-/**
- * SPI.  If implemented then <code>/restful/health</code> resource will invoke this service to determine the health of the system.
- */
 public interface HealthCheckService {
 
     @Programmatic

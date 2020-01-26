@@ -21,6 +21,6 @@
  * The {@link org.apache.isis.applib.services.message.MessageService} allows domain objects to raise information,
  * warning or error messages. These messages can either be simple strings, or can be translated.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_application-layer-api_MessageService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.message;

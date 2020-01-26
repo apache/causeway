@@ -21,6 +21,6 @@
  * The {@link org.apache.isis.applib.services.jaxb.JaxbService} allows instances of JAXB-annotated classes to be
  * marshalled to XML and unmarshalled from XML back into domain objects.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_integration-api_JaxbService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.jaxb;

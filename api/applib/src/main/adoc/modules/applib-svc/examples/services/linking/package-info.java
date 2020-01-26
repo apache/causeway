@@ -21,6 +21,6 @@
  * The {@link org.apache.isis.applib.services.linking.DeepLinkService} provides the ability to obtain a
  * <code>java.net.URI</code> that links to a representation of any (persisted) domain entity or view model.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_presentation-api_DeepLinkService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.linking;

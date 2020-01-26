@@ -23,6 +23,6 @@
  * which view is selected (eg table or hidden), which page of a table to render, or whether "show all" (rows) is
  * toggled.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_presentation-layer-spi_HintStore">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.hint;

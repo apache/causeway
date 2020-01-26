@@ -22,6 +22,6 @@
  * representations of the packages, classes and class members (collectively: "application features") of the
  * domain classes within the Apache Isis' internal metamodel.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_metadata-api_ApplicationFeatureRepository">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.appfeat;

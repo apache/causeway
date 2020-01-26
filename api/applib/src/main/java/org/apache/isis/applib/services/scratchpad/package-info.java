@@ -21,6 +21,6 @@
  * The {@link org.apache.isis.applib.services.scratchpad.Scratchpad} (request-scoped) domain service allows objects to
  * exchange information even if they do not directly call each other.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_core-domain-api_Scratchpad">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.scratchpad;

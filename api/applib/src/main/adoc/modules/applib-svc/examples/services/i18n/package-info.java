@@ -23,6 +23,6 @@
  * (service and object classes, properties, collections, actions, action parameters) and also to translate business
  * rule (disable/valid) messages, and exceptions. These translations provide for both singular and plural forms.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_presentation-layer-spi_TranslationService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.i18n;

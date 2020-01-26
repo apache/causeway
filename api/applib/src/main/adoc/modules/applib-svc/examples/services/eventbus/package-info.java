@@ -21,6 +21,6 @@
  * The {@link org.apache.isis.applib.services.eventbus.EventBusService} allows domain objects to emit events to
  * subscribing domain services using an in-memory event bus.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_core-domain-api_EventBusService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.eventbus;

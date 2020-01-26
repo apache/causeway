@@ -20,6 +20,6 @@
 /**
  * The {@link UserService} allows the domain object to obtain the identity of the user interacting with said object.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_core-domain-api_UserService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.user;

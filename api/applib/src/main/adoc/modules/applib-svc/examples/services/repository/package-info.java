@@ -22,6 +22,6 @@
  * persisting and searching for entities from the underlying persistence store. It acts as an abstraction over the
  * JDO/DataNucleus objectstore.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-api_RepositoryService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.repository;

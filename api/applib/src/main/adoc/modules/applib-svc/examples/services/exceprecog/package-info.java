@@ -23,6 +23,6 @@
  * thrown by the system. Rather than display an obscure error to the end-user, the application can instead display a
  * user-friendly message
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_presentation-layer-spi_ExceptionRecognizer">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.exceprecog;

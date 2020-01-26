@@ -21,6 +21,6 @@
  * The {@link org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService} provides the capability to generate
  * XML snapshots (and if required corresponding XSD schemas) based on graphs of domain objects.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_integration-api_XmlSnapshotService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.xmlsnapshot;

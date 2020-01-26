@@ -21,6 +21,6 @@
  * The {@link org.apache.isis.applib.services.metamodel.MetaModelService} service provides access to a number of
  * aspects of Apache Isis' internal metamodel.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_metadata-api_MetamodelService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.metamodel;

@@ -23,6 +23,6 @@
  * from the UI and which create or modify large amounts of data. A classic example is migrating data from one system
  * to another.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_application-layer-api_SessionManagementService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.sessmgmt;

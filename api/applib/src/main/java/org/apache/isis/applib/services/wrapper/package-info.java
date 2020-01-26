@@ -23,6 +23,6 @@
  * and callee — eg if they reside in different modules — then the wrapper factory is a useful mechanism to ensure that
  * any business constraints defined by the callee are honoured.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_application-layer-api_WrapperFactory">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.wrapper;

@@ -21,6 +21,6 @@
  * The {@link org.apache.isis.applib.services.factory.FactoryService} collects together methods for instantiating
  * domain objects.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_core-domain-api_FactoryService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.factory;

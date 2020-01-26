@@ -24,6 +24,6 @@
  * a property. If that top-level action or property uses the {@link org.apache.isis.applib.services.wrapper.WrapperFactory} to invoke child actions/properties, then
  * those sub-executions are captured as a call-graph. The Execution is thus a graph structure.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#__code_interactioncontext_code">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.iactn;

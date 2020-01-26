@@ -23,6 +23,6 @@
  * XSD schema of those objects using two mixins, {@link org.apache.isis.applib.mixins.dto.Dto_downloadXml} and
  * {@link org.apache.isis.applib.mixins.dto.Dto_downloadXsd}.
  *
- * @see <a href="http://isis.apache.org/guides/rgcms/rgcms.html#_rgcms_classes_mixins_Dto">Classes, Methods &amp; Schema guide</a>
+ *
  */
 package org.apache.isis.applib.mixins.dto;

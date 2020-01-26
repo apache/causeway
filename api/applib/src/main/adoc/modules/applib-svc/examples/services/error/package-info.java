@@ -23,6 +23,6 @@
  * system (such as JIRA). The service also allows a user-friendly (jargon-free) error message to be returned and
  * rendered to the end.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_presentation-layer-spi_ErrorReportingService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.error;

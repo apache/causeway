@@ -20,6 +20,6 @@
 /**
  * This domain service provides current time.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_core-domain-api_ClockService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.clock;

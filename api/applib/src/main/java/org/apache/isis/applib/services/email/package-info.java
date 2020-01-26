@@ -21,6 +21,6 @@
  * The {@link org.apache.isis.applib.services.email.EmailService} provides the ability to send HTML emails, with
  * attachments, to one or more recipients.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_integration-api_EmailService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.email;

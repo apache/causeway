@@ -21,6 +21,6 @@
  * The {@link org.apache.isis.applib.services.xactn.TransactionService} provides a small number of methods to allow
  * domain objects to influence user transactions.
  *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_application-layer-api_TransactionService">Reference guide</a>
+ *
  */
 package org.apache.isis.applib.services.xactn;

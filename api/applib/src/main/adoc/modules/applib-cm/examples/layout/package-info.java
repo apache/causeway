@@ -20,6 +20,6 @@
 /**
  * Support for file-based layouts.
  *
- * @see <a href="http://isis.apache.org/guides/ugvw/ugvw.html#_ugvw_layout_file-based">User guide</a>
+ *
  */
 package org.apache.isis.applib.layout;
