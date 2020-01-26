@@ -20,6 +20,6 @@
 /**
  * The {@link org.apache.isis.testing.fixtures.applib.fixturespec.FixtureScriptsSpecificationProvider} SPI service configures the {@link org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts} domain service.
  *
- * @see <a href="http://isis.apache.org/migration-notes/migration-notes.html#_migration-notes_1.8.0-to-1.9.0_fixture-scripts-specification-provider">Reference guide</a>
+ *
  */
 package org.apache.isis.testing.fixtures.applib.fixturespec;
