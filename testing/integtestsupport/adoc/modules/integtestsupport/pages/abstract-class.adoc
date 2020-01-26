@@ -28,9 +28,13 @@ public abstract class DomainAppIntegTest
 }
 ----
 
+WARNING: TODO: v2 - out of date, we no longer support `isis.integTest.module` system property.
+
 The `IntegrationTestAbstract3` class also allows the module to be specified externally, using either the `isis.integTest.module` or the (more general) `isis.headless.module` system property, eg by updating the `pom.xml`.
 
 For example:
+
+WARNING: TODO: v2 - out of date, we no longer support `isis.integTest.module` system property.
 
 [source,xml]
 ----

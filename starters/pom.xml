@@ -236,7 +236,6 @@ under the License.
 				<!--
 				uses maven-surefire-plugin.version, which is declared by spring-boot-starter-parent
 				-->
-				<isis.integTest.module></isis.integTest.module>
 				<skipTests>false</skipTests>
 				<skipUTs>${skipTests}</skipUTs>
 				<skipITs>${skipTests}</skipITs>
@@ -293,9 +292,6 @@ under the License.
 										<useFile>true</useFile>
 										<printSummary>true</printSummary>
 										<reportsDirectory>${project.build.directory}/surefire-integtest-reports</reportsDirectory>
-										<systemPropertyVariables>
-											<isis.integTest.module>${isis.integTest.module}</isis.integTest.module>
-										</systemPropertyVariables>
 										<forkCount>1</forkCount>
 										<reuseForks>true</reuseForks>
 										<argLine>${surefire-plugin.argLine}</argLine>
