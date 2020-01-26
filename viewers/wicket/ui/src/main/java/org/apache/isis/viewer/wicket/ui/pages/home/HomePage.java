@@ -19,11 +19,15 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.home;
 
+import java.util.function.Supplier;
+
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.runtime.context.session.RuntimeContextBase;
 import org.apache.isis.core.runtime.session.IsisSession;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -62,7 +66,11 @@ public class HomePage extends PageAbstract {
             .informUser("Page timeout");
         }
 
-        val homePageAdapter = IsisSession.current().map(x -> x.getHomePageSupplier().get()).orElse(null);
+        val homePageAdapter = IsisSession.current()
+                .map(RuntimeContextBase::getHomePageSupplier)
+                .map(Supplier::get)
+                .filter(x -> x != ManagedObject.empty())
+                .orElse(null);
 
         if(homePageAdapter != null) {
             final RequestCycle requestCycle = RequestCycle.get();

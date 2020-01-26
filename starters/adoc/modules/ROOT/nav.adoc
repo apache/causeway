@@ -1,5 +1,3 @@
-* xref:about.adoc[Starter Apps]
-
 * xref:about.adoc[Starter Parent]
 
 
