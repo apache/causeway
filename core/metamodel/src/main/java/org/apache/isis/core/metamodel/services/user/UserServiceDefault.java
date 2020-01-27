@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -49,6 +50,31 @@ import lombok.val;
 public class UserServiceDefault implements UserService {
     
     @Inject private AuthenticationSessionProvider authenticationSessionProvider;
+    
+    @Service
+    @Named("isisMetaModel.UserServiceDefault.SudoServiceSpi")
+    @Order(OrderPrecedence.MIDPOINT)
+    @Qualifier("UserServiceDefault")
+    public static class SudoServiceSpi implements SudoService.Spi {
+
+        @Inject UserServiceDefault userServiceDefault;
+        
+        @Override
+        public void runAs(final String username, final List<String> roles) {
+            userServiceDefault.overrideUserAndRoles(username, roles);
+        }
+
+        @Override
+        public void releaseRunAs() {
+            userServiceDefault.resetOverrides();
+        }
+        
+    }
+    
+    @PreDestroy
+    public void cleanUp() {
+        overrides.remove();
+    }
 
     @Override
     public UserMemento getUser() {
@@ -77,13 +103,6 @@ public class UserServiceDefault implements UserService {
         }
     }
 
-    private Can<String> previousRoles() {
-        val authenticationSession =
-                authenticationSessionProvider.getAuthenticationSession();
-        val roles = authenticationSession.getRoles();
-        return roles;
-    }
-
     public static class UserAndRoleOverrides {
         final String user;
         final Can<String> roles;
@@ -107,23 +126,6 @@ public class UserServiceDefault implements UserService {
         }
     }
 
-    private final ThreadLocal<Stack<UserAndRoleOverrides>> overrides =
-            new ThreadLocal<Stack<UserAndRoleOverrides>>() {
-        @Override protected Stack<UserAndRoleOverrides> initialValue() {
-            return new Stack<>();
-        }
-    };
-
-
-    private void overrideUserAndRoles(final String user, final List<String> rolesIfAny) {
-        final Iterable<String> roles = rolesIfAny != null ? rolesIfAny : inheritRoles();
-        this.overrides.get().push(new UserAndRoleOverrides(user, roles));
-    }
-
-    private void resetOverrides() {
-        this.overrides.get().pop();
-    }
-
     /**
      * Not API; for use by the implementation of sudo/runAs (see {@link SudoService} etc.
      */
@@ -132,6 +134,15 @@ public class UserServiceDefault implements UserService {
         return !userAndRoleOverrides.empty()
                 ? userAndRoleOverrides.peek()
                         : null;
+    }
+    
+    // -- HELPER
+    
+    private Can<String> previousRoles() {
+        val authenticationSession =
+                authenticationSessionProvider.getAuthenticationSession();
+        val roles = authenticationSession.getRoles();
+        return roles;
     }
 
     private Can<String> inheritRoles() {
@@ -150,28 +161,18 @@ public class UserServiceDefault implements UserService {
         }
         return mementos;
     }
+    
+    private final ThreadLocal<Stack<UserAndRoleOverrides>> overrides = ThreadLocal.withInitial(Stack::new);
 
-
-    @Service
-    @Named("isisMetaModel.UserServiceDefault.SudoServiceSpi")
-    @Order(OrderPrecedence.MIDPOINT)
-    @Qualifier("UserServiceDefault")
-    public static class SudoServiceSpi implements SudoService.Spi {
-
-        @Override
-        public void runAs(final String username, final List<String> roles) {
-            userServiceDefault.overrideUserAndRoles(username, roles);
-        }
-
-        @Override
-        public void releaseRunAs() {
-            userServiceDefault.resetOverrides();
-        }
-
-        @Inject
-        UserServiceDefault userServiceDefault;
+    private void overrideUserAndRoles(final String user, final List<String> rolesIfAny) {
+        final Iterable<String> roles = rolesIfAny != null ? rolesIfAny : inheritRoles();
+        this.overrides.get().push(new UserAndRoleOverrides(user, roles));
     }
 
+    private void resetOverrides() {
+        this.overrides.get().pop();
+    }
+    
     
 
 }
