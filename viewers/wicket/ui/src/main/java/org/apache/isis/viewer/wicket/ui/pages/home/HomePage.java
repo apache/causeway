@@ -29,15 +29,10 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.session.RuntimeContextBase;
 import org.apache.isis.core.runtime.session.IsisSession;
-import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.actions.ActionFormExecutorStrategy;
-import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
-import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 
 import lombok.val;
@@ -69,11 +64,10 @@ public class HomePage extends PageAbstract {
         val homePageAdapter = IsisSession.current()
                 .map(RuntimeContextBase::getHomePageSupplier)
                 .map(Supplier::get)
-                .filter(x -> x != ManagedObject.empty())
-                .orElse(null);
+                .orElse(ManagedObject.empty());
 
-        if(homePageAdapter != null) {
-            final RequestCycle requestCycle = RequestCycle.get();
+        if(homePageAdapter != ManagedObject.empty()) {
+            val requestCycle = RequestCycle.get();
             requestCycle.setResponsePage(new EntityPage(getCommonContext(), homePageAdapter));
 
         } else {
@@ -81,8 +75,8 @@ public class HomePage extends PageAbstract {
             getComponentFactoryRegistry().addOrReplaceComponent(themeDiv, ComponentType.WELCOME, null);
         }
 
-        final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
-        final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
+        val breadcrumbModelProvider = (BreadcrumbModelProvider) getSession();
+        val breadcrumbModel = breadcrumbModelProvider.getBreadcrumbModel();
         breadcrumbModel.visitedHomePage();
     }
 
