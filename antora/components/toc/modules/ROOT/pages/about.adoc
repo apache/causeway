@@ -24,6 +24,11 @@
 * xref:starters:helloworld:about.adoc[Hello World]
 * xref:starters:simpleapp:about.adoc[SimpleApp]
 
+_Resources_
+
+* xref:starters:parent-pom:about.adoc[Parent POM]
+* xref:starters:mavendeps:about.adoc[Maven Dependencies]
+
 |
 [discrete]
 == Demos & Tutorials
@@ -50,7 +55,7 @@ _Libraries_
 _Resources_
 
 * *xref:toc:devguide:about.adoc[Developers' Guide]*
-* xref:starters:mavendeps:about.adoc[Maven dependencies]
+
 
 |
 [discrete]

@@ -10,6 +10,10 @@
 ** xref:starters:helloworld:about.adoc[Hello World]
 ** xref:starters:simpleapp:about.adoc[SimpleApp]
 
+** Resources
+*** xref:starters:parent-pom:about.adoc[Parent POM]
+*** xref:starters:mavendeps:about.adoc[Maven Dependencies]
+
 * Demos & Tutorials
 
 ** xref:demoapp:ROOT:about.adoc[Demo App]
@@ -32,7 +36,7 @@
 ** Resources
 
 *** xref:toc:devguide:about.adoc[Developers' Guide]
-*** xref:starters:mavendeps:about.adoc[Maven dependencies]
+
 
 
 
