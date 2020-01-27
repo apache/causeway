@@ -32,6 +32,7 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.domain.DomainObjectList;
+import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Tuples.Indexed;
 import org.apache.isis.core.commons.internal.collections._Arrays;
@@ -699,11 +700,7 @@ public interface ManagedObject {
         // resourceContext.adapterOfPojo(list);
     }
 
-    @Deprecated
     static void _makePersistentInTransaction(ManagedObject adapter) {
-
-        // legacy of
-        // getResourceContext().makePersistentInTransaction(adapter);
 
         val spec = adapter.getSpecification();
         if(spec.isEntity()) {
@@ -712,7 +709,7 @@ public interface ManagedObject {
             return;
         }
 
-        throw _Exceptions.unexpectedCodeReach();
+        throw _Exceptions.illegalArgument("not an entity type %s (sort=%s)", spec.getCorrespondingClass(), spec.getBeanSort());
     }
     
     static void _destroyObjectInTransaction(ManagedObject adapter) {

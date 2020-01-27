@@ -22,12 +22,12 @@ import java.lang.reflect.Method;
 
 import javax.jdo.annotations.IdentityType;
 
+import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.core.commons.internal.base._Lazy;
 import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.spec.EntityState;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoMetamodelUtil;

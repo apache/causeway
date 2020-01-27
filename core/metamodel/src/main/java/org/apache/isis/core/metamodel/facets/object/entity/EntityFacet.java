@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.facets.object.entity;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.spec.EntityState;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**

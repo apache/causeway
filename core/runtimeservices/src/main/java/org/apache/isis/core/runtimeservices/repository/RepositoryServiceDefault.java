@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -37,6 +38,7 @@ import org.apache.isis.applib.RepositoryException;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
@@ -68,23 +70,16 @@ public class RepositoryServiceDefault implements RepositoryService {
     }
 
     @Override
+    public EntityState getEntityState(@Nullable final Object object) {
+        val adapter = objectManager.adapt(unwrapped(object));
+        val entityState = ManagedObject._entityState(adapter);
+        return entityState;
+    }
+    
+    @Override
     public <T> T detachedEntity(final Class<T> domainClass) {
         return factoryService.detachedEntity(domainClass);
     }
-
-    @Override
-    public boolean isPersistent(final Object domainObject) {
-        
-        val adapter = objectManager.adapt(unwrapped(domainObject));
-        return isPersistentObject(adapter);
-    }
-
-    @Override
-    public boolean isDeleted(final Object domainObject) {
-        val adapter = objectManager.adapt(unwrapped(domainObject));
-        return ManagedObject._isDestroyed(adapter);
-    }
-
 
     @Override
     public <T> T persist(final T domainObject) {
@@ -93,22 +88,12 @@ public class RepositoryServiceDefault implements RepositoryService {
         if(adapter == null) {
             throw new PersistFailedException("Object not known to framework (unable to create/obtain an adapter)");
         }
-        if (isPersistentObject(adapter)) {
+        val entityState = ManagedObject._entityState(adapter);
+        val skip = !entityState.isPersistable() || entityState.isDestroyed();
+        if(skip) {
             return domainObject;
         }
         ManagedObject._makePersistentInTransaction(adapter);
-
-//legacy of        
-//        if (ManagedObject._isParentedCollection(adapter)) {
-//            // TODO check aggregation is supported
-//            return domainObject;
-//        }
-//        if (isPersistentObject(adapter)) {
-//            val oid = ManagedObject._identify(adapter);
-//            throw new PersistFailedException("Object already persistent; OID=" + oid);
-//        }
-//        getPersistenceSession().makePersistentInTransaction(adapter);
-
         return domainObject;
     }
 
@@ -122,20 +107,14 @@ public class RepositoryServiceDefault implements RepositoryService {
 
     @Override
     public void remove(final Object domainObject) {
-        removeIfNotAlready(domainObject);
-    }
-
-    private void removeIfNotAlready(final Object object) {
-        if (object == null) {
-            throw new IllegalArgumentException("Must specify a reference for disposing an object");
+        if (domainObject == null) {
+            return; // noop
         }
-        val adapter = objectManager.adapt(unwrapped(object));
-        if (!isPersistentObject(adapter)) {
-            return;
+        val adapter = objectManager.adapt(unwrapped(domainObject));
+        val entityState = ManagedObject._entityState(adapter);
+        if(entityState.isAttached()) {
+            ManagedObject._destroyObjectInTransaction(adapter);   
         }
-        ManagedObject._destroyObjectInTransaction(adapter);
-        // legacy of
-        //getPersistenceSession().destroyObjectInTransaction(adapter);
     }
 
     @Override
@@ -143,7 +122,6 @@ public class RepositoryServiceDefault implements RepositoryService {
         remove(domainObject);
         transactionService.flushTransaction();
     }
-
 
 
     // -- allInstances, allMatches, uniqueMatch, firstMatch
@@ -224,23 +202,6 @@ public class RepositoryServiceDefault implements RepositoryService {
                 ? Optional.empty()
                 : Optional.of(instances.get(0));
     }
-
-    private boolean isPersistentObject(ManagedObject adapter) {
-        
-        val spec = adapter.getSpecification();
-        if(spec.isManagedBean() || spec.isViewModel()) {
-            // services and view models are treated as persistent objects
-            //FIXME bad design: this method should instead throw an IllegalArgEx
-            // when called with non entity types
-            return true; 
-        }
-        
-        val entityState = ManagedObject._entityState(adapter);
-        val isRepresentingPersistent = entityState!=null 
-                && (entityState.isAttached() || entityState.isDestroyed());
-        return isRepresentingPersistent;
-    }
-    
 
     private Object unwrapped(Object domainObject) {
         return wrapperFactory != null ? wrapperFactory.unwrap(domainObject) : domainObject;

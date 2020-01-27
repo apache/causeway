@@ -48,6 +48,7 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -73,7 +74,6 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedLifecycleEv
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
-import org.apache.isis.core.metamodel.spec.EntityState;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
