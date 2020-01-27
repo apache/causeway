@@ -34,13 +34,11 @@ public class IsisPermission extends WildcardPermission {
     private static final long serialVersionUID = 1L;
     private static final Pattern PATTERN = Pattern.compile("([!]?)([^/]+)[/](.+)");
 
-    private static ThreadLocal<Map<String,List<IsisPermission>>> VETOING_PERMISSIONS = new ThreadLocal<Map<String,List<IsisPermission>>>() {
-        @Override
-        protected java.util.Map<String,List<IsisPermission>> initialValue() { return _Maps.newTreeMap(); }
-    };
+    private static ThreadLocal<Map<String,List<IsisPermission>>> VETOING_PERMISSIONS = 
+            ThreadLocal.withInitial(_Maps::newTreeMap);
 
     public static void resetVetoedPermissions() {
-        IsisPermission.VETOING_PERMISSIONS.get().clear();
+        IsisPermission.VETOING_PERMISSIONS.remove();
     }
 
     static boolean isVetoed(String permissionGroup, Permission p) {
