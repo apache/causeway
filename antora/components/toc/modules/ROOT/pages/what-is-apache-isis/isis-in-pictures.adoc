@@ -4,6 +4,7 @@
 
 
 
+WARNING: TODO: v2 - this material out of date, to be updated (need to migrate much of incode-platform, and port of isis-app-todoapp to github/apache/isis-app-todoapp)
 
 On this page we want to show you what a modern Apache Isis application looks like.
 

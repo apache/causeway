@@ -1,3 +1,3 @@
-
+* xref:core:ROOT:about.adoc[Core Framework]
 
 

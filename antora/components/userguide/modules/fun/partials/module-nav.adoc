@@ -1,21 +1,20 @@
-* xref:about.adoc[Fundamentals]
+* xref:userguide:fun:about.adoc[Fundamentals]
 
-
-** xref:core-concepts.adoc[Core Concepts]
+** xref:userguide:fun:core-concepts.adoc[Core Concepts]
 
 ** xref:userguide:fun:building-blocks.adoc[Building Blocks]
 
-** xref:programming-model.adoc[Programming Model]
+** xref:userguide:fun:programming-model.adoc[Programming Model]
 
-** xref:ui-hints.adoc[UI Hints]
+** xref:userguide:fun:ui-hints.adoc[UI Hints]
 
-** xref:crud.adoc[CRUD]
+** xref:userguide:fun:crud.adoc[CRUD]
 
-** xref:business-rules.adoc[Business Rules]
+** xref:userguide:fun:business-rules.adoc[Business Rules]
 
-** xref:drop-downs-and-defaults.adoc[Drop downs and Defaults]
+** xref:userguide:fun:drop-downs-and-defaults.adoc[Drop downs and Defaults]
 
-** xref:available-domain-services.adoc[Available Domain Services]
+** xref:userguide:fun:available-domain-services.adoc[Available Domain Services]
 
 
 

@@ -79,7 +79,7 @@ Note that the method name can be anything; it doesn't need to be related to the 
 
 == Constructor injection
 
-TODO: v2: this is now supported, because of Spring Boot, I think.
+NOTE: TODO: v2: this is now supported, because of Spring Boot, I think.
 
 
 == Multiple Implementations
@@ -93,13 +93,13 @@ When there are multiple service implementations of a given type, annotate the di
 
 == Scoping
 
-TODO: v2: should describe how this works.
+WARNING: TODO: v2: should describe how this works.
 
 
 
 == Qualified Injection
 
-TODO: v2: x-ref to Spring Boot docs.
+NOTE: TODO: v2: x-ref to Spring Boot docs.
 
 
 

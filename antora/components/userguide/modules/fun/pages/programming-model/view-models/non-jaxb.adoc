@@ -9,7 +9,7 @@ Instead of using JAXB to specify a view model, it is also possible to use Apache
 As was explained xref:userguide:fun:programming-model.adoc#view-models[earlier], the approach is described here is neither as flexible nor as powerful as using the JAXB-style of view models.
 It is however likely to be faster.
 
-// TODO: v2: I think we should only support programmatic API (ViewModel), and JAXB.
+WARNING: TODO: v2: I think we should only support programmatic API (ViewModel), and JAXB.
 //  So let's get rid of all these other natures that, under the covers, are all our original poor-man's JAXB (ie, EXTERNAL_ENTITY, INMEMORY_ENTITY, VIEW_MODEL, and @ViewModel itself).
 
 

@@ -4,7 +4,7 @@
 :page-partial:
 
 
-// TODO: v2: a lot of this has changed, because we now use `WebModule_Xxx` instead of `web.xml`, ie set this stuff up programmatically.
+WARNING: TODO: v2: a lot of this has changed, because we now use `WebModule_Xxx` instead of `web.xml`, ie set this stuff up programmatically.
 
 
 Apache Isis provides two different viewers, the xref:vw:ROOT:about.adoc[Wicket viewer] and the xref:vro:ROOT:about.adoc[RestfulObjects viewer].

@@ -231,7 +231,7 @@ public class Order {
 
 The subscriber can then populate this event:
 
-// *TODO: v2: *what annotation is required for SpringBoot event subscribers?
+WARNING: TODO: v2: what annotation is required for SpringBoot event subscribers?
 
 [source,java]
 ----

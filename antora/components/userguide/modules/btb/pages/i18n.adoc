@@ -622,7 +622,7 @@ However, Apache Isis can be configured to read config files from an xref:usergui
 
 Thus, if in `web.xml` the external configuration directory has been set:
 
-// TODO: v2: this almost certainly no longer works, because we now set up configuration very early on.
+WARNING: TODO: v2: this almost certainly no longer works, because we now set up configuration very early on.
 
 [source,xml]
 ----

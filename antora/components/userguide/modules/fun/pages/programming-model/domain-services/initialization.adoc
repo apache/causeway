@@ -3,7 +3,7 @@
 :page-partial:
 
 
-// TODO: v2: support for init with a Map is no longer supported, I suspect...?  Instead, can x-ref Spring's strongly typed configuration beans
+WARNING: TODO: v2: support for init with a Map is no longer supported, I suspect...?  Instead, can x-ref Spring's strongly typed configuration beans
 
 Services can optionally declare lifecycle callbacks to initialize them (when the app is deployed) and to shut them down (when the app is undeployed).
 

@@ -1,2 +1,4 @@
+* xref:testing:ROOT:about.adoc[About the Testing Guide]
+
 * xref:testing:ROOT:overview.adoc[Overview]
 

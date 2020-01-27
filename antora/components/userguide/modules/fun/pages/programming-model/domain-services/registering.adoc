@@ -3,7 +3,7 @@
 :page-partial:
 
 
-// TODO: v2: this is out of date, need to xref Spring Boot mechanism instead.
+WARNING: TODO: v2: this is out of date, need to xref Spring Boot mechanism instead.
 
 
 The easiest way to register domain services with the framework is to use an xref:refguide:applib-cm:classes/AppManifest-bootstrapping.adoc[`AppManifest`].
