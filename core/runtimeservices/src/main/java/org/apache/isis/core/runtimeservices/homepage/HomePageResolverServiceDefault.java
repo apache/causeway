@@ -29,48 +29,41 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.core.commons.internal.reflection._Annotations;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
-import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.homepage.HomePageResolverService;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.val;
 
 @Service
 @Order(OrderPrecedence.MIDPOINT)
-public class HomePageResolverServiceDefault  implements HomePageResolverService {
+public class HomePageResolverServiceDefault implements HomePageResolverService {
 
-    private final SpecificationLoader specificationLoader;
     private final FactoryService factoryService;
     private final IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder;
-    private final ObjectManager objectManager;
 
-    private Optional<Class> viewModelType;
+    private Optional<Class<?>> viewModelTypeForHomepage;
 
     @Inject
     public HomePageResolverServiceDefault(
-            final SpecificationLoader specificationLoader,
             final FactoryService factoryService,
-            final IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder, ObjectManager objectManager) {
-        this.specificationLoader = specificationLoader;
+            final IsisBeanTypeRegistryHolder isisBeanTypeRegistryHolder) {
+        
         this.factoryService = factoryService;
         this.isisBeanTypeRegistryHolder = isisBeanTypeRegistryHolder;
-        this.objectManager = objectManager;
     }
 
     @PostConstruct
     public void init() {
         val viewModelTypes = isisBeanTypeRegistryHolder.getIsisBeanTypeRegistry().getViewModelTypes();
-        viewModelType = viewModelTypes.stream()
-                .filter(type -> type.isAnnotationPresent(HomePage.class))
-                .map(x -> (Class)x)
+        viewModelTypeForHomepage = viewModelTypes.stream()
+                .filter(viewModelType -> _Annotations.isPresent(viewModelType, HomePage.class)) 
                 .findFirst();
     }
 
     @Override
     public Object getHomePage() {
-        return viewModelType.map(factoryService::viewModel).orElse(null);
+        return viewModelTypeForHomepage.map(factoryService::viewModel).orElse(null);
     }
 
 

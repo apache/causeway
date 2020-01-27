@@ -25,8 +25,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.ViewModel;
-
 /**
  * Annotated on a view model to indicate that it should be used as the home page.
  *
