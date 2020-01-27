@@ -164,9 +164,6 @@ implements LinksProvider, UiHintContainer {
             @Override
             List<ManagedObject> load(EntityCollectionModel colModel) {
 
-                //XXX lombok issue, cannot use val here
-                boolean isBulkLoad = false;
-
                 return loadElementsOneByOne(colModel).collect(Collectors.toList());
             }
 
