@@ -21,8 +21,8 @@
 [discrete]
 == Starter Apps
 
-* link:https://github.com/apache/isis-app-helloworld[Hello World]
-* link:https://github.com/apache/isis-app-simpleapp[SimpleApp]
+* xref:starters:helloworld:about.adoc[Hello World]
+* xref:starters:simpleapp:about.adoc[SimpleApp]
 
 |
 [discrete]
@@ -50,7 +50,7 @@ _Libraries_
 _Resources_
 
 * *xref:toc:devguide:about.adoc[Developers' Guide]*
-* xref:toc:mavendeps:about.adoc[Maven dependencies]
+* xref:starters:mavendeps:about.adoc[Maven dependencies]
 
 |
 [discrete]

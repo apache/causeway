@@ -47,5 +47,5 @@ As well as the current libraries, the xref:incubator:ROOT:about.adoc[Incubator] 
 == Resources
 
 * *xref:toc:devguide:about.adoc[Developers' Guide]*
-* xref:toc:mavendeps:about.adoc[Maven dependencies]
+* xref:starters:mavendeps:about.adoc[Maven dependencies]
 
