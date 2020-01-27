@@ -19,6 +19,10 @@
 package org.apache.isis.applib.services.repository;
 
 /**
+ * TODO lower case enums not up to standard, is this an issue?
+ * 
+ * @apiNote use the provided predicates rather then directly referencing the enum names
+ *  
  * @since 2.0
  */
 public enum EntityState {
