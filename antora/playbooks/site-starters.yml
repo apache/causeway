@@ -11,6 +11,15 @@ content:
       start_path: antora/components/toc # toc
       branches: HEAD
 
+# mavendeps
+    - url: .
+      start_path: mavendeps/adoc # starters
+      branches: HEAD
+
+# starters
+    - url: .
+      start_path: starters/adoc # starters
+      branches: HEAD
 
 
 ui:

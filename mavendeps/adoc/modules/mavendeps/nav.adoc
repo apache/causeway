@@ -1,1 +1,1 @@
-// unused - referenced directly by toc/nav.adoc
+include::starters:ROOT:partial$component-nav.adoc[]

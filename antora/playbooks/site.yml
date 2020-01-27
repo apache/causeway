@@ -168,7 +168,7 @@ content:
 
 # mavendeps
     - url: .
-      start_path: mavendeps/adoc # toc
+      start_path: mavendeps/adoc # starters
       branches: HEAD
 
 # security

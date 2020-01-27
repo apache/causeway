@@ -1,0 +1,2 @@
+* xref:starters:simpleapp:about.adoc[SimpleApp]
+

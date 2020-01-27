@@ -51,3 +51,5 @@ rebel.xml
 
 /site*.yml
 /.antora-cache-dir/
+
+_commit.sh

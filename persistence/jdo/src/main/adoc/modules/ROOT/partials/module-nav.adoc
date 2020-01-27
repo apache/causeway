@@ -1,4 +1,4 @@
-* xref:configuring.adoc[Configuring]
-* xref:jdo-mappings.adoc[JDO Mappings]
-* xref:db-schemas.adoc[DB Schemas]
-* xref:hints-and-tips.adoc[Hints-n-Tips]
+* xref:pjdo:ROOT:configuring.adoc[Configuring]
+* xref:pjdo:ROOT:jdo-mappings.adoc[JDO Mappings]
+* xref:pjdo:ROOT:db-schemas.adoc[DB Schemas]
+* xref:pjdo:ROOT:hints-and-tips.adoc[Hints-n-Tips]

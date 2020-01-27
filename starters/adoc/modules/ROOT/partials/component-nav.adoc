@@ -1,0 +1,7 @@
+include::starters:ROOT:partial$module-nav.adoc[]
+include::starters:helloworld:partial$module-nav.adoc[]
+include::starters:simpleapp:partial$module-nav.adoc[]
+include::starters:mavendeps:partial$module-nav.adoc[]
+
+
+
