@@ -40,6 +40,7 @@ import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
+import lombok.Value;
 import lombok.val;
 
 @Service
@@ -61,7 +62,7 @@ public class UserServiceDefault implements UserService {
         
         @Override
         public void runAs(final String username, final List<String> roles) {
-            userServiceDefault.overrideUserAndRoles(username, roles);
+            userServiceDefault.overrideUserAndRoles(username, Can.ofCollection(roles));
         }
 
         @Override
@@ -103,28 +104,13 @@ public class UserServiceDefault implements UserService {
         }
     }
 
+
+    @Value
     public static class UserAndRoleOverrides {
         final String user;
         final Can<String> roles;
-
-
-        UserAndRoleOverrides(final String user) {
-            this(user, null);
-        }
-
-        UserAndRoleOverrides(final String user, final Iterable<String> roles) {
-            this.user = user;
-            this.roles = Can.ofIterable(roles);
-        }
-
-        public String getUser() {
-            return user;
-        }
-
-        public Can<String> getRoles() {
-            return roles;
-        }
     }
+
 
     /**
      * Not API; for use by the implementation of sudo/runAs (see {@link SudoService} etc.
@@ -164,8 +150,8 @@ public class UserServiceDefault implements UserService {
     
     private final ThreadLocal<Stack<UserAndRoleOverrides>> overrides = ThreadLocal.withInitial(Stack::new);
 
-    private void overrideUserAndRoles(final String user, final List<String> rolesIfAny) {
-        final Iterable<String> roles = rolesIfAny != null ? rolesIfAny : inheritRoles();
+    private void overrideUserAndRoles(final String user, final Can<String> rolesIfAny) {
+        val roles = rolesIfAny.isNotEmpty() ? rolesIfAny : inheritRoles();
         this.overrides.get().push(new UserAndRoleOverrides(user, roles));
     }
 
