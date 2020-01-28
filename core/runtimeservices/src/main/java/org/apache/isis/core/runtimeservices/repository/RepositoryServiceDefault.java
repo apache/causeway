@@ -89,7 +89,7 @@ public class RepositoryServiceDefault implements RepositoryService {
             throw new PersistFailedException("Object not known to framework (unable to create/obtain an adapter)");
         }
         val entityState = ManagedObject._entityState(adapter);
-        val skip = !entityState.isPersistable() || entityState.isDestroyed();
+        val skip = !entityState.isDetached(); // only persist detached entities, otherwise skip
         if(skip) {
             return domainObject;
         }
