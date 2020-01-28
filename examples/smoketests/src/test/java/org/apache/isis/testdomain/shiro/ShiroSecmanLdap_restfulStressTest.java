@@ -127,7 +127,7 @@ class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {
                     fail(digest.getFailureCause());
                 }
                 
-                val httpSessionInfo = digest.get();
+                val httpSessionInfo = digest.getEntities();
 
                 assertNotNull(httpSessionInfo);
                 assertEquals("no http-session", httpSessionInfo);

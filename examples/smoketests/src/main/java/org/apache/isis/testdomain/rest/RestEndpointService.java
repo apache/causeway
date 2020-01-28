@@ -18,8 +18,11 @@
  */
 package org.apache.isis.testdomain.rest;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.ws.rs.client.Invocation;
+import javax.ws.rs.core.GenericType;
 import javax.xml.bind.JAXBException;
 
 import org.springframework.core.env.Environment;
@@ -67,11 +70,11 @@ public class RestEndpointService {
 
     public RestfulClient newClient(boolean useRequestDebugLogging) {
 
-        if(useRequestDebugLogging) {
-            final String msg = "RestfulLoggingFilter seems to fail in 4.4.1, consumes the response's entity (in order to log) so that subsequent attempts to read response fail.";
-            log.error(msg);
-            throw new UnsupportedOperationException(msg);
-        }
+//        if(useRequestDebugLogging) {
+//            final String msg = "RestfulLoggingFilter seems to fail in 4.4.1, consumes the response's entity (in order to log) so that subsequent attempts to read response fail.";
+//            log.error(msg);
+//            throw new UnsupportedOperationException(msg);
+//        }
         val restRootPath =
                 String.format("http://localhost:%d%s/",
                         getPort(),
@@ -109,6 +112,23 @@ public class RestEndpointService {
 
         return digest;
     }
+    
+    public ResponseDigest<Book> getMultipleBooks(RestfulClient client) throws JAXBException {
+        
+        Invocation.Builder request = client.request(
+                "services/testdomain.InventoryResource/actions/multipleBooks/invoke",
+                SuppressionType.ALL);
+
+        val args = client.arguments()
+                .addActionParameter("nrOfBooks", 2)
+                .build();
+
+        val response = request.post(args);
+        val digest = client.digestList(response, Book.class, new GenericType<List<Book>>() {});
+
+        return digest;
+    }
+    
     
     public ResponseDigest<Book> storeBook(RestfulClient client, Book newBook) throws JAXBException {
         val request = client.request(

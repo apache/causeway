@@ -30,8 +30,10 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.collections._Lists;
 
 import lombok.val;
 
@@ -59,6 +61,24 @@ public class InventoryResource {
         return repository.persist(book);
     }
 
+    @Action
+    public List<Book> multipleBooks(
+            
+            @ParameterLayout(named = "")
+            int nrOfBooks
+            
+            ) {
+        
+        val books = _Lists.<Book>newArrayList();
+        
+        // for this test we do not care if we generate duplicates
+        for(int i=0; i<nrOfBooks; ++i) {
+            val book = Book.of("MultipleBooksTest", "An awesome Book["+i+"]", 12, "Author", "ISBN", "Publisher");
+            books.add(repository.persist(book));
+        }
+        return books;
+    }
+    
     @Action //TODO improve the REST client such that the param can be of type Book
     public Book storeBook(String newBook) throws JAXBException { 
         Book book = BookDto.decode(newBook).toBook();

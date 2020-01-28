@@ -21,10 +21,13 @@ package org.apache.isis.extensions.restclient;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Future;
 import java.util.function.Function;
 
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
 
@@ -32,10 +35,12 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.resources._Json;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -44,16 +49,41 @@ import lombok.val;
  */
 public class ResponseDigest<T> {
 
-    /** synchronous response processing */
-    public static <T> ResponseDigest<T> of(Response response, Class<T> entityType) {
-        return new ResponseDigest<>(response, entityType).digest();
+    /**
+     * synchronous response processing (single entity)
+     * @param <T>
+     * @param response
+     * @param entityType
+     * @return
+     */
+    public static <T> ResponseDigest<T> of(
+            @NonNull final Response response, 
+            @NonNull final Class<T> entityType) {
+        
+        return new ResponseDigest<>(response, entityType, null).digest();
     }
-
+    
+    /**
+     * synchronous response processing (list of entities)
+     * @param <T>
+     * @param response
+     * @param entityType
+     * @param genericType
+     * @return
+     */
+    public static <T> ResponseDigest<T> ofList(
+            @NonNull final Response response, 
+            @NonNull final Class<T> entityType,
+            @NonNull final GenericType<List<T>> genericType) {
+        
+        return new ResponseDigest<>(response, entityType, genericType).digest();
+    }
+    
     /** a-synchronous response failure processing */
     public static <T> ResponseDigest<T> ofAsyncFailure(
-            Future<Response> asyncResponse, 
-            Class<T> entityType, 
-            Exception failure) {
+            final Future<Response> asyncResponse, 
+            final Class<T> entityType, 
+            final Exception failure) {
 
         Response response;
         try {
@@ -62,20 +92,22 @@ public class ResponseDigest<T> {
             response = null;
         }
 
-        final ResponseDigest<T> failureDigest = new ResponseDigest<>(response, entityType);
+        final ResponseDigest<T> failureDigest = new ResponseDigest<>(response, entityType, null);
         return failureDigest.digestAsyncFailure(asyncResponse.isCancelled(), failure);
     }
-
+    
     private final Response response;
     private final Class<T> entityType;
+    private final GenericType<List<T>> genericType;
 
-    private T entity;
+    private Can<T> entities;
     private Exception failureCause;
 
 
-    protected ResponseDigest(Response response, Class<T> entityType) {
+    protected ResponseDigest(Response response, Class<T> entityType, GenericType<List<T>> genericType) {
         this.response = response;
         this.entityType = entityType;
+        this.genericType = genericType;
     }
 
     public boolean isSuccess() {
@@ -86,23 +118,23 @@ public class ResponseDigest<T> {
         return failureCause!=null;
     }
 
-    public T get(){
-        return entity;
+    public Can<T> getEntities(){
+        return entities;
     }
 
     public Exception getFailureCause(){
         return failureCause;
     }
 
-    public T ifSuccessGetOrElseMap(Function<Exception, T> failureMapper) {
+    public Can<T> ifSuccessGetOrElseMap(Function<Exception, Can<T>> failureMapper) {
         return isSuccess() 
-                ? get()
+                ? getEntities()
                         : failureMapper.apply(getFailureCause());
     }
 
-    public <X> X ifSuccessMapOrElseMap(Function<T, X> successMapper, Function<Exception, X> failureMapper) {
+    public <X> X ifSuccessMapOrElseMap(Function<Can<T>, X> successMapper, Function<Exception, X> failureMapper) {
         return isSuccess() 
-                ? successMapper.apply(get())
+                ? successMapper.apply(getEntities())
                         : failureMapper.apply(getFailureCause());
     }
 
@@ -111,47 +143,65 @@ public class ResponseDigest<T> {
     private ResponseDigest<T> digest() {
 
         if(response==null) {
-            entity = null;
+            entities = Can.empty();
             failureCause = new NoSuchElementException();
             return this;
         }
 
         if(!response.hasEntity()) {
-            entity = null;
+            entities = Can.empty();
             failureCause = new NoSuchElementException(defaultFailureMessage(response));
             return this;
         }
 
         if(response.getStatusInfo().getFamily() != Family.SUCCESSFUL) {
-            entity = null;
+            entities = Can.empty();
             failureCause = new RestfulClientException(defaultFailureMessage(response));
             return this;
         }
 
-        if(isValueType(entityType)) {
-            try {
-                val responseBody = response.readEntity(String.class);
-                entity = parseValueTypeBody(responseBody);
-            } catch (Exception e) {
-                entity = null;
-                failureCause = new RestfulClientException("failed to read JAX-RS response content", e);
-            }
-            return this;
-        }
-
         try {
-            entity = response.readEntity(entityType);
+            
+            if(genericType==null) {
+                // when response is a singleton
+                entities = Can.ofSingleton(readSingle());
+            } else {
+                // when response is a list
+                entities = Can.ofCollection(readList());
+            }
+            
         } catch (Exception e) {
-            entity = null;
+            entities = Can.empty();
             failureCause = new RestfulClientException("failed to read JAX-RS response content", e);
         }
 
         return this;
     }
 
+    private T readSingle() throws JsonParseException, JsonMappingException, IOException {
+        if(isValueType(entityType)) {
+            val responseBody = response.readEntity(String.class);
+            return parseValueTypeBody(responseBody);
+        }
+        return response.<T>readEntity(entityType);
+    }
+    
+    private List<T> readList() throws JsonParseException, JsonMappingException, IOException {
+        if(isValueType(entityType)) {
+            final List<String> valueBodies = response.readEntity(new GenericType<List<String>>() {});
+            final List<T> resultList = new ArrayList<>(valueBodies.size());
+            for(val valueBody : valueBodies) {
+                // explicit loop, for simpler exception propagation
+                resultList.add(parseValueTypeBody(valueBody)); 
+            }
+            return resultList;
+        }
+        return response.readEntity(genericType);
+    }
+
     private ResponseDigest<T> digestAsyncFailure(boolean isCancelled, Exception failure) {
 
-        entity = null;
+        entities = Can.empty();
 
         if(isCancelled) {
             failureCause = new RestfulClientException("Async JAX-RS request was canceled", failure);

@@ -19,6 +19,7 @@
 package org.apache.isis.extensions.restclient;
 
 import java.util.EnumSet;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Invocation.Builder;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.client.SuppressionType;
@@ -71,7 +73,7 @@ ResponseDigest<MyObject> digest = client.digest(response, MyObject.class);
 }
 
 if(digest.isSuccess()) {
-    System.out.println("result: "+ digest.get().get$$instanceId());
+    System.out.println("result: "+ digest.getEntities().getSingletonOrFail().get$$instanceId());
 } else {
     digest.getFailureCause().printStackTrace();
 }
@@ -97,7 +99,7 @@ ResponseDigest<MyObject> digest = digestFuture.get(); // blocking
 }
 
 if(digest.isSuccess()) {
-    System.out.println("result: "+ digest.get().get$$instanceId());
+    System.out.println("result: "+ digest.getEntities().getSingletonOrFail().get$$instanceId());
 } else {
     digest.getFailureCause().printStackTrace();
 }
@@ -185,6 +187,10 @@ public class RestfulClient {
         return ResponseDigest.of(response, entityType);
     }
 
+    public <T> ResponseDigest<T> digestList(Response response, Class<T> entityType, GenericType<List<T>> genericType) {
+        return ResponseDigest.ofList(response, entityType, genericType);
+    }
+    
     // -- RESPONSE PROCESSING (ASYNC)
 
     public <T> CompletableFuture<ResponseDigest<T>> digest(
@@ -200,6 +206,28 @@ public class RestfulClient {
 
             } catch (Exception e) {
                 return ResponseDigest.ofAsyncFailure(asyncResponse, entityType, e);
+            }
+        });
+
+        return completableFuture;
+    }
+    
+    public <T> CompletableFuture<ResponseDigest<T>> digestList(
+            final Future<Response> asyncResponse, 
+            final Class<T> entityType,
+            GenericType<List<T>> genericType) {
+
+        final CompletableFuture<ResponseDigest<T>> completableFuture = CompletableFuture.supplyAsync(()->{
+            try {
+                Response response = asyncResponse.get();
+                ResponseDigest<T> digest = digestList(response, entityType, genericType);
+
+                return digest;
+
+            } catch (Exception e) {
+                
+                return ResponseDigest.ofAsyncFailure(asyncResponse, entityType, e);
+                
             }
         });
 
@@ -255,7 +283,6 @@ public class RestfulClient {
 
         return "";
     }
-
 
 
 

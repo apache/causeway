@@ -58,7 +58,7 @@ class RestServiceTest {
         assertNotNull(restService.getPort());
         assertTrue(restService.getPort()>0);
 
-        val useRequestDebugLogging = false; // not used because seems to fail in 4.4.1, consumes the response's entity and so
+        val useRequestDebugLogging = false;
         val restfulClient = restService.newClient(useRequestDebugLogging);
 
         val digest = restService.getRecommendedBookOfTheWeek(restfulClient);
@@ -67,7 +67,7 @@ class RestServiceTest {
             fail(digest.getFailureCause());
         }
 
-        val bookOfTheWeek = digest.get();
+        val bookOfTheWeek = digest.getEntities().getSingletonOrFail();
 
         assertNotNull(bookOfTheWeek);
         assertEquals("Book of the week", bookOfTheWeek.getName());
@@ -80,7 +80,7 @@ class RestServiceTest {
         assertNotNull(restService.getPort());
         assertTrue(restService.getPort()>0);
 
-        val useRequestDebugLogging = false; // not used because seems to fail in 4.4.1, consumes the response's entity and so
+        val useRequestDebugLogging = false;
         val restfulClient = restService.newClient(useRequestDebugLogging);
 
         val newBook = Book.of("REST Book", "A sample REST book for testing.", 77., 
@@ -92,14 +92,37 @@ class RestServiceTest {
             fail(digest.getFailureCause());
         }
 
-        val storedBook = digest.get();
+        val storedBook = digest.getEntities().getSingletonOrFail();
 
         assertNotNull(storedBook);
         assertEquals("REST Book", storedBook.getName());
 
     }
     
-    
+    @Test
+    void multipleBooks_viaRestEndpoint() throws JAXBException {
+
+        assertNotNull(restService.getPort());
+        assertTrue(restService.getPort()>0);
+
+        val useRequestDebugLogging = false; 
+        val restfulClient = restService.newClient(useRequestDebugLogging);
+
+        val digest = restService.getMultipleBooks(restfulClient);
+
+        if(!digest.isSuccess()) {
+            fail(digest.getFailureCause());
+        }
+
+        val multipleBooks = digest.getEntities();
+        
+        assertEquals(2, multipleBooks.size());
+        
+        for(val book : multipleBooks) {
+            assertEquals("MultipleBooksTest", book.getName());    
+        }
+
+    }
     
     @Test
     void httpSessionInfo() {
@@ -113,7 +136,7 @@ class RestServiceTest {
             fail(digest.getFailureCause());
         }
 
-        val httpSessionInfo = digest.get();
+        val httpSessionInfo = digest.getEntities().getSingletonOrFail();
 
         assertNotNull(httpSessionInfo);
         assertEquals("no http-session", httpSessionInfo);
