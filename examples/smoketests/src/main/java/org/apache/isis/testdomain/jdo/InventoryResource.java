@@ -85,6 +85,8 @@ public class InventoryResource {
         return repository.persist(book);
     }
     
+    // -- NON - ENTITIES
+    
     @Action
     public String httpSessionInfo() {
         
@@ -101,5 +103,31 @@ public class InventoryResource {
         
         return String.format("http-session attribute names: {%s}", sessionAttributeNames);
     }
+    
+    @Action
+    public BookDto recommendedBookOfTheWeekAsDto() {
+        // for this test we do not care if we generate duplicates
+        val book = Book.of("Book of the week", "An awesome Book", 12, "Author", "ISBN", "Publisher");
+        return BookDto.from(book);
+    }
+
+    @Action
+    public List<BookDto> multipleBooksAsDto(
+            
+            @ParameterLayout(named = "")
+            int nrOfBooks
+            
+            ) {
+        
+        val books = _Lists.<BookDto>newArrayList();
+        
+        // for this test we do not care if we generate duplicates
+        for(int i=0; i<nrOfBooks; ++i) {
+            val book = Book.of("MultipleBooksTest", "An awesome Book["+i+"]", 12, "Author", "ISBN", "Publisher");
+            books.add(BookDto.from(book));
+        }
+        return books;
+    }
+    
 
 }

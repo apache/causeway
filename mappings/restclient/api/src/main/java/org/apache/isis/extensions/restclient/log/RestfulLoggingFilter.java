@@ -108,7 +108,7 @@ public class RestfulLoggingFilter implements ClientRequestFilter, ClientResponse
 
     // -- HELPER
 
-    private final String basicAuthMagic = "Authorization=[Basic "; 
+    private final String basicAuthMagic = "Authorization: [Basic "; 
 
     private String toKeyValueString(Map.Entry<?, ?> entry) {
         return "" + entry.getKey() + ": " + entry.getValue();

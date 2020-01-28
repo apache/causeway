@@ -70,11 +70,6 @@ public class RestEndpointService {
 
     public RestfulClient newClient(boolean useRequestDebugLogging) {
 
-//        if(useRequestDebugLogging) {
-//            final String msg = "RestfulLoggingFilter seems to fail in 4.4.1, consumes the response's entity (in order to log) so that subsequent attempts to read response fail.";
-//            log.error(msg);
-//            throw new UnsupportedOperationException(msg);
-//        }
         val restRootPath =
                 String.format("http://localhost:%d%s/",
                         getPort(),
@@ -145,6 +140,36 @@ public class RestEndpointService {
         return digest;
     }
 
+    public ResponseDigest<BookDto> getRecommendedBookOfTheWeekAsDto(RestfulClient client) {
+        Invocation.Builder request = client.request(
+                "services/testdomain.InventoryResource/actions/recommendedBookOfTheWeekAsDto/invoke",
+                SuppressionType.ALL);
+
+        val args = client.arguments()
+                .build();
+
+        val response = request.post(args);
+        val digest = client.digest(response, BookDto.class);
+
+        return digest;
+    }
+    
+    public ResponseDigest<BookDto> getMultipleBooksAsDto(RestfulClient client) throws JAXBException {
+        
+        Invocation.Builder request = client.request(
+                "services/testdomain.InventoryResource/actions/multipleBooksAsDto/invoke",
+                SuppressionType.ALL);
+
+        val args = client.arguments()
+                .addActionParameter("nrOfBooks", 2)
+                .build();
+
+        val response = request.post(args);
+        val digest = client.digestList(response, BookDto.class, new GenericType<List<BookDto>>() {});
+
+        return digest;
+    }
+    
     
     public ResponseDigest<String> getHttpSessionInfo(RestfulClient client) {
         val request = client.request(
