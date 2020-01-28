@@ -1,5 +1,5 @@
 * What is Apache Isis?
-** *xref:what-is-apache-isis/isis-in-pictures.adoc[Apache Isis in pictures]*
+** xref:what-is-apache-isis/isis-in-pictures.adoc[Apache Isis in pictures]
 ** xref:what-is-apache-isis/common-use-cases.adoc[Common Use Cases]
 ** xref:what-is-apache-isis/screencasts.adoc[Screencasts]
 ** xref:what-is-apache-isis/powered-by.adoc[Powered By]
@@ -14,6 +14,7 @@
 *** xref:starters:parent-pom:about.adoc[Parent POM]
 *** xref:starters:mavendeps:about.adoc[Maven Dependencies]
 
+
 * Demos & Tutorials
 
 ** xref:demoapp:ROOT:about.adoc[Demo App]
@@ -26,6 +27,7 @@
 *** xref:userguide:ROOT:about.adoc[User Guide]
 *** xref:refguide:ROOT:about.adoc[Reference Guide]
 *** xref:testing:ROOT:about.adoc[Testing Guide]
+*** xref:toc:devguide:about.adoc[Developers' Guide]
 
 ** Libraries
 
@@ -35,7 +37,6 @@
 
 ** Resources
 
-*** xref:toc:devguide:about.adoc[Developers' Guide]
 
 
 
