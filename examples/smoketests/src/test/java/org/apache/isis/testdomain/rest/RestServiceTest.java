@@ -130,7 +130,7 @@ class RestServiceTest {
         assertNotNull(restService.getPort());
         assertTrue(restService.getPort()>0);
 
-        val useRequestDebugLogging = true;
+        val useRequestDebugLogging = false;
         val restfulClient = restService.newClient(useRequestDebugLogging);
 
         val digest = restService.getRecommendedBookOfTheWeekAsDto(restfulClient);

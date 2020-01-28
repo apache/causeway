@@ -74,6 +74,12 @@ public class ActionParameterListBuilder {
         return this;
     }
 
+//XXX would be nice to have, but also requires the RO spec to be updated     
+//    public ActionParameterListBuilder addActionParameterDto(String parameterName, Object parameterDto) {
+//        actionParameters.put(parameterName, dto(parameterDto));
+//        return this;
+//    }
+    
     public Entity<String> build() {
 
         final StringBuilder sb = new StringBuilder();
@@ -93,6 +99,12 @@ public class ActionParameterListBuilder {
     private String value(String valueLiteral) {
         return "{\"value\" : " + valueLiteral + "}";
     }
+    
+//    @SneakyThrows
+//    private String dto(Object dto) {
+//        val mapper = new ObjectMapper();
+//        return mapper.writeValueAsString(dto);
+//    }
 
     private String toJson(Map.Entry<String, String> entry) {
         return "   \""+entry.getKey()+"\": "+entry.getValue();
