@@ -26,16 +26,16 @@
 ** Core
 *** xref:userguide:ROOT:about.adoc[User Guide]
 *** xref:refguide:ROOT:about.adoc[Reference Guide]
-*** xref:testing:ROOT:about.adoc[Testing Guide]
+
+** Development
 *** xref:toc:devguide:about.adoc[Developers' Guide]
+*** xref:testing:ROOT:about.adoc[Testing Guide]
 
 ** Libraries
 
 ***  xref:subdomains:ROOT:about.adoc[Subdomain Libraries]
 ***  xref:valuetypes:ROOT:about.adoc[Value Types]
 ***  xref:mappings:ROOT:about.adoc[Bounded Context Mapping Libraries]
-
-** Resources
 
 
 

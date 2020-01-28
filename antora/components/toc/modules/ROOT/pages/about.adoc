@@ -19,7 +19,7 @@
 
 |
 [discrete]
-== Starter Apps
+== xref:starters:ROOT:about.adoc[Starter Apps]
 
 * xref:starters:helloworld:about.adoc[Hello World]
 * xref:starters:simpleapp:about.adoc[SimpleApp]
@@ -44,7 +44,11 @@ _Core_
 
 * *xref:userguide:ROOT:about.adoc[User Guide]*
 * *xref:refguide:ROOT:about.adoc[Reference Guide]*
+
+_Development_
+
 * *xref:testing:ROOT:about.adoc[Testing Guide]*
+* *xref:toc:devguide:about.adoc[Developers' Guide]*
 
 _Libraries_
 
@@ -52,9 +56,7 @@ _Libraries_
 *  xref:valuetypes:ROOT:about.adoc[Value Types]
 *  xref:mappings:ROOT:about.adoc[Bounded Context Mapping Libraries]
 
-_Resources_
 
-* *xref:toc:devguide:about.adoc[Developers' Guide]*
 
 
 |
