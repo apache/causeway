@@ -1,2 +1,2 @@
-* xref:starters:simpleapp:about.adoc[SimpleApp]
+** xref:starters:simpleapp:about.adoc[SimpleApp]
 

@@ -1,2 +1,2 @@
-* xref:starters:helloworld:about.adoc[Hello World]
+** xref:starters:helloworld:about.adoc[HelloWorld]
 

@@ -1,6 +1,12 @@
 include::starters:ROOT:partial$module-nav.adoc[]
+
+* Starter Apps
+
 include::starters:helloworld:partial$module-nav.adoc[]
 include::starters:simpleapp:partial$module-nav.adoc[]
+
+* Resources
+
 include::starters:parent-pom:partial$module-nav.adoc[]
 include::starters:mavendeps:partial$module-nav.adoc[]
 

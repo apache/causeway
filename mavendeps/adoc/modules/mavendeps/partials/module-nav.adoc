@@ -1,1 +1,1 @@
-* xref:starters:mavendeps:about.adoc[Maven Dependencies]
+** xref:starters:mavendeps:about.adoc[Maven Dependencies]
