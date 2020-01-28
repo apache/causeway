@@ -50,7 +50,7 @@ public final class _Bytes {
     private final static int BUFFER_SIZE = 16 * 1024; // 16k
 
     /**
-     * Reads the input stream into an array of byte.
+     * Reads the input stream into an array of byte, then closes the input (-stream). 
      * @param input
      * @return null if {@code input} is null
      * @throws IOException
@@ -60,17 +60,41 @@ public final class _Bytes {
             return null;
         }
 
-        final ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        final byte[] buffer = new byte[BUFFER_SIZE];
-
-        int nRead;
-        while ((nRead = input.read(buffer, 0, buffer.length)) != -1) {
-            bos.write(buffer, 0, nRead);
+        try(final ByteArrayOutputStream bos = new ByteArrayOutputStream()){
+            final byte[] buffer = new byte[BUFFER_SIZE];
+    
+            int nRead;
+            while ((nRead = input.read(buffer, 0, buffer.length)) != -1) {
+                bos.write(buffer, 0, nRead);
+            }
+            bos.flush();
+            return bos.toByteArray();
+        } finally {
+            input.close();
         }
-        bos.flush();
+    }
+    
+    /**
+     * Reads the input stream into an array of byte, but does not close the input (-stream).
+     * @param input
+     * @return null if {@code input} is null
+     * @throws IOException
+     */
+    public static byte[] ofKeepOpen(@Nullable final InputStream input) throws IOException {
+        if(input==null) {
+            return null;
+        }
 
-        input.close();
-        return bos.toByteArray();
+        try(final ByteArrayOutputStream bos = new ByteArrayOutputStream()){
+            final byte[] buffer = new byte[BUFFER_SIZE];
+    
+            int nRead;
+            while ((nRead = input.read(buffer, 0, buffer.length)) != -1) {
+                bos.write(buffer, 0, nRead);
+            }
+            bos.flush();
+            return bos.toByteArray();
+        }
     }
 
     // -- PREPEND/APPEND

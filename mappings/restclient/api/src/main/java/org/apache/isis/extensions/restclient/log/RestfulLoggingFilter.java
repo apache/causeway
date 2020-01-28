@@ -31,8 +31,10 @@ import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.client.ClientResponseContext;
 import javax.ws.rs.client.ClientResponseFilter;
 
+import org.apache.isis.core.commons.internal.base._Bytes;
 import org.apache.isis.core.commons.internal.base._Strings;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -40,8 +42,8 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0
  */
 @Priority(999) @Log4j2
-public class RestfulLoggingFilter implements ClientRequestFilter, ClientResponseFilter{
-
+public class RestfulLoggingFilter implements ClientRequestFilter, ClientResponseFilter {
+    
     @Override
     public void filter(ClientRequestContext requestContext) throws IOException {
         final String endpoint = requestContext.getUri().toString();
@@ -86,8 +88,9 @@ public class RestfulLoggingFilter implements ClientRequestFilter, ClientResponse
         final InputStream inputStream = responseContext.getEntityStream();
         final String responseBody;
         if(inputStream!=null) {
-            responseBody = _Strings.read(responseContext.getEntityStream(), StandardCharsets.UTF_8);
-            responseContext.setEntityStream(new ByteArrayInputStream(responseBody.getBytes(StandardCharsets.UTF_8)));    
+            val bytes = _Bytes.ofKeepOpen(inputStream);
+            responseBody = new String(bytes, StandardCharsets.UTF_8);
+            responseContext.setEntityStream(new ByteArrayInputStream(bytes));
         } else {
             responseBody = "null";
         }
@@ -123,10 +126,6 @@ public class RestfulLoggingFilter implements ClientRequestFilter, ClientResponse
         }
         return keyValueLiteral;
     }
-
-
-
-
 
 
 }
