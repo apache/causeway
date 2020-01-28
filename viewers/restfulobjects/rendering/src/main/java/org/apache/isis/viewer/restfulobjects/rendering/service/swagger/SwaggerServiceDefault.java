@@ -28,8 +28,12 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.swagger.SwaggerService;
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.config.RestEasyConfiguration;
+import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.SwaggerSpecGenerator;
+
+import lombok.val;
 
 @Service
 @Named("isisMetaModel.swaggerServiceDefault")
@@ -39,16 +43,20 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.
 public class SwaggerServiceDefault implements SwaggerService {
 
     private final SwaggerSpecGenerator swaggerSpecGenerator;
-    private final RestEasyConfiguration restEasyConfiguration;
     private final String basePath;
 
     @Inject
     public SwaggerServiceDefault(
             final SwaggerSpecGenerator swaggerSpecGenerator,
-            final RestEasyConfiguration restEasyConfiguration) {
+            final RestEasyConfiguration restEasyConfiguration,
+            final WebAppContextPath webAppContextPath) {
+        
         this.swaggerSpecGenerator = swaggerSpecGenerator;
-        this.restEasyConfiguration = restEasyConfiguration;
-        basePath = this.restEasyConfiguration.getJaxrs().getDefaultPath() + "/";
+        
+        val restfulPath = restEasyConfiguration.getJaxrs().getDefaultPath();
+        val restfulBase = webAppContextPath.prependContextPath(restfulPath);
+        
+        this.basePath = _Strings.suffix(restfulBase, "/");
     }
 
     @Override

@@ -31,6 +31,7 @@
   </head>
 
   <body>
+  	<!-- template variables are filled in by the TemplateResourceServlet -->
   
     <div id="swagger-ui"></div>
 
