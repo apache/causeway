@@ -19,7 +19,7 @@
 
 |
 [discrete]
-== xref:starters:ROOT:about.adoc[Starter Apps]
+== Starter Apps
 
 * xref:starters:helloworld:about.adoc[Hello World]
 * xref:starters:simpleapp:about.adoc[SimpleApp]

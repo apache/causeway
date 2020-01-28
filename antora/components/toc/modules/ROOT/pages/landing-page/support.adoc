@@ -27,7 +27,7 @@ Some other places that might be useful are:
 [discrete]
 == Releases
 
-It's usually easiest to work with the xref:toc:ROOT:landing-page/quick-start.adoc[quick start apps].
+It's usually easiest to work with the xref:starters:ROOT:about.adoc[starter apps].
 But you can also download the framework and built it yourself:
 
 * xref:toc:ROOT:downloads/how-to.adoc[Downloads]
