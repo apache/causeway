@@ -20,6 +20,7 @@ package org.apache.isis.core.config;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -50,6 +51,17 @@ public class RestEasyConfiguration {
     @Inject @Named("resteasy-settings") private Map<String, String> resteasySettings;
     public Map<String, String> getAsMap() { return Collections.unmodifiableMap(resteasySettings); }
 
+      
+    private final Authentication authentication = new Authentication();
+    @Data
+    public static class Authentication {
+        /**
+         * Defaults to 'org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategyBasicAuth'.
+         */
+        private Optional<String> strategyClassName = Optional.empty();    
+    }
+    
+    
     private final Jaxrs jaxrs = new Jaxrs();
     @Data
     public static class Jaxrs {

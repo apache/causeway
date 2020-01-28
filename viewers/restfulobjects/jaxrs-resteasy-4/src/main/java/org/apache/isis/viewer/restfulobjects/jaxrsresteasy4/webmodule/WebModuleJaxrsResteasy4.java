@@ -34,13 +34,14 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.config.RestEasyConfiguration;
+import org.apache.isis.core.webapp.modules.WebModuleAbstract;
+import org.apache.isis.core.webapp.modules.WebModuleContext;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.IsisRestfulObjectsSessionFilter;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.IsisTransactionFilterForRestfulObjects;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategyBasicAuth;
-import org.apache.isis.core.webapp.modules.WebModuleAbstract;
-import org.apache.isis.core.webapp.modules.WebModuleContext;
 
 import lombok.Getter;
+import lombok.val;
 
 /**
  * WebModule that provides the RestfulObjects Viewer.
@@ -100,38 +101,41 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
     @Override
     public Can<ServletContextListener> init(ServletContext ctx) throws ServletException {
 
+        val authenticationSessionStrategyClassName = restEasyConfiguration.getAuthentication().getStrategyClassName()
+                .orElse(AuthenticationSessionStrategyBasicAuth.class.getName());
+        
         registerFilter(ctx, ISIS_SESSION_FILTER_FOR_RESTFUL_OBJECTS, IsisRestfulObjectsSessionFilter.class)
-                .ifPresent(filterReg -> {
-                    // this is mapped to the entire application;
-                    // however the IsisSessionFilter will
-                    // "notice" if the session filter has already been
-                    // executed for the request pipeline, and if so will do nothing
-                    filterReg.addMappingForUrlPatterns(
-                            null,
-                            true,
-                            this.urlPattern);
+        .ifPresent(filterReg -> {
+            // this is mapped to the entire application;
+            // however the IsisSessionFilter will
+            // "notice" if the session filter has already been
+            // executed for the request pipeline, and if so will do nothing
+            filterReg.addMappingForUrlPatterns(
+                    null,
+                    true,
+                    this.urlPattern);
+            
+            filterReg.setInitParameter(
+                    "authenticationSessionStrategy",
+                    authenticationSessionStrategyClassName);
+            filterReg.setInitParameter(
+                    "whenNoSession", // what to do if no session was found ...
+                    "auto"); // ... 401 and a basic authentication challenge if request originates from web browser
+            filterReg.setInitParameter(
+                    "passThru",
+                    String.join(",",
+                            this.restfulPath + "swagger",
+                            this.restfulPath + "health"));
 
-                    filterReg.setInitParameter(
-                            "authenticationSessionStrategy",
-                            AuthenticationSessionStrategyBasicAuth.class.getName());
-                    filterReg.setInitParameter(
-                            "whenNoSession", // what to do if no session was found ...
-                            "auto"); // ... 401 and a basic authentication challenge if request originates from web browser
-                    filterReg.setInitParameter(
-                            "passThru",
-                            String.join(",",
-                                    this.restfulPath + "swagger",
-                                    this.restfulPath + "health"));
-
-                } );
+        } );
 
         registerFilter(ctx, ISIS_TRANSACTION_FILTER, IsisTransactionFilterForRestfulObjects.class)
-            .ifPresent(filterReg -> {
+        .ifPresent(filterReg -> {
                 filterReg.addMappingForUrlPatterns(
                         null,
                         true,
                         this.urlPattern);
-            });
+        });
 
 
         return Can.empty(); // registers no listeners
