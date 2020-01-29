@@ -1,1 +1,0 @@
-* xref:core:detached-tests:about.adoc[Detached Tests]

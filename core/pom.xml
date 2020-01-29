@@ -1853,10 +1853,6 @@
 		<module>../viewers/wicket</module>
 
 		<module>../persistence/jdo</module>
-
-		<!-- to break cyclic dependencies some tests needed to be moved to their 
-			own modules -->
-		<module>detached-tests</module>
 	</modules>
 
 </project>
