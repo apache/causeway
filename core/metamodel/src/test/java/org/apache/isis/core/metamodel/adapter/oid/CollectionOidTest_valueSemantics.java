@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.adapter.oid;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.isis.applib.unittestsupport.ValueTypeContractTestAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.unittestsupport.value.ValueTypeContractTestAbstract;
 
 public class CollectionOidTest_valueSemantics extends ValueTypeContractTestAbstract<ParentedOid> {
 

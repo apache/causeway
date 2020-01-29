@@ -113,7 +113,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     private List<Object> singletons;
 
     //@Override
-    public efereIsisConfigurationLegacy getConfigurationLegacy() {
+    public IsisConfigurationLegacy getConfigurationLegacy() {
         return _Config.getConfiguration();
     }
     
