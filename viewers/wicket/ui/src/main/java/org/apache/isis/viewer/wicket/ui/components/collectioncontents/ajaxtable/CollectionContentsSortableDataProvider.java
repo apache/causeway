@@ -180,8 +180,8 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
         @SuppressWarnings({ "unchecked", "rawtypes" })
         @Override
         public int compare(ManagedObject p, ManagedObject q) {
-            val pPojo = p.getPojo();
-            val qPojo = q.getPojo();
+            val pPojo = ManagedObject.unwrapSingle(p);
+            val qPojo = ManagedObject.unwrapSingle(q);
             if(!(pPojo instanceof Comparable) || !(qPojo instanceof Comparable)) {
                 return 0;
             }
