@@ -20,7 +20,7 @@ class UrlsTest : IntegrationTest() {
 
     //@Test
     fun testUrls() {
-        if (isSimpleAppAvailable()) {
+        if (isAppAvailable()) {
             // given
             val urls = mutableMapOf<String, String>()
             urls.put(FR_OBJECT.url, FR_OBJECT.str)

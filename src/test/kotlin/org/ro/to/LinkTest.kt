@@ -47,7 +47,7 @@ class LinkTest : IntegrationTest() {
             }  """   */
         val href = """"href": "http://localhost:8080/restful/objects/domainapp.application.fixture.scenarios.DomainAppDemo/$fingerPrint""""
         //TODO construct link, invoke and check response
-        if (isSimpleAppAvailable()) {
+        if (isAppAvailable()) {
             val action = ActionHandler().parse(ACTIONS_RUN_FIXTURE_SCRIPT.str) as Action
 
             val link = action.getInvokeLink()

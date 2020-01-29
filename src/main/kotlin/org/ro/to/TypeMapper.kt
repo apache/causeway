@@ -2,25 +2,27 @@ package org.ro.to
 
 import org.ro.core.Utils
 
-class TypeMapper {
+enum class TypeMapperType(val type: String) {
+    BOOLEAN("Boolean"),
+    DATE("Date"),
+    HTML("Html"),
+    NUMERIC("Numeric"),
+    TEXT("Text"),
+    TEXT_AREA("TextArea")
+}
 
-    val BOOLEAN = "Boolean"
-    val DATE = "Date"
-    val HTML = "Html"
-    val NUMERIC = "Numeric"
-    val TEXT = "Text"
-    val TEXT_AREA = "TextArea"
+class TypeMapper {
 
     fun match(member: Member): String {
         val mf = member.format
         val mex = member.extensions?.xIsisFormat
         return when {
-            mf == "int" -> NUMERIC
-            mf == "date" -> DATE
-            mf == "date-time" -> DATE
-            mex == "boolean" -> BOOLEAN
+            mf == "int" -> TypeMapperType.NUMERIC.type
+            mf == "date" -> TypeMapperType.DATE.type
+            mf == "date-time" -> TypeMapperType.DATE.type
+            mex == "boolean" -> TypeMapperType.BOOLEAN.type
             else -> {
-               match(member.value)
+                match(member.value)
             }
         }
     }
@@ -31,10 +33,10 @@ class TypeMapper {
     private fun match(value: Value?): String {
         val contentStr = value?.content.toString()
         return when {
-            ISO_DATE.matches(contentStr) -> DATE
- //           JAVA_LANG_LONG.matches(contentStr) -> NUMERIC
-            Utils.isXml(contentStr) -> HTML
-            else -> TEXT
+            ISO_DATE.matches(contentStr) -> TypeMapperType.DATE.type
+            //           JAVA_LANG_LONG.matches(contentStr) -> NUMERIC
+            Utils.isXml(contentStr) -> TypeMapperType.HTML.type
+            else -> TypeMapperType.TEXT.type
         }
     }
 

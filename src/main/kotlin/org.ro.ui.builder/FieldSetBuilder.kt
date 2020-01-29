@@ -2,6 +2,7 @@ package org.ro.ui.builder
 
 import org.ro.layout.FieldSetLayout
 import org.ro.to.TObject
+import org.ro.to.TypeMapperType
 import org.ro.ui.FormItem
 import org.ro.ui.kv.FormPanelFactory
 import org.ro.ui.kv.RoDisplay
@@ -25,7 +26,7 @@ class FieldSetBuilder {
 
             if (member != null) {
                 if (p.multiLine.asDynamic() != null) {
-                    member.type = "TextArea"
+                    member.type = TypeMapperType.TEXT_AREA.type
                 }
 
                 val fi = FormItem(

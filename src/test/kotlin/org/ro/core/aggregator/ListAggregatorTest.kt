@@ -17,7 +17,7 @@ class ListAggregatorTest : IntegrationTest() {
 
     @Test
     fun testFixtureResult() {
-        if (isSimpleAppAvailable()) {
+        if (isAppAvailable()) {
             // given
             EventStore.reset()
             val obs = ListAggregator("test")
@@ -53,7 +53,7 @@ class ListAggregatorTest : IntegrationTest() {
 
     @Test
     fun testService() {
-        if (isSimpleAppAvailable()) {
+        if (isAppAvailable()) {
             // given
             EventStore.reset()
             val obs = ListAggregator("test")

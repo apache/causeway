@@ -18,7 +18,7 @@ import org.w3c.xhr.XMLHttpRequest
 @UnstableDefault
 open class IntegrationTest {
 
-    fun isSimpleAppAvailable(): Boolean {
+    fun isAppAvailable(): Boolean {
         val user = "sven"
         val pw = "pass"
         val url = "http://${user}:${pw}@localhost:8080/restful/"
