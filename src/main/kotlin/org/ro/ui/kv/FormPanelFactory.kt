@@ -43,8 +43,12 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
     }
 
     private fun createBoolean(fi: FormItem): Component {
-        val item = CheckBox(label = fi.label, value = fi.content as Boolean)
-        return item
+        if (fi.content is Boolean) {
+            val item = CheckBox(label = fi.label, value = fi.content as Boolean)
+            return item
+        } else {
+            return createText(fi)
+        }
     }
 
     private fun createTime(fi: FormItem): DateTime {
@@ -62,7 +66,7 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
     }
 
     private fun createNumeric(fi: FormItem): Spinner {
-        val item = Spinner(label = fi.label, min = 10, max = 20, value = fi.content as Number)
+        val item = Spinner(label = fi.label, value = fi.content as Long)
         return item
     }
 
@@ -72,7 +76,7 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
     }
 
     private fun createText(fi: FormItem): Text {
-        val item = Text(label = fi.label, value = fi.content as String)
+        val item = Text(label = fi.label, value = fi.content.toString())
         item.readonly = fi.member?.isReadOnly()
         item.onEvent {
             change = {

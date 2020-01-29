@@ -1,6 +1,5 @@
 package org.ro.ui.builder
 
-import org.ro.core.Utils
 import org.ro.layout.FieldSetLayout
 import org.ro.to.TObject
 import org.ro.ui.FormItem
@@ -10,53 +9,34 @@ import pl.treksoft.kvision.form.FormPanel
 
 class FieldSetBuilder {
 
-    fun create(fieldSetLayout: FieldSetLayout, tObject: TObject, tab: RoDisplay): FormPanel<String>? {
+    fun create(
+            fieldSetLayout: FieldSetLayout,
+            tObject: TObject,
+            tab: RoDisplay
+    ): FormPanel<String>? {
         val members = tObject.getProperties()
         val items = mutableListOf<FormItem>()
         console.log("[FSB.create] property")
         console.log(fieldSetLayout.property)
         for (p in fieldSetLayout.property) {
             val label = p.id ?: "label not set"
-            var type = "Text"
-            if (p.multiLine.asDynamic() != null) {
-                type = "TextArea"
-            }
-            var content: Any = ""
+
             val member = members.firstOrNull() { it.id == label }
+
             if (member != null) {
-            content = member.value?.content.toString()
-            }
-            //TODO handle numbers, dates, etc. as well
-            if (content is String) {
-                if (content.startsWith("<") && content.endsWith(">")) {
-                type = "Html"
+                if (p.multiLine.asDynamic() != null) {
+                    member.type = "TextArea"
                 }
-            }
-            if (content == "true") {
-                content = true
-                type = "Boolean"
-            }
-            if (content == "false") {
-                content = false
-                type = "Boolean"
-            }
 
-            if (member!!.isDate()) {
-                content = Utils.toDate(content as String)
-               type = "Date"
+                val fi = FormItem(
+                        label = label,
+                        type = member.type!!,
+                        content = member.value?.content,
+                        description = p.describedAs,
+                        member = member,
+                        tab = tab)
+                items.add(fi)
             }
-
-           /* if (member!!.extensions!!.xIsisFormat == "byte") {
-                content = content as Number
-                type = "Numeric"
-            }*/
-
-            val description = p.describedAs
-            val fi = FormItem(label, type, content,
-                    description = description,
-                    member = member,
-                    tab = tab)
-            items.add(fi)
         }
         return FormPanelFactory(items).panel
     }
