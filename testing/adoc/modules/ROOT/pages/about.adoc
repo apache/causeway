@@ -129,16 +129,7 @@ This defines a pattern (command pattern and composite pattern) with supporting c
 
 == Fake data
 
-In any given test there are often quite a few variables involved, to initialize the state of the objects, or to act as arguments for invoking a method, or when asserting on post-conditions.
-Sometimes those values are important (eg verifying that an ``Order``'s state went from PENDING to SHIPPED, say), but often they aren't (a customer's name, for example).
-Nevertheless all this data may need to be set up, especially in integration tests.
-
-We want our tests to be easily understood, and we want the reader's eye to be drawn to the values that are significant and ignore those that are not.
-
-One way to do this is to use random (or fake) values for any insignificant data.
-This in effect tells the reader that "any value will do".
-Moreover, if it turns out that any data won't do, and that there's some behaviour that is sensitive to the value, then the test will start to flicker, passing and then failing depending on inputs.
-This is A Good Thing&#8482;.
+include::testing:fakedata:partial$intro.adoc[]
 
 Apache Isis provides the link:testing:fakedata:about.adoc[Fake Data] library to assist with this.
 

@@ -11,11 +11,11 @@ content:
       start_path: antora/components/toc # toc
       branches: HEAD
 
+# extensions
     - url: .
-      start_path: antora/components/extensions # extensions
+      start_path: extensions/adoc # extensions
       branches: HEAD
 
-# extensions
     - url: .
       start_path: extensions/persistence/jdo/flywayjdo/adoc # extensions
       branches: HEAD
@@ -32,6 +32,9 @@ content:
       branches: HEAD
     - url: .
       start_path: extensions/vw/exceldownload/adoc # vw
+      branches: HEAD
+    - url: .
+      start_path: extensions/vw/fullcalendar/adoc # vw
       branches: HEAD
     - url: .
       start_path: extensions/vw/pdfjs/adoc # vw

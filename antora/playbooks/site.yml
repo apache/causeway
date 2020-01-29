@@ -15,9 +15,6 @@ content:
       start_path: antora/components/core # core
       branches: HEAD
     - url: .
-      start_path: antora/components/extensions # extensions
-      branches: HEAD
-    - url: .
       start_path: antora/components/incubator # incubator
       branches: HEAD
     - url: .
@@ -100,6 +97,10 @@ content:
       branches: HEAD
 
 # extensions
+    - url: .
+      start_path: extensions/adoc # extensions
+      branches: HEAD
+
     - url: .
       start_path: extensions/core/flyway/adoc # userguide
       branches: HEAD
