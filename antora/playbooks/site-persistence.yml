@@ -11,7 +11,7 @@ content:
       start_path: antora/toc # toc
       branches: HEAD
 
-# core
+# persistence
     - url: .
       start_path: persistence/jdo/src/main/adoc # pjdo
       branches: HEAD

@@ -11,11 +11,6 @@ content:
       start_path: antora/toc # toc
       branches: HEAD
 
-# core
-    - url: .
-      start_path: core/viewers/wicket/src/main/adoc # vw
-      branches: HEAD
-
 # extensions
     - url: .
       start_path: extensions/vw/exceldownload/adoc # vw
@@ -25,6 +20,11 @@ content:
       branches: HEAD
     - url: .
       start_path: extensions/vw/pdfjs/adoc # vw
+      branches: HEAD
+
+# viewers
+    - url: .
+      start_path: viewers/wicket/src/main/adoc # vw
       branches: HEAD
 
 

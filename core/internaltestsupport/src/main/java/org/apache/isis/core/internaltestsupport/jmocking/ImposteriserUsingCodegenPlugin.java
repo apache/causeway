@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.unittestsupport.jmocking;
+package org.apache.isis.core.internaltestsupport.jmocking;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;

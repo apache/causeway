@@ -73,8 +73,8 @@ import org.apache.isis.core.runtimeservices.wrapper.dom.employees.EmployeeReposi
 import org.apache.isis.core.runtimeservices.wrapper.dom.employees.EmployeeRepositoryImpl;
 import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.security.authentication.standard.SimpleSession;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import lombok.val;

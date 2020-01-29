@@ -26,8 +26,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 public class RestfulHttpMethodTest_setUp {

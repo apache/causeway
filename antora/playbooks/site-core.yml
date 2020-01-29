@@ -23,7 +23,7 @@ content:
       start_path: core/commons/src/main/adoc # core
       branches: HEAD
     - url: .
-      start_path: core/detached-tests/src/main/adoc # core
+      start_path: core/internaltestsupport/src/main/adoc # core
       branches: HEAD
     - url: .
       start_path: core/metamodel/src/main/adoc # core

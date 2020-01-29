@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.unittestsupport.value;
+package org.apache.isis.core.internaltestsupport.value;
 
 import java.util.List;
 

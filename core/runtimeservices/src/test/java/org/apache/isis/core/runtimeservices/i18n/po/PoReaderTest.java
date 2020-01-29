@@ -36,7 +36,7 @@ import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 
 public class PoReaderTest {
 

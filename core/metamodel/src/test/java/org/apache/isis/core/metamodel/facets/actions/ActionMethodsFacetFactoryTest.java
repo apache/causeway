@@ -53,7 +53,7 @@ import org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionPara
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.testspec.ObjectSpecificationStub;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 
 import lombok.val;
 

@@ -40,13 +40,10 @@ content:
       start_path: core/config/src/main/adoc # refguide
       branches: HEAD
     - url: .
-      start_path: core/detached-tests/src/main/adoc # core
+      start_path: core/internaltestsupport/src/main/adoc # core
       branches: HEAD
     - url: .
       start_path: core/metamodel/src/main/adoc # core
-      branches: HEAD
-    - url: .
-      start_path: persistence/jdo/src/main/adoc # pjdo
       branches: HEAD
     - url: .
       start_path: core/runtime/src/main/adoc # core
@@ -59,15 +56,6 @@ content:
       branches: HEAD
     - url: .
       start_path: core/security/src/main/adoc # security
-      branches: HEAD
-    - url: .
-      start_path: core/unittestsupport/src/main/adoc # testing
-      branches: HEAD
-    - url: .
-      start_path: viewers/restfulobjects/adoc # vro
-      branches: HEAD
-    - url: .
-      start_path: viewers/wicket/adoc # vw
       branches: HEAD
 
 # examples
@@ -160,6 +148,11 @@ content:
       start_path: mavendeps/adoc # starters
       branches: HEAD
 
+# persistence
+    - url: .
+      start_path: persistence/jdo/src/main/adoc # pjdo
+      branches: HEAD
+
 # security
     - url: .
       start_path: security/adoc # security
@@ -249,6 +242,14 @@ content:
       branches: HEAD
     - url: .
       start_path: valuetypes/sse/adoc # valuetypes
+      branches: HEAD
+
+# viewers
+    - url: .
+      start_path: viewers/restfulobjects/adoc # vro
+      branches: HEAD
+    - url: .
+      start_path: viewers/wicket/adoc # vw
       branches: HEAD
 
 ui:

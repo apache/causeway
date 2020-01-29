@@ -31,7 +31,7 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 
 public class IsisRestfulObjectsSessionFilter_lookupPassThru_Test {
 

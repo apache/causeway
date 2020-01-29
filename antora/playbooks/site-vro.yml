@@ -11,17 +11,14 @@ content:
       start_path: antora/toc # toc
       branches: HEAD
 
-# core
-    - url: .
-      start_path: viewers/restfulobjects/jaxrs-resteasy-4/src/main/adoc # vro
-      branches: HEAD
-    - url: .
-      start_path: viewers/restfulobjects/src/main/adoc # vro
-      branches: HEAD
-
 # extensions
     - url: .
       start_path: extensions/vro/cors/adoc # vro
+      branches: HEAD
+
+# viewers
+    - url: .
+      start_path: viewers/restfulobjects/src/main/adoc # vro
       branches: HEAD
 
 

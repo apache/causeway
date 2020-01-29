@@ -41,8 +41,8 @@ import org.apache.isis.core.security.authentication.AuthenticationRequestPasswor
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.security.shiro.authentication.AuthenticatorShiro;
 import org.apache.isis.security.shiro.authorization.AuthorizorShiro;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 import lombok.val;
 

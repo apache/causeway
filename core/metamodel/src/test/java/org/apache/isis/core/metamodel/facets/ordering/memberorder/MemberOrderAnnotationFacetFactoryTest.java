@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetAnnotation;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetFactory;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 
 public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 

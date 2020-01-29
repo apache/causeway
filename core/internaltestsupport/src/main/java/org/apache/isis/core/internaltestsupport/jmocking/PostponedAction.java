@@ -16,19 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.unittestsupport.jmocking;
+package org.apache.isis.core.internaltestsupport.jmocking;
 
-import org.jmock.api.Imposteriser;
+import java.util.function.Supplier;
 
-public final class Imposterisers {
+import org.hamcrest.Description;
+import org.jmock.api.Action;
+import org.jmock.api.Invocation;
 
-    private Imposterisers() {}
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
-    /**
-     * @return framework's default Imposteriser instance
-     */
-    public static Imposteriser getDefault() {
-        return ImposteriserUsingCodegenPlugin.INSTANCE;
+@RequiredArgsConstructor(staticName = "returnValuePostponed")
+public class PostponedAction implements Action {
+    
+    @NonNull private Supplier<Object> resultSupplier;
+
+    public Object invoke(Invocation invocation) throws Throwable {
+        return resultSupplier.get();
     }
+
+    public void describeTo(Description description) {
+        description.appendText("returns ");
+        description.appendValue(resultSupplier.get());
+    }
+    
+    
 
 }

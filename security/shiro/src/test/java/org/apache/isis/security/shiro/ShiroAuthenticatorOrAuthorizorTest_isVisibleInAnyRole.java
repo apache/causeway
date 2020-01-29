@@ -24,7 +24,6 @@ import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.Factory;
 import org.apache.shiro.util.ThreadContext;
-import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -39,8 +38,8 @@ import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.security.shiro.authentication.AuthenticatorShiro;
 import org.apache.isis.security.shiro.authorization.AuthorizorShiro;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 import lombok.val;
 

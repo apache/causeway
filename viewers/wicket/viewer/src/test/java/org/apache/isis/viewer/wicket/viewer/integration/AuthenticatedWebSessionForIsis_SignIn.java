@@ -41,7 +41,7 @@ import org.apache.isis.core.security.authentication.AuthenticationRequestPasswor
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authentication.standard.Authenticator;
 import org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 public class AuthenticatedWebSessionForIsis_SignIn {
