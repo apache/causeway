@@ -23,6 +23,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import org.apache.isis.core.config.unittestsupport.internal._Config;
 import org.apache.isis.legacy.applib.value.Percentage;
@@ -72,7 +73,7 @@ public class PercentageValueSemanticsProviderTest extends ValueSemanticsProvider
     @Test
     public void testParseTextEntryWithBlank() {
         final Percentage parsed = adapter.parseTextEntry(percentage, "");
-        assertEquals(null, parsed);
+        assertNull(parsed);
     }
 
     @Test
