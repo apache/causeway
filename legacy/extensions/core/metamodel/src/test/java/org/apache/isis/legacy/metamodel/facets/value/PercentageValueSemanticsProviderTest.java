@@ -24,13 +24,13 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+import org.apache.isis.core.config.unittestsupport.internal._Config;
 import org.apache.isis.legacy.applib.value.Percentage;
 import org.apache.isis.legacy.metamodel.facets.value.percentage.PercentageValueSemanticsProvider;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstractTestCase;
-import org.apache.isis.core.unittestsupport.config._Config;
 
 public class PercentageValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
     private PercentageValueSemanticsProvider adapter;

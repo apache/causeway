@@ -22,7 +22,6 @@ import java.util.HashMap;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.HttpHeaders;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -34,7 +33,6 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.url.UrlDecoderUtil;
 import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
@@ -42,9 +40,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.core.runtime.session.IsisSession;
-import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.unittestsupport.config.IsisConfigurationLegacy;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
