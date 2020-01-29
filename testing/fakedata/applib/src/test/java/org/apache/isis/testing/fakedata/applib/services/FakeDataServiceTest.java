@@ -28,7 +28,7 @@ import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Sets;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.testing.unittestsupport.applib.core.jmocking.JUnitRuleMockery2;
 
 public class FakeDataServiceTest {
 

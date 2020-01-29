@@ -29,7 +29,7 @@ import java.util.TreeSet;
 import org.junit.Test;
 
 import org.apache.isis.core.commons.internal._Constants;
-import org.apache.isis.core.unittestsupport.utils.IndentPrinter;
+import org.apache.isis.testing.unittestsupport.applib.core.utils.IndentPrinter;
 
 /**
  * Provides some basic infrastructure to iterate over all entity types and

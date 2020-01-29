@@ -78,8 +78,8 @@
             <scope>test</scope>
             <exclusions>
                 <exclusion>
-                    <groupId>org.apache.isis.core</groupId>
-                    <artifactId>isis-core-unittestsupport</artifactId>
+                    <groupId>org.apache.isis.testing</groupId>
+                    <artifactId>isis-testing-unittestsupport-applib</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>org.junit.vintage</groupId>

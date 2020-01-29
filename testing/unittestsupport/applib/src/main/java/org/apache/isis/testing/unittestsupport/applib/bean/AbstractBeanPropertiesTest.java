@@ -4,7 +4,7 @@ import org.jmock.auto.Mock;
 import org.junit.Rule;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.testing.unittestsupport.applib.core.jmocking.JUnitRuleMockery2;
 
 public abstract class AbstractBeanPropertiesTest {
 

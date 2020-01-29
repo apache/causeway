@@ -27,7 +27,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.apache.isis.core.commons.internal.reflection._Reflect;
-import org.apache.isis.core.unittestsupport.AbstractApplyToAllContractTest;
+import org.apache.isis.testing.unittestsupport.applib.core.AbstractApplyToAllContractTest;
 
 import static org.apache.isis.core.commons.internal.collections._Collections.toHashSet;
 import static org.apache.isis.core.commons.internal.reflection._Reflect.withTypeAssignableTo;

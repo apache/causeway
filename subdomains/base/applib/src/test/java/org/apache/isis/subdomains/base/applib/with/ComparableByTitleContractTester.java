@@ -8,7 +8,8 @@ import com.google.common.collect.Lists;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.core.unittestsupport.comparable.ComparableContractTester;
+import org.apache.isis.testing.unittestsupport.applib.core.comparable.ComparableContractTester;
+
 
 public class ComparableByTitleContractTester<T extends WithTitleComparable<T>> {
     protected final Class<T> cls;

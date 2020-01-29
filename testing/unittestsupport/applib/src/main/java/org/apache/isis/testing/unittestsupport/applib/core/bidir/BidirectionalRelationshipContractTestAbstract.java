@@ -35,17 +35,18 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.core.unittestsupport.AbstractApplyToAllContractTest;
-import org.apache.isis.core.unittestsupport.utils.CollectUtils;
-import org.apache.isis.core.unittestsupport.utils.ReflectUtils;
-import org.apache.isis.core.unittestsupport.utils.StringUtils;
+
+import org.apache.isis.testing.unittestsupport.applib.core.AbstractApplyToAllContractTest;
+import org.apache.isis.testing.unittestsupport.applib.core.utils.CollectUtils;
+import org.apache.isis.testing.unittestsupport.applib.core.utils.ReflectUtils;
+import org.apache.isis.testing.unittestsupport.applib.core.utils.StringUtils;
 
 import static org.apache.isis.core.commons.internal.collections._Collections.toHashSet;
 import static org.apache.isis.core.commons.internal.reflection._Reflect.streamAllFields;
 import static org.apache.isis.core.commons.internal.reflection._Reflect.streamAllMethods;
 import static org.apache.isis.core.commons.internal.reflection._Reflect.withMethodParametersCount;
 import static org.apache.isis.core.commons.internal.reflection._Reflect.withName;
-import static org.apache.isis.core.unittestsupport.utils.ReflectUtils.withParametersAssignableFrom;
+import static org.apache.isis.testing.unittestsupport.applib.core.utils.ReflectUtils.withParametersAssignableFrom;
 
 /**
  * <p>
