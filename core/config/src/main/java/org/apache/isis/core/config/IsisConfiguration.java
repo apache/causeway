@@ -148,7 +148,7 @@ public class IsisConfiguration {
                  * This setting can be overridden on a case-by-case basis using {@link DomainObject#getEditing()  DomainObject#getEditing()}
                  * </p>
                  */
-                private EditingObjectsConfiguration editing = EditingObjectsConfiguration.TRUE;
+                private EditingObjectsConfiguration editing = EditingObjectsConfiguration.FALSE;
 
                 /**
                  * The default for whether the identities of changed objects should be sent through to the
