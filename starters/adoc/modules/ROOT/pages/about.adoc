@@ -8,28 +8,25 @@ To get started with a new application, download one of the two starter apps.
 
 The helloworld app is a very minimal app, intended just as a starting point to learn what the framework is all about.
 
+The source code is in this link:https://github.com/apache/isis-app-helloworld[git repo] which you can either fork, or just download as a zip:
+
 include::starters:helloworld:page$script.adoc[]
 
 
-Notes:
-
-* you can find an explanation of how to use the app, and of its structure xref:starters:helloworld:about.adoc[here]
-* the source code can be found in this link:https://github.com/apache/isis-app-helloworld[git repo]
-
+An explanation of the structure of the app can be found *xref:starters:helloworld:about.adoc[here]*.
 
 
 == Simple App
 
 This app has the same functionality as _HelloWorld_, but is structured so it can be used as a starting point for developing your own applications.
+It also includes some xref:testing:integtestsupport:about.adoc[integration tests], xref:testing:fixtures:about.adoc[fixtures], and xref:testing:specsupport:about.adoc[BDD (Cucumber)] specs.
+
+The source code can be found in this link:https://github.com/apache/isis-app-simpleapp[git repo] which you can either fork, or just download as a zip:
 
 include::starters:simpleapp:page$script.adoc[]
 
-It also includes some xref:testing:integtestsupport:about.adoc[integration tests], xref:testing:fixtures:about.adoc[fixtures], and xref:testing:specsupport:about.adoc[BDD (Cucumber)] specs.
 
-Notes:
-
-* you can find an explanation of how to use the app, and of its structure xref:starters:simpleapp:about.adoc[here]
-* the source code can be found in this link:https://github.com/apache/isis-app-simpleapp[git repo]
+An explanation of the structure of the app can be found *xref:starters:helloworld:about.adoc[here]*.
 
 
 == Updating to Newer Versions

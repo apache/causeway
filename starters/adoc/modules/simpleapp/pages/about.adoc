@@ -272,6 +272,8 @@ The REST API implemented by Apache Isis is specified in the link:http://www.rest
 
 The simpleapp starter app is a multi-module project, structured so that you easily extend it as your application grows.
 
+=== Application Modules
+
 The application consists of three modules, with a top-level module acting as an aggregator, the `module-simple` module that contains the business logic, and `webapp` module that acts as a bootstrapper.
 
 [plantuml]
@@ -306,6 +308,26 @@ For example, you might have a `module-customer` holding a `Customer` entity and 
 
 We can use Maven dependency management to ensure that there are no cyclic dependencies (order "knows about" product but product does not know about orders) and ensure that the codebase remains decoupled.
 When Java9 modules are commonplace, we'll also be able to restrict visibility of classes between modules.
+
+=== Bootstrapping & Framework Modules
+
+One of the main responsibilities of Spring Boot is - naturally enough - to bootstrap the application.
+For the webapp, this is done using a class annotated with link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/autoconfigure/SpringBootApplication.html[@SpringBootApplication].
+For integration tests, this uses the link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/test/context/SpringBootTest.html[@SpringBootTest] annotation.
+
+These two different annotations reference a (class annotated with) link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration], which in turn can link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html[@Import] other annotations.
+
+By convention, the top-level `@Configuration` in an Apache Isis application is called the "app manifest".
+This references not only the application-level modules (described xref:about.adoc#application-modules[above]), but also the framework's modules.
+There will be several of these app manifests, typically one for the webapp itself, and one for integration testing each module.
+
+The link:{attachmentsdir}/simpleapp-modules-dependencies.pptx[diagram] below shows how classes fit together:
+
+.Module Dependencies
+image::simpleapp-modules-dependencies.png/[width="600px",link="{imagesdir}/simpleapp-modules-dependencies.png/"]
+
+
+
 
 Let's now review the contents of each of the modules in the simpleapp starter app.
 
