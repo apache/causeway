@@ -115,7 +115,8 @@ public interface FactoryService {
      * with injection points resolved
      * and defaults applied.
      * @param domainClass - not applicable to IoC container managed types
-     * @throws IllegalArgumentException if domainClass is not an IoC container managed type
+     * @throws IllegalArgumentException if domainClass is an IoC container managed type, 
+     *      or not recognized by the meta-model
      * @apiNote forces the domainClass to be added to the meta-model if not already
      * @since 2.0
      */
@@ -151,7 +152,8 @@ public interface FactoryService {
      * method.
      * </p>
      * @deprecated with semantic changes since 2.0 previous behavior is no longer guaranteed, 
-     * instead consider use of {@link #getOrCreate(Class)} if applicable
+     * instead consider use of @{@link #detachedEntity(Class)} or {@link #getOrCreate(Class)} 
+     * if applicable
      */
     @Deprecated
     default <T> T instantiate(Class<T> domainClass) {

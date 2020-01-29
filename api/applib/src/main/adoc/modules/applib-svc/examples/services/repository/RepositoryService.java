@@ -23,41 +23,29 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.query.Query;
+
+import lombok.val;
 
 public interface RepositoryService {
 
+    /**
+     * Returns the EntityState of given {@code object}. Returns {@link EntityState#not_Persistable} for {@code object==null}.
+     * @param object
+     * @return (non-null)
+     * @since 2.0
+     */
+    EntityState getEntityState(@Nullable Object object);
+    
     /**
      * Same as {@link org.apache.isis.applib.services.factory.FactoryService#detachedEntity(Class)}; provided as a
      * convenience because instantiating and {@link #persist(Object) persisting} are often done together.
      * @since 2.0
      */
-    <T> T detachedEntity(final Class<T> ofType);
+    <T> T detachedEntity(Class<T> ofType);
         
-    /**
-     * @deprecated if applicable use {@link #detachedEntity(Class)} instead 
-     */
-    @Deprecated
-    default <T> T instantiate(final Class<T> ofType) {
-        return detachedEntity(ofType);
-    }
-
-    /**
-     * Determines if the specified object is persistent (that it is stored permanently outside of the virtual machine
-     * in the object store).
-     *
-     * <p>
-     *     This method can also return <code>true</code> if the object has been {@link #isDeleted(Object) deleted}
-     *     from the object store.
-     * </p>
-     */
-    boolean isPersistent(Object domainObject);
-
-    /**
-     * Determines if the specified object has been deleted from the object store.
-     */
-    boolean isDeleted(Object domainObject);
-
     /**
      * Persist the specified object (or do nothing if already persistent).
      *
@@ -73,7 +61,7 @@ public interface RepositoryService {
     <T> T persistAndFlush(T domainObject);
 
     /**
-     * Deletes the domain object but only if is persistent.
+     * Deletes the domain object but only if is attached.
      *
      * @param domainObject
      */
@@ -122,7 +110,7 @@ public interface RepositoryService {
      * As {@link #allMatches(Class, Predicate, long, long)}, but returning all instances rather than just those
      * within the specified range.
      */
-    <T> List<T> allMatches(final Class<T> ofType, final Predicate<? super T> predicate);
+    <T> List<T> allMatches(Class<T> ofType, Predicate<? super T> predicate);
 
     /**
      * Returns all the instances of the specified type (including subtypes) that
@@ -150,7 +138,7 @@ public interface RepositoryService {
      * @param <T>
      * @return
      */
-    <T> List<T> allMatches(final Class<T> ofType, final Predicate<? super T> predicate, long start, long count);
+    <T> List<T> allMatches(Class<T> ofType, Predicate<? super T> predicate, long start, long count);
 
     /**
      * Returns all the instances that match the given {@link Query}.
@@ -182,7 +170,7 @@ public interface RepositoryService {
      * instances.  Use {@link #uniqueMatch(Query)} for production code.
      * </p>
      */
-    <T> Optional<T> uniqueMatch(final Class<T> ofType, final Predicate<T> predicate);
+    <T> Optional<T> uniqueMatch(Class<T> ofType, Predicate<T> predicate);
 
     /**
      * Find the only instance that matches the provided query.
@@ -214,7 +202,7 @@ public interface RepositoryService {
      * instances.  Use {@link #firstMatch(Query)} for production code.
      * </p>
      */
-    <T> Optional<T> firstMatch(final Class<T> ofType, final Predicate<T> predicate);
+    <T> Optional<T> firstMatch(Class<T> ofType, Predicate<T> predicate);
 
     /**
      * Find the only instance that matches the provided query, if any..
@@ -228,5 +216,40 @@ public interface RepositoryService {
      */
     <T> Optional<T> firstMatch(Query<T> query);
 
+    // -- DEPRECATIONS
 
+    /**
+     * @deprecated if applicable use {@link #detachedEntity(Class)} instead 
+     */
+    @Deprecated
+    default <T> T instantiate(Class<T> ofType) {
+        return detachedEntity(ofType);
+    }
+
+    /**
+     * Determines if the specified object is persistent (that it is stored permanently outside of the virtual machine
+     * in the object store).
+     *
+     * <p>
+     *     This method can also return <code>true</code> if the object has been {@link #isDeleted(Object) deleted}
+     *     from the object store.
+     * </p>
+     * @deprecated due to ambiguous semantic, use {@link #getEntityState(Object)} instead
+     */
+    @Deprecated
+    default boolean isPersistent(Object domainObject) {
+        val entityState = getEntityState(domainObject);
+        return entityState.isAttached() || entityState.isDestroyed();
+    }
+
+    /**
+     * Determines if the specified object has been deleted from the object store.
+     * @deprecated due to ambiguous semantic, use {@link #getEntityState(Object)} instead
+     */
+    @Deprecated
+    default boolean isDeleted(Object domainObject) {
+        val entityState = getEntityState(domainObject);
+        return entityState.isDestroyed();
+    }
+    
 }

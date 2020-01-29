@@ -16,26 +16,38 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-package org.apache.isis.applib.annotation;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package org.apache.isis.applib.services.repository;
 
 /**
- * Annotated on a view model to indicate that it should be used as the home page.
- *
- * <p>
- *     The view model is instantiated through a no-arg constructor, so must in effect be stateless.
- *     Typically it will use injected repositories in order to display a dashboard, and offer actions
- *     to traverse or operate on the rendered state.
- * </p>
+ * TODO lower case enums not up to standard, is this an issue?
+ * 
+ * @apiNote use the provided predicates rather then directly referencing the enum names
+ *  
+ * @since 2.0
  */
-@Inherited
-@Target({ ElementType.TYPE })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface HomePage {
+public enum EntityState {
+
+    not_Persistable,
+    persistable_Attached,
+    persistable_Detached, 
+    persistable_Destroyed
+
+    ;
+
+    public boolean isPersistable() {
+        return this != not_Persistable;
+    }
+
+    public boolean isAttached() {
+        return this == persistable_Attached;
+    }
+
+    public boolean isDetached() {
+        return this == persistable_Detached;
+    }
+
+    public boolean isDestroyed() {
+        return this == persistable_Destroyed;
+    }
+
 }

@@ -40,7 +40,7 @@ application.css
 | 
 | URL of file to read any custom CSS, relative to `static` package on the class path.
 
-A typical value is `css/application.css`. This will result in this file being read from the `static.css` package (because static resources such as CSS are mounted by Spring by default under `static` package).
+A typical value is `css/application.css`. This will result in this file being read from the `static/css` directory (because static resources such as CSS are mounted by Spring by default under `static` package).
 
 
 | isis.viewer.wicket. +
@@ -63,7 +63,7 @@ application.js
 | 
 | URL of file to read any custom Javascript, relative to `static` package on the class path.
 
-A typical value is `css/application.js`. This will result in this file being read from the `static.js` package (because static resources such as CSS are mounted by Spring by default under `static` package).
+A typical value is `js/application.js`. This will result in this file being read from the `static/js` directory (because static resources such as CSS are mounted by Spring by default under `static` package).
 
 
 | isis.viewer.wicket. +

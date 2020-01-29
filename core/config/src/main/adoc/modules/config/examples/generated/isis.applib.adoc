@@ -66,7 +66,7 @@ default-view
 | 
 | Defines the initial view to display collections when rendered.
 
-The value of this can be overridden on a case-by-case basis using ``org.apache.isis.applib.annotation.CollectionLayout#defaultView()``. Note that this default configuration property is an enum and so defines only a fixed number of values, whereas the annotation returns a string; this is to allow for flexibility that individual viewers might support their own additional types. For example, the Wicket viewer supports which can render objects that have a date on top of a calendar view.
+The value of this can be overridden on a case-by-case basis using ``org.apache.isis.applib.annotation.CollectionLayout#defaultView()``. Note that this default configuration property is an enum and so defines only a fixed number of values, whereas the annotation returns a string; this is to allow for flexibility that individual viewers might support their own additional types. For example, the Wicket viewer supports
 
 
 | isis.applib.annotation. +

@@ -2,34 +2,34 @@
 jdo-datanucleus.impl. +
 datanucleus. +
 ConnectionFactory2Name
-|
-|
+| 
+| 
 
 | isis.persistence. +
 jdo-datanucleus.impl. +
 datanucleus. +
 ConnectionFactoryName
-|
-|
+| 
+| 
 
 | isis.persistence. +
 jdo-datanucleus.impl. +
 datanucleus. +
 ConnectionPasswordDecrypter
-|
-|
+| 
+| 
 
 | isis.persistence. +
 jdo-datanucleus.impl. +
 datanucleus. +
 PersistenceUnitLoadClasses
-|
-|
+| 
+| 
 
 | isis.persistence. +
 jdo-datanucleus.impl. +
 datanucleus.cache.level2.mode
-|
+| 
 | Values of javax.persistence.SharedCacheMode, capitalized
 
 
@@ -50,7 +50,7 @@ NOTE: this config property isn't used by the framework, but is provided as a con
 jdo-datanucleus.impl. +
 datanucleus. +
 connection-factory-name
-|
+| 
 | The JNDI name for a connection factory for transactional connections.
 
 For RBDMS, it must be a JNDI name that points to a javax.sql.DataSource object.
@@ -64,7 +64,7 @@ NOTE: this config property isn't used by the framework, but is provided as a con
 jdo-datanucleus.impl. +
 datanucleus. +
 connection-factory2-name
-|
+| 
 | The JNDI name for a connection factory for non-transactional connections.
 
 For RBDMS, it must be a JNDI name that points to a javax.sql.DataSource object.
@@ -78,7 +78,7 @@ NOTE: this config property isn't used by the framework, but is provided as a con
 jdo-datanucleus.impl. +
 datanucleus. +
 connection-password-decrypter
-|
+| 
 | Name of a class that implements `org.datanucleus.store.connection.DecryptionProvider` and should only be specified if the password is encrypted in the persistence properties.
 
 See also `additional-spring-configuration-metadata.json` (camelCasing instead of kebab-casing).
@@ -89,8 +89,8 @@ NOTE: this config property isn't used by the framework, but is provided as a con
 | isis.persistence. +
 jdo-datanucleus.impl. +
 datanucleus.identifier.case
-|
-|
+| 
+| 
 
 | isis.persistence. +
 jdo-datanucleus.impl. +
@@ -108,8 +108,8 @@ See also `additional-spring-configuration-metadata.json` (camelCasing instead of
 jdo-datanucleus.impl. +
 datanucleus.objectProvider. +
 className
-|
-|
+| 
+| 
 
 | isis.persistence. +
 jdo-datanucleus.impl. +
@@ -130,14 +130,14 @@ jdo-datanucleus.impl. +
 datanucleus. +
 persistenceByReachabilityAtCom +
 mit
-|
-|
+| 
+| 
 
 | isis.persistence. +
 jdo-datanucleus.impl. +
 datanucleus.schema. +
 auto-create-all
-|
+| 
 | Whether DN should automatically create the database schema on bootstrapping.
 
 This should be set to `true` when running against an in-memory database, but set to `false` when running against a persistent database (use something like flyway instead to manage schema evolution).
@@ -151,7 +151,7 @@ NOTE: this config property isn't used by the core framework, but is used by one 
 jdo-datanucleus.impl. +
 datanucleus.schema. +
 auto-create-database
-|
+| 
 | Previously we defaulted this property to "true", but that could cause the target database to be modified
 
 See also `additional-spring-configuration-metadata.json` (camelCasing instead of kebab-casing).
@@ -163,15 +163,15 @@ NOTE: this config property isn't used by the framework, but is provided as a con
 jdo-datanucleus.impl. +
 datanucleus.schema. +
 autoCreateAll
-|
-|
+| 
+| 
 
 | isis.persistence. +
 jdo-datanucleus.impl. +
 datanucleus.schema. +
 autoCreateDatabase
-|
-|
+| 
+| 
 
 | isis.persistence. +
 jdo-datanucleus.impl. +
@@ -187,27 +187,27 @@ NOTE: this config property isn't used by the framework, but is provided as a con
 jdo-datanucleus.impl. +
 datanucleus.schema. +
 validateAll
-|
-|
+| 
+| 
 
 | isis.persistence. +
 jdo-datanucleus.impl. +
 datanucleus.schema. +
 validateConstraints
-|
-|
+| 
+| 
 
 | isis.persistence. +
 jdo-datanucleus.impl. +
 datanucleus.schema. +
 validateTables
-|
-|
+| 
+| 
 
 | isis.persistence. +
 jdo-datanucleus.impl. +
 datanucleus.transaction-type
-|
+| 
 | Type of transaction to use.
 
 If running under JavaSE the default is RESOURCE_LOCAL, and if running under JavaEE the default is JTA.
@@ -222,39 +222,39 @@ jdo-datanucleus.impl.javax. +
 jdo. +
 PersistenceManagerFactoryClass +
 
-|
-|
+| 
+| 
 
 | isis.persistence. +
 jdo-datanucleus.impl.javax. +
 jdo.option. +
 ConnectionDriverName
-|
-|
+| 
+| 
 
 | isis.persistence. +
 jdo-datanucleus.impl.javax. +
 jdo.option.ConnectionPassword
-|
-|
+| 
+| 
 
 | isis.persistence. +
 jdo-datanucleus.impl.javax. +
 jdo.option.ConnectionURL
-|
-|
+| 
+| 
 
 | isis.persistence. +
 jdo-datanucleus.impl.javax. +
 jdo.option.ConnectionUserName
-|
-|
+| 
+| 
 
 | isis.persistence. +
 jdo-datanucleus.impl.javax. +
 jdo.option. +
 connection-driver-name
-|
+| 
 | JDBC driver used by JDO/DataNucleus object store to connect.
 
 See also `additional-spring-configuration-metadata.json` (PascalCasing instead of kebab-casing).
@@ -266,7 +266,7 @@ NOTE: this config property isn't used by the framework, but provided as a conven
 jdo-datanucleus.impl.javax. +
 jdo.option. +
 connection-password
-|
+| 
 | Password for the user account used by JDO/DataNucleus object store to connect.
 
 See also `additional-spring-configuration-metadata.json` (PascalCasing instead of kebab-casing).
@@ -277,7 +277,7 @@ NOTE: this config property isn't used by the framework, but provided as a conven
 | isis.persistence. +
 jdo-datanucleus.impl.javax. +
 jdo.option.connection-url
-|
+| 
 | URL used by JDO/DataNucleus object store to connect.
 
 See also `additional-spring-configuration-metadata.json` (PascalCasing instead of kebab-casing).
@@ -289,7 +289,7 @@ NOTE: some extensions (H2Console, MsqlDbManager) peek at this URL to determine i
 jdo-datanucleus.impl.javax. +
 jdo.option. +
 connection-user-name
-|
+| 
 | User account used by JDO/DataNucleus object store to connect.
 
 See also `additional-spring-configuration-metadata.json` (PascalCasing instead of kebab-casing).
