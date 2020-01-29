@@ -68,7 +68,7 @@ import org.springframework.context.event.EventListener;
 public class SomeSubscriber extends AbstractSubscriber {
     @EventListener(ActionDomainEvent.class)
     public void on(ActionDomainEvent ev) {
-        // ...
+        ...
     }
 }
 ----
@@ -83,7 +83,7 @@ import org.springframework.context.event.EventListener;
 public class SomeSubscriber extends AbstractSubscriber {
     @EventListener(ToDoItem.CompletedEvent.class)
     public void on(ToDoItem.CompletedEvent ev) {
-        // ...
+        ...
     }
 }
 ----

@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
-import org.apache.isis.testing.fixtures.applib.legacy.FixtureClock;
+import org.apache.isis.testing.fixtures.applib.clock.FixtureClock;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 
 @Service

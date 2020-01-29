@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.fixtures.applib.legacy.setup;
+package org.apache.isis.testing.fixtures.applib.setup;
 
 import java.util.List;
 

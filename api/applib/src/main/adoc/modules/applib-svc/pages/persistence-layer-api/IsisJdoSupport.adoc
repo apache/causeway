@@ -252,7 +252,7 @@ If you require more flexibility than this, eg for dynamically constructed querie
 public interface IsisJdoSupport {
     @Programmatic
     PersistenceManager getJdoPersistenceManager();
-    // ...
+    ...
 }
 ----
 
@@ -265,7 +265,7 @@ public class Orders {
     public List<Order> findOrders( /* ... */ ) {
         javax.jdo.PersistenceManager pm = isisJdoSupport.getPersistenceManager();
 
-        // ...
+        ...
 
         return someListOfOrders;
     }

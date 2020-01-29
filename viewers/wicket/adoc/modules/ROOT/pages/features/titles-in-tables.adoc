@@ -63,7 +63,7 @@ public class Order {
     @Title(sequence="1")
     @PropertyLayout(hidden=Where.REFERENCES_PARENT)
     public Customer getCustomer() { /* ... */ }
-    // ...
+    ...
 }
 ----
 

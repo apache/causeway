@@ -2,22 +2,596 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-As discussed in the introductory overview of this chapter, Apache Isis allows you to integration test your domain objects from within JUnit.  There are several parts to this:
+Apache Isis builds on top of Spring Boot's integration testing support, in particular using link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/test/context/SpringBootTest.html[@SpringBootTest].
+This configures and bootstraps the Apache Isis runtime, usually running against an in-memory database.
 
-* configuring the Apache Isis runtime so it can be bootstrapped (mostly boilerplate)
-* defining a base class to perform said bootstrapping
-* using fixture scripts to set up the app
-* using `WrapperFactory` so that the UI can be simulated.
+On top of that, we usually:
 
-We'll get to all that shortly, but let's start by taking a look at what a typical integration test looks like.
+* use xref:testing:fixtures:about.adoc[fixture scripts] to set up the app's initial state
+* use the xref:refguide:applib-svc:application-layer-api/WrapperFactory.adoc[WrapperFactory] to simulate the UI.
 
-
-
+To explain further, let's walk through of the xref:starters:simpleapp:about.adoc[SimpleApp] starter app.
 
 
-include::typical-usage.adoc[leveloffset=+1]
-include::bootstrapping.adoc[leveloffset=+1]
-include::abstract-class.adoc[leveloffset=+1]
-include::configuration-properties.adoc[leveloffset=+1]
-include::wrapper-factory.adoc[leveloffset=+1]
-include::maven-configuration.adoc[leveloffset=+1]
+== Bootstrapping
+
+We typically put the bootstrapping of Apache Isis into a superclass, one for each Maven module.
+This allows an individual "slice" of the application to be tested, rather than as a monolith.
+
+So, for the `module-simple` module, we have:
+
+[source,java]
+.SimpleModuleIntegTestAbstract.java
+----
+@SpringBootTest(
+        classes = SimpleModuleIntegTestAbstract.AppManifest.class
+)
+@TestPropertySource({
+        IsisPresets.H2InMemory_withUniqueSchema,
+        IsisPresets.DataNucleusAutoCreate,
+        IsisPresets.UseLog4j2Test,
+})
+public abstract class SimpleModuleIntegTestAbstract extends IsisIntegrationTestAbstractWithFixtures {
+
+    @Configuration
+    @Import({
+        IsisModuleCoreRuntimeServices.class,
+        IsisModuleSecurityBypass.class,
+        IsisModuleJdoDataNucleus5.class,
+        IsisModuleTestingFixturesApplib.class,
+        SimpleModule.class                      //<1>
+    })
+    public static class AppManifest {
+    }
+}
+----
+<1> references just the `SimpleModule`
+
+while in the `webapp` module we have:
+
+[source,java]
+.ApplicationIntegTestAbstract.java
+----
+@SpringBootTest(
+        classes = ApplicationIntegTestAbstract.AppManifest.class
+)
+@TestPropertySource({
+        IsisPresets.H2InMemory_withUniqueSchema,
+        IsisPresets.DataNucleusAutoCreate,
+        IsisPresets.UseLog4j2Test,
+})
+@ContextConfiguration
+public abstract class ApplicationIntegTestAbstract extends IsisIntegrationTestAbstract {
+
+    @Configuration
+    @Import({
+        IsisModuleCoreRuntimeServices.class,
+        IsisModuleJdoDataNucleus5.class,
+        IsisModuleSecurityBypass.class,
+        IsisModuleTestingFixturesApplib.class,
+        ApplicationModule.class                 //<1>
+    })
+    public static class AppManifest {
+    }
+}
+----
+<1> references the top-level `ApplicationModule`
+
+You can see that these are very similar, what's different is the module referenced.
+
+They both also force an in-memory database, with JDO/DataNucleus ORM configured to autocreate the database schema.
+
+=== Faster bootstrapping
+
+By default integration tests are run in "production" deployment mode.
+With the `isis.core.meta-model.introspector.mode=` set to its default value, this results in full introspection of the Apache Isis metamodel.
+
+While this _does_ have the benefit that the metamodel will be validated, the downside is that the test takes longer to bootstrap.
+
+To bootstrap lazily, set the property to 'lazy'.
+This can be done by adding:
+
+[source,java]
+----
+@TestPropertySource(IsisPresets.IntrospectLazily)
+----
+
+
+== Typical Usage
+
+Let's now drill down and look at `SimpleObject_IntegTest`, which (not surprisingly) is the integration test that exercises the `SimpleObject` class:
+
+[source,java]
+.SimpleObject_IntegTest.java
+----
+@Transactional                                                                  //<1>
+public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {     //<2>
+
+    SimpleObject simpleObject;
+
+    @BeforeEach                                                                 //<3>
+    public void setUp() {
+        // given
+        simpleObject = fixtureScripts.runPersona(SimpleObject_persona.FOO);     //<4>
+    }
+
+    //...
+}
+----
+<1> The Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/transaction/annotation/Transactional.html[@Transactional] annotation means that any changes made in the database will be rolled back automatically.
+There's further discussion xref:about.adoc#manual-teardown[below].
+<2> inherits from the module-level abstract class (which in turn will be annotated with `@SpringBootTest`, see xref:about.adoc#bootstrapping[bootstrapping] earlier).
+<3> uses JUnit 5
+<4> uses a xref:testing:fixtures:about.adoc[fixture script] to setup the database.
+The `FixtureScripts` domain service is inherited from the superclass.
+
+
+For example, let's test the `SimpleObject#name` property:
+
+[source,java]
+.SimpleObject.java
+----
+@DomainObject()
+public class SimpleObject
+    ...
+    @lombok.Getter @lombok.Setter
+    @Name private String name;
+    ...
+}
+----
+
+If we look at `application.yaml`, we see that:
+
+[source,yaml]
+.application.yaml
+----
+isis:
+  applib:
+    annotation:
+      domain-object:
+        editing: false
+----
+
+which means that this property is implicitly read-only.
+
+By convention, we group tests into nested static classes, so the corresponding integration test is:
+
+[source,java]
+.SimpleObject_IntegTest.java
+----
+public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
+    ...
+    public static class name extends SimpleObject_IntegTest {   //<1>
+
+        @Test
+        public void accessible() {
+            // when
+            final String name = wrap(simpleObject).getName();   //<2>
+
+            // then
+            assertThat(name).isEqualTo(simpleObject.getName()); //<3>
+        }
+
+        @Test
+        public void not_editable() {
+
+            // expect
+            assertThrows(DisabledException.class, ()->{         //<4>
+
+                // when
+                wrap(simpleObject).setName("new name");
+            });
+        }
+    }
+}
+----
+<1> inherit from `SimpleObject_IntegTest`
++
+CAUTION: JUnit 5's `@Nested` annotation doesn't work here.
+
+<2> we use the xref:about.adoc#wrapper-factory[WrapperFactory] to access the domain object.
++
+This will check that property (for access) is visible to the current user.
+
+<3> we use link:http://joel-costigliola.github.io/assertj[AssertJ] for assertions.
+<4> attempting to set the name on the property (through the wrapper) is disallowed.
+We detect this by catching a `DisabledException` (using JUnit 5's `assertThrows()`).
+
+The way that the simple app allows the name to be updated is through an `updateName` action:
+
+[source,java]
+.SimpleObject.java
+----
+@DomainObject()
+public class SimpleObject
+    ...
+    public static class UpdateNameActionDomainEvent extends SimpleObject.ActionDomainEvent {}
+    @Action(...
+            domainEvent = UpdateNameActionDomainEvent.class)                //<1>
+    public SimpleObject updateName(
+            @Name final String name) {                                      //<2>
+        setName(name);                                                      //<3>
+        return this;
+    }
+    public String default0UpdateName() {                                    //<4>
+        return getName();
+    }
+    ...
+}
+----
+<1> an event will be emitted whenever the action is interacted with
+<2> (the `@Name` annotation is discussed later)
+<3> the business functionality to be tested.
+<4> (we normally test default methods using unit tests).
+
+The corresponding integration test is:
+
+[source,java]
+.SimpleObject_IntegTest.java
+----
+public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
+    ...
+    public static class updateName extends SimpleObject_IntegTest {
+
+        @DomainService                                                      // <1>
+        public static class UpdateNameListener {
+
+            @Getter
+            List<SimpleObject.UpdateNameActionDomainEvent> events = new ArrayList<>();
+
+            @EventListener(SimpleObject.UpdateNameActionDomainEvent.class)
+            public void on(SimpleObject.UpdateNameActionDomainEvent ev) {
+                events.add(ev);
+            }
+        }
+
+        @Inject
+        UpdateNameListener updateNameListener;
+
+        @Test
+        public void can_be_updated_directly() {
+
+            // given
+            updateNameListener.getEvents().clear();
+
+            // when
+            wrap(simpleObject).updateName("new name");                      //<2>
+            transactionService.flushTransaction();
+
+            // then
+            assertThat(wrap(simpleObject).getName()).isEqualTo("new name"); //<3>
+            assertThat(updateNameListener.getEvents()).hasSize(5);          //<4>
+        }
+    }
+----
+<1> defines a domain service to detect the domain events emitted when interacting with the action (through the wrapper).
++
+This domain service is not part of the production code base, but is detected automatically thanks to `@ComponentScan` on the `SimpleModule`.
+
+<2> interact with the action through the wrapper
+<3> verify the object was updated correctly
+<4> verify that the domain events were emitted.
++
+Since this was a successful interaction, there will have been 5 events, one for each of the event phases (hide, disable, validate, executing, executed)
+
+
+As was pointed out earlier, the `name` parameter to `updateName()` has the `@Name` meta-annotation.
+This meta-annotation also defines some business rules, through `@Property` and `@Parameter`:
+
+[source,java]
+.Name.java
+----
+@Property(mustSatisfy = Name.NoExclamationMarks.class, maxLength = Name.MAX_LEN)
+@Parameter(mustSatisfy = Name.NoExclamationMarks.class, maxLength = Name.MAX_LEN)
+@ParameterLayout(named = "Name")
+...
+public @interface Name {
+
+    int MAX_LEN = 40;
+
+    class NoExclamationMarks extends AbstractSpecification2<String> {
+
+        @Override
+        public TranslatableString satisfiesTranslatableSafely(final String name) {
+            return name != null && name.contains("!")
+                    ? TranslatableString.tr("Exclamation mark is not allowed")
+                            : null;
+        }
+    }
+}
+----
+
+We test this by checking the wrapper throws an `InvalidException`:
+
+[source,java]
+.SimpleObject_IntegTest.java
+----
+public class SimpleObject_IntegTest extends SimpleModuleIntegTestAbstract {
+    ...
+    public static class updateName extends SimpleObject_IntegTest {
+        ...
+        @Test
+        public void failsValidation() {
+
+            // expect
+            InvalidException cause = assertThrows(InvalidException.class, ()->{
+
+                // when
+                wrap(simpleObject).updateName("new name!");
+            });
+
+            // then
+            assertThat(cause.getMessage(), containsString("Exclamation mark is not allowed."));
+        }
+    }
+----
+
+Some of the methods being called here are inherited from the superclass, so let's look at that next.
+
+
+== IsisIntegrationTestAbstract
+
+For convenience the framework provides the `IsisIntegrationTestAbstract` as a base class for integration tests.
+
+
+This is the class that provides the `wrap(...)` method (as see in the xref:about.adoc#typical-usage[previous section]).
+It also provides a number of other convenience methods:
+
+* `wrap()` - as just mentioned.
+Also has an alias of `w()`.
+
+* `unwrap()` - to unwrap.
+
+* `mixin()` - to instantiate a mixin around a domain object.
+Also has an alias of `m()`.
+
+* `wrapMixin()` - which naturally enough ``wrap()``s the result of a ``mixin()``.
+This has an alias of `wm()`.
+
+This class also provides a number of injected domain services:
+
+* xref:refguide:applib-svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`]
++
+to query and persist objects through a generic repository
+
+* xref:refguide:applib-svc:core-domain-api/FactoryService.adoc[`FactoryService`]
++
+for instantiating domain objects and mixins
+
+* xref:refguide:applib-svc:core-domain-api/UserService.adoc[`UserService`]
++
+to acces the current user
+
+* xref:refguide:applib-svc:metadata-api/ServiceRegistry.adoc[`ServiceRegistry`]
++
+to access domain services
+
+* xref:refguide:applib-svc:metadata-api/MetamodelService.adoc[`MetaModelService`]
++
+to access the metamodel.
+
+* xref:refguide:applib-svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`]
++
+to simulate interactions through the UI.
+This is discussed further xref:about.adoc#wrapper-factory[below].
+
+* xref:refguide:applib-svc:application-layer-api/TransactionService.adoc[`TransactionService`]
++
+for more control over transactions
+
+* xref:refguide:applib-svc:application-layer-api/SessionManagementService.adoc[`SessionManagementService`]
++
+for tests that check interactions over multiple separate sessions
+
+
+The class also defines (as a nested static class) the `CommandSupport` as a domain service.
+If ``@Import``ed into the integration test's "app manifest", this ensures that any ``Command``s that are raised as the result of interactions through the wrapper factory are setup correctly.
+
+
+== Wrapper Factory
+
+The xref:refguide:applib-svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] service is responsible for wrapping a domain object in a dynamic proxy, of the same type as the object being proxied.
+The role of this wrapper is to simulate the UI.
+
+It does this by allowing through method invocations that would be allowed if the user were interacting with the domain object through one of the viewers, but throwing an exception if the user attempts to interact with the domain object in a way that would not be possible if using the UI.
+The `WrapperFactory` uses link:https://bytebuddy.net/[ByteBuddy] to perform its magic.
+
+The mechanics are as follows:
+
+. the integration test calls the `WrapperFactory` to obtain a wrapper for the domain object under test.
+This is usually done in the test's `setUp()` method.
+
+. the test calls the methods on the wrapper rather than the domain object itself
+
+. the wrapper performs a reverse lookup from the method invoked (a regular `java.lang.reflect.Method` instance) into the Apache Isis metamodel
+
+. (like a viewer), the wrapper then performs the "see it/use it/do it" checks, checking that the member is visible, that it is enabled and (if there are arguments) that the arguments are valid
+
+. if the business rule checks pass, then the underlying member is invoked.
+Otherwise an exception is thrown.
+
+The type of exception depends upon what sort of check failed.
+It's straightforward enough: if the member is invisible then a `HiddenException` is thrown; if it's not usable then you'll get a `DisabledException`, if the args are not valid then catch an `InvalidException`.
+
+image::wrapper-factory.png[width="600px",link="{imagesdir}/wrapper-factory.png"]
+
+
+
+=== Wrapping and Unwrapping
+
+Wrapping a domain object is very straightforward; simply call `WrapperFactory#wrap(...)`.
+
+For example:
+
+[source,java]
+----
+Customer customer = ...;
+Customer wrappedCustomer = wrapperFactory.wrap(wrappedCustomer);
+----
+
+
+Going the other way -- getting hold of the underlying (wrapped) domain object -- is just as easy; just call `WrapperFactory#unwrap(...)`.
+
+For example:
+
+[source,java]
+----
+Customer wrappedCustomer = ...;
+Customer customer = wrapperFactory.unwrap(wrappedCustomer);
+----
+
+If you prefer, you also can get the underlying object from the wrapper itself, by downcasting to `WrappingObject` and calling `__isis_wrapped()` method:
+
+[source,java]
+----
+Customer wrappedCustomer = ...;
+Customer customer = (Customer)((WrappingObject)wrappedCustomer).__isis_wrapped());
+----
+
+We're not sure that's any easier (in fact we're certain it looks rather obscure).  Stick with calling `unwrap(...)`!
+
+
+
+
+=== Using the wrapper
+
+As the wrapper is intended to simulate the UI, only those methods that correspond to the "primary" methods of the domain object's members are allowed to be called.
+That means:
+
+* for *_object properties_* the test can call the getter or setter method
+
+* for *_object collections_* the test can call the getter to access the contents.
++
+WARNING: For this to work properly, the collection should be marked as read-only, generally globally using the `isis.applib.annotation.domain-object.editing` configuration property.
+
+* for *_object actions_* the test can call the action method itself.
+
+As a convenience, we also allow the test to call any `default...()`,`choices...()` or `autoComplete...()` method.
+These are often useful for obtaining a valid value to use.
+
+What the test can't call is any of the remaining supporting methods, such as `hide...()`, `disable...()` or `validate...()`.
+That's because their value is implied by the exception being thrown.
+
+The wrapper _does_ also allow the object's `title()` method or its  `toString()` , however this is little use for objects whose title is built up using the `@Title` annotation.
+Instead, we recommend that your test verifies an object's title by calling `TitleService#titleOf(...)` method.
+
+
+
+
+=== Firing Domain Events
+
+As well as enforcing business rules, the wrapper has another important feature, namely that it will cause domain events to be fired.
+
+The walk through of xref:about.adoc#typical-usage[SimpleApp] above showed how this works.
+
+
+
+== Manual Teardown
+
+The Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/transaction/annotation/Transactional.html[@Transactional] annotation means that any changes made in the database will be rolled back automatically.
+Normally this is what we want.
+For more on this topic, see the link:https://docs.spring.io/spring/docs/current/spring-framework-reference/testing.html#testcontext-tx-enabling-transactions[Spring docs].
+
+Sometimes you may want to commit to the database to verify state, eg using Spring's link:https://docs.spring.io/spring/docs/current/spring-framework-reference/testing.html#spring-testing-annotation-commit[@Commit] annotation.
+In these cases, you'll need to manually tear down the database contents afterwards, in readiness for the next test.
+
+This can be done using the xref:testing:fixtures:about.adoc[fixture] library's `ModuleWithFixtures` interface:
+
+[source,java]
+.ModuleWithFixtures.java
+----
+public interface ModuleWithFixtures {
+    default FixtureScript getRefDataSetupFixture() {        //<1>
+        return FixtureScript.NOOP;
+    }
+    default FixtureScript getTeardownFixture() {            //<2>
+        return FixtureScript.NOOP;
+    }
+}
+----
+<1> Optionally each module can define a `FixtureScript` which holds immutable "reference data".
+
+<2> Optionally each module can define a tear-down `FixtureScript`, used to remove the contents of all of the operational/transactional entities (but ignoring reference data fixtures).
+
+This should be implemented by module classes, eg as is the case for `SimpleModule`.
+
+[source,java]
+.SimpleModule.java
+----
+@Configuration
+@Import({})
+@ComponentScan
+public class SimpleModule implements ModuleWithFixtures {
+
+    @Override
+    public FixtureScript getTeardownFixture() {
+        return new TeardownFixtureAbstract() {
+            @Override
+            protected void execute(ExecutionContext executionContext) {
+                deleteFrom(SimpleObject.class);
+            }
+        };
+    }
+    ...
+}
+----
+
+The `ModuleWithFixturesService` aggregates all these setup and teardown fixtures, honouring the module dependencies:
+
+[source,java]
+.ModuleWithFixtures.java
+----
+@Service
+public class ModuleWithFixturesService {
+    ...
+    public FixtureScript getRefDataSetupFixture() { ... }
+    public FixtureScript getTeardownFixture() { ... }
+    ...
+}
+----
+
+Thus, the setup fixture runs the setup for the "inner-most" "leaf-level" modules with no dependencies first, whereas the teardown fixture runs in the opposite order, with the "outer-most" "top-level" modules torn down first.
+
+
+
+
+
+
+== Maven Configuration
+
+Apache Isis' integ test support is most easily configured through a dependency on the `isis-mavendeps-testing` module:
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.apache.isis.mavendeps</groupId>
+    <artifactId>isis-mavendeps-testing</artifactId>
+    <scope>test</scope>                             <!--1-->
+    <type>pom</type>
+</dependency>
+----
+<1> Normally `test`; usual Maven scoping rules apply.
+
+There is no need to specify the version if you inherit from from the xref:starters:parent-pom:about.adoc[starter app parent POM], then
+
+This will set up unit testing, integration testing and BDD specs support .
+
+include::starters:parent-pom:partial$surefire-configuration-caution.adoc[]
+
+If you just want to set up integration testing support, then use:
+
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.apache.isis.core</groupId>
+    <artifactId>isis-core-integtestsupport</artifactId>
+    <scope>test</scope>
+</dependency>
+----
+
+== Hints-n-Tips
+
+=== Using JDO/DataNucleus
+
+When running integration tests through the IDE, if using the JDO/DataNucleus ORM, then make sure the module(s) with entities have been enhanced first.

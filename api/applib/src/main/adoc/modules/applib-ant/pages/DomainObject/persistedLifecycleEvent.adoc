@@ -63,7 +63,7 @@ public class SomeSubscriber extends AbstractSubscriber {
     @EventListener(ObjectPersistedEvent.class)
     public void on(ObjectPersistedEvent ev) {
         if(ev.getSource() instanceof ToDoItem) {
-            // ...
+            ...
         }
     }
 }
@@ -79,7 +79,7 @@ import org.springframework.context.event.EventListener;
 public class SomeSubscriber extends AbstractSubscriber {
     @EventListener(ToDoItem.ObjectPersistedEvent.class)
     public void on(ToDoItem.ObjectPersistedEvent ev) {
-        // ...
+        ...
     }
 }
 ----

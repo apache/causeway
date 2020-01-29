@@ -34,11 +34,6 @@ public interface ModuleWithFixtures {
      * Optionally each module can define a {@link FixtureScript} which holds immutable "reference data".
      *
      * <p>
-     * These are automatically executed whenever running integration tests (but are ignored when bootstrapping the
-     * runtime as a webapp).
-     * </p>
-     *
-     * <p>
      *     By default, returns a {@link FixtureScript#NOOP noop}.
      * </p>
      */
@@ -48,12 +43,7 @@ public interface ModuleWithFixtures {
 
     /**
      * Optionally each module can define a tear-down {@link FixtureScript}, used to remove the contents of <i>all</i>
-     * entities (both reference data and operational/transactional data).
-     *
-     * <p>
-     * These are automatically executed whenever running integration tests (but are ignored when bootstrapping the
-     * runtime as a webapp).
-     * </p>
+     * transactional entities (both reference data and operational/transactional data).
      *
      * <p>
      *     By default, returns a {@link FixtureScript#NOOP noop}.

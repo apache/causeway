@@ -13,14 +13,14 @@ For this we annotate the collection using xref:refguide:applib-ant:CollectionLay
 [source,java]
 ----
 public class ToDoItem /*...*/ {
-    // ...
+    ...
 
     @javax.jdo.annotations.Persistent(table="ToDoItemDependencies")
     @Collection
     @CollectionLayout( defaultView = "table" )
     private Set<ToDoItem> dependencies = new TreeSet<>();
 
-    // ...
+    ...
 }
 ----
 

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.fixtures.applib.legacy.teardown;
+package org.apache.isis.testing.fixtures.applib.teardown;
 
 import javax.inject.Inject;
 import javax.jdo.PersistenceManagerFactory;
@@ -39,14 +39,15 @@ public abstract class TeardownFixtureAbstract extends FixtureScript {
 
         preDeleteFrom(cls);
 
-        final String column = discriminatorColumnOf(cls);
         final String value = discriminatorValueOf(cls);
 
-        if(column == null || value == null) {
+        if(value == null) {
 
             doDeleteFrom(cls);
 
         } else {
+
+            final String column = discriminatorColumnOf(cls);
 
             final String schema = schemaOf(cls);
             final String table = tableOf(cls);

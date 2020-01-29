@@ -67,7 +67,7 @@ public class SomeSubscriber extends AbstractSubscriber {
     @EventListener(IconUiEvent.class)
     public void on(IconUiEvent ev) {
         if(ev.getSource() instanceof ToDoItemDto) {
-            // ...
+            ...
         }
     }
 }
@@ -83,7 +83,7 @@ import org.springframework.context.event.EventListener;
 public class SomeSubscriber extends AbstractSubscriber {
     @EventListener(ToDoItemDto.IconUiEvent.class)
     public void on(ToDoItemDto.IconUiEvent ev) {
-        // ...
+        ...
     }
 }
 ----

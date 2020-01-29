@@ -97,7 +97,7 @@ import org.springframework.context.event.EventListener;
 public class SomeSubscriber extends AbstractSubscriber {
     @EventListener(ToDoItem.DependenciesChangedEvent.class)
     public void on(ToDoItem.DependenciesChangedEvent ev) {
-        // ...
+        ...
     }
 }
 ----

@@ -28,8 +28,8 @@ import org.apache.isis.testing.fixtures.applib.api.PersonaWithBuilderScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.BuilderScriptAbstract;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
-import org.apache.isis.testing.fixtures.applib.legacy.FixtureClock;
-import org.apache.isis.testing.fixtures.applib.legacy.TickingFixtureClock;
+import org.apache.isis.testing.fixtures.applib.clock.FixtureClock;
+import org.apache.isis.testing.fixtures.applib.clock.TickingFixtureClock;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 public abstract class IsisIntegrationTestAbstractWithFixtures extends IsisIntegrationTestAbstract {

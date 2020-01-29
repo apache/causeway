@@ -28,6 +28,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.testing.fixtures.applib.clock.FixtureClock;
 
 public class FixtureClockInstantiationTest {
 

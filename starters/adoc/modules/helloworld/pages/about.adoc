@@ -261,7 +261,7 @@ In the case of `HelloWorldModule`, it is extremely simple:
 .HelloWorldModule.java
 ----
 package domainapp.modules.hello;
-// ... imports omitted ...
+... imports omitted ...
 @Configuration
 @Import({})                         //<!--1-->
 @ComponentScan                      //<!--2-->

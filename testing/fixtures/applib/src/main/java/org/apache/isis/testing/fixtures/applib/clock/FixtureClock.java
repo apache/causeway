@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.testing.fixtures.applib.legacy;
+package org.apache.isis.testing.fixtures.applib.clock;
 
 import java.time.Instant;
 import java.util.Calendar;

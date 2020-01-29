@@ -61,6 +61,11 @@
 			<artifactId>isis-testing-integtestsupport-applib</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.isis.testing</groupId>
+			<artifactId>isis-testing-specsupport-applib</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest-library</artifactId>
 		</dependency>

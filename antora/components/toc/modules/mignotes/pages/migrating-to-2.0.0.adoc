@@ -1503,7 +1503,7 @@ public abstract class MyIntegTestAbstract extends IntegrationTestJupiter {
   public MyIntegTestAbstract() {
     super(new MyModule()
       .withAdditionalModules( /* ... */)
-      // ...
+      ...
       .withConfigurationProperties(databaseConfigForTest())
     );
   }

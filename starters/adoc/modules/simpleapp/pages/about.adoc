@@ -384,7 +384,7 @@ In the case of `SimpleModule`, it consists of:
 .SimpleModule.java
 ----
 package domainapp.modules.simple;
-// ... imports omitted ...
+... imports omitted ...
 @Configuration
 @Import({})                                             //<!--1-->
 @ComponentScan                                          //<!--2-->
@@ -586,7 +586,7 @@ It's very simple though:
 .ApplicationModule.java
 ----
 package domainapp.webapp.application;
-// ... imports omitted ...
+... imports omitted ...
 @Configuration
 @Import(SimpleModule.class)             // <!--1-->
 @ComponentScan                          // <!--2-->

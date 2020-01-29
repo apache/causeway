@@ -25,7 +25,7 @@ Customer customer = repositoryService.instantiate(Customer.class);
 customer.setReference(reference);
 customer.setFirstName(firstName);
 customer.setLastName(lastName);
-// ...
+...
 repositoryService.persist(customer);
 ----
 

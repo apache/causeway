@@ -41,7 +41,7 @@ public class Customer {
     @lombok.Getter
     private String lastName;
 
-    // ...
+    ...
 }
 ----
 
@@ -59,7 +59,7 @@ public class CustomerAlt {
     @lombok.Getter
     private String lastName;
 
-    // ...
+    ...
 }
 ----
 
@@ -77,7 +77,7 @@ public class Author extends Customer {
     @lombok.Getter
     private String middleInitial;
 
-    // ...
+    ...
 }
 ----
 
@@ -105,7 +105,7 @@ public class Author extends Customer {
         return buf.toString();
     }
 
-    // ...
+    ...
 }
 ----
 
@@ -181,7 +181,7 @@ For example:
 ----
 @DomainObjectLayout( cssClassFa="play" )    // <1>
 public class InvoiceRun {
-    // ...
+    ...
 }
 ----
 <1> will use the "fa-play" icon.
@@ -286,7 +286,7 @@ public class Order {
     public String cssClass() {
         return isShipped() ? "shipped": null;       <1>
     }
-    // ...
+    ...
 }
 ----
 <1> the implementation might well be the same as the `iconName()`.

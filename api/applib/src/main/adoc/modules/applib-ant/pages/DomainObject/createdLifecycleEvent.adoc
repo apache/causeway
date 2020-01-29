@@ -24,7 +24,7 @@ For example:
 ----
 @DomainObject
 public class ToDoItemDto {
-    // ...
+    ...
 }
 ----
 
@@ -41,7 +41,7 @@ For example:
 public class ToDoItem {
     public static class CreatedEvent
         extends org.apache.isis.applib.events.lifecycle.ObjectCreatedEvent<ToDoItem> { }
-    // ...
+    ...
 }
 ----
 
@@ -66,7 +66,7 @@ public class SomeSubscriber extends AbstractSubscriber {
     @EventListener(ObjectCreatedEvent.class)
     public void on(ObjectCreatedEvent ev) {
         if(ev.getSource() instanceof ToDoItem) {
-            // ...
+            ...
         }
     }
 }
@@ -82,7 +82,7 @@ import org.springframework.context.event.EventListener;
 public class SomeSubscriber extends AbstractSubscriber {
     @EventListener(ToDoItem.ObjectCreatedEvent.class)
     public void on(ToDoItem.ObjectCreatedEvent ev) {
-        // ...
+        ...
     }
 }
 ----

@@ -51,7 +51,7 @@ public class Customer {
                     ? "Cannot change credit limit for blacklisted customers"
                     : null;
     }
-    // ...
+    ...
 }
 ----
 
@@ -67,14 +67,14 @@ public class Customer {
             final Product product,
             @ParameterLayout(named="Quantity")
             final int quantity) {
-        // ...
+        ...
     }
     public String disablePlaceOrder() {
         return isBlacklisted()
                     ? "Blacklisted customers cannot place orders"
                     : null;
     }
-    // ...
+    ...
 }
 ----
 

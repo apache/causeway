@@ -80,7 +80,7 @@ import org.springframework.context.event.EventListener;
 public class SomeSubscriber extends AbstractSubscriber {
     @EventListener(ToDoItem.DueByChangedEvent.class)
     public void on(ToDoItem.DueByChangedEvent ev) {
-        // ...
+        ...
     }
 }
 ----

@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.testing.fixtures.applib.fixturescripts.ExecutionParametersService;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
-import org.apache.isis.testing.fixtures.applib.legacy.queryresultscache.QueryResultsCacheControlDefault;
+import org.apache.isis.testing.fixtures.applib.queryresultscache.QueryResultsCacheControlDefault;
 import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixturesService;
 import org.apache.isis.subdomains.spring.applib.IsisModuleSubdomainsSpringApplib;
 import org.apache.isis.testing.fixtures.applib.services.FixturesLifecycleService;

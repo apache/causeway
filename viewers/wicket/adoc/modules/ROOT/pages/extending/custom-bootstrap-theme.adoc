@@ -23,7 +23,7 @@ To make use of the custom `ITheme` the application should register it by subclas
 ----
 
 public void init() {
-    // ...
+    ...
     IBootstrapSettings settings = new BootstrapSettings();
     ThemeProvider themeProvider = new SingleThemeProvider(new MyTheme());
     settings.setThemeProvider(themeProvider);

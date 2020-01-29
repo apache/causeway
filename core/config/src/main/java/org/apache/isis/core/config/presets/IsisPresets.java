@@ -27,6 +27,7 @@ package org.apache.isis.core.config.presets;
 public final class IsisPresets  {
 
     public static final String NoTranslations = "classpath:/org/apache/isis/core/config/presets/NoTranslations.properties";
+    public static final String IntrospectLazily = "classpath:/org/apache/isis/core/config/presets/IntrospectLazily.properties";
 
     public static final String H2InMemory = "classpath:/org/apache/isis/core/config/presets/H2InMemory.properties";
 

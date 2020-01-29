@@ -47,12 +47,12 @@ public class Customer {
     public Order placeOrder(
             final Product product,
             final int quantity) {
-        // ...
+        ...
     }
     public boolean hidePlaceOrder() {
         return isBlacklisted();
     }
-    // ...
+    ...
 }
 ----
 

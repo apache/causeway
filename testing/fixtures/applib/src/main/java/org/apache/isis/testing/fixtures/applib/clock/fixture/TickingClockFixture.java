@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.fixtures.applib.legacy.clock;
+package org.apache.isis.testing.fixtures.applib.clock.fixture;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
@@ -28,8 +28,8 @@ import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.testing.fixtures.applib.api.FixtureScriptWithExecutionStrategy;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
-import org.apache.isis.testing.fixtures.applib.legacy.FixtureClock;
-import org.apache.isis.testing.fixtures.applib.legacy.TickingFixtureClock;
+import org.apache.isis.testing.fixtures.applib.clock.FixtureClock;
+import org.apache.isis.testing.fixtures.applib.clock.TickingFixtureClock;
 
 
 @Programmatic

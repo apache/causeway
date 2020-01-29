@@ -58,7 +58,7 @@ public class ToDoItem {
     public String getNotes() { /* ... */ }
     @MemberOrder(name="Misc", sequence="99")
     public Long getVersionSequence() { /* ... */ }
-    // ...
+    ...
 }
 ----
 
@@ -86,7 +86,7 @@ public class ToDoItem {
     public ToDoItem add(ToDoItem t) { /* ... */ }
     @MemberOrder(name="dependencies", sequence="2")
     public ToDoItem remove(ToDoItem t) { /* ... */ }
-    // ...
+    ...
 }
 ----
 
@@ -128,7 +128,7 @@ For example:
      middle="Detail"
  )
 public class ToDoItem {
-    // ...
+    ...
 }
 ----
 

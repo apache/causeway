@@ -68,7 +68,7 @@ public class SomeSubscriber extends AbstractSubscriber {
     @EventListener(CssClassUiEvent.class)
     public void on(CssClassUiEvent ev) {
         if(ev.getSource() instanceof ToDoItemDto) {
-            // ...
+            ...
         }
     }
 }
@@ -84,7 +84,7 @@ import org.springframework.context.event.EventListener;
 public class SomeSubscriber extends AbstractSubscriber {
     @EventListener(ToDoItemDto.CssClassUiEvent.class)
     public void on(ToDoItemDto.CssClassUiEvent ev) {
-        // ...
+        ...
     }
 }
 ----

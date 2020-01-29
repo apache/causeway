@@ -63,7 +63,7 @@ In all cases these mixins can be hidden using either security or by writing a li
 
 == Bug
 
-* link:https://issues.apache.org/jira/browse/ISIS-1348[ISIS-1348] - Bug with link:https://isis.apache.org/versions/1.12.0/guides/ugtst/ugtst.html#_ugtst_unittestsupport_soap-fake-server-junit-rule[SoapEndpointPublishingRule] when multiple endpoints.
+* link:https://issues.apache.org/jira/browse/ISIS-1348[ISIS-1348] - Bug with `SoapEndpointPublishingRule` when multiple endpoints.
 * link:https://issues.apache.org/jira/browse/ISIS-1347[ISIS-1347] - Missing annotation in SimpleObject
 * link:https://issues.apache.org/jira/browse/ISIS-1346[ISIS-1346] - ActionInvocationContext isn't populated properly
 * link:https://issues.apache.org/jira/browse/ISIS-1342[ISIS-1342] - The metamodel validation error page doesn't reliably render itself if there are errors.
