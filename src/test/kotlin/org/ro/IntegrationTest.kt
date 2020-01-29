@@ -19,9 +19,9 @@ import org.w3c.xhr.XMLHttpRequest
 open class IntegrationTest {
 
     fun isSimpleAppAvailable(): Boolean {
-        val url = "http://sven:pass@localhost:8080/restful/"
         val user = "sven"
         val pw = "pass"
+        val url = "http://${user}:${pw}@localhost:8080/restful/"
         UiManager.login(url, user, pw)
         val credentials: String = UiManager.getCredentials()
         val xhr = XMLHttpRequest();
