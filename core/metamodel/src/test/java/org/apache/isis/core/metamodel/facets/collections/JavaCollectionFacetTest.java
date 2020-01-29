@@ -39,8 +39,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.javautilcollection.JavaCollectionFacet;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.metamodel.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.metamodel.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 public class JavaCollectionFacetTest {
 

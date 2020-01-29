@@ -47,7 +47,7 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
-import org.apache.isis.core.unittestsupport.config._Config;
+import org.apache.isis.core.config.unittestsupport.internal._Config;
 
 public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 

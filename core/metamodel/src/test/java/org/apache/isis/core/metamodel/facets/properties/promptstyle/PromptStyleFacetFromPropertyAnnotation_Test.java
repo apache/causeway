@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.PromptStyleFacetForPropertyLayoutAnnotation;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.metamodel.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class PromptStyleFacetFromPropertyAnnotation_Test {
 

@@ -53,8 +53,8 @@ import org.apache.isis.core.metamodel.spec.Hierarchical;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionDefault;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.metamodel.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.metamodel.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 class MetaModelServiceDefaultTest {
 

@@ -16,23 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.spec;
+package org.apache.isis.core.metamodel.unittestsupport.jmocking;
 
-import java.util.Arrays;
-import java.util.List;
+import org.jmock.api.Imposteriser;
 
-import org.apache.isis.applib.unittestsupport.ValueTypeContractTestAbstract;
+public final class Imposterisers {
 
-public class ObjectSpecIdTest_valueSemantics extends ValueTypeContractTestAbstract<ObjectSpecId> {
+    private Imposterisers() {}
 
-    @Override
-    protected List<ObjectSpecId> getObjectsWithSameValue() {
-        return Arrays.asList(ObjectSpecId.of("CUS"), ObjectSpecId.of("CUS"), ObjectSpecId.of("CUS"));
-    }
-
-    @Override
-    protected List<ObjectSpecId> getObjectsWithDifferentValue() {
-        return Arrays.asList(ObjectSpecId.of("bUS"), ObjectSpecId.of("CUt"));
+    /**
+     * @return framework's default Imposteriser instance
+     */
+    public static Imposteriser getDefault() {
+        return ImposteriserUsingCodegenPlugin.INSTANCE;
     }
 
 }

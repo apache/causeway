@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.value.floats.FloatValueSemanticsProviderAbstract;
 import org.apache.isis.core.metamodel.facets.value.floats.FloatWrapperValueSemanticsProvider;
-import org.apache.isis.core.unittestsupport.config._Config;
+import org.apache.isis.core.config.unittestsupport.internal._Config;
 
 public class FloatValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 

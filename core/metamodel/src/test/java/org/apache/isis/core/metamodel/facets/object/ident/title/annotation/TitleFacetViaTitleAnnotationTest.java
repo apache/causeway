@@ -41,8 +41,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.metamodel.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.metamodel.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 public class TitleFacetViaTitleAnnotationTest {
 

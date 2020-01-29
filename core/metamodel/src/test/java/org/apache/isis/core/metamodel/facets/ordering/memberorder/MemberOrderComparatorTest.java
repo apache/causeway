@@ -30,7 +30,7 @@ import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetAnnotation;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderComparator;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.metamodel.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;

@@ -39,8 +39,8 @@ import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertThat;
 
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.unittestsupport.value.ValueTypeContractTestAbstract;
+import org.apache.isis.applib.unittestsupport.ValueTypeContractTestAbstract;
+import org.apache.isis.core.metamodel.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class ApplicationFeatureIdTest {
 

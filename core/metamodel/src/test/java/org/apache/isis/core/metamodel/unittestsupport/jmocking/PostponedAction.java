@@ -16,23 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.spec;
+package org.apache.isis.core.metamodel.unittestsupport.jmocking;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.function.Supplier;
 
-import org.apache.isis.applib.unittestsupport.ValueTypeContractTestAbstract;
+import org.hamcrest.Description;
+import org.jmock.api.Action;
+import org.jmock.api.Invocation;
 
-public class ObjectSpecIdTest_valueSemantics extends ValueTypeContractTestAbstract<ObjectSpecId> {
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
-    @Override
-    protected List<ObjectSpecId> getObjectsWithSameValue() {
-        return Arrays.asList(ObjectSpecId.of("CUS"), ObjectSpecId.of("CUS"), ObjectSpecId.of("CUS"));
+@RequiredArgsConstructor(staticName = "returnValuePostponed")
+public class PostponedAction implements Action {
+    
+    @NonNull private Supplier<Object> resultSupplier;
+
+    public Object invoke(Invocation invocation) throws Throwable {
+        return resultSupplier.get();
     }
 
-    @Override
-    protected List<ObjectSpecId> getObjectsWithDifferentValue() {
-        return Arrays.asList(ObjectSpecId.of("bUS"), ObjectSpecId.of("CUt"));
+    public void describeTo(Description description) {
+        description.appendText("returns ");
+        description.appendValue(resultSupplier.get());
     }
+    
+    
 
 }
