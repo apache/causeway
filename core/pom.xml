@@ -693,12 +693,12 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-unittestsupport</artifactId>
+				<artifactId>isis-core-internaltestsupport</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis-core-unittestsupport</artifactId>
+				<artifactId>isis-core-internaltestsupport</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 				<type>test-jar</type>
 				<scope>test</scope>
@@ -1837,12 +1837,12 @@
 		<module>codegen-bytebuddy</module>
 		<module>commons</module>
 		<module>config</module>
+		<module>internaltestsupport</module>
 		<module>metamodel</module>
 		<module>runtime</module>
 		<module>runtimeservices</module>
 		<module>webapp</module>
 
-		<module>unittestsupport</module>
 
 		<module>security</module>
 		<module>../security/bypass</module>

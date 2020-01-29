@@ -20,7 +20,7 @@
 		<version>2.0.0-M3-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-core-unittestsupport</artifactId>
+	<artifactId>isis-core-internaltestsupport</artifactId>
 	<name>Apache Isis Core - Unit Test Support</name>
 
 	<properties>

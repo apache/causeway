@@ -90,7 +90,7 @@
 
 		<dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-unittestsupport</artifactId>
+            <artifactId>isis-core-internaltestsupport</artifactId>
             <scope>test</scope>
             <exclusions>
             	<exclusion>
