@@ -47,10 +47,17 @@
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-config</artifactId>
+			<scope>test</scope>
         </dependency>
-        
 
-        <dependency>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-config</artifactId>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-metamodel</artifactId>
 			<type>test-jar</type>
@@ -90,16 +97,19 @@
 		<dependency>
 			<groupId>org.picocontainer</groupId>
 			<artifactId>picocontainer</artifactId>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jmock</groupId>
 			<artifactId>jmock</artifactId>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jmock</groupId>
 			<artifactId>jmock-junit4</artifactId>
+			<scope>test</scope>
 			<exclusions>
 				<exclusion>
 					<groupId>junit</groupId>
