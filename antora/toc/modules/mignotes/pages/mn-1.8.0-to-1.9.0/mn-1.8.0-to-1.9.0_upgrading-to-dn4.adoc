@@ -18,7 +18,7 @@ under the `project/properties`, remove:
 
 [source,xml]
 ----
-<!-- must be consistent with the versions defined by the JDO Objectstore -->
+<!-- must be consistent with the versions defined by JDO/DataNucleus -->
 <datanucleus-accessplatform-jdo-rdbms.version>3.3.6</datanucleus-accessplatform-jdo-rdbms.version>
 <datanucleus-maven-plugin.version>3.3.2</datanucleus-maven-plugin.version>
 ----

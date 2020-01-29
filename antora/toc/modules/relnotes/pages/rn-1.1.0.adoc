@@ -113,7 +113,7 @@
 * link:https://issues.apache.org/jira/browse/ISIS-326[ISIS-326] - Make Datanucleus JNDI aware
 * link:https://issues.apache.org/jira/browse/ISIS-362[ISIS-362] - Upgrade to JMock 2.6.0
 * link:https://issues.apache.org/jira/browse/ISIS-376[ISIS-376] - Enhance JDO objectstore to also support IdentityType.APPLICATION (as well as DATASTORE)
-* link:https://issues.apache.org/jira/browse/ISIS-386[ISIS-386] - Provide the ability to force a reload of an object by the JDO objectstore, and provide a domain service for clients.
+* link:https://issues.apache.org/jira/browse/ISIS-386[ISIS-386] - Provide the ability to force a reload of an object by JDO/DataNucleus, and provide a domain service for clients.
 * link:https://issues.apache.org/jira/browse/ISIS-387[ISIS-387] - Enhance PublishingService and AuditingService for created and deleted objects (as well as just updated objects).
 * link:https://issues.apache.org/jira/browse/ISIS-389[ISIS-389] - Ensure that objects lazily loaded by JDO/DataNucleus get domain services injected into them consistently.
 * link:https://issues.apache.org/jira/browse/ISIS-391[ISIS-391] - Upgrade JDO objectstore to Datanucleus 3.2.1

@@ -245,3 +245,4 @@ If you wish to do this, then your integtest module's `pom.xml` must contain:
     </testResources>
 </build>
 ----
+

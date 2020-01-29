@@ -36,7 +36,7 @@
 * link:https://issues.apache.org/jira/browse/ISIS-362[ISIS-362] - Upgrade to JMock 2.6.0
 * link:https://issues.apache.org/jira/browse/ISIS-364[ISIS-364] - Suppress components of title when rendered in a parented collection.
 * link:https://issues.apache.org/jira/browse/ISIS-366[ISIS-366] - Core unit testing support JUnitRuleMockery2 does not support autoinjection of setters
-* link:https://issues.apache.org/jira/browse/ISIS-386[ISIS-386] - Provide the ability to force a reload of an object by the JDO objectstore, and provide a domain service for clients.
+* link:https://issues.apache.org/jira/browse/ISIS-386[ISIS-386] - Provide the ability to force a reload of an object by JDO/DataNucleus, and provide a domain service for clients.
 * link:https://issues.apache.org/jira/browse/ISIS-387[ISIS-387] - Enhance PublishingService and AuditingService for created and deleted objects (as well as just updated objects).
 * link:https://issues.apache.org/jira/browse/ISIS-396[ISIS-396] - Wicket/JDO handling of BigDecimal properties should honour the @Column&#39;s scale attribute.
 * link:https://issues.apache.org/jira/browse/ISIS-397[ISIS-397] - Change default AuditingService impl to write to stderr, not stdout

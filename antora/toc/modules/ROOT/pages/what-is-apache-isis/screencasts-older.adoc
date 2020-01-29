@@ -47,7 +47,7 @@ _nb: the todoapp was previously called the 'quickstart' app_
 
 |Setting up Eclipse +
 
-_How to import an Apache Isis maven-based application into Eclipse and configure to use with the JDO Objectstore_ +
+_How to import an Apache Isis maven-based application into Eclipse and configure to use with JDO/DataNucleus_ +
 
 NB: when configuring DataNucleus for the *dom* project, make sure you are in the 'Java perspective', not the 'Java EE perspective'). +
 

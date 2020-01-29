@@ -115,7 +115,7 @@ isis.persistor.datanucleus.classMetadataLoadedListener=\
 ----
 
 
-Because this pertains to the JDO Objectstore we suggest you put this configuration property in `WEB-INF/persistor_datanucleus.properties`; but putting it in `isis.properties` will also work.
+Because this pertains to JDO/DataNucleus we suggest you put this configuration property in `WEB-INF/persistor_datanucleus.properties`; but putting it in `isis.properties` will also work.
 
 Any implementation must implement `org.datanucleus.metadata.MetaDataListener`.
 In many cases simply subclassing from `CreateSchemaObjectFromClassMetadata` and overriding `buildSqlToCheck(...)` and `buildSqlToExec(...)` should suffice.

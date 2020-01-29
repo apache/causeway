@@ -71,7 +71,7 @@ Internally there have been substantial simplifications to the codebase.
 
 == Superceded
 
-* link:https://issues.apache.org/jira/browse/ISIS-721[ISIS-721] - For 2.0.0, should we remove the ObjectStore API and standardize on the JDO Objectstore
+* link:https://issues.apache.org/jira/browse/ISIS-721[ISIS-721] - For 2.0.0, should we remove the ObjectStore API and standardize on JDO/DataNucleus
 * link:https://issues.apache.org/jira/browse/ISIS-725[ISIS-725] - For 2.0.0, should we remove the ProfileStore?
 
 

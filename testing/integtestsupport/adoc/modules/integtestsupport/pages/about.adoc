@@ -561,7 +561,6 @@ Thus, the setup fixture runs the setup for the "inner-most" "leaf-level" modules
 
 
 
-
 == Maven Configuration
 
 Apache Isis' integ test support is most easily configured through a dependency on the `isis-mavendeps-testing` module:
@@ -594,6 +593,7 @@ If you just want to set up integration testing support, then use:
     <scope>test</scope>
 </dependency>
 ----
+
 
 == Hints-n-Tips
 

@@ -1,16 +1,14 @@
 = Unit Test Support
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Apache Isis provides a number of unit test helpers for you to use (if you wish) to unit test your domain objects.
+Apache Isis provides a number of helpers to help unit test your domain objects.
+
+
 
 == Contract Tests
 
-
-
 Contract tests ensure that all instances of a particular idiom/pattern that occur within your codebase are implemented correctly.
 You could think of them as being a way to enforce a certain type of coding standard.
-Implementation-wise they use link:https://code.google.com/p/reflections/[Reflections] library to scan for classes.
-
 
 
 === ``SortedSet``s
@@ -38,7 +36,7 @@ public class SomeDomainObject {
 }
 ----
 
-If using DataNucleus against an RDBMS (as you probably are) then we strongly recommend that you implement this test, for several reasons:
+If using an RDBMS for persistence then we strongly recommend that you implement this test, for several reasons:
 
 * first, ``Set``s align more closely to the relational model than do ``List``s. A ``List`` must have an additional index to specify order.
 
@@ -46,7 +44,7 @@ If using DataNucleus against an RDBMS (as you probably are) then we strongly rec
 +
 The xref:refguide:applib-cm:classes/utility.adoc#ObjectContracts[`ObjectContracts`]  utility class substantially simplifies the task of implementing `Comparable` in your domain classes.
 
-* third, if the relationship is bidirectional then JDO/Objectstore will automatically maintain the relationship.
+* third, if the relationship is bidirectional then the ORM (JDO/DataNucleus) will automatically maintain the relationship.
 
 To use the contract test, subclass `SortedSetsContractTestAbstract`, specifying the root package to search for domain classes.
 
@@ -71,7 +69,7 @@ This contract test automatically checks that bidirectional 1:m or 1:1 associatio
 
 [TIP]
 ====
-(If using the JDO objectstore, then) there is generally no need to programmatically maintain 1:m relationships (indeed it may introduce subtle errors).
+(If using JDO/DataNucleus, then) there is generally no need to programmatically maintain 1:m relationships (indeed it may introduce subtle errors).
 For more details, see xref:userguide:fun:how-tos/entity-relationships/managed-1-to-m-bidirectional-relationships.adoc[here].
 Also check out the templates in the developers' guide (xref:toc:devguide:about.adoc#live-templates[live templates for IntelliJ] / xref:toc:devguide:about.adoc#editor-templates[editor templates for Eclipse]) for further guidance.
 ====
@@ -312,6 +310,7 @@ If you want more control, then you can call one of ``SoapEndpointPublishingRule`
 
 Apache Isis' unit testing support also provides helper `JaxbUtil` and `JaxbMatchers` classes.
 These are useful if you have exampler XML-serialized representations of the SOAP requests and response payloads and want to use these within your tests.
+
 
 
 == Maven Configuration
