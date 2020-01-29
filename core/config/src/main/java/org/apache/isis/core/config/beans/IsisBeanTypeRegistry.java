@@ -111,8 +111,14 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
     @Override
     public void intercept(TypeMetaData typeMeta) {
         
-        val type = typeMeta.getUnderlyingClass();
-
+        val classOrFailure = typeMeta.getUnderlyingClassOrFailure();
+        
+        if(classOrFailure.isFailure()) {
+            log.warn(classOrFailure.getFailure());
+            return;
+        }
+        
+        val type = classOrFailure.getUnderlyingClass();
         val classification = quickClassify(type);
         
         val delegated = classification.isDelegateLifecycleManagement();
@@ -163,7 +169,7 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
     // -- HELPER
 
     private void addIntrospectableType(BeanSort sort, TypeMetaData typeMeta) {
-        val type = typeMeta.getUnderlyingClass();
+        val type = typeMeta.getUnderlyingClassOrFailure().getUnderlyingClass();
         synchronized (introspectableTypes) {
             introspectableTypes.put(type, sort);
             

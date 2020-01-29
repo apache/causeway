@@ -20,11 +20,11 @@ package org.apache.isis.core.config.beans;
 
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.context._Context;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.Value;
 import lombok.val;
 
 @RequiredArgsConstructor(staticName = "of")
@@ -53,24 +53,38 @@ final class TypeMetaData {
     private boolean injectable = true;
     
     @Getter(lazy=true)
-    private final Class<?> underlyingClass = resolveClass();
+    private final ClassOrFailure underlyingClassOrFailure = resolveClass();
     
-    /**
-     * @return the underlying class of this TypeMetaData
-     */
-    private Class<?> resolveClass() {
-        try {
-            return _Context.loadClass(className);
-        } catch (ClassNotFoundException e) {
-            val msg = String.format("Failed to load class for name '%s'", className);
-            throw _Exceptions.unrecoverable(msg, e);
-        }
-    }
-
     public String getEffectiveBeanName() {
         return _Strings.isNullOrEmpty(beanNameOverride)
                 ? proposedBeanName 
                         : beanNameOverride;
+    }
+    
+    // -- HELPER
+    
+    /**
+     * Holds either the class or the failure string when attempting to load by name. 
+     */
+    @Value(staticConstructor = "of")
+    final static class ClassOrFailure {
+        Class<?> underlyingClass;
+        String failure;
+        public boolean isFailure() {
+            return underlyingClass==null;
+        }
+    }
+    
+    /**
+     * @return the underlying class of this TypeMetaData
+     */
+    private ClassOrFailure resolveClass() {
+        try {
+            return ClassOrFailure.of(_Context.loadClass(className), null);
+        } catch (ClassNotFoundException e) {
+            val msg = String.format("Failed to load class for name '%s', throwing %s", className, e);
+            return ClassOrFailure.of(null, msg);
+        }
     }
 
 
