@@ -44,7 +44,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.core.commons.internal.context._Context;
 
-class ImposteriserTestUsingCodegenPlugin {
+class ImposteriserTestUsingCodegenPlugin_Test {
 
     private Imposteriser imposteriser = Imposterisers.getDefault();
 
@@ -58,7 +58,7 @@ class ImposteriserTestUsingCodegenPlugin {
         invokable = new Invokable() {
             @Override
             public Object invoke(Invocation invocation) throws Throwable {
-                ImposteriserTestUsingCodegenPlugin.this.invocation = invocation;
+                ImposteriserTestUsingCodegenPlugin_Test.this.invocation = invocation;
                 return "result";
             }
         };
