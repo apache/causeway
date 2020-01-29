@@ -24,6 +24,11 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.concurrent.Callable;
 
+/**
+ * <p>
+ *     Used by domain apps only.
+ * </p>
+ */
 public class NullPrintStream extends PrintStream {
     public NullPrintStream() {
         super(new NullByteArrayOutputStream());

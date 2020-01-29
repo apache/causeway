@@ -32,6 +32,11 @@ import org.apache.isis.core.unittestsupport.AbstractApplyToAllContractTest;
 import static org.apache.isis.core.commons.internal.collections._Collections.toHashSet;
 import static org.apache.isis.core.commons.internal.reflection._Reflect.withTypeAssignableTo;
 
+/**
+ * <p>
+ *     Used by domain apps only.
+ * </p>
+ */
 public abstract class SortedSetsContractTestAbstract extends AbstractApplyToAllContractTest {
 
     protected SortedSetsContractTestAbstract(

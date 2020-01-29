@@ -34,6 +34,10 @@ import org.apache.isis.core.unittestsupport.utils.IndentPrinter;
 /**
  * Provides some basic infrastructure to iterate over all entity types and
  * apply some contract test.
+ *
+ * <p>
+ *     Used by domain apps only.
+ * </p>
  */
 public abstract class AbstractApplyToAllContractTest {
 

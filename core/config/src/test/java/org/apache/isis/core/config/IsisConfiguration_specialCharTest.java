@@ -23,8 +23,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.isis.core.unittestsupport.config.IsisConfigurationLegacy;
-import org.apache.isis.core.unittestsupport.config.internal._Config;
+import org.apache.isis.core.config.unittestsupport.IsisConfigurationLegacy;
+import org.apache.isis.core.config.unittestsupport.internal._Config;
 
 class IsisConfiguration_specialCharTest {
 

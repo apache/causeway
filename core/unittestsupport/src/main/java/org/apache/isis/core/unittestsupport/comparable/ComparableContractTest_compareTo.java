@@ -23,6 +23,13 @@ import java.util.List;
 
 import org.junit.Test;
 
+/**
+ * <p>
+ *     Used by core and domain apps.
+ * </p>
+ *
+ * @param <T>
+ */
 public abstract class ComparableContractTest_compareTo<T extends Comparable<T>> {
 
     /**

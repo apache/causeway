@@ -27,6 +27,11 @@ import javax.jdo.annotations.Persistent;
 
 import org.apache.isis.core.commons.internal.base._Strings;
 
+/**
+ * <p>
+ *     Used by domain apps only.
+ * </p>
+ */
 public class ReflectUtils {
 
     public static <T> Predicate<Field> withTypeAssignableFrom(final Class<T> type) {

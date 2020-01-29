@@ -47,6 +47,11 @@ import static org.apache.isis.core.commons.internal.reflection._Reflect.withMeth
 import static org.apache.isis.core.commons.internal.reflection._Reflect.withName;
 import static org.apache.isis.core.unittestsupport.utils.ReflectUtils.withParametersAssignableFrom;
 
+/**
+ * <p>
+ *     Used by domain apps only.
+ * </p>
+ */
 public abstract class BidirectionalRelationshipContractTestAbstract extends AbstractApplyToAllContractTest implements Instantiators {
 
     private final InstantiatorMap instantiatorMap;

@@ -24,7 +24,7 @@ import org.apache.isis.applib.annotation.Defaulted;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.defaults.annotcfg.DefaultedFacetAnnotationElseConfigurationFactory;
-import org.apache.isis.core.unittestsupport.config.internal._Config;
+import org.apache.isis.core.unittestsupport.config._Config;
 
 public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
 

@@ -16,29 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.unittestsupport.utils;
+package org.apache.isis.core.config.unittestsupport.internal;
 
-import java.lang.reflect.Field;
+import java.util.Map;
 
-/**
- * <p>
- *     Used by domain apps only.
- * </p>
- */
-public class StringUtils {
+import org.apache.isis.core.commons.internal.collections._Maps;
 
-    public static String capitalize(final String str) {
-        if (str == null || str.length() == 0) {
-            return str;
-        }
-        if (str.length() == 1) {
-            return str.toUpperCase();
-        }
-        return Character.toUpperCase(str.charAt(0)) + str.substring(1);
-    }
+import lombok.val;
 
-    public static String methodNamed(final String methodPrefix, final Field field) {
-        return methodPrefix + capitalize(field.getName());
+final class _Config_trim {
+
+    /**
+     * Given {@code map}, for every key trim the corresponding value. 
+     * Filter any absent values, but keep empty Strings.
+     * @param map
+     */
+    static Map<String, String> trim(Map<String, String> map) {
+
+        val trimmed = _Maps.<String, String> newHashMap();
+
+        map.forEach((k, v)->{
+
+            if(v!=null) {
+                trimmed.put(k, v.trim());
+            }
+
+        });
+
+        return trimmed;
     }
 
 }

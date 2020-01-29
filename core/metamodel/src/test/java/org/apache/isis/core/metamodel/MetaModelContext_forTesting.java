@@ -52,7 +52,7 @@ import org.apache.isis.core.security.authentication.AuthenticationSessionProvide
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 import org.apache.isis.core.unittestsupport.config.IsisConfigurationLegacy;
-import org.apache.isis.core.unittestsupport.config.internal._Config;
+import org.apache.isis.core.unittestsupport.config._Config;
 
 import lombok.Builder;
 import lombok.Getter;

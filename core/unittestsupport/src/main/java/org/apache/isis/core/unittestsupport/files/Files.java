@@ -22,6 +22,11 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 
+/**
+ * <p>
+ *     Used by domain apps only.
+ * </p>
+ */
 public final class Files {
 
     Files() {

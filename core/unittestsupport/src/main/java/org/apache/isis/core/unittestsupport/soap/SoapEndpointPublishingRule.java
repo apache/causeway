@@ -30,7 +30,9 @@ import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
 
 /**
- * For example usage, see <a href="https://github.com/isisaddons/isis-module-publishmq">Isis addons' publishmq module</a> (non-ASF)
+ * <p>
+ *     Used by domain apps only.
+ * </p>
  */
 public class SoapEndpointPublishingRule implements TestRule {
 

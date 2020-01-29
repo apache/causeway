@@ -64,6 +64,10 @@ import junit.framework.AssertionFailedError;
  * The class also adds some convenience methods, and uses a factory method to
  * make it explicit whether the context can mock only interfaces or interfaces
  * and classes.
+ *
+ * <p>
+ *     Used by domain apps only.
+ * </p>
  */
 public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
 

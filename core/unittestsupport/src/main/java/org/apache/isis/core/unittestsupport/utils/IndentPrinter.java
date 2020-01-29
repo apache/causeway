@@ -24,6 +24,10 @@ import java.io.Writer;
 
 /**
  * Adapted from <tt>groovy.util.IndentPrinter</tt> (published under ASL 2.0).
+ *
+ * <p>
+ *     Used by domain apps only.
+ * </p>
  */
 public class IndentPrinter {
 

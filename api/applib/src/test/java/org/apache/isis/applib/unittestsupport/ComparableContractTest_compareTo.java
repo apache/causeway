@@ -16,34 +16,42 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.unittestsupport.config.internal;
+package org.apache.isis.applib.unittestsupport;
 
-import java.util.Map;
+import java.util.Arrays;
+import java.util.List;
 
-import org.apache.isis.core.commons.internal.collections._Maps;
+import org.junit.Test;
 
-import lombok.val;
-
-final class _Config_trim {
+/**
+ * <p>
+ *     Used by core.
+ * </p>
+ *
+ * @param <T>
+ */
+public abstract class ComparableContractTest_compareTo<T extends Comparable<T>> {
 
     /**
-     * Given {@code map}, for every key trim the corresponding value. 
-     * Filter any absent values, but keep empty Strings.
-     * @param map
+     * Return an array of tuples; each tuple should consist of 4 elements, whereby
+     * item0  < item1 = item2 < item3
+     *
+     * Typically item0 should be null valued (if supported by the impl).
      */
-    static Map<String, String> trim(Map<String, String> map) {
+    protected abstract List<List<T>> orderedTuples();
 
-        val trimmed = _Maps.<String, String> newHashMap();
+    @Test
+    public void compareAllOrderedTuples() {
 
-        map.forEach((k, v)->{
+        new ComparableContractTester<T>(orderedTuples()).test();
+    }
 
-            if(v!=null) {
-                trimmed.put(k, v.trim());
-            }
-
-        });
-
-        return trimmed;
+    /**
+     * Syntax sugar to remove boilerplate from subclasses.
+     */
+    @SafeVarargs
+    protected static <E> List<E> listOf(E... elements) {
+        return Arrays.asList(elements);
     }
 
 }

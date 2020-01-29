@@ -76,7 +76,7 @@ import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySe
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.unittestsupport.config.internal._Config;
+import org.apache.isis.core.unittestsupport.config._Config;
 
 import lombok.val;
 

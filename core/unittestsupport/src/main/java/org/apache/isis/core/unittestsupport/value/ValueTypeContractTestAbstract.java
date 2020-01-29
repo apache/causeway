@@ -35,6 +35,10 @@ import static org.junit.Assume.assumeThat;
  * Contract test for value types ({@link #equals(Object) equals} and
  * {@link #hashCode() hashCode}), and also {@link Comparable#compareTo(Object) compareTo} for
  * any value types that also are {@link Comparable}
+ *
+ * <p>
+ *     Used by core and domain apps only.
+ * </p>
  */
 public abstract class ValueTypeContractTestAbstract<T> {
 

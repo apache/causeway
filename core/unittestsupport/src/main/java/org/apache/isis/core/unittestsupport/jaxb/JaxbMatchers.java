@@ -40,7 +40,9 @@ import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.resources._Resources;
 
 /**
- * For example usage, see <a href="https://github.com/isisaddons/isis-module-publishmq">Isis addons' publishmq module</a> (non-ASF)
+ * <p>
+ *     Used by domain apps only.
+ * </p>
  */
 public class JaxbMatchers {
 

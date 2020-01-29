@@ -20,6 +20,11 @@ package org.apache.isis.core.unittestsupport.utils;
 
 import java.util.Set;
 
+/**
+ * <p>
+ *     Used by domain apps only.
+ * </p>
+ */
 public class CollectUtils {
 
     public static <T> T firstIn(final Set<T> set) {
