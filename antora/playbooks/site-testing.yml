@@ -11,9 +11,6 @@ content:
       start_path: antora/components/toc # toc
       branches: HEAD
 
-    - url: .
-      start_path: antora/components/testing # testing
-      branches: HEAD
 
 # core
     - url: .
@@ -21,6 +18,9 @@ content:
       branches: HEAD
 
 # testing
+    - url: .
+      start_path: testing/adoc # testing
+      branches: HEAD
     - url: .
       start_path: testing/fakedata/adoc # testing
       branches: HEAD
