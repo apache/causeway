@@ -19,6 +19,7 @@
 package org.apache.isis.applib.util.schema;
 
 import org.jmock.auto.Mock;
+import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -31,7 +32,6 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.schema.common.v2.BlobDto;
 import org.apache.isis.schema.common.v2.ClobDto;
 import org.apache.isis.schema.common.v2.ValueDto;
@@ -40,7 +40,7 @@ import org.apache.isis.schema.common.v2.ValueType;
 public class CommonDtoUtils_setValueOn_Test {
 
     @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+    public JUnitRuleMockery context = new JUnitRuleMockery();
 
     @Mock
     private BookmarkService mockBookmarkService;

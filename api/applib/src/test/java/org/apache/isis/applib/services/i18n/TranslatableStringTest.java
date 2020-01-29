@@ -20,13 +20,13 @@ package org.apache.isis.applib.services.i18n;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
+import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class TranslatableStringTest {
 
@@ -79,7 +79,7 @@ public class TranslatableStringTest {
     public static class Translate extends TranslatableStringTest {
 
         @Rule
-        public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+        public final JUnitRuleMockery context = new JUnitRuleMockery();
 
         @Mock
         private TranslationService mockTranslationService;

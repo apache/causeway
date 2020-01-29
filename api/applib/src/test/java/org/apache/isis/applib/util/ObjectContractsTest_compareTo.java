@@ -20,7 +20,8 @@ import java.util.List;
 
 import org.junit.Before;
 
-import org.apache.isis.core.unittestsupport.comparable.ComparableContractTest_compareTo;
+import org.apache.isis.applib.unittestsupport.ComparableContractTest_compareTo;
+
 
 public class ObjectContractsTest_compareTo extends ComparableContractTest_compareTo<InvoiceItem> {
 
