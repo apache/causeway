@@ -8,14 +8,14 @@ content:
 
 # antora
     - url: .
-      start_path: antora/components/toc # toc
+      start_path: antora/toc # toc
       branches: HEAD
 
-    - url: .
-      start_path: antora/components/incubator # incubator
-      branches: HEAD
 
 # incubator
+    - url: .
+      start_path: incubator/adoc # incubator
+      branches: HEAD
     - url: .
       start_path: incubator/core/model/src/main/adoc # incubator
       branches: HEAD

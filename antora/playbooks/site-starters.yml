@@ -8,7 +8,7 @@ content:
 
 # antora
     - url: .
-      start_path: antora/components/toc # toc
+      start_path: antora/toc # toc
       branches: HEAD
 
 # mavendeps

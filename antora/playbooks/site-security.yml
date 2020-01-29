@@ -8,12 +8,9 @@ content:
 
 # antora
     - url: .
-      start_path: antora/components/toc # toc
+      start_path: antora/toc # toc
       branches: HEAD
 
-    - url: .
-      start_path: antora/components/security # security
-      branches: HEAD
 
 # core
     - url: .
@@ -29,6 +26,9 @@ content:
       branches: HEAD
 
 # security
+    - url: .
+      start_path: security/adoc # security
+      branches: HEAD
     - url: .
       start_path: security/bypass/src/main/adoc # security
       branches: HEAD

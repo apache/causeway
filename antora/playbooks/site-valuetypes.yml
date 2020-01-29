@@ -8,22 +8,22 @@ content:
 
 # antora
     - url: .
-      start_path: antora/components/toc # toc
+      start_path: antora/toc # toc
       branches: HEAD
 
-    - url: .
-      start_path: antora/components/valuetypes # valuetypes
-      branches: HEAD
 
 # valuetypes
     - url: .
-      start_path: valuetypes/asciidoc/adoc # vw
+      start_path: valuetypes/adoc # valuetypes
       branches: HEAD
     - url: .
-      start_path: valuetypes/markdown/adoc # vw
+      start_path: valuetypes/asciidoc/adoc # valuetypes
       branches: HEAD
     - url: .
-      start_path: valuetypes/sse/adoc # vw
+      start_path: valuetypes/markdown/adoc # valuetypes
+      branches: HEAD
+    - url: .
+      start_path: valuetypes/sse/adoc # valuetypes
       branches: HEAD
 
 ui:

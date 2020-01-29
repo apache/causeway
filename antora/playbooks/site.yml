@@ -8,38 +8,17 @@ content:
 
 # antora
     - url: .
-      start_path: antora/components/toc # toc
+      start_path: antora/toc # toc
       branches: HEAD
 
-    - url: .
-      start_path: antora/components/core # core
-      branches: HEAD
-    - url: .
-      start_path: antora/components/incubator # incubator
-      branches: HEAD
-    - url: .
-      start_path: antora/components/legacy # legacy
-      branches: HEAD
-    - url: .
-      start_path: antora/components/mappings # mappings
-      branches: HEAD
-    - url: .
-      start_path: antora/components/refguide # refguide
-      branches: HEAD
-    - url: .
-      start_path: antora/components/security # security
-      branches: HEAD
-    - url: .
-      start_path: antora/components/subdomains # subdomains
-      branches: HEAD
-    - url: .
-      start_path: antora/components/userguide # userguide
-      branches: HEAD
-    - url: .
-      start_path: antora/components/valuetypes # valuetypes
-      branches: HEAD
 
 # api
+    - url: .
+      start_path: api/adoc/refguide # refguide
+      branches: HEAD
+    - url: .
+      start_path: api/adoc/userguide # userguide
+      branches: HEAD
     - url: .
       start_path: api/applib/src/main/adoc # refguide
       branches: HEAD
@@ -48,6 +27,9 @@ content:
       branches: HEAD
 
 # core
+    - url: .
+      start_path: core/adoc # core
+      branches: HEAD
     - url: .
       start_path: core/codegen-bytebuddy/src/main/adoc # core
       branches: HEAD
@@ -127,6 +109,9 @@ content:
 
 # incubator
     - url: .
+      start_path: incubator/adoc # incubator
+      branches: HEAD
+    - url: .
       start_path: incubator/core/model/src/main/adoc # incubator
       branches: HEAD
     - url: .
@@ -134,6 +119,9 @@ content:
       branches: HEAD
 
 # legacy
+    - url: .
+      start_path: legacy/adoc # legacy
+      branches: HEAD
     - url: .
       start_path: legacy/extensions/core/applib/src/main/adoc # legacy
       branches: HEAD
@@ -151,6 +139,9 @@ content:
       branches: HEAD
 
 # mappings
+    - url: .
+      start_path: mappings/adoc # mappings
+      branches: HEAD
     - url: .
       start_path: mappings/jaxrsclient/adoc # mappings
       branches: HEAD
@@ -171,6 +162,9 @@ content:
 
 # security
     - url: .
+      start_path: security/adoc # security
+      branches: HEAD
+    - url: .
       start_path: security/bypass/src/main/adoc # security
       branches: HEAD
     - url: .
@@ -186,6 +180,9 @@ content:
       branches: HEAD
 
 # subdomains
+    - url: .
+      start_path: subdomains/adoc # subdomains
+      branches: HEAD
     - url: .
       start_path: subdomains/base/adoc # subdomains
       branches: HEAD
@@ -242,13 +239,16 @@ content:
 
 # valuetypes
     - url: .
-      start_path: valuetypes/asciidoc/adoc # vw
+      start_path: valuetypes/adoc # valuetypes
       branches: HEAD
     - url: .
-      start_path: valuetypes/markdown/adoc # vw
+      start_path: valuetypes/asciidoc/adoc # valuetypes
       branches: HEAD
     - url: .
-      start_path: valuetypes/sse/adoc # vw
+      start_path: valuetypes/markdown/adoc # valuetypes
+      branches: HEAD
+    - url: .
+      start_path: valuetypes/sse/adoc # valuetypes
       branches: HEAD
 
 ui:

@@ -8,14 +8,14 @@ content:
 
 # antora
     - url: .
-      start_path: antora/components/toc # toc
+      start_path: antora/toc # toc
       branches: HEAD
 
-    - url: .
-      start_path: antora/components/subdomains # subdomains
-      branches: HEAD
 
 # subdomains
+    - url: .
+      start_path: subdomains/adoc # subdomains
+      branches: HEAD
     - url: .
       start_path: subdomains/base/adoc # subdomains
       branches: HEAD

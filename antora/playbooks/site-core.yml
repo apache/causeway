@@ -8,14 +8,14 @@ content:
 
 # antora
     - url: .
-      start_path: antora/components/toc # toc
+      start_path: antora/toc # toc
       branches: HEAD
 
-    - url: .
-      start_path: antora/components/core # core
-      branches: HEAD
 
 # core
+    - url: .
+      start_path: core/adoc # core
+      branches: HEAD
     - url: .
       start_path: core/codegen-bytebuddy/src/main/adoc # core
       branches: HEAD

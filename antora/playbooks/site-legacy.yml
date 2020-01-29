@@ -8,14 +8,14 @@ content:
 
 # antora
     - url: .
-      start_path: antora/components/toc # toc
+      start_path: antora/toc # toc
       branches: HEAD
 
-    - url: .
-      start_path: antora/components/legacy # legacy
-      branches: HEAD
 
 # legacy
+    - url: .
+      start_path: legacy/adoc # legacy
+      branches: HEAD
     - url: .
       start_path: legacy/extensions/core/applib/src/main/adoc # legacy
       branches: HEAD

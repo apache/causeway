@@ -6,12 +6,14 @@ site:
 content:
   sources:
 
-# antora/components
+# antora
     - url: .
-      start_path: antora/components/toc # toc
+      start_path: antora/toc # toc
       branches: HEAD
+
+# api
     - url: .
-      start_path: antora/components/userguide # userguide
+      start_path: api/adoc/userguide # userguide
       branches: HEAD
 
 # extensions

@@ -8,14 +8,14 @@ content:
 
 # antora
     - url: .
-      start_path: antora/components/toc # toc
+      start_path: antora/toc # toc
       branches: HEAD
 
-    - url: .
-      start_path: antora/components/mappings # mappings
-      branches: HEAD
 
 # mappings
+    - url: .
+      start_path: mappings/adoc # mappings
+      branches: HEAD
     - url: .
       start_path: mappings/jaxrsclient/adoc # mappings
       branches: HEAD

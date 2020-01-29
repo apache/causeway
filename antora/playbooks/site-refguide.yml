@@ -8,14 +8,14 @@ content:
 
 # antora
     - url: .
-      start_path: antora/components/toc # toc
+      start_path: antora/toc # toc
       branches: HEAD
 
-    - url: .
-      start_path: antora/components/refguide # refguide
-      branches: HEAD
 
 # api
+    - url: .
+      start_path: api/adoc/refguide # refguide
+      branches: HEAD
     - url: .
       start_path: api/applib/src/main/adoc # refguide
       branches: HEAD
