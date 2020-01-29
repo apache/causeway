@@ -39,6 +39,8 @@ import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
+import org.apache.isis.core.config.unittestsupport.IsisConfigurationLegacy;
+import org.apache.isis.core.config.unittestsupport.internal._Config;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault;
@@ -51,8 +53,6 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
-import org.apache.isis.core.unittestsupport.config.IsisConfigurationLegacy;
-import org.apache.isis.core.unittestsupport.config._Config;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -113,7 +113,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     private List<Object> singletons;
 
     //@Override
-    public IsisConfigurationLegacy getConfigurationLegacy() {
+    public efereIsisConfigurationLegacy getConfigurationLegacy() {
         return _Config.getConfiguration();
     }
     

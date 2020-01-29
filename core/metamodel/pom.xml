@@ -116,8 +116,9 @@
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-unittestsupport</artifactId>
+            <artifactId>isis-core-config</artifactId>
             <scope>test</scope>
+            <type>test-jar</type>
         </dependency>
 
         <dependency>
