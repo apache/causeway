@@ -47,8 +47,8 @@ import org.apache.isis.core.metamodel.facets.object.parseable.parser.ParseableFa
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.config.unittestsupport.internal._Config;
-import org.apache.isis.core.metamodel.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.metamodel.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 public abstract class ValueSemanticsProviderAbstractTestCase {
 
