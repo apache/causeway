@@ -126,6 +126,8 @@ There's further discussion xref:about.adoc#manual-teardown[below].
 The `FixtureScripts` domain service is inherited from the superclass.
 
 
+=== Testing a property
+
 For example, let's test the `SimpleObject#name` property:
 
 [source,java]
@@ -196,6 +198,8 @@ This will check that property (for access) is visible to the current user.
 <3> we use link:http://joel-costigliola.github.io/assertj[AssertJ] for assertions.
 <4> attempting to set the name on the property (through the wrapper) is disallowed.
 We detect this by catching a `DisabledException` (using JUnit 5's `assertThrows()`).
+
+=== Testing an action
 
 The way that the simple app allows the name to be updated is through an `updateName` action:
 
@@ -274,6 +278,7 @@ This domain service is not part of the production code base, but is detected aut
 +
 Since this was a successful interaction, there will have been 5 events, one for each of the event phases (hide, disable, validate, executing, executed)
 
+=== Testing a type meta-annotation
 
 As was pointed out earlier, the `name` parameter to `updateName()` has the `@Name` meta-annotation.
 This meta-annotation also defines some business rules, through `@Property` and `@Parameter`:
@@ -592,6 +597,12 @@ If you just want to set up integration testing support, then use:
 
 == Hints-n-Tips
 
-=== Using JDO/DataNucleus
+[TIP]
+.Using JDO/DataNucleus
+====
+When running integration tests through the IDE, and if using the JDO/DataNucleus ORM, then make sure the module(s) with entities have been enhanced first.
 
-When running integration tests through the IDE, if using the JDO/DataNucleus ORM, then make sure the module(s) with entities have been enhanced first.
+If using IntelliJ, we recommend creating a run Maven configuration that runs `datanucleus:enhance`, and then pinning the configuration once run as a tab in the "Debug" window for easy access.
+
+image::pin-enhance-run-configuration.png/[width="400px",link="{imagesdir}/pin-enhance-run-configuration.png/"]
+====
