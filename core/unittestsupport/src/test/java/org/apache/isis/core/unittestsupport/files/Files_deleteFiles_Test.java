@@ -34,7 +34,7 @@ import org.apache.isis.core.unittestsupport.files.Files.Recursion;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
-public class FilesTest_deleteFiles {
+public class Files_deleteFiles_Test {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
