@@ -1,10 +1,11 @@
 = Parent POM
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-:page-role: -toc
 
 
 The starter app parent POM is provided as a convenience to act as the `<parent>` for Apache Isis applications.
 It builds upon a similar POM provided by the Spring Boot framework, which ensures a consistent set of dependencies, as well as configuring various build plugins.
+
+== Usage
 
 To use it, just add:
 
@@ -21,20 +22,24 @@ To use it, just add:
 
 You'll see that it is used by both the xref:starters:helloworld:about.adoc[HelloWorld] and xref:starters:simpleapp:about.adoc[SimpleApp] starter apps.
 
+== Relationship to other POMs
+
 The link:{attachmentsdir}/parent-pom.pptx[diagram] below shows how the parent POM relates to other POMs:
 
 image::parent-pom.png[width="600px",link="{imagesdir}/parent-pom.png"]
 
-In more detail, the parent POM:
+
+So, you can see that the parent POM:
 
 * inherits from `org.springframework.boot:spring-boot-starter-parent`
 +
-which configures various `<build>/<plugins>` and `<resources`>
+This configures various `<build>/<plugins>` and `<resources`>
 
 * transitively inherits from `org.springframework.boot:spring-boot-dependencies`
 +
-which defines numerous `xxx.version` properties for various third party applications, and sets up corresponding `<dependencyManagement>/<dependencies>`.
-These have been validated as being compatible with each other by the Spring Boot team.
+This defines numerous `xxx.version` properties for various third party applications, and sets up corresponding `<dependencyManagement>/<dependencies>`.
++
+NOTE: These have been validated as being compatible with each other by the Spring Boot team.
 
 * imports `org.apache.isis.core:isis` (using scope=import, type=pom)
 +
