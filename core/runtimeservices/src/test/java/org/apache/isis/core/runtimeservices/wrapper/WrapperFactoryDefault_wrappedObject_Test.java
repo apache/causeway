@@ -44,6 +44,7 @@ import org.apache.isis.applib.services.wrapper.InvalidException;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
 import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactoryService;
+import org.apache.isis.core.config.unittestsupport.internal._Config;
 import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -72,7 +73,6 @@ import org.apache.isis.core.runtimeservices.wrapper.dom.employees.EmployeeReposi
 import org.apache.isis.core.runtimeservices.wrapper.dom.employees.EmployeeRepositoryImpl;
 import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.security.authentication.standard.SimpleSession;
-import org.apache.isis.core.unittestsupport.config._Config;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.schema.cmd.v2.CommandDto;
@@ -87,9 +87,7 @@ public class WrapperFactoryDefault_wrappedObject_Test {
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
-    //@Mock private ObjectAdapterProvider mockAdapterManager;
     @Mock private AuthenticationSessionProvider mockAuthenticationSessionProvider;
-//    @Mock private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
     @Mock private MessageService mockMessageService;
     @Mock private CommandContext mockCommandContext;
     @Mock private Command mockCommand;
