@@ -35,7 +35,6 @@ import static org.junit.Assert.assertThat;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.unittestsupport.IsisConfigurationLegacy;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.security.shiro.authentication.AuthenticatorShiro;
@@ -49,9 +48,6 @@ public class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
-
-    @Mock
-    private IsisConfigurationLegacy mockConfiguration;
 
     private AuthenticatorShiro authenticator;
     private AuthorizorShiro authorizor;

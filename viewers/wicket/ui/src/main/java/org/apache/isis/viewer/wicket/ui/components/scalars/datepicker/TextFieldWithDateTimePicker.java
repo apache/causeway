@@ -154,16 +154,5 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
         return $(this).chain("datetimepicker", config).get();
     }
 
-//    IsisConfigurationLegacy getConfigurationLegacy() {
-//        return IsisContext.getConfigurationLegacy();
-//    }
-//
-//    IsisConfiguration getConfiguration() {
-//        return IsisContext.getConfiguration();
-//    }
-//
-//    IsisSessionFactory getIsisSessionFactory() {
-//        return IsisContext.getSessionFactory();
-//    }
 
 }

@@ -61,11 +61,8 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     @Mock HttpServletRequest mockHttpServletRequest;
     @Mock ServletContext mockServletContext;
     @Mock IsisSessionFactory mockIsisSessionFactory;
-    @Mock ServiceInjector mockServicesInjector;
-    @Mock IsisConfigurationLegacy mockConfiguration;
     @Mock IsisSession mockIsisSession;
     @Mock AuthenticationSession mockAuthenticationSession;
-    @Mock PersistenceSession mockPersistenceSession;
     @Mock SpecificationLoader mockSpecificationLoader;
     @Mock WebApplicationContext webApplicationContext;
     

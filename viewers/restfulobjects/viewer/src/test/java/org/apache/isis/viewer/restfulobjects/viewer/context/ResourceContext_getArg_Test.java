@@ -56,12 +56,8 @@ public class ResourceContext_getArg_Test {
 
     @Rule public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    @Mock HttpHeaders mockHttpHeaders;
     @Mock HttpServletRequest mockHttpServletRequest;
     @Mock ServletContext mockServletContext;
-    @Mock IsisSessionFactory mockIsisSessionFactory;
-    @Mock ServiceInjector mockServicesInjector;
-    @Mock IsisConfigurationLegacy mockConfiguration;
     @Mock IsisSession mockIsisSession;
     @Mock AuthenticationSession mockAuthenticationSession;
     @Mock PersistenceSession mockPersistenceSession;
