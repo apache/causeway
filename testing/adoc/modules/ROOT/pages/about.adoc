@@ -10,24 +10,28 @@ This guide describes those features available to you for testing your Apache Isi
 
 We divide automated tests into two broad categories:
 
-* unit tests exercise a single unit (usually a method) of a domain object, in isolation.  +
+* xref:testing:unittestsupport:about.adoc[unit tests] exercise a single unit (usually a method) of a domain object, in isolation.
 +
 Dependencies of that object are mocked out.  These are written by a developer and for a developer; they are to ensure that a particular "cog in the machine" works correctly
 
-* integration tests exercise the application as a whole, usually focusing on one particular business operation (action).  +
+* xref:testing:integtestsupport:about.adoc[integration tests] exercise the application as a whole, usually focusing on one particular business operation (action).
 +
 These are tests that represent the acceptance criteria of some business story; their intent should make sense to the domain expert (even if the domain expert is "non-technical")
++
+For larger "modular monoliths", integration tests can also run against a particular vertical slice of the application.
+The xref:starters:simpleapp:about.adoc[SimpleApp] starter app demonstrates this technique.
 
 To put it another way:
 
 [TIP]
 ====
-Integration tests help ensure that you are *_building the right system_*
+Integration tests ensure that you are *_building the right system_*
 
-Unit tests help ensure that you are *_building the system right_*.
+Unit tests ensure that you are *_building the system right_*.
 ====
 
-
+Integration tests leverage Spring Boot's integration testing infrastructure,in particular using link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/test/context/SpringBootTest.html[@SpringBootTest].
+This configures and bootstraps the Apache Isis runtime, usually running against an in-memory database.
 
 == Integ tests vs BDD Specs
 
@@ -35,11 +39,14 @@ We further sub-divide integration tests into:
 
 * those that are implemented in Java and JUnit (we call these simply _"integration tests"_) +
 +
-Even if a domain expert understands the intent of these tests, the actual implementation will be opaque to them.  Also, the only output from the tests is a (hopefully) green CI job
+Even if a domain expert understands the intent of these tests, the actual implementation will probably be pretty opaque to them.
+Also, the only output from the tests is a (hopefully) green CI job
 
-* tests (or rather, specifications) that are implemented in a _behaviour-driven design_ (BDD) language such as link:https://cucumber.io/[Cucumber] (we call these _"BDD specs"_) +
+* tests (or rather, specifications) that are implemented in a _behaviour-driven design_ (BDD) language such as link:https://cucumber.io/[Cucumber].
+We call these _"BDD specs"_, and provide the xref:testing:specsupport:about.adoc[BDD spec support] module to makes Cucumber and `@SpringBootTest` work together.
 +
-The natural language specification then maps down onto some glue code that is used to drive the application.  But the benefits of taking a BDD approach include the fact that your domain expert will be able to read the tests/specifications, and that when you run the specs, you also get documentation of the application's behaviour ("living documentation").
+The natural language specification then maps down onto some glue code that is used to drive the application.
+But the benefits of taking a BDD approach include the fact that your domain expert will be able to read the tests/specifications, and that when you run the specs, you also get documentation of the application's behaviour ("living documentation").
 
 It's up to you whether you use BDD specs for your apps; it will depend on your development process and company culture.  But if you don't then you certainly should write integration tests: acceptance criteria for user stories should be automated!
 
@@ -55,18 +62,23 @@ For most other frameworks that would require having to test the application in a
 
 The xref:refguide:applib-svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] domain service allows a test to wrap domain objects and thus to interact with said objects "as if" through the UI:
 
-image::integ-tests.png[width="700px",link="{imagesdir}/integ-tests.png"]
+.Wrapper objects
+image::testing:integtestsupport:wrapper-factory.png[width="400px",link="testing:integtestsupport:{imagesdir}/wrapper-factory.png"]
 
-If the test invokes an action that is disabled, then the wrapper will throw an appropriate exception.  If the action is ok to invoke, it delegates through.
+If the test invokes an action that is disabled, then the wrapper will throw an appropriate exception.
+If the action is ok to invoke, it delegates through.
+There's more discussion on the wrapper factory in the xref:testing:integtestsupport:about.adoc#wrapper-factory[integ test support] chapter.
 
-What this means is that an Apache Isis application can be tested end-to-end without having to deploy it onto a webserver; the whole app can be tested while running in-memory.  Although integration tests re (necessarily) slower than unit tests, they are not any harder to write (in fact, in some respects they are easier).
+What this means is that an Apache Isis application can be tested end-to-end without having to deploy it onto a webserver; the whole app can be tested while running in-memory.
+Although integration tests re (necessarily) slower than unit tests, they are not any harder to write (in fact, in some respects they are easier).
 
 
 
 
 == Dependency Injection
 
-Isis provides autowiring dependency injection into every domain object.  This is most useful when writing unit tests; simply mock out the service and inject into the domain object.
+Spring Boot will automatically inject dependencies into integration tests and services, and Apache Isis extends this to also inject services into every domain object (entity or view model).
+This is most useful when writing unit tests; simply mock out the service and inject into the domain object.
 
 There are a number of syntaxes supported, but the simplest is to use `@javax.inject.Inject` annotation; for example:
 
@@ -76,29 +88,8 @@ There are a number of syntaxes supported, but the simplest is to use `@javax.inj
 CustomerRepository customers;
 ----
 
-Isis can inject into this even if the field has package-level (or even `private`) visibility.  We recommend that you use package-level visibility, though, so that your unit tests (in the same package as the class under test) are able to inject mocks.
-
-Isis does also support a couple of other syntaxes:
-
-[source,java]
-----
-public void setCustomerRepository(CustomerRepository customers) { /* ... */ }
-----
-
-or
-
-[source,java]
-----
-public void injectCustomerRepository(CustomerRepository customers) { /* ... */ }
-----
-
-
-[TIP]
-====
-Apache Isis also supports automatic dependency injection into integration tests; just declare the service dependency in the usual fashion and it will be automatically injected.
-====
-
-
+Domain services are discovered by Spring Boot, either explicitly referenced in the link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html[@Import] annotation, or picked up from class path scanning of link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/ComponentScan.html[@ComponentScan].
+Any service annotated or meta-annotated with link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Component.html[@Component] can be discovered; this includes classes annotated with Apache Isis' xref:refguide:applib-ant:DomainService.adoc[@DomainService].
 
 
 == Given/When/Then
@@ -109,11 +100,13 @@ Whatever type of test/spec you are writing, we recommend you follow the given/wh
 * *when* I poke it with a stick
 * *then* it looks like this (postconditions)
 
-A good test should be 5 to 10 lines long; the test should be there to help you reason about the behaviour of the system.  Certainly if the test becomes more than 20 lines it'll be too difficult to understand.
+A good test should be 5 to 10 lines long; the test should be there to help you reason about the behaviour of the system.
+Certainly if the test becomes more than 20 lines it'll be too difficult to understand.
 
 The "when" part is usually a one-liner, and in the "then" part there will often be only two or three assertions that you want to make that the system has changed as it should.
 
-For unit test the "given" part shouldn't be too difficult either: just instantiate the class under test, wire in the appropriate mocks and set up the expectations.  And if there are too many mock expectations to set up, then "listen to the tests" ... they are telling you your design needs some work.
+For unit test the "given" part shouldn't be too difficult either: just instantiate the class under test, wire in the appropriate mocks and set up the expectations.
+And if there are too many mock expectations to set up, then "listen to the tests" ... they are telling you your design needs some work.
 
 Where things get difficult though is the "given" for integration tests; which is the topic of the next section...
 
@@ -124,23 +117,30 @@ Where things get difficult though is the "given" for integration tests; which is
 
 In the previous section we discussed using given/when/then as a form of organizing tests, and why you should keep your tests small.
 
-For integration tests though it can be difficult to keep the "given" short; there could be a lot of prerequisite data that needs to exist before you can actually exercise your system.  Moreover, however we do set up that data, but we also want to do so in a way that is resilient to the system changing over time.
+For integration tests though it can be difficult to keep the "given" short; there could be a lot of prerequisite data that needs to exist before you can actually exercise your system.
+Moreover, however we do set up that data, but we also want to do so in a way that is resilient to the system changing over time.
 
-The solution that Apache Isis provides is a domain service called xref:refguide:applib-cm:classes/super.adoc#FixtureScripts[Fixture Scripts], that defines a pattern and supporting classes to help ensure that the "data setup" for your tests are reusable and maintainable over time.
-
+The solution that Apache Isis provides is
+xref:testing:fixtures:about.adoc[fixture scripts], supported by a domain service (also) called xref:refguide:applib-cm:classes/super.adoc#FixtureScripts[Fixture Scripts].
+This defines a pattern (command pattern and composite pattern) with supporting classes to help ensure that the "data setup" for your tests are reusable and maintainable over time.
 
 
 
 
 == Fake data
 
-In any given test there are often quite a few variables involved, to initialize the state of the objects, or to act as arguments for invoking a method, or when asserting on post-conditions.  Sometimes those values are important (eg verifying that an `Order`'s state went from PENDING to SHIPPED, say), but often they aren't (a customer's name, for example) but nevertheless need to be set up (especially in integration tests).
+In any given test there are often quite a few variables involved, to initialize the state of the objects, or to act as arguments for invoking a method, or when asserting on post-conditions.
+Sometimes those values are important (eg verifying that an ``Order``'s state went from PENDING to SHIPPED, say), but often they aren't (a customer's name, for example).
+Nevertheless all this data may need to be set up, especially in integration tests.
 
 We want our tests to be easily understood, and we want the reader's eye to be drawn to the values that are significant and ignore those that are not.
 
-One way to do this is to use random (or fake) values for any insignificant data.  This in effect tells the reader that "any value will do".  Moreover, if it turns out that any data won't do, and that there's some behaviour that is sensitive to the value, then the test will start to flicker, passing and then failing depending on inputs.  This is A Good Thing&#8482;.
+One way to do this is to use random (or fake) values for any insignificant data.
+This in effect tells the reader that "any value will do".
+Moreover, if it turns out that any data won't do, and that there's some behaviour that is sensitive to the value, then the test will start to flicker, passing and then failing depending on inputs.
+This is A Good Thing&#8482;.
 
-Apache Isis does not, itself, ship with a fake data library.  However, the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s fakedata module (non-ASF) does provide exactly this capability.
+Apache Isis provides the link:testing:fakedata:about.adoc[Fake Data] library to assist with this.
 
 [TIP]
 ====
@@ -152,16 +152,20 @@ Using fake data works very well with fixture scripts; the fixture script can inv
 
 == Feature Toggles
 
-Writing automated tests is just good development practice.  Also good practice is developing on the mainline (master, trunk); so that your continuous integration system really is integrating all code.  Said another way: link:http://martinfowler.com/bliki/FeatureBranch.html[don't use branches]!
+Writing automated tests is just good development practice.
+Also good practice is developing on the mainline (master, trunk); so that your continuous integration system really is integrating all code.
+Said another way: link:http://martinfowler.com/bliki/FeatureBranch.html[don't use branches]!
 
-Sometimes, though, a feature will take longer to implement than your iteration cycle.  In such a case, how do you use continuous integration to keep everyone working on the mainline without revealing a half-implemented feature on your releases?  One option is to use link:http://martinfowler.com/bliki/FeatureToggle.html[feature toggle]s.
+Sometimes, though, a feature will take longer to implement than your iteration cycle.
+In such a case, how do you use continuous integration to keep everyone working on the mainline without revealing a half-implemented feature on your releases?
 
-Apache Isis does not, itself, ship with a feature toggle library.  However, the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s togglz module does provide exactly this capability.
+One option is to use link:http://martinfowler.com/bliki/FeatureToggle.html[feature toggle]s.
+These let us decouple deployment (meaning shipping code into production) from release (meaning let users have access to and use that feature).
 
+At its simplest, a feature toggle could be a global variable disabling the functionality until fully ready, or it might even just be implemented using security.
+More sophisticated implementations make access more dynamic, for example by granting access to "alpha" or canary users.
 
+WARNING: TODO: v2: intention is to bring in incode-platform's feature toggle library.
 
-
-
-With all that said, let's look in detail at the testing features provided by Apache Isis.
 
 
