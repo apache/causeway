@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.commons.internal.reflection;
+package org.apache.isis.core.metamodel.commons.internal.reflection;
 
 import java.lang.reflect.Method;
 import java.util.List;
