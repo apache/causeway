@@ -255,7 +255,7 @@ There is no need to specify the version if you inherit from from the xref:starte
 
 This will set up unit testing, integration testing and BDD specs support .
 
-include::starters:parent-pom:partial$surefire-configuration-caution.adoc[]
+include::testing:ROOT:partial$surefire-configuration-caution.adoc[]
 
 If you just want to set up BDD spec support, then use:
 
