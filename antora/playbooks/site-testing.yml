@@ -12,11 +12,6 @@ content:
       branches: HEAD
 
 
-# core
-    - url: .
-      start_path: core/unittestsupport/src/main/adoc # testing
-      branches: HEAD
-
 # testing
     - url: .
       start_path: testing/adoc # testing
