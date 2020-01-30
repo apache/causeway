@@ -44,7 +44,7 @@ if [ ! -z "$REVISION" ]; then
       | grep -v "Downloaded from central" \
       | grep -v "Downloading from DataNucleus_2" \
       | grep -v "Downloaded from DataNucleus_2" \
-      | grep -v "^[INFO] $"
+      | grep -v "^\[INFO\] $"
 
   cd $PROJECT_ROOT_PATH/starters
   echo ""
@@ -63,11 +63,7 @@ fi
 cd $PROJECT_ROOT_PATH/core-parent
 echo ""
 echo ""
-echo ""
-echo ""
 echo ">>> mvn $MVN_STAGES $MVN_ADDITIONAL_OPTS"
-echo ""
-echo ""
 echo ""
 echo ""
 mvn -s $SETTINGS_XML \
@@ -85,25 +81,20 @@ mvn -s $SETTINGS_XML \
     | grep -v "Uploaded from gcpappenginerepo" \
     | grep -v "Downloading from gcpappenginerepo" \
     | grep -v "Downloaded from gcpappenginerepo" \
-    | grep -v "^[INFO] $" \
-    | grep -v "^[INFO] --- maven-enforcer-plugin" \
-    | grep -v "^[INFO] --- maven-site-plugin" \
-    | grep -v "^[INFO] <<< maven-source-plugin:" \
-    | grep -v "^[INFO] >>> maven-source-plugin" \
-    | grep -v "^[INFO] Using alternate deployment repository gcpappenginerepo" \
-    | grep -v "^[INFO] No site descriptor found: nothing to attach." \
-    | grep -v "^[INFO] Skipping because packaging 'jar' is not pom." \
-    | grep -v "^[INFO] Installing"
+    | grep -v "^\[INFO\] $" \
+    | grep -v "^\[INFO\] --- maven-enforcer-plugin" \
+    | grep -v "^\[INFO\] --- maven-site-plugin" \
+    | grep -v "^\[INFO\] <<< maven-source-plugin:" \
+    | grep -v "^\[INFO\] >>> maven-source-plugin" \
+    | grep -v "^\[INFO\] Using alternate deployment repository gcpappenginerepo" \
+    | grep -v "^\[INFO\] No site descriptor found: nothing to attach." \
+    | grep -v "^\[INFO\] Skipping because packaging 'jar' is not pom."
 
 if [ ! -z "$REVISION" ]; then
   cd $PROJECT_ROOT_PATH/core-parent
   echo ""
   echo ""
-  echo ""
-  echo ""
   echo ">>> mvn versions:revert ..."
-  echo ""
-  echo ""
   echo ""
   echo ""
   mvn versions:revert \
@@ -112,16 +103,12 @@ if [ ! -z "$REVISION" ]; then
       | grep -v "Downloaded from central" \
       | grep -v "Downloading from DataNucleus_2" \
       | grep -v "Downloaded from DataNucleus_2" \
-      | grep -v "^[INFO] $"
+      | grep -v "^\[INFO\] $"
 
   cd $PROJECT_ROOT_PATH/starters
   echo ""
   echo ""
-  echo ""
-  echo ""
   echo ">>> sed'ing to revert version in starters ..."
-  echo ""
-  echo ""
   echo ""
   echo ""
   sed -i "s|<version>$REVISION</version>|<version>$CURR</version>|g" pom.xml
