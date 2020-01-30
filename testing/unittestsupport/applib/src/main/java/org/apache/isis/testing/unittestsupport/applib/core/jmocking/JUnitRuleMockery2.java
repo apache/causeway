@@ -44,6 +44,8 @@ import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 
+import lombok.RequiredArgsConstructor;
+
 import junit.framework.AssertionFailedError;
 
 
@@ -230,11 +232,7 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
      * returned in turn.
      */
     public <T> T ignoring(final T mock) {
-        checking(new Expectations() {
-            {
-                ignoring(mock);
-            }
-        });
+        checking(expectationsWith(()->ignoring(mock)));
         return mock;
     }
 
@@ -243,11 +241,7 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
      * turn.
      */
     public <T> T allowing(final T mock) {
-        checking(new Expectations() {
-            {
-                allowing(mock);
-            }
-        });
+        checking(expectationsWith(()->allowing(mock)));
         return mock;
     }
 
@@ -255,11 +249,7 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
      * Prohibit any interaction with the mock.
      */
     public <T> T never(final T mock) {
-        checking(new Expectations() {
-            {
-                never(mock);
-            }
-        });
+        checking(expectationsWith(()->never(mock)));
         return mock;
     }
 
@@ -278,44 +268,41 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
      * @return
      */
     public Object oneOf(final Object mock) {
-        checking(new Expectations() {
-            {
-                oneOf(mock);
-            }
-        });
+        checking(expectationsWith(()->oneOf(mock)));
         return mock;
     }
 
-    /**
-     * Require one interaction
-     * @return
-     * @deprecated use {@link #oneOf(Object)} instead
-     */
-    @Deprecated
-    public Object one(final Object mock) {
-        return oneOf(mock);
-    }
-
-    public static class ExpectationsOn<T> extends Expectations {
-        public ExpectationsOn(Object mock) {
-            this.mockObj = _Casts.uncheckedCast( mock );
-        }
-        private T mockObj;
-        public T mock() {
-            return mockObj;
+    @RequiredArgsConstructor
+    public static class ExpectationsOn extends Expectations {
+        private final Object mockObj;
+        public <T> T mock() {
+            return _Casts.uncheckedCast(mockObj);
         }
     }
 
-    public <T> T checking(T mock, Class<? extends ExpectationsOn<T>> expectationsClass) {
+    public <T> T checking(T mock, Class<? extends ExpectationsOn> expectationsClass) {
         try {
-            Constructor<? extends ExpectationsOn<T>> constructor = expectationsClass.getConstructor(Object.class);
-            ExpectationsOn<T> expectations = constructor.newInstance(mock);
+            Constructor<? extends ExpectationsOn> constructor = expectationsClass.getConstructor(Object.class);
+            ExpectationsOn expectations = constructor.newInstance(mock);
             checking(expectations);
             return mock;
         } catch (Exception e) {
             throw new AssertionFailedError("Unable to instantiate expectations class '" + expectationsClass.getName() + "'");
         }
     }
+
+    
+    private static class ExpectationsWithInitializer extends Expectations {
+        private ExpectationsWithInitializer(Runnable initializer) {
+            super();
+            initializer.run();
+        }
+    }
+    
+    public static Expectations expectationsWith(Runnable initializer) {
+        return new ExpectationsWithInitializer(initializer);
+    }
+    
 
 
 }
