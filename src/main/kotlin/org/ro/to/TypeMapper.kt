@@ -8,7 +8,8 @@ enum class TypeMapperType(val type: String) {
     HTML("Html"),
     NUMERIC("Numeric"),
     TEXT("Text"),
-    TEXT_AREA("TextArea")
+    TEXT_AREA("TextArea"),
+    SIMPLE_SELECT("SimpleSelect")
 }
 
 class TypeMapper {

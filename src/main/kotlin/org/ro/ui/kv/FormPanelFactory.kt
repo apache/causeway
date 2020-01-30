@@ -1,9 +1,7 @@
 package org.ro.ui.kv
 
 import org.ro.ui.FormItem
-import pl.treksoft.kvision.core.Component
-import pl.treksoft.kvision.core.StringPair
-import pl.treksoft.kvision.core.onEvent
+import pl.treksoft.kvision.core.*
 import pl.treksoft.kvision.form.FormPanel
 import pl.treksoft.kvision.form.check.CheckBox
 import pl.treksoft.kvision.form.formPanel
@@ -14,7 +12,8 @@ import pl.treksoft.kvision.form.text.Text
 import pl.treksoft.kvision.form.text.TextArea
 import pl.treksoft.kvision.form.time.DateTime
 import pl.treksoft.kvision.form.time.dateTime
-import pl.treksoft.kvision.html.Iframe
+import pl.treksoft.kvision.html.Div
+import pl.treksoft.kvision.panel.SimplePanel
 import pl.treksoft.kvision.panel.VPanel
 import pl.treksoft.kvision.utils.px
 import kotlin.js.Date
@@ -71,7 +70,13 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
     }
 
     private fun createHtml(fi: FormItem): Component {
-        val item = Iframe(name = fi.label, srcdoc = fi.content as String)
+        val item = SimplePanel()
+        item.title = fi.label
+        val border = Border(1.px, BorderStyle.GROOVE)
+        item.border = border
+        val div = Div(rich = true, content = fi.content.toString())
+        div.padding = CssSize(15, UNIT.px)
+        item.add(div)
         return item
     }
 
