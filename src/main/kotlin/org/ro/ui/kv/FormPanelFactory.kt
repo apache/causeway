@@ -1,5 +1,6 @@
 package org.ro.ui.kv
 
+import org.ro.core.Utils
 import org.ro.ui.FormItem
 import pl.treksoft.kvision.core.*
 import pl.treksoft.kvision.form.FormPanel
@@ -13,10 +14,10 @@ import pl.treksoft.kvision.form.text.TextArea
 import pl.treksoft.kvision.form.time.DateTime
 import pl.treksoft.kvision.form.time.dateTime
 import pl.treksoft.kvision.html.Div
+import pl.treksoft.kvision.html.header
 import pl.treksoft.kvision.panel.SimplePanel
 import pl.treksoft.kvision.panel.VPanel
 import pl.treksoft.kvision.utils.px
-import kotlin.js.Date
 
 class FormPanelFactory(items: List<FormItem>) : VPanel() {
 
@@ -51,15 +52,17 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
     }
 
     private fun createTime(fi: FormItem): DateTime {
-        val item = dateTime(format = "HH:mm", label = fi.label, value = fi.content as Date)
+        val date = Utils.toDate(fi.content as String)
+        val item = dateTime(format = "HH:mm", label = fi.label, value = date)
         return item
     }
 
     private fun createDate(fi: FormItem): DateTime {
+        val date = Utils.toDate(fi.content as String)
         val item = dateTime(
                 format = "YYYY-MM-DD",
                 label = fi.label,
-                value = fi.content as Date
+                value = date
         )
         return item
     }
@@ -71,6 +74,7 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
 
     private fun createHtml(fi: FormItem): Component {
         val item = SimplePanel()
+        item.header(fi.label).paddingLeft = CssSize(15, UNIT.px)
         item.title = fi.label
         val border = Border(1.px, BorderStyle.GROOVE)
         item.border = border

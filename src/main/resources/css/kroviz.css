@@ -69,3 +69,13 @@ label.control-label {
     font-weight: lighter !important;
     font-size: small !important;
 }
+
+pre.highlight {
+    margin: 7px 0px;
+    padding: 14px;
+    background: #FDF6E3;
+}
+
+code.language-java {
+    color: #657B83 !important;
+}
