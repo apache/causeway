@@ -1,6 +1,9 @@
 package org.ro.ui
 
+import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
+import org.ro.ui.kv.EventLogTable
+import org.ro.ui.kv.UiManager
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.navbar.*
@@ -10,15 +13,18 @@ object RoStatusBar {
         height = CssSize(8, UNIT.mm)
         minHeight = CssSize(8, UNIT.mm)
     }
-    private val nav = Nav()
-    private val urlLink = nav.navLink("", icon = "fab fa-windows")
+    private val nav = Nav(rightAlign = true)
+    private val urlLink = nav.navLink("", icon = "fas fa-history").onClick {
+        val model = EventStore.log
+        UiManager.add("Log Entries", EventLogTable(model))
+    }
     private val userLink = nav.navLink("", icon = "far fa-user")
 
 
     init {
         navbar.add(nav)
-        nav.add(urlLink)
         nav.add(userLink)
+        nav.add(urlLink)
     }
 
     fun brand(colorCode: String) {
@@ -28,11 +34,21 @@ object RoStatusBar {
 
     fun updateUser(user: String) {
         userLink.setAttribute(name = "title", value = user)
+        turnGreen()
     }
 
     fun update(le: LogEntry?) {
         val url = le?.title!!
         urlLink.setAttribute(name = "title", value = url)
+    }
+
+    private const val OK = "text-ok"
+    private const val DISABLED = "text-disabled"
+    private const val WARN = "text-warn"
+    fun turnGreen() {
+        urlLink.removeCssClass(DISABLED)
+        urlLink.removeCssClass(WARN)
+        urlLink.addCssClass(OK)
     }
 
 }

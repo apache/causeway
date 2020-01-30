@@ -26,7 +26,7 @@ object IconManager {
             "Error" to "bug",
             "Find" to "search",
             "Hsql" to "database",
-            "JEE/CDI" to "sword-light",
+            "JEE/CDI" to "jedi",
             "List" to "list",
             "Log" to "history",
             "Manager" to "manager",

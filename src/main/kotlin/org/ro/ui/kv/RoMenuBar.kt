@@ -1,6 +1,5 @@
 package org.ro.ui.kv
 
-import org.ro.core.event.EventStore
 import org.ro.to.mb.Menubars
 import org.ro.ui.IconManager
 import org.ro.ui.Point
@@ -45,15 +44,6 @@ object RoMenuBar : SimplePanel() {
             ).onClick { e ->
                 val at = Point(e.pageX.toInt(), e.pageY.toInt())
                 LoginPrompt().open(at)
-            }
-
-            val logTitle = "Log Entries"
-            ddLink(
-                    logTitle,
-                    icon = IconManager.find(logTitle)
-            ).onClick {
-                val model = EventStore.log
-                UiManager.add(logTitle, EventLogTable(model))
             }
 
             val sampleTitle = "Image Sample"
