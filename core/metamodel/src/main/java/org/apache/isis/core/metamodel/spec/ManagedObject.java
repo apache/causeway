@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.spec;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
@@ -34,6 +35,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.base._Tuples.Indexed;
 import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.commons.internal.collections._Lists;
@@ -52,6 +54,7 @@ import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
 
@@ -356,6 +359,47 @@ public interface ManagedObject {
         return adapter.getPojo()==null;
     }
 
+    // -- COMPARE UTILITIES
+    
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    static final class CompareUtil {
+
+        public static int compare(@Nullable ManagedObject p, @Nullable ManagedObject q) {
+            return NATURAL_NULL_FIRST.compare(p, q);
+        }
+        
+        public static Comparator<ManagedObject> orderingBy(ObjectAssociation sortProperty, boolean ascending) {
+            
+            final Comparator<ManagedObject> comparator = ascending 
+                    ? NATURAL_NULL_FIRST 
+                            : NATURAL_NULL_FIRST.reversed();
+            
+            return (p, q) -> {
+                    val pSort = sortProperty.get(p, InteractionInitiatedBy.FRAMEWORK);
+                    val qSort = sortProperty.get(q, InteractionInitiatedBy.FRAMEWORK);
+                    return comparator.compare(pSort, qSort);
+            };
+            
+        }
+        
+        // -- PREDEFINED COMPARATOR
+        
+        private static final Comparator<ManagedObject> NATURAL_NULL_FIRST = new Comparator<ManagedObject>(){
+            @SuppressWarnings({ "unchecked", "rawtypes" })
+            @Override
+            public int compare(@Nullable ManagedObject p, @Nullable ManagedObject q) {
+                val pPojo = ManagedObject.unwrapSingle(p);
+                val qPojo = ManagedObject.unwrapSingle(q);
+                if(!(pPojo instanceof Comparable) || !(qPojo instanceof Comparable)) {
+                    return 0;
+                }
+                return _NullSafe.compareNullsFirst((Comparable)pPojo, (Comparable)qPojo);
+            }
+            
+        };
+        
+    }
+    
     // -- VISIBILITY UTILITIES
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)

@@ -20,7 +20,6 @@
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
@@ -31,7 +30,6 @@ import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvid
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -115,7 +113,7 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
         
         final ObjectAssociation sortProperty = lookupAssociationFor(sort);
         if(sortProperty != null) {
-            Collections.sort(copy, orderingBy(sortProperty, sort.isAscending()));
+            Collections.sort(copy, ManagedObject.CompareUtil.orderingBy(sortProperty, sort.isAscending()));
         }
         
         return copy;
@@ -157,39 +155,6 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
                 objectAdapter, objectAdapter.getSpecification().getIdentifier(), InteractionInitiatedBy.USER,
                 Where.ALL_TABLES);
     }
-
-    private static Comparator<ManagedObject> orderingBy(
-            ObjectAssociation sortProperty, 
-            boolean ascending) {
-        
-        return new Comparator<ManagedObject>(){
-
-            @Override
-            public int compare(ManagedObject p, ManagedObject q) {
-                val pSort = sortProperty.get(p, InteractionInitiatedBy.FRAMEWORK);
-                val qSort = sortProperty.get(q, InteractionInitiatedBy.FRAMEWORK);
-                
-                return (ascending ? NATURAL_NULL_FIRST : NATURAL_NULL_FIRST.reversed())
-                        .compare(pSort, qSort);
-            }
-        };
-        
-    }
-
-    private static final Comparator<ManagedObject> NATURAL_NULL_FIRST = new Comparator<ManagedObject>(){
-        @SuppressWarnings({ "unchecked", "rawtypes" })
-        @Override
-        public int compare(ManagedObject p, ManagedObject q) {
-            val pPojo = ManagedObject.unwrapSingle(p);
-            val qPojo = ManagedObject.unwrapSingle(q);
-            if(!(pPojo instanceof Comparable) || !(qPojo instanceof Comparable)) {
-                return 0;
-            }
-            return _NullSafe.compareNullsFirst((Comparable)pPojo, (Comparable)qPojo);
-        }
-        
-    };
-
 
 
 }
