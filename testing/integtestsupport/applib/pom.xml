@@ -100,11 +100,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.testing</groupId>
-			<artifactId>isis-testing-fixtures-applib</artifactId>
-		</dependency>
-
-		<dependency>
 			<groupId>org.apache.isis.security</groupId>
 			<artifactId>isis-security-bypass</artifactId>
 		</dependency>

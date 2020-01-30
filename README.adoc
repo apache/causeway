@@ -11,8 +11,8 @@ image:https://github.com/apache-isis-committers/isis-nightly/workflows/Nightly/b
 
 _http://isis.apache.org[Apache Isis] software is a framework for rapidly developing domain-driven apps in Java. Write your business logic in entities, domain services and repositories, and the framework dynamically generates a representation of that domain model as a webapp or a RESTful API._
 
-Start learning about Apache Isis using our http://isis.apache.org/arch/helloworld/about.html["Hello World"] Maven archetype.
-Build your own apps using our http://isis.apache.org/arch/simpleapp/about.html["SimpleApp"] Maven archetype.
+Start learning about Apache Isis using the http://github.com/apache/isis-app-helloworld["Hello World"] starter app.
+Build your own apps using our http://github.com/apache/isis-app-simpleapp["SimpleApp"] starter app.
 
 For help and support, join the http://isis.apache.org/support.html[mailing lists].
 To contribute to our documentation, see our https://github.com/apache/isis/tree/master/adocs/documentation[Asciidoctor source].

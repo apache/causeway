@@ -201,6 +201,11 @@ with JMock2 extensions to mock classes
 | Y
 | Y
 
+| Apache Isis xref:testing:fakedata:about.adoc[Fake Data]
+| Y
+| Y
+| Y
+
 | Apache Isis xref:testing:fixtures:about.adoc[Fixture Scripts]
 |
 | Y

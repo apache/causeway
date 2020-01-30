@@ -59,6 +59,12 @@
 			<artifactId>isis-subdomains-spring-applib</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.isis.testing</groupId>
+			<artifactId>isis-testing-integtestsupport-applib</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
 		<!-- JDO API (non transient, provided by plugin) -->
 		<dependency>
 			<groupId>javax.jdo</groupId>
