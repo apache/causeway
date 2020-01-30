@@ -909,7 +909,19 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.mavendeps</groupId>
-				<artifactId>isis-mavendeps-testing</artifactId>
+				<artifactId>isis-mavendeps-unittests</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.mavendeps</groupId>
+				<artifactId>isis-mavendeps-integtests</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.mavendeps</groupId>
+				<artifactId>isis-mavendeps-integspecs</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
