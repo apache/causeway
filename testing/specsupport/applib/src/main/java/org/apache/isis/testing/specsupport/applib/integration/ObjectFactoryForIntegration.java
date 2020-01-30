@@ -26,8 +26,8 @@ import org.apache.isis.core.commons.internal.collections._Maps;
 
 import lombok.RequiredArgsConstructor;
 
-import cucumber.runtime.CucumberException;
 import io.cucumber.core.backend.ObjectFactory;
+import io.cucumber.core.exception.CucumberException;
 
 
 @RequiredArgsConstructor
