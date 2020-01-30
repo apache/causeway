@@ -2,17 +2,18 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-link:http://en.wikipedia.org/wiki/Behavior-driven_development[Behaviour-driven design] (BDD) redefines testing not as an after-the-fact "let's check the system works", but rather as a means to work with the domain expert to (a) specify the behaviour of the feature _before_ starting implementation, and (b) provide a means that the domain expert can verify the feature after it has been implemented.
+link:http://en.wikipedia.org/wiki/Behavior-driven_development[Behaviour-driven design] (BDD) redefines testing not as an after-the-fact "let's check the system works", but instead as a means to specify the required behaviour in conjunction with the domain expert.
+Once the feature has been implemented, it also provide a means by which the domain expert can verify the feature has been implemented to spec.
 
-Since domain experts are usually non-technical (at least, they are unlikely to be able to read or want to learn how to read JUnit/Java code), then applying BDD typically requires writing specifications in using structured English text and (ASCII) tables.  The BDD tooling parses this text and uses it to actually interact with the system under test.  As a byproduct the BDD frameworks generate readable output of some form; this is often an annotated version of the original specification, marked up to indicate which specifications passed, which have failed.  This readable output is a form of "living documentation"; it captures the actual behaviour of the system, and so is guaranteed to be accurate.
+Since domain experts are usually non-technical (at least, they are unlikely to be able to read or want to learn how to read JUnit/Java code), then applying BDD typically requires writing specifications in using structured English text and (ASCII) tables.
+The BDD tooling parses this text and uses it to actually interact with the system under test.
+As a byproduct the BDD frameworks generate readable output of some form; this is often an annotated version of the original specification, marked up to indicate which specifications passed, which have failed.
+This readable output is a form of "living documentation"; it captures the actual behaviour of the system, and so is guaranteed to be accurate.
 
 There are many BDD tools out there; Apache Isis provides an integration with link:https://cucumber.io/docs/reference/jvm#java[Cucumber JVM] (see also the https://github.com/cucumber/cucumber-jvm[github site]):
 
 
-
 == How it works
-
-
 
 At a high level, here's how Cucumber works
 
@@ -20,167 +21,218 @@ At a high level, here's how Cucumber works
 
 * Cucumber-JVM itself is a JUnit runner, and searches for https://github.com/cucumber/cucumber/wiki/Feature-Introduction[feature files] on the classpath.
 
-* These in turn are matched to link:https://github.com/cucumber/cucumber/wiki/Step-Definitions[step definition]s through regular expressions. +
+* These in turn are matched to link:https://github.com/cucumber/cucumber/wiki/Step-Definitions[step definition]s through regular expressions.
 +
-It is the step definitions (the "glue") that exercise the system.
+It is the step definitions (also called "glue") that exercise the system.
 
-The code that goes in step definitions is broadly the same as the code that goes in an integration test method.  One benefit of using step definitions (rather than integration tests) is that the step definitions are reusable across scenarios, so there may be less code overall to maintain.  For example, if you have a step definition that maps to "given an uncompleted todo item", then this can be used for all the scenarios that start with that as their precondition.
+The code that goes in step definitions is broadly the same as the code that goes in an integration test method.
+However one benefit of using step definitions (rather than integration tests) is that the step definitions are reusable across scenarios, so there may be less code overall to maintain.
 
-
+For example, if you have a step definition that maps to "given an uncompleted todo item", then this can be used for all the scenarios that start with that as their precondition.
 
 == Writing a BDD spec
-
-
-
 
 BDD specifications contain:
 
 * a `XxxSpec.feature` file, describing the feature and the scenarios (given/when/then)s that constitute its acceptance criteria
 
-* a `RunSpecs.java` class file to run the specification (all boilerplate).
-This will run all `.feature` files in the same package or subpackages.
+* a `RunIntegBddSpecs` class file to run the specification (all boilerplate).
+This will run all `.feature` files in the same package or subpackages, but is basically just boilerplate.
 
-* one or several `XxxGlue` constituting the step definitions to be matched against. +
+* one or several `XxxStepDef` classes constituting the step definitions to be matched against.
 +
-The "glue" (step definitions) are intended to be reused across features.
-We therefore recommend that they reside in a separate package, and are organized by the entity type upon which they act. +
+The step definitions are intended to be reused across features.
+We therefore recommend that they reside in a separate package, and are organized by the entity type upon which they act.
 +
-For example, given a feature that involves `Customer` and `Order`, have the step definitions pertaining to `Customer` reside in `CustomerGlue`, and the step definitions pertaining to `Order` reside in `OrderGlue`. +
-+
-The `glue` attribute of the Cucumber-JVM JUnit runner allows you to indicate which package(s) should be recursively searched to find any glue.
+For example, given a feature that involves `Customer` and `Order`, have the step definitions pertaining to `Customer` reside in `CustomerStepDef`, and the step definitions pertaining to `Order` reside in `OrderStepDef`.
 
-+
-There also needs to be one glue class that is used to bootstrap the runtime.
+The xref:starters:simpleapp:about.adoc[SimpleApp] starter app provides some BDD specs, so we'll use them to understand how this all works.
 
 
-Here's an example of a feature from the link:https://github.com/apache/isis-app-simpleapp[SimpleApp archetype]:
+== Bootstrapping
+
+The `RunIntegBddSpecs` class uses the Cucumber (JUnit4) runner to discover the features and step defs (glue).
+It also determines how to emit the results.
+
+The class itself is pretty much boilerplate:
 
 [source,java]
+.RunIntegBddSpecs.java
 ----
-@DomainAppDemo
-Feature: List and Create New Simple Objects
-
-  Scenario: Existing simple objects can be listed and new ones created
-    Given there are initially 10 simple objects
-    When  I create a new simple object
-    Then  there are 11 simple objects
-----
-
-The "@DomainAppDemo" is a custom tag we've specified to indicate the prerequisite fixtures to be loaded; more on this in a moment.
-
-[IMPORTANT]
-====
-BDD specs are assumed to run only as integration tests.
-====
-
-The `RunBddSpecs` class to run this feature (and any other features in this package or subpackages) is just boilerplate
-
-[source,java]
-----
-@RunWith(Cucumber.class)
+package domainapp.webapp.bdd;                           //<1>
+...
+@RunWith(Cucumber.class)                                //<2>
 @CucumberOptions(
-        format = {
+        plugin = {
                 "html:target/cucumber-html-report"
-                ,"json:target/cucumber.json"
-        },
-        glue={
-                "classpath:domainapp.application.bdd.specglue",
-                "classpath:domainapp.modules.simple.specglue"
+                ,"json:target/cucumber.json"            //<3>
         },
         strict = true,
-        tags = { "~@backlog", "~@ignore" }
-)
-public class RunBddSpecs {
+        tags = { "not @backlog", "not @ignore" },
+        glue = {}
+        )
+public class RunIntegBddSpecs {
     // intentionally empty
 }
 ----
+<1> All feature files and step definitions under this package will be found.
++
+This can be overridden using the `glue` attribute, if required.
+<2> The tests are run through JUnit 4
+<3> The JSON formatter allows integration with enhanced reports.
 
-The JSON formatter allows integration with enhanced reports.
-(Commented out) configuration for this is provided in the link:https://github.com/apache/isis-app-simpleapp[SimpleApp archetype].
+We also use two "infrastructure" step definitions to bootstrap and configure Spring.
+These are also boilerplate:
 
-The bootstrapping of Apache Isis itself lives in a `BootstrappingGlue` step definition:
-
+* The `BootstrapStepDef` class actually starts the Spring application context:
++
 [source,java]
+.BootstrapStepDef.java
 ----
-public class BootstrappingGlue
-                extends HeadlessWithBootstrappingAbstract { // <1>
+package domainapp.webapp.bdd.infrastructure;                // <1>
+...
 
-    public BootstrappingGlue() {
-        super(new DomainAppApplicationModule());            // <2>
+public class BootstrapStepDef
+                extends ApplicationIntegTestAbstract {      // <2>
+
+    @Before(order= OrderPrecedence.FIRST)                   // <3>
+    public void bootstrap() {
+        // empty                                            // <4>
+    }
+}
+----
+<1> in a subpackage of `RunIntegBddSpecs`
+<2> subclasses from the corresponding integration tests, see xref:testing:integtestsupport:about.adoc[integ test support] for more on this.
+<3> this `@Before` runs before anything else
+<4> there's not anything to do (the heavy lifting is in the superclass)
+
+* The `TransactionalStepDef` simulates Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/transaction/annotation/Transactional.html[@Transactional] attribute:
++
+[source,java]
+.TransactionalStepDef.java
+----
+package domainapp.webapp.bdd.infrastructure;                // <1>
+...
+public class TransactionalStepDef {                         // <2>
+
+    private Runnable afterScenario;
+
+    @Before(order = OrderPrecedence.EARLY)
+    public void beforeScenario(){
+        val txTemplate = new TransactionTemplate(txMan);    // <3>
+        val status = txTemplate.getTransactionManager().getTransaction(null);
+        afterScenario = () -> {
+            txTemplate.getTransactionManager().rollback(status);
+        };
+
+        status.flush();
     }
 
-    @Before(order=100)                                      // <3>
-    public void beforeScenario() {
-        super.bootstrapAndSetupIfRequired();
-    }
     @After
-    public void afterScenario(cucumber.api.Scenario sc) {
-        super.tearDownAllModules();
+    public void afterScenario(){
+        if(afterScenario==null) {
+            return;
+        }
+        afterScenario.run();                                // <4>
+        afterScenario = null;
     }
+
+    @Inject private PlatformTransactionManager txMan;       // <5>
 }
 ----
-<1> superclass contains much of the bootstrapping logic (and is also used by the integration testing framework)
-<2> the `Module` to use to bootstrap the application in headless mode.
-<3> remainder of the class is just boilerplate.
+<1> again, in a subpackage of `RunIntegBddSpecs`
+<2> no need to subclass anything
+<3> uses Spring's link:https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/transaction/support/TransactionTemplate.html[TransactionTemplate] to wrap up the rest of the steps
+<4> rolls back the transaction at the end.
+<5> supporting services are automatically injected.
 
-[NOTE]
-====
-For BDD specs, the `CukeGlueBootstrappingAbstract` was previously provided (as a BDD counterpart to `IntegrationTestAbstract3`) to perform the relevant bootstrapping.
-_However_, it turns out that Cucumber does not allow subclassing of BDD specs.
-Therefore the bootstrapping boilerplate (that ideally would have been factored out into an abstract superclass) must be included within the BDD spec.
-====
+These two "infrastructure" step definitions could be combined into a single class, if desired.
 
-The fixture to run also lives in its own step definition, `CatalogOfFixturesGlue`:
+
+== Typical Usage
+
+With the bootstrapping and infrastructure taken care of, let's look at the actual spec and corresponding step defs.
+
+
+[source,gherkin]
+.SimpleObjectSpec_listAllAndCreate.feature
+----
+@DomainAppDemo                                                          //<1>
+Feature: List and Create New Simple Objects                             //<2>
+
+  Scenario: Existing simple objects can be listed and new ones created  //<2>
+    Given there are initially 10 simple objects                         //<3>
+    When  I create a new simple object                                  //<3>
+    Then  there are 11 simple objects                                   //<3>
+----
+<1> Tag indicates the fixture to be run
+<2> Provide context, but not actually executed
+<3> Map onto step definitions
+
+We need a step definition to match the Cucumber tag to a xref:testing:fixtures:about.adoc[fixture script].
 
 [source,java]
+.DomainAppDemoStepDef.java
 ----
-public class CatalogOfFixturesGlue extends CukeGlueAbstract2 {
-    @Before(value={"@DomainAppDemo"}, order=20000)
+package domainapp.webapp.bdd.fixtures;
+...
+
+public class DomainAppDemoStepDef {
+
+    @Before(value="@DomainAppDemo", order= OrderPrecedence.MIDPOINT) //<1>
     public void runDomainAppDemo() {
-        fixtureScripts.runFixtureScript(new DomainAppDemo(), null); // <1>
+        fixtureScripts.runFixtureScript(new DomainAppDemo(), null);  //<2>
     }
+
+    @Inject private FixtureScripts fixtureScripts;                   //<3>
 }
 ----
-<1> The `fixtureScripts` service is inherited from the superclass.
+<1> specifies the tag to match
+<2> invokes the similarly named `FixtureScript`
+<3> The `fixtureScripts` service is injected automatically
 
 This will only activate for feature files tagged with "@DomainAppDemo".
 
-Finally, the step definitions pertaining to `SimpleObject` domain entity then reside in the `SimpleObjectGlue` class.
+Finally, the step definitions pertaining to `SimpleObjects` domain service residein the `SimpleObjectsSpecDef` class.
 This is where the heavy lifting gets done:
 
 [source,java]
 ----
-public class SimpleObjectMenuGlue extends CukeGlueAbstract2 {
+package domainapp.webapp.bdd.stepdefs;
+...
+public class SimpleObjectsStepDef {
 
-    @Given("^there are.* (\\d+) simple objects$")                           // <1>
-    public void there_are_N_simple_objects(int n) throws Throwable {
-        final List<SimpleObject> list = wrap(simpleObjectMenu).listAll();   // <2>
+    @Inject protected SimpleObjects simpleObjects;                      //<1>
+
+    @Given("^there are.* (\\d+) simple objects$")                       //<2>
+    public void there_are_N_simple_objects(int n) {
+        final List<SimpleObject> list = wrap(simpleObjects).listAll();  //<3>
         assertThat(list.size(), is(n));
     }
 
     @When("^.*create a .*simple object$")
     public void create_a_simple_object() throws Throwable {
-        wrap(simpleObjectMenu).create(UUID.randomUUID().toString());
+        wrap(simpleObjects).create(UUID.randomUUID().toString());
     }
 
-    @Inject
-    SimpleObjectMenu simpleObjectMenu;                                      // <3>
+    <T> T wrap(T domainObject) {
+        return wrapperFactory.wrap(domainObject);
+    }
+
+    @Inject protected WrapperFactory wrapperFactory;                    //<4>
 }
 ----
-<1> regex to match to feature file specification
-<2> the inherited `wrap(...)` method delegates to `WrapperFactory#wrap(...)`
-<3> injected in the usual way
+<1> injected domain service being interacted with
+<2> regex to match to feature file specification
+<3> code that interacts with the domain service.
+This is done using the xref:testing:integtestsupport:about.adoc#wrapper-factory[WrapperFactory] to simulate the UI.
+<4> supporting domain services
 
 [TIP]
 ====
 The xref:refguide:applib-svc:core-domain-api/Scratchpad.adoc[`Scratchpad`] domain service is one way in which glue classes can pass state between each other.
 Or, for more type safety, you could develop your own custom domain services for each scenario, and inject these in as regular services.
 See link:http://www.thinkcode.se/blog/2017/04/01/sharing-state-between-steps-in-cucumberjvm-using-picocontainer[this blog] post for more details.
-====
-
-[TIP]
-====
-If using Java 8, note that Cucumber JVM supports a link:https://cucumber.io/docs/reference/jvm#java-8-lambdas[simplified syntax using lambdas].
 ====
 
 
@@ -208,7 +260,6 @@ include::starters:parent-pom:partial$surefire-configuration-caution.adoc[]
 
 If you just want to set up BDD spec support, then use:
 
-
 [source,xml]
 ----
 <dependency>
@@ -217,9 +268,6 @@ If you just want to set up BDD spec support, then use:
     <scope>test</scope>
 </dependency>
 ----
-
-
-
 
 You may also find it more convenient to place the `.feature` files in `src/test/java`, rather than `src/test/resources`.
 If you wish to do this, then your integtest module's `pom.xml` must contain:
@@ -245,4 +293,47 @@ If you wish to do this, then your integtest module's `pom.xml` must contain:
     </testResources>
 </build>
 ----
+
+
+== Generated Report
+
+BDD is all about creating a conversation with the domain expert, and that includes providing meaningful feedback as to whether the spec is passing or failing.
+
+The xref:starters:simpleapp:about.adoc[SimpleApp]'s `webapp` module uses a Maven plugin to generate a snazzy HTML website based on the contents of the `.json` file emitted by `RunBddIntegSpecs`.
+
+The plugin's configuration is:
+
+[source,xml]
+.webapp/pom.xml
+----
+<plugin>
+    <groupId>net.masterthought</groupId>
+    <artifactId>maven-cucumber-reporting</artifactId>
+    <version>${maven-cucumber-reporting.version}</version>
+    <executions>
+        <execution>
+            <id>execution</id>
+            <phase>verify</phase>
+            <goals>
+                <goal>generate</goal>
+            </goals>
+            <configuration>
+                <projectName>SimpleApp</projectName>
+                <outputDirectory>${project.build.directory}</outputDirectory>
+                <inputDirectory>${project.build.directory}</inputDirectory>
+                <jsonFiles>
+                    <param>**/*.json</param>
+                </jsonFiles>
+                <skip>${skipBSs}</skip>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+----
+
+The report generated by xref:starters:simpleapp:about.adoc[SimpleApp] looks like this:
+
+image::bdd-report.png[width="600px",link="{imagesdir}/bdd-report.png"]
+
+The idea is that this could then be published to a webserver to create an information radiator.
 

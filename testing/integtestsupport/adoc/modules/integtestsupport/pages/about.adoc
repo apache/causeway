@@ -142,19 +142,11 @@ public class SimpleObject
 }
 ----
 
-If we look at `application.yaml`, we see that:
+Properties are visible but unmodifiable by default
+We therefore have two tests for each of these facts.
 
-[source,yaml]
-.application.yaml
-----
-isis:
-  applib:
-    annotation:
-      domain-object:
-        editing: false
-----
-
-which means that this property is implicitly read-only.
+NOTE: Non-editable properties is change from Isis v1.x.
+Use the `isis.applib.annotation.domain-object.editing` configuration property to pverride.
 
 By convention, we group tests into nested static classes, so the corresponding integration test is:
 
