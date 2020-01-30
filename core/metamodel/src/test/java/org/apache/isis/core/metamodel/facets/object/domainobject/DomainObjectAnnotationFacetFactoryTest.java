@@ -50,6 +50,7 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.auditing.Audita
 import org.apache.isis.core.metamodel.facets.object.domainobject.autocomplete.AutoCompleteFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.choices.ChoicesFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetForDomainObjectAnnotationAsConfigured;
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetFromConfiguration;
 import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.publishing.PublishedObjectFacetForDomainObjectAnnotation;
@@ -625,8 +626,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndEditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
-                Assert.assertNotNull(facet); // default is now non-editable
-                Assert.assertTrue(facet instanceof ImmutableFacetFromConfiguration);
+                Assert.assertNull(facet);
 
                 expectNoMethodsRemoved();
             }
@@ -651,7 +651,8 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndEditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
-                Assert.assertNull(facet);
+                Assert.assertNotNull(facet); // default is now non-editable
+                Assert.assertTrue(facet instanceof ImmutableFacetForDomainObjectAnnotationAsConfigured);
 
                 expectNoMethodsRemoved();
             }
