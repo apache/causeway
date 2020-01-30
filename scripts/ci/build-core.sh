@@ -35,11 +35,11 @@ if [ ! -z "$REVISION" ]; then
   echo ""
   mvn versions:set \
       -DnewVersion=$REVISION \
-      | grep -v "^Progress (1)" \
-      | grep -v "Downloading from central" \
-      | grep -v "Downloaded from central" \
-      | grep -v "Downloading from DataNucleus_2" \
-      | grep -v "Downloaded from DataNucleus_2"
+      | fgrep --line-buffered -v "^Progress (1)" \
+      | fgrep --line-buffered -v "Downloading from central" \
+      | fgrep --line-buffered -v "Downloaded from central" \
+      | fgrep --line-buffered -v "Downloading from DataNucleus_2" \
+      | fgrep --line-buffered -v "Downloaded from DataNucleus_2"
 
   cd $PROJECT_ROOT_PATH/starters
   echo ""
@@ -63,22 +63,22 @@ mvn -s $SETTINGS_XML \
     $MVN_STAGES \
     $MVN_ADDITIONAL_OPTS \
     $* \
-    | grep -v "^Progress (1)" \
-    | grep -v "Downloading from central" \
-    | grep -v "Downloaded from central" \
-    | grep -v "Downloading from DataNucleus_2" \
-    | grep -v "Downloaded from DataNucleus_2" \
-    | grep -v "Uploading from gcpappenginerepo" \
-    | grep -v "Uploaded from gcpappenginerepo" \
-    | grep -v "Downloading from gcpappenginerepo" \
-    | grep -v "Downloaded from gcpappenginerepo" \
-    | grep -v "^\[INFO\] --- maven-enforcer-plugin" \
-    | grep -v "^\[INFO\] --- maven-site-plugin" \
-    | grep -v "^\[INFO\] <<< maven-source-plugin:" \
-    | grep -v "^\[INFO\] >>> maven-source-plugin" \
-    | grep -v "^\[INFO\] Using alternate deployment repository gcpappenginerepo" \
-    | grep -v "^\[INFO\] No site descriptor found: nothing to attach." \
-    | grep -v "^\[INFO\] Skipping because packaging 'jar' is not pom."
+    | fgrep --line-buffered -v "^Progress (1)" \
+    | fgrep --line-buffered -v "Downloading from central" \
+    | fgrep --line-buffered -v "Downloaded from central" \
+    | fgrep --line-buffered -v "Downloading from DataNucleus_2" \
+    | fgrep --line-buffered -v "Downloaded from DataNucleus_2" \
+    | fgrep --line-buffered -v "Uploading from gcpappenginerepo" \
+    | fgrep --line-buffered -v "Uploaded from gcpappenginerepo" \
+    | fgrep --line-buffered -v "Downloading from gcpappenginerepo" \
+    | fgrep --line-buffered -v "Downloaded from gcpappenginerepo" \
+    | fgrep --line-buffered -v "[INFO] --- maven-enforcer-plugin" \
+    | fgrep --line-buffered -v "[INFO] --- maven-site-plugin" \
+    | fgrep --line-buffered -v "[INFO] <<< maven-source-plugin:" \
+    | fgrep --line-buffered -v "[INFO] >>> maven-source-plugin" \
+    | fgrep --line-buffered -v "[INFO] Using alternate deployment repository gcpappenginerepo" \
+    | fgrep --line-buffered -v "[INFO] No site descriptor found: nothing to attach." \
+    | fgrep --line-buffered -v "[INFO] Skipping because packaging 'jar' is not pom."
 
 if [ ! -z "$REVISION" ]; then
   cd $PROJECT_ROOT_PATH/core-parent
@@ -88,11 +88,11 @@ if [ ! -z "$REVISION" ]; then
   echo ""
   echo ""
   mvn versions:revert \
-      | grep -v "^Progress (1)" \
-      | grep -v "Downloading from central" \
-      | grep -v "Downloaded from central" \
-      | grep -v "Downloading from DataNucleus_2" \
-      | grep -v "Downloaded from DataNucleus_2"
+      | fgrep --line-buffered -v "^Progress (1)" \
+      | fgrep --line-buffered -v "Downloading from central" \
+      | fgrep --line-buffered -v "Downloaded from central" \
+      | fgrep --line-buffered -v "Downloading from DataNucleus_2" \
+      | fgrep --line-buffered -v "Downloaded from DataNucleus_2"
 
   cd $PROJECT_ROOT_PATH/starters
   echo ""
