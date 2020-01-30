@@ -22,23 +22,27 @@ package org.apache.isis.core.metamodel.commons.internal.reflection;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.xml.bind.JAXBContext;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.jaxb.JaxbServiceDefault;
+import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.isis.core.metamodel.services.user.UserServiceDefault;
 
 import static org.apache.isis.core.commons.internal.reflection._Reflect.getAnnotation;
 import static org.apache.isis.core.commons.internal.reflection._Reflect.streamAllMethods;
 import static org.apache.isis.core.commons.internal.reflection._Reflect.streamTypeHierarchy;
+
+import lombok.val;
 
 //TODO we are using real world classes from the framework, we could instead isolate these tests
 // if we provide some custom classes for hierarchy traversal here (could be nested); 
@@ -50,31 +54,32 @@ class ReflectTest {
 
         Class<?> type = UserServiceDefault.SudoServiceSpi.class;
 
-        String typeListLiteral = streamTypeHierarchy(type, InterfacePolicy.EXCLUDE)
+        val typeSet = streamTypeHierarchy(type, InterfacePolicy.EXCLUDE)
                 .map(Class::getName)
-                .collect(Collectors.joining(",\n"));
+                .collect(Collectors.toSet());
 
-        assertEquals(""
-                + "org.apache.isis.core.metamodel.services.user.UserServiceDefault$SudoServiceSpi,\n"
-                + "java.lang.Object", 
-                typeListLiteral);
+        assertSetContainsAll(_Sets.<String>of(
+                    "org.apache.isis.core.metamodel.services.user.UserServiceDefault$SudoServiceSpi",
+                    "java.lang.Object"),
+                typeSet);
 
     }
+    
 
     @Test
     void typeHierarchyAndInterfaces() {
 
         Class<?> type = UserServiceDefault.SudoServiceSpi.class;
 
-        String typeListLiteral = streamTypeHierarchy(type, InterfacePolicy.INCLUDE)
+        val typeSet = streamTypeHierarchy(type, InterfacePolicy.INCLUDE)
                 .map(Class::getName)
-                .collect(Collectors.joining(",\n"));
+                .collect(Collectors.toSet());
 
-        assertEquals(
-                "org.apache.isis.core.metamodel.services.user.UserServiceDefault$SudoServiceSpi,\n"
-                        + "org.apache.isis.applib.services.sudo.SudoService$Spi,\n"
-                        + "java.lang.Object", 
-                        typeListLiteral);
+        assertSetContainsAll(_Sets.<String>of(
+                    "org.apache.isis.core.metamodel.services.user.UserServiceDefault$SudoServiceSpi",
+                    "org.apache.isis.applib.services.sudo.SudoService$Spi",
+                    "java.lang.Object"), 
+                typeSet);
 
     }
 
@@ -83,18 +88,16 @@ class ReflectTest {
 
         Class<?> type = UserServiceDefault.SudoServiceSpi.class;
 
-        String typeListLiteral = streamAllMethods(type, true)
+        val typeSet = streamAllMethods(type, true)
                 .map(m->m.toString())
-                .sorted()
-                .collect(Collectors.joining(",\n"));
+                .collect(Collectors.toSet());
 
-        assertEquals(""
-                + "public abstract void org.apache.isis.applib.services.sudo.SudoService$Spi.releaseRunAs(),\n"
-                + "public abstract void org.apache.isis.applib.services.sudo.SudoService$Spi.runAs(java.lang.String,java.util.List),\n"
-                + "public void org.apache.isis.core.metamodel.services.user.UserServiceDefault$SudoServiceSpi.releaseRunAs(),\n"
-                + "public void org.apache.isis.core.metamodel.services.user.UserServiceDefault$SudoServiceSpi.runAs(java.lang.String,java.util.List)"
-                ,
-                typeListLiteral);
+        assertSetContainsAll(_Sets.<String>of(
+                "public abstract void org.apache.isis.applib.services.sudo.SudoService$Spi.releaseRunAs()",
+                "public abstract void org.apache.isis.applib.services.sudo.SudoService$Spi.runAs(java.lang.String,java.util.List)",
+                "public void org.apache.isis.core.metamodel.services.user.UserServiceDefault$SudoServiceSpi.releaseRunAs()",
+                "public void org.apache.isis.core.metamodel.services.user.UserServiceDefault$SudoServiceSpi.runAs(java.lang.String,java.util.List)"),
+            typeSet);
 
     }
 
@@ -114,16 +117,16 @@ class ReflectTest {
 
         Class<?> type = JaxbServiceDefault.class;
 
-        String typeListLiteral = streamTypeHierarchy(type, InterfacePolicy.INCLUDE)
+        val typeSet = streamTypeHierarchy(type, InterfacePolicy.INCLUDE)
                 .map(t->t.getName())
-                .collect(Collectors.joining(",\n"));
+                .collect(Collectors.toSet());
 
-        assertEquals(
-                "org.apache.isis.applib.services.jaxb.JaxbServiceDefault,\n"
-                        + "org.apache.isis.applib.services.jaxb.JaxbService$Simple,\n"
-                        + "org.apache.isis.applib.services.jaxb.JaxbService,\n"
-                        + "java.lang.Object", 
-                        typeListLiteral);
+        assertSetContainsAll(_Sets.<String>of(
+                "org.apache.isis.applib.services.jaxb.JaxbServiceDefault",
+                "org.apache.isis.applib.services.jaxb.JaxbService$Simple",
+                "org.apache.isis.applib.services.jaxb.JaxbService",
+                "java.lang.Object"),
+            typeSet);
 
     }
 
@@ -138,6 +141,12 @@ class ReflectTest {
 
         assertNotNull(annot);
 
+    }
+    
+    // -- HELPER
+    
+    private static void assertSetContainsAll(Set<String> shouldContain, Set<String> actuallyContains) {
+        assertTrue(_Sets.minus(shouldContain, actuallyContains).isEmpty());
     }
 
 }

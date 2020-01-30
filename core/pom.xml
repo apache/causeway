@@ -320,7 +320,7 @@
 							<exclude>${testsToExclude}</exclude>
 						</excludes>
 						<printSummary>false</printSummary>
-						<argLine>${surefire-plugin.argLine}</argLine>
+						<argLine>@{argLine} ${surefire-plugin.argLine}</argLine>
 					</configuration>
 					<!-- goal:test binds to phase:test -->
 				</plugin>
