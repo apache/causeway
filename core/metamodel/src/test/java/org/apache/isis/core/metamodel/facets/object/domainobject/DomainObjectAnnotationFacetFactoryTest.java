@@ -607,7 +607,9 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
                 facetFactory.process(new ProcessClassContext(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
-                Assert.assertNull(facet);
+                Assert.assertNotNull(facet); // default is now non-editable
+                Assert.assertTrue(facet instanceof ImmutableFacetFromConfiguration);
+
 
                 expectNoMethodsRemoved();
             }
@@ -623,7 +625,8 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
                 facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndEditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
-                Assert.assertNull(facet);
+                Assert.assertNotNull(facet); // default is now non-editable
+                Assert.assertTrue(facet instanceof ImmutableFacetFromConfiguration);
 
                 expectNoMethodsRemoved();
             }
