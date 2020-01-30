@@ -72,7 +72,7 @@ mvn -s $SETTINGS_XML \
     | fgrep --line-buffered -v "Uploaded from gcpappenginerepo" \
     | fgrep --line-buffered -v "Downloading from gcpappenginerepo" \
     | fgrep --line-buffered -v "Downloaded from gcpappenginerepo" \
-    | fgrep --line-buffered -v "^[INFO]$" \
+    | grep --line-buffered -v "^\[INFO\]\s*$" \
     | fgrep --line-buffered -v "[INFO] --- maven-enforcer-plugin" \
     | fgrep --line-buffered -v "[INFO] --- maven-site-plugin" \
     | fgrep --line-buffered -v "[INFO] <<< maven-source-plugin:" \
