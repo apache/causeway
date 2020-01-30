@@ -28,7 +28,7 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                     }),
             ColumnDefinition<LogEntry>("Title", "title",
                     headerFilter = Editor.INPUT,
-                    width = "350",
+                    width = "450",
                     formatterComponentFunction = { _, _, data ->
                         Button(data.title, icon = data.state.iconName, style = ButtonStyle.LINK).onClick {
                             console.log(data)
