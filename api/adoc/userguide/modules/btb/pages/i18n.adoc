@@ -533,7 +533,7 @@ To ensure your app is fully internationalized app, you must therefore:
 ====
 We make no apologies for this requirement: one of the reasons that we decided to implement Apache Isis' i18n support in this way is because it encourages/requires the app to be properly tested.
 
-Behind the scenes Apache Isis uses a JUnit rule (`ExceptionRecognizerTranslate`) to intercept any exceptions that are thrown.
+Behind the scenes Apache Isis uses a JUnit 5 extension (`ExceptionRecognizerTranslate`) to intercept any exceptions that are thrown.
 These are simply passed through to the registered xref:refguide:applib-svc:presentation-layer-spi/ExceptionRecognizer.adoc[`ExceptionRecognizer`]s so that any messages are recorded as requiring translation.
 ====
 

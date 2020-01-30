@@ -18,60 +18,31 @@
  */
 package org.apache.isis.testing.integtestsupport.applib;
 
-import org.junit.rules.MethodRule;
-import org.junit.runners.model.FrameworkMethod;
-import org.junit.runners.model.Statement;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.TestExecutionExceptionHandler;
 
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.session.RuntimeContextBase;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
-public class ExceptionRecognizerTranslate implements MethodRule {
+public class ExceptionRecognizerTranslate implements TestExecutionExceptionHandler {
     
-    private final ServiceRegistry serviceRegistry;
-
     @Override
-    public Statement apply(final Statement statement, final FrameworkMethod frameworkMethod, final Object o) {
-        return new TranslationStatement(statement);
-    }
-
-    private class TranslationStatement extends Statement {
-        private final Statement next;
-
-        public TranslationStatement(final Statement base) {
-            this.next = base;
-        }
-
-        @Override
-        public void evaluate() throws Throwable {
-            try {
-                this.next.evaluate();
-            } catch (final Throwable ex) {
-                recognize(ex);
-                throw ex;
-            }
-        }
-    }
-
-    /**
-     * Simply invokes {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer#recognize(Throwable)} 
-     * for all registered {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer}s 
-     * for the provided exception, so that the message will be translated.
-     */
-    private void recognize(final Throwable ex) {
-        serviceRegistry
-        .select(ExceptionRecognizer.class)
-        .stream()
-        .forEach(exceptionRecognizer->{
-            exceptionRecognizer.recognize(ex);
-        });
-    }
-
-    IsisSessionFactory getIsisSessionFactory() {
-        return serviceRegistry.lookupServiceElseFail(IsisSessionFactory.class);
+    public void handleTestExecutionException(ExtensionContext extensionContext, Throwable throwable) throws Throwable {
+        IsisContext.getCurrentIsisSession()
+                .map(RuntimeContextBase::getServiceRegistry).
+                ifPresent(serviceRegistry ->
+                        serviceRegistry.select(ExceptionRecognizer.class)
+                                        .stream()
+                                        .forEach(exceptionRecognizer->{
+                                            exceptionRecognizer.recognize(throwable);
+                                        })
+                );
+        throw throwable;
     }
 
 }

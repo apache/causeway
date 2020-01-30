@@ -20,6 +20,7 @@ package org.apache.isis.testing.integtestsupport.applib;
 
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,7 @@ import org.apache.isis.core.runtime.persistence.transaction.events.TransactionAf
  *  
  * @since 2.0
  */
+@ExtendWith(ExceptionRecognizerTranslate.class)
 public abstract class IsisIntegrationTestAbstract {
 
     /**

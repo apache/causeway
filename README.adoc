@@ -261,8 +261,8 @@ Indeed, the example todoapp demonstrates this.
 
 The Apache Isis http://isis.apache.org[website] has lots of useful information and is being continually updated.
 
-Or, you can just start coding using one of the http://isis.apache.org/arch/helloworld/about.html[Maven archetype]s.
+Or, you can just start coding using the https:github.com/apache/isis-app-simpleapp[SimpleApp] starter app.
 
-And if you need help or support, join the http://isis.apache.org/support.html[mailing lists].
+And if you need help or support, join our https://cwiki.apache.org/confluence/display/ISIS/Signing+up+to+Slack[ASF Slack channel] or our http://isis.apache.org/support.html[mailing list].
 
 

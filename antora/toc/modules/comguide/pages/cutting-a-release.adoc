@@ -12,13 +12,9 @@ The release process consists of:
 * Members of the Apache Isis PMC xref:toc:comguide:about.adoc#verifying-releases[verifying] and voting on the release
 * the release manager performing post-release tasks, for either a xref:toc:comguide:about.adoc#post-release-successful.adoc[successful] or an xref:toc:comguide:post-release-unsuccessful[unsuccessful] vote.
 
-Apache Isis itself consists of three separately releasable modules; relative to the link:https://github.com/apache/isis[source code root] there are:
+Apache Isis itself is released in one go, everything is ultimately a child of `core-parent/pom.xml` (relative to the link:https://github.com/apache/isis[source code root])
+This section details the process for formally releasing this module.
 
-* `core`
-* `component/example/archetypes/helloworld`
-* `component/example/archetypes/simpleapp`
-
-This section details the process for formally releasing Isis modules.  It describes the process for both `core` and then the archetypes.
 The subsequent sections describe how other committers can xref:toc:comguide:about.adoc#verifying-releases.adoc[verify a release] and how the release manager can then perform xref:toc:comguide:post-release[post-release] activities and set up for the next development iteration.
 
 If you've not performed a release before, then note that there are some configuration xref:toc:comguide:about.adoc#release-process-prereqs[prerequisites] that must be configured first.
@@ -26,9 +22,6 @@ In particular, you'll need signed public/private keys, and the ASF Nexus staging
 
 These release notes using bash command line tools.
 They should work on Linux and MacOS; for Windows, use mSysGit.
-
-
-
 
 == Obtain Consensus
 
@@ -38,11 +31,8 @@ The discussion should include confirming the version number to be used, and to c
 These discussions should also confirm the version number of the module being released.
 This should be in line with our xref:toc:comguide:about.adoc#versioning-policy[semantic versioning policy].
 
-
 Make sure you have a JIRA ticket open against which to perform all commits.
 In most cases a JIRA ticket will have been created at the beginning of the previous release cycle.
-
-
 
 == Set environment variables
 
@@ -72,8 +62,6 @@ Obviously, alter ``$ISISREL`` as required, and bump ``$ISISRC`` for re-releasing
 Note that the branch name is intentionally *not* the same any of the eventual tag names (eg `isis-{isisnext}` or `simpleapp-archetype-{isisnext}`).
 ====
 
-
-
 == Pull down code to release
 
 Set the HEAD of your local git repo to the commit to be released.
@@ -89,7 +77,6 @@ git checkout -b $ISISBRANCH
 
 The release is performed on a branch; if we are successful, this branch will be merged back into master.
 
-
 Check that there are no snapshot dependencies:
 
 [source,bash,subs="attributes+"]
@@ -98,8 +85,6 @@ grep SNAPSHOT `/bin/find . -name pom.xml | grep -v target | grep -v mothball | s
 ----
 
 The only mention of `SNAPSHOT` should be in the `revision` property of the root `core/pom.xml` file.
-
-
 
 == Bump `revision` property to `$ISISREL`
 
@@ -125,10 +110,7 @@ so that they should read:
 </properties>
 ----
 
-
 After release, there is a xref:toc:comguide:cutting-a-release.adoc#reset-revision[similar step at the end] to reset back to `1.0.0-SNAPSHOT`.
-
-
 
 == Releasing Core
 
@@ -151,8 +133,6 @@ export ISISART=isis
 env | grep ISIS | sort
 ----
 
-
-
 === License headers
 
 The Apache Release Audit Tool `RAT` (from the http://creadur.apache.org[Apache Creadur] project) checks for missing license header files.
@@ -167,9 +147,8 @@ for a in `/bin/find . -name rat.txt -print`; do grep '!???' $a; done || \
 for a in `/bin/find . -name rat.txt -print`; do grep '!AL' $a; done
 ----
 
-where `rat.numUnapprovedLicenses` property is set to a high figure, temporarily overriding the default value of 0.
-This will allow the command to run over all submodules, rather than failing after the first one.
-The command writes out a `target\rat.txt` for each submodule.  missing license notes are indicated using the key `!???`.
+where `rat.numUnapprovedLicenses` property is set to a high figure, temporarily overriding the default value of 0. This will allow the command to run over all submodules, rather than failing after the first one.
+The command writes out a `target\rat.txt` for each submodule. missing license notes are indicated using the key `!???`.
 The `for` command collates all the errors.
 
 Investigate and fix any reported violations, typically by either:
@@ -185,7 +164,6 @@ Once you've fixed all issues, confirm once more that `apache-rat-plugin` no long
 mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=0 -o && \
 for a in `find . -name rat.txt -print`; do grep '!???' $a; done
 ----
-
 
 === Missing License Check
 
@@ -229,9 +207,6 @@ licenses to remove from supplemental-models.xml (are spurious):
 
 If any missing entries are listed or are spurious, then update `supplemental-models.xml` and try again.
 
-
-
-
 === Commit changes
 
 Commit any changes from the preceding steps:
@@ -243,7 +218,6 @@ mvn versions:set -DnewVersion=$ISISVER
 git commit -am "$ISISJIRA: updates to pom.xml etc for release"
 ----
 
-
 === Sanity check
 
 Perform one last sanity check on the codebase.
@@ -254,7 +228,6 @@ Delete all Isis artifacts from your local Maven repo, then build using the `-o` 
 rm -rf ~/.m2/repository/org/apache/isis
 mvn clean install -o
 ----
-
 
 === Deploy
 
@@ -276,15 +249,10 @@ git tag $ISISART-$ISISREL-$ISISRC
 
 using your own GPG passphrase, of course.
 
-
 [IMPORTANT]
 ====
 This requires `gpg` v2.1 or later.
 ====
-
-
-
-
 
 == Check/Close Staging Repo
 
@@ -300,10 +268,11 @@ image::release-process/nexus-staging-1.png[width="600px",link="{imagesdir}/relea
 
 If nothing appears in a staging repo you should stop here and work out why.
 
-Assuming that the repo has been populated, make a note of its repo id; this is needed for the voting thread. In the screenshot above the id is `org.apache.isis-008`.
+Assuming that the repo has been populated, make a note of its repo id; this is needed for the voting thread.
+In the screenshot above the id is `org.apache.isis-008`.
 
-
-After checking that the staging repository contains the artifacts that you expect you should close the staging repository. This will make it available so that people can check the release.
+After checking that the staging repository contains the artifacts that you expect you should close the staging repository.
+This will make it available so that people can check the release.
 
 Press the Close button and complete the dialog:
 
@@ -325,15 +294,11 @@ image::release-process/nexus-staging-4.png[width="600px",link="{imagesdir}/relea
 
 Use `gpg --keyserver hkp://pgp.mit.edu --recv-keys nnnnnnnn` to confirm that the key is available.
 
-
 [NOTE]
 ====
-Unfortunately, Nexus does not seem to allow subkeys to be used for signing. See xref:toc:comguide:about.adoc#key-generation[Key Generation] for more details.
+Unfortunately, Nexus does not seem to allow subkeys to be used for signing.
+See xref:toc:comguide:about.adoc#key-generation[Key Generation] for more details.
 ====
-
-
-
-
 
 == Reset `revision` property
 
@@ -352,7 +317,6 @@ In the root of the Apache Isis repo, we do this for all three ``pom.xml``s with:
 ----
 sh scripts/version-reset.sh $ISISJIRA
 ----
-
 
 == Push branches
 
@@ -377,8 +341,6 @@ git fetch
 ====
 The remote tags aren't visible locally but can be seen link:https://github.com/apache/isis/tags[online].
 ====
-
-
 
 == Voting
 
