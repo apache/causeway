@@ -28,29 +28,102 @@ sh $SCRIPT_DIR/_print-environment.sh "build-core"
 if [ ! -z "$REVISION" ]; then
 
   cd $PROJECT_ROOT_PATH/core-parent
-  echo "updating version in isis-parent ..."
-  mvn versions:set -DnewVersion=$REVISION
+  echo ""
+  echo ""
+  echo ""
+  echo ""
+  echo ">>> mvn versions:set -DnewVersion=$REVISION ..."
+  echo ""
+  echo ""
+  echo ""
+  echo ""
+  mvn versions:set \
+      -DnewVersion=$REVISION \
+      | grep -v "^Progress (1)" \
+      | grep -v "Downloading from central" \
+      | grep -v "Downloaded from central" \
+      | grep -v "Downloading from DataNucleus_2" \
+      | grep -v "Downloaded from DataNucleus_2" \
+      | grep -v "^[INFO] $"
 
   cd $PROJECT_ROOT_PATH/starters
-  echo "updating version in isis-app-starter-parent ..."
+  echo ""
+  echo ""
+  echo ""
+  echo ""
+  echo ">>> sed'ing version in starters ..."
+  echo ""
+  echo ""
+  echo ""
+  echo ""
   CURR=$(grep "<version>" pom.xml | head -1 | cut -d'>' -f2 | cut -d'<' -f1)
   sed -i "s|<version>$CURR</version>|<version>$REVISION</version>|g" pom.xml
 fi
 
 cd $PROJECT_ROOT_PATH/core-parent
+echo ""
+echo ""
+echo ""
+echo ""
+echo ">>> mvn $MVN_STAGES $MVN_ADDITIONAL_OPTS"
+echo ""
+echo ""
+echo ""
+echo ""
 mvn -s $SETTINGS_XML \
     $BATCH_MODE \
     -T1C \
     $MVN_STAGES \
     $MVN_ADDITIONAL_OPTS \
-    $*
+    $* \
+    | grep -v "^Progress (1)" \
+    | grep -v "Downloading from central" \
+    | grep -v "Downloaded from central" \
+    | grep -v "Downloading from DataNucleus_2" \
+    | grep -v "Downloaded from DataNucleus_2" \
+    | grep -v "Uploading from gcpappenginerepo" \
+    | grep -v "Uploaded from gcpappenginerepo" \
+    | grep -v "Downloading from gcpappenginerepo" \
+    | grep -v "Downloaded from gcpappenginerepo" \
+    | grep -v "^[INFO] $" \
+    | grep -v "^[INFO] --- maven-enforcer-plugin" \
+    | grep -v "^[INFO] --- maven-site-plugin" \
+    | grep -v "^[INFO] <<< maven-source-plugin:" \
+    | grep -v "^[INFO] >>> maven-source-plugin" \
+    | grep -v "^[INFO] Using alternate deployment repository gcpappenginerepo" \
+    | grep -v "^[INFO] No site descriptor found: nothing to attach." \
+    | grep -v "^[INFO] Skipping because packaging 'jar' is not pom." \
+    | grep -v "^[INFO] Installing"
 
 if [ ! -z "$REVISION" ]; then
   cd $PROJECT_ROOT_PATH/core-parent
-  echo "reverting version in isis-parent ..."
-  mvn versions:revert
+  echo ""
+  echo ""
+  echo ""
+  echo ""
+  echo ">>> mvn versions:revert ..."
+  echo ""
+  echo ""
+  echo ""
+  echo ""
+  mvn versions:revert \
+      | grep -v "^Progress (1)" \
+      | grep -v "Downloading from central" \
+      | grep -v "Downloaded from central" \
+      | grep -v "Downloading from DataNucleus_2" \
+      | grep -v "Downloaded from DataNucleus_2" \
+      | grep -v "^[INFO] $"
+
   cd $PROJECT_ROOT_PATH/starters
-  echo "reverting version in isis-app-starter-parent ..."
+  echo ""
+  echo ""
+  echo ""
+  echo ""
+  echo ">>> sed'ing to revert version in starters ..."
+  echo ""
+  echo ""
+  echo ""
+  echo ""
   sed -i "s|<version>$REVISION</version>|<version>$CURR</version>|g" pom.xml
 fi
 
