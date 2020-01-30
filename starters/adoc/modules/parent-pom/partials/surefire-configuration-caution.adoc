@@ -1,4 +1,3 @@
-:page-partial:
 
 [CAUTION]
 ====
