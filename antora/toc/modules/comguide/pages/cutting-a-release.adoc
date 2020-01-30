@@ -286,7 +286,7 @@ See xref:toc:comguide:about.adoc#key-generation[Key Generation] for more details
 
 == Reset `revision` property
 
-At the beginning of the release process we bumped the `revision` property to the release version, ie `$ISISREL`.
+At the beginning of the release process we bumped the version to the release version, ie `$ISISREL`.
 With the release now deployed we now need to reset the revision back down to the base snapshot, ie `2.0.0-SNAPSHOT`.
 
 [NOTE]
@@ -350,9 +350,7 @@ And use the following body:
 
 [source,bash,subs="attributes+"]
 ----
-I've cut a release for Apache Isis Framework (Core, Extensions, Mavendeps + Mixins):
-
-* Framework {isisnext}
+I've just cut a new release for Apache Isis Framework.
 
 The source code artifacts have been uploaded to staging repositories on repository.apache.org.
 For each zip there is a corresponding signature file (append .asc to the zip's url).
@@ -368,8 +366,6 @@ To verify the source code, you can use the following commands (in an empty direc
     gpg --import /tmp/KEYS
 
     rm -rf isis-$VERSION*
-    rm -rf simpleapp-archetype-$VERSION*
-    rm -rf helloworld-archetype-$VERSION*
 
     curl -O -L https://raw.githubusercontent.com/apache/isis/06f947ad7a0968c34d8e6941a77e12aa0196cd17/scripts/verify-isis-release.sh
 

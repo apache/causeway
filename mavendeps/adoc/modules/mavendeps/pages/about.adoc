@@ -116,100 +116,68 @@ integspecs
 
 |Apache Isis' own xref:testing:unittestsupport:about.adoc[unit test support] +
 with JMock2 extensions to mock classes
-| Y
-|
-|
+| Y | - | -
 
 |Apache Isis' own xref:testing:integtestsupport:about.adoc[integ test support]
-|
-| Y
-| Y
+| - | Y | Y
 
 |Apache Isis' own xref:testing:specsupport:about.adoc[BDD spec support]
-|
-|
-| Y
+| - | - | Y
 
 | link:https://junit.org/junit5/docs/current/user-guide/[JUnit 5 "jupiter"]
-| Y
-| Y
-| Y
+| Y | Y | Y
 
 | link:https://junit.org/junit5/docs/current/user-guide/#migrating-from-junit4[JUnit 5 "vintage"]
-| Y
-|
-|
+| Y | - | -
 
 | link:https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-testing[Spring Boot Test]
-| Y
-| Y
-| Y
+| Y | Y | Y
 
 | link:http://hamcrest.org/JavaHamcrest/[Hamcrest] (core + library)
-| Y
-| Y
-| Y
+| Y | Y | Y
 
 | link:https://joel-costigliola.github.io/assertj/[AssertJ]
-| Y
-| Y
-| Y
+| Y | Y | Y
 
 | link:https://site.mockito.org/[Mockito]
-| Y
-| Y
-| Y
+| Y | Y | Y
 
 | link:http://jmock.org/[JMock]
-| Y
-|
-|
+| Y | - | -
 
 | link:https://github.com/approvals/ApprovalTests.Java[Approval tests]
-| Y
-| Y
-| Y
-
-| link:https://github.com/google/guava/wiki[Google's Guava]
-| Y
-|
-|
+| Y | Y | Y
 
 | link:http://picocontainer.com/[PicoContainer] +
 (for JMock2 extensions)
-| Y
-|
-|
+| Y | - | -
 
 | Apache Isis xref:refguide:ROOT:about.adoc[Applib]
-| Y
-| Y
-| Y
+| Y | Y | Y
 
 | Apache Isis xref:core:runtime-services:about.adoc[Runtime Services]
-|
-| Y
-| Y
+| - | Y | Y
 
 | Apache Isis xref:security:bypass:about.adoc[Bypass] security
-|
-| Y
-| Y
+| - | Y | Y
 
 | Apache Isis xref:pjdo:ROOT:about.adoc[JDO/DataNucleus]
-|
-| Y
-| Y
+| - | Y | Y
 
 | Apache Isis xref:testing:fakedata:about.adoc[Fake Data]
-| Y
-| Y
-| Y
+| Y | Y | Y
 
 | Apache Isis xref:testing:fixtures:about.adoc[Fixture Scripts]
-|
-| Y
-| Y
+| - | Y | Y
+
+| link:https://github.com/google/guava/wiki[Google's Guava]
+| Y | - | -
+
+| link:http://hsqldb.org[HSQLDB]
+| - | Y | Y
+
+| link:https://www.h2database.com[H2 Database]
+| - | Y | Y
 
 |===
 
