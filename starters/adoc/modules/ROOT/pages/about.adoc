@@ -1,4 +1,4 @@
-= Quick Start
+= Starter Apps
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 To get started with a new application, download one of the two starter apps.
@@ -13,7 +13,7 @@ The source code is in this link:https://github.com/apache/isis-app-helloworld[gi
 include::starters:helloworld:page$script.adoc[]
 
 
-An explanation of the structure of the app can be found *xref:starters:helloworld:about.adoc[here]*.
+A much more complete explanation of the structure of the app (and how to use it) can be found *xref:starters:helloworld:about.adoc[here]*.
 
 
 == Simple App
@@ -26,7 +26,7 @@ The source code can be found in this link:https://github.com/apache/isis-app-sim
 include::starters:simpleapp:page$script.adoc[]
 
 
-An explanation of the structure of the app can be found *xref:starters:helloworld:about.adoc[here]*.
+A much more complete explanation of the structure of the app (and how to use it) can be found *xref:starters:helloworld:about.adoc[here]*.
 
 
 == Updating to Newer Versions
