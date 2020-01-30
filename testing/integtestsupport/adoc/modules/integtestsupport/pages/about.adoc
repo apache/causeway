@@ -596,5 +596,5 @@ When running integration tests through the IDE, and if using the JDO/DataNucleus
 
 If using IntelliJ, we recommend creating a run Maven configuration that runs `datanucleus:enhance`, and then pinning the configuration once run as a tab in the "Debug" window for easy access.
 
-image::pin-enhance-run-configuration.png/[width="400px",link="{imagesdir}/pin-enhance-run-configuration.png/"]
+image::pin-enhance-run-configuration.png[width="400px",link="{imagesdir}/pin-enhance-run-configuration.png"]
 ====

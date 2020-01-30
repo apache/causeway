@@ -26,39 +26,34 @@ You'll see that it is used by both the xref:starters:helloworld:about.adoc[Hello
 
 The link:{attachmentsdir}/parent-pom.pptx[diagram] below shows how the parent POM relates to other POMs:
 
-image::parent-pom.png[width="600px",link="{imagesdir}/parent-pom.png"]
+image::parent-pom.png[width="800px",link="{imagesdir}/parent-pom.png"]
 
 
-So, you can see that the parent POM:
+As the diagram shows, the parent POM inherits two Spring Boot parent POMs: directly from `org.springframework.boot:spring-boot-starter-parent`, and transitively inherits from `org.springframework.boot:spring-boot-dependencies`.
 
-* inherits from `org.springframework.boot:spring-boot-starter-parent`
+* `spring-boot-starter-parent` configures various `<build>/<plugins>` and `<resources>`, while
+* `spring-boot-dependencies` the second defines numerous `xxx.version` properties for various third party applications (validated as being compatible with each other by the Spring Boot team), and sets up corresponding `<dependencyManagement>/<dependencies>`.
+
+The parent POM also import (using `scope=import, type=pom`) each of the "bill of material" POMs provided by Apache Isis framework:
+
+* `org.apache.isis.core:isis` -
 +
-This configures various `<build>/<plugins>` and `<resources`>
+The two core modules most commonly referenced by domain applications are `o.a.i.core:isis-applib` and `o.a.i.core:isis-schema`.
 
-* transitively inherits from `org.springframework.boot:spring-boot-dependencies`
+* `o.a.i.testing:isis-testing`
 +
-This defines numerous `xxx.version` properties for various third party applications, and sets up corresponding `<dependencyManagement>/<dependencies>`.
-+
-NOTE: These have been validated as being compatible with each other by the Spring Boot team.
+For the `isis-testing-xxx` modules (fixture scripts, unit test support, integ test support etc)
 
-* imports `org.apache.isis.core:isis` (using scope=import, type=pom)
-+
-\... setting up `<dependencyManagement>/<dependencies>` entries for all of the core modules.
-+
-TIP: The two core modules most commonly referenced in domain applications are `o.a.i.core:isis-applib` and `o.a.i.core:isis-schema`.
+* `o.a.i.extensions:isis-extensions`
 
-* similarly imports `o.a.i.testing:isis-testing`, for the `isis-testing-xxx` modules
+* `o.a.i.subdomains:isis-subdomains`
 
-* imports `o.a.i.extensions:isis-extensions`, for `isis-extension-xxx` modules
+* `o.a.i.mappings:isis-mappings`
 
-* imports `o.a.i.subdomains:isis-subdomains`, for `isis-subdomain-xxx` modules
+* `o.a.i.valuetypes:isis-valuetypes`
 
-* imports `o.a.i.mappings:isis-mappings`, for `isis-mappings-xxx` modules
+* `o.a.i.incubator:isis-incubator`
 
-* imports `o.a.i.valuetypes:isis-valuetypes`, for `isis-valuetypes-xxx` modules
+* `o.a.i.legacy:isis-legacy`
 
-* imports `o.a.i.incubator:isis-incubator`, for `isis-incubator-xxx` modules
-
-* imports `o.a.i.legacy:isis-legacy`, for `isis-legacy-xxx` modules
-
-
+These all set up `<dependencyManagement>/<dependencies>` entries for all of the modules, meaning that there's only one place to update the version to Apache Isis (the reference to the parent POM).

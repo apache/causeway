@@ -12,53 +12,29 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.apache.isis</groupId>
-	<artifactId>isis-all</artifactId>
-	<version>2.0.0-M3-SNAPSHOT</version>
+	<parent>
+		<groupId>org.apache.isis.mavendeps</groupId>
+		<artifactId>isis-mavendeps</artifactId>
+		<version>2.0.0-M3-SNAPSHOT</version>
+	</parent>
 
+	<artifactId>isis-mavendeps-integspecs</artifactId>
 
 	<packaging>pom</packaging>
 
-	<name>Apache Isis (Aggregator)</name>
+	<name>Apache Isis Maven Deps - BDD Integ Spec</name>
 	<description>
-        Convenience aggregator POM that references all modules.
-        The parent POM of the core framework is core-parent/pom.xml
+        Defines a module that can be used as a single dependency for BDD (Cucumber) specs as integration tests.
     </description>
 
-	<scm>
-		<connection>scm:git:https://github.com/apache/isis.git</connection>
-		<developerConnection>scm:git:https://github.com/apache/isis.git</developerConnection>
-		<url>https://github.com/apache/isis.git</url>
-		<tag>HEAD</tag>
-	</scm>
-
-	<modules>
-		<module>core-parent</module>
-
-		<module>examples/demo</module>
-		<module>examples/smoketests</module>
-	</modules>
-
-	<profiles>
-		<profile>
-			<id>examples</id>
-			<activation>
-				<!--
-				only include within IDE as a convenience
-				-->
-				<property>
-					<name>idea.version</name>
-				</property>
-			</activation>
-			<modules>
-				<module>mixins</module>
-				<module>core</module>
-				<module>examples</module>
-			</modules>
-		</profile>
-
-	</profiles>
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.isis.testing</groupId>
+			<artifactId>isis-testing-specsupport-applib</artifactId>
+		</dependency>
+	</dependencies>
 
 </project>

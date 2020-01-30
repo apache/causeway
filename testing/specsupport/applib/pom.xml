@@ -34,37 +34,11 @@
 
 	<dependencies>
 
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime</artifactId>
-        </dependency>
-        
-        <!-- ISIS TESTING -->
-		
 		<dependency>
 			<groupId>org.apache.isis.testing</groupId>
-			<artifactId>isis-testing-fixtures-applib</artifactId>
+			<artifactId>isis-testing-integtestsupport-applib</artifactId>
 		</dependency>
-        
-		<!-- TESTING -->
-		<dependency>
-			<groupId>org.apache.isis.testing</groupId>
-			<artifactId>isis-testing-unittestsupport-applib</artifactId>
-        </dependency>
-                
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.vintage</groupId>
-            <artifactId>junit-vintage-engine</artifactId>
-        </dependency>
-        
+
 		<!-- CUCUMBER -->
 		<dependency>
 		    <groupId>io.cucumber</groupId>
@@ -80,12 +54,14 @@
 		    <groupId>io.cucumber</groupId>
 		    <artifactId>cucumber-junit</artifactId>
 		    <version>${cucumber.version}</version>
+<!--
 		    <exclusions>
 		        <exclusion>
 		            <groupId>junit</groupId>
 		            <artifactId>junit</artifactId>
 		        </exclusion>
 		    </exclusions>
+-->
 		</dependency>
 
 	</dependencies>

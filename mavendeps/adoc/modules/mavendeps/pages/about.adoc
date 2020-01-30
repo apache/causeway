@@ -1,4 +1,249 @@
-= Maven Dependencies
+= Convenience POMs
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-TODO: to document
+The framework provides a number of "convenience" POMs that act as aggregators of other dependencies.
+
+For example, when writing unit tests for your domain app,
+it can simply depend on the `isis-mavendeps-unittesting` artifact (rather than have to reference all of JUnit, AssertJ, Spring Boot, Hamcrest, Mockito and so on).
+
+Currently five convenience POMs are provided.
+
+== isis-mavendeps-webapp
+
+The `isis-mavendeps-webapp` aggregates the main runtime dependencies of a production webapp.
+
+To use, add the following :
+
+[source,xml]
+.webapp/pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.isis.mavendeps</groupId>
+        <artifactId>isis-mavendeps-webapp</artifactId>
+        <type>pom</type>
+    </dependency>
+</dependencies>
+----
+
+For convenience, it includes all of the current components available:
+
+* Spring Boot (link:https://docs.spring.io/spring-boot/docs/current/reference/html/getting-started.html#getting-started-first-application-dependencies[spring-boot-starter-web])
+
+* Apache Isis Core - the xref:refguide:ROOT:about.adoc[Applib] and underlying implementation (xref:core:runtime-services:about.adoc[Runtime Services])
+
+* All the security implementations (xref:security:bypass:about.adoc[Bypass],
+xref:security:shiro:about.adoc[Shiro], xref:security:keycloak:about.adoc[Keycloak])
+
+* All the viewer implementations (
+xref:vw:ROOT:about.adoc[Wicket], xref:vro:ROOT:about.adoc[Restful Objects])
+
+* All the persistence implementations (xref:pjdo:ROOT:about.adoc[JDO/DataNucleus])
+
+If you don't need any of these (for example, you'll probably only want one security implementation), then you can exclude the others.
+
+Also, remember that adding the class onto the classpath does _not_ make that functionality available (Apache Isis does not currently leverage Spring Boot's link:https://docs.spring.io/spring-boot/docs/current/reference/html/using-spring-boot.html#using-boot-auto-configuration[auto configuration] capabilities).
+So, you must also add in the appropriate `IsisModuleXxx` to your application's top-level link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] (aka "app manifest").
+For example, see the xref:starters:simpleapp:about.adoc#appmanifest[AppManifest for the SimpleApp] starter app.
+
+
+== Testing and BDD Specs
+
+Three convenience POMs are provided to support  xref:testing:unittestsupport:about.adoc[unit testing], xref:testing:integtestsupport:about.adoc[integ testing] or running xref:testing:specsupport:about.adoc[BDD (Cucumber) specs].
+
+NOTE: in fact, these convenience POMs are just thin wrappers around the corresponding `isis-testing-xxx-applib` modules.
+We've added them for consistency.
+
+To use them when unit testing, add:
+
+[source,xml]
+.webapp/pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.isis.mavendeps</groupId>
+        <artifactId>isis-mavendeps-unittests</artifactId>
+        <type>pom</type>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
+----
+
+For integration testing, add:
+
+[source,xml]
+.webapp/pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.isis.mavendeps</groupId>
+        <artifactId>isis-mavendeps-integtests</artifactId>
+        <type>pom</type>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
+----
+
+For BDD (Cucumber) specs, within an integration testing context:
+
+[source,xml]
+.webapp/pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.isis.mavendeps</groupId>
+        <artifactId>isis-mavendeps-integspecs</artifactId>
+        <type>pom</type>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
+----
+
+The table below summarises the dependencies that each of these convenience POMs brings in.
+
+.Dependencies of the Convenience POM for Tests/Specs
+[cols="3a,^1a,^1a,^1a", options="header"]
+|===
+
+| Dependency
+| mavendeps-
+unittests
+| mavendeps-
+integtests
+| mavendeps-
+integspecs
+
+
+|Apache Isis' own xref:testing:unittestsupport:about.adoc[unit test support] +
+with JMock2 extensions to mock classes
+| Y
+|
+|
+
+|Apache Isis' own xref:testing:integtestsupport:about.adoc[integ test support]
+|
+| Y
+| Y
+
+|Apache Isis' own xref:testing:specsupport:about.adoc[BDD spec support]
+|
+|
+| Y
+
+| link:https://junit.org/junit5/docs/current/user-guide/[JUnit 5 "jupiter"]
+| Y
+| Y
+| Y
+
+| link:https://junit.org/junit5/docs/current/user-guide/#migrating-from-junit4[JUnit 5 "vintage"]
+| Y
+|
+|
+
+| link:https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-testing[Spring Boot Test]
+| Y
+| Y
+| Y
+
+| link:http://hamcrest.org/JavaHamcrest/[Hamcrest] (core + library)
+| Y
+| Y
+| Y
+
+| link:https://joel-costigliola.github.io/assertj/[AssertJ]
+| Y
+| Y
+| Y
+
+| link:https://site.mockito.org/[Mockito]
+| Y
+| Y
+| Y
+
+| link:http://jmock.org/[JMock]
+| Y
+|
+|
+
+| link:https://github.com/approvals/ApprovalTests.Java[Approval tests]
+| Y
+| Y
+| Y
+
+| link:https://github.com/google/guava/wiki[Google's Guava]
+| Y
+|
+|
+
+| link:http://picocontainer.com/[PicoContainer] +
+(for JMock2 extensions)
+| Y
+|
+|
+
+| Apache Isis xref:refguide:ROOT:about.adoc[Applib]
+| Y
+| Y
+| Y
+
+| Apache Isis xref:core:runtime-services:about.adoc[Runtime Services]
+|
+| Y
+| Y
+
+| Apache Isis xref:security:bypass:about.adoc[Bypass] security
+|
+| Y
+| Y
+
+| Apache Isis xref:pjdo:ROOT:about.adoc[JDO/DataNucleus]
+|
+| Y
+| Y
+
+| Apache Isis xref:testing:fixtures:about.adoc[Fixture Scripts]
+|
+| Y
+| Y
+
+|===
+
+
+
+== jdk11
+
+While Apache Isis v2 will run happily on Java 8, it is of course also possible to it on later versions.
+
+However, between Java 8 and Java 11 a number of packages related to JavaEE were removed from the JRE, but these packages are used by the framework, specifically
+
+* JAX-WS packages (`javax.jws`, `javax.jws.soap`, `javax.xml.soap`, and `javax.xml.ws.*`)
+* JAXB packages (`javax.xml.bind.*`)
+
+So, if you _do_ want to run your Apache Isis application on Java 11 or later, then these dependencies need to be added in.
+
+
+All you need to do is include this dependency in the webapp module:
+
+To use, add the following :
+
+[source,xml]
+.webapp/pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.isis.mavendeps</groupId>
+        <artifactId>isis-mavendeps-jdk11</artifactId>
+        <type>pom</type>
+    </dependency>
+</dependencies>
+----
+
+If you are running on JDK11, then this will activate a profile to bring in the missing packages.
+Otherwise it will be ignored.
+
+For more on this topic, see:
+
+* link:https://www.oracle.com/technetwork/java/javase/11-relnote-issues-5012449.html#JDK-8190378[JDK11 release notes]
+* link:http://openjdk.java.net/jeps/320[JEP 320] under which the packages were removed (also includes notes on replacements)
+* link:https://blog.codefx.org/java/java-11-migration-guide/#Removal-Of-Java-EE-Modules[this blog post] on how to fix it
+* link:https://stackoverflow.com/questions/48204141/replacements-for-deprecated-jpms-modules-with-java-ee-apis/48204154#48204154[this SO answer] on how to fix it

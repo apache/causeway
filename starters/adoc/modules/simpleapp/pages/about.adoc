@@ -324,7 +324,7 @@ There will be several of these app manifests, typically one for the webapp itsel
 The link:{attachmentsdir}/simpleapp-modules-dependencies.pptx[diagram] below shows how classes fit together:
 
 .Module Dependencies
-image::simpleapp-modules-dependencies.png/[width="600px",link="{imagesdir}/simpleapp-modules-dependencies.png/"]
+image::simpleapp-modules-dependencies.png[width="800px",link="{imagesdir}/simpleapp-modules-dependencies.png"]
 
 
 

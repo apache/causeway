@@ -98,7 +98,9 @@
 
 	<modules>
 		<module>jdk11</module>
-		<module>testing</module>
+		<module>unittests</module>
+		<module>integtests</module>
+		<module>integspecs</module>
 		<module>webapp</module>
 	</modules>
 
