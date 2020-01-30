@@ -56,10 +56,10 @@ public abstract class ValueTypeContractTestAbstract<T> {
     @Test
     public void notEqualToNull() throws Exception {
         for (final T o1 : getObjectsWithSameValue()) {
-            assertThat(o1.equals(null), is(false));
+            assertThat(o1==null, is(false));
         }
         for (final T o1 : getObjectsWithDifferentValue()) {
-            assertThat(o1.equals(null), is(false));
+            assertThat(o1==null, is(false));
         }
     }
 
