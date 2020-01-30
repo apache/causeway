@@ -54,7 +54,7 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
 
     private fun createTime(fi: FormItem): DateTime {
         val date = Utils.toDate(fi.content)
-        val item = dateTime(format = "HH:mm", label = fi.label, value = date)
+        val item = dateTime(format = "YYYY-MM-DD HH:mm", label = fi.label, value = date)
         return item
     }
 
