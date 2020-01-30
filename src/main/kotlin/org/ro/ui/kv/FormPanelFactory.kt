@@ -1,6 +1,7 @@
 package org.ro.ui.kv
 
 import org.ro.core.Utils
+import org.ro.to.ValueType
 import org.ro.ui.FormItem
 import pl.treksoft.kvision.core.*
 import pl.treksoft.kvision.form.FormPanel
@@ -28,15 +29,15 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
             margin = 10.px
             for (fi: FormItem in items) {
                 when (fi.type) {
-                    "Text" -> add(createText(fi))
-                    "Password" -> add(createPassword(fi))
-                    "TextArea" -> add(createTextArea(fi))
-                    "SimpleSelect" -> add(createSelect(fi))
-                    "Html" -> add(createHtml(fi))
-                    "Numeric" -> add(createNumeric(fi))
-                    "Date" -> add(createDate(fi))
-                    "Time" -> add(createTime(fi))
-                    "Boolean" -> add(createBoolean(fi))
+                    ValueType.TEXT.type -> add(createText(fi))
+                    ValueType.PASSWORD.type -> add(createPassword(fi))
+                    ValueType.TEXT_AREA.type -> add(createTextArea(fi))
+                    ValueType.SIMPLE_SELECT.type -> add(createSelect(fi))
+                    ValueType.HTML.type -> add(createHtml(fi))
+                    ValueType.NUMERIC.type -> add(createNumeric(fi))
+                    ValueType.DATE.type -> add(createDate(fi))
+                    ValueType.TIME.type -> add(createTime(fi))
+                    ValueType.BOOLEAN.type -> add(createBoolean(fi))
                 }
             }
         }
@@ -52,13 +53,13 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
     }
 
     private fun createTime(fi: FormItem): DateTime {
-        val date = Utils.toDate(fi.content as String)
+        val date = Utils.toDate(fi.content)
         val item = dateTime(format = "HH:mm", label = fi.label, value = date)
         return item
     }
 
     private fun createDate(fi: FormItem): DateTime {
-        val date = Utils.toDate(fi.content as String)
+        val date = Utils.toDate(fi.content)
         val item = dateTime(
                 format = "YYYY-MM-DD",
                 label = fi.label,

@@ -2,7 +2,7 @@ package org.ro.ui.builder
 
 import org.ro.layout.FieldSetLayout
 import org.ro.to.TObject
-import org.ro.to.TypeMapperType
+import org.ro.to.ValueType
 import org.ro.ui.FormItem
 import org.ro.ui.kv.FormPanelFactory
 import org.ro.ui.kv.RoDisplay
@@ -25,14 +25,19 @@ class FieldSetBuilder {
             val member = members.firstOrNull() { it.id == label }
 
             if (member != null) {
-                if (p.multiLine.asDynamic() != null) {
-                    member.type = TypeMapperType.TEXT_AREA.type
+                var size = 1
+                console.log("[FSB.create] p.multiline")
+                console.log(p.multiLine)
+                if (p.multiLine != null && p.multiLine > 1) {
+                    member.type = ValueType.TEXT_AREA.type
+                    size = p.multiLine
                 }
 
                 val fi = FormItem(
                         label = label,
                         type = member.type!!,
                         content = member.value?.content,
+                        size = size,
                         description = p.describedAs,
                         member = member,
                         tab = tab)

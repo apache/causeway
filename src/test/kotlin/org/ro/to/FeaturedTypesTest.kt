@@ -23,13 +23,19 @@ class FeaturedTypesTest {
         val javaSqlDate = properties.firstOrNull { it.id == "javaSqlDate" }!!
         assertEquals("date", javaSqlDate.format) // 2
         assertEquals("javasqldate", javaSqlDate.extensions!!.xIsisFormat) //3
-        assertEquals(true, javaSqlDate.type == TypeMapperType.DATE.type) //4
-        console.log("[FTT.testTemporals]")
-        console.log(javaSqlDate.value!!)
-        console.log(javaSqlDate.value!!.content)
+        assertEquals(true, javaSqlDate.type == ValueType.DATE.type) //4
         val dt = javaSqlDate.value?.content
         assertEquals("2020-01-24", dt as String) //5
 
+        val javaSqlTimestamp = properties.firstOrNull { it.id == "javaSqlTimestamp" }!!
+        assertEquals("utc-millisec", javaSqlTimestamp.format) // 6
+        assertEquals("javasqltimestamp", javaSqlTimestamp.extensions!!.xIsisFormat) //7
+        assertEquals(true, javaSqlTimestamp.type == ValueType.TIME.type) //8
+        console.log("[FTT.testTemporals]")
+        console.log(javaSqlTimestamp.value!!)
+        console.log(javaSqlTimestamp.value!!.content)
+        val ts = javaSqlTimestamp.value?.content
+        assertEquals(1579957625356, ts) //9
     }
 
     @Test
@@ -47,23 +53,23 @@ class FeaturedTypesTest {
         val description = properties.firstOrNull { it.id == "description" }!!
         assertEquals("string", description.format) //3
         assertEquals("string", description.extensions!!.xIsisFormat) //4
-        assertEquals(true, description.type == TypeMapperType.HTML.type) //5
+        assertEquals(true, description.type == ValueType.HTML.type) //5
 
         val javaLangBoolean = properties.firstOrNull { it.id == "javaLangBoolean" }!!
         assertEquals("boolean", javaLangBoolean.extensions!!.xIsisFormat) //6
-        assertEquals(true, javaLangBoolean.type == TypeMapperType.BOOLEAN.type) //7
+        assertEquals(true, javaLangBoolean.type == ValueType.BOOLEAN.type) //7
 
         val javaLangByte = properties.firstOrNull { it.id == "javaLangByte" }!!
         assertEquals("int", javaLangByte.format)
         assertEquals("byte", javaLangByte.extensions!!.xIsisFormat)
-        assertEquals(true, javaLangByte.type == TypeMapperType.NUMERIC.type)
+        assertEquals(true, javaLangByte.type == ValueType.NUMERIC.type)
         val jlb = javaLangByte.value?.content as Long
         assertEquals(127.toLong(), jlb)
 
         val primitiveByte = properties.firstOrNull { it.id == "primitiveByte" }!!
         assertEquals("int", primitiveByte.format)
         assertEquals("byte", primitiveByte.extensions!!.xIsisFormat)
-        assertEquals(true, primitiveByte.type == TypeMapperType.NUMERIC.type)
+        assertEquals(true, primitiveByte.type == ValueType.NUMERIC.type)
         val pb = primitiveByte.value?.content as Long
         assertEquals(-128.toLong(), pb)
     }

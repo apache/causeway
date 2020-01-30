@@ -15,7 +15,7 @@ data class Member(val id: String,
                   val optional: Boolean = false
 ) : TransferObject {
 
-    var type: String? = TypeMapperType.TEXT.type
+    var type: String? = ValueType.TEXT.type
 
     init {
         if (memberType == MemberType.PROPERTY.type

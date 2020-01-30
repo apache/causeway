@@ -13,15 +13,36 @@ class UtilsTest {
     @Test
     fun testDate() {
         // given
-        val dateStr = "2020-01-25T13:07:05Z"
+        val rawDate:Any? = "2020-01-25T13:07:05Z"
         //when
-        val dateTime = Utils.toDate(dateStr)
+        val dateTime = Utils.toDate(rawDate)
         // then
         assertNotNull(dateTime)
         assertEquals(2020, dateTime.getFullYear())
         assertEquals(0, dateTime.getMonth()) // c braintwist strikes again
-        assertEquals(7, dateTime.getMinutes())
+        assertEquals(14, dateTime.getHours())  // MEZ = GMT + 1
+        assertEquals(7, dateTime.getMinutes())  // and again? shouldn't it be 7??
     }
+
+    @Test
+    fun test_javaOffsetDateTime() {
+        // given
+        val rawDate:Any? = "20200125T140705.356+0100"
+        val expected:String = "2020-01-25T14:07:05.356+0100"
+        //when Then
+
+        val actual = Utils.convertJavaOffsetDateTimeToISO(rawDate as String)
+        assertEquals(expected, actual as String)
+
+        val dateTime = Utils.toDate(actual)
+        assertNotNull(dateTime)
+        assertEquals(2020, dateTime.getFullYear())
+        assertEquals(0, dateTime.getMonth()) // c braintwist strikes again
+        assertEquals(25, dateTime.getDate())
+        assertEquals(14, dateTime.getHours())  // MEZ = GMT + 1
+        assertEquals(7, dateTime.getMinutes())  // and again? shouldn't it be 7??
+    }
+
 
     // @Test
     fun test_argumentsAsBody() {

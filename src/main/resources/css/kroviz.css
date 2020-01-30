@@ -76,6 +76,12 @@ pre.highlight {
     background: #FDF6E3;
 }
 
-code.language-java {
+.language-java {
     color: #657B83 !important;
+}
+
+.header {
+    color: #2C3E50 !important;
+    background: #ECF0F1 !important;
+    padding: 3px 15px !important;
 }
