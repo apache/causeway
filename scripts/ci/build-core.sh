@@ -30,11 +30,7 @@ if [ ! -z "$REVISION" ]; then
   cd $PROJECT_ROOT_PATH/core-parent
   echo ""
   echo ""
-  echo ""
-  echo ""
   echo ">>> mvn versions:set -DnewVersion=$REVISION ..."
-  echo ""
-  echo ""
   echo ""
   echo ""
   mvn versions:set \
@@ -43,17 +39,12 @@ if [ ! -z "$REVISION" ]; then
       | grep -v "Downloading from central" \
       | grep -v "Downloaded from central" \
       | grep -v "Downloading from DataNucleus_2" \
-      | grep -v "Downloaded from DataNucleus_2" \
-      | grep -v "^\[INFO\] $"
+      | grep -v "Downloaded from DataNucleus_2"
 
   cd $PROJECT_ROOT_PATH/starters
   echo ""
   echo ""
-  echo ""
-  echo ""
   echo ">>> sed'ing version in starters ..."
-  echo ""
-  echo ""
   echo ""
   echo ""
   CURR=$(grep "<version>" pom.xml | head -1 | cut -d'>' -f2 | cut -d'<' -f1)
@@ -81,7 +72,6 @@ mvn -s $SETTINGS_XML \
     | grep -v "Uploaded from gcpappenginerepo" \
     | grep -v "Downloading from gcpappenginerepo" \
     | grep -v "Downloaded from gcpappenginerepo" \
-    | grep -v "^\[INFO\] $" \
     | grep -v "^\[INFO\] --- maven-enforcer-plugin" \
     | grep -v "^\[INFO\] --- maven-site-plugin" \
     | grep -v "^\[INFO\] <<< maven-source-plugin:" \
@@ -102,8 +92,7 @@ if [ ! -z "$REVISION" ]; then
       | grep -v "Downloading from central" \
       | grep -v "Downloaded from central" \
       | grep -v "Downloading from DataNucleus_2" \
-      | grep -v "Downloaded from DataNucleus_2" \
-      | grep -v "^\[INFO\] $"
+      | grep -v "Downloaded from DataNucleus_2"
 
   cd $PROJECT_ROOT_PATH/starters
   echo ""
