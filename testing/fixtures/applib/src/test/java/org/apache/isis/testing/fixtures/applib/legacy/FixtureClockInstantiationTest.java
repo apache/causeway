@@ -20,19 +20,19 @@
 package org.apache.isis.testing.fixtures.applib.legacy;
 
 import org.hamcrest.CoreMatchers;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.testing.fixtures.applib.clock.FixtureClock;
 
 public class FixtureClockInstantiationTest {
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
     }

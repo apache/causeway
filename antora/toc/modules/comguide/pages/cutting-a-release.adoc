@@ -46,20 +46,19 @@ export ISISREL={isisnext}
 export ISISRC=RC1
 export ISISBRANCH=release-$ISISREL-$ISISRC
 export ISISJIRA=ISIS-9999                           # <2>
-export CATALINA_HOME=/c/java/apache-tomcat-9.0.10   # <3>
 
 env | grep ISIS | sort
 ----
 <1> adjust by platform
 <2> set to an "umbrella" ticket for all release activities.
 (One should exist already, xref:toc:comguide:post-release-successful.adoc#create-new-jira[created at] the beginning of the development cycle now completing).
-<3> adjust as required (Tomcat is used to smoke test the simpleapp archetype)
+
 
 Obviously, alter ``$ISISREL`` as required, and bump ``$ISISRC`` for re-releasing following an xref:toc:comguide:about.adoc#post-release-unsuccessful[unsuccessful] release.
 
 [IMPORTANT]
 ====
-Note that the branch name is intentionally *not* the same any of the eventual tag names (eg `isis-{isisnext}` or `simpleapp-archetype-{isisnext}`).
+Note that the branch name is intentionally *not* the same as the eventual tag names (eg `isis-{isisnext}`).
 ====
 
 == Pull down code to release
@@ -91,9 +90,11 @@ The only mention of `SNAPSHOT` should be in the `revision` property of the root 
 Previously we used the `maven-release-plugin` which took responsibility for bumping the `<version>` from -SNAPSHOT to release, and then onto the next -SNAPSHOT.
 However, this plugin does not seem to be compatible with the support for `$\{revision}` property introduced in Maven 3.5.0 in order https://maven.apache.org/maven-ci-friendly.html[to support CI/CD use cases]; at least we couldn't make it work.
 
-So, instead, we perform the edit of `$\{revision}` in the three `pom.xml` files (for `core` and the two archetypes):
+So, instead, we perform the edit of `$\{revision}` in the `pom.xml` files (for `core-parent`):
 
-Change all of these to the release version, using:
+Change these to the release version, using:
+
+WARNING: TODO: v2: these scripts have changed
 
 [source,bash,subs="attributes+"]
 ----
@@ -256,7 +257,7 @@ This requires `gpg` v2.1 or later.
 
 == Check/Close Staging Repo
 
-The `mvn deploy` commands will have uploaded release artifacts for both `core` and the `simpleapp` archetype into a newly created staging repository on the ASF Nexus repository server.
+The `mvn deploy` commands will have uploaded all of the release artifacts into a newly created staging repository on the ASF Nexus repository server.
 
 Log onto http://repository.apache.org[repository.apache.org] (using your ASF LDAP account):
 
@@ -327,13 +328,11 @@ Push the release branch to origin:
 git push -u origin $ISISBRANCH
 ----
 
-and also push tags for both core and the archetype:
+and also push tags:
 
 [source,bash,subs="attributes+"]
 ----
 git push origin refs/tags/isis-$ISISREL:refs/tags/isis-$ISISREL-$ISISRC
-git push origin refs/tags/simpleapp-archetype-$ISISREL:refs/tags/simpleapp-archetype-$ISISREL-$ISISRC
-git push origin refs/tags/helloworld-archetype-$ISISREL:refs/tags/helloworld-archetype-$ISISREL-$ISISRC
 git fetch
 ----
 
