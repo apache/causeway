@@ -61,9 +61,6 @@ core/
 | `isis-core-commons`
 | Framework internal API, not 'public' API and not meant to be used with domain code. The internal API is subject to change without notice.
 
-| `isis-core-detached-tests`
-| To break cyclic dependencies some (JUnit) tests needed to be detached from their originating module and moved here.
-
 | `isis-core-integtestsupport`
 | Integration test support.
 Application integration tests typically extend from adapter superclasses defined in this module.

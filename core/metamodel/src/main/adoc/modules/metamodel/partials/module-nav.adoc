@@ -1,1 +1,1 @@
-* xref:core:detached-tests:about.adoc[MetaModel]
+* xref:core:metamodel:about.adoc[MetaModel]
