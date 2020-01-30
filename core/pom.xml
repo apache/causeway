@@ -91,6 +91,8 @@
 		<commons-lang3.version>3.9</commons-lang3.version>
 		<commons-logging.version>1.2</commons-logging.version>
 
+		<cucumber.version>5.1.2</cucumber.version>
+
 		<cxf-rt-rs-client.version>3.3.4</cxf-rt-rs-client.version>
 
 		<danhaywood-java-assertjext.version>0.1.0</danhaywood-java-assertjext.version>
@@ -1552,6 +1554,22 @@
 				<groupId>org.wicketstuff</groupId>
 				<artifactId>wicketstuff-select2</artifactId>
 				<version>${wicketstuff.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.cucumber</groupId>
+				<artifactId>cucumber-java</artifactId>
+				<version>${cucumber.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.cucumber</groupId>
+				<artifactId>cucumber-spring</artifactId>
+				<version>${cucumber.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.cucumber</groupId>
+				<artifactId>cucumber-junit</artifactId>
+				<version>${cucumber.version}</version>
 			</dependency>
 
 		</dependencies>

@@ -550,17 +550,15 @@ Thus, the setup fixture runs the setup for the "inner-most" "leaf-level" modules
 
 
 
-
-
 == Maven Configuration
 
-Apache Isis' integ test support is most easily configured through a dependency on the `isis-mavendeps-testing` module:
+Apache Isis' integ test support is most easily configured through a dependency on the `isis-mavendeps-integtests` module:
 
 [source,xml]
 ----
 <dependency>
     <groupId>org.apache.isis.mavendeps</groupId>
-    <artifactId>isis-mavendeps-testing</artifactId>
+    <artifactId>isis-mavendeps-integtests</artifactId>
     <scope>test</scope>                             <!--1-->
     <type>pom</type>
 </dependency>

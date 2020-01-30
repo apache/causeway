@@ -321,7 +321,7 @@ Apache Isis' unit test support is most easily configured through a dependency on
 ----
 <dependency>
     <groupId>org.apache.isis.mavendeps</groupId>
-    <artifactId>isis-mavendeps-testing</artifactId>
+    <artifactId>isis-mavendeps-unittests</artifactId>
     <scope>test</scope>                             <!--1-->
     <type>pom</type>
 </dependency>

@@ -50,6 +50,7 @@ under the License.
 		<approvaltests.version>4.0.2</approvaltests.version>
 
 		<resteasy.version>4.4.1.Final</resteasy.version>
+
 	</properties>
 
 	<build>
@@ -252,7 +253,7 @@ under the License.
 							<version>${maven-surefire-plugin.version}</version>
 							<executions>
 								<execution>
-									<id>default-test</id>
+									<id>unit-test</id>
 									<phase>test</phase>
 									<goals>
 										<goal>test</goal>

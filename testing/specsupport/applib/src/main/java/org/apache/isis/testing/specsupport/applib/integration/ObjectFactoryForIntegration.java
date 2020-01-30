@@ -26,8 +26,9 @@ import org.apache.isis.core.commons.internal.collections._Maps;
 
 import lombok.RequiredArgsConstructor;
 
-import cucumber.api.java.ObjectFactory;
 import cucumber.runtime.CucumberException;
+import io.cucumber.core.backend.ObjectFactory;
+
 
 @RequiredArgsConstructor
 public class ObjectFactoryForIntegration implements ObjectFactory {

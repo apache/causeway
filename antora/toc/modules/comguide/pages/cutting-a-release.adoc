@@ -326,6 +326,62 @@ git fetch
 The remote tags aren't visible locally but can be seen link:https://github.com/apache/isis/tags[online].
 ====
 
+== Update starter apps
+
+For each starter app, we create a new branch and make the changes there, pushing the branch back if the sanity check passes.
+
+
+* for helloworld, the steps are:
++
+[source,bash,subs="attributes+"]
+----
+git checkout master
+git pull --ff-only
+
+git checkout -b $ISISBRANCH
+
+mvn versions:update-parent -DparentVersion=$ISISREL
+mvn versions:set -DnewVersion=$ISISREL
+
+mvn clean install -o
+mvn spring-boot:run
+----
+
+* for simple app, the steps are almost the same:
++
+[source,bash,subs="attributes+"]
+----
+git checkout master
+git pull --ff-only
+
+git checkout -b $ISISBRANCH
+
+mvn versions:update-parent -DparentVersion=$ISISREL
+mvn versions:set -DnewVersion=$ISISREL
+
+mvn clean install -o -Dmetamodel.lockdown
+mvn -pl webapp test -o -Dmavendeps.lockdown
+----
++
+Approve any failed lockdown tests (the mavendeps will fail first time arround because the dependencies on Apache Isis itself have just be bumped).
+Repeat, then run the app as a sanity check:
++
+[source,bash,subs="attributes+"]
+----
+mvn clean install -o -Dmetamodel.lockdown
+mvn -pl webapp test -o -Dmavendeps.lockdown
+
+mvn -pl webapp spring-boot:run
+----
+
+* For both apps, push the release branch to origin once ok:
++
+[source,bash,subs="attributes+"]
+----
+git push -u origin $ISISBRANCH
+----
+
+
 == Voting
 
 Once the artifacts have been uploaded, you can call a vote.

@@ -28,8 +28,7 @@
 		<git-plugin.propertiesDir>org/apache/isis/testing/specsupport.applib</git-plugin.propertiesDir>
 
  		<cucumber.impl>io.cucumber</cucumber.impl>
- 		<cucumber.version>4.8.0</cucumber.version>
-		
+
 	</properties>
 
 	<dependencies>
@@ -43,25 +42,14 @@
 		<dependency>
 		    <groupId>io.cucumber</groupId>
 		    <artifactId>cucumber-java</artifactId>
-		    <version>${cucumber.version}</version>
 		</dependency>
 		<dependency>
 		    <groupId>io.cucumber</groupId>
 		    <artifactId>cucumber-spring</artifactId>
-		    <version>${cucumber.version}</version>
 		</dependency>
 		<dependency>
 		    <groupId>io.cucumber</groupId>
 		    <artifactId>cucumber-junit</artifactId>
-		    <version>${cucumber.version}</version>
-<!--
-		    <exclusions>
-		        <exclusion>
-		            <groupId>junit</groupId>
-		            <artifactId>junit</artifactId>
-		        </exclusion>
-		    </exclusions>
--->
 		</dependency>
 
 	</dependencies>
