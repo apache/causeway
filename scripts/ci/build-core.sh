@@ -77,6 +77,7 @@ mvn -s $SETTINGS_XML \
     | fgrep --line-buffered -v "[INFO] <<< maven-source-plugin:" \
     | fgrep --line-buffered -v "[INFO] >>> maven-source-plugin" \
     | fgrep --line-buffered -v "[INFO] Installing" \
+    | fgrep --line-buffered -v "[INFO] Copying" \
     | fgrep --line-buffered -v "[INFO] Using alternate deployment repository gcpappenginerepo" \
     | fgrep --line-buffered -v "[INFO] No site descriptor found: nothing to attach." \
     | fgrep --line-buffered -v "[INFO] Skipping because packaging 'jar' is not pom."
