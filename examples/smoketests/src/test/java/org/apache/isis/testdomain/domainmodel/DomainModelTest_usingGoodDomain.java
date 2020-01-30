@@ -53,7 +53,7 @@ import lombok.val;
         }, 
         properties = {
                 "isis.core.meta-model.introspector.mode=FULL",
-                "isis.applib.annotation.domain-object.editing==TRUE",
+                "isis.applib.annotation.domain-object.editing=TRUE",
                 "isis.core.meta-model.validator.explicit-object-type=FALSE", // does not override any of the imports
                 "logging.level.DependentArgUtils=DEBUG"
         })
