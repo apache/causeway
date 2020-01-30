@@ -23,6 +23,7 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -232,7 +233,7 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
      * returned in turn.
      */
     public <T> T ignoring(final T mock) {
-        checking(expectationsWith(()->ignoring(mock)));
+        checking(expectationsWith(exp->exp.ignoring(mock)));
         return mock;
     }
 
@@ -241,7 +242,7 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
      * turn.
      */
     public <T> T allowing(final T mock) {
-        checking(expectationsWith(()->allowing(mock)));
+        checking(expectationsWith(exp->exp.allowing(mock)));
         return mock;
     }
 
@@ -249,7 +250,7 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
      * Prohibit any interaction with the mock.
      */
     public <T> T never(final T mock) {
-        checking(expectationsWith(()->never(mock)));
+        checking(expectationsWith(exp->exp.never(mock)));
         return mock;
     }
 
@@ -268,7 +269,7 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
      * @return
      */
     public Object oneOf(final Object mock) {
-        checking(expectationsWith(()->oneOf(mock)));
+        checking(expectationsWith(exp->exp.oneOf(mock)));
         return mock;
     }
 
@@ -293,13 +294,13 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
 
     
     private static class ExpectationsWithInitializer extends Expectations {
-        private ExpectationsWithInitializer(Runnable initializer) {
+        private ExpectationsWithInitializer(Consumer<Expectations> initializer) {
             super();
-            initializer.run();
+            initializer.accept(this);
         }
     }
     
-    public static Expectations expectationsWith(Runnable initializer) {
+    public static Expectations expectationsWith(Consumer<Expectations> initializer) {
         return new ExpectationsWithInitializer(initializer);
     }
     
