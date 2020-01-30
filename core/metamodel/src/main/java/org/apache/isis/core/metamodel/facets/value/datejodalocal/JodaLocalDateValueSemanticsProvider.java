@@ -76,12 +76,10 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
         NAMED_TITLE_FORMATTERS.put("short", DateTimeFormat.forStyle("S-"));
     }
 
-    private final static ThreadLocal<String> OVERRIDE_TITLE_PATTERN = new ThreadLocal<String>() {
-        @Override
-        protected String initialValue() {
-            return null;
-        }
-    };
+    /**
+     * @deprecated possible memory leak issue, because this one is never cleared up
+     */
+    private final static ThreadLocal<String> OVERRIDE_TITLE_PATTERN = ThreadLocal.withInitial(()->null);
 
 
     private final static List<DateTimeFormatter> PARSE_FORMATTERS = _Lists.newArrayList();
