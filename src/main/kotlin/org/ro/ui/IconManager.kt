@@ -29,6 +29,7 @@ object IconManager {
             "Edit" to "pencil",
             "Error Handling" to "bug",
             "Error" to "bug",
+            "Experimental" to "flask",
             "Find" to "search",
             "Hsql" to "database",
             "JEE/CDI" to "jedi",
