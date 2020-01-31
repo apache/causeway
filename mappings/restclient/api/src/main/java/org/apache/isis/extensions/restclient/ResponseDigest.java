@@ -24,9 +24,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.concurrent.Future;
 import java.util.function.Function;
 
+import javax.annotation.Nullable;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
@@ -110,31 +112,58 @@ public class ResponseDigest<T> {
         this.genericType = genericType;
     }
 
+    /**
+     * @return whether the REST endpoint replied with a success status code.
+     */
     public boolean isSuccess() {
         return !isFailure();
     }
 
+    /**
+     * @return whether the REST endpoint replied with a failure status code.
+     */
     public boolean isFailure() {
         return failureCause!=null;
     }
-
+    
+    /**
+     * @return (non-null), optionally the result if cardinality is exactly ONE
+     */
+    public Optional<T> getEntity(){
+        return getEntities().getSingleton();
+    }
+    
+    /**
+     * @return (non-null), the entities replied by the REST endpoint supporting any cardinality ZERO, ONE or more. 
+     */
     public Can<T> getEntities(){
         return entities;
     }
 
-    public Exception getFailureCause(){
+    /**
+     * @return (nullable), the failure case (if any), when the REST endpoint replied with a failure status code 
+     */
+    public @Nullable Exception getFailureCause(){
         return failureCause;
     }
 
-    public Can<T> ifSuccessGetOrElseMap(Function<Exception, Can<T>> failureMapper) {
+    /**
+     * @param failureMapper - fallback, to calculate a result from given failure exception 
+     * @return the result if cardinality is exactly ONE, otherwise the result of applying the failure to the {@code failureMapper} 
+     */
+    public T singletonOrElseMapFailure(Function<Exception, T> failureMapper) {
         return isSuccess() 
-                ? getEntities()
+                ? getEntity().orElseGet(()->failureMapper.apply(new NoSuchElementException()))
                         : failureMapper.apply(getFailureCause());
     }
 
-    public <X> X ifSuccessMapOrElseMap(Function<Can<T>, X> successMapper, Function<Exception, X> failureMapper) {
+    /**
+     * @param failureMapper - fallback, to calculate a result from given failure exception
+     * @return the result of any cardinality, otherwise the result of applying the failure to the {@code failureMapper} 
+     */
+    public Can<T> multipleOrElseMapFailure(Function<Exception, Can<T>> failureMapper) {
         return isSuccess() 
-                ? successMapper.apply(getEntities())
+                ? getEntities()
                         : failureMapper.apply(getFailureCause());
     }
 
