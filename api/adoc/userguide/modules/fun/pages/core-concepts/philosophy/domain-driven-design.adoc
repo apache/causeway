@@ -42,6 +42,7 @@ This domain model identifies the relevant concepts of the domain, how they relat
 This single domain model provides the vocabulary for the  ubiquitous language for our system.
 
 
+[role="float-left"]
 .Ubiquitous Language
 ****
 Build a common language between the domain experts and developers by using the concepts of the domain model as the primary means of communication. Use the terms in speech, in diagrams, in writing, and when presenting.
