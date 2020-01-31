@@ -42,13 +42,11 @@ object RoStatusBar {
         urlLink.setAttribute(name = "title", value = url)
     }
 
-    private const val OK = "text-ok"
-    private const val DISABLED = "text-disabled"
-    private const val WARN = "text-warn"
+    //IMPLEMENT turnRed, turnYellow
     fun turnGreen() {
-        urlLink.removeCssClass(DISABLED)
-        urlLink.removeCssClass(WARN)
-        urlLink.addCssClass(OK)
+        urlLink.removeCssClass(IconManager.DANGER)
+        urlLink.removeCssClass(IconManager.WARN)
+        urlLink.addCssClass(IconManager.OK)
     }
 
 }

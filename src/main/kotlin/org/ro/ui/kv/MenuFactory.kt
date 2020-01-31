@@ -77,27 +77,24 @@ object MenuFactory {
 
     // disabled when tObject.isClean
     // IMPROVE use tr("Dropdowns (disabled)") to DD.DISABLED.option,
-    private const val OK = "text-ok"
-    private const val DISABLED = "text-disabled"
-    private const val WARN = "text-warn"
     fun disableSaveUndo(dd: DropDown) {
         val menuItems = dd.getChildren()
 
         val saveItem = menuItems[menuItems.size - 2]
-        switchCssClass(saveItem, OK, DISABLED)
+        switchCssClass(saveItem, IconManager.OK, IconManager.DISABLED)
 
         val undoItem = menuItems[menuItems.size - 1]
-        switchCssClass(undoItem, OK, WARN)
+        switchCssClass(undoItem, IconManager.OK, IconManager.WARN)
     }
 
     fun enableSaveUndo(dd: DropDown) {
         val menuItems = dd.getChildren()
 
         val saveItem = menuItems[menuItems.size - 2]
-        switchCssClass(saveItem, DISABLED, OK)
+        switchCssClass(saveItem, IconManager.DISABLED, IconManager.OK)
 
         val undoItem = menuItems[menuItems.size - 1]
-        switchCssClass(undoItem, DISABLED, WARN)
+        switchCssClass(undoItem, IconManager.DISABLED, IconManager.WARN)
     }
 
     private fun switchCssClass(menuItem: Component, from: String, to: String) {

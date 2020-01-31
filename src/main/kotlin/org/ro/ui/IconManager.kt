@@ -6,6 +6,11 @@ object IconManager {
     val PREFIX = "fas fa-"
     val DEFAULT_ICON = PREFIX + "bolt"
 
+    const val DANGER = "text-danger"
+    const val DISABLED = "text-disabled"
+    const val OK = "text-ok"
+    const val WARN = "text-warn"
+
     /* Recreate from configuration value*/
     val word2Icon = mapOf<String, String>(
             "All" to "asterisk",
