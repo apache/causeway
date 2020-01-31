@@ -101,8 +101,8 @@ So, bump to the release version:
 
 [source,bash,subs="attributes+"]
 ----
-mvn versions:set -DnewVersion=${ISISREL}
-git commit -am "${ISISJIRA}: bumps version to ${ISISREL}"
+mvn versions:set -DnewVersion=$ISISREL
+git commit -am "$ISISJIRA: bumps version to $ISISREL"
 ----
 
 so that they should read:
@@ -301,7 +301,7 @@ Therefore:
 ----
 cd core-parent
 mvn versions:set -DnewVersion=2.0.0-SNAPSHOT
-git commit -am "${ISISJIRA}: resetting version"
+git commit -am "$ISISJIRA: resetting version"
 ----
 
 == Push branches

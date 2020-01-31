@@ -8,32 +8,30 @@
 
 Apache Isis is great for rapid prototyping, because all you need to write in order to get an application up-and-running is the domain model objects.
 
-By focussing just on the domain, you'll also find that you start to develop a ubiquitous language - a set of terms and concepts that the entire team (business and technologists alike) have a shared understanding.
+By focusing just on the domain, you'll also find that you start to develop a ubiquitous language - a set of terms and concepts that the entire team (business and technologists alike) have a shared understanding.
+
+If you wish, you could combine this with BDD - the framework integrates with xref:testing:specsupport:about.adoc[Cucumber].
 
 Once you've sketched out your domain model, you can then either start-over using your preferred framework, or you might choose to take the domain model forward into more formal specification and testing.
 
 
-
-
-
-== Deploy as an human-usable webapp
+== Deploy with a generic UI
 
 One of the original motivations for Apache Isis itself was to be able automatically generate a user interface for a domain object model.
 
 Apache Isis' has a pluggable architecture allowing different user interface technologies.
- The principal implementation (as configured by the link:https://github.com/apache/isis-app-simpleapp[SimpleApp archetype]) is the xref:vw:ROOT:about.adoc[Wicket viewer].
-  This provides an appealing default user interface, with the ability to customize the user interface by writing new http://wicket.apache.org[Apache Wicket] components.
-Some third-party components can be found in the (non-ASF) link:https://platform.incode.org[Incode Platform^].
+ The principal implementation is the xref:vw:ROOT:about.adoc[Wicket viewer].
 
+This provides an appealing default user interface, with the ability to customize the user interface by writing new http://wicket.apache.org[Apache Wicket] components.
 
 Deploying on Apache Isis means that the framework also manages object persistence.
 Again this is pluggable, but the principal implementation is the JDO/DataNucleus objectstore.
-Because JDO supports both SQL and NoSQL databases, you can then deploy on a variety of platforms, including the link:https://developers.google.com/appengine/[Google App Engine (GAE)] and link:http://neo4j.com/[Neo4J].
+Because JDO supports both SQL and NoSQL databases, you can then deploy on a variety of platforms, normally relational but also databases such as link:http://neo4j.com/[Neo4J].
 
 
 
 
-== Deploy as a RESTful web service
+== Deploy as a REST API
 
 REST (Representation State Transfer) is an architectural style for building highly scalable distributed systems, using the same principles as the World Wide Web.
 Many commercial web APIs (twitter, facebook, Amazon) are implemented as either pure REST APIs or some approximation therein.

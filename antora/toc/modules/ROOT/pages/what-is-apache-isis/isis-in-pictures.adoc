@@ -1,24 +1,13 @@
-[[isis-in-pictures]]
 = Apache Isis in Pictures
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+// TODO: v2: NICE-TO-HAVE: these screenshots should be updated, but first need to port the todoapp over first (which also means the various modules from incode-platform)
 
+On this page we want to show you what an Apache Isis application looks like, running on the xref:vw:ROOT:about.adoc[Wicket viewer].
+The screenshots below are taken from a "Todo" application.
 
-WARNING: TODO: v2 - this material out of date, to be updated (need to migrate much of incode-platform, and port of isis-app-todoapp to github/apache/isis-app-todoapp)
-
-On this page we want to show you what a modern Apache Isis application looks like.
-
-The screenshots below are taken from the Isis Addons' http://github.com/isisaddons/isis-app-todoapp[todoapp example] (non ASF), which you are free to fork and use as you will.
-The corresponding domain classes from which this UI was built can be found https://github.com/isisaddons/isis-app-todoapp/tree/master/dom/src/main/java/todoapp/dom/todoitem[here].
-
-The todoapp also integrates with a number of other modules from the (non-ASF) link:https://platform.incode.org[Incode Platform^].
-Because we expect that most apps will end up using one or more of these modules, we've chosen to include screenshots of those too.
-
-[NOTE]
-====
-These screenshots based on Apache Isis 1.13.x.
-====
-
+NOTE: these screenshots are based on an app running against v1.13  and v1.10 of the framework.
+There have since been a number of UI improvements since these releases.
 
 == Basics
 
@@ -33,8 +22,6 @@ The core framework supports file-based realms, while the xref:security:ROOT:abou
 
 image::what-is-apache-isis/isis-in-pictures/010-login.png[width="800px",link="{imagesdir}/what-is-apache-isis/isis-in-pictures/010-login.png"]
 
-
-
 === Install Fixtures
 
 Apache Isis has lots of features to help you prototype and then fully test your application.
@@ -45,8 +32,6 @@ This is great to act as the starting point for identifying new stories; later on
 
 image::what-is-apache-isis/isis-in-pictures/020-install-fixtures.png[width="800px",link="{imagesdir}/what-is-apache-isis/isis-in-pictures/020-install-fixtures.png"]
 
-
-
 === Dashboard and View Models
 
 Most of the time the end-user interacts with representations of persistent domain entities, but Apache Isis also supports view models which can aggregate data from multiple sources.
@@ -56,9 +41,6 @@ image::what-is-apache-isis/isis-in-pictures/030-dashboard-view-model.png[width="
 
 In general we recommend to initially focus only on domain entities; this will help drive out a good domain model.
 Later on view models can be introduced in support of specific use cases.
-
-
-
 
 === Domain Entity
 
@@ -76,9 +58,6 @@ The benefit of the latter is that it can be updated (and the UI redrawn) without
 
 Any production-ready app will require this metadata but (like the view models discussed above) this metadata can be added gradually on top of the core domain model.
 
-
-
-
 === Edit properties
 
 By default properties on domain entities are editable, meaning they can be changed directly.
@@ -89,9 +68,6 @@ image::what-is-apache-isis/isis-in-pictures/050-edit-property.png[width="800px",
 
 Note that some of the properties are read-only even in edit mode; individual properties can be made non-editable.
 It is also possible to make all properties disabled and thus enforce changes only through actions (below).
-
-
-
 
 === Actions
 
@@ -107,9 +83,6 @@ Or, it might not update any objects at all, but could instead perform some other
 In general though, all actions are associated with some object, and are (at least initially) also implemented by that object: good old-fashioned encapsulation.
 We sometimes use the term "behaviourally complete" for such domain objects.
 
-
-
-
 === Mixins
 
 As an alternative to placing actions (business logic) on a domain object, it can instead be placed inside a mixin object.
@@ -119,13 +92,8 @@ In the screenshot below the highlighted "export as xml" action, the "relative pr
 
 image::what-is-apache-isis/isis-in-pictures/065-contributions.png[width="800px",link="{imagesdir}/what-is-apache-isis/isis-in-pictures/065-contributions.png"]
 
-
 == Extensible Views
 
-[NOTE]
-====
-The remaining screenshots on this page are for v1.10.0 of the framework, which precedes the support for tabbed views introduced in v1.12.0.
-====
 
 The Apache Isis viewer is implemented using http://wicket.apache.org[Apache Wicket], and has been designed to be extensible.
 For example, when a collection of objects is rendered, this is just one of several views, as shown in the selector drop-down:
@@ -149,8 +117,7 @@ image::what-is-apache-isis/isis-in-pictures/090-fullcalendar2-view.png[width="80
 
 
 
-Yet another "view" (though this one is rather simpler) is that provided by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s excel Wicket component
-This provides a download button to the table as a spreadsheet:
+Yet another "view" (though this one is rather simpler) is that provided by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s excel Wicket component This provides a download button to the table as a spreadsheet:
 
 image::what-is-apache-isis/isis-in-pictures/100-excel-view-and-docx.png[width="800px",link="{imagesdir}/what-is-apache-isis/isis-in-pictures/100-excel-view-and-docx.png"]
 
@@ -163,24 +130,13 @@ This is _not_ a view but instead is a (contributed) action that uses the (non-AS
 image::what-is-apache-isis/isis-in-pictures/110-docx.png[width="800px",link="{imagesdir}/what-is-apache-isis/isis-in-pictures/110-docx.png"]
 
 
-
-
-[NOTE]
-====
-Please note that the Isis Addons are not part of ASF, but they _are_ all licensed under Apache License 2.0 and are maintained by the Apache Isis committers.
-====
-
-
-
-
 == Security, Auditing and more...
 
 As well as providing extensions to the UI, the (non ASF) Isis Addons provide a rich set of modules to support various cross-cutting concerns.
 
-Under the activity menu are four sets of services which provide support for (non-ASF) link:https://platform.incode.org[Incode Platform^]'s sessionlogger module (for user session logging/auditing) , command module (audit/profiling), audit module (audit object changes) (shown) and (inter-system) event publishing:
+Under the activity menu are four sets of services which provide support on user session logging/auditing, command module (profiling and replay), audit module (audit object changes) and (inter-system) event publishing:
 
 image::what-is-apache-isis/isis-in-pictures/120-auditing.png[width="800px",link="{imagesdir}/what-is-apache-isis/isis-in-pictures/120-auditing.png"]
-
 
 
 In the security menu is access to the rich set of functionality provided by the xref:security:ROOT:about.adoc[SecMan extension]:
@@ -204,9 +160,6 @@ Most apps (the todoapp example included) won't expose these services directly, b
 
 image::what-is-apache-isis/isis-in-pictures/150-appsettings.png[width="800px",link="{imagesdir}/what-is-apache-isis/isis-in-pictures/150-appsettings.png"]
 
-
-
-
 === Multi-tenancy support
 
 One significant feature of the xref:security:ROOT:about.adoc[SecMan extension] is the ability to associate users and objects with a "tenancy".
@@ -218,7 +171,6 @@ image::what-is-apache-isis/isis-in-pictures/160-switch-tenancy.png[width="800px"
 
 
 For more details, see the xref:security:ROOT:about.adoc[SecMan extension].
-
 
 === Me
 
@@ -238,16 +190,12 @@ image::what-is-apache-isis/isis-in-pictures/180-app-user-entity.png[width="800px
 If not all of these properties are required, then they can be hidden either using security or though Apache Isis' internal event bus (described below).
 Conversely, additional properties can be "grafted onto" the user using the contributed properties/collections discussed previously.
 
-
 === Themes
 
 Apache Isis' Wicket viewer uses http://getbootstrap.com[Twitter Bootstrap], which means that it can be themed.
 If more than one theme has been configured for the app, then the viewer allows the end-user to switch their theme:
 
 image::what-is-apache-isis/isis-in-pictures/190-switch-theme.png[width="800px",link="{imagesdir}/what-is-apache-isis/isis-in-pictures/190-switch-theme.png"]
-
-
-
 
 == REST API
 
@@ -265,13 +213,6 @@ From this spec REST clients can be code-generated; it also allows developers to 
 
 
 image::what-is-apache-isis/isis-in-pictures/205-swagger-ui.png[width="800px",link="{imagesdir}/what-is-apache-isis/isis-in-pictures/205-swagger-ui.png"]
-
-
-
-
-
-
-
 
 == Integration Testing Support
 
@@ -295,11 +236,6 @@ For example, if using the Wicket viewer then Apache Isis will enforce the rule (
 The wrapper simulates this by throwing an appropriate exception:
 
 image::what-is-apache-isis/isis-in-pictures/230-testing-wrapper-factory.png[width="550px",link="{imagesdir}/what-is-apache-isis/isis-in-pictures/230-testing-wrapper-factory.png"]
-
-
-
-
-
 
 == Internal Event Bus
 

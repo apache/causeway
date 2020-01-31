@@ -2,6 +2,7 @@
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
 :page-partial:
 
+// TODO: V2: need to update these, they are getting stale.
 
 CQNZ(TM) (pronounced "sequence") is a thematic social network that:
 
@@ -11,7 +12,6 @@ enables people like you and me to express our lives and experiences in the form 
 ____
 
 image::powered-by/cqnz/cqnz-advert.png[width="900px",link="{imagesdir}/powered-by/cqnz/cqnz-advert.png"]
-
 
 == Underlying Technology
 
@@ -35,6 +35,7 @@ This is also one of the many reasons we choose Apache Isis over Spring Framework
 
 == For more info
 
-For further information, please see our link:https://www.facebook.com/pg/mycqnz/about/?ref=page_internal[facebook page] or visit link:http://cqnz.rocks/[cqnz.rocks].  All images and trademarks property of their respective owners.
+For further information, please see our link:https://www.facebook.com/pg/mycqnz/about/?ref=page_internal[facebook page] or visit link:http://cqnz.rocks/[cqnz.rocks].
+All images and trademarks property of their respective owners.
 
 _Case study provided by Cesar Lugo, Research and Development Director, Vortech IT._

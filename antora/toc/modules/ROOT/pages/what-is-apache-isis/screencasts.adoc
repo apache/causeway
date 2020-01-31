@@ -1,11 +1,14 @@
-[[screencasts]]
 = Screencasts
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+:page-role: -toc
 
 
-
+// TODO: v2: NICE-TO-HAVE: update these screenshots for v2
 
 We've prepared a number of screencasts to help you see what Apache Isis has to offer; the following were recorded using Apache Isis v1.12.x.
+
+NOTE: these screencasts were recorded using v1.12.x.
+There have since been a number of UI improvements since these releases.
 
 While these each follow on from each other, you should be able to watch them in any order; the typical duration is
 3 minutes.
@@ -30,10 +33,10 @@ Finally, you can also find some screencasts for earlier versions of the framewor
 
 
 
-|    11+|[big]#*Playlists*#
+|    11+|*Playlists*
 
 
-12+| [big]#*Archetype, IDE, layouts*#
+12+| *Archetype, IDE, layouts*
 
 include::screencasts/playlists.adoc[]
 
@@ -58,7 +61,7 @@ Importing the generated app into an xref:toc:devguide:ide.adoc[IDE] +
 
 
 |link:https://www.youtube.com/watch?v=xVTjtiJM8XM[003^] +
-Walking through the main classes that make up the SimpleApp: `SimpleObject` persistent entity, `HomePageViewModel` xref:userguide:fun:view-models.adoc[view model] and `SimpleObjects` domain service (repository).
+Walking through the main classes that make up the SimpleApp: `SimpleObject` persistent entity, `HomePageViewModel`xref:userguide:fun:programming-model/view-models.adoc[view model] and `SimpleObjects` domain service (repository).
 ||||x|||||||
 
 
@@ -72,13 +75,13 @@ Using the optional `Xxx.layout.xml` file to provide xref:vw:ROOT:layout.adoc#fil
 
 
 
-12+| [big]#*Fixture scripts, rules, tests*#
+12+| *Fixture scripts, rules, tests*
 
 include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=pH02g0l2GKY[005^] +
-Using xref:fixtures:ROOT:about.adoc[fixture scripts] to initialize the database, eg while prototyping and for demos
+Using xref:testing:fixtures:about.adoc[fixture scripts] to initialize the database, eg while prototyping and for demos
 ||x|||||||||
 
 
@@ -102,7 +105,7 @@ Writing end-to-end xref:testing:integtestsupport:about.adoc[integration tests] f
 
 
 
-12+| [big]#*Swagger UI*#
+12+| *Swagger UI*
 
 include::screencasts/playlists.adoc[]
 
@@ -121,17 +124,17 @@ Using the Swagger UI to access the xref:vro:ROOT:about.adoc[REST API] automatica
 
 
 
-12+| [big]#*App Manifest*#
+//12+| *App Manifest*
+//
+//
+//|link:https://www.youtube.com/watch?v=1sNiR3Y84c0[011^] +
+//How the framework uses the xref:refguide:applib-cm:classes/AppManifest-bootstrapping.adoc[`AppManifest`] is used to bootstrap the application
+//||||||||||x|
 
 
-|link:https://www.youtube.com/watch?v=1sNiR3Y84c0[011^] +
-How the framework uses the xref:refguide:applib-cm:classes/AppManifest-bootstrapping.adoc[`AppManifest`] is used to bootstrap the application
-||||||||||x|
 
 
-
-
-12+| [big]#*Actions*#
+12+| *Actions*
 
 
 include::screencasts/playlists.adoc[]
@@ -146,7 +149,7 @@ Implementing business logic using a (no-arg) action, and associating with a prop
 
 
 
-12+| [big]#*Titles and icons, UI event subscribers*#
+12+| *Titles and icons, UI event subscribers*
 
 
 include::screencasts/playlists.adoc[]
@@ -166,7 +169,7 @@ Moving the responsibility to specify the icon for a domain object out and into a
 
 
 
-12+| [big]#*Derived collections*#
+12+| *Derived collections*
 
 
 |link:https://www.youtube.com/watch?v=ckT8Lt20SE4[016^] +
@@ -177,18 +180,18 @@ How to implement a derived collection on a domain object.
 
 
 
-12+| [big]#*More on fixture scripts*#
+12+| *More on fixture scripts*
 
 
 |link:https://www.youtube.com/watch?v=l_oZymgb65I[017^] +
-Extending a xref:fixtures:ROOT:about.adoc[fixture script] to more easily demonstrate new functionality.
+Extending a xref:testing:fixtures:about.adoc[fixture script] to more easily demonstrate new functionality.
 ||x|||||||||
 
 
 
 
 
-12+| [big]#*Page size of collections*#
+12+| *Page size of collections*
 
 
 |link:https://www.youtube.com/watch?v=39Hpd7C4Kvo[018^] +
@@ -200,7 +203,7 @@ Using xref:vw:ROOT:layout.adoc#file-based[dynamic (XML) layouts] to specify the 
 
 
 
-12+| [big]#*Hints and end-user features*#
+12+| *Hints and end-user features*
 
 
 include::screencasts/playlists.adoc[]
@@ -227,7 +230,7 @@ Demonstrates how the end-user can use bookmarks and breadcrumbs within Apache Is
 
 
 
-12+| [big]#*Decoupling (mixins & subscribers)*#
+12+| *Decoupling (mixins & subscribers)*
 
 
 include::screencasts/playlists.adoc[]
@@ -260,7 +263,7 @@ Using a domain event xref:refguide:applib-cm:classes/super.adoc#AbstractSubscrib
 
 
 
-12+| [big]#*Titles using the @Title annotation*#
+12+| *Titles using the @Title annotation*
 
 
 
@@ -272,7 +275,7 @@ Using the xref:refguide:applib-ant:Title.adoc[`@Title`] annotation (instead of t
 
 
 
-12+| [big]#*Integration testing of mixins*#
+12+| *Integration testing of mixins*
 
 
 
@@ -286,7 +289,7 @@ How to write an xref:testing:integtestsupport:about.adoc[integration test] for a
 
 
 
-12+| [big]#*Removing boilerplate*#
+12+| *Removing boilerplate*
 
 
 
@@ -308,7 +311,7 @@ Using the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s paranam
 
 
 
-12+| [big]#*Action validation*#
+12+| *Action validation*
 
 
 
@@ -328,7 +331,7 @@ How to validate action parameters using the xref:refguide:applib-ant:Parameter.a
 
 
 
-12+| [big]#*Instantiating/Initializing Objects*#
+12+| *Instantiating/Initializing Objects*
 
 
 
@@ -341,7 +344,7 @@ How to instantiate/initialize objects using xref:refguide:applib-svc:persistence
 
 
 
-12+| [big]#*Property and parameter choices*#
+12+| *Property and parameter choices*
 
 
 
@@ -361,7 +364,7 @@ How to provide a set of xref:refguide:applib-cm:methods.adoc#choices[choices] (a
 
 
 |link:https://www.youtube.com/watch?v=fKo6aTPK-gk[035^] +
-How to use the xref:refguide:applib-cm:methods.adoc#choices[choices] supporting methods as a source for default values within a xref:fixtures:ROOT:about.adoc[fixture script].
+How to use the xref:refguide:applib-cm:methods.adoc#choices[choices] supporting methods as a source for default values within a xref:testing:fixtures:about.adoc[fixture script].
 ||x|||||||x||
 
 
@@ -373,7 +376,7 @@ How to use an enum for choices (drop down list) for both a property or an action
 
 
 
-12+| [big]#*Hiding columns*#
+12+| *Hiding columns*
 
 
 
@@ -392,7 +395,7 @@ How to hide properties as columns in tables, using CSS.
 
 
 
-12+| [big]#*Fixture scripts defaults / fake data*#
+12+| *Fixture scripts defaults / fake data*
 
 
 
@@ -412,7 +415,7 @@ Using the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s fakedat
 
 
 
-12+| [big]#*BigDecimals*#
+12+| *BigDecimals*
 
 
 include::screencasts/playlists.adoc[]
@@ -432,7 +435,7 @@ How to use the xref:refguide:applib-ant:Digits.adoc[`@Digits`] annotation for ac
 
 
 
-12+| [big]#*Action parameters*#
+12+| *Action parameters*
 
 
 
@@ -461,7 +464,7 @@ How to use the xref:refguide:applib-cm:methods.adoc#autoComplete[`autoCompleteXx
 
 
 
-12+| [big]#*Excel, Calendars, Maps*#
+12+| *Excel, Calendars, Maps*
 
 
 
@@ -500,7 +503,7 @@ Using derived properties to persist value types (such as gmap3's Location value 
 
 
 
-12+| [big]#*View Models*#
+12+| *View Models*
 
 
 
@@ -529,7 +532,7 @@ Adding an action to a xref:userguide:fun:programming-model.adoc#jaxb[(JAXB) view
 
 
 
-12+| [big]#*Renaming*#
+12+| *Renaming*
 
 
 
@@ -567,7 +570,7 @@ Updating the logo for the application as it appears in the header.
 
 
 
-12+| [big]#*Decoupling*#
+12+| *Decoupling*
 
 
 include::screencasts/playlists.adoc[]
@@ -586,7 +589,7 @@ Separating out the responsibilities of the persistent domain entities from those
 
 
 
-12+| [big]#*(Parented) collections*#
+12+| *(Parented) collections*
 
 
 
@@ -615,7 +618,7 @@ How deleting one persistent entity can, if required, automatically delete anothe
 
 
 
-12+| [big]#*Metadata fieldset*#
+12+| *Metadata fieldset*
 
 include::screencasts/playlists.adoc[]
 
@@ -625,7 +628,7 @@ Improving the layout of domain entities by adding a metadata fieldset.
 ||||x|||||||
 
 
-12+| [big]#*for Contributors and Committers*#
+12+| *for Contributors and Committers*
 
 include::screencasts/playlists.adoc[]
 
