@@ -21,7 +21,7 @@
 [discrete]
 == Starter Apps
 
-* xref:starters:helloworld:about.adoc[Hello World]
+* xref:starters:helloworld:about.adoc[HelloWorld]
 * xref:starters:simpleapp:about.adoc[SimpleApp]
 
 _Resources_

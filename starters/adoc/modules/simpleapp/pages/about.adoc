@@ -3,7 +3,7 @@
 
 The quickest way to get started building an application "for real" is to use the `simpleapp` starter app.
 
-As with the xref:starters:helloworld:about.adoc[helloworld] startre app, this will download a very simple one-class domain model, namely the `SimpleObject` entity and a supporting `SimpleObjects` domain service.
+As with the xref:starters:helloworld:about.adoc[HelloWorld] startre app, this will download a very simple one-class domain model, namely the `SimpleObject` entity and a supporting `SimpleObjects` domain service.
 
 However, the app also provides more structure to assist you as your application grows, with multiple Maven modules, and examples of unit tests, integration tests and BDD (cucumber) specs.
 
