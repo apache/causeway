@@ -32,7 +32,7 @@ class UtilsTest {
         //when Then
 
         val actual = Utils.convertJavaOffsetDateTimeToISO(rawDate as String)
-        assertEquals(expected, actual as String)
+        assertEquals(expected, actual)
 
         val dateTime = Utils.toDate(actual)
         assertNotNull(dateTime)
@@ -40,7 +40,7 @@ class UtilsTest {
         assertEquals(0, dateTime.getMonth()) // c braintwist strikes again
         assertEquals(25, dateTime.getDate())
         assertEquals(14, dateTime.getHours())  // MEZ = GMT + 1
-        assertEquals(7, dateTime.getMinutes())  // and again? shouldn't it be 7??
+        assertEquals(7, dateTime.getMinutes())
     }
 
 
