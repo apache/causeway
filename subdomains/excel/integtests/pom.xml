@@ -30,7 +30,6 @@
     	<jar-plugin.automaticModuleName>org.apache.isis.subdomains.excel.integtests</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/isis/subdomains/excel/integtests</git-plugin.propertiesDir>
         
-        <skipTests>true</skipTests>
     </properties>
 
     <build>

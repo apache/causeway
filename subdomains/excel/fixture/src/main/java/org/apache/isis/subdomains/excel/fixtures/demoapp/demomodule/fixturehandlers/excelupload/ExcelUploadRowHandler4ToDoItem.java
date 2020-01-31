@@ -9,11 +9,14 @@ import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.applib.util.JaxbAdapters;
 import org.apache.isis.subdomains.excel.testing.ExcelFixture;
 import org.apache.isis.subdomains.excel.testing.ExcelFixtureRowHandler;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Category;
@@ -33,7 +36,7 @@ import lombok.Setter;
 @XmlType(
         propOrder = {
                 "description",
-                "subcategory",
+                "subCategory",
                 "ownedBy",
                 "dueBy",
                 "cost",
@@ -51,7 +54,7 @@ public class ExcelUploadRowHandler4ToDoItem implements ExcelFixtureRowHandler {
     @Getter @Setter
     private String ownedBy;
 
-    @Getter @Setter
+    @Getter @Setter @XmlJavaTypeAdapter(JaxbAdapters.LocalDateAdapter.class)
     private LocalDate dueBy;
 
     @Getter @Setter
@@ -70,9 +73,9 @@ public class ExcelUploadRowHandler4ToDoItem implements ExcelFixtureRowHandler {
         return Collections.<Object>singletonList(toDoItem);
     }
 
-    @Inject
+    @Inject @XmlTransient
     ExcelDemoToDoItemMenu toDoItems;
 
-    @Inject
+    @Inject @XmlTransient
     WrapperFactory wrapperFactory;
 }

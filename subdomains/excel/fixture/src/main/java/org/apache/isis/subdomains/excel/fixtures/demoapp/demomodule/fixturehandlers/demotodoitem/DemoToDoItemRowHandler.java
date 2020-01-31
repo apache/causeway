@@ -7,19 +7,21 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.subdomains.excel.testing.ExcelFixture;
-import org.apache.isis.subdomains.excel.testing.ExcelFixtureRowHandler;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Category;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Subcategory;
+import org.apache.isis.subdomains.excel.testing.ExcelFixture;
+import org.apache.isis.subdomains.excel.testing.ExcelFixtureRowHandler;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.Getter;
 import lombok.Setter;
 
+@ViewModel
 public class DemoToDoItemRowHandler implements ExcelFixtureRowHandler {
 
     @Getter @Setter
