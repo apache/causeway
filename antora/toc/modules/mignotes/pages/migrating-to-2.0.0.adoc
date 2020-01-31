@@ -724,7 +724,19 @@ isis.value-types. +
 
 === No longer any archetypes
 
-TODO: document.
+The archetypes have been replaced by starter apps.
+This has several benefits:
+
+* for users of the framework:
+
+** github repos are now better understood than Maven archetypes
+** it is easier to provide improvements/patches as pull requests
+** a forked repo is immediately under code control
+
+* for committers:
+
+** contributions can be merged in more easiler
+** it simplifies the release process
 
 == 2.0.0-M2 to 2.0.0-M3
 

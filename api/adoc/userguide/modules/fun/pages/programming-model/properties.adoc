@@ -25,8 +25,7 @@ It's also possible (using annotations) to define a link table to hold foreign ke
 Apache Isis recognises some of these annotations for JDO/DataNucleus and JAXB and infers some domain semantics from them (for example, the maximum allowable length of a string property).
 
 Since writing getter and setter methods adds quite a bit of boilerplate, it's common to use link:https://projectlombok.org/[Project Lombok] to code generate these methods at compile time (using Java's annotation processor) simply by adding the `@lombok.Getter` and `@lombok.Setter` annotations to the field.
-The link:https://github.com/apache/isis-app-helloworld[HelloWorld] and link:https://github.com/apache/isis-app-simpleapp[SimpleApp] archetypes use this approach.
-
+The link:https://github.com/apache/isis-app-simpleapp[SimpleApp] starter app uses this approach.
 
 == Value vs Reference Types
 
@@ -70,7 +69,6 @@ For further details on mapping associations, see the JDO/DataNucleus documentati
 
 For domain entities, the annotations for mapping value types tend to be different for properties vs action parameters, because JDO annotations are only valid on properties.
 The table in the xref:userguide:fun:programming-model.adoc#properties-vs-parameters[Properties vs Parameters] section provides a handy reference of each.
-
 
 == Optional Properties
 
@@ -120,7 +118,6 @@ private String notes;
 
 If this is omitted then whether editing is enabled or disabled is defined globally, in the `isis.properties` configuration file; see xref:refguide:config:configuring-core.adoc#isis-objects-editing[reference configuration guide] for further details.
 
-
 == Ignoring Properties
 
 By default Apache Isis will automatically render all properties in the xref:vw:ROOT:about.adoc[Wicket UI] or in the xref:vro:ROOT:about.adoc[REST API].
@@ -131,7 +128,6 @@ This is independent of Apache Isis; in other words that property will still be r
 
 For view models, you can tell JAXB to ignore a property using the `@javax.xml.bind.annotation.XmlTransient` annotation.
 Again, this is independent of Apache Isis.
-
 
 == Derived Properties
 
@@ -168,13 +164,9 @@ AddressService addressService;                                      // <3>
 <2> the lat/long representation of the address, eg "51.503363;-0.127625"
 <3> an injected service that can convert to/from address and latLong.
 
-
-
 == Data types
 
 This section shows specific considerations for various datatypes, in particular how to annotate them for DataNucleus mapping to the persistence object store.
-
-
 
 === ``String``s (Length)
 
@@ -191,8 +183,6 @@ private String firstName
 ----
 
 This is a good example of a case where Apache Isis infers domain semantics from the JDO annotation.
-
-
 
 === JODA Dates
 
@@ -214,7 +204,6 @@ For example, the `ToDoItem` (in the https://github.com/isisaddons/isis-app-todoa
 private LocalDate dueBy;
 ----
 
-
 === ``BigDecimal``s (Precision)
 
 Working with `java.math.BigDecimal` properties takes a little care due to scale/precision issues.
@@ -227,7 +216,9 @@ For example, suppose we have:
 private BigDecimal impact;
 ----
 
-JDO/DataNucleus creates, at least with HSQL, the table with the field type as NUMERIC(19). No decimal digits are admitted. (Further details http://hsqldb.org/doc/2.0/guide/sqlgeneral-chapt.html#sgc_numeric_types[here]).
+JDO/DataNucleus creates, at least with HSQL, the table with the field type as NUMERIC(19).
+No decimal digits are admitted.
+(Further details http://hsqldb.org/doc/2.0/guide/sqlgeneral-chapt.html#sgc_numeric_types[here]).
 
 What this implies is that, when a record is inserted, a log entry similar to this one appears:
 
@@ -250,8 +241,6 @@ private BigDecimal impact;
 In addition, you should also set the scale of the `BigDecimal`, using `setScale(scale, roundingMode)`.
 
 More information can be found http://www.opentaps.org/docs/index.php/How_to_Use_Java_BigDecimal:_A_Tutorial[here] and http://www.tutorialspoint.com/java/math/bigdecimal_setscale_rm_roundingmode.htm[here].
-
-
 
 === ``Blob``s
 
@@ -301,7 +290,6 @@ There can be differences in behaviour between JDBC drivers.
 
 === ``Clob``s
 
-
 Mapping `Clob`s works in a very similar way to ``Blob``s, but the `jdbcType` and `sqlType` attributes will, respectively, be `CLOB` and `LONGVARCHAR`:
 
 [source,java]
@@ -320,9 +308,9 @@ private Clob doc;
 
 [NOTE]
 ====
-If specifying a `sqlType` of "LONGVARCHAR" does not work, try instead "CLOB".  There can be differences in behaviour between JDBC drivers.
+If specifying a `sqlType` of "LONGVARCHAR" does not work, try instead "CLOB".
+There can be differences in behaviour between JDBC drivers.
 ====
-
 
 === Mapping to VARBINARY or VARCHAR
 
@@ -348,6 +336,7 @@ The same argument applies to `LONGVARCHAR` (or `CLOB`); you could instead map to
         sqlType = "VARCHAR", length=2048
 )
 ----
+
 Support and maximum allowed length will vary by database vendor.
 
 

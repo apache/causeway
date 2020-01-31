@@ -1,7 +1,7 @@
-[[AppManifest-bootstrapping]]
 = `AppManifest` (bootstrapping)
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+// TODO: v2: this is all out of date, instead bootstrap with @SpringBootApplication
 
 This section describes how to implement the `AppManifest` interface to bootstrap both an Apache Isis web application, and also its integration tests.
 
@@ -14,7 +14,6 @@ The app manifest can then be used both to bootstrap the application "proper", or
 // TODO: v2: `AppManifestAbstract` and `AppManifestAbstract2` have been unified/simplified
 
 == API
-
 
 The `AppManifest` interface allows the constituent parts of an application to be defined programmatically, most specifically the packages that contain domain services and/or persistent entities.
 Its API is defined as:
@@ -38,9 +37,6 @@ public interface AppManifest {
 <6> Overrides for any other configuration properties.
 
 The following sections describe each of these methods in a little more detail.
-
-
-
 
 === `getModules()`
 
@@ -87,7 +83,6 @@ public List<Class<?>> getModules() {
 
 As can be seen, the various (non-ASF) link:https://platform.incode.org[Incode Platform^] modules also each provide a module class that can be easily referenced.
 
-
 === `getAdditionalServices()`
 
 We normally we recommend that services are defined exclusively through `getModules()`, and that this method should therefore return an empty list.
@@ -107,9 +102,6 @@ public List<Class<?>> getAdditionalServices() {
 
 If this method returns a non-`null` value, then it overrides the value of `isis.services` configuration property.
 
-
-
-
 === `getAuthenticationMechanism()`
 
 If non-`null`, this method specifies the authentication mechanism to use.
@@ -123,8 +115,6 @@ See the xref:security:ROOT:about.adoc[security guide] for further details on con
 This property is ignored for integration tests (which always uses the `"bypass"` mechanism).
 ====
 
-
-
 === `getAuthorizationMechanism()`
 
 If non-`null`, this method specifies the authorization mechanism to use.
@@ -137,9 +127,6 @@ See the xref:security:ROOT:about.adoc[security guide] for further details on con
 ====
 This property is ignored for integration tests (which always uses the `"bypass"` mechanism).
 ====
-
-
-
 
 === `getFixtures()`
 
@@ -156,12 +143,8 @@ public List<Class<? extends FixtureScript>> getFixtures() {
 }
 ----
 
-
-
 Note that in order for fixtures to be installed it is also necessary to set the `isis.persistor.datanucleus.install-fixtures` key to `true`.
 This can most easily be done using the `getConfigurationProperties()` method, discussed below.
-
-
 
 === `getConfigurationProperties()`
 
@@ -177,8 +160,6 @@ public Map<String, String> getConfigurationProperties() {
     return props;
 }
 ----
-
-
 
 == Bootstrapping
 
@@ -209,8 +190,7 @@ isis.appManifest=domainapp.app.MyAppAppManifest
 ----
 
 * the second is also as a webapp, but from within the context of the IDE. +
-+
-Here, it's common to use the `org.apache.isis.WebServer` class to launch your application from the xref:userguide:btb:about.adoc#cmd-line[command line].
++ Here, it's common to use the `org.apache.isis.WebServer` class to launch your application from the xref:userguide:btb:about.adoc#cmd-line[command line].
 This allows the `AppManifest` to be specified using the `-m` (or `--manifest`) flag: +
 +
 [source,ini]
@@ -219,8 +199,7 @@ java org.apache.isis.WebServer -m com.mycompany.myapp.MyAppAppManifestWithFixtur
 ----
 
 * the third case is within an integration test. +
-+
-The code to boostrap an integration test is shown in the xref:testing:integtestsupport:about.adoc#bootstrapping[testing guide], but once again an `AppManifest` is required.
++ The code to boostrap an integration test is shown in the xref:testing:integtestsupport:about.adoc#bootstrapping[testing guide], but once again an `AppManifest` is required.
 
 In some cases an integration test uses the exact same `AppManifest` as the regular webapp.
 Sometimes though it is necessary to "tweak" the `AppManifest`:
@@ -231,8 +210,10 @@ Sometimes though it is necessary to "tweak" the `AppManifest`:
 
 The next section describes some helper classes that the framework provides to help achieve this.
 
-
 === AppManifestAbstract
+
+CAUTION: TODO: v2: this is all out of date and superceded by Spring Boot
+
 
 [IMPORTANT]
 ====
@@ -247,14 +228,12 @@ This takes an instance of a `AppManifestAbstract.Builder` in its constructor; th
 Moreover, these classes recognise that configuration properties fall into two broad classes:
 
 * those that are fixed and do not change between environments. +
-+
-In other words these describe how the application chooses to configure the framework itself, eg global disable of editing of properties, or enabling of auditing.
++ In other words these describe how the application chooses to configure the framework itself, eg global disable of editing of properties, or enabling of auditing.
 
 * those that change between environments. +
-+
-The classic example here is the JDBC URL.
++ The classic example here is the JDBC URL.
 
-For example, the link:https://github.com/apache/isis-app-simpleapp[SimpleApp archetype]'s `AppManifest` is defined as:
+For example, the link:https://github.com/apache/isis-app-simpleapp[SimpleApp] starter app's `AppManifest` is defined as:
 
 [source,java]
 ----
@@ -279,7 +258,7 @@ public class DomainAppAppManifest extends AppManifestAbstract {
 }
 ----
 <1> the modules that make up the application; corresponds to `AppManifest#getModules()`
-<2> the (non-changing with environment) set of configuration properties, loaded relative to the manifest itself;  corresponds to `AppManifest#getConfigurationProperties()`
+<2> the (non-changing with environment) set of configuration properties, loaded relative to the manifest itself; corresponds to `AppManifest#getConfigurationProperties()`
 <3> override of components; correponds to both `AppManifest#getAuthenticationMechanism()` and `AppManifest#getAuthorizationMechanism()`
 <4> Pass the builder up to the superclass.
 

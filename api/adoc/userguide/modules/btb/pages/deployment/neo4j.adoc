@@ -6,14 +6,12 @@
 
 Apache Isis has experimental support for Neo4J, courtesy of DataNucleus' http://www.datanucleus.org/products/datanucleus/datastores/neo4j.html[Neo4J Datastore] implementation.
 
-
 [TIP]
 ====
 In addition, the http://github.com/isisaddons/isis-app-neoapp[Isis addons' neoapp] (non-ASF) is configured to run with an embedded Neo4J server running alongside the Apache Isis webapp.
 ====
 
 The steps below describe the configuration steps required to update an existing app.
-
 
 == ConnectionURL
 
@@ -45,17 +43,5 @@ Add the following dependency to the `webapp` project's `pom.xml`:
 <1> for Isis v1.9.0, use the value shown.
 For Isis v1.8.0, use 3.2.3.
 
-In the link:https://github.com/apache/isis-app-simpleapp[SimpleApp archetype] this is defined under the "neo4j" profile so can be activated using `-P neo4j`.
 
 
-== Try it out!
-
-If you want to quickly try out neo4j for yourself:
-
-* run the link:https://github.com/apache/isis-app-simpleapp[SimpleApp archetype] (v1.8.0)
-
-* build the app:
-
-* run the app:
-
-If you visit the about page you should see the neo4j JAR files are linked in, and a `neo4j_DB` subdirectory within the `webapp` directory.

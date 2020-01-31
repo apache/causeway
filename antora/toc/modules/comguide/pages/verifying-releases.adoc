@@ -78,10 +78,8 @@ curl http://www.apache.org/dist/isis/KEYS > /tmp/KEYS
 gpg --import /tmp/KEYS
 
 rm -rf isis-$VERSION*
-rm -rf simpleapp-archetype-$VERSION*
-rm -rf helloworld-archetype-$VERSION*
 
-curl -O -L https://gist.githubusercontent.com/danhaywood/9b052f68ef56cfdbeb3eb1603c5f772a/raw/a083599d34a502a18c5ccfd4a4d26f18352ca0e4/verify-isis-release.sh
+curl -O -L https://gist.githubusercontent.com/danhaywood/xxx/raw/xxx/verify-isis-release.sh
 
 chmod +x ./verify-isis-release.sh
 ./verify-isis-release.sh $NEXUSREPONUM $VERSION
@@ -100,31 +98,10 @@ The location of this repository will be in the VOTE email.
 +
 in other words, to confirm that the release was created by an Apache Isis committer
 
-* builds all the framework code from source
-+
-that is, `core`, `simpleapp-archetype` and `helloworld-archetype`
+* builds the framework code from source
 
-* generates and build an app for each of the two archetypes
+Assuming this completes successfully, you can then test the two starter applications; adjust the version if required.
 
-Assuming this completes successfully, you can then test the two applications generated from the `simpleapp` and `helloworld` archetypes:
-
-* Test out simpleapp using:
-+
-[source,bash]
-----
-pushd test-simpleapp/myapp
-mvn -pl webapp jetty:run
-popd
-----
-
-* Test out helloworld using:
-+
-[source,bash]
-----
-pushd test-helloworld/myapp
-mvn jetty:run
-popd
-----
 
 You can if you wish perform some additional optional checks, listed in the sections below.
 Alternatively, you can xref:toc:comguide:verifying-releases.adoc#casting-a-vote[cast your vote].
@@ -133,7 +110,7 @@ Alternatively, you can xref:toc:comguide:verifying-releases.adoc#casting-a-vote[
 
 == (Optional) Verifying binary artifacts
 
-You can verify the binary releases by configuring your local Maven install to point to the Maven staging repository (or repositories) and then using them, eg to run the link:https://github.com/apache/isis-app-helloworld[HelloWorld archetype] or the link:https://github.com/apache/isis-app-simpleapp[SimpleApp archetype] and running the resultant app.
+You can verify the binary releases by configuring your local Maven install to point to the Maven staging repository (or repositories) and then using them, eg to run the link:https://github.com/apache/isis-app-helloworld[HelloWorld starter app] or the link:https://github.com/apache/isis-app-simpleapp[SimpleApp starter app] (adjust the parent version if required).
 
 Configuring your local Maven install amounts to updating the `~/.m2/settings.xml` file:
 

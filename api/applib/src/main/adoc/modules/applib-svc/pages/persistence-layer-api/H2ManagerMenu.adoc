@@ -9,7 +9,6 @@ The `H2ManagerMenu` provides a single menu item to redirect to the H2 web consol
 This is only enabled for prototyping, and only if H2 is detected in the underlying JDBC URL.
 The menu appears under the "Prototyping" menu.
 
-
 == API & Implementation
 
 The API of the service is:
@@ -25,7 +24,7 @@ Note that this launches the manager on the same host that the webapp runs, and s
 
 == Additional Configuration
 
-The following additional configuration is also required (all of this is present in the helloworld and simpleapp archetypes):
+The following additional configuration is also required (all of this is present in the helloworld and simpleapp starter apps):
 
 * the h2 jdbc driver is required on the classpath of the webapp:
 +
@@ -38,7 +37,7 @@ The following additional configuration is also required (all of this is present 
 </dependency>
 ----
 
-* the `jdbc:h2` URL configuration properties must be defined, eg in `isis.properties`:
+* the `jdbc:h2` URL configuration properties must be defined, eg in `application.properties`:
 +
 [source,ini]
 .isis.properties
@@ -69,11 +68,9 @@ isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionPassword=
 </servlet-mapping>
 ----
 
-
 == Disabling/hiding the menu
 
 The menu can be hidden or disabled by subscribing to its domain event, eg:
-
 
 [source,java]
 ----

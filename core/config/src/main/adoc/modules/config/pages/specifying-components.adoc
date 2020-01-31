@@ -16,7 +16,7 @@ This allows the components, services and entities to be specified from a single 
 To specify the `AppManifest` as a configuration property, use:
 
 .Core Configuration Properties (ignored if `isis.appManifest` is present)
-[cols="2a,1,3a", options="header"]
+[cols="2a,1,3a",options="header"]
 |===
 |Property
 |Value +
@@ -28,7 +28,7 @@ To specify the `AppManifest` as a configuration property, use:
 |`o.a.i.applib.AppManifest` +
 
 By convention this implementation resides in an `myapp-app` Maven module (as opposed to `myapp-dom` or `myapp-fixture`).
-See the link:https://github.com/apache/isis-app-simpleapp[SimpleApp archetype] for details.
+See the link:https://github.com/apache/isis-app-simpleapp[SimpleApp] starter app for details.
 
 |===
 
@@ -49,16 +49,11 @@ public interface AppManifest {
 
 These can return either:
 
-    * "shiro" - enable integration with Apache Shiro, as described in the xref:security:ROOT:about.adoc[security] user guide
-    * "bypass" - bypass security (in effect, configure a no-op implementation that allows everything).
+* "shiro" - enable integration with Apache Shiro, as described in the xref:security:ROOT:about.adoc[security] user guide
+* "bypass" - bypass security (in effect, configure a no-op implementation that allows everything).
 
 Note that these are actually aliases for concrete implementations.
 It is also possible to specify a fully qualified class name to replace either of the two security components, implementing the appropriate interface.
-
-
-
-
-
 
 == Viewer Configuration
 

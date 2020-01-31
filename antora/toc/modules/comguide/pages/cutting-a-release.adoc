@@ -411,7 +411,7 @@ I've just cut a new release for Apache Isis Framework.
 The source code artifacts have been uploaded to staging repositories on repository.apache.org.
 For each zip there is a corresponding signature file (append .asc to the zip's url).
 
-In the source code repo the code has been tagged as isis-{isisnext}-RC1, helloworld-archetype-{isisnext}-RC1 and simpleapp-archetype-{isisnext}-RC1; see https://github.com/apache/isis/tags
+In the source code repo the code has been tagged as isis-{isisnext}-RC1; see https://github.com/apache/isis/tags
 
 To verify the source code, you can use the following commands (in an empty directory):
 
@@ -423,23 +423,10 @@ To verify the source code, you can use the following commands (in an empty direc
 
     rm -rf isis-$VERSION*
 
-    curl -O -L https://raw.githubusercontent.com/apache/isis/06f947ad7a0968c34d8e6941a77e12aa0196cd17/scripts/verify-isis-release.sh
+    curl -O -L https://raw.githubusercontent.com/apache/isis/xxxx/scripts/verify-isis-release.sh
 
     chmod +x ./verify-isis-release.sh
     ./verify-isis-release.sh $NEXUSREPONUM $VERSION
-
-
-Assuming this completes successfully, you can then test the two applications generated from the `simpleapp` and `helloworld` archetypes:
-
-    pushd test-simpleapp/myapp
-    mvn -pl webapp jetty:run
-    popd
-
-and
-
-    pushd test-helloworld/myapp
-    mvn jetty:run
-    popd
 
 
 For more details, see https://isis.apache.org/toc/comguide/about.html#verifying-releases

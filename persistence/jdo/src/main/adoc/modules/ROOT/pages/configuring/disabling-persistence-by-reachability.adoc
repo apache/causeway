@@ -26,11 +26,9 @@ We therefore recommend that you disable persistence-by-reachability by adding th
 isis.persistor.datanucleus.impl.datanucleus.persistenceByReachabilityAtCommit=false
 ----
 
-This change has been made to both the link:https://github.com/apache/isis-app-helloworld[HelloWorld] and link:https://github.com/apache/isis-app-simpleapp[SimpleApp] archetypes.
+This change has been made to both the link:https://github.com/apache/isis-app-helloworld[HelloWorld] and link:https://github.com/apache/isis-app-simpleapp[SimpleApp] starter apps.
 
 If you do disable this feature, then you will (of course) need to ensure that you explicitly persist all entities using the `RepositoryService#persist(.)` or `RepositoryService#persistAndFlush(.)` methods.
-
-
 
 == The issue in more detail
 

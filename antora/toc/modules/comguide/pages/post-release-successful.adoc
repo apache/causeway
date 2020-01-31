@@ -21,9 +21,6 @@ If there are not +3 votes after this time then it is perfectly permissible to ke
 
 This section describes the steps to perform if the vote has been successful.
 
-
-
-
 == Inform dev ML
 
 Post the results to the `dev@isis.a.o` mailing list:
@@ -50,8 +47,6 @@ The vote is SUCCESSFUL.
 I'll now go ahead and complete the post-release activities.
 ----
 
-
-
 == Update tags
 
 Replace the `-RCn` tag with another without the qualifier.
@@ -61,17 +56,12 @@ You can do this using the `scripts/promoterctag.sh` script; for example:
 [source,bash,subs="attributes+"]
 ----
 sh scripts/promoterctag.sh isis-{isisnext} RC1
-sh scripts/promoterctag.sh helloworld-archetype-{isisnext} RC1
-sh scripts/promoterctag.sh simpleapp-archetype-{isisnext} RC1
 ----
 
 This script pushes the tag under `refs/tags/rel`.
 As per Apache policy (communicated on 10th Jan 2016 to Apache PMCs), this path is 'protected' and is unmodifiable (guaranteeing the provenance that the ASF needs for releases).
 
 Then, continue onto the next section for the steps to promote and announce the release.
-
-
-
 
 == Release to Maven Central
 
@@ -81,8 +71,6 @@ From the http://repository.apache.org[ASF Nexus repository], select the staging 
 image::release-process/nexus-release-1.png[width="600px",link="{imagesdir}/release-process/nexus-release-1.png"]
 
 This moves the release artifacts into an Apache releases repository; from there they will be automatically moved to the Maven repository.
-
-
 
 
 == Release Source Zip
@@ -99,9 +87,6 @@ The directory structure of Apache Isis reflects the directory structure in our g
 ----
 isis/
   core/
-  example/
-    archetype/
-      simpleapp/
 ----
 
 If necessary, checkout this directory structure:
@@ -148,47 +133,6 @@ svn delete $fullname-$old_ver-$zip
 
 popd
 
-
-#
-# helloworld-archetype
-#
-type="archetype"
-fullname="helloworld-archetype"
-pushd $type/$fullname
-
-curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$md5
-svn add $fullname-$new_ver-$md5
-curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$asc
-svn add $fullname-$new_ver-$asc
-curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$zip
-svn add $fullname-$new_ver-$zip
-
-svn delete $fullname-$old_ver-$md5
-svn delete $fullname-$old_ver-$asc
-svn delete $fullname-$old_ver-$zip
-
-popd
-
-
-#
-# simpleapp-archetype
-#
-type="archetype"
-fullname="simpleapp-archetype"
-pushd $type/$fullname
-
-curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$md5
-svn add $fullname-$new_ver-$md5
-curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$asc
-svn add $fullname-$new_ver-$asc
-curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$zip
-svn add $fullname-$new_ver-$zip
-
-svn delete $fullname-$old_ver-$md5
-svn delete $fullname-$old_ver-$asc
-svn delete $fullname-$old_ver-$zip
-
-popd
 ----
 
 [source,bash,subs="attributes+"]
@@ -197,8 +141,6 @@ sh upd.sh {isiscurr} {isisnext}
 ----
 
 The script downloads the artifacts from the Nexus release repository, adds the artifacts to subversion and deletes the previous version.
-
-
 
 Double check that the files are correct; there is sometimes a small delay in the files becoming available in the release repository.
 It should be sufficient to check just the `md5` or `.asc` files that these look valid (aren't HTML 404 error pages):
@@ -217,8 +159,6 @@ svn commit -m "publishing isis source releases to dist.apache.org"
 
 If the files are invalid, then revert using `svn revert . --recursive` and try again in a little while.
 
-
-
 == Update JIRA
 
 === Generate Release Notes
@@ -236,13 +176,10 @@ This script uses 'jq' to parse JSON.
 See the script itself for details of how to install this utility.
 ====
 
-
 === Close tickets
 
 Close all JIRA tickets for the release, or moved to future releases if not yet addressed.
 Any tickets that were partially implemented should be closed, and new tickets created for the functionality on the ticket not yet implemented.
-
-
 
 === Mark the version as released
 
@@ -250,18 +187,13 @@ In JIRA, go to the link:https://issues.apache.org/jira/plugins/servlet/project-c
 
 In the link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[Kanban view] this will have the effect of marking all tickets as released (clearing the "done" column).
 
-
 === Create new JIRA
 
 Create a new JIRA ticket as a catch-all for the _next_ release.
 
-
 === Update the ASF Reporter website
 
 Log the new release in the link:https://reporter.apache.org/addrelease.html?isis[ASF Reporter website].
-
-
-
 
 == Release image to Docker hub
 
@@ -274,8 +206,6 @@ TODO:
 * the entry: `<docker-plugin.imageName>` in `pom.xml` will need to change from `apacheisis/core` to simply `apache/isis-9.0.10-jre8-alpine`.
 
 * Once this has been implemented, we also need to update the documentation for helloworld and simpleapp in order to explain how to build and deploy a skinny war to a running container.
-
-
 
 The idea is to use `isis-webdocker` to create a new image, then upload.
 
@@ -301,7 +231,6 @@ Prereqs are:
 
 \... because `isis-webdocker/pom.xml` references `docker-hub`.
 
-
 [source,bash]
 ----
 cd core
@@ -313,10 +242,6 @@ mvn -Drevision=$ISISREL \
     deploy
 ----
 
-
-
-
-
 == Update website
 
 In the main `isis` repo (ie containing the asciidoc source):
@@ -326,10 +251,6 @@ In the main `isis` repo (ie containing the asciidoc source):
 Also add a summary line for the release.
 
 * Update the [`site.yml`] file that declares the current and next releases.
-
-* Update any pages (`.adoc`, `.md`, `.html` etc) that describe how to run the archetype, and ensure they reference the correct version.
-+
-A search for `archetypeGroupId=org.apache.isis.archetype` should find these pages.
 
 * update the `doap_isis.rdf` file (which provides a machine-parseable description of the project) with details of the new release.
 Validate using the http://www.w3.org/RDF/Validator/[W3C RDF Validator] service.
@@ -398,8 +319,6 @@ You can take a copy from one of the older named versions, or just use this text:
 
 ** update the menu to reference the new version
 
-** update the version in the archetype.
-
 At this point the files in the root (directly under `content`) will still be out of date; the publish process simply preserves whatever is in `content/versions/current`.
 Also, the `SNAPSHOT` will be missing (above it was renamed to `current`).
 And, we also need to make sure that any future publishing of snapshots has the correct version in the navbar.
@@ -418,7 +337,6 @@ Therefore:
 * Finally, preview the changes (using `sh preview.sh` in the `isis-site`).
 
 If everything looks ok, then push the changes to make live.
-
 
 == Announce the release
 
@@ -456,17 +374,10 @@ Enjoy!
 [4] http://isis.apache.org/downloads.html
 ----
 
-
-
-
 == Blog post
 
 link:https://blogs.apache.org/roller-ui/login.rol[Log onto] the http://blogs.apache.org/isis/[Apache blog] and create a new post.
 Copy-n-paste the above mailing list announcement should suffice.
-
-
-
-
 
 == Merge in release branch
 
@@ -481,16 +392,11 @@ git push origin --delete release-{isisnext}-RC1   # remote branch no longer need
 git branch -d release-{isisnext}-RC1              # branch no longer needed
 ----
 
-
-
-
 == Update dependencies
 
 With the release complete, now is a good time to bump versions of dependencies (so that there is a full release cycle to identify any possible issues).
 
 You will probably want to create a new JIRA ticket for these updates (or if minor then use the "catch-all" JIRA ticket raised earlier for the next release).
-
-
 
 === Update parent of Core
 
@@ -510,8 +416,6 @@ If there is, update the `&lt;version&gt;` in the `&lt;parent&gt;` element in the
 
 where `NN` is the updated version number.
 
-
-
 === Update plugin versions
 
 The `maven-versions-plugin` should be used to determine if there are newer versions of any of the plugins used to build Apache Isis.
@@ -525,8 +429,6 @@ grep "\->" /tmp/foo | /bin/sort -u
 
 Review the generated output and make updates as you see fit.
 (However, if updating, please check by searching for known issues with newer versions).
-
-
 
 === Update dependency versions
 
@@ -561,14 +463,10 @@ For example, here is a report showing both of these cases:
 
 For these artifacts you will need to search http://search.maven.org[Maven central repo] directly yourself to confirm there are no newer dependencies not shown in this list.
 
-
-
 == Code formatting
 
 This is also a good time to make source code has been cleaned up and formatted according to the Apache Isis and ASF conventions.
 Use link:../dg/resources/eclipse/Apache-code-style-formatting.xml[this] Eclipse template and link:../dg/resources/eclipse/isis.importorder[this] import order.
-
-
 
 == Push changes
 
@@ -579,8 +477,6 @@ Finally, push the changes up to origin:
 git fetch    # check no new commits on origin/master
 git push
 ----
-
-
 
 == Release (non-ASF) Modules
 

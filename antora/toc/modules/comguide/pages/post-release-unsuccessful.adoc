@@ -50,32 +50,18 @@ The vote is UNSUCCESSFUL.
 
 Tidy up remote branches in the git repo:
 
-* delete the remote branch, for example: +
-+
 [source,bash,subs="attributes+"]
 ----
 git push --delete origin release-{isisnext}-RC1
-----
-
-
-* delete the remote origin server's tags, for example: +
-+
-[source,bash,subs="attributes+"]
-----
 git push --delete origin isis-{isisnext}-RC1
-git push --delete origin helloworld-archetype-{isisnext}-RC1
-git push --delete origin simpleapp-archetype-{isisnext}-RC1
-----
-
-
-* delete the tags that were created locally, for example: +
-+
-[source,bash,subs="attributes+"]
-----
 git tag -d isis-{isisnext}
-git tag -d helloworld-archetype-{isisnext}
-git tag -d simpleapp-archetype-{isisnext}
 ----
+
+These steps:
+
+* delete the remote branch
+* delete the remote origin server's tags
+* delete the tags that were created locally
 
 
 == Tidy up the Nexus repo

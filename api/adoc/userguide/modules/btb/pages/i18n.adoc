@@ -14,7 +14,6 @@ If no translations are available, then the Wicket viewer falls back to using Wic
 Isis does not translate the values of your domain objects, though.
 So, if you have a domain concept such as `Country` whose name is intended to be localized according to the current user, you will need to model this yourself.
 
-
 == Implementation Approach
 
 Most Java frameworks tackle i18n by using Java's own `ResourceBundle` API.
@@ -24,7 +23,8 @@ However, there are some serious drawbacks in this approach, including:
 * there is no support for plural forms (see this link:http://stackoverflow.com/questions/14326653/java-internationalization-i18n-with-proper-plurals/14327683#14327683[SO answer])
 * there is no tooling support for translators
 
-Apache Isis therefore takes a different approach, drawing inspiration from GNU's https://www.gnu.org/software/gettext/manual/index.html[gettext] API and specifically its `.pot` and `.po` files.  These are intended to be used as follows:
+Apache Isis therefore takes a different approach, drawing inspiration from GNU's https://www.gnu.org/software/gettext/manual/index.html[gettext] API and specifically its `.pot` and `.po` files.
+These are intended to be used as follows:
 
 * the `.pot` (portable object template) file holds the message text to be translated
 * this file is translated into multiple `.po` (portable object) files, one per supported locale
@@ -33,7 +33,6 @@ The name of each `.po` resolved in a very similar way to resource bundles.
 
 The format of the `.pot` and `.po` files is identical; the only difference is that the `.po` file has translations for each of the message strings.
 These message strings can also have singular and plural forms.
-
 
 [IMPORTANT]
 ====
@@ -46,15 +45,11 @@ This design tackles all the issues of ``ResourceBundle``s:
 * the `.po` message format is such that any given message text to translate need only be translated once, even if it appears in multiple places in the application (eg "Name")
 * the `.po` message format includes translations for (optional) plural form as well as singular form
 * there are lots of freely available editors https://www.google.co.uk/search?q=.po+file+editor[to be found], many summarized on this https://www.drupal.org/node/11131[Drupal.org] webpage. +
-+
-In fact, there are also online communities/platforms of translators to assist with translating files.
++ In fact, there are also online communities/platforms of translators to assist with translating files.
 One such is https://crowdin.com/[crowdin] (nb: this link does not imply endorsement).
 
 In Apache Isis' implementation, if the translation is missing from the `.po` file then the original message text from the `.pot` file will be returned.
 In fact, it isn't even necessary for there to be any `.po` files; `.po` translations can be added piecemeal as the need arises.
-
-
-
 
 == `TranslationService`
 
@@ -87,9 +82,8 @@ The `translate(...)` methods are closely modelled on GNU's gettext API.
 The first version is used when no translation is required, the second is when both a singular and plural form will be required, with the `num` parameter being used to select which is returned.
 In both cases the `context` parameter provides some contextual information for the translator; this generally corresponds to the class member.
 
-The mode meanwhile determines the behaviour of the service.  More on this below.
-
-
+The mode meanwhile determines the behaviour of the service.
+More on this below.
 
 === `TranslationServicePo`
 
@@ -112,8 +106,6 @@ It is also possible to set a configuration setting in `isis.properties` to force
 When running in write mode the original text is returned to the caller untranslated.
 If in read mode, then the translated `.po` files are read and translations provided as required.
 
-
-
 == Imperative messages
 
 The `TranslationService` is used internally by Apache Isis when building up the metamodel; the name and description of every class, property, collection, action and action parameter is automatically translated.
@@ -122,13 +114,12 @@ Thus the simple act of bootstrapping Apache Isis will cause most of the messages
 However, for an application to be fully internationalized, any validation messages (from either `disableXxx()` or `validateXxx()` supporting methods) and also possibly an object's title (from the `title()` method) will also require translation.
 Moreover, these messages must be captured in the `.pot` file such that they can be translated.
 
-
 === `TranslatableString`
 
 The first part of the puzzle is tackled by an extension to Apache Isis' programming model.
 Whereas previously the `disableXxx()` / `validateXxx()` / `title()` methods could only return a `java.lang.String`, they may now optionally return a `TranslatableString` (defined in Isis applib) instead.
 
-Here's a (silly) example from the link:https://github.com/apache/isis-app-simpleapp[SimpleApp archetype]:
+Here's a (silly) example from the link:https://github.com/apache/isis-app-simpleapp[SimpleApp] starter app:
 
 [source,java]
 ----
@@ -192,7 +183,6 @@ msgstr "Ich heisse {firstName} {lastName}."
 
 then the translation would be: "Ich heisse James Bond".
 
-
 The same class is used in xref:refguide:applib-svc:core-domain-api/MessageService.adoc[`MessageService`] so that you can raise translatable info, warning and error messages; each of the relevant methods are overloaded.
 
 For example:
@@ -208,8 +198,6 @@ public interface MessageService {
 }
 ----
 <1> are concatenated together to form the context for the `.pot` file.
-
-
 
 === `TranslatableException`
 
@@ -230,13 +218,9 @@ public interface TranslatableException {
 If returns `null`, then the `Exception#getMessage()` is used as a fallback
 <2> the context to use when translating the message
 
-
-
-
 == Wicket Viewer
 
-The xref:vw:ROOT:about.adoc[Wicket viewer] (its labels and messages) is also internationalized using
-the `TranslationService`.
+The xref:vw:ROOT:about.adoc[Wicket viewer] (its labels and messages) is also internationalized using the `TranslationService`.
 This is done through an Isis-specific implementation of the Wicket framework's `org.apache.wicket.Localizer` class, namely `LocalizerForIsis`.
 
 The Wicket `Localizer` defines the following API:
@@ -258,12 +242,10 @@ public String getString(
 For example, `key` might be a value such as "okLabel", while `component` an internal class of the Wicket viewer, such as `EntityPropertiesForm`.
 
 The `LocalizerForIsis` implementation uses the `key` as the `msgId`, while the fully qualified class name of the `component` is used as a context.
-There is one exception to this: if the component is the third-party select2
-component (used for drop-downs), then that class name is used directly.
+There is one exception to this: if the component is the third-party select2 component (used for drop-downs), then that class name is used directly.
 
 In the main, using Isis' i18n support means simply adding the appropriate translations to the `translation.po` file, for each locale that you require.
 If the translations are missing then the original translations from the Wicket resource bundles will be used instead.
-
 
 === Commonly used
 
@@ -335,7 +317,7 @@ msgstr "You can only select 1 item"
 === Login/self-sign-up
 
 In addition, there are a reasonably large number of messages that are used for both login and the
- xref:vw:ROOT:features.adoc#user-registration[user registration] (self sign-up) and password reset features.
+xref:vw:ROOT:features.adoc#user-registration[user registration] (self sign-up) and password reset features.
 
 These are:
 
@@ -482,11 +464,6 @@ msgid "usernamePlaceholder"
 msgstr "Username"
 ----
 
-
-
-
-
-
 == Integration Testing
 
 So much for the API; but as noted, it is also necessary to ensure that the required translations are recorded (by the `TranslationService`) into the `.pot` file.
@@ -537,9 +514,6 @@ Behind the scenes Apache Isis uses a JUnit 5 extension (`ExceptionRecognizerTran
 These are simply passed through to the registered xref:refguide:applib-svc:presentation-layer-spi/ExceptionRecognizer.adoc[`ExceptionRecognizer`]s so that any messages are recorded as requiring translation.
 ====
 
-
-
-
 == Escaped strings
 
 Translated messages can be escaped if required, eg to include embedded markup.
@@ -564,9 +538,6 @@ For example:
 public Integer getQuantity() { /* ... */ }
 ----
 <1> required (even though it won't be used when a translation is read; otherwise the escaped flag is ignored)
-
-
-
 
 == Configuration
 
@@ -613,7 +584,6 @@ then:
 * a user with `fr-CA` locale will use `translations.po`
 
 The basename for translation files is always `translations`; this cannot be altered.
-
 
 === Externalized translation files
 
@@ -668,12 +638,10 @@ Note that this default implementation does not support requests made through the
 Registering a different implementation of `LocaleProvider` that taps into appropriate REST (RestEasy?) APIs would be the way to address this.
 ====
 
-
 === `TranslationsResolver`
 
 The `TranslationResolver` is used by the `TranslationService` implementation to lookup translations for a specified locale.
 It is this service that reads from the `WEB-INF/` (or externalized directory).
-
 
 === `TranslationServicePoMenu`
 
@@ -687,8 +655,7 @@ While this will contain all the translations from the metamodel, it will not nec
 ====
 
 * the `clearTranslationsCache()` action - available only in read mode - will clear the cache so that new translations can be loaded. +
-+
-This allows a translator to edit the appropriate `translations-xx-XX.po` file and check the translation is correct without having to restart the app.
++ This allows a translator to edit the appropriate `translations-xx-XX.po` file and check the translation is correct without having to restart the app.
 
 
 

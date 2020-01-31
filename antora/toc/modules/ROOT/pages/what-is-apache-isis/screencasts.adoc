@@ -36,20 +36,20 @@ Finally, you can also find some screencasts for earlier versions of the framewor
 |    11+|*Playlists*
 
 
-12+| *Archetype, IDE, layouts*
+12+| *IDE, layouts*
 
 include::screencasts/playlists.adoc[]
 
 
-|https://www.youtube.com/watch?v=RQ_FFYd7npU[000^] +
-Searching and using the Apache Isis docs
-|x||||||||||
+//|https://www.youtube.com/watch?v=RQ_FFYd7npU[000^] +
+//Searching and using the Apache Isis docs
+//|x||||||||||
 
 
-|link:https://www.youtube.com/watch?v=OTNHR5EdAs8[001^] +
-Generating an app using the link:https://github.com/apache/isis-app-simpleapp[SimpleApp archetype]
-
-|x||||||||||
+//|link:https://www.youtube.com/watch?v=OTNHR5EdAs8[001^] +
+//Generating an app using the link:https://github.com/apache/isis-app-simpleapp[SimpleApp archetype]
+//
+//|x||||||||||
 
 
 
