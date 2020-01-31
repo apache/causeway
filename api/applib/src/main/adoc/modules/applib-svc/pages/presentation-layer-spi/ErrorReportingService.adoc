@@ -75,7 +75,7 @@ By default a stack trace button is not shown if a ticket is returned (but _is_ s
 
 There is no default implementation of this service, but there are a couple of concrete examples of `Ticket` in `core-runtime`.
 
-The (non-ASF) http://github.com/isisaddons/isis-app-kitchensink[Isis addons' kitchensink] app provides an example implementation:
+The (non-ASF) a[Isis addons' kitchensink] app provides an example implementation:
 
 [source,java]
 ----

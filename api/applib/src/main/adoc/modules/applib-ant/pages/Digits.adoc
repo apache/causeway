@@ -5,7 +5,7 @@
 
 The `@javax.validation.constraints.Digits` annotation is recognized by Apache Isis as a means to specify the precision for properties and action parameters of type `java.math.BigDecimal`.
 
-For example (taken from the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp]):
+For example (taken from the http://github.com/apache/isis-app-todoapp[TodoApp]):
 
 [source,java]
 ----

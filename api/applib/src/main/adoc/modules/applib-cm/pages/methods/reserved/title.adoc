@@ -21,7 +21,7 @@ public String title() { /* ... */ }
 
 Note that Apache Isis' xref:userguide:btb:i18n.adoc[i18n support] extends this so that titles can also be internationalized.
 
-For example, the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] uses this technique to add an overlay for todo items that have been completed:
+For example, the http://github.com/apache/isis-app-todoapp[TodoApp] uses this technique to add an overlay for todo items that have been completed:
 
 [source,java]
 ----

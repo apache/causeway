@@ -6,7 +6,7 @@
 Sometimes in our fixture scripts we want to perform a business action running as a particular user.
 This might be for the usual reason - so that our fixtures accurately reflect the reality of the system with all business constraints enforced using the `WrapperFactory` - or more straightforwardly it might be simply that the action depends on the identity of the user invoking the action.
 
-An example of the latter case is in the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp]'s `ToDoItem` class:
+An example of the latter case is in the http://github.com/apache/isis-app-todoapp[TodoApp]'s `ToDoItem` class:
 
 [source,java]
 .Production code that depends on current user

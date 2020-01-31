@@ -119,7 +119,7 @@ View models are created identically:
 
 [source,java]
 ----
-ToDoAppDashboard dashboard = repositoryService.instantiate(ToDoAppDashboard.class);
+TodoAppDashboard dashboard = repositoryService.instantiate(TodoAppDashboard.class);
 ----
 
 

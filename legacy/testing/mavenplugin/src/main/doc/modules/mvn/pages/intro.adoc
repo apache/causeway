@@ -24,10 +24,6 @@ This is instead of and preferable to using the JAXB link:https://jaxb.java.net/2
 
 The `validate` goal is by default bound to the `test` phase, and the `swagger` goal is by default bound to the `package` phase; both are typically of your application's `dom` sub-module.
 The `xsd` goal meanwhile defaults to the `generate-resources` phase, and this is generally used in a completely separate sub-module.
-An example can be found in the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] example app; the separate submodule that uses the `xsd` goal is (also) called `todoapp-xsd`.
-
-All of these goals require an xref:refguide:applib-cm:classes/AppManifest-bootstrapping.adoc[`AppManifest`] to point the plugin at, so that it knows how to bootstrap an Isis runtime.
-This is discussed below, followed by sections on configuring the two goals.
 
 
 

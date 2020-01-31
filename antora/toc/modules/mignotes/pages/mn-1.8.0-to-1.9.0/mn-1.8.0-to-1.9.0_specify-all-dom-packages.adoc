@@ -14,7 +14,7 @@ Apache Isis automatically scans for certain classes on the classpath in order to
 
 For the last of these we have tightened up the validation, to ensure that each package specified in the `isis.persistor.datanucleus.RegisterEntities.packagePrefix` key does indeed include at least one annotated entity.  This should include any domain classes for addon modules.
 
-For example, the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp]'s configuration now reads:
+For example, the http://github.com/apache/isis-app-todoapp[TodoApp]'s configuration now reads:
 
 [source,ini]
 ----

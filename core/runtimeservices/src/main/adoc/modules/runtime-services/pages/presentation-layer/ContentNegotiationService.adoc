@@ -136,7 +136,7 @@ which returns xref:vro:ROOT:simplified-representations.adoc[simplified represent
 
 == Usage
 
-You can find an example of all these services in the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp].  This defines a `ToDoItemDto` class that is JAXB annotated (it is in fact generated from an XSD).
+You can find an example of all these services in the http://github.com/apache/isis-app-todoapp[TodoApp].  This defines a `ToDoItemDto` class that is JAXB annotated (it is in fact generated from an XSD).
 
 The example app also includes an implementation of `ContentMappingService` that maps `todoapp.dom.module.todoitem.ToDoItem` entities to `todoapp.dto.module.todoitem.ToDoItemDto` classes.
 

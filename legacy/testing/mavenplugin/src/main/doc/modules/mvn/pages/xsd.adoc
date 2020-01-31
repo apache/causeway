@@ -59,7 +59,7 @@ below shows the overall design:
 image::maven-plugin/xsd-goal.png[width="800px",link="{imagesdir}/maven-plugin/xsd-goal.png"]
 
 For example, here is the `pom.xml` file for the (non-ASF)
-http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] example app's `todoapp-xsd` submodule.
+http://github.com/apache/isis-app-todoapp[TodoApp] example app's `todoapp-xsd` submodule.
 
 First, the usual boilerplate:
 
@@ -76,7 +76,7 @@ First, the usual boilerplate:
     </parent>
 
     <artifactId>todoapp-xsd</artifactId>
-    <name>Isis Addons ToDoApp XSD</name>
+    <name>Isis Addons TodoApp XSD</name>
 
     <dependencies>
         <dependency>
@@ -126,7 +126,7 @@ The `isis-xsd` profile runs the `xsd` goal of the `isis-maven-plugin`; these are
                 <artifactId>isis-maven-plugin</artifactId>
                 <version>${isis.version}</version>
                 <configuration>
-                    <appManifest>todoapp.dom.ToDoAppDomManifest</appManifest>                       <!--2-->
+                    <appManifest>todoapp.dom.TodoAppDomManifest</appManifest>                       <!--2-->
                     <jaxbClasses>                                                                   <!--3-->
                         <jaxbClass>todoapp.app.viewmodels.todoitem.v1_0.ToDoItemDto</jaxbClass>
                         <jaxbClass>todoapp.app.viewmodels.todoitem.v1_1.ToDoItemDto</jaxbClass>

@@ -194,7 +194,7 @@ See the link:http://db.apache.org/jdo/field_types.html[JDO docs] for more detail
 Moreover, these datatypes are _not_ in the default fetch group, meaning that JDO/DataNucleus will perform an additional `SELECT` query for each attribute.
 To avoid this extra query, the annotation should indicate that the property is in the default fetch group.
 
-For example, the `ToDoItem` (in the https://github.com/isisaddons/isis-app-todoapp[todoapp example app] (not ASF)) defines the `dueBy` property as follows:
+For example, the `ToDoItem` (in the https://github.com/apache/isis-app-todoapp[TodoApp] example app (not ASF)) defines the `dueBy` property as follows:
 
 [source,java]
 ----
@@ -249,7 +249,7 @@ Apache Isis configures JDO/DataNucleus so that the properties of type `org.apach
 As for Joda dates, this requires the `@javax.jdo.annotations.Persistent` annotation.
 However, whereas for dates one would always expect this value to be retrieved eagerly, for blobs and clobs it is not so clear cut.
 
-For example, in the `ToDoItem` class (in the (non-ASF) https://github.com/isisaddons/isis-app-todoapp/blob/0333852ddd18ad67e3356fccf805aa442246790d/dom/src/main/java/todoapp/dom/todoitem/ToDoItem.java#L442[todoapp example app]) the `attachment` property is as follows:
+For example, in the `ToDoItem` class (in the (non-ASF) https://github.com/apache/isis-app-todoapp/blob/0333852ddd18ad67e3356fccf805aa442246790d/dom/src/main/java/todoapp/dom/todoitem/ToDoItem.java#L442[TodoApp] example app) the `attachment` property is as follows:
 
 [source,java]
 ----

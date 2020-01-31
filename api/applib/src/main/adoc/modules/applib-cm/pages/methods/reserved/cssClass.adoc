@@ -12,7 +12,7 @@ This is done both for rendering the object either in a table or when rendering t
 In conjunction with xref:refguide:config:application-specific/application-css.adoc[`application.css`], can therefore provide custom styling of an object instance wherever it is rendered. +
 
 
-For example, the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] uses this technique to add a strikethrough for completed todo items.
+For example, the http://github.com/apache/isis-app-todoapp[TodoApp] uses this technique to add a strikethrough for completed todo items.
 This is shown on the home page:
 
 image::reference-methods/reserved/cssClass/strikethrough.png[width="800px",link="{imagesdir}/reference-methods/reserved/cssClass/strikethrough.png"]

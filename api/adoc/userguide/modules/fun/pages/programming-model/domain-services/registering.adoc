@@ -16,9 +16,9 @@ For example:
 public class MyAppManifest implements AppManifest {
     public List<Class<?>> getModules() {
         return Arrays.asList(
-                ToDoAppDomainModule.class,
-                ToDoAppFixtureModule.class,
-                ToDoAppAppModule.class,
+                TodoAppDomainModule.class,
+                TodoAppFixtureModule.class,
+                TodoAppAppModule.class,
                 org.isisaddons.module.audit.AuditModule.class);
     }
     ...

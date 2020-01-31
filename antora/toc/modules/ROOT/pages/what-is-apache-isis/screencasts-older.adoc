@@ -25,9 +25,8 @@ _This screencast is for Apache Isis v1.1.0 (ie very out of date)_
 
 |Todo app walkthrough (v.1.4.0) +
 
-_A run-through of the main features of the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp]_ +
+_A run-through of the main features of the http://github.com/apache/isis-app-todoapp[TodoApp]_
 
-_nb: the todoapp was previously called the 'quickstart' app_
 
 |video::2leQwavWxeg[youtube,width="420px",height="210px"]
 

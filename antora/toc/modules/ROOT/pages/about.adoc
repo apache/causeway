@@ -158,7 +158,7 @@ _Analysis_
 
 _Example Apps_
 
-* https://github.com/isisaddons/isis-app-todoapp[TodoApp]
+* https://github.com/apache/isis-app-todoapp[TodoApp]
 * https://github.com/isisaddons/isis-app-kitchensink[Kitchensink]
 * https://github.com/isisaddons/isis-app-quickstart[Quickstart]
 

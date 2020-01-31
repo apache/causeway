@@ -60,7 +60,7 @@ public class ShoppingCartItem {
 
 
 Defaults are also supported (of course) for xref:userguide:fun:programming-model.adoc#contributed-action[contributed actions].
-For example, here is a contributed action for updating category/subcategory of the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp]:
+For example, here is a contributed action for updating category/subcategory of the http://github.com/apache/isis-app-todoapp[TodoApp]:
 
 [source,java]
 ----
@@ -111,7 +111,7 @@ public Integer default2Add(final Integer net, final Integer val) {
 }
 ----
 
-As a more complex example (taken from the (non-ASF) http://github.com/isisaddons/isis-app-kitchensink[Isis addons' kitchensink] app), we can default the NFL region from the NFL league, and then the NFL team based on the region:
+As a more complex example (taken from the link:http://github.com/apache/isis-app-kitchensink[Isis addons' kitchensink] app), we can default the NFL region from the NFL league, and then the NFL team based on the region:
 
 [source,java]
 ----

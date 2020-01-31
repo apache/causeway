@@ -132,7 +132,7 @@ image::what-is-apache-isis/isis-in-pictures/110-docx.png[width="800px",link="{im
 
 == Security, Auditing and more...
 
-As well as providing extensions to the UI, the (non ASF) Isis Addons provide a rich set of modules to support various cross-cutting concerns.
+As well as providing extensions to the UI, the xref:extensions:ROOT:about.adoc[extensions] provide a rich set of modules to support various cross-cutting concerns.
 
 Under the activity menu are four sets of services which provide support on user session logging/auditing, command module (profiling and replay), audit module (audit object changes) and (inter-system) event publishing:
 
@@ -148,7 +148,6 @@ image::what-is-apache-isis/isis-in-pictures/130-security.png[width="800px",link=
 
 In the prototyping menu is the ability to download a GNU gettext `.po` file for translation.
 This file can then be translated into multiple languages so that your app can support different locales.
-Note that this feature is part of Apache Isis core (it is not in Isis Addons):
 
 image::what-is-apache-isis/isis-in-pictures/140-i18n.png[width="800px",link="{imagesdir}/what-is-apache-isis/isis-in-pictures/140-i18n.png"]
 

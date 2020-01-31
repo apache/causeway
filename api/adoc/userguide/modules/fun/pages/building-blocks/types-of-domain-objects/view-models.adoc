@@ -22,14 +22,10 @@ Such view models are part of the application layer, not part of the domain layer
 
 We explore these use cases in more detail below.
 
-
 [TIP]
 ====
-Details on how to actually write a view model (the programming model for view models) is
-xref:userguide:fun:programming-model.adoc#view-models[here].
+Details on how to actually write a view model (the programming model for view models) can be found xref:userguide:fun:programming-model.adoc#view-models[here].
 ====
-
-
 
 == Externally-managed entities
 
@@ -41,14 +37,11 @@ This proxy would hold the reference to the externally-managed domain entity (eg 
 
 The stub/proxy is a type of view model: a view -- if you like -- onto the domain entity managed by the external system.
 
-
-
 == In-memory entities
 
 As a variation on the above, sometimes there are domain objects that are, conceptually at least entities, but whose state is not actually persisted anywhere, merely held in-memory (eg in a hash).
 
 A simple example might be read-only configuration data that is read from a config file (eg log4j appender definitions) but thereafter is presented in the UI just like any other entity.
-
 
 == Application-layer view models
 
@@ -61,7 +54,7 @@ For example, it may be useful to show a dashboard of the most significant data i
 Obtaining this information by hand (by querying the respective services/repositories) would be tedious and slow; far better to have a dashboard do the job for the end user.
 
 A dashboard object is a model of the most relevant state to the end-user, in other words it is (quite literally) a view model.
- It is not a persisted entity, instead it belongs to the application layer.
+It is not a persisted entity, instead it belongs to the application layer.
 
 A view model need not merely aggregate data; it could also provide actions of its own.
 Most likely these actions will be queries and will always ultimately just delegate down to the appropriate domain-layer service/repository.
@@ -72,7 +65,7 @@ In these cases the view model might have some state of its own, but in most case
 
 .Desire Lines
 ****
-One way to think of application view models is as modelling the "desire line": the commonly-trod path that end-users must follow to get from point A to point B as quickly as possible.
+One way to think of application view models is that they model the "desire line": the commonly-trod path that end-users must follow to get from point A to point B as quickly as possible.
 
 To explain: there are link:http://ask.metafilter.com/62599/Where-the-sidewalk-ends[documented] link:https://sivers.org/walkways[examples] link:http://www.softpanorama.org/People/Wall/larry_wall_articles_and_interviews.shtml[that] architects of university campus will only add in paths some while after the campus buildings are complete: let the pedestrians figure out the routes they want to take.
 The name we like best for this idea is "desire lines", though it has also been called a "desire path", "paving the path" or "paving the sidewalk".
@@ -89,13 +82,10 @@ Then build out the minimum domain entities to support that use case.
 Then, identify if there any view models that could be introduced which would simplify the end-user interactions with the system (perhaps automating several related use cases together).
 ****
 
-
 When developing an Apache Isis application you will most likely start off with the persistent domain entities: `Customer`, `Order`, `Product`, and so on.
 For some applications this may well suffice.
 
 However, if the application needs to integrate with other systems, or if the application needs to support reasonably complex business processes, then you may need to look beyond just domain entities; view models are the tool of choice.
-
-
 
 == DTOs
 
@@ -121,7 +111,6 @@ The view model simply needs to implement the xref:refguide:applib-cm:classes/mix
 Details of how to consume such DTOs can be found xref:userguide:fun:programming-model.adoc#dto-consumers[here].
 ====
 
-
 == For REST Clients
 
 The xref:vro:ROOT:about.adoc[Restful Objects] viewer automatically provides a REST API for both domain entities.
@@ -139,7 +128,7 @@ Not so fast, though: the real question is whether the REST API you are exposing 
 +
 In this case view models provide an isolation layer which allow you to modify the structure of the underlying domain entities without breaking this API.
 
-* If it's a private API, which is to say that the only clients of the REST API are under your  control, then view models are an unnecessary overhead.
+* If it's a private API, which is to say that the only clients of the REST API are under your control, then view models are an unnecessary overhead.
 
 +
 In this case, just expose domain entities directly.

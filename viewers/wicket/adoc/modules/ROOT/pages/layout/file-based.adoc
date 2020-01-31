@@ -77,7 +77,7 @@ This link:https://www.youtube.com/watch?v=MxewC5Pve5k[screencast] describes the 
 == Examples
 
 Probably the easiest way to understand dynamic XML layouts is by example.
-For this we'll use the `ToDoItem` from the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp]:
+For this we'll use the `ToDoItem` from the http://github.com/apache/isis-app-todoapp[TodoApp]:
 
 image::layout-dynamic-xml/ToDoItem.png[width="940px",link="{imagesdir}/layout-dynamic-xml/ToDoItem.png"]
 
@@ -266,10 +266,10 @@ This section decribes a number of more features useful in more complex layouts.
 
 One feature worth being aware of is that it is possible to render a single feature more than once.
 
-For example, the dashboard home page for the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] shows
+For example, the dashboard home page for the http://github.com/apache/isis-app-todoapp[TodoApp] shows
 the "not yet complete" collection of todo items twice, once as a table and also as a calendar:
 
-image::layout-dynamic-xml/ToDoAppDashboard.png[width="940px",link="{imagesdir}/layout-dynamic-xml/ToDoAppDashboard.png"]
+image::layout-dynamic-xml/TodoAppDashboard.png[width="940px",link="{imagesdir}/layout-dynamic-xml/TodoAppDashboard.png"]
 
 
 This is accomplished using the following (slightly abbreviated) layout:
@@ -306,7 +306,7 @@ This might be useful for a complex domain object with multiple tabs; certain pro
 
 === Custom CSS
 
-The ToDoApp's dashboard (above) also shows how custom CSS styles can be associated with specific regions of the layout:
+The TodoApp's dashboard (above) also shows how custom CSS styles can be associated with specific regions of the layout:
 
 [source,xml]
 ----

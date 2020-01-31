@@ -15,7 +15,7 @@ object) and a `$$title` property (to use as a label, eg the hyperlink text).
 
 In addition, the representation defined by the RO spec is also included, under a special `$$ro` property.
 
-For example, using the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp], accessing
+For example, using the http://github.com/apache/isis-app-todoapp[TodoApp], accessing
 this resource:
 
 [source]

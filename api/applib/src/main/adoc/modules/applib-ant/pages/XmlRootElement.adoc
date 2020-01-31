@@ -34,7 +34,7 @@ If the view model XML graph is too large to be serialized to a string, then an a
 
 == Example
 
-This example is taken from the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp]:
+This example is taken from the http://github.com/apache/isis-app-todoapp[TodoApp]:
 
 [source,java]
 ----

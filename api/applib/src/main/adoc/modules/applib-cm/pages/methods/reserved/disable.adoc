@@ -44,7 +44,7 @@ For example:
 ----
 public class ToDoItem ... {
     public static abstract class PropertyDomainEvent<T>
-            extends ToDoAppDomainModule.PropertyDomainEvent<ToDoItem, T> {
+            extends TodoAppDomainModule.PropertyDomainEvent<ToDoItem, T> {
         ...
     }
     ...
@@ -55,8 +55,8 @@ where in turn:
 
 [source,java]
 ----
-public final class ToDoAppDomainModule {
-    private ToDoAppDomainModule(){}
+public final class TodoAppDomainModule {
+    private TodoAppDomainModule(){}
     public abstract static class PropertyDomainEvent<S,T>
             extends org.apache.isis.applib.events.domain.PropertyDomainEvent<S,T> { }
     ...

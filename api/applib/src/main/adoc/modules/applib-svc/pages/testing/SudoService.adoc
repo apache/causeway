@@ -48,7 +48,7 @@ The core framework provides a default implementation of this service (`o.a.i.cor
 
 == Usage
 
-A good example can be found in the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] which uses the `SudoService` in a fixture script to set up `ToDoItem` objects:
+A good example can be found in the http://github.com/apache/isis-app-todoapp[TodoApp] which uses the `SudoService` in a fixture script to set up `ToDoItem` objects:
 
 [source,java]
 ----

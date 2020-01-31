@@ -14,7 +14,7 @@ A class can define a property using either of these types, for example:
 
 == Screenshots
 
-The following screenshots are taken from the Isis addons example https://github.com/isisaddons/isis-app-todoapp[todoapp] (not ASF):
+The following screenshots are taken from the example https://github.com/apache/isis-app-todoapp[TodoApp]:
 
 
 

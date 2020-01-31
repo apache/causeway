@@ -5,7 +5,7 @@
 
 The `@HomePage` annotation allows a _single_ (no-arg, query-only) action on a _single_ domain service to be nominated as the action to invoke for the default home page.  This often returns a view model that acts as some sort of dashboard, presenting key information and makeing the most commonly used actions easy to invoke.
 
-For example, the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] uses `@HomePage` to return a dashboard of todo items to complete:
+For example, the http://github.com/apache/isis-app-todoapp[TodoApp] uses `@HomePage` to return a dashboard of todo items to complete:
 
 image::reference-annotations/HomePage/HomePage.png[width="800px",link="{imagesdir}/reference-annotations/HomePage/HomePage.png"]
 
@@ -15,25 +15,25 @@ The corresponding code is:
 [source,java]
 ----
 @DomainService(nature = NatureOfService.DOMAIN)
-public class ToDoAppDashboardService  {
+public class TodoAppDashboardService  {
     @Action(
             semantics = SemanticsOf.SAFE
     )
     @HomePage
-    public ToDoAppDashboard lookup() {
-        return serviceRegistry.injectServicesInto(new ToDoAppDashboard());
+    public TodoAppDashboard lookup() {
+        return serviceRegistry.injectServicesInto(new TodoAppDashboard());
     }
     @Inject
     ServiceRegistry serviceRegistry;
 }
 ----
 
-where `ToDoAppDashboard` is:
+where `TodoAppDashboard` is:
 
 [source,java]
 ----
 @DomainObject(nature = Nature.VIEW_MODEL)
-public class ToDoAppDashboard {
+public class TodoAppDashboard {
     public String title() { return "Dashboard"; }
 
     public List<ToDoItem> getNotYetComplete() { /* ... */ }
@@ -44,6 +44,6 @@ public class ToDoAppDashboard {
 ----
 <1> associated using xref:vw:ROOT:layout.adoc#file-based[file-based layout] with the `notYetComplete` collection.
 
-The other two actions shown in the above screenshot -- `exportAsXml` and `downloadLayout` -- are actually contributed to the `ToDoAppDashboard` through various domain services, as is the `downloadLayout` action.
+The other two actions shown in the above screenshot -- `exportAsXml` and `downloadLayout` -- are actually contributed to the `TodoAppDashboard` through various domain services, as is the `downloadLayout` action.
 
 

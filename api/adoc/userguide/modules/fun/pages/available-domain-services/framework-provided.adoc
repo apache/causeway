@@ -5,11 +5,10 @@
 
 
 Most framework domain services are API: they exist to provide support functionality to the application's domain objects and services.
-In this case an implementation of the service will be available, either by Apache Isis itself or by Isis Addons (non ASF).
+In this case an implementation of the service will be available, either in Apache Isis core or as an extension.
 
 Some framework domain services are SPI: they exist primarily so that the application can influence the framework's behaviour.
 In these cases there is (usually) no default implementation; it is up to the application to provide an implementation.
-
 
 General purpose:
 

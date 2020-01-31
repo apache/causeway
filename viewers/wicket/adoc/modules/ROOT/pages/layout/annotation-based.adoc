@@ -164,7 +164,7 @@ If the sum of all the columns exceeds 12, then the collections are placed undern
 
 == Example Layouts
 
-Below are sketches for the layout of the https://github.com/apache/isis/blob/f38fdb92941172eabb12e0943509f239e6d5925f/example/application/quickstart_wicket_restful_jdo/dom/src/main/java/dom/todo/ToDoItem.java[ToDoItem] class of the Isis addons example https://github.com/isisaddons/isis-app-todoapp/[todoapp] (not ASF):
+Below are sketches for the layout of the https://github.com/apache/isis/blob/f38fdb92941172eabb12e0943509f239e6d5925f/example/application/quickstart_wicket_restful_jdo/dom/src/main/java/dom/todo/ToDoItem.java[ToDoItem] class of the example https://github.com/apache/isis-app-todoapp/[TodoApp]:
 
 The first divides the properties into two equal sized columns (6-6-0) and puts the collections underneath (12):
 

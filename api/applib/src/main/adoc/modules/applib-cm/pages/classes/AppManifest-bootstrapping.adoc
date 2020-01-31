@@ -59,16 +59,16 @@ This tells the framework that the package and subpackages under `com.mycompany.m
 As is perhaps apparent, the `getModules()` method replaces and overrides both the `isis.services.ServicesInstallerFromAnnotation.packagePrefix` key (usually found in the `isis.properties`  file) and also the`isis.persistor.datanucleus.RegisterEntities.packagePrefix` key (usually found in the `persistor_datanucleus.properties` file).
 The value of the `isis.services-installer` configuration property is also ignored.
 
-For example, the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] defines the following:
+For example, the http://github.com/apache/isis-app-todoapp[TodoApp] defines the following:
 
 [source,java]
 ----
 @Override
 public List<Class<?>> getModules() {
     return Arrays.asList(
-            ToDoAppDomainModule.class,
-            ToDoAppFixtureModule.class,
-            ToDoAppAppModule.class,
+            TodoAppDomainModule.class,
+            TodoAppFixtureModule.class,
+            TodoAppAppModule.class,
             org.isisaddons.module.audit.AuditModule.class,
             org.isisaddons.module.command.CommandModule.class,
             org.isisaddons.module.devutils.DevUtilsModule.class,

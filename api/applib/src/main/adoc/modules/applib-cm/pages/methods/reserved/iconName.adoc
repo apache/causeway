@@ -12,7 +12,7 @@ The `iconName()` allows the icon that to be used to change for individual object
 These are usually quite subtle, for example to reflect the particular status of an object.
 The value returned by the `iconName()` method is added as a suffix to the base icon name.
 
-For example, the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] uses this technique to add an overlay for todo items that have been completed:
+For example, the http://github.com/apache/isis-app-todoapp[TodoApp] uses this technique to add an overlay for todo items that have been completed:
 
 image::reference-methods/reserved/iconName/differing.png[width="200px",link="{imagesdir}/reference-methods/reserved/iconName/differing.png"]
 

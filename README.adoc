@@ -22,11 +22,6 @@ toc::[]
 == Core Features
 
 Isis automatically generates the UI from the domain classes.
-The following screenshots are taken from the Isis Addons' http://github.com/isisaddons/isis-app-todoapp[todoapp example], which you are free to fork and use as you will.
-The corresponding domain classes from which this UI was built can be found https://github.com/isisaddons/isis-app-todoapp/tree/0669d6e2acc5bcad1d9978a4514a17bcf7beab1f/dom/src/main/java/todoapp/dom/module/todoitem[here].
-
-The todoapp also integrates with a number of other modules provided by the link:https://platform.incode.org[Incode Platform].
-Please note that these modules are not part of ASF, but they *are* all licensed under Apache License 2.0 and are maintained by Apache the Isis committers.
 
 === Sign-in
 

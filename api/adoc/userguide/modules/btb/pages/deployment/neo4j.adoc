@@ -6,9 +6,11 @@
 
 Apache Isis has experimental support for Neo4J, courtesy of DataNucleus' http://www.datanucleus.org/products/datanucleus/datastores/neo4j.html[Neo4J Datastore] implementation.
 
+//TODO: v2: need to port this over from http://github.com/isisaddons/isis-app-neoapp
+
 [TIP]
 ====
-In addition, the http://github.com/isisaddons/isis-app-neoapp[Isis addons' neoapp] (non-ASF) is configured to run with an embedded Neo4J server running alongside the Apache Isis webapp.
+The http://github.com/apache/isis-app-neoapp[neoapp] is configured to run with an embedded Neo4J server running alongside the Apache Isis webapp.
 ====
 
 The steps below describe the configuration steps required to update an existing app.

@@ -19,7 +19,7 @@ These customizations should generally be added to xref:refguide:config:applicati
 
 == Individual members
 
-For example, the `ToDoItem` object of the Isis addons example https://github.com/isisaddons/isis-app-todoapp/[todoapp] (not ASF) has a `notes` property. The HTML for this will be something like:
+For example, the `ToDoItem` object of the example https://github.com/apache/isis-app-todoapp/[TodoApp] has a `notes` property. The HTML for this will be something like:
 
 [source,html]
 ----

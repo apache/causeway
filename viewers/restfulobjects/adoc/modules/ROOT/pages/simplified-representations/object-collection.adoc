@@ -11,7 +11,7 @@ pairs of the properties of that object (a grid, again). +
 In addition, the representation defined by the RO spec is also included, as a special object with a single `$$ro`
 property.
 
-For example, using the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp], accessing
+For example, using the http://github.com/apache/isis-app-todoapp[TodoApp], accessing
 this resource:
 
 [source]

@@ -179,7 +179,7 @@ public void addExcludedProduct() {
 There are various implementations of the `Query` API, but these either duplicate functionality of the other overloads of `allMatches(...)` or they are not supported by the JDO/DataNucleus object store.
 The only significant implementation of `Query` to be aware of is `QueryDefault`, which identifies a named query and a set of parameter/argument tuples.
 
-For example, in the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] the `ToDoItem` is annotated:
+For example, in the http://github.com/apache/isis-app-todoapp[TodoApp] the `ToDoItem` is annotated:
 
 [source,java]
 ----

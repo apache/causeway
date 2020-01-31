@@ -26,5 +26,5 @@ image::configure-shiro-to-use-isisaddons-security-module-realm-with-delegate-rea
 The xref:security:ROOT:about.adoc[SecMan extension] has many more features than are described here, all of which are described in the module's README.
 The README also explains in detail how to configure an existing app to use this module.
 
-//You can also look at the Isisaddons https://github.com/isisaddons/isis-app-todoapp[todoapp example] (not ASF), which is preconfigured to use the security module.
+//You can also look at the Isisaddons https://github.com/apache/isis-app-todoapp[TodoApp example] (not ASF), which is preconfigured to use the security module.
 

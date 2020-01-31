@@ -39,7 +39,7 @@ To use an alternative implementation, subclass and use Spring's link:https://doc
 
 The most common use-case is for xref:refguide:applib-ant:Action.adoc#invokeOn[bulk] actions that act upon multiple objects in a list.  The (same) `Scratchpad` service is injected into each of these objects, and so they can use pass information.
 
-For example, the Isis addons example https://github.com/isisaddons/isis-app-todoapp/[todoapp] (not ASF) demonstrates how the `Scratchpad` service can be used to calculate the total cost of the selected `ToDoItem`s:
+For example, the link:https://github.com/apache/isis-app-todoapp/[TodoApp] (not ASF) demonstrates how the `Scratchpad` service can be used to calculate the total cost of the selected `ToDoItem`s:
 
 
 [source,java]

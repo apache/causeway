@@ -11,7 +11,7 @@ Would this also be possible for the login page, possibly depending on the used h
 
 Yes, you can do this, by installing a custom implementation of the Wicket Bootstrap's `ActiveThemeProvider`.
 
-The http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] (non-ASF) actually link:https://github.com/isisaddons/isis-app-todoapp/tree/61b8114a8e01dbb3c380b31cf09eaed456407570[does this], storing the info via the (non-ASF) http://platform.incode.org/modules/dom/settings/dom-settings.html[Incode Platform's settings module] :
+The http://github.com/apache/isis-app-todoapp[TodoApp] (non-ASF) actually link:https://github.com/apache/isis-app-todoapp/tree/61b8114a8e01dbb3c380b31cf09eaed456407570[does this], storing the info via the (non-ASF) http://platform.incode.org/modules/dom/settings/dom-settings.html[Incode Platform's settings module] :
 
 
 [source,java]

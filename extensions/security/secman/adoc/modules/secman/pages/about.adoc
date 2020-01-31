@@ -6,4 +6,3 @@ This SecMan module provides a complete security subdomain for users, roles, perm
 What that means, of course, that they can also be administered through your Apache Isis application.
 Moreover, the set of permissions (to features) is derived completely from your application's metamodel; in essence the permissions are "type-safe".
 
-NOTE: this extension module builds upon and supercedes the link:https://github.com/isisaddons/isis-module-security[Isis Addons Security Module] (part of the non-ASF https://incode.platform.org[Incode Platform])

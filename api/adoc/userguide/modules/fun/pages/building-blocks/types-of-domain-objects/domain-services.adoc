@@ -46,11 +46,10 @@ xref:userguide:fun:programming-model.adoc#domain-services[here].
 
 It's worth extending the xref:userguide:fun:core-concepts.adoc#hexagonal-architecture[Hexagonal Architecture] to show where domain services fit in:
 
-.The hexagonal architecture with Isis addons
+.The hexagonal architecture with API and SPI implementations
 image::core-concepts/philosophy/hexagonal-architecture-addons.png[width="700px",link="{imagesdir}/core-concepts/philosophy/hexagonal-architecture-addons.png"]
 
-The (non-ASF) link:https://platform.incode.org[Incode Platform^] provide SPI implementations of the common cross-cutting concerns.
-They also provide a number of APIs for domain objects to invoke (not shown in the diagram).
+The xref:extensions:ROOT:about.adoc[extensions] catalog provide SPI implementations of the common cross-cutting concerns.
 You can also write your own domain services as well, for example to interface with some external CMS system, say.
 
 

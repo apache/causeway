@@ -91,7 +91,7 @@ public interface IsisJdoSupport {
 The `executeQuery(...)` method supports the common case of obtaining a set of objects that meet some criteria, filtered using the provided `BooleanExpression`.
 To avoid memory leaks, the returned list is cloned and the underlying query closed.
 
-For example, in the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] there is an implementation of `ToDoItemRepository` using type-safe queries.
+For example, in the http://github.com/apache/isis-app-todoapp[TodoApp] there is an implementation of `ToDoItemRepository` using type-safe queries.
 The following JDOQL:
 
 [source,sql]

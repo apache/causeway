@@ -4,13 +4,30 @@
 
 
 We tend to use Maven modules as a way to group related domain objects together; we can then reason about all the classes in that module as a single unit.
-By convention there will be a single top-level package corresponding to the module.
 
-For example, the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s http://platform.incode.org/modules/lib/excel/lib-excel.html[Excel] module has a top-level package of `org.incode.module.excel`.
-Within the module there may be various subpackages, but it's the module that defines the namespace.
+There will be a single top-level package corresponding to the module, and this will be aligned with the `<groupId>` and `<artifactId>` of the Maven module in which it resides
+For example, the xref:subdomains:excel:about.adoc[Excel subdomain] module has a top-level package of `org.apache.isis.subdomains.excel`.
+Within the module there may be various subpackages, but it's the top-level package that defines the namespace.
 
-[NOTE]
-====
-TODO: flesh out with details on how modules are used under Spring Boot.
-====
+In this top-level package there will also be a class annotated with Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] annotation.
+The class is also often anntotated with link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html[@Import], through which the dependencies of this module may appear.
+And there is one other annotation that often appears, namely link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/ComponentScan.html[@ComponentScan].
+This indicates that the classpath should be scanned for domain services, entities and xref:testing:fixtures:about.adoc[fixture scripts].
 
+For example, if an application's customer module needs to use the aforementioned Excel subdomain model (perhaps to generate a downloadable report), then this would be expressed using:
+
+[source,java]
+----
+package com.mycompany.modules.customer;
+...
+
+@Configuration                                  // <1>
+@Import({
+    IsisModuleSubdomainsExcelApplib.class       // <2>
+})
+@ComponentScan                                  // <3>
+public class CustomerModule {}
+----
+<1> indicates that this is a module (so far as Spring Boot is concerned)
+<2> indicates a dependency on the Excel module (more precisely, its "applib")
+<3> indicates that the classpath be scanned to find domain services and entities etc under this package, eg a `Customer` entity or a `CustomerRepository` domain service.

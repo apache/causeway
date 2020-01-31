@@ -5,7 +5,7 @@
 
 
 JAXB view models can also be used as DTOs.
-The examples in this section uses the DTO for `ToDoItem`, taken from the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp].
+The examples in this section uses the DTO for `ToDoItem`, taken from the http://github.com/apache/isis-app-todoapp[TodoApp].
 
 This DTO is defined as follows:
 

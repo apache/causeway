@@ -13,7 +13,7 @@ The default `BackgroundServiceDefault` implementation works by using a proxy wra
 This is done using xref:runtime-services:ROOT:application-layer/CommandDtoServiceInternal.adoc[`CommandDtoServiceInternal`].
 
 The persistence delegates the persistence of the memento to an appropriate implementation of the companion `BackgroundCommandService2`.
-One such implementation of `BackgroundCommandService` is provided by (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module.
+One such implementation of `BackgroundCommandService` is provided by (non-ASF) http://github.com/incodehq/incode-platform[Incode Platform's command] module.
 
 The persisting of commands is only half the story; there needs to be a separate process to read the commands and execute them.
 The `BackgroundCommandExecution` abstract class (discussed xref:refguide:applib-svc:application-layer-api/BackgroundService/BackgroundCommandExecution.adoc[below]) provides infrastructure to do this; the concrete implementation of this class depends on the configured `BackgroundCommandService` (in order to query for the persisted (background) ``Command``s.
