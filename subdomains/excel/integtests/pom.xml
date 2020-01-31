@@ -14,22 +14,8 @@
     <name>Apache Isis Sub - Excel (Integ Tests)</name>
 
 	<properties>
-
-        <!-- TODO: reinstate -->
-        <skipTests>true</skipTests>
-        
-        <!-- [ERROR] Failed to execute goal on project isis-subdomains-excel-integtests: 
-        Could not resolve dependencies for project 
-        org.apache.isis.subdomains:isis-subdomains-excel-integtests:jar:2.0.0-M3-SNAPSHOT: 
-        Failure to find org.apache.isis.mavendeps:isis-mavendeps-testing:pom:2.0.0-M3-SNAPSHOT 
-        in https://oss.sonatype.org/content/repositories/snapshots was cached in the local repository, 
-        resolution will not be reattempted until the update interval of sonatype-snapshots has elapsed or updates are forced  
-        -->
-        <sonar.skip>true</sonar.skip>
-
     	<jar-plugin.automaticModuleName>org.apache.isis.subdomains.excel.integtests</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/isis/subdomains/excel/integtests</git-plugin.propertiesDir>
-        
     </properties>
 
     <build>
