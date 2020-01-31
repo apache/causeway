@@ -18,10 +18,10 @@
  */
 package org.apache.isis.core.metamodel.services.grid;
 
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
@@ -53,7 +53,7 @@ import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -116,6 +116,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
+import lombok.Value;
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -374,32 +376,17 @@ implements GridSystemService<G> {
     }
 
 
-
-    protected static class Tuple<T> {
-        public final T first;
-        public final T second;
-        private Tuple(final T first, final T second) {
-            this.first = first;
-            this.second = second;
-        }
-        public static <T> Tuple<T> of(final T first, final T second) {
-            return new Tuple<>(first, second);
-        }
+    @Value(staticConstructor = "of")
+    protected static class SurplusAndMissing {
+        public final Set<String> surplus;
+        public final Set<String> missing;
     }
 
-
-    /**
-     * Returns a 2-element tuple of [first-second, second-first]
-     */
-    protected static <T> Tuple<List<T>> surplusAndMissing(final Collection<T> first, final Collection<T> second){
-        final List<T> firstNotSecond = _Lists.newArrayList(first);
-        firstNotSecond.removeAll(second);
-        final List<T> secondNotFirst = _Lists.newArrayList(second);
-        secondNotFirst.removeAll(first);
-        return Tuple.of(firstNotSecond, secondNotFirst);
+    protected static SurplusAndMissing surplusAndMissing(final Set<String> first, final Set<String> second){
+        val firstNotSecond = _Sets.minus(first, second);
+        val secondNotFirst = _Sets.minus(second, first);
+        return SurplusAndMissing.of(firstNotSecond, secondNotFirst);
     }
-
-
 
     // //////////////////////////////////////
 

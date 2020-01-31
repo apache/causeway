@@ -344,10 +344,10 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         }
 
         // add missing properties will be added to the first fieldset of the specified column
-        final Tuple<List<String>> propertyIdTuple =
+        val surplusAndMissingPropertyIds = 
                 surplusAndMissing(propertyLayoutDataById.keySet(),  oneToOneAssociationById.keySet());
-        final List<String> surplusPropertyIds = propertyIdTuple.first;
-        final List<String> missingPropertyIds = propertyIdTuple.second;
+        val surplusPropertyIds = surplusAndMissingPropertyIds.getSurplus();
+        val missingPropertyIds = surplusAndMissingPropertyIds.getMissing();
 
         for (String surplusPropertyId : surplusPropertyIds) {
             propertyLayoutDataById.get(surplusPropertyId).setMetadataError("No such property");
@@ -425,10 +425,10 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         }
 
         // any missing collections will be added as tabs to a new TabGroup in the specified column
-        final Tuple<List<String>> collectionIdTuple =
+        val surplusAndMissingCollectionIds =
                 surplusAndMissing(collectionLayoutDataById.keySet(), oneToManyAssociationById.keySet());
-        final List<String> surplusCollectionIds = collectionIdTuple.first;
-        final List<String> missingCollectionIds = collectionIdTuple.second;
+        val surplusCollectionIds = surplusAndMissingCollectionIds.getSurplus();
+        val missingCollectionIds = surplusAndMissingCollectionIds.getMissing();
 
         for (String surplusCollectionId : surplusCollectionIds) {
             collectionLayoutDataById.get(surplusCollectionId).setMetadataError("No such collection");
@@ -456,10 +456,11 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         }
 
         // any missing actions will be added as actions in the specified column
-        final Tuple<List<String>> actionIdTuple =
+        val surplusAndMissingActionIds =
                 surplusAndMissing(actionLayoutDataById.keySet(), objectActionById.keySet());
-        final List<String> surplusActionIds = actionIdTuple.first;
-        final List<String> possiblyMissingActionIds = actionIdTuple.second;
+        val surplusActionIds = surplusAndMissingActionIds.getSurplus();
+        val possiblyMissingActionIds = surplusAndMissingActionIds.getMissing();
+        
         final List<String> associatedActionIds = _Lists.newArrayList();
 
         final List<ObjectAction> sortedPossiblyMissingActions = 
