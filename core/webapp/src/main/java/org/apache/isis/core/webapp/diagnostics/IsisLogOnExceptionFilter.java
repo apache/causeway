@@ -63,6 +63,7 @@ public class IsisLogOnExceptionFilter implements Filter {
             if(ex instanceof IOException) {
                 val url = ((HttpServletRequest) request).getRequestURL().toString();
                 if(url.endsWith(".css")
+                        || url.endsWith(".js")
                         || url.endsWith(".woff2")) {
                     throw ex; // don't log
                 }    
