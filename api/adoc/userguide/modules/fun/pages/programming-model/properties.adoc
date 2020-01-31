@@ -25,7 +25,7 @@ It's also possible (using annotations) to define a link table to hold foreign ke
 Apache Isis recognises some of these annotations for JDO/DataNucleus and JAXB and infers some domain semantics from them (for example, the maximum allowable length of a string property).
 
 Since writing getter and setter methods adds quite a bit of boilerplate, it's common to use link:https://projectlombok.org/[Project Lombok] to code generate these methods at compile time (using Java's annotation processor) simply by adding the `@lombok.Getter` and `@lombok.Setter` annotations to the field.
-The link:https://github.com/apache/isis-app-simpleapp[SimpleApp] starter app uses this approach.
+The xref:starters:simpleapp:about.adoc[SimpleApp] starter app uses this approach.
 
 == Value vs Reference Types
 

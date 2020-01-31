@@ -45,7 +45,7 @@ The class is immutable but it has a builder (obtained using `FixturescriptsSpeci
 
 == Implementation
 
-The link:https://github.com/apache/isis-app-simpleapp[SimpleApp] starter app has a simple implementation of this service:
+The xref:starters:simpleapp:about.adoc[SimpleApp] starter app has a simple implementation of this service:
 
 [source,java]
 ----

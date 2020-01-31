@@ -233,7 +233,7 @@ Moreover, these classes recognise that configuration properties fall into two br
 * those that change between environments. +
 + The classic example here is the JDBC URL.
 
-For example, the link:https://github.com/apache/isis-app-simpleapp[SimpleApp] starter app's `AppManifest` is defined as:
+For example, the xref:starters:simpleapp:about.adoc[SimpleApp] starter app's `AppManifest` is defined as:
 
 [source,java]
 ----

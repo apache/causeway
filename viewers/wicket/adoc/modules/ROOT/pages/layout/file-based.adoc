@@ -458,7 +458,7 @@ Ensure the following is defined in the dom project's `pom.xml`:
 </resources>
 ----
 
-If using an Apache Isis link:https://github.com/apache/isis-app-helloworld[HelloWorld] link:https://github.com/apache/isis-app-simpleapp[SimpleApp] starter app, then the POM is already correctly configured.
+If using an Apache Isis xref:starters:helloworld:about.adoc[HelloWorld] xref:starters:simpleapp:about.adoc[SimpleApp] starter app, then the POM is already correctly configured.
 
 
 
