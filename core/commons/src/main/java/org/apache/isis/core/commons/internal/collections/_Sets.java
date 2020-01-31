@@ -43,6 +43,9 @@ import org.apache.isis.core.commons.internal.base._With;
 
 import static org.apache.isis.core.commons.internal.functions._Predicates.not;
 
+import lombok.NonNull;
+import lombok.val;
+
 /**
  * <h1>- internal use only -</h1>
  * <p>
@@ -246,7 +249,7 @@ public final class _Sets {
                 .filter(b::contains)
                 .collect(toUnmodifiableSorted());
     }
-
+    
     /**
      * Returns a new set containing all the elements of {@code a} that are not in {@code b}, 
      * not retaining any order. 
@@ -257,16 +260,7 @@ public final class _Sets {
      * @return {@code a - b}, non null, unmodifiable 
      */
     public static <T> Set<T> minus(@Nullable Set<T> a, @Nullable Set<T> b) {
-        if(a==null || a.isEmpty()) {
-            return Collections.emptySet();
-        }
-        if(b==null || b.isEmpty()) {
-            return Collections.unmodifiableSet(new HashSet<>(a));
-        }
-        return a.stream()
-                .filter(Objects::nonNull)
-                .filter(not(b::contains))
-                .collect(toUnmodifiable());
+        return minus(a, b, HashSet::new);
     }
     
     /**
@@ -279,11 +273,60 @@ public final class _Sets {
      * @return {@code a - b}, non null, unmodifiable 
      */
     public static <T> SortedSet<T> minusSorted(@Nullable SortedSet<T> a, @Nullable SortedSet<T> b) {
+        return minusSorted(a, b, TreeSet::new);
+    }
+
+    /**
+     * Returns a new set containing all the elements of {@code a} that are not in {@code b}, 
+     * not retaining any order. 
+     * Any {@code null} elements are ignored and will not be contained in the resulting set.
+     * @param <T>
+     * @param a
+     * @param b
+     * @param collectionFactory
+     * @return {@code a - b}, non null, unmodifiable 
+     */
+    public static <T> Set<T> minus(
+            @Nullable Set<T> a, 
+            @Nullable Set<T> b, 
+            @NonNull Supplier<Set<T>> collectionFactory) {
+        
+        if(a==null || a.isEmpty()) {
+            return Collections.emptySet();
+        }
+        if(b==null || b.isEmpty()) {
+            val copy = collectionFactory.get();
+            copy.addAll(a);
+            return Collections.unmodifiableSet(copy);
+        }
+        return a.stream()
+                .filter(Objects::nonNull)
+                .filter(not(b::contains))
+                .collect(toUnmodifiable(collectionFactory));
+    }
+    
+    /**
+     * Returns a new (sorted) set containing all the elements of {@code a} that are not in {@code b}, 
+     * retaining order only when natural order. 
+     * Any {@code null} elements are ignored and will not be contained in the resulting set.
+     * @param <T>
+     * @param a
+     * @param b
+     * @param collectionFactory
+     * @return {@code a - b}, non null, unmodifiable 
+     */
+    public static <T> SortedSet<T> minusSorted(
+            @Nullable SortedSet<T> a, 
+            @Nullable SortedSet<T> b, 
+            @NonNull Supplier<SortedSet<T>> collectionFactory) {
+        
         if(a==null || a.isEmpty()) {
             return Collections.emptySortedSet();
         }
         if(b==null || b.isEmpty()) {
-            return Collections.unmodifiableSortedSet(new TreeSet<>(a));
+            val copy = collectionFactory.get();
+            copy.addAll(a);
+            return Collections.unmodifiableSortedSet(copy);
         }
         return a.stream()
                 .filter(Objects::nonNull)
@@ -303,6 +346,11 @@ public final class _Sets {
     public static <T> 
     Collector<T, ?, Set<T>> toUnmodifiable() {
         return toUnmodifiable(HashSet::new);
+    }
+    
+    public static <T> 
+    Collector<T, ?, Set<T>> toUnmodifiablePreservingOrder() {
+        return toUnmodifiable(LinkedHashSet::new);
     }
     
     public static <T> 

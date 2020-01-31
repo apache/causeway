@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.services.grid;
 
 import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -383,8 +384,8 @@ implements GridSystemService<G> {
     }
 
     protected static SurplusAndMissing surplusAndMissing(final Set<String> first, final Set<String> second){
-        val firstNotSecond = _Sets.minus(first, second);
-        val secondNotFirst = _Sets.minus(second, first);
+        val firstNotSecond = _Sets.minus(first, second, LinkedHashSet::new); // preserve order
+        val secondNotFirst = _Sets.minus(second, first, LinkedHashSet::new); // preserve order
         return SurplusAndMissing.of(firstNotSecond, secondNotFirst);
     }
 
