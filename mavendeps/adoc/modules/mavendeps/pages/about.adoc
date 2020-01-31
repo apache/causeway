@@ -1,21 +1,20 @@
-= Convenience POMs
+= Aggregator POMs
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The framework provides a number of "convenience" POMs that act as aggregators of other dependencies.
+The framework provides a number of "aggregator" POMs that act as a convenient way to  aggregate together various common dependencies.
 
-For example, when writing unit tests for your domain app,
-it can simply depend on the `isis-mavendeps-unittesting` artifact (rather than have to reference all of JUnit, AssertJ, Spring Boot, Hamcrest, Mockito and so on).
+For example, when writing unit tests for your domain app, it can simply depend on the `isis-mavendeps-unittests` artifact (rather than have to reference all of JUnit, AssertJ, Spring Boot, Hamcrest, Mockito and so on).
 
-Currently five convenience POMs are provided.
+Currently five aggregator POMs are provided.
 
-== isis-mavendeps-webapp
+== Webapp
 
 The `isis-mavendeps-webapp` aggregates the main runtime dependencies of a production webapp.
 
 To use, add the following :
 
 [source,xml]
-.webapp/pom.xml
+.pom.xml
 ----
 <dependencies>
     <dependency>
@@ -49,15 +48,12 @@ For example, see the xref:starters:simpleapp:about.adoc#appmanifest[AppManifest 
 
 == Testing and BDD Specs
 
-Three convenience POMs are provided to support  xref:testing:unittestsupport:about.adoc[unit testing], xref:testing:integtestsupport:about.adoc[integ testing] or running xref:testing:specsupport:about.adoc[BDD (Cucumber) specs].
-
-NOTE: in fact, these convenience POMs are just thin wrappers around the corresponding `isis-testing-xxx-applib` modules.
-We've added them for consistency.
+Three aggregator POMs are provided to support  xref:testing:unittestsupport:about.adoc[unit testing], xref:testing:integtestsupport:about.adoc[integ testing] or running xref:testing:specsupport:about.adoc[BDD (Cucumber) specs].
 
 To use them when unit testing, add:
 
 [source,xml]
-.webapp/pom.xml
+.pom.xml
 ----
 <dependencies>
     <dependency>
@@ -72,7 +68,7 @@ To use them when unit testing, add:
 For integration testing, add:
 
 [source,xml]
-.webapp/pom.xml
+.pom.xml
 ----
 <dependencies>
     <dependency>
@@ -87,7 +83,7 @@ For integration testing, add:
 For BDD (Cucumber) specs, within an integration testing context:
 
 [source,xml]
-.webapp/pom.xml
+.pom.xml
 ----
 <dependencies>
     <dependency>
@@ -99,9 +95,9 @@ For BDD (Cucumber) specs, within an integration testing context:
 </dependencies>
 ----
 
-The table below summarises the dependencies that each of these convenience POMs brings in.
+The table below summarises the dependencies that each of these aggregator POMs brings in.
 
-.Dependencies of the Convenience POM for Tests/Specs
+.Dependencies of the Aggregator POM for Tests/Specs
 [cols="3a,^1a,^1a,^1a", options="header"]
 |===
 
@@ -116,19 +112,19 @@ integspecs
 
 |Apache Isis' own xref:testing:unittestsupport:about.adoc[unit test support] +
 with JMock2 extensions to mock classes
-| Y | - | -
+| Y |  |
 
 |Apache Isis' own xref:testing:integtestsupport:about.adoc[integ test support]
-| - | Y | Y
+|   | Y | Y
 
 |Apache Isis' own xref:testing:specsupport:about.adoc[BDD spec support]
-| - | - | Y
+|   |   | Y
 
 | link:https://junit.org/junit5/docs/current/user-guide/[JUnit 5 "jupiter"]
 | Y | Y | Y
 
 | link:https://junit.org/junit5/docs/current/user-guide/#migrating-from-junit4[JUnit 5 "vintage"]
-| Y | - | -
+| Y |   |
 
 | link:https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-testing[Spring Boot Test]
 | Y | Y | Y
@@ -143,41 +139,41 @@ with JMock2 extensions to mock classes
 | Y | Y | Y
 
 | link:http://jmock.org/[JMock]
-| Y | - | -
+| Y |   |
 
 | link:https://github.com/approvals/ApprovalTests.Java[Approval tests]
 | Y | Y | Y
 
 | link:http://picocontainer.com/[PicoContainer] +
 (for JMock2 extensions)
-| Y | - | -
+| Y |   |
 
 | Apache Isis xref:refguide:ROOT:about.adoc[Applib]
 | Y | Y | Y
 
 | Apache Isis xref:core:runtime-services:about.adoc[Runtime Services]
-| - | Y | Y
+|   | Y | Y
 
 | Apache Isis xref:security:bypass:about.adoc[Bypass] security
-| - | Y | Y
+|   | Y | Y
 
 | Apache Isis xref:pjdo:ROOT:about.adoc[JDO/DataNucleus]
-| - | Y | Y
+|   | Y | Y
 
 | Apache Isis xref:testing:fakedata:about.adoc[Fake Data]
 | Y | Y | Y
 
 | Apache Isis xref:testing:fixtures:about.adoc[Fixture Scripts]
-| - | Y | Y
+|   | Y | Y
 
 | link:https://github.com/google/guava/wiki[Google's Guava]
-| Y | - | -
+| Y |   |
 
 | link:http://hsqldb.org[HSQLDB]
-| - | Y | Y
+|   | Y | Y
 
 | link:https://www.h2database.com[H2 Database]
-| - | Y | Y
+|   | Y | Y
 
 |===
 
@@ -200,7 +196,7 @@ All you need to do is include this dependency in the webapp module:
 To use, add the following :
 
 [source,xml]
-.webapp/pom.xml
+.pom.xml
 ----
 <dependencies>
     <dependency>

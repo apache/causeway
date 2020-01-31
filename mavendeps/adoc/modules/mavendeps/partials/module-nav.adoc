@@ -1,1 +1,1 @@
-** xref:starters:mavendeps:about.adoc[Convenience POMs]
+* xref:starters:mavendeps:about.adoc[Aggregator POMs]

@@ -156,16 +156,16 @@ With the bootstrapping and infrastructure taken care of, let's look at the actua
 [source,gherkin]
 .SimpleObjectSpec_listAllAndCreate.feature
 ----
-@DomainAppDemo                                                          //<1>
-Feature: List and Create New Simple Objects                             //<2>
+Feature: List and Create New Simple Objects                             //<1>
 
-  Scenario: Existing simple objects can be listed and new ones created  //<2>
+  @DomainAppDemo                                                        //<2>
+  Scenario: Existing simple objects can be listed and new ones created  //<1>
     Given there are initially 10 simple objects                         //<3>
     When  I create a new simple object                                  //<3>
     Then  there are 11 simple objects                                   //<3>
 ----
-<1> Tag indicates the fixture to be run
-<2> Provide context, but not actually executed
+<1> Provide context, but not actually executed
+<2> Tag indicates the fixture to be run
 <3> Map onto step definitions
 
 We need a step definition to match the Cucumber tag to a xref:testing:fixtures:about.adoc[fixture script].
@@ -222,7 +222,7 @@ public class SimpleObjectsStepDef {
 }
 ----
 <1> injected domain service being interacted with
-<2> regex to match to feature file specification
+<2> regex to match to feature file specification.
 <3> code that interacts with the domain service.
 This is done using the xref:testing:integtestsupport:about.adoc#wrapper-factory[WrapperFactory] to simulate the UI.
 <4> supporting domain services
