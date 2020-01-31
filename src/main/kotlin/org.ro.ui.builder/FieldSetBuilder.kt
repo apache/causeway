@@ -15,6 +15,7 @@ class FieldSetBuilder {
             tObject: TObject,
             tab: RoDisplay
     ): FormPanel<String>? {
+
         val members = tObject.getProperties()
         val items = mutableListOf<FormItem>()
         console.log("[FSB.create] property")

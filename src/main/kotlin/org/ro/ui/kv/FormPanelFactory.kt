@@ -3,7 +3,9 @@ package org.ro.ui.kv
 import org.ro.core.Utils
 import org.ro.to.ValueType
 import org.ro.ui.FormItem
-import pl.treksoft.kvision.core.*
+import pl.treksoft.kvision.core.Component
+import pl.treksoft.kvision.core.StringPair
+import pl.treksoft.kvision.core.onEvent
 import pl.treksoft.kvision.form.FormPanel
 import pl.treksoft.kvision.form.check.CheckBox
 import pl.treksoft.kvision.form.formPanel
@@ -73,16 +75,15 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
         return item
     }
 
+    //FIXME the outer frame needs to be moved to the builder
     private fun createHtml(fi: FormItem): Component {
-        val item = SimplePanel()
-        item.header(fi.label).paddingLeft = CssSize(15, UNIT.px)
-        item.title = fi.label
-        val border = Border(1.px, BorderStyle.GROOVE)
-        item.border = border
+        val cpt = SimplePanel()
+        cpt.header(fi.label).addCssClass("panel-heading")
+        cpt.title = fi.label
         val div = Div(rich = true, content = fi.content.toString())
-        div.padding = CssSize(15, UNIT.px)
-        item.add(div)
-        return item
+        div.addCssClass("panel-body")
+        cpt.add(div)
+        return cpt
     }
 
     private fun createText(fi: FormItem): Text {

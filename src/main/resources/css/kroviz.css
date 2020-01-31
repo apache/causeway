@@ -80,8 +80,25 @@ pre.highlight {
     color: #657B83 !important;
 }
 
-.header {
-    color: #2C3E50 !important;
-    background: #ECF0F1 !important;
-    padding: 3px 15px !important;
+.panel-heading {
+    padding: 3px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 3em;
+    background-color: #ecf0f1;
+    border-color: #ecf0f1;
+    border-bottom: 1px solid transparent;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    box-sizing: border-box;
+}
+
+.panel-body {
+    padding: 15px;
+    box-sizing: border-box;
+    font-size: 15px;
+    border-left: 1px solid #ecf0f1;
+    border-bottom: 1px solid #ecf0f1;
+    border-right: 1px solid #ecf0f1;
 }
