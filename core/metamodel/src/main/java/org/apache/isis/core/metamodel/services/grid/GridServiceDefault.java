@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.services.grid;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,8 +36,10 @@ import org.apache.isis.applib.services.grid.GridLoaderService;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.grid.GridSystemService;
 import org.apache.isis.core.commons.internal.base._Casts;
-import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Sets;
+
+import lombok.val;
 
 @Service
 @Named("isisMetaModel.GridServiceDefault")
@@ -86,8 +89,8 @@ public class GridServiceDefault implements GridService {
     @Override
     public Grid defaultGridFor(Class<?> domainClass) {
 
-        for (GridSystemService<?> gridSystemService : gridSystemServices()) {
-            Grid grid = gridSystemService.defaultGrid(domainClass);
+        for (val gridSystemService : gridSystemServices()) {
+            val grid = (Grid) gridSystemService.defaultGrid(domainClass);
             if(grid != null) {
                 return grid;
             }
@@ -102,9 +105,9 @@ public class GridServiceDefault implements GridService {
             return grid;
         }
 
-        final Class<?> domainClass = grid.getDomainClass();
+        val domainClass = grid.getDomainClass();
 
-        for (GridSystemService<?> gridSystemService : gridSystemServices()) {
+        for (val gridSystemService : gridSystemServices()) {
             gridSystemService.normalize(_Casts.uncheckedCast(grid), domainClass);
         }
 
@@ -119,8 +122,8 @@ public class GridServiceDefault implements GridService {
     @Override
     public Grid complete(final Grid grid) {
 
-        final Class<?> domainClass = grid.getDomainClass();
-        for (GridSystemService<?> gridSystemService : gridSystemServices()) {
+        val domainClass = grid.getDomainClass();
+        for (val gridSystemService : gridSystemServices()) {
             gridSystemService.complete(_Casts.uncheckedCast(grid), domainClass);
         }
 
@@ -130,8 +133,8 @@ public class GridServiceDefault implements GridService {
     @Override
     public Grid minimal(final Grid grid) {
 
-        final Class<?> domainClass = grid.getDomainClass();
-        for (GridSystemService<?> gridSystemService : gridSystemServices()) {
+        val domainClass = grid.getDomainClass();
+        for (val gridSystemService : gridSystemServices()) {
             gridSystemService.minimal(_Casts.uncheckedCast(grid), domainClass);
         }
 
@@ -143,7 +146,7 @@ public class GridServiceDefault implements GridService {
      * Not public API, exposed only for testing.
      */
     public String tnsAndSchemaLocation(final Grid grid) {
-        final List<String> parts = _Lists.newArrayList();
+        val parts = _Lists.<String>newArrayList();
 
         parts.add(COMPONENT_TNS);
         parts.add(COMPONENT_SCHEMA_LOCATION);
@@ -151,8 +154,8 @@ public class GridServiceDefault implements GridService {
         parts.add(LINKS_TNS);
         parts.add(LINKS_SCHEMA_LOCATION);
 
-        for (GridSystemService<?> gridSystemService : getGridSystemServices()) {
-            final Class<? extends Grid> gridImpl = gridSystemService.gridImplementation();
+        for (val gridSystemService : getGridSystemServices()) {
+            val gridImpl = gridSystemService.gridImplementation();
             if(gridImpl.isAssignableFrom(grid.getClass())) {
                 parts.add(gridSystemService.tns());
                 parts.add(gridSystemService.schemaLocation());
@@ -167,7 +170,7 @@ public class GridServiceDefault implements GridService {
     private List<GridSystemService<?>> filteredGridSystemServices;
 
     /**
-     * For all of the available {@link GridSystemService}s available, return only the first one for any that
+     * For all of the {@link GridSystemService}s available, return only the first one for any that
      * are for the same grid implementation.
      *
      * <p>
@@ -178,20 +181,15 @@ public class GridServiceDefault implements GridService {
     protected List<GridSystemService<?>> gridSystemServices() {
 
         if (filteredGridSystemServices == null) {
-            List<GridSystemService<?>> services = _Lists.newArrayList();
+            
+            val gridImplementations = _Sets.<Class<?>>newHashSet();
 
-            for (GridSystemService<?> gridSystemService : getGridSystemServices()) {
-                final Class<?> gridImplementation = gridSystemService.gridImplementation();
-                final boolean seenBefore = _NullSafe.stream(services)
-                        .anyMatch((GridSystemService<?> systemService) -> 
-                        systemService.gridImplementation() == gridImplementation);
-                if(!seenBefore) {
-                    services.add(gridSystemService);
-                }
-            }
-
-            filteredGridSystemServices = services;
-
+            filteredGridSystemServices = getGridSystemServices()
+                    .stream()
+                    // true only if gridImplementations did not already contain the specified element
+                    .filter(gridService->gridImplementations.add(gridService.gridImplementation())) 
+                    .collect(Collectors.toList());
+            
         }
         return filteredGridSystemServices;
     }
@@ -199,7 +197,7 @@ public class GridServiceDefault implements GridService {
     // -- poor man's testing support
 
     List<GridSystemService<?>> gridSystemServicesForTest;
-    Iterable<GridSystemService<?>> getGridSystemServices() {
+    Collection<GridSystemService<?>> getGridSystemServices() {
         return gridSystemServices!=null 
                 ? gridSystemServices
                         : gridSystemServicesForTest;
