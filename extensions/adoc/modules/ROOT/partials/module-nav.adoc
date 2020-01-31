@@ -1,3 +1,0 @@
-* xref:extensions:ROOT:about.adoc[About the Extensions]
-
-

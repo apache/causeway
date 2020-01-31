@@ -13,7 +13,7 @@ content:
 
 # persistence
     - url: .
-      start_path: persistence/jdo/src/main/adoc # pjdo
+      start_path: persistence/jdo/adoc # pjdo
       branches: HEAD
 
 

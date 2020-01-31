@@ -1,2 +1,2 @@
-* xref:vw:sse:about.adoc[SSE (Extension)]
+* xref:vw:sse:about.adoc[SSE]
 

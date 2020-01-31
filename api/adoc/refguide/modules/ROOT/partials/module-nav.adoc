@@ -1,2 +1,2 @@
-* xref:refguide:ROOT:about.adoc[About the Reference Guides]
+
 

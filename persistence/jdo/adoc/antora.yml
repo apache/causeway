@@ -1,5 +1,5 @@
 name: pjdo
-title: "DataNucleus ObjectStore"
+title: "JDO/DataNucleus"
 version: master
 start_page: ROOT:about.adoc
 nav:

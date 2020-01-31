@@ -12,7 +12,7 @@
 
 ** Resources
 *** xref:starters:parent-pom:about.adoc[Parent POM]
-*** xref:starters:mavendeps:about.adoc[Maven Dependencies]
+*** xref:starters:mavendeps:about.adoc[Aggregator POMs]
 
 
 * Demos & Tutorials

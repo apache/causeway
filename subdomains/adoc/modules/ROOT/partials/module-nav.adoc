@@ -1,4 +1,0 @@
-* xref:incubator:ROOT:about.adoc[About the Subdomains]
-
-
-

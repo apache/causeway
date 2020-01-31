@@ -1,4 +1,0 @@
-* xref:mappings:ROOT:about.adoc[About the Bounded Context Mappings]
-
-
-

@@ -1,7 +1,0 @@
-* xref:incubator:ROOT:about.adoc[About the Value Types Catalog]
-
-
-
-
-
-

@@ -1,2 +1,2 @@
-* xref:vw:asciidoc:about.adoc[Asciidoc value type (extension)]
+* xref:vw:asciidoc:about.adoc[Asciidoc]
 

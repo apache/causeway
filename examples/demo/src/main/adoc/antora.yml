@@ -1,5 +1,5 @@
 name: demoapp
-title: "Tutorial App - Demo"
+title: "Demo App"
 version: master
 start_page: ROOT:about.adoc
 nav:
