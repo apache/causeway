@@ -203,14 +203,14 @@ public class SimpleObjectsStepDef {
 
     @Inject protected SimpleObjects simpleObjects;                      //<1>
 
-    @Given("^there are.* (\\d+) simple objects$")                       //<2>
+    @Given("^there (?:is|are).* (\\d+) simple object[s]?$")             //<2>
     public void there_are_N_simple_objects(int n) {
         final List<SimpleObject> list = wrap(simpleObjects).listAll();  //<3>
         assertThat(list.size(), is(n));
     }
 
-    @When("^.*create a .*simple object$")
-    public void create_a_simple_object() throws Throwable {
+    @When("^.*create (?:a|another) .*simple object$")
+    public void create_a_simple_object() {
         wrap(simpleObjects).create(UUID.randomUUID().toString());
     }
 
