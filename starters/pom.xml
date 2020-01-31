@@ -133,6 +133,13 @@ under the License.
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
+			
+			<dependency>
+				<groupId>org.apache.isis.mavendeps</groupId>
+				<artifactId>isis-mavendeps-integtests</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+				<type>pom</type>
+			</dependency>
 
 			<dependency>
 				<groupId>org.apache.isis.valuetypes</groupId>
