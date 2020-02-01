@@ -1,0 +1,43 @@
+.RO based Regression Testing (Tellurium;-) Overview Diagram
+[plantuml,file="test-overview.png"]
+--
+@startuml
+skinparam nodesep 20
+skinparam ranksep 5
+
+
+component kroviz <<RO FrontEnd>> as FE
+component Demo <<RO App>> as APP
+component "Apache Isis" as AI
+
+database EventLog as EL
+
+:user: as DEV
+
+DEV -> FE : action
+FE <-> APP : request / response
+APP -> AI
+FE -> EL : req./resp.\nas well as\n user actions\nare logged
+
+title
+Sample Content of EventLog
+|= url |= [request data] |= response |
+| http://localhost:8080/restful | uid/pw | {jsonStr} |
+| http://localhost:8080/restful/menubars | n/a | {another js}} |
+end title
+
+
+note right of AI
+code under test
+end note
+
+note right of EL
+Event Log Entries
+are replayed
+during test.
+Expected/actually responses
+are compared.
+end note
+
+@enduml
+--
