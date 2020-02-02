@@ -1,42 +1,66 @@
-.RO based Regression Testing (Tellurium;-) Overview Diagram
-[plantuml,file="test-overview.png"]
+RO based Regression Testing (Tellurium;-) Overview Diagram
+
+.Record
+[plantuml,file="test1-overview.png"]
 --
 @startuml
-skinparam nodesep 20
-skinparam ranksep 5
 
+:USER:
+USER -> FE : action
 
-component kroviz <<RO FrontEnd>> as FE
+component kroviz <<RO FrontEnd>> as FE {
+    database EventLog as EL
+    FE -> EL : Remote and UI \nevents are logged
+}
+
 component Demo <<RO App>> as APP
-component "Apache Isis" as AI
-
-database EventLog as EL
-
-:user: as DEV
-
-DEV -> FE : action
 FE <-> APP : request / response
-APP -> AI
-FE -> EL : req./resp.\nas well as\n user actions\nare logged
+
+component "Apache Isis" <<Naked Objects FW>> as AI
+APP -> AI : uses
+
+@enduml
+--
+.Export
+[plantuml,file="test2-overview.png" ]
+--
+@startuml
 
 title
 Sample Content of EventLog
 |= url |= [request data] |= response |
 | http://localhost:8080/restful | uid/pw | {jsonStr} |
-| http://localhost:8080/restful/menubars | n/a | {another js}} |
+| http://localhost:8080/restful/menubars | n/a | {another js} |
 end title
 
+database "Event Log" as EL
+file "Replay Events" as RE
+EL -> RE : export
 
-note right of AI
-code under test
+@enduml
+--
+.Replay
+[plantuml,file="test3-overview.png" ]
+--
+@startuml
+
+file "Replay Events" as RE
+component "Demo \nRegression \nTest" as DRT
+RE <- DRT : reads
+
+component Demo <<RO App>> as APP
+DRT -> APP : invokes RO API calls
+
+component "Apache Isis" <<Naked Objects FW>> as AI
+APP -> AI : uses
+
+note bottom of DRT
+Event Log Entries are replayed during test.
+Expected/actual responses are compared.
 end note
 
-note right of EL
-Event Log Entries
-are replayed
-during test.
-Expected/actually responses
-are compared.
+note bottom of AI
+code under test
 end note
 
 @enduml
