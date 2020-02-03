@@ -18,7 +18,8 @@ enum class EventState(val id: String, val iconName: String, val style: ButtonSty
     VIEW("VIEW", "fas fa-info-circle", ButtonStyle.INFO),
     DUPLICATE("DUPLICATE", "fas fa-link", ButtonStyle.OUTLINESUCCESS),
     CLOSED("CLOSED", "fas fa-times-circle", ButtonStyle.OUTLINEINFO),
-    RELOAD("RELOAD", "fas fa-retweet", ButtonStyle.OUTLINEWARNING)
+    RELOAD("RELOAD", "fas fa-retweet", ButtonStyle.OUTLINEWARNING),
+    MISSING("MISSING","fas fa-bug", ButtonStyle.OUTLINEDANGER)
     // IMPROVE multiple aspects intermangled: req/resp, view, as well as cache
     // encapsulate access with managers?
 }

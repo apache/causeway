@@ -30,6 +30,7 @@ object IconManager {
             "Error Handling" to "bug",
             "Error" to "bug",
             "Experimental" to "flask",
+            "Export" to "file-export",
             "Find" to "search",
             "Hsql" to "database",
             "JEE/CDI" to "jedi",

@@ -1,6 +1,7 @@
 package org.ro.ui.kv
 
 import org.ro.to.mb.Menubars
+import org.ro.ui.ExportAlert
 import org.ro.ui.IconManager
 import org.ro.ui.Point
 import pl.treksoft.kvision.core.CssSize
@@ -46,6 +47,12 @@ object RoMenuBar : SimplePanel() {
                 LoginPrompt().open(at)
             }
 
+            val exportTitle = "Export Events for Replay"
+            ddLink(exportTitle,
+                    icon = IconManager.find("Export")
+            ).onClick {
+                ExportAlert().open()
+            }
             val sampleTitle = "Image Sample"
             ddLink(sampleTitle,
                     icon = IconManager.find(sampleTitle)
