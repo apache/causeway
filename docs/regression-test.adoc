@@ -8,24 +8,29 @@ Given
 
 When
 
-* Recordings are replayed
+* Recorded events are replayed
 
 Then
 
 * FW test coverage should increase
 
-.Record Phase
-[plantuml,file="test1-overview.png"]
+.Record and Replay
+[plantuml,file="regression-test.png"]
 --
 @startuml
 
-:USER:
-USER -> FE : action
+: : -> FE : action
 
 component kroviz <<RO FrontEnd>> as FE {
     database EventLog as EL
-    FE -> EL : Remote and UI \nevents are logged
+    FE -> EL
 }
+
+note bottom of EL
+Req./Resp.
+as well as UI
+events are recorded
+end note
 
 component Demo <<RO App>> as APP
 FE <-> APP : request / response
@@ -33,40 +38,19 @@ FE <-> APP : request / response
 component "Apache Isis" <<Naked Objects FW>> as FW
 APP -> FW : uses
 
-@enduml
---
-.Export Function
-[plantuml,file="test2-overview.png" ]
---
-@startuml
 
-title
-Sample Content of EventLog
-|= url |= [request data] |= state |= response |
-| http://localhost:8080/restful | uid/pw | SUCCESS | {jsonStr} |
-| http://localhost:8080/restful/menubars | n/a | ERROR | {another js} |
-end title
+together {
+    file RE as "
+    .. (Sample) Replay Events..
+    |= url |= [request data] |= state |= response |\n| http://localhost:8080/restful | uid/pw | SUCCESS | {jsonStr} |\n| http://localhost:8080/restful/menubars | n/a | ERROR | {another js} |
+    "
+    component "Demo \nRegression \nTest" as DRT
+}
+EL ->"export" RE
 
-database "Event Log" as EL
-file "Replay Events" as RE
-EL -> RE : export
 
-@enduml
---
-.Replay Phase
-[plantuml,file="test3-overview.png" ]
---
-@startuml
-
-file "Replay Events" as RE
-component "Demo \nRegression \nTest" as DRT
 RE <- DRT : reads
-
-component Demo <<RO App>> as APP
-DRT -> APP : invokes RO API calls
-
-component "Apache Isis" <<Naked Objects FW>> as FW
-APP -> FW : uses
+DRT "invokes"->"RO API" APP : replay
 
 note bottom of DRT
 Event Log Entries are replayed during test.
@@ -77,7 +61,7 @@ Events in state:
 * ERROR -> expected != actual
 end note
 
-note bottom of FW
+note top of FW
 additional
 coverage
 end note
@@ -94,3 +78,4 @@ NREG .. FW
 
 
 
+ 
