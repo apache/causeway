@@ -15,7 +15,7 @@ class FileAlert(val logEntry: LogEntry) : Command {
         formItems.add(FormItem("URL", "Text", logEntry.url))
         formItems.add(FormItem("Blob", "TextArea", list[2], 20))
         val label = list[0] + "/" + list[1]
-        RoDialog(caption = label, items = formItems, command = this).show()
+        RoDialog(caption = label, items = formItems, command = this).open()
     }
 
     override fun execute() {
