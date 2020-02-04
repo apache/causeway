@@ -1,4 +1,4 @@
-RO based Regression Testing (Tellurium;-)
+# RO based Regression Testing
 
 Given
 
@@ -78,4 +78,3 @@ NREG .. FW
 
 
 
- 
