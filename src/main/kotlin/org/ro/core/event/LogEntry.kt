@@ -98,10 +98,9 @@ data class LogEntry(
     }
 
     fun getTransferObject(): TransferObject? {
-        return if (obj is TransferObject) {
-            obj as TransferObject
-        } else {
-            null
+        return when (obj) {
+            is TransferObject-> obj as TransferObject
+            else -> null
         }
     }
 
