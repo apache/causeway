@@ -1,5 +1,6 @@
 package org.ro.ui
 
+import org.ro.core.Utils
 import org.ro.core.event.EventState
 import org.ro.core.event.EventStore
 import org.ro.org.ro.core.event.ReplayEvent
@@ -7,19 +8,19 @@ import org.ro.ui.kv.RoDialog
 
 class ExportAlert() : Command {
 
+    private var jsonOutput: String = ""
+
     fun open() {
         val replayEvents = collectReplayEvents()
-        val jsonOutput = JSON.stringify(replayEvents)
-        console.log("[ExportAlert.open]")
-        console.log(jsonOutput)
+        jsonOutput = JSON.stringify(replayEvents)
+        jsonOutput = Utils.format(jsonOutput)
         val formItems = mutableListOf<FormItem>()
-        formItems.add(FormItem("URL", "Text", "ReplayEvents.json"))
-        formItems.add(FormItem("Blob", "TextArea", jsonOutput, 20))
-        val label = "export"
+        formItems.add(FormItem("JSON", "TextArea", jsonOutput, 20))
+        val label = "Download Replay Events"
         RoDialog(caption = label, items = formItems, command = this).open()
     }
 
-    private fun collectReplayEvents(): MutableList<ReplayEvent>{
+    private fun collectReplayEvents(): MutableList<ReplayEvent> {
         val replayEvents = mutableListOf<ReplayEvent>()
         EventStore.log.forEach { it ->
             val re = ReplayEvent(
@@ -41,6 +42,7 @@ class ExportAlert() : Command {
     }
 
     override fun execute() {
-        //TODO write out to FS
+        Utils.download("ReplayEvents.json", jsonOutput)
     }
+
 }

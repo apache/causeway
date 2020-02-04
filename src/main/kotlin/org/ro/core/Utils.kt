@@ -3,7 +3,10 @@ package org.ro.core
 import org.ro.to.Argument
 import org.ro.to.Link
 import org.ro.to.TObject
+import kotlin.browser.document
 import kotlin.js.Date
+
+external fun encodeURIComponent(encodedURI: String): String
 
 object Utils {
 
@@ -184,6 +187,21 @@ object Utils {
         val rest = input.substring(13, input.length)
         val output = "$year-$month-$dayEtc:$minutes:$rest"
         return output
+    }
+
+    fun format(jsonStr: String): String {
+        val s1 = JSON.parse<String>(jsonStr)
+        return JSON.stringify(s1, null, 2)
+    }
+
+    fun download(filename: String, text: String) {
+        val element = document.createElement("a")
+        element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(text))
+        element.setAttribute("download", filename)
+        document.body?.appendChild(element)
+        console.log(document)
+        element.asDynamic().click()
+        document.body?.removeChild(element)
     }
 
 }

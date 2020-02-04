@@ -44,7 +44,7 @@ class RoDialog(
         isDraggable = true
         isResizable = true
         closeButton = true
-        verticalAlign = VerticalAlign.MIDDLE
+        verticalAlign = VerticalAlign.BOTTOM
         panel = FormPanelFactory(items).panel
         panel?.let { add(it) }
 
