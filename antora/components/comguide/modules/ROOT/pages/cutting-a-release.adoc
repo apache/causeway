@@ -1,0 +1,451 @@
+= Cutting a Release
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+:page-partial:
+
+
+The release process consists of:
+
+* the release manager cutting the release (documented below)
+* Members of the Apache Isis PMC xref:comguide:ROOT:verifying-releases.adoc[verifying] and voting on the release
+* the release manager performing post-release tasks, for either a xref:comguide:ROOT:post-release-successful.adoc.adoc[successful] or an xref:comguide:ROOT:post-release-unsuccessful[unsuccessful] vote.
+
+Apache Isis itself is released in one go, everything is ultimately a child of `core-parent/pom.xml` (relative to the link:https://github.com/apache/isis[source code root]).
+This section details the process for formally releasing this module.
+
+The subsequent sections describe how other committers can xref:comguide:ROOT:verifying-releases.adoc.adoc[verify a release] and how the release manager can then perform xref:comguide:ROOT:post-release[post-release] activities and set up for the next development iteration.
+
+If you've not performed a release before, then note that there are some configuration xref:comguide:ROOT:release-process-prereqs.adoc[prerequisites] that must be configured first.
+In particular, you'll need signed public/private keys, and the ASF Nexus staging repo inlocal `~/.m2/settings.xml` file.
+
+These release notes using bash command line tools.
+They should work on Linux and MacOS; for Windows, use mSysGit.
+
+== Obtain Consensus
+
+Before releasing the framework, ensure there is consensus on the xref:toc:ROOT:support.adoc#[dev mailing list] that this is the right time for a release.
+The discussion should include confirming the version number to be used, and to confirm content.
+
+These discussions should also confirm the version number of the module being released.
+This should be in line with our xref:comguide:ROOT:versioning-policy.adoc[semantic versioning policy].
+
+Make sure you have a JIRA ticket open against which to perform all commits.
+In most cases a JIRA ticket will have been created at the beginning of the previous release cycle.
+
+== Set environment variables
+
+We use environment variables to parameterize as many of the steps as possible.
+For example:
+
+[source,bash,subs="attributes+"]
+----
+export ISISTMP=/c/tmp                               # <1>
+export ISISREL={isisnext}
+export ISISRC=RC1
+export ISISBRANCH=release-$ISISREL-$ISISRC
+export ISISJIRA=ISIS-9999                           # <2>
+export ISISART=isis
+
+env | grep ISIS | sort
+----
+<1> adjust by platform
+<2> set to an "umbrella" ticket for all release activities.
+(One should exist already, xref:comguide:ROOT:post-release-successful.adoc#create-new-jira[created at] the beginning of the development cycle now completing).
+
+Obviously, alter ``$ISISREL`` as required, and bump ``$ISISRC`` for re-releasing following an xref:comguide:ROOT:post-release-unsuccessful.adoc[unsuccessful] release.
+
+[IMPORTANT]
+====
+Note that the branch name is intentionally *not* the same as the eventual tag names (eg `isis-{isisnext}`).
+====
+
+
+== Pull down code to release
+
+Set the HEAD of your local git repo to the commit to be released.
+This will usually be the tip of the origin's `master` branch.
+Then, create a release branch for the version number being released; eg:
+
+[source,bash,subs="attributes+"]
+----
+git checkout master
+git pull --ff-only
+git checkout -b $ISISBRANCH
+----
+
+The release is performed on a branch; if we are successful, this branch will be merged back into master.
+
+Check that there are no snapshot dependencies:
+
+[source,bash,subs="attributes+"]
+----
+grep SNAPSHOT $(/bin/find . -name pom.xml | grep -v target  sort)
+----
+
+The only mention of `SNAPSHOT` should be in the `revision` property of the root `core-prent/pom.xml` file.
+
+== Releasing the Framework
+
+Switch to the appropriate directory:
+
+[source,bash,subs="attributes+"]
+----
+cd core-parent
+----
+
+=== Bump `revision` property to `$ISISREL`
+
+Previously we used the `maven-release-plugin` which took responsibility for bumping the `<version>` from -SNAPSHOT to release, and then onto the next -SNAPSHOT.
+However, we now use a simpler process, and just use `mvn versions:set`.
+
+So, bump to the release version:
+
+[source,bash,subs="attributes+"]
+----
+mvn versions:set -DnewVersion=$ISISREL
+git commit -am "$ISISJIRA: bumps version to $ISISREL"
+----
+
+so that they should read:
+
+[source,xml,subs="attributes+"]
+----
+<properties>
+    <revision>{isisnext}</revision>
+    ...
+</properties>
+----
+
+NOTE: After release, there is a xref:comguide:ROOT:cutting-a-release.adoc#reset-revision[similar step at the end] to reset back to `2.0.0-SNAPSHOT`.
+
+
+
+=== License headers
+
+The Apache Release Audit Tool `RAT` (from the http://creadur.apache.org[Apache Creadur] project) checks for missing license header files.
+The parent `pom.xml` of each releasable module specifies the RAT Maven plugin, with a number of custom exclusions.
+
+To run the RAT tool, use:
+
+[source,bash,subs="attributes+"]
+----
+mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=50 -o && \
+for a in `/bin/find . -name rat.txt -print`; do grep '!???' $a; done || \
+for a in `/bin/find . -name rat.txt -print`; do grep '!AL' $a; done
+----
+
+where `rat.numUnapprovedLicenses` property is set to a high figure, temporarily overriding the default value of 0. This will allow the command to run over all submodules, rather than failing after the first one.
+The command writes out a `target\rat.txt` for each submodule. missing license notes are indicated using the key `!???`.
+The `for` command collates all the errors.
+
+Investigate and fix any reported violations, typically by either:
+
+* adding genuinely missing license headers from Java (or other) source files, or
+* updating the `&lt;excludes&gt;` element for the `apache-rat-plugin` plugin to ignore test files, log files and any other non-source code files
+* also look to remove any stale `&lt;exclude&gt;` entries
+
+Once you've fixed all issues, confirm once more that `apache-rat-plugin` no longer reports any license violations, this time leaving the `rat.numUnapprovedLicenses` property to its default, 0:
+
+[source,bash]
+----
+mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=0 -o && \
+for a in `find . -name rat.txt -print`; do grep '!???' $a; done
+----
+
+=== Missing License Check
+
+Although Apache Isis has no dependencies on artifacts with incompatible licenses, the POMs for some of these dependencies (in the Maven central repo) do not necessarily contain the required license information.
+Without appropriate additional configuration, this would result in the generated `DEPENDENCIES` file and generated Maven site indicating dependencies as having "unknown" licenses.
+
+Fortunately, Maven allows the missing information to be provided by configuring the `maven-remote-resources-plugin`.
+This is stored in the `src/main/appended-resources/supplemental-models.xml` file, relative to the root of each releasable module.
+
+It's first necessary to have built the framework locally at least once:
+
+[source,bash,subs="attributes+"]
+----
+mvn clean install -o
+----
+
+Once this is done, capture the missing license information using:
+
+[source,bash,subs="attributes+"]
+----
+mvn license:download-licenses && \
+groovy ../scripts/checkmissinglicenses.groovy
+----
+
+The Maven plugin creates a `license.xml` file in the `target/generated-resources` directory of each module.
+The script then searches for these `licenses.xml` files, and compares them against the contents of the `supplemental-models.xml` file.
+
+For example, the output could be something like:
+
+[source,bash,subs="attributes+"]
+----
+licenses to add to supplemental-models.xml:
+
+[org.slf4j, slf4j-api, 1.5.7]
+[org.codehaus.groovy, groovy-all, 1.7.2]
+
+licenses to remove from supplemental-models.xml (are spurious):
+
+[org.slf4j, slf4j-api, 1.5.2]
+----
+
+If any missing entries are listed or are spurious, then update `supplemental-models.xml` and try again.
+
+=== Commit changes
+
+Commit any changes from the preceding steps:
+
+[source,bash,subs="attributes+"]
+----
+git commit -am "$ISISJIRA: updates to pom.xml etc for release"
+----
+
+=== Sanity check
+
+Perform one last sanity check on the codebase.
+Delete all Isis artifacts from your local Maven repo, then build using the `-o` offline flag:
+
+[source,bash,subs="attributes+"]
+----
+rm -rf ~/.m2/repository/org/apache/isis
+mvn clean install -o
+----
+
+=== Deploy
+
+Since the `<version>` has already been updated, we just use `mvn deploy` to upload the artifacts.
+We activate the (inherited) `apache-release` profile to bring in the `gpg` plugin for code signing.
+
+To build and deploy and tag, we use:
+
+[source,bash,subs="attributes+"]
+----
+mvn -P apache-release \
+    clean deploy      \
+    -Dgit \
+    -Dgpg.passphrase="this is not really my passphrase"
+
+git tag $ISISART-$ISISREL
+git tag $ISISART-$ISISREL-$ISISRC
+----
+
+using your own GPG passphrase, of course.
+
+[IMPORTANT]
+====
+This requires `gpg` v2.1 or later.
+====
+
+== Check/Close Staging Repo
+
+The `mvn deploy` commands will have uploaded all of the release artifacts into a newly created staging repository on the ASF Nexus repository server.
+
+Log onto http://repository.apache.org[repository.apache.org] (using your ASF LDAP account):
+
+image::release-process/nexus-staging-0.png[width="600px",link="{imagesdir}/release-process/nexus-staging-0.png"]
+
+And then check that the release has been staged (select `staging repositories` from left-hand side):
+
+image::release-process/nexus-staging-1.png[width="600px",link="{imagesdir}/release-process/nexus-staging-1.png"]
+
+If nothing appears in a staging repo you should stop here and work out why.
+
+Assuming that the repo has been populated, make a note of its repo id; this is needed for the voting thread.
+In the screenshot above the id is `org.apache.isis-008`.
+
+After checking that the staging repository contains the artifacts that you expect you should close the staging repository.
+This will make it available so that people can check the release.
+
+Press the Close button and complete the dialog:
+
+image::release-process/nexus-staging-2.png[width="600px",link="{imagesdir}/release-process/nexus-staging-2.png"]
+
+Nexus should start the process of closing the repository.
+
+image::release-process/nexus-staging-2a.png[width="600px",link="{imagesdir}/release-process/nexus-staging-2a.png"]
+
+All being well, the close should (eventually) complete successfully (keep hitting refresh):
+
+image::release-process/nexus-staging-3.png[width="600px",link="{imagesdir}/release-process/nexus-staging-3.png"]
+
+The Nexus repository manager will also email you with confirmation of a successful close.
+
+If Nexus has problems with the key signature, however, then the close will be aborted:
+
+image::release-process/nexus-staging-4.png[width="600px",link="{imagesdir}/release-process/nexus-staging-4.png"]
+
+Use `gpg --keyserver hkp://pgp.mit.edu --recv-keys nnnnnnnn` to confirm that the key is available.
+
+[NOTE]
+====
+Unfortunately, Nexus does not seem to allow subkeys to be used for signing.
+See xref:comguide:ROOT:key-generation.adoc[Key Generation] for more details.
+====
+
+== Reset `revision` property
+
+At the beginning of the release process we bumped the version to the release version, ie `$ISISREL`.
+With the release now deployed we now need to reset the revision back down to the base snapshot, ie `2.0.0-SNAPSHOT`.
+
+[NOTE]
+====
+Previously we bumped to the next development snapshot.
+However, this approach doesn't play well with CI/CD when Apache Isis is mounted as a git submodule, so instead we always use `2.0.0-SNAPSHOT` for all development work.
+====
+
+Therefore:
+
+[source,bash,subs="attributes+"]
+----
+cd core-parent
+mvn versions:set -DnewVersion=2.0.0-SNAPSHOT
+git commit -am "$ISISJIRA: resetting version"
+----
+
+== Push branches
+
+Push the release branch to origin:
+
+[source,bash,subs="attributes+"]
+----
+git push -u origin $ISISBRANCH
+----
+
+and also push tags:
+
+[source,bash,subs="attributes+"]
+----
+git push origin refs/tags/isis-$ISISREL:refs/tags/isis-$ISISREL-$ISISRC
+git fetch
+----
+
+[NOTE]
+====
+The remote tags aren't visible locally but can be seen link:https://github.com/apache/isis/tags[online].
+====
+
+== Update starter apps
+
+For each starter app, we create a new branch and make the changes there, pushing the branch back if the sanity check passes.
+
+
+* for helloworld, the steps are:
++
+[source,bash,subs="attributes+"]
+----
+git checkout master
+git pull --ff-only
+
+git checkout -b $ISISBRANCH
+
+mvn versions:update-parent -DparentVersion=$ISISREL
+mvn versions:set -DnewVersion=$ISISREL
+
+mvn clean install -o
+mvn spring-boot:run
+----
+
+* for simple app, the steps are almost the same:
++
+[source,bash,subs="attributes+"]
+----
+git checkout master
+git pull --ff-only
+
+git checkout -b $ISISBRANCH
+
+mvn versions:update-parent -DparentVersion=$ISISREL
+mvn versions:set -DnewVersion=$ISISREL
+
+mvn clean install -o -Dmetamodel.lockdown
+mvn -pl webapp test -o -Dmavendeps.lockdown
+----
++
+Approve any failed lockdown tests (the mavendeps will fail first time arround because the dependencies on Apache Isis itself have just be bumped).
+Repeat, then run the app as a sanity check:
++
+[source,bash,subs="attributes+"]
+----
+mvn clean install -o -Dmetamodel.lockdown
+mvn -pl webapp test -o -Dmavendeps.lockdown
+
+mvn -pl webapp spring-boot:run
+----
+
+* For both apps, push the release branch to origin once ok:
++
+[source,bash,subs="attributes+"]
+----
+git push -u origin $ISISBRANCH
+----
+
+
+== Voting
+
+Once the artifacts have been uploaded, you can call a vote.
+
+In all cases, votes last for 72 hours and require a +3 (binding) vote from members.
+
+=== Start voting thread on dev mailing list
+
+That is, link:mailto:dev@apache.isis.org[]
+
+The following boilerplate is for a release of the Apache Isis Core.
+Adapt as required:
+
+Use the following subject, eg:
+
+[source,bash,subs="attributes+"]
+----
+[VOTE] Apache Isis Core release {isisnext} RC1
+----
+
+And use the following body:
+
+[source,bash,subs="attributes+"]
+----
+I've just cut a new release for Apache Isis Framework.
+
+The source code artifacts have been uploaded to staging repositories on repository.apache.org.
+For each zip there is a corresponding signature file (append .asc to the zip's url).
+
+In the source code repo the code has been tagged as isis-{isisnext}-RC1; see https://github.com/apache/isis/tags
+
+To verify the source code, you can use the following commands (in an empty directory):
+
+    NEXUSREPONUM=10xx
+    VERSION={isisnext}
+
+    curl http://www.apache.org/dist/isis/KEYS > /tmp/KEYS
+    gpg --import /tmp/KEYS
+
+    rm -rf isis-$VERSION*
+
+    curl -O -L https://raw.githubusercontent.com/apache/isis/xxxx/scripts/verify-isis-release.sh
+
+    chmod +x ./verify-isis-release.sh
+    ./verify-isis-release.sh $NEXUSREPONUM $VERSION
+
+
+For more details, see https://isis.apache.org/toc/comguide/about.html#verifying-releases
+
+Please verify the release and cast your vote.  The vote will be open for a minimum of 72 hours.
+
+[ ] +1
+[ ]  0
+[ ] -1
+----
+
+Remember to update:
+
+* the version number (`{isisnext}` or whatever)
+* the release candidate number (`RC1` or whatever)
+* the `NEXUSREPONUM` to the repository id as provided by Nexus earlier (`10xx` or whatever)
+
+Note that the email also references the procedure for other committers to xref:comguide:ROOT:verifying-releases.adoc[verify the release].
+
+
+
+

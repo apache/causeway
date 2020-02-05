@@ -1,0 +1,11 @@
+* Guides
+
+** Development
+
+*** xref:setupguide:ROOT:about.adoc[Setup Guide]
+
+** Core
+
+*** xref:userguide:ROOT:about.adoc[User Guide]
+*** xref:refguide:ROOT:about.adoc[Reference Guide]
+*** xref:testing:ROOT:about.adoc[Testing Guide]

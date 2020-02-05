@@ -23,7 +23,7 @@ package org.apache.isis.applib.annotation;
  */
 public enum Editing {
     /**
-     * The editing of the object should be as per the default editing policy configured in <tt>isis.properties</tt>.
+     * The editing of the object should be as per the default editing policy configured in <tt>application.properties</tt>.
      *
      * <p>
      *     If no editing policy is configured, then the editing is enabled.

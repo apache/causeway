@@ -160,7 +160,7 @@ This can be computed using a simple script, for example:
 DATE=$(date +%Y%m%d.%H%M)
 BRANCH=$(echo $GIT_BRANCH | sed 's|^rel/||g' | sed 's|[.]|_|g' | awk -F/ '{ print $NF }')
 GIT_SHORT_COMMIT=$(echo $GIT_COMMIT | cut -c1-8)
-REVISION=$DATE.$BRANCH.$GIT_SHORT_COMMIT
+APPLICATION_VERSION=$DATE.$BRANCH.$GIT_SHORT_COMMIT
 ----
 
 where `$GIT_BRANCH` and `$GIT_COMMIT` are provided by the CI server/build environment.
@@ -169,35 +169,39 @@ This environment variable can be passed into the (Maven) build using a system pr
 
 [source,bash]
 ----
-mvn -Drevision=$REVISION clean install
+mvn -DapplicationVersion=$APPLICATION_VERSION clean install
 ----
 
-If we provide a file `application-version.properties` is in the same package as the app manifest file, but in the `src/main/resources` directory:
+Suppose we now provide a file `application-version.properties` is in the same package as the app manifest file, but in the `src/main/resources` directory:
 
 [source,ini]
 .application-version.properties
 ----
-isis.viewer.wicket.application.version=$\{revision}
+isis.viewer.wicket.application.version=$\{applicationVersion}
 ----
 
 then Maven will automatically interpolate the actual revision when this file is copied over to the build (ie `target/classes`) directory.
 
-Finally, this file can be loaded in the app manifest using:
+The last step is for Spring Boot to also load this file.
+One way to do this is using the Spring link:https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/PropertySource.html[@PropertySource] annotation on the top-level "app manifest":
 
 [source,java]
 ----
-public class MyAppManifest extends AppManifestAbstract2 {
+@Configuration
+@Import({
+        IsisModuleCoreRuntimeServices.class,
+        IsisModuleSecurityShiro.class,
+        IsisModuleJdoDataNucleus5.class,
+        IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,
+        IsisModuleViewerWicketViewer.class,
 
-    public static final AppManifestAbstract2.Builder BUILDER =
-            AppManifestAbstract2.Builder.forModule(new MyApplicationModule())
-            .withConfigurationPropertiesFile(
-                    MyAppManifest.class, "application-version.properties");
-
-    public MyAppManifest() {
-        super(BUILDER);
-    }
+        /* ... application-specific modules ... */
+})
+@PropertySource("classpath:application-version.properties")     //<1>
+public class AppManifest {
 }
 ----
+<1> picks up the additional configuration property.
 
 
 
@@ -809,7 +813,7 @@ This feature is primarily just to help track any memory leakage issues that migh
 |`isis.viewer.wicket.` +
 `liveReloadUrl`
 | URL
-|Specifies the URL if xref:toc:devguide:about.adoc#advanced_gradle-liveReload[live reload] is set up, eg: +
+|Specifies the URL if xref:setupguide:ROOT:intellij.adoc#using-gradle-for-livereload[live reload] is set up, eg: +
 
 `http://localhost:35729/livereload.js?snipver=1`
 

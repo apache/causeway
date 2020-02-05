@@ -1,0 +1,104 @@
+[[working-with-many-repos]]
+= Appendix: Working with Many Repos
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+
+Applications built with Apache Isis often (should) consist of multiple modules.
+For example, there are the various modules that make up the (non-ASF) link:https://platform.incode.org[Incode Platform^] that provide various technical/cross-cutting concerns and generic business functionality.
+
+In addition, your own application may well be structured as a number of distinct modules (probably with the entities in each module being mapped to a different schema), and using such techniques as the xref:userguide:fun:building-blocks.adoc#domain-events[event bus] and xref:userguide:fun:building-blocks.adoc#mixins[mixins] so that these modules are decoupled from each other.
+
+All of which is a preamble to say that you will likely have multiple directories on your local development computer, for each such git repository that you contribute to.
+
+In this appendix we provide some simple but useful bash scripts to help you manage each such.
+
+
+== Prerequisites
+
+We recommend that you adopt a convention for your directories.  For example, open source repositories (such as Apache Isis itself or the Incode Platform) reside in link:https://github.com/[github.com], while your own proprietary code might reside in some other service, eg link:https://bitbucket.org/[bitbucket].  For example:
+
+[source]
+----
+/users/home/me/
+    BITBUCKET/
+        mycompany/
+            myapp/
+            otherapp/
+    GITHUB/
+        apache/
+            isis/
+        incodehq/
+            incode-platform/
+----
+
+
+== `_repos.txt`
+
+Create a file `_repos.txt` that catalogues the repositories, eg:
+
+[source]
+----
+#
+# our code
+#
+/users/home/me/BITBUCKET/mycompany/myapp
+/users/home/me/BITBUCKET/mycompany/otherapp
+#
+# open source modules
+#
+/users/home/me/GITHUB/apache/isis
+/users/home/me/GITHUB/incodehq/incode-platform
+----
+
+
+
+== Bash functions
+
+The `.bash_functions` file (downloadable from this link:https://gist.github.com/danhaywood/21b5b885433fd8bc440da3fab88c91cb[gist]) provides the following two functions:
+
+
+* `repo` +
++
+Switches (using `pushd`) to the specified directory (as listed in the `_repos.txt` file).
+
+* `foreach` +
++
+Runs the specified command for all (or matching) repositories (as listed in `_repos.txt` file).
+
+
+For example,
+
+[source,bash]
+----
+repo plat
+----
+
+would switch to `/users/home/me/GITHUB/incodehq/incode-platform`, the first module that matches the fragment.
+
+
+Meanwhile:
+
+[source,bash]
+----
+foreach git status
+----
+
+would perform a `git status` on every git repository, while
+
+[source,bash]
+----
+foreach -g plat git fetch
+----
+
+would perform a `git fetch` but only to those repositories which match "plat" (`-g` flag standing for `grep`).
+
+
+To load the functions into your profile (`.bashrc` or `.profile` or similar), use:
+
+[source,bash]
+----
+. ~/.bash_functions
+----
+
+

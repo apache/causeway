@@ -37,7 +37,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
  * {@link AuditerServiceLogging}.
  *
  * <p>
- * To use either service, must include on the classpath and also register the service (eg in <tt>isis.properties</tt>).
+ * To use either service, must include on the classpath and also register the service (eg in <tt>application.properties</tt>).
  */
 public interface AuditerService {
 

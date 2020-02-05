@@ -3,7 +3,7 @@
 
 This guide introduces the xref:userguide:fun:core-concepts.adoc[core concepts] and the xref:userguide:fun:building-blocks.adoc[building blocks] of Apache Isis, and tells you how to get started with the xref:starters:helloworld:about.adoc[HelloWorld] starter app.
 
-It describes in some detail the conventions of Apache Isis' xref:userguide:fun:programming-model.adoc[programming model]s, describes how to influence the xref:vw:ROOT:layout.adoc[UI layout] of your domain objects , and it catalogues various xref:toc:devguide:hints-and-tips.adoc.adoc[FAQ]s.
+It describes in some detail the conventions of Apache Isis' xref:userguide:fun:programming-model.adoc[programming model]s, describes how to influence the xref:vw:ROOT:layout.adoc[UI layout] of your domain objects , and it catalogues various xref:setupguide:ROOT:hints-and-tips.adoc[hints-n-tips]s.
 
 
 

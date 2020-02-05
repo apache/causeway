@@ -1,0 +1,883 @@
+[[asciidoc-syntax]]
+= Appendix: Asciidoc Syntax
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+:page-partial:
+
+
+
+This appendix describes the main syntax conventions when writing Asciidoctor/Asciidoc.
+
+For more info, see:
+
+* link:asciidoc-syntax-quick-reference.pdf[asciidoc-syntax-quick-reference.pdf]
+
+* link:asciidoc-writers-guide.pdf[asciidoc-writers-guide.pdf]
+
+* link:https://powerman.name/doc/asciidoc[online cheat sheet]
+
+* link:http://asciidoctor.org/docs/user-manual[asciidoctor online user manual]
+
+* link:http://www.methods.co.nz/asciidoc/userguide.html[asciidoc online user manual]
+
+
+== Headings
+
+The number of preceding `=` signs indicates the heading level.
+
+[cols="3a,2a", options="header"]
+|===
+
+| Syntax
+| Meaning
+
+|....
+= Level 1
+....
+
+|There can only be one level 1 per .adoc (at the very top).
+
+The paragraph immediately following the heading is the "preamble", and is rendered in a larger font.
+It's therefore a good place to summarize the content of the document.
+
+|....
+== Level 2
+....
+
+|Level 2
+
+|....
+=== Level 3
+....
+
+|Level 3
+
+|....
+==== Level 4
+....
+|Level 4
+
+|===
+
+
+== Paragraphs
+
+[cols="3a,2a", options="header"]
+|===
+
+| Syntax
+| Example
+
+|....
+Paragraphs are separated by one or more blank lines.
+
+So, this is a separate paragraph.
+....
+
+|Paragraphs are separated by one or more blank lines.
+
+So, this is a separate paragraph.
+
+
+|....
+All consecutive sentences are rendered in the same paragraph.
+This is another sentence in the para.
+And another one.
+Yet another.
+....
+
+|Sentences without a blank line are in the same paragraph.
+Don't worry about word wrapping, just start the next sentence on the next line.
+
+|===
+
+
+In general, there's no need to indent paragraphs; keep things left-aligned.
+Let the markup specify the logical indentation.
+
+.Start each sentence on a new line
+****
+Don't worry about wrapping sentences at 80 characters, just start each new sentence on a new line.
+Asciidoc will take care of the rendering.
+
+This simple tip has a number of other benefits:
+
+1. when the document is edited (eg correct a typo or insert a missing word), then only a single line in the file is changed. +
++
+This will reduce change of merge conflicts, too.
+
+2. You can easily see if a sentence is too long, and should be split
+
+3. You can easily see if all sentences are the same length: good writing should vary the length of sentences
+
+4. You can easily see if successive sentences start with the same phrase (that might be a good thing, or a bad thing, depending).
+
+****
+
+
+== Bulleted lists
+
+[cols="3a,2a", options="header"]
+|===
+
+| Syntax
+| Example
+
+|....
+The blank line after this para is required:
+
+* Bullet 1 +
++
+Indented paragraph (note the '+' to to chain this para with the bullet)
+
+* Bullet 2
+
+** Child bullets +
++
+More indenting
+
+** Another child bullet
+
+* Bullet 3
+....
+
+|The blank line after this para is required:
+
+* Bullet 1 +
++
+Indented paragraph (note the '+' to chain this para with the bullet)
+
+* Bullet 2
+
+** Child bullets +
++
+More indenting
+
+** Another child bullet
+
+* Bullet 3
+
+|===
+
+
+== Numbered lists
+
+There's no need to keep track of numbers, just use '1' or 'a' etc:
+
+[cols="3a,2a", options="header"]
+|===
+
+| Syntax
+| Example
+
+|....
+The blank line after this para is required:
+
+1. Bullet 1 +
++
+Indented paragraph
+
+2. Bullet 2
+
+a. Child bullets +
++
+More indenting
+
+b. Another child bullet
+
+3. Bullet 3
+....
+
+|The blank line after this para is required:
+
+1. Bullet 1 +
++
+Indented paragraph
+
+2. Bullet 2
+
+a. Child bullets +
++
+More indenting
+
+b. Another child bullet
+
+3. Bullet 3
+
+|===
+
+While it isn't necessary to maintain the ordering manually (could just use '1' for all bullets), this does generate warnings when the document is built.
+
+
+== Links and Cross-references
+
+[cols="3a,2a,3a", options="header"]
+|===
+
+| Syntax
+| Example
+| Purpose
+
+|....
+link:http://ciserver:8080[CI Server]
+....
+|link:http://ciserver:8080[CI Server]
+|Link to an external hyperlink
+
+|....
+link:http://ciserver:8080[CI Server^]
+....
+|link:http://ciserver:8080[CI Server^]
+|Link to an external hyperlink, with `target=blank`
+
+|....
+xref:conguide:ROOT:about.adoc#links-and-xrefs[background]
+....
+|xref:conguide:ROOT:about.adoc#links-and-xrefs[background]
+|Cross-reference to section in Antora document
+
+
+|===
+
+
+
+== Tables
+
+....
+.Some table
+[cols="3a,2a", options="header"]
+|===
+
+| Header col 1
+| Header col 2
+
+| Row 1 col 1
+| Row 1 col 2
+
+| Row 2 col 1
+| Row 2 col 2
+
+|===
+....
+
+renders as:
+
+.Some table
+[cols="3a,2a", options="header"]
+|===
+
+| Header col 1
+| Header col 2
+
+| Row 1 col 1
+| Row 1 col 2
+
+| Row 2 col 1
+| Row 2 col 2
+
+|===
+
+where:
+
+* the `cols` attribute says how many columns there are and their respective widths.
+* the "a" suffix indicates that the contents is parsed as Asciidoc
+
+=== Column Attributes
+
+Other options are (link:http://mrhaki.blogspot.co.uk/2014/11/awesome-asciidoctor-styling-columns-and.html[credit]):
+
+* e: emphasized
+* a: Asciidoc markup
+* m: monospace
+* h: header style, all column values are styled as header
+* s: strong
+* l: literal, text is shown in monospace font and line breaks are kept
+* d: default
+* v: verse, keeps line breaks
+
+For example:
+
+....
+.Table with column style e,a,m
+[cols="e,a,m"]
+|===
+| Emphasized (e) | Asciidoc (a) | Monospaced (m)
+
+| Asciidoctor
+| NOTE: *Awesome* way to write documentation
+| It is just code
+
+|===
+....
+
+renders as
+
+.Table with column style e,a,m
+[cols="e,a,m"]
+|===
+| Emphasized (e) | Asciidoc (a) | Monospaced (m)
+
+| Asciidoctor
+| NOTE: *Awesome* way to write documentation
+| It is just code
+
+|===
+
+and:
+
+....
+.Table with column style h,s,l
+[cols="h,s,l"]
+|===
+| Header (h) | Strong (s) | Literal (l)
+
+| Asciidoctor
+| Awesome way to write documentation
+| It is
+just code
+
+|===
+....
+
+renders as
+
+.Table with column style h,s,l
+[cols="h,s,l"]
+|===
+| Header (h) | Strong (s) | Literal (l)
+
+| Asciidoctor
+| Awesome way to write documentation
+| It is
+just code
+
+|===
+
+and:
+
+....
+.Table with column style d,v
+[cols="d,v"]
+|===
+| Default (d) | Verse (v)
+
+| Asciidoctor
+| Awesome way
+to write
+documentation
+
+|===
+....
+
+renders as
+
+.Table with column style d,v
+[cols="d,v"]
+|===
+| Default (d) | Verse (v)
+
+| Asciidoctor
+| Awesome way
+to write
+documentation
+
+|===
+
+
+=== Column Alignment
+
+This can be combined with alignment markers (link:http://mrhaki.blogspot.co.uk/2014/11/awesome-asciidoctor-table-column-and.html[credit]):
+
+* <: top align values (default)
+* >: bottom align values
+* ^: center values
+
+For example:
+
+....
+[cols="^.>,<.<,>.^", options="header"]
+|===
+
+| Name
+| Description
+| Version
+
+| Asciidoctor
+| Awesome way to write documentation
+| 1.5.0
+|===
+....
+
+renders as:
+
+[cols="^.>,<.<,>.^", options="header"]
+|===
+
+| Name
+| Description
+| Version
+
+| Asciidoctor
+| Awesome way to write documentation
+| 1.5.0
+|===
+
+where:
+
+* the first column is centered and bottom aligned,
+* the second column is left and top aligned and
+* the third column is right aligned and centered vertically.
+
+
+=== Column/Row Spanning
+
+We can also have columns or rows spanning multiple cells (link:http://mrhaki.blogspot.co.uk/2014/12/awesome-asciidoctor-span-cell-over-rows.html[credit]):
+
+For example:
+
+....
+.Cell spans columns
+|===
+| Name | Description
+
+| Asciidoctor
+| Awesome way to write documentation
+
+2+| The statements above say it all
+
+|===
+....
+
+renders as:
+
+
+.Cell spans columns
+|===
+| Name | Description
+
+| Asciidoctor
+| Awesome way to write documentation
+
+2+| The statements above say it all
+
+|===
+
+The `N+` sign notation tells Asciidoctor to span this cell over N columns.
+
+
+while:
+
+....
+.Cell spans rows
+|===
+| Name | Description
+
+.2+| Asciidoctor
+| Awesome way to write documentation
+
+| Works on the JVM
+
+|===
+....
+
+renders as:
+
+
+.Cell spans rows
+|===
+| Name | Description
+
+.2+| Asciidoctor
+| Awesome way to write documentation
+
+| Works on the JVM
+
+|===
+
+The `.N+` notation tells Asciidoctor to span this cell over N rows.
+
+
+and:
+
+....
+.Cell spans both rows and columns
+|===
+
+| Row 1, Col 1 | Row 1, Col 2 | Row 1, Col 3
+
+2.2+| Cell spans 2 cols, 2 rows
+| Row 2, Col 3
+| Row 3, Col 3
+
+|===
+....
+
+renders as:
+
+.Cell spans both rows and columns
+|===
+
+| Row 1, Col 1 | Row 1, Col 2 | Row 1, Col 3
+
+2.2+| Cell spans 2 cols, 2 rows
+| Row 2, Col 3
+| Row 3, Col 3
+
+|===
+
+The `N.M+` notation tells Asciidoctor to span this cell over N columns and M rows.
+
+
+
+== Admonitions
+
+Callout or highlight content of particular note.
+
+[cols="3a,2a", options="header"]
+|===
+
+| Syntax
+| Example
+
+|....
+NOTE: the entire note must be a single sentence.
+....
+
+|NOTE: the entire note must be a single sentence.
+
+|....
+[NOTE]
+====
+the note is multiple paragraphs, and can have all the usual styling,
+* eg bullet points:
+* etc etc
+====
+....
+
+|
+[NOTE]
+====
+the note is multiple paragraphs, and can have all the usual styling,
+
+* eg bullet points:
+* etc etc
+====
+
+|....
+[TIP]
+====
+Here's something worth knowing...
+====
+....
+
+|
+[TIP]
+====
+Here's something worth knowing...
+====
+
+
+|....
+[WARNING]
+====
+Be careful...
+====
+....
+
+|
+[WARNING]
+====
+Be careful...
+====
+
+|....
+[IMPORTANT]
+====
+Don't forget...
+====
+....
+
+|
+[IMPORTANT]
+====
+Don't forget...
+====
+
+|===
+
+
+== Source code
+
+Use `[source]` macro to specify source content:
+
+....
+[source,powershell]
+----
+get-command -module BomiArtifact
+----
+....
+
+will render as:
+
+[source,powershell]
+----
+get-command -module BomiArtifact
+----
+
+Some languages support syntax highlighting.
+For example:
+
+....
+[source,java]
+----
+public class SomeClass extends SomeOtherClass {
+    ...
+}
+----
+....
+
+will render as:
+
+[source,java]
+----
+public class SomeClass extends SomeOtherClass {
+    ...
+}
+----
+
+Callouts can also be added using an appropriate comment syntax.
+For example:
+
+....
+[source,java]
+----
+public class SomeClass
+                extends SomeOtherClass {        // \<1>
+    public static void main(String[] args) {    // \<2>
+        ...
+    }
+}
+----
+<1> inherits from `SomeOtherClass`
+<2> entry point into the program
+....
+
+will render as:
+
+[source,java]
+----
+public class SomeClass
+                extends SomeOtherClass {        //<1>
+    public static void main(String[] args) {    //<2>
+        ...
+    }
+}
+----
+<1> inherits from `SomeOtherClass`
+<2> entry point into the program
+
+
+and
+
+....
+[source,xml]
+----
+<a>
+    <b c="foo"/>     \<!--1-->
+</a>
+----
+<1> some comment
+....
+
+renders as:
+
+[source,xml]
+----
+<a>
+    <b c="foo"/>     <!--1-->
+</a>
+----
+<1> some comment
+
+
+It's also possible to include source code snippets; see the guides linked previously
+
+
+== Images
+
+Use the `image:` macro to reference images.
+For example:
+
+....
+image:_images/vscode.png[]
+....
+
+To make the image clickable, add in the `link` attribute:
+
+....
+image:_images/vscode.png[link="_images/vscode.png"]
+....
+
+
+
+It's also possible to specify the width using `scaledwidth` (for PDF/HTML) or `width` and `height` (for HTML only).
+
+For example:
+
+....
+image:_images/vscode.png[link="_images/vscode.png",width="800px"]
+....
+
+
+
+== Child Documents
+
+
+Use the `include:` macro to break up a document into multiple sections.
+
+The `leveloffset=+1` means that each included file's heading levels are automatically adjusted.
+The net effect is that all documents can and should use heading 1 as their top-level.
+
+
+== Metadata
+
+The top-level document must include the `_basedir` attribute; this points to the parent directory `src/main/asciidoc`.
+This attribute is set immediately after the top-level heading.
+
+In addition, the `:toc:` adds a table of contents.
+
+For example, the `setting-up/concepts/concepts.adoc` file starts:
+
+[source,asciidoc]
+----
+[[concepts]]
+= Concepts
+:_basedir: ../../
+
+...
+----
+
+
+
+== UML diagrams
+
+Asciidoctor includes support for the link:http://plantuml.com/[plantuml], allowing simple UML diagrams to be easily sketched.
+
+For example:
+
+....
+[plantuml]
+----
+class Car
+
+Driver - Car : drives >
+Car *- Wheel : have 4 >
+Car -- Person : < owns
+----
+....
+
+renders as:
+
+[plantuml]
+----
+class Car
+
+Driver - Car : drives >
+Car *- Wheel : have 4 >
+Car -- Person : < owns
+----
+
+
+
+
+== Ditaa diagrams
+
+Asciidoctor includes support for the link:http://ditaa.sourceforge.net/[ditaa], allowing boxes-and-lines diagrams to be easily sketched.
+
+For example:
+
+....
+[ditaa,images/asciidoctor/ditaa-demo,png]
+----
+    +--------+   +-------+    +-------+
+    |        | --+ ditaa +--> |       |
+    |  Text  |   +-------+    |diagram|
+    |Document|   |!magic!|    |       |
+    |     {d}|   |       |    |       |
+    +---+----+   +-------+    +-------+
+        :                         ^
+        |       Lots of work      |
+        +-------------------------+
+----
+....
+
+renders as:
+
+[ditaa,images/asciidoctor/ditaa-demo,png]
+----
+    +--------+   +-------+    +-------+
+    |        | --+ ditaa +--> |       |
+    |  Text  |   +-------+    |diagram|
+    |Document|   |!magic!|    |       |
+    |     {d}|   |       |    |       |
+    +---+----+   +-------+    +-------+
+        :                         ^
+        |       Lots of work      |
+        +-------------------------+
+----
+
+
+== Graphviz diagrams
+
+
+Asciidoctor includes support for the link:http://ditaa.sourceforge.net/[ditaa], allowing boxes-and-lines diagrams to be easily sketched.
+
+For example:
+
+....
+[graphviz,images/asciidoctor/graphviz-demo,png]
+----
+digraph automata_0 {
+  size ="8.5, 11";
+  node [shape = circle];
+  0 [ style = filled, color=lightgrey ];
+  2 [ shape = doublecircle ];
+  0 -> 2 [ label = "a " ];
+  0 -> 1 [ label = "other " ];
+  1 -> 2 [ label = "a " ];
+  1 -> 1 [ label = "other " ];
+  2 -> 2 [ label = "a " ];
+  2 -> 1 [ label = "other " ];
+  "Machine: a" [ shape = plaintext ];
+}
+----
+....
+
+renders as:
+
+[graphviz,images/asciidoctor/graphviz-demo,png]
+----
+digraph automata_0 {
+  size ="8.5, 11";
+  node [shape = circle];
+  0 [ style = filled, color=lightgrey ];
+  2 [ shape = doublecircle ];
+  0 -> 2 [ label = "a " ];
+  0 -> 1 [ label = "other " ];
+  1 -> 2 [ label = "a " ];
+  1 -> 1 [ label = "other " ];
+  2 -> 2 [ label = "a " ];
+  2 -> 1 [ label = "other " ];
+  "Machine: a" [ shape = plaintext ];
+}
+----
+
+[IMPORTANT]
+====
+This requires graphviz to be installed and the `dot.exe` on the PATH.
+Alternatively, specify the location, eg using:
+
+....
+:graphvizdot: c:\Program Files (x86)\Graphviz2.38\bin\dot.exe
+....
+====
+

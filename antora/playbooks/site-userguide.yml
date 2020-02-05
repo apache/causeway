@@ -8,7 +8,7 @@ content:
 
 # antora
     - url: .
-      start_path: antora/toc # toc
+      start_path: antora/components/toc # toc
       branches: HEAD
 
 # api
@@ -18,7 +18,7 @@ content:
 
 # extensions
     - url: .
-      start_path: extensions/core/flyway/adoc # refguide
+      start_path: extensions/core/flyway/adoc # userguide
       branches: HEAD
 
 

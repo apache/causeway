@@ -1,0 +1,62 @@
+= Guides
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+
+This page lists the user and reference guides available for developers to create applications with the framework:
+
+== Getting Started
+
+The following guide helps you setup your development environment so you can quickly be productive:
+
+* xref:setupguide:ROOT:about.adoc[Setup Guide]
+
+It's supported by the starter apps:
+
+* xref:starters:helloworld:about.adoc[HelloWorld] starter app
+* xref:starters:simpleapp:about.adoc[SimpleApp] starter app
+
+and the convenience POMs (to inherit from or reference):
+
+* xref:starters:parent-pom:about.adoc[Parent POM]
+* xref:starters:mavendeps:about.adoc[Aggregator POMs]
+
+
+== Core
+
+The core guides describe how to write domain applications:
+
+* *xref:userguide:ROOT:about.adoc[User Guide]*
++
+Consists of two sections: fundamentals, and "beyond the basics".
+
+* *xref:refguide:ROOT:about.adoc[Reference Guide]*
++
+Reference for the annotations, domain services and naming conventions.
+
+* *xref:testing:ROOT:about.adoc[Testing]*
++
+How to write unit tests, integration tests and BDD (Cucumber) tests, and how to use fixtures within integration tests and for rapid prototyping.
+
+
+== Libraries
+
+There are three sets of libraries:
+
+*  xref:subdomains:ROOT:about.adoc[Subdomains]
++
+Contains libraries to be called from the domain application itself, to integrate with various subdomains.
++
+These subdomains are usually technical in nature, for example to perform a mail merge in MS Word, or to zip up files.
+
+*  xref:valuetypes:ROOT:about.adoc[Value Types]
++
+Support for additional value types, for example an Markdown.
+
+*  xref:mappings:ROOT:about.adoc[Bounded Context Mappings]
++
+Provides libraries for integrating (or mapping) between the Apache Isis application and other bounded contexts.
++
+Some/many of these libraries are for code hosted outside of the Apache Isis application, ie which call into it.
+Others are SPIs that are called by the framework implicitly rather than by your domain logic directly.
+
+As well as the current libraries, the xref:incubator:ROOT:about.adoc[Incubator] may have additional libraries that may end up graduating to the extensions catalog, while the xref:legacy:ROOT:about.adoc[Legacy Catalog] may contain libraries that have been deprecated and are on the way out.
+

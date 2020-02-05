@@ -23,7 +23,7 @@ package org.apache.isis.applib.annotation;
  */
 public enum Publishing {
     /**
-     * The publishing of the object should be as per the default publishing policy configured in <tt>isis.properties</tt>.
+     * The publishing of the object should be as per the default publishing policy configured in <tt>application.properties</tt>.
      *
      * <p>
      *     If no publishing policy is configured, then the publishing is disabled.

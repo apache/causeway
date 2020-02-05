@@ -1,0 +1,190 @@
+[[screencasts-older]]
+= (Older) Screencasts
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+
+
+
+
+These screencasts refer to older versions of the framework, but you may still find them of use.
+More recent screencasts can be found link:./screencasts.html[here].
+
+
+== Getting Started
+
+[cols="2a,2a"]
+|===
+
+|How it works (v1.1.0)+
+
+_How Apache Isis builds a webapp from the underlying domain object model_
+
+_This screencast is for Apache Isis v1.1.0 (ie very out of date)_
+
+|video::ludOLyi6VyY[youtube,width="420px",height="315px"]
+
+
+|Todo app walkthrough (v.1.4.0) +
+
+_A run-through of the main features of the http://github.com/apache/isis-app-todoapp[TodoApp]_
+
+
+|video::2leQwavWxeg[youtube,width="420px",height="210px"]
+
+
+
+|===
+
+
+
+
+== Development Environment
+
+[cols="2a,2a"]
+|===
+
+
+
+|Setting up Eclipse +
+
+_How to import an Apache Isis maven-based application into Eclipse and configure to use with JDO/DataNucleus_ +
+
+NB: when configuring DataNucleus for the *dom* project, make sure you are in the 'Java perspective', not the 'Java EE perspective'). +
+
+Learn more xref:setupguide:ROOT:eclipse.adoc[here]
+
+|video::RgcYfjQ8yJA[youtube,width="420px",height="315px"]
+
+
+
+|Setting up IntelliJ +
+
+_How to import an Apache Isis maven-based application into IntelliJ and run the app._ +
+
+Learn more xref:setupguide:ROOT:intellij.adoc[here]
+
+|video::lwKsyTbTSnA[youtube,width="420px",height="315px"]
+
+
+
+|===
+
+
+
+
+== Isis Add-on Modules
+
+[cols="2a,2a"]
+|===
+
+
+|Commands and Auditing (v1.6.0) +
+
+_Configuring the command and auditing add-on modules for the xref:starters:simpleapp:about.adoc[SimpleApp]._ +
+
+Learn more at the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command and audit SPI modules
+
+|video::g01tK58MxJ8[youtube,width="420px",height="236px"]
+
+
+|Security (v1.6.0) +
+
+_Configuring the security add-on module for for the xref:starters:simpleapp:about.adoc[SimpleApp]._ +
+
+Learn more at the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s security SPI module.
+
+|video::bj8735nBRR4[youtube,width="420px",height="236px"]
+
+
+
+|Commands, Auditing, Publishing (v1.5.0) +
+
+_A run-through of the command (profiling) service, auditing service, publishing service.  Also shows how commands can be run in the background either explicitly by scheduling through the background service or implicitly by way of a framework annotation._ +
+
+Learn more at the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command and audit modules (also the obsolete http://github.com/isisaddons-legacy/isis-module-publishing[publishing] modules).
+
+|video::tqXUZkPB3EI[youtube,width="420px",height="210px"]
+
+
+
+|Bulk updates in Apache Isis (v1.5.0) +
+
+_Using the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s excel module and view models to perform bulk updates)._
+
+|video::8SsRDhCUuRc[youtube,width="420px",height="315px"]
+
+
+
+|===
+
+
+
+
+== Wicket Viewer and Isis Add-ons
+
+[cols="2a,2a"]
+|===
+
+
+
+|Customizing the Wicket viewer +
+
+_How to customize the Wicket viewer, integrating the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s gmap3 wicket component._
+
+|video::9o5zAME8LrM[youtube,width="420px",height="315px"]
+
+
+
+|===
+
+
+
+
+== Restful Objects Viewer
+
+[cols="2a,2a"]
+|===
+
+|Using Chrome Tools +
+
+_Using Chrome plugins to invoke an action through the REST API_
+
+|video::_-TOvVYWCHc[youtube,width="420px",height="236px"]
+
+
+|Creating objects using the REST API
+
+_Posting to the "Objects of Type" resource"_
+
+|video::VmvhACyA2ZI[youtube,width="420px",height="236px"]
+
+
+
+|===
+
+
+
+
+
+== JRebel Integration
+
+_Develop your app without having to redeploy using link:http://zeroturnaround.com/software/jrebel/[JRebel] and an link:https://github.com/danhaywood/isis-jrebel-plugin[Isis plugin] for JRebel._
+
+[cols="2a,2a"]
+|===
+
+|Maven and JRebel
+|video::jpYNZ343gi4[youtube,width="420px",height="236px"]
+
+
+|Eclipse and JRebel
+|video::uPfRXllQV1o[youtube,width="420px",height="236px"]
+
+
+|IntelliJ and JRebel
+|video::fb5VbU-VY8I[youtube,width="420px",height="236px"]
+
+
+|===
+
+
+

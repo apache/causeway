@@ -1,0 +1,14 @@
+* Libraries
+
+** For Use in Apps
+
+***  xref:subdomains:ROOT:about.adoc[Subdomain Libraries]
+***  xref:valuetypes:ROOT:about.adoc[Value Types]
+
+** Integrate between Apps
+
+***  xref:mappings:ROOT:about.adoc[Bounded Context Mapping Libraries]
+
+** Other
+***  xref:incubator:ROOT:about.adoc[Incubator]
+***  xref:legacy:ROOT:about.adoc[Legacy]

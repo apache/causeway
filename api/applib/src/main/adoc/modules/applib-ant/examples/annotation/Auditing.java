@@ -23,7 +23,7 @@ package org.apache.isis.applib.annotation;
  */
 public enum Auditing {
     /**
-     * The auditing of the object should be as per the default auditing policy configured in <tt>isis.properties</tt>.
+     * The auditing of the object should be as per the default auditing policy configured in <tt>application.properties</tt>.
      *
      * <p>
      *     If no auditing policy is configured, then the auditing is disabled.

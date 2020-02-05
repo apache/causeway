@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacetAbstract
 
 /**
  * If the domain object has not been annotated with {@link org.apache.isis.applib.annotation.DomainObject} but auditing
- * has been configured in <tt>isis.properties</tt>.
+ * has been configured in <tt>application.properties</tt>.
  */
 public class AuditableFacetFromConfiguration extends AuditableFacetAbstract {
 

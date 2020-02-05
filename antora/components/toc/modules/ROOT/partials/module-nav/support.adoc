@@ -1,0 +1,8 @@
+* Support
+
+
+** xref:toc:ROOT:support/slack-channel.adoc[Slack]
+** xref:toc:ROOT:support/mailing-list.adoc[Mailing Lists]
+** link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[ASF JIRA]
+** link:http://stackoverflow.com/questions/tagged/isis[Stack Overflow]
+

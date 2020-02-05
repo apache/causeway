@@ -8,7 +8,22 @@ content:
 
 # antora
     - url: .
-      start_path: antora/toc # toc
+      start_path: antora/components/toc # toc
+      branches: HEAD
+    - url: .
+      start_path: antora/components/comguide # comguide
+      branches: HEAD
+    - url: .
+      start_path: antora/components/conguide # conguide
+      branches: HEAD
+    - url: .
+      start_path: antora/components/relnotes # relnotes
+      branches: HEAD
+    - url: .
+      start_path: antora/components/setupguide # setupguide
+      branches: HEAD
+    - url: .
+      start_path: antora/redirects/guides # toc
       branches: HEAD
 
 

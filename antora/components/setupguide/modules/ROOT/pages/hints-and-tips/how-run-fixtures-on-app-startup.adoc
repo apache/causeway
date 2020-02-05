@@ -1,0 +1,18 @@
+= How run fixtures on startup?
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+:page-partial:
+
+
+From this link:http://isis.markmail.org/thread/g6amfj2eyf2xfjbr[thread] on the Apache Isis users mailing list:
+
+* _my fixtures have grown into a couple of files the application needs to read in when it starts the first time (and possibly later on when the files content change).
+What is the right way to do this?
+Hook up into the webapp start?
+Use events?_
+
+
+The standard approach is to use xref:fixtures:ROOT:about.adoc[fixture scripts].
+These can be run in on start-up for example using the `@PostConstruct` of a seed domain service.
+
+The xref:subdomains:excel:about.adoc[Excel subdomain] library also provides `ExcelFixture`, which is an implementation of `FixtureScript`; it works by providing an implementation of  `ExcelFixtureRowHandler`, to handle each row.
+

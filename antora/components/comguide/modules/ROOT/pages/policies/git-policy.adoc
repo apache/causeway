@@ -1,0 +1,99 @@
+[[git-policy]]
+= Git Policy
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+:page-partial:
+
+
+
+
+
+
+These notes recommend how contributors should work with git. To understand these notes, the only real concepts that you need to grok are:
+
+* git commits form an acyclic graph, with each commit pointing to its parent commit (or commit**s**, if a merge)
+
+* a branch is merely a pointer to one of these commits; git calls the main branch `master`
+
+* git commits happen in two steps: first they are added to the index (also called the staging area), then they are committed.
+
+For more background reading, see:
+
+* http://git-scm.com/book[Pro Git] book (free in electronic form)
+* https://github.s3.amazonaws.com/media/book.pdf[Git community book]
+* http://git-scm.com/2011/07/11/reset.html[git reset demystified] - differentiating the working directory vs index/staging area
+
+And, of course, there is loads of good advice on http://stackoverflow.com/questions/tagged/git[stackoverflow.com]
+
+
+
+== Workflow
+
+There are many ways of using Git, but the Apache Isis committers have adopted the following workflow:
+
+* create a topic branch for a feature +
++
+[source,bash]
+----
+git checkout -b ISIS-999
+----
+
+* periodically, push the branch to origin (for safekeeping): +
++
+[source,bash]
+----
+git push origin ISIS-999
+----
+
+
+* `rebase` the topic branch periodically on master. +
++
+How often you do this will depend on whether you are collaborating with others on the feature.  You need to ensure that your co-worker has no outstanding work before you do this; otherwise it'll create merge conflict hell for them:
++
+[source,bash]
+----
+git checkout master
+git pull
+git checkout ISIS-999
+git rebase master
+git push origin ISIS-999 --force
+----
+
+* when feature is complete, rebase once more (as above), then switch to master and perform a `merge --no-ff`: +
++
+[source,bash]
+----
+git checkout master
+git merge --no-ff ISIS-999
+----
+
+* finally, remove the branch +
++
+[source,bash]
+----
+git branch -d ISIS-999
+git push origin --delete ISIS-999
+----
+
+This way of working gives us the full history on the branch as to what the thought processes were for the feature, but only a single commit on to `master` to see the ultimate impact of the changes (acting a bit like a summary).
+
+
+
+
+
+== Commit message
+
+The minimum we expect in a commit messages is:
+
+[source,bash]
+----
+ISIS-nnn: brief summary here
+
+- optionally, longer details
+- should be written here
+- in bullet points
+----
+
+
+where `ISIS-nnn` is a ticket raised in our https://issues.apache.org/jira/browse/ISIS[JIRA issue tracker].
+
+For non-committers we typically expect more detail again; see the xref:conguide:ROOT:contributing.adoc[contributing] page for the longer format recommended for contributors to use.
