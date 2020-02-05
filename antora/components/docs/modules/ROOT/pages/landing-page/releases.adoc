@@ -1,0 +1,37 @@
+= Releases
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+
+
+Each new version of the framework comes with xref:relnotes:ROOT:about.adoc[Release Notes], which new features, improvements and bug fixes.
+These usually include migration notes that explain how to migrate to new features / away from deprecated or removed features.
+
+
+== Updating your App
+
+If your app inherits from the xref:docs:parent-pom:about.adoc[Parent POM], then the easiest way to update to the next release is often as simple as changing the `<version>` in your application's parent `pom.xml`:
+
+[source,xml]
+----
+<parent>
+    <groupId>org.apache.isis.app</groupId>
+    <artifactId>isis-app-starter-parent</artifactId>
+    <version>2.0.0</version>                            <!--1-->
+</parent>
+----
+<1> update as required.
+
+
+== Nightly Builds
+
+If you like to live on the bleeding edge, there are also nightly builds of the framework.
+
+* link:https://github.com/apache-isis-committers/isis-nightly[CI]
+* link:https://repo.incode.cloud/[Maven Repo]
+* link:https://apache-isis-committers.github.io/isis-nightly/toc/about.html[Website preview]
+
+Although these are maintained and used by the framework's committers, do be aware that *these are _not_ official ASF releases*; they are provided as a convenience only.
+
+== Building from Source
+
+If you want though you can also xref:docs:ROOT:downloads/how-to.adoc[download] the source code and build it directly.
+

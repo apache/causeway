@@ -1,4 +1,0 @@
-* Resources
-
-** xref:toc:resources:cheatsheet.adoc[Cheat Sheet]
-** xref:toc:resources:icons.adoc[Icons]

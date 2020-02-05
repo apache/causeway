@@ -28,7 +28,7 @@ To install, download each XML file, then go to `Windows > Preferences > Java > E
 
 == Install Project Lombok
 
-The xref:starters:simpleapp:about.adoc[SimpleApp] starter app uses link:http://projectlombok.org[Project Lombok] annotations (`@Getter` and `@Setter` and so on) to reduce the boilerplate.
+The xref:docs:starters:simpleapp.adoc[SimpleApp] starter app uses link:http://projectlombok.org[Project Lombok] annotations (`@Getter` and `@Setter` and so on) to reduce the boilerplate.
 For Eclipse IDE this requires an link:https://projectlombok.org/setup/eclipse[installation step]:
 
 * Locate the `lombok.jar` jar file:
@@ -104,7 +104,7 @@ DataNucleus' enhancer uses the domain object model's own classpath to reference 
 So, even though your domain objects are unlikely to depend on DataNucleus, these references must still be present.
 
 See the section in xref:setupguide:ROOT:hints-and-tips.adoc#datanucleus-enhancer[DataNucleus enhancer] for details of the contents of the `pom.xml`.
-If you've based your app on either the xref:starters:helloworld:about.adoc[HelloWorld] or the xref:starters:simpleapp:about.adoc[SimpleApp] starter app, then it'll be set up already.
+If you've based your app on either the xref:docs:starters:helloworld.adoc[HelloWorld] or the xref:docs:starters:simpleapp.adoc[SimpleApp] starter app, then it'll be set up already.
 
 Then, tell DataNucleus to use the project classpath:
 

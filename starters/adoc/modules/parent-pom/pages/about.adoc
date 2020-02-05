@@ -20,7 +20,7 @@ To use it, just add:
 ----
 <1> update as required for new versions of the framework.
 
-You'll see that it is used by both the xref:starters:helloworld:about.adoc[HelloWorld] and xref:starters:simpleapp:about.adoc[SimpleApp] starter apps.
+You'll see that it is used by both the xref:docs:starters:helloworld.adoc[HelloWorld] and xref:docs:starters:simpleapp.adoc[SimpleApp] starter apps.
 
 == Relationship to other POMs
 

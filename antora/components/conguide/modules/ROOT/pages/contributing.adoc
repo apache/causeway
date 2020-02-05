@@ -31,7 +31,7 @@ That is:
 . you set the https://github.com/apache/isis.git[github.com/apache/isis] as your upstream branch; this will allow you to keep your local clone up-to-date with new commits
 * note the asymmetry here: the `upstream` repo (the Apache github repo) is *not* the same as the `origin` repo (your fork).
 . you work on your changes locally; when done, you push them to your github fork
-. to contribute back a change, raise a https://issues.apache.org/jira/browse/ISIS[JIRA] ticket, and ensure your commit message is in the form: `ISIS-nnnn: ...` so that changes can be tracked (more discussion on this point below). In any case, before you decide to start hacking with Apache Isis, it's always worth creating a ticket in JIRA and then have a discussion about it on the xref:toc:ROOT:support.adoc#[mailing lists].
+. to contribute back a change, raise a https://issues.apache.org/jira/browse/ISIS[JIRA] ticket, and ensure your commit message is in the form: `ISIS-nnnn: ...` so that changes can be tracked (more discussion on this point below). In any case, before you decide to start hacking with Apache Isis, it's always worth creating a ticket in JIRA and then have a discussion about it on the xref:docs:ROOT:support.adoc#[mailing lists].
 . Use github to raise a https://help.github.com/articles/using-pull-requests/[pull request] for your feature
 . An Apache Isis committer will review your change, and apply it if suitable.
 
@@ -205,7 +205,7 @@ If you have your own fork, you can now simply push the changes you've made local
 
 This will create a corresponding branch in the remote github repo. If you use `gitk --all`, you'll also see a `remotes/origin/ISIS-123-blobs` branch.
 
-Then, use github to raise a https://help.github.com/articles/using-pull-requests/[pull request]. Pull requests sent to the Apache GitHub repositories will forward a pull request e-mail to the xref:toc:ROOT:support.adoc#[dev mailing list]. You'll probably want to sign up to the dev mailing list first before issuing your first pull request (though that isn't mandatory).
+Then, use github to raise a https://help.github.com/articles/using-pull-requests/[pull request]. Pull requests sent to the Apache GitHub repositories will forward a pull request e-mail to the xref:docs:ROOT:support.adoc#[dev mailing list]. You'll probably want to sign up to the dev mailing list first before issuing your first pull request (though that isn't mandatory).
 
 The process to raise the pull request, broadly speaking:
 

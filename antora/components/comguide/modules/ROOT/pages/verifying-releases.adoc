@@ -20,7 +20,7 @@ This section describes some guidance on what a voter (members of the Apache Isis
 
 == Background
 
-Whenever a release manager announces a vote on a release (as per the xref:comguide:ROOT:release-process.adoc[release process]) on the xref:toc:ROOT:support.adoc#[dev mailing list], it is the responsibility of the project's PMC to cast their vote on the release.
+Whenever a release manager announces a vote on a release (as per the xref:comguide:ROOT:release-process.adoc[release process]) on the xref:docs:ROOT:support.adoc#[dev mailing list], it is the responsibility of the project's PMC to cast their vote on the release.
 Anyone else can also vote, but only members of the Apache Isis PMC's vote are binding.
 
 Per this http://www.apache.org/dev/release.html[ASF documentation], the legal requirements for an ASF release are:
@@ -110,7 +110,7 @@ Alternatively, you can xref:comguide:ROOT:verifying-releases.adoc#casting-a-vote
 
 == (Optional) Verifying binary artifacts
 
-You can verify the binary releases by configuring your local Maven install to point to the Maven staging repository (or repositories) and then using them, eg to run the xref:starters:helloworld:about.adoc[HelloWorld starter app] or the xref:starters:simpleapp:about.adoc[SimpleApp starter app] (adjust the parent version if required).
+You can verify the binary releases by configuring your local Maven install to point to the Maven staging repository (or repositories) and then using them, eg to run the xref:docs:starters:helloworld.adoc[HelloWorld starter app] or the xref:docs:starters:simpleapp.adoc[SimpleApp starter app] (adjust the parent version if required).
 
 Configuring your local Maven install amounts to updating the `~/.m2/settings.xml` file:
 

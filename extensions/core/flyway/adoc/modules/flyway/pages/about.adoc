@@ -61,7 +61,7 @@ If you want your tests to check your Flyway scripts beforehand, there is nothing
 
 One point to be aware of though is that the DDL syntax may vary between an in-memory database (such as H2) and a typical production database (such as PostgreSQL or SQL Server).
 Luckily, Spring Boot's Flyway integration allows different variants of scripts for different vendors to be stored, in `+db.migration.{vendor}+` package (where `+{vendor}+` is as defined by the https://github.com/spring-projects/spring-boot/blob/v2.2.3.RELEASE/spring-boot-project/spring-boot/src/main/java/org/springframework/boot/jdbc/DatabaseDriver.java[DatabaseDriver] class).
-The xref:starters:simpleapp:about.adoc[simpleapp starter app] also provides an example of this.
+The xref:docs:starters:simpleapp.adoc[simpleapp starter app] also provides an example of this.
 
 
 === Custom schemas

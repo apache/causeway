@@ -18,7 +18,7 @@ What this means is that the enhancer -- available as both a Maven plugin and as 
 
 If working from the Maven command line, JDO enhancement is done using the `datanucleus-maven-plugin`.
 
-Both the xref:starters:helloworld:about.adoc[HelloWorld] and xref:starters:simpleapp:about.adoc[SimpleApp] starter apps have this plugin pre-configured.
+Both the xref:docs:starters:helloworld.adoc[HelloWorld] and xref:docs:starters:simpleapp.adoc[SimpleApp] starter apps have this plugin pre-configured.
 
 
 
@@ -39,7 +39,7 @@ It's also a good idea to ensure that every domain module(s) containing entities 
 ----
 <1> change as required; typically is the name of the domain module.
 
-Again, the xref:starters:helloworld:about.adoc[HelloWorld] and xref:starters:simpleapp:about.adoc[Simpleapp] starter apps do this.
+Again, the xref:docs:starters:helloworld.adoc[HelloWorld] and xref:docs:starters:simpleapp.adoc[Simpleapp] starter apps do this.
 
 
 [WARNING]

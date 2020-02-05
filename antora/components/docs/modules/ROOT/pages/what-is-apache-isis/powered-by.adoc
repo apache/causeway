@@ -1,0 +1,25 @@
+= Powered By
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+
+
+// TODO: V2: need to update these, they are getting stale.
+
+
+Deciding whether to use a full stack framework such as Apache Isis means in large part determining to what extent the applications you need to develop align with the strengths and philosophy of the framework.
+This page catalogues a few notable applications that are powered by Apache Isis so you can help make that determination.
+
+[TIP]
+====
+If you have written an app in Apache Isis that you'd like to share, please mention it on the xref:docs:ROOT:support.adoc#[mailing list].
+====
+
+include::powered-by/estatio.adoc[leveloffset=+1]
+include::powered-by/gesconsultor-grc.adoc[leveloffset=+1]
+include::powered-by/contactapp.adoc[leveloffset=+1]
+include::powered-by/cqnz.adoc[leveloffset=+1]
+//include::powered-by/commapp.adoc[leveloffset=+1]
+include::powered-by/transport-planner.adoc[leveloffset=+1]
+
+
+
+

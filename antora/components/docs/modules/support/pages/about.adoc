@@ -1,0 +1,24 @@
+= Support & Releases
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+
+
+This page lists additional resources to assist the developer when building applications with the framework.
+
+
+== Support
+
+You can get help when writing your domain applications from:
+
+* *xref:docs:support:slack-channel.adoc[Slack]*
+* xref:docs:support:mailing-list.adoc[Mailing Lists]
+* link:https://stackoverflow.com/questions/tagged/isis[Stack Overflow]
+
+If you think you've found a bug or want to raise an enhancement request, go to:
+
+* link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[JIRA]
+
+Some other places that might be useful are:
+
+* link:https://cwiki.apache.org/confluence/display/ISIS/Index[ASF Wiki]
+* link:https://twitter.com/ApacheIsis[Twitter]
+

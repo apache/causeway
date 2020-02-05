@@ -9,7 +9,7 @@ On top of that, we usually:
 * use xref:testing:fixtures:about.adoc[fixture scripts] to set up the app's initial state
 * use the xref:refguide:applib-svc:application-layer-api/WrapperFactory.adoc[WrapperFactory] to simulate the UI.
 
-To explain further, let's walk through of the xref:starters:simpleapp:about.adoc[SimpleApp] starter app.
+To explain further, let's walk through of the xref:docs:starters:simpleapp.adoc[SimpleApp] starter app.
 
 
 == Bootstrapping
@@ -565,9 +565,8 @@ Apache Isis' integ test support is most easily configured through a dependency o
 ----
 <1> Normally `test`; usual Maven scoping rules apply.
 
-There is no need to specify the version if you inherit from from the xref:starters:parent-pom:about.adoc[starter app parent POM], then
-
-This will set up unit testing, integration testing and BDD specs support .
+This will set up integration testing support .
+There is no need to specify the version if you inherit from from the xref:docs:parent-pom:about.adoc[Parent POM].
 
 
 include::testing:ROOT:partial$surefire-configuration-caution.adoc[]

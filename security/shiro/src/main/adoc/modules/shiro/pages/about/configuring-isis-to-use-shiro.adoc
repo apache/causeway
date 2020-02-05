@@ -9,7 +9,7 @@ The Shiro security mechanism is an integration wih Apache Shiro that implements 
 
 [TIP]
 ====
-Both the xref:starters:helloworld:about.adoc[HelloWorld] and xref:starters:simpleapp:about.adoc[SimpleApp] starter apps are pre-configured to use Apache Shiro, so much of what follows may well have been set up already.
+Both the xref:docs:starters:helloworld.adoc[HelloWorld] and xref:docs:starters:simpleapp.adoc[SimpleApp] starter apps are pre-configured to use Apache Shiro, so much of what follows may well have been set up already.
 ====
 
 
@@ -17,7 +17,7 @@ Both the xref:starters:helloworld:about.adoc[HelloWorld] and xref:starters:simpl
 
 To tell Apache Isis to use Shiro when using an xref:refguide:applib-cm:rgcms.adoc#__rgcms_classes_AppManifest-bootstrapping_bootstrapping_AppManifestAbstract[`AppManifestAbstract.BUILDER`], simply specify the "authMechanism" as "shiro".
 
-For example, the xref:starters:helloworld:about.adoc[HelloWorld]  starter app bootstraps using:
+For example, the xref:docs:starters:helloworld.adoc[HelloWorld]  starter app bootstraps using:
 
 // TODO: v2: this is out of date.
 

@@ -328,9 +328,8 @@ Apache Isis' unit test support is most easily configured through a dependency on
 ----
 <1> Normally `test`; usual Maven scoping rules apply.
 
-There is no need to specify the version if you inherit from from the xref:starters:parent-pom:about.adoc[starter app parent POM], then
-
-This will set up unit testing, integration testing and BDD specs support .
+This will set up unit testing support.
+There is no need to specify the version if you inherit from from the xref:docs:parent-pom:about.adoc[Parent POM].
 
 
 

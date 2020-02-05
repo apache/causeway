@@ -43,7 +43,7 @@ If you don't need any of these (for example, you'll probably only want one secur
 
 Also, remember that adding the class onto the classpath does _not_ make that functionality available (Apache Isis does not currently leverage Spring Boot's link:https://docs.spring.io/spring-boot/docs/current/reference/html/using-spring-boot.html#using-boot-auto-configuration[auto configuration] capabilities).
 So, you must also add in the appropriate `IsisModuleXxx` to your application's top-level link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] (aka "app manifest").
-For example, see the xref:starters:simpleapp:about.adoc#appmanifest[AppManifest for the SimpleApp] starter app.
+For example, see the xref:docs:starters:simpleapp.adoc#appmanifest[AppManifest for the SimpleApp] starter app.
 
 
 == Testing and BDD Specs

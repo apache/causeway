@@ -1,2 +1,0 @@
-* xref:starters:helloworld:about.adoc[HelloWorld]
-

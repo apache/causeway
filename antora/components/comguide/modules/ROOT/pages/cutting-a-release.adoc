@@ -22,7 +22,7 @@ They should work on Linux and MacOS; for Windows, use mSysGit.
 
 == Obtain Consensus
 
-Before releasing the framework, ensure there is consensus on the xref:toc:ROOT:support.adoc#[dev mailing list] that this is the right time for a release.
+Before releasing the framework, ensure there is consensus on the xref:docs:ROOT:support.adoc#[dev mailing list] that this is the right time for a release.
 The discussion should include confirming the version number to be used, and to confirm content.
 
 These discussions should also confirm the version number of the module being released.

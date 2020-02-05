@@ -1,6 +1,0 @@
-name: toc
-title: " "
-version: master
-start_page: ROOT:about.adoc
-nav:
-- modules/ROOT/nav.adoc

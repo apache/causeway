@@ -12,7 +12,7 @@ The intent of an "interim" release is to allow a developer team to release their
 Since `-SNAPSHOT` changes on a day-to-day basis, the idea is to tag a particular revision and to release this, thereby providing stability/traceability for the application being developed.
 
 Whereas xref:comguide:ROOT:cutting-a-release.adoc.adoc[formal release]s and xref:comguide:ROOT:release-process-for-snapshots[snapshot release]s are public (released through the Maven repository maintained by Apache Software Foundation), interim releases are non-public and rely on infrastructure provided by a developer team.
-The tagged release resides __not__ in the xref:toc:ROOT:downloads.adoc#\__downloads_source_code[official Apache Isis git repository], but instead in a fork/clone maintained by the developer team.
+The tagged release resides __not__ in the xref:docs:ROOT:downloads.adoc#\__downloads_source_code[official Apache Isis git repository], but instead in a fork/clone maintained by the developer team.
 
 == Prerequisites
 

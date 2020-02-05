@@ -1,1 +1,0 @@
-include::toc:resources:partial$module-nav.adoc[]

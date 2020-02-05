@@ -21,7 +21,7 @@ https://www.jetbrains.com/idea/download/[Download] latest version of IntelliJ Co
 
 In IntelliJ a project can contain multiple modules; these need not be physically located together.
 
-Download either the xref:starters:helloworld:about.adoc[HelloWorld] or xref:starters:simpleapp:about.adoc[SimpleApp] starter app to your filesystem.
+Download either the xref:docs:starters:helloworld.adoc[HelloWorld] or xref:docs:starters:simpleapp.adoc[SimpleApp] starter app to your filesystem.
 
 From the welcome screen, select "import project":
 
@@ -316,9 +316,13 @@ Recommended are:
 //+
 //More on this below.
 
-* link:https://github.com/asciidoctor/asciidoctor-intellij-plugin[AsciiDoctor] plugin
+* link:https://plugins.jetbrains.com/plugin/7391-asciidoc[AsciiDoctor] plugin
 +
-Extremely useful if you are doing any authoring of documents.
+Extremely useful if you are doing any authoring of documents (plugin's git repo is link:https://github.com/asciidoctor/asciidoctor-intellij-plugin[here])
+
+* link:https://plugins.jetbrains.com/plugin/6317-lombok[Lombok] plugin
++
+If you plan to use link:https://projectlombok.org[Project Lombok] to reduce boilerplate.
 
 //Some others you might like to explore are:
 //

@@ -1,9 +1,0 @@
-* Starter Apps
-
-** xref:starters:helloworld:about.adoc[HelloWorld]
-** xref:starters:simpleapp:about.adoc[SimpleApp]
-
-** xref:starters:parent-pom:about.adoc[Parent POM]
-** xref:starters:mavendeps:about.adoc[Aggregator POMs]
-
-

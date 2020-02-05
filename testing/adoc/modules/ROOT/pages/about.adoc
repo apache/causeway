@@ -20,7 +20,7 @@ Dependencies of that object are mocked out.  These are written by a developer an
 These are tests that represent the acceptance criteria of some business story; their intent should make sense to the domain expert (even if the domain expert is "non-technical")
 +
 For larger "modular monoliths", integration tests can also run against a particular vertical slice of the application.
-The xref:starters:simpleapp:about.adoc[SimpleApp] starter app demonstrates this technique.
+The xref:docs:starters:simpleapp.adoc[SimpleApp] starter app demonstrates this technique.
 
 To put it another way:
 

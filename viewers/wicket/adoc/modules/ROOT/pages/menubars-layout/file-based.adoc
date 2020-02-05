@@ -37,7 +37,7 @@ image::/menubars/020-download.png[width="400px",link="{imagesdir}/menubars/020-d
 The "Default" layout is that currently in use, while the "Fallback" layout is that provided only from the annotations.
 Initially these are identical.
 
-For example, here's a fragment of that provided by the xref:starters:simpleapp:about.adoc[SimpleApp] starter app:
+For example, here's a fragment of that provided by the xref:docs:starters:simpleapp.adoc[SimpleApp] starter app:
 
 [source,xml]
 ----

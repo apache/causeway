@@ -1,1 +1,1 @@
-** xref:toc:demo:about.adoc[Demo App]
+** xref:docs:demo:about.adoc[Demo App]

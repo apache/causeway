@@ -1,14 +1,14 @@
 site:
   title: Apache Isis
   url: https://isis.apache.org/
-  start_page: toc:ROOT:about.adoc
+  start_page: docs:ROOT:about.adoc
 
 content:
   sources:
 
 # antora
     - url: .
-      start_path: antora/components/toc # toc
+      start_path: antora/components/docs # docs
       branches: HEAD
     - url: .
       start_path: antora/components/setupguide # setupguide

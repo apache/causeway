@@ -1,0 +1,38 @@
+= With thanks
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+
+
+
+
+In addition to the http://www.apache.org/foundation/thanks.html[support given to Apache Foundation as a whole], we in the Apache Isis community would also like to extend our thanks to:
+
+[cols="1a,2a"]
+|===
+
+
+|image::more-thanks/ecp.png[link="http://www.eurocommercialproperties.com"]
+|Eurocommercial Properties, for sponsoring the development of Apache Isis in support of the link:./powered-by.html[Estatio] estate management application.  Our heart-felt thanks.
+
+
+|image::more-thanks/s101_170.png[link="http://structure101.com"]
+|Headway Software, for supplying an open source license to Structure&nbsp;101.
+
+
+|image::more-thanks/ej-technologies.png[link="http://www.ej-technologies.com/products/jprofiler/overview.html"]
+|EJ Technologies, for supplying an open source license to link:http://www.ej-technologies.com/products/jprofiler/overview.html[JProfiler]
+
+
+|image::more-thanks/icons8-logo.png[link="http://icons8.com"]
+|Icons8, for selected icons on this website and in the xref:docs:starters:helloworld.adoc[HelloWorld] and xref:docs:starters:simpleapp.adoc[SimpleApp] starter apps
+
+|===
+
+
+
+Also to:
+
+* link:https://github.com/mojavelinux[Dan Allen] for his fantastic work on link:https://asciidoctor.org[Asciidoctor] and link:https://antora.org[Antora]
+
+* link:https://github.com/krasa/MavenHelper[Vojtech Krasa] for his super https://github.com/krasa/MavenHelper[MavenHelper] plugin for IntelliJ
+
+and to the many others who contribute their free time and passion to open source.

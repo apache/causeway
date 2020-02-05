@@ -1,0 +1,4 @@
+* Resources
+
+** xref:docs:resources:cheatsheet.adoc[Cheat Sheet]
+** xref:docs:resources:icons.adoc[Icons]
