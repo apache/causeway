@@ -51,7 +51,7 @@ object Utils {
         var output = ""
         val list: List<String> = input.split("/")
         //split string by "/" and remove parts longer than 40chars
-        for (s in list) {
+        list.forEach { s ->
             output += "/"
             output += if (s.length < 40) {
                 s
