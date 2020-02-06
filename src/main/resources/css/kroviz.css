@@ -108,5 +108,15 @@ textarea {
 }
 
 .button-bar {
+    display: flex;
     align-self: baseline !important;
+}
+
+@font-face {
+    font-family: Chicago;
+    src: url('/fonts/ChicagoFLF.ttf');
+}
+
+div {
+    font-family: Chicago, sans-serif;
 }
