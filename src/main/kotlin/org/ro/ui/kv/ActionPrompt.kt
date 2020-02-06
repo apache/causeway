@@ -5,8 +5,8 @@ import org.ro.to.Action
 import org.ro.to.Link
 import org.ro.to.Parameter
 import org.ro.ui.Command
-import org.ro.ui.Point
 import org.ro.ui.FormItem
+import org.ro.ui.Point
 import pl.treksoft.kvision.core.StringPair
 import pl.treksoft.kvision.form.select.SimpleSelect
 import pl.treksoft.kvision.form.text.TextArea
@@ -66,7 +66,7 @@ class ActionPrompt(val action: Action) : Command {
         val link = action.getInvokeLink()!!
         var value: String? = null
         var key: String? = null
-        val formPanel = form.panel
+        val formPanel = form.formPanel
         val kids = formPanel!!.getChildren()
         //iterate over FormItems (0,1) but not Buttons(2,3)
         for (i in kids) {

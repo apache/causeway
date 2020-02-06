@@ -36,7 +36,7 @@ class LoginPrompt : Command {
     private fun extractUserInput() {
         //TODO function has a side effect, ie. changes variable values
         var key: String?
-        val formPanel = form.panel
+        val formPanel = form.formPanel
         val kids = formPanel!!.getChildren()
         //iterate over FormItems (0,1,2) but not Buttons(3,4)
         for (i in kids) {

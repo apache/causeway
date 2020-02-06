@@ -6,12 +6,14 @@ import org.ro.ui.IconManager
 import org.ro.ui.Point
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
-import pl.treksoft.kvision.core.VerticalAlign
 import pl.treksoft.kvision.core.Widget
 import pl.treksoft.kvision.form.FormPanel
 import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.ButtonStyle
+import pl.treksoft.kvision.panel.FlexJustify
 import pl.treksoft.kvision.panel.HPanel
+import pl.treksoft.kvision.panel.vPanel
+import pl.treksoft.kvision.utils.perc
 import pl.treksoft.kvision.utils.px
 import pl.treksoft.kvision.window.Window
 
@@ -37,23 +39,30 @@ class RoDialog(
                 close()
             }
 
-    var panel: FormPanel<String>?
+    var formPanel: FormPanel<String>? = null
 
     init {
         icon = IconManager.find(caption)
         isDraggable = true
         isResizable = true
         closeButton = true
-        verticalAlign = VerticalAlign.BOTTOM
-        panel = FormPanelFactory(items).panel
-        panel?.let { add(it) }
 
-        val buttonBar = HPanel(spacing = 10) {
-            margin = 10.px
+        vPanel(justify = FlexJustify.SPACEBETWEEN) {
+            height = 100.perc
+            formPanel = FormPanelFactory(items).panel
+            formPanel?.height = 100.perc
+            formPanel?.let {
+                add(it, grow = 2)
+            }
+
+            val buttonBar = HPanel(spacing = 10) {
+                id = "button-bar"
+                margin = 10.px
+            }
+            buttonBar.add(okButton)
+            buttonBar.add(cancelButton)
+            add(buttonBar)
         }
-        buttonBar.add(okButton)
-        buttonBar.add(cancelButton)
-        add(buttonBar)
     }
 
     private fun execute() {
@@ -75,7 +84,7 @@ class RoDialog(
         super.remove(this)
         clearParent()
         dispose()
-        panel = null
+//        panel = null
     }
 
 }

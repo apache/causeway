@@ -103,4 +103,10 @@ pre.highlight {
     border-right: 1px solid #ecf0f1;
 }
 
-textarea { height: auto; }
+textarea {
+    height: calc(100% - 30px) !important;
+}
+
+.button-bar {
+    align-self: baseline !important;
+}

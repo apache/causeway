@@ -20,6 +20,7 @@ import pl.treksoft.kvision.html.Div
 import pl.treksoft.kvision.html.header
 import pl.treksoft.kvision.panel.SimplePanel
 import pl.treksoft.kvision.panel.VPanel
+import pl.treksoft.kvision.utils.perc
 import pl.treksoft.kvision.utils.px
 
 class FormPanelFactory(items: List<FormItem>) : VPanel() {
@@ -103,8 +104,8 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
     }
 
     private fun createTextArea(fi: FormItem): TextArea {
-        val rowCnt = maxOf(3, fi.size)
-        val item = TextArea(label = fi.label, value = fi.content as String, rows = rowCnt)
+//       val rowCnt = maxOf(3, fi.size)
+        val item = TextArea(label = fi.label, value = fi.content as String)
         item.readonly = fi.readOnly
         item.onEvent {
             change = {
@@ -112,6 +113,7 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
                 it.stopPropagation()
             }
         }
+        item.height = 100.perc
         return item
     }
 
