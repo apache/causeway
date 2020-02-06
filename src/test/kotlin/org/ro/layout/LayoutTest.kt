@@ -6,6 +6,7 @@ import org.ro.handler.LayoutHandler
 import org.ro.snapshots.demo2_0_0.DEMO_OBJECT_LAYOUT
 import org.ro.snapshots.demo2_0_0.DEMO_TAB_OBJECT_LAYOUT
 import org.ro.snapshots.demo2_0_0.DEMO_TEXT_LAYOUT
+import org.ro.snapshots.demo2_0_0.DEMO_TOOLTIP_OBJECT_LAYOUT
 import org.ro.snapshots.simpleapp1_16_0.FR_OBJECT_LAYOUT
 import org.ro.snapshots.simpleapp1_16_0.SO_OBJECT_LAYOUT
 import kotlin.test.Test
@@ -48,12 +49,12 @@ class LayoutTest : IntegrationTest() {
             val fslList = clBody.fieldSet
             assertEquals(2, fslList.size) //10
             // Editable
-            val fslEditable =  fslList[0]
+            val fslEditable = fslList[0]
             assertEquals("Editable", fslEditable.name)
             val editableProperties = fslEditable.property
             assertEquals(2, editableProperties.size) //11
             // Readonly
-            val fslReadonly =  fslList[1]
+            val fslReadonly = fslList[1]
             assertEquals("Readonly", fslReadonly.name) //12
             val readonlyProperties = fslReadonly.property
             assertEquals(2, readonlyProperties.size) //13
@@ -65,7 +66,7 @@ class LayoutTest : IntegrationTest() {
             assertEquals(6, descClBody.span as Int)  //15
             val descFslList = descClBody.fieldSet
             assertEquals(1, descFslList.size) //16
-            val fslDescription =  descFslList[0]
+            val fslDescription = descFslList[0]
             assertEquals("Description", fslDescription.name) //17
             val descriptionProperties = fslDescription.property
             assertEquals(1, descriptionProperties.size) //18
@@ -73,67 +74,71 @@ class LayoutTest : IntegrationTest() {
     }
 
     @Test
+    fun testDemoToolTipObjectLayout() {
+        //given
+        val jsonStr = DEMO_TOOLTIP_OBJECT_LAYOUT.str
+        //when
+        val lo = LayoutHandler().parse(jsonStr) as Layout
+        val fieldSet = lo.properties
+        // then
+        assertEquals(1, fieldSet.size)    //1
+        assertEquals("text1", fieldSet[0].id)  //2
+    }
+
+    @Test
     fun testDemoTabObjectLayout() {
-        if (isAppAvailable()) {
-            //given
-            val jsonStr = DEMO_TAB_OBJECT_LAYOUT.str
-            //when
-            val lo = LayoutHandler().parse(jsonStr) as Layout
-            val fieldSet = lo.properties
-            // then
-            assertEquals(1, fieldSet.size)    //1
-            assertEquals("field1", fieldSet[0].id)  //2
-        }
+        //given
+        val jsonStr = DEMO_TAB_OBJECT_LAYOUT.str
+        //when
+        val lo = LayoutHandler().parse(jsonStr) as Layout
+        val fieldSet = lo.properties
+        // then
+        assertEquals(1, fieldSet.size)    //1
+        assertEquals("field1", fieldSet[0].id)  //2
     }
 
     @Test
     fun testDemoObjectLayout() {
-        if (isAppAvailable()) {
-            //given
-            val jsonStr = DEMO_OBJECT_LAYOUT.str
-            //when
-            val lo = LayoutHandler().parse(jsonStr) as Layout
-            val fieldSet = lo.properties
-            // then
-            assertEquals(2, fieldSet.size)    //1
-            assertEquals("string", fieldSet[0].id)  //2
-            assertEquals("stringMultiline", fieldSet[1].id)  //3
-            assertEquals(2, lo.row.size) //4
-        }
+        //given
+        val jsonStr = DEMO_OBJECT_LAYOUT.str
+        //when
+        val lo = LayoutHandler().parse(jsonStr) as Layout
+        val fieldSet = lo.properties
+        // then
+        assertEquals(2, fieldSet.size)    //1
+        assertEquals("string", fieldSet[0].id)  //2
+        assertEquals("stringMultiline", fieldSet[1].id)  //3
+        assertEquals(2, lo.row.size) //4
     }
 
     @Test
     fun testParseSimpleObjectLayout() {
-        if (isAppAvailable()) {
-            //given
-            val jsonStr = SO_OBJECT_LAYOUT.str
-            //when
-            val lo = LayoutHandler().parse(jsonStr) as Layout
-            val properties = lo.properties
-            // then
-            assertEquals(2, properties.size)    //1
-            assertEquals("name", properties[0].id)  //2
-            assertEquals("notes", properties[1].id)  //3
-            assertEquals(2, lo.row.size) //4
-        }
+        //given
+        val jsonStr = SO_OBJECT_LAYOUT.str
+        //when
+        val lo = LayoutHandler().parse(jsonStr) as Layout
+        val properties = lo.properties
+        // then
+        assertEquals(2, properties.size)    //1
+        assertEquals("name", properties[0].id)  //2
+        assertEquals("notes", properties[1].id)  //3
+        assertEquals(2, lo.row.size) //4
     }
 
     @Test
     fun testParseFixtureScriptObjectLayout() {
-        if (isAppAvailable()) {
-            // given
-            val jsonStr = FR_OBJECT_LAYOUT.str
-            val lo = LayoutHandler().parse(jsonStr) as Layout
-            // when
-            val properties = lo.properties
-            // then
-            assertNotNull(properties)  // (1)
-            assertEquals(4, properties.size)
-            assertEquals("className", properties[0].id)
-            assertEquals("fixtureScriptClassName", properties[1].id)
-            assertEquals("key", properties[2].id)
-            assertEquals("object", properties[3].id)
-        }
+        // given
+        val jsonStr = FR_OBJECT_LAYOUT.str
+        val lo = LayoutHandler().parse(jsonStr) as Layout
+        // when
+        val properties = lo.properties
+        // then
+        assertNotNull(properties)  // (1)
+        assertEquals(4, properties.size)
+        assertEquals("className", properties[0].id)
+        assertEquals("fixtureScriptClassName", properties[1].id)
+        assertEquals("key", properties[2].id)
+        assertEquals("object", properties[3].id)
     }
 
 }
