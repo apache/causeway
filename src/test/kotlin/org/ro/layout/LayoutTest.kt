@@ -4,6 +4,7 @@ import kotlinx.serialization.UnstableDefault
 import org.ro.IntegrationTest
 import org.ro.handler.LayoutHandler
 import org.ro.snapshots.demo2_0_0.DEMO_OBJECT_LAYOUT
+import org.ro.snapshots.demo2_0_0.DEMO_TAB_OBJECT_LAYOUT
 import org.ro.snapshots.demo2_0_0.DEMO_TEXT_LAYOUT
 import org.ro.snapshots.simpleapp1_16_0.FR_OBJECT_LAYOUT
 import org.ro.snapshots.simpleapp1_16_0.SO_OBJECT_LAYOUT
@@ -68,6 +69,20 @@ class LayoutTest : IntegrationTest() {
             assertEquals("Description", fslDescription.name) //17
             val descriptionProperties = fslDescription.property
             assertEquals(1, descriptionProperties.size) //18
+        }
+    }
+
+    @Test
+    fun testDemoTabObjectLayout() {
+        if (isAppAvailable()) {
+            //given
+            val jsonStr = DEMO_TAB_OBJECT_LAYOUT.str
+            //when
+            val lo = LayoutHandler().parse(jsonStr) as Layout
+            val fieldSet = lo.properties
+            // then
+            assertEquals(1, fieldSet.size)    //1
+            assertEquals("field1", fieldSet[0].id)  //2
         }
     }
 

@@ -7,6 +7,7 @@ import org.ro.to.bs3.TabGroup
 data class TabGroupLayout(val cssClass: String? = "",
                           val metadataError: String? = "",
                           val tab: MutableList<TabLayout> = mutableListOf<TabLayout>(),
+                          val collapseIfOne: Boolean? = false,
                           val unreferencedCollections: Boolean? = false
 ) {
     constructor(tabGroup: TabGroup) : this() {
