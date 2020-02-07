@@ -38,8 +38,11 @@ data class Layout(val cssClass: String? = null,
             }
         }
         colLyt = colsLyt.col!!
-        val fsLyt = colLyt.fieldSet.first()
-        properties = fsLyt.property
+        val fsList = colLyt.fieldSet
+        if (fsList.isNotEmpty()) {
+            val fsLyt = fsList.first()
+            properties = fsLyt.property
+        }
     }
 
 }

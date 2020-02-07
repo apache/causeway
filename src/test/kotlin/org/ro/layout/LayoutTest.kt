@@ -3,10 +3,7 @@ package org.ro.layout
 import kotlinx.serialization.UnstableDefault
 import org.ro.IntegrationTest
 import org.ro.handler.LayoutHandler
-import org.ro.snapshots.demo2_0_0.DEMO_OBJECT_LAYOUT
-import org.ro.snapshots.demo2_0_0.DEMO_TAB_OBJECT_LAYOUT
-import org.ro.snapshots.demo2_0_0.DEMO_TEXT_LAYOUT
-import org.ro.snapshots.demo2_0_0.DEMO_TOOLTIP_OBJECT_LAYOUT
+import org.ro.snapshots.demo2_0_0.*
 import org.ro.snapshots.simpleapp1_16_0.FR_OBJECT_LAYOUT
 import org.ro.snapshots.simpleapp1_16_0.SO_OBJECT_LAYOUT
 import kotlin.test.Test
@@ -83,6 +80,25 @@ class LayoutTest : IntegrationTest() {
         // then
         assertEquals(1, fieldSet.size)    //1
         assertEquals("text1", fieldSet[0].id)  //2
+    }
+
+    @Test
+    fun testDemoAssociatedActionObjectLayout() {
+        console.log("[LayoutTest.testDemoAssociatedActionObjectLayout]")
+        //given
+        val jsonStr = DEMO_ASSOCIATED_ACTION_OBJECT_LAYOUT.str
+        //when
+        val lo = LayoutHandler().parse(jsonStr) as Layout
+        val row0 = lo.row[0]
+        console.log(row0)
+        val cols00 = row0.cols[0]
+        console.log(cols00)
+        val col000 = cols00.col
+        console.log(col000)
+        val action = col000!!.action
+        // then
+        assertEquals(5, action.size)    //1
+        //assertEquals("field1", fieldSet[0].id)  //2
     }
 
     @Test

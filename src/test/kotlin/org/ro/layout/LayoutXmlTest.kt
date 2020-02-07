@@ -1,7 +1,7 @@
 package org.ro.layout
 
 import org.ro.snapshots.simpleapp1_16_0.SO_LAYOUT_XML
-import org.ro.to.bs3.XmlHelper
+import org.ro.to.XmlHelper
 import org.ro.to.bs3.Grid
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -11,7 +11,6 @@ class LayoutXmlTest {
 
     @Test
     fun testParseXmlLayout() {
-        console.log("[LayoutXmlTest.testParseXmlLayout]")
         //given
         val xmlStr = SO_LAYOUT_XML.str
         //when

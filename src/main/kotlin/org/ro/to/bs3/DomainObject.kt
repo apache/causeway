@@ -1,6 +1,6 @@
 package org.ro.to.bs3
 
-import org.ro.to.bs3.XmlHelper
+import org.ro.to.XmlHelper
 import org.w3c.dom.Node
 
 class DomainObject(node: Node) {

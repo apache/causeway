@@ -7,6 +7,7 @@ import org.ro.to.Link
 data class CollectionLayout(var named: String? = "",
                             var describedAs: String? = "",
                             var sortedBy: String? = "",
+                            var action: MutableList<ActionLayout> = mutableListOf<ActionLayout>(),
                             var metadataError: String? = "",
                             var link: Link? = null,
                             var id: String? = "",
