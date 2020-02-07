@@ -1,4 +1,10 @@
-{
+package org.ro.snapshots.demo2_0_0
+
+import org.ro.snapshots.Response
+
+object ISIS_SECURITY_ME_SERVICE : Response() {
+    override val url = "http://localhost:8080/restful/objects/isissecurity.MeService/1/actions/me/invoke"
+    override val str = """{
     "links": [
         {
             "rel": "self",
@@ -420,4 +426,6 @@
             ]
         }
     }
+}
+"""
 }
