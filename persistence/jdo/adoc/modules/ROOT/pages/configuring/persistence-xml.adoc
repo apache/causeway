@@ -27,7 +27,7 @@ Normally all one needs to do is to change the `persistence-unit` name.
 [TIP]
 ====
 If you use Eclipse IDE on Windows then
-xref:setupguide:ROOT:eclipse.adoc#workaround-for-path-limits-the-dn-plugin-to-use-the-persistence-xml[note the importance] of the `persistence.xml` file to make DataNucleus enhancer work correctly.
+xref:setupguide:eclipse:about.adoc#workaround-for-path-limits-the-dn-plugin-to-use-the-persistence-xml[note the importance] of the `persistence.xml` file to make DataNucleus enhancer work correctly.
 ====
 
 

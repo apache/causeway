@@ -813,9 +813,9 @@ This feature is primarily just to help track any memory leakage issues that migh
 |`isis.viewer.wicket.` +
 `liveReloadUrl`
 | URL
-|Specifies the URL if xref:setupguide:ROOT:intellij.adoc#using-gradle-for-livereload[live reload] is set up, eg: +
-
+|Specifies the URL if live reload is set up, eg: +
 `http://localhost:35729/livereload.js?snipver=1`
+// xref:setupguide:intellij:hints-and-tips.adoc#using-gradle-for-livereload[live reload] is set up, eg: +
 
 |`isis.viewer.wicket.` +
 `stripWicketTags`

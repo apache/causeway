@@ -1,0 +1,196 @@
+= Faster Turnaround Times
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+This section describes how to install and setup JetBrains' IntelliJ IDEA, then how to import an application into IntelliJ and run it.
+
+
+In this section are several options that will reduce the time it takes between making a source code edit and seeing the results in the running app. code/build/deploy/review feedback loop.
+
+== Using Grade to compile/enhance
+
+Running an Apache Isis application requires that the DataNucleus enhancer runs on the compiled bytecode.
+As described xref:setupguide:intellij:about.adoc#running-the-app[above], the recommended way to do this with IntelliJ is to use a Run configuration that runs the enhancer goal prior to launch.
+
+Alternative, you can use the following `build.gradle` script in your `dom` module:
+
+[source,groovy]
+.`build.gradle`
+----
+apply plugin: 'java'
+apply plugin: 'tangram.tools'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+version = (new XmlParser()).parse('pom.xml').parent.version.text()
+buildscript {
+  repositories {
+    maven { url "http://oss.jfrog.org/artifactory/oss-snapshot-local" }
+    jcenter()
+  }
+  dependencies {
+    classpath 'tangram:gradle-plugin:1.1.2'
+  }
+}
+repositories {
+    mavenLocal()
+    maven { url "http://oss.jfrog.org/artifactory/oss-snapshot-local" }
+    jcenter()
+}
+dependencies {
+    compile group: 'org.apache.isis.core', name: 'isis-core-applib', version: version
+}
+task copyClasses << {
+    copy {
+        from 'build/classes/main'
+        into 'target/classes'
+    }
+}
+----
+
+The script is intended to be in the background as a daemon while editing/developing; whenever a change is made to any source code, gradle will automatically compile _and_ enhance the code.
+In this way it eliminates the need to start up Maven and run the enhancer goal.
+
+To use, you must disable the IntelliJ's automatic building of the 'dom' project.
+This is done using:
+`File > Settings > Build, Execution, Deployment > Compiler > Excludes`, and then exclude the `.../dom/src/main/java`
+directory:
+
+image::070-advanced/002-compiler-exclude.png[width="800px",link="{imagesdir}/070-advanced/002-compiler-exclude.png"]
+
+
+The script can be run in the background using:
+
+[source,bash]
+----
+gradle -t --offline &
+----
+
+from the command line (in the `dom` module).
+
+image::070-advanced/004-gradle-output.png[width="600px",link="{imagesdir}/070-advanced/004-gradle-output.png"]
+
+== Using Gradle for liveReload
+
+Similarly, gradle can be run to reduce the turn-around time when tweaking the UI (defined by the
+xref:vw:ROOT:layout.adoc#file-based[`*.layout.xml`] file for each domain class), when the app is running.
+
+The framework will automatically notice any changes to `.layout.xml` files, but these are read from the classpath (the `target/classes` directory), not the source path.
+With IntelliJ these can be copied over manually by invoking `Run > Reload Changed Classes`.
+Once the browser is refreshed, the new layout will be rendered.
+
+[NOTE]
+====
+We've occasionally noticed that this interferes with Wicket's own javascript - switching tabs becomes unresponsive.
+The work-around is just to reload the page.
+====
+
+To reduce the turn-around time there are therefore two steps to be automated:
+
+* the copying of the `.layout.xml` files over to the `target/classes` directory
+* the triggering of a page refresh by the browser.
+
+The `layouts.gradle` script takes care of the first of these; whenever a change is made to any `.layout.xml` file, gradle will automatically copy over the file to the `target/classes` directory:
+
+[source,groovy]
+.`layouts.gradle`
+----
+defaultTasks 'copyLayouts'
+task copyLayouts(type:Copy) {
+    from 'src/main/java'
+    into 'target/classes'
+    include '**/*.layout.xml'
+}
+----
+
+Similarly, the `liveReload.gradle` script takes care of the browser refresh:
+
+[source,groovy]
+.`liveReload.gradle`
+----
+defaultTasks 'liveReload'
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.kordamp.gradle:livereload-gradle-plugin:0.2.1'
+    }
+}
+apply plugin: 'org.kordamp.gradle.livereload'
+liveReload {
+    docRoot new File('target/classes').canonicalPath
+}
+----
+
+These scripts can be run together using:
+
+[source,bash]
+----
+gradle -t --offline -b layouts.gradle &
+gradle -t --offline -b liveReload.gradle &
+----
+
+from the command line (in the `dom` module):
+
+
+image::070-advanced/005-gradle-output.png[width="600px",link="{imagesdir}/070-advanced/005-gradle-output.png"]
+
+
+Live reload also requires that the `isis.viewer.wicket.liveReloadUrl` configuration property is set appropriately:
+
+[source,ini]
+.`viewer_wicket.properties`
+----
+isis.viewer.wicket.liveReloadUrl=http://localhost:35729/livereload.js?snipver=1
+----
+
+You can confirm the script is loaded correctly using the web browser's development tools, eg:
+
+
+image::070-advanced/006-livereload-js.png[width="800px",link="{imagesdir}/070-advanced/006-livereload-js.png"]
+
+== Setting up DCEVM
+
+link:http://github.com/dcevm/dcevm[DCEVM] enhances the JVM with true hot-swap adding/removing of methods as well as more reliable hot swapping of the implementation of existing methods.
+
+In the context of Apache Isis, this is very useful for contributed actions and mixins and also view models; you should then be able to write these actions and have them be picked up without restarting the application.
+
+Changing persisting domain entities is more problematic, for two reasons: the JDO/DataNucleus enhancer needs to run on domain entities, and also at runtime JDO/DataNucleus would need to rebuild its own metamodel.
+You may find that adding actions will work, but adding new properties or collections is much less likely to.
+
+To set up DCEVM, download the appropriate JAR from the link:https://dcevm.github.io/[github page], and run the installer.
+For example:
+
+[source,bash]
+----
+java -jar DCEVM-light-8u51-installer.jar
+----
+
+[TIP]
+====
+Be sure to run with appropriate privileges to be able to write to the installation directories of the JDK. If running on Windows, that means running as `Administrator`.
+====
+
+After a few seconds this will display a dialog listing all installations of JDK that have been found:
+
+image::070-advanced/010-dcevm-list-of-found-jdk-installations.png[width="600px",link="{imagesdir}/070-advanced/010-dcevm-list-of-found-jdk-installations.png"]
+
+
+Select the corresponding installation, and select `Replace by DCEVM`.
+
+image::070-advanced/020-dcevm-once-installed.png[width="600px",link="{imagesdir}/070-advanced/020-dcevm-once-installed.png"]
+
+
+In IntelliJ, register the JDK in `File > Project Structure` dialog:
+
+image::070-advanced/030-dcevm-intellij-project-structure.png[width="600px",link="{imagesdir}/070-advanced/030-dcevm-intellij-project-structure.png"]
+
+Finally, in the run configuration, select the patched JDK:
+
+image::070-advanced/040-dcevm-run-configuration.png[width="600px",link="{imagesdir}/070-advanced/040-dcevm-run-configuration.png"]
+
+== Setting up JRebel
+
+See the repo for the (non-ASF) link:https://github.com/isisaddons/isis-jrebel-plugin[Isis JRebel] plugin.
+
+Note that JRebel is a commercial product, requiring a license.
+At the time of writing there is also currently a non-commercial free license (though note this comes with some usage conditions).
+

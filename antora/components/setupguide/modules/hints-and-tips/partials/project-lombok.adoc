@@ -1,0 +1,42 @@
+= Project Lombok
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+
+link:https://projectlombok.org/[Project Lombok] is an open source project to reduce the amount of boilerplate in
+your code.
+
+For example, rather than write:
+
+[source,java]
+----
+private String name;
+public String getName() {
+    return name;
+}
+public void setName(String name) {
+    this.name = name;
+}
+----
+
+you can instead write simply:
+
+[source,java]
+----
+@Getter @Setter
+private String name;
+----
+
+Under the covers it is implemented as an annotation processor; it basically hooks into the Java compiler
+so that it can emit additional bytecode (eg for the getter and setter).
+See xref:setupguide:intellij:about.adoc#compiler-settings[here] for details of setting up in IntelliJ (Eclipse has very similar support).
+Apache Isis supports link:https://projectlombok.org/[Project Lombok], in that the annotations that would normally be placed on the getter (namely xref:refguide:applib-ant:Property.adoc[`Property`], xref:refguide:applib-ant:PropertyLayout.adoc[`@PropertyLayout`], xref:refguide:applib-ant:Collection.adoc[`@Collection`], xref:refguide:applib-ant:CollectionLayout.adoc[`@CollectionLayout`] and xref:refguide:applib-ant:MemberOrder.adoc[`@MemberOrder`]) can be placed on the field instead.
+
+
+There are plugins for Lombok for maven; it's just a matter of adding the required dependency.
+To compile the code within your IDE (eg so that its compiler "knows" that there is, actually, a getter and setter) require an Lombok plugin appropriate to that IDE.
+See the link:https://projectlombok.org/download.html[Lombok download page] for more information.
+
+
+

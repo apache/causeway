@@ -10,7 +10,9 @@ content:
     - url: .
       start_path: antora/components/docs # docs
       branches: HEAD
-
+    - url: .
+      start_path: antora/redirects/guides # docs
+      branches: HEAD
 
 # core
     - url: .
@@ -40,8 +42,22 @@ content:
 
 # examples
     - url: .
+      start_path: examples/demo/src/main/adoc # docs
+      branches: HEAD
+    - url: .
       start_path: examples/smoketests/src/main/adoc # core
       branches: HEAD
+
+# mavendeps
+    - url: .
+      start_path: mavendeps/adoc # docs
+      branches: HEAD
+
+# starters
+    - url: .
+      start_path: starters/adoc # docs
+      branches: HEAD
+
 
 ui:
   bundle:

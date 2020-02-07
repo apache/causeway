@@ -50,7 +50,7 @@ _How to import an Apache Isis maven-based application into Eclipse and configure
 
 NB: when configuring DataNucleus for the *dom* project, make sure you are in the 'Java perspective', not the 'Java EE perspective'). +
 
-Learn more xref:setupguide:ROOT:eclipse.adoc[here]
+Learn more xref:setupguide:eclipse:about.adoc[here]
 
 |video::RgcYfjQ8yJA[youtube,width="420px",height="315px"]
 
@@ -60,7 +60,7 @@ Learn more xref:setupguide:ROOT:eclipse.adoc[here]
 
 _How to import an Apache Isis maven-based application into IntelliJ and run the app._ +
 
-Learn more xref:setupguide:ROOT:intellij.adoc[here]
+Learn more xref:setupguide:intellij:about.adoc[here]
 
 |video::lwKsyTbTSnA[youtube,width="420px",height="315px"]
 

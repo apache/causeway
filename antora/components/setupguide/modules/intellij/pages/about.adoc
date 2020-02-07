@@ -1,0 +1,189 @@
+= IntelliJ IDEA
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+This section describes how to install and setup JetBrains' IntelliJ IDEA, then how to import an application into IntelliJ and run it.
+
+NOTE: This material does not constitute an endorsement; JetBrains is not affiliated to Apache Software Foundation in any way.
+JetBrains does however provide complimentary copies of the IntelliJ IDE to Apache committers.
+
+
+== Installing and Importing
+
+This section covers installation and setup.
+These notes/screenshots were prepared using IntelliJ IDEA Community Edition 2019.3, but is believed to be compatible with more recent versions/other editions of the IDE.
+
+=== Download and Install
+
+https://www.jetbrains.com/idea/download/[Download] latest version of IntelliJ Community Edition, and install.
+
+
+=== Import Project
+
+In IntelliJ a project can contain multiple modules; these need not be physically located together.
+
+Download either the xref:docs:starters:helloworld.adoc[HelloWorld] or xref:docs:starters:simpleapp.adoc[SimpleApp] starter app to your filesystem.
+
+From the welcome screen, select "import project":
+
+image::015-import-project/010-welcome.png[width="400px",link="{imagesdir}/015-import-project/010-welcome.png"]
+
+Navigate to the top-level pom.xml of the starter app:
+
+image::015-import-project/020-import-pom.png[width="300px",link="{imagesdir}/015-import-project/020-import-pom.png"]
+
+Project imported:
+
+image::015-import-project/030-imported.png[width="800px",link="{imagesdir}/015-import-project/030-imported.png"]
+Start off by creating a new project:
+
+
+Use menu:File[Project Structure] to confirm that JDK 8 is configured:
+
+image::015-import-project/040-project-structure.png[width="600px",link="{imagesdir}/015-import-project/040-project-structure.png"]
+
+
+
+== Configuring
+
+//include::partial$UNUSED/file-templates.adoc[leveloffset=+2]
+//include::partial$UNUSED/live-templates.adoc[leveloffset=+2]
+//include::partial$UNUSED/coding-standards.adoc[leveloffset=+2]
+
+=== Compiler Settings
+
+There are a number of compiler settings that influence the compiler.
+We highly recommend you set these.
+
+On the *Compiler* Settings page, ensure that `build automatically` is enabled (and optionally `compile independent modules in parallel`):
+
+.IntelliJ Compiler Settings
+image::040-other-settings-compiler/010-build-automatically.png[width="700px",link="{imagesdir}/040-other-settings-compiler/010-build-automatically.png"]
+
+
+On the *Annotation Processors* page, confirm that these are enabled for all of the `packaging=jar` modules (in other words, those that contain Java and have a `src/main/java` directory):
+
+.IntelliJ Annotation Processor Settings
+image::040-other-settings-compiler/020-annotation-processor.png[width="700px",link="{imagesdir}/040-other-settings-compiler/020-annotation-processor.png"]
+
+This setting enables the generation of the `Q*` classes for DataNucleus type-safe queries, as well as being required for frameworks such as xref:setupguide:ROOT:hints-and-tips.adoc#project-lombok[Project Lombok].
+
+
+=== Maven Settings
+
+There are also some other settings for Maven that we recommend you adjust (though these are less critical):
+
+On the Maven settings page:
+
+.IntelliJ Maven Settings - Installation
+image::042-other-settings-maven/010-maven-installation.png[width="700px",link="{imagesdir}/042-other-settings-maven/010-maven-installation.png"]
+
+Still on the Maven settings page, configure as follows:
+
+.IntelliJ Maven Settings - Configuration
+image::042-other-settings-maven/020-maven-configuration.png[width="700px",link="{imagesdir}/042-other-settings-maven/020-maven-configuration.png"]
+
+=== Editor Settings
+
+On the *Auto Import* settings page, check the `optimize imports on the fly` and `add unambiguous imports on the fly`
+
+.IntelliJ Auto Import Setting
+image::044-other-settings-misc/010-auto-import.png[width="700px",link="{imagesdir}/044-other-settings-misc/010-auto-import.png"]
+
+You might also want to exclude certain packages or classes from auto-import, for example:
+
+* `java.awt.*`
+* `javax.swing.*`
+* `lombok.experimental.*`
+
+== Plugins
+
+You might want to set up some additional plugins.
+You can do this using `File > Settings > Plugins` (or equivalently `File > Other Settings > Configure Plugins`).
+
+Highly recommended are:
+
+* link:https://plugins.jetbrains.com/plugin/7179?pr=idea[Maven Helper] plugin
+
+* link:https://plugins.jetbrains.com/plugin/7391-asciidoc[AsciiDoctor] plugin
++
+Extremely useful if you are doing any authoring of documents (plugin's git repo is link:https://github.com/asciidoctor/asciidoctor-intellij-plugin[here])
+
+* link:https://plugins.jetbrains.com/plugin/6317-lombok[Lombok] plugin
++
+If you plan to use link:https://projectlombok.org[Project Lombok] to reduce boilerplate.
+
+
+
+
+== Running
+
+Let's see how to run both the app and the tests.
+
+=== Running the App
+
+We run the application by creating a Run configuration, using `Run > Edit Configurations`.
+
+There is one complication.
+DataNucleus requires that all entities are bytecode enhanced.
+When building from the command line using Maven, the `datanucleus:enhance` Maven plugin takes care of this.
+When building within IntelliJ, though, there is no similar plugin.
+
+However, this is easily solved: we can just have IntelliJ run the enhance as a separate run configuration before the run configuration that runs the app itself.
+
+First, set up the run configuration to do the enhance:
+
+.Run Configuration to enhance the entities
+image::110-running-the-app/005-datanucleus-enhance-run-configuration.png[width="700px",link="{imagesdir}/110-running-the-app/005-datanucleus-enhance-run-configuration.png"]
+
+TIP: Check "work offline" (on the General tab) to speed this up slightly.
+
+[WARNING]
+====
+If on Windows you encounter a "The command line is too long" error, then set '-Dfork=false' as a VM option (on the Runner tab).
+====
+
+Then, set up the run configuration for the app.
+Note how it runs the enhance configuration first:
+
+.Run Configuration to run the app
+image::110-running-the-app/010-run-configuration.png[width="700px",link="{imagesdir}/110-running-the-app/010-run-configuration.png"]
+
+You should now be able to run the app using `Run > Run Configuration`.
+The same configuration can also be used to debug the app if you so need.
+
+
+=== Running the Unit Tests
+
+The easiest way to run the unit tests is just to right click on the relevant package in the _Project Window_, and choose run unit tests.
+Hopefully your tests will pass (!).
+
+.Running Unit Tests from Project Explorer
+image::110-running-the-app/030-running-unit-tests.png[width="300px",link="{imagesdir}/110-running-the-app/030-running-unit-tests.png"]
+
+As a side-effect, this will create a run configuration, very similar to the one we manually created for the main app:
+
+.Unit Tests Run Configuration
+image::110-running-the-app/040-running-unit-tests-run-configuration.png[width="700px",link="{imagesdir}/110-running-the-app/040-running-unit-tests-run-configuration.png"]
+
+Thereafter, you should run units by selecting this configuration (if you use the right click approach you'll end up with lots of run configurations, all similar).
+
+=== Running the Integration Tests
+
+Integration tests can be run in the same way as unit tests, however the module must also have been enhanced.
+
+One approach is to initially run the tests use the right click on the `integtests` module:
+
+.Running Integ Tests from Project Explorer
+image::110-running-the-app/045-running-integ-tests.png[width="400px",link="{imagesdir}/110-running-the-app/045-running-integ-tests.png"]
+
+The tests might fail because the entities won't have been enhanced.
+However, we can then easily update the run configuration to run the datanucleus enhancer goal (same as when running the application):
+
+.Integration Tests Run Configuration
+image::110-running-the-app/050-running-integration-tests-run-configuration.png[width="700px",link="{imagesdir}/110-running-the-app/050-running-integration-tests-run-configuration.png"]
+
+
+CAUTION: Make sure that the `search for tests` radio button is set to `In single module`.
+If this radio button is set to one of the other options then you may obtain class loading issues.
+
+

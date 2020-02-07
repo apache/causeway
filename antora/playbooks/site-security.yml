@@ -10,6 +10,9 @@ content:
     - url: .
       start_path: antora/components/docs # docs
       branches: HEAD
+    - url: .
+      start_path: antora/redirects/guides # docs
+      branches: HEAD
 
 
 # core
@@ -17,12 +20,23 @@ content:
       start_path: core/security/src/main/adoc # security
       branches: HEAD
 
+# examples
+    - url: .
+      start_path: examples/demo/src/main/adoc # docs
+      branches: HEAD
+
+
 # extensions
     - url: .
       start_path: extensions/security/secman/adoc # security
       branches: HEAD
     - url: .
       start_path: extensions/security/shiro-realm-ldap/adoc # security
+      branches: HEAD
+
+# mavendeps
+    - url: .
+      start_path: mavendeps/adoc # docs
       branches: HEAD
 
 # security
@@ -37,6 +51,12 @@ content:
       branches: HEAD
     - url: .
       start_path: security/keycloak/src/main/adoc # security
+      branches: HEAD
+
+
+# starters
+    - url: .
+      start_path: starters/adoc # docs
       branches: HEAD
 
 

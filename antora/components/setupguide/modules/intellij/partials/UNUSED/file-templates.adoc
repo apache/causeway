@@ -1,0 +1,37 @@
+= File Templates
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+Next we recommend you import a set of standard file templates.
+These are used to create new classes or supporting files:
+
+.File templates
+image::030-import-settings/040-file-templates.png[width="400px",link="{imagesdir}/030-import-settings/040-file-templates.png"]
+
+The file templates are provided as a settings JAR file, namely *link:{attachmentsdir}/isis-settings-file-templates.jar[isis-settings-file-templates.jar]*.
+Download this file.
+
+Next, import using `File > Import Settings`, specifying the directory that you have downloaded the file to:
+
+.IntelliJ Import Settings - Specify JAR file
+image::030-import-settings/010-settings-import-jar.png[width="400px",link="{imagesdir}/030-import-settings/010-settings-import-jar.png"]
+
+Select all the categories (there should just be one), and hit OK. then hit restart.
+
+[WARNING]
+====
+If importing into IntelliJ 2017.2.3 two categories are shown - "File templates" and "File templates (schemes)".
+Select all the categories.
+
+Apparently no categories are shown if importing into IntelliJ 2016.1.1 Community Edition (and perhaps other 2016 versions).
+The file does import ok into IntelliJ 15.0.x, so we think this is a bug in the 2016 version.
+
+The workaround is to extract the `.jar` file locally and copy the files into IntelliJ's `config` directory, somewhere in your home directory:
+
+* Windows `<User home>\.IdeaIC2016\config`
+* Linux `~/..IdeaIC2016/config`
+* Mac OS `~/Library/Preferences/IdeaIC2016`
+
+====
+

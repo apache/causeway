@@ -4,3 +4,6 @@ version: master
 start_page: ROOT:about.adoc
 nav:
 - modules/ROOT/nav.adoc
+- modules/intellij/nav.adoc
+#- modules/eclipse/nav.adoc
+- modules/hints-and-tips/nav.adoc

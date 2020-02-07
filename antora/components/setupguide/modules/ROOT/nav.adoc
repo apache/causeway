@@ -1,7 +1,0 @@
-* xref:intellij.adoc[Using IntelliJ]
-//* xref:eclipse.adoc[Using Eclipse]
-* xref:hints-and-tips.adoc[Hints and Tips]
-* xref:git-cookbook.adoc[Git Cookbook]
-* xref:working-with-many-repos.adoc[Working with Many Repos]
-* xref:resources/cheat-sheet.adoc[Cheat Sheet]
-* xref:resources/icons.adoc[Icons]

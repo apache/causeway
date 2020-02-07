@@ -16,7 +16,7 @@ Apache Isis is a Java based framework, so in terms of prerequisites, you'll need
 * Java 8 JDK
 * link:http://maven.apache.org[Apache Maven] 3.5+
 
-You'll probably also want to use an IDE; the Apache Isis committers use either IntelliJ or Eclipse; in the xref:setupguide:ROOT:ide.adoc[Setup Guide] we have detailed setup instructions for using these two IDEs.
+You'll probably also want to use an IDE; the Apache Isis committers use either IntelliJ or Eclipse; in the xref:setupguide:ROOT:about.adoc[Setup Guide] we have detailed setup instructions for using these two IDEs.
 If you're a NetBeans user you should have no problems as it too has strong support for Maven.
 
 When building and running within an IDE, you'll also need to configure the Datanucleus enhancer.
@@ -874,8 +874,8 @@ This means:
 == Running from within the IDE
 
 Most of the time you'll probably want to run the app from within your IDE.
-The mechanics of doing this will vary by IDE; see the xref:setupguide:ROOT:ide.adoc[Setup Guide] for details of setting up Eclipse or IntelliJ IDEA.
-Basically, though, it amounts to running the `main()` method in the `SimpleApp`, but also (and this bit is important) ensuring that the xref:setupguide:ROOT:hints-and-tips.adoc#datanucleus-enhancer[DataNucleus enhancer] has properly processed all domain entities.
+The mechanics of doing this will vary by IDE; see the xref:setupguide:ROOT:about.adoc[Setup Guide] for details.
+Basically, though, it amounts to running the `main()` method in the `SimpleApp`, but also (and this bit is important) ensuring that the xref:setupguide:hints-and-tips:about.adoc#datanucleus-enhancer[DataNucleus enhancer] has properly processed all domain entities.
 
 Here's what the setup looks like in IntelliJ IDEA:
 
@@ -892,7 +892,7 @@ image::simpleapp/simpleapp-webapp-before-launch.png[width="600px",link="{imagesd
 Once you are familiar with the app, try modifying it.
 There is plenty more guidance on this site; start with the xref:userguide:fun:about.adoc[User Guide Fundamentals] and then look at the other guides linked to from the top-level menu or from the main xref:docs:ROOT:about.adoc[table of contents].
 
-If you use IntelliJ IDEA or Eclipse, do also install the xref:setupguide:ROOT:intellij.adoc#live-templates[live templates (for IntelliJ)] / xref:setupguide:ROOT:eclipse.adoc#editor-templates[editor templates (for Eclipse)]; these will help you follow the Apache Isis naming conventions.
+// If you use IntelliJ IDEA or Eclipse, do also install the xref:setupguide:intellij:about.adoc#live-templates[live templates (for IntelliJ)] / xref:setupguide:eclipse:about.adoc#editor-templates[editor templates (for Eclipse)]; these will help you follow the Apache Isis naming conventions.
 
 If you run into issues, please don't hesitate to ask for help on the users mailing list or the Slack channel, as per the xref:docs:support:about.adoc[support page].
 

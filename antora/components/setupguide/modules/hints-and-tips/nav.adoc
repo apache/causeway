@@ -1,0 +1,1 @@
+* xref:setupguide:hints-and-tips:about.adoc[Hints & Tips]

@@ -139,7 +139,7 @@ git checkout master
 git pull --ff-only
 ----
 
-If the `merge` or `pull` fails, it means that you must have made commits and there have been changes meanwhile on the remote `master`'s branch. You can use `gitk --all` to confirm. If this fails, see our xref:_dg_git-cookbook.adoc#[git cookbook] page for a procedure to retrospectively sort out this situation.
+If the `merge` or `pull` fails, it means that you must have made commits and there have been changes meanwhile on the remote `master`'s branch. You can use `gitk --all` to confirm. If this fails, see our xref:setupguide:git:about.adoc[git cookbook] page for a procedure to retrospectively sort out this situation.
 
 
 
@@ -160,7 +160,7 @@ The command line prompt should also indicate you are on a branch, isolated from 
 
 === Make File Changes and Commit
 
-Next, make changes to your files using the usual commands (see also our xref:setupguide:ROOT:git-cookbook.adoc[git cookbook] section):
+Next, make changes to your files using the usual commands (see also our xref:setupguide:git:about.adoc[git cookbook] section):
 
 * `git add`
 * `git mv`
