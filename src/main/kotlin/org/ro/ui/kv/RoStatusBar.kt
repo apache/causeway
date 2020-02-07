@@ -1,15 +1,22 @@
 package org.ro.ui
 
+import org.ro.core.event.EventState
 import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
 import org.ro.ui.kv.EventLogTable
 import org.ro.ui.kv.UiManager
+import pl.treksoft.kvision.core.Background
+import pl.treksoft.kvision.core.Col
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
-import pl.treksoft.kvision.navbar.*
+import pl.treksoft.kvision.navbar.Nav
+import pl.treksoft.kvision.navbar.Navbar
+import pl.treksoft.kvision.navbar.NavbarType
+import pl.treksoft.kvision.navbar.navLink
+import pl.treksoft.kvision.panel.SimplePanel
 
 object RoStatusBar {
-    val navbar: Navbar = Navbar(type = NavbarType.FIXEDBOTTOM) {
+    val navbar = Navbar(type = NavbarType.FIXEDBOTTOM) {
         height = CssSize(8, UNIT.mm)
         minHeight = CssSize(8, UNIT.mm)
     }
@@ -20,33 +27,39 @@ object RoStatusBar {
     }
     private val userLink = nav.navLink("", icon = "far fa-user")
 
-
     init {
         navbar.add(nav)
         nav.add(userLink)
         nav.add(urlLink)
     }
 
-    fun brand(colorCode: String) {
-        navbar.setAttribute(name = "color", value = colorCode)
-        navbar.nColor = NavbarColor.DARK //IMPROVE changing attributes a runtime possible?
-    }
-
     fun updateUser(user: String) {
         userLink.setAttribute(name = "title", value = user)
-        turnGreen()
+        turnGreen(userLink)
     }
 
     fun update(le: LogEntry?) {
         val url = le?.title!!
         urlLink.setAttribute(name = "title", value = url)
+        when (le.state) {
+            EventState.MISSING -> turnRed(nav)
+            EventState.ERROR -> turnRed(nav)
+            else -> turnGreen(nav)
+        }
     }
 
-    //IMPLEMENT turnRed, turnYellow
-    fun turnGreen() {
-        urlLink.removeCssClass(IconManager.DANGER)
-        urlLink.removeCssClass(IconManager.WARN)
-        urlLink.addCssClass(IconManager.OK)
+    private fun turnGreen(panel: SimplePanel) {
+        panel.removeCssClass(IconManager.DANGER)
+        panel.removeCssClass(IconManager.WARN)
+        panel.addCssClass(IconManager.OK)
+        nav.background = Background(color = Col.LIGHTGRAY)
+    }
+
+    private fun turnRed(panel: SimplePanel) {
+        panel.removeCssClass(IconManager.OK)
+        panel.removeCssClass(IconManager.WARN)
+        panel.addCssClass(IconManager.DANGER)
+        nav.background = Background(color = Col.RED)
     }
 
 }

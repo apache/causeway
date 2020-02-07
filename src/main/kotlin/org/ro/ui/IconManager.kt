@@ -8,6 +8,7 @@ object IconManager {
 
     const val DANGER = "text-danger"
     const val DISABLED = "text-disabled"
+    const val NORMAL = "text-normal"
     const val OK = "text-ok"
     const val WARN = "text-warn"
 
@@ -31,6 +32,7 @@ object IconManager {
             "Error" to "bug",
             "Experimental" to "flask",
             "Export" to "file-export",
+            "Facet" to "gem",
             "Find" to "search",
             "Hsql" to "database",
             "JEE/CDI" to "jedi",
@@ -70,10 +72,10 @@ object IconManager {
 
     fun findStyleFor(actionName: String): Set<String> {
         when {
-            actionName == "delete" -> return setOf("text-danger")
-            actionName == "undo" -> return setOf("text-warn")
-            actionName == "save" -> return setOf("text-ok")
-            else -> return setOf("text-normal")
+            actionName == "delete" -> return setOf(DANGER)
+            actionName == "undo" -> return setOf(WARN)
+            actionName == "save" -> return setOf(OK)
+            else -> return setOf(NORMAL)
         }
     }
 

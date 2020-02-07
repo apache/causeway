@@ -122,10 +122,8 @@ div {
 }
 
 .logo-button-image:before {
-    padding: 0;
-    margin: 0;
     content: "";
-    width: 100px;
+    width: 75px;
     height: 40px;
     display: inline-block;
     vertical-align: text-top;
