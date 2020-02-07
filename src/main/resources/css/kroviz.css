@@ -120,3 +120,21 @@ textarea {
 div {
    /* font-family: Chicago, sans-serif;*/
 }
+
+.logo-button-image:before {
+    padding: 0px;
+    margin: 0px;
+    content: "";
+    width: 100px;
+    height: 40px;
+    display: inline-block;
+    vertical-align: text-top;
+    background-color: transparent;
+    background-position : center center;
+    background-repeat:no-repeat;
+    background-size: contain, cover;
+}
+
+.logo-button:before{
+    background-image : url(https://www.apache.org/img/ASF20thAnniversary.jpg);
+}
