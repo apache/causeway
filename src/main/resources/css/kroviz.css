@@ -122,8 +122,8 @@ div {
 }
 
 .logo-button-image:before {
-    padding: 0px;
-    margin: 0px;
+    padding: 0;
+    margin: 0;
     content: "";
     width: 100px;
     height: 40px;
@@ -133,8 +133,12 @@ div {
     background-position : center center;
     background-repeat:no-repeat;
     background-size: contain, cover;
+    background-image : url("https://svn.apache.org/repos/asf/comdev/project-logos/originals/isis.svg");
 }
 
-.logo-button:before{
-    background-image : url(https://www.apache.org/img/ASF20thAnniversary.jpg);
-}
+/*background-image: url("https://www.apache.org/img/ASF20thAnniversary.jpg");*/
+/*background-image: url(https://www.apache.org/logos/res/isis/isis.png);*/
+/*background-image: url(/img/kroviz-logo.svg);*/
+/*background-image: url(https://upload.wikimedia.org/wikipedia/commons/b/b9/SVG_animation_using_SMIL.svg)
+https://svn.apache.org/repos/asf/comdev/project-logos/originals/isis.svg
+*/
