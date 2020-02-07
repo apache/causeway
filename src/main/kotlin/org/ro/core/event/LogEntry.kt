@@ -78,6 +78,12 @@ data class LogEntry(
         state = EventState.ERROR
     }
 
+    fun setUndefined(error: String) {
+        calculate()
+        fault = error
+        state = EventState.MISSING
+    }
+
     fun setClose() {
         updatedAt = Date()
         state = EventState.CLOSED

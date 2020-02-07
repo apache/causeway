@@ -35,6 +35,7 @@ abstract class BaseAggregator {
     }
 
     protected fun log(logEntry: LogEntry) {
+        logEntry.setUndefined("unexpected")
         console.log("[BaseAggregator.log] unexpected:\n $logEntry}")
         console.log(this::class.simpleName)
         console.log(logEntry)

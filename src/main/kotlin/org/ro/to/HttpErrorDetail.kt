@@ -5,11 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class HttpErrorDetail(
         val className: String,
-        val message: String,
+        val message: String? = null,
         val element: List<String>,
-        var causedBy: String? = null
-) : TransferObject {
-    init {
-        if (causedBy == null) causedBy = "null"
-    }
-}
+        var causedBy: HttpErrorDetail? = null
+) : TransferObject
