@@ -1,15 +1,18 @@
 ![Preview](../images/WheatFieldWithCrows.png)
 
 #Quickstart
-## Frontend
+TIP: Originally Apache Isis SimpleApp 1.16.0 was used as the reference RO backend.
+This required some extra steps in order to deal with CORS setup, see sections on pre 2.0.0-M3 and CORS.
 
+## Frontend
+ 
 ### Requirements
 Kotlin/JS uses `Gradle` for the build, for the JS runtime `NodeJS`, and for the JS dependency management part `npm`.
 You should have installed:
 * node js (https://nodejs.org/en/download/current/)
 * Apache Gradle 
 * Google Chrome (72.0.3626.81 or higher)
-* Moesif CORS Plugin (for Chrome)
+* <Moesif CORS Plugin (for Chrome)
 
 ### Build
 gradle is run under Windows with gitbash:
@@ -34,30 +37,9 @@ gradlew.bat -t run
 ```
 
 ## Backend
-### Requirements
-* (Oracle) JDK 1.8_181 (or higher)
-* Apache Maven 3.6.0
+### Via Docker Image
+// TODO insert to AI reference /doc
 
-### Create 
-Create from the Apache Isis SimpleApp archetype:
-```bash
-mvn archetype:generate \
-    -D archetypeGroupId=org.apache.isis.archetype \
-    -D archetypeArtifactId=simpleapp-archetype \
-    -D archetypeVersion=2.0.0-M2 \
-    -D groupId=org.my \ 
-    -D artifactId=myapp-2.0.0-M2 \ 
-    -D version=1.0.0 -B
-```
-### Build 
-```bash
-mvn clean install -DskipTests
-```
-### Run
-```bash
-cd webapp
-mvn -Djetty.port=8080 jetty:run -DPROTOTYPING
-```
 
 # Design
 In the following section you'll find information that likely helps understanding the implementation.  
@@ -69,7 +51,7 @@ In the following section you'll find information that likely helps understanding
 ## Patterns 
 ### Redux
 The implementation is an (independent) reinvention of Redux. 
-I prefer the name Aggregator over Reducer though - IIRC it's even older.
+I prefer the name Aggregator over Reducer though - IIRC Aggregator is prior art.
 ### Half Object Protocol
 The HOP pattern dates back to the early 2000, namely CanooULC.
 IMO Naked Objects together with the RO API and kroViz resembles something similar.
@@ -98,77 +80,24 @@ Used for building tables dynamically.
 ### Remote Facade
 The Restful Objects API.
 
-# Troubleshooting
-
-## CORS
-CORS stands for 'Cross Origin Resource Sharing' aka: 'Same Origin Policy' was designed to improve security and is implemented in browsers.
-In short it means: your browser will allow loading of resources only if host and port are identical to the url you are on.
-Ie. webpage loaded from http://localhost:8088/ resources from http://localhost:8080/restful will not be accessible.
-
-### Solution 1 (Q&D):
-Disable CORS in your browser, eg. for Chrome with the MOESIF plugin.
-
-Nicely done introduction: 
-* https://www.moesif.com/blog/technical/cors/Authoritative-Guide-to-CORS-Cross-Origin-Resource-Sharing-for-REST-APIs/#how-is-origin-definedhttps://www.moesif.com/blog/technical/cors/Authoritative-Guide-to-CORS-Cross-Origin-Resource-Sharing-for-REST-APIs/#how-is-origin-defined
-
-### Solution 2: 
-Add to webapp\src\main\webapp\WEB-INF\web.xml
-
-```xml
-	 	<!-- CORS filter for XmlHttpRequests -->
-	<filter>
-		<filter-name>cross-origin</filter-name>
-		<filter-class>org.eclipse.jetty.servlets.CrossOriginFilter</filter-class>
-		<init-param>
-			<param-name>allowedOrigins</param-name>
-			<param-value>*</param-value>
-		</init-param>
-		<init-param>
-			<param-name>allowedMethods</param-name>
-			<value>*</value>
-		</init-param>
-		<init-param>
-			<param-name>allowedHeaders</param-name>
-			<param-value>*</param-value>
-		</init-param>
-		<init-param>
-			<param-name>supportsCredentials</param-name>
-			<param-value>true</param-value>
-		</init-param>
-		<init-param>
-			<param-name>chainPreflight</param-name>
-			<param-value>false</param-value>
-		</init-param>
-	</filter>
-	<filter-mapping>
-		<filter-name>cross-origin</filter-name>
-		<url-pattern>/restful/*</url-pattern>
-	</filter-mapping>
-```
-
-Put into webapp/src/main/webapp/WEB-INF/lib:
-* https://search.maven.org/artifact/org.eclipse.jetty/jetty-util/9.4.12.v20180830/jar
-* https://search.maven.org/artifact/org.eclipse.jetty/jetty-servlets/9.4.12.v20180830/jar
-
-### Solution 3:
-Incorporate kroviz.js eg. in the WAR containing your Apache Isis backend. 
-
-## Network Proxy
-Depending on the network you are in, you may need to configure the proxy settings. Among the relevant files are:
-   ```bash
-   ~/.npmrc
-   ~/.gitconfig
-   ~/.ssh/config
-   ~/.ssh/id_rsa
-   ```
-### References
-   * https://jjasonclark.com/how-to-setup-node-behind-web-proxy/
-   * https://gist.github.com/EudesSilva/0329645b9c258e0495544b8a5ccd1454
+# Trouble Shooting
    
 ## Corporate Firewall with SSL 'inspection'
 There are some questionable setups in coporate settings that are based on SSL replacement.
 In order to cope with it, you may try to import the Certificate into cacerts, 
 see https://intellij-support.jetbrains.com/hc/en-us/community/posts/115000094584-IDEA-Ultimate-2016-3-4-throwing-unable-to-find-valid-certification-path-to-requested-target-when-trying-to-refresh-gradle
+
+ ## Network Proxy
+ Depending on the network you are in, you may need to configure the proxy settings. Among the relevant files are:
+    ```bash
+    ~/.npmrc
+    ~/.gitconfig
+    ~/.ssh/config
+    ~/.ssh/id_rsa
+    ```
+ ### References
+    * https://jjasonclark.com/how-to-setup-node-behind-web-proxy/
+    * https://gist.github.com/EudesSilva/0329645b9c258e0495544b8a5ccd1454
 
 ## Access to git from npm
 ### Problem
@@ -206,7 +135,7 @@ see https://intellij-support.jetbrains.com/hc/en-us/community/posts/115000094584
      IdentitiesOnly yes
    ```
  
- ### Karma-Tests do not respond to code changes 
+ ## Karma-Tests do not respond to code changes 
   Windows:
  ```
  taskkill /f /im node.exe 
@@ -241,3 +170,84 @@ https://github.com/istanbuljs/nyc
 
 ## Gradle Build Overview
 ![Preview](./dev-overview.png)
+
+## Build the Backend Yourself
+### Tool Chain
+* (Oracle) JDK 1.8_181 (or higher)
+* Apache Maven 3.6.0
+
+### Create from Archetype 
+Create from the Apache Isis SimpleApp archetype:
+```bash
+mvn archetype:generate \
+    -D archetypeGroupId=org.apache.isis.archetype \
+    -D archetypeArtifactId=simpleapp-archetype \
+    -D archetypeVersion=2.0.0-M3 \
+    -D groupId=org.my \ 
+    -D artifactId=myapp-2.0.0-M3 \ 
+    -D version=1.0.0 -B
+```
+### Compile 
+```bash
+mvn clean install -DskipTests
+```
+### Run
+```bash
+cd webapp
+mvn -Djetty.port=8080 jetty:run -DPROTOTYPING   
+```
+
+
+ ## CORS
+ CORS stands for 'Cross Origin Resource Sharing' aka: 'Same Origin Policy' was designed to improve security and is implemented in browsers.
+ In short it means: your browser will allow loading of resources only if host and port are identical to the url you are on.
+ Ie. webpage loaded from http://localhost:8088/ resources from http://localhost:8080/restful will not be accessible.
+ 
+ ### Solution 1 (Q&D):
+ Disable CORS in your browser, eg. for Chrome with the MOESIF plugin.
+ 
+ Nicely done introduction: 
+ * https://www.moesif.com/blog/technical/cors/Authoritative-Guide-to-CORS-Cross-Origin-Resource-Sharing-for-REST-APIs/#how-is-origin-definedhttps://www.moesif.com/blog/technical/cors/Authoritative-Guide-to-CORS-Cross-Origin-Resource-Sharing-for-REST-APIs/#how-is-origin-defined
+ 
+ ### Solution 2: 
+ Add to webapp\src\main\webapp\WEB-INF\web.xml
+ 
+ ```xml
+ 	 	<!-- CORS filter for XmlHttpRequests -->
+ 	<filter>
+ 		<filter-name>cross-origin</filter-name>
+ 		<filter-class>org.eclipse.jetty.servlets.CrossOriginFilter</filter-class>
+ 		<init-param>
+ 			<param-name>allowedOrigins</param-name>
+ 			<param-value>*</param-value>
+ 		</init-param>
+ 		<init-param>
+ 			<param-name>allowedMethods</param-name>
+ 			<value>*</value>
+ 		</init-param>
+ 		<init-param>
+ 			<param-name>allowedHeaders</param-name>
+ 			<param-value>*</param-value>
+ 		</init-param>
+ 		<init-param>
+ 			<param-name>supportsCredentials</param-name>
+ 			<param-value>true</param-value>
+ 		</init-param>
+ 		<init-param>
+ 			<param-name>chainPreflight</param-name>
+ 			<param-value>false</param-value>
+ 		</init-param>
+ 	</filter>
+ 	<filter-mapping>
+ 		<filter-name>cross-origin</filter-name>
+ 		<url-pattern>/restful/*</url-pattern>
+ 	</filter-mapping>
+ ```
+ 
+ Put into webapp/src/main/webapp/WEB-INF/lib:
+ * https://search.maven.org/artifact/org.eclipse.jetty/jetty-util/9.4.12.v20180830/jar
+ * https://search.maven.org/artifact/org.eclipse.jetty/jetty-servlets/9.4.12.v20180830/jar
+ 
+ ### Solution 3:
+ Incorporate kroviz.js eg. in the WAR containing your Apache Isis backend. 
+ 
