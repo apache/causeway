@@ -104,8 +104,14 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
     }
 
     private fun createTextArea(fi: FormItem): TextArea {
-//       val rowCnt = maxOf(3, fi.size)
-        val item = TextArea(label = fi.label, value = fi.content as String)
+        val rows = fi.size
+        val item: TextArea
+        if (rows != null) {
+            val rowCnt = maxOf(3, rows)
+            item = TextArea(label = fi.label, value = fi.content as String, rows = rowCnt)
+        } else {
+            item = TextArea(label = fi.label, value = fi.content as String)
+        }
         item.readonly = fi.readOnly
         item.onEvent {
             change = {

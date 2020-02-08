@@ -7,7 +7,7 @@ class FormItem(
         val label: String,
         val type: String,
         var content: Any? = null,
-        val size: Int = 1,
+        val size: Int? = null,
         val description: String? = "not set",
         val member: Member? = null,
         val tab: RoDisplay? = null) {
