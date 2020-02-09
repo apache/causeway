@@ -397,7 +397,13 @@ public interface ManagedObject {
                 if(Objects.equals(pPojo, qPojo)) {
                     return 0;
                 }
-                return Integer.compare(Objects.hashCode(pPojo), Objects.hashCode(qPojo));
+                
+                final int hashCompare = Integer.compare(Objects.hashCode(pPojo), Objects.hashCode(qPojo));
+                if(hashCompare!=0) {
+                    return hashCompare;
+                }
+                //TODO what to return on hash-collision?
+                return -1;
             }
             
         };
