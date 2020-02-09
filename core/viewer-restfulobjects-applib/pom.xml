@@ -106,7 +106,7 @@
         <!-- The artifact in the maven repository has been moved and causes a build failure. Using this setting gets the artifact allowing the build to work.  This fix should hopefully be temporary -->
         <repository>
           <id>java.net</id>
-          <url>http://repo1.maven.org/maven2</url>
+          <url>https://repo1.maven.org/maven2</url>
             <snapshots>
               <enabled>false</enabled>
             </snapshots>
