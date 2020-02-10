@@ -22,7 +22,7 @@
                 <cpt:property id="stringMultiline"/>
             </cpt:fieldSet>
             
-            <cpt:fieldSet name="Readonly" id="readonly" unreferencedProperties="true">
+            <cpt:fieldSet name="Readonly" id="readonly">
                 
                 <cpt:property id="stringReadonly"/>
                 <cpt:property id="stringMultilineReadonly"/>

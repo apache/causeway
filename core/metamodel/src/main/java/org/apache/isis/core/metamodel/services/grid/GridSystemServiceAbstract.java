@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.services.grid;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
@@ -35,7 +34,6 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RenderDay;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
-import org.apache.isis.applib.layout.component.ActionLayoutDataOwner;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutDataOwner;
@@ -117,6 +115,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
+import static org.apache.isis.core.metamodel.facetapi.FacetUtil.addOrReplaceFacet;
+
 import lombok.Value;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -125,6 +125,12 @@ import lombok.extern.log4j.Log4j2;
 public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib.layout.grid.Grid>
 implements GridSystemService<G> {
 
+    @Inject protected SpecificationLoader specificationLoader;
+    @Inject protected TranslationService translationService;
+    @Inject protected JaxbService jaxbService;
+    @Inject protected MessageService messageService;
+    @Inject IsisSystemEnvironment isisSystemEnvironment;
+    
     private final Class<G> gridImplementation;
     private final String tns;
     private final String schemaLocation;
@@ -133,6 +139,7 @@ implements GridSystemService<G> {
             final Class<G> gridImplementation,
             final String tns,
             final String schemaLocation) {
+        
         this.gridImplementation = gridImplementation;
         this.tns = tns;
         this.schemaLocation = schemaLocation;
@@ -164,9 +171,7 @@ implements GridSystemService<G> {
             return;
         }
 
-        final boolean valid =
-                validateAndNormalize(
-                        grid, domainClass);
+        final boolean valid = validateAndNormalize(grid, domainClass);
         if (valid) {
             overwriteFacets(grid, domainClass);
             if(log.isDebugEnabled()) {
@@ -203,16 +208,11 @@ implements GridSystemService<G> {
             final G fcGrid,
             final Class<?> domainClass) {
 
+        val objectSpec = specificationLoader.loadSpecification(domainClass);
 
-        final ObjectSpecification objectSpec = specificationLoader.loadSpecification(domainClass);
-
-        final Map<String, OneToOneAssociation> oneToOneAssociationById =
-                ObjectMember.mapById(getOneToOneAssociations(objectSpec));
-        final Map<String, OneToManyAssociation> oneToManyAssociationById =
-                ObjectMember.mapById(getOneToManyAssociations(objectSpec));
-        final Map<String, ObjectAction> objectActionById =
-                ObjectMember.mapById(objectSpec.streamObjectActions(Contributed.INCLUDED));
-
+        val oneToOneAssociationById = ObjectMember.mapById(getOneToOneAssociations(objectSpec));
+        val oneToManyAssociationById = ObjectMember.mapById(getOneToManyAssociations(objectSpec));
+        val objectActionById = ObjectMember.mapById(objectSpec.streamObjectActions(Contributed.INCLUDED));
 
         final AtomicInteger propertySequence = new AtomicInteger(0);
         fcGrid.visit(new Grid.VisitorAdapter() {
@@ -226,18 +226,18 @@ implements GridSystemService<G> {
             @Override
             public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
 
-                FacetUtil.addOrReplaceFacet(BookmarkPolicyFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
-                FacetUtil.addOrReplaceFacet(CssClassFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
-                FacetUtil.addOrReplaceFacet(CssClassFaFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
-                FacetUtil.addOrReplaceFacet(DescribedAsFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
-                FacetUtil.addOrReplaceFacet(NamedFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
-                FacetUtil.addOrReplaceFacet(PluralFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
+                addOrReplaceFacet(BookmarkPolicyFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
+                addOrReplaceFacet(CssClassFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
+                addOrReplaceFacet(CssClassFaFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
+                addOrReplaceFacet(DescribedAsFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
+                addOrReplaceFacet(NamedFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
+                addOrReplaceFacet(PluralFacetForDomainObjectXml.create(domainObjectLayoutData, objectSpec));
             }
 
             @Override
             public void visit(final ActionLayoutData actionLayoutData) {
-                final ActionLayoutDataOwner actionLayoutDataOwner = actionLayoutData.getOwner();
-                final ObjectAction objectAction = objectActionById.get(actionLayoutData.getId());
+                val actionLayoutDataOwner = actionLayoutData.getOwner();
+                val objectAction = objectActionById.get(actionLayoutData.getId());
                 if(objectAction == null) {
                     return;
                 }
@@ -270,7 +270,7 @@ implements GridSystemService<G> {
                     memberOrderSequence = actionDomainObjectSequence++;
                 }
                 if(memberOrderName != null) {
-                    FacetUtil.addOrReplaceFacet(
+                    addOrReplaceFacet(
                             new MemberOrderFacetXml(memberOrderName, "" + memberOrderSequence, translationService, objectAction));
                 }
 
@@ -292,37 +292,34 @@ implements GridSystemService<G> {
                     actionLayoutData.setPosition(null);
                 }
 
-                FacetUtil.addOrReplaceFacet(ActionPositionFacetForActionXml.create(actionLayoutData, objectAction));
-                FacetUtil.addOrReplaceFacet(BookmarkPolicyFacetForActionXml.create(actionLayoutData, objectAction));
-                FacetUtil.addOrReplaceFacet(CssClassFacetForActionXml.create(actionLayoutData, objectAction));
-                FacetUtil.addOrReplaceFacet(CssClassFaFacetForActionXml.create(actionLayoutData, objectAction));
-                FacetUtil.addOrReplaceFacet(DescribedAsFacetForActionXml.create(actionLayoutData, objectAction));
-                FacetUtil.addOrReplaceFacet(HiddenFacetForActionXml.create(actionLayoutData, objectAction));
-                FacetUtil.addOrReplaceFacet(NamedFacetForActionXml.create(actionLayoutData, objectAction));
-                FacetUtil.addOrReplaceFacet(PromptStyleFacetForActionXml.create(actionLayoutData, objectAction));
-                FacetUtil.addOrReplaceFacet(RedirectFacetFromActionXml.create(actionLayoutData, objectAction));
+                addOrReplaceFacet(ActionPositionFacetForActionXml.create(actionLayoutData, objectAction));
+                addOrReplaceFacet(BookmarkPolicyFacetForActionXml.create(actionLayoutData, objectAction));
+                addOrReplaceFacet(CssClassFacetForActionXml.create(actionLayoutData, objectAction));
+                addOrReplaceFacet(CssClassFaFacetForActionXml.create(actionLayoutData, objectAction));
+                addOrReplaceFacet(DescribedAsFacetForActionXml.create(actionLayoutData, objectAction));
+                addOrReplaceFacet(HiddenFacetForActionXml.create(actionLayoutData, objectAction));
+                addOrReplaceFacet(NamedFacetForActionXml.create(actionLayoutData, objectAction));
+                addOrReplaceFacet(PromptStyleFacetForActionXml.create(actionLayoutData, objectAction));
+                addOrReplaceFacet(RedirectFacetFromActionXml.create(actionLayoutData, objectAction));
             }
 
             @Override
             public void visit(final PropertyLayoutData propertyLayoutData) {
-                final OneToOneAssociation oneToOneAssociation = oneToOneAssociationById.get(propertyLayoutData.getId());
+                val oneToOneAssociation = oneToOneAssociationById.get(propertyLayoutData.getId());
                 if(oneToOneAssociation == null) {
                     return;
                 }
 
-                FacetUtil.addOrReplaceFacet(CssClassFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                FacetUtil.addOrReplaceFacet(DescribedAsFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                FacetUtil.addOrReplaceFacet(HiddenFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                FacetUtil.addOrReplaceFacet(LabelAtFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                FacetUtil.addOrReplaceFacet(MultiLineFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                FacetUtil.addOrReplaceFacet(NamedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                FacetUtil.addOrReplaceFacet(
-                        PromptStyleFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                FacetUtil.addOrReplaceFacet(
-                        RenderedAdjustedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                FacetUtil.addOrReplaceFacet(
-                        UnchangingFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                FacetUtil.addOrReplaceFacet(TypicalLengthFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                addOrReplaceFacet(CssClassFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                addOrReplaceFacet(DescribedAsFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                addOrReplaceFacet(HiddenFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                addOrReplaceFacet(LabelAtFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                addOrReplaceFacet(MultiLineFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                addOrReplaceFacet(NamedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                addOrReplaceFacet(PromptStyleFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                addOrReplaceFacet(RenderedAdjustedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                addOrReplaceFacet(UnchangingFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                addOrReplaceFacet(TypicalLengthFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
 
                 // @MemberOrder#name based on owning property group, @MemberOrder#sequence monotonically increasing
                 // nb for any given field set the sequence won't reset to zero; however this is what we want so that
@@ -330,31 +327,29 @@ implements GridSystemService<G> {
                 final FieldSet fieldSet = propertyLayoutData.getOwner();
                 final String groupName = fieldSet.getName();
                 final String sequence = "" + (propertySequence.incrementAndGet());
-                FacetUtil.addOrReplaceFacet(
+                addOrReplaceFacet(
                         new MemberOrderFacetXml(groupName, sequence, translationService, oneToOneAssociation));
             }
 
             @Override
             public void visit(final CollectionLayoutData collectionLayoutData) {
-                final OneToManyAssociation oneToManyAssociation = oneToManyAssociationById.get(collectionLayoutData.getId());
+                val oneToManyAssociation = oneToManyAssociationById.get(collectionLayoutData.getId());
                 if(oneToManyAssociation == null) {
                     return;
                 }
 
-                FacetUtil.addOrReplaceFacet(CssClassFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
-                FacetUtil.addOrReplaceFacet(
-                        DefaultViewFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
-                FacetUtil.addOrReplaceFacet(
-                        DescribedAsFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
-                FacetUtil.addOrReplaceFacet(HiddenFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
-                FacetUtil.addOrReplaceFacet(NamedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
-                FacetUtil.addOrReplaceFacet(PagedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
-                FacetUtil.addOrReplaceFacet(SortedByFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
+                addOrReplaceFacet(CssClassFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
+                addOrReplaceFacet(DefaultViewFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
+                addOrReplaceFacet(DescribedAsFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
+                addOrReplaceFacet(HiddenFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
+                addOrReplaceFacet(NamedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
+                addOrReplaceFacet(PagedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
+                addOrReplaceFacet(SortedByFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
 
                 // @MemberOrder#name based on the collection's id (so that each has a single "member group")
                 final String groupName = collectionLayoutData.getId();
                 final String sequence = "" + collectionSequence++;
-                FacetUtil.addOrReplaceFacet(
+                addOrReplaceFacet(
                         new MemberOrderFacetXml(groupName, sequence, translationService, oneToManyAssociation));
             }
         });
@@ -396,7 +391,7 @@ implements GridSystemService<G> {
     public void complete(final G grid, final Class<?> domainClass) {
         normalize(grid, domainClass);
 
-        final ObjectSpecification objectSpec = specificationLoader.loadSpecification(domainClass);
+        val objectSpec = specificationLoader.loadSpecification(domainClass);
 
         grid.visit(new Grid.VisitorAdapter() {
 
@@ -459,7 +454,8 @@ implements GridSystemService<G> {
     protected void setBookmarkingIfAny(
             final HasBookmarking hasBookmarking,
             final FacetHolder facetHolder) {
-        final BookmarkPolicyFacet bookmarkPolicyFacet = facetHolder.getFacet(BookmarkPolicyFacet.class);
+        
+        val bookmarkPolicyFacet = facetHolder.getFacet(BookmarkPolicyFacet.class);
         if(isDoOp(bookmarkPolicyFacet)) {
             final BookmarkPolicy bookmarking = bookmarkPolicyFacet.value();
             if(bookmarking != null) {
@@ -471,7 +467,8 @@ implements GridSystemService<G> {
     protected void setCssClassIfAny(
             final HasCssClass hasCssClass,
             final FacetHolder facetHolder) {
-        final CssClassFacet cssClassFacet = facetHolder.getFacet(CssClassFacet.class);
+        
+        val cssClassFacet = facetHolder.getFacet(CssClassFacet.class);
         if(isDoOp(cssClassFacet)) {
             try {
                 // try...finally because CSS class may vary by object, and we pass in only null
@@ -488,7 +485,8 @@ implements GridSystemService<G> {
     protected void setCssClassFaIfAny(
             final HasCssClassFa hasCssClassFa,
             final FacetHolder facetHolder) {
-        final CssClassFaFacet cssClassFaFacet = facetHolder.getFacet(CssClassFaFacet.class);
+        
+        val cssClassFaFacet = facetHolder.getFacet(CssClassFaFacet.class);
         if (isDoOp(cssClassFaFacet)) {
             final String cssClassFa = cssClassFaFacet.value();
             final CssClassFaPosition position = cssClassFaFacet.getPosition();
@@ -502,7 +500,8 @@ implements GridSystemService<G> {
     protected void setDefaultViewIfAny(
             final CollectionLayoutData collectionLayoutData,
             final FacetHolder facetHolder) {
-        final DefaultViewFacet defaultViewFacet = facetHolder.getFacet(DefaultViewFacet.class);
+        
+        val defaultViewFacet = facetHolder.getFacet(DefaultViewFacet.class);
         if(isDoOp(defaultViewFacet)) {
             final String defaultView = defaultViewFacet.value();
             if(!_Strings.isNullOrEmpty(defaultView)) {
@@ -514,7 +513,8 @@ implements GridSystemService<G> {
     protected void setDescribedAsIfAny(
             final HasDescribedAs hasDescribedAs,
             final FacetHolder facetHolder) {
-        final DescribedAsFacet describedAsFacet = facetHolder.getFacet(DescribedAsFacet.class);
+        
+        val describedAsFacet = facetHolder.getFacet(DescribedAsFacet.class);
         if(isDoOp(describedAsFacet)) {
             final String describedAs = describedAsFacet.value();
             if(!_Strings.isNullOrEmpty(describedAs)) {
@@ -526,7 +526,8 @@ implements GridSystemService<G> {
     protected void setHiddenIfAny(
             final HasHidden hasHidden,
             final FacetHolder facetHolder) {
-        final HiddenFacet hiddenFacet = facetHolder.getFacet(HiddenFacet.class);
+        
+        val hiddenFacet = facetHolder.getFacet(HiddenFacet.class);
         if (isDoOp(hiddenFacet)) {
             final Where where = hiddenFacet.where();
             if(where != null) {
@@ -538,7 +539,8 @@ implements GridSystemService<G> {
     protected void setLabelPositionIfAny(
             final PropertyLayoutData propertyLayoutData,
             final FacetHolder facetHolder) {
-        final LabelAtFacet labelAtFacet = facetHolder.getFacet(LabelAtFacet.class);
+        
+        val labelAtFacet = facetHolder.getFacet(LabelAtFacet.class);
         if(isDoOp(labelAtFacet)) {
             final LabelPosition labelPosition = labelAtFacet.label();
             if(labelPosition != null) {
@@ -550,7 +552,8 @@ implements GridSystemService<G> {
     protected void setMultiLineIfAny(
             final PropertyLayoutData propertyLayoutData,
             final FacetHolder facetHolder) {
-        final MultiLineFacet multiLineFacet = facetHolder.getFacet(MultiLineFacet.class);
+        
+        val multiLineFacet = facetHolder.getFacet(MultiLineFacet.class);
         if(isDoOp(multiLineFacet)) {
             final int numberOfLines = multiLineFacet.numberOfLines();
             if(numberOfLines > 0) {
@@ -562,7 +565,8 @@ implements GridSystemService<G> {
     protected void setNamedIfAny(
             final HasNamed hasNamed,
             final FacetHolder facetHolder) {
-        final NamedFacet namedFacet = facetHolder.getFacet(NamedFacet.class);
+        
+        val namedFacet = facetHolder.getFacet(NamedFacet.class);
         if(isDoOp(namedFacet)) {
             final String named = namedFacet.value();
             if(!_Strings.isNullOrEmpty(named)){
@@ -578,7 +582,8 @@ implements GridSystemService<G> {
     protected void setPagedIfAny(
             final CollectionLayoutData collectionLayoutData,
             final FacetHolder facetHolder) {
-        final PagedFacet pagedFacet = facetHolder.getFacet(PagedFacet.class);
+        
+        val pagedFacet = facetHolder.getFacet(PagedFacet.class);
         if(isDoOp(pagedFacet)) {
             final int value = pagedFacet.value();
             if(value > 0) {
@@ -590,7 +595,8 @@ implements GridSystemService<G> {
     protected void setPluralIfAny(
             final DomainObjectLayoutData domainObjectLayoutData,
             final FacetHolder facetHolder) {
-        final PluralFacet pluralFacet = facetHolder.getFacet(PluralFacet.class);
+        
+        val pluralFacet = facetHolder.getFacet(PluralFacet.class);
         if(isDoOp(pluralFacet)) {
             final String plural = pluralFacet.value();
             if(!_Strings.isNullOrEmpty(plural)) {
@@ -603,7 +609,8 @@ implements GridSystemService<G> {
     protected void setActionPositionIfAny(
             final ActionLayoutData actionLayoutData,
             final FacetHolder facetHolder) {
-        final ActionPositionFacet actionPositionFacet = facetHolder.getFacet(ActionPositionFacet.class);
+        
+        val actionPositionFacet = facetHolder.getFacet(ActionPositionFacet.class);
         if(isDoOp(actionPositionFacet)) {
             final ActionLayout.Position position = actionPositionFacet.position();
             if(position != null) {
@@ -615,7 +622,8 @@ implements GridSystemService<G> {
     protected void setRenderedAsDayBeforeIfAny(
             final PropertyLayoutData propertyLayoutData,
             final FacetHolder facetHolder) {
-        final RenderedAdjustedFacet renderedAdjustedFacet = facetHolder.getFacet(RenderedAdjustedFacet.class);
+        
+        val renderedAdjustedFacet = facetHolder.getFacet(RenderedAdjustedFacet.class);
         if(isDoOp(renderedAdjustedFacet)) {
             final int adjusted = renderedAdjustedFacet.value();
             propertyLayoutData.setRenderDay(adjusted != 0 ? RenderDay.AS_DAY_BEFORE : RenderDay.AS_DAY);
@@ -625,7 +633,8 @@ implements GridSystemService<G> {
     protected void setSortedByIfAny(
             final CollectionLayoutData collectionLayoutData,
             final FacetHolder facetHolder) {
-        final SortedByFacet sortedByFacet = facetHolder.getFacet(SortedByFacet.class);
+        
+        val sortedByFacet = facetHolder.getFacet(SortedByFacet.class);
         if(isDoOp(sortedByFacet)) {
             final Class<? extends Comparator<?>> className = sortedByFacet.value();
             if(className != null) {
@@ -637,7 +646,8 @@ implements GridSystemService<G> {
     protected void setTypicalLengthIfAny(
             final PropertyLayoutData propertyLayoutData,
             final FacetHolder facetHolder) {
-        final TypicalLengthFacet typicalLengthFacet = facetHolder.getFacet(TypicalLengthFacet.class);
+        
+        val typicalLengthFacet = facetHolder.getFacet(TypicalLengthFacet.class);
         if(isDoOp(typicalLengthFacet)) {
             final int typicalLength = typicalLengthFacet.value();
             if(typicalLength > 0) {
@@ -676,12 +686,5 @@ implements GridSystemService<G> {
     }
 
 
-    // //////////////////////////////////////
-
-    @Inject protected SpecificationLoader specificationLoader;
-    @Inject protected TranslationService translationService;
-    @Inject protected JaxbService jaxbService;
-    @Inject protected MessageService messageService;
-    @Inject IsisSystemEnvironment isisSystemEnvironment;
 
 }

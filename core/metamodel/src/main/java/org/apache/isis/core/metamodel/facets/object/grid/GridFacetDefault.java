@@ -18,6 +18,10 @@
  */
 package org.apache.isis.core.metamodel.facets.object.grid;
 
+import java.util.Optional;
+
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -26,6 +30,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+
+import lombok.val;
 
 public class GridFacetDefault
 extends FacetAbstract
@@ -55,24 +61,34 @@ implements GridFacet {
 
     @Override
     public Grid getGrid(final ManagedObject objectAdapterIfAny) {
-        if (!gridService.supportsReloading() && this.grid != null) {
-            return this.grid;
+        if (this.grid == null || gridService.supportsReloading()) {
+            val domainClass = getSpecification().getCorrespondingClass();
+            final String layout = layout(objectAdapterIfAny);
+            this.grid = load(domainClass, layout);
         }
-        final Class<?> domainClass = getSpecification().getCorrespondingClass();
-        final LayoutFacet layoutFacet = getFacetHolder().getFacet(LayoutFacet.class);
-        final String layout = layoutFacet != null && objectAdapterIfAny != null
-                ? layoutFacet.layout(objectAdapterIfAny)
-                        : null;
-                this.grid = load(domainClass, layout);
 
-                return this.grid;
+        return this.grid;
+    }
+    
+    // -- HELPER
+    
+    @Nullable
+    private String layout(@Nullable final ManagedObject objectAdapterIfAny) {
+        if(objectAdapterIfAny == null) {
+            return null;
+        }
+        val facetHolder = getFacetHolder();
+        val layoutFacet = facetHolder.getFacet(LayoutFacet.class);
+        if(layoutFacet == null) {
+            return null;
+        }
+        return layoutFacet.layout(objectAdapterIfAny);
     }
 
     private Grid load(final Class<?> domainClass, final String layout) {
-        Grid grid = gridService.load(domainClass, layout);
-        if(grid == null) {
-            grid = gridService.defaultGridFor(domainClass);
-        }
+        val grid = Optional.ofNullable(gridService.load(domainClass, layout))
+                .orElseGet(()->gridService.defaultGridFor(domainClass));
+        
         gridService.normalize(grid);
         return grid;
     }

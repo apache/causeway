@@ -40,5 +40,10 @@ public class LayoutFacetFallback extends LayoutFacetAbstract {
     public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
     }
+    
+    @Override
+    public boolean isFallback() {
+        return true;
+    }
 
 }

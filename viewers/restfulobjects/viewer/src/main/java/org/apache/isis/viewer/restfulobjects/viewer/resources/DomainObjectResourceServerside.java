@@ -74,6 +74,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 import org.apache.isis.viewer.restfulobjects.viewer.resources.serialization.SerializationStrategy;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Component
@@ -313,8 +314,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
                 ? SerializationStrategy.XML
                         : SerializationStrategy.JSON;
 
-        final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
-        final GridFacet gridFacet = objectSpec.getFacet(GridFacet.class);
+        val objectSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
+        val gridFacet = objectSpec.getFacet(GridFacet.class);
         final Response.ResponseBuilder builder;
         if(gridFacet == null) {
             builder = Responses.ofNotFound();
