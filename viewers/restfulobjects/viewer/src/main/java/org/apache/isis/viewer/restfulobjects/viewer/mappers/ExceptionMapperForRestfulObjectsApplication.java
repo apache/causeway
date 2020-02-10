@@ -37,9 +37,6 @@ extends ExceptionMapperAbstract<RestfulObjectsApplicationException> {
 
     @Override
     public Response toResponse(final RestfulObjectsApplicationException ex) {
-        //XXX code not used, so commented out
-        //final JsonRepresentation body = ex.getBody();
-        //final String bodyStr = body != null ? body.toString() : null;
         return buildResponse(ex);
     }
 

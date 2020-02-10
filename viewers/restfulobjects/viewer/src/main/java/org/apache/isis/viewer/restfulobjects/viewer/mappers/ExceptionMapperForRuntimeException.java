@@ -35,29 +35,8 @@ public class ExceptionMapperForRuntimeException extends ExceptionMapperAbstract<
 
     @Override
     public Response toResponse(final RuntimeException ex) {
-
-        //TODO [2033] removed    	
-        //        final Throwable rootCause = _Exceptions.getRootCause(ex);
-        //        final List<Throwable> causalChain = _Exceptions.getCausalChain(ex);
-        //        for (Throwable throwable : causalChain) {
-        //            if(throwable == rootCause) {
-        //                
-        //                // since already rendered...
-        //                getCurrentTransaction()
-        //                    .ifPresent(IsisTransaction::clearAbortCause);
-        //            }
-        //        }
-
         return buildResponse(ex);
     }
-
-    // -- HELPER
-
-    //TODO [2033] removed
-    //    private Optional<IsisTransaction> getCurrentTransaction() {
-    //        return IsisContext.getTransactionManager()
-    //                .map(IsisTransactionManager::getCurrentTransaction);
-    //    }
 
 
 }
