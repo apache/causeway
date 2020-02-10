@@ -38,6 +38,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -141,13 +142,17 @@ public class JsonValueEncoder {
             String format,
             boolean suppressExtensions) {
 
-        val jsonValueConverter = converterBySpecId.get(objectSpecification.getSpecId());
+        val specId = objectSpecification.getSpecId();
+        val jsonValueConverter = converterBySpecId.get(specId);
         if(jsonValueConverter != null) {
             return jsonValueConverter.appendValueAndFormat(objectAdapter, format, repr, suppressExtensions);
         } else {
             val encodableFacet = objectSpecification.getFacet(EncodableFacet.class);
             if (encodableFacet == null) {
-                throw new IllegalArgumentException("objectSpec expected to have EncodableFacet");
+                throw _Exceptions.illegalArgument(
+                        "objectSpec '%s' expected to have EncodableFacet "
+                        + "or a registered JsonValueConverter", 
+                        specId);
             }
             Object value = objectAdapter != null
                     ? encodableFacet.toEncodedString(objectAdapter)
