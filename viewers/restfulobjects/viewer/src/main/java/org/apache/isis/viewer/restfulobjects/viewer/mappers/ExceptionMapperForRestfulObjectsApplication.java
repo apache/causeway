@@ -18,16 +18,21 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer.mappers;
 
+import javax.inject.Singleton;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 
 @Component
 @Provider
-public class ExceptionMapperForRestfulObjectsApplication 
+@Singleton
+@Order(OrderPrecedence.MIDPOINT)
+public class ExceptionMapperForRestfulObjectsApplication
 extends ExceptionMapperAbstract<RestfulObjectsApplicationException> {
 
     @Override

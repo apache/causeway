@@ -18,15 +18,21 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer.mappers;
 
+import javax.inject.Singleton;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.metamodel.adapter.oid.ObjectNotFoundException;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 
 @Component
 @Provider
+@Singleton
+@Order(OrderPrecedence.MIDPOINT)
 public class ExceptionMapperForObjectNotFound extends ExceptionMapperAbstract<ObjectNotFoundException> {
 
     @Override

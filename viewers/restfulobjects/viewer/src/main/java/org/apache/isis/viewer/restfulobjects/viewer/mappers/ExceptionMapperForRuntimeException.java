@@ -18,13 +18,19 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer.mappers;
 
+import javax.inject.Singleton;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import org.apache.isis.applib.annotation.OrderPrecedence;
 
 @Component
 @Provider
+@Singleton
+@Order(OrderPrecedence.LATE)
 public class ExceptionMapperForRuntimeException extends ExceptionMapperAbstract<RuntimeException> {
 
     @Override
