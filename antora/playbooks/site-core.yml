@@ -10,10 +10,6 @@ content:
     - url: .
       start_path: antora/components/docs # docs
       branches: HEAD
-    - url: .
-      start_path: antora/redirects/guides # docs
-      branches: HEAD
-
 # core
     - url: .
       start_path: core/adoc # core

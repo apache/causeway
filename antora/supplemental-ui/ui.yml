@@ -1,5 +1,6 @@
 static_files:
 - index.html
+- support.html
 - _headers
 - robots.txt
 - doap_isis.rdf
