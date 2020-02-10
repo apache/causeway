@@ -42,9 +42,15 @@ import lombok.val;
 @Qualifier("Default")
 public class TitleServiceDefault implements TitleService {
 
-    @Inject private WrapperFactory wrapperFactory;
-    @Inject private SpecificationLoader specificationLoader;
+    private final WrapperFactory wrapperFactory;
+    private final SpecificationLoader specificationLoader;
     
+    @Inject
+    public TitleServiceDefault(WrapperFactory wrapperFactory, SpecificationLoader specificationLoader) {
+        this.wrapperFactory = wrapperFactory;
+        this.specificationLoader = specificationLoader;
+    }
+
     @Override
     public String titleOf(final Object domainObject) {
         

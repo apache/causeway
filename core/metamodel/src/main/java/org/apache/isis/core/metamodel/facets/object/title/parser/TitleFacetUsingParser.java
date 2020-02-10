@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.title.parser;
 
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
@@ -27,9 +28,9 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
 
-    private final Parser parser;
+    private final Parser<?> parser;
 
-    public TitleFacetUsingParser(final Parser parser, final FacetHolder holder) {
+    public TitleFacetUsingParser(final Parser<?> parser, final FacetHolder holder) {
         super(TitleFacet.class, holder, Derivation.NOT_DERIVED);
         this.parser = parser;
     }
@@ -50,7 +51,7 @@ public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
             return null;
         }
         getServiceInjector().injectServicesInto(parser);
-        return parser.displayTitleOf(object);
+        return parser.displayTitleOf(_Casts.uncheckedCast(object));
     }
 
     @Override
@@ -70,7 +71,7 @@ public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
             return null;
         }
         getServiceInjector().injectServicesInto(parser);
-        return parser.displayTitleOf(object, usingMask);
+        return parser.displayTitleOf(_Casts.uncheckedCast(object), usingMask);
     }
 
 

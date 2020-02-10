@@ -154,7 +154,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
                 metamodelEventService,
                 specificationLoader,
                 authenticationSessionProvider,
-                translationService,
+                getTranslationService(),
                 authenticationSession,
                 authorizationManager,
                 authenticationManager,
@@ -203,6 +203,14 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         return serviceInjector;
     }
     
+    @Override
+    public TranslationService getTranslationService() {
+        if(translationService==null) {
+            translationService = new TranslationService_forTesting();
+        }
+        return translationService;
+    }
+    
     public IsisBeanTypeRegistryHolder getIsisBeanTypeRegistryHolder() {
         if(isisBeanTypeRegistryHolder==null) {
             
@@ -225,6 +233,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
             val configuration = requireNonNull(getConfiguration());
             val environment = requireNonNull(getSystemEnvironment());
             val serviceRegistry = requireNonNull(getServiceRegistry());
+            @SuppressWarnings("unused")
             val serviceInjector = requireNonNull(getServiceInjector());
             val programmingModel = requireNonNull(getProgrammingModel());
             val isisBeanTypeRegistryHolder = requireNonNull(getIsisBeanTypeRegistryHolder());

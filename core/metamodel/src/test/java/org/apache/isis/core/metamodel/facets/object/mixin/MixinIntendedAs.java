@@ -65,7 +65,7 @@ abstract class MixinIntendedAs {
         metaModelContext = MetaModelContext_forTesting.builder()
                 .programmingModel(programmingModel)
                 .translationService(mockTranslationService)
-                .titleService(new TitleServiceDefault())
+                .titleService(new TitleServiceDefault(null, null))
                 .serviceInjector(mockServiceInjector)
                 .build();
         
