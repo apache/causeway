@@ -31,7 +31,7 @@ public class ExceptionMapperForObjectNotFound extends ExceptionMapperAbstract<Ob
 
     @Override
     public Response toResponse(final ObjectNotFoundException ex) {
-        return buildResponse(ex);
+        return buildResponse(ex, RestfulResponse.HttpStatusCode.NOT_FOUND);
     }
 
 }
