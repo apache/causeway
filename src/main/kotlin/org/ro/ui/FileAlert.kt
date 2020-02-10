@@ -13,7 +13,7 @@ class FileAlert(val logEntry: LogEntry) : Command {
         val list = value.split(":")
         val formItems = mutableListOf<FormItem>()
         formItems.add(FormItem("URL", "Text", logEntry.url))
-        formItems.add(FormItem("Blob", "TextArea", list[2], 20))
+        formItems.add(FormItem("Blob", "TextArea", list[2], 15))
         val label = list[0] + "/" + list[1]
         RoDialog(caption = label, items = formItems, command = this).open()
     }

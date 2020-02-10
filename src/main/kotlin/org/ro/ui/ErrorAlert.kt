@@ -13,7 +13,7 @@ class ErrorAlert(val logEntry: LogEntry) : Command {
         formItems.add(FormItem("Message", "Text", error.message))
         val detail = error.detail
         if (detail != null) {
-            formItems.add(FormItem("StackTrace", "TextArea", toString(detail.element), 20))
+            formItems.add(FormItem("StackTrace", "TextArea", toString(detail.element), 15))
             formItems.add(FormItem("Caused by", "Text", detail.causedBy))
         }
         val label = "HttpError " + error.httpStatusCode.toString()

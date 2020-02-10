@@ -15,7 +15,7 @@ class ExportAlert() : Command {
         jsonOutput = JSON.stringify(replayEvents)
         jsonOutput = Utils.format(jsonOutput)
         val formItems = mutableListOf<FormItem>()
-        formItems.add(FormItem("JSON", "TextArea", jsonOutput, 20))
+        formItems.add(FormItem("JSON", "TextArea", jsonOutput, 15))
         val label = "Download Replay Events"
         RoDialog(caption = label, items = formItems, command = this).open()
     }

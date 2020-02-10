@@ -13,7 +13,7 @@ class EventLogDetail(val logEntry: LogEntry) : Command {
         if (jsonStr.isNotEmpty()) {
             jsonStr = Utils.format(jsonStr)
         }
-        formItems.add(FormItem("Text", "TextArea", jsonStr, 20))
+        formItems.add(FormItem("Text", "TextArea", jsonStr, 15))
         val label = logEntry.title
         val rd = RoDialog(caption = label, items = formItems, command = this)
         rd.open()
