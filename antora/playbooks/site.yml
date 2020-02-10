@@ -22,9 +22,9 @@ content:
     - url: .
       start_path: antora/components/setupguide # setupguide
       branches: HEAD
-    - url: .
-      start_path: antora/redirects/guides # docs
-      branches: HEAD
+#    - url: .
+#      start_path: antora/redirects/guides # docs
+#      branches: HEAD
 
 
 # api

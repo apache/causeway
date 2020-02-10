@@ -1,5 +1,7 @@
 = Restful Objects Viewer
 
+:page-aliases: guides:ugvro:ugvro.adoc
+
 Apache Isis' Restful Objects viewer is an implementation of the link:http://restfulobjects.org[Restful Objects spec],
 which defines a generic way to expose a domain model through a REST (or more precisely, hypermedia) API.  Having a REST
 API opens up an Apache Isis domain model to a huge variety of applications, from bespoke single-page apps,
