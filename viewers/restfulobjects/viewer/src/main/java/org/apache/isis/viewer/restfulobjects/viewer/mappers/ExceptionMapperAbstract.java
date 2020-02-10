@@ -47,7 +47,10 @@ public abstract class ExceptionMapperAbstract<T extends Throwable> implements Ex
     protected HttpHeaders httpHeaders;
 
     Response buildResponse(final T ex) {
-        final RestfulResponse.HttpStatusCode httpStatusCode = determineStatusCode(ex);
+        return buildResponse(ex, determineStatusCode(ex));
+    }
+
+    Response buildResponse(final T ex, final RestfulResponse.HttpStatusCode httpStatusCode) {
         final String message = messageFor(ex);
 
         if(ex instanceof ExceptionWithBody) {
