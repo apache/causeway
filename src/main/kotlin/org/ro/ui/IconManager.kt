@@ -35,6 +35,7 @@ object IconManager {
             "Facet" to "gem",
             "Find" to "search",
             "Hsql" to "database",
+            "Isis" to "ankh",
             "JEE/CDI" to "jedi",
             "List" to "list",
             "Log" to "history",

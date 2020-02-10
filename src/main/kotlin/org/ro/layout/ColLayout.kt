@@ -6,6 +6,7 @@ import org.ro.to.bs3.Col
 
 @Serializable
 data class ColLayout(val domainObject: DomainObjectLayout? = null,
+                     val row: MutableList<RowLayout> = mutableListOf<RowLayout>(),
                      val fieldSet: MutableList<FieldSetLayout> = mutableListOf<FieldSetLayout>(),
                      val action: MutableList<ActionLayout> = mutableListOf<ActionLayout>(),  // org.ro.authors
                      val collection: MutableList<CollectionLayout> = mutableListOf<CollectionLayout>(),

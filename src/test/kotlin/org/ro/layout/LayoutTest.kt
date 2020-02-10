@@ -71,6 +71,17 @@ class LayoutTest : IntegrationTest() {
     }
 
     @Test
+    fun testDemoTupleObjectLayout() {
+        //given
+        val jsonStr = DEMO_TUPLE_OBJECT_LAYOUT.str
+        //when
+        val lo = LayoutHandler().parse(jsonStr) as Layout
+        val rowLayoutList = lo.row
+        // then
+        assertEquals(2, rowLayoutList.size)    //1
+    }
+
+    @Test
     fun testDemoToolTipObjectLayout() {
         //given
         val jsonStr = DEMO_TOOLTIP_OBJECT_LAYOUT.str
