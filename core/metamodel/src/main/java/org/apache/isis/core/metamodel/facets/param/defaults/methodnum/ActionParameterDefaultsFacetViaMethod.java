@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacetAbstract;
@@ -74,7 +75,7 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
             final Integer paramNumUpdated) {
 
         // this isn't a dependent defaults situation, so just evaluate the default.
-        if (pendingArgs.isEmpty() || paramNumUpdated == null) {
+        if (_NullSafe.isEmpty(pendingArgs) || paramNumUpdated == null) {
             return ManagedObject.InvokeUtil.invokeAutofit(method, target, pendingArgs);
         }
 

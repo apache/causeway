@@ -597,7 +597,7 @@ public interface ManagedObject {
             val additionalArgCount = additionalArgValues.size();
             val pendingArgsToConsiderCount = paramCount - additionalArgCount;
             
-            val argIterator = pendingArgs.iterator();
+            val argIterator = pendingArgs!=null ? pendingArgs.iterator() : Collections.<ManagedObject>emptyIterator();
             val adjusted = new Object[paramCount];
             for(int i=0; i<pendingArgsToConsiderCount; i++) {
                 
