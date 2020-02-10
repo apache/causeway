@@ -20,6 +20,7 @@ package org.apache.isis.core.runtimeservices.menubars.bootstrap3;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -74,7 +75,7 @@ import lombok.extern.log4j.Log4j2;
 @Qualifier("BS3")
 @Log4j2
 public class MenuBarsServiceBS3 implements MenuBarsService {
-
+    
     public static final String MB3_TNS = "http://isis.apache.org/applib/layout/menubars/bootstrap3";
     public static final String MB3_SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd";
 
@@ -83,6 +84,12 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
 
     public static final String LINKS_TNS = GridServiceDefault.LINKS_TNS;
     public static final String LINKS_SCHEMA_LOCATION = GridServiceDefault.LINKS_SCHEMA_LOCATION;
+    
+    @Inject private MenuBarsLoaderService menuBarsLoaderService;
+    @Inject private MessageService messageService;
+    @Inject private JaxbService jaxbService;
+    @Inject private IsisSystemEnvironment isisSystemEnvironment;
+    @Inject private MetaModelContext metaModelContext;
 
     BS3MenuBars menuBars;
 
@@ -97,58 +104,61 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
 
         // else load (and only fallback if nothing could be loaded)...
         if(menuBars == null || menuBarsLoaderService.supportsReloading()) {
-
-            BS3MenuBars menuBars = menuBarsLoaderService.menuBars();
-            if(menuBars == null) {
-                menuBars = fallbackMenuBars;
-            }
-
-            menuBars.setTnsAndSchemaLocation(tnsAndSchemaLocation());
-
-            val unreferencedActionsMenu = validateAndGetUnreferencedActionMenu(menuBars);
-
-            if (unreferencedActionsMenu != null) {
-                // add in any missing actions from the fallback
-                val referencedActionsByObjectTypeAndId =
-                        menuBars.getAllServiceActionsByObjectTypeAndId();
-
-                fallbackMenuBars.visit(BS3MenuBars.VisitorAdapter.visitingMenuSections(menuSection->{
-
-                    // created only if required to collect unreferenced actions
-                    // for this menuSection into a new section within the designated
-                    // unreferencedActionsMenu
-                    BS3MenuSection section = null;   
-
-                    for (ServiceActionLayoutData serviceAction : menuSection.getServiceActions()) {
-                        val objectTypeAndId = serviceAction.getObjectTypeAndId();
-                        val isReferencedAction = referencedActionsByObjectTypeAndId.containsKey(objectTypeAndId);
-
-                        if (isReferencedAction) {
-                            continue; // check next
-                        }
-
-                        if(section == null) {
-                            section = addSectionToMenu(unreferencedActionsMenu);
-                        }
-
-                        bindActionToSection(serviceAction, section);
-                    }
-
-                }));
-
-            } else {
-                // just use fallback
-                menuBars = fallbackMenuBars;
-            }
-
-            this.menuBars = menuBars;
+            this.menuBars = loadOrElse(fallbackMenuBars);
         }
 
         return menuBars;
     }
 
     // -- HELPER
+    
+    private BS3MenuBars loadOrElse(BS3MenuBars fallbackMenuBars) {
+        
+        val menuBars = Optional.ofNullable(menuBarsLoaderService.menuBars())
+                .map(this::addTnsAndSchemaLocation)
+                .orElse(fallbackMenuBars);
 
+        val unreferencedActionsMenu = validateAndGetUnreferencedActionMenu(menuBars);
+        if (unreferencedActionsMenu == null) {
+            // just use fallback
+            return fallbackMenuBars;
+        }
+        
+        // add in any missing actions from the fallback
+        val referencedActionsByObjectTypeAndId = menuBars.getAllServiceActionsByObjectTypeAndId();
+
+        fallbackMenuBars.visit(BS3MenuBars.VisitorAdapter.visitingMenuSections(menuSection->{
+
+            // created only if required to collect unreferenced actions
+            // for this menuSection into a new section within the designated
+            // unreferencedActionsMenu
+            BS3MenuSection section = null;   
+
+            for (val serviceActionLayout : menuSection.getServiceActions()) {
+                val objectTypeAndId = serviceActionLayout.getObjectTypeAndId();
+                val isReferencedAction = referencedActionsByObjectTypeAndId.containsKey(objectTypeAndId);
+
+                if (isReferencedAction) {
+                    continue; // check next
+                }
+
+                if(section == null) {
+                    section = addSectionToMenu(unreferencedActionsMenu);
+                }
+
+                bindActionToSection(serviceActionLayout, section);
+            }
+
+        }));
+        
+        return menuBars;
+    }
+
+    private BS3MenuBars addTnsAndSchemaLocation(BS3MenuBars menuBars) {
+        menuBars.setTnsAndSchemaLocation(tnsAndSchemaLocation());
+        return menuBars;
+    }
+    
     private static BS3MenuSection addSectionToMenu(BS3Menu menu) {
         val section = new BS3MenuSection();
         menu.getSections().add(section);
@@ -196,20 +206,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
         final BS3MenuBars menuBars = new BS3MenuBars();
 
         final List<ManagedObject> visibleServiceAdapters = metaModelContext.streamServiceAdapters()
-                .filter(objectAdapter -> {
-                    val spec = objectAdapter.getSpecification();
-                    if (spec.isHidden()) {
-                        // however, this isn't the same as HiddenObjectFacet, so doesn't filter out
-                        // services that have an imperative hidden() method.
-                        return false;
-                    }
-                    val domainServiceFacet = spec.getFacet(DomainServiceFacet.class);
-                    if (domainServiceFacet == null) {
-                        return true;
-                    }
-                    val natureOfService = domainServiceFacet.getNatureOfService();
-                    return natureOfService == null || natureOfService != NatureOfService.DOMAIN;
-                })
+                .filter(this::isVisibleAdapterForMenu)
                 .collect(Collectors.toList());
 
         append(visibleServiceAdapters, menuBars.getPrimary(), DomainServiceLayout.MenuBar.PRIMARY);
@@ -224,6 +221,21 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
         menuBars.getPrimary().getMenus().add(otherMenu);
 
         return menuBars;
+    }
+    
+    private boolean isVisibleAdapterForMenu(ManagedObject objectAdapter) {
+        val spec = objectAdapter.getSpecification();
+        if (spec.isHidden()) {
+            // however, this isn't the same as HiddenObjectFacet, so doesn't filter out
+            // services that have an imperative hidden() method.
+            return false;
+        }
+        val domainServiceFacet = spec.getFacet(DomainServiceFacet.class);
+        if (domainServiceFacet == null) {
+            return true;
+        }
+        val natureOfService = domainServiceFacet.getNatureOfService();
+        return natureOfService == null || natureOfService != NatureOfService.DOMAIN;
     }
 
 
@@ -398,11 +410,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
     }
 
 
-    @Inject MenuBarsLoaderService menuBarsLoaderService;
-    @Inject MessageService messageService;
-    @Inject JaxbService jaxbService;
-    @Inject IsisSystemEnvironment isisSystemEnvironment;
-    @Inject MetaModelContext metaModelContext;
+
 
 }
 
