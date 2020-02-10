@@ -21,6 +21,11 @@ package org.apache.isis.core.metamodel.exceptions.persistence;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
+/**
+ * TODO: v2 - review - doesn't seem to be used?
+ * @deprecated
+ */
+@Deprecated
 public class PojoRefreshException extends ObjectNotFoundException {
     private static final long serialVersionUID = 1L;
 
