@@ -24,45 +24,61 @@ import org.apache.isis.applib.services.menu.MenuBarsService;
 
 public interface LayoutService {
 
+    /**
+     * Mode of operation when downloading a layout file (while prototyping). It affects the way the file's 
+     * content is assembled. Once a layout file is in place, its layout data takes precedence over any 
+     * conflicting layout data from annotations.
+     */
     enum Style {
 
         /**
          * The current layout for the domain class.
-         * <p/>
          * <p>
          * If a <code>layout.xml</code> exists, then the grid returned will correspond to that
-         * grid, having been {@link org.apache.isis.applib.services.grid.GridService#normalize(Grid) normalized}.  If there is no <code>layout.xml</code> file, then the grid returned will be the
+         * grid, having been {@link org.apache.isis.applib.services.grid.GridService#normalize(Grid) normalized}.
+         * If there is no <code>layout.xml</code> file, then the grid returned will be the
          * {@link org.apache.isis.applib.services.grid.GridService#defaultGridFor(Class) default grid},
          * also {@link org.apache.isis.applib.services.grid.GridService#normalize(Grid) normalized}.
-         * </p>
          */
         CURRENT,
+        
         /**
          * As per {@link #NORMALIZED}, but also with all (non-null) facets for all
          * properties/collections/actions also included included in the grid.
-         * <p/>
          * <p>
          * The intention here is that any layout metadata annotations can be removed from the code.
-         * </p>
+         * <ul>
+         * <li>{@code @MemberGroupLayout}: <b>serialized as XML</b></li>
+         * <li>{@code @MemberOrder}: <b>serialized as XML</b></li>
+         * <li>{@code @ActionLayout, @PropertyLayout, @CollectionLayout}: <b>serialized as XML</b></li>
+         * </ul>
          */
         COMPLETE,
+        
         /**
          * Default, whereby missing properties/collections/actions are added to regions,
          * and unused/empty regions are removed/trimmed.
-         * <p/>
          * <p>
-         * It should be possible to remove any {@link MemberOrder} annotation but
-         * any layout annotations would need to be retained.
-         * </p>
+         * It should be possible to remove any {@link MemberOrder} and {@link MemberGroupLayout} annotation but
+         * any property/collection/action layout annotations would need to be retained.
+         * <ul>
+         * <li>{@code @MemberGroupLayout}: <b>serialized as XML</b></li>
+         * <li>{@code @MemberOrder}: <b>serialized as XML</b></li>
+         * <li>{@code @ActionLayout, @PropertyLayout, @CollectionLayout}: <b>ignored</b></li>
+         * </ul>
          */
         NORMALIZED,
+        
         /**
          * As per {@link #NORMALIZED}, but with no properties/collections/actions.
-         * <p/>
          * <p>
          * The intention here is for layout annotations that &quot;bind&quot; the properties/collections/actions
          * to the regions to be retained.
-         * </p>
+         * <ul>
+         * <li>{@code @MemberGroupLayout}: <b>serialized as XML</b></li>
+         * <li>{@code @MemberOrder}: <b>ignored</b></li>
+         * <li>{@code @ActionLayout, @PropertyLayout, @CollectionLayout}: <b>ignored</b></li>
+         * </ul>
          */
         MINIMAL
     }

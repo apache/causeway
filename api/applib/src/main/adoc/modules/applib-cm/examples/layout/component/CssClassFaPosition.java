@@ -18,16 +18,11 @@
  */
 package org.apache.isis.applib.layout.component;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlType;
 
-public interface HasCssClassFa {
-
-    @XmlAttribute(required = false)
-    String getCssClassFa();
-    void setCssClassFa(String cssClassFa);
-
-    @XmlAttribute(required = false)
-    CssClassFaPosition getCssClassFaPosition();
-    void setCssClassFaPosition(CssClassFaPosition cssClassFaPosition);
-
+@XmlType(
+        namespace = "http://isis.apache.org/applib/layout/component"
+        )
+public enum CssClassFaPosition {
+    LEFT, RIGHT
 }

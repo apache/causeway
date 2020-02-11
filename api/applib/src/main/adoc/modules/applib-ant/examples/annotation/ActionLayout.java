@@ -27,6 +27,8 @@ import java.lang.annotation.Target;
 
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.isis.applib.layout.component.CssClassFaPosition;
+
 /**
  * Layout hints for actions.
  */
@@ -74,13 +76,6 @@ public @interface ActionLayout {
      * icon. The icon could be rendered on the left or the right of the action button
      */
     CssClassFaPosition cssClassFaPosition() default CssClassFaPosition.LEFT;
-
-    @XmlType(
-            namespace = "http://isis.apache.org/applib/layout/component"
-            )
-    enum CssClassFaPosition {
-        LEFT, RIGHT
-    }
 
     // //////////////////////////////////////
 

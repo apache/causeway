@@ -98,16 +98,16 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
 
 
 
-    private org.apache.isis.applib.annotation.ActionLayout.CssClassFaPosition cssClassFaPosition;
+    private CssClassFaPosition cssClassFaPosition;
 
     @Override
     @XmlAttribute(required = false)
-    public org.apache.isis.applib.annotation.ActionLayout.CssClassFaPosition getCssClassFaPosition() {
+    public CssClassFaPosition getCssClassFaPosition() {
         return cssClassFaPosition;
     }
 
     @Override
-    public void setCssClassFaPosition(org.apache.isis.applib.annotation.ActionLayout.CssClassFaPosition cssClassFaPosition) {
+    public void setCssClassFaPosition(CssClassFaPosition cssClassFaPosition) {
         this.cssClassFaPosition = cssClassFaPosition;
     }
 
