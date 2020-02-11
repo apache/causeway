@@ -56,12 +56,6 @@ public class FixturesLifecycleService {
             FixtureClock.initialize();
         }
 
-        //
-        // installFixturesIfRequired
-        //
-        //        final FixturesInstallerFromConfiguration fixtureInstaller =
-        //                new FixturesInstallerFromConfiguration();
-        //        fixtureInstaller.installFixtures();  
 
 
     }
