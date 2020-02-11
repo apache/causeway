@@ -21,47 +21,106 @@ package org.apache.isis.core.commons.internal.assertions;
 
 import java.util.Objects;
 
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 
+import lombok.experimental.UtilityClass;
+
+/**
+ * <h1>- internal use only -</h1>
+ * <p>
+ * A collection of commonly used constants.
+ * </p>
+ * <p>
+ * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
+ * These may be changed or removed without notice!
+ * </p>
+ *
+ * @since 2.0
+ */
+@UtilityClass
 public final class _Assert {
+    
 
-    public static void assertFalse(final String message, final boolean flag) {
-        assertTrue(message, !flag);
+    // -- TRUE
+
+    public static void assertTrue(boolean condition) {
+        assertTrue(condition, (String) null);
     }
 
-    public static void assertFalse(final String message, final Object target, final boolean flag) {
-        assertTrue(message, target, !flag);
-    }
-
-    public static void assertNotNull(final Object object) {
-        assertNotNull("", object);
-    }
-
-    public static void assertNotNull(final String message, final Object object) {
-        assertTrue("unexpected null: " + message, object != null);
-    }
-
-    public static void assertTrue(final String message, final boolean flag) {
-        assertTrue(message, null, flag);
-    }
-
-    public static void assertTrue(final String message, final Object target, final boolean flag) {
-        if (!flag) {
-            throw _Exceptions.unrecoverable(message + (target == null ? "" : (": " + target)));
+    public static void assertTrue(boolean condition, String message) {
+        if (!condition) {
+            fail(message, true, false);
         }
     }
 
-    public static void assertEquals(final String message, Object left, Object right) {
+    // -- FALSE
+
+    public static void assertFalse(boolean condition) {
+        assertFalse(condition, (String) null);
+    }
+
+    public static void assertFalse(boolean condition, String message) {
+        if (condition) {
+            fail(message, false, true);
+        }
+    }
+    
+    // -- NOT NULL
+
+    public static void assertNotNull(Object object) {
+        assertNotNull(object, (String) null);
+    }
+
+    public static void assertNotNull(Object object, String message) {
+        if (object==null) {
+            fail(message, "not null", "null");
+        }
+    }
+    
+    /**
+     * <em>Assert</em> that {@code expected} and {@code actual} are equal.
+     * <p>If both are {@code null}, they are considered equal.
+     *
+     * @see Object#equals(Object)
+     */
+    public static void assertEquals(Object left, Object right) {
+        assertEquals(left, right, (String) null);
+    }
+
+    /**
+     * <em>Assert</em> that {@code expected} and {@code actual} are equal.
+     * <p>If both are {@code null}, they are considered equal.
+     * <p>Fails with the supplied failure {@code message}.
+     *
+     * @see Object#equals(Object)
+     */
+    public static void assertEquals(Object left, Object right, String message) {
         if (!Objects.equals(left, right)) {
-            throw _Exceptions.unrecoverable(message + String.format(": '%s' != '%s' ", ""+left, ""+right));
+            fail(message, left, right);
         }
     }
+    
+    // -- TYPE INSTANCE OF
 
     public static void assertTypeIsInstanceOf(Class<?> type, Class<?> requiredType) {
         if(!requiredType.isAssignableFrom(type)) {
-            throw _Exceptions.unrecoverable(String.format(
-                    "unexpected type: '%s' is not an instance of '%s' ", ""+type, ""+requiredType));
+            throw _Exceptions.assertionError(String.format(
+                    "unexpected type: <%s> is not an instance of <%s> ", ""+type, ""+requiredType));
         }
     }
+    
+    // -- HELPER
+    
+    static String buildPrefix(String message) {
+        return _Strings.isNotEmpty(message) ? message + " ==> " : "";
+    }
+    
+    private static void fail(String message, Object expected, Object actual) {
+        throw _Exceptions.assertionError(
+                buildPrefix(message) 
+                + String.format("expected: <%s> but was: <%s>", ""+expected, ""+actual));
+    }
+
 
 }

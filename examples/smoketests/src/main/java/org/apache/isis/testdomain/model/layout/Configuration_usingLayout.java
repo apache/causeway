@@ -16,26 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.services;
+package org.apache.isis.testdomain.model.layout;
 
-import org.apache.isis.core.commons.internal.assertions._Assert;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-public final class ServiceUtil {
+import org.apache.isis.incubator.model.metamodel.IsisModuleIncModelMetaModel;
 
-    private ServiceUtil() {
-    }
-
-    public static String idOfSpec(final ObjectSpecification serviceSpec) {
-        _Assert.assertEquals( 
-                serviceSpec.getManagedBeanName(), 
-                serviceSpec.getSpecId().asString());
-        return serviceSpec.getManagedBeanName();
-    }
-
-    public static String idOfAdapter(final ManagedObject serviceAdapter) {
-        return idOfSpec(serviceAdapter.getSpecification());
-    }
+@Configuration
+@Import({
+    IsisModuleIncModelMetaModel.class
+})
+@ComponentScan(
+        basePackageClasses= {               
+                Configuration_usingLayout.class
+        })
+public class Configuration_usingLayout {
 
 }

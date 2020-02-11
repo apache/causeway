@@ -133,6 +133,12 @@ public final class _Exceptions {
         return new UnsupportedOperationException("unrecoverable error: method call not allowed/supported");
     }
     
+    // -- ASSERT
+    
+    public static AssertionError assertionError(String msg) {
+        return new AssertionError(msg);
+    }
+    
     // -- MESSAGE
     
     public static String getMessage(Exception ex) {
@@ -437,6 +443,8 @@ public final class _Exceptions {
             uncheckedConsumer(checkedConsumer).accept(obj);
         }
     }
+
+
 
 
 

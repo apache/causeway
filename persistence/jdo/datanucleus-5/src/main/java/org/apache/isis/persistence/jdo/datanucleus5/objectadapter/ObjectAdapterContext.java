@@ -237,7 +237,7 @@ final public class ObjectAdapterContext {
         final RootOid persistentOid = createPersistentOrViewModelOid(rootAdapter.getPojo());
 
         Objects.requireNonNull(persistentOid);
-        _Assert.assertFalse("expected to not be parented", rootAdapter.isParented());
+        _Assert.assertFalse(rootAdapter.isParented(), "expected to not be parented");
         
         final ObjectSpecId hintRootOidObjectSpecId = persistentOid.getObjectSpecId();
         final ObjectSpecId adapterObjectSpecId = rootAdapter.getSpecification().getSpecId();

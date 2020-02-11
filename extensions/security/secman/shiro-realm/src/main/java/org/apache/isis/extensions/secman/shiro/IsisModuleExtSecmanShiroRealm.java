@@ -112,7 +112,7 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements S
             val newPrincipal = createPrincipal_inApplicationUserRepository(username);
 
             _Assert.assertNotNull(newPrincipal);
-            _Assert.assertTrue("Auto-created user accounts must be initially disabled!", newPrincipal.isDisabled());
+            _Assert.assertTrue(newPrincipal.isDisabled(), "Auto-created user accounts must be initially disabled!");
 
             throw disabledAccountException(username); // default behavior after user auto-creation
         }

@@ -123,7 +123,7 @@ class AbstractShiroTest {
         }
         SecurityUtils.setSecurityManager(securityManager);
         
-        _Assert.assertEquals("expected same object", securityManager, SecurityUtils.getSecurityManager());
+        _Assert.assertEquals(securityManager, SecurityUtils.getSecurityManager(), "expected same object");
     }
 
     protected static SecurityManager getSecurityManager() {

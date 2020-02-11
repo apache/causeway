@@ -117,7 +117,7 @@ public final class InstanceUtil {
             final Class<? extends T> defaultType,
             final Class<T> requiredType,
             Object... args) {
-        _Assert.assertNotNull("Class to instantiate must be specified", cls);
+        _Assert.assertNotNull(cls, "Class to instantiate must be specified");
         try {
             if (requiredType == null || requiredType.isAssignableFrom(cls)) {
                 final Class<T> tClass = _Casts.uncheckedCast(cls);

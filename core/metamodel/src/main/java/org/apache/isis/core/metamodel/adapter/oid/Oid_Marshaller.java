@@ -226,7 +226,7 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
     // -- marshal
     @Override
     public final String marshal(RootOid rootOid) {
-        _Assert.assertFalse("can not marshal values", rootOid.isValue());
+        _Assert.assertFalse(rootOid.isValue(), "cannot marshal values");
         return rootOid.getObjectSpecId() + SEPARATOR + rootOid.getIdentifier();
     }
 
