@@ -177,8 +177,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     }
     
     private static IsisConfiguration newIsisConfiguration() {
-        val config = new IsisConfiguration();
-        config.setEnvironment(new AbstractEnvironment() {
+        val config = new IsisConfiguration(new AbstractEnvironment() {
             @Override
             public String getProperty(String key) {
                 return _Config.getConfiguration().getString(key);

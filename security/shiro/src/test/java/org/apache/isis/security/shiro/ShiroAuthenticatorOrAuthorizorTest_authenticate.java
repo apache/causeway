@@ -59,7 +59,7 @@ public class ShiroAuthenticatorOrAuthorizorTest_authenticate {
 
         // PRODUCTION
 
-        val configuration = new IsisConfiguration();
+        val configuration = new IsisConfiguration(null);
         configuration.getSecurity().getShiro().setAutoLogoutIfAlreadyAuthenticated(false);
         
         authenticator = new AuthenticatorShiro(configuration);

@@ -10,7 +10,7 @@ public class IsisConfiguration_getMaxTitleLengthInParentedTables_Test {
 
     @Before
     public void setUp() throws Exception {
-        configuration = new IsisConfiguration();
+        configuration = new IsisConfiguration(null);
     }
 
     @Test

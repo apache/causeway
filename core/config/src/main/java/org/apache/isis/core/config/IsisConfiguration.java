@@ -78,8 +78,12 @@ import lombok.Value;
 public class IsisConfiguration {
 
     public static final String ROOT_PREFIX = "isis";
-    @Autowired private ConfigurableEnvironment environment;
-    
+
+    private final ConfigurableEnvironment environment;
+    public IsisConfiguration(final ConfigurableEnvironment environment) {
+        this.environment = environment;
+    }
+
     @Inject @Named("isis-settings") private Map<String, String> isisSettings;
     public Map<String, String> getAsMap() { return Collections.unmodifiableMap(isisSettings); }
     

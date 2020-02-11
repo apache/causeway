@@ -64,9 +64,8 @@ abstract class SpecificationLoaderTestAbstract {
         }
 
         IsisConfiguration newConfiguration() {
-            val config = new IsisConfiguration(); // uses defaults!
+            val config = new IsisConfiguration(newConfigurableEnvironment()); // uses defaults!
             config.getCore().getMetaModel().getIntrospector().setLockAfterFullIntrospection(false);
-            config.setEnvironment(newConfigurableEnvironment());
             return config;
         }
 

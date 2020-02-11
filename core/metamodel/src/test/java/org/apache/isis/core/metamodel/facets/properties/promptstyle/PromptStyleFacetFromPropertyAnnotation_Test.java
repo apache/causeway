@@ -46,7 +46,7 @@ public class PromptStyleFacetFromPropertyAnnotation_Test {
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
-    IsisConfiguration stubConfiguration = new IsisConfiguration();
+    IsisConfiguration stubConfiguration = new IsisConfiguration(null);
 
     @Mock
     FacetHolder mockFacetHolder;
