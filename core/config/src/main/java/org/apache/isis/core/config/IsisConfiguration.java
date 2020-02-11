@@ -57,10 +57,13 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.services.audit.AuditerService;
 import org.apache.isis.applib.services.command.CommandWithDto;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.publish.PublishedObjects;
+import org.apache.isis.applib.services.userreg.EmailNotificationService;
+import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.core.config.metamodel.facets.AuditObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.CommandActionsConfiguration;
@@ -146,7 +149,7 @@ public class IsisConfiguration {
 
                 /**
                  * The default for whether <i>domain entities</i> should be audited or not (meaning that any changes are
-                 * sent through to the {@link org.apache.isis.applib.services.audit.AuditerService}.
+                 * sent through to the {@link AuditerService}.
                  *
                  * <p>
                  * This setting can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotation.DomainObject#auditing()} DomainObject#getAuditing()}
@@ -619,7 +622,7 @@ public class IsisConfiguration {
                  * copy of the system.
                  *
                  * <p>
-                 *     In particular, the {@link org.apache.isis.applib.services.command.CommandWithDto} implementation
+                 *     In particular, the {@link CommandWithDto} implementation
                  *     of {@link org.apache.isis.applib.services.command.Command} represents the action invocation
                  *     memento (obtained using {@link CommandWithDto#asDto()}) as a
                  *     {@link org.apache.isis.schema.cmd.v2.CommandDto}.
@@ -686,7 +689,7 @@ public class IsisConfiguration {
                  * <p>
                  *     The service's {@link org.apache.isis.applib.services.publish.PublisherService#publish(Interaction.Execution) publish}
                  *     method is called only once per transaction, with
-                 *     {@link org.apache.isis.applib.services.iactn.Interaction.Execution} collecting details of
+                 *     {@link Interaction.Execution} collecting details of
                  *     the identity of the target object, the action invoked, the action arguments and the returned
                  *     object (if any).
                  * </p>
@@ -806,7 +809,7 @@ public class IsisConfiguration {
                  * against a copy of the system.
                  *
                  * <p>
-                 *     In particular, the {@link org.apache.isis.applib.services.command.CommandWithDto} implementation
+                 *     In particular, the {@link CommandWithDto} implementation
                  *     of {@link org.apache.isis.applib.services.command.Command} represents the action invocation
                  *     memento (obtained using {@link CommandWithDto#asDto()}) as a
                  *     {@link org.apache.isis.schema.cmd.v2.CommandDto}.
@@ -826,7 +829,7 @@ public class IsisConfiguration {
                  * <p>
                  *     The service's {@link org.apache.isis.applib.services.publish.PublisherService#publish(Interaction.Execution) publish}
                  *     method is called only once per transaction, with
-                 *     {@link org.apache.isis.applib.services.iactn.Interaction.Execution} collecting details of
+                 *     {@link Interaction.Execution} collecting details of
                  *     the identity of the target object, the property edited, and the new value of the property.
                  * </p>
                  *
@@ -2230,8 +2233,8 @@ public class IsisConfiguration {
              * <p>
              *     Although this is disabled by default (in other words the sign-up link is not suppressed), note that
              *     in addition the application must provide an implementation of the
-             *     {@link org.apache.isis.applib.services.userreg.UserRegistrationService} as well as a
-             *     configured {@link org.apache.isis.applib.services.userreg.EmailNotificationService} (same conditions
+             *     {@link UserRegistrationService} as well as a
+             *     configured {@link EmailNotificationService} (same conditions
              *     as for the {@link #isSuppressPasswordReset()} password reset link).
              * </p>
              */
@@ -2244,8 +2247,8 @@ public class IsisConfiguration {
              * <p>
              *     Although this is disabled by default (in other words the 'reset password' link is not suppressed),
              *     note that in addition the application must provide an implementation of the
-             *     {@link org.apache.isis.applib.services.userreg.UserRegistrationService} as well as a
-             *     configured {@link org.apache.isis.applib.services.userreg.EmailNotificationService} (same conditions
+             *     {@link UserRegistrationService} as well as a
+             *     configured {@link EmailNotificationService} (same conditions
              *     as for the {@link #isSuppressSignUp()} sign-up link).
              * </p>
              */
