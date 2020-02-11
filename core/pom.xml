@@ -190,7 +190,7 @@
 	<pluginRepositories>
 		<pluginRepository>
 			<id>DataNucleus_2</id>
-			<url>https://www.datanucleus.org/downloads/maven2/</url>
+			<url>http://www.datanucleus.org/downloads/maven2/</url> <!--TODO not yet supports SSL, even required? -->
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
