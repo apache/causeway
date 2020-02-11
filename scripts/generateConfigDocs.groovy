@@ -153,7 +153,14 @@ groups+= new PropertyGroup() {{
 groups+= new PropertyGroup() {{
     prefix = "isis.subdomains"
     name = "Subdomains"
-    description = "Configuration that applies to value type definitions"
+    description = "Configuration that applies to subdomain libraries"
+    searchOrder = 501
+}}
+
+groups+= new PropertyGroup() {{
+    prefix = "isis.testing"
+    name = "Testing"
+    description = "Configuration that applies to the testing libraries"
     searchOrder = 501
 }}
 

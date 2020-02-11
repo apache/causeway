@@ -120,6 +120,15 @@
       }]
     },
     {
+      "name": "isis.testing.fixtures.initial-script",
+      "providers": [{
+        "name": "class-reference",
+        "parameters": {
+          "target": "org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript"
+        }
+      }]
+    },
+    {
       "name": "isis.viewer.wicket.themes.provider",
       "providers": [{
         "name": "class-reference",

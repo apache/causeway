@@ -18,6 +18,9 @@
  */
 package org.apache.isis.core.config;
 
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -30,12 +33,21 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.validation.Constraint;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+import javax.validation.Payload;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.validation.annotation.Validated;
@@ -49,6 +61,7 @@ import org.apache.isis.applib.services.command.CommandWithDto;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.publish.PublishedObjects;
+import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.core.config.metamodel.facets.AuditObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.CommandActionsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.CommandPropertiesConfiguration;
@@ -63,6 +76,7 @@ import org.apache.isis.core.config.viewer.wicket.DialogMode;
 
 import lombok.Data;
 import lombok.Value;
+import lombok.var;
 
 
 /**
@@ -2893,6 +2907,25 @@ public class IsisConfiguration {
         }
     }
 
+    private final Testing testing = new Testing();
+    @Data
+    public static class Testing {
+        private final Fixtures fixtures = new Fixtures();
+        @Data
+        public static class Fixtures {
+            /**
+             * Indicates the fixture script class to run initially.
+             *
+             * <p>
+             *     Intended for use when prototyping against an in-memory database (but will run in production mode
+             *     as well if required).
+             * </p>
+             */
+            @AssignableFrom("org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript")
+            private Class<?> initialScript = null;
+        }
+    }
+
     private final Legacy legacy = new Legacy();
     @Data
     public static class Legacy {
@@ -3013,4 +3046,45 @@ public class IsisConfiguration {
     }
 
 
+    @Target({ FIELD, METHOD, PARAMETER, ANNOTATION_TYPE })
+    @Retention(RUNTIME)
+    @Constraint(validatedBy = AssignableFromValidator.class)
+    @Documented
+    public @interface AssignableFrom {
+
+        String value();
+
+        String message()
+                default "{org.apache.isis.core.config.IsisConfiguration.AssignableFrom.message}";
+
+        Class<?>[] groups() default { };
+
+        Class<? extends Payload>[] payload() default { };
+    }
+
+
+    public static class AssignableFromValidator implements ConstraintValidator<AssignableFrom, Class<?>> {
+
+        private Class<?> superType;
+
+        @Override
+        public void initialize(final AssignableFrom assignableFrom) {
+            var className = assignableFrom.value();
+            try {
+                superType = _Context.loadClass(className);
+            } catch (ClassNotFoundException e) {
+                superType = null;
+            }
+        }
+
+        @Override
+        public boolean isValid(
+                final Class<?> candidateClass,
+                final ConstraintValidatorContext constraintContext) {
+            if (superType == null || candidateClass == null) {
+                return true;
+            }
+            return superType.isAssignableFrom(candidateClass);
+        }
+    }
 }

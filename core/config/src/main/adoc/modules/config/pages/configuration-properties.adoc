@@ -179,6 +179,20 @@ include::refguide:config:example$generated/isis.viewer.wicket.adoc[]
 |===
 
 
+== Testing
+
+[cols="2a,2a,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+include::refguide:config:example$generated/isis.testing.adoc[]
+
+|===
+
+
 == Value Types
 
 [cols="2a,2a,3a", options="header"]
@@ -235,6 +249,7 @@ endif::[]
 include::refguide:config:example$generated/isis.extensions.adoc[]
 
 |===
+
 
 ifdef::env-this-stuff-is-currently-disabled[]
 
