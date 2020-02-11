@@ -41,16 +41,11 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class SeedSecurityModuleService {
 
-    @Inject private FixtureScripts fixtureScripts;
+    private final FixtureScripts fixtureScripts;
 
-    //@PostConstruct ... to early, need to wait for the IsisSessionFactory, 
-    //which can only init after the post-construct phase
-    public void init() {
-        
-        log.info("SEED");
-
-        fixtureScripts.run(new SeedUsersAndRolesFixtureScript());
-
+    @Inject
+    public SeedSecurityModuleService(final FixtureScripts fixtureScripts) {
+        this.fixtureScripts = fixtureScripts;
     }
 
     @EventListener(AppLifecycleEvent.class)
@@ -64,13 +59,15 @@ public class SeedSecurityModuleService {
         case appPreMetamodel:
             break;
         case appPostMetamodel:
-            init();
+
+            log.info("SEED");
+
+            fixtureScripts.run(new SeedUsersAndRolesFixtureScript());
             break;
 
         default:
             throw _Exceptions.unmatchedCase(eventType);
         }
-
     }
 
     
