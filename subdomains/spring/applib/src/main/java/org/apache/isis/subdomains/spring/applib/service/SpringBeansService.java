@@ -21,6 +21,7 @@ package org.apache.isis.subdomains.spring.applib.service;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -44,6 +45,7 @@ public class SpringBeansService {
 
     private final ConfigurableApplicationContext context;
 
+    @Inject
     public SpringBeansService(final ConfigurableApplicationContext context) {
         this.context = context;
     }
