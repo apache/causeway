@@ -62,7 +62,7 @@ import lombok.extern.log4j.Log4j2;
         }
 )
 @TestPropertySource(IsisPresets.UseLog4j2Test)
-@Incubating("inconsitent state when run in a test batch")
+@Incubating("wrapper.wrap(inventoryManager) throws NPE")
 class WrapperAsyncTest {
 
     @Inject private FixtureScripts fixtureScripts;
@@ -90,7 +90,8 @@ class WrapperAsyncTest {
 
         actionDomainEventListener.prepareLatch();
 
-        wrapper.wrap(inventoryManager).updateProductPrice(product, 123);
+        wrapper.wrap(inventoryManager)
+        .updateProductPrice(product, 123);
 
         assertTrue(
                 actionDomainEventListener.getCountDownLatch()

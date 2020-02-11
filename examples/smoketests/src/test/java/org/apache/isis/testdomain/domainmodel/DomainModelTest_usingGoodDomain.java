@@ -149,7 +149,7 @@ class DomainModelTest_usingGoodDomain {
         val mx_openRestApi = holderSpec.getObjectAction("openRestApi"); // built-in mixin support
         assertNotNull(mx_openRestApi);
         
-        assertThrows(Exception.class, ()->holderSpec.getAssociation("openRestApi")); // should not be picked up as a property
+        assertThrows(Exception.class, ()->holderSpec.getAssociationElseFail("openRestApi")); // should not be picked up as a property
         
     }
     
@@ -158,7 +158,7 @@ class DomainModelTest_usingGoodDomain {
         
         val holderSpec = specificationLoader.loadSpecification(Product.class);
         
-        val mx_datanucleusIdLong = holderSpec.getAssociation("datanucleusIdLong"); // plugged in mixin
+        val mx_datanucleusIdLong = holderSpec.getAssociationElseFail("datanucleusIdLong"); // plugged in mixin
         assertNotNull(mx_datanucleusIdLong);
         
     }

@@ -24,15 +24,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
-
 /**
  * To be used on all smoke-test classes, to allow for a convenient means to globally apply meta-annotations.
  */
 @Target({ ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@DirtiesContext(classMode = ClassMode.BEFORE_CLASS) //XXX prevents re-use of cached application-context
+//@DirtiesContext(classMode = ClassMode.BEFORE_CLASS) // prevents re-use of cached application-context
 @Documented
 public @interface Smoketest {
 
