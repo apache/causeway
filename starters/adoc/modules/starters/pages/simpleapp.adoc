@@ -44,11 +44,11 @@ Then browse to link:http://localhost:8080[], and read on.
 
 When you start the app, you'll be presented with a welcome page from which you can access the webapp using either the generic UI provided by xref:vw:ROOT:about.adoc[Wicket viewer] or use Swagger to access the xref:vro:ROOT:about.adoc[Restful Objects viewer]:
 
-image::simpleapp/simpleapp/using/010-root-page.png[width="600px",link="{imagesdir}/simpleapp/using/010-root-page.png"]
+image::simpleapp/using/010-root-page.png[width="600px",link="{imagesdir}/simpleapp/using/010-root-page.png"]
 
 Choose the generic Wicket UI, and navigate to the login page:
 
-image::simpleapp/simpleapp/using/020-login-to-wicket-viewer.png[width="600px",link="{imagesdir}/simpleapp/using/020-login-to-wicket-viewer.png"]
+image::simpleapp/using/020-login-to-wicket-viewer.png[width="600px",link="{imagesdir}/simpleapp/using/020-login-to-wicket-viewer.png"]
 
 The app itself is configured to run using xref:security:ROOT:about.adoc[shiro security], as configured in the `WEB-INF/shiro.ini` config file.
 You can login with:
@@ -60,7 +60,7 @@ You can login with:
 
 Once you've logged in you'll see the default home page:
 
-image::simpleapp/simpleapp/using/030-home-page.png[width="600px",link="{imagesdir}/simpleapp/using/030-home-page.png"]
+image::simpleapp/using/030-home-page.png[width="600px",link="{imagesdir}/simpleapp/using/030-home-page.png"]
 
 This is a view model annotated with xref:refguide:applib-ant:HomePage.adoc[@HomePage]:
 
@@ -92,11 +92,11 @@ public class HomePageViewModel {
 When prototyping against an in-memory database, it's useful to have a mechanism to create some initial state.
 This can be done using fixture scripts, accessible from the menu:Prototyping[Run Fixture Script]:
 
-image::simpleapp/simpleapp/using/032-run-fixture-script-prompt.png[width="px",link="{imagesdir}/simpleapp/using/032-run-fixture-script-prompt.png"]
+image::simpleapp/using/032-run-fixture-script-prompt.png[width="px",link="{imagesdir}/simpleapp/using/032-run-fixture-script-prompt.png"]
 
 This brings up a dialog to select the fixture script:
 
-image::simpleapp/simpleapp/using/033-run-fixture-script-prompt.png[width="px",link="{imagesdir}/simpleapp/using/033-run-fixture-script-prompt.png"]
+image::simpleapp/using/033-run-fixture-script-prompt.png[width="px",link="{imagesdir}/simpleapp/using/033-run-fixture-script-prompt.png"]
 
 This surfaces this code:
 
@@ -120,27 +120,36 @@ public class DomainAppDemo extends FixtureScript {
 
 When executed, all objects created by the fixture are listed:
 
-image::simpleapp/simpleapp/using/034-run-fixture-script-result.png[width="px",link="{imagesdir}/simpleapp/using/034-run-fixture-script-result.png"]
+image::simpleapp/using/034-run-fixture-script-result.png[width="px",link="{imagesdir}/simpleapp/using/034-run-fixture-script-result.png"]
 
 Navigating back to the home page shows the newly created objects:
 
-image::simpleapp/simpleapp/using/036-home-page-after-fixture-scriptpng.png[width="600px",link="{imagesdir}/simpleapp/using/036-home-page-after-fixture-scriptpng.png"]
+image::simpleapp/using/036-home-page-after-fixture-scriptpng.png[width="600px",link="{imagesdir}/simpleapp/using/036-home-page-after-fixture-scriptpng.png"]
 
+
+As well as running in fixtures from the UI, you can also specify a configuration property to run a fixture script as part of the application start-up:
+
+[source,ini]
+.config/application.properties
+----
+# isis.testing.fixtures.initial-script = \
+#    domainapp.webapp.application.fixture.scenarios.DomainAppDemo
+----
 
 
 ==== Create an object
 
 You can also of course create new objects:
 
-image::simpleapp/simpleapp/using/040-create-object-from-menu.png[width="600px",link="{imagesdir}/simpleapp/using/040-create-object-from-menu.png"]
+image::simpleapp/using/040-create-object-from-menu.png[width="600px",link="{imagesdir}/simpleapp/using/040-create-object-from-menu.png"]
 
 To avoid obscuring the current page, this is configured to bring up a sidebar dialog:
 
-image::simpleapp/simpleapp/using/050-create-object-from-menu-prompt.png[width="600px",link="{imagesdir}/simpleapp/using/050-create-object-from-menu-prompt.png"]
+image::simpleapp/using/050-create-object-from-menu-prompt.png[width="600px",link="{imagesdir}/simpleapp/using/050-create-object-from-menu-prompt.png"]
 
 Hitting OK returns the created object:
 
-image::simpleapp/simpleapp/using/060-created-object.png[width="600px",link="{imagesdir}/simpleapp/using/060-created-object.png"]
+image::simpleapp/using/060-created-object.png[width="600px",link="{imagesdir}/simpleapp/using/060-created-object.png"]
 
 The above functionality is implemented by this code:
 
@@ -165,7 +174,7 @@ The `SimpleObject` contains a couple of properties, and a single action to updat
 
 The `name` property is read-only, and can only be modified using the `updateName` action:
 
-image::simpleapp/simpleapp/using/070-update-name.png[width="600px",link="{imagesdir}/simpleapp/using/070-update-name.png"]
+image::simpleapp/using/070-update-name.png[width="600px",link="{imagesdir}/simpleapp/using/070-update-name.png"]
 
 The above functionality is implemented by this code:
 
@@ -191,7 +200,7 @@ This means that the action invocation is converted into XML and dispatched to al
 
 The framework provides a default implementation that just logs the interaction:
 
-image::simpleapp/simpleapp/using/075-publish-logging-1.png[width="600px",link="{imagesdir}/simpleapp/using/075-publish-logging-1.png"]
+image::simpleapp/using/075-publish-logging-1.png[width="600px",link="{imagesdir}/simpleapp/using/075-publish-logging-1.png"]
 
 In fact, it also logs the fact that the object itself was modified:
 
@@ -324,7 +333,7 @@ There will be several of these app manifests, typically one for the webapp itsel
 The link:{attachmentsdir}/simpleapp-modules-dependencies.pptx[diagram] below shows how classes fit together:
 
 .Module Dependencies
-image::simpleapp/simpleapp-modules-dependencies.png[width="800px",link="{imagesdir}/simpleapp/simpleapp-modules-dependencies.png"]
+image::simpleapp-modules-dependencies.png[width="800px",link="{imagesdir}/simpleapp/simpleapp-modules-dependencies.png"]
 
 
 
