@@ -190,7 +190,7 @@
 	<pluginRepositories>
 		<pluginRepository>
 			<id>DataNucleus_2</id>
-			<url>http://www.datanucleus.org/downloads/maven2/</url>
+			<url>https://www.datanucleus.org/downloads/maven2/</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
@@ -240,7 +240,7 @@
 		<!-- required for RestEasy -->
 		<repository>
 			<id>jboss</id>
-			<url>http://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+			<url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
