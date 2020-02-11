@@ -20,11 +20,11 @@ package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 
 public class CssClassFaFacetForDomainObjectLayoutAnnotation extends CssClassFaFacetAbstract {
 
@@ -35,7 +35,7 @@ public class CssClassFaFacetForDomainObjectLayoutAnnotation extends CssClassFaFa
         class Annot {
             private Annot(final DomainObjectLayout domainObjectLayout) {
                 this.cssClassFa = _Strings.emptyToNull(domainObjectLayout.cssClassFa());
-                this.cssClassFaPosition = CssClassFaPosition.from(domainObjectLayout.cssClassFaPosition());
+                this.cssClassFaPosition = domainObjectLayout.cssClassFaPosition();
             }
             String cssClassFa;
             CssClassFaPosition cssClassFaPosition;

@@ -20,8 +20,6 @@ package org.apache.isis.applib.layout.component;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
-import org.apache.isis.applib.annotation.ActionLayout;
-
 public interface HasCssClassFa {
 
     @XmlAttribute(required = false)
@@ -29,7 +27,7 @@ public interface HasCssClassFa {
     void setCssClassFa(String cssClassFa);
 
     @XmlAttribute(required = false)
-    ActionLayout.CssClassFaPosition getCssClassFaPosition();
-    void setCssClassFaPosition(ActionLayout.CssClassFaPosition cssClassFaPosition);
+    CssClassFaPosition getCssClassFaPosition();
+    void setCssClassFaPosition(CssClassFaPosition cssClassFaPosition);
 
 }

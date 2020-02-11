@@ -35,7 +35,8 @@ import static org.junit.Assert.assertTrue;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.ViewModelLayout;
-import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
+import org.apache.isis.applib.layout.component.CssClassFaPosition;
+import org.apache.isis.core.config.unittestsupport.internal._Config;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
@@ -44,10 +45,9 @@ import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
+import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
-import org.apache.isis.core.config.unittestsupport.internal._Config;
 
 public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -75,7 +75,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
             bookmarking = BookmarkPolicy.AS_ROOT,
             cssClass = "foobar",
             cssClassFa = "foo",
-            cssClassFaPosition = DomainObjectLayout.CssClassFaPosition.RIGHT,
+            cssClassFaPosition = CssClassFaPosition.RIGHT,
             describedAs = "This is a description",
             named = "Name override",
             paged = 20,
@@ -90,7 +90,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
             bookmarking = BookmarkPolicy.AS_ROOT,
             cssClass = "foobar",
             cssClassFa = "foo",
-            cssClassFaPosition = ViewModelLayout.CssClassFaPosition.RIGHT,
+            cssClassFaPosition = CssClassFaPosition.RIGHT,
             describedAs = "This is a description",
             named = "Name override",
             paged = 20,

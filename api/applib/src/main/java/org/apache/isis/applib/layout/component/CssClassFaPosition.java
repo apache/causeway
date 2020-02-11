@@ -16,23 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.applib.layout.component;
 
-package org.apache.isis.core.metamodel.facets.members.cssclassfa;
+import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.layout.component.CssClassFaPosition;
-import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
-
-/**
- * The <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> css class(es) for an action.
- *
- * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating the
- * member with <tt>{@literal @}{@link org.apache.isis.applib.annotation.ActionLayout#cssClassFa()  ActionLayout}</tt>#cssClassFa().
- */
-public interface CssClassFaFacet extends SingleStringValueFacet {
-
-    /**
-     * @return The position of the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> icon.
-     */
-    CssClassFaPosition getPosition();
+@XmlType(
+        namespace = "http://isis.apache.org/applib/layout/component"
+        )
+public enum CssClassFaPosition {
+    LEFT, RIGHT
 }

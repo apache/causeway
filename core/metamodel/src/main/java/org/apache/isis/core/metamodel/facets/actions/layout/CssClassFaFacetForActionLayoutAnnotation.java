@@ -22,11 +22,11 @@ package org.apache.isis.core.metamodel.facets.actions.layout;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 
 public class CssClassFaFacetForActionLayoutAnnotation extends CssClassFaFacetAbstract {
 
@@ -37,7 +37,7 @@ public class CssClassFaFacetForActionLayoutAnnotation extends CssClassFaFacetAbs
         class Annot {
             private Annot(final ActionLayout actionLayout) {
                 this.cssClassFa = _Strings.emptyToNull(actionLayout.cssClassFa());
-                this.cssClassFaPosition = CssClassFaPosition.from(actionLayout.cssClassFaPosition());
+                this.cssClassFaPosition = actionLayout.cssClassFaPosition();
             }
             String cssClassFa;
             CssClassFaPosition cssClassFaPosition;

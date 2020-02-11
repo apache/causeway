@@ -35,6 +35,7 @@ import org.apache.isis.applib.annotation.RenderDay;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
+import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutDataOwner;
 import org.apache.isis.applib.layout.component.FieldSet;
@@ -81,7 +82,6 @@ import org.apache.isis.core.metamodel.facets.collections.layout.SortedByFacetFor
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetXml;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectXml;
@@ -200,9 +200,8 @@ implements GridSystemService<G> {
     /**
      * Overwrites (replaces) any existing facets in the metamodel with info taken from the grid.
      *
-     * <p>
-     *     This code uses {@link FacetUtil#addOrReplaceFacet(Facet)} because the layout might be changed multiple times.
-     * </p>
+     * @implNote This code uses {@link FacetUtil#addOrReplaceFacet(Facet)} 
+     * because the layout might be changed multiple times.
      */
     private void overwriteFacets(
             final G fcGrid,
@@ -489,10 +488,9 @@ implements GridSystemService<G> {
         val cssClassFaFacet = facetHolder.getFacet(CssClassFaFacet.class);
         if (isDoOp(cssClassFaFacet)) {
             final String cssClassFa = cssClassFaFacet.value();
-            final CssClassFaPosition position = cssClassFaFacet.getPosition();
             if(!_Strings.isNullOrEmpty(cssClassFa)) {
                 hasCssClassFa.setCssClassFa(cssClassFa);
-                hasCssClassFa.setCssClassFaPosition(position.toActionLayoutPosition());
+                hasCssClassFa.setCssClassFaPosition(cssClassFaFacet.getPosition());
             }
         }
     }

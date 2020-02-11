@@ -18,11 +18,11 @@
 package org.apache.isis.core.metamodel.facets.object.cssclassfa.annotation;
 
 import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.CssClassFaFacetForDomainObjectLayoutAnnotation;
 
 public class CssClassFaFacetForDomainObjectLayoutFactory extends CssClassFaFacetAbstract {
@@ -32,7 +32,7 @@ public class CssClassFaFacetForDomainObjectLayoutFactory extends CssClassFaFacet
             return null;
         }
         final String cssClassFa = _Strings.emptyToNull(domainObjectLayout.cssClassFa());
-        final CssClassFaPosition position = CssClassFaPosition.from(domainObjectLayout.cssClassFaPosition());
+        final CssClassFaPosition position = domainObjectLayout.cssClassFaPosition();
         return cssClassFa != null ? new CssClassFaFacetForDomainObjectLayoutAnnotation(cssClassFa, position, holder) : null;
     }
 

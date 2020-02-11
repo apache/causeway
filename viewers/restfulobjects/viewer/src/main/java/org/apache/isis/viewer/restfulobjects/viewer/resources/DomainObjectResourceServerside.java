@@ -335,6 +335,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             final String domainType,
             final String instanceId,
             final Grid grid) {
+        
         grid.visit(new Grid.VisitorAdapter() {
             @Override
             public void visit(final DomainObjectLayoutData domainObjectLayoutData) {

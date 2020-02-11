@@ -24,8 +24,10 @@ import java.io.InputStream;
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import org.apache.isis.core.commons.internal.base._Either;
 
@@ -321,6 +323,22 @@ public class _Json {
     public static <T> _Either<List<T>, Exception> tryReadJsonList(final Class<T> clazz, byte[] content) {
         try {
             return _Either.left(readJsonList(clazz, content));
+        } catch (Exception e) {
+            return _Either.right(e);
+        }
+    }
+    
+    // -- WRITING
+
+    public static String toString(Object pojo) throws JsonProcessingException {
+        val objectMapper = new ObjectMapper()
+                .enable(SerializationFeature.INDENT_OUTPUT);
+        return objectMapper.writeValueAsString(pojo);
+    }
+    
+    public static <T> _Either<String, Exception> tryToString(Object pojo) {
+        try {
+            return _Either.left(toString(pojo));
         } catch (Exception e) {
             return _Either.right(e);
         }

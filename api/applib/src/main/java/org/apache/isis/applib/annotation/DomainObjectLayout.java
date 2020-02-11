@@ -29,6 +29,7 @@ import org.apache.isis.applib.events.ui.CssClassUiEvent;
 import org.apache.isis.applib.events.ui.IconUiEvent;
 import org.apache.isis.applib.events.ui.LayoutUiEvent;
 import org.apache.isis.applib.events.ui.TitleUiEvent;
+import org.apache.isis.applib.layout.component.CssClassFaPosition;
 
 /**
  * Layout hints for domain objects.
@@ -104,9 +105,6 @@ public @interface DomainObjectLayout {
      */
     CssClassFaPosition cssClassFaPosition() default CssClassFaPosition.LEFT;
 
-    enum CssClassFaPosition {
-        LEFT, RIGHT
-    }
 
     // //////////////////////////////////////
 

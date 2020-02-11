@@ -66,7 +66,6 @@ implements GridFacet {
             final String layout = layout(objectAdapterIfAny);
             this.grid = load(domainClass, layout);
         }
-
         return this.grid;
     }
     

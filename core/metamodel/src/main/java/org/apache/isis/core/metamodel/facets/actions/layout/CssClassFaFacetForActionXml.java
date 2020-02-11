@@ -20,11 +20,11 @@
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import org.apache.isis.applib.layout.component.ActionLayoutData;
+import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 
 public class CssClassFaFacetForActionXml extends CssClassFaFacetAbstract {
 
@@ -33,7 +33,7 @@ public class CssClassFaFacetForActionXml extends CssClassFaFacetAbstract {
             return null;
         }
         final String cssClassFa = _Strings.emptyToNull(actionLayout.getCssClassFa());
-        CssClassFaPosition cssClassFaPosition = CssClassFaPosition.from(actionLayout.getCssClassFaPosition());
+        CssClassFaPosition cssClassFaPosition = actionLayout.getCssClassFaPosition();
         return cssClassFa != null ? new CssClassFaFacetForActionXml(cssClassFa, cssClassFaPosition, holder) : null;
     }
 
