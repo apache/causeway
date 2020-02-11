@@ -22,7 +22,7 @@ registration
 |  /restful
 | The path at which the RO viewer should be mounted.
 
-Note that this is used rather than `resteasy.servlet.mapping.prefix` because there is _NO_ implementation of ``javax.ws.rs.core.Application``, so we rely on it being automatically created.
+Note that this is used rather than ``prefix`` because there is _NO_ implementation of ``Application``, so we rely on it being automatically created.
 
 
 | resteasy.jaxrs.defaultPath

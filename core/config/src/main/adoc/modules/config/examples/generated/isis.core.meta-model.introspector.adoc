@@ -29,6 +29,6 @@ validate-incrementally
 
 This does _not_ apply if the introspector is configured to perform full introspection up-front AND when the metamodel is locked after initial bootstrapping (because in that case the lock check will simply prevent any new specs from being loaded). But it will apply otherwise.
 
-In particular, this setting _can_ still apply even if the introspection mode is set to full, because that in itself does not preclude some code from attempting to load some previously unknown type. For example, a fixture script could attempt to invoke an action on some new type using the ``org.apache.isis.applib.services.wrapper.WrapperFactory`` - this will cause introspection of that new type to be performed.
+In particular, this setting _can_ still apply even if the introspection mode is set to full, because that in itself does not preclude some code from attempting to load some previously unknown type. For example, a fixture script could attempt to invoke an action on some new type using the ``WrapperFactory`` - this will cause introspection of that new type to be performed.
 
 

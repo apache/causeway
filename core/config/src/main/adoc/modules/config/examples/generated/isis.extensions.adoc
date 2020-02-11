@@ -3,7 +3,7 @@ allowed-headers
 | 
 | Which HTTP headers are allowed in a CORS request.
 
-For more information, check the usage of the `cors.allowed.headers` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
+For more information, check the usage of the ``headers`` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
 
 
 | isis.extensions.cors. +
@@ -11,7 +11,7 @@ allowed-methods
 | 
 | Which HTTP methods are permitted in a CORS request.
 
-For more information, check the usage of the `cors.allowed.methods` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
+For more information, check the usage of the ``methods`` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
 
 
 | isis.extensions.cors. +
@@ -21,7 +21,7 @@ allowed-origins
 
 The default is the wildcard ("*") but this can be made more restrictive if necessary.
 
-For more information, check the usage of the `cors.allowed.origins` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
+For more information, check the usage of the ``origins`` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
 
 
 | isis.extensions.cors. +
@@ -29,6 +29,6 @@ exposed-headers
 |  Authorization
 | Which HTTP headers are exposed in a CORS request.
 
-For more information, check the usage of the `cors.exposed.headers` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
+For more information, check the usage of the ``headers`` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
 
 

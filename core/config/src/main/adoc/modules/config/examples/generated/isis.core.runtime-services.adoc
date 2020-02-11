@@ -1,25 +1,25 @@
 | isis.core.runtime-services. +
 application-features.init
 | 
-| Whether the ``org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository`` (or the default implementation of that service, at least) should compute the set of `ApplicationFeature` that describe the metamodel eagerly, or lazily.
+| Whether the ``ApplicationFeatureRepository`` (or the default implementation of that service, at least) should compute the set of ``ApplicationFeature`` that describe the metamodel eagerly, or lazily.
 
 
 | isis.core.runtime-services. +
 email.override.bcc
 | 
-| Intended for testing purposes only, if set then the requested `bcc:` of the email will be ignored, and instead sent to this email address instead.
+| Intended for testing purposes only, if set then the requested ``bcc:`` of the email will be ignored, and instead sent to this email address instead.
 
 
 | isis.core.runtime-services. +
 email.override.cc
 | 
-| Intended for testing purposes only, if set then the requested `cc:` of the email will be ignored, and instead sent to this email address instead.
+| Intended for testing purposes only, if set then the requested ``cc:`` of the email will be ignored, and instead sent to this email address instead.
 
 
 | isis.core.runtime-services. +
 email.override.to
 | 
-| Intended for testing purposes only, if set then the requested `to:` of the email will be ignored, and instead sent to this email address instead.
+| Intended for testing purposes only, if set then the requested ``to:`` of the email will be ignored, and instead sent to this email address instead.
 
 
 | isis.core.runtime-services. +
@@ -35,7 +35,7 @@ email.sender.address
 
 If the username is not specified, is also used as the username to connect to the SMTP service.
 
-This configuration property is mandatory (for the default implementation of the ``org.apache.isis.applib.services.email.EmailService``, at least).
+This configuration property is mandatory (for the default implementation of the ``EmailService``, at least).
 
 
 | isis.core.runtime-services. +
@@ -43,7 +43,7 @@ email.sender.hostname
 | 
 | Specifies the host running the SMTP service.
 
-If not specified, then the value used depends upon the email implementation. The default implementation will use the `mail.smtp.host` system property.
+If not specified, then the value used depends upon the email implementation. The default implementation will use the ``host`` system property.
 
 
 | isis.core.runtime-services. +
@@ -51,7 +51,7 @@ email.sender.password
 | 
 | Specifies the password (corresponding to the username to connect to the SMTP service.
 
-This configuration property is mandatory (for the default implementation of the ``org.apache.isis.applib.services.email.EmailService``, at least).
+This configuration property is mandatory (for the default implementation of the ``EmailService``, at least).
 
 
 | isis.core.runtime-services. +
@@ -84,14 +84,14 @@ email.throw-exception-on-fail
 | isis.core.runtime-services. +
 email.tls.enabled
 |  true
-| Whether TLS encryption should be started (that is, `STARTTLS`).
+| Whether TLS encryption should be started (that is, ``STARTTLS``).
 
 
 | isis.core.runtime-services. +
 exception-recognizer.jdo. +
 disable
 | 
-| Whether the ``org.apache.isis.applib.services.exceprecog.ExceptionRecognizer`` implementation for JDO/DataNucleus object store - which attempts to sanitize any exceptions arising from that object store - should be disabled (meaning that exceptions will potentially propagate as more serious to the end user).
+| Whether the ``ExceptionRecognizer`` implementation for JDO/DataNucleus object store - which attempts to sanitize any exceptions arising from that object store - should be disabled (meaning that exceptions will potentially propagate as more serious to the end user).
 
 
 | isis.core.runtime-services. +

@@ -1,19 +1,19 @@
 | isis.viewer.restfulobjects. +
 base-uri
 | 
-| If left unset (the default), then the RO viewer will use the ``javax.ws.rs.core.UriInfo`` (injected using ``javax.ws.rs.core.Context``) to figure out the base Uri (used to render `href`s).
+| If left unset (the default), then the RO viewer will use the ``UriInfo`` (injected using ``Context``) to figure out the base Uri (used to render ``href``s).
 
 This will be correct much of the time, but will almost certainly be wrong if there is a reverse proxy.
 
-If set, eg `https://dev.myapp.com/`, then this value will be used instead.
+If set, eg ``com/``, then this value will be used instead.
 
 
 | isis.viewer.restfulobjects. +
 honor-ui-hints
 | 
-| Whether to enable the `x-ro-follow-links` support, to minimize round trips.
+| Whether to enable the ``x-ro-follow-links`` support, to minimize round trips.
 
-The RO viewer provides the capability for the client to set the optional `x-ro-follow-links` query parameter, as described in section 34.4 of the RO spec v1.0. If used, the resultant representation includes the result of following the associated link, but through a server-side "join", somewhat akin to GraphQL.
+The RO viewer provides the capability for the client to set the optional ``x-ro-follow-links`` query parameter, as described in section 34.4 of the RO spec v1.0. If used, the resultant representation includes the result of following the associated link, but through a server-side "join", somewhat akin to GraphQL.
 
 By default this functionality is disabled, this configuration property enables the feature. If enabled, then the representations returned are non-standard with respect to the RO Spec v1.0.
 
@@ -29,7 +29,7 @@ This is disabled by default. If enabled, then the representations returned are n
 | isis.viewer.restfulobjects. +
 strict-accept-checking
 | 
-| If set, then any unrecognised `Accept` headers will result in an HTTP _Not Acceptable_ response code (406).
+| If set, then any unrecognised ``Accept`` headers will result in an HTTP _Not Acceptable_ response code (406).
 
 
 | isis.viewer.restfulobjects. +
@@ -42,7 +42,7 @@ suppress-described-by-links
 suppress-member-disabled- +
 reason
 | 
-| If set, then - should there be an interaction with an action, property or collection that is disabled - then this will prevent the `disabledReason` reason from being added to the returned representation.
+| If set, then - should there be an interaction with an action, property or collection that is disabled - then this will prevent the ``disabledReason`` reason from being added to the returned representation.
 
 This is disabled by default. If enabled, then the representations returned are non-standard with respect to the RO Spec v1.0.
 
@@ -50,7 +50,7 @@ This is disabled by default. If enabled, then the representations returned are n
 | isis.viewer.restfulobjects. +
 suppress-member-extensions
 | 
-| If set, then the `x-isis-format` key (under `extensions`) for properties will be suppressed.
+| If set, then the ``x-isis-format`` key (under ``extensions``) for properties will be suppressed.
 
 This is disabled by default. If enabled, then the representations returned are non-standard with respect to the RO Spec v1.0.
 
@@ -58,7 +58,7 @@ This is disabled by default. If enabled, then the representations returned are n
 | isis.viewer.restfulobjects. +
 suppress-member-id
 | 
-| If set, then the `id` key for all members will be suppressed.
+| If set, then the ``id`` key for all members will be suppressed.
 
 This is disabled by default. If enabled, then the representations returned are non-standard with respect to the RO Spec v1.0.
 
@@ -66,7 +66,7 @@ This is disabled by default. If enabled, then the representations returned are n
 | isis.viewer.restfulobjects. +
 suppress-member-links
 | 
-| If set, then the detail link (in other words `links[rel='details' ...]`) for all members will be suppressed.
+| If set, then the detail link (in other words ``]``) for all members will be suppressed.
 
 This is disabled by default. If enabled, then the representations returned are non-standard with respect to the RO Spec v1.0.
 
@@ -74,7 +74,7 @@ This is disabled by default. If enabled, then the representations returned are n
 | isis.viewer.restfulobjects. +
 suppress-update-link
 | 
-| If set, then the update link (in other words `links[rel='update'... ]` to perform a bulk update of an object) will be suppressed.
+| If set, then the update link (in other words `` ]`` to perform a bulk update of an object) will be suppressed.
 
 This is disabled by default. If enabled, then the representations returned are non-standard with respect to the RO Spec v1.0.
 

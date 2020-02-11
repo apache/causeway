@@ -2,7 +2,3 @@
 | 
 | 
 
-| isis.isis-settings
-| 
-| 
-

@@ -8,7 +8,7 @@ ajax-debug-mode
 |  org.apache.isis.viewer. +
 wicket.viewer.wicketapp. +
 IsisWicketApplication
-| Specifies the subclass of `org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication` that is used to bootstrap Wicket.
+| Specifies the subclass of ``IsisWicketApplication`` that is used to bootstrap Wicket.
 
 There is usually very little reason to change this from its default.
 
@@ -38,9 +38,9 @@ This is rendered on the sign-in page. An image with a size of 400x40 works well.
 | isis.viewer.wicket. +
 application.css
 | 
-| URL of file to read any custom CSS, relative to `static` package on the class path.
+| URL of file to read any custom CSS, relative to ``static`` package on the class path.
 
-A typical value is `css/application.css`. This will result in this file being read from the `static/css` directory (because static resources such as CSS are mounted by Spring by default under `static` package).
+A typical value is ``css``. This will result in this file being read from the ``static/css`` directory (because static resources such as CSS are mounted by Spring by default under ``static`` package).
 
 
 | isis.viewer.wicket. +
@@ -61,9 +61,9 @@ This is expected to be a local resource.
 | isis.viewer.wicket. +
 application.js
 | 
-| URL of file to read any custom Javascript, relative to `static` package on the class path.
+| URL of file to read any custom Javascript, relative to ``static`` package on the class path.
 
-A typical value is `js/application.js`. This will result in this file being read from the `static/js` directory (because static resources such as CSS are mounted by Spring by default under `static` package).
+A typical value is ``js``. This will result in this file being read from the ``static/js`` directory (because static resources such as CSS are mounted by Spring by default under ``static`` package).
 
 
 | isis.viewer.wicket. +
@@ -179,7 +179,7 @@ Each Date scalar panel will use ``#getDatePattern()`` or ``#getDateTimePattern()
 | isis.viewer.wicket. +
 development-utilities.enable
 | 
-| Determines whether debug bar and other stuff influenced by `DebugSettings#isDevelopmentUtilitiesEnabled()` is enabled or not.
+| Determines whether debug bar and other stuff influenced by ``DebugSettings#isDevelopmentUtilitiesEnabled()`` is enabled or not.
 
 By default, depends on the mode (prototyping = enabled, server = disabled). This property acts as an override.
 
@@ -205,7 +205,7 @@ live-reload-url
 | 
 | If specified, then is rendered on each page to enable live reload.
 
-Configuring live reload also requires an appropriate plugin to the web browser (eg see http://livereload.com/[livereload.com] and a mechanism to trigger changes, eg by watching `Xxx.layout.xml` files.
+Configuring live reload also requires an appropriate plugin to the web browser (eg see http://livereload.com/[livereload.com] and a mechanism to trigger changes, eg by watching ``xml`` files.
 
 
 | isis.viewer.wicket. +
@@ -249,7 +249,7 @@ prompt-style
 | 
 | Whether to use a modal dialog for property edits and for actions associated with properties.
 
-This can be overridden on a case-by-case basis using `@PropertyLayout#promptStyle` and `@ActionLayout#promptStyle`.
+This can be overridden on a case-by-case basis using ``@PropertyLayout#promptStyle`` and ``@ActionLayout#promptStyle``.
 
 This behaviour is disabled by default; the viewer will use an inline prompt in these cases, making for a smoother user experience. If enabled then this reinstates the pre-1.15.0 behaviour of using a dialog prompt in all cases.
 
@@ -318,7 +318,7 @@ suppress-password-reset
 | 
 | Whether to suppress the password reset link on the sign-in page.
 
-Although this is disabled by default (in other words the 'reset password' link is not suppressed), note that in addition the application must provide an implementation of the ``org.apache.isis.applib.services.userreg.UserRegistrationService`` as well as a configured ``org.apache.isis.applib.services.userreg.EmailNotificationService`` (same conditions as for the ``#isSuppressSignUp()`` sign-up link).
+Although this is disabled by default (in other words the 'reset password' link is not suppressed), note that in addition the application must provide an implementation of the ``UserRegistrationService`` as well as a configured ``EmailNotificationService`` (same conditions as for the ``#isSuppressSignUp()`` sign-up link).
 
 
 | isis.viewer.wicket. +
@@ -326,7 +326,7 @@ suppress-sign-up
 | 
 | Whether to suppress the sign-up link on the sign-in page.
 
-Although this is disabled by default (in other words the sign-up link is not suppressed), note that in addition the application must provide an implementation of the ``org.apache.isis.applib.services.userreg.UserRegistrationService`` as well as a configured ``org.apache.isis.applib.services.userreg.EmailNotificationService`` (same conditions as for the ``#isSuppressPasswordReset()`` password reset link).
+Although this is disabled by default (in other words the sign-up link is not suppressed), note that in addition the application must provide an implementation of the ``UserRegistrationService`` as well as a configured ``EmailNotificationService`` (same conditions as for the ``#isSuppressPasswordReset()`` password reset link).
 
 
 | isis.viewer.wicket.themes. +
@@ -349,7 +349,7 @@ provider
 wicket.ui.components.widgets. +
 themepicker. +
 IsisWicketThemeSupportDefault
-| Specifies an implementation of `org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.IsisWicketThemeSupport`
+| Specifies an implementation of ``IsisWicketThemeSupport``
 
 
 | isis.viewer.wicket.themes. +

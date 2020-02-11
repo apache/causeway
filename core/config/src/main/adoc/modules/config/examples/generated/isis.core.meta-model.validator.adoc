@@ -38,7 +38,7 @@ It is _highly advisable_ to leave this set as enabled (the default). These objec
 validator.jaxb-view-model. +
 date-time-type-adapter
 |  true
-| If set, then ensures that for all properties of JAXB-style view models where the property's type is a date or time, then that property has been correctly annotated with @``javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter`` (so that the property's value can be converted into a serializable form).
+| If set, then ensures that for all properties of JAXB-style view models where the property's type is a date or time, then that property has been correctly annotated with @``XmlJavaTypeAdapter`` (so that the property's value can be converted into a serializable form).
 
 
 | isis.core.meta-model. +
@@ -66,30 +66,30 @@ not-inner-class
 validator.jaxb-view-model. +
 reference-type-adapter
 |  true
-| If set, then ensures that for all properties of JAXB-style view models where the property's type is an entity, then that entity's type has been correctly annotated with @``javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter`` (so that the property's value can be converted into a serializable form).
+| If set, then ensures that for all properties of JAXB-style view models where the property's type is an entity, then that entity's type has been correctly annotated with @``XmlJavaTypeAdapter`` (so that the property's value can be converted into a serializable form).
 
 
 | isis.core.meta-model. +
 validator.jdoql.from-clause
 |  true
-| If set, then ensures that the 'FROM' clause within any JDOQL `@Query`s annotations relates to a known entity type, and moreover that that type is compatible with the type on which the annotation appears: meaning its either a supertype of or the same type as the annotated type.
+| If set, then ensures that the 'FROM' clause within any JDOQL ``@Query``s annotations relates to a known entity type, and moreover that that type is compatible with the type on which the annotation appears: meaning its either a supertype of or the same type as the annotated type.
 
 
 | isis.core.meta-model. +
 validator.jdoql. +
 variables-clause
 |  true
-| If set, then ensures that the 'VARIABLES' clause within any JDOQL `@Query`s relates to a known entity type.
+| If set, then ensures that the 'VARIABLES' clause within any JDOQL ``@Query``s relates to a known entity type.
 
 
 | isis.core.meta-model. +
 validator.no-params-only
 | 
-| If set, then checks that the supports `hideXxx` and `disableXxx` methods for actions do not have take parameters.
+| If set, then checks that the supports ``hideXxx`` and ``disableXxx`` methods for actions do not have take parameters.
 
-Historically, the programming model allowed these methods to accept the same number of parameters as the action method to which they relate, the rationale being for similarity with the `validateXxx` method. However, since these parameters serve no function, the programming model has been simplified so that these supporting methods are discovered if they have exactly no parameters.
+Historically, the programming model allowed these methods to accept the same number of parameters as the action method to which they relate, the rationale being for similarity with the ``validateXxx`` method. However, since these parameters serve no function, the programming model has been simplified so that these supporting methods are discovered if they have exactly no parameters.
 
-Note that this aspect of the programming model relates to the `hideXxx` and `disableXxx` supporting methods that relate to the entire method. Do not confuse these with the `hideNXxx` and `disableNXxx` supporting methods, which relate to the N-th parameter, and allow up to N-1 parameters to be passed in (allowing the Nth parameter to be dynamically hidden or disabled).
+Note that this aspect of the programming model relates to the ``hideXxx`` and ``disableXxx`` supporting methods that relate to the entire method. Do not confuse these with the ``hideNXxx`` and ``disableNXxx`` supporting methods, which relate to the N-th parameter, and allow up to N-1 parameters to be passed in (allowing the Nth parameter to be dynamically hidden or disabled).
 
 
 | isis.core.meta-model. +
