@@ -224,7 +224,7 @@ public final class ServiceActionUtil {
                     }
                     final EntityModel entityModel = EntityModel.ofAdapter(commonContext, serviceAdapter);
                     final ObjectAction objectAction = serviceAdapter.getSpecification()
-                            .getObjectAction(actionLayoutData.getId());
+                            .getObjectAction(actionLayoutData.getId()).orElse(null);
                     if(objectAction == null) {
                         log.warn("No such action {}", actionLayoutData.getId());
                         continue;

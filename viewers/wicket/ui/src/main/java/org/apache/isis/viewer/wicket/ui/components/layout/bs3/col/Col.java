@@ -123,12 +123,11 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
         // (rendering depends on whether also showing the icon/title)
         final List<ActionLayoutData> actionLayoutDatas = bs3Col.getActions();
         val visibleActions = _NullSafe.stream(actionLayoutDatas)
-                .filter((final ActionLayoutData actionLayoutData) -> {
-                    return actionLayoutData.getMetadataError() == null;
-                })
-                .map((@Nullable final ActionLayoutData actionLayoutData) -> {
-                    return getModel().getTypeOfSpecification().getObjectAction(actionLayoutData.getId());
-                })
+                .filter(actionLayoutData -> actionLayoutData.getMetadataError() == null)
+                .filter(_NullSafe::isPresent)
+                .map(actionLayoutData -> 
+                    getModel().getTypeOfSpecification().getObjectAction(actionLayoutData.getId()).orElse(null)
+                )
                 .filter(_NullSafe::isPresent)
                 .collect(Collectors.toList());
         //

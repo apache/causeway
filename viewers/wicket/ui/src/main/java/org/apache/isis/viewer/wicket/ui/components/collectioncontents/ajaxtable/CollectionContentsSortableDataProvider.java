@@ -37,8 +37,6 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -125,16 +123,10 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
             return null;
         }
 
-        final ObjectSpecification elementSpec = model.getTypeOfSpecification();
-        final String sortPropertyId = sort.getProperty();
+        val elementSpec = model.getTypeOfSpecification();
+        val sortPropertyId = sort.getProperty();
 
-        try {
-            // might be null, or throw ex
-            return elementSpec.getAssociation(sortPropertyId);
-        } catch(ObjectSpecificationException ex) {
-            // eg invalid propertyId
-            return null;
-        }
+        return elementSpec.getAssociation(sortPropertyId).orElse(null); // eg invalid propertyId
     }
 
     private Predicate<ManagedObject> ignoreHidden() {

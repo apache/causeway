@@ -59,7 +59,6 @@ import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -448,12 +447,10 @@ public class XmlSnapshot implements Snapshot {
 
         // locate the field in the object's class
         final ObjectSpecification nos = object.getSpecification();
-        ObjectAssociation field = null;
-        try {
-            // HACK: really want a ObjectSpecification.hasField method to
-            // check first.
-            field = nos.getAssociation(fieldName);
-        } catch (final ObjectSpecificationException ex) {
+        // HACK: really want a ObjectSpecification.hasField method to
+        // check first.
+        val field = nos.getAssociation(fieldName).orElse(null);
+        if (field == null) {
             if (log.isInfoEnabled()) {
                 log.info("includeField(Pl, Vec, Str): could not locate field, skipping");
             }

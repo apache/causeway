@@ -22,9 +22,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -32,6 +30,8 @@ import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberType;
+
+import lombok.val;
 
 /**
  * Utility class that encapsulates the logic for checking access to the specified
@@ -63,16 +63,11 @@ public class ObjectAdapterAccessHelper {
     public OneToOneAssociation getPropertyThatIsVisibleForIntent(
             final String propertyId, final Intent intent) {
 
-        final ObjectAssociation association;
-        try {
-            final ObjectSpecification specification = objectAdapter.getSpecification();
-            association = specification.getAssociation(propertyId);
-        } catch(Exception ex) {
-            // fall through
-            throw notFoundException(propertyId, MemberType.PROPERTY);
-        }
+        val spec = objectAdapter.getSpecification();
+        val association = spec.getAssociation(propertyId)
+                .orElseThrow(()->notFoundException(propertyId, MemberType.PROPERTY));
 
-        if (association == null || !association.isOneToOneAssociation()) {
+        if (!association.isOneToOneAssociation()) {
             throw notFoundException(propertyId, MemberType.PROPERTY);
         }
 
@@ -83,17 +78,14 @@ public class ObjectAdapterAccessHelper {
     public OneToManyAssociation getCollectionThatIsVisibleForIntent(
             final String collectionId, final Intent intent) {
 
-        final ObjectAssociation association;
-        try {
-            final ObjectSpecification specification = objectAdapter.getSpecification();
-            association = specification.getAssociation(collectionId);
-        } catch(Exception ex) {
-            // fall through
+        val spec = objectAdapter.getSpecification();
+        val association = spec.getAssociation(collectionId)
+                .orElseThrow(()->notFoundException(collectionId, MemberType.COLLECTION));
+        
+        if (!association.isOneToManyAssociation()) {
             throw notFoundException(collectionId, MemberType.COLLECTION);
         }
-        if (association == null || !association.isOneToManyAssociation()) {
-            throw notFoundException(collectionId, MemberType.COLLECTION);
-        }
+        
         final OneToManyAssociation collection = (OneToManyAssociation) association;
         return memberThatIsVisibleForIntent(collection, MemberType.COLLECTION, intent);
     }
@@ -101,16 +93,10 @@ public class ObjectAdapterAccessHelper {
     public ObjectAction getObjectActionThatIsVisibleForIntent(
             final String actionId, final Intent intent) {
 
-        final ObjectAction action;
-        try {
-            final ObjectSpecification specification = objectAdapter.getSpecification();
-            action = specification.getObjectAction(actionId);
-        } catch(Exception ex) {
-            throw notFoundException(actionId, MemberType.ACTION);
-        }
-        if (action == null) {
-            throw notFoundException(actionId, MemberType.ACTION);
-        }
+        val spec = objectAdapter.getSpecification();
+        val action = spec.getObjectAction(actionId)
+                .orElseThrow(()->notFoundException(actionId, MemberType.ACTION));
+
         return memberThatIsVisibleForIntent(action, MemberType.ACTION, intent);
     }
 

@@ -88,7 +88,7 @@ public class ActionMemento implements Serializable {
             String nameParmsId,
             final SpecificationLoader specificationLoader) {
         final ObjectSpecification objectSpec = specificationLoader.lookupBySpecIdElseLoad(owningType);
-        return objectSpec.getObjectAction(actionType, nameParmsId);
+        return objectSpec.getObjectActionElseFail(actionType, nameParmsId);
     }
 
 }

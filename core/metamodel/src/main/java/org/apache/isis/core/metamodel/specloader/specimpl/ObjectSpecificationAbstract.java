@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -80,7 +81,6 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -684,18 +684,18 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     @Override
-    public ObjectMember getMember(final String memberId) {
+    public Optional<? extends ObjectMember> getMember(final String memberId) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         val objectAction = getObjectAction(memberId);
-        if(objectAction != null) {
+        if(objectAction.isPresent()) {
             return objectAction;
         }
         val association = getAssociation(memberId);
-        if(association != null) {
+        if(association.isPresent()) {
             return association;
         }
-        return null;
+        return Optional.empty();
     }
 
 
@@ -714,44 +714,11 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * method for an {@link ObjectSpecificationOnContainer})
      */
     @Override
-    public ObjectAssociation getAssociation(final String id) {
+    public Optional<ObjectAssociation> getAssociation(final String id) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
-
-        ObjectAssociation oa = getAssociationWithId(id);
-        if(oa != null) {
-            return oa;
-        }
-        //TODO [2033] remove or replace        
-        //        if(IsisSystemEnvironment.get().isPrototyping()) {
-        //            // automatically refresh if not in production
-        //            // (better support for jrebel)
-        //
-        //            LOG.warn("Could not find association with id '{}'; invalidating cache automatically", id);
-        //            if(!invalidatingCache.get()) {
-        //                // make sure don't go into an infinite loop, though.
-        //                try {
-        //                    invalidatingCache.set(true);
-        //                    getSpecificationLoader().invalidateCache(getCorrespondingClass());
-        //                } finally {
-        //                    invalidatingCache.set(false);
-        //                }
-        //            } else {
-        //                LOG.warn("... already invalidating cache earlier in stacktrace, so skipped this time");
-        //            }
-        //            oa = getAssociationWithId(id);
-        //            if(oa != null) {
-        //                return oa;
-        //            }
-        //        }
-        throw new ObjectSpecificationException(
-                String.format("No association called '%s' in '%s'", id, getSingularName()));
-    }
-
-    private ObjectAssociation getAssociationWithId(final String id) {
         return streamAssociations(Contributed.INCLUDED)
                 .filter(objectAssociation->objectAssociation.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+                .findFirst();
     }
 
     @Override

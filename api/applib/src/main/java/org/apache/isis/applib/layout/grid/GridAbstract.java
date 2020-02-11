@@ -98,6 +98,7 @@ public abstract class GridAbstract implements Grid {
     protected void traverseActions(
             final ActionLayoutDataOwner actionLayoutDataOwner,
             final GridAbstract.Visitor visitor) {
+        
         final List<ActionLayoutData> actionLayoutDatas = actionLayoutDataOwner.getActions();
         if(actionLayoutDatas == null) {
             return;

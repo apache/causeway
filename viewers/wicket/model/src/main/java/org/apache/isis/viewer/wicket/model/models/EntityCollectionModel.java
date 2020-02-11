@@ -386,7 +386,7 @@ implements LinksProvider, UiHintContainer {
         final String collectionId = collectionLayoutData.getId();
         final ObjectSpecId objectSpecId = parentObjectAdapterMemento.getObjectSpecId();
         final ObjectSpecification objectSpec = specificationLoader.lookupBySpecIdElseLoad(objectSpecId);
-        final OneToManyAssociation otma = (OneToManyAssociation) objectSpec.getAssociation(collectionId);
+        final OneToManyAssociation otma = (OneToManyAssociation) objectSpec.getAssociationElseFail(collectionId);
         return otma;
     }
 

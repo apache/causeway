@@ -39,9 +39,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -70,6 +68,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 import org.apache.isis.viewer.restfulobjects.viewer.resources.serialization.SerializationStrategy;
 import org.apache.isis.viewer.restfulobjects.viewer.util.UrlParserUtils;
+
+import lombok.val;
 
 /**
  * Implementation note: it seems to be necessary to annotate the implementation
@@ -160,8 +160,10 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
 
-        final ObjectMember objectMember = parentSpec.getAssociation(propertyId);
-        if (objectMember == null || objectMember.isOneToManyAssociation()) {
+        val objectMember = parentSpec.getAssociation(propertyId)
+                .orElseThrow(()->RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
+        
+        if (objectMember.isOneToManyAssociation()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
         final OneToOneAssociation property = (OneToOneAssociation) objectMember;
@@ -185,8 +187,10 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
 
-        final ObjectMember objectMember = parentSpec.getAssociation(collectionId);
-        if (objectMember == null || objectMember.isOneToOneAssociation()) {
+        val objectMember = parentSpec.getAssociation(collectionId)
+                .orElseThrow(()->RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
+        
+        if (objectMember.isOneToOneAssociation()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
         final OneToManyAssociation collection = (OneToManyAssociation) objectMember;
@@ -210,12 +214,9 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
 
-        final ObjectMember objectMember = parentSpec.getObjectAction(actionId);
-        if (objectMember == null) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
-        }
-        final ObjectAction action = (ObjectAction) objectMember;
-
+        val action = parentSpec.getObjectAction(actionId)
+                .orElseThrow(()->RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
+        
         final ActionDescriptionReprRenderer renderer = new ActionDescriptionReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(new ParentSpecAndAction(parentSpec, action)).includesSelf();
 
@@ -235,12 +236,9 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
 
-        final ObjectMember objectMember = parentSpec.getObjectAction(actionId);
-        if (objectMember == null) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
-        }
-        final ObjectAction parentAction = (ObjectAction) objectMember;
-
+        val parentAction = parentSpec.getObjectAction(actionId)
+                .orElseThrow(()->RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
+        
         final ObjectActionParameter actionParam = parentAction.getParameterByName(paramName);
 
         final ActionParameterDescriptionReprRenderer renderer = new ActionParameterDescriptionReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());

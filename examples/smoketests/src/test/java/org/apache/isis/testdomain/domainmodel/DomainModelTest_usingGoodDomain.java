@@ -106,34 +106,34 @@ class DomainModelTest_usingGoodDomain {
         val holderSpec = specificationLoader.loadSpecification(ProperMemberSupport.class, 
                         IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         
-        val mx_mixin = holderSpec.getObjectAction("action2"); // proper mixed-in action support
+        val mx_mixin = holderSpec.getObjectActionElseFail("action2"); // proper mixed-in action support
         assertNotNull(mx_mixin);
         
-        val mx_action = holderSpec.getObjectAction("action"); // when @Action at type level
+        val mx_action = holderSpec.getObjectActionElseFail("action"); // when @Action at type level
         assertNotNull(mx_action);
         assertEquals("action", mx_action.getId());
         assertEquals("foo", mx_action.getName());
         assertEquals("bar", mx_action.getDescription());
         
-        val mx_property = holderSpec.getAssociation("property"); // when @Property at type level
+        val mx_property = holderSpec.getAssociationElseFail("property"); // when @Property at type level
         assertNotNull(mx_property);
         assertEquals("property", mx_property.getId());
         assertEquals("foo", mx_property.getName());
         assertEquals("bar", mx_property.getDescription());
         
-        val mx_property2 = holderSpec.getAssociation("property2"); // when @Property at method level
+        val mx_property2 = holderSpec.getAssociationElseFail("property2"); // when @Property at method level
         assertNotNull(mx_property2);
         assertEquals("property2", mx_property2.getId());
         assertEquals("foo", mx_property2.getName());
         assertEquals("bar", mx_property2.getDescription());
         
-        val mx_collection = holderSpec.getAssociation("collection"); // when @Collection at type level
+        val mx_collection = holderSpec.getAssociationElseFail("collection"); // when @Collection at type level
         assertNotNull(mx_collection);
         assertEquals("collection", mx_collection.getId());
         assertEquals("foo", mx_collection.getName());
         assertEquals("bar", mx_collection.getDescription());
         
-        val mx_collection2 = holderSpec.getAssociation("collection2"); // when @Collection at method level
+        val mx_collection2 = holderSpec.getAssociationElseFail("collection2"); // when @Collection at method level
         assertNotNull(mx_collection2);
         assertEquals("collection2", mx_collection2.getId());
         assertEquals("foo", mx_collection2.getName());

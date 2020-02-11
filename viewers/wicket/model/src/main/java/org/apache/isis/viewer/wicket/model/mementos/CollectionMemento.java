@@ -103,7 +103,8 @@ public class CollectionMemento implements Serializable {
             ObjectSpecId owningType,
             String id,
             final SpecificationLoader specificationLoader) {
-        return (OneToManyAssociation) specificationLoader.lookupBySpecIdElseLoad(owningType).getAssociation(id);
+        return (OneToManyAssociation) specificationLoader.lookupBySpecIdElseLoad(owningType)
+                .getAssociationElseFail(id);
     }
 
 }

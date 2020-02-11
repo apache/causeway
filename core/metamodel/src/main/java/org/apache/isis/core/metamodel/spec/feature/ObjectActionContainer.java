@@ -20,10 +20,12 @@
 package org.apache.isis.core.metamodel.spec.feature;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -34,7 +36,7 @@ public interface ObjectActionContainer {
     /**
      * Returns the action of the specified type with the specified signature.
      */
-    ObjectAction getObjectAction(ActionType type, String id, Can<ObjectSpecification> parameters);
+    Optional<ObjectAction> getObjectAction(ActionType type, String id, Can<ObjectSpecification> parameters);
 
     /**
      * Get the action object represented by the specified identity string.
@@ -46,7 +48,13 @@ public interface ObjectActionContainer {
      *
      * @see #getObjectAction(String)
      */
-    ObjectAction getObjectAction(ActionType type, String id);
+    Optional<ObjectAction> getObjectAction(ActionType type, String id);
+    
+    default ObjectAction getObjectActionElseFail(ActionType type, String id) {
+        return getObjectAction(type, id)
+                .orElseThrow(()->_Exceptions.noSuchElement("type=%s id=%s", type, id));  
+    }
+    
 
     /**
      * Get the action object represented by the specified identity string,
@@ -59,7 +67,12 @@ public interface ObjectActionContainer {
      *
      * @see #getObjectAction(ActionType, String)
      */
-    ObjectAction getObjectAction(String id);
+    Optional<ObjectAction> getObjectAction(String id);
+    
+    default ObjectAction getObjectActionElseFail(String id) {
+        return getObjectAction(id)
+                .orElseThrow(()->_Exceptions.noSuchElement("id=%s", id));  
+    }
 
     default Stream<ObjectAction> streamObjectActions(Contributed contributed) {
         return streamObjectActions(ActionType.ALL, contributed);

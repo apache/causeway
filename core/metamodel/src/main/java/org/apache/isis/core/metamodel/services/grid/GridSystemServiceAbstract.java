@@ -35,7 +35,6 @@ import org.apache.isis.applib.annotation.RenderDay;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
-import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutDataOwner;
 import org.apache.isis.applib.layout.component.FieldSet;
@@ -108,7 +107,6 @@ import org.apache.isis.core.metamodel.facets.properties.propertylayout.TypicalLe
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.UnchangingFacetForPropertyXml;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -396,42 +394,45 @@ implements GridSystemService<G> {
 
             @Override
             public void visit(final ActionLayoutData actionLayoutData) {
-                final ObjectAction objectAction = objectSpec.getObjectAction(actionLayoutData.getId());
-
-                setBookmarkingIfAny(actionLayoutData, objectAction);
-                setCssClassIfAny(actionLayoutData, objectAction);
-                setCssClassFaIfAny(actionLayoutData, objectAction);
-                setDescribedAsIfAny(actionLayoutData, objectAction);
-                setHiddenIfAny(actionLayoutData, objectAction);
-                setNamedIfAny(actionLayoutData, objectAction);
-                setActionPositionIfAny(actionLayoutData, objectAction);
+                objectSpec.getObjectAction(actionLayoutData.getId())
+                .ifPresent(objectAction->{
+                    setBookmarkingIfAny(actionLayoutData, objectAction);
+                    setCssClassIfAny(actionLayoutData, objectAction);
+                    setCssClassFaIfAny(actionLayoutData, objectAction);
+                    setDescribedAsIfAny(actionLayoutData, objectAction);
+                    setHiddenIfAny(actionLayoutData, objectAction);
+                    setNamedIfAny(actionLayoutData, objectAction);
+                    setActionPositionIfAny(actionLayoutData, objectAction);    
+                });
             }
 
             @Override
             public void visit(final CollectionLayoutData collectionLayoutData) {
-                final ObjectAssociation collection = objectSpec.getAssociation(collectionLayoutData.getId());
-
-                setCssClassIfAny(collectionLayoutData, collection);
-                setDefaultViewIfAny(collectionLayoutData, collection);
-                setDescribedAsIfAny(collectionLayoutData, collection);
-                setHiddenIfAny(collectionLayoutData, collection);
-                setNamedIfAny(collectionLayoutData, collection);
-                setPagedIfAny(collectionLayoutData, collection);
-                setSortedByIfAny(collectionLayoutData, collection);
+                objectSpec.getAssociation(collectionLayoutData.getId())
+                .ifPresent(collection->{
+                    setCssClassIfAny(collectionLayoutData, collection);
+                    setDefaultViewIfAny(collectionLayoutData, collection);
+                    setDescribedAsIfAny(collectionLayoutData, collection);
+                    setHiddenIfAny(collectionLayoutData, collection);
+                    setNamedIfAny(collectionLayoutData, collection);
+                    setPagedIfAny(collectionLayoutData, collection);
+                    setSortedByIfAny(collectionLayoutData, collection);    
+                });
             }
 
             @Override
             public void visit(final PropertyLayoutData propertyLayoutData) {
-                final ObjectAssociation property = objectSpec.getAssociation(propertyLayoutData.getId());
-
-                setCssClassIfAny(propertyLayoutData, property);
-                setDescribedAsIfAny(propertyLayoutData, property);
-                setHiddenIfAny(propertyLayoutData, property);
-                setNamedIfAny(propertyLayoutData, property);
-                setLabelPositionIfAny(propertyLayoutData, property);
-                setMultiLineIfAny(propertyLayoutData, property);
-                setRenderedAsDayBeforeIfAny(propertyLayoutData, property);
-                setTypicalLengthIfAny(propertyLayoutData, property);
+                objectSpec.getAssociation(propertyLayoutData.getId())
+                .ifPresent(property->{
+                    setCssClassIfAny(propertyLayoutData, property);
+                    setDescribedAsIfAny(propertyLayoutData, property);
+                    setHiddenIfAny(propertyLayoutData, property);
+                    setNamedIfAny(propertyLayoutData, property);
+                    setLabelPositionIfAny(propertyLayoutData, property);
+                    setMultiLineIfAny(propertyLayoutData, property);
+                    setRenderedAsDayBeforeIfAny(propertyLayoutData, property);
+                    setTypicalLengthIfAny(propertyLayoutData, property);    
+                });
             }
 
             @Override

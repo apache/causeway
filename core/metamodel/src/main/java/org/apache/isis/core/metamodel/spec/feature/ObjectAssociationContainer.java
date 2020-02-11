@@ -19,8 +19,10 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 
 public interface ObjectAssociationContainer {
@@ -32,7 +34,13 @@ public interface ObjectAssociationContainer {
      * Throw a {@link ObjectSpecificationException} if no such association
      * exists.
      */
-    ObjectAssociation getAssociation(String id);
+    Optional<ObjectAssociation> getAssociation(String id);
+    
+    default ObjectAssociation getAssociationElseFail(String id) {
+        return getAssociation(id)
+                .orElseThrow(()->_Exceptions.noSuchElement("id=%s", id));
+    }
+    
 
     /**
      * Return all the fields that exist in an object of this specification,

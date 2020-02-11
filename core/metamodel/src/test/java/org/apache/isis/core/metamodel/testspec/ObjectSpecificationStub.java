@@ -21,12 +21,12 @@ package org.apache.isis.core.metamodel.testspec;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.ioc.BeanSort;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -49,6 +49,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 
+import lombok.val;
+
 public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSpecification {
 
     private ObjectAction action;
@@ -68,16 +70,16 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public ObjectMember getMember(final String memberId) {
-        final ObjectAction objectAction = getObjectAction(memberId);
-        if(objectAction != null) {
+    public Optional<? extends ObjectMember> getMember(final String memberId) {
+        val objectAction = getObjectAction(memberId);
+        if(objectAction.isPresent()) {
             return objectAction;
         }
-        final ObjectAssociation association = getAssociation(memberId);
-        if(association != null) {
+        val association = getAssociation(memberId);
+        if(association.isPresent()) {
             return association;
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override
@@ -110,13 +112,13 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public ObjectAssociation getAssociation(final String name) {
+    public Optional<ObjectAssociation> getAssociation(final String name) {
         for (int i = 0; i < fields.size(); i++) {
             if (fields.get(i).getId().equals(name)) {
-                return fields.get(i);
+                return Optional.ofNullable(fields.get(i));
             }
         }
-        throw new IsisException("Field not found: " + name);
+        return Optional.empty();
     }
 
     @Override
@@ -153,32 +155,32 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public ObjectAction getObjectAction(
+    public Optional<ObjectAction> getObjectAction(
             final ActionType type,
             final String name, 
             final Can<ObjectSpecification> parameters) {
         
         if (action != null && action.getId().equals(name)) {
-            return action;
+            return Optional.of(action);
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override
-    public ObjectAction getObjectAction(final ActionType type, final String id) {
+    public Optional<ObjectAction> getObjectAction(final ActionType type, final String id) {
         final int openBracket = id.indexOf('(');
         return getObjectAction(type, id.substring(0, openBracket), null);
     }
 
     @Override
-    public ObjectAction getObjectAction(final String nameParmsIdentityString) {
+    public Optional<ObjectAction> getObjectAction(final String nameParmsIdentityString) {
         for (final ActionType type : ActionType.values()) {
-            final ObjectAction action = getObjectAction(type, nameParmsIdentityString);
-            if (action != null) {
+            val action = getObjectAction(type, nameParmsIdentityString);
+            if (action.isPresent()) {
                 return action;
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override

@@ -88,7 +88,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
         s1.getShortIdentifier().compareToIgnoreCase(s2.getShortIdentifier());
     }
 
-    ObjectMember getMember(String memberId);
+    Optional<? extends ObjectMember> getMember(String memberId);
 
     /**
      * @param onType
@@ -447,6 +447,8 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     default boolean isIdentifiable() {
         return isManagedBean() || isViewModel() || isEntity();
     }
+
+    
 
 
 }

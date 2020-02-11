@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.specloader.specimpl.dflt;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
@@ -291,7 +292,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     // -- getObjectAction
 
     @Override
-    public ObjectAction getObjectAction(
+    public Optional<ObjectAction> getObjectAction(
             final ActionType type, 
             final String id, 
             final Can<ObjectSpecification> parameters) {
@@ -303,7 +304,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     @Override
-    public ObjectAction getObjectAction(final ActionType type, final String id) {
+    public Optional<ObjectAction> getObjectAction(final ActionType type, final String id) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         final Stream<ObjectAction> actions =
@@ -312,7 +313,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     @Override
-    public ObjectAction getObjectAction(final String id) {
+    public Optional<ObjectAction> getObjectAction(final String id) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         final Stream<ObjectAction> actions =
@@ -320,7 +321,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         return firstAction(actions, id);
     }
 
-    private static ObjectAction firstAction(
+    private static Optional<ObjectAction> firstAction(
             final Stream<ObjectAction> candidateActions,
             final String actionName,
             final Can<ObjectSpecification> parameters) {
@@ -328,8 +329,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         return candidateActions
                 .filter(action->actionName == null || actionName.equals(action.getId()))
                 .filter(action->isMatchingSignature(parameters, action.getParameters()))
-                .findAny()
-                .orElse(null);
+                .findAny();
     }
 
     private static  boolean isMatchingSignature(
@@ -351,7 +351,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         return true;
     }
 
-    private static ObjectAction firstAction(
+    private static Optional<ObjectAction> firstAction(
             final Stream<ObjectAction> candidateActions,
             final String id) {
 
@@ -371,8 +371,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
                     }
                     return false;
                 })
-                .findFirst()
-                .orElse(null);
+                .findFirst();
     }
 
     /**

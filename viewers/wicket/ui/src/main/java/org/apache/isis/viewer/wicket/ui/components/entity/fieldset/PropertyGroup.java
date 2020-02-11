@@ -22,8 +22,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.annotation.Nullable;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -38,8 +36,6 @@ import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -172,27 +168,18 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
         //
 
         val oas = _NullSafe.stream(properties)
-                .filter((final PropertyLayoutData propertyLayoutData) -> {
-                    return propertyLayoutData.getMetadataError() == null;
-                })
-                .map((final PropertyLayoutData propertyLayoutData)->{
-                    ObjectSpecification adapterSpecification = adapter.getSpecification();
-                    try {
-                        // this shouldn't happen, but has been reported (https://issues.apache.org/jira/browse/ISIS-1574),
-                        // suggesting that in some cases the GridService can get it wrong.  This is therefore a hack...
-                        return adapterSpecification.getAssociation(propertyLayoutData.getId());
-                    } catch (ObjectSpecificationException e) {
-                        return null;
-                    }
-                })
-                .filter((@Nullable final ObjectAssociation objectAssociation) -> {
-                    if(objectAssociation == null) {
-                        return false;
-                    }
-                    final HiddenFacet facet = objectAssociation.getFacet(HiddenFacet.class);
-                    if(facet != null && !facet.isFallback()) {
+                .filter(propertyLayoutData -> propertyLayoutData.getMetadataError() == null)
+                .map(propertyLayoutData -> 
+                    adapter.getSpecification()
+                    .getAssociation(propertyLayoutData.getId())
+                    .orElse(null)
+                )
+                .filter(_NullSafe::isPresent)
+                .filter(objectAssociation -> {
+                    val hiddenFacet = objectAssociation.getFacet(HiddenFacet.class);
+                    if(hiddenFacet != null && !hiddenFacet.isFallback()) {
                         // static invisible.
-                        if(facet.where() == Where.EVERYWHERE || facet.where() == Where.OBJECT_FORMS) {
+                        if(hiddenFacet.where() == Where.EVERYWHERE || hiddenFacet.where() == Where.OBJECT_FORMS) {
                             return false;
                         }
                     }
