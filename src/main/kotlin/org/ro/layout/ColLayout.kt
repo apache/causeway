@@ -2,7 +2,6 @@ package org.ro.layout
 
 import kotlinx.serialization.Serializable
 import org.ro.to.Link
-import org.ro.to.bs3.Col
 
 @Serializable
 data class ColLayout(val domainObject: DomainObjectLayout? = null,
@@ -26,13 +25,4 @@ data class ColLayout(val domainObject: DomainObjectLayout? = null,
                      val cssClassFaPosition: String? = "",
                      val namedEscaped: Boolean? = false,
                      val tabGroup: MutableList<TabGroupLayout> = mutableListOf<TabGroupLayout>()
-) {
-    constructor(col: Col) : this() {
-        col.tabGroups.forEach {
-            tabGroup.add(TabGroupLayout(it))
-        }
-        val fs = col.fieldSet!!
-        fieldSet.add(FieldSetLayout(fs))
-    }
-
-}
+)

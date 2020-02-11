@@ -2,7 +2,6 @@ package org.ro.layout
 
 import kotlinx.serialization.Serializable
 import org.ro.to.Link
-import org.ro.to.bs3.Property
 
 @Serializable
 data class PropertyLayout(val named: String? = null,
@@ -22,10 +21,4 @@ data class PropertyLayout(val named: String? = null,
                           val typicalLength: Int? = null,
                           val repainting: String? = null,
                           val unchanging: String? = null
-) {
-    constructor(property: Property) : this() {
-        val act = property.action
-        action.add(ActionLayout(act))
-    }
-
-}
+)

@@ -2,7 +2,6 @@ package org.ro.layout
 
 import kotlinx.serialization.Serializable
 import org.ro.to.TransferObject
-import org.ro.to.bs3.Grid
 
 /**
  * Parse layout specification.
@@ -15,12 +14,6 @@ data class Layout(val cssClass: String? = null,
                   val row: MutableList<RowLayout> = mutableListOf<RowLayout>()) : TransferObject {
 
     var properties = listOf<PropertyLayout>()
-
-    constructor(grid: Grid) : this() {
-        grid.rows.forEach {
-            row.add(RowLayout(it))
-        }
-    }
 
     init {
         // row[0] (head) contains the object title and actions

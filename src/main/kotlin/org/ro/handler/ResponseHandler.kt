@@ -19,7 +19,6 @@ object ResponseHandler {
     private var _4b = ResultValueHandler()
     private var _5 = TObjectHandler()
     private var _6 = LayoutHandler()
-    private var _6a = XmlLayoutHandler()
     private var _7 = PropertyHandler()
     private var _8 = MemberHandler()
     private var _9 = HttpErrorHandler()
@@ -39,8 +38,7 @@ object ResponseHandler {
         _4a.successor = _4b
         _4b.successor = _5
         _5.successor = _6
-        _6.successor = _6a
-        _6a.successor = _7
+        _6.successor = _7
         _7.successor = _8
         _8.successor = _9
         _9.successor = _10
