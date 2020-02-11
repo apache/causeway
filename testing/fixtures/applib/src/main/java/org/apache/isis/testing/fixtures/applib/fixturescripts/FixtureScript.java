@@ -714,7 +714,9 @@ public abstract class FixtureScript {
      *     Package-visibility only, not public API.
      * </p>
      */
-    final List<FixtureResult> run(final String parameters) {
+    final List<FixtureResult> run(
+            final String parameters,
+            final FixtureScripts fixtureScripts) {
         executionContext = fixtureScripts.newExecutionContext(parameters);
         executionContext.executeChildIfNotAlready(this);
         return executionContext.getResults();
@@ -831,7 +833,6 @@ public abstract class FixtureScript {
 
     // -- DEPENDENCIES
 
-    @Inject protected FixtureScripts fixtureScripts;
     @Inject protected FactoryService factoryService;
     @Inject protected ServiceRegistry serviceRegistry;
     @Inject protected ServiceInjector serviceInjector;

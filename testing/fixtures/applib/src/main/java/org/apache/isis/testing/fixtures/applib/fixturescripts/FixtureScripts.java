@@ -259,7 +259,7 @@ public class FixtureScripts extends AbstractService {
             // domain services are injected into the fixture script.
             serviceInjector.injectServicesInto(fixtureScript);
 
-            return fixtureScript.run(parameters);
+            return fixtureScript.run(parameters, this);
         } finally {
             eventBusService.post(new FixturesInstalledEvent(this));
         }
@@ -295,7 +295,7 @@ public class FixtureScripts extends AbstractService {
 
     protected List<FixtureResult> runScript(final FixtureScript fixtureScript, final String parameters) {
         serviceInjector.injectServicesInto(fixtureScript);
-        return fixtureScript.run(parameters);
+        return fixtureScript.run(parameters, this);
     }
 
 
@@ -387,7 +387,7 @@ public class FixtureScripts extends AbstractService {
 
         serviceInjector.injectServicesInto(builderScript);
 
-        builderScript.run(null);
+        builderScript.run(null, this);
         final T object = builderScript.getObject();
         return object;
     }
