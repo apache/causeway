@@ -270,6 +270,7 @@ static String toAsciidoc(String str) {
     System.out.print(".");
     str = str.replaceAll( /\{@link[ ]+?([^}]+?)[ ]+?([^}]+?)}/, '$2')
     str = str.replaceAll( /\{@link (?:(?:[^}]|[.])+[.])*([^}]+)}/, '``$1``')
+    str = str.replaceAll( /<tt>(?:(?:[^<]|[.])+[.])*([^<]+)<\/tt>/, '``$1``')
     str = str.replaceAll( /<code>(?:(?:[^<]|[.])+[.])*([^<]+)<\/code>/, '``$1``')
     str = str.replaceAll( /@apiNote -/, 'TIP:')
     str = str.replaceAll( /@apiNote/, 'TIP:')

@@ -101,9 +101,14 @@ public class IsisConfiguration {
         this.environment = environment;
     }
 
-    @Inject @Named("isis-settings") private Map<String, String> isisSettings;
-    public Map<String, String> getAsMap() { return Collections.unmodifiableMap(isisSettings); }
-    
+    /**
+     *
+     */
+    @Inject @Named("as-map")
+    private Map<String, String> asMap;
+    public Map<String, String> getAsMap() { return Collections.unmodifiableMap(asMap); }
+
+
     private final Security security = new Security();
     @Data
     public static class Security {
@@ -1682,7 +1687,7 @@ public class IsisConfiguration {
 
 
                     /**
-                     * Name of a class that implements <tt>org.datanucleus.store.connection.DecryptionProvider</tt>
+                     * Name of a class that implements <code>org.datanucleus.store.connection.DecryptionProvider</code>
                      * and should only be specified if the password is encrypted in the persistence properties.
                      *
                      * <p>

@@ -6,11 +6,10 @@
 == Applib
 
 
-[cols="2a,2a,3a", options="header"]
+[cols="3a,2a,5a", options="header"]
 |===
 |Property
-|Value +
-(default value)
+|Default
 |Description
 
 include::refguide:config:example$generated/isis.applib.adoc[]
@@ -22,11 +21,10 @@ include::refguide:config:example$generated/isis.applib.adoc[]
 
 General configuration:
 
-[cols="2a,2a,3a", options="header"]
+[cols="3a,2a,5a", options="header"]
 |===
 |Property
-|Value +
-(default value)
+|Default
 |Description
 
 include::refguide:config:example$generated/isis.core.meta-model.adoc[]
@@ -35,11 +33,10 @@ include::refguide:config:example$generated/isis.core.meta-model.adoc[]
 
 === Introspection
 
-[cols="2a,2a,3a", options="header"]
+[cols="3a,2a,5a", options="header"]
 |===
 |Property
-|Value +
-(default value)
+|Default
 |Description
 
 include::refguide:config:example$generated/isis.core.meta-model.introspector.adoc[]
@@ -48,11 +45,10 @@ include::refguide:config:example$generated/isis.core.meta-model.introspector.ado
 
 === Validator
 
-[cols="2a,2a,3a", options="header"]
+[cols="3a,2a,5a", options="header"]
 |===
 |Property
-|Value +
-(default value)
+|Default
 |Description
 
 include::refguide:config:example$generated/isis.core.meta-model.validator.adoc[]
@@ -64,11 +60,10 @@ include::refguide:config:example$generated/isis.core.meta-model.validator.adoc[]
 
 == Core Runtime
 
-[cols="2a,2a,3a", options="header"]
+[cols="3a,2a,5a", options="header"]
 |===
 |Property
-|Value +
-(default value)
+|Default
 |Description
 
 include::refguide:config:example$generated/isis.core.runtime.adoc[]
@@ -80,11 +75,10 @@ include::refguide:config:example$generated/isis.core.runtime.adoc[]
 
 == Core Runtime Services
 
-[cols="2a,2a,3a", options="header"]
+[cols="3a,2a,5a", options="header"]
 |===
 |Property
-|Value +
-(default value)
+|Default
 |Description
 
 include::refguide:config:example$generated/isis.core.runtime-services.adoc[]
@@ -97,11 +91,10 @@ include::refguide:config:example$generated/isis.core.runtime-services.adoc[]
 
 == JDO DataNucleus Persistence
 
-[cols="2a,2a,3a", options="header"]
+[cols="3a,2a,5a", options="header"]
 |===
 |Property
-|Value +
-(default value)
+|Default
 |Description
 
 include::refguide:config:example$generated/isis.persistence.jdo-datanucleus.adoc[]
@@ -122,11 +115,10 @@ Configuration properties keys under `datanucleus` need to be specified in `camel
 Configuration properties keys under `javax.jdo.option` need to be specified in `PascalCase`.
 ====
 
-[cols="2a,2a,3a", options="header"]
+[cols="3a,2a,5a", options="header"]
 |===
 |Property
-|Value +
-(default value)
+|Default
 |Description
 
 include::refguide:config:example$generated/isis.persistence.jdo-datanucleus.impl.adoc[]
@@ -136,11 +128,10 @@ include::refguide:config:example$generated/isis.persistence.jdo-datanucleus.impl
 
 == Shiro Security
 
-[cols="2a,2a,3a", options="header"]
+[cols="3a,2a,5a", options="header"]
 |===
 |Property
-|Value +
-(default value)
+|Default
 |Description
 
 
@@ -152,11 +143,10 @@ include::refguide:config:example$generated/isis.security.shiro.adoc[]
 
 == Restful Objects Viewer
 
-[cols="2a,2a,3a", options="header"]
+[cols="3a,2a,5a", options="header"]
 |===
 |Property
-|Value +
-(default value)
+|Default
 |Description
 
 include::refguide:config:example$generated/isis.viewer.restfulobjects.adoc[]
@@ -167,11 +157,10 @@ include::refguide:config:example$generated/isis.viewer.restfulobjects.adoc[]
 
 == Wicket Viewer
 
-[cols="2a,2a,3a", options="header"]
+[cols="3a,2a,5a", options="header"]
 |===
 |Property
-|Value +
-(default value)
+|Default
 |Description
 
 include::refguide:config:example$generated/isis.viewer.wicket.adoc[]
@@ -181,11 +170,10 @@ include::refguide:config:example$generated/isis.viewer.wicket.adoc[]
 
 == Testing
 
-[cols="2a,2a,3a", options="header"]
+[cols="3a,2a,5a", options="header"]
 |===
 |Property
-|Value +
-(default value)
+|Default
 |Description
 
 include::refguide:config:example$generated/isis.testing.adoc[]
@@ -195,11 +183,10 @@ include::refguide:config:example$generated/isis.testing.adoc[]
 
 == Value Types
 
-[cols="2a,2a,3a", options="header"]
+[cols="3a,2a,5a", options="header"]
 |===
 |Property
-|Value +
-(default value)
+|Default
 |Description
 
 include::refguide:config:example$generated/isis.value-types.adoc[]
@@ -211,11 +198,10 @@ ifdef::env-this-stuff-is-currently-disabled[]
 
 == Subdomains
 
-[cols="2a,2a,3a", options="header"]
+[cols="3a,2a,5a", options="header"]
 |===
 |Property
-|Value +
-(default value)
+|Default
 |Description
 
 include::refguide:config:example$generated/isis.subdomains.adoc[]
@@ -224,11 +210,10 @@ include::refguide:config:example$generated/isis.subdomains.adoc[]
 
 == Mappings
 
-[cols="2a,2a,3a", options="header"]
+[cols="3a,2a,5a", options="header"]
 |===
 |Property
-|Value +
-(default value)
+|Default
 |Description
 
 include::refguide:config:example$generated/isis.mappings.adoc[]
@@ -239,11 +224,10 @@ endif::[]
 
 == Extensions
 
-[cols="2a,2a,3a", options="header"]
+[cols="3a,2a,5a", options="header"]
 |===
 |Property
-|Value +
-(default value)
+|Default
 |Description
 
 include::refguide:config:example$generated/isis.extensions.adoc[]
@@ -255,11 +239,10 @@ ifdef::env-this-stuff-is-currently-disabled[]
 
 == Incubator
 
-[cols="2a,2a,3a", options="header"]
+[cols="3a,2a,5a", options="header"]
 |===
 |Property
-|Value +
-(default value)
+|Default
 |Description
 
 include::refguide:config:example$generated/isis.incubator.adoc[]
@@ -271,11 +254,10 @@ endif::[]
 
 == Legacy
 
-[cols="2a,2a,3a", options="header"]
+[cols="3a,2a,5a", options="header"]
 |===
 |Property
-|Value +
-(default value)
+|Default
 |Description
 
 include::refguide:config:example$generated/isis.legacy.adoc[]
@@ -289,11 +271,10 @@ These configuration options are defined by 3rd party libraries (dependency of th
 
 === RestEasy
 
-[cols="2a,2a,3a", options="header"]
+[cols="3a,2a,5a", options="header"]
 |===
 |Property
-|Value +
-(default value)
+|Default
 |Description
 
 include::refguide:config:example$generated/resteasy.adoc[]
@@ -306,11 +287,10 @@ include::refguide:config:example$generated/resteasy.adoc[]
 
 == Other
 
-[cols="2a,2a,3a", options="header"]
+[cols="3a,2a,5a", options="header"]
 |===
 |Property
-|Value +
-(default value)
+|Default
 |Description
 
 include::refguide:config:example$generated/Other.adoc[]
