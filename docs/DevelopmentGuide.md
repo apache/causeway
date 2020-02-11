@@ -45,10 +45,8 @@ gradlew.bat -t run
 In the following section you'll find information that likely helps understanding the implementation.  
 ## Overview
 ![Preview](./uml-overview.png)
-## Handler Chain
-![Preview](./uml-handler.png)
 
-## Patterns 
+## Patterns Applied 
 ### Redux
 The implementation is an (independent) reinvention of Redux. 
 I prefer the name Aggregator over Reducer though - IIRC Aggregator is prior art.
@@ -70,6 +68,7 @@ mutable lists.
 ### Chain of Responsibility (GOF)
 A chain of handlers is used to identify what kind of TO is to be generated from the 
 JSON response. Handlers are responsible for initial assignment of aggregators.
+![Preview](./uml-handler.png)
 ### Template Method (GOF)
 The Handler base class makes use of this pattern. Some methods have to be implemented
 in each subclass, in some cases the default implementation in the base class is used.
@@ -146,13 +145,19 @@ see https://intellij-support.jetbrains.com/hc/en-us/community/posts/115000094584
  ```
 
 # Misc
-## HowTo
+## Toolchain Overview
 When you are accustomed to the well settled Java ecosystem with integrated development environments, prepare yourself for learning new tools and addressing new problems.
 
 Kotlin is straightforward and once you now it, you may not want to go back.
 
 ![Preview](./dev-mindmap.png)
 
+## Visualize JSON
+See [json-to-plantul](https://github.com/meteorbites/json-to-plantuml)
+```
+npm install -g json-to-plantuml
+
+```
 
 ## Visualize JS dependencies
 ```

@@ -58,10 +58,10 @@ depends on the aspect and the perspective most useful to the user working with t
 
 Which renderers should be provided for what data?
 
-One approach to identifying applicable renderers is duck typing ("if it walkes like a duck and quarks like a duck ...").
+One approach to identifying applicable renderers is [duck typing](https://en.wikipedia.org/wiki/Duck_typing).
 This means resorting to behavior / properties of an object. If eg. an object has two properties of type date, labeled "start" and "end"
-it is reasonable to render it on a timeline. If there is a list of such object they can form a gantt chart. 
+it is reasonable to render it as horizontal bar on a timeline. If there is a list of such objects, they can form a gantt chart. 
 
-The number of renderers included with kroviz is limited and there isn't yet an example of selecting one of possibly many applicale renderers, but there is room for impovement and creativity.   
-
+The number of renderers included with kroviz is limited and there isn't yet an example of selecting one of possibly many applicale renderers, but there is room for impovement and creativity.
+Such renderes should as well have links leading back to 'plain old object' renderings.
 
