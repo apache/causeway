@@ -306,7 +306,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         init(RepresentationType.OBJECT_LAYOUT, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        val responseBuilder = layoutAsGrid(domainType, instanceId)
+        final Response.ResponseBuilder responseBuilder = layoutAsGrid(domainType, instanceId)
             .map(grid->{
                 
                 val serializationStrategy = getResourceContext().getSerializationStrategy();
