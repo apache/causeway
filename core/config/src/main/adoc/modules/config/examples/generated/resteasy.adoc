@@ -5,7 +5,7 @@
 | resteasy.authentication. +
 strategy-class-name
 | 
-| Defaults to 'org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategyBasicAuth'.
+| Defaults to ``AuthenticationSessionStrategyBasicAuth``.
 
 
 | resteasy.environment
