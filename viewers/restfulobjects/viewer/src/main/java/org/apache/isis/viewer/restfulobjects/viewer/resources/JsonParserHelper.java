@@ -31,6 +31,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplication
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueEncoder;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 
+import lombok.val;
+
 /**
  * Utility class that encapsulates the logic for parsing some content (JSON, or a simple string that is JSON)
  * into an{@link ManagedObject} of a specified
@@ -131,12 +133,12 @@ public class JsonParserHelper {
             throw new IllegalArgumentException(reason);
         }
 
-        final ManagedObject objectAdapter = resourceContext.getObjectAdapterElseNull(oidFromHref);
-        if (objectAdapter == null) {
-            final String reason = "'href' does not reference a known entity";
-            argRepr.mapPut("invalidReason", reason);
-            throw new IllegalArgumentException(reason);
-        }
+        val objectAdapter = resourceContext.getObjectAdapterForOidFromHref(oidFromHref)
+                .orElseThrow(()->{
+                    val reason = "'href' does not reference a known entity";
+                    argRepr.mapPut("invalidReason", reason);
+                    return new IllegalArgumentException(reason);
+                });
         return objectAdapter;
     }
 

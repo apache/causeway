@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.restfulobjects.rendering;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.ws.rs.core.MediaType;
 
@@ -32,6 +33,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
@@ -85,21 +87,22 @@ public interface IResourceContext {
     ServiceRegistry getServiceRegistry(); // TODO derive from specLoader
     IsisConfiguration getConfiguration(); // TODO derive from specLoader
 
-    // -- TEMPORARY FOR REFACTORING
+    // -- UTILITY
 
-    @Deprecated
-    default ManagedObject getObjectAdapterElseNull(String oidFromHref) {
+    default Optional<ManagedObject> getObjectAdapterForOidFromHref(String oidFromHref) {
         String oidStrUnencoded = UrlDecoderUtils.urlDecode(oidFromHref);
         val rootOid = RootOid.deString(oidStrUnencoded);
-        return ManagedObject._adapterOfRootOid(getSpecificationLoader(), rootOid);
+        return Optional.ofNullable(ManagedObject._adapterOfRootOid(getSpecificationLoader(), rootOid));
     }
 
-    @Deprecated
-    default ManagedObject getObjectAdapterElseNull(String domainType, String instanceIdEncoded) {
+    default ManagedObject getObjectAdapterElseFail(String domainType, String instanceIdEncoded) {
         final String instanceIdUnencoded = UrlDecoderUtils.urlDecode(instanceIdEncoded);
         String oidStrUnencoded = Oid.marshaller().joinAsOid(domainType, instanceIdUnencoded);
         val rootOid = RootOid.deString(oidStrUnencoded);
-        return ManagedObject._adapterOfRootOid(getSpecificationLoader(), rootOid);
+        
+        return Optional.ofNullable(ManagedObject._adapterOfRootOid(getSpecificationLoader(), rootOid))
+                .orElseThrow(()->RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND, 
+                        "Could not determine adapter for OID: '%s:%s'", domainType, instanceIdUnencoded));
     }
 
 }

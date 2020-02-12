@@ -135,23 +135,10 @@ public abstract class ResourceAbstract {
         .lookupServiceElseFail(CommandContext.class).getCommand().internal().setExecutor(executor);
     }
 
-    // //////////////////////////////////////////////////////////////
-    // Isis integration
-    // //////////////////////////////////////////////////////////////
+    // -- ISIS INTEGRATION
 
     protected ManagedObject getObjectAdapterElseThrowNotFound(String domainType, final String instanceId) {
-        ManagedObject objectAdapter = getObjectAdapterElseNull(domainType, instanceId);
-
-        if (objectAdapter == null) {
-            final String instanceIdUnencoded = org.apache.isis.viewer.restfulobjects.rendering.UrlDecoderUtils.urlDecode(instanceId);
-            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND, 
-                    "Could not determine adapter for OID: '%s:%s'", domainType, instanceIdUnencoded);
-        }
-        return objectAdapter;
-    }
-
-    protected ManagedObject getObjectAdapterElseNull(String domainType, final String instanceId) {
-        return resourceContext.getObjectAdapterElseNull(domainType, instanceId);
+        return resourceContext.getObjectAdapterElseFail(domainType, instanceId);
     }
 
     protected ManagedObject getServiceAdapter(final String serviceId) {
