@@ -28,7 +28,7 @@
 
     <artifactId>isis-viewer-restfulobjects-viewer</artifactId>
 
-	<name>Apache Isis Viewer - RO (SeViewerrver)</name>
+	<name>Apache Isis Viewer - RO (Viewer)</name>
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.viewer.restfulobjects.viewer</jar-plugin.automaticModuleName>
