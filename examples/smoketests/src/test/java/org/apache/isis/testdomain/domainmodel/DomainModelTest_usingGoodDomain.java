@@ -40,7 +40,7 @@ import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.Product;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
 import org.apache.isis.testdomain.model.good.ProperMemberSupport;
-import org.apache.isis.testing.integtestsupport.applib.validate.ValidateDomainModel;
+import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
 
 import lombok.val;
 
@@ -96,8 +96,8 @@ class DomainModelTest_usingGoodDomain {
         //debug();
         assertFalse(specificationLoader.snapshotSpecifications().isEmpty());
         
-        val validateDomainModel = new ValidateDomainModel(specificationLoader);
-        validateDomainModel.run(); // should not throw
+        val validateDomainModel = new DomainModelValidator(specificationLoader, configuration, isisSystemEnvironment);
+        validateDomainModel.throwIfInvalid(); // should not throw
     }
     
     @Test

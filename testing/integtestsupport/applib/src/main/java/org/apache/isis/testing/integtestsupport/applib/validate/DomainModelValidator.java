@@ -21,12 +21,21 @@ package org.apache.isis.testing.integtestsupport.applib.validate;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
+import javax.inject.Inject;
+
+import org.junit.jupiter.api.Assertions;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
+import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
@@ -34,7 +43,7 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
 
-import lombok.RequiredArgsConstructor;
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -43,40 +52,78 @@ import lombok.extern.log4j.Log4j2;
  *
  */
 @Log4j2
-@RequiredArgsConstructor
-public class ValidateDomainModel implements Runnable {
+public class DomainModelValidator {
 
-    private final SpecificationLoader specificationLoader;
-    private ValidationFailures validationFailures;
+    private final ValidationFailures validationFailures;
 
-    @Override
-    public void run() {
+    @Inject
+    public DomainModelValidator(ServiceRegistry registry) {
+        this(   registry.lookupServiceElseFail(SpecificationLoader.class),
+                registry.lookupServiceElseFail(IsisConfiguration.class),
+                registry.lookupServiceElseFail(IsisSystemEnvironment.class));
+    }
 
-        specificationLoader.createMetaModel();
-        
-        this.validationFailures = specificationLoader.getValidationResult();
-      
+    public DomainModelValidator(
+            final SpecificationLoader specificationLoader,
+            final IsisConfiguration configuration,
+            final IsisSystemEnvironment isisSystemEnvironment) {
 
-        if(log.isDebugEnabled()) {
-            specificationLoader.forEach(spec->{
-                log.debug("loaded: " + spec.getFullIdentifier());
-            });
+        val recreateRequired = isRecreateRequired(configuration, isisSystemEnvironment);
+        if(recreateRequired) {
+            specificationLoader.createMetaModel();
+            if(log.isDebugEnabled()) {
+                specificationLoader.forEach(spec->{
+                    log.debug("loaded: " + spec.getFullIdentifier());
+                });
+            }
         }
 
+        this.validationFailures = specificationLoader.getValidationResult();
+    }
+
+
+    private static boolean isRecreateRequired(IsisConfiguration configuration, IsisSystemEnvironment isisSystemEnvironment) {
+        final IntrospectionMode mode = configuration.getCore().getMetaModel().getIntrospector().getMode();
+        switch (mode) {
+            case FULL:
+                return false;
+            case LAZY_UNLESS_PRODUCTION:
+                return isisSystemEnvironment.isPrototyping();
+            case LAZY:
+            default:
+                return true;
+        }
+    }
+
+    /**
+     * Typical usage in integration tests.
+     */
+    public void assertValid() {
+        if (validationFailures.hasFailures()) {
+            final StringJoiner joiner = new StringJoiner("\n");
+            validationFailures.getMessages().forEach(joiner::add);
+            Assertions.fail(joiner.toString());
+        }
+    }
+
+    /**
+     * Alternative way of checking
+     */
+    public void throwIfInvalid() {
         if (validationFailures.hasFailures()) {
             throwFailureException(
-                    validationFailures.getNumberOfFailures() + " problems found.", 
+                    validationFailures.getNumberOfFailures() + " problems found.",
                     validationFailures.getMessages());
         }
     }
-    
+
     public Set<ValidationFailure> getFailures() {
-        if(validationFailures==null) {
+        if (validationFailures == null) {
             return Collections.emptySet();
         }
         return validationFailures.getFailures(); // already wrapped unmodifiable
     }
-    
+
     public Stream<ValidationFailure> streamFailures(@Nullable Predicate<Identifier> filter) {
         if(validationFailures==null) {
             return Stream.empty();
@@ -92,7 +139,8 @@ public class ValidateDomainModel implements Runnable {
         requires(cls, "cls");
         return streamFailures(origin->origin.getClassName().equals(cls.getName()));
     }
-    
+
+
     // -- SHORTCUTS
     
     /**

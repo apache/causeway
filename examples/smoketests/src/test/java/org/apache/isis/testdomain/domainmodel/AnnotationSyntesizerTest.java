@@ -101,7 +101,7 @@ class AnnotationSyntesizerTest {
         }
         System.out.println("!!! ---");
 
-//        val validateDomainModel = new ValidateDomainModel();
+//        val validateDomainModel = new DomainModelValidator();
 //        validateDomainModel.run(); // should not throw
 
     }

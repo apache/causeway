@@ -550,6 +550,36 @@ Thus, the setup fixture runs the setup for the "inner-most" "leaf-level" modules
 
 
 
+== Validate MetaModel
+
+Metamodel validation checks for a number of semantic errors with the domain model.
+For example, if a supporting method (such as `default0UpdateName()` in `SimpleObject`) is misspelt, then this would be flagged.
+
+Running up the application will flag any metamodel validation issues, as will running an integration test.
+However, depending upon configuration, the metamodel may only be built lazily, meaning that issues will only be detected while the application is running, rather than at bootstrap.
+
+The `DomainModelValidator` is a simple utility class that will fullu rebuild the metamodel if required, and then verify that there are no issues.
+
+[source,java]
+.ValidateDomainModel_IntegTest.java
+----
+class ValidateDomainModel_IntegTest
+        extends ApplicationIntegTestAbstract {
+
+    @Inject ServiceRegistry serviceRegistry;
+
+    @Test
+    void validate() {
+        new DomainModelValidator(serviceRegistry).assertValid();
+    }
+}
+----
+
+To see this in action in the xref:docs:starters:simpleapp.adoc[simpleapp] starter app:
+
+* change `isis.applib.annotation.action.explicit` to `false` in `application.yml`
+* introduce an error, for example by renaming `default0UpdateName` to `default0UpdateFoo`.
+
 == Maven Configuration
 
 Apache Isis' integ test support is most easily configured through a dependency on the `isis-mavendeps-integtests` module:

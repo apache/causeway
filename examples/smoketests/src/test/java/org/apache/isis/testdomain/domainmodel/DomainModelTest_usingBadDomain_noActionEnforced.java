@@ -38,7 +38,7 @@ import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.badnoact.Configuration_usingInvalidDomain_noActionEnforced;
 import org.apache.isis.testdomain.model.badnoact.InvalidOrphanedActionSupportNoActionEnforced;
-import org.apache.isis.testing.integtestsupport.applib.validate.ValidateDomainModel;
+import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
 
 import lombok.val;
 
@@ -79,9 +79,9 @@ class DomainModelTest_usingBadDomain_noActionEnforced {
     @Test
     void orphanedActionSupport_shouldFail() {
            
-        val validateDomainModel = new ValidateDomainModel(specificationLoader);
+        val validateDomainModel = new DomainModelValidator(specificationLoader, configuration, isisSystemEnvironment);
         
-        assertThrows(DomainModelException.class, validateDomainModel::run);
+        assertThrows(DomainModelException.class, validateDomainModel::throwIfInvalid);
         assertTrue(validateDomainModel.anyMatchesContaining(
                 InvalidOrphanedActionSupportNoActionEnforced.class, 
                 "is assumed to support"));

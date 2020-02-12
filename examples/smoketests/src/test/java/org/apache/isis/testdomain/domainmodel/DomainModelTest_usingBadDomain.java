@@ -42,7 +42,7 @@ import org.apache.isis.testdomain.model.bad.InvalidOrphanedActionSupport;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedCollectionSupport;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedPropertySupport;
 import org.apache.isis.testdomain.model.bad.InvalidPropertyAnnotationOnAction;
-import org.apache.isis.testing.integtestsupport.applib.validate.ValidateDomainModel;
+import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
 
 import lombok.val;
 
@@ -78,9 +78,9 @@ class DomainModelTest_usingBadDomain {
     @Test
     void ambiguousTitle_shouldFail() {
            
-        val validateDomainModel = new ValidateDomainModel(specificationLoader);
+        val validateDomainModel = new DomainModelValidator(specificationLoader, configuration, isisSystemEnvironment);
         
-        assertThrows(DomainModelException.class, validateDomainModel::run);
+        assertThrows(DomainModelException.class, validateDomainModel::assertValid);
         assertTrue(validateDomainModel.anyMatchesContaining(
                 AmbiguousTitle.class, 
                 "conflict for determining a strategy for retrieval of title"));
@@ -89,9 +89,9 @@ class DomainModelTest_usingBadDomain {
     @Test
     void orphanedActionSupport_shouldFail() {
            
-        val validateDomainModel = new ValidateDomainModel(specificationLoader);
+        val validateDomainModel = new DomainModelValidator(specificationLoader, configuration, isisSystemEnvironment);
         
-        assertThrows(DomainModelException.class, validateDomainModel::run);
+        assertThrows(DomainModelException.class, validateDomainModel::throwIfInvalid);
         assertTrue(validateDomainModel.anyMatchesContaining(
                 InvalidOrphanedActionSupport.class, 
                 "is assumed to support"));
@@ -100,7 +100,7 @@ class DomainModelTest_usingBadDomain {
 //    @Test
 //    void orphanedActionSupportNotEnforced_shouldFail() {
 //           
-//        val validateDomainModel = new ValidateDomainModel();
+//        val validateDomainModel = new DomainModelValidator();
 //        
 //        assertThrows(DomainModelException.class, validateDomainModel::run);
 //        assertTrue(validateDomainModel.anyMatchesContaining(
@@ -111,9 +111,9 @@ class DomainModelTest_usingBadDomain {
     @Test
     void orphanedPropertySupport_shouldFail() {
            
-        val validateDomainModel = new ValidateDomainModel(specificationLoader);
+        val validateDomainModel = new DomainModelValidator(specificationLoader, configuration, isisSystemEnvironment);
         
-        assertThrows(DomainModelException.class, validateDomainModel::run);
+        assertThrows(DomainModelException.class, validateDomainModel::throwIfInvalid);
         assertTrue(validateDomainModel.anyMatchesContaining(
                 InvalidOrphanedPropertySupport.class, 
                 "is assumed to support"));
@@ -122,9 +122,9 @@ class DomainModelTest_usingBadDomain {
     @Test
     void orphanedCollectionSupport_shouldFail() {
            
-        val validateDomainModel = new ValidateDomainModel(specificationLoader);
+        val validateDomainModel = new DomainModelValidator(specificationLoader, configuration, isisSystemEnvironment);
         
-        assertThrows(DomainModelException.class, validateDomainModel::run);
+        assertThrows(DomainModelException.class, validateDomainModel::throwIfInvalid);
         assertTrue(validateDomainModel.anyMatchesContaining(
                 InvalidOrphanedCollectionSupport.class, 
                 "is assumed to support"));
@@ -133,9 +133,9 @@ class DomainModelTest_usingBadDomain {
     @Test @Disabled("this case has no vaildation refiner yet")
     void invalidPropertyAnnotationOnAction_shouldFail() {
         
-        val validateDomainModel = new ValidateDomainModel(specificationLoader);
+        val validateDomainModel = new DomainModelValidator(specificationLoader, configuration, isisSystemEnvironment);
         
-        assertThrows(DomainModelException.class, validateDomainModel::run);
+        assertThrows(DomainModelException.class, validateDomainModel::throwIfInvalid);
         assertTrue(validateDomainModel.anyMatchesContaining(
                 InvalidPropertyAnnotationOnAction.class, 
                 "TODO"));
