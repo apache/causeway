@@ -104,7 +104,7 @@ public class IsisConfiguration {
     /**
      *
      */
-    @Inject @Named("as-map")
+    @Inject @Named("isis-config-props-as-map")
     private Map<String, String> asMap;
     public Map<String, String> getAsMap() { return Collections.unmodifiableMap(asMap); }
 
