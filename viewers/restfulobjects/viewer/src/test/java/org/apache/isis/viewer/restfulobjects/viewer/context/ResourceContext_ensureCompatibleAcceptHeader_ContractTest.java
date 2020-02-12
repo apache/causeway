@@ -38,16 +38,19 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.session.IsisSession;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.isis.viewer.restfulobjects.viewer.resources.ResourceDescriptor;
+
+import lombok.val;
 
 public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest {
 
@@ -203,9 +206,12 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
 
     private ResourceContext instantiateResourceContext(
             final RepresentationType representationType) {
-        return new ResourceContext(representationType, mockHttpHeaders, null, null, null, null, null, null,
+        
+        val resourceDescriptor = ResourceDescriptor.of(representationType, null, null);
+        
+        return new ResourceContext(resourceDescriptor, mockHttpHeaders, null, null, null, null, 
                 mockHttpServletRequest, null, null,
-                metaModelContext, null);
+                metaModelContext, null, null);
     }
 
 }

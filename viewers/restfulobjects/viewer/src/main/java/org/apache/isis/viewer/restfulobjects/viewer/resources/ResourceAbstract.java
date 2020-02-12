@@ -19,6 +19,8 @@
 package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
 import java.io.InputStream;
+import java.util.Map;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +37,8 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.commons.internal.url.UrlDecoderUtil;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -44,6 +48,7 @@ import org.apache.isis.core.runtime.session.IsisSession;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.isis.viewer.restfulobjects.rendering.UrlDecoderUtils;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 import org.apache.isis.viewer.restfulobjects.viewer.context.ResourceContext;
@@ -69,22 +74,22 @@ public abstract class ResourceAbstract {
     protected ResourceAbstract(
             final MetaModelContext metaModelContext,
             final IsisConfiguration isisConfiguration) {
+        
         this.metaModelContext = metaModelContext;
         this.isisConfiguration = isisConfiguration;
     }
 
     protected void init(
+            final RepresentationType representationType,
             final Where where,
             final RepresentationService.Intent intent) {
-        init(RepresentationType.GENERIC, where, intent);
+        
+        init(ResourceDescriptor.of(representationType, where, intent));
     }
-
-    protected void init(
-            final RepresentationType representationType,
-            Where where,
-            final RepresentationService.Intent intent) {
+    
+    protected void init(final ResourceDescriptor resourceDescriptor) {
         String queryStringIfAny = getUrlDecodedQueryStringIfAny();
-        init(representationType, where, intent, queryStringIfAny);
+        init(resourceDescriptor, queryStringIfAny);
     }
 
     private String getUrlDecodedQueryStringIfAny() {
@@ -93,19 +98,17 @@ public abstract class ResourceAbstract {
     }
 
     protected void init(
-            final RepresentationType representationType,
-            final Where where,
-            final RepresentationService.Intent intent,
+            final ResourceDescriptor resourceDescriptor,
             final InputStream arguments) {
+        
         final String urlDecodedQueryString = Util.asStringUtf8(arguments);
-        init(representationType, where, intent, urlDecodedQueryString);
+        init(resourceDescriptor, urlDecodedQueryString);
     }
 
     protected void init(
-            final RepresentationType representationType,
-            final Where where,
-            final RepresentationService.Intent intent,
+            final ResourceDescriptor resourceDescriptor,
             final String urlUnencodedQueryString) {
+        
         if (!IsisSession.isInSession()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
@@ -116,36 +119,40 @@ public abstract class ResourceAbstract {
         final String baseUri = isisConfiguration.getViewer().getRestfulobjects().getBaseUri()
                                     .orElse(uriInfo.getBaseUri().toString());
 
-        this.resourceContext = new ResourceContext(
-                representationType, 
-                httpHeaders, providers, baseUri, request,
-                where, intent, urlUnencodedQueryString, 
-                httpServletRequest, httpServletResponse,
-                securityContext,
-                metaModelContext, InteractionInitiatedBy.USER);
+        this.resourceContext = resourceContext(
+                resourceDescriptor, baseUri, urlUnencodedQueryString, httpServletRequest.getParameterMap());
     }
 
     protected ResourceContext getResourceContext() {
         return resourceContext;
     }
-
+    
+    public void initResourceContextForTesting(
+            final ResourceDescriptor resourceDescriptor, 
+            final Map<String, String[]> requestParams) {
+        
+        this.resourceContext = resourceContext(
+                resourceDescriptor, "/restful", /*urlUnencodedQueryString*/ null, requestParams);
+    }
 
     protected void setCommandExecutor(Command.Executor executor) {
-        resourceContext.getServiceRegistry()
+        metaModelContext.getServiceRegistry()
         .lookupServiceElseFail(CommandContext.class).getCommand().internal().setExecutor(executor);
     }
 
     // -- ISIS INTEGRATION
 
-    protected ManagedObject getObjectAdapterElseThrowNotFound(String domainType, final String instanceId) {
-        return resourceContext.getObjectAdapterElseFail(domainType, instanceId);
+    protected ManagedObject getObjectAdapterElseThrowNotFound(String domainType, final String instanceIdEncoded) {
+        final String instanceIdUnencoded = UrlDecoderUtils.urlDecode(instanceIdEncoded);
+        final String oidStrUnencoded = Oid.marshaller().joinAsOid(domainType, instanceIdUnencoded);
+        val rootOid = RootOid.deString(oidStrUnencoded);
+        
+        return Optional.ofNullable(ManagedObject._adapterOfRootOid(getSpecificationLoader(), rootOid))
+                .orElseThrow(()->RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND, 
+                        "Could not determine adapter for OID: '%s:%s'", domainType, instanceIdUnencoded));
     }
 
     protected ManagedObject getServiceAdapter(final String serviceId) {
-
-        val metaModelContext = resourceContext.getServiceRegistry()
-                .lookupServiceElseFail(MetaModelContext.class);
-
         final ManagedObject serviceAdapter = metaModelContext.lookupServiceAdapterById(serviceId);
         if(serviceAdapter==null) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND, 
@@ -155,7 +162,26 @@ public abstract class ResourceAbstract {
     }
 
     protected SpecificationLoader getSpecificationLoader() {
-        return resourceContext.getSpecificationLoader();
+        return metaModelContext.getSpecificationLoader();
+    }
+    
+    // -- HELPER 
+    
+    private ResourceContext resourceContext(
+            final ResourceDescriptor resourceDescriptor,
+            final String baseUri,
+            final String urlUnencodedQueryString, 
+            final Map<String, String[]> requestParams) {
+        
+        return new ResourceContext(
+                resourceDescriptor, 
+                httpHeaders, providers, baseUri, request,
+                urlUnencodedQueryString, 
+                httpServletRequest, httpServletResponse,
+                securityContext,
+                metaModelContext, 
+                InteractionInitiatedBy.USER,
+                requestParams);
     }
 
 }

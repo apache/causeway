@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer.context;
 
-import java.util.HashMap;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
@@ -33,20 +31,20 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.url.UrlDecoderUtil;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.core.runtime.session.IsisSession;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
+import org.apache.isis.viewer.restfulobjects.viewer.resources.ResourceDescriptor;
 
 public class ResourceContext_getArg_Test {
 
@@ -101,13 +99,11 @@ public class ResourceContext_getArg_Test {
     @Test
     public void whenArgExists() throws Exception {
         final String queryString = UrlEncodingUtils.urlEncode(JsonRepresentation.newMap("x-ro-page", "123").asJsonNode());
-        //givenServletRequestQueryString(queryString);
-        givenServletRequestParameterMapEmpty();
 
-        resourceContext = new ResourceContext(null, null, null, null, null, null, null,
+        resourceContext = new ResourceContext(ResourceDescriptor.empty(), null, null, null, null,
                 UrlDecoderUtil.urlDecodeNullSafe(queryString),
                 mockHttpServletRequest, null, null,
-                metaModelContext, null) {
+                metaModelContext, null, null) {
             @Override
             void init(final RepresentationType representationType) {
                 //
@@ -120,13 +116,11 @@ public class ResourceContext_getArg_Test {
     @Test
     public void whenArgDoesNotExist() throws Exception {
         final String queryString = UrlEncodingUtils.urlEncode(JsonRepresentation.newMap("xxx", "123").asJsonNode());
-        //givenServletRequestQueryString(queryString);
-        givenServletRequestParameterMapEmpty();
 
-        resourceContext = new ResourceContext(null, null, null, null, null, null, null,
+        resourceContext = new ResourceContext(ResourceDescriptor.empty(), null, null, null, null,
                 UrlDecoderUtil.urlDecodeNullSafe(queryString),
                 mockHttpServletRequest, null, null,
-                metaModelContext, null) {
+                metaModelContext, null, null) {
             @Override
             void init(final RepresentationType representationType) {
                 //
@@ -136,14 +130,5 @@ public class ResourceContext_getArg_Test {
         assertThat(arg, equalTo(RequestParameter.PAGE.getDefault()));
     }
 
-    private void givenServletRequestParameterMapEmpty() {
-        final HashMap<Object, Object> parameterMap = _Maps.newHashMap();
-        context.checking(new Expectations() {
-            {
-                oneOf(mockHttpServletRequest).getParameterMap();
-                will(returnValue(parameterMap));
-            }
-        });
-    }
 
 }

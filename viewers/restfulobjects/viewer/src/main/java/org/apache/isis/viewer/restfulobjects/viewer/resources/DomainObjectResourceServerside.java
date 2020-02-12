@@ -21,6 +21,7 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -133,9 +134,9 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         if (validity.isVetoed()) {
             throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, objectRepr, validity.getReason());
         }
-        
+
         ManagedObject._makePersistentInTransaction(adapter);
-        
+
 
         return newDomainResourceHelper(adapter).objectRepresentation();
     }
@@ -307,35 +308,47 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         init(RepresentationType.OBJECT_LAYOUT, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final List<MediaType> acceptableMediaTypes = getResourceContext().getAcceptableMediaTypes();
-        final SerializationStrategy serializationStrategy =
-                acceptableMediaTypes.contains(MediaType.APPLICATION_XML_TYPE) ||
-                acceptableMediaTypes.contains(RepresentationType.OBJECT_LAYOUT.getXmlMediaType())
-                ? SerializationStrategy.XML
-                        : SerializationStrategy.JSON;
+        val responseBuilder = layoutAsGrid(domainType, instanceId)
+            .map(grid->{
+                
+                final List<MediaType> acceptableMediaTypes = getResourceContext().getAcceptableMediaTypes();
+                final SerializationStrategy serializationStrategy =
+                        acceptableMediaTypes.contains(MediaType.APPLICATION_XML_TYPE) ||
+                        acceptableMediaTypes.contains(RepresentationType.OBJECT_LAYOUT.getXmlMediaType())
+                        ? SerializationStrategy.XML
+                                : SerializationStrategy.JSON;        
+                
+                return Response.status(Response.Status.OK)
+                        .entity(serializationStrategy.entity(grid))
+                        .type(serializationStrategy.type(RepresentationType.OBJECT_LAYOUT));
+            })
+            .orElseGet(Responses::ofNotFound);
+
+        return responseBuilder.build();
+    }
+
+    // public ... for testing
+    public Optional<Grid> layoutAsGrid(
+            final String domainType,
+            final String instanceId) {
 
         val objectSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
         val gridFacet = objectSpec.getFacet(GridFacet.class);
-        final Response.ResponseBuilder builder;
+        
         if(gridFacet == null) {
-            builder = Responses.ofNotFound();
-        } else {
-            final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-            Grid grid = gridFacet.getGrid(objectAdapter);
-            addLinks(domainType, instanceId, grid);
-            builder = Response.status(Response.Status.OK)
-                    .entity(serializationStrategy.entity(grid))
-                    .type(serializationStrategy.type(RepresentationType.OBJECT_LAYOUT));
-        }
-
-        return builder.build();
+            Optional.empty();
+        } 
+        val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        val grid = gridFacet.getGrid(objectAdapter);
+        addLinks(domainType, instanceId, grid);
+        return Optional.of(grid);
     }
 
     private void addLinks(
             final String domainType,
             final String instanceId,
             final Grid grid) {
-        
+
         grid.visit(new Grid.VisitorAdapter() {
             @Override
             public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
@@ -420,7 +433,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response modifyProperty(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId, final InputStream body) {
-        init(Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE);
+        
+        init(ResourceDescriptor.generic(Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE));
 
         setCommandExecutor(Command.Executor.USER);
 
@@ -459,7 +473,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response clearProperty(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId) {
-        init(Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE);
+        
+        init(ResourceDescriptor.generic(Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE));
 
         setCommandExecutor(Command.Executor.USER);
 
@@ -517,7 +532,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response addToSet(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId, final InputStream body) {
-        init(Where.PARENTED_TABLES, RepresentationService.Intent.NOT_APPLICABLE);
+        
+        init(ResourceDescriptor.generic(Where.PARENTED_TABLES, RepresentationService.Intent.NOT_APPLICABLE));
 
         final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         final DomainResourceHelper helper = newDomainResourceHelper(objectAdapter);
@@ -554,7 +570,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response addToList(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId, final InputStream body) {
-        init(Where.PARENTED_TABLES, RepresentationService.Intent.NOT_APPLICABLE);
+        
+        init(ResourceDescriptor.generic(Where.PARENTED_TABLES, RepresentationService.Intent.NOT_APPLICABLE));
 
         final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         final DomainResourceHelper helper = newDomainResourceHelper(objectAdapter);
@@ -591,7 +608,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response removeFromCollection(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId) {
-        init(Where.PARENTED_TABLES, RepresentationService.Intent.NOT_APPLICABLE);
+        
+        init(ResourceDescriptor.generic(Where.PARENTED_TABLES, RepresentationService.Intent.NOT_APPLICABLE));
 
         final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         final DomainResourceHelper helper = newDomainResourceHelper(objectAdapter);
@@ -670,7 +688,9 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         final String urlUnencodedQueryString = UrlDecoderUtil
                 .urlDecodeNullSafe(xIsisUrlEncodedQueryString != null? xIsisUrlEncodedQueryString: httpServletRequest.getQueryString());
-        init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE, urlUnencodedQueryString);
+        init(
+                ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
+                urlUnencodedQueryString);
 
         setCommandExecutor(Command.Executor.USER);
 
@@ -696,7 +716,9 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             final @PathParam("actionId") String actionId,
             final InputStream body) {
 
-        init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE, body);
+        init(
+                ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
+                body);
 
         setCommandExecutor(Command.Executor.USER);
 
@@ -721,7 +743,9 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             @PathParam("instanceId") final String instanceId,
             @PathParam("actionId") final String actionId,
             final InputStream body) {
-        init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE,
+        
+        init(
+                ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
                 body);
 
         setCommandExecutor(Command.Executor.USER);

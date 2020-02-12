@@ -208,7 +208,9 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
 
         final String urlUnencodedQueryString = UrlDecoderUtil
                 .urlDecodeNullSafe(xIsisUrlEncodedQueryString != null? xIsisUrlEncodedQueryString: httpServletRequest.getQueryString());
-        init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE, urlUnencodedQueryString);
+        init(
+                ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
+                urlUnencodedQueryString);
 
         setCommandExecutor(Command.Executor.USER);
 
@@ -233,7 +235,10 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
             final @PathParam("serviceId") String serviceId,
             final @PathParam("actionId") String actionId,
             final InputStream body) {
-        init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE, body);
+        
+        init(
+                ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
+                body);
 
         setCommandExecutor(Command.Executor.USER);
 
@@ -254,7 +259,10 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response invokeAction(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, final InputStream body) {
-        init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE, body);
+        
+        init(
+                ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
+                body);
 
         setCommandExecutor(Command.Executor.USER);
 

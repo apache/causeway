@@ -22,21 +22,37 @@ import javax.inject.Inject;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.isis.applib.services.jaxb.JaxbService;
+import static org.junit.Assert.assertNotNull;
+
+import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.model.layout.Configuration_usingLayout;
+import org.apache.isis.testdomain.model.layout.LayoutDemo;
+import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
+import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
+import org.apache.isis.viewer.restfulobjects.viewer.resources.DomainObjectResourceServerside;
+import org.apache.isis.viewer.restfulobjects.viewer.resources.ResourceDescriptor;
+
+import lombok.val;
 
 @Smoketest
 @SpringBootTest(
         classes = { 
                 Configuration_usingJdo.class,
                 Configuration_usingLayout.class,
+                DomainObjectLayoutTest.TestSetup.class
         }, 
         properties = {
                 "isis.core.meta-model.introspector.mode=FULL",
@@ -52,12 +68,44 @@ import org.apache.isis.testdomain.model.layout.Configuration_usingLayout;
 })
 class DomainObjectLayoutTest {
     
+    @Inject private FactoryService factoryService;
+    @Inject private IsisSystemEnvironment isisSystemEnvironment; 
+    
     @Inject private MetaModelService metaModelService;
-    @Inject private JaxbService jaxbService;
+    @Inject private ObjectManager objectManager;
     @Inject private SpecificationLoader specificationLoader;
+    @Inject private DomainObjectResourceServerside domainObjectResourceServerside;
 
+    @Configuration
+    @Import({
+        DomainObjectResourceServerside.class
+    })
+    static class TestSetup {
+        
+    }
+    
     @Test
     void grid_shouldContainMultiline() {
+        
+        assertNotNull(domainObjectResourceServerside);
+        
+        val layoutDemo = factoryService.viewModel(LayoutDemo.class);
+        val adapter = objectManager.adapt(layoutDemo);
+        val spec = adapter.getSpecification();
+        val domainType = spec.getSpecId().asString();
+        val instanceId = objectManager.identifyObject(adapter).getIdentifier();
+        
+        val layoutResourceDescriptor = 
+                ResourceDescriptor
+                .of(RepresentationType.OBJECT_LAYOUT, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
+        
+        domainObjectResourceServerside.initResourceContextForTesting(layoutResourceDescriptor, /*params*/null);
+        
+        val grid = domainObjectResourceServerside.layoutAsGrid(domainType, instanceId)
+                .orElseThrow(_Exceptions::noSuchElement);
+        
+        System.out.println(grid.toString());
+        
         //TODO implement
     }
 

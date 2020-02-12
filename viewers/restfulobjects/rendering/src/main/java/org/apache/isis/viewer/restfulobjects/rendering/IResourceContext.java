@@ -26,14 +26,12 @@ import javax.ws.rs.core.MediaType;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
@@ -93,16 +91,6 @@ public interface IResourceContext {
         String oidStrUnencoded = UrlDecoderUtils.urlDecode(oidFromHref);
         val rootOid = RootOid.deString(oidStrUnencoded);
         return Optional.ofNullable(ManagedObject._adapterOfRootOid(getSpecificationLoader(), rootOid));
-    }
-
-    default ManagedObject getObjectAdapterElseFail(String domainType, String instanceIdEncoded) {
-        final String instanceIdUnencoded = UrlDecoderUtils.urlDecode(instanceIdEncoded);
-        String oidStrUnencoded = Oid.marshaller().joinAsOid(domainType, instanceIdUnencoded);
-        val rootOid = RootOid.deString(oidStrUnencoded);
-        
-        return Optional.ofNullable(ManagedObject._adapterOfRootOid(getSpecificationLoader(), rootOid))
-                .orElseThrow(()->RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND, 
-                        "Could not determine adapter for OID: '%s:%s'", domainType, instanceIdUnencoded));
     }
 
 }

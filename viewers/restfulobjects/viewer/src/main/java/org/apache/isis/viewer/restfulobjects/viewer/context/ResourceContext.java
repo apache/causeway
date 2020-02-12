@@ -49,6 +49,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplication
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
+import org.apache.isis.viewer.restfulobjects.viewer.resources.ResourceDescriptor;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -69,33 +70,31 @@ public class ResourceContext extends RuntimeContextBase implements IResourceCont
     private final RepresentationService.Intent intent;
     @Getter private final InteractionInitiatedBy interactionInitiatedBy;
     private final String urlUnencodedQueryString;
-
-    private JsonRepresentation readQueryStringAsMap;
+    private final JsonRepresentation readQueryStringAsMap;
 
     // -- constructor and init
 
     public ResourceContext(
-            final RepresentationType representationType,
+            final ResourceDescriptor resourceDescriptor,
             final HttpHeaders httpHeaders,
             final Providers providers,
             final String baseUri,
             final Request request,
-            final Where where,
-            final RepresentationService.Intent intent,
             final String urlUnencodedQueryStringIfAny,
             final HttpServletRequest httpServletRequest,
             final HttpServletResponse httpServletResponse,
             final SecurityContext securityContext,
             final MetaModelContext metaModelContext,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Map<String, String[]> requestParams) {
 
         super(metaModelContext);
 
         this.httpHeaders = httpHeaders;
         //not used ... this.providers = providers;
         this.request = request;
-        this.where = where;
-        this.intent = intent;
+        this.where = resourceDescriptor.getWhere();
+        this.intent = resourceDescriptor.getIntent();
         this.urlUnencodedQueryString = urlUnencodedQueryStringIfAny;
         this.httpServletRequest = httpServletRequest;
         this.httpServletResponse = httpServletResponse;
@@ -104,12 +103,13 @@ public class ResourceContext extends RuntimeContextBase implements IResourceCont
 
         this.baseUri = baseUri;
 
-        init(representationType);
+        this.readQueryStringAsMap = requestArgsAsMap(requestParams);
+        
+        init(resourceDescriptor.getRepresentationType());
     }
 
 
     void init(final RepresentationType representationType) {
-        getQueryStringAsJsonRepr(); // force it to be cached
 
         // previously we checked for compatible accept headers here.
         // now, though, this is a responsibility of the various ContentNegotiationService implementations
@@ -136,15 +136,10 @@ public class ResourceContext extends RuntimeContextBase implements IResourceCont
     }
 
     public JsonRepresentation getQueryStringAsJsonRepr() {
-
-        if (readQueryStringAsMap == null) {
-            readQueryStringAsMap = requestArgsAsMap();
-        }
         return readQueryStringAsMap;
     }
 
-    protected JsonRepresentation requestArgsAsMap() {
-        final Map<String,String[]> params = httpServletRequest.getParameterMap();
+    protected JsonRepresentation requestArgsAsMap(final Map<String, String[]> params) {
 
         if(simpleQueryArgs(params)) {
             // try to process regular params and build up JSON repr
@@ -179,7 +174,7 @@ public class ResourceContext extends RuntimeContextBase implements IResourceCont
     }
 
     private static boolean simpleQueryArgs(Map<String, String[]> params) {
-        if(params.isEmpty()) {
+        if(params==null || params.isEmpty()) {
             return false;
         }
         for(String paramName: params.keySet()) {

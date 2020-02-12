@@ -260,7 +260,8 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
             @QueryParam("supertype") final String superTypeStr, // simple style
             @QueryParam("args") final String argsUrlEncoded // formal style
             ) {
-        init(Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
+        
+        init(ResourceDescriptor.generic(Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE));
 
         final String supertype = domainTypeFor(superTypeStr, argsUrlEncoded, "supertype");
 
@@ -291,7 +292,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
             @QueryParam("args") final String argsUrlEncoded // formal style
             ) {
 
-        init(Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
+        init(ResourceDescriptor.generic(Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE));
 
         final String subtype = domainTypeFor(subTypeStr, argsUrlEncoded, "subtype");
 
