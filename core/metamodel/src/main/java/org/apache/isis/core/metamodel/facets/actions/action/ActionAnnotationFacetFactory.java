@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.associateWith.AssociatedWithFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForActionAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.explicit.ActionExplicitFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetDefault;
@@ -61,6 +62,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         
         val actionIfAny = processMethodContext.synthesizeOnMethodOrMixinType(Action.class);
         
+        processExplicit(processMethodContext, actionIfAny);
         processInvocation(processMethodContext, actionIfAny);
         processHidden(processMethodContext, actionIfAny);
         processRestrictTo(processMethodContext, actionIfAny);
@@ -76,6 +78,15 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         processAssociateWith(processMethodContext, actionIfAny);
         
         processFileAccept(processMethodContext, actionIfAny);
+    }
+
+
+    void processExplicit(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
+        val holder = processMethodContext.getFacetHolder();
+
+        // check for @Action at all.
+        val facet = ActionExplicitFacetForActionAnnotation.create(actionIfAny, holder);
+        super.addFacet(facet);
     }
 
 
