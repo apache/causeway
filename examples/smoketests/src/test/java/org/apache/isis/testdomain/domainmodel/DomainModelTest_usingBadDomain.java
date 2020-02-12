@@ -78,10 +78,10 @@ class DomainModelTest_usingBadDomain {
     @Test
     void ambiguousTitle_shouldFail() {
            
-        val validateDomainModel = new DomainModelValidator(specificationLoader, configuration, isisSystemEnvironment);
+        val validator = new DomainModelValidator(specificationLoader, configuration, isisSystemEnvironment);
         
-        assertThrows(DomainModelException.class, validateDomainModel::assertValid);
-        assertTrue(validateDomainModel.anyMatchesContaining(
+        assertThrows(DomainModelException.class, validator::throwIfInvalid);
+        assertTrue(validator.anyMatchesContaining(
                 AmbiguousTitle.class, 
                 "conflict for determining a strategy for retrieval of title"));
     }

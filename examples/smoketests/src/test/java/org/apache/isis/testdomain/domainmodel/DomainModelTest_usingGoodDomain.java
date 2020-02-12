@@ -31,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
@@ -68,6 +69,7 @@ class DomainModelTest_usingGoodDomain {
     
     @Inject private MetaModelService metaModelService;
     @Inject private JaxbService jaxbService;
+    @Inject private ServiceRegistry serviceRegistry;
 //    @Inject private FactoryService factoryService;
     @Inject private SpecificationLoader specificationLoader;
 
@@ -96,7 +98,7 @@ class DomainModelTest_usingGoodDomain {
         //debug();
         assertFalse(specificationLoader.snapshotSpecifications().isEmpty());
         
-        val validateDomainModel = new DomainModelValidator(specificationLoader, configuration, isisSystemEnvironment);
+        val validateDomainModel = new DomainModelValidator(serviceRegistry);
         validateDomainModel.throwIfInvalid(); // should not throw
     }
     
