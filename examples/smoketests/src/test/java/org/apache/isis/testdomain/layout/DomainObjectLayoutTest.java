@@ -29,6 +29,7 @@ import org.springframework.test.context.TestPropertySource;
 import static org.junit.Assert.assertNotNull;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
@@ -101,7 +102,7 @@ class DomainObjectLayoutTest {
         
         domainObjectResourceServerside.initResourceContextForTesting(layoutResourceDescriptor, /*params*/null);
         
-        val grid = domainObjectResourceServerside.layoutAsGrid(domainType, instanceId)
+        val grid = (BS3Grid) domainObjectResourceServerside.layoutAsGrid(domainType, instanceId)
                 .orElseThrow(_Exceptions::noSuchElement);
         
         System.out.println(grid.toString());

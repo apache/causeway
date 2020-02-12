@@ -40,7 +40,8 @@ import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.menubars.MenuBarsResource;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
-import org.apache.isis.viewer.restfulobjects.viewer.resources.serialization.SerializationStrategy;
+
+import lombok.val;
 
 @Component
 public class MenuBarsResourceServerside extends ResourceAbstract implements MenuBarsResource {
@@ -62,8 +63,7 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
     public Response menuBars() {
         init(RepresentationType.MENUBARS, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final SerializationStrategy serializationStrategy =
-                SerializationStrategy.determineFrom(getResourceContext().getAcceptableMediaTypes());
+        val serializationStrategy = getResourceContext().getSerializationStrategy();
 
         final Response.ResponseBuilder builder;
 

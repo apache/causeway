@@ -50,6 +50,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAdapt
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 import org.apache.isis.viewer.restfulobjects.viewer.resources.ResourceDescriptor;
+import org.apache.isis.viewer.restfulobjects.viewer.resources.serialization.SerializationStrategy;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -203,6 +204,10 @@ public class ResourceContext extends RuntimeContextBase implements IResourceCont
     @Override
     public RepresentationService.Intent getIntent() {
         return intent;
+    }
+    
+    public SerializationStrategy getSerializationStrategy() {
+        return SerializationStrategy.determineFrom(getAcceptableMediaTypes());
     }
 
     // -- canEagerlyRender

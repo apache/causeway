@@ -19,7 +19,6 @@
 package org.apache.isis.viewer.restfulobjects.viewer.context;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -37,7 +36,6 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -105,7 +103,6 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     public void noop() throws Exception {
         final RepresentationType representationType = RepresentationType.HOME_PAGE;
         givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(representationType.getMediaType()));
-        givenServletRequestParameterMapEmpty();
 
         instantiateResourceContext(representationType);
     }
@@ -114,7 +111,6 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     public void happyCase() throws Exception {
         final RepresentationType representationType = RepresentationType.HOME_PAGE;
         givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(representationType.getMediaType()));
-        givenServletRequestParameterMapEmpty();
 
         instantiateResourceContext(representationType);
     }
@@ -123,7 +119,6 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     public void acceptGenericAndProduceGeneric() throws Exception {
         final RepresentationType representationType = RepresentationType.GENERIC;
         givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(MediaType.APPLICATION_JSON_TYPE));
-        givenServletRequestParameterMapEmpty();
 
         instantiateResourceContext(representationType);
     }
@@ -132,7 +127,6 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     public void acceptGenericAndProduceSpecific() throws Exception {
         final RepresentationType representationType = RepresentationType.HOME_PAGE;
         givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(MediaType.APPLICATION_JSON_TYPE));
-        givenServletRequestParameterMapEmpty();
 
         instantiateResourceContext(representationType);
     }
@@ -141,7 +135,6 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     public void nonMatching() throws Exception {
         final RepresentationType representationType = RepresentationType.HOME_PAGE;
         givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(MediaType.APPLICATION_ATOM_XML_TYPE));
-        givenServletRequestParameterMapEmpty();
 
         try {
             instantiateResourceContext(representationType);
@@ -154,7 +147,6 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     public void nonMatchingProfile() throws Exception {
         final RepresentationType representationType = RepresentationType.HOME_PAGE;
         givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(RepresentationType.USER.getMediaType()));
-        givenServletRequestParameterMapEmpty();
 
         try {
             instantiateResourceContext(representationType);
@@ -167,7 +159,6 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     public void nonMatchingProfile_ignoreGeneric() throws Exception {
         final RepresentationType representationType = RepresentationType.HOME_PAGE;
         givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(RepresentationType.USER.getMediaType(), MediaType.APPLICATION_JSON_TYPE));
-        givenServletRequestParameterMapEmpty();
 
         try {
             instantiateResourceContext(representationType);
@@ -180,7 +171,6 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     public void emptyList_isOK() throws Exception {
         final RepresentationType representationType = RepresentationType.HOME_PAGE;
         givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList());
-        givenServletRequestParameterMapEmpty();
 
         instantiateResourceContext(representationType);
     }
@@ -190,16 +180,6 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
             {
                 allowing(mockHttpHeaders).getAcceptableMediaTypes();
                 will(returnValue(mediaTypes));
-            }
-        });
-    }
-
-    private void givenServletRequestParameterMapEmpty() {
-        final HashMap<Object, Object> parameterMap = _Maps.newHashMap();
-        context.checking(new Expectations() {
-            {
-                oneOf(mockHttpServletRequest).getParameterMap();
-                will(returnValue(parameterMap));
             }
         });
     }

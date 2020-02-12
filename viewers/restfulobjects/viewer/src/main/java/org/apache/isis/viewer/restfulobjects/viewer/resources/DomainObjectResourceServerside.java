@@ -20,7 +20,6 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.Optional;
 
 import javax.inject.Inject;
@@ -73,7 +72,6 @@ import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplication
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberReprMode;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
-import org.apache.isis.viewer.restfulobjects.viewer.resources.serialization.SerializationStrategy;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -311,12 +309,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         val responseBuilder = layoutAsGrid(domainType, instanceId)
             .map(grid->{
                 
-                final List<MediaType> acceptableMediaTypes = getResourceContext().getAcceptableMediaTypes();
-                final SerializationStrategy serializationStrategy =
-                        acceptableMediaTypes.contains(MediaType.APPLICATION_XML_TYPE) ||
-                        acceptableMediaTypes.contains(RepresentationType.OBJECT_LAYOUT.getXmlMediaType())
-                        ? SerializationStrategy.XML
-                                : SerializationStrategy.JSON;        
+                val serializationStrategy = getResourceContext().getSerializationStrategy();
                 
                 return Response.status(Response.Status.OK)
                         .entity(serializationStrategy.entity(grid))

@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer.resources.serialization;
 
-import java.util.List;
+import java.util.Collection;
 
 import javax.ws.rs.core.MediaType;
 
@@ -30,6 +30,7 @@ import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 
 public enum SerializationStrategy {
+    
     XML {
         @Override public Object entity(final Object jaxbAnnotatedObject) {
             return jaxbAnnotatedObject;
@@ -39,6 +40,7 @@ public enum SerializationStrategy {
             return representationType.getXmlMediaType();
         }
     },
+    
     JSON {
         @Override public Object entity(final Object jaxbAnnotatedObject) {
             final JaxbAnnotationModule jaxbAnnotationModule = new JaxbAnnotationModule();
@@ -68,7 +70,8 @@ public enum SerializationStrategy {
 
     public abstract MediaType type(final RepresentationType representationType);
 
-    public static SerializationStrategy determineFrom(final List<MediaType> acceptableMediaTypes) {
+    public static SerializationStrategy determineFrom(final Collection<MediaType> acceptableMediaTypes) {
+
         for (MediaType acceptableMediaType : acceptableMediaTypes) {
             if(acceptableMediaType.isCompatible(MediaType.APPLICATION_JSON_TYPE)) {
                 return SerializationStrategy.JSON;
@@ -79,4 +82,5 @@ public enum SerializationStrategy {
         }
         return SerializationStrategy.JSON;
     }
+
 }
