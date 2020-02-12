@@ -580,6 +580,26 @@ To see this in action in the xref:docs:starters:simpleapp.adoc[simpleapp] starte
 * change `isis.applib.annotation.action.explicit` to `false` in `application.yml`
 * introduce an error, for example by renaming `default0UpdateName` to `default0UpdateFoo`.
 
+
+== Swagger Exporter
+
+@SpringBootTest(
+classes = {
+ApplicationIntegTestAbstract.AppManifest.class,
+IsisModuleViewerRestfulObjectsJaxrsResteasy4.class
+}
+)
+class SwaggerExport_IntegTest extends ApplicationIntegTestAbstract {
+
+    @Inject ServiceRegistry serviceRegistry;
+
+    @Test
+    void export() throws IOException {
+        new SwaggerExporter(serviceRegistry)
+                .export(SwaggerService.Visibility.PRIVATE, SwaggerService.Format.JSON);
+    }
+}
+
 == Maven Configuration
 
 Apache Isis' integ test support is most easily configured through a dependency on the `isis-mavendeps-integtests` module:
