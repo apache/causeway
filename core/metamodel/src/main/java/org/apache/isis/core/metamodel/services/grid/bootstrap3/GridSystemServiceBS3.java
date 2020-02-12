@@ -84,6 +84,8 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
 
     public static final String TNS = "http://isis.apache.org/applib/layout/grid/bootstrap3";
     public static final String SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd";
+    
+    @Inject private GridReaderUsingJaxb gridReader;
 
     public GridSystemServiceBS3() {
         super(BS3Grid.class, TNS, SCHEMA_LOCATION);
@@ -198,74 +200,15 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         final LinkedHashMap<String, CollectionLayoutData> collectionLayoutDataById = bs3Grid.getAllCollectionsById();
         final LinkedHashMap<String, ActionLayoutData> actionLayoutDataById = bs3Grid.getAllActionsById();
 
-
         // find all row and col ids
         // ensure that all Ids are different
-
-        final List<String> gridIds = _Lists.newArrayList();
-        final LinkedHashMap<String, BS3Row> rowIds = _Maps.newLinkedHashMap();
-        final LinkedHashMap<String, BS3Col> colIds = _Maps.newLinkedHashMap();
-        final LinkedHashMap<String, FieldSet> fieldSetIds = _Maps.newLinkedHashMap();
-
-        // fast (non-threadsafe) value reference
-        final boolean[] duplicateIdDetected = {false}; 
-
-        bs3Grid.visit(new BS3Grid.VisitorAdapter(){
-            @Override
-            public void visit(final BS3Row bs3Row) {
-                final String id = bs3Row.getId();
-                if(id == null) {
-                    return;
-                }
-                if(gridIds.contains(id)) {
-                    bs3Row.setMetadataError("There is another element in the grid with this id");
-                    duplicateIdDetected[0] = true;
-                    return;
-                }
-                rowIds.put(id, bs3Row);
-                gridIds.add(id);
-            }
-
-            @Override
-            public void visit(final BS3Col bs3Col) {
-                final String id = bs3Col.getId();
-                if(id == null) {
-                    return;
-                }
-                if(gridIds.contains(id)) {
-                    bs3Col.setMetadataError("There is another element in the grid with this id");
-                    duplicateIdDetected[0] = true;
-                    return;
-                }
-                colIds.put(id, bs3Col);
-                gridIds.add(id);
-            }
-
-            @Override
-            public void visit(final FieldSet fieldSet) {
-                String id = fieldSet.getId();
-                if(id == null) {
-                    final String name = fieldSet.getName();
-                    fieldSet.setId(id = asId(name));
-                }
-                if(gridIds.contains(id)) {
-                    fieldSet.setMetadataError("There is another element in the grid with this id");
-                    duplicateIdDetected[0] = true;
-                    return;
-                }
-                fieldSetIds.put(id, fieldSet);
-                gridIds.add(id);
-            }
-        });
-
-        if(duplicateIdDetected[0]) {
+        val gridModel = GridModel.createFrom(bs3Grid); 
+        if(gridModel.isDuplicateIdDetected()) {
             return false;
         }
 
-
         // ensure that there is exactly one col with the
         // unreferencedActions, unreferencedProperties and unreferencedCollections attribute set.
-
 
         final GridVisitorResult result = new GridVisitorResult();
 
@@ -359,7 +302,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         final Map<String, Set<String>> boundAssociationIdsByFieldSetId = _Maps.newHashMap();
 
         // all those explicitly in the grid
-        for (FieldSet fieldSet : fieldSetIds.values()) {
+        for (FieldSet fieldSet : gridModel.fieldSets()) {
             final String fieldSetId = fieldSet.getId();
             Set<String> boundAssociationIds = boundAssociationIdsByFieldSetId.get(fieldSetId);
             if(boundAssociationIds == null) {
@@ -379,7 +322,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             final MemberOrderFacet memberOrderFacet = otoa.getFacet(MemberOrderFacet.class);
             if(memberOrderFacet != null) {
                 val id = asId(memberOrderFacet.name());
-                if(fieldSetIds.containsKey(id)) {
+                if(gridModel.containsFieldSetId(id)) {
                     Set<String> boundAssociationIds =
                             boundAssociationIdsByFieldSetId.computeIfAbsent(id, k -> _Sets.newLinkedHashSet());
                     boundAssociationIds.add(otoa.getId());
@@ -399,7 +342,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             }
 
             for (final String fieldSetId : boundAssociationIdsByFieldSetId.keySet()) {
-                val fieldSet = fieldSetIds.get(fieldSetId);
+                val fieldSet = gridModel.getFieldSet(fieldSetId);
                 val associationIds =
                         boundAssociationIdsByFieldSetId.get(fieldSetId);
 
@@ -541,7 +484,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                 final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
 
                 actionLayoutData.setPosition(ActionLayout.Position.PANEL_DROPDOWN);
-                final FieldSet fieldSet = fieldSetIds.get(id);
+                final FieldSet fieldSet = gridModel.getFieldSet(id);
                 addActionTo(fieldSet, actionLayoutData);
             }
         }
@@ -665,7 +608,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         return flag != null && flag;
     }
 
-    private static String asId(final String str) {
+    static String asId(final String str) {
         if(_Strings.isNullOrEmpty(str)) {
             return str;
         }
@@ -673,9 +616,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         return Character.toLowerCase(c) + str.substring(1).replaceAll("\\s+", "");
     }
 
-    // -- DEPENDENCIES
-
-    @Inject GridReaderUsingJaxb gridReader;
+        
 
 
 }

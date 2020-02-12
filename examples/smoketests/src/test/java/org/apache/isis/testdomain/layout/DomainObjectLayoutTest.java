@@ -18,11 +18,10 @@
  */
 package org.apache.isis.testdomain.layout;
 
-import java.nio.charset.StandardCharsets;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.hsqldb.lib.StringInputStream;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
@@ -30,15 +29,16 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.model.layout.Configuration_usingLayout;
@@ -68,6 +68,7 @@ import lombok.val;
     IsisPresets.SilenceMetaModel,
     IsisPresets.SilenceProgrammingModel
 })
+@Incubating("tests do fail, framwork needs fixing")
 class DomainObjectLayoutTest {
     
     @Inject private FactoryService factoryService;
@@ -83,7 +84,7 @@ class DomainObjectLayoutTest {
     }
     
     @Test
-    void grid_shouldContainMultiline() {
+    void grid_fromDomainObjectResourceServerside_shouldContainMultiline() {
         
         assertNotNull(domainObjectResourceServerside);
         
@@ -109,15 +110,13 @@ class DomainObjectLayoutTest {
         
         assertNotNull(jaxbEntity);
         
-        _Strings.grep(jaxbEntity.toString(), "multiLine")
-        .forEach(line->{
-            System.out.println("line: '"+line+"'");
-        });
-        //.forEach(System.out::println);
+        val filteredResult = _Strings.grep(jaxbEntity.toString(), "multiLine")
+        .map(String::trim)
+        .collect(Collectors.joining());
         
-        //System.out.println(jaxbEntity);
+        assertTrue(filteredResult.contains(" 3,"), 
+                String.format("multiLine is expected to be populated, got '%s'", filteredResult));
         
-        //TODO implement
     }
 
 }

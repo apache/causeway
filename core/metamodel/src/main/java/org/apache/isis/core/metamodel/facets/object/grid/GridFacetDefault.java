@@ -85,8 +85,8 @@ implements GridFacet {
     }
 
     private Grid load(final Class<?> domainClass, final String layout) {
-        val grid = Optional.ofNullable(gridService.load(domainClass, layout))
-                .orElseGet(()->gridService.defaultGridFor(domainClass));
+        val grid = Optional.ofNullable(gridService.load(domainClass, layout)) //loads from object's XML if available
+                .orElseGet(()->gridService.defaultGridFor(domainClass)); //loads from default-XML if available
         
         gridService.normalize(grid);
         return grid;

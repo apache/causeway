@@ -51,6 +51,9 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GridLoaderServiceDefault implements GridLoaderService {
 
+    @Inject private MessageService messageService;
+    @Inject private GridReaderUsingJaxb gridReader;
+    @Inject private IsisSystemEnvironment isisSystemEnvironment;
 
     static class DomainClassAndLayout {
         private final Class<?> domainClass;
@@ -248,10 +251,5 @@ public class GridLoaderServiceDefault implements GridLoaderService {
         return null;
     }
 
-    // -- DEPENDENCIES
-
-    @Inject MessageService messageService;
-    @Inject GridReaderUsingJaxb gridReader;
-    @Inject IsisSystemEnvironment isisSystemEnvironment;
 
 }
