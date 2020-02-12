@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 
+import org.apache.isis.core.commons.internal.resources._Json;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 
 public enum SerializationStrategy {
@@ -35,40 +36,49 @@ public enum SerializationStrategy {
         @Override public Object entity(final Object jaxbAnnotatedObject) {
             return jaxbAnnotatedObject;
         }
-
-        @Override public MediaType type(final RepresentationType representationType) {
-            return representationType.getXmlMediaType();
-        }
+       
     },
     
     JSON {
         @Override public Object entity(final Object jaxbAnnotatedObject) {
             final JaxbAnnotationModule jaxbAnnotationModule = new JaxbAnnotationModule();
             final ObjectMapper objectMapper = new ObjectMapper()
+                    .registerModule(jaxbAnnotationModule)
                     .disable(SerializationFeature.WRITE_NULL_MAP_VALUES) // doesn't seem to work...
-                    .disable(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS)
-                    ;
-            objectMapper.registerModule(jaxbAnnotationModule);
+                    .disable(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS);
             try {
-                String gridJson = objectMapper
-                        .writer()
-                        .writeValueAsString(jaxbAnnotatedObject);
-                return gridJson;
+                return _Json.toString(objectMapper, jaxbAnnotatedObject);
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
         }
 
-
-        @Override
-        public MediaType type(final RepresentationType representationType) {
-            return representationType.getJsonMediaType();
+    },
+    
+    JSON_INDENTED {
+        @Override public Object entity(final Object jaxbAnnotatedObject) {
+            final JaxbAnnotationModule jaxbAnnotationModule = new JaxbAnnotationModule();
+            final ObjectMapper objectMapper = new ObjectMapper()
+                    .registerModule(jaxbAnnotationModule)
+                    .enable(SerializationFeature.INDENT_OUTPUT)
+                    .disable(SerializationFeature.WRITE_NULL_MAP_VALUES) // doesn't seem to work...
+                    .disable(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS);
+            try {
+                return _Json.toString(objectMapper, jaxbAnnotatedObject);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
         }
-    };
+
+    },
+    
+    ;
 
     public abstract Object entity(final Object jaxbAnnotatedObject);
 
-    public abstract MediaType type(final RepresentationType representationType);
+    public MediaType type(final RepresentationType representationType) {
+        return representationType.getXmlMediaType();
+    }
 
     public static SerializationStrategy determineFrom(final Collection<MediaType> acceptableMediaTypes) {
 

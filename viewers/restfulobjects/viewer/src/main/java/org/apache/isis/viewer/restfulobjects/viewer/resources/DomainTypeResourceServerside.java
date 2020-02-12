@@ -135,11 +135,11 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         val serializationStrategy = resourceContext.getSerializationStrategy();
 
         val objectSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
-        final GridFacet gridFacet = objectSpec.getFacet(GridFacet.class);
+        val gridFacet = objectSpec.getFacet(GridFacet.class);
+        
         final Response.ResponseBuilder builder;
         if(gridFacet == null) {
             builder = Responses.ofNotFound();
-            return builder.build();
         } else {
             Grid grid = gridFacet.getGrid(null);
             builder = Response.status(Response.Status.OK)

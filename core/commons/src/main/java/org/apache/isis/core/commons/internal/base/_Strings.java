@@ -35,6 +35,7 @@ import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -44,6 +45,7 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.core.commons.internal._Constants;
 import org.apache.isis.core.commons.internal.base._Bytes.BytesOperator;
+import org.apache.isis.core.commons.internal.functions._Predicates;
 
 import static org.apache.isis.core.commons.internal.base._NullSafe.size;
 import static org.apache.isis.core.commons.internal.base._Strings_SplitIterator.splitIterator;
@@ -418,6 +420,19 @@ public final class _Strings {
                 rhs->onSplit.accept(null, rhs));
     }
 
+    
+    public static Stream<String> grep(@Nullable final String input, @Nullable Predicate<String> matcher){
+        matcher = matcher!=null ? matcher : _Predicates.alwaysTrue();
+        return splitThenStream(input, "\n")
+                .filter(_Strings::isNotEmpty)
+                .filter(matcher)
+                .map(s->s.replace("\r", ""));
+    }
+    
+    public static Stream<String> grep(@Nullable final String input, @Nullable String contains){
+        final Predicate<String> matcher = contains!=null ? line->line.contains(contains) : _Predicates.alwaysTrue();
+        return grep(input, matcher);
+    }
 
 
     // -- REPLACEMENT OPERATORS

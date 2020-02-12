@@ -18,8 +18,11 @@
  */
 package org.apache.isis.testdomain.layout;
 
+import java.nio.charset.StandardCharsets;
+
 import javax.inject.Inject;
 
+import org.hsqldb.lib.StringInputStream;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
@@ -31,12 +34,11 @@ import static org.junit.Assert.assertNotNull;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.metamodel.MetaModelService;
-import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.core.metamodel.commons.StringExtensions;
+import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.model.layout.Configuration_usingLayout;
@@ -45,6 +47,7 @@ import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.viewer.resources.DomainObjectResourceServerside;
 import org.apache.isis.viewer.restfulobjects.viewer.resources.ResourceDescriptor;
+import org.apache.isis.viewer.restfulobjects.viewer.resources.serialization.SerializationStrategy;
 
 import lombok.val;
 
@@ -62,19 +65,13 @@ import lombok.val;
                 "logging.level.DependentArgUtils=DEBUG"
         })
 @TestPropertySource({
-    //IsisPresets.DebugMetaModel,
-    //IsisPresets.DebugProgrammingModel,
     IsisPresets.SilenceMetaModel,
     IsisPresets.SilenceProgrammingModel
 })
 class DomainObjectLayoutTest {
     
     @Inject private FactoryService factoryService;
-    @Inject private IsisSystemEnvironment isisSystemEnvironment; 
-    
-    @Inject private MetaModelService metaModelService;
     @Inject private ObjectManager objectManager;
-    @Inject private SpecificationLoader specificationLoader;
     @Inject private DomainObjectResourceServerside domainObjectResourceServerside;
 
     @Configuration
@@ -91,10 +88,10 @@ class DomainObjectLayoutTest {
         assertNotNull(domainObjectResourceServerside);
         
         val layoutDemo = factoryService.viewModel(LayoutDemo.class);
-        val adapter = objectManager.adapt(layoutDemo);
-        val spec = adapter.getSpecification();
+        val objectAdapter = objectManager.adapt(layoutDemo);
+        val spec = objectAdapter.getSpecification();
         val domainType = spec.getSpecId().asString();
-        val instanceId = objectManager.identifyObject(adapter).getIdentifier();
+        val instanceId = objectManager.identifyObject(objectAdapter).getIdentifier(); //TODO also needs URL encoding
         
         val layoutResourceDescriptor = 
                 ResourceDescriptor
@@ -102,10 +99,23 @@ class DomainObjectLayoutTest {
         
         val resourceContext = domainObjectResourceServerside.resourceContextForTesting(layoutResourceDescriptor, /*params*/null);
         
-        val grid = (BS3Grid) domainObjectResourceServerside.layoutAsGrid(resourceContext, domainType, instanceId)
-                .orElseThrow(_Exceptions::noSuchElement);
+        val grid = (BS3Grid) spec.getFacet(GridFacet.class).getGrid(objectAdapter);
         
-        System.out.println(grid.toString());
+        DomainObjectResourceServerside.addLinks(resourceContext, domainType, instanceId, grid);
+        
+        assertNotNull(grid);
+        
+        val jaxbEntity = SerializationStrategy.JSON_INDENTED.entity(grid);
+        
+        assertNotNull(jaxbEntity);
+        
+        _Strings.grep(jaxbEntity.toString(), "multiLine")
+        .forEach(line->{
+            System.out.println("line: '"+line+"'");
+        });
+        //.forEach(System.out::println);
+        
+        //System.out.println(jaxbEntity);
         
         //TODO implement
     }

@@ -330,10 +330,23 @@ public class _Json {
     
     // -- WRITING
 
+    public static String toString(ObjectMapper objectMapper, Object pojo) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(pojo);
+    }
+    
+    
     public static String toString(Object pojo) throws JsonProcessingException {
         val objectMapper = new ObjectMapper()
                 .enable(SerializationFeature.INDENT_OUTPUT);
-        return objectMapper.writeValueAsString(pojo);
+        return toString(objectMapper, pojo);
+    }
+    
+    public static <T> _Either<String, Exception> tryToString(ObjectMapper objectMapper, Object pojo) {
+        try {
+            return _Either.left(toString(objectMapper, pojo));
+        } catch (Exception e) {
+            return _Either.right(e);
+        }
     }
     
     public static <T> _Either<String, Exception> tryToString(Object pojo) {

@@ -317,10 +317,12 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         val resourceContext = createResourceContext(
                 RepresentationType.OBJECT_LAYOUT, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        return layoutAsGrid(resourceContext, domainType, instanceId)
+        val serializationStrategy = resourceContext.getSerializationStrategy();
+
+        return layoutAsGrid(domainType, instanceId)
             .map(grid->{
-                
-                val serializationStrategy = resourceContext.getSerializationStrategy();
+
+                addLinks(resourceContext, domainType, instanceId, grid);
                 
                 return Response.status(Response.Status.OK)
                         .entity(serializationStrategy.entity(grid))
@@ -331,9 +333,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         
     }
 
-    // public ... for testing
-    public Optional<Grid> layoutAsGrid(
-            final ResourceContext resourceContext,
+    private Optional<Grid> layoutAsGrid(
             final String domainType,
             final String instanceId) {
 
@@ -345,11 +345,11 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         } 
         val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         val grid = gridFacet.getGrid(objectAdapter);
-        addLinks(resourceContext, domainType, instanceId, grid);
         return Optional.of(grid);
     }
 
-    private void addLinks(
+    // public ... for testing
+    public static void addLinks(
             final ResourceContext resourceContext,
             final String domainType,
             final String instanceId,
