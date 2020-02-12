@@ -356,7 +356,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             final String id) {
 
         if (id == null) {
-            return null;
+            return Optional.empty();
         }
 
         return candidateActions
