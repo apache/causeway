@@ -55,8 +55,7 @@ import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.internal.collections._Sets;
-import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
@@ -68,7 +67,6 @@ import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissio
 import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -138,16 +136,6 @@ import lombok.val;
 //)
 public class ApplicationUser implements Comparable<ApplicationUser>, 
 org.apache.isis.extensions.secman.api.user.ApplicationUser {
-
-    public static abstract class PropertyDomainEvent<T>
-    extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationUser, T> {}
-
-    public static abstract class CollectionDomainEvent<T> 
-    extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationUser, T> {}
-
-    public static abstract class ActionDomainEvent 
-    extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUser> {}
-
 
     // -- identification
 
@@ -545,7 +533,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
         return this;
     }
     public String disableUpdateAccountType() {
-        return isAdminUser()
+        return applicationUserRepository.isAdminUser(this)
                 ? "Cannot change account type for admin user"
                         : null;
     }
@@ -614,7 +602,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
         return this;
     }
     public String disableLock() {
-        if(isAdminUser()) {
+        if(applicationUserRepository.isAdminUser(this)) {
             return "Cannot disable the '" + configBean.getAdminUserName() + "' user.";
         }
         return getStatus() == ApplicationUserStatus.DISABLED ? "Status is already set to DISABLE": null;
@@ -800,35 +788,6 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     }
 
 
-    // -- addRole (action)
-
-    public static class AddRoleDomainEvent extends ActionDomainEvent {}
-
-    @Action(
-            domainEvent = AddRoleDomainEvent.class,
-            semantics = SemanticsOf.IDEMPOTENT
-            )
-    @ActionLayout(
-            named="Add"
-            )
-    @MemberOrder(name="roles", sequence = "1")
-    public ApplicationUser addRole(final ApplicationRole role) {
-        addToRoles(role);
-        return this;
-    }
-
-    public SortedSet<ApplicationRole> choices0AddRole() {
-        final List<ApplicationRole> allRoles = applicationRoleRepository.allRoles();
-        final SortedSet<ApplicationRole> applicationRoles = _Sets.newTreeSet(allRoles);
-        applicationRoles.removeAll(getRoles());
-        return applicationRoles;
-    }
-
-    public String disableAddRole() {
-        return choices0AddRole().isEmpty()? "All roles added": null;
-    }
-
-
     // -- removeRole (action)
 
     public static class RemoveRoleDomainEvent extends ActionDomainEvent {}
@@ -854,9 +813,10 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
         return getRoles();
     }
 
+    // duplicated in ApplicationRole_removeUser mixin
     public String validateRemoveRole(
             final ApplicationRole applicationRole) {
-        if(isAdminUser() && applicationRole.isAdminRole()) {
+        if(applicationUserRepository.isAdminUser(this) && applicationRoleRepository.isAdminRole(applicationRole)) {
             return "Cannot remove admin user from the admin role.";
         }
         return null;
@@ -873,13 +833,13 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
             semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE
             )
     @MemberOrder(sequence = "1")
-    public List<ApplicationUser> delete() {
+    public java.util.Collection<org.apache.isis.extensions.secman.api.user.ApplicationUser> delete() {
         repository.removeAndFlush(this);
         return applicationUserRepository.allUsers();
     }
 
     public String disableDelete() {
-        return isAdminUser()? "Cannot delete the admin user": null;
+        return applicationUserRepository.isAdminUser(this)? "Cannot delete the admin user": null;
     }
 
 
@@ -900,12 +860,6 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
                         permissionsEvaluationService);
     }
 
-
-    // -- isAdminUser (programmatic)
-    @Programmatic
-    public boolean isAdminUser() {
-        return configBean.getAdminUserName().equals(getName());
-    }
 
     // -- helpers
     boolean isForSelfOrRunAsAdministrator() {
@@ -975,6 +929,6 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
      * implementation.
      */
     @Inject PermissionsEvaluationService permissionsEvaluationService;
-    @Inject SecurityModuleConfig configBean;
+    @Inject private SecurityModuleConfig configBean;
 
 }

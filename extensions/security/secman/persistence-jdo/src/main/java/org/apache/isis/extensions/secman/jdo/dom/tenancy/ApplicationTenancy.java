@@ -52,7 +52,6 @@ import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
-import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserRepository;
 
@@ -118,9 +117,6 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
     @Getter @Setter
     private String name;
 
-
-
-
     // -- updateName (action)
 
     public static class UpdateNameDomainEvent extends ActionDomainEvent {}
@@ -184,56 +180,6 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
         applicationUser.setAtPath(null);
     }
 
-
-    // -- addUser (action)
-
-    public static class AddUserDomainEvent extends ActionDomainEvent {}
-
-    @Action(
-            domainEvent = AddUserDomainEvent.class,
-            semantics = SemanticsOf.IDEMPOTENT
-            )
-    @ActionLayout(
-            named="Add"
-            )
-    @MemberOrder(name="Users", sequence = "1")
-    public ApplicationTenancy addUser(final ApplicationUser applicationUser) {
-        applicationUser.setAtPath(this.getPath());
-        // no need to add to users set, since will be done by JDO/DN.
-        return this;
-    }
-
-    public List<ApplicationUser> autoComplete0AddUser(final String search) {
-        final List<ApplicationUser> matchingSearch = applicationUserRepository.find(search);
-        final List<ApplicationUser> list = _Lists.newArrayList(matchingSearch);
-        list.removeAll(getUsers());
-        return list;
-    }
-
-
-    // -- removeUser (action)
-
-    public static class RemoveUserDomainEvent extends ActionDomainEvent {}
-
-    @Action(
-            domainEvent = RemoveUserDomainEvent.class,
-            semantics = SemanticsOf.IDEMPOTENT
-            )
-    @ActionLayout(
-            named="Remove"
-            )
-    @MemberOrder(name="Users", sequence = "2")
-    public ApplicationTenancy removeUser(final ApplicationUser applicationUser) {
-        applicationUser.setAtPath(null);
-        // no need to add to users set, since will be done by JDO/DN.
-        return this;
-    }
-    public java.util.Collection<ApplicationUser> choices0RemoveUser() {
-        return getUsers();
-    }
-    public String disableRemoveUser() {
-        return choices0RemoveUser().isEmpty()? "No users to remove": null;
-    }
 
 
 
@@ -354,7 +300,7 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
             semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE
             )
     @MemberOrder(sequence = "1")
-    public List<ApplicationTenancy> delete() {
+    public java.util.Collection<org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy> delete() {
         for (final ApplicationUser user : getUsers()) {
             user.updateAtPath(null);
         }

@@ -29,7 +29,6 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.InheritanceStrategy;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.Collection;
@@ -41,12 +40,12 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.types.DescriptionType;
 import org.apache.isis.applib.util.Equality;
@@ -54,7 +53,8 @@ import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
@@ -62,11 +62,11 @@ import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissio
 import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserRepository;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.extensions.secman.model.dom.permission.ApplicationPermission_delete;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.val;
 
 @javax.jdo.annotations.PersistenceCapable(
         identityType = IdentityType.DATASTORE,
@@ -105,20 +105,6 @@ import lombok.Setter;
 public class ApplicationRole 
 implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparable<ApplicationRole> {
 
-    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationRole, T> {}
-
-    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationRole, T> {}
-
-    public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationRole> {}
-
-
-    // -- constants, moved to interface
-
-    //    public static final int MAX_LENGTH_NAME = 50;
-    //    public static final int TYPICAL_LENGTH_NAME = 30;
-    //    public static final int TYPICAL_LENGTH_DESCRIPTION = 50;
-
-
     // -- identification
     /**
      * having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use
@@ -127,7 +113,6 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
     public String title() {
         return getName();
     }
-
 
     // -- name (property)
 
@@ -532,7 +517,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
             final ApplicationFeatureType type,
             @ParameterLayout(named="Feature", typicalLength=ApplicationFeature.TYPICAL_LENGTH_MEMBER_NAME)
             final String featureFqn) {
-        if(isAdminRole() && configBean.isStickyAdminPackage(featureFqn)) {
+        if(applicationRoleRepository.isAdminRole(this) && configBean.isStickyAdminPackage(featureFqn)) {
             return "Cannot remove top-level package permissions for the admin role.";
         }
         return null;
@@ -583,61 +568,6 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
     }
 
 
-    // -- addUser (action)
-
-    public static class AddUserDomainEvent extends ActionDomainEvent {}
-
-    @Action(
-            domainEvent = AddUserDomainEvent.class,
-            semantics = SemanticsOf.IDEMPOTENT
-            )
-    @ActionLayout(
-            named="Add")
-    @MemberOrder(name="Users", sequence = "1")
-    public ApplicationRole addUser(final ApplicationUser applicationUser) {
-        applicationUser.addRole(this);
-        // no need to add to users set, since will be done by JDO/DN.
-        return this;
-    }
-
-    public List<ApplicationUser> autoComplete0AddUser(final String search) {
-        final List<ApplicationUser> matchingSearch = applicationUserRepository.find(search);
-        final List<ApplicationUser> list = _Lists.newArrayList(matchingSearch);
-        list.removeAll(getUsers());
-        return list;
-    }
-
-
-
-    // -- removeUser (action)
-
-    public static class RemoveUserDomainEvent extends ActionDomainEvent {}
-
-    @Action(
-            domainEvent = RemoveUserDomainEvent.class,
-            semantics = SemanticsOf.IDEMPOTENT
-            )
-    @ActionLayout(
-            named="Remove"
-            )
-    @MemberOrder(name="Users", sequence = "2")
-    public ApplicationRole removeUser(final ApplicationUser applicationUser) {
-        applicationUser.removeRole(this);
-        // no need to remove from users set, since will be done by JDO/DN.
-        return this;
-    }
-
-    public java.util.Collection<ApplicationUser> choices0RemoveUser() {
-        return getUsers();
-    }
-
-    public String validateRemoveUser(
-            final ApplicationUser applicationUser) {
-        return applicationUser.validateRemoveRole(this);
-    }
-
-
-
     // -- delete (action)
     public static class DeleteDomainEvent extends ActionDomainEvent {}
 
@@ -646,28 +576,19 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
             semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE
             )
     @MemberOrder(sequence = "1")
-    public List<ApplicationRole> delete() {
+    public java.util.Collection<org.apache.isis.extensions.secman.api.role.ApplicationRole> delete() {
         getUsers().clear();
         final List<ApplicationPermission> permissions = getPermissions();
         for (final ApplicationPermission permission : permissions) {
-            permission.delete();
+            val deleteMixin = factoryService.mixin(ApplicationPermission_delete.class, permission);
+            deleteMixin.act();
         }
         repository.removeAndFlush(this);
         return applicationRoleRepository.allRoles();
     }
 
     public String disableDelete() {
-        return isAdminRole() ? "Cannot delete the admin role" : null;
-    }
-
-
-
-    // -- isAdminRole (programmatic)
-    @Programmatic
-    public boolean isAdminRole() {
-        final ApplicationRole adminRole = applicationRoleRepository.findByNameCached(
-                configBean.getAdminRoleName());
-        return this == adminRole;
+        return applicationRoleRepository.isAdminRole(this) ? "Cannot delete the admin role" : null;
     }
 
 
@@ -706,12 +627,13 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
         return toString.toString(this);
     }
 
+    @Inject FactoryService factoryService;
     @Inject RepositoryService repository;
     @Inject ApplicationFeatureRepository applicationFeatureRepository;
     @Inject ApplicationPermissionRepository applicationPermissionRepository;
     @Inject ApplicationUserRepository applicationUserRepository;
     @Inject ApplicationRoleRepository applicationRoleRepository;
-    @Inject SecurityModuleConfig configBean;
+    @Inject private SecurityModuleConfig configBean;
 
 
 }

@@ -18,7 +18,7 @@
  */
 package org.apache.isis.extensions.secman.model.dom.user;
 
-import java.util.List;
+import java.util.Collection;
 
 import javax.inject.Inject;
 
@@ -79,7 +79,7 @@ public class ApplicationUserMenu {
             semantics = SemanticsOf.SAFE
             )
     @MemberOrder(sequence = "100.10.2")
-    public List<? extends ApplicationUser> findUsers(
+    public Collection<ApplicationUser> findUsers(
             final @ParameterLayout(named = "Search") String search) {
         return applicationUserRepository.find(search);
     }
@@ -167,7 +167,7 @@ public class ApplicationUserMenu {
             semantics = SemanticsOf.SAFE
             )
     @MemberOrder(sequence = "100.10.5")
-    public List<? extends ApplicationUser> allUsers() {
+    public Collection<ApplicationUser> allUsers() {
         return applicationUserRepository.allUsers();
     }
 

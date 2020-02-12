@@ -26,12 +26,12 @@ import javax.inject.Inject;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.extensions.secman.api.user.AccountType;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserRepository;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.Getter;
 
@@ -100,13 +100,10 @@ public class AbstractUserAndRolesFixtureScript extends FixtureScript {
                 final ApplicationRole securityRole = applicationRoleRepository.findByName(roleName);
 
                 if(securityRole!=null) {
-                    applicationUser.addRole(securityRole);    
+                    applicationRoleRepository.addRoleToUser(securityRole, applicationUser);
                 } else {
-
                     throw _Exceptions.unrecoverable("role not found by name: "+roleName);
-
                 }
-
 
             }
         }

@@ -18,14 +18,23 @@
  */
 package org.apache.isis.extensions.secman.api.tenancy;
 
-import java.util.List;
+import java.util.Collection;
+
+import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 
 public interface ApplicationTenancyRepository {
 
-    List<? extends ApplicationTenancy> allTenancies();
+    Collection<ApplicationTenancy> allTenancies();
 
-    List<? extends ApplicationTenancy> findByNameOrPathMatchingCached(String partialNameOrPath);
+    Collection<ApplicationTenancy> findByNameOrPathMatchingCached(String partialNameOrPath);
+    
+    Collection<ApplicationUser> getUsers(ApplicationTenancy tenancy);
 
     ApplicationTenancy newTenancy(String name, String path, ApplicationTenancy parent);
+
+    void setTenancyOnUser(ApplicationTenancy tenancy, ApplicationUser user);
+    void clearTenancyOnUser(ApplicationUser user);
+
+    
 
 }

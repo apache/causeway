@@ -18,18 +18,28 @@
  */
 package org.apache.isis.extensions.secman.api.role;
 
-import java.util.List;
+import java.util.Collection;
+
+import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 
 public interface ApplicationRoleRepository {
 
-    List<? extends ApplicationRole> allRoles();
+    Collection<ApplicationRole> allRoles();
 
     ApplicationRole newRole(String name, String description);
 
-    List<? extends ApplicationRole> findNameContaining(String search);
+    Collection<ApplicationRole> findNameContaining(String search);
+    
+    Collection<ApplicationUser> getUsers(ApplicationRole role);
 
     ApplicationRole findByName(String roleName);
 
     ApplicationRole findByNameCached(String roleName);
+
+    void addRoleToUser(ApplicationRole role, ApplicationUser holder);
+    void removeRoleFromUser(ApplicationRole role, ApplicationUser holder);
+
+    boolean isAdminRole(ApplicationRole role);
+    
 
 }

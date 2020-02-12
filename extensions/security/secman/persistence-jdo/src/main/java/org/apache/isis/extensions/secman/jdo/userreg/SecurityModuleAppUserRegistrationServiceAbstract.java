@@ -26,6 +26,7 @@ import org.apache.isis.applib.services.userreg.UserDetails;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
+import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserRepository;
 
@@ -35,6 +36,9 @@ import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserRepository;
  */
 public abstract class SecurityModuleAppUserRegistrationServiceAbstract implements UserRegistrationService {
 
+    @Inject private ApplicationUserRepository applicationUserRepository;
+    @Inject private ApplicationRoleRepository applicationRoleRepository;
+    
     @Override
     public boolean usernameExists(final String username) {
         return applicationUserRepository.findByUsername(username) != null;
@@ -54,7 +58,7 @@ public abstract class SecurityModuleAppUserRegistrationServiceAbstract implement
         final Set<ApplicationRole> additionalRoles = getAdditionalInitialRoles();
         if(additionalRoles != null) {
             for (final ApplicationRole additionalRole : additionalRoles) {
-                applicationUser.addRole(additionalRole);
+                applicationRoleRepository.addRoleToUser(additionalRole, applicationUser);
             }
         }
 
@@ -85,7 +89,5 @@ public abstract class SecurityModuleAppUserRegistrationServiceAbstract implement
      * @return Additional roles for newly created local users
      */
     protected abstract Set<ApplicationRole> getAdditionalInitialRoles();
-
-    @Inject
-    private ApplicationUserRepository applicationUserRepository;
+    
 }

@@ -18,7 +18,7 @@
  */
 package org.apache.isis.extensions.secman.model.dom.tenancy;
 
-import java.util.List;
+import java.util.Collection;
 
 import javax.inject.Inject;
 
@@ -69,7 +69,7 @@ public class ApplicationTenancyMenu {
             semantics = SemanticsOf.SAFE
             )
     @MemberOrder(sequence = "100.30.1")
-    public List<? extends ApplicationTenancy> findTenancies(
+    public Collection<ApplicationTenancy> findTenancies(
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(named = "Partial Name Or Path", describedAs = "String to search for, wildcard (*) can be used")
             @MinLength(1) // for auto-complete
@@ -109,7 +109,7 @@ public class ApplicationTenancyMenu {
             restrictTo = RestrictTo.PROTOTYPING
             )
     @MemberOrder(sequence = "100.30.4")
-    public List<? extends ApplicationTenancy> allTenancies() {
+    public Collection<ApplicationTenancy> allTenancies() {
         return applicationTenancyRepository.allTenancies();
     }
 

@@ -21,6 +21,7 @@ package org.apache.isis.extensions.secman.api.user;
 import java.util.SortedSet;
 
 import org.apache.isis.applib.services.HasUsername;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValueSet;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.tenancy.HasAtPath;
@@ -51,5 +52,20 @@ public interface ApplicationUser extends HasUsername, HasAtPath {
 
     @Override
     String getUsername();
+    
+    // -- EVENTS 
+    
+    public static abstract class PropertyDomainEvent<T>
+    extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationUser, T> {}
+
+    public static abstract class CollectionDomainEvent<T> 
+    extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationUser, T> {}
+
+    public static abstract class ActionDomainEvent 
+    extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUser> {}
+    
+    public static class AddRoleDomainEvent extends ActionDomainEvent {}
+
+    
 
 }

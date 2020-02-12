@@ -18,6 +18,8 @@
  */
 package org.apache.isis.extensions.secman.jdo.dom.user;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -32,7 +34,9 @@ import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Password;
-import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Sets;
+import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.AccountType;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
@@ -45,6 +49,8 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
     @Inject private QueryResultsCache queryResultsCache;
     @Inject private ApplicationUserFactory applicationUserFactory;
     @Inject private RepositoryService repository;
+    @Inject private ApplicationRoleRepository applicationRoleRepository;
+    @Inject private SecurityModuleConfig configBean;
     
     // -- findOrCreateUserByUsername (programmatic)
 
@@ -109,11 +115,14 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
     // -- findByName
 
     @Override
-    public List<ApplicationUser> find(final String search) {
+    public Collection<org.apache.isis.extensions.secman.api.user.ApplicationUser> find(final String search) {
         final String regex = String.format("(?i).*%s.*", search.replace("*", ".*").replace("?", "."));
         return repository.allMatches(new QueryDefault<>(
                 ApplicationUser.class,
-                "find", "regex", regex));
+                "find", "regex", regex))
+                .stream()
+                .map(org.apache.isis.extensions.secman.api.user.ApplicationUser.class::cast)
+                .collect(_Sets.toUnmodifiableSorted());
     }
 
     // -- newDelegateUser (action)
@@ -128,7 +137,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
         user.setStatus(ApplicationUserStatus.parse(enabled));
         user.setAccountType(AccountType.DELEGATED);
         if (initialRole != null) {
-            user.addRole((ApplicationRole)initialRole);
+            applicationRoleRepository.addRoleToUser(initialRole, user);
         }
         repository.persist(user);
         return user;
@@ -152,7 +161,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
             user.setAccountType(AccountType.LOCAL);
         }
         if (initialRole != null) {
-            user.addRole((ApplicationRole)initialRole);
+            applicationRoleRepository.addRoleToUser(initialRole, user);
         }
         if (password != null) {
             user.updatePassword(password.getPassword());
@@ -203,16 +212,19 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
     // -- allUsers
 
     @Override
-    public List<ApplicationUser> allUsers() {
-        return repository.allInstances(ApplicationUser.class);
+    public Collection<org.apache.isis.extensions.secman.api.user.ApplicationUser> allUsers() {
+        return repository.allInstances(ApplicationUser.class)
+                .stream()
+                .map(org.apache.isis.extensions.secman.api.user.ApplicationUser.class::cast)
+                .collect(_Sets.toUnmodifiableSorted());
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public List<ApplicationUser> findMatching(final String search) {
+    public Collection<org.apache.isis.extensions.secman.api.user.ApplicationUser> findMatching(final String search) {
         if (search != null && search.length() > 0) {
             return find(search);
         }
-        return _Lists.newArrayList();
+        return Collections.emptySortedSet();
     }
     
     // -- UPDATE USER STATE
@@ -231,6 +243,9 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
         }
     }
 
-
+    @Override
+    public boolean isAdminUser(org.apache.isis.extensions.secman.api.user.ApplicationUser user) {
+        return configBean.getAdminUserName().equals(user.getName());
+    }
 
 }

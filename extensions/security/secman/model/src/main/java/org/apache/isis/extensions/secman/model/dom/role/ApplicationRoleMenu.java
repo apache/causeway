@@ -18,7 +18,7 @@
  */
 package org.apache.isis.extensions.secman.model.dom.role;
 
-import java.util.List;
+import java.util.Collection;
 
 import javax.inject.Inject;
 
@@ -68,7 +68,7 @@ public class  ApplicationRoleMenu {
             semantics = SemanticsOf.SAFE
             )
     @MemberOrder(sequence = "100.20.1")
-    public List<? extends ApplicationRole> findRoles(
+    public Collection<ApplicationRole> findRoles(
             @Parameter(maxLength = ApplicationRole.MAX_LENGTH_NAME)
             @ParameterLayout(named = "Search", typicalLength = ApplicationRole.TYPICAL_LENGTH_NAME)
             final String search) {
@@ -103,7 +103,7 @@ public class  ApplicationRoleMenu {
             semantics = SemanticsOf.SAFE
             )
     @MemberOrder(sequence = "100.20.3")
-    public List<? extends ApplicationRole> allRoles() {
+    public Collection<ApplicationRole> allRoles() {
         return applicationRoleRepository.allRoles();
     }
 
