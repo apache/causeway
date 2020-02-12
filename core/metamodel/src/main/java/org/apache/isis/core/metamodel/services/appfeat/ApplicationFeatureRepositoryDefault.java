@@ -39,6 +39,7 @@ import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.commons.internal.base._Lazy;
 import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
@@ -342,40 +343,40 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         return excluded;
     }
 
-    /**
-     * Ignore the (strict) super-classes of any services.
-     * <p>
-     * For example, we want to ignore <code>ExceptionRecognizerComposite</code> 
-     * because there is no service of that type (only of subtypes of that).
-     * </p>
-     */
-    @Deprecated
-    private boolean isSuperClassOfService(final ObjectSpecification spec) {
-
-        val specClass = spec.getCorrespondingClass();
-        
-        // is this class a supertype or the actual type of one of the services?
-        boolean serviceCls = false;
-        for (final ManagedBeanAdapter bean : registeredServices.get()) {
-            final Class<?> serviceClass = bean.getBeanClass();
-            if (specClass.isAssignableFrom(serviceClass)) {
-                serviceCls = true;
-            }
-        }
-        if (!serviceCls) {
-            return false;
-        }
-
-        // yes it is.  In which case, is it the actual concrete class of one of those services?
-        for (final Object registeredService : registeredServices.get()) {
-            final Class<?> serviceClass = registeredService.getClass();
-            if (serviceClass.isAssignableFrom(specClass)) {
-                return false;
-            }
-        }
-        // couldn't find a service of exactly this type, so ignore the spec.
-        return true;
-    }
+//XXX[2286] .. replaced by check 'spec.getBeanSort().isUnknown()'
+//    /**
+//     * Ignore the (strict) super-classes of any services.
+//     * <p>
+//     * For example, we want to ignore <code>ExceptionRecognizerComposite</code> 
+//     * because there is no service of that type (only of subtypes of that).
+//     * </p>
+//     */
+//    private boolean isSuperClassOfService(final ObjectSpecification spec) {
+//
+//        val specClass = spec.getCorrespondingClass();
+//        
+//        // is this class a supertype or the actual type of one of the services?
+//        boolean serviceCls = false;
+//        for (final ManagedBeanAdapter bean : registeredServices.get()) {
+//            final Class<?> serviceClass = bean.getBeanClass();
+//            if (specClass.isAssignableFrom(serviceClass)) {
+//                serviceCls = true;
+//            }
+//        }
+//        if (!serviceCls) {
+//            return false;
+//        }
+//
+//        // yes it is.  In which case, is it the actual concrete class of one of those services?
+//        for (final Object registeredService : registeredServices.get()) {
+//            final Class<?> serviceClass = registeredService.getClass();
+//            if (serviceClass.isAssignableFrom(specClass)) {
+//                return false;
+//            }
+//        }
+//        // couldn't find a service of exactly this type, so ignore the spec.
+//        return true;
+//    }
 
     protected boolean isHidden(final ObjectSpecification spec) {
         final HiddenFacet facet = spec.getFacet(HiddenFacet.class);
@@ -482,56 +483,56 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
     // -- packageNames, packageNamesContainingClasses, classNamesContainedIn, memberNamesOf
     @Override 
-    public Set<String> packageNames() {
+    public SortedSet<String> packageNames() {
         initializeIfRequired();
         return stream(allFeatures(ApplicationFeatureType.PACKAGE))
                 .map(ApplicationFeature.Functions.GET_FQN)
-                .collect(Collectors.toSet());
+                .collect(_Sets.toUnmodifiableSorted());
     }
 
     @Override 
-    public Set<String> packageNamesContainingClasses(final ApplicationMemberType memberType) {
+    public SortedSet<String> packageNamesContainingClasses(final ApplicationMemberType memberType) {
         initializeIfRequired();
         final Collection<ApplicationFeature> packages = allFeatures(ApplicationFeatureType.PACKAGE);
 
         return stream(packages)
                 .filter(ApplicationFeature.Predicates.packageContainingClasses(memberType, this))
                 .map(ApplicationFeature.Functions.GET_FQN)
-                .collect(Collectors.toSet());
+                .collect(_Sets.toUnmodifiableSorted());
     }
 
     @Override 
-    public Set<String> classNamesContainedIn(final String packageFqn, final ApplicationMemberType memberType) {
+    public SortedSet<String> classNamesContainedIn(final String packageFqn, final ApplicationMemberType memberType) {
         initializeIfRequired();
         final ApplicationFeatureId packageId = ApplicationFeatureId.newPackage(packageFqn);
         final ApplicationFeature pkg = findPackage(packageId);
         if (pkg == null) {
-            return Collections.emptySet();
+            return Collections.emptySortedSet();
         }
         final SortedSet<ApplicationFeatureId> contents = pkg.getContents();
         return contents.stream()
                 .filter(ApplicationFeatureId.Predicates.isClassContaining(memberType, this))
                 .map(ApplicationFeatureId.Functions.GET_CLASS_NAME)
-                .collect(Collectors.toSet());
+                .collect(_Sets.toUnmodifiableSorted());
     }
 
     @Override 
-    public Set<String> classNamesRecursivelyContainedIn(final String packageFqn) {
+    public SortedSet<String> classNamesRecursivelyContainedIn(final String packageFqn) {
         initializeIfRequired();
         final ApplicationFeatureId packageId = ApplicationFeatureId.newPackage(packageFqn);
         final ApplicationFeature pkg = findPackage(packageId);
         if (pkg == null) {
-            return Collections.emptySet();
+            return Collections.emptySortedSet();
         }
         final Set<ApplicationFeatureId> classIds = this.classFeatures.keySet();
         return classIds.stream()
                 .filter(ApplicationFeatureId.Predicates.isClassRecursivelyWithin(packageId))
                 .map(ApplicationFeatureId.Functions.GET_CLASS_NAME)
-                .collect(Collectors.toSet());
+                .collect(_Sets.toUnmodifiableSorted());
     }
 
     @Override 
-    public Set<String> memberNamesOf(
+    public SortedSet<String> memberNamesOf(
             final String packageFqn,
             final String className,
             final ApplicationMemberType memberType) {
@@ -539,19 +540,16 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         final ApplicationFeatureId classId = ApplicationFeatureId.newClass(packageFqn + "." + className);
         final ApplicationFeature cls = findClass(classId);
         if (cls == null) {
-            return Collections.emptySet();
+            return Collections.emptySortedSet();
         }
         final SortedSet<ApplicationFeatureId> featureIds = cls.membersOf(memberType);
         return featureIds.stream()
                 .map(ApplicationFeatureId.Functions.GET_MEMBER_NAME)
-                .collect(Collectors.toSet());
+                .collect(_Sets.toUnmodifiableSorted());
     }
 
-    //region  > services (injected)
-
     @Inject ServiceRegistry serviceRegistry;
-    @Inject
-    SpecificationLoader specificationLoader;
+    @Inject SpecificationLoader specificationLoader;
     @Inject ApplicationFeatureFactory applicationFeatureFactory;
 
     private _Lazy<List<ManagedBeanAdapter>> registeredServices = _Lazy.threadSafe(()->{

@@ -159,7 +159,9 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
         return getName();
     }
 
-
+    public String iconName() {
+        return getStatus().isEnabled() ? "enabled" : "disabled"; 
+    }
 
     // -- name (derived property)
 
