@@ -387,11 +387,6 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     /**
      * @since 2.0
      */
-    boolean isExcludedFromMetamodel();
-
-    /**
-     * @since 2.0
-     */
     default Object instantiatePojo() {
         final Class<?> correspondingClass = getCorrespondingClass();
         if (correspondingClass.isArray()) {

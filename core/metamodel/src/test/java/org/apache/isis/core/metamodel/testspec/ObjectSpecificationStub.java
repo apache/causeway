@@ -342,11 +342,6 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public boolean isExcludedFromMetamodel() {
-        return false; // [2158] not implemented yet
-    }
-
-    @Override
     public void introspectUpTo(IntrospectionState upTo) {
         // [2158] not implemented yet
     }

@@ -38,7 +38,6 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.commons.internal.base._Lazy;
-import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.core.config.IsisConfiguration;
@@ -62,9 +61,11 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Repository
 @Named("isisMetaModel.ApplicationFeatureRepositoryDefault")
+@Log4j2
 public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRepository {
 
     // -- caches
@@ -105,7 +106,9 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         }
         initializationState = InitializationState.INITIALIZED;
         final Collection<ObjectSpecification> specifications = primeMetaModel();
-        createApplicationFeaturesFor(specifications);
+        for (val spec : specifications) {
+            createApplicationFeaturesFor(spec);
+        }
     }
 
     private Collection<ObjectSpecification> primeMetaModel() {
@@ -114,15 +117,8 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         return specificationLoader.snapshotSpecifications();
     }
 
-    private void createApplicationFeaturesFor(final Collection<ObjectSpecification> specifications) {
-        // take copy to avoid ConcurrentModificationException
-        final List<ObjectSpecification> objectSpecifications = _Lists.newArrayList(specifications);
-        for (final ObjectSpecification spec : objectSpecifications) {
-            createApplicationFeaturesFor(spec);
-        }
-    }
-
     void createApplicationFeaturesFor(final ObjectSpecification spec) {
+        
         if (exclude(spec)) {
             return;
         }
@@ -327,11 +323,23 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
 
     protected boolean exclude(final ObjectSpecification spec) {
-        return spec.isAbstract() ||
+        
+        val excluded = spec.isAbstract() ||
+                spec.getBeanSort().isUnknown() ||
                 isBuiltIn(spec) ||
-                isHidden(spec) ||
-                spec.isExcludedFromMetamodel() ||
-                isSuperClassOfService(spec);
+                isHidden(spec);
+        
+        if(excluded && log.isDebugEnabled()) {
+            log.debug("{} excluded because: abstract:{} unknown-sort:{} builtIn:{} hidden:{}", 
+                    spec.getCorrespondingClass().getSimpleName(),
+                    spec.isAbstract(),
+                    spec.getBeanSort().isUnknown(),
+                    isBuiltIn(spec),
+                    isHidden(spec)
+                    );
+        }
+        
+        return excluded;
     }
 
     /**
@@ -341,10 +349,11 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
      * because there is no service of that type (only of subtypes of that).
      * </p>
      */
+    @Deprecated
     private boolean isSuperClassOfService(final ObjectSpecification spec) {
 
         val specClass = spec.getCorrespondingClass();
-
+        
         // is this class a supertype or the actual type of one of the services?
         boolean serviceCls = false;
         for (final ManagedBeanAdapter bean : registeredServices.get()) {

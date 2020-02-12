@@ -39,9 +39,6 @@ public abstract class ClassExcluderAbstract implements ClassExcluder {
         if(objectSpec == null) {
             return false;
         }
-        if (objectSpec.isExcludedFromMetamodel()) {
-            return true;
-        }
 
         return packageNamesToIgnore.stream()
                 .anyMatch(packageName ->  objectSpec.getCorrespondingClass().getName().startsWith(packageName));

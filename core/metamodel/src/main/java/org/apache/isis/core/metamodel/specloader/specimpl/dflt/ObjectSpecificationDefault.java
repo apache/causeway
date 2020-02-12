@@ -218,15 +218,11 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     // -- create associations and actions
     private List<ObjectAssociation> createAssociations() {
         final List<ObjectAssociation> associations = _Lists.newArrayList();
-        if(isExcludedFromMetamodel()) {
-            // add no associations
-        } else {
-            final List<FacetedMethod> associationFacetedMethods = facetedMethodsBuilder.getAssociationFacetedMethods();
-            for (FacetedMethod facetedMethod : associationFacetedMethods) {
-                final ObjectAssociation association = createAssociation(facetedMethod);
-                if(association != null) {
-                    associations.add(association);
-                }
+        final List<FacetedMethod> associationFacetedMethods = facetedMethodsBuilder.getAssociationFacetedMethods();
+        for (FacetedMethod facetedMethod : associationFacetedMethods) {
+            final ObjectAssociation association = createAssociation(facetedMethod);
+            if(association != null) {
+                associations.add(association);
             }
         }
         return associations;
@@ -244,15 +240,11 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     private List<ObjectAction> createActions() {
         val actions = _Lists.<ObjectAction>newArrayList();
-        if(isExcludedFromMetamodel()) {
-            // create no actions
-        } else {
-            val actionFacetedMethods = facetedMethodsBuilder.getActionFacetedMethods();
-            for (val facetedMethod : actionFacetedMethods) {
-                val action = createAction(facetedMethod);
-                if(action != null) {
-                    actions.add(action);
-                }
+        val actionFacetedMethods = facetedMethodsBuilder.getActionFacetedMethods();
+        for (val facetedMethod : actionFacetedMethods) {
+            val action = createAction(facetedMethod);
+            if(action != null) {
+                actions.add(action);
             }
         }
         return actions;

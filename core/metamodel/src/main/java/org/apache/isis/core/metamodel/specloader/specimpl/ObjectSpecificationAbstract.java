@@ -187,8 +187,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private final Identifier identifier;
     private final boolean isAbstract;
 
-    @Getter(onMethod=@__({@Override})) private final boolean excludedFromMetamodel = false;
-
     // derived lazily, cached since immutable
     protected ObjectSpecId specId;
 

@@ -161,11 +161,10 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
     }
 
     public static boolean check(final ObjectSpecification objectSpec) {
-        if(objectSpec.isExcludedFromMetamodel()) {
+            //TODO
             // as a special case, don't enforce this for fixture scripts... 
             // we never invoke actions on fixture scripts anyway
-            return false; //skip validation
-        }
+
         if(objectSpec.isAbstract()) {
             return false; //skip validation
         }
