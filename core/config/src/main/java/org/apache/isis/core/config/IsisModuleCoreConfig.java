@@ -53,7 +53,7 @@ import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 public class IsisModuleCoreConfig {
     
     @ConfigurationProperties(prefix = "isis")
-    @Bean("isis-config-props-as-map")
+    @Bean("isis-settings")
     public Map<String, String> getIsisConfigProps() {
         return new HashMap<>();
     }

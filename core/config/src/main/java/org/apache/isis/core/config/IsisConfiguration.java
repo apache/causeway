@@ -77,7 +77,9 @@ import org.apache.isis.core.config.metamodel.services.ApplicationFeaturesInitCon
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.config.viewer.wicket.DialogMode;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
 import lombok.Value;
 import lombok.var;
 
@@ -104,9 +106,9 @@ public class IsisConfiguration {
     /**
      *
      */
-    @Inject @Named("isis-config-props-as-map")
-    private Map<String, String> asMap;
-    public Map<String, String> getAsMap() { return Collections.unmodifiableMap(asMap); }
+    @Inject @Named("isis-settings")
+    @Getter(AccessLevel.PRIVATE) private Map<String, String> isisSettings;
+    public Map<String, String> getAsMap() { return Collections.unmodifiableMap(isisSettings); }
 
 
     private final Security security = new Security();
