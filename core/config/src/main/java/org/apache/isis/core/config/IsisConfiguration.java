@@ -103,11 +103,11 @@ public class IsisConfiguration {
         this.environment = environment;
     }
 
-    /**
-     *
-     */
     @Inject @Named("isis-settings")
     @Getter(AccessLevel.PRIVATE) private Map<String, String> isisSettings;
+    /**
+     * All of the isis configuration properties, gathered together as an immutable map.
+     */
     public Map<String, String> getAsMap() { return Collections.unmodifiableMap(isisSettings); }
 
 

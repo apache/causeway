@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.restfulobjects.viewer.context;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -36,6 +37,7 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -180,6 +182,16 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
             {
                 allowing(mockHttpHeaders).getAcceptableMediaTypes();
                 will(returnValue(mediaTypes));
+            }
+        });
+    }
+
+    private void givenServletRequestParameterMapEmpty() {
+        final HashMap<Object, Object> parameterMap = _Maps.newHashMap();
+        context.checking(new Expectations() {
+            {
+                allowing(mockHttpServletRequest).getParameterMap();
+                will(returnValue(parameterMap));
             }
         });
     }
