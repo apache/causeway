@@ -28,7 +28,7 @@ class LayoutTest : IntegrationTest() {
 
         // row0 ^= DomainObject
         val cols00 = cols0List[0]
-        val col00 = cols00.col
+        val col00 = cols00.col.first()
         assertNotNull(col00)  // 3
         val do00 = col00.domainObject
         assertNotNull(do00) //4
@@ -40,7 +40,7 @@ class LayoutTest : IntegrationTest() {
         val cols1List = row1.cols
         assertEquals(2, cols1List.size) //7
         val cslBody = cols1List[0]
-        val clBody = cslBody.col
+        val clBody = cslBody.col.first()
         assertNotNull(clBody)  //8
         assertEquals(6, clBody.span as Int)  //9
         val fslList = clBody.fieldSet
@@ -58,7 +58,7 @@ class LayoutTest : IntegrationTest() {
 
         // Description
         val descCslBody = cols1List[1]
-        val descClBody = descCslBody.col
+        val descClBody = descCslBody.col.first()
         assertNotNull(descClBody)  //14
         assertEquals(6, descClBody.span as Int)  //15
         val descFslList = descClBody.fieldSet
@@ -103,7 +103,7 @@ class LayoutTest : IntegrationTest() {
         console.log(row0)
         val cols00 = row0.cols[0]
         console.log(cols00)
-        val col000 = cols00.col
+        val col000 = cols00.col.first()
         console.log(col000)
         val action = col000!!.action
         // then

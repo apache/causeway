@@ -10,7 +10,7 @@ class ColsBuilder {
 
     fun create(colsLayout: ColsLayout, tObject: TObject, dsp: RoDisplay): SimplePanel {
         val result = VPanel()
-        val b = ColBuilder().create(colsLayout.col!!, tObject, dsp)
+        val b = ColBuilder().create(colsLayout.col!!.first(), tObject, dsp)
         result.add(b)
         return result
     }

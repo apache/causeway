@@ -153,7 +153,7 @@ Kotlin is straightforward and once you now it, you may not want to go back.
 ![Preview](./dev-mindmap.png)
 
 ## Visualize JSON
-See [json-to-plantul](https://github.com/meteorbites/json-to-plantuml)
+See [json-to-plantuml](https://github.com/meteorbites/json-to-plantuml)
 ```
 npm install -g json-to-plantuml
 

@@ -20,7 +20,7 @@ data class Layout(val cssClass: String? = null,
         // row[1] contains data, tabs, collections, etc.
         val secondRow = row[1] // traditional C braintwist
         var colsLyt = secondRow.cols.first()
-        var colLyt = colsLyt.col
+        var colLyt = colsLyt.col.first()
         if (colLyt != null) {
             val tgLyts = colLyt.tabGroup
             if (tgLyts.isNotEmpty()) {
@@ -30,7 +30,7 @@ data class Layout(val cssClass: String? = null,
                 colsLyt = row.cols.first()
             }
         }
-        colLyt = colsLyt.col!!
+        colLyt = colsLyt.col!!.first()
         val fsList = colLyt.fieldSet
         if (fsList.isNotEmpty()) {
             val fsLyt = fsList.first()
