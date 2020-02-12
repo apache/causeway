@@ -40,6 +40,7 @@ import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.menubars.MenuBarsResource;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
+import org.apache.isis.viewer.restfulobjects.viewer.context.ResourceContext;
 
 import lombok.val;
 
@@ -61,17 +62,16 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_LAYOUT_MENUBARS
     })
     public Response menuBars() {
-        init(RepresentationType.MENUBARS, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
+        
+        val resourceContext = createResourceContext(
+                RepresentationType.MENUBARS, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        val serializationStrategy = getResourceContext().getSerializationStrategy();
-
+        val serializationStrategy = resourceContext.getSerializationStrategy();
+        val menuBarsService = metaModelContext.getServiceRegistry().lookupServiceElseFail(MenuBarsService.class);
+        
         final Response.ResponseBuilder builder;
-
-        final MenuBarsService menuBarsService =
-                getResourceContext().getServiceRegistry().lookupServiceElseFail(MenuBarsService.class);
-
         final MenuBars menuBars = menuBarsService.menuBars();
-        addLinksForServiceActions(menuBars);
+        addLinksForServiceActions(resourceContext, menuBars);
 
         builder = Response.status(Response.Status.OK)
                 .entity(serializationStrategy.entity(menuBars))
@@ -80,7 +80,7 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
         return builder.build();
     }
 
-    void addLinksForServiceActions(final MenuBars menuBars) {
+    void addLinksForServiceActions(final ResourceContext resourceContext, final MenuBars menuBars) {
         menuBars.visit(new MenuBars.Visitor() {
             @Override
             public void visit(final ServiceActionLayoutData actionLayoutData) {
@@ -91,7 +91,7 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
                 Link link = new Link(
                         Rel.ACTION.getName(),
                         HttpMethod.GET,
-                        getResourceContext().urlFor(relativeUrl),
+                        resourceContext.urlFor(relativeUrl),
                         RepresentationType.OBJECT_ACTION.getJsonMediaType().toString());
                 actionLayoutData.setLink(link);
             }

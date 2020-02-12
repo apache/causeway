@@ -100,9 +100,9 @@ class DomainObjectLayoutTest {
                 ResourceDescriptor
                 .of(RepresentationType.OBJECT_LAYOUT, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
         
-        domainObjectResourceServerside.initResourceContextForTesting(layoutResourceDescriptor, /*params*/null);
+        val resourceContext = domainObjectResourceServerside.resourceContextForTesting(layoutResourceDescriptor, /*params*/null);
         
-        val grid = (BS3Grid) domainObjectResourceServerside.layoutAsGrid(domainType, instanceId)
+        val grid = (BS3Grid) domainObjectResourceServerside.layoutAsGrid(resourceContext, domainType, instanceId)
                 .orElseThrow(_Exceptions::noSuchElement);
         
         System.out.println(grid.toString());

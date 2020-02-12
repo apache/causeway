@@ -72,6 +72,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplication
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberReprMode;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
+import org.apache.isis.viewer.restfulobjects.viewer.context.ResourceContext;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -102,7 +103,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     })
     public Response persist(@PathParam("domainType") String domainType, final InputStream object) {
 
-        init(RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS, RepresentationService.Intent.JUST_CREATED);
+        val resourceContext = createResourceContext(
+                RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS, RepresentationService.Intent.JUST_CREATED);
 
         final String objectStr = Util.asStringUtf8(object);
         final JsonRepresentation objectRepr = Util.readAsMap(objectStr);
@@ -117,7 +119,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         final ManagedObject adapter = ManagedObject._newTransientInstance(domainTypeSpec);
 
-        final ObjectAdapterUpdateHelper updateHelper = new ObjectAdapterUpdateHelper(getResourceContext(), adapter);
+        final ObjectAdapterUpdateHelper updateHelper = new ObjectAdapterUpdateHelper(resourceContext, adapter);
 
         final JsonRepresentation membersMap = objectRepr.getMap("members");
         if (membersMap == null) {
@@ -135,8 +137,9 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         ManagedObject._makePersistentInTransaction(adapter);
 
+        val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, adapter);
 
-        return newDomainResourceHelper(adapter).objectRepresentation();
+        return domainResourceHelper.objectRepresentation();
     }
 
 
@@ -153,11 +156,14 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response object(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId) {
-        init(RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
+        
+        val resourceContext = createResourceContext(
+                RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
 
-        final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
 
-        return newDomainResourceHelper(objectAdapter).objectRepresentation();
+        return domainResourceHelper.objectRepresentation();
     }
 
 
@@ -171,7 +177,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     })
     public Response object(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, final InputStream object) {
 
-        init(RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
+        val resourceContext = createResourceContext(
+                RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
 
         final String objectStr = Util.asStringUtf8(object);
         final JsonRepresentation argRepr = Util.readAsMap(objectStr);
@@ -179,8 +186,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Body is not a map; got %s", argRepr);
         }
 
-        final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-        final ObjectAdapterUpdateHelper updateHelper = new ObjectAdapterUpdateHelper(getResourceContext(), objectAdapter);
+        val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        final ObjectAdapterUpdateHelper updateHelper = new ObjectAdapterUpdateHelper(resourceContext, objectAdapter);
 
         if (!updateHelper.copyOverProperties(argRepr, ObjectAdapterUpdateHelper.Intent.UPDATE_EXISTING)) {
             throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, argRepr, "Illegal property value");
@@ -191,7 +198,9 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, argRepr, validity.getReason());
         }
 
-        return newDomainResourceHelper(objectAdapter).objectRepresentation();
+        val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
+        
+        return domainResourceHelper.objectRepresentation();
     }
 
     @Override
@@ -277,7 +286,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             @PathParam("instanceId")
             final String instanceId) {
 
-        init(RepresentationType.OBJECT_LAYOUT, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
+        createResourceContext(
+                RepresentationType.OBJECT_LAYOUT, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         final ObjectSpecification objectSpec = objectAdapter.getSpecification();
@@ -304,24 +314,26 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             @PathParam("instanceId")
             final String instanceId) {
 
-        init(RepresentationType.OBJECT_LAYOUT, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
+        val resourceContext = createResourceContext(
+                RepresentationType.OBJECT_LAYOUT, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final Response.ResponseBuilder responseBuilder = layoutAsGrid(domainType, instanceId)
+        return layoutAsGrid(resourceContext, domainType, instanceId)
             .map(grid->{
                 
-                val serializationStrategy = getResourceContext().getSerializationStrategy();
+                val serializationStrategy = resourceContext.getSerializationStrategy();
                 
                 return Response.status(Response.Status.OK)
                         .entity(serializationStrategy.entity(grid))
                         .type(serializationStrategy.type(RepresentationType.OBJECT_LAYOUT));
             })
-            .orElseGet(Responses::ofNotFound);
-
-        return responseBuilder.build();
+            .orElseGet(Responses::ofNotFound)
+            .build();
+        
     }
 
     // public ... for testing
     public Optional<Grid> layoutAsGrid(
+            final ResourceContext resourceContext,
             final String domainType,
             final String instanceId) {
 
@@ -333,11 +345,12 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         } 
         val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         val grid = gridFacet.getGrid(objectAdapter);
-        addLinks(domainType, instanceId, grid);
+        addLinks(resourceContext, domainType, instanceId, grid);
         return Optional.of(grid);
     }
 
     private void addLinks(
+            final ResourceContext resourceContext,
             final String domainType,
             final String instanceId,
             final Grid grid) {
@@ -348,7 +361,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
                 Link link = new Link(
                         Rel.ELEMENT.getName(),
                         HttpMethod.GET,
-                        getResourceContext().urlFor(
+                        resourceContext.urlFor(
                                 "objects/" + domainType + "/" + instanceId
                                 ),
                         RepresentationType.DOMAIN_OBJECT.getJsonMediaType().toString());
@@ -360,7 +373,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
                 Link link = new Link(
                         Rel.ACTION.getName(),
                         HttpMethod.GET,
-                        getResourceContext().urlFor(
+                        resourceContext.urlFor(
                                 "objects/" + domainType + "/" + instanceId + "/actions/" + actionLayoutData.getId()
                                 ),
                         RepresentationType.OBJECT_ACTION.getJsonMediaType().toString());
@@ -372,7 +385,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
                 Link link = new Link(
                         Rel.PROPERTY.getName(),
                         HttpMethod.GET,
-                        getResourceContext().urlFor(
+                        resourceContext.urlFor(
                                 "objects/" + domainType + "/" + instanceId + "/properties/" + propertyLayoutData.getId()
                                 ),
                         RepresentationType.OBJECT_PROPERTY.getJsonMediaType().toString());
@@ -384,7 +397,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
                 Link link = new Link(
                         Rel.COLLECTION.getName(),
                         HttpMethod.GET,
-                        getResourceContext().urlFor(
+                        resourceContext.urlFor(
                                 "objects/" + domainType + "/" + instanceId + "/collections/" + collectionLayoutData.getId()
                                 ),
                         RepresentationType.OBJECT_COLLECTION.getJsonMediaType().toString());
@@ -406,12 +419,14 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response propertyDetails(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId) {
-        init(RepresentationType.OBJECT_PROPERTY, Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE);
+        
+        val resourceContext = createResourceContext(
+                RepresentationType.OBJECT_PROPERTY, Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-        final DomainResourceHelper helper = newDomainResourceHelper(objectAdapter);
+        val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
 
-        return helper.propertyDetails(
+        return domainResourceHelper.propertyDetails(
                 propertyId,
                 MemberReprMode.READ
                 );
@@ -427,13 +442,14 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     })
     public Response modifyProperty(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId, final InputStream body) {
         
-        init(ResourceDescriptor.generic(Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE));
+        val resourceContext = createResourceContext(
+                ResourceDescriptor.generic(Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE));
 
         setCommandExecutor(Command.Executor.USER);
 
-        final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-        final DomainResourceHelper helper = newDomainResourceHelper(objectAdapter);
-        final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(getResourceContext(), objectAdapter);
+        val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
+        final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
 
         final OneToOneAssociation property = accessHelper.getPropertyThatIsVisibleForIntent(propertyId,
                 ObjectAdapterAccessHelper.Intent.MUTATE);
@@ -441,7 +457,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final ObjectSpecification propertySpec = property.getSpecification();
         final String bodyAsString = Util.asStringUtf8(body);
 
-        final ManagedObject argAdapter = new JsonParserHelper(getResourceContext(), propertySpec).parseAsMapWithSingleValue(
+        final ManagedObject argAdapter = new JsonParserHelper(resourceContext, propertySpec).parseAsMapWithSingleValue(
                 bodyAsString);
 
         final Consent consent = property.isAssociationValid(objectAdapter, argAdapter, InteractionInitiatedBy.USER);
@@ -451,7 +467,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         property.set(objectAdapter, argAdapter, InteractionInitiatedBy.USER);
 
-        return helper.propertyDetails(
+        return domainResourceHelper.propertyDetails(
                 propertyId,
                 MemberReprMode.WRITE
                 );
@@ -467,13 +483,14 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     })
     public Response clearProperty(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId) {
         
-        init(ResourceDescriptor.generic(Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE));
+        val resourceContext = createResourceContext(
+                ResourceDescriptor.generic(Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE));
 
         setCommandExecutor(Command.Executor.USER);
 
-        final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-        final DomainResourceHelper helper = newDomainResourceHelper(objectAdapter);
-        final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(getResourceContext(), objectAdapter);
+        val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
+        val accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
 
         final OneToOneAssociation property = accessHelper.getPropertyThatIsVisibleForIntent(
                 propertyId, ObjectAdapterAccessHelper.Intent.MUTATE);
@@ -485,7 +502,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         property.set(objectAdapter, null, InteractionInitiatedBy.USER);
 
-        return helper.propertyDetails(
+        return domainResourceHelper.propertyDetails(
                 propertyId,
                 MemberReprMode.WRITE
                 );
@@ -509,11 +526,15 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response accessCollection(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId) {
-        init(RepresentationType.OBJECT_COLLECTION, Where.PARENTED_TABLES, RepresentationService.Intent.NOT_APPLICABLE);
+        
+        val resourceContext = createResourceContext(
+                RepresentationType.OBJECT_COLLECTION, Where.PARENTED_TABLES, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
 
-        return newDomainResourceHelper(objectAdapter).collectionDetails(collectionId, MemberReprMode.READ);
+        
+        return domainResourceHelper.collectionDetails(collectionId, MemberReprMode.READ);
     }
 
     @Override
@@ -526,11 +547,12 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     })
     public Response addToSet(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId, final InputStream body) {
         
-        init(ResourceDescriptor.generic(Where.PARENTED_TABLES, RepresentationService.Intent.NOT_APPLICABLE));
+        val resourceContext = createResourceContext(
+                ResourceDescriptor.generic(Where.PARENTED_TABLES, RepresentationService.Intent.NOT_APPLICABLE));
 
-        final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-        final DomainResourceHelper helper = newDomainResourceHelper(objectAdapter);
-        final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(getResourceContext(), objectAdapter);
+        val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
+        final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
 
         final OneToManyAssociation collection = accessHelper.getCollectionThatIsVisibleForIntent(
                 collectionId, ObjectAdapterAccessHelper.Intent.MUTATE);
@@ -541,8 +563,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         final ObjectSpecification collectionSpec = collection.getSpecification();
         final String bodyAsString = Util.asStringUtf8(body);
-        final ManagedObject argAdapter = new JsonParserHelper(getResourceContext(), collectionSpec).parseAsMapWithSingleValue(
-                bodyAsString);
+        final ManagedObject argAdapter = new JsonParserHelper(resourceContext, collectionSpec)
+                .parseAsMapWithSingleValue(bodyAsString);
 
         final Consent consent = collection.isValidToAdd(objectAdapter, argAdapter, InteractionInitiatedBy.USER);
         if (consent.isVetoed()) {
@@ -551,7 +573,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         collection.addElement(objectAdapter, argAdapter, InteractionInitiatedBy.USER);
 
-        return helper.collectionDetails(collectionId, MemberReprMode.WRITE);
+        return domainResourceHelper.collectionDetails(collectionId, MemberReprMode.WRITE);
     }
 
     @Override
@@ -564,11 +586,12 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     })
     public Response addToList(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId, final InputStream body) {
         
-        init(ResourceDescriptor.generic(Where.PARENTED_TABLES, RepresentationService.Intent.NOT_APPLICABLE));
+        val resourceContext = createResourceContext(
+                ResourceDescriptor.generic(Where.PARENTED_TABLES, RepresentationService.Intent.NOT_APPLICABLE));
 
-        final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-        final DomainResourceHelper helper = newDomainResourceHelper(objectAdapter);
-        final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(getResourceContext(), objectAdapter);
+        val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
+        final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
 
         final OneToManyAssociation collection = accessHelper.getCollectionThatIsVisibleForIntent(
                 collectionId, ObjectAdapterAccessHelper.Intent.MUTATE);
@@ -579,7 +602,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         final ObjectSpecification collectionSpec = collection.getSpecification();
         final String bodyAsString = Util.asStringUtf8(body);
-        final ManagedObject argAdapter = new JsonParserHelper(getResourceContext(), collectionSpec).parseAsMapWithSingleValue(
+        final ManagedObject argAdapter = new JsonParserHelper(resourceContext, collectionSpec).parseAsMapWithSingleValue(
                 bodyAsString);
 
         final Consent consent = collection.isValidToAdd(objectAdapter, argAdapter, InteractionInitiatedBy.USER);
@@ -589,7 +612,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         collection.addElement(objectAdapter, argAdapter, InteractionInitiatedBy.USER);
 
-        return helper.collectionDetails(collectionId, MemberReprMode.WRITE);
+        return domainResourceHelper.collectionDetails(collectionId, MemberReprMode.WRITE);
     }
 
     @Override
@@ -602,18 +625,19 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     })
     public Response removeFromCollection(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId) {
         
-        init(ResourceDescriptor.generic(Where.PARENTED_TABLES, RepresentationService.Intent.NOT_APPLICABLE));
+        val resourceContext = createResourceContext(
+                ResourceDescriptor.generic(Where.PARENTED_TABLES, RepresentationService.Intent.NOT_APPLICABLE));
 
-        final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-        final DomainResourceHelper helper = newDomainResourceHelper(objectAdapter);
-        final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(getResourceContext(), objectAdapter);
+        val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
+        final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
 
         final OneToManyAssociation collection = accessHelper.getCollectionThatIsVisibleForIntent(
                 collectionId, ObjectAdapterAccessHelper.Intent.MUTATE);
 
         final ObjectSpecification collectionSpec = collection.getSpecification();
-        final ManagedObject argAdapter = new JsonParserHelper(getResourceContext(), collectionSpec).parseAsMapWithSingleValue(
-                getResourceContext().getUrlUnencodedQueryString());
+        final ManagedObject argAdapter = new JsonParserHelper(resourceContext, collectionSpec)
+                .parseAsMapWithSingleValue(resourceContext.getUrlUnencodedQueryString());
 
         final Consent consent = collection.isValidToRemove(objectAdapter, argAdapter, InteractionInitiatedBy.USER);
         if (consent.isVetoed()) {
@@ -622,7 +646,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         collection.removeElement(objectAdapter, argAdapter, InteractionInitiatedBy.USER);
 
-        return helper.collectionDetails(collectionId, MemberReprMode.WRITE);
+        return domainResourceHelper.collectionDetails(collectionId, MemberReprMode.WRITE);
     }
 
     // //////////////////////////////////////////////////////////
@@ -638,12 +662,14 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response actionPrompt(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId) {
-        init(RepresentationType.OBJECT_ACTION, Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE);
+        
+        val resourceContext = createResourceContext(
+                RepresentationType.OBJECT_ACTION, Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-        final DomainResourceHelper helper = newDomainResourceHelper(objectAdapter);
+        val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
 
-        return helper.actionPrompt(actionId);
+        return domainResourceHelper.actionPrompt(actionId);
     }
 
     @Override
@@ -681,18 +707,18 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         final String urlUnencodedQueryString = UrlDecoderUtil
                 .urlDecodeNullSafe(xIsisUrlEncodedQueryString != null? xIsisUrlEncodedQueryString: httpServletRequest.getQueryString());
-        init(
+        val resourceContext = createResourceContext(
                 ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
                 urlUnencodedQueryString);
 
         setCommandExecutor(Command.Executor.USER);
 
-        final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
+        final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
 
-        final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-        final DomainResourceHelper helper = newDomainResourceHelper(objectAdapter);
+        val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
 
-        return helper.invokeActionQueryOnly(actionId, arguments);
+        return domainResourceHelper.invokeActionQueryOnly(actionId, arguments);
     }
 
     @Override
@@ -709,18 +735,18 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             final @PathParam("actionId") String actionId,
             final InputStream body) {
 
-        init(
+        val resourceContext = createResourceContext(
                 ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
                 body);
 
         setCommandExecutor(Command.Executor.USER);
 
-        final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
+        final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
 
-        final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-        final DomainResourceHelper helper = newDomainResourceHelper(objectAdapter);
+        val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
 
-        return helper.invokeActionIdempotent(actionId, arguments);
+        return domainResourceHelper.invokeActionIdempotent(actionId, arguments);
     }
 
     @Override
@@ -737,29 +763,23 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             @PathParam("actionId") final String actionId,
             final InputStream body) {
         
-        init(
+        val resourceContext = createResourceContext(
                 ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
                 body);
 
         setCommandExecutor(Command.Executor.USER);
 
-        final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
+        final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
 
-        final ManagedObject objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-        final DomainResourceHelper helper = newDomainResourceHelper(objectAdapter);
+        val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
 
-        return helper.invokeAction(actionId, arguments);
+        return domainResourceHelper.invokeAction(actionId, arguments);
     }
 
     @Override
     public Response deleteInvokeActionNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") String instanceId, @PathParam("actionId") String actionId) {
         throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting an action invocation resource is not allowed.");
     }
-
-
-    private DomainResourceHelper newDomainResourceHelper(final ManagedObject objectAdapter) {
-        return DomainResourceHelper.ofObjectResource(getResourceContext(), objectAdapter);
-    }
-
 
 }

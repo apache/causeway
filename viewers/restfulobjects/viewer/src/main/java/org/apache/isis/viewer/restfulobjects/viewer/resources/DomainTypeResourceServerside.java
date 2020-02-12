@@ -92,11 +92,12 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_LIST })
     public Response domainTypes() {
 
-        init(RepresentationType.TYPE_LIST, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
+        val resourceContext = createResourceContext(
+                RepresentationType.TYPE_LIST, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         final Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().snapshotSpecifications();
 
-        final TypeListReprRenderer renderer = new TypeListReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final TypeListReprRenderer renderer = new TypeListReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.with(allSpecifications).includesSelf();
 
         return Responses.ofOk(renderer, Caching.ONE_DAY).build();
@@ -108,11 +109,12 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE })
     public Response domainType(@PathParam("domainType") final String domainType) {
 
-        init(RepresentationType.DOMAIN_TYPE, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
+        val resourceContext = createResourceContext(
+                RepresentationType.DOMAIN_TYPE, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         val objectSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
 
-        final DomainTypeReprRenderer renderer = new DomainTypeReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final DomainTypeReprRenderer renderer = new DomainTypeReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.with(objectSpec).includesSelf();
 
         return Responses.ofOk(renderer, Caching.ONE_DAY).build();
@@ -127,9 +129,10 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     })
     public Response layout(@PathParam("domainType") final String domainType) {
 
-        init(RepresentationType.LAYOUT, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
+        val resourceContext = createResourceContext(
+                RepresentationType.LAYOUT, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
         
-        val serializationStrategy = getResourceContext().getSerializationStrategy();
+        val serializationStrategy = resourceContext.getSerializationStrategy();
 
         val objectSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
         final GridFacet gridFacet = objectSpec.getFacet(GridFacet.class);
@@ -153,7 +156,8 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_PROPERTY_DESCRIPTION })
     public Response typeProperty(@PathParam("domainType") final String domainType, @PathParam("propertyId") final String propertyId) {
 
-        init(RepresentationType.PROPERTY_DESCRIPTION, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
+        val resourceContext = createResourceContext(
+                RepresentationType.PROPERTY_DESCRIPTION, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         val parentSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
         if (parentSpec == null) {
@@ -168,7 +172,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         }
         final OneToOneAssociation property = (OneToOneAssociation) objectMember;
 
-        final PropertyDescriptionReprRenderer renderer = new PropertyDescriptionReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final PropertyDescriptionReprRenderer renderer = new PropertyDescriptionReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.with(new ParentSpecAndProperty(parentSpec, property)).includesSelf();
 
         return Responses.ofOk(renderer, Caching.ONE_DAY).build();
@@ -180,7 +184,8 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_COLLECTION_DESCRIPTION })
     public Response typeCollection(@PathParam("domainType") final String domainType, @PathParam("collectionId") final String collectionId) {
         
-        init(RepresentationType.COLLECTION_DESCRIPTION, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
+        val resourceContext = createResourceContext(
+                RepresentationType.COLLECTION_DESCRIPTION, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         val parentSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
         if (parentSpec == null) {
@@ -195,7 +200,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         }
         final OneToManyAssociation collection = (OneToManyAssociation) objectMember;
 
-        final CollectionDescriptionReprRenderer renderer = new CollectionDescriptionReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final CollectionDescriptionReprRenderer renderer = new CollectionDescriptionReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.with(new ParentSpecAndCollection(parentSpec, collection)).includesSelf();
 
         return Responses.ofOk(renderer, Caching.ONE_DAY).build();
@@ -207,7 +212,8 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_DESCRIPTION })
     public Response typeAction(@PathParam("domainType") final String domainType, @PathParam("actionId") final String actionId) {
         
-        init(RepresentationType.ACTION_DESCRIPTION, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
+        val resourceContext = createResourceContext(
+                RepresentationType.ACTION_DESCRIPTION, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         val parentSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
         if (parentSpec == null) {
@@ -217,7 +223,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         val action = parentSpec.getObjectAction(actionId)
                 .orElseThrow(()->RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
         
-        final ActionDescriptionReprRenderer renderer = new ActionDescriptionReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final ActionDescriptionReprRenderer renderer = new ActionDescriptionReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.with(new ParentSpecAndAction(parentSpec, action)).includesSelf();
 
         return Responses.ofOk(renderer, Caching.ONE_DAY).build();
@@ -229,7 +235,8 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION })
     public Response typeActionParam(@PathParam("domainType") final String domainType, @PathParam("actionId") final String actionId, @PathParam("paramName") final String paramName) {
 
-        init(RepresentationType.ACTION_PARAMETER_DESCRIPTION, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
+        val resourceContext = createResourceContext(
+                RepresentationType.ACTION_PARAMETER_DESCRIPTION, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         val parentSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
         if (parentSpec == null) {
@@ -241,7 +248,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         
         final ObjectActionParameter actionParam = parentAction.getParameterByName(paramName);
 
-        final ActionParameterDescriptionReprRenderer renderer = new ActionParameterDescriptionReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final ActionParameterDescriptionReprRenderer renderer = new ActionParameterDescriptionReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.with(new ParentSpecAndActionParam(parentSpec, actionParam)).includesSelf();
 
         return Responses.ofOk(renderer, Caching.ONE_DAY).build();
@@ -261,18 +268,19 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
             @QueryParam("args") final String argsUrlEncoded // formal style
             ) {
         
-        init(ResourceDescriptor.generic(Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE));
+        val resourceContext = createResourceContext(
+                ResourceDescriptor.generic(Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE));
 
         final String supertype = domainTypeFor(superTypeStr, argsUrlEncoded, "supertype");
 
         val domainTypeSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
         val supertypeSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(supertype));
 
-        final TypeActionResultReprRenderer renderer = new TypeActionResultReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final TypeActionResultReprRenderer renderer = new TypeActionResultReprRenderer(resourceContext, null, JsonRepresentation.newMap());
 
         final String url = "domain-types/" + domainType + "/type-actions/isSubtypeOf/invoke";
-        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.SELF.getName(), RepresentationType.TYPE_ACTION_RESULT, url);
-        final JsonRepresentation arguments = DomainTypeReprRenderer.argumentsTo(getResourceContext(), "supertype", supertypeSpec);
+        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(resourceContext, Rel.SELF.getName(), RepresentationType.TYPE_ACTION_RESULT, url);
+        final JsonRepresentation arguments = DomainTypeReprRenderer.argumentsTo(resourceContext, "supertype", supertypeSpec);
         final JsonRepresentation selfLink = linkBuilder.withArguments(arguments).build();
 
         final boolean value = domainTypeSpec.isOfType(supertypeSpec);
@@ -292,18 +300,19 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
             @QueryParam("args") final String argsUrlEncoded // formal style
             ) {
 
-        init(ResourceDescriptor.generic(Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE));
+        val resourceContext = createResourceContext(
+                ResourceDescriptor.generic(Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE));
 
         final String subtype = domainTypeFor(subTypeStr, argsUrlEncoded, "subtype");
 
         val domainTypeSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
         val subtypeSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(subtype));
 
-        final TypeActionResultReprRenderer renderer = new TypeActionResultReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final TypeActionResultReprRenderer renderer = new TypeActionResultReprRenderer(resourceContext, null, JsonRepresentation.newMap());
 
         final String url = "domain-types/" + domainType + "/type-actions/isSupertypeOf/invoke";
-        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.SELF.getName(), RepresentationType.TYPE_ACTION_RESULT, url);
-        final JsonRepresentation arguments = DomainTypeReprRenderer.argumentsTo(getResourceContext(), "subtype", subtypeSpec);
+        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(resourceContext, Rel.SELF.getName(), RepresentationType.TYPE_ACTION_RESULT, url);
+        final JsonRepresentation arguments = DomainTypeReprRenderer.argumentsTo(resourceContext, "subtype", subtypeSpec);
         final JsonRepresentation selfLink = linkBuilder.withArguments(arguments).build();
 
         final boolean value = subtypeSpec.isOfType(domainTypeSpec);

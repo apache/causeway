@@ -85,14 +85,16 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Path("/")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response services() {
-        init(RepresentationType.LIST, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE);
+        
+        val resourceContext = createResourceContext(
+                RepresentationType.LIST, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE);
 
-        val metaModelContext = super.getResourceContext().getMetaModelContext();
-
+        val metaModelContext = resourceContext.getMetaModelContext();
+        
         final Stream<ManagedObject> serviceAdapters = metaModelContext.streamServiceAdapters()
                 .filter(NATURE_REST_ALSO);
 
-        final DomainServicesListReprRenderer renderer = new DomainServicesListReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final DomainServicesListReprRenderer renderer = new DomainServicesListReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.usingLinkToBuilder(new DomainServiceLinkTo())
         .includesSelf()
         .with(serviceAdapters);
@@ -127,11 +129,13 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response service(@PathParam("serviceId") final String serviceId) {
-        init(RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
+        
+        val resourceContext = createResourceContext(
+                RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
 
-        final ManagedObject serviceAdapter = getServiceAdapter(serviceId);
+        val serviceAdapter = getServiceAdapter(serviceId);
 
-        final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.usingLinkToBuilder(new DomainServiceLinkTo())
         .with(serviceAdapter)
         .includesSelf();
@@ -167,12 +171,14 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response actionPrompt(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId) {
-        init(RepresentationType.OBJECT_ACTION, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
+        
+        val resourceContext = createResourceContext(
+                RepresentationType.OBJECT_ACTION, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
 
-        final ManagedObject serviceAdapter = getServiceAdapter(serviceId);
-        final DomainResourceHelper helper = newDomainResourceHelper(serviceAdapter);
+        val serviceAdapter = getServiceAdapter(serviceId);
+        val domainResourceHelper = DomainResourceHelper.ofServiceResource(resourceContext, serviceAdapter);
 
-        return helper.actionPrompt(actionId);
+        return domainResourceHelper.actionPrompt(actionId);
     }
 
     @Override
@@ -208,18 +214,18 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
 
         final String urlUnencodedQueryString = UrlDecoderUtil
                 .urlDecodeNullSafe(xIsisUrlEncodedQueryString != null? xIsisUrlEncodedQueryString: httpServletRequest.getQueryString());
-        init(
+        val resourceContext = createResourceContext(
                 ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
                 urlUnencodedQueryString);
 
         setCommandExecutor(Command.Executor.USER);
 
-        final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
+        final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
 
-        final ManagedObject serviceAdapter = getServiceAdapter(serviceId);
-        final DomainResourceHelper helper = newDomainResourceHelper(serviceAdapter);
+        val serviceAdapter = getServiceAdapter(serviceId);
+        val domainResourceHelper = DomainResourceHelper.ofServiceResource(resourceContext, serviceAdapter);
 
-        return helper.invokeActionQueryOnly(actionId, arguments);
+        return domainResourceHelper.invokeActionQueryOnly(actionId, arguments);
     }
 
 
@@ -236,18 +242,18 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
             final @PathParam("actionId") String actionId,
             final InputStream body) {
         
-        init(
+        val resourceContext = createResourceContext(
                 ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
                 body);
 
         setCommandExecutor(Command.Executor.USER);
 
-        final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
+        final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
 
-        final ManagedObject serviceAdapter = getServiceAdapter(serviceId);
-        final DomainResourceHelper helper = newDomainResourceHelper(serviceAdapter);
+        val serviceAdapter = getServiceAdapter(serviceId);
+        val domainResourceHelper = DomainResourceHelper.ofServiceResource(resourceContext, serviceAdapter);
 
-        return helper.invokeActionIdempotent(actionId, arguments);
+        return domainResourceHelper.invokeActionIdempotent(actionId, arguments);
     }
 
     @Override
@@ -260,29 +266,24 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     })
     public Response invokeAction(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, final InputStream body) {
         
-        init(
+        val resourceContext = createResourceContext(
                 ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
                 body);
 
         setCommandExecutor(Command.Executor.USER);
 
-        final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
+        final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
 
-        final ManagedObject serviceAdapter = getServiceAdapter(serviceId);
-        final DomainResourceHelper helper = newDomainResourceHelper(serviceAdapter);
+        val serviceAdapter = getServiceAdapter(serviceId);
+        val domainResourceHelper = DomainResourceHelper.ofServiceResource(resourceContext, serviceAdapter);
 
-        return helper.invokeAction(actionId, arguments);
+        return domainResourceHelper.invokeAction(actionId, arguments);
     }
 
     @Override
     public Response deleteInvokeActionNotAllowed(@PathParam("serviceId") String serviceId, @PathParam("actionId") String actionId) {
         throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting an action invocation resource is not allowed.");
     }
-
-    private DomainResourceHelper newDomainResourceHelper(final ManagedObject serviceAdapter) {
-        return DomainResourceHelper.ofServiceResource(getResourceContext(), serviceAdapter);
-    }
-
 
 
 

@@ -43,6 +43,9 @@ import org.apache.isis.viewer.restfulobjects.rendering.Caching;
 import org.apache.isis.viewer.restfulobjects.rendering.Responses;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
+import org.apache.isis.viewer.restfulobjects.viewer.context.ResourceContext;
+
+import lombok.val;
 
 /**
  * Implementation note: it seems to be necessary to annotate the implementation
@@ -64,10 +67,12 @@ public class VersionResourceServerside extends ResourceAbstract implements Versi
     @GET
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_VERSION })
     public Response version() {
-        init(RepresentationType.VERSION, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
-        fakeRuntimeExceptionIfXFail();
+        
+        val resourceContext = createResourceContext(
+                RepresentationType.VERSION, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
+        fakeRuntimeExceptionIfXFail(resourceContext);
 
-        final VersionReprRenderer renderer = new VersionReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final VersionReprRenderer renderer = new VersionReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.includesSelf();
 
         return Responses.ofOk(renderer, Caching.ONE_DAY).build();
@@ -88,8 +93,8 @@ public class VersionResourceServerside extends ResourceAbstract implements Versi
         throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Posting to the version resource is not allowed.");
     }
 
-    private void fakeRuntimeExceptionIfXFail() {
-        final HttpHeaders httpHeaders = getResourceContext().getHttpHeaders();
+    private void fakeRuntimeExceptionIfXFail(ResourceContext resourceContext) {
+        final HttpHeaders httpHeaders = resourceContext.getHttpHeaders();
         final List<String> requestHeader = httpHeaders.getRequestHeader("X-Fail");
         if (requestHeader != null && !requestHeader.isEmpty()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.METHOD_FAILURE);

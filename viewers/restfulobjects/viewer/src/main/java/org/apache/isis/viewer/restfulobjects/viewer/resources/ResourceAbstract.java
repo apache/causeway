@@ -68,8 +68,6 @@ public abstract class ResourceAbstract {
     @Context SecurityContext securityContext;
     @Context Providers providers;
 
-    private ResourceContext resourceContext;
-
     @Inject
     protected ResourceAbstract(
             final MetaModelContext metaModelContext,
@@ -78,34 +76,31 @@ public abstract class ResourceAbstract {
         this.metaModelContext = metaModelContext;
         this.isisConfiguration = isisConfiguration;
     }
+    
+    // -- FACTORIES
 
-    protected void init(
+    protected ResourceContext createResourceContext(
             final RepresentationType representationType,
             final Where where,
             final RepresentationService.Intent intent) {
         
-        init(ResourceDescriptor.of(representationType, where, intent));
+        return createResourceContext(ResourceDescriptor.of(representationType, where, intent));
     }
     
-    protected void init(final ResourceDescriptor resourceDescriptor) {
+    protected ResourceContext createResourceContext(final ResourceDescriptor resourceDescriptor) {
         String queryStringIfAny = getUrlDecodedQueryStringIfAny();
-        init(resourceDescriptor, queryStringIfAny);
+        return createResourceContext(resourceDescriptor, queryStringIfAny);
     }
 
-    private String getUrlDecodedQueryStringIfAny() {
-        final String queryStringIfAny = httpServletRequest.getQueryString();
-        return UrlDecoderUtil.urlDecodeNullSafe(queryStringIfAny);
-    }
-
-    protected void init(
+    protected ResourceContext createResourceContext(
             final ResourceDescriptor resourceDescriptor,
             final InputStream arguments) {
         
         final String urlDecodedQueryString = Util.asStringUtf8(arguments);
-        init(resourceDescriptor, urlDecodedQueryString);
+        return createResourceContext(resourceDescriptor, urlDecodedQueryString);
     }
 
-    protected void init(
+    protected ResourceContext createResourceContext(
             final ResourceDescriptor resourceDescriptor,
             final String urlUnencodedQueryString) {
         
@@ -119,22 +114,20 @@ public abstract class ResourceAbstract {
         final String baseUri = isisConfiguration.getViewer().getRestfulobjects().getBaseUri()
                                     .orElse(uriInfo.getBaseUri().toString());
 
-        this.resourceContext = resourceContext(
+        return resourceContext(
                 resourceDescriptor, baseUri, urlUnencodedQueryString, httpServletRequest.getParameterMap());
     }
 
-    protected ResourceContext getResourceContext() {
-        return resourceContext;
-    }
-    
-    public void initResourceContextForTesting(
+    public ResourceContext resourceContextForTesting(
             final ResourceDescriptor resourceDescriptor, 
             final Map<String, String[]> requestParams) {
         
-        this.resourceContext = resourceContext(
+        return resourceContext(
                 resourceDescriptor, "/restful", /*urlUnencodedQueryString*/ null, requestParams);
     }
 
+    // --
+    
     protected void setCommandExecutor(Command.Executor executor) {
         metaModelContext.getServiceRegistry()
         .lookupServiceElseFail(CommandContext.class).getCommand().internal().setExecutor(executor);
@@ -166,6 +159,11 @@ public abstract class ResourceAbstract {
     }
     
     // -- HELPER 
+    
+    private String getUrlDecodedQueryStringIfAny() {
+        final String queryStringIfAny = httpServletRequest.getQueryString();
+        return UrlDecoderUtil.urlDecodeNullSafe(queryStringIfAny);
+    }
     
     private ResourceContext resourceContext(
             final ResourceDescriptor resourceDescriptor,

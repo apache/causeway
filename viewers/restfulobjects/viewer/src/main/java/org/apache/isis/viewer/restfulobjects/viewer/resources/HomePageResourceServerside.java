@@ -41,6 +41,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.Responses;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 
+import lombok.val;
+
 @Component
 public class HomePageResourceServerside extends ResourceAbstract implements HomePageResource {
 
@@ -54,12 +56,14 @@ public class HomePageResourceServerside extends ResourceAbstract implements Home
     @Override
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
     public Response homePage() {
-        init(RepresentationType.HOME_PAGE, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
+        
+        val resourceContext = createResourceContext(
+                RepresentationType.HOME_PAGE, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final HomePageReprRenderer renderer = new HomePageReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
-        renderer.includesSelf();
+        val homePageReprRenderer = new HomePageReprRenderer(resourceContext, null, JsonRepresentation.newMap());
+        homePageReprRenderer.includesSelf();
 
-        return Responses.ofOk(renderer, Caching.ONE_DAY).build();
+        return Responses.ofOk(homePageReprRenderer, Caching.ONE_DAY).build();
     }
 
     @Override

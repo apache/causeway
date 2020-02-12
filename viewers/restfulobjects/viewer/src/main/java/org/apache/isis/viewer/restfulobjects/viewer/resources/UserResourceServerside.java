@@ -42,6 +42,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplication
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.IsisRestfulObjectsSessionFilter;
 
+import lombok.val;
+
 @Component
 public class UserResourceServerside extends ResourceAbstract implements UserResource {
 
@@ -55,10 +57,12 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
     @Override
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_USER })
     public Response user() {
-        init(RepresentationType.USER, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
+        
+        val resourceContext = createResourceContext(
+                RepresentationType.USER, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final UserReprRenderer renderer = new UserReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
-        renderer.includesSelf().with(getResourceContext().getAuthenticationSession());
+        final UserReprRenderer renderer = new UserReprRenderer(resourceContext, null, JsonRepresentation.newMap());
+        renderer.includesSelf().with(resourceContext.getAuthenticationSession());
 
         return Responses.ofOk(renderer, Caching.ONE_HOUR).build();
     }
@@ -86,12 +90,14 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
     @Override
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
     public Response logout() {
-        init(RepresentationType.HOME_PAGE, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
+        
+        val resourceContext = createResourceContext(
+                RepresentationType.HOME_PAGE, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final HomePageReprRenderer renderer = new HomePageReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final HomePageReprRenderer renderer = new HomePageReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.includesSelf();
 
-        getResourceContext().logoutAuthenticationSession();
+        resourceContext.logoutAuthenticationSession();
 
         // we also redirect to home page with special query string; this allows the session filter
         // to clear out any cookies/headers (eg if BASIC auth in use).
