@@ -32,6 +32,7 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser.AddRoleDomainEvent;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Action(domainEvent = AddRoleDomainEvent.class, associateWith = "roles")
 @ActionLayout(named="Add")
@@ -49,8 +50,8 @@ public class ApplicationUser_addRole {
     }
 
     public SortedSet<ApplicationRole> choices0Act() {
-        final java.util.Collection<ApplicationRole> allRoles = applicationRoleRepository.allRoles();
-        final SortedSet<ApplicationRole> applicationRoles = _Sets.newTreeSet(allRoles);
+        val allRoles = applicationRoleRepository.allRoles();
+        val applicationRoles = _Sets.newTreeSet(allRoles);
         applicationRoles.removeAll(holder.getRoles());
         return applicationRoles;
     }

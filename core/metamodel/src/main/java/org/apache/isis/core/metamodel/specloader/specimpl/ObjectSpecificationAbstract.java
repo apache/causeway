@@ -462,32 +462,43 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * spec2.isOfType(spec1);
      * </pre>
      *
+     * @return whether {@code other} is assignable from {@code this}
+     *
      */
     @Override
-    public boolean isOfType(final ObjectSpecification specification) {
+    public boolean isOfType(final ObjectSpecification other) {
+        
         // do the comparison using value types because of a possible aliasing/race condition
         // in matchesParameterOf when building up contributed associations
-        if (specification.getSpecId().equals(this.getSpecId())) {
+        if (other.getSpecId().equals(this.getSpecId())) {
             return true;
         }
-        for (val interfaceSpec : interfaces()) {
-            if (interfaceSpec.isOfType(specification)) {
-                return true;
-            }
-        }
-
-        // this is a bit of a workaround; the metamodel doesn't have the interfaces for enums.
-        val correspondingClass = getCorrespondingClass();
-        val possibleSupertypeClass = specification.getCorrespondingClass();
-        if(correspondingClass != null && possibleSupertypeClass != null &&
-                Enum.class.isAssignableFrom(correspondingClass) && possibleSupertypeClass.isInterface()) {
-            if(possibleSupertypeClass.isAssignableFrom(correspondingClass)) {
-                return true;
-            }
-        }
-
-        val superclassSpec = superclass();
-        return superclassSpec != null && superclassSpec.isOfType(specification);
+        
+        val thisClass = this.getCorrespondingClass();
+        val otherClass = other.getCorrespondingClass();
+        
+        return otherClass.isAssignableFrom(thisClass);
+        
+//XXX legacy of ...        
+//        
+//        for (val interfaceSpec : interfaces()) {
+//            if (interfaceSpec.isOfType(other)) {
+//                return true;
+//            }
+//        }
+//
+//        // this is a bit of a workaround; the metamodel doesn't have the interfaces for enums.
+//        val correspondingClass = getCorrespondingClass();
+//        val possibleSupertypeClass = other.getCorrespondingClass();
+//        if(correspondingClass != null && possibleSupertypeClass != null &&
+//                Enum.class.isAssignableFrom(correspondingClass) && possibleSupertypeClass.isInterface()) {
+//            if(possibleSupertypeClass.isAssignableFrom(correspondingClass)) {
+//                return true;
+//            }
+//        }
+//
+//        val superclassSpec = superclass();
+//        return superclassSpec != null && superclassSpec.isOfType(other);
     }
 
     // -- NAME, DESCRIPTION, PERSISTABILITY

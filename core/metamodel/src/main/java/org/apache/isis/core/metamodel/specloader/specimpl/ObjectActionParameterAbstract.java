@@ -345,6 +345,8 @@ implements ObjectActionParameter, FacetHolder.Delegating {
             final ObjectSpecification choiceWrappedSpec = specificationLookup.loadSpecification(choiceWrappedClass);
             final ObjectSpecification paramWrappedSpec = specificationLookup.loadSpecification(paramWrappedClass);
 
+            // type returned by choices must be an instance of the param type
+            // in other words <param type> is assignable from <choices type>
 
             // TODO: should implement this instead as a MetaModelValidator
             if (!choiceWrappedSpec.isOfType(paramWrappedSpec)) {
