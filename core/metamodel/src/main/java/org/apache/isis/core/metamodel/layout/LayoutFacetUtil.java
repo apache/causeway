@@ -273,7 +273,7 @@ public class LayoutFacetUtil {
     }
 
     @RequiredArgsConstructor(staticName = "of")
-    public static class MetamodelToGridOverridingVisistor extends Grid.VisitorAdapter  {
+    public static class MetamodelToGridOverridingVisitor extends Grid.VisitorAdapter  {
 
         private final ObjectSpecification objectSpec; 
 

@@ -76,7 +76,7 @@ import org.apache.isis.core.metamodel.facets.properties.propertylayout.PromptSty
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.RenderedAdjustedFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.TypicalLengthFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.UnchangingFacetForPropertyXml;
-import org.apache.isis.core.metamodel.layout.LayoutFacetUtil.MetamodelToGridOverridingVisistor;
+import org.apache.isis.core.metamodel.layout.LayoutFacetUtil.MetamodelToGridOverridingVisitor;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -360,7 +360,7 @@ implements GridSystemService<G> {
     public void complete(final G grid, final Class<?> domainClass) {
         normalize(grid, domainClass);
         val objectSpec = specificationLoader.loadSpecification(domainClass);
-        grid.visit(MetamodelToGridOverridingVisistor.of(objectSpec));
+        grid.visit(MetamodelToGridOverridingVisitor.of(objectSpec));
     }
 
 
