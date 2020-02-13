@@ -41,7 +41,11 @@ public class ObjectAdapterAccessHelper {
 
     public static RestfulObjectsApplicationException notFoundException(final String memberId, final MemberType memberType) {
         final String memberTypeStr = memberType.name().toLowerCase();
-        return RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.NOT_FOUND, "%s '%s' either does not exist or is not visible", memberTypeStr, memberId);
+        return RestfulObjectsApplicationException.createWithMessage(
+                RestfulResponse.HttpStatusCode.NOT_FOUND, 
+                "%s '%s' either does not exist, is disabled or is not visible", 
+                memberTypeStr,
+                memberId);
     }
 
     static enum Intent {
