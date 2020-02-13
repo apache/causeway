@@ -19,16 +19,21 @@
 	
 		<bs3:col span="6">
 		
-			<cpt:fieldSet name="Actions" id="actions">
+			<cpt:fieldSet name="Actions" id="actions-dep">
 				<cpt:action id="useChoices"/>
             	<cpt:action id="useAutoComplete"/>
             	<cpt:action id="useDefault"/>
             	<cpt:action id="useHide"/>
             	<cpt:action id="useDisable"/>
-	            <cpt:property id="text"/>
+	            <cpt:property id="dependentText"/>
 			</cpt:fieldSet>
 			
-			<cpt:collection defaultView="table" id="items" />
+			<cpt:fieldSet name="Actions" id="actions-indep">
+				<cpt:action id="useIndependent"/>
+	            <cpt:property id="independentText"/>
+			</cpt:fieldSet>
+
+			<cpt:collection defaultView="table" id="items" />			
             
 		</bs3:col>
 		

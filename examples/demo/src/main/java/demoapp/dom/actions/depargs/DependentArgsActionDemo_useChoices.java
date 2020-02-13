@@ -25,7 +25,6 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -35,7 +34,8 @@ import org.apache.isis.incubator.model.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
 
-@Mixin
+@ActionLayout(named="Choices", promptStyle = PromptStyle.DIALOG_MODAL)
+@Action(semantics = SemanticsOf.SAFE)
 @RequiredArgsConstructor
 public class DependentArgsActionDemo_useChoices {
 
@@ -43,9 +43,7 @@ public class DependentArgsActionDemo_useChoices {
 
     private final DependentArgsActionDemo holder;
 
-    @ActionLayout(named="Choices", promptStyle = PromptStyle.DIALOG_MODAL)
-    @Action(semantics = SemanticsOf.SAFE)
-    public DependentArgsActionDemo $$(
+    public DependentArgsActionDemo act(
 
             // PARAM 0
             @Parameter(optionality = Optionality.MANDATORY)
@@ -64,7 +62,7 @@ public class DependentArgsActionDemo_useChoices {
     // -- PARAM 1 (DemoItem)
 
     @Model
-    public Collection<DemoItem> choices1$$(
+    public Collection<DemoItem> choices1Act(
             
             Parity parity // <-- the refining parameter from the dialog above
             

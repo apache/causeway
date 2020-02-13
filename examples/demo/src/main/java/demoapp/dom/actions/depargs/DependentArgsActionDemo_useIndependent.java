@@ -18,54 +18,66 @@
  */
 package demoapp.dom.actions.depargs;
 
+import java.util.Collection;
+
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.incubator.model.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
-@ActionLayout(named="Disable", promptStyle = PromptStyle.DIALOG_MODAL)
+@ActionLayout(named="Independent Args", promptStyle = PromptStyle.DIALOG_MODAL)
 @Action
 @RequiredArgsConstructor
-public class DependentArgsActionDemo_useDisable {
+public class DependentArgsActionDemo_useIndependent {
 
     @Inject MessageService messageService;
 
     private final DependentArgsActionDemo holder;
-    
+
     public DependentArgsActionDemo act(
 
             // PARAM 0
-            @ParameterLayout(named = "Disable Message Field")
-            boolean disableMessageField,
-
+            @Parameter(optionality = Optionality.MANDATORY)
+            Parity parity,
+            
             // PARAM 1
             @Parameter(optionality = Optionality.MANDATORY)
-            @ParameterLayout(named = "Message")
-            String message
+            DemoItem item1,
+
+            // PARAM 2
+            @Parameter(optionality = Optionality.MANDATORY)
+            DemoItem item2
 
             ) {
 
-        messageService.informUser(message); 
+        val message = String.format("got %s %s %s", parity, item1.getParity(), item2.getParity());
+        
+        messageService.informUser(message);
         return holder;
     }
 
-    // -- PARAM 1 (String message)
+    // -- PARAM 1 (DemoItem item1)
 
     @Model
-    public String disable1Act(boolean disableMessageField) {
-        return disableMessageField
-                ? "disabled by dependent argument"
-                        : null;
+    public Collection<DemoItem> choices1Act() {
+        return holder.getItems();
     }
+    
+    // -- PARAM 2 (DemoItem item2)
 
+    @Model
+    public Collection<DemoItem> choices2Act() {
+        return holder.getItems();
+    }
+    
 
 }
 

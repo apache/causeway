@@ -43,13 +43,16 @@ import demoapp.utils.DemoStub;
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.DependentArgs", editing=Editing.ENABLED)
 public class DependentArgsActionDemo extends DemoStub {
 
-    // -- INIT
-
     @Getter private final Set<DemoItem> items = new LinkedHashSet<>();
 
     @PropertyLayout(labelPosition=LabelPosition.NONE)
-    public Markup getText() {
+    public Markup getDependentText() {
         return new Markup("Click one of these 5 actions to see how dependent arguments work.");
+    }
+    
+    @PropertyLayout(labelPosition=LabelPosition.NONE)
+    public Markup getIndependentText() {
+        return new Markup("Click this action to see independent arguments do not clear other on changing.");
     }
 
     @Override
@@ -61,42 +64,6 @@ public class DependentArgsActionDemo extends DemoStub {
         items.add(DemoItem.of("last", Parity.EVEN));
     }
     
-    // -- DEBUG
-    
-//    @ActionLayout(named="Choices", promptStyle = PromptStyle.DIALOG_MODAL)
-//    @Action(semantics = SemanticsOf.SAFE)
-//    public DependentArgsActionDemo useChoices(
-//
-//            // PARAM 0
-//            @Parameter(optionality = Optionality.MANDATORY)
-//            Parity parity,
-//
-//            // PARAM 1
-//            @Parameter(optionality = Optionality.MANDATORY)
-//            DemoItem item
-//
-//            ) {
-//        
-//        return this;
-//    }
-//
-//    // -- PARAM 1 (DemoItem)
-//
-//    
-//    public Collection<DemoItem> choices1useChoices(
-//            
-//            Parity parity // <-- the refining parameter from the dialog above
-//            
-//            ) {
-//        
-//        if(parity == null) {
-//            return this.getItems();
-//        }
-//        return this.getItems()
-//                .stream()
-//                .filter(item->parity == item.getParity())
-//                .collect(Collectors.toList());
-//    }
 
 }
 

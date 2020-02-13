@@ -28,6 +28,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import lombok.val;
@@ -35,7 +36,7 @@ import lombok.val;
 public abstract class DemoStub {
 
     public String title() {
-        return getClass().getSimpleName();
+        return _Strings.asNaturalName2.apply(getClass().getSimpleName());
     }
 
     public abstract void initDefaults();

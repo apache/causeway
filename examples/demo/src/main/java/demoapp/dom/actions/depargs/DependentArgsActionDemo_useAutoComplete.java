@@ -26,17 +26,16 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MinLength;
-import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.incubator.model.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
 
-@Mixin
+@ActionLayout(named="Auto Complete", promptStyle = PromptStyle.DIALOG_MODAL)
+@Action
 @RequiredArgsConstructor
 public class DependentArgsActionDemo_useAutoComplete {
 
@@ -44,9 +43,7 @@ public class DependentArgsActionDemo_useAutoComplete {
 
     private final DependentArgsActionDemo holder;
 
-    @ActionLayout(named="Auto Complete", promptStyle = PromptStyle.DIALOG_MODAL)
-    @Action(semantics = SemanticsOf.SAFE)
-    public DependentArgsActionDemo $$(
+    public DependentArgsActionDemo act(
 
             // PARAM 0
             @Parameter(optionality = Optionality.MANDATORY)
@@ -65,7 +62,7 @@ public class DependentArgsActionDemo_useAutoComplete {
     // -- PARAM 1 (DemoItem)
 
     @Model
-    public Collection<DemoItem> autoComplete1$$(
+    public Collection<DemoItem> autoComplete1Act(
 
             Parity parity, // <-- the refining parameter from the dialog above
 
