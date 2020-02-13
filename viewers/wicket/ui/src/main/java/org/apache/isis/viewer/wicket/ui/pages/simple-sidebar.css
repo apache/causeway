@@ -157,7 +157,7 @@ body {
 }
 
 #sidebar-wrapper {
-    z-index: 1000;
+    z-index: 990;
     position: fixed;
     height: 100%;
     overflow-y: auto;
