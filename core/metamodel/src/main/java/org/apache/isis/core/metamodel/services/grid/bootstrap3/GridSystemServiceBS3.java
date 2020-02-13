@@ -19,11 +19,11 @@
 package org.apache.isis.core.metamodel.services.grid.bootstrap3;
 
 import java.util.Arrays;
-import java.util.LinkedHashMap;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -166,127 +166,32 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         }
     }
 
-
-    private static final class GridVisitorResult {
-        BS3Col colForUnreferencedActionsRef;
-        BS3Col colForUnreferencedCollectionsRef;
-        FieldSet fieldSetForUnreferencedActionsRef;
-        FieldSet fieldSetForUnreferencedPropertiesRef;
-        BS3TabGroup tabGroupForUnreferencedCollectionsRef;    
-    }
-
-    /**
-     * Mandatory hook method defined in {@link GridSystemServiceAbstract superclass}, called by {@link GridSystemServiceAbstract#normalize(Grid, Class)} }.
-     */
     @Override
     protected boolean validateAndNormalize(
             final Grid grid,
             final Class<?> domainClass) {
 
+        val bs3Grid = (BS3Grid) grid;
+        val objectSpec = specificationLoader.loadSpecification(domainClass);
 
-        final ObjectSpecification objectSpec = specificationLoader.loadSpecification(domainClass);
+        val oneToOneAssociationById = ObjectMember.mapById(getOneToOneAssociations(objectSpec));
+        val oneToManyAssociationById = ObjectMember.mapById(getOneToManyAssociations(objectSpec));
+        val objectActionById = ObjectMember.mapById( objectSpec.streamObjectActions(Contributed.INCLUDED));
 
-        final Map<String, OneToOneAssociation> oneToOneAssociationById =
-                ObjectMember.mapById(getOneToOneAssociations(objectSpec));
-        final Map<String, OneToManyAssociation> oneToManyAssociationById =
-                ObjectMember.mapById(getOneToManyAssociations(objectSpec));
-        final Map<String, ObjectAction> objectActionById =
-                ObjectMember.mapById(
-                        objectSpec.streamObjectActions(Contributed.INCLUDED));
+        val propertyLayoutDataById = bs3Grid.getAllPropertiesById();
+        val collectionLayoutDataById = bs3Grid.getAllCollectionsById();
+        val actionLayoutDataById = bs3Grid.getAllActionsById();
 
-        final BS3Grid bs3Grid = (BS3Grid) grid;
-
-        final LinkedHashMap<String, PropertyLayoutData> propertyLayoutDataById = bs3Grid.getAllPropertiesById();
-        final LinkedHashMap<String, CollectionLayoutData> collectionLayoutDataById = bs3Grid.getAllCollectionsById();
-        final LinkedHashMap<String, ActionLayoutData> actionLayoutDataById = bs3Grid.getAllActionsById();
-
-        // find all row and col ids
-        // ensure that all Ids are different
-        val gridModel = GridModel.createFrom(bs3Grid); 
-        if(gridModel.isDuplicateIdDetected()) {
+        val gridModelIfValid = GridModel.createFrom(bs3Grid);
+        if(!gridModelIfValid.isPresent()) { // only present if valid
             return false;
         }
+        val gridModel = gridModelIfValid.get(); 
 
-        // ensure that there is exactly one col with the
-        // unreferencedActions, unreferencedProperties and unreferencedCollections attribute set.
-
-        final GridVisitorResult result = new GridVisitorResult();
-
-        bs3Grid.visit(new BS3Grid.VisitorAdapter(){
-
-            @Override
-            public void visit(final BS3Col bs3Col) {
-                if(isSet(bs3Col.isUnreferencedActions())) {
-                    if(result.colForUnreferencedActionsRef != null) {
-                        bs3Col.setMetadataError("More than one col with 'unreferencedActions' attribute set");
-                    } else if(result.fieldSetForUnreferencedActionsRef != null) {
-                        bs3Col.setMetadataError("Already found a fieldset with 'unreferencedActions' attribute set");
-                    } else {
-                        result.colForUnreferencedActionsRef=bs3Col;
-                    }
-                }
-                if(isSet(bs3Col.isUnreferencedCollections())) {
-                    if(result.colForUnreferencedCollectionsRef != null) {
-                        bs3Col.setMetadataError("More than one col with 'unreferencedCollections' attribute set");
-                    } else if(result.tabGroupForUnreferencedCollectionsRef != null) {
-                        bs3Col.setMetadataError("Already found a tabgroup with 'unreferencedCollections' attribute set");
-                    } else {
-                        result.colForUnreferencedCollectionsRef = bs3Col;
-                    }
-                }
-            }
-
-            @Override
-            public void visit(final FieldSet fieldSet) {
-                if(isSet(fieldSet.isUnreferencedActions())) {
-                    if(result.fieldSetForUnreferencedActionsRef != null) {
-                        fieldSet.setMetadataError("More than one fieldset with 'unreferencedActions' attribute set");
-                    } else if(result.colForUnreferencedActionsRef != null) {
-                        fieldSet.setMetadataError("Already found a column with 'unreferencedActions' attribute set");
-                    } else {
-                        result.fieldSetForUnreferencedActionsRef = fieldSet;
-                    }
-                }
-                if(isSet(fieldSet.isUnreferencedProperties())) {
-                    if(result.fieldSetForUnreferencedPropertiesRef != null) {
-                        fieldSet.setMetadataError("More than one column with 'unreferencedProperties' attribute set");
-                    } else {
-                        result.fieldSetForUnreferencedPropertiesRef = fieldSet;
-                    }
-                }
-            }
-
-            @Override
-            public void visit(final BS3TabGroup bs3TabGroup) {
-                if(isSet(bs3TabGroup.isUnreferencedCollections())) {
-                    if(result.tabGroupForUnreferencedCollectionsRef != null) {
-                        bs3TabGroup.setMetadataError("More than one tabgroup with 'unreferencedCollections' attribute set");
-                    } else if(result.colForUnreferencedCollectionsRef != null) {
-                        bs3TabGroup.setMetadataError("Already found a column with 'unreferencedCollections' attribute set");
-                    } else {
-                        result.tabGroupForUnreferencedCollectionsRef = bs3TabGroup;
-                    }
-                }
-            }
-        });
-
-        if(result.colForUnreferencedActionsRef == null && result.fieldSetForUnreferencedActionsRef == null) {
-            bs3Grid.getMetadataErrors().add("No column and also no fieldset found with the 'unreferencedActions' attribute set");
-        }
-        if(result.fieldSetForUnreferencedPropertiesRef == null) {
-            bs3Grid.getMetadataErrors().add("No fieldset found with the 'unreferencedProperties' attribute set");
-        }
-        if(result.colForUnreferencedCollectionsRef == null && result.tabGroupForUnreferencedCollectionsRef == null) {
-            bs3Grid.getMetadataErrors().add("No column and also no tabgroup found with the 'unreferencedCollections' attribute set");
-        }
-
-        if(     result.colForUnreferencedActionsRef == null && result.fieldSetForUnreferencedActionsRef == null ||
-                result.fieldSetForUnreferencedPropertiesRef == null ||
-                result.colForUnreferencedCollectionsRef == null && result.tabGroupForUnreferencedCollectionsRef == null) {
-            return false;
-        }
-
-        // add missing properties will be added to the first fieldset of the specified column
+        // * surplus ... those defined in the grid model but not available with the meta-model 
+        // * missing ... those available with the meta-model but missing in the grid-model 
+        // (missing properties will be added to the first field-set of the specified column)
+        
         val surplusAndMissingPropertyIds = 
                 surplusAndMissing(propertyLayoutDataById.keySet(),  oneToOneAssociationById.keySet());
         val surplusPropertyIds = surplusAndMissingPropertyIds.getSurplus();
@@ -296,14 +201,13 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             propertyLayoutDataById.get(surplusPropertyId).setMetadataError("No such property");
         }
 
-        // catalog which associations are bound to an existing field set
-        // so that (below) we can determine which missing property ids are not unbound vs which should be included
-        // in the fieldset that they are bound to.
-        final Map<String, Set<String>> boundAssociationIdsByFieldSetId = _Maps.newHashMap();
-
-        // all those explicitly in the grid
-        for (FieldSet fieldSet : gridModel.fieldSets()) {
-            final String fieldSetId = fieldSet.getId();
+        // catalog which associations are bound to an existing field-set
+        // so that (below) we can determine which missing property IDs are not unbound vs 
+        // which should be included in the field-set that they are bound to.
+        val boundAssociationIdsByFieldSetId = _Maps.<String, Set<String>>newHashMap();
+        
+        for (val fieldSet : gridModel.fieldSets()) {
+            val fieldSetId = fieldSet.getId();
             Set<String> boundAssociationIds = boundAssociationIdsByFieldSetId.get(fieldSetId);
             if(boundAssociationIds == null) {
                 boundAssociationIds = stream(fieldSet.getProperties())
@@ -313,13 +217,13 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             }
         }
 
-        // 1-to-1-association Ids, that want to contribute to the 'metadata' FieldSet
+        // 1-to-1-association IDs, that want to contribute to the 'metadata' FieldSet
         // but are unbound, because such a FieldSet is not defined by the given layout.
         val unboundMetadataContributingIds = _Sets.<String>newHashSet();
 
         // along with any specified by existing metadata
         for (OneToOneAssociation otoa : oneToOneAssociationById.values()) {
-            final MemberOrderFacet memberOrderFacet = otoa.getFacet(MemberOrderFacet.class);
+            val memberOrderFacet = otoa.getFacet(MemberOrderFacet.class);
             if(memberOrderFacet != null) {
                 val id = asId(memberOrderFacet.name());
                 if(gridModel.containsFieldSetId(id)) {
@@ -334,7 +238,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
 
         if(!missingPropertyIds.isEmpty()) {
 
-            val unboundPropertyIds = _Lists.newArrayList(missingPropertyIds);
+            val unboundPropertyIds = _Sets.newLinkedHashSet(missingPropertyIds);
 
             for (final String fieldSetId : boundAssociationIdsByFieldSetId.keySet()) {
                 val boundPropertyIds = boundAssociationIdsByFieldSetId.get(fieldSetId);
@@ -343,26 +247,24 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
 
             for (final String fieldSetId : boundAssociationIdsByFieldSetId.keySet()) {
                 val fieldSet = gridModel.getFieldSet(fieldSetId);
-                val associationIds =
-                        boundAssociationIdsByFieldSetId.get(fieldSetId);
-
-                val associations1To1 =
+                val associationIds = boundAssociationIdsByFieldSetId.get(fieldSetId);
+                
+                val associations1To1Ids =
                         associationIds.stream()
                         .map(oneToOneAssociationById::get)
                         .filter(_NullSafe::isPresent)
                         .sorted(ObjectMember.Comparators.byMemberOrderSequence())
+                        .map(ObjectAssociation::getId)
                         .collect(Collectors.toList());
 
-                addPropertiesTo(fieldSet,
-                        _Lists.map(associations1To1, ObjectAssociation::getId),
-                        propertyLayoutDataById);
+                addPropertiesTo(fieldSet, associations1To1Ids, propertyLayoutDataById::put);
             }
 
             if(!unboundPropertyIds.isEmpty()) {
-                val fieldSet = result.fieldSetForUnreferencedPropertiesRef;
+                val fieldSet = gridModel.getFieldSetForUnreferencedPropertiesRef();
                 if(fieldSet != null) {
                     unboundPropertyIds.removeAll(unboundMetadataContributingIds);
-                    addPropertiesTo(fieldSet, unboundPropertyIds, propertyLayoutDataById);
+                    addPropertiesTo(fieldSet, unboundPropertyIds, propertyLayoutDataById::put);
                 }
             }
         }
@@ -380,20 +282,19 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         if(!missingCollectionIds.isEmpty()) {
             final List<OneToManyAssociation> sortedCollections = 
                     _Lists.map(missingCollectionIds, oneToManyAssociationById::get);
-            {
-                sortedCollections.sort(ObjectMember.Comparators.byMemberOrderSequence());
-            }
+            
+            sortedCollections.sort(ObjectMember.Comparators.byMemberOrderSequence());
 
             final List<String> sortedMissingCollectionIds = 
                     _Lists.map(sortedCollections, ObjectAssociation::getId);
 
-            final BS3TabGroup bs3TabGroup = result.tabGroupForUnreferencedCollectionsRef;
+            final BS3TabGroup bs3TabGroup = gridModel.getTabGroupForUnreferencedCollectionsRef();
             if(bs3TabGroup != null) {
                 addCollectionsTo(bs3TabGroup, sortedMissingCollectionIds, objectSpec);
             } else {
-                final BS3Col bs3Col = result.colForUnreferencedCollectionsRef;
+                final BS3Col bs3Col = gridModel.getColForUnreferencedCollectionsRef();
                 if(bs3Col != null) {
-                    addCollectionsTo(bs3Col, sortedMissingCollectionIds, collectionLayoutDataById);
+                    addCollectionsTo(bs3Col, sortedMissingCollectionIds, collectionLayoutDataById::put);
                 }
             }
         }
@@ -408,11 +309,8 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
 
         final List<ObjectAction> sortedPossiblyMissingActions = 
                 _Lists.map(possiblyMissingActionIds, objectActionById::get);
-        {
-            sortedPossiblyMissingActions
-            .sort(ObjectMember.Comparators.byMemberOrderSequence());
-        }
-
+        
+        sortedPossiblyMissingActions.sort(ObjectMember.Comparators.byMemberOrderSequence());
 
         final List<String> sortedPossiblyMissingActionIds =
                 _Lists.map(sortedPossiblyMissingActions, ObjectMember::getId);
@@ -499,13 +397,13 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         }
 
         if(!missingActionIds.isEmpty()) {
-            final BS3Col bs3Col = result.colForUnreferencedActionsRef;
+            final BS3Col bs3Col = gridModel.getColForUnreferencedActionsRef();
             if(bs3Col != null) {
-                addActionsTo(bs3Col, missingActionIds, actionLayoutDataById);
+                addActionsTo(bs3Col, missingActionIds, actionLayoutDataById::put);
             } else {
-                final FieldSet fieldSet = result.fieldSetForUnreferencedActionsRef;
+                final FieldSet fieldSet = gridModel.getFieldSetForUnreferencedActionsRef();
                 if(fieldSet != null) {
-                    addActionsTo(fieldSet, missingActionIds, actionLayoutDataById);
+                    addActionsTo(fieldSet, missingActionIds, actionLayoutDataById::put);
                 }
             }
         }
@@ -515,40 +413,43 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
 
     private void addPropertiesTo(
             final FieldSet fieldSet,
-            final List<String> propertyIds,
-            final LinkedHashMap<String, PropertyLayoutData> propertyLayoutDataById) {
-
+            final Collection<String> propertyIds,
+            final BiConsumer<String, PropertyLayoutData> onNewLayoutData) {
+        
         final Set<String> existingIds =
                 stream(fieldSet.getProperties())
                 .map(PropertyLayoutData::getId)
                 .collect(Collectors.toSet());
-
+        
         for (final String propertyId : propertyIds) {
-            if(!existingIds.contains(propertyId)) {
-                final PropertyLayoutData propertyLayoutData = new PropertyLayoutData(propertyId);
-                fieldSet.getProperties().add(propertyLayoutData);
-                propertyLayoutData.setOwner(fieldSet);
-                propertyLayoutDataById.put(propertyId, propertyLayoutData);
+            if(existingIds.contains(propertyId)) {
+                continue;
             }
+            val propertyLayoutData = new PropertyLayoutData(propertyId);
+            fieldSet.getProperties().add(propertyLayoutData);
+            propertyLayoutData.setOwner(fieldSet);
+            onNewLayoutData.accept(propertyId, propertyLayoutData);
         }
     }
 
     private void addCollectionsTo(
             final BS3Col tabRowCol,
-            final List<String> collectionIds,
-            final LinkedHashMap<String, CollectionLayoutData> collectionLayoutDataById) {
+            final Collection<String> collectionIds,
+            final BiConsumer<String, CollectionLayoutData> onNewLayoutData) {
+        
         for (final String collectionId : collectionIds) {
-            final CollectionLayoutData collectionLayoutData = new CollectionLayoutData(collectionId);
+            val collectionLayoutData = new CollectionLayoutData(collectionId);
             collectionLayoutData.setDefaultView("table");
             tabRowCol.getCollections().add(collectionLayoutData);
-            collectionLayoutDataById.put(collectionId, collectionLayoutData);
+            onNewLayoutData.accept(collectionId, collectionLayoutData);
         }
     }
 
     private void addCollectionsTo(
             final BS3TabGroup tabGroup,
-            final List<String> collectionIds,
+            final Collection<String> collectionIds,
             final ObjectSpecification objectSpec) {
+        
         for (final String collectionId : collectionIds) {
             final BS3Tab bs3Tab = new BS3Tab();
             bs3Tab.setName(objectSpec.getAssociationElseFail(collectionId).getName());
@@ -573,39 +474,38 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
 
     protected void addActionsTo(
             final BS3Col bs3Col,
-            final List<String> actionIds,
-            final LinkedHashMap<String, ActionLayoutData> actionLayoutDataById) {
+            final Collection<String> actionIds,
+            final BiConsumer<String, ActionLayoutData> onNewLayoutData) {
+        
         for (String actionId : actionIds) {
-            final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
+            val actionLayoutData = new ActionLayoutData(actionId);
             addActionTo(bs3Col, actionLayoutData);
-            actionLayoutDataById.put(actionId, actionLayoutData);
+            onNewLayoutData.accept(actionId, actionLayoutData);
         }
     }
 
     private void addActionsTo(
             final FieldSet fieldSet,
-            final List<String> actionIds,
-            final LinkedHashMap<String, ActionLayoutData> actionLayoutDataById) {
+            final Collection<String> actionIds,
+            final BiConsumer<String, ActionLayoutData> onNewLayoutData) {
+        
         for (String actionId : actionIds) {
-            final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
+            val actionLayoutData = new ActionLayoutData(actionId);
             addActionTo(fieldSet, actionLayoutData);
-            actionLayoutDataById.put(actionId, actionLayoutData);
+            onNewLayoutData.accept(actionId, actionLayoutData);
         }
     }
 
     private void addActionTo(
             final ActionLayoutDataOwner owner,
             final ActionLayoutData actionLayoutData) {
+        
         List<ActionLayoutData> actions = owner.getActions();
         if(actions == null) {
             owner.setActions(actions = _Lists.newArrayList());
         }
         actions.add(actionLayoutData);
         actionLayoutData.setOwner(owner);
-    }
-
-    private static Boolean isSet(final Boolean flag) {
-        return flag != null && flag;
     }
 
     static String asId(final String str) {

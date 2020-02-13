@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.services.grid;
 
-import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,23 +26,12 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.RenderDay;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutDataOwner;
 import org.apache.isis.applib.layout.component.FieldSet;
-import org.apache.isis.applib.layout.component.HasBookmarking;
-import org.apache.isis.applib.layout.component.HasCssClass;
-import org.apache.isis.applib.layout.component.HasCssClassFa;
-import org.apache.isis.applib.layout.component.HasDescribedAs;
-import org.apache.isis.applib.layout.component.HasHidden;
-import org.apache.isis.applib.layout.component.HasNamed;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.grid.GridSystemService;
@@ -51,11 +39,9 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.commons.internal.base._Casts;
-import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.actions.layout.ActionPositionFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.BookmarkPolicyFacetForActionXml;
@@ -66,11 +52,6 @@ import org.apache.isis.core.metamodel.facets.actions.layout.HiddenFacetForAction
 import org.apache.isis.core.metamodel.facets.actions.layout.NamedFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.PromptStyleFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.RedirectFacetFromActionXml;
-import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.core.metamodel.facets.collections.layout.CssClassFacetForCollectionXml;
 import org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetForCollectionXml;
 import org.apache.isis.core.metamodel.facets.collections.layout.DescribedAsFacetForCollectionXml;
@@ -78,23 +59,13 @@ import org.apache.isis.core.metamodel.facets.collections.layout.HiddenFacetForCo
 import org.apache.isis.core.metamodel.facets.collections.layout.NamedFacetForCollectionXml;
 import org.apache.isis.core.metamodel.facets.collections.layout.PagedFacetForCollectionXml;
 import org.apache.isis.core.metamodel.facets.collections.layout.SortedByFacetForCollectionXml;
-import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetXml;
-import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectXml;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.CssClassFaFacetForDomainObjectXml;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.CssClassFacetForDomainObjectXml;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.DescribedAsFacetForDomainObjectXml;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.NamedFacetForDomainObjectXml;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.PluralFacetForDomainObjectXml;
-import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
-import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.CssClassFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.DescribedAsFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.HiddenFacetForPropertyXml;
@@ -105,6 +76,7 @@ import org.apache.isis.core.metamodel.facets.properties.propertylayout.PromptSty
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.RenderedAdjustedFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.TypicalLengthFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.UnchangingFacetForPropertyXml;
+import org.apache.isis.core.metamodel.layout.LayoutFacetUtil.MetamodelToGridOverridingVisistor;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -387,272 +359,8 @@ implements GridSystemService<G> {
     @Override
     public void complete(final G grid, final Class<?> domainClass) {
         normalize(grid, domainClass);
-
         val objectSpec = specificationLoader.loadSpecification(domainClass);
-
-        grid.visit(new Grid.VisitorAdapter() {
-
-            @Override
-            public void visit(final ActionLayoutData actionLayoutData) {
-                objectSpec.getObjectAction(actionLayoutData.getId())
-                .ifPresent(objectAction->{
-                    setBookmarkingIfAny(actionLayoutData, objectAction);
-                    setCssClassIfAny(actionLayoutData, objectAction);
-                    setCssClassFaIfAny(actionLayoutData, objectAction);
-                    setDescribedAsIfAny(actionLayoutData, objectAction);
-                    setHiddenIfAny(actionLayoutData, objectAction);
-                    setNamedIfAny(actionLayoutData, objectAction);
-                    setActionPositionIfAny(actionLayoutData, objectAction);    
-                });
-            }
-
-            @Override
-            public void visit(final CollectionLayoutData collectionLayoutData) {
-                objectSpec.getAssociation(collectionLayoutData.getId())
-                .ifPresent(collection->{
-                    setCssClassIfAny(collectionLayoutData, collection);
-                    setDefaultViewIfAny(collectionLayoutData, collection);
-                    setDescribedAsIfAny(collectionLayoutData, collection);
-                    setHiddenIfAny(collectionLayoutData, collection);
-                    setNamedIfAny(collectionLayoutData, collection);
-                    setPagedIfAny(collectionLayoutData, collection);
-                    setSortedByIfAny(collectionLayoutData, collection);    
-                });
-            }
-
-            @Override
-            public void visit(final PropertyLayoutData propertyLayoutData) {
-                objectSpec.getAssociation(propertyLayoutData.getId())
-                .ifPresent(property->{
-                    setCssClassIfAny(propertyLayoutData, property);
-                    setDescribedAsIfAny(propertyLayoutData, property);
-                    setHiddenIfAny(propertyLayoutData, property);
-                    setNamedIfAny(propertyLayoutData, property);
-                    setLabelPositionIfAny(propertyLayoutData, property);
-                    setMultiLineIfAny(propertyLayoutData, property);
-                    setRenderedAsDayBeforeIfAny(propertyLayoutData, property);
-                    setTypicalLengthIfAny(propertyLayoutData, property);    
-                });
-            }
-
-            @Override
-            public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
-                setBookmarkingIfAny(domainObjectLayoutData, objectSpec);
-                setCssClassIfAny(domainObjectLayoutData, objectSpec);
-                setCssClassFaIfAny(domainObjectLayoutData, objectSpec);
-                setDescribedAsIfAny(domainObjectLayoutData, objectSpec);
-                setNamedIfAny(domainObjectLayoutData, objectSpec);
-                setPluralIfAny(domainObjectLayoutData, objectSpec);
-            }
-        });
-    }
-
-    private static boolean isDoOp(final Facet facet) {
-        return facet != null && !facet.isFallback();
-    }
-
-    protected void setBookmarkingIfAny(
-            final HasBookmarking hasBookmarking,
-            final FacetHolder facetHolder) {
-        
-        val bookmarkPolicyFacet = facetHolder.getFacet(BookmarkPolicyFacet.class);
-        if(isDoOp(bookmarkPolicyFacet)) {
-            final BookmarkPolicy bookmarking = bookmarkPolicyFacet.value();
-            if(bookmarking != null) {
-                hasBookmarking.setBookmarking(bookmarking);
-            }
-        }
-    }
-
-    protected void setCssClassIfAny(
-            final HasCssClass hasCssClass,
-            final FacetHolder facetHolder) {
-        
-        val cssClassFacet = facetHolder.getFacet(CssClassFacet.class);
-        if(isDoOp(cssClassFacet)) {
-            try {
-                // try...finally because CSS class may vary by object, and we pass in only null
-                final String cssClass = cssClassFacet.cssClass(null);
-                if(!_Strings.isNullOrEmpty(cssClass)) {
-                    hasCssClass.setCssClass(cssClass);
-                }
-            } catch(Exception ignore) {
-                // ignore
-            }
-        }
-    }
-
-    protected void setCssClassFaIfAny(
-            final HasCssClassFa hasCssClassFa,
-            final FacetHolder facetHolder) {
-        
-        val cssClassFaFacet = facetHolder.getFacet(CssClassFaFacet.class);
-        if (isDoOp(cssClassFaFacet)) {
-            final String cssClassFa = cssClassFaFacet.value();
-            if(!_Strings.isNullOrEmpty(cssClassFa)) {
-                hasCssClassFa.setCssClassFa(cssClassFa);
-                hasCssClassFa.setCssClassFaPosition(cssClassFaFacet.getPosition());
-            }
-        }
-    }
-
-    protected void setDefaultViewIfAny(
-            final CollectionLayoutData collectionLayoutData,
-            final FacetHolder facetHolder) {
-        
-        val defaultViewFacet = facetHolder.getFacet(DefaultViewFacet.class);
-        if(isDoOp(defaultViewFacet)) {
-            final String defaultView = defaultViewFacet.value();
-            if(!_Strings.isNullOrEmpty(defaultView)) {
-                collectionLayoutData.setDefaultView(defaultView);
-            }
-        }
-    }
-
-    protected void setDescribedAsIfAny(
-            final HasDescribedAs hasDescribedAs,
-            final FacetHolder facetHolder) {
-        
-        val describedAsFacet = facetHolder.getFacet(DescribedAsFacet.class);
-        if(isDoOp(describedAsFacet)) {
-            final String describedAs = describedAsFacet.value();
-            if(!_Strings.isNullOrEmpty(describedAs)) {
-                hasDescribedAs.setDescribedAs(describedAs);
-            }
-        }
-    }
-
-    protected void setHiddenIfAny(
-            final HasHidden hasHidden,
-            final FacetHolder facetHolder) {
-        
-        val hiddenFacet = facetHolder.getFacet(HiddenFacet.class);
-        if (isDoOp(hiddenFacet)) {
-            final Where where = hiddenFacet.where();
-            if(where != null) {
-                hasHidden.setHidden(where);
-            }
-        }
-    }
-
-    protected void setLabelPositionIfAny(
-            final PropertyLayoutData propertyLayoutData,
-            final FacetHolder facetHolder) {
-        
-        val labelAtFacet = facetHolder.getFacet(LabelAtFacet.class);
-        if(isDoOp(labelAtFacet)) {
-            final LabelPosition labelPosition = labelAtFacet.label();
-            if(labelPosition != null) {
-                propertyLayoutData.setLabelPosition(labelPosition);
-            }
-        }
-    }
-
-    protected void setMultiLineIfAny(
-            final PropertyLayoutData propertyLayoutData,
-            final FacetHolder facetHolder) {
-        
-        val multiLineFacet = facetHolder.getFacet(MultiLineFacet.class);
-        if(isDoOp(multiLineFacet)) {
-            final int numberOfLines = multiLineFacet.numberOfLines();
-            if(numberOfLines > 0) {
-                propertyLayoutData.setMultiLine(numberOfLines);
-            }
-        }
-    }
-
-    protected void setNamedIfAny(
-            final HasNamed hasNamed,
-            final FacetHolder facetHolder) {
-        
-        val namedFacet = facetHolder.getFacet(NamedFacet.class);
-        if(isDoOp(namedFacet)) {
-            final String named = namedFacet.value();
-            if(!_Strings.isNullOrEmpty(named)){
-                hasNamed.setNamed(named);
-            }
-            final boolean escaped = namedFacet.escaped();
-            if(!escaped) {
-                hasNamed.setNamedEscaped(escaped);
-            }
-        }
-    }
-
-    protected void setPagedIfAny(
-            final CollectionLayoutData collectionLayoutData,
-            final FacetHolder facetHolder) {
-        
-        val pagedFacet = facetHolder.getFacet(PagedFacet.class);
-        if(isDoOp(pagedFacet)) {
-            final int value = pagedFacet.value();
-            if(value > 0) {
-                collectionLayoutData.setPaged(value);
-            }
-        }
-    }
-
-    protected void setPluralIfAny(
-            final DomainObjectLayoutData domainObjectLayoutData,
-            final FacetHolder facetHolder) {
-        
-        val pluralFacet = facetHolder.getFacet(PluralFacet.class);
-        if(isDoOp(pluralFacet)) {
-            final String plural = pluralFacet.value();
-            if(!_Strings.isNullOrEmpty(plural)) {
-                domainObjectLayoutData.setPlural(plural);
-            }
-        }
-    }
-
-
-    protected void setActionPositionIfAny(
-            final ActionLayoutData actionLayoutData,
-            final FacetHolder facetHolder) {
-        
-        val actionPositionFacet = facetHolder.getFacet(ActionPositionFacet.class);
-        if(isDoOp(actionPositionFacet)) {
-            final ActionLayout.Position position = actionPositionFacet.position();
-            if(position != null) {
-                actionLayoutData.setPosition(position);
-            }
-        }
-    }
-
-    protected void setRenderedAsDayBeforeIfAny(
-            final PropertyLayoutData propertyLayoutData,
-            final FacetHolder facetHolder) {
-        
-        val renderedAdjustedFacet = facetHolder.getFacet(RenderedAdjustedFacet.class);
-        if(isDoOp(renderedAdjustedFacet)) {
-            final int adjusted = renderedAdjustedFacet.value();
-            propertyLayoutData.setRenderDay(adjusted != 0 ? RenderDay.AS_DAY_BEFORE : RenderDay.AS_DAY);
-        }
-    }
-
-    protected void setSortedByIfAny(
-            final CollectionLayoutData collectionLayoutData,
-            final FacetHolder facetHolder) {
-        
-        val sortedByFacet = facetHolder.getFacet(SortedByFacet.class);
-        if(isDoOp(sortedByFacet)) {
-            final Class<? extends Comparator<?>> className = sortedByFacet.value();
-            if(className != null) {
-                collectionLayoutData.setSortedBy(className.getCanonicalName());
-            }
-        }
-    }
-
-    protected void setTypicalLengthIfAny(
-            final PropertyLayoutData propertyLayoutData,
-            final FacetHolder facetHolder) {
-        
-        val typicalLengthFacet = facetHolder.getFacet(TypicalLengthFacet.class);
-        if(isDoOp(typicalLengthFacet)) {
-            final int typicalLength = typicalLengthFacet.value();
-            if(typicalLength > 0) {
-                propertyLayoutData.setTypicalLength(typicalLength);
-            }
-        }
+        grid.visit(MetamodelToGridOverridingVisistor.of(objectSpec));
     }
 
 

@@ -21,11 +21,13 @@ package org.apache.isis.core.metamodel.services.grid.bootstrap3;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 
 import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.collections._Sets;
 
@@ -45,18 +47,18 @@ final class GridModel {
         private final LinkedHashMap<String, BS3Col> cols = _Maps.newLinkedHashMap();
         private final LinkedHashMap<String, FieldSet> fieldSets = _Maps.newLinkedHashMap();
         
-        @Getter private boolean duplicateIdDetected = false;
+        @Getter private BS3Col colForUnreferencedActionsRef;
+        @Getter private BS3Col colForUnreferencedCollectionsRef;
+        @Getter private FieldSet fieldSetForUnreferencedActionsRef;
+        @Getter private FieldSet fieldSetForUnreferencedPropertiesRef;
+        @Getter private BS3TabGroup tabGroupForUnreferencedCollectionsRef;
+        
+        private boolean duplicateIdDetected = false;
         
         public boolean contains(String id) {
             return allIds.contains(id);
         }
         
-//        public Collection<BS3Row> rows() {
-//            return rows.values();
-//        }
-//        public Collection<BS3Col> cols() {
-//            return cols.values();
-//        }
         public Collection<FieldSet> fieldSets() {
             return fieldSets.values();
         }
@@ -67,7 +69,15 @@ final class GridModel {
             return fieldSets.get(id);
         }
         
-        public static GridModel createFrom(BS3Grid bs3Grid) {
+        /**
+         * find all row and col ids<br>
+         * - ensure that all Ids are different<br>
+         * - ensure that there is exactly one col with the 
+         * unreferencedActions, unreferencedProperties and unreferencedCollections attribute set.
+         * @param bs3Grid
+         * @return empty if not valid
+         */
+        public static Optional<GridModel> createFrom(BS3Grid bs3Grid) {
             
             val gridModel = new GridModel();
 
@@ -115,8 +125,87 @@ final class GridModel {
                     gridModel.putFieldSet(id, fieldSet);
                 }
             });
+            
+            if(gridModel.duplicateIdDetected) {
+                return Optional.empty();
+            }
+            
+            bs3Grid.visit(new BS3Grid.VisitorAdapter(){
 
-            return gridModel;
+                @Override
+                public void visit(final BS3Col bs3Col) {
+                    if(isSet(bs3Col.isUnreferencedActions())) {
+                        if(gridModel.colForUnreferencedActionsRef != null) {
+                            bs3Col.setMetadataError("More than one col with 'unreferencedActions' attribute set");
+                        } else if(gridModel.fieldSetForUnreferencedActionsRef != null) {
+                            bs3Col.setMetadataError("Already found a fieldset with 'unreferencedActions' attribute set");
+                        } else {
+                            gridModel.colForUnreferencedActionsRef=bs3Col;
+                        }
+                    }
+                    if(isSet(bs3Col.isUnreferencedCollections())) {
+                        if(gridModel.colForUnreferencedCollectionsRef != null) {
+                            bs3Col.setMetadataError("More than one col with 'unreferencedCollections' attribute set");
+                        } else if(gridModel.tabGroupForUnreferencedCollectionsRef != null) {
+                            bs3Col.setMetadataError("Already found a tabgroup with 'unreferencedCollections' attribute set");
+                        } else {
+                            gridModel.colForUnreferencedCollectionsRef = bs3Col;
+                        }
+                    }
+                }
+
+                @Override
+                public void visit(final FieldSet fieldSet) {
+                    if(isSet(fieldSet.isUnreferencedActions())) {
+                        if(gridModel.fieldSetForUnreferencedActionsRef != null) {
+                            fieldSet.setMetadataError("More than one fieldset with 'unreferencedActions' attribute set");
+                        } else if(gridModel.colForUnreferencedActionsRef != null) {
+                            fieldSet.setMetadataError("Already found a column with 'unreferencedActions' attribute set");
+                        } else {
+                            gridModel.fieldSetForUnreferencedActionsRef = fieldSet;
+                        }
+                    }
+                    if(isSet(fieldSet.isUnreferencedProperties())) {
+                        if(gridModel.fieldSetForUnreferencedPropertiesRef != null) {
+                            fieldSet.setMetadataError("More than one column with 'unreferencedProperties' attribute set");
+                        } else {
+                            gridModel.fieldSetForUnreferencedPropertiesRef = fieldSet;
+                        }
+                    }
+                }
+
+                @Override
+                public void visit(final BS3TabGroup bs3TabGroup) {
+                    if(isSet(bs3TabGroup.isUnreferencedCollections())) {
+                        if(gridModel.tabGroupForUnreferencedCollectionsRef != null) {
+                            bs3TabGroup.setMetadataError("More than one tabgroup with 'unreferencedCollections' attribute set");
+                        } else if(gridModel.colForUnreferencedCollectionsRef != null) {
+                            bs3TabGroup.setMetadataError("Already found a column with 'unreferencedCollections' attribute set");
+                        } else {
+                            gridModel.tabGroupForUnreferencedCollectionsRef = bs3TabGroup;
+                        }
+                    }
+                }
+            });
+
+            if(gridModel.colForUnreferencedActionsRef == null && gridModel.fieldSetForUnreferencedActionsRef == null) {
+                bs3Grid.getMetadataErrors().add("No column and also no fieldset found with the 'unreferencedActions' attribute set");
+            }
+            if(gridModel.fieldSetForUnreferencedPropertiesRef == null) {
+                bs3Grid.getMetadataErrors().add("No fieldset found with the 'unreferencedProperties' attribute set");
+            }
+            if(gridModel.colForUnreferencedCollectionsRef == null && gridModel.tabGroupForUnreferencedCollectionsRef == null) {
+                bs3Grid.getMetadataErrors().add("No column and also no tabgroup found with the 'unreferencedCollections' attribute set");
+            }
+            
+            final boolean hasErrors = 
+                    gridModel.colForUnreferencedActionsRef == null 
+                    && gridModel.fieldSetForUnreferencedActionsRef == null 
+                    || gridModel.fieldSetForUnreferencedPropertiesRef == null 
+                    || gridModel.colForUnreferencedCollectionsRef == null 
+                    && gridModel.tabGroupForUnreferencedCollectionsRef == null;
+
+            return hasErrors ? Optional.empty() : Optional.of(gridModel);
             
         }
         
@@ -131,6 +220,9 @@ final class GridModel {
         private void putFieldSet(String id, FieldSet fieldSet) {
             fieldSets.put(id, fieldSet);
             allIds.add(id);            
+        }
+        private static Boolean isSet(final Boolean flag) {
+            return flag != null && flag;
         }
         
     }
