@@ -257,16 +257,16 @@ for (PropertyGroup group in groups) {
                 buf << "\n"
             }
 
-            String configFilePath = property.name.replace('.', File.separatorChar) + ".adoc";
-            def dirBaseSplitAt = configFilePath.lastIndexOf(File.separatorChar)
+            String configFilePath = property.name.replace(".", File.separator) + ".adoc";
+            def dirBaseSplitAt = configFilePath.lastIndexOf(File.separator)
             def configFileParentDir = outputDir + File.separator + configFilePath.substring(0, dirBaseSplitAt)
             def configFileName = configFilePath.substring(dirBaseSplitAt+1)
-
-            def configFile = new File(configFileParentDir, configFileName)
 
             def buf2 = StringBuilder.newInstance()
             buf2 << "= `${property.name}`"
             buf2 << "\n"
+            buf2 << "\n"
+            buf2 << "== Description\n"
             buf2 << "\n"
             if(propertyDescription) {
                 buf2 << propertyDescription
@@ -274,16 +274,30 @@ for (PropertyGroup group in groups) {
                 buf2 << "No description available."
             }
             buf2 << "\n"
+            buf2 << "== Type\n"
+            buf2 << "\n"
             if(property.type) {
-                buf2 << "Type:: ${property.type}"
-                buf2 << "\n"
+                buf2 << "${property.type}"
+            } else {
+                buf2 << "Type not specified (assume string)."
             }
+            buf2 << "\n"
+            buf2 << "\n"
+            buf2 << "== Default Value\n"
+            buf2 << "\n"
             if(property.defaultValue) {
-                buf2 << "Default value:: ${property.defaultValue}"
-                buf2 << "\n"
+                buf2 << "${property.defaultValue}"
+            } else {
+                buf2 << "No default value."
             }
+            buf2 << "\n"
 
-            outputFile.write(buf2.toString())
+//            System.out.println(outputDir)
+//            System.out.println(configFileParentDir)
+//            System.out.println(configFileName)
+            def configFile = new File(configFileParentDir, configFileName)
+            new File(configFileParentDir).mkdirs()
+            configFile.write(buf2.toString())
         }
 
         def outputFile = new File(outputDir, "${group.fileName()}.adoc")
