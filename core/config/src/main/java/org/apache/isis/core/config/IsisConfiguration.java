@@ -970,7 +970,7 @@ public class IsisConfiguration {
                  *     view.
                  * </p>
                  */
-                private DefaultViewConfiguration defaultView = DefaultViewConfiguration.HIDDEN;
+                private DefaultViewConfiguration defaultView = DefaultViewConfiguration.TABLE;
 
                 /**
                  * Defines the default number of objects that are shown in a &quot;parented&quot; collection of a

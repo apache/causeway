@@ -38,7 +38,6 @@ import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.model.layout.Configuration_usingLayout;
@@ -68,7 +67,6 @@ import lombok.val;
     IsisPresets.SilenceMetaModel,
     IsisPresets.SilenceProgrammingModel
 })
-@Incubating("tests do fail, framwork needs fixing")
 class DomainObjectLayoutTest {
     
     @Inject private FactoryService factoryService;

@@ -443,7 +443,6 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         
         for (final String collectionId : collectionIds) {
             val collectionLayoutData = new CollectionLayoutData(collectionId);
-            //collectionLayoutData.setDefaultView("table"); redundant, done later with MetamodelToGridOverridingVisitor
             tabRowCol.getCollections().add(collectionLayoutData);
             onNewLayoutData.accept(collectionId, collectionLayoutData);
         }
@@ -471,7 +470,6 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             tabRow.getCols().add(tabRowCol);
 
             final CollectionLayoutData layoutMetadata = new CollectionLayoutData(collectionId);
-            //collectionLayoutData.setDefaultView("table"); redundant, done later with MetamodelToGridOverridingVisitor
             tabRowCol.getCollections().add(layoutMetadata);
         }
     }

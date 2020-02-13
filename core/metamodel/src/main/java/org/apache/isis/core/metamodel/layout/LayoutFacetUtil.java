@@ -122,10 +122,8 @@ public class LayoutFacetUtil {
             final String defaultView = defaultViewFacet.value();
             if(_Strings.isNotEmpty(defaultView)) {
                 collectionLayoutData.setDefaultView(defaultView);
-                return;
             }
         }
-        collectionLayoutData.setDefaultView("table");
     }
 
     public void setDescribedAsIfAny(
