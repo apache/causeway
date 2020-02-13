@@ -66,6 +66,9 @@ import io.swagger.models.properties.StringProperty;
 
 class Generation {
 
+    // double quotes
+    private static final String DQ = ""; // empty seems the only variant that works
+    
     private final String basePath;
     private final SwaggerService.Visibility visibility;
     private final SpecificationLoader specificationLoader;
@@ -846,15 +849,15 @@ class Generation {
                     supportsV1 = true;
                 }
                 
-                operation = operation
-                        .produces("application/json;profile=urn:org.restfulobjects:repr-types/" + reprType);
+                operation = operation.produces(
+                        "application/json;profile=" + DQ + "urn:org.restfulobjects:repr-types/" + reprType + DQ);
             }
         }
         
         if(supportsV1) {
             operation = operation
-                .produces("application/json;profile=urn:org.apache.isis/v1")
-                .produces("application/json;profile=urn:org.apache.isis/v1;suppress=all");
+                .produces("application/json;profile=" + DQ + "urn:org.apache.isis/v1" + DQ)
+                .produces("application/json;profile=" + DQ + "urn:org.apache.isis/v1;suppress=all" + DQ);
         }
                 
         return operation;
