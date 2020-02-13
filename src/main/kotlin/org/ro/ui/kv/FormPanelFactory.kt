@@ -41,6 +41,7 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
                     ValueType.DATE.type -> add(createDate(fi))
                     ValueType.TIME.type -> add(createTime(fi))
                     ValueType.BOOLEAN.type -> add(createBoolean(fi))
+                    ValueType.IMAGE.type -> add(createImage(fi))
                 }
             }
         }
@@ -131,6 +132,14 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
             preSelectedValue = list.first().first
         }
         return SimpleSelect(label = fi.label, options = list, value = preSelectedValue)
+    }
+
+    private fun createImage(fi: FormItem): VPanel {
+        val item = VPanel(spacing = 3) {
+            id = "diagramPanel"
+        }
+        item.height = 100.perc
+        return item
     }
 
 }

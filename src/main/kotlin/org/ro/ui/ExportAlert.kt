@@ -3,8 +3,9 @@ package org.ro.ui
 import org.ro.core.Utils
 import org.ro.core.event.EventState
 import org.ro.core.event.EventStore
-import org.ro.org.ro.core.event.ReplayEvent
+import org.ro.core.event.ReplayEvent
 import org.ro.ui.kv.RoDialog
+import org.ro.utils.DomUtils
 
 class ExportAlert() : Command {
 
@@ -42,7 +43,7 @@ class ExportAlert() : Command {
     }
 
     override fun execute() {
-        Utils.download("ReplayEvents.json", jsonOutput)
+        DomUtils.download("ReplayEvents.json", jsonOutput)
     }
 
 }

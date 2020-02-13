@@ -12,7 +12,7 @@ import org.ro.to.TransferObject
 @Serializable
 data class Layout(val cssClass: String? = null,
                   val row: MutableList<RowLayout> = mutableListOf<RowLayout>()) : TransferObject {
-
+//TODO check if :TransferObject is required
     var properties = listOf<PropertyLayout>()
 
     init {
@@ -20,7 +20,7 @@ data class Layout(val cssClass: String? = null,
         // row[1] contains data, tabs, collections, etc.
         val secondRow = row[1] // traditional C braintwist
         var colsLyt = secondRow.cols.first()
-        var colLyt = colsLyt.col.first()
+        var colLyt = colsLyt.col
         if (colLyt != null) {
             val tgLyts = colLyt.tabGroup
             if (tgLyts.isNotEmpty()) {
@@ -30,7 +30,7 @@ data class Layout(val cssClass: String? = null,
                 colsLyt = row.cols.first()
             }
         }
-        colLyt = colsLyt.col!!.first()
+        colLyt = colsLyt.col
         val fsList = colLyt.fieldSet
         if (fsList.isNotEmpty()) {
             val fsLyt = fsList.first()

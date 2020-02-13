@@ -7,7 +7,7 @@ import org.ro.to.Link
 data class ColLayout(val domainObject: DomainObjectLayout? = null,
                      val row: MutableList<RowLayout> = mutableListOf<RowLayout>(),
                      val fieldSet: MutableList<FieldSetLayout> = mutableListOf<FieldSetLayout>(),
-                     val action: MutableList<ActionLayout> = mutableListOf<ActionLayout>(),  // org.ro.authors
+                     val action: MutableList<ActionLayout> = mutableListOf<ActionLayout>(),
                      val collection: MutableList<CollectionLayout> = mutableListOf<CollectionLayout>(),
                      val metadataError: String? = "",
                      val cssClass: String? = "",

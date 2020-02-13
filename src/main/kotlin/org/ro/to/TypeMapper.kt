@@ -6,6 +6,7 @@ enum class ValueType(val type: String) {
     BOOLEAN("Boolean"),
     DATE("Date"),
     HTML("Html"),
+    IMAGE("Image"),
     NUMERIC("Numeric"),
     PASSWORD("Password"),
     TEXT("Text"),
