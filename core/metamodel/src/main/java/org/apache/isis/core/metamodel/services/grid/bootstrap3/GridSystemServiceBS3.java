@@ -59,6 +59,7 @@ import org.apache.isis.core.commons.internal.resources._Resources;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetAnnotation;
+import org.apache.isis.core.metamodel.layout.LayoutFacetUtil.MetamodelToGridOverridingVisitor;
 import org.apache.isis.core.metamodel.services.grid.GridReaderUsingJaxb;
 import org.apache.isis.core.metamodel.services.grid.GridSystemServiceAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -408,6 +409,9 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             }
         }
 
+        // prime all layout data from metamodel
+        grid.visit(MetamodelToGridOverridingVisitor.of(objectSpec));
+        
         return true;
     }
 
@@ -439,7 +443,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         
         for (final String collectionId : collectionIds) {
             val collectionLayoutData = new CollectionLayoutData(collectionId);
-            collectionLayoutData.setDefaultView("table");
+            //collectionLayoutData.setDefaultView("table"); redundant, done later with MetamodelToGridOverridingVisitor
             tabRowCol.getCollections().add(collectionLayoutData);
             onNewLayoutData.accept(collectionId, collectionLayoutData);
         }
@@ -467,7 +471,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             tabRow.getCols().add(tabRowCol);
 
             final CollectionLayoutData layoutMetadata = new CollectionLayoutData(collectionId);
-            layoutMetadata.setDefaultView("table");
+            //collectionLayoutData.setDefaultView("table"); redundant, done later with MetamodelToGridOverridingVisitor
             tabRowCol.getCollections().add(layoutMetadata);
         }
     }

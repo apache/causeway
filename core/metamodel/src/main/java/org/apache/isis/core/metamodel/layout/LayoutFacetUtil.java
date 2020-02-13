@@ -120,10 +120,12 @@ public class LayoutFacetUtil {
         val defaultViewFacet = facetHolder.getFacet(DefaultViewFacet.class);
         if(isDoOp(defaultViewFacet)) {
             final String defaultView = defaultViewFacet.value();
-            if(!_Strings.isNullOrEmpty(defaultView)) {
+            if(_Strings.isNotEmpty(defaultView)) {
                 collectionLayoutData.setDefaultView(defaultView);
+                return;
             }
         }
+        collectionLayoutData.setDefaultView("table");
     }
 
     public void setDescribedAsIfAny(
