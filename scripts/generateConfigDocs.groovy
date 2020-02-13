@@ -250,13 +250,41 @@ for (PropertyGroup group in groups) {
             }
             buf << "\n"
             buf << "| "
-            if(property.description) {
-                buf << toAsciidoc(" ${property.description}")
+            def propertyDescription = toAsciidoc(" ${property.description}")
+            if(propertyDescription) {
+                buf << propertyDescription
+                buf << "\n"
+                buf << "\n"
             }
-            buf << "\n"
-            buf << "\n"
-        }
 
+            String configFilePath = property.name.replace('.', File.separatorChar) + ".adoc";
+            def dirBaseSplitAt = configFilePath.lastIndexOf(File.separatorChar)
+            def configFileParentDir = outputDir + File.separator + configFilePath.substring(0, dirBaseSplitAt)
+            def configFileName = configFilePath.substring(dirBaseSplitAt+1)
+
+            def configFile = new File(configFileParentDir, configFileName)
+
+            def buf2 = StringBuilder.newInstance()
+            buf2 << "= `${property.name}`"
+            buf2 << "\n"
+            buf2 << "\n"
+            if(propertyDescription) {
+                buf2 << propertyDescription
+            } else {
+                buf2 << "No description available."
+            }
+            buf2 << "\n"
+            if(property.type) {
+                buf2 << "Type:: ${property.type}"
+                buf2 << "\n"
+            }
+            if(property.defaultValue) {
+                buf2 << "Default value:: ${property.defaultValue}"
+                buf2 << "\n"
+            }
+
+            outputFile.write(buf2.toString())
+        }
 
         def outputFile = new File(outputDir, "${group.fileName()}.adoc")
         outputFile.write(buf.toString())
@@ -266,6 +294,8 @@ System.out.println("");
 System.out.println("");
 
 static String toAsciidoc(String str) {
+
+    if (str == null) return null;
 
     System.out.print(".");
     str = str.replaceAll( /\{@link[ ]+?([^}]+?)[ ]+?([^}]+?)}/, '$2')
