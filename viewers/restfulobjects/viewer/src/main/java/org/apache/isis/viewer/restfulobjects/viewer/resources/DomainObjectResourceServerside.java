@@ -341,7 +341,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         val gridFacet = objectSpec.getFacet(GridFacet.class);
         
         if(gridFacet == null) {
-            Optional.empty();
+            return Optional.empty();
         } 
         val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         val grid = gridFacet.getGrid(objectAdapter);
