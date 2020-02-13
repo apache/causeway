@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -59,7 +60,7 @@ import org.apache.isis.core.commons.internal.resources._Resources;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetAnnotation;
-import org.apache.isis.core.metamodel.layout.LayoutFacetUtil.MetamodelToGridOverridingVisitor;
+import org.apache.isis.core.metamodel.layout.LayoutFacetUtil.LayoutDataFactory;
 import org.apache.isis.core.metamodel.services.grid.GridReaderUsingJaxb;
 import org.apache.isis.core.metamodel.services.grid.GridSystemServiceAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -188,6 +189,8 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             return false;
         }
         val gridModel = gridModelIfValid.get(); 
+        
+        val layoutDataFactory = LayoutDataFactory.of(objectSpec);
 
         // * surplus ... those defined in the grid model but not available with the meta-model 
         // * missing ... those available with the meta-model but missing in the grid-model 
@@ -258,14 +261,22 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                         .map(ObjectAssociation::getId)
                         .collect(Collectors.toList());
 
-                addPropertiesTo(fieldSet, associations1To1Ids, propertyLayoutDataById::put);
+                addPropertiesTo(
+                        fieldSet, 
+                        associations1To1Ids,
+                        layoutDataFactory::createPropertyLayoutData,
+                        propertyLayoutDataById::put);
             }
 
             if(!unboundPropertyIds.isEmpty()) {
                 val fieldSet = gridModel.getFieldSetForUnreferencedPropertiesRef();
                 if(fieldSet != null) {
                     unboundPropertyIds.removeAll(unboundMetadataContributingIds);
-                    addPropertiesTo(fieldSet, unboundPropertyIds, propertyLayoutDataById::put);
+                    addPropertiesTo(
+                            fieldSet,
+                            unboundPropertyIds,
+                            layoutDataFactory::createPropertyLayoutData,
+                            propertyLayoutDataById::put);
                 }
             }
         }
@@ -291,11 +302,19 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
 
             final BS3TabGroup bs3TabGroup = gridModel.getTabGroupForUnreferencedCollectionsRef();
             if(bs3TabGroup != null) {
-                addCollectionsTo(bs3TabGroup, sortedMissingCollectionIds, objectSpec);
+                addCollectionsTo(
+                        bs3TabGroup, 
+                        sortedMissingCollectionIds, 
+                        objectSpec,
+                        layoutDataFactory::createCollectionLayoutData);
             } else {
                 final BS3Col bs3Col = gridModel.getColForUnreferencedCollectionsRef();
                 if(bs3Col != null) {
-                    addCollectionsTo(bs3Col, sortedMissingCollectionIds, collectionLayoutDataById::put);
+                    addCollectionsTo(
+                        bs3Col, 
+                        sortedMissingCollectionIds,
+                        layoutDataFactory::createCollectionLayoutData,
+                        collectionLayoutDataById::put);
                 }
             }
         }
@@ -374,7 +393,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             }
             // if the @MemberOrder for the action references a field set (that has bound
             // associations), then don't mark it as missing, but instead explicitly add it to the
-            // list of actions of that fieldset.
+            // list of actions of that field-set.
             final Set<String> boundAssociationIds = boundAssociationIdsByFieldSetId.get(id);
             if(boundAssociationIds != null && !boundAssociationIds.isEmpty()) {
 
@@ -400,24 +419,30 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         if(!missingActionIds.isEmpty()) {
             final BS3Col bs3Col = gridModel.getColForUnreferencedActionsRef();
             if(bs3Col != null) {
-                addActionsTo(bs3Col, missingActionIds, actionLayoutDataById::put);
+                addActionsTo(
+                        bs3Col,
+                        missingActionIds, 
+                        layoutDataFactory::createActionLayoutData,
+                        actionLayoutDataById::put);
             } else {
                 final FieldSet fieldSet = gridModel.getFieldSetForUnreferencedActionsRef();
                 if(fieldSet != null) {
-                    addActionsTo(fieldSet, missingActionIds, actionLayoutDataById::put);
+                    addActionsTo(
+                            fieldSet, 
+                            missingActionIds,
+                            layoutDataFactory::createActionLayoutData,
+                            actionLayoutDataById::put);
                 }
             }
         }
 
-        // prime all layout data from metamodel
-        grid.visit(MetamodelToGridOverridingVisitor.of(objectSpec));
-        
         return true;
     }
 
     private void addPropertiesTo(
             final FieldSet fieldSet,
             final Collection<String> propertyIds,
+            final Function<String, PropertyLayoutData> layoutFactory,
             final BiConsumer<String, PropertyLayoutData> onNewLayoutData) {
         
         final Set<String> existingIds =
@@ -429,7 +454,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             if(existingIds.contains(propertyId)) {
                 continue;
             }
-            val propertyLayoutData = new PropertyLayoutData(propertyId);
+            val propertyLayoutData = layoutFactory.apply(propertyId);
             fieldSet.getProperties().add(propertyLayoutData);
             propertyLayoutData.setOwner(fieldSet);
             onNewLayoutData.accept(propertyId, propertyLayoutData);
@@ -439,10 +464,11 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
     private void addCollectionsTo(
             final BS3Col tabRowCol,
             final Collection<String> collectionIds,
+            final Function<String, CollectionLayoutData> layoutFactory,
             final BiConsumer<String, CollectionLayoutData> onNewLayoutData) {
         
         for (final String collectionId : collectionIds) {
-            val collectionLayoutData = new CollectionLayoutData(collectionId);
+            val collectionLayoutData = layoutFactory.apply(collectionId);
             tabRowCol.getCollections().add(collectionLayoutData);
             onNewLayoutData.accept(collectionId, collectionLayoutData);
         }
@@ -451,7 +477,8 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
     private void addCollectionsTo(
             final BS3TabGroup tabGroup,
             final Collection<String> collectionIds,
-            final ObjectSpecification objectSpec) {
+            final ObjectSpecification objectSpec,
+            final Function<String, CollectionLayoutData> layoutFactory) {
         
         for (final String collectionId : collectionIds) {
             final BS3Tab bs3Tab = new BS3Tab();
@@ -469,18 +496,19 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             tabRowCol.setOwner(tabRow);
             tabRow.getCols().add(tabRowCol);
 
-            final CollectionLayoutData layoutMetadata = new CollectionLayoutData(collectionId);
-            tabRowCol.getCollections().add(layoutMetadata);
+            val collectionLayoutData = layoutFactory.apply(collectionId);
+            tabRowCol.getCollections().add(collectionLayoutData);
         }
     }
 
     protected void addActionsTo(
             final BS3Col bs3Col,
             final Collection<String> actionIds,
+            final Function<String, ActionLayoutData> layoutFactory,
             final BiConsumer<String, ActionLayoutData> onNewLayoutData) {
         
         for (String actionId : actionIds) {
-            val actionLayoutData = new ActionLayoutData(actionId);
+            val actionLayoutData = layoutFactory.apply(actionId);
             addActionTo(bs3Col, actionLayoutData);
             onNewLayoutData.accept(actionId, actionLayoutData);
         }
@@ -489,10 +517,11 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
     private void addActionsTo(
             final FieldSet fieldSet,
             final Collection<String> actionIds,
+            final Function<String, ActionLayoutData> layoutFactory,
             final BiConsumer<String, ActionLayoutData> onNewLayoutData) {
         
         for (String actionId : actionIds) {
-            val actionLayoutData = new ActionLayoutData(actionId);
+            val actionLayoutData = layoutFactory.apply(actionId);
             addActionTo(fieldSet, actionLayoutData);
             onNewLayoutData.accept(actionId, actionLayoutData);
         }
