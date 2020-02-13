@@ -14,9 +14,9 @@ One way to implement is to use the xref:refguide:applib-svc:core-domain-api/Even
 
 * Set up a xref:refguide:applib-cm:classes/domainevent.adoc[domain event] xref:refguide:applib-cm:classes/super.adoc#AbstractSubscriber[subscriber] that can veto the changes.
 
-* if the change is made through an action, you can use xref:refguide:applib-ant:Action.adoc#domainEvent[`@Action#domainEvent``].
+* if the change is made through an action, you can use xref:refguide:applib-ant:Action.adoc#domainEvent[`@Action#domainEvent`].
 
-if if the change is made through an edit, you can use xref:refguide:applib-ant:Property.adoc#domainEvent[`@Property#domainEvent``].
+if if the change is made through an edit, you can use xref:refguide:applib-ant:Property.adoc#domainEvent[`@Property#domainEvent`].
 
 You'll need some way to know which fields should be spell checked.  Two ways spring to mind:
 

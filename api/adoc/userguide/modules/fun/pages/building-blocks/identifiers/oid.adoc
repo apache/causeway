@@ -33,7 +33,7 @@ When the PDF is scanned by the mail room, the barcode could be read to attach th
 * and of course both the xref:vro:ROOT:about.adoc[RestfulObjects viewer] and xref:vw:ROOT:about.adoc[Wicket viewer] use the oid tuple to look up, render and allow the user to interact with domain objects.
 
 Although the exact content of an OID should be considered opaque by domain objects, it is possible for domain objects to obtain OIDs.
-These are represented as ``Bookmark``s, obtained from the xref:refguide:applib-svc:integration-api/BookmarkService.adoc[``BookmarkService``].
+These are represented as ``Bookmark``s, obtained from the xref:refguide:applib-svc:integration-api/BookmarkService.adoc[``BookmarkService`].
 Deep links meanwhile can be obtained from the xref:refguide:applib-svc:presentation-layer-api/DeepLinkService.adoc[``DeepLinkService`].
 
 OIDs can also be converted into XML format, useful for integration scenarios.

@@ -30,16 +30,16 @@ public class Customer {
     public void setMiddleInitial(String middleInitial) { /* ... */ }
 ----
 
-Isis also provides xref:refguide:applib-ant:Property.adoc#optionality[`@Property#optionality``] attribute.  If both are specified, Apache Isis will check when it initializes for any contradictions, and will fail-fast with an appropriate error message in the log if there are.
+Isis also provides xref:refguide:applib-ant:Property.adoc#optionality[`@Property#optionality`] attribute.  If both are specified, Apache Isis will check when it initializes for any contradictions, and will fail-fast with an appropriate error message in the log if there are.
 
-You should also be aware that in the lack of either the `@Column#allowsNull()` or the `@Property#optionality()` attributes, that the JDO and Apache Isis defaults differ.  Apache Isis rule is straight-forward: properties are assumed to be required.  JDO on the other hand specifies that only primitive types are mandatory; everything else is assumed to be optional.  Therefore a lack of either annotation can also trigger the fail-fast validation check.
+You should also be aware that in the lack of either the `@Column#allowsNull` or the `@Property#optionality` attributes, that the JDO and Apache Isis defaults differ.  Apache Isis rule is straight-forward: properties are assumed to be required.  JDO on the other hand specifies that only primitive types are mandatory; everything else is assumed to be optional.  Therefore a lack of either annotation can also trigger the fail-fast validation check.
 
-In the vast majority of cases you should be fine just to add the `@Column#allowsNull()` attribute to the getter.  But see the documentation for xref:refguide:applib-ant:Property.adoc#optionality[`@Property#optionality``] attribute for discussion on one or two minor edge cases.
+In the vast majority of cases you should be fine just to add the `@Column#allowsNull` attribute to the getter.  But see the documentation for xref:refguide:applib-ant:Property.adoc#optionality[`@Property#optionality`] attribute for discussion on one or two minor edge cases.
 
 
 == Length for ``String``s
 
-The `length()` attribute is used to specify the length of `java.lang.String` property types as they map to `varchar(n)` columns.
+The `length` attribute is used to specify the length of `java.lang.String` property types as they map to `varchar(n)` columns.
 
 For example:
 
@@ -57,7 +57,8 @@ public class Customer {
     public void setLastName(String lastName) { /* ... */ }
 ----
 
-Isis also provides xref:refguide:applib-ant:Property.adoc#maxLength[`@Property#maxLength``] attribute.  If both are specified, Apache Isis will check when it initializes for any contradictions, and will fail-fast with an appropriate error message in the log if there are.
+Apache Isis also provides xref:refguide:applib-ant:Property.adoc#maxLength[`@Property#maxLength`] attribute.
+If both are specified, Apache Isis will check when it initializes for any contradictions, and will fail-fast with an appropriate error message in the log if there are.
 
 
 
