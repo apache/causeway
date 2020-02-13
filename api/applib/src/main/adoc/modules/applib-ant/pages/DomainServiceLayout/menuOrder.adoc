@@ -4,7 +4,7 @@
 
 
 
-The `menuOrder()` attribute determines the ordering of a domain service's actions as menu items within a specified menu bar and top-level menu.
+The `menuOrder` attribute determines the ordering of a domain service's actions as menu items within a specified menu bar and top-level menu.
 
 
 The algorithm works as follows:
@@ -40,7 +40,7 @@ public class DemoDomainEventSubscriptions {
 ----
 <1> render on the "Prototyping" menu
 <2> positioning relative to other service's on the "Prototyping" menu
-<3> by convention (nothing more) the `@MemberOrder#sequence()` attribute continues the same Dewey decimal sequence format (a simple string "1" could in fact have been used instead)
+<3> by convention (nothing more) the `@MemberOrder#sequence` attribute continues the same Dewey decimal sequence format (a simple string "1" could in fact have been used instead)
 
 
 while others come from services provided by Apache Isis itself, eg:
@@ -60,7 +60,7 @@ public class MetaModelServicesMenu {
 ----
 <1> render on the "Prototyping" menu
 <2> positioning relative to other service's on the "Prototyping" menu; this appears after the `DemoDomainEventSubscriptions` service shown above
-<3> by convention (nothing more) the `@MemberOrder#sequence()` attribute continues the same Dewey decimal sequence format (a simple string "1", "2", "3", ... could in fact have been used instead)
+<3> by convention (nothing more) the `@MemberOrder#sequence` attribute continues the same Dewey decimal sequence format (a simple string "1", "2", "3", ... could in fact have been used instead)
 
 
 

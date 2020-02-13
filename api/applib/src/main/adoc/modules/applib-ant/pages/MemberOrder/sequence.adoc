@@ -5,6 +5,6 @@
 
 // TODO: v2: replace @MemberOrder#sequence() with @PropertyLayout#sequence().
 
-Broadly speaking the `sequence()` attribute orders members once they have been grouped.
+Broadly speaking the `sequence` attribute orders members once they have been grouped.
 
 As this is an important topic, there is a xref:vw:ROOT:layout.adoc[separate chapter] that discussed object layout in full.

@@ -183,15 +183,15 @@ public class Order {
 }
 ----
 
-As can be seen, whether a command is actually persisted does not always follow the value of the `commandPersistence()` attribute.
-This is because the `command()` attribute actually determines whether any command metadata for the action is captured within the framework's internal metamodel.
+As can be seen, whether a command is actually persisted does not always follow the value of the `commandPersistence` attribute.
+This is because the `command` attribute actually determines whether any command metadata for the action is captured within the framework's internal metamodel.
 If `command` is `DISABLED` or does not otherwise apply due to the action's declared semantics, then the framework decides to persist a command based solely on whether the action dirtied any objects (as if `commandPersistence()` was set to `IF_HINTED`).
 
 
 
 == `commandExecuteIn()`
 
-For persisted commands, the `commandExecuteIn()` attribute determines whether the `Command` should be executed in the foreground (the default) or executed in the background.
+For persisted commands, the `commandExecuteIn` attribute determines whether the `Command` should be executed in the foreground (the default) or executed in the background.
 
 Background execution means that the command is not executed immediately, but is available for a configured xref:refguide:applib-svc:application-layer-spi/BackgroundCommandService.adoc[`BackgroundCommandService`] to execute, eg by way of an in-memory scheduler such as Quartz.  See xref:userguide:btb:about.adoc#BackgroundCommandExecution[here] for further information on this topic.
 
@@ -217,7 +217,7 @@ The returned object from this property edit is the persisted `Command` itself.
 
 == `commandDtoProcessor()`
 
-The `commandDtoProcessor()` attribute allows an implementation of `CommandDtoProcessor` to be specified.
+The `commandDtoProcessor` attribute allows an implementation of `CommandDtoProcessor` to be specified.
 This interface has the following API:
 
 [source,java]

@@ -5,7 +5,7 @@
 
 
 
-The `maxLength()` attribute applies only to `String` properties, indicating the maximum number of characters that the user may enter (for example in a text field in the UI).
+The `maxLength` attribute applies only to `String` properties, indicating the maximum number of characters that the user may enter (for example in a text field in the UI).
 The attribute It is ignored if applied to properties of any other type.
 
 
@@ -24,14 +24,14 @@ public class Customer {
 }
 ----
 
-In this case there is therefore no need for the `@Property#maxLength()` attribute.
+In this case there is therefore no need for the `@Property#maxLength` attribute.
 
 
 
 == Non-persistent properties
 
 Of course, not every property is persistent (it could instead be derived), and neither is every domain object an entity (it could be a view model).
-For these non persistable properties the `maxLength()` attribute is still required.
+For these non persistable properties the `maxLength` attribute is still required.
 
 For example:
 

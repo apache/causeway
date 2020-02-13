@@ -55,7 +55,7 @@ Note that the discriminator overrides the object type that may otherwise be infe
 `PersistenceCapable`]
 |Used to build Apache Isis' own internal identifier for objects. +
 
-If the `schema()` attribute is specified (and if xref:refguide:applib-ant:Discriminator.adoc[`@Discriminator`] __hasn't__ been specified), is also used to derive the object type, as used in `Bookmark`s, URLs for xref:vro:ROOT:about.adoc[RestfulObjects viewer] and elsewhere.
+If the `schema` attribute is specified (and if xref:refguide:applib-ant:Discriminator.adoc[`@Discriminator`] __hasn't__ been specified), is also used to derive the object type, as used in `Bookmark`s, URLs for xref:vro:ROOT:about.adoc[RestfulObjects viewer] and elsewhere.
 
 |Domain / persistence
 |Class

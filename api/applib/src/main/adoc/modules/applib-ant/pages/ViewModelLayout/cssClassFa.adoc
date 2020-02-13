@@ -5,7 +5,7 @@
 
 
 
-The `cssClassFa()` attribute is used to specify the name of a link:http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icon] name, to be rendered as the domain object's icon.
+The `cssClassFa` attribute is used to specify the name of a link:http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icon] name, to be rendered as the domain object's icon.
 
 This is equivalent to xref:refguide:applib-ant:DomainObjectLayout.adoc#cssClassFa[`@DomainObjectLayout#cssClassFa()`], but for view models instead of entities.
 

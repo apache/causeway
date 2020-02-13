@@ -18,7 +18,7 @@ public class ToDoItemDto {
 }
 ----
 
-The purpose of the `loadedLifecycleEvent()` attribute is to allows a custom subclass to be emitted instead.
+The purpose of the `loadedLifecycleEvent` attribute is to allows a custom subclass to be emitted instead.
 A similar attribute is available for other lifecycle events.
 
 For example:

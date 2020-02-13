@@ -5,7 +5,7 @@
 
 By default, a domain service's actions will be rendered in the application menu bar _and_ be contributed _and_ appear in the REST API _and_ (of course) be available to invoke programmatically wherever that domain service is injected.
 This is great for initial prototyping, but later on you may prefer to add a little more structure.
-This is the purpose of the `nature()` attribute: to indicates the intent of (all of) the actions defined within the domain service.
+This is the purpose of the `nature` attribute: to indicates the intent of (all of) the actions defined within the domain service.
 
 The values of the enum are:
 

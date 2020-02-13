@@ -4,7 +4,7 @@
 
 
 Often an action, when invoked, will return the target (in other words, will "return this").
-The `redirect()` attribute is used to control how the object is re-rendered.
+The `redirect` attribute is used to control how the object is re-rendered.
 
 There are three options:
 

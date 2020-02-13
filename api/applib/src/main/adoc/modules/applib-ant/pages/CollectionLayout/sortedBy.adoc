@@ -3,7 +3,7 @@
 :page-partial:
 
 
-The `sortedBy()` attribute specifies that the collection be ordered using the specified comparator, rather than the natural ordering of the entity (as would usually be the case).
+The `sortedBy` attribute specifies that the collection be ordered using the specified comparator, rather than the natural ordering of the entity (as would usually be the case).
 
 For example:
 

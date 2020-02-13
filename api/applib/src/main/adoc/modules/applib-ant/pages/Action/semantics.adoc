@@ -4,7 +4,7 @@
 
 
 
-The `semantics()` attribute describes whether the invocation modifies state of the system, and if so whether it does so idempotently.  If the action invocation does _not_ modify the state of the system, in other words is safe, then it also can beused to specify whether the results of the action can be cached automatically for the remainder of the request.
+The `semantics` attribute describes whether the invocation modifies state of the system, and if so whether it does so idempotently.  If the action invocation does _not_ modify the state of the system, in other words is safe, then it also can beused to specify whether the results of the action can be cached automatically for the remainder of the request.
 
 The attribute was originally introduced for the xref:vro:ROOT:about.adoc[RestfulObjects viewer] in order that action invocations could be using the appropriate `HTTP` verb (`GET`, `PUT` and `POST`).
 

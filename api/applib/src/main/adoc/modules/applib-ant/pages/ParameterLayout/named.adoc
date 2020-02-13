@@ -4,12 +4,12 @@
 
 
 
-The `named()` attribute explicitly specifies the action parameter's name.
+The `named` attribute explicitly specifies the action parameter's name.
 
 Unlike most other aspects of the Apache Isis metamodel, the name of method parameters cannot (prior to Java 8, at least) be inferred from the Java source code.
 Without other information, Apache Isis uses the object's type (`int`, `String` etc) as the name instead.
 This can be sufficient for application-specific reference types (eg `ToDoItem`) but is generally not sufficient for primitives and other value types.
-The `named()` attribute is therefore often required to specify the parameter name.
+The `named` attribute is therefore often required to specify the parameter name.
 
 As of Java 8, the Java reflection API has been extended.
 The (non-ASF) link:https://platform.incode.org[Incode Platform^]'s paraname8 metamodel extension provides support for this.
@@ -18,7 +18,7 @@ Note that your application must (obviously) be running on Java 8, and be compile
 
 
 By default the name is HTML escaped.
-To allow HTML markup, set the related `namedEscaped()` attribute to `false`.
+To allow HTML markup, set the related `namedEscaped` attribute to `false`.
 
 For example:
 

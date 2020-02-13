@@ -5,7 +5,7 @@
 
 The `@javax.jdo.annotation.PersistenceCapable` is used by JDO/DataNucleus to indicate that a class is a domain entity to be persisted to the database.
 
-Apache Isis also checks for this annotation, and if the `@PersistenceCapable#schema()` attribute is present will use it to form the object type.
+Apache Isis also checks for this annotation, and if the `@PersistenceCapable#schema` attribute is present will use it to form the object type.
 
 [NOTE]
 ====
@@ -66,7 +66,7 @@ public class AddressImpl {
 }
 ----
 
-does _not_ correspond to an object type, because the `schema()` attribute is missing.
+does _not_ correspond to an object type, because the `schema` attribute is missing.
 
 
 

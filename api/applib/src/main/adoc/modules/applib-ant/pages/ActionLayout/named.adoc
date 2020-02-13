@@ -3,7 +3,7 @@
 :page-partial:
 
 
-The `named()` attribute explicitly specifies the action's name, overriding the name that would normally be inferred from the Java source code.
+The `named` attribute explicitly specifies the action's name, overriding the name that would normally be inferred from the Java source code.
 
 
 [TIP]

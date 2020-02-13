@@ -3,7 +3,7 @@
 :page-partial:
 
 
-The `typeOf()` attribute specifies the expected type of an element contained within a collection when for whatever reason the type cannot be inferred from the generic type, or to provide a hint about the actual run-time (as opposed to compile-time) type.
+The `typeOf` attribute specifies the expected type of an element contained within a collection when for whatever reason the type cannot be inferred from the generic type, or to provide a hint about the actual run-time (as opposed to compile-time) type.
 
 
 For example:

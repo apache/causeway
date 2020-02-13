@@ -4,7 +4,7 @@
 
 
 
-The `paged()` attribute specifies the number of rows to display in a standalone collection, as returned from an action invocation.
+The `paged` attribute specifies the number of rows to display in a standalone collection, as returned from an action invocation.
 
 
 

@@ -5,7 +5,7 @@
 
 
 
-By default actions are available irrespective of the xref:refguide:config:deployment-types.adoc[deployment mode].  The `restrictTo()` attribute specifies whether the action should instead be restricted to only available in prototyping mode.
+By default actions are available irrespective of the xref:refguide:config:deployment-types.adoc[deployment mode].  The `restrictTo` attribute specifies whether the action should instead be restricted to only available in prototyping mode.
 
 For example:
 

@@ -3,7 +3,7 @@
 :page-partial:
 
 
-The `objectType()` attribute is used to provide a unique alias for the domain service's class name.
+The `objectType` attribute is used to provide a unique alias for the domain service's class name.
 
 This value is used internally to generate a string representation of an service identity (the `Oid`).
 This can appear in several contexts, including:

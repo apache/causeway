@@ -4,7 +4,7 @@
 
 
 
-For a domain service action that _can_ be contributed, the `contributedAs()` attribute determines how it is contributed: as an action or as an association (ie a property or collection).
+For a domain service action that _can_ be contributed, the `contributedAs` attribute determines how it is contributed: as an action or as an association (ie a property or collection).
 
 The distinction between property or collection is automatic: if the action returns a `java.util.Collection` (or subtype) then the action is contributed as a collection; otherwise it is contributed as a property.
 

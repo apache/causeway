@@ -4,7 +4,7 @@
 
 
 
-The `method()` attribute specifies the name of the method to be treated as a "reserved" method name, meaning that the mixin's name should instead be inferred from the mixin's type.
+The `method` attribute specifies the name of the method to be treated as a "reserved" method name, meaning that the mixin's name should instead be inferred from the mixin's type.
 
 For example:
 

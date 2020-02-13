@@ -24,12 +24,12 @@ If no `name()` is specified then the property is placed in a fallback "General" 
 +
 The name of these member groups/fieldsets are then referenced by xref:refguide:applib-ant:MemberGroupLayout.adoc[`@MemberGroupLayout`].
 
-* for collections, the `name()` attribute is (currently) unused.
+* for collections, the `name` attribute is (currently) unused.
 The `sequence()` orders collections relative to one another
 
-* for actions, the `name()` attribute associates an action with either a property or with a collection.
+* for actions, the `name` attribute associates an action with either a property or with a collection.
 
-** If the `name()` attribute matches a property name, then the action's button is rendered close to the property, according to xref:refguide:applib-ant:ActionLayout.adoc#position[`@ActionLayout#position()`] attribute.
+** If the `name` attribute matches a property name, then the action's button is rendered close to the property, according to xref:refguide:applib-ant:ActionLayout.adoc#position[`@ActionLayout#position()`] attribute.
 
 ** On the other hand if the `name() attribute matches a collection name, then the action's button is rendered on the collection's header.
 
@@ -107,7 +107,7 @@ It also allows subclasses to insert their class members as required.
 The xref:refguide:applib-ant:MemberGroupLayout.adoc[`@MemberGroupLayout`] annotation specifies the relative positioning of property groups/fieldsets as being either in a left column, a middle column or in a right column.
 The annotation also specifies the relative width of the columns.
 
-The property groups/fieldsets in this case are those that are inferred from the `@MemberOrder#name()` attribute.
+The property groups/fieldsets in this case are those that are inferred from the `@MemberOrder#name` attribute.
 
 [TIP]
 ====

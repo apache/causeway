@@ -5,7 +5,7 @@
 
 Whenever a collection of a domain object is interacted with then a domain event will be fired, for each of the various phases (hidden, disabled, validated, executing, executed).
 Using xref:refguide:applib-ant:Collection.adoc#domainEvent[`@Collection#domainEvent()`], the actual domain event class fired can be customised.
-the `@DomainObject#collectionDomainEvent()` attribute allows a common event domain class to be fired for all of the collections of the domain object.
+the `@DomainObject#collectionDomainEvent` attribute allows a common event domain class to be fired for all of the collections of the domain object.
 
 For example:
 

@@ -4,7 +4,7 @@
 
 
 
-The `invokeOn()` attribute indicates whether the an action can be invoked on a single object (the default) and/or on many objects in a collection.
+The `invokeOn` attribute indicates whether the an action can be invoked on a single object (the default) and/or on many objects in a collection.
 
 For example:
 

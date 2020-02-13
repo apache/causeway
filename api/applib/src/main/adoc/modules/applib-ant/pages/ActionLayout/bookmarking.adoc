@@ -4,7 +4,7 @@
 
 
 
-The `bookmarking()` attribute indicates if an action (with safe xref:refguide:applib-ant:Action.adoc#semantics[action semantics]) is automatically bookmarked.
+The `bookmarking` attribute indicates if an action (with safe xref:refguide:applib-ant:Action.adoc#semantics[action semantics]) is automatically bookmarked.
 
 
 

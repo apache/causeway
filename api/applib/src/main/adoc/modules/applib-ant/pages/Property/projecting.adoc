@@ -9,7 +9,7 @@ A common use case for view models is to act as a projection of some underlying e
 Very often the object that is of interest to the end-user is the underlying entity, not the view model per se.
 If the view model is displayed within a table (on a home page, say), then when the user clicks the entity/icon link for the view model, they will in fact want to drill-down to the underlying entity and skip the view model completely.
 
-The `projecting()` attribute allows the view model to indicate which of its properties holds a reference to the underlying entity of which it is a projection.
+The `projecting` attribute allows the view model to indicate which of its properties holds a reference to the underlying entity of which it is a projection.
 
 For example:
 

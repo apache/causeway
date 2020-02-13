@@ -4,7 +4,7 @@
 
 
 
-The `bookmarking()` attribute indicates that an entity is automatically bookmarked.
+The `bookmarking` attribute indicates that an entity is automatically bookmarked.
 This attribute is also supported for  xref:refguide:applib-ant:Action.adoc#bookmarking[domain objects].
 
 (In the Wicket viewer), a link to a bookmarked object is shown in the bookmarks panel:

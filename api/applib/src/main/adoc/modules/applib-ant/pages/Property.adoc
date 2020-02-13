@@ -152,7 +152,7 @@ public class Customer {
 }
 ----
 <1> the (fictitious) `EmailUtil.ensureValid(...)` (omitted for brevity) returns a string explaining if an email is invalid
-<2> generally use instead of the `@Property#optionality()` attribute
+<2> generally use instead of the `@Property#optionality` attribute
 
 
 

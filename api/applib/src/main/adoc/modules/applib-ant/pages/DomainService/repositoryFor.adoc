@@ -3,7 +3,7 @@
 :page-partial:
 
 
-The `repositoryFor()` attribute is intended for domain services (probably with a xref:refguide:applib-ant:DomainService.adoc#nature[`nature=DOMAIN`]) that are intended to act as repositories for domain entities.
+The `repositoryFor` attribute is intended for domain services (probably with a xref:refguide:applib-ant:DomainService.adoc#nature[`nature=DOMAIN`]) that are intended to act as repositories for domain entities.
 
 For example:
 

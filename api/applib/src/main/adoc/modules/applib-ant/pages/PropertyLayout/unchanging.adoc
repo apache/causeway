@@ -3,7 +3,7 @@
 :page-partial:
 
 
-The `unchanging()` attribute is used to indicate that the value held by the property never changes over time, even when other properties of the object do change.
+The `unchanging` attribute is used to indicate that the value held by the property never changes over time, even when other properties of the object do change.
 
 Setting this attribute to `true` is used as a hint to the viewer to not redraw the property after an AJAX update of some other property/ies of the object have changed.
 This is primarily for performance, eg can improve the user experience when rendering PDFs/blobs.

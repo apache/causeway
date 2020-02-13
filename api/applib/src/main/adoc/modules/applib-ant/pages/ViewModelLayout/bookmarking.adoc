@@ -4,7 +4,7 @@
 
 
 
-The `bookmarking()` attribute indicates that a view model is automatically bookmarked.
+The `bookmarking` attribute indicates that a view model is automatically bookmarked.
 
 This is equivalent to xref:refguide:applib-ant:DomainObjectLayout.adoc#bookmarking[`@DomainObjectLayout#bookmarking()`], but for view models instead of entities.
 

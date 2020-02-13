@@ -4,7 +4,7 @@
 
 
 
-The `renderedAsDayBefore()` attribute applies only to date properties whereby the date will be rendered as the day before the value actually held in the domain object.
+The `renderedAsDayBefore` attribute applies only to date properties whereby the date will be rendered as the day before the value actually held in the domain object.
 It is ignored for properties of other types.
 
 This behaviour might at first glance appear odd, but the rationale is to support the use case of a sequence of instances that represent adjacent intervals of time.

@@ -18,7 +18,7 @@ This section identifies which attributes of `@Column` are recognized and used by
 
 == Nullability
 
-The `allowsNull()` attribute is used to specify if a property is mandatory or is optional.
+The `allowsNull` attribute is used to specify if a property is mandatory or is optional.
 
 For example:
 
@@ -65,7 +65,7 @@ If both are specified, Apache Isis will check when it initializes for any contra
 == Length/scale for ``BigDecimal``s
 
 
-The `length()` and `scale()` attributes are used to infer the precision/scale of `java.math.BigDecimal` property types as they map to `decimal(n,p)` columns.
+The `length()` and `scale` attributes are used to infer the precision/scale of `java.math.BigDecimal` property types as they map to `decimal(n,p)` columns.
 
 For example:
 
@@ -92,7 +92,7 @@ This seems to be a good place to describe some additional common mappings that u
 
 === Mapping foreign keys
 
-The `name()` attribute can be used to override the name of the column.  References to other objects are generally mapped as foreign key columns.  If there are multiple references to a given type, then you will want to override the name that JDO/DataNucleus would otherwise default.
+The `name` attribute can be used to override the name of the column.  References to other objects are generally mapped as foreign key columns.  If there are multiple references to a given type, then you will want to override the name that JDO/DataNucleus would otherwise default.
 
 For example (taken from link:http://github.com/estatio/estatio[estatio] app):
 

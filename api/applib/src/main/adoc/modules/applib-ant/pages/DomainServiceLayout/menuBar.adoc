@@ -4,7 +4,7 @@
 
 
 
-The `menuBar()` attribute is a hint to specify where on the application menu a domain service's actions should be rendered.
+The `menuBar` attribute is a hint to specify where on the application menu a domain service's actions should be rendered.
 
 For example:
 

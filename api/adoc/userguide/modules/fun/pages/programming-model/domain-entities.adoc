@@ -131,7 +131,7 @@ RepositoryService repositoryService;
 ----
 <1> The `RepositoryService` is a generic facade over the JDO/DataNucleus API, provided by the Apache Isis framework.
 <2> Specifies the class that is annotated with `@Query`
-<3> Corresponds to the `@Query#name()` attribute
+<3> Corresponds to the `@Query#name` attribute
 <4> Corresponds to the `:name` parameter in the query JDOQL string
 
 

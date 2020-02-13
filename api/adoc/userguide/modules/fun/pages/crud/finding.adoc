@@ -49,7 +49,7 @@ public class CustomerRepository {
 ----
 <1>	The xref:refguide:applib-svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`] is a generic facade over the JDO/DataNucleus API.
 <2> Specifies the class that is annotated with @Query
-<3> Corresponds to the `@Query#name()` attribute
+<3> Corresponds to the `@Query#name` attribute
 <4> Corresponds to the `:name` parameter in the query JDOQL string
 
 Whenever a query is submitted, the framework will automatically "flush" any pending changes.

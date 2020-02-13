@@ -4,7 +4,7 @@
 
 
 
-The `autoCompleteRepository()` attribute nominates a single method on a domain service as the fallback means for looking up instances of the domain object using a simple string.
+The `autoCompleteRepository` attribute nominates a single method on a domain service as the fallback means for looking up instances of the domain object using a simple string.
 
 For example, this might search for a customer by their name or number.
 Or it could search for a country based on its ISO-3 code or user-friendly name.
@@ -44,7 +44,7 @@ public class CustomerRepository {
 
 == `autoCompleteAction()`
 
-As noted above, by default the method invoked on the repository is assumed to be called "autoComplete".  The optional `autoCompleteAction()` attribute allows the method on the repository to be overridden.
+As noted above, by default the method invoked on the repository is assumed to be called "autoComplete".  The optional `autoCompleteAction` attribute allows the method on the repository to be overridden.
 
 
 For example:

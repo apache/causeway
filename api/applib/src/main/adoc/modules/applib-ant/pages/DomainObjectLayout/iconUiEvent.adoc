@@ -28,7 +28,7 @@ public class ToDoItemDto {
 }
 ----
 
-The purpose of the `iconUiEvent()` attribute is to allows a custom subclass to be emitted instead.
+The purpose of the `iconUiEvent` attribute is to allows a custom subclass to be emitted instead.
 A similar attribute is available for titles and CSS classes.
 
 For example:

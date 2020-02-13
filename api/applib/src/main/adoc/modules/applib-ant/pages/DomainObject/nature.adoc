@@ -4,7 +4,7 @@
 
 
 
-The `nature()` attribute is used to characterize the domain object as either an entity (part of the domain layer) or as a view model (part of the application layer).
+The `nature` attribute is used to characterize the domain object as either an entity (part of the domain layer) or as a view model (part of the application layer).
 If the domain object should be thought of as an entity, it also captures how the persistence of that entity is managed.
 
 For example:

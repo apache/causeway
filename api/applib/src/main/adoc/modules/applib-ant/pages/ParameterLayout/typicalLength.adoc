@@ -4,7 +4,7 @@
 
 
 
-The `typicalLength()` attribute indicates the typical length of a string parameter.
+The `typicalLength` attribute indicates the typical length of a string parameter.
 It is ignored for parameters of other types.
 The attribute is also supported for xref:refguide:applib-ant:PropertyLayout.adoc#typicalLength[properties].
 

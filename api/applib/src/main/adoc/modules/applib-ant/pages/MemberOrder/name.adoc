@@ -5,7 +5,7 @@
 
 // TODO: v2: replace @MemberOrder#name() with @PropertyLayout#group().
 
-Broadly speaking the `name()` attribute is used to group or associate members together.
+Broadly speaking the `name` attribute is used to group or associate members together.
 
 As this is an important topic, there is a xref:vw:ROOT:layout.adoc[separate chapter] that discussed object layout in full.
 

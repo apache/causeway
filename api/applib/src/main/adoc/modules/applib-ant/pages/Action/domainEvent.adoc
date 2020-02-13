@@ -27,7 +27,7 @@ public class ToDoItem {
 ----
 
 
-The `domainEvent()` attribute allows a custom subclass to be emitted allowing more precise subscriptions (to those
+The `domainEvent` attribute allows a custom subclass to be emitted allowing more precise subscriptions (to those
 subclasses) to be defined instead.
 
 

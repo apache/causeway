@@ -4,7 +4,7 @@
 
 
 
-The `cssClassFa()` attribute is used to specify the name of a link:http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icon] name, to be rendered as the domain object's icon.
+The `cssClassFa` attribute is used to specify the name of a link:http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icon] name, to be rendered as the domain object's icon.
 
 If necessary the icon specified can be overridden by a particular object instance using the xref:refguide:applib-cm:methods.adoc#iconName[`iconName()`] method.
 
@@ -25,7 +25,7 @@ There is no need to include the mandatory `fa` "marker" CSS class; it will be au
 The `fa-` prefix can also be omitted from the class names; it will be prepended to each if required.
 
 
-The related `cssClassFaPosition()` attribute is currently unused for domain objects; the icon is always rendered to the left.
+The related `cssClassFaPosition` attribute is currently unused for domain objects; the icon is always rendered to the left.
 
 
 [TIP]

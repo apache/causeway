@@ -6,7 +6,7 @@
 
 The `editing()` annotation indicates whether a collection can be added to or removed from within the UI.
 
-The related `editingDisabledReason()` attribute specifies the a hard-coded reason why the collection cannot be modified directly.
+The related `editingDisabledReason` attribute specifies the a hard-coded reason why the collection cannot be modified directly.
 
 [WARNING]
 ====

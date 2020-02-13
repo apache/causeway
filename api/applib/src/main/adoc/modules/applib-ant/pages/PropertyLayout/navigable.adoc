@@ -3,7 +3,7 @@
 :page-partial:
 
 
-The `navigable()` attribute allows to specify a domain object's (or view's) navigable parent, as utilized by the 'Where am I' feature.
+The `navigable` attribute allows to specify a domain object's (or view's) navigable parent, as utilized by the 'Where am I' feature.
 
 For example:
 

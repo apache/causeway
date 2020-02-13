@@ -3,9 +3,9 @@
 :page-partial:
 
 
-The `editing()` attribute can be used to prevent a property from being modified or cleared, ie to make it read-only.
+The `editing` attribute can be used to prevent a property from being modified or cleared, ie to make it read-only.
 
-The related `editingDisabledReason()` attribute specifies the a hard-coded reason why the property cannot be modified directly.
+The related `editingDisabledReason` attribute specifies the a hard-coded reason why the property cannot be modified directly.
 
 Whether a property is enabled or disabled depends upon these factors:
 

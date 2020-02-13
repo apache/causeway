@@ -4,7 +4,7 @@
 
 
 
-The `multiLine()` attribute specifies that the text field for a string parameter should span multiple lines.  It is ignored for other parameter types.  The attribute is also supported for xref:refguide:applib-ant:PropertyLayout.adoc#multiLine[properties].
+The `multiLine` attribute specifies that the text field for a string parameter should span multiple lines.  It is ignored for other parameter types.  The attribute is also supported for xref:refguide:applib-ant:PropertyLayout.adoc#multiLine[properties].
 
 For example:
 

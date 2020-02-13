@@ -525,7 +525,7 @@ msgid "<i>Quantity</i>"
 msgstr "<i>Quantité</i>"
 ----
 
-For this to work, the `namedEscaped()` attribute must be specified using either the xref:vw:ROOT:layout.adoc#file-based[layout file], or using an annotation such as xref:refguide:applib-ant:PropertyLayout.adoc[`@PropertyLayout`] or xref:refguide:applib-ant:ParameterLayout.adoc[`@ParameterLayout`].
+For this to work, the `namedEscaped` attribute must be specified using either the xref:vw:ROOT:layout.adoc#file-based[layout file], or using an annotation such as xref:refguide:applib-ant:PropertyLayout.adoc[`@PropertyLayout`] or xref:refguide:applib-ant:ParameterLayout.adoc[`@ParameterLayout`].
 
 For example:
 

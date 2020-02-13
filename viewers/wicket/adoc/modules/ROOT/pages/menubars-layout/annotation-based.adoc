@@ -100,7 +100,7 @@ In the UI it is rendered in italics.
 == Tertiary Menu
 
 
-Domain services' actions can be associated with the tertiary menu using the same `@DomainServiceLayout` annotation, but be aware that the `@DomainServiceLayout#name()` attribute will be ignored (there is only one effective menu).
+Domain services' actions can be associated with the tertiary menu using the same `@DomainServiceLayout` annotation, but be aware that the `@DomainServiceLayout#name` attribute will be ignored (there is only one effective menu).
 
 For example, the `updateEpochDate(...)` and `listAllSettings(...)` actions come from the following service:
 

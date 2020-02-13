@@ -4,7 +4,7 @@
 
 
 
-The `hidden()` attribute indicates where (in the UI) the property should be hidden from the user.
+The `hidden` attribute indicates where (in the UI) the property should be hidden from the user.
 
 [TIP]
 ====

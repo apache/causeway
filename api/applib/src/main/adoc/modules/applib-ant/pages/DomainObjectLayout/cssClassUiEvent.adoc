@@ -27,7 +27,7 @@ public class ToDoItemDto {
 }
 ----
 
-The purpose of the `cssClassUiEvent()` attribute is to allows a custom subclass to be emitted instead.
+The purpose of the `cssClassUiEvent` attribute is to allows a custom subclass to be emitted instead.
 A similar attribute is available for titles and icons.
 
 For example:

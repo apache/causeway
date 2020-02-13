@@ -6,7 +6,7 @@
 
 When Apache Isis displays a standalone collection of several objects, it will label the collection using the plural form of the object type.
 By default the plural name will be derived from the end of the singular name, with support for some basic English language defaults (eg using "ies" for names ending with a "y").
-The `plural()` attribute allows the plural form of the class name to be specified explicitly.
+The `plural` attribute allows the plural form of the class name to be specified explicitly.
 
 For example:
 

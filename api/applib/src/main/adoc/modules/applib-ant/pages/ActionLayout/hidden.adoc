@@ -3,7 +3,7 @@
 :page-partial:
 
 
-The `hidden()` attribute indicates where (in the UI) the action should be hidden from the user.
+The `hidden` attribute indicates where (in the UI) the action should be hidden from the user.
 
 
 [TIP]

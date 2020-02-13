@@ -7,7 +7,7 @@
 
 
 By default, Apache Isis assumes that all properties of an domain object or view model are required (mandatory).
-The `optionality()` attribute allows this to be relaxed.
+The `optionality` attribute allows this to be relaxed.
 The attribute is also supported for xref:refguide:applib-ant:Parameter.adoc#optionality[parameters].
 
 That said, properties are most commonly defined on persistent domain objects (entities), in which case the JDO xref:refguide:applib-ant:Column.adoc[`@Column`] should be specified.
@@ -28,12 +28,12 @@ public class Customer {
 }
 ----
 
-In this case there is no need for the `@Property#optionality()` attribute.
+In this case there is no need for the `@Property#optionality` attribute.
 
 
 == Mismatched defaults
 
-If the `@Column#allowsNull()` attribute is omitted and the `@Property#optionality() attribute is also omitted, then note that Isis' defaults and JDO's defaults differ.
+If the `@Column#allowsNull` attribute is omitted and the `@Property#optionality() attribute is also omitted, then note that Isis' defaults and JDO's defaults differ.
 Specifically, Isis always assumes properties are mandatory, whereas JDO specifies that primitives are mandatory, but all reference types are optional.
 
 When Apache Isis initializes it checks for these mismatches during its metamodel validation phase, and will fail to boot ("fail-fast") if there is a mismatch.
@@ -89,7 +89,7 @@ Also, in the future Apache Isis may be extended to support reading annotations f
 == Non-persistent properties
 
 Of course, not every property is persistent (it could instead be derived), and neither is every domain object an entity (it could be a view model).
-For these non persistable properties the `optionality()` attribute is still required.
+For these non persistable properties the `optionality` attribute is still required.
 
 For example:
 

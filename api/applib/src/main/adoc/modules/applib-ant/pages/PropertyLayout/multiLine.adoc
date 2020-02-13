@@ -3,7 +3,7 @@
 :page-partial:
 
 
-The `multiLine()` attribute specifies that the text field for a string property should span multiple lines.  It is ignored for other property types.  The attribute is also supported for xref:refguide:applib-ant:ParameterLayout.adoc#multiLine[parameters].
+The `multiLine` attribute specifies that the text field for a string property should span multiple lines.  It is ignored for other property types.  The attribute is also supported for xref:refguide:applib-ant:ParameterLayout.adoc#multiLine[parameters].
 
 For example:
 

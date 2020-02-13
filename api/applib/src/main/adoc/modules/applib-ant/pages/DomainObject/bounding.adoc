@@ -8,7 +8,7 @@ Some domain classes are immutable to the user, and moreover have only a fixed nu
 Often these are "reference" ("standing") data, or lookup data/pick lists.
 Typical examples could include categories, countries, states, and tax or interest rate tables.
 
-Where the number of instances is relatively small, ie bounded, then the `bounding()` attribute can be used as a hint.
+Where the number of instances is relatively small, ie bounded, then the `bounding` attribute can be used as a hint.
 For such domain objects the framework will automatically allow instances to be selected; xref:vw:ROOT:about.adoc[Wicket viewer] displays these as a drop-down list.
 
 

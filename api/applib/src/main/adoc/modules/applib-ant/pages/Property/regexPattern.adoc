@@ -6,13 +6,13 @@
 
 There are three attributes related to enforcing regular expressions:
 
-* The `regexPattern()` attribute validates the contents of any string property with respect to a regular expression pattern.
+* The `regexPattern` attribute validates the contents of any string property with respect to a regular expression pattern.
 It is ignored if applied to properties of any other type.
 
-* The `regexPatternFlags()` attribute specifies flags that modify the handling of the pattern.
+* The `regexPatternFlags` attribute specifies flags that modify the handling of the pattern.
 The values are those that would normally be passed to `java.util.regex.Pattern#compile(String,int)`.
 
-* The related `regexPatternReplacement()` attribute specifies the error message to show if the provided argument does not match the regex pattern.
+* The related `regexPatternReplacement` attribute specifies the error message to show if the provided argument does not match the regex pattern.
 
 For example:
 

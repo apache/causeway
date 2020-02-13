@@ -5,7 +5,7 @@
 
 
 
-The `maxLength()` attribute applies only to `String` parameters, indicating the maximum number of characters that the user may enter (for example in a text field in the UI).  It is ignored if applied to parameters of any other type.
+The `maxLength` attribute applies only to `String` parameters, indicating the maximum number of characters that the user may enter (for example in a text field in the UI).  It is ignored if applied to parameters of any other type.
 
 
 For example:

@@ -3,7 +3,7 @@
 :page-partial:
 
 
-The `describedAs()` attribute is used to provide a short description of the view model to the user; in the xref:vw:ROOT:about.adoc[Wicket viewer] it is displayed as a 'tool tip'.
+The `describedAs` attribute is used to provide a short description of the view model to the user; in the xref:vw:ROOT:about.adoc[Wicket viewer] it is displayed as a 'tool tip'.
 
 This attribute is the same as xref:refguide:applib-ant:DomainObjectLayout.adoc#describedAs[`@DomainObjectLayout#describedAs`], but for view models instead of entities.
 
