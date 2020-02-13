@@ -15,13 +15,13 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:refguide:applib-ant:Collection.adoc#domainEvent[`domainEvent()`]
+|xref:refguide:applib-ant:Collection.adoc#domainEvent[`domainEvent`]
 |subtype of `CollectionDomainEvent` +
 (`CollectionDomainEvent.Default`)
 |the event type to be posted to the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] to broadcast the collection's business rule checking (hide, disable, validate) and its modification (before and after).
 
 
-|xref:refguide:applib-ant:Collection.adoc#editing[`editing()`]
+|xref:refguide:applib-ant:Collection.adoc#editing[`editing`]
 |`ENABLED`, `DISABLED`, `AS_CONFIGURED` +
 (`AS_CONFIGURED`)
 |whether a collection can be added to or removed from within the UI
@@ -32,13 +32,13 @@ The table below summarizes the annotation's attributes.
 |if `editing()` is `DISABLED`, provides a reason as to why.
 
 
-|xref:refguide:applib-ant:Collection.adoc#hidden[`hidden()`]
+|xref:refguide:applib-ant:Collection.adoc#hidden[`hidden`]
 |`EVERYWHERE`, `OBJECT_FORMS`, `NOWHERE` +
 (`NOWHERE`)
 |indicates where (in the UI) the collection should be hidden from the user.
 
 
-|xref:refguide:applib-ant:Collection.adoc#notPersisted[`notPersisted()`]
+|xref:refguide:applib-ant:Collection.adoc#notPersisted[`notPersisted`]
 |`true`, `false` +
 (`false`)
 |whether to exclude from snapshots. +
@@ -50,7 +50,7 @@ Collection must also be annotated with `@javax.jdo.annotations.NotPersistent` in
 
 
 
-|xref:refguide:applib-ant:Collection.adoc#typeOf[`typeOf()`]
+|xref:refguide:applib-ant:Collection.adoc#typeOf[`typeOf`]
 |
 |hints as to the run-time type of the objects within that collection (as a fallback)
 

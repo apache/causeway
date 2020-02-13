@@ -8,7 +8,7 @@ In fact, it also injects domain services into xref:testing:integtestsupport:abou
 
 [NOTE]
 ====
-One omission: Apache Isis (currently) does not inject services into `o.a.i.applib.spec.Specification` instances (as used by xref:refguide:applib-ant:Property.adoc#mustSatisfy[`@Property#mustSatisfy()`] and xref:refguide:applib-ant:Parameter.adoc#mustSatisfy[`@Parameter#mustSatisfy()`] annotations.
+One omission: Apache Isis (currently) does not inject services into `o.a.i.applib.spec.Specification` instances (as used by xref:refguide:applib-ant:Property.adoc#mustSatisfy[`@Property#mustSatisfy`] and xref:refguide:applib-ant:Parameter.adoc#mustSatisfy[`@Parameter#mustSatisfy`] annotations.
 ====
 
 Apache Isis supports several syntaxes for injecting domain services.

@@ -23,11 +23,11 @@ public class PublishingServiceInternal {
     void publishObjects();                          // <3>
 }
 ----
-<1> to publish an action invocation, as represented by the specified member `Execution` parameter and with the xref:refguide:applib-ant:Action.adoc#publishing[`@Action#publishing()`] annotation attribute or equivalent, to any configured xref:refguide:applib-svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
+<1> to publish an action invocation, as represented by the specified member `Execution` parameter and with the xref:refguide:applib-ant:Action.adoc#publishing[`@Action#publishing`] annotation attribute or equivalent, to any configured xref:refguide:applib-svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
 The `Execution` object will be an instance of `ActionInvocation` (see xref:refguide:applib-svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] for details).
-<2> to publish a property edit, as as represented by the specified member `Execution` parameter and with the xref:refguide:applib-ant:Property.adoc#publishing[`@Property#publishing()`] annotation attribute or equivalent, to any configured xref:refguide:applib-svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
+<2> to publish a property edit, as as represented by the specified member `Execution` parameter and with the xref:refguide:applib-ant:Property.adoc#publishing[`@Property#publishing`] annotation attribute or equivalent, to any configured xref:refguide:applib-svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
 The `Execution` object will be an instance of `PropertyEdit` (see xref:refguide:applib-svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] for details).
-<3> to publish all changed objects that are to be published (with the xref:refguide:applib-ant:DomainObject.adoc#publishing[`@DomainObject#publishing()`] annotation attribute or equivalent).
+<3> to publish all changed objects that are to be published (with the xref:refguide:applib-ant:DomainObject.adoc#publishing[`@DomainObject#publishing`] annotation attribute or equivalent).
 
 
 The service implementation is `o.a.i.c.m.s.publishing.PublishingServiceInternal`.

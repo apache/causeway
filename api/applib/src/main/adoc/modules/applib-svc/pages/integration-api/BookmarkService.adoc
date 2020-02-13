@@ -8,7 +8,7 @@ The `BookmarkService2` domain service (and its various supertypes) provides the 
 
 For example, a `Customer` object with:
 
-* an object type of "custmgmt.Customer" (as per xref:refguide:applib-ant:DomainObject.adoc#objectType[`DomainObject#objectType()`] or equivalent) , and
+* an object type of "custmgmt.Customer" (as per xref:refguide:applib-ant:DomainObject.adoc#objectType[`DomainObject#objectType`] or equivalent) , and
 * an id=123
 
 could correspond to a `Bookmark` with a string representation of `custmgmt.Customer|123`.

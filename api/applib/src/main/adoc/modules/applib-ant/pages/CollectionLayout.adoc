@@ -40,7 +40,7 @@ See the (non-ASF) link:https://platform.incode.org[Incode Platform^] for further
 |indicates where (in the UI) the collection should be hidden from the user.
 
 
-|xref:refguide:applib-ant:CollectionLayout.adoc#named[named()]
+|xref:refguide:applib-ant:CollectionLayout.adoc#named[`named`]
 |String.
 |to override the name inferred from the collection's name in code. +
 

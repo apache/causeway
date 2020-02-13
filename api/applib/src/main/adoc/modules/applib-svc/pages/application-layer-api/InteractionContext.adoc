@@ -14,7 +14,7 @@ invoke child actions/properties, then those sub-executions are captured as a cal
 graph structure.
 
 If a bulk action is performed (as per an action annotated using
-xref:refguide:applib-ant:Action.adoc#invokeOn[`@Action#invokeOn()`]), then this will result in multiple ``Interaction``s, one
+xref:refguide:applib-ant:Action.adoc#invokeOn[`@Action#invokeOn`]), then this will result in multiple ``Interaction``s, one
 per selected object (not one `Interaction` with multiple top-level ``Execution``s).
 
 

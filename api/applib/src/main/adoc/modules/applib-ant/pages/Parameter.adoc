@@ -40,7 +40,7 @@ The table below summarizes the annotation's attributes.
 |specifies a parameter is optional rather than mandatory
 
 
-|xref:refguide:applib-ant:Parameter.adoc#regexPattern[regexPattern()]
+|xref:refguide:applib-ant:Parameter.adoc#regexPattern[regexPattern]
 |regular expression
 |validates the contents of a string parameter against the regular expression pattern
 

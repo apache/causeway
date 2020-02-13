@@ -15,13 +15,13 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:refguide:applib-ant:ActionLayout.adoc#bookmarking[`bookmarking()`]
+|xref:refguide:applib-ant:ActionLayout.adoc#bookmarking[`bookmarking`]
 |`AS_ROOT`, `NEVER` +
 (`NEVER`)
 |indicates if an action (with safe xref:refguide:applib-ant:Action.adoc#semantics[action semantics]) is automatically bookmarked.
 
 
-|xref:refguide:applib-ant:ActionLayout.adoc#contributedAs[`contributedAs()`]
+|xref:refguide:applib-ant:ActionLayout.adoc#contributedAs[`contributedAs`]
 |`AS_BOTH`, `AS_ACTION`, `AS_ASSOCIATION`, `AS_NEITHER` +
 (`AS_BOTH`)
 |for a domain service action that can be contributed, whether to contribute as an action or as an association (ie a property or collection). +
@@ -29,14 +29,14 @@ The table below summarizes the annotation's attributes.
 For a domain service action to be contributed, the domain services must have a xref:refguide:applib-ant:DomainService.adoc#nature[nature] nature of either `VIEW` or `VIEW_CONTRIBUTIONS_ONLY`, and the action must have xref:refguide:applib-ant:Action.adoc#semantics[safe action semantics], and takes a single argument, namely the contributee domain object.
 
 
-|xref:refguide:applib-ant:ActionLayout.adoc#cssClass[`cssClass()`]
+|xref:refguide:applib-ant:ActionLayout.adoc#cssClass[`cssClass`]
 |Any string valid as a CSS class
 |an additional CSS class around the HTML that represents for the action, to allow targetted styling in xref:refguide:config:application-specific/application-css.adoc[`application.css`]. +
 
 Supported by the xref:vw:ROOT:about.adoc[Wicket viewer] but currently ignored by the xref:vro:ROOT:about.adoc[RestfulObjects viewer].
 
 
-|xref:refguide:applib-ant:ActionLayout.adoc#cssClassFa[`cssClassFa()`]
+|xref:refguide:applib-ant:ActionLayout.adoc#cssClassFa[`cssClassFa`]
 |Any valid link:http://fortawesome.github.io/Font-Awesome/[Font awesome] icon name
 |specify a font awesome icon for the action's menu link or icon. +
 
@@ -47,26 +47,26 @@ Supported by the xref:vw:ROOT:about.adoc[Wicket viewer] but currently ignored by
 |Positioning of the icon on the button/menu item.
 
 
-|xref:refguide:applib-ant:ActionLayout.adoc#describedAs[`describedAs()`]
+|xref:refguide:applib-ant:ActionLayout.adoc#describedAs[`describedAs`]
 |String.
 |provides a short description of the action, eg for rendering as a 'tool tip'.
 
 
-|xref:refguide:applib-ant:ActionLayout.adoc#hidden[`hidden()`]
+|xref:refguide:applib-ant:ActionLayout.adoc#hidden[`hidden`]
 |`EVERYWHERE`, `NOWHERE` +
 (`NOWHERE`)
 |indicates where (in the UI) the action should be hidden from the user.
 
 
-|xref:refguide:applib-ant:ActionLayout.adoc#named[`named()`]
+|xref:refguide:applib-ant:ActionLayout.adoc#named[`named`]
 |String.
 |to override the name inferred from the action's name in code. +
 
 A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
 
-|xref:refguide:applib-ant:ActionLayout.adoc#position[`position()`]
+|xref:refguide:applib-ant:ActionLayout.adoc#position[`position`]
 |`BELOW`, `RIGHT`, `PANEL`, `PANEL_DROPDOWN` (`BELOW`)
-|for actions associated (using xref:refguide:applib-ant:MemberOrder.adoc[`@MemberOrder#named()`]) with properties, the positioning of the action's button with respect to the property
+|for actions associated (using xref:refguide:applib-ant:MemberOrder.adoc[`@MemberOrder#named`]) with properties, the positioning of the action's button with respect to the property
 
 
 |===

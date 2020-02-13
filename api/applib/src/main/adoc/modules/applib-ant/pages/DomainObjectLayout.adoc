@@ -23,18 +23,18 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:refguide:applib-ant:DomainObjectLayout.adoc#bookmarking[`bookmarking()`]
+|xref:refguide:applib-ant:DomainObjectLayout.adoc#bookmarking[`bookmarking`]
 |`AS_ROOT`, `AS_CHILD`, `NEVER` +
 (`NEVER`)
 |whether (and how) this domain object should be automatically bookmarked
 
 
-|xref:refguide:applib-ant:DomainObjectLayout.adoc#cssclass[`cssClass()`]
+|xref:refguide:applib-ant:DomainObjectLayout.adoc#cssclass[`cssClass`]
 |Any string valid as a CSS class
 |the css class that a domain class (type) should have, to allow more targetted styling in xref:refguide:config:application-specific/application-css.adoc[`application.css`]
 
 
-|xref:refguide:applib-ant:DomainObjectLayout.adoc#cssClassFa[`cssClassFa()`]
+|xref:refguide:applib-ant:DomainObjectLayout.adoc#cssClassFa[`cssClassFa`]
 |Any valid link:http://fortawesome.github.io/Font-Awesome/[Font awesome] icon name
 |specify a font awesome icon for the action's menu link or icon. +
 
@@ -45,43 +45,43 @@ The table below summarizes the annotation's attributes.
 |Currently unused.
 
 
-|xref:refguide:applib-ant:DomainObjectLayout.adoc#cssClassUiEvent[`cssClassUiEvent()`]
+|xref:refguide:applib-ant:DomainObjectLayout.adoc#cssClassUiEvent[`cssClassUiEvent`]
 |subtype of `CssClassUiEvent` +
 (`CssClassUiEvent.Default`)
 |the event type to be posted to the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain a CSS class for the domain object.
 
-|xref:refguide:applib-ant:DomainObjectLayout.adoc#describedAs[`describedAs()`]
+|xref:refguide:applib-ant:DomainObjectLayout.adoc#describedAs[`describedAs`]
 |String.
 |description of this class, eg to be rendered in a tooltip.
 
-|xref:refguide:applib-ant:DomainObjectLayout.adoc#iconUiEvent[`iconUiEvent()`]
+|xref:refguide:applib-ant:DomainObjectLayout.adoc#iconUiEvent[`iconUiEvent`]
 |subtype of `IconUiEvent` +
 (`IconUiEvent.Default`)
 |the event type to be posted to the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain the icon (name) for the domain object.
 
-|xref:refguide:applib-ant:DomainObjectLayout.adoc#layoutUiEvent[`layoutUiEvent()`]
+|xref:refguide:applib-ant:DomainObjectLayout.adoc#layoutUiEvent[`layoutUiEvent`]
 |subtype of `LayoutUiEvent` +
 (`LayoutUiEvent.Default`)
 |the event type to be posted to the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain the layout (name) for the domain object.
 
-|xref:refguide:applib-ant:DomainObjectLayout.adoc#named[`named()`]
+|xref:refguide:applib-ant:DomainObjectLayout.adoc#named[`named`]
 |String.
 |to override the name inferred from the action's name in code. +
 
 A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
 
 
-|xref:refguide:applib-ant:DomainObjectLayout.adoc#paged[`paged()`]
+|xref:refguide:applib-ant:DomainObjectLayout.adoc#paged[`paged`]
 |Positive integer
 |the page size for instances of this class when rendered within a table (as returned from an action invocation)
 
 
-|xref:refguide:applib-ant:DomainObjectLayout.adoc#plural[`plural()`]
+|xref:refguide:applib-ant:DomainObjectLayout.adoc#plural[`plural`]
 |String.
 |the plural name of the class
 
 
-|xref:refguide:applib-ant:DomainObjectLayout.adoc#titleUiEvent[`titleUiEvent()`]
+|xref:refguide:applib-ant:DomainObjectLayout.adoc#titleUiEvent[`titleUiEvent`]
 |subtype of `TitleUiEvent` +
 (`TitleUiEvent.Default`)
 |the event type to be posted to the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain the title for the domain object.

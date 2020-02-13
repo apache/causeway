@@ -19,6 +19,8 @@ Docker host can be assured.
 
 == Using an `overrides.properties`
 
+WARNING: TODO: v2: this is out of date; instead just cross-reference Spring docs on how to do this.
+
 In addition to loading the regular configuration properties from `WEB-INF` directory (described
 xref:refguide:config:configuration-files.adoc[here]), Apache Isis will also load the `overrides.properties` file.
 

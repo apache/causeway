@@ -7,5 +7,5 @@
 Subclass of xref:refguide:applib-cm:classes.adoc#AbstractLifecycleEvent[`AbstractLifecycleEvent`], broadcast when an object is about to be saved (inserted) into the database using the xref:refguide:applib-svc:core-domain-api/RepositoryService.adoc[`RepositoryService`]'s `#persist(...)` method.
 
 
-`ObjectPersistingEvent.Default` is the implementation that is used by default, but this can be overridden using xref:refguide:applib-ant:DomainObject.adoc#persistingLifecycleEvent[`@DomainObject#persistingLifecycleEvent()`].
+`ObjectPersistingEvent.Default` is the implementation that is used by default, but this can be overridden using xref:refguide:applib-ant:DomainObject.adoc#persistingLifecycleEvent[`@DomainObject#persistingLifecycleEvent`].
 

@@ -649,7 +649,7 @@ Optional (though if omitted then only xref:userguide:fun:building-blocks/types-o
 <9> References the application's module(s), in this case just the one, `ApplicationModule`. +
 This is discussed below.
 <10> Makes the fixture scenario classes available for discovery.
-<11> Normally configuration properties are picked up from Spring Boot's `application.properties` or `application.yaml` files, but additional properties can be overridden directly.
+<11> Normally configuration properties are picked up from Spring Boot's `application.properties` or `application.yml` files, but additional properties can be overridden directly.
 These two both use the `IsisPresets` convenience class, to disable i18n support and for additional debugging log statements.
 
 

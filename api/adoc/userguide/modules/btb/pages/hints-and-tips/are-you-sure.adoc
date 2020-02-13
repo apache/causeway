@@ -9,7 +9,7 @@ In such a case it's probably a good idea for the UI to require that the end-user
 
 == Using action semantics
 
-One way to meet this requirement is using the framework's built-in xref:refguide:applib-ant:Action.adoc#semantics[`@Action#semantics()`] attribute:
+One way to meet this requirement is using the framework's built-in xref:refguide:applib-ant:Action.adoc#semantics[`@Action#semantics``] attribute:
 
 [source,java]
 ----

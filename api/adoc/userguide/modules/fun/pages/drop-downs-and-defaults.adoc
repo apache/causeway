@@ -109,7 +109,7 @@ For example:
 public class Product { /* ... */ }
 ----
 
-For more on this, see xref:refguide:applib-ant:DomainObject.adoc#bounding[`@DomainObject#bounding()`].
+For more on this, see xref:refguide:applib-ant:DomainObject.adoc#bounding[`@DomainObject#bounding`].
 
 Or, if the data type is an enum, then a drop-down will be provided automatically.
 A payment method is a good example of this:
@@ -148,7 +148,7 @@ public class Customers {
 }
 ----
 
-For more on this, see xref:refguide:applib-ant:DomainObject.adoc#autoCompleteRepository[`@DomainObject#autoCompleteRepository()`].
+For more on this, see xref:refguide:applib-ant:DomainObject.adoc#autoCompleteRepository[`@DomainObject#autoCompleteRepository`].
 
 [TIP]
 ====

@@ -37,7 +37,7 @@ If background ``Command``s are used, then an external scheduler, using xref:user
 
 
 
-== `command()` and `commandPersistence()`
+== `command` and `commandPersistence`
 
 The `command()` and `commandPersistence() attributes work together to determine whether a command will actually be persisted.
 There inter-relationship is somewhat complex, so is probably best explained by way of examples:
@@ -274,7 +274,7 @@ If `command` is `DISABLED` or does not otherwise apply due to the action's decla
 
 
 
-== `commandExecuteIn()`
+== `commandExecuteIn`
 
 For persisted commands, the `commandExecuteIn()` attribute determines whether the `Command` should be executed in the foreground (the default) or executed in the background.
 
@@ -300,7 +300,7 @@ The returned object from this action invocation is the persisted `Command` itsel
 
 
 
-== `commandDtoProcessor()`
+== `commandDtoProcessor`
 
 The `commandDtoProcessor()` attribute allows an implementation of `CommandDtoProcessor` to be specified.
 This interface has the following API:

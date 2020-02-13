@@ -25,25 +25,25 @@ The table below summarizes the annotations available:
 
 
 | Class
-| xref:refguide:applib-ant:DomainObjectLayout.adoc#named[`@DomainObjectLayout#named()`]
-| xref:refguide:applib-ant:DomainObjectLayout.adoc#describedAs[`@DomainObjectLayout#describedAs()`]
+| xref:refguide:applib-ant:DomainObjectLayout.adoc#named[`@DomainObjectLayout#named`]
+| xref:refguide:applib-ant:DomainObjectLayout.adoc#describedAs[`@DomainObjectLayout#describedAs`]
 
 
 | Property
-| xref:refguide:applib-ant:PropertyLayout.adoc#named[`@PropertyLayout#named()`]
-| xref:refguide:applib-ant:PropertyLayout.adoc#describedAs[`@PropertyLayout#describedAs()`]
+| xref:refguide:applib-ant:PropertyLayout.adoc#named[`@PropertyLayout#named`]
+| xref:refguide:applib-ant:PropertyLayout.adoc#describedAs[`@PropertyLayout#describedAs`]
 
 | Collection
-| xref:refguide:applib-ant:CollectionLayout.adoc#named[`@CollectionLayout#named()`]
-| xref:refguide:applib-ant:CollectionLayout.adoc#describedAs[`@CollectionLayout#describedAs()`]
+| xref:refguide:applib-ant:CollectionLayout.adoc#named[`@CollectionLayout#named`]
+| xref:refguide:applib-ant:CollectionLayout.adoc#describedAs[`@CollectionLayout#describedAs`]
 
 | Action
-| xref:refguide:applib-ant:ActionLayout.adoc#named[`@ActionLayout#named()`]
-| xref:refguide:applib-ant:ActionLayout.adoc#describedAs[`@ActionLayout#describedAs()`]
+| xref:refguide:applib-ant:ActionLayout.adoc#named[`@ActionLayout#named`]
+| xref:refguide:applib-ant:ActionLayout.adoc#describedAs[`@ActionLayout#describedAs`]
 
 | Action Parameters
-| xref:refguide:applib-ant:ParameterLayout.adoc#named[`@ParameterLayout#named()`]
-| xref:refguide:applib-ant:ParameterLayout.adoc#describedAs[`@ParameterLayout#describedAs()`]
+| xref:refguide:applib-ant:ParameterLayout.adoc#named[`@ParameterLayout#named`]
+| xref:refguide:applib-ant:ParameterLayout.adoc#describedAs[`@ParameterLayout#describedAs`]
 
 |===
 
