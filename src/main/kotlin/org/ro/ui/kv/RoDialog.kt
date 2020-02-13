@@ -84,7 +84,6 @@ class RoDialog(
         super.remove(this)
         clearParent()
         dispose()
-//        panel = null
     }
 
 }

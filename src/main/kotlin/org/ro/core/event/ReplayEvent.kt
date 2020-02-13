@@ -1,4 +1,4 @@
-package org.ro.org.ro.core.event
+package org.ro.core.event
 
 import kotlinx.serialization.Serializable
 

@@ -256,3 +256,22 @@ mvn -Djetty.port=8080 jetty:run -DPROTOTYPING
  ### Solution 3:
  Incorporate kroviz.js eg. in the WAR containing your Apache Isis backend. 
  
+
+## Appendix
+### JSON Terminology
+See: elp.kapowsoftware.com/9.4/index.jsp?topic=/doc/rm/JSONTerminology.html
+
+
+|                |             | 
+|---------------|-------------| 
+| JSON Text        | JSON Object &vert; JSON Array | 
+| JSON&nbsp;Object | {} &vert; { Properties }     | 
+| JSON Array       | [] &vert; [ Items ]      | 
+| Properties       | Property, Properties |
+| Property         | String : JSON Value |
+| Items            | JSON Value, Items |
+| JSON Value       | JSON Text &vert; String &vert; Number &vert; false &vert; null &vert; true |
+| String           | "" &vert; " Characters " |
+| Characters       | Character Characters |
+| Character        | any Unicode character except ", \ or control character &vert; \" &vert; \\ &vert; \/ &vert; \b &vert; \f &vert; \n &vert; \r &vert; \t &vert; \u 4 hex digits |
+| Number           | a number very much like a C or Java number, see RFC 4627 for details. |

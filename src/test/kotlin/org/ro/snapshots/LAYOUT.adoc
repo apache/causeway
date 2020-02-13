@@ -1,4 +1,4 @@
-[plantuml,file="LAYOUT.svg"]
+[plantuml,file="LAYOUT.png"]
 --
 
 @startuml
