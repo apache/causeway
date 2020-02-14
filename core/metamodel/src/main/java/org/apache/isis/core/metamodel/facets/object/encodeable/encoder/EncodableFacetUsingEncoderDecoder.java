@@ -38,7 +38,7 @@ implements EncodableFacet {
     }
 
     // TODO: is this safe? really?
-    public static String ENCODED_NULL = "NULL";
+    public static final String ENCODED_NULL = "NULL";
 
     @Override
     protected String toStringValues() {

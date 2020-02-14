@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.postprocessors.param;
 
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Collection;
@@ -28,7 +27,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
-import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.commons.internal.reflection._Annotations;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
@@ -126,7 +125,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
     public void postProcess(final ObjectSpecification objectSpecification) {
 
         // all the actions of this type
-        final List<ActionType> actionTypes = inferActionTypes();
+        val actionTypes = inferActionTypes();
         final Stream<ObjectAction> objectActions = objectSpecification.streamObjectActions(actionTypes, Contributed.INCLUDED);
 
         // and all the collections of this type
@@ -619,13 +618,11 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         return facet != null && !facet.isFallback();
     }
 
-    private List<ActionType> inferActionTypes() {
-        final List<ActionType> actionTypes = _Lists.newArrayList();
-        actionTypes.add(ActionType.USER);
+    private ImmutableEnumSet<ActionType> inferActionTypes() {
         if (metaModelContext.getSystemEnvironment().isPrototyping()) {
-            actionTypes.add(ActionType.PROTOTYPE);
+            return ActionType.USER_AND_PROTOTYPE;
         }
-        return actionTypes;
+        return ActionType.USER_ONLY;
     }
     
     private void addFacet(Facet facet) {

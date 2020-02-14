@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
@@ -26,7 +25,9 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -35,6 +36,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+
+import lombok.val;
 
 import io.swagger.models.Response;
 
@@ -139,7 +142,7 @@ public final class Util {
             final ObjectSpecification objectSpec,
             final SwaggerService.Visibility visibility,
             final ClassExcluder classExcluder) {
-        final List<ActionType> actionTypes = actionTypesFor(visibility);
+        val actionTypes = actionTypesFor(visibility);
 
         return objectSpec.streamObjectActions(actionTypes, Contributed.INCLUDED)
                 .filter(objectAction->
@@ -159,15 +162,15 @@ public final class Util {
         return response;
     }
 
-    static List<ActionType> actionTypesFor(final SwaggerService.Visibility visibility) {
+    static ImmutableEnumSet<ActionType> actionTypesFor(final SwaggerService.Visibility visibility) {
         switch (visibility) {
         case PUBLIC:
-            return Arrays.asList(ActionType.USER);
+            return ActionType.USER_ONLY;
         case PRIVATE:
-            return Arrays.asList(ActionType.USER);
+            return ActionType.USER_ONLY;
         case PRIVATE_WITH_PROTOTYPING:
-            return Arrays.asList(ActionType.USER, ActionType.PROTOTYPE);
+            return ActionType.USER_AND_PROTOTYPE;
         }
-        throw new IllegalArgumentException("Unrecognized type '" + visibility + "'");
+        throw _Exceptions.unmatchedCase(visibility);
     }
 }

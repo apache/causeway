@@ -24,15 +24,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 
 import lombok.val;
 
@@ -58,7 +58,7 @@ public class AssociatedWithActionsHelper implements Serializable {
 
         final ObjectSpecification objectSpec = getObjectSpecification();
 
-        final List<ActionType> actionTypes = inferActionTypes(collectionModel.getCommonContext());
+        val actionTypes = inferActionTypes(collectionModel.getCommonContext());
         final Stream<ObjectAction> objectActions = objectSpec.streamObjectActions(actionTypes, Contributed.INCLUDED);
 
         return objectActions
@@ -72,13 +72,11 @@ public class AssociatedWithActionsHelper implements Serializable {
         return parentAdapter.getSpecification();
     }
 
-    private List<ActionType> inferActionTypes(IsisWebAppCommonContext commonContext) {
-        final List<ActionType> actionTypes = _Lists.newArrayList();
-        actionTypes.add(ActionType.USER);
-        if ( commonContext.getSystemEnvironment().isPrototyping() ) {
-            actionTypes.add(ActionType.PROTOTYPE);
+    private ImmutableEnumSet<ActionType> inferActionTypes(IsisWebAppCommonContext commonContext) {
+        if (commonContext.getSystemEnvironment().isPrototyping()) {
+            return ActionType.USER_AND_PROTOTYPE;
         }
-        return actionTypes;
+        return ActionType.USER_ONLY;
     }
 
 }

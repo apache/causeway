@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 
 public class MethodRemoverConstants {
 
-    public static MethodRemover NOOP = new MethodRemover() {
+    public static final MethodRemover NOOP = new MethodRemover() {
 
         @Override
         public void removeMethod(final Method method) {

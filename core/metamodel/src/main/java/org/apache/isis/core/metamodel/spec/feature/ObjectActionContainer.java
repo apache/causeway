@@ -19,12 +19,12 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
-import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -84,7 +84,7 @@ public interface ObjectActionContainer {
      */
     Stream<ObjectAction> streamObjectActions(ActionType type, Contributed contributee);
 
-    default Stream<ObjectAction> streamObjectActions(Collection<ActionType> types, Contributed contributee) {
+    default Stream<ObjectAction> streamObjectActions(ImmutableEnumSet<ActionType> types, Contributed contributee) {
         return stream(types)
                 .flatMap(type->streamObjectActions(type, contributee));
     }

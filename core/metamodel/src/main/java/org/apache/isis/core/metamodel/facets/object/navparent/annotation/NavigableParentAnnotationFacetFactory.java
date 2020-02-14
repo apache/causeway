@@ -32,6 +32,8 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetMethod;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 
+import lombok.extern.log4j.Log4j2;
+
 /**
  * For detailed behavioral specification see
  * <a href="https://issues.apache.org/jira/browse/ISIS-1816">ISIS-1816</a>.
@@ -39,6 +41,7 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
  * @since 2.0
  *
  */
+@Log4j2
 public class NavigableParentAnnotationFacetFactory extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
@@ -89,7 +92,8 @@ implements MetaModelRefiner {
         try {
             super.addFacet(new NavigableParentFacetMethod(method, facetHolder));
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            log.warn("failed to create NavigableParentFacetMethod method:{} holder:{}", 
+                    method, facetHolder, e);
         }
     }
 

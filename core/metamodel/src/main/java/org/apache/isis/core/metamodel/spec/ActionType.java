@@ -19,11 +19,11 @@
 
 package org.apache.isis.core.metamodel.spec;
 
-import java.util.Arrays;
-import java.util.List;
+import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 
 public enum ActionType {
-    PROTOTYPE, USER;
+    USER,
+    PROTOTYPE;
 
     public String getName() {
         return name();
@@ -37,5 +37,7 @@ public enum ActionType {
         return this == USER;
     }
 
-    public static final List<ActionType> ALL = Arrays.asList(values());
+    public static final ImmutableEnumSet<ActionType> USER_ONLY = ImmutableEnumSet.of(ActionType.USER);
+    public static final ImmutableEnumSet<ActionType> USER_AND_PROTOTYPE = ImmutableEnumSet.of(ActionType.USER, ActionType.PROTOTYPE);
+    public static final ImmutableEnumSet<ActionType> ALL = ImmutableEnumSet.allOf(ActionType.class);
 }
