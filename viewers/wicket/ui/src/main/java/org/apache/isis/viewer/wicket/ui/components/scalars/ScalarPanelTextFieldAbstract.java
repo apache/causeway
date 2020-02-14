@@ -38,6 +38,7 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
 import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
@@ -233,7 +234,9 @@ implements TextFieldValueModel.ScalarModelProvider {
             }
             
             private ObjectManager objectManager() {
-                return IsisSession.current().get().getMetaModelContext()
+                return IsisSession.current()
+                        .orElseThrow(()->_Exceptions.unrecoverable("no current IsisSession"))
+                        .getMetaModelContext()
                         .getObjectManager();
             }
             

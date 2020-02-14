@@ -5,6 +5,8 @@ import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
+import static org.apache.isis.core.commons.internal.base._With.requires;
+
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
@@ -92,7 +94,9 @@ public class _Ints {
     private static long parseIntElseLongMaxValue(
             @Nullable final String s, 
             final int radix, 
-            @Nullable final Consumer<String> onFailure) {
+            final Consumer<String> onFailure) {
+        
+        requires(onFailure, "onFailure");
         
         if (s == null) {
             onFailure.accept("null");

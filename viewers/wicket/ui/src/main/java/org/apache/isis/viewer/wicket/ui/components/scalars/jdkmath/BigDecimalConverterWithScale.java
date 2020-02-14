@@ -101,7 +101,7 @@ public class BigDecimalConverterWithScale extends BigDecimalConverter {
                 throw new ConversionException("No more than " + this.scale + " digits can be entered after the decimal place");
             }
             try {
-                return bd != null ? bd.setScale(this.scale) : null;
+                return bd.setScale(this.scale);
             } catch(Exception ex) {
                 // TODO: this is not actually shown; we see a generic error
                 // need to configure the ConversionException somehow

@@ -19,7 +19,7 @@
 package org.apache.isis.viewer.wicket.ui.components.actions;
 
 import java.util.Collections;
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -31,13 +31,11 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
-import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionArgumentModel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -69,30 +67,35 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
 
     @Override
     protected void addParameters() {
-        final ActionModel actionModel = getActionModel();
-
-        final RepeatingView rv = new RepeatingView(ActionParametersFormPanel.ID_ACTION_PARAMETERS);
-        add(rv);
+        val actionModel = getActionModel();
+        
+        val repeatingView = new RepeatingView(ActionParametersFormPanel.ID_ACTION_PARAMETERS);
+        add(repeatingView);
 
         paramPanels.clear();
-        List<ActionParameterMemento> parameterMementos = actionModel.primeArgumentModels();
-        for (final ActionParameterMemento apm : parameterMementos) {
-            final WebMarkupContainer container = new WebMarkupContainer(rv.newChildId());
-            rv.add(container);
+        val parameterMementos = actionModel.primeArgumentModels();
+        for (val actionParameterMemento : parameterMementos) {
+            val container = new WebMarkupContainer(repeatingView.newChildId());
+            repeatingView.add(container);
 
-            final ActionArgumentModel actionArgumentModel = actionModel.getArgumentModel(apm);
+            val actionArgumentModel = actionModel.getArgumentModel(actionParameterMemento);
             actionArgumentModel.setActionArgsHint(actionModel.getArgumentsAsImmutable());
-            final ScalarPanelAbstract2 paramPanel = newParamPanel(container, actionArgumentModel);
-            paramPanels.add(paramPanel);
+            newParamPanel(container, actionArgumentModel)
+            .ifPresent(paramPanel->{
+            
+                paramPanels.add(paramPanel);
 
-            // TODO: maybe this logic should move instead to ScalarModel.Kind#whether{Hidden/Disabled}
-            val targetAdapter = actionModel.getTargetAdapter();
-            val realTargetAdapter = actionModel.getActionMemento().getAction(getSpecificationLoader())
-                    .realTargetAdapter(targetAdapter);
-            final Consent consent = apm.getActionParameter(getSpecificationLoader())
-                    .isVisible(realTargetAdapter, Collections.emptyList(), InteractionInitiatedBy.USER);
-            final boolean allowed = consent.isAllowed();
-            paramPanel.setVisible(allowed);
+                // TODO: maybe this logic should move instead to ScalarModel.Kind#whether{Hidden/Disabled}
+                val targetAdapter = actionModel.getTargetAdapter();
+                val realTargetAdapter = actionModel.getActionMemento().getAction(getSpecificationLoader())
+                        .realTargetAdapter(targetAdapter);
+                val consent = actionParameterMemento.getActionParameter(getSpecificationLoader())
+                        .isVisible(realTargetAdapter, Collections.emptyList(), InteractionInitiatedBy.USER);
+                val allowed = consent.isAllowed();
+                paramPanel.setVisible(allowed);
+                
+            });
+            
         }
 
         setOutputMarkupId(true);
@@ -100,7 +103,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
 
     }
 
-    private ScalarPanelAbstract2 newParamPanel(final WebMarkupContainer container, final ActionArgumentModel model) {
+    private Optional<ScalarPanelAbstract2> newParamPanel(final WebMarkupContainer container, final ActionArgumentModel model) {
         final Component component = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE, model);
 
@@ -123,11 +126,12 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
                 component instanceof ScalarPanelAbstract2
                 ? (ScalarPanelAbstract2) component
                         : null;
-                if (paramPanel != null) {
-                    paramPanel.setOutputMarkupId(true);
-                    paramPanel.notifyOnChange(this);
-                }
-                return paramPanel;
+                
+        if (paramPanel != null) {
+            paramPanel.setOutputMarkupId(true);
+            paramPanel.notifyOnChange(this);
+        }
+        return Optional.of(paramPanel);
     }
 
     @Override

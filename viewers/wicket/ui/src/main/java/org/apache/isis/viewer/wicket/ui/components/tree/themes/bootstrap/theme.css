@@ -47,7 +47,7 @@
 }
 
 .tree-theme-bootstrap .tree-junction-expanded:before {
-  font-family: "Glyphicons Halflings";
+  font-family: "Glyphicons Halflings", sans-serif;
   content: "\e114";
 }
 
@@ -63,7 +63,7 @@
 }
 
 .tree-theme-bootstrap .tree-junction-collapsed:before {
-  font-family: "Glyphicons Halflings";
+  font-family: "Glyphicons Halflings", sans-serif;
   content: "\e080";
 }
 
