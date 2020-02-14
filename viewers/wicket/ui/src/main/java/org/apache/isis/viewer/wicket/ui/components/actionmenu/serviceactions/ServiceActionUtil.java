@@ -212,7 +212,7 @@ public final class ServiceActionUtil {
 
             for (final MenuSection menuSection : menu.getSections()) {
 
-                boolean firstSection = true;
+                boolean isFirstSection = true;
 
                 for (final ServiceActionLayoutData actionLayoutData : menuSection.getServiceActions()) {
                     val serviceSpecId = actionLayoutData.getObjectType();
@@ -230,12 +230,9 @@ public final class ServiceActionUtil {
                         continue;
                     }
                     final ServiceAndAction serviceAndAction =
-                            new ServiceAndAction(actionLayoutData.getNamed(), entityModel, objectAction);
+                            new ServiceAndAction(actionLayoutData.getNamed(), entityModel, objectAction, isFirstSection);
 
-                    if(firstSection) {
-                        serviceAndAction.separator = true;
-                        firstSection = false;
-                    }
+                    isFirstSection = false;
 
                     final CssMenuItem.Builder subMenuItemBuilder = serviceMenu.newSubMenuItem(serviceAndAction);
                     if (subMenuItemBuilder == null) {

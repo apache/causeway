@@ -26,17 +26,19 @@ class ServiceAndAction {
     final EntityModel serviceEntityModel;
     final ObjectAction objectAction;
     final ServiceActionLinkFactory linkAndLabelFactory;
-
-    public boolean separator;
+    final boolean isFirstSection;
 
     ServiceAndAction(
             final String serviceName,
             final EntityModel serviceEntityModel,
-            final ObjectAction objectAction) {
+            final ObjectAction objectAction,
+            final boolean isFirstSection) {
+        
         this.serviceName = serviceName;
         this.serviceEntityModel = serviceEntityModel;
         this.objectAction = objectAction;
         this.linkAndLabelFactory = new ServiceActionLinkFactory(serviceEntityModel);
+        this.isFirstSection = isFirstSection; 
     }
 
     @Override

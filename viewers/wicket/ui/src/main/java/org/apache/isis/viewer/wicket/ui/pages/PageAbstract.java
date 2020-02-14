@@ -122,7 +122,7 @@ public abstract class PageAbstract extends WebPageBase implements ActionPromptPr
      * This is a bit hacky, but best way I've found to pass an exception over to the WicketSignInPage
      * if there is a problem rendering this page.
      */
-    public static ThreadLocal<ExceptionModel> EXCEPTION = new ThreadLocal<>();
+    public static final ThreadLocal<ExceptionModel> EXCEPTION = new ThreadLocal<>();
 
     private final List<ComponentType> childComponentIds;
 

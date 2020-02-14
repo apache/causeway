@@ -57,12 +57,12 @@ public final class RestfulRequest {
 
     public static class RequestParameter<Q> {
 
-        public static RequestParameter<List<List<String>>> FOLLOW_LINKS = new RequestParameter<List<List<String>>>("x-ro-follow-links", Parser.forListOfListOfStrings(), Collections.<List<String>> emptyList());
-        public static RequestParameter<Integer> PAGE = new RequestParameter<Integer>("x-ro-page", Parser.forInteger(), 1);
-        public static RequestParameter<Integer> PAGE_SIZE = new RequestParameter<Integer>("x-ro-page-size", Parser.forInteger(), 25);
-        public static RequestParameter<List<String>> SORT_BY = new RequestParameter<List<String>>("x-ro-sort-by", Parser.forListOfStrings(), Collections.<String> emptyList());
-        public static RequestParameter<DomainModel> DOMAIN_MODEL = new RequestParameter<DomainModel>("x-ro-domain-model", DomainModel.parser(), DomainModel.FORMAL);
-        public static RequestParameter<Boolean> VALIDATE_ONLY = new RequestParameter<Boolean>("x-ro-validate-only", Parser.forBoolean(), false);
+        public static final RequestParameter<List<List<String>>> FOLLOW_LINKS = new RequestParameter<List<List<String>>>("x-ro-follow-links", Parser.forListOfListOfStrings(), Collections.<List<String>> emptyList());
+        public static final RequestParameter<Integer> PAGE = new RequestParameter<Integer>("x-ro-page", Parser.forInteger(), 1);
+        public static final RequestParameter<Integer> PAGE_SIZE = new RequestParameter<Integer>("x-ro-page-size", Parser.forInteger(), 25);
+        public static final RequestParameter<List<String>> SORT_BY = new RequestParameter<List<String>>("x-ro-sort-by", Parser.forListOfStrings(), Collections.<String> emptyList());
+        public static final RequestParameter<DomainModel> DOMAIN_MODEL = new RequestParameter<DomainModel>("x-ro-domain-model", DomainModel.parser(), DomainModel.FORMAL);
+        public static final RequestParameter<Boolean> VALIDATE_ONLY = new RequestParameter<Boolean>("x-ro-validate-only", Parser.forBoolean(), false);
 
         private final String name;
         private final Parser<Q> parser;
@@ -104,8 +104,8 @@ public final class RestfulRequest {
     }
 
     public static class Header<X> {
-        public static Header<String> IF_MATCH = new Header<String>("If-Match", Parser.forString());
-        public static Header<List<MediaType>> ACCEPT = new Header<List<MediaType>>("Accept", Parser.forListOfJaxRsMediaTypes());
+        public static final Header<String> IF_MATCH = new Header<String>("If-Match", Parser.forString());
+        public static final Header<List<MediaType>> ACCEPT = new Header<List<MediaType>>("Accept", Parser.forListOfJaxRsMediaTypes());
 
         private final String name;
         private final Parser<X> parser;

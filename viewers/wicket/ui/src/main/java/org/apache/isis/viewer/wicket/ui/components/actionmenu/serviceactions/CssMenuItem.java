@@ -348,7 +348,7 @@ class CssMenuItem implements Serializable {
 
         final EntityModel targetEntityModel = serviceAndAction.serviceEntityModel;
         final ObjectAction objectAction = serviceAndAction.objectAction;
-        final boolean separator = serviceAndAction.separator;
+        final boolean requiresSeparator = serviceAndAction.isFirstSection;
         final ServiceActionLinkFactory actionLinkFactory = serviceAndAction.linkAndLabelFactory;
 
         val serviceAdapter = targetEntityModel.load();
@@ -396,7 +396,7 @@ class CssMenuItem implements Serializable {
                         ObjectAction.Util.isNoParameters(objectAction))
                 .returnsBlobOrClob(ObjectAction.Util.returnsBlobOrClob(objectAction))
                 .prototyping(objectAction.isPrototype())
-                .requiresSeparator(separator)
+                .requiresSeparator(requiresSeparator)
                 .withActionIdentifier(ObjectAction.Util.actionIdentifierFor(objectAction))
                 .withCssClass(ObjectAction.Util.cssClassFor(objectAction, serviceAdapter))
                 .withCssClassFa(ObjectAction.Util.cssClassFaFor(objectAction))
