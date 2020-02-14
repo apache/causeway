@@ -140,3 +140,7 @@ div {
 /*background-image: url(https://upload.wikimedia.org/wikipedia/commons/b/b9/SVG_animation_using_SMIL.svg)
 https://svn.apache.org/repos/asf/comdev/project-logos/originals/isis.svg
 */
+
+.kv-window {
+  /* background-color: rgba(255,255,255, 0) !important;*/
+}

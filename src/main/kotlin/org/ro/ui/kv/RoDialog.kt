@@ -1,9 +1,6 @@
 package org.ro.ui.kv
 
-import org.ro.ui.Command
-import org.ro.ui.FormItem
-import org.ro.ui.IconManager
-import org.ro.ui.Point
+import org.ro.ui.*
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.core.Widget
@@ -20,13 +17,14 @@ import pl.treksoft.kvision.window.Window
 class RoDialog(
         caption: String,
         val items: List<FormItem>,
-        val command: Command) :
-        Window(caption, 600.px, 300.px, closeButton = true) {
+        val command: Command,
+        defaultAction: String = "OK") :
+        Displayable, Window(caption, 600.px, 300.px, closeButton = true) {
 
     private val okButton = Button(
-            caption,
-            "fas fa-check",
-            ButtonStyle.SUCCESS)
+            text = defaultAction,
+            icon = IconManager.find(defaultAction),
+            style = ButtonStyle.SUCCESS)
             .onClick {
                 execute()
             }

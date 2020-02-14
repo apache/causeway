@@ -1,44 +1,34 @@
 package org.ro.org.ro.ui
 
-import org.ro.core.aggregator.DiagramDispatcher
-import org.ro.core.event.RoXmlHttpRequest
-import org.ro.to.Argument
-import org.ro.to.Link
-import org.ro.to.Method
+import org.ro.org.ro.utils.UmlUtils
 import org.ro.to.ValueType
 import org.ro.ui.Command
 import org.ro.ui.FormItem
 import org.ro.ui.kv.RoDialog
 import kotlin.js.Date
 
-class ImageAlert() : Command {
+class ImageAlert(val label: String = "UML Diagram Sample") : Command {
 
-    private val uuid:String = Date().toTimeString() //IMPROVE
+    private val uuid: String = Date().toTimeString() //IMPROVE
 
     fun open() {
-        val fi = FormItem("svg", ValueType.IMAGE.type)
         val formItems = mutableListOf<FormItem>()
-        formItems.add(fi)
-        val label = "Image Sample"
-        RoDialog(caption = label, items = formItems, command = this).open()
+        val slider = FormItem("Opacity", ValueType.SLIDER.type, content = 1.0)
+        formItems.add(slider)
 
-        //FIXME extract code into SvgUtils ?? -> see PlantUmlPanel
-        val plantUmlCode: String = "\"Bob -> Pita : sometimes is a\""
-        // https://github.com/yuzutech/kroki
-        val url = "https://kroki.io/"
-        val args = mutableMapOf<String, Argument>()
-        args.put("diagram_source", Argument("\"diagram_source\"", plantUmlCode))
-        args.put("diagram_type", Argument("\"diagram_type\"", "\"plantuml\""))
-        args.put("output_format", Argument("\"output_format\"", "\"svg\""))
+        val img = FormItem("svg", ValueType.IMAGE.type, callBackId = uuid)
+        formItems.add(img)
 
-        val link = Link(href = url, method = Method.POST.operation, args = args)
-        val agr = DiagramDispatcher(uuid)
-        RoXmlHttpRequest().processAnonymous(link, agr)
+        val dialog = RoDialog(caption = label, items = formItems, command = this)
+        dialog.open()
+        slider.setDisplay(dialog)
 
-    }
-
-    override fun execute() {
-        //do nothing
+        val plantUmlCode = "\"" +
+                "participant BOB [[https://en.wiktionary.org/wiki/best_of_breed]]\\n" +
+                "participant PITA [[https://en.wiktionary.org/wiki/PITA]]\\n" +
+                "BOB -> PITA: sometimes is a" +
+                "\""
+        UmlUtils.generateDiagram(plantUmlCode, uuid)
     }
 
 }

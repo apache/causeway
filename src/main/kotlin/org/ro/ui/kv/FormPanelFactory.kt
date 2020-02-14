@@ -9,6 +9,7 @@ import pl.treksoft.kvision.core.onEvent
 import pl.treksoft.kvision.form.FormPanel
 import pl.treksoft.kvision.form.check.CheckBox
 import pl.treksoft.kvision.form.formPanel
+import pl.treksoft.kvision.form.range.Range
 import pl.treksoft.kvision.form.select.SimpleSelect
 import pl.treksoft.kvision.form.spinner.Spinner
 import pl.treksoft.kvision.form.text.Password
@@ -20,6 +21,7 @@ import pl.treksoft.kvision.html.Div
 import pl.treksoft.kvision.html.header
 import pl.treksoft.kvision.panel.SimplePanel
 import pl.treksoft.kvision.panel.VPanel
+import pl.treksoft.kvision.panel.vPanel
 import pl.treksoft.kvision.utils.perc
 import pl.treksoft.kvision.utils.px
 
@@ -42,6 +44,7 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
                     ValueType.TIME.type -> add(createTime(fi))
                     ValueType.BOOLEAN.type -> add(createBoolean(fi))
                     ValueType.IMAGE.type -> add(createImage(fi))
+                    ValueType.SLIDER.type -> add(createSlider(fi))
                 }
             }
         }
@@ -136,9 +139,24 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
 
     private fun createImage(fi: FormItem): VPanel {
         val item = VPanel(spacing = 3) {
-            id = "diagramPanel"
+            // add InnerPanel to be replaced by callback with svg
+            vPanel { id = fi.callBackId }
         }
         item.height = 100.perc
+        item.width = 100.perc
+        console.log(item)
+        return item
+    }
+
+    private fun createSlider(fi:FormItem): Range {
+        //IMPROVE this needs to be amended for other ranges
+        val item = Range(label = fi.label, min = 0, max = 1.0, step = 0.1, value = fi.content as Float)
+        item.onEvent {
+            change = {
+                fi.changed(item.value!!.toString())
+                it.stopPropagation()
+            }
+        }
         return item
     }
 

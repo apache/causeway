@@ -41,7 +41,7 @@ class FieldSetBuilder {
                         size = size,
                         description = p.describedAs,
                         member = member,
-                        tab = tab)
+                        dspl = tab)
                 items.add(fi)
             }
         }

@@ -1,7 +1,8 @@
 package org.ro.ui
 
 import org.ro.to.Member
-import org.ro.ui.kv.RoDisplay
+import org.ro.to.ValueType
+import pl.treksoft.kvision.window.Window
 
 class FormItem(
         val label: String,
@@ -10,7 +11,8 @@ class FormItem(
         val size: Int? = null,
         val description: String? = "not set",
         val member: Member? = null,
-        val tab: RoDisplay? = null) {
+        var dspl: Displayable? = null,
+        val callBackId: String? = null) {
 
     private var originalContent: Any?
     var readOnly = false
@@ -23,16 +25,28 @@ class FormItem(
     }
 
     fun changed(value: String?) {
-        tab?.setDirty(true)
+        dspl?.setDirty(true)
         if (member != null) {
             member.value?.content = value
         }
+        setOpacity(value)
     }
 
     fun reset() {
-        tab?.setDirty(false)
+        dspl?.setDirty(false)
         if (member != null) {
             content = originalContent
+        }
+    }
+
+    fun setDisplay(displayable: Displayable) {
+        dspl = displayable
+    }
+
+    fun setOpacity(value: String?) {
+        if (type == ValueType.SLIDER.type) {
+            val opacity = value?.toDouble()!!
+            (dspl as Window).opacity = opacity
         }
     }
 

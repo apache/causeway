@@ -42,6 +42,7 @@ object IconManager {
             "Manager" to "manager",
             "Me" to "user",
             "Objects" to "cubes",
+            "OK" to "check",
             "Open" to "book",
             "Other" to "asterisk",
             "Primitives" to "hashtag",
