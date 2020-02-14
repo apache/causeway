@@ -440,11 +440,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     // -- HELPER
     
-    /**
-     * Creates the appropriate type of {@link ObjectSpecification}.
-     */
-    private ObjectSpecification createSpecification(final Class<?> cls) {
-
+    private void guardAgainstMetamodelLockedAfterFullIntrospection(final Class<?> cls) {
         if(isMetamodelFullyIntrospected() 
                 && isisConfiguration.getCore().getMetaModel().getIntrospector().isLockAfterFullIntrospection()) {
 
@@ -461,14 +457,27 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 //                    cls.getName(), sort);
 
             log.warn("Missed class '{}' when the metamodel was fully introspected.", cls.getName());
+            
+            if(sort.isValue()) {
+                return; // opinionated: just relax when value
+            }
+            
             if(sort.isToBeIntrospected()) {
-                log.error("Introspecting class '%s' of sort %s, after the metamodel had been fully introspected and is now locked. " +
+                log.error("Introspecting class '{}' of sort {}, after the metamodel had been fully introspected and is now locked. " +
                       "One reason this can happen is if you are attempting to invoke an action through the WrapperFactory " +
                       "on a service class incorrectly annotated with Spring's @Service annotation instead of " +
                       "@DomainService.",
                         cls.getName(), sort);
             }
         }
+    }
+    
+    /**
+     * Creates the appropriate type of {@link ObjectSpecification}.
+     */
+    private ObjectSpecification createSpecification(final Class<?> cls) {
+
+        guardAgainstMetamodelLockedAfterFullIntrospection(cls);
 
         // ... and create the specs
 

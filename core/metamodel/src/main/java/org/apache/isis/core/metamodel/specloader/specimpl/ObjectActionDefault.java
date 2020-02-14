@@ -486,7 +486,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         return Can.ofArray(parameterDefaultAdapters);
     }
 
-    private static ThreadLocal<List<ManagedObject>> commandTargetAdaptersHolder = ThreadLocal.withInitial(null);
+    private static ThreadLocal<List<ManagedObject>> commandTargetAdaptersHolder = new ThreadLocal<>();
 
     /**
      * A horrible hack to be able to persist a number of adapters in the command object.
