@@ -13,5 +13,5 @@ import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 public class IsisModuleCoreCommons {
     
     // force CI build to fail, in order to check why github's CI pipline still succeeds
-    ...
+    ....
 }
