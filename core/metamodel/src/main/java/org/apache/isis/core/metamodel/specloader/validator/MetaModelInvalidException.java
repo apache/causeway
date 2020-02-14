@@ -21,13 +21,15 @@ package org.apache.isis.core.metamodel.specloader.validator;
 
 import java.util.Optional;
 
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+
 public class MetaModelInvalidException extends IllegalStateException {
 
     private static final long serialVersionUID = 1L;
 
     public MetaModelInvalidException(Optional<String> failuresAsLineNumberedString) {
         // fails if failuresAsLineNumberedString is empty, which would indicate misuse
-        super(failuresAsLineNumberedString.get());  
+        super(failuresAsLineNumberedString.orElseThrow(_Exceptions::noSuchElement));  
     }
 
 }

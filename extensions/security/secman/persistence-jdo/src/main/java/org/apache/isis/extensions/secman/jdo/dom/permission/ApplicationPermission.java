@@ -20,6 +20,7 @@ package org.apache.isis.extensions.secman.jdo.dom.permission;
 
 import java.util.Comparator;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 
 import javax.inject.Inject;
@@ -38,10 +39,10 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
-import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
 import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
@@ -53,6 +54,7 @@ import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.UtilityClass;
 
 /**
  * Specifies how a particular {@link #getRole() application role} may interact with a specific
@@ -159,25 +161,30 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
         .append(" ").append(getMode().toString()) // Viewing|Changing
         .append(" of ");
 
-        final ApplicationFeatureId featureId = getFeatureId();
-        switch (getFeatureType()) {
-        case PACKAGE:
-            buf.append(getFeatureFqn());              // com.mycompany
-            break;
-        case CLASS:
-            // abbreviate if required because otherwise title overflows on action prompt.
-            if(getFeatureFqn().length() < 30) {
-                buf.append(getFeatureFqn());          // com.mycompany.Bar
-            } else {
-                buf.append(featureId.getClassName()); // Bar
+        createFeatureId()
+        .ifPresent(featureId->{
+            
+            switch (featureId.getType()) {
+            case PACKAGE:
+                buf.append(getFeatureFqn());              // com.mycompany
+                break;
+            case CLASS:
+                // abbreviate if required because otherwise title overflows on action prompt.
+                if(getFeatureFqn().length() < 30) {
+                    buf.append(getFeatureFqn());          // com.mycompany.Bar
+                } else {
+                    buf.append(featureId.getClassName()); // Bar
+                }
+                break;
+            case MEMBER:
+                buf.append(featureId.getClassName())
+                .append("#")
+                .append(featureId.getMemberName());   // com.mycompany.Bar#foo
+                break;
             }
-            break;
-        case MEMBER:
-            buf.append(featureId.getClassName())
-            .append("#")
-            .append(featureId.getMemberName());   // com.mycompany.Bar#foo
-            break;
-        }
+            
+        });
+        
         return buf.toString();
     }
 
@@ -235,17 +242,14 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
 
     // -- featureId (derived property)
 
-    private ApplicationFeatureId getFeatureId() {
-        if(getFeatureType() == null) {
-            return null;
-        }
-        return ApplicationFeatureId.newFeature(getFeatureType(), getFeatureFqn());
+    private Optional<ApplicationFeatureId> createFeatureId() {
+        return Optional.of(getFeatureType())
+                .map(featureType -> ApplicationFeatureId.newFeature(featureType, getFeatureFqn()));
     }
-    ApplicationFeature getFeature() {
-        if(getFeatureId() == null) {
-            return null;
-        }
-        return applicationFeatureRepository.findFeature(getFeatureId());
+    
+    private Optional<ApplicationFeature> getFeature() {
+        return createFeatureId()
+                .map(featureId -> applicationFeatureRepository.findFeature(featureId));
     }
 
 
@@ -264,14 +268,16 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
     @PropertyLayout(typicalLength=ApplicationPermission.TYPICAL_LENGTH_TYPE)
     @MemberOrder(name="Feature", sequence = "5")
     public String getType() {
-        final Enum<?> e = getFeatureType() != ApplicationFeatureType.MEMBER ? getFeatureType() : getMemberType();
+        final Enum<?> e = getFeatureType() != ApplicationFeatureType.MEMBER 
+                ? getFeatureType() 
+                        : getMemberType().orElse(null);
         return e != null ? e.name(): null;
     }
 
     @Programmatic
-    private ApplicationMemberType getMemberType() {
-        final ApplicationFeature feature = getFeature();
-        return feature != null? feature.getMemberType(): null;
+    private Optional<ApplicationMemberType> getMemberType() {
+        return getFeature()
+                .map(ApplicationFeature::getMemberType);
     }
 
 
@@ -366,21 +372,21 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
 
     // -- Functions
 
+    @UtilityClass
     public static final class Functions {
-
-        private Functions(){}
 
         public static final Function<ApplicationPermission, ApplicationPermissionValue> AS_VALUE = 
                 (ApplicationPermission input) ->
-        new ApplicationPermissionValue(input.getFeatureId(), input.getRule(), input.getMode());
+                    new ApplicationPermissionValue(
+                            input.createFeatureId().orElseThrow(_Exceptions::noSuchElement), 
+                            input.getRule(), 
+                            input.getMode());
 
-        public static final Function<ApplicationPermission, String> GET_FQN = ApplicationPermission::getFeatureFqn;
+        public static final Function<ApplicationPermission, String> GET_FQN = 
+                ApplicationPermission::getFeatureFqn;
 
     }
 
-    @Inject RepositoryService repository;
-    @Inject ApplicationFeatureRepositoryDefault applicationFeatureRepository;
-
-
+    @Inject private ApplicationFeatureRepositoryDefault applicationFeatureRepository;
 
 }

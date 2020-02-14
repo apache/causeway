@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.security.authorization.manager;
 
+import java.util.function.Predicate;
+
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -33,6 +35,8 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
+
+import lombok.NonNull;
 
 /**
  * Authorizes the user in the current session view and use members of an object.
@@ -69,15 +73,7 @@ public class AuthorizationManager {
         if (authorizor.isUsableInAnyRole(identifier)) {
             return true;
         }
-
-        if(session!=null 
-                && session.getRoles()
-                .stream()
-                .anyMatch(roleName->authorizor.isUsableInRole(roleName, identifier)) ) {
-            return true;
-        }
-
-        return false;
+        return anyMatchOnRoles(session, roleName->authorizor.isUsableInRole(roleName, identifier));
     }
 
     /**
@@ -92,31 +88,39 @@ public class AuthorizationManager {
         if (isPerspectiveMember(identifier)) {
             return true;
         }
-
         // no-op if is visibility context check at object-level
         if (identifier.getMemberName().equals("")) {
             return true;
         }
-
         if(containsSudoSuperuserRole(session)) {
             return true;
         }
         if (authorizor.isVisibleInAnyRole(identifier)) {
             return true;
         }
-        if(session.getRoles().stream()
-                .anyMatch(roleName->authorizor.isVisibleInRole(roleName, identifier)) ) {
-            return true;
-        }
-        return false;
+        return anyMatchOnRoles(session, roleName->authorizor.isVisibleInRole(roleName, identifier));
     }
 
+    // -- HELPER
+    
     private static boolean containsSudoSuperuserRole(@Nullable final AuthenticationSession session) {
         if(session==null) {
             return false;
         }
         return session.hasRole(SudoService.ACCESS_ALL_ROLE);
     }
+    
+    private boolean anyMatchOnRoles(
+            @Nullable final AuthenticationSession session, 
+            @NonNull final Predicate<String> predicate) {
+        if(session==null) {
+            return false;
+        }
+        return session.getRoles()
+                .stream()
+                .anyMatch(predicate);
+    }
+    
 
     private boolean isPerspectiveMember(final Identifier identifier) {
         return (identifier.getClassName().equals(""));

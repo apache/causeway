@@ -93,6 +93,10 @@ public class AbstractUserAndRolesFixtureScript extends FixtureScript {
                 applicationUser = applicationUserRepository.newLocalUser(username, pwd, pwd, null, enabled, emailAddress);
             }
 
+            if(applicationUser == null) {
+                throw _Exceptions.unrecoverableFormatted("failed to create user '%s'", username);
+            }
+            
             // update tenancy (repository checks for null)
             applicationUser.setAtPath(tenancyPath);
 

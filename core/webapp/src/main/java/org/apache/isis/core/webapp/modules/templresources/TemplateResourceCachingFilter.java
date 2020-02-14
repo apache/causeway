@@ -38,6 +38,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.isis.core.commons.internal.exceptions._Exceptions.FluentException;
 
+import lombok.val;
+
 public class TemplateResourceCachingFilter implements Filter {
 
     /**
@@ -109,7 +111,12 @@ public class TemplateResourceCachingFilter implements Filter {
     /** The cache time in seconds. */
     private long cacheTime = 0L;
 
-    private final static DateFormat httpDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
+    private final static DateFormat httpDateFormat() { 
+        // not thread-safe, so each thread should have its own instance
+        val dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+        return dateFormat;
+    }
 
     /**
      * Initializes the Servlet filter with the cache time and sets up the
@@ -137,7 +144,6 @@ public class TemplateResourceCachingFilter implements Filter {
         }
         this.mReplyHeaders = new String[newReplyHeaders.size()][2];
         newReplyHeaders.toArray(this.mReplyHeaders);
-        httpDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
     }
 
     @Override
@@ -175,8 +181,9 @@ public class TemplateResourceCachingFilter implements Filter {
         }
         if (this.cacheTime > 0L) {
             final long now = System.currentTimeMillis();
-            httpResponse.addHeader(LAST_MODIFIED_HEADER, httpDateFormat.format(new Date(now)));
-            httpResponse.addHeader(EXPIRES_HEADER, httpDateFormat.format(new Date(now + (this.cacheTime * MILLISECONDS_IN_SECOND))));
+            val dateFormat = httpDateFormat();
+            httpResponse.addHeader(LAST_MODIFIED_HEADER, dateFormat.format(new Date(now)));
+            httpResponse.addHeader(EXPIRES_HEADER, dateFormat.format(new Date(now + (this.cacheTime * MILLISECONDS_IN_SECOND))));
         }
         httpRequest.setAttribute(REQUEST_ATTRIBUTE, true);
 

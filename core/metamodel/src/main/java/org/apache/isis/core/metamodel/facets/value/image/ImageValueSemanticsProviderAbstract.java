@@ -190,7 +190,7 @@ implements ImageValueFacet {
         int pixel = 0;
         for (int i = 0; i < 4; i++) {
             final char c = data.charAt(offset + i);
-            final byte b = REVERSE_BASE_64_CHARS[c];
+            final int b = (REVERSE_BASE_64_CHARS[c] & 0xff);
             if (i == 0 && b >= 32) {
                 pixel = 0xff;
             }
@@ -243,6 +243,8 @@ implements ImageValueFacet {
             // TODO what happens if the grab fails?
             return new int[lines][width];
         } catch (final InterruptedException e) {
+            // Restore interrupted state...
+            Thread.currentThread().interrupt();
             throw new IsisException(e);
         }
     }

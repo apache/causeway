@@ -23,8 +23,9 @@ import java.util.concurrent.atomic.LongAdder;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.valuetypes.sse.applib.service.SseChannel;
+import org.apache.isis.core.commons.internal.concurrent._ThreadSleep;
 import org.apache.isis.valuetypes.sse.applib.annotations.SseSource;
+import org.apache.isis.valuetypes.sse.applib.service.SseChannel;
 
 import lombok.RequiredArgsConstructor;
 
@@ -47,12 +48,7 @@ public class DemoTask implements SseSource {
 
         for(int i=0;i<totalSteps;++i) {
 
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                return;
-            }
+            _ThreadSleep.millis(1000);
 
             taskProgress.getStepsProgressed().increment();
 
