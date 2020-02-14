@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.runtimeservices.wrapper;
 
-import java.util.EnumSet;
-
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
@@ -32,6 +30,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
+import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactoryService;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 
@@ -46,7 +45,7 @@ public class WrapperFactoryDefaultTest {
     private static class WrappedDomainObject extends DomainObject implements WrappingObject {
 
         private final DomainObject wrappedObject;
-        private final EnumSet<WrapperFactory.ExecutionMode> mode;
+        private final ImmutableEnumSet<WrapperFactory.ExecutionMode> mode;
 
         @Override
         public void __isis_save() {
@@ -58,7 +57,7 @@ public class WrapperFactoryDefaultTest {
         }
 
         @Override
-        public EnumSet<WrapperFactory.ExecutionMode> __isis_executionMode() {
+        public ImmutableEnumSet<WrapperFactory.ExecutionMode> __isis_executionMode() {
             return mode;
         }
     }
@@ -70,7 +69,7 @@ public class WrapperFactoryDefaultTest {
     private WrapperFactoryDefault wrapperFactory;
 
     private DomainObject createProxyCalledWithDomainObject;
-    private EnumSet<WrapperFactory.ExecutionMode> createProxyCalledWithMode;
+    private ImmutableEnumSet<WrapperFactory.ExecutionMode> createProxyCalledWithMode;
 
     @Before
     public void setUp() throws Exception {
@@ -83,7 +82,7 @@ public class WrapperFactoryDefaultTest {
             }
             
             @Override
-            protected <T> T createProxy(T domainObject, EnumSet<WrapperFactory.ExecutionMode> mode) {
+            protected <T> T createProxy(T domainObject, ImmutableEnumSet<WrapperFactory.ExecutionMode> mode) {
                 WrapperFactoryDefaultTest.this.createProxyCalledWithMode = mode;
                 WrapperFactoryDefaultTest.this.createProxyCalledWithDomainObject = (DomainObject) domainObject;
                 return domainObject;

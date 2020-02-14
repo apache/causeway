@@ -21,6 +21,8 @@ package org.apache.isis.applib.services.wrapper;
 
 import java.util.EnumSet;
 
+import org.apache.isis.core.commons.collections.ImmutableEnumSet;
+
 /**
  * Implemented by all objects that have been viewed as per
  * {@link org.apache.isis.applib.services.wrapper.WrapperFactory#wrap(Object)}.
@@ -66,5 +68,5 @@ public interface WrappingObject {
      * intended to reduce the risk of a collision.
      * </p>
      */
-    EnumSet<WrapperFactory.ExecutionMode> __isis_executionMode();
+    ImmutableEnumSet<WrapperFactory.ExecutionMode> __isis_executionMode();
 }

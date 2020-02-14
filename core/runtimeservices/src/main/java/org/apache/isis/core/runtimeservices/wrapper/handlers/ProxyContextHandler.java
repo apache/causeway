@@ -20,10 +20,10 @@
 package org.apache.isis.core.runtimeservices.wrapper.handlers;
 
 import java.util.Collection;
-import java.util.EnumSet;
 import java.util.Map;
 
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
+import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtimeservices.wrapper.proxy.ProxyCreator;
@@ -37,7 +37,7 @@ public class ProxyContextHandler {
 
     @NonNull private final ProxyCreator proxyCreator;
 
-    public <T> T proxy(MetaModelContext metaModelContext, T domainObject, EnumSet<ExecutionMode> mode) {
+    public <T> T proxy(MetaModelContext metaModelContext, T domainObject, ImmutableEnumSet<ExecutionMode> mode) {
 
         val invocationHandler = new DomainObjectInvocationHandler<T>(
                 metaModelContext, 

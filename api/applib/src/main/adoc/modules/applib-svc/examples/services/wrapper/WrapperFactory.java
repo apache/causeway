@@ -25,6 +25,7 @@ import java.util.List;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
+import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -100,30 +101,30 @@ public interface WrapperFactory {
         /**
          * Validate all business rules and then execute. May throw exceptions in order to fail fast. 
          */
-        public static final EnumSet<ExecutionMode> EXECUTE = EnumSet.noneOf(ExecutionMode.class); 
+        public static final ImmutableEnumSet<ExecutionMode> EXECUTE = ImmutableEnumSet.noneOf(ExecutionMode.class); 
 
         /**
          * Skip all business rules and then execute, does throw an exception if execution fails.
          */
-        public static final EnumSet<ExecutionMode> SKIP_RULES = EnumSet.of(SKIP_RULE_VALIDATION);
+        public static final ImmutableEnumSet<ExecutionMode> SKIP_RULES = ImmutableEnumSet.of(SKIP_RULE_VALIDATION);
         
         /**
          * Validate all business rules but do not execute, throw an exception if validation 
          * fails. 
          */
-        public static final EnumSet<ExecutionMode> NO_EXECUTE = EnumSet.of(SKIP_EXECUTION);
+        public static final ImmutableEnumSet<ExecutionMode> NO_EXECUTE = ImmutableEnumSet.of(SKIP_EXECUTION);
         
         /**
          * Validate all business rules and then execute, but don't throw an exception if validation 
          * or execution fails.
          */
-        public static final EnumSet<ExecutionMode> TRY = EnumSet.of(SWALLOW_EXCEPTIONS); 
+        public static final ImmutableEnumSet<ExecutionMode> TRY = ImmutableEnumSet.of(SWALLOW_EXCEPTIONS); 
         
         /**
          * Skips all steps.
          * @since 2.0
          */
-        public static final EnumSet<ExecutionMode> NOOP = EnumSet.of(SKIP_RULE_VALIDATION, SKIP_EXECUTION);
+        public static final ImmutableEnumSet<ExecutionMode> NOOP = ImmutableEnumSet.of(SKIP_RULE_VALIDATION, SKIP_EXECUTION);
         
     }
 

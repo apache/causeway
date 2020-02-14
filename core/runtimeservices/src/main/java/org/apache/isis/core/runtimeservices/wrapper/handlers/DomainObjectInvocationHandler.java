@@ -22,7 +22,6 @@ package org.apache.isis.core.runtimeservices.wrapper.handlers;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -42,6 +41,7 @@ import org.apache.isis.applib.services.wrapper.events.PropertyAccessEvent;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
+import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.commons.internal.collections._Lists;
@@ -74,7 +74,7 @@ import lombok.val;
 public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandlerDefault<T> {
 
     private final ProxyContextHandler proxy;
-    private final EnumSet<ExecutionMode> executionMode;
+    private final ImmutableEnumSet<ExecutionMode> executionMode;
     private final MetaModelContext mmContext;
 
     /**
@@ -102,7 +102,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     public DomainObjectInvocationHandler(
             final MetaModelContext metaModelContext,
             final T domainObject,
-            final EnumSet<ExecutionMode> mode,
+            final ImmutableEnumSet<ExecutionMode> mode,
             final ProxyContextHandler proxy) {
         
         super(metaModelContext.getServiceRegistry(), domainObject, mode);

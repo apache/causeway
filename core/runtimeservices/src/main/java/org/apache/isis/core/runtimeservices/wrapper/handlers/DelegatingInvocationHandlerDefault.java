@@ -21,12 +21,12 @@ package org.apache.isis.core.runtimeservices.wrapper.handlers;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.EnumSet;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
+import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.commons.internal._Constants;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
@@ -43,7 +43,7 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
     // getter is API
     @Getter(onMethod = @__(@Override)) private final T delegate;
     @Getter protected final WrapperFactory wrapperFactory;
-    @Getter private final EnumSet<ExecutionMode> executionMode;
+    @Getter private final ImmutableEnumSet<ExecutionMode> executionMode;
 
     protected final Method equalsMethod;
     protected final Method hashCodeMethod;
@@ -56,7 +56,7 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
     public DelegatingInvocationHandlerDefault(
             final ServiceRegistry serviceRegistry,
             final T delegate,
-            final EnumSet<ExecutionMode> executionMode) {
+            final ImmutableEnumSet<ExecutionMode> executionMode) {
 
         if (delegate == null) {
             throw new IllegalArgumentException("delegate must not be null");

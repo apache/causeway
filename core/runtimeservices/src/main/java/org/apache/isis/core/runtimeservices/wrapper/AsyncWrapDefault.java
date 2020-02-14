@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.runtimeservices.wrapper;
 
-import java.util.EnumSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -30,6 +29,7 @@ import org.apache.isis.applib.services.wrapper.AsyncWrap;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
@@ -63,7 +63,7 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
     
     /*getter is API*/
     @Getter(onMethod = @__(@Override)) @With(AccessLevel.PACKAGE) @NonNull 
-    private EnumSet<ExecutionMode> executionMode;
+    private ImmutableEnumSet<ExecutionMode> executionMode;
     
     /*getter and wither are API*/
     @NonNull
