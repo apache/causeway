@@ -38,7 +38,15 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.applib.util.ObjectContracts;
+import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.subdomains.excel.applib.dom.AggregationType;
 import org.apache.isis.subdomains.excel.applib.dom.ExcelMetaDataEnabled;
 import org.apache.isis.subdomains.excel.applib.dom.ExcelService;
@@ -50,20 +58,14 @@ import org.apache.isis.subdomains.excel.applib.dom.PivotValue;
 import org.apache.isis.subdomains.excel.applib.dom.RowHandler;
 import org.apache.isis.subdomains.excel.applib.dom.WorksheetContent;
 import org.apache.isis.subdomains.excel.applib.dom.WorksheetSpec;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+
+import lombok.ToString;
+import lombok.val;
 
 class ExcelConverter {
 
     private static final String XLSX_SUFFIX = ".xlsx";
 
-    @SuppressWarnings({ "unchecked", "deprecation" })
     private static final Predicate<ObjectAssociation> VISIBLE_PROPERTIES =
             ObjectAssociation.Predicates.PROPERTIES.and(
             ObjectAssociation.Predicates.staticallyVisible(Where.STANDALONE_TABLES));
@@ -118,14 +120,14 @@ class ExcelConverter {
 
         final File tempFile =
                 File.createTempFile(ExcelConverter.class.getName(), UUID.randomUUID().toString() + XLSX_SUFFIX);
-        final FileOutputStream fos = new FileOutputStream(tempFile);
+        try(final FileOutputStream fos = new FileOutputStream(tempFile)) {
 
-        for (WorksheetContent worksheetContent : worksheetContents) {
-            final WorksheetSpec spec = worksheetContent.getSpec();
-            appendSheet(workbook, worksheetContent.getDomainObjects(), spec.getFactory(), spec.getSheetName());
+            for (WorksheetContent worksheetContent : worksheetContents) {
+                final WorksheetSpec spec = worksheetContent.getSpec();
+                appendSheet(workbook, worksheetContent.getDomainObjects(), spec.getFactory(), spec.getSheetName());
+            }
+            workbook.write(fos);
         }
-        workbook.write(fos);
-        fos.close();
         return tempFile;
     }
 
@@ -190,6 +192,9 @@ class ExcelConverter {
         final ImmutableSet<String> worksheetNames = FluentIterable.from(worksheetContents)
                 .transform(new Function<WorksheetContent, String>() {
                     @Nullable @Override public String apply(@Nullable final WorksheetContent worksheetContent) {
+                        if(worksheetContent==null) {
+                            return null;
+                        }
                         return worksheetContent.getSpec().getSheetName();
                     }
                 }).toSet();
@@ -204,18 +209,19 @@ class ExcelConverter {
             }
         }
 
-        final XSSFWorkbook workbook = new XSSFWorkbook();
-        final File tempFile =
-                File.createTempFile(ExcelConverter.class.getName(), UUID.randomUUID().toString() + XLSX_SUFFIX);
-        final FileOutputStream fos = new FileOutputStream(tempFile);
-
-        for (WorksheetContent worksheetContent : worksheetContents) {
-            final WorksheetSpec spec = worksheetContent.getSpec();
-            appendPivotSheet(workbook, worksheetContent.getDomainObjects(), spec.getFactory(), spec.getSheetName());
+        try(final XSSFWorkbook workbook = new XSSFWorkbook()) {
+            final File tempFile =
+                    File.createTempFile(ExcelConverter.class.getName(), UUID.randomUUID().toString() + XLSX_SUFFIX);
+            try(final FileOutputStream fos = new FileOutputStream(tempFile)) {
+    
+                for (WorksheetContent worksheetContent : worksheetContents) {
+                    final WorksheetSpec spec = worksheetContent.getSpec();
+                    appendPivotSheet(workbook, worksheetContent.getDomainObjects(), spec.getFactory(), spec.getSheetName());
+                }
+                workbook.write(fos);
+            }
+            return tempFile;
         }
-        workbook.write(fos);
-        fos.close();
-        return tempFile;
     }
 
     private void appendPivotSheet(
@@ -369,7 +375,7 @@ class ExcelConverter {
         final WorksheetSpec.RowFactory<Object> factory = worksheetSpec.getFactory();
         this.serviceInjector.injectServicesInto(factory);
 
-        final Class<T> cls = (Class<T>) factory.getCls();
+        final Class<T> cls = _Casts.uncheckedCast(factory.getCls());
         final String sheetName = worksheetSpec.getSheetName();
         final Mode mode = worksheetSpec.getMode();
 
@@ -430,13 +436,13 @@ class ExcelConverter {
                             if (value != null) {
                                 if (imported == null) {
                                     // copy the row into a new object
-                                    imported = (T) factory.create();
+                                    imported = _Casts.uncheckedCast(factory.create());
                                     // set excel metadata if applicable
                                     if (ExcelMetaDataEnabled.class.isAssignableFrom(cls)){
                                         ExcelMetaDataEnabled importedEnhanced = (ExcelMetaDataEnabled) imported;
                                         importedEnhanced.setExcelRowNumber(row.getRowNum());
                                         importedEnhanced.setExcelSheetName(sheetName);
-                                        imported = (T) importedEnhanced;
+                                        imported = _Casts.uncheckedCast(importedEnhanced);
                                     }
                                     templateAdapter = this.objectManager.adapt(imported);
                                 }
@@ -475,7 +481,10 @@ class ExcelConverter {
                     importedItems.add(imported);
 
                     if(imported instanceof RowHandler) {
-                        ((RowHandler)imported).handleRow((RowHandler) previousRow);
+                        val rowHandler = (RowHandler<?>) imported;
+                        val rowHandlerPrev = (RowHandler<?>) previousRow;
+                        
+                        rowHandler.handleRow(_Casts.uncheckedCast(rowHandlerPrev));
                     }
 
                     previousRow = imported;
@@ -529,6 +538,7 @@ class ExcelConverter {
                 .orElse(null);
     }
 
+    @ToString(of = {"name", "type", "currentValue"})
     static class Property {
         private final String name;
         private final Class<?> type;
@@ -560,19 +570,14 @@ class ExcelConverter {
         public void setCurrentValue(final Object currentValue) {
             this.currentValue = currentValue;
         }
-
-        @Override
-        public String toString() {
-            return ObjectContracts.toString(this, "name,type,currentValue");
-        }
     }
 
-    @SuppressWarnings("unused")
-    private void autoSize(final Sheet sh, final int numProps) {
-        for (int prop = 0; prop < numProps; prop++) {
-            sh.autoSizeColumn(prop);
-        }
-    }
+//    @SuppressWarnings("unused")
+//    private void autoSize(final Sheet sh, final int numProps) {
+//        for (int prop = 0; prop < numProps; prop++) {
+//            sh.autoSizeColumn(prop);
+//        }
+//    }
 
     // //////////////////////////////////////
 

@@ -27,10 +27,11 @@ import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.PersistenceCommand;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionAspectSupport;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionManagerException;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionObject;
+import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.PersistenceCommand;
 
 import lombok.Getter;
 import lombok.val;
@@ -68,7 +69,10 @@ class IsisTransactionManagerJdo {
         val txInProgress = isTransactionInProgress();
         if (txInProgress) {
 
-            val txObject = IsisTransactionAspectSupport.currentTransactionObject().get();
+            val txObject = IsisTransactionAspectSupport
+                    .currentTransactionObject()
+                    .orElseThrow(()->_Exceptions.unrecoverable("no current IsisTransactionObject available"));
+            
             txObject.incTransactionNestingLevel();
             val nestingLevel = txObject.getTransactionNestingLevel();
 
@@ -170,12 +174,12 @@ class IsisTransactionManagerJdo {
             val tx = (IsisTransactionJdo) txObject.getCurrentTransaction();
             if(tx==null) {
                 log.error("race condition when ending the current transaction object");
-                return;
-            }
-            val state = tx.getState();
-            if(isTopLevel && !state.isComplete()) {
-                log.error("endTransaction: when top-level, "
-                        + "transactionState is expected COMMITTED or ABORTED but was: '{}'", state);
+            } else {
+                val state = tx.getState();
+                if(isTopLevel && !state.isComplete()) {
+                    log.error("endTransaction: when top-level, "
+                            + "transactionState is expected COMMITTED or ABORTED but was: '{}'", state);
+                }
             }
         }
     }
@@ -195,7 +199,10 @@ class IsisTransactionManagerJdo {
                 abortTransaction(txObject);
 
                 // just in case any different exception was raised...
-                abortCause = this.getCurrentTransaction().getAbortCause();
+                val currentTx = this.getCurrentTransaction();
+                if(currentTx!=null && currentTx.getAbortCause()!=null) {
+                    abortCause = currentTx.getAbortCause();
+                }
 
             } catch(RuntimeException ex) {
 
@@ -245,7 +252,12 @@ class IsisTransactionManagerJdo {
             }
 
             try {
-                getCurrentTransaction().preCommit();
+                
+                val currentTx = this.getCurrentTransaction();
+                if(currentTx!=null) {
+                    currentTx.preCommit();   
+                }
+                
             } catch(Exception ex) {
                 // just in case any new exception was raised...
 
@@ -253,19 +265,27 @@ class IsisTransactionManagerJdo {
                 // being thrown due to a coding error in a domain object
                 abortCause = ex instanceof RuntimeException ? (RuntimeException) ex : new RuntimeException(ex);
 
-                getCurrentTransaction().setAbortCause(new IsisTransactionManagerException(ex));
+                val currentTx = this.getCurrentTransaction();
+                if(currentTx!=null) {
+                    currentTx.setAbortCause(new IsisTransactionManagerException(ex));    
+                }
+                
             }
         }
 
         if(abortCause == null) {
             try {
+                
                 persistenceSession.endTransaction();
             } catch(Exception ex) {
                 // just in case any new exception was raised...
                 abortCause = ex instanceof RuntimeException ? (RuntimeException) ex : new RuntimeException(ex);
 
                 // hacky... moving the transaction back to something other than COMMITTED
-                getCurrentTransaction().setAbortCause(new IsisTransactionManagerException(ex));
+                val currentTx = this.getCurrentTransaction();
+                if(currentTx!=null) {
+                    currentTx.setAbortCause(new IsisTransactionManagerException(ex));
+                }
             }
         }
 
@@ -295,7 +315,10 @@ class IsisTransactionManagerJdo {
         } else {
 
             // keeping things in sync
-            getCurrentTransaction().commit();
+            val currentTx = this.getCurrentTransaction();
+            if(currentTx!=null) {
+                currentTx.commit();
+            }
         }
 
 

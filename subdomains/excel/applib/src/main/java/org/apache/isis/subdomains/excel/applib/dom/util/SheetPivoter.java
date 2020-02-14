@@ -19,6 +19,8 @@ import org.apache.poi.ss.util.CellReference;
 import org.apache.isis.subdomains.excel.applib.dom.AggregationType;
 import org.apache.isis.subdomains.excel.applib.dom.ExcelService;
 
+import lombok.val;
+
 public class SheetPivoter {
 
     private Sheet sourceSheet;
@@ -179,8 +181,9 @@ public class SheetPivoter {
 
     private void validateAndAdaptSourceDataIfNeeded() throws ExcelService.Exception {
 
-        if (sourceNotValid()!=null){
-            throw sourceNotValid();
+        val sourceNotValid = sourceNotValid();
+        if (sourceNotValid!=null){
+            throw sourceNotValid;
         }
 
         for (Iterator<Row> iter = sourceSheet.rowIterator(); iter.hasNext();){
@@ -249,7 +252,7 @@ public class SheetPivoter {
         int trCnt;
         int tcCnt;
         trCnt = 0;
-        for (AnnotationTriplet at : annotations.getByAnnotation_OrderBy_OrderAscending("column")){
+        for (@SuppressWarnings("unused") AnnotationTriplet at : annotations.getByAnnotation_OrderBy_OrderAscending("column")){
             Row workRow = targetSheet.createRow(TargetLayOut.columnLabelOffsetY + trCnt++);
             for (tcCnt=0; tcCnt<tableWidth; tcCnt++){
                 workRow.createCell(tcCnt);

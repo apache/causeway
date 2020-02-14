@@ -34,7 +34,7 @@ public class IsisPermission extends WildcardPermission {
     private static final long serialVersionUID = 1L;
     private static final Pattern PATTERN = Pattern.compile("([!]?)([^/]+)[/](.+)");
 
-    private static ThreadLocal<Map<String,List<IsisPermission>>> VETOING_PERMISSIONS = 
+    private static final ThreadLocal<Map<String,List<IsisPermission>>> VETOING_PERMISSIONS = 
             ThreadLocal.withInitial(_Maps::newTreeMap);
 
     public static void resetVetoedPermissions() {

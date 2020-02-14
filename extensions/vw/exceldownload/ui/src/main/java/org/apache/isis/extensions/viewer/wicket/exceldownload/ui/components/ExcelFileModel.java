@@ -88,64 +88,66 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
             String sheetName = model.getName();
             if(sheetName==null||sheetName.length()==0) sheetName = "Collection";
             final File tempFile = File.createTempFile(ExcelFileModel.class.getCanonicalName(), sheetName + ".xlsx");
-            final FileOutputStream fos = new FileOutputStream(tempFile);
-            final Sheet sheet = wb.createSheet(sheetName);
-    
-            final ObjectSpecification typeOfSpec = model.getTypeOfSpecification();
-    
-    
-            //XXX legacy of 1.15.1
-            //            @SuppressWarnings("unchecked")
-            //            final Filter<ObjectAssociation> filter = Filters.and(
-            //                    ObjectAssociationFilters.PROPERTIES, 
-            //                    ObjectAssociationFilters.staticallyVisible(model.isParented()? Where.PARENTED_TABLES: Where.STANDALONE_TABLES));
-            //            
-            final Predicate<ObjectAssociation> filter = oa->{
-                if(!oa.isPropertyOrCollection())
-                    return false;
-                //            	if(model.getEntityModel()!=null && model.getEntityModel().getObject()!=null &&
-                //            		oa.isVisible(
-                //            			model.getEntityModel().getObject(), 
-                //            			InteractionInitiatedBy.USER, 
-                //            			model.isParented()? Where.PARENTED_TABLES: Where.STANDALONE_TABLES).isVetoed() )
-                //            			return false;
-                return true;
-            };            
-    
-            final List<? extends ObjectAssociation> propertyList = typeOfSpec
-                    .streamAssociations(Contributed.INCLUDED)
-                    .filter(filter)
-                    .collect(Collectors.toList());
-    
-            final ExcelFileModel.RowFactory rowFactory = new RowFactory(sheet);
-            Row row = rowFactory.newRow();
-    
-    
-            // header row
-            int i=0;
-            for (ObjectAssociation property : propertyList) {
-                final Cell cell = row.createCell((short) i++);
-                cell.setCellValue(property.getName());
-            }
-    
-            final CellStyle dateCellStyle = createDateFormatCellStyle(wb);
-    
-            // detail rows
-            final List<ManagedObject> adapters = model.getObject();
-            for (val objectAdapter : adapters) {
-                row = rowFactory.newRow();
-                i=0;
-                for (final ObjectAssociation property : propertyList) {
+            
+            try(final FileOutputStream fos = new FileOutputStream(tempFile)) {
+                final Sheet sheet = wb.createSheet(sheetName);
+        
+                final ObjectSpecification typeOfSpec = model.getTypeOfSpecification();
+        
+        
+                //XXX legacy of 1.15.1
+                //            @SuppressWarnings("unchecked")
+                //            final Filter<ObjectAssociation> filter = Filters.and(
+                //                    ObjectAssociationFilters.PROPERTIES, 
+                //                    ObjectAssociationFilters.staticallyVisible(model.isParented()? Where.PARENTED_TABLES: Where.STANDALONE_TABLES));
+                //            
+                final Predicate<ObjectAssociation> filter = oa->{
+                    if(!oa.isPropertyOrCollection())
+                        return false;
+                    //            	if(model.getEntityModel()!=null && model.getEntityModel().getObject()!=null &&
+                    //            		oa.isVisible(
+                    //            			model.getEntityModel().getObject(), 
+                    //            			InteractionInitiatedBy.USER, 
+                    //            			model.isParented()? Where.PARENTED_TABLES: Where.STANDALONE_TABLES).isVetoed() )
+                    //            			return false;
+                    return true;
+                };            
+        
+                final List<? extends ObjectAssociation> propertyList = typeOfSpec
+                        .streamAssociations(Contributed.INCLUDED)
+                        .filter(filter)
+                        .collect(Collectors.toList());
+        
+                final ExcelFileModel.RowFactory rowFactory = new RowFactory(sheet);
+                Row row = rowFactory.newRow();
+        
+        
+                // header row
+                int i=0;
+                for (ObjectAssociation property : propertyList) {
                     final Cell cell = row.createCell((short) i++);
-                    setCellValue(objectAdapter, property, cell, dateCellStyle);
+                    cell.setCellValue(property.getName());
                 }
+        
+                final CellStyle dateCellStyle = createDateFormatCellStyle(wb);
+        
+                // detail rows
+                final List<ManagedObject> adapters = model.getObject();
+                for (val objectAdapter : adapters) {
+                    row = rowFactory.newRow();
+                    i=0;
+                    for (final ObjectAssociation property : propertyList) {
+                        final Cell cell = row.createCell((short) i++);
+                        setCellValue(objectAdapter, property, cell, dateCellStyle);
+                    }
+                }
+        
+                // freeze panes
+                sheet.createFreezePane(0, 1);
+        
+                wb.write(fos);
+    
             }
-    
-            // freeze panes
-            sheet.createFreezePane(0, 1);
-    
-            wb.write(fos);
-            fos.close();
             return tempFile;
         }
     }

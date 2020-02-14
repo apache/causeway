@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -280,6 +281,7 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
     @Override
     public Object newInstance(final Class<?> entityType) {
         final Instantiator instantiator = instantiatorFor(entityType);
+        Objects.requireNonNull(instantiator);
         return instantiator.instantiate();
     }
 

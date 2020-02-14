@@ -88,29 +88,31 @@ implements MetaModelRefiner {
                         : new MandatoryFacetInferredFromAbsenceOfJdoColumn(holder, required);
 
 
-                // as a side-effect, will chain any existing facets.
-                // we'll exploit this fact for meta-model validation (see #refineMetaModelValidator(), below)
-                FacetUtil.addFacet(facet);
+        // as a side-effect, will chain any existing facets.
+        // we'll exploit this fact for meta-model validation (see #refineMetaModelValidator(), below)
+        FacetUtil.addFacet(facet);
 
-                // however, if a @Column was explicitly provided, and the underlying facet
-                // was the simple MandatoryFacetDefault (from an absence of @Optional or @Mandatory),
-                // then don't chain, simply replace.
-                if(facet instanceof MandatoryFacetDerivedFromJdoColumn && facet.getUnderlyingFacet() instanceof MandatoryFacetDefault) {
-                    facet.setUnderlyingFacet(null);
-                }
+        // however, if a @Column was explicitly provided, and the underlying facet
+        // was the simple MandatoryFacetDefault (from an absence of @Optional or @Mandatory),
+        // then don't chain, simply replace.
+        if(facet instanceof MandatoryFacetDerivedFromJdoColumn && facet.getUnderlyingFacet() instanceof MandatoryFacetDefault) {
+            facet.setUnderlyingFacet(null);
+        }
     }
 
     private static boolean whetherRequired(final ProcessMethodContext processMethodContext, final Column annotation) {
 
         final String allowsNull = annotation != null ? annotation.allowsNull() : null;
 
-        if(_Strings.isNullOrEmpty(allowsNull)) {
-            final Class<?> returnType = processMethodContext.getMethod().getReturnType();
-            // per JDO spec
-            return returnType != null && returnType.isPrimitive();
-        } else {
-            return !"true".equalsIgnoreCase(allowsNull.trim()); // if mis-spelt, then DN assumes is not-nullable
+        if(_Strings.isNotEmpty(allowsNull)) {
+            // if miss-spelled, then DN assumes is not-nullable
+            return !"true".equalsIgnoreCase(allowsNull.trim()); 
         }
+        
+        final Class<?> returnType = processMethodContext.getMethod().getReturnType();
+        // per JDO spec
+        return returnType != null && returnType.isPrimitive();
+        
     }
 
     @Override

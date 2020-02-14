@@ -32,6 +32,7 @@ import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.internal.collections._Inbox;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -336,7 +337,7 @@ public class IsisTransactionJdo implements Transaction {
                     
                     PersistenceSession.current(IsisPersistenceSessionJdo.class)
                     .getFirst()
-                    .get()
+                    .orElseThrow(()->_Exceptions.unrecoverable("no current IsisPersistenceSessionJdo available"))
                     .execute(pc_snapshot);
                     
                 } catch (final RuntimeException ex) {

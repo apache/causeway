@@ -34,8 +34,8 @@ public class CalendarService {
     }
 
     static LocalDate beginningOfMonth(final LocalDate date) {
-        final int dayOfMonth = date.getDayOfMonth();
-        return date.minusDays(dayOfMonth-1);
+        final long dayOfMonth = date.getDayOfMonth();
+        return date.minusDays(dayOfMonth-1L);
     }
 
     public LocalDate beginningOfQuarter() {
@@ -53,7 +53,8 @@ public class CalendarService {
         final int monthOfYear = beginningOfMonth.getMonthValue();
         final int quarter = (monthOfYear-1)/MONTHS_IN_QUARTER; // 0, 1, 2, 3
         final int monthStartOfQuarter = quarter*MONTHS_IN_QUARTER+1;
-        return beginningOfMonth.minusMonths(monthOfYear-monthStartOfQuarter);
+        final long deltaMonth = (long)monthOfYear - monthStartOfQuarter;
+        return beginningOfMonth.minusMonths(deltaMonth);
     }
 
     /**

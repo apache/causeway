@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.model.hints;
 
+import java.util.Objects;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
@@ -39,7 +41,16 @@ public class IsisSelectorEvent extends IsisEventLetterAbstract {
     }
 
     public String hintFor(Component component, String hintKey) {
-        return this.component == component && this.hintKey == hintKey ? hintValue : null;
+        return sameComponent(component) && sameKey(hintKey) ? hintValue : null;
     }
+    
+    private boolean sameComponent(Component other) {
+        return Objects.equals(this.component, other);
+    }
+    
+    private boolean sameKey(String other) {
+        return Objects.equals(this.hintKey, other);
+    }
+    
 }
 

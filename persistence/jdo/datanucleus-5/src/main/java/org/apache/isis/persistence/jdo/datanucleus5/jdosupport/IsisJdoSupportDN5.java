@@ -115,16 +115,18 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
         final List<Map<String,Object>> rows = _Lists.newArrayList();
 
         try(Statement statement = connection.createStatement()) {
-            final ResultSet rs = statement.executeQuery(sql);
-            final ResultSetMetaData rsmd = rs.getMetaData();
-            while(rs.next()) {
-                final Map<String,Object> row = _Maps.newLinkedHashMap();
-                final int columnCount = rsmd.getColumnCount();
-                for(int i=0; i<columnCount; i++) {
-                    final Object val = rs.getObject(i+1);
-                    row.put(rsmd.getColumnName(i+1), val);
+            try(final ResultSet rs = statement.executeQuery(sql)) {
+             
+                final ResultSetMetaData rsmd = rs.getMetaData();
+                while(rs.next()) {
+                    final Map<String,Object> row = _Maps.newLinkedHashMap();
+                    final int columnCount = rsmd.getColumnCount();
+                    for(int i=0; i<columnCount; i++) {
+                        final Object val = rs.getObject(i+1);
+                        row.put(rsmd.getColumnName(i+1), val);
+                    }
+                    rows.add(row);
                 }
-                rows.add(row);
             }
 
         } catch (final SQLException ex) {

@@ -20,6 +20,7 @@ package org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.com
 
 import javax.jdo.PersistenceManager;
 
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
@@ -63,8 +64,8 @@ implements CreateObjectCommand {
 
     private boolean isDetached(Object pojo) {
         val ps = PersistenceSession.current(PersistenceSession.class)
-        .getFirst()
-        .get();
+                .getFirst()
+                .orElseThrow(()->_Exceptions.unrecoverable("no current PersistenceSession available"));
         
         val state = ps.getEntityState(pojo);
         return state.isDetached();

@@ -25,9 +25,7 @@ import java.io.PrintStream;
 import java.util.concurrent.Callable;
 
 /**
- * <p>
- *     Used by domain apps only.
- * </p>
+ * @apiNote Used by domain apps only.
  */
 public class NullPrintStream extends PrintStream {
     public NullPrintStream() {
@@ -36,17 +34,17 @@ public class NullPrintStream extends PrintStream {
 
     private static class NullByteArrayOutputStream extends ByteArrayOutputStream {
         @Override
-        public void write(int b) {
+        public synchronized void write(int b) {
             // do nothing
         }
 
         @Override
-        public void write(byte[] b, int off, int len) {
+        public synchronized void write(byte[] b, int off, int len) {
             // do nothing
         }
 
         @Override
-        public void writeTo(OutputStream out) throws IOException {
+        public synchronized void writeTo(OutputStream out) throws IOException {
             // do nothing
         }
     }

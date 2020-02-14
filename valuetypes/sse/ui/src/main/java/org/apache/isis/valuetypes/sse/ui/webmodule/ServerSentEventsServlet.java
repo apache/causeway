@@ -20,7 +20,6 @@ package org.apache.isis.valuetypes.sse.ui.webmodule;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 
 import javax.servlet.AsyncContext;
@@ -41,6 +40,7 @@ import org.apache.isis.valuetypes.sse.applib.value.ListeningMarkup;
 import static org.apache.isis.core.commons.internal.base._With.requires;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Server-sent events.
@@ -51,24 +51,16 @@ import lombok.val;
  *
  */
 //@WebServlet(value="/sse", asyncSupported=true)
+@Log4j2
 public class ServerSentEventsServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private ExecutorService threadPool;
 
     @Autowired private SseService sseService;
 
     @Override
     public void init() throws ServletException {
         super.init();
-        threadPool = ForkJoinPool.commonPool();
-        
         requires(sseService, "sseService");
-    }
-
-    @Override
-    public void destroy() {
-        threadPool.shutdown();
-        super.destroy();
     }
 
     @Override
@@ -94,8 +86,8 @@ public class ServerSentEventsServlet extends HttpServlet {
 
         final AsyncContext asyncContext = request.startAsync();
 
-        //XXX javac explicitly requires curly-braces here (to tell it we want a Runnable)
-        threadPool.submit(()->{fork(asyncContext, eventStream);});
+        // javac explicitly requires curly-braces here (to tell it we want a Runnable)
+        ForkJoinPool.commonPool().submit(()->{fork(asyncContext, eventStream);});
 
     }
 
@@ -108,7 +100,7 @@ public class ServerSentEventsServlet extends HttpServlet {
 
         eventStream.listenWhile(source->{
 
-            if(threadPool.isShutdown()) {
+            if(ForkJoinPool.commonPool().isShutdown()) {
                 return false; // stop listening
             }
 
@@ -140,7 +132,9 @@ public class ServerSentEventsServlet extends HttpServlet {
         try {
             eventStream.awaitClose();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            log.warn("Interrupted!", e);
+            // Restore interrupted state...
+            Thread.currentThread().interrupt();
         }
 
         // Completes the asynchronous operation that was started on the request

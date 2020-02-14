@@ -33,6 +33,7 @@ import org.springframework.transaction.support.DefaultTransactionStatus;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionAspectSupport;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionObject;
@@ -152,7 +153,7 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
     private IsisTransactionManagerJdo transactionManagerJdo() {
         return PersistenceSession.current(IsisPersistenceSessionJdoBase.class)
                     .getFirst()
-                    .get()
+                    .orElseThrow(()->_Exceptions.unrecoverable("no current IsisPersistenceSessionJdoBase available"))
                     .transactionManager;
     }
 

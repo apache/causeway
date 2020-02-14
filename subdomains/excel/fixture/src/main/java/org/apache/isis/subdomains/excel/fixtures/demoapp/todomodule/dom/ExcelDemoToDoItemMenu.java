@@ -158,7 +158,7 @@ public class ExcelDemoToDoItemMenu {
 //                new Location(51.5172+random(-0.05, +0.05), 0.1182 + random(-0.05, +0.05)));
 
         LocalDate today = clockService.now();
-        toDoItem.setDueBy(today.plusDays(random(10)-2));
+        toDoItem.setDueBy(today.plusDays((long)random(10)-2L));
 
         repositoryService.persist(toDoItem);
 
@@ -170,9 +170,10 @@ public class ExcelDemoToDoItemMenu {
         return newToDoItem(description, null, null, user, null, null);
     }
 
-    private static double random(final double from, final double to) {
-        return Math.random() * (to-from) + from;
-    }
+// not used    
+//    private static double random(final double from, final double to) {
+//        return Math.random() * (to-from) + from;
+//    }
 
     private static int random(int n) {
         return (int) (Math.random() * n);

@@ -18,21 +18,17 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.subdomains.excel.applib.dom.util.ExcelServiceImpl;
 import org.apache.isis.subdomains.excel.applib.dom.util.Mode;
 
-import lombok.extern.log4j.Log4j2;
-
 @Service
 @Named("isisSubExcel.ExcelService")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
 public class ExcelService {
 
     public static class Exception extends RecoverableException {
@@ -196,13 +192,14 @@ public class ExcelService {
 
         List<WorksheetSpec> worksheetSpecs = _Lists.newArrayList();
         try (ByteArrayInputStream bais = new ByteArrayInputStream(excelBlob.getBytes())) {
-            final Workbook wb = org.apache.poi.ss.usermodel.WorkbookFactory.create(bais);
-            final int numberOfSheets = wb.getNumberOfSheets();
-            for (int i = 0; i < numberOfSheets; i++) {
-                final Sheet sheet = wb.getSheetAt(i);
-                WorksheetSpec worksheetSpec = matcher.fromSheet(sheet.getSheetName());
-                if(worksheetSpec != null) {
-                    worksheetSpecs.add(worksheetSpec);
+            try (final Workbook wb = org.apache.poi.ss.usermodel.WorkbookFactory.create(bais)) {
+                final int numberOfSheets = wb.getNumberOfSheets();
+                for (int i = 0; i < numberOfSheets; i++) {
+                    final Sheet sheet = wb.getSheetAt(i);
+                    WorksheetSpec worksheetSpec = matcher.fromSheet(sheet.getSheetName());
+                    if(worksheetSpec != null) {
+                        worksheetSpecs.add(worksheetSpec);
+                    }
                 }
             }
         } catch (IOException e) {
@@ -216,7 +213,6 @@ public class ExcelService {
         return fromExcel(excelBlob, worksheetSpecs);
     }
 
-    @Inject private BookmarkService bookmarkService;
     @Inject private ServiceInjector serviceInjector;
 
 }
