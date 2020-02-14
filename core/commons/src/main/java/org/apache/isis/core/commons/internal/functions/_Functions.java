@@ -36,6 +36,12 @@ import java.util.function.Supplier;
  */
 public final class _Functions {
 
+    // -- NOOP
+    
+    public static <T> Consumer<T> noopConsumer() {
+        return t->{};
+    }
+    
     // -- INDEX AWARE
 
     @FunctionalInterface

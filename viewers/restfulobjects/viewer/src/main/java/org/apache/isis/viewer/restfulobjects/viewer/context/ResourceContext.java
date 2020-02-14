@@ -34,6 +34,7 @@ import javax.ws.rs.ext.Providers;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Sets;
+import org.apache.isis.core.commons.internal.primitives._Ints;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -54,6 +55,7 @@ import org.apache.isis.viewer.restfulobjects.viewer.resources.serialization.Seri
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.val;
 
 public class ResourceContext extends RuntimeContextBase implements IResourceContext {
 
@@ -149,13 +151,15 @@ public class ResourceContext extends RuntimeContextBase implements IResourceCont
                 String paramValue = params.get(paramName)[0];
                 // this is rather hacky :-(
                 final String key = paramName.startsWith("x-ro") ? paramName : paramName + ".value";
-                try {
-                    // and this is even more hacky :-(
-                    int paramValueAsInt = Integer.parseInt(paramValue);
-                    map.mapPut(key, paramValueAsInt);
-                } catch(Exception ex) {
+                
+                // test whether we can parse as an int
+                val parseResult = _Ints.parseInt(paramValue, 10);
+                if(parseResult.isPresent()) {
+                    map.mapPut(key, parseResult.getAsInt());
+                } else {
                     map.mapPut(key, stripQuotes(paramValue));
                 }
+                
             }
             return map;
         } else {

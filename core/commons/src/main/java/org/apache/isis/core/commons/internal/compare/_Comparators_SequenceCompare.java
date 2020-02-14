@@ -23,6 +23,9 @@ import java.util.StringTokenizer;
 import javax.annotation.Nullable;
 
 import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.primitives._Ints;
+
+import lombok.val;
 
 /**
  *
@@ -80,15 +83,17 @@ final class _Comparators_SequenceCompare {
             }
             // we have this component on each side
 
-            final String token1 = components1.nextToken();
-            final String token2 = components2.nextToken();
+            val token1 = components1.nextToken();
+            val token2 = components2.nextToken();
 
             int componentCompare = 0;
-            try {
-                final int c1 = Integer.parseInt(token1);
-                final int c2 = Integer.parseInt(token2);
-                componentCompare = Integer.compare(c1, c2);
-            } catch (final NumberFormatException nfe) {
+            
+            val int1 = _Ints.parseInt(token1, 10);
+            val int2 = _Ints.parseInt(token2, 10);
+            
+            if(int1.isPresent() && int2.isPresent()) {
+                componentCompare = Integer.compare(int1.getAsInt(), int2.getAsInt());
+            } else {
                 // not integers compare as strings
                 componentCompare = token1.compareTo(token2);
             }

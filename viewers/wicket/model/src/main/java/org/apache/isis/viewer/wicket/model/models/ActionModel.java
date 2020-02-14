@@ -26,8 +26,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.regex.Matcher;
+import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -54,6 +53,8 @@ import org.apache.isis.applib.value.NamedWithMimeType;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.primitives._Ints;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -75,6 +76,7 @@ import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 
+import lombok.Value;
 import lombok.val;
 
 public class ActionModel extends BookmarkableModel<ManagedObject> implements FormExecutorContext {
@@ -139,45 +141,35 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
         return pageParameters;
     }
 
+    @Value(staticConstructor = "of")
+    public static class ParamNumAndOidString {
+        int paramNum;
+        String oidString;
+    }
 
-    public static Entry<Integer, String> parse(final String paramContext) {
-        final Matcher matcher = KEY_VALUE_PATTERN.matcher(paramContext);
+    public static Optional<ParamNumAndOidString> parse(final String paramContext) {
+        val matcher = KEY_VALUE_PATTERN.matcher(paramContext);
         if (!matcher.matches()) {
-            return null;
+            return Optional.empty();
         }
-
-        final int paramNum;
+        
         try {
-            paramNum = Integer.parseInt(matcher.group(1));
+        
+            val intLiteral = matcher.group(1);
+            val oidStr = matcher.group(2);
+            
+            val parseResult = _Ints.parseInt(intLiteral, 10);
+            if(parseResult.isPresent()) {
+                val paramNum = parseResult.getAsInt();
+                return Optional.of(ParamNumAndOidString.of(paramNum, oidStr));
+            }
+            
         } catch (final Exception e) {
-            // ignore
-            return null;
+            // ignore and fall through
         }
+        
+        return Optional.empty();
 
-        final String oidStr;
-        try {
-            oidStr = matcher.group(2);
-        } catch (final Exception e) {
-            return null;
-        }
-
-        return new Map.Entry<Integer, String>() {
-
-            @Override
-            public Integer getKey() {
-                return paramNum;
-            }
-
-            @Override
-            public String getValue() {
-                return oidStr;
-            }
-
-            @Override
-            public String setValue(final String value) {
-                return null;
-            }
-        };
     }
 
     //////////////////////////////////////////////////
@@ -342,15 +334,17 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
         val parameterTypes = action.getParameterTypes();
         final int parameterCount = parameterTypes.size();
 
-        final Map.Entry<Integer, String> mapEntry = parse(paramContext);
+        val paramNumAndOidString = parse(paramContext)
+                .orElseThrow(()->_Exceptions
+                        .unrecoverableFormatted("failed to parse param context '%s'", paramContext));
 
-        final int paramNum = mapEntry.getKey();
+        final int paramNum = paramNumAndOidString.getParamNum();
         if (paramNum >= parameterCount) {
             return false;
         }
 
-        final String encoded = mapEntry.getValue();
-        setArgument(paramNum, parameterTypes.getElseFail(paramNum), encoded);
+        final String oidStrEncoded = paramNumAndOidString.getOidString();
+        setArgument(paramNum, parameterTypes.getElseFail(paramNum), oidStrEncoded);
 
         return true;
     }

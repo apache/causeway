@@ -37,6 +37,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.primitives._Ints;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -340,14 +341,16 @@ public class EntityLinksSelectorPanel extends PanelAbstract<EntityModel>  {
         if(hintContainer != null) {
             String viewStr = hintContainer.getHint(this, UIHINT_VIEW);
             if(viewStr != null) {
-                try {
-                    int view = Integer.parseInt(viewStr);
-                    if(view >= 0 && view < componentFactories.size()) {
-                        return view;
+                
+                val parseResult = _Ints.parseInt(viewStr, 10);
+                if(parseResult.isPresent()) {
+                    val viewNum = parseResult.getAsInt();
+                    if(viewNum >= 0 && viewNum < componentFactories.size()) {
+                        return viewNum;
                     }
-                } catch(NumberFormatException ex) {
-                    // ignore
                 }
+                // else fall through
+                
             }
         }
 

@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
-import java.util.Map;
-
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;
@@ -28,13 +26,18 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.viewer.wicket.model.models.ActionModel.ParamNumAndOidString;
+
 public class ActionModelTest {
 
     @Test
     public void whenParseThenParses() throws Exception {
-        final Map.Entry<Integer, String> parsed = ActionModel.parse("3=OBJECT_OID:123");
+        final ParamNumAndOidString parsed = ActionModel.parse("3=OBJECT_OID:123")
+                .orElseThrow(()->_Exceptions.unrecoverable("parsing failed"));
+        
         assertThat(parsed, is(not(nullValue())));
-        assertThat(parsed.getKey(), is(3));
-        assertThat(parsed.getValue(), is("OBJECT_OID:123"));
+        assertThat(parsed.getParamNum(), is(3));
+        assertThat(parsed.getOidString(), is("OBJECT_OID:123"));
     }
 }
