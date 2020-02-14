@@ -60,7 +60,10 @@ public class Object_clearHints {
     public Object act() {
         if (getHintStoreUsingWicketSession() != null) {
             val bookmark = bookmarkService.bookmarkForElseThrow(holder);
-            getHintStoreUsingWicketSession().removeAll(bookmark);
+            val hintStore = getHintStoreUsingWicketSession();
+            if(hintStore!=null) { // just in case
+                hintStore.removeAll(bookmark);
+            }
         }
         return holder;
     }

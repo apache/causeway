@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.viewer.integration;
 
 import java.util.Locale;
 import java.util.MissingResourceException;
+import java.util.Optional;
 import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
@@ -33,10 +34,13 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.runtime.session.IsisSession;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication;
+
+import lombok.val;
 
 /**
  * Implementation integrates Isis' own i18n support ({@link TranslationService}) with Wicket's equivalent i18n
@@ -84,25 +88,26 @@ public class LocalizerForIsis extends Localizer {
     }
 
     private Class<?> determineContextClassElse(final Component component, final Class<?> fallback) {
-        return component != null
-                ? determineContextClass(component)
-                        : fallback;
-    }
+        
+        if(component==null) {
+            return fallback;
+        }
 
-    private Class<? > determineContextClass(final Component component) {
         // special case
         if(component instanceof org.wicketstuff.select2.Select2Choice ||
                 component instanceof org.wicketstuff.select2.Select2MultiChoice) {
             return component.getClass();
         }
-        final Component parentComponent = pageElseSignificantParentOf(component);
-        return enclosing(parentComponent.getClass());
+        
+        return pageElseSignificantParentOf(component)
+                .map(parentComponent->enclosing(parentComponent.getClass()))
+                .orElse(_Casts.uncheckedCast(fallback));
     }
 
-    private Component pageElseSignificantParentOf(final Component component) {
+    private Optional<Component> pageElseSignificantParentOf(final Component component) {
         final Component page = pageOf(component);
         if (page != null) {
-            return page;
+            return Optional.of(page);
         }
         return parentFormOrPanelOf(component);
     }
@@ -125,15 +130,15 @@ public class LocalizerForIsis extends Localizer {
      * Search up this component instance's hierarchy, and use the first form or panel that is a parent
      * of this component.
      */
-    private Component parentFormOrPanelOf(final Component component) {
+    private Optional<Component> parentFormOrPanelOf(final Component component) {
         if(component instanceof Form || component instanceof Panel) {
-            return component;
+            return Optional.of(component);
         }
-        final MarkupContainer parent = component.getParent();
+        val parent = component.getParent();
         if(parent != null) {
             return parentFormOrPanelOf(parent);
         }
-        return parent;
+        return Optional.empty();
     }
 
     private Class<?> enclosing(final Class<?> cls) {

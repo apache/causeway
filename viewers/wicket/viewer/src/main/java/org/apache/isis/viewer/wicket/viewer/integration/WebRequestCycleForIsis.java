@@ -272,11 +272,17 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
     }
 
     private void addTranslatedMessage(final String translatedSuffixIfAny) {
-        final String translatedPrefix = translate("Action no longer available");
-        final String message = translatedSuffixIfAny != null
-                ? String.format("%s (%s)", translatedPrefix, translatedSuffixIfAny)
-                        : translatedPrefix;
-                getMessageBroker().addMessage(message);
+        
+        getMessageBroker().ifPresent(broker->{
+        
+            final String translatedPrefix = translate("Action no longer available");
+            final String message = translatedSuffixIfAny != null
+                    ? String.format("%s (%s)", translatedPrefix, translatedSuffixIfAny)
+                            : translatedPrefix;
+            
+            broker.addMessage(message);
+            
+        });
     }
 
     private String translate(final String text) {
@@ -366,7 +372,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         if(!inIsisSession()) {
             return false;
         }
-        if(getAuthenticationSession() == null) {
+        if(!getAuthenticationSession().isPresent()) {
             return false;
         }
         return getWicketAuthenticationSession().isSignedIn();
@@ -391,12 +397,13 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         return IsisSession.currentOrElseNull()!=null;
     }
 
-    private AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getCurrentAuthenticationSession().orElse(null);
+    private Optional<AuthenticationSession> getAuthenticationSession() {
+        return IsisContext.getCurrentAuthenticationSession();
     }
 
-    private MessageBroker getMessageBroker() {
-        return getAuthenticationSession().getMessageBroker();
+    private Optional<MessageBroker> getMessageBroker() {
+        return getAuthenticationSession()
+                .map(AuthenticationSession::getMessageBroker);
     }
 
     private AuthenticatedWebSession getWicketAuthenticationSession() {

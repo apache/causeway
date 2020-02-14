@@ -36,6 +36,8 @@ import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 
+import lombok.val;
+
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
@@ -44,7 +46,6 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
  * {@link de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel}
  * for Bootstrap styled error messages
  */
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 public class IsisSignInPanel extends SignInPanel {
 
     private static final long serialVersionUID = 1L;
@@ -132,13 +133,15 @@ public class IsisSignInPanel extends SignInPanel {
     }
 
     private void setVisibilityAllowedBasedOnAvailableServices(final Component... components) {
-        final UserRegistrationService userRegistrationService =
-                anyUserRegistrationService.stream().findFirst().orElse(null);
-        final EmailNotificationService emailNotificationService = 
-                anyEmailNotificationService.stream().findFirst().orElse(null);
+        val hasUserRegistrationService = anyUserRegistrationService.isNotEmpty();
+        val hasConfiguredEmailNotificationService = anyEmailNotificationService.stream()
+                .anyMatch(EmailNotificationService::isConfigured);
 
-        final boolean visibilityAllowed = userRegistrationService != null && emailNotificationService.isConfigured();
-        for (final Component component: components) {
+        val visibilityAllowed = 
+                hasUserRegistrationService
+                && hasConfiguredEmailNotificationService;
+        
+        for (val component: components) {
             if(component.isVisibilityAllowed()) {
                 component.setVisibilityAllowed(visibilityAllowed);
             }
