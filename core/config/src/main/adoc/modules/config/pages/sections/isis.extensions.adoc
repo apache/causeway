@@ -1,0 +1,67 @@
+= Extensions
+
+include::../section-hooks/isis.extensions~pre.adoc[]
+
+[cols="3a,2a,5a", options="header"]
+|===
+|Property
+|Default
+|Description
+|
+[[isis.extensions.cors. +
+allowed-headers
+]]
+isis.extensions.cors. +
+allowed-headers
+
+| 
+| Which HTTP headers are allowed in a CORS request.
+
+For more information, check the usage of the ``headers`` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
+
+
+|
+[[isis.extensions.cors. +
+allowed-methods
+]]
+isis.extensions.cors. +
+allowed-methods
+
+| 
+| Which HTTP methods are permitted in a CORS request.
+
+For more information, check the usage of the ``methods`` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
+
+
+|
+[[isis.extensions.cors. +
+allowed-origins
+]]
+isis.extensions.cors. +
+allowed-origins
+
+|  *
+| Which origins are allowed to make CORS requests.
+
+The default is the wildcard ("*") but this can be made more restrictive if necessary.
+
+For more information, check the usage of the ``origins`` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
+
+
+|
+[[isis.extensions.cors. +
+exposed-headers
+]]
+isis.extensions.cors. +
+exposed-headers
+
+|  Authorization
+| Which HTTP headers are exposed in a CORS request.
+
+For more information, check the usage of the ``headers`` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
+
+
+
+|===
+
+include::../section-hooks/isis.extensions~post.adoc[]

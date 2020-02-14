@@ -1,0 +1,1 @@
+Configuration that applies to Spring itself.

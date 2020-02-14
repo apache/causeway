@@ -1,0 +1,212 @@
+= MetaModel Validator
+
+include::../section-hooks/isis.core.meta-model.validator~pre.adoc[]
+
+[cols="3a,2a,5a", options="header"]
+|===
+|Property
+|Default
+|Description
+|
+[[isis.core.meta-model. +
+validator. +
+action-collection-parameter- +
+choices
+]]
+isis.core.meta-model. +
+validator. +
+action-collection-parameter- +
+choices
+
+|  true
+| Whether to validate that any actions that accept action parameters have either a corresponding choices or auto-complete for that action parameter, or are associated with a collection of the appropriate type.
+
+
+|
+[[isis.core.meta-model. +
+validator.allow-deprecated
+]]
+isis.core.meta-model. +
+validator.allow-deprecated
+
+|  true
+| This setting is used to determine whether the use of such deprecated features is allowed.
+
+If not allowed, then metamodel validation errors will be flagged.
+
+Note that this settings has no effect if the programming model has been configured to ignore deprecated features (because in this case the programming model facets simply won't be included in the introspection process.
+
+
+|
+[[isis.core.meta-model. +
+validator. +
+ensure-unique-object-types
+]]
+isis.core.meta-model. +
+validator. +
+ensure-unique-object-types
+
+|  true
+| Whether to ensure that the object type of all objects (which can be set either explicitly using ``DomainObject#objectType()`` or ``DomainService#objectType()``, or can be inferred implicitly using a variety of mechanisms) must be unique with respect to all other object types.
+
+It is _highly advisable_ to leave this set as enabled (the default), and to also use explicit types (see ``#isExplicitObjectType()``.
+
+
+|
+[[isis.core.meta-model. +
+validator. +
+explicit-object-type
+]]
+isis.core.meta-model. +
+validator. +
+explicit-object-type
+
+| 
+| Whether to ensure that the object type of all objects must be specified explicitly, using either ``DomainObject#objectType()`` or ``DomainService#objectType()``.
+
+It is _highly advisable_ to leave this set as enabled (the default). These object types should also (of course) be unique - that can be checked by setting the ``#isEnsureUniqueObjectTypes()`` config property.
+
+
+|
+[[isis.core.meta-model. +
+validator.jaxb-view-model. +
+date-time-type-adapter
+]]
+isis.core.meta-model. +
+validator.jaxb-view-model. +
+date-time-type-adapter
+
+|  true
+| If set, then ensures that for all properties of JAXB-style view models where the property's type is a date or time, then that property has been correctly annotated with @``XmlJavaTypeAdapter`` (so that the property's value can be converted into a serializable form).
+
+
+|
+[[isis.core.meta-model. +
+validator.jaxb-view-model. +
+no-arg-constructor
+]]
+isis.core.meta-model. +
+validator.jaxb-view-model. +
+no-arg-constructor
+
+| 
+| If set, then ensures that all JAXB-style view models have a no-arg constructor.
+
+
+|
+[[isis.core.meta-model. +
+validator.jaxb-view-model. +
+not-abstract
+]]
+isis.core.meta-model. +
+validator.jaxb-view-model. +
+not-abstract
+
+|  true
+| If set, then ensures that all JAXB-style view models are concrete classes, not abstract.
+
+
+|
+[[isis.core.meta-model. +
+validator.jaxb-view-model. +
+not-inner-class
+]]
+isis.core.meta-model. +
+validator.jaxb-view-model. +
+not-inner-class
+
+|  true
+| If set, then ensures that all JAXB-style view models are either top-level classes or nested static classes (in other words, checks that they are not anonymous, local nor nested non-static classes).
+
+
+|
+[[isis.core.meta-model. +
+validator.jaxb-view-model. +
+reference-type-adapter
+]]
+isis.core.meta-model. +
+validator.jaxb-view-model. +
+reference-type-adapter
+
+|  true
+| If set, then ensures that for all properties of JAXB-style view models where the property's type is an entity, then that entity's type has been correctly annotated with @``XmlJavaTypeAdapter`` (so that the property's value can be converted into a serializable form).
+
+
+|
+[[isis.core.meta-model. +
+validator.jdoql.from-clause
+]]
+isis.core.meta-model. +
+validator.jdoql.from-clause
+
+|  true
+| If set, then ensures that the 'FROM' clause within any JDOQL ``@Query``s annotations relates to a known entity type, and moreover that that type is compatible with the type on which the annotation appears: meaning its either a supertype of or the same type as the annotated type.
+
+
+|
+[[isis.core.meta-model. +
+validator.jdoql. +
+variables-clause
+]]
+isis.core.meta-model. +
+validator.jdoql. +
+variables-clause
+
+|  true
+| If set, then ensures that the 'VARIABLES' clause within any JDOQL ``@Query``s relates to a known entity type.
+
+
+|
+[[isis.core.meta-model. +
+validator.no-params-only
+]]
+isis.core.meta-model. +
+validator.no-params-only
+
+| 
+| If set, then checks that the supports ``hideXxx`` and ``disableXxx`` methods for actions do not have take parameters.
+
+Historically, the programming model allowed these methods to accept the same number of parameters as the action method to which they relate, the rationale being for similarity with the ``validateXxx`` method. However, since these parameters serve no function, the programming model has been simplified so that these supporting methods are discovered if they have exactly no parameters.
+
+Note that this aspect of the programming model relates to the ``hideXxx`` and ``disableXxx`` supporting methods that relate to the entire method. Do not confuse these with the ``hideNXxx`` and ``disableNXxx`` supporting methods, which relate to the N-th parameter, and allow up to N-1 parameters to be passed in (allowing the Nth parameter to be dynamically hidden or disabled).
+
+
+|
+[[isis.core.meta-model. +
+validator.parallelize
+]]
+isis.core.meta-model. +
+validator.parallelize
+
+|  true
+| Whether to perform metamodel validation in parallel.
+
+
+|
+[[isis.core.meta-model. +
+validator.mixins-only
+]]
+isis.core.meta-model. +
+validator.mixins-only
+
+|  true
+| If set, then domain services actions are not contributed to domain objects. @deprecated - in that in the future the programming model will simply not support contributed actions from domain services.
+
+
+|
+[[isis.core.meta-model. +
+validator. +
+service-actions-only
+]]
+isis.core.meta-model. +
+validator. +
+service-actions-only
+
+|  true
+| If set, checks that any domain services have only actions associated with them, not properties or collections. @deprecated - in that in the future the programming model will simply not search for properties or collections of domain services.
+
+
+
+|===
+
+include::../section-hooks/isis.core.meta-model.validator~post.adoc[]

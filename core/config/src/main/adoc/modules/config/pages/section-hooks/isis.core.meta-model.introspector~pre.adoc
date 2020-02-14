@@ -1,0 +1,1 @@
+Configuration of the introspector component that actually builds the metamodel by introspecting the domain object classes"

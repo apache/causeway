@@ -1,0 +1,1 @@
+Configuration of the validator component that checks the well-formedness of the built metamodel (how strict to be etc.)

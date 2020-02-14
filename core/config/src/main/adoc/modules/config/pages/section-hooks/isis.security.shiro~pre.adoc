@@ -1,0 +1,2 @@
+Configuration of the Shiro implementation of the Authenticator and Authorizor APIs.
+

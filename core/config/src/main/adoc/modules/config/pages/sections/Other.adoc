@@ -1,0 +1,22 @@
+= Other
+
+include::../section-hooks/Other~pre.adoc[]
+
+[cols="3a,2a,5a", options="header"]
+|===
+|Property
+|Default
+|Description
+|
+[[isis.as-map
+]]
+isis.as-map
+
+| 
+| null
+
+
+
+|===
+
+include::../section-hooks/Other~post.adoc[]

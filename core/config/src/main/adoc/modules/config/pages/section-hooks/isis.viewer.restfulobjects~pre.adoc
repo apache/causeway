@@ -1,0 +1,1 @@
+Configuration of the REST API surfaced by the Restful Objects viewer.

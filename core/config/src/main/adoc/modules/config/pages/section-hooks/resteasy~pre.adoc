@@ -1,0 +1,1 @@
+Configuration that applies to the RestEasy framework (that bootstraps the Restful Objects viewer).

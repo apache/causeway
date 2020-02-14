@@ -1,0 +1,2 @@
+Configuration that applies to the testing libraries.
+

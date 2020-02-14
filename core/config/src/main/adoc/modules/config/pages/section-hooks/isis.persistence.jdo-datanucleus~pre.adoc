@@ -1,0 +1,2 @@
+Configuration of the DataNucleus JDO persistence component (the Apache Isis component that wraps the DataNucleus ORM).
+

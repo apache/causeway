@@ -1,9 +1,0 @@
-| isis.security.shiro. +
-auto-logout-if-already- +
-authenticated
-| 
-| If the Shiro subject is found to be still authenticated, then will be logged out anyway and then re-authenticated.
-
-Applies only to the Restful Objects viewer.
-
-

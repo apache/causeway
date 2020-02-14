@@ -1,0 +1,2 @@
+Configuration properties that are passed through directly to DataNucleus, for the most part unused by Apache Isis itself.
+

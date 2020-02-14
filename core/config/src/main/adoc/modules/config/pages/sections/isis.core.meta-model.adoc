@@ -1,0 +1,39 @@
+= Core MetaModel
+
+include::../section-hooks/isis.core.meta-model~pre.adoc[]
+
+[cols="3a,2a,5a", options="header"]
+|===
+|Property
+|Default
+|Description
+|
+[[isis.core.meta-model. +
+filter-visibility
+]]
+isis.core.meta-model. +
+filter-visibility
+
+|  true
+| Whether domain objects to which the current user does not have visibility access should be rendered within collections or drop-down choices/autocompletes.
+
+One reason this filtering may be necessary is for multi-tenanted applications, whereby an end-user should only be able to "see" what data that they own. For efficiency, the application should only query for objects that the end-user owns. This configuration property acts as a safety net to prevent the end-user from viewing domain objects _even if_ those domain objects were rehydrated from the persistence store.
+
+
+|
+[[isis.core.meta-model. +
+programming-model. +
+ignore-deprecated
+]]
+isis.core.meta-model. +
+programming-model. +
+ignore-deprecated
+
+| 
+| If set, then any aspects of the programming model (as implemented by ``FacetFactory``s that have been indicated as deprecated will simply be ignored/excluded from the metamodel.
+
+
+
+|===
+
+include::../section-hooks/isis.core.meta-model~post.adoc[]

@@ -1,0 +1,1 @@
+Configuration of the metamodel component that is responsible for building and validating the metamodel.

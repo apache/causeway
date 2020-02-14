@@ -1,0 +1,31 @@
+= JDO DataNucleus
+
+include::../section-hooks/isis.persistence.jdo-datanucleus~pre.adoc[]
+
+[cols="3a,2a,5a", options="header"]
+|===
+|Property
+|Default
+|Description
+|
+[[isis.persistence. +
+jdo-datanucleus. +
+class-metadata-loaded- +
+listener
+]]
+isis.persistence. +
+jdo-datanucleus. +
+class-metadata-loaded- +
+listener
+
+|  org.apache.isis.persistence. +
+jdo.datanucleus5.datanucleus. +
+CreateSchemaObjectFromClassMet +
+adata
+| null
+
+
+
+|===
+
+include::../section-hooks/isis.persistence.jdo-datanucleus~post.adoc[]

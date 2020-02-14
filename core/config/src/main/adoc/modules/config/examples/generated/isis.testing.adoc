@@ -1,8 +1,0 @@
-| isis.testing.fixtures. +
-initial-script
-| 
-| Indicates the fixture script class to run initially.
-
-Intended for use when prototyping against an in-memory database (but will run in production mode as well if required).
-
-

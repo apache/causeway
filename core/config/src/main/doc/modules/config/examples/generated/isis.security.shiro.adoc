@@ -1,6 +1,0 @@
-| isis.security.shiro. +
-auto-logout-if-already- +
-authenticated
-| 
-| 
-

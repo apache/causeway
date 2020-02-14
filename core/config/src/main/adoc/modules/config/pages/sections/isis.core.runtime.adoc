@@ -1,0 +1,31 @@
+= Core Runtime Services configurations
+
+include::../section-hooks/isis.core.runtime~pre.adoc[]
+
+[cols="3a,2a,5a", options="header"]
+|===
+|Property
+|Default
+|Description
+|
+[[isis.core.runtime.locale
+]]
+isis.core.runtime.locale
+
+| 
+| If set, then overrides the application's ``Locale#getDefault()``
+
+
+|
+[[isis.core.runtime.timezone
+]]
+isis.core.runtime.timezone
+
+| 
+| If set, then override's the application's timezone.
+
+
+
+|===
+
+include::../section-hooks/isis.core.runtime~post.adoc[]

@@ -1,0 +1,26 @@
+= Testing
+
+include::../section-hooks/isis.testing~pre.adoc[]
+
+[cols="3a,2a,5a", options="header"]
+|===
+|Property
+|Default
+|Description
+|
+[[isis.testing.fixtures. +
+initial-script
+]]
+isis.testing.fixtures. +
+initial-script
+
+| 
+| Indicates the fixture script class to run initially.
+
+Intended for use when prototyping against an in-memory database (but will run in production mode as well if required).
+
+
+
+|===
+
+include::../section-hooks/isis.testing~post.adoc[]

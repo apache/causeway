@@ -1,0 +1,1 @@
+Configuration that applies to utilities and libraries for integrating (mapping between) bounded contexts.

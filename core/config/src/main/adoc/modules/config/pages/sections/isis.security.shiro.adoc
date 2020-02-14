@@ -1,0 +1,28 @@
+= Shiro Security Implementation
+
+include::../section-hooks/isis.security.shiro~pre.adoc[]
+
+[cols="3a,2a,5a", options="header"]
+|===
+|Property
+|Default
+|Description
+|
+[[isis.security.shiro. +
+auto-logout-if-already- +
+authenticated
+]]
+isis.security.shiro. +
+auto-logout-if-already- +
+authenticated
+
+| 
+| If the Shiro subject is found to be still authenticated, then will be logged out anyway and then re-authenticated.
+
+Applies only to the Restful Objects viewer.
+
+
+
+|===
+
+include::../section-hooks/isis.security.shiro~post.adoc[]

@@ -1,0 +1,2 @@
+Configuration that applies to the catalogue of extensions to the framework.
+

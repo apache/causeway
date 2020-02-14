@@ -1,0 +1,2 @@
+Configuration that applies to value type definitions.
+

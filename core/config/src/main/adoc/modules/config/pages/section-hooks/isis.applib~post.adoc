@@ -1,0 +1,20 @@
+== Events
+
+Note:
+
+* In order for the lifecycle events to fire (`persisting`, `loaded` etc) the class must be annotated using `@DomainObject` (even if no attributes on that annotation are set).
+* Similarly, for UI events to fire (`title`, `icon` etc) the class must be annotated using `@DomainObjectLayout` (even if no attributes on that annotation are set).
+* Similarly, for domain events to fire (`title`, `icon` etc) the action/property/collection must be annotated using the appropriate `@XxxLayout` (even if no attributes on that annotation are set).
+
+
+== Non-editable Objects
+
+The `isis.applib.annotation.domain-object.editing` configuration property determines whether properties can be edited or not.
+By default it is _disabled_:
+
+[source,ini]
+----
+isis.applib.annotation.domain-object.editing=false
+----
+We recommend leaving this at its default, and only selectively enabling property editing where there are likely to be no business rules, such as "notes" or "comments" properties.
+Doing so will help drive out the underlying business operations (processes and procedures) that require objects to change; these can then be captured as actions.
