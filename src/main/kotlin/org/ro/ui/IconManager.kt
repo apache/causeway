@@ -58,7 +58,9 @@ object IconManager {
             "Temporals" to "clock",
             "Trees" to "tree",
             "Types" to "typewriter",
-            "Undo" to "undo")
+            "Undo" to "undo",
+            "Visualize" to "eye",
+            "Wikipedia" to "wikipedia-w")
 
     fun find(query: String): String {
         val actionTitle = Utils.deCamel(query)
