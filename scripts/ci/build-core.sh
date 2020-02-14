@@ -10,12 +10,6 @@ if [ -z "$PROJECT_ROOT_PATH" ]; then
   PROJECT_ROOT_PATH=`cd $SCRIPT_DIR/../.. ; pwd`
 fi
 
-#if [ -z "$REVISION" ]; then
-#  if [ ! -z "$SHARED_VARS_FILE" ] && [ -f "$SHARED_VARS_FILE" ]; then
-#    . $SHARED_VARS_FILE
-#    export $(cut -d= -f1 $SHARED_VARS_FILE)
-#  fi
-#fi
 if [ -z "$MVN_STAGES" ]; then
   MVN_STAGES="clean install"
 fi
@@ -81,6 +75,15 @@ mvn -s $SETTINGS_XML \
     | fgrep --line-buffered -v "[INFO] Using alternate deployment repository gcpappenginerepo" \
     | fgrep --line-buffered -v "[INFO] No site descriptor found: nothing to attach." \
     | fgrep --line-buffered -v "[INFO] Skipping because packaging 'jar' is not pom."
+	
+# debugging issue, where CI pipeline succeeds even though maven build fails
+if [ $? -eq 0 ]; then
+  echo "Maven ran ok"
+  exit 0
+else
+  echo "Maven failed" >&2
+  exit 1
+fi
 
 if [ ! -z "$REVISION" ]; then
   cd $PROJECT_ROOT_PATH/core-parent

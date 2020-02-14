@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # to be shared among all steps of this job
-      BASELINE: 2.0.0-M2
+      BASELINE: 2.0.0-M3
       PROJECT_ROOT_PATH: ${{ github.workspace }}
       CI_SCRIPTS_PATH: ${{ github.workspace }}/scripts/ci
       
@@ -40,8 +40,6 @@ jobs:
     
     - name: Setup Script Environment
       shell: bash
-      # we write the more tricky varibles to the $SHARED_VARS_FILE using the full power of bash commands
-      # then we simply print all the (non-secret) variables as used by the build scripts to the console
       run: |
         echo ==============  ENV  =================
         echo BASELINE         \: $BASELINE
