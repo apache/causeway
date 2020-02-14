@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -eo pipefail
 
 if [ -z "$BATCH_MODE_FLAG" ] || [ "$BATCH_MODE_FLAG" != "off" ]; then
   BATCH_MODE=--batch-mode
@@ -79,7 +79,6 @@ mvn -s $SETTINGS_XML \
 # debugging issue, where CI pipeline succeeds even though maven build fails
 if [ $? -eq 0 ]; then
   echo "Maven ran ok"
-  exit 0
 else
   echo "Maven failed" >&2
   exit 1
