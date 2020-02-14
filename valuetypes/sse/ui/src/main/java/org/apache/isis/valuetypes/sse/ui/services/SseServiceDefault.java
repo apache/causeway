@@ -127,7 +127,7 @@ public class SseServiceDefault implements SseService {
 
         } catch (Exception e) {
 
-            e.printStackTrace();
+            log.warn("task run failed on source type {} failed", sourceType, e);
 
         } finally {
 

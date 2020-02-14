@@ -22,15 +22,19 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+
+import lombok.val;
+import lombok.experimental.UtilityClass;
+
 /**
  * <p>
  *     Used by domain apps only.
  * </p>
  */
+@UtilityClass
 public final class Files {
 
-    Files() {
-    }
 
     // /////////////////////////////////////////////////////
     // delete files
@@ -66,15 +70,16 @@ public final class Files {
     }
 
     public static void deleteFiles(final File directory, final FilenameFilter filter, Recursion recursion) {
-        deleteFiles(directory, filter, recursion, new Deleter() {
-            @Override
-            public void deleteFile(File f) {
-                f.delete();
+        deleteFiles(directory, filter, recursion, file -> {
+            val success = file.delete();
+            if(!success) {
+                throw _Exceptions.assertionError("could not delete file " + file);
             }
         });
     }
 
     // introduced for testing of this utility class.
+    @FunctionalInterface
     public interface Deleter {
         void deleteFile(File f);
     }

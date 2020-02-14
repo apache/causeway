@@ -28,6 +28,9 @@ import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 
 import static org.apache.isis.core.commons.internal.base._Strings.isNullOrEmpty;
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 final class ListeningMarkupComponent_observing  {
 
     private static final String jScriptTemplateResource = "js/ObservingComponent.js";
@@ -45,7 +48,8 @@ final class ListeningMarkupComponent_observing  {
                     ListeningMarkupComponent_observing.class, jScriptTemplateResource);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.warn("resource not found class:{} path:{}", 
+                    ListeningMarkupComponent_observing.class, jScriptTemplateResource, e);
             return resourceNotFound();
         }
 

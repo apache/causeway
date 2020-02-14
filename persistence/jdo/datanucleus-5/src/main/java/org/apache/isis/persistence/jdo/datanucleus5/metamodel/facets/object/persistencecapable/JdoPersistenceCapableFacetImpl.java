@@ -22,9 +22,9 @@ import java.lang.reflect.Method;
 
 import javax.jdo.annotations.IdentityType;
 
+import org.datanucleus.enhancement.Persistable;
+
 import org.apache.isis.applib.services.repository.EntityState;
-import org.apache.isis.core.commons.internal.base._Lazy;
-import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -118,18 +118,8 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
 
     // -- HELPER
     
-    private final static _Lazy<Class<?>> persistable_type = _Lazy.threadSafe(()->{
-        try {
-            return _Context.loadClass("org.datanucleus.enhancement.Persistable");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
-    });
-
-    
     private static boolean isPersistableType(Class<?> type) {
-        return persistable_type.get().isAssignableFrom(type);
+        return Persistable.class.isAssignableFrom(type);
     }
 
     @Override
