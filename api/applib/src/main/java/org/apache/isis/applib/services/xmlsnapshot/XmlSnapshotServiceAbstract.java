@@ -28,7 +28,6 @@ import java.util.Locale;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.stream.StreamSource;
 
@@ -38,6 +37,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
+import org.apache.isis.core.commons.internal.codec._DocumentFactories;
+
 public abstract class XmlSnapshotServiceAbstract implements XmlSnapshotService {
 
     @Override
@@ -46,8 +47,8 @@ public abstract class XmlSnapshotServiceAbstract implements XmlSnapshotService {
             final StringReader reader = new StringReader(xmlStr);
             final StreamSource streamSource = new StreamSource(reader);
             final DOMResult result = new DOMResult();
-            final TransformerFactory tf = TransformerFactory.newInstance();
-            final Transformer transformer = tf.newTransformer();
+            
+            final Transformer transformer = _DocumentFactories.transformer();
             transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
             transformer.setOutputProperty(OutputKeys.METHOD, "xml");
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");

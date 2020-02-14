@@ -38,7 +38,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.core.commons.internal.url.UrlDecoderUtil;
+import org.apache.isis.core.commons.internal.codec._UrlDecoderUtil;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
@@ -212,7 +212,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
             final @PathParam("actionId") String actionId,
             final @QueryParam("x-isis-querystring") String xIsisUrlEncodedQueryString) {
 
-        final String urlUnencodedQueryString = UrlDecoderUtil
+        final String urlUnencodedQueryString = _UrlDecoderUtil
                 .urlDecodeNullSafe(xIsisUrlEncodedQueryString != null? xIsisUrlEncodedQueryString: httpServletRequest.getQueryString());
         val resourceContext = createResourceContext(
                 ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),

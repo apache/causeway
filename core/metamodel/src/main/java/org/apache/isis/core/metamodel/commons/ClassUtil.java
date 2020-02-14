@@ -67,7 +67,7 @@ public final class ClassUtil {
                     double.class, 0.0,
                     char.class, (char)0
                     );
-    static Map<Class<?>, Class<?>> wrapperClasses =
+    static final Map<Class<?>, Class<?>> wrapperClasses =
             MapUtil.asMap(
                     // TODO: there is a better way of doing this in 1.6 using TypeMirror
                     boolean.class, Boolean.class,
@@ -81,7 +81,7 @@ public final class ClassUtil {
                     void.class, Void.class
                     );
 
-    static Map<Class<?>, Object> defaultByPrimitiveType = new HashMap<Class<?>, Object>();
+    static final Map<Class<?>, Object> defaultByPrimitiveType = new HashMap<Class<?>, Object>();
 
     static {
         defaultByPrimitiveType.put(byte.class, (byte) 0);
@@ -94,7 +94,7 @@ public final class ClassUtil {
         defaultByPrimitiveType.put(boolean.class, false);
     }
 
-    public static Map<String, Class<?>> primitives = _Maps.newHashMap();
+    static final Map<String, Class<?>> primitives = _Maps.newHashMap();
 
     static {
         @SuppressWarnings({ "rawtypes" })

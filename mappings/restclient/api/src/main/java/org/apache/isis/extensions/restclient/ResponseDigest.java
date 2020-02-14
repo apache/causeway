@@ -269,7 +269,7 @@ public class ResponseDigest<T> {
     // -- VALUE TYPE HANDLING
 
     private boolean isValueType(Class<T> entityType) {
-        return CommonDtoUtils.VALUE_TYPES.contains(entityType);
+        return CommonDtoUtils.isValueType(entityType);
     }
 
     private T parseValueTypeBody(String body) 

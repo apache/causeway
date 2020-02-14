@@ -31,7 +31,7 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.core.commons.internal.url.UrlDecoderUtil;
+import org.apache.isis.core.commons.internal.codec._UrlDecoderUtil;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
@@ -101,7 +101,7 @@ public class ResourceContext_getArg_Test {
         final String queryString = UrlEncodingUtils.urlEncode(JsonRepresentation.newMap("x-ro-page", "123").asJsonNode());
 
         resourceContext = new ResourceContext(ResourceDescriptor.empty(), null, null, null, null,
-                UrlDecoderUtil.urlDecodeNullSafe(queryString),
+                _UrlDecoderUtil.urlDecodeNullSafe(queryString),
                 mockHttpServletRequest, null, null,
                 metaModelContext, null, null) {
             @Override
@@ -118,7 +118,7 @@ public class ResourceContext_getArg_Test {
         final String queryString = UrlEncodingUtils.urlEncode(JsonRepresentation.newMap("xxx", "123").asJsonNode());
 
         resourceContext = new ResourceContext(ResourceDescriptor.empty(), null, null, null, null,
-                UrlDecoderUtil.urlDecodeNullSafe(queryString),
+                _UrlDecoderUtil.urlDecodeNullSafe(queryString),
                 mockHttpServletRequest, null, null,
                 metaModelContext, null, null) {
             @Override

@@ -461,7 +461,7 @@ class MetaModelExporter {
     }
 
     private boolean isValueType(final ObjectSpecification specification) {
-        return CommonDtoUtils.VALUE_TYPES.contains(specification.getCorrespondingClass());
+        return CommonDtoUtils.isValueType(specification.getCorrespondingClass());
     }
 
 

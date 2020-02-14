@@ -110,7 +110,7 @@ public final class CommonDtoUtils {
                     entry(Clob.class, ValueType.CLOB)
                     );
 
-    public final static Set<Class<?>> VALUE_TYPES = valueTypeByClass.keySet();
+    private final static Set<Class<?>> VALUE_TYPES = valueTypeByClass.keySet();
 
     public static ValueType asValueType(final Class<?> type) {
         final ValueType valueType = valueTypeByClass.get(type);
@@ -546,6 +546,11 @@ public final class CommonDtoUtils {
         return mapDto.getEntry().stream()
                 .filter(entry->Objects.equals(entry.getKey(), key))
                 .findFirst();
+    }
+
+
+    public static boolean isValueType(Class<?> type) {
+        return VALUE_TYPES.contains(type);
     }
 
 }

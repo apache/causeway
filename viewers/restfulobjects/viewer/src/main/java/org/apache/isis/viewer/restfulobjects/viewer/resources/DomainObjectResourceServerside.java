@@ -48,8 +48,8 @@ import org.apache.isis.applib.layout.links.Link;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.core.commons.internal.base._Bytes;
 import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.codec._UrlDecoderUtil;
 import org.apache.isis.core.commons.internal.resources._Resources;
-import org.apache.isis.core.commons.internal.url.UrlDecoderUtil;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -705,7 +705,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             final @PathParam("actionId") String actionId,
             final @QueryParam("x-isis-querystring") String xIsisUrlEncodedQueryString) {
 
-        final String urlUnencodedQueryString = UrlDecoderUtil
+        final String urlUnencodedQueryString = _UrlDecoderUtil
                 .urlDecodeNullSafe(xIsisUrlEncodedQueryString != null? xIsisUrlEncodedQueryString: httpServletRequest.getQueryString());
         val resourceContext = createResourceContext(
                 ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),

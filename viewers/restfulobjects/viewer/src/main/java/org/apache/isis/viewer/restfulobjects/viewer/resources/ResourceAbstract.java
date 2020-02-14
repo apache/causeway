@@ -35,7 +35,7 @@ import javax.ws.rs.ext.Providers;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
-import org.apache.isis.core.commons.internal.url.UrlDecoderUtil;
+import org.apache.isis.core.commons.internal.codec._UrlDecoderUtil;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -162,7 +162,7 @@ public abstract class ResourceAbstract {
     
     private String getUrlDecodedQueryStringIfAny() {
         final String queryStringIfAny = httpServletRequest.getQueryString();
-        return UrlDecoderUtil.urlDecodeNullSafe(queryStringIfAny);
+        return _UrlDecoderUtil.urlDecodeNullSafe(queryStringIfAny);
     }
     
     private ResourceContext resourceContext(

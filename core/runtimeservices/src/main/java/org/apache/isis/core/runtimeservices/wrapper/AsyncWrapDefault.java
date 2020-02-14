@@ -40,6 +40,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.With;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * 
@@ -47,6 +48,7 @@ import lombok.val;
  *
  */
 @AllArgsConstructor
+@Log4j2
 class AsyncWrapDefault<T> implements AsyncWrap<T> {
     
     @With(AccessLevel.PACKAGE) @NonNull
@@ -207,7 +209,7 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
                                 "[cannot resolve method name - not implemented]",//wrappedMethod.getName(),
                                 domainObject.getClass());
                 
-                e.printStackTrace();
+                log.warn(msg, e);
                 
                 exceptionHandler.accept(_Exceptions.unrecoverable(msg, e));
 

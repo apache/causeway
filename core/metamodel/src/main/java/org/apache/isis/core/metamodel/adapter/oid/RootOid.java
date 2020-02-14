@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.adapter.oid;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.core.commons.internal.url.UrlDecoderUtil;
+import org.apache.isis.core.commons.internal.codec._UrlDecoderUtil;
 import org.apache.isis.schema.common.v2.OidDto;
 
 public interface RootOid extends Oid {
@@ -34,7 +34,7 @@ public interface RootOid extends Oid {
     // -- DECODE FROM STRING
 
     public static RootOid deStringEncoded(final String urlEncodedOidStr) {
-        final String oidStr = UrlDecoderUtil.urlDecode(urlEncodedOidStr);
+        final String oidStr = _UrlDecoderUtil.urlDecode(urlEncodedOidStr);
         return deString(oidStr);
     }
 
