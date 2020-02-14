@@ -22,12 +22,12 @@ package org.apache.isis.core.metamodel.facets;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.EnumSet;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.internal.reflection._Annotations;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -137,7 +137,7 @@ public interface FacetFactory {
      * the meta-model.
      * 
      */
-    EnumSet<FeatureType> getFeatureTypes();
+    ImmutableEnumSet<FeatureType> getFeatureTypes();
 
 
     // //////////////////////////////////////

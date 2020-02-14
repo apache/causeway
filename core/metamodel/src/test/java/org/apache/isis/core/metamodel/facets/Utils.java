@@ -20,8 +20,8 @@
 package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
-import java.util.EnumSet;
 
+import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.commons.internal._Constants;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 
@@ -40,7 +40,7 @@ class Utils {
         return false;
     }
 
-    protected static boolean contains(EnumSet<FeatureType> featureTypes, final FeatureType featureType) {
+    protected static boolean contains(ImmutableEnumSet<FeatureType> featureTypes, final FeatureType featureType) {
         if(featureTypes==null || featureType==null) {
             return false;
         }

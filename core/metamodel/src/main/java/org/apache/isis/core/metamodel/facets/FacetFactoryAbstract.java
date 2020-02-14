@@ -19,8 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets;
 
-import java.util.EnumSet;
-
+import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -37,9 +36,9 @@ implements FacetFactory, MetaModelContextAware, MetaModelContext.Delegating {
     private MetaModelContext metaModelContext;
     
     @Getter(onMethod = @__({@Override}))
-    private final EnumSet<FeatureType> featureTypes;
+    private final ImmutableEnumSet<FeatureType> featureTypes;
 
-    public FacetFactoryAbstract(EnumSet<FeatureType> featureTypes) {
+    public FacetFactoryAbstract(ImmutableEnumSet<FeatureType> featureTypes) {
         this.featureTypes = featureTypes;
     }
 

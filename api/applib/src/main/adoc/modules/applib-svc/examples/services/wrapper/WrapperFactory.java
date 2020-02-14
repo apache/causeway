@@ -100,30 +100,30 @@ public interface WrapperFactory {
         /**
          * Validate all business rules and then execute. May throw exceptions in order to fail fast. 
          */
-        public static EnumSet<ExecutionMode> EXECUTE = EnumSet.noneOf(ExecutionMode.class); 
+        public static final EnumSet<ExecutionMode> EXECUTE = EnumSet.noneOf(ExecutionMode.class); 
 
         /**
          * Skip all business rules and then execute, does throw an exception if execution fails.
          */
-        public static EnumSet<ExecutionMode> SKIP_RULES = EnumSet.of(SKIP_RULE_VALIDATION);
+        public static final EnumSet<ExecutionMode> SKIP_RULES = EnumSet.of(SKIP_RULE_VALIDATION);
         
         /**
          * Validate all business rules but do not execute, throw an exception if validation 
          * fails. 
          */
-        public static EnumSet<ExecutionMode> NO_EXECUTE = EnumSet.of(SKIP_EXECUTION);
+        public static final EnumSet<ExecutionMode> NO_EXECUTE = EnumSet.of(SKIP_EXECUTION);
         
         /**
          * Validate all business rules and then execute, but don't throw an exception if validation 
          * or execution fails.
          */
-        public static EnumSet<ExecutionMode> TRY = EnumSet.of(SWALLOW_EXCEPTIONS); 
+        public static final EnumSet<ExecutionMode> TRY = EnumSet.of(SWALLOW_EXCEPTIONS); 
         
         /**
          * Skips all steps.
          * @since 2.0
          */
-        public static EnumSet<ExecutionMode> NOOP = EnumSet.of(SKIP_RULE_VALIDATION, SKIP_EXECUTION);
+        public static final EnumSet<ExecutionMode> NOOP = EnumSet.of(SKIP_RULE_VALIDATION, SKIP_EXECUTION);
         
     }
 

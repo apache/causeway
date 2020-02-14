@@ -27,7 +27,7 @@ public class Veto extends ConsentAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public static Veto DEFAULT = new Veto("Vetoed by default");
+    public static final Veto DEFAULT = new Veto("Vetoed by default");
 
     /**
      * Called by DnD viewer; we should instead find a way to put the calling

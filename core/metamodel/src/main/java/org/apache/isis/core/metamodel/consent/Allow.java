@@ -28,7 +28,7 @@ public class Allow extends ConsentAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public static Allow DEFAULT = new Allow();
+    public static final Allow DEFAULT = new Allow();
 
     private Allow() {
         this((String) null);

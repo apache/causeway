@@ -124,7 +124,7 @@ public class _Probe {
 
     // -- INDENTING
 
-    public int currentIndent = 0;
+    private int currentIndent = 0;
 
     // -- PRINTING
 

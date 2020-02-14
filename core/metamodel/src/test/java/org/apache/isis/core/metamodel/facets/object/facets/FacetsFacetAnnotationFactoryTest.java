@@ -19,9 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.facets;
 
-import java.util.EnumSet;
-
 import org.apache.isis.applib.annotation.Facets;
+import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
@@ -49,8 +48,8 @@ public class FacetsFacetAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
     public static class CustomerFacetFactory implements FacetFactory {
         @Override
-        public EnumSet<FeatureType> getFeatureTypes() {
-            return null;
+        public ImmutableEnumSet<FeatureType> getFeatureTypes() {
+            return ImmutableEnumSet.noneOf(FeatureType.class);
         }
 
         @Override
@@ -68,8 +67,8 @@ public class FacetsFacetAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
     public static class CustomerFacetFactory2 implements FacetFactory {
         @Override
-        public EnumSet<FeatureType> getFeatureTypes() {
-            return null;
+        public ImmutableEnumSet<FeatureType> getFeatureTypes() {
+            return ImmutableEnumSet.noneOf(FeatureType.class);
         }
 
         @Override

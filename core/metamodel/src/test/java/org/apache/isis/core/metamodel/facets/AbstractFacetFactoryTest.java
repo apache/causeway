@@ -20,13 +20,14 @@
 package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
-import java.util.EnumSet;
 
 import org.jmock.Expectations;
 import org.junit.Rule;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.core.commons.collections.ImmutableEnumSet;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
@@ -38,7 +39,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 
 import junit.framework.TestCase;
 
@@ -149,7 +149,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         return Utils.contains(types, type);
     }
 
-    protected static boolean contains(final EnumSet<FeatureType> featureTypes, final FeatureType featureType) {
+    protected static boolean contains(final ImmutableEnumSet<FeatureType> featureTypes, final FeatureType featureType) {
         return Utils.contains(featureTypes, featureType);
     }
 

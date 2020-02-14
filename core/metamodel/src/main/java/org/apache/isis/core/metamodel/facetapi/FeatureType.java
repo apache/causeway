@@ -21,9 +21,9 @@ package org.apache.isis.core.metamodel.facetapi;
 
 import java.beans.Introspector;
 import java.lang.reflect.Method;
-import java.util.EnumSet;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 
@@ -85,34 +85,33 @@ public enum FeatureType {
         }
     };
 
-    public final static EnumSet<FeatureType> COLLECTIONS_ONLY = EnumSet.of(COLLECTION);
-    public final static EnumSet<FeatureType> COLLECTIONS_AND_ACTIONS = EnumSet.of(COLLECTION, ACTION);
-    public final static EnumSet<FeatureType> ACTIONS_ONLY = EnumSet.of(ACTION);
-    public final static EnumSet<FeatureType> PARAMETERS_ONLY = EnumSet.of(ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION);
-    public final static EnumSet<FeatureType> PROPERTIES_ONLY = EnumSet.of(PROPERTY);
-    public final static EnumSet<FeatureType> PROPERTIES_AND_ACTIONS = EnumSet.of(PROPERTY, ACTION);
-    public final static EnumSet<FeatureType> OBJECTS_ONLY = EnumSet.of(OBJECT);
-    public final static EnumSet<FeatureType> MEMBERS = EnumSet.of(PROPERTY, COLLECTION, ACTION);
-    public final static EnumSet<FeatureType> OBJECTS_AND_PROPERTIES = EnumSet.of(OBJECT, PROPERTY);
-    public final static EnumSet<FeatureType> PROPERTIES_AND_COLLECTIONS = EnumSet.of(PROPERTY, COLLECTION);
-    public final static EnumSet<FeatureType> OBJECTS_AND_COLLECTIONS = EnumSet.of(OBJECT, COLLECTION);
-    public final static EnumSet<FeatureType> OBJECTS_AND_ACTIONS = EnumSet.of(OBJECT, ACTION);
-    public final static EnumSet<FeatureType> OBJECTS_PROPERTIES_AND_COLLECTIONS = EnumSet.of(OBJECT, PROPERTY, COLLECTION);
-    public static final EnumSet<FeatureType> ACTIONS_AND_PARAMETERS =
-            EnumSet.of(ACTION, ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION);
+    public final static ImmutableEnumSet<FeatureType> COLLECTIONS_ONLY = ImmutableEnumSet.of(COLLECTION);
+    public final static ImmutableEnumSet<FeatureType> COLLECTIONS_AND_ACTIONS = ImmutableEnumSet.of(COLLECTION, ACTION);
+    public final static ImmutableEnumSet<FeatureType> ACTIONS_ONLY = ImmutableEnumSet.of(ACTION);
+    public final static ImmutableEnumSet<FeatureType> PARAMETERS_ONLY = ImmutableEnumSet.of(ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION);
+    public final static ImmutableEnumSet<FeatureType> PROPERTIES_ONLY = ImmutableEnumSet.of(PROPERTY);
+    public final static ImmutableEnumSet<FeatureType> PROPERTIES_AND_ACTIONS = ImmutableEnumSet.of(PROPERTY, ACTION);
+    public final static ImmutableEnumSet<FeatureType> OBJECTS_ONLY = ImmutableEnumSet.of(OBJECT);
+    public final static ImmutableEnumSet<FeatureType> MEMBERS = ImmutableEnumSet.of(PROPERTY, COLLECTION, ACTION);
+    public final static ImmutableEnumSet<FeatureType> OBJECTS_AND_PROPERTIES = ImmutableEnumSet.of(OBJECT, PROPERTY);
+    public final static ImmutableEnumSet<FeatureType> PROPERTIES_AND_COLLECTIONS = ImmutableEnumSet.of(PROPERTY, COLLECTION);
+    public final static ImmutableEnumSet<FeatureType> OBJECTS_AND_COLLECTIONS = ImmutableEnumSet.of(OBJECT, COLLECTION);
+    public final static ImmutableEnumSet<FeatureType> OBJECTS_AND_ACTIONS = ImmutableEnumSet.of(OBJECT, ACTION);
+    public final static ImmutableEnumSet<FeatureType> OBJECTS_PROPERTIES_AND_COLLECTIONS = ImmutableEnumSet.of(OBJECT, PROPERTY, COLLECTION);
+    public final static ImmutableEnumSet<FeatureType> ACTIONS_AND_PARAMETERS = ImmutableEnumSet.of(ACTION, ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION);
 
     /**
      * Use of this is discouraged; instead use multiple {@link FacetFactory}s
      * for different features.
      */
-    public final static EnumSet<FeatureType> EVERYTHING_BUT_PARAMETERS = 
-            EnumSet.complementOf(
-                    EnumSet.of(ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION));
+    public final static ImmutableEnumSet<FeatureType> EVERYTHING_BUT_PARAMETERS = 
+            ImmutableEnumSet.complementOf(
+                    ImmutableEnumSet.of(ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION));
     /**
      * Use of this is discouraged; instead use multiple {@link FacetFactory}s
      * for different features.
      */
-    public final static EnumSet<FeatureType> EVERYTHING = EnumSet.allOf(FeatureType.class); 
+    public final static ImmutableEnumSet<FeatureType> EVERYTHING = ImmutableEnumSet.allOf(FeatureType.class); 
 
     private final String name;
 

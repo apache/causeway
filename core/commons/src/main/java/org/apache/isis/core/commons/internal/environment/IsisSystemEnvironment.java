@@ -112,8 +112,7 @@ public class IsisSystemEnvironment {
     @EventListener(ApplicationFailedEvent.class)
     public void onContextRefreshed(ApplicationFailedEvent event) {
         // happens eg. when DN finds non enhanced entity classes 
-        log.error("Application failed to start");
-        event.getException().printStackTrace();
+        log.error("Application failed to start", event.getException());
     }
     
     

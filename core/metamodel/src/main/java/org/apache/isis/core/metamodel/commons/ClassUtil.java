@@ -38,7 +38,7 @@ public final class ClassUtil {
 
     static final String JAVA_CLASS_PREFIX = "java.";
 
-    private static Map<String, Class<?>> builtInClasses = new HashMap<String, Class<?>>();
+    private final static Map<String, Class<?>> builtInClasses = new HashMap<String, Class<?>>();
 
     static {
         put(void.class);

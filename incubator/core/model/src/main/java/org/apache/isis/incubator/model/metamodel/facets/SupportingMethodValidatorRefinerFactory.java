@@ -19,12 +19,12 @@
 package org.apache.isis.incubator.model.metamodel.facets;
 
 import java.lang.reflect.Method;
-import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
@@ -47,7 +47,7 @@ extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
     public SupportingMethodValidatorRefinerFactory() {
-        super(EnumSet.noneOf(FeatureType.class)); // does not contribute any facets
+        super(ImmutableEnumSet.noneOf(FeatureType.class)); // does not contribute any facets
     }
 
     @Override
