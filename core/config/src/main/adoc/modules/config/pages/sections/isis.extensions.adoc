@@ -1,4 +1,7 @@
 = Extensions
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+:page-role: -toc
+
 
 include::../section-hooks/isis.extensions~pre.adoc[]
 
@@ -8,9 +11,7 @@ include::../section-hooks/isis.extensions~pre.adoc[]
 |Default
 |Description
 |
-[[isis.extensions.cors. +
-allowed-headers
-]]
+[[isis.extensions.cors.allowed-headers]]
 isis.extensions.cors. +
 allowed-headers
 
@@ -21,9 +22,7 @@ For more information, check the usage of the ``headers`` init parameter for http
 
 
 |
-[[isis.extensions.cors. +
-allowed-methods
-]]
+[[isis.extensions.cors.allowed-methods]]
 isis.extensions.cors. +
 allowed-methods
 
@@ -34,9 +33,7 @@ For more information, check the usage of the ``methods`` init parameter for http
 
 
 |
-[[isis.extensions.cors. +
-allowed-origins
-]]
+[[isis.extensions.cors.allowed-origins]]
 isis.extensions.cors. +
 allowed-origins
 
@@ -49,9 +46,7 @@ For more information, check the usage of the ``origins`` init parameter for http
 
 
 |
-[[isis.extensions.cors. +
-exposed-headers
-]]
+[[isis.extensions.cors.exposed-headers]]
 isis.extensions.cors. +
 exposed-headers
 

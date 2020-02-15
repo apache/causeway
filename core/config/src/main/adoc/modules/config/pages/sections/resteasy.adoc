@@ -1,4 +1,7 @@
 = RestEasy Configuration
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+:page-role: -toc
+
 
 include::../section-hooks/resteasy~pre.adoc[]
 
@@ -8,8 +11,7 @@ include::../section-hooks/resteasy~pre.adoc[]
 |Default
 |Description
 |
-[[resteasy.as-map
-]]
+[[resteasy.as-map]]
 resteasy.as-map
 
 | 
@@ -17,9 +19,7 @@ resteasy.as-map
 
 
 |
-[[resteasy.authentication. +
-strategy-class-name
-]]
+[[resteasy.authentication.strategy-class-name]]
 resteasy.authentication. +
 strategy-class-name
 
@@ -28,8 +28,7 @@ strategy-class-name
 
 
 |
-[[resteasy.environment
-]]
+[[resteasy.environment]]
 resteasy.environment
 
 | 
@@ -37,9 +36,7 @@ resteasy.environment
 
 
 |
-[[resteasy.jaxrs.app. +
-registration
-]]
+[[resteasy.jaxrs.app.registration]]
 resteasy.jaxrs.app. +
 registration
 
@@ -48,8 +45,7 @@ registration
 
 
 |
-[[resteasy.jaxrs.default-path
-]]
+[[resteasy.jaxrs.default-path]]
 resteasy.jaxrs.default-path
 
 |  /restful
@@ -59,8 +55,7 @@ Note that this is used rather than ``prefix`` because there is _NO_ implementati
 
 
 |
-[[resteasy.jaxrs.defaultPath
-]]
+[[resteasy.jaxrs.defaultPath]]
 resteasy.jaxrs.defaultPath
 
 | 
@@ -68,8 +63,7 @@ resteasy.jaxrs.defaultPath
 
 
 |
-[[resteasy.resteasy-settings
-]]
+[[resteasy.resteasy-settings]]
 resteasy.resteasy-settings
 
 | 

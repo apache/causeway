@@ -216,9 +216,12 @@ for (PropertyGroup group in groups) {
     def buf = StringBuilder.newInstance()
     if(group.properties.size() > 0) {
 
-        bufNav << "* xref:section/${group.fileName()}.adoc[${group.name}]\n"
+        bufNav << "** xref:refguide:config:sections/${group.fileName()}.adoc[${group.name}]\n"
 
         buf << """= ${group.name}
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+:page-role: -toc
+
 
 include::../section-hooks/${group.fileName()}~pre.adoc[]
 
@@ -231,7 +234,7 @@ include::../section-hooks/${group.fileName()}~pre.adoc[]
 
 
         for (Property property in group.properties) {
-            def anchorPropertyName = format("${property.name}\n")
+            def anchorPropertyName = property.name
             def formattedPropertyName = format("${property.name}\n")
             buf << """|
 [[${anchorPropertyName}]]

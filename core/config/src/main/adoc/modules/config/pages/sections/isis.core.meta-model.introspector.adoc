@@ -1,4 +1,7 @@
 = Core MetaModel Introspection
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+:page-role: -toc
+
 
 include::../section-hooks/isis.core.meta-model.introspector~pre.adoc[]
 
@@ -8,10 +11,7 @@ include::../section-hooks/isis.core.meta-model.introspector~pre.adoc[]
 |Default
 |Description
 |
-[[isis.core.meta-model. +
-introspector. +
-lock-after-full-introspection
-]]
+[[isis.core.meta-model.introspector.lock-after-full-introspection]]
 isis.core.meta-model. +
 introspector. +
 lock-after-full-introspection
@@ -23,9 +23,7 @@ Only applies if the introspector is configured to perform full introspection up-
 
 
 |
-[[isis.core.meta-model. +
-introspector.mode
-]]
+[[isis.core.meta-model.introspector.mode]]
 isis.core.meta-model. +
 introspector.mode
 
@@ -36,9 +34,7 @@ Leaving this as lazy means that there's a chance that metamodel validation error
 
 
 |
-[[isis.core.meta-model. +
-introspector.parallelize
-]]
+[[isis.core.meta-model.introspector.parallelize]]
 isis.core.meta-model. +
 introspector.parallelize
 
@@ -47,10 +43,7 @@ introspector.parallelize
 
 
 |
-[[isis.core.meta-model. +
-introspector. +
-validate-incrementally
-]]
+[[isis.core.meta-model.introspector.validate-incrementally]]
 isis.core.meta-model. +
 introspector. +
 validate-incrementally

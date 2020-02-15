@@ -1,4 +1,7 @@
 = MetaModel Validator
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+:page-role: -toc
+
 
 include::../section-hooks/isis.core.meta-model.validator~pre.adoc[]
 
@@ -8,11 +11,7 @@ include::../section-hooks/isis.core.meta-model.validator~pre.adoc[]
 |Default
 |Description
 |
-[[isis.core.meta-model. +
-validator. +
-action-collection-parameter- +
-choices
-]]
+[[isis.core.meta-model.validator.action-collection-parameter-choices]]
 isis.core.meta-model. +
 validator. +
 action-collection-parameter- +
@@ -23,9 +22,7 @@ choices
 
 
 |
-[[isis.core.meta-model. +
-validator.allow-deprecated
-]]
+[[isis.core.meta-model.validator.allow-deprecated]]
 isis.core.meta-model. +
 validator.allow-deprecated
 
@@ -38,10 +35,7 @@ Note that this settings has no effect if the programming model has been configur
 
 
 |
-[[isis.core.meta-model. +
-validator. +
-ensure-unique-object-types
-]]
+[[isis.core.meta-model.validator.ensure-unique-object-types]]
 isis.core.meta-model. +
 validator. +
 ensure-unique-object-types
@@ -53,10 +47,7 @@ It is _highly advisable_ to leave this set as enabled (the default), and to also
 
 
 |
-[[isis.core.meta-model. +
-validator. +
-explicit-object-type
-]]
+[[isis.core.meta-model.validator.explicit-object-type]]
 isis.core.meta-model. +
 validator. +
 explicit-object-type
@@ -68,10 +59,7 @@ It is _highly advisable_ to leave this set as enabled (the default). These objec
 
 
 |
-[[isis.core.meta-model. +
-validator.jaxb-view-model. +
-date-time-type-adapter
-]]
+[[isis.core.meta-model.validator.jaxb-view-model.date-time-type-adapter]]
 isis.core.meta-model. +
 validator.jaxb-view-model. +
 date-time-type-adapter
@@ -81,10 +69,7 @@ date-time-type-adapter
 
 
 |
-[[isis.core.meta-model. +
-validator.jaxb-view-model. +
-no-arg-constructor
-]]
+[[isis.core.meta-model.validator.jaxb-view-model.no-arg-constructor]]
 isis.core.meta-model. +
 validator.jaxb-view-model. +
 no-arg-constructor
@@ -94,10 +79,7 @@ no-arg-constructor
 
 
 |
-[[isis.core.meta-model. +
-validator.jaxb-view-model. +
-not-abstract
-]]
+[[isis.core.meta-model.validator.jaxb-view-model.not-abstract]]
 isis.core.meta-model. +
 validator.jaxb-view-model. +
 not-abstract
@@ -107,10 +89,7 @@ not-abstract
 
 
 |
-[[isis.core.meta-model. +
-validator.jaxb-view-model. +
-not-inner-class
-]]
+[[isis.core.meta-model.validator.jaxb-view-model.not-inner-class]]
 isis.core.meta-model. +
 validator.jaxb-view-model. +
 not-inner-class
@@ -120,10 +99,7 @@ not-inner-class
 
 
 |
-[[isis.core.meta-model. +
-validator.jaxb-view-model. +
-reference-type-adapter
-]]
+[[isis.core.meta-model.validator.jaxb-view-model.reference-type-adapter]]
 isis.core.meta-model. +
 validator.jaxb-view-model. +
 reference-type-adapter
@@ -133,9 +109,7 @@ reference-type-adapter
 
 
 |
-[[isis.core.meta-model. +
-validator.jdoql.from-clause
-]]
+[[isis.core.meta-model.validator.jdoql.from-clause]]
 isis.core.meta-model. +
 validator.jdoql.from-clause
 
@@ -144,10 +118,7 @@ validator.jdoql.from-clause
 
 
 |
-[[isis.core.meta-model. +
-validator.jdoql. +
-variables-clause
-]]
+[[isis.core.meta-model.validator.jdoql.variables-clause]]
 isis.core.meta-model. +
 validator.jdoql. +
 variables-clause
@@ -157,9 +128,7 @@ variables-clause
 
 
 |
-[[isis.core.meta-model. +
-validator.no-params-only
-]]
+[[isis.core.meta-model.validator.no-params-only]]
 isis.core.meta-model. +
 validator.no-params-only
 
@@ -172,9 +141,7 @@ Note that this aspect of the programming model relates to the ``hideXxx`` and ``
 
 
 |
-[[isis.core.meta-model. +
-validator.parallelize
-]]
+[[isis.core.meta-model.validator.parallelize]]
 isis.core.meta-model. +
 validator.parallelize
 
@@ -183,9 +150,7 @@ validator.parallelize
 
 
 |
-[[isis.core.meta-model. +
-validator.mixins-only
-]]
+[[isis.core.meta-model.validator.mixins-only]]
 isis.core.meta-model. +
 validator.mixins-only
 
@@ -194,10 +159,7 @@ validator.mixins-only
 
 
 |
-[[isis.core.meta-model. +
-validator. +
-service-actions-only
-]]
+[[isis.core.meta-model.validator.service-actions-only]]
 isis.core.meta-model. +
 validator. +
 service-actions-only

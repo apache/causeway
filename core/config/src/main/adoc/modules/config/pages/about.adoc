@@ -11,4 +11,76 @@ This chapter describes the configuration properties available to configure an Ap
 
 
 
+== Deployment Types
 
+Apache Isis distinguishes between the application being run in prototyping mode vs running in production mode.
+The framework calls this the "deployment type" (corresponding internally to the `DeploymentType` class).
+
+A similar concept appears in the link:https://wicket.apache.org[Wicket] framework (which is the library with which the xref:vw:ROOT:about.adoc[Wicket viewer] is implemented, of course).
+
+* the term "deployment type" is called the runtime "configuration" by Wicket
+* the _prototyping_ deployment type corresponds to Wicket's _development_ configuration
+* the _production_ deployment type corresponds to Wicket's _deployment_ configuration
+
+By default Apache Isis runs in production mode.
+If running in prototyping mode, then any actions xref:refguide:applib-ant:Action.adoc#restrictto[restricted to] to prototype mode are visible.
+In particular, the "Prototyping" menu will appear, containing a number of framework-provided menu services - all restricted to prototyping mode.
+For example, menu items to run in xref:testing:fixtures:about.adoc[fixture scripts] are on this menu.
+
+Prototyping mode can be enabled in a number of ways:
+
+* environment variable:
++
+[source,bash]
+----
+export PROTOTYPING=true
+----
+
+* `PRODUCTION` system property
++
+[source,bash]
+----
+-DPROTOTYPING=true
+----
+
+* `isis.deploymentType` system property
++
+[source,bash]
+----
+-Disis.deploymentType=PROTOTYPING
+----
+
+It is also possible to explicitly specify production mode:
+
+* `PRODUCTION` system property
++
+[source,bash]
+----
+-DPROTOTYPING=false
+----
+
+* `isis.deploymentType` system property
++
+[source,bash]
+----
+-Disis.deploymentType=PRODUCTION
+----
+
+If (by a combination of mechanisms) both prototyping and production modes are specified, then production mode wins.
+
+
+=== `IsisSystemEnvironment` service
+
+Applications can discover the prototyping mode by injecting the xref:refguide:applib-svc:testing/IsisSystemEnvironment.adoc[IsisSystemEnvironment] service.
+
+
+
+== Specifying components
+
+WARNING: TODO: v2 - discuss the Spring bootstrap and IsisModuleXxx.  Perhaps just copy similar material already in the starter apps.
+
+
+
+== Configuration Properties
+
+WARNING: TODO: v2 - quick intro to the subsections that follow...

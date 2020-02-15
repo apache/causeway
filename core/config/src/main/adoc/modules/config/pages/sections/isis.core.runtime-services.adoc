@@ -1,4 +1,7 @@
 = Core Runtime Services configurations
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+:page-role: -toc
+
 
 include::../section-hooks/isis.core.runtime-services~pre.adoc[]
 
@@ -8,9 +11,7 @@ include::../section-hooks/isis.core.runtime-services~pre.adoc[]
 |Default
 |Description
 |
-[[isis.core.runtime-services. +
-application-features.init
-]]
+[[isis.core.runtime-services.application-features.init]]
 isis.core.runtime-services. +
 application-features.init
 
@@ -19,9 +20,7 @@ application-features.init
 
 
 |
-[[isis.core.runtime-services. +
-email.override.bcc
-]]
+[[isis.core.runtime-services.email.override.bcc]]
 isis.core.runtime-services. +
 email.override.bcc
 
@@ -30,9 +29,7 @@ email.override.bcc
 
 
 |
-[[isis.core.runtime-services. +
-email.override.cc
-]]
+[[isis.core.runtime-services.email.override.cc]]
 isis.core.runtime-services. +
 email.override.cc
 
@@ -41,9 +38,7 @@ email.override.cc
 
 
 |
-[[isis.core.runtime-services. +
-email.override.to
-]]
+[[isis.core.runtime-services.email.override.to]]
 isis.core.runtime-services. +
 email.override.to
 
@@ -52,9 +47,7 @@ email.override.to
 
 
 |
-[[isis.core.runtime-services. +
-email.port
-]]
+[[isis.core.runtime-services.email.port]]
 isis.core.runtime-services. +
 email.port
 
@@ -63,9 +56,7 @@ email.port
 
 
 |
-[[isis.core.runtime-services. +
-email.sender.address
-]]
+[[isis.core.runtime-services.email.sender.address]]
 isis.core.runtime-services. +
 email.sender.address
 
@@ -78,9 +69,7 @@ This configuration property is mandatory (for the default implementation of the 
 
 
 |
-[[isis.core.runtime-services. +
-email.sender.hostname
-]]
+[[isis.core.runtime-services.email.sender.hostname]]
 isis.core.runtime-services. +
 email.sender.hostname
 
@@ -91,9 +80,7 @@ If not specified, then the value used depends upon the email implementation. The
 
 
 |
-[[isis.core.runtime-services. +
-email.sender.password
-]]
+[[isis.core.runtime-services.email.sender.password]]
 isis.core.runtime-services. +
 email.sender.password
 
@@ -104,9 +91,7 @@ This configuration property is mandatory (for the default implementation of the 
 
 
 |
-[[isis.core.runtime-services. +
-email.sender.username
-]]
+[[isis.core.runtime-services.email.sender.username]]
 isis.core.runtime-services. +
 email.sender.username
 
@@ -117,10 +102,7 @@ If not specified, then the sender's email address will be used instead.
 
 
 |
-[[isis.core.runtime-services. +
-email. +
-socket-connection-timeout
-]]
+[[isis.core.runtime-services.email.socket-connection-timeout]]
 isis.core.runtime-services. +
 email. +
 socket-connection-timeout
@@ -130,9 +112,7 @@ socket-connection-timeout
 
 
 |
-[[isis.core.runtime-services. +
-email.socket-timeout
-]]
+[[isis.core.runtime-services.email.socket-timeout]]
 isis.core.runtime-services. +
 email.socket-timeout
 
@@ -141,9 +121,7 @@ email.socket-timeout
 
 
 |
-[[isis.core.runtime-services. +
-email.throw-exception-on-fail
-]]
+[[isis.core.runtime-services.email.throw-exception-on-fail]]
 isis.core.runtime-services. +
 email.throw-exception-on-fail
 
@@ -152,9 +130,7 @@ email.throw-exception-on-fail
 
 
 |
-[[isis.core.runtime-services. +
-email.tls.enabled
-]]
+[[isis.core.runtime-services.email.tls.enabled]]
 isis.core.runtime-services. +
 email.tls.enabled
 
@@ -163,10 +139,7 @@ email.tls.enabled
 
 
 |
-[[isis.core.runtime-services. +
-exception-recognizer.jdo. +
-disable
-]]
+[[isis.core.runtime-services.exception-recognizer.jdo.disable]]
 isis.core.runtime-services. +
 exception-recognizer.jdo. +
 disable
@@ -176,10 +149,7 @@ disable
 
 
 |
-[[isis.core.runtime-services. +
-repository-service. +
-disable-auto-flush
-]]
+[[isis.core.runtime-services.repository-service.disable-auto-flush]]
 isis.core.runtime-services. +
 repository-service. +
 disable-auto-flush
@@ -193,9 +163,7 @@ Originally introduced as part of ISIS-1134 (fixing memory leaks in the objectsto
 
 
 |
-[[isis.core.runtime-services. +
-translation.po.mode
-]]
+[[isis.core.runtime-services.translation.po.mode]]
 isis.core.runtime-services. +
 translation.po.mode
 

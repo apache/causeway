@@ -1,4 +1,7 @@
 = Value types
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+:page-role: -toc
+
 
 include::../section-hooks/isis.value-types~pre.adoc[]
 
@@ -8,9 +11,7 @@ include::../section-hooks/isis.value-types~pre.adoc[]
 |Default
 |Description
 |
-[[isis.value-types.primitives. +
-integer.format
-]]
+[[isis.value-types.primitives.integer.format]]
 isis.value-types.primitives. +
 integer.format
 
@@ -19,9 +20,7 @@ integer.format
 
 
 |
-[[isis.value-types.java-lang. +
-byte.format
-]]
+[[isis.value-types.java-lang.byte.format]]
 isis.value-types.java-lang. +
 byte.format
 
@@ -30,9 +29,7 @@ byte.format
 
 
 |
-[[isis.value-types.java-lang. +
-double.format
-]]
+[[isis.value-types.java-lang.double.format]]
 isis.value-types.java-lang. +
 double.format
 
@@ -41,9 +38,7 @@ double.format
 
 
 |
-[[isis.value-types.java-lang. +
-float.format
-]]
+[[isis.value-types.java-lang.float.format]]
 isis.value-types.java-lang. +
 float.format
 
@@ -52,9 +47,7 @@ float.format
 
 
 |
-[[isis.value-types.java-lang. +
-long.format
-]]
+[[isis.value-types.java-lang.long.format]]
 isis.value-types.java-lang. +
 long.format
 
@@ -63,9 +56,7 @@ long.format
 
 
 |
-[[isis.value-types.java-lang. +
-short.format
-]]
+[[isis.value-types.java-lang.short.format]]
 isis.value-types.java-lang. +
 short.format
 
@@ -74,9 +65,7 @@ short.format
 
 
 |
-[[isis.value-types.java-math. +
-big-decimal.format
-]]
+[[isis.value-types.java-math.big-decimal.format]]
 isis.value-types.java-math. +
 big-decimal.format
 
@@ -85,9 +74,7 @@ big-decimal.format
 
 
 |
-[[isis.value-types.java-math. +
-big-integer.format
-]]
+[[isis.value-types.java-math.big-integer.format]]
 isis.value-types.java-math. +
 big-integer.format
 
@@ -96,9 +83,7 @@ big-integer.format
 
 
 |
-[[isis.value-types.java-sql. +
-date.format
-]]
+[[isis.value-types.java-sql.date.format]]
 isis.value-types.java-sql. +
 date.format
 
@@ -107,9 +92,7 @@ date.format
 
 
 |
-[[isis.value-types.java-sql. +
-time.format
-]]
+[[isis.value-types.java-sql.time.format]]
 isis.value-types.java-sql. +
 time.format
 
@@ -118,9 +101,7 @@ time.format
 
 
 |
-[[isis.value-types.java-sql. +
-timestamp.format
-]]
+[[isis.value-types.java-sql.timestamp.format]]
 isis.value-types.java-sql. +
 timestamp.format
 
@@ -129,9 +110,7 @@ timestamp.format
 
 
 |
-[[isis.value-types.java-time. +
-local-date-time.format
-]]
+[[isis.value-types.java-time.local-date-time.format]]
 isis.value-types.java-time. +
 local-date-time.format
 
@@ -140,9 +119,7 @@ local-date-time.format
 
 
 |
-[[isis.value-types.java-time. +
-local-date.format
-]]
+[[isis.value-types.java-time.local-date.format]]
 isis.value-types.java-time. +
 local-date.format
 
@@ -151,9 +128,7 @@ local-date.format
 
 
 |
-[[isis.value-types.java-time. +
-local-time.format
-]]
+[[isis.value-types.java-time.local-time.format]]
 isis.value-types.java-time. +
 local-time.format
 
@@ -162,9 +137,7 @@ local-time.format
 
 
 |
-[[isis.value-types.java-time. +
-offset-date-time.format
-]]
+[[isis.value-types.java-time.offset-date-time.format]]
 isis.value-types.java-time. +
 offset-date-time.format
 
@@ -173,9 +146,7 @@ offset-date-time.format
 
 
 |
-[[isis.value-types.java-time. +
-offset-time.format
-]]
+[[isis.value-types.java-time.offset-time.format]]
 isis.value-types.java-time. +
 offset-time.format
 
@@ -184,9 +155,7 @@ offset-time.format
 
 
 |
-[[isis.value-types.java-time. +
-zoned-date-time.format
-]]
+[[isis.value-types.java-time.zoned-date-time.format]]
 isis.value-types.java-time. +
 zoned-date-time.format
 
@@ -195,9 +164,7 @@ zoned-date-time.format
 
 
 |
-[[isis.value-types.java-util. +
-date.format
-]]
+[[isis.value-types.java-util.date.format]]
 isis.value-types.java-util. +
 date.format
 
@@ -206,9 +173,7 @@ date.format
 
 
 |
-[[isis.value-types.joda. +
-date-time.format
-]]
+[[isis.value-types.joda.date-time.format]]
 isis.value-types.joda. +
 date-time.format
 
@@ -217,9 +182,7 @@ date-time.format
 
 
 |
-[[isis.value-types.joda. +
-local-date-time.format
-]]
+[[isis.value-types.joda.local-date-time.format]]
 isis.value-types.joda. +
 local-date-time.format
 
@@ -228,9 +191,7 @@ local-date-time.format
 
 
 |
-[[isis.value-types.joda. +
-local-date.format
-]]
+[[isis.value-types.joda.local-date.format]]
 isis.value-types.joda. +
 local-date.format
 
@@ -239,9 +200,7 @@ local-date.format
 
 
 |
-[[isis.value-types.primitives. +
-int.format
-]]
+[[isis.value-types.primitives.int.format]]
 isis.value-types.primitives. +
 int.format
 

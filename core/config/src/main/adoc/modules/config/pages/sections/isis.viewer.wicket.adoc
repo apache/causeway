@@ -1,4 +1,7 @@
 = Wicket Viewer
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+:page-role: -toc
+
 
 include::../section-hooks/isis.viewer.wicket~pre.adoc[]
 
@@ -8,9 +11,7 @@ include::../section-hooks/isis.viewer.wicket~pre.adoc[]
 |Default
 |Description
 |
-[[isis.viewer.wicket. +
-ajax-debug-mode
-]]
+[[isis.viewer.wicket.ajax-debug-mode]]
 isis.viewer.wicket. +
 ajax-debug-mode
 
@@ -19,8 +20,7 @@ ajax-debug-mode
 
 
 |
-[[isis.viewer.wicket.app
-]]
+[[isis.viewer.wicket.app]]
 isis.viewer.wicket.app
 
 |  org.apache.isis.viewer. +
@@ -32,9 +32,7 @@ There is usually very little reason to change this from its default.
 
 
 |
-[[isis.viewer.wicket. +
-application.about
-]]
+[[isis.viewer.wicket.application.about]]
 isis.viewer.wicket. +
 application.about
 
@@ -43,9 +41,7 @@ application.about
 
 
 |
-[[isis.viewer.wicket. +
-application.brand-logo-header
-]]
+[[isis.viewer.wicket.application.brand-logo-header]]
 isis.viewer.wicket. +
 application.brand-logo-header
 
@@ -56,9 +52,7 @@ This is rendered on the header panel. An image with a size of 160x40 works well.
 
 
 |
-[[isis.viewer.wicket. +
-application.brand-logo-signin
-]]
+[[isis.viewer.wicket.application.brand-logo-signin]]
 isis.viewer.wicket. +
 application.brand-logo-signin
 
@@ -69,9 +63,7 @@ This is rendered on the sign-in page. An image with a size of 400x40 works well.
 
 
 |
-[[isis.viewer.wicket. +
-application.css
-]]
+[[isis.viewer.wicket.application.css]]
 isis.viewer.wicket. +
 application.css
 
@@ -82,10 +74,7 @@ A typical value is ``css``. This will result in this file being read from the ``
 
 
 |
-[[isis.viewer.wicket. +
-application. +
-favicon-content-type
-]]
+[[isis.viewer.wicket.application.favicon-content-type]]
 isis.viewer.wicket. +
 application. +
 favicon-content-type
@@ -95,9 +84,7 @@ favicon-content-type
 
 
 |
-[[isis.viewer.wicket. +
-application.favicon-url
-]]
+[[isis.viewer.wicket.application.favicon-url]]
 isis.viewer.wicket. +
 application.favicon-url
 
@@ -108,9 +95,7 @@ This is expected to be a local resource.
 
 
 |
-[[isis.viewer.wicket. +
-application.js
-]]
+[[isis.viewer.wicket.application.js]]
 isis.viewer.wicket. +
 application.js
 
@@ -121,10 +106,7 @@ A typical value is ``js``. This will result in this file being read from the ``s
 
 
 |
-[[isis.viewer.wicket. +
-application. +
-menubars-layout-xml
-]]
+[[isis.viewer.wicket.application.menubars-layout-xml]]
 isis.viewer.wicket. +
 application. +
 menubars-layout-xml
@@ -136,9 +118,7 @@ This is expected to be a local resource.
 
 
 |
-[[isis.viewer.wicket. +
-application.name
-]]
+[[isis.viewer.wicket.application.name]]
 isis.viewer.wicket. +
 application.name
 
@@ -147,9 +127,7 @@ application.name
 
 
 |
-[[isis.viewer.wicket. +
-application.version
-]]
+[[isis.viewer.wicket.application.version]]
 isis.viewer.wicket. +
 application.version
 
@@ -160,8 +138,7 @@ If present, then this will be shown in the footer on every page as well as on th
 
 
 |
-[[isis.viewer.wicket.base-path
-]]
+[[isis.viewer.wicket.base-path]]
 isis.viewer.wicket.base-path
 
 |  /wicket/
@@ -169,9 +146,7 @@ isis.viewer.wicket.base-path
 
 
 |
-[[isis.viewer.wicket. +
-bookmarked-pages.max-size
-]]
+[[isis.viewer.wicket.bookmarked-pages.max-size]]
 isis.viewer.wicket. +
 bookmarked-pages.max-size
 
@@ -182,9 +157,7 @@ These are aged out on an MRU-LRU basis.
 
 
 |
-[[isis.viewer.wicket. +
-bookmarked-pages.show-chooser
-]]
+[[isis.viewer.wicket.bookmarked-pages.show-chooser]]
 isis.viewer.wicket. +
 bookmarked-pages.show-chooser
 
@@ -193,10 +166,7 @@ bookmarked-pages.show-chooser
 
 
 |
-[[isis.viewer.wicket. +
-bookmarked-pages. +
-show-drop-down-on-footer
-]]
+[[isis.viewer.wicket.bookmarked-pages.show-drop-down-on-footer]]
 isis.viewer.wicket. +
 bookmarked-pages. +
 show-drop-down-on-footer
@@ -206,9 +176,7 @@ show-drop-down-on-footer
 
 
 |
-[[isis.viewer.wicket. +
-breadcrumbs.enabled
-]]
+[[isis.viewer.wicket.breadcrumbs.enabled]]
 isis.viewer.wicket. +
 breadcrumbs.enabled
 
@@ -217,10 +185,7 @@ breadcrumbs.enabled
 
 
 |
-[[isis.viewer.wicket. +
-breadcrumbs. +
-max-parent-chain-length
-]]
+[[isis.viewer.wicket.breadcrumbs.max-parent-chain-length]]
 isis.viewer.wicket. +
 breadcrumbs. +
 max-parent-chain-length
@@ -230,9 +195,7 @@ max-parent-chain-length
 
 
 |
-[[isis.viewer.wicket. +
-clear-original-destination
-]]
+[[isis.viewer.wicket.clear-original-destination]]
 isis.viewer.wicket. +
 clear-original-destination
 
@@ -243,8 +206,7 @@ The default behaviour is to honour the original destination requested.
 
 
 |
-[[isis.viewer.wicket.credit
-]]
+[[isis.viewer.wicket.credit]]
 isis.viewer.wicket.credit
 
 | 
@@ -256,9 +218,7 @@ NOTE: For further discussion, see for example https://stackoverflow.com/question
 
 
 |
-[[isis.viewer.wicket. +
-date-pattern
-]]
+[[isis.viewer.wicket.date-pattern]]
 isis.viewer.wicket. +
 date-pattern
 
@@ -269,9 +229,7 @@ Each Date scalar panel will use ``#getDatePattern()`` or ``#getDateTimePattern()
 
 
 |
-[[isis.viewer.wicket. +
-date-picker.max-date
-]]
+[[isis.viewer.wicket.date-picker.max-date]]
 isis.viewer.wicket. +
 date-picker.max-date
 
@@ -282,9 +240,7 @@ As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in I
 
 
 |
-[[isis.viewer.wicket. +
-date-picker.min-date
-]]
+[[isis.viewer.wicket.date-picker.min-date]]
 isis.viewer.wicket. +
 date-picker.min-date
 
@@ -295,9 +251,7 @@ As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in I
 
 
 |
-[[isis.viewer.wicket. +
-date-time-pattern
-]]
+[[isis.viewer.wicket.date-time-pattern]]
 isis.viewer.wicket. +
 date-time-pattern
 
@@ -308,9 +262,7 @@ Each Date scalar panel will use ``#getDatePattern()`` or ``#getDateTimePattern()
 
 
 |
-[[isis.viewer.wicket. +
-development-utilities.enable
-]]
+[[isis.viewer.wicket.development-utilities.enable]]
 isis.viewer.wicket. +
 development-utilities.enable
 
@@ -321,9 +273,7 @@ By default, depends on the mode (prototyping = enabled, server = disabled). This
 
 
 |
-[[isis.viewer.wicket. +
-dialog-mode
-]]
+[[isis.viewer.wicket.dialog-mode]]
 isis.viewer.wicket. +
 dialog-mode
 
@@ -334,9 +284,7 @@ This can be overridden on a case-by-case basis using ``ActionLayout#promptStyle(
 
 
 |
-[[isis.viewer.wicket. +
-dialog-mode-for-menu
-]]
+[[isis.viewer.wicket.dialog-mode-for-menu]]
 isis.viewer.wicket. +
 dialog-mode-for-menu
 
@@ -347,9 +295,7 @@ This can be overridden on a case-by-case basis using ``ActionLayout#promptStyle(
 
 
 |
-[[isis.viewer.wicket. +
-live-reload-url
-]]
+[[isis.viewer.wicket.live-reload-url]]
 isis.viewer.wicket. +
 live-reload-url
 
@@ -360,10 +306,7 @@ Configuring live reload also requires an appropriate plugin to the web browser (
 
 
 |
-[[isis.viewer.wicket. +
-max-title-length-in-parented- +
-tables
-]]
+[[isis.viewer.wicket.max-title-length-in-parented-tables]]
 isis.viewer.wicket. +
 max-title-length-in-parented- +
 tables
@@ -373,10 +316,7 @@ tables
 
 
 |
-[[isis.viewer.wicket. +
-max-title-length-in- +
-standalone-tables
-]]
+[[isis.viewer.wicket.max-title-length-in-standalone-tables]]
 isis.viewer.wicket. +
 max-title-length-in- +
 standalone-tables
@@ -386,9 +326,7 @@ standalone-tables
 
 
 |
-[[isis.viewer.wicket. +
-max-title-length-in-tables
-]]
+[[isis.viewer.wicket.max-title-length-in-tables]]
 isis.viewer.wicket. +
 max-title-length-in-tables
 
@@ -399,10 +337,7 @@ If truncated, then the remainder of the title will be replaced with ellipses (..
 
 
 |
-[[isis.viewer.wicket. +
-prevent-double-click-for-form- +
-submit
-]]
+[[isis.viewer.wicket.prevent-double-click-for-form-submit]]
 isis.viewer.wicket. +
 prevent-double-click-for-form- +
 submit
@@ -412,10 +347,7 @@ submit
 
 
 |
-[[isis.viewer.wicket. +
-prevent-double-click-for-no- +
-arg-action
-]]
+[[isis.viewer.wicket.prevent-double-click-for-no-arg-action]]
 isis.viewer.wicket. +
 prevent-double-click-for-no- +
 arg-action
@@ -427,9 +359,7 @@ This behaviour is enabled by default, but can be disabled using this flag.
 
 
 |
-[[isis.viewer.wicket. +
-prompt-style
-]]
+[[isis.viewer.wicket.prompt-style]]
 isis.viewer.wicket. +
 prompt-style
 
@@ -442,9 +372,7 @@ This behaviour is disabled by default; the viewer will use an inline prompt in t
 
 
 |
-[[isis.viewer.wicket. +
-redirect-even-if-same-object
-]]
+[[isis.viewer.wicket.redirect-even-if-same-object]]
 isis.viewer.wicket. +
 redirect-even-if-same-object
 
@@ -455,9 +383,7 @@ This behaviour is disabled by default; the viewer will update the existing page 
 
 
 |
-[[isis.viewer.wicket. +
-remember-me.cookie-key
-]]
+[[isis.viewer.wicket.remember-me.cookie-key]]
 isis.viewer.wicket. +
 remember-me.cookie-key
 
@@ -466,9 +392,7 @@ remember-me.cookie-key
 
 
 |
-[[isis.viewer.wicket. +
-remember-me.encryption-key
-]]
+[[isis.viewer.wicket.remember-me.encryption-key]]
 isis.viewer.wicket. +
 remember-me.encryption-key
 
@@ -483,9 +407,7 @@ In prototype mode this setting is effectively ignored, because the same key will
 
 
 |
-[[isis.viewer.wicket. +
-remember-me.suppress
-]]
+[[isis.viewer.wicket.remember-me.suppress]]
 isis.viewer.wicket. +
 remember-me.suppress
 
@@ -496,10 +418,7 @@ If "remember me" is available and checked, then the viewer will allow users to l
 
 
 |
-[[isis.viewer.wicket. +
-replace-disabled-tag-with- +
-readonly-tag
-]]
+[[isis.viewer.wicket.replace-disabled-tag-with-readonly-tag]]
 isis.viewer.wicket. +
 replace-disabled-tag-with- +
 readonly-tag
@@ -511,9 +430,7 @@ This behaviour is enabled by default but can be disabled using this flag
 
 
 |
-[[isis.viewer.wicket. +
-show-footer
-]]
+[[isis.viewer.wicket.show-footer]]
 isis.viewer.wicket. +
 show-footer
 
@@ -524,9 +441,7 @@ This is enabled by default.
 
 
 |
-[[isis.viewer.wicket. +
-strip-wicket-tags
-]]
+[[isis.viewer.wicket.strip-wicket-tags]]
 isis.viewer.wicket. +
 strip-wicket-tags
 
@@ -537,9 +452,7 @@ By default this is enabled, in other words Wicket tags are stripped. Please be a
 
 
 |
-[[isis.viewer.wicket. +
-suppress-password-reset
-]]
+[[isis.viewer.wicket.suppress-password-reset]]
 isis.viewer.wicket. +
 suppress-password-reset
 
@@ -550,9 +463,7 @@ Although this is disabled by default (in other words the 'reset password' link i
 
 
 |
-[[isis.viewer.wicket. +
-suppress-sign-up
-]]
+[[isis.viewer.wicket.suppress-sign-up]]
 isis.viewer.wicket. +
 suppress-sign-up
 
@@ -563,9 +474,7 @@ Although this is disabled by default (in other words the sign-up link is not sup
 
 
 |
-[[isis.viewer.wicket.themes. +
-enabled
-]]
+[[isis.viewer.wicket.themes.enabled]]
 isis.viewer.wicket.themes. +
 enabled
 
@@ -574,9 +483,7 @@ enabled
 
 
 |
-[[isis.viewer.wicket.themes. +
-initial
-]]
+[[isis.viewer.wicket.themes.initial]]
 isis.viewer.wicket.themes. +
 initial
 
@@ -587,9 +494,7 @@ Expected to be in the list of ``#getEnabled()`` themes.
 
 
 |
-[[isis.viewer.wicket.themes. +
-provider
-]]
+[[isis.viewer.wicket.themes.provider]]
 isis.viewer.wicket.themes. +
 provider
 
@@ -601,9 +506,7 @@ IsisWicketThemeSupportDefault
 
 
 |
-[[isis.viewer.wicket.themes. +
-show-chooser
-]]
+[[isis.viewer.wicket.themes.show-chooser]]
 isis.viewer.wicket.themes. +
 show-chooser
 
@@ -612,9 +515,7 @@ show-chooser
 
 
 |
-[[isis.viewer.wicket. +
-use-indicator-for-form-submit
-]]
+[[isis.viewer.wicket.use-indicator-for-form-submit]]
 isis.viewer.wicket. +
 use-indicator-for-form-submit
 
@@ -625,10 +526,7 @@ This behaviour is enabled by default.
 
 
 |
-[[isis.viewer.wicket. +
-use-indicator-for-no-arg- +
-action
-]]
+[[isis.viewer.wicket.use-indicator-for-no-arg-action]]
 isis.viewer.wicket. +
 use-indicator-for-no-arg- +
 action
@@ -640,9 +538,7 @@ This behaviour is enabled by default.
 
 
 |
-[[isis.viewer.wicket.welcome. +
-text
-]]
+[[isis.viewer.wicket.welcome.text]]
 isis.viewer.wicket.welcome. +
 text
 
@@ -651,9 +547,7 @@ text
 
 
 |
-[[isis.viewer.wicket. +
-wicket-source-plugin
-]]
+[[isis.viewer.wicket.wicket-source-plugin]]
 isis.viewer.wicket. +
 wicket-source-plugin
 
@@ -664,9 +558,7 @@ This behaviour is disabled by default. Please be aware that enabloing it can sub
 
 
 |
-[[isis.viewer.wicket. +
-timestamp-pattern
-]]
+[[isis.viewer.wicket.timestamp-pattern]]
 isis.viewer.wicket. +
 timestamp-pattern
 
