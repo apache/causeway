@@ -45,10 +45,10 @@ git clone https://github.com/apache/isis.git
 
 Next up is to configure your user name and password:
 
-[source,bash]
+[source,bash,subs=+quotes]
 ----
-git config user.name "<i>My Name Here</i>"
-git config user.email <i>myusername@apache.org</i>
+git config user.name "__My Name Here__"
+git config user.email _myusername@apache.org_
 ----
 
 Next, configure the `core.autocrlf` so that line endings are normalized to LF (Unix style) in the rep; again see https://git-wip-us.apache.org/[Apache's git] page:
@@ -93,7 +93,7 @@ Next, we recommend you setup this a refspec so that you can distinguish remote t
 ----
 
 
-This will ensure that a `git fetch` or `git pull` places any remote tags under `origin/xxx.  For example, the`isis-1.0.0`tag on the origin will appear under`origin/isis-1.0.0`.
+This will ensure that a `git fetch` or `git pull` places any remote tags under `origin/xxx`.  For example, the `isis-1.0.0` tag on the origin will appear under `origin/isis-1.0.0`.
 
 
 If you don't use git outside of Apache, you can add the `--global` flag so that the above settings apply for all repos managed by git on your PC.

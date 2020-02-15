@@ -59,9 +59,9 @@ git commit -m "ISIS-nnn: yada yada"
 
 To rename or move a file:
 
-[source,bash]
+[source,bash,subs=+quotes]
 ----
-git mv <i>filename</i> <i>newfilename</i>
+git mv _filename_ _newfilename_
 git commit -m "ISIS-nnn: yada yada"
 ----
 
@@ -76,9 +76,9 @@ If committing to a local branch, the changes are still just that: local, and run
 
 To create a new, similarly named branch on the central repo, use:
 
-[source,bash]
+[source,bash,subs=+quotes]
 ----
-git push -u origin <i>branchname</i>
+git push -u origin _branchname_
 ----
 
 Using `gitk --all` will show you this new branch, named *origin/branchname*.
@@ -94,9 +94,9 @@ Doing this also allows others to collaborate on this branch, just as they would 
 
 When, eventually, you have reintegrated this branch, you can delete the remote branch using:
 
-[source,bash]
+[source,bash,subs=+quotes]
 ----
-git push origin --delete <i>branchname</i>
+git push origin --delete _branchname_
 ----
 
 For more detail, see this link:http://stackoverflow.com/questions/2003505/how-do-i-delete-a-git-branch-both-locally-and-in-github[stackoverflow post].
@@ -123,7 +123,7 @@ git stash pop
 
 Note that stashing works even if switching branches
 
-## Ignoring files
+== Ignoring files
 
 Put file patterns into `.gitignore`.
 There is one at the root of the git repo, but they can additionally appear in subdirectories (the results are cumulative).
@@ -187,9 +187,9 @@ You can retrospectively create a topic branch for the work you've accidentally d
 
 First, create a branch for your current commit:
 
-[source,bash]
+[source,bash,subs=+quotes]
 ----
-git branch <i>newbranch</i>
+git branch _newbranch_
 ----
 
 Next, make sure you have no outstanding edits.
@@ -202,11 +202,12 @@ git stash
 
 Finally, locate the shaId of the commit you want to roll back to (easily obtained in `gitk -all`), and wind `master` branch back to that commit:
 
-[source,bash]
+[source,bash,subs=+quotes]
 ----
 git checkout master
-git reset --hard <i>shaId</i>      # move master branch shaId of common ancestor
+git reset --hard _shaId_ <1>
 ----
+<1> move master branch shaId of common ancestor
 
 
 

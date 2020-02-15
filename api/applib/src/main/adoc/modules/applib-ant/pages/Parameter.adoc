@@ -90,8 +90,8 @@ public class Customer {
 
 
 
-include:Parameter/fileAccept.adoc[leveloffset=+1]
-include:Parameter/maxLength.adoc[leveloffset=+1]
-include:Parameter/mustSatisfy.adoc[leveloffset=+1]
-include:Parameter/optionality.adoc[leveloffset=+1]
-include:Parameter/regexPattern.adoc[leveloffset=+1]
+include::Parameter/fileAccept.adoc[leveloffset=+1]
+include::Parameter/maxLength.adoc[leveloffset=+1]
+include::Parameter/mustSatisfy.adoc[leveloffset=+1]
+include::Parameter/optionality.adoc[leveloffset=+1]
+include::Parameter/regexPattern.adoc[leveloffset=+1]
