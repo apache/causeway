@@ -95,16 +95,18 @@ Enter your name, email and comment:
 * use your apache.org email
 * the comment should be "CODE SIGNING KEY"
 
+----
 Real name: Xxx Xxxxxxxxx
-Email address: link:mailto:&#x78;&#120;&#120;&#64;&#97;&#x70;&#97;&#99;&#104;&#x65;&#46;&#111;&#x72;&#103;[&#x78;&#120;&#120;&#64;&#97;&#x70;&#97;&#99;&#104;&#x65;&#46;&#111;&#x72;&#103;]
+Email address: xxx@apache.org
 Comment: CODE SIGNING KEY
 You selected this USER-ID:
- "Xxx Xxxxxxxxx (CODE SIGNING KEY) link:mailto:&#x78;&#x78;&#x78;&#x40;&#97;&#x70;&#97;&#99;h&#101;&#x2e;&#x6f;r&#x67;[&#x78;&#x78;&#x78;&#x40;&#97;&#x70;&#97;&#99;h&#101;&#x2e;&#x6f;r&#x67;]"
+ "Xxx Xxxxxxxxx (CODE SIGNING KEY) xxx@apache.org"
 
 Change (N)ame, (C)omment, (E)mail or (O)kay/(Q)uit? O
 
 You need a Passphrase to protect your secret key.
 Enter passphrase:
+----
 
 Provide a passphrase to secure your key.
 
@@ -372,7 +374,7 @@ Backup these files also.
 
 == Publish Key
 
-It is also necessary to publish your key. There are several places where this should be done. In most cases, you'll need the "armored" &quot; (ie ASCII) representation of your key. This can be generated using:
+It is also necessary to publish your key. There are several places where this should be done. In most cases, you'll need the "`armored`" (ie ASCII) representation of your key. This can be generated using:
 
 [source]
 ----
@@ -485,7 +487,7 @@ From this, copy out the `wot:key`, and paste into your FDF file in `committers/i
 </wot:hasKey>
 ----
 
-Then, manually add in a `&lt;wot:pubkeyAddress&gt;` element within `&lt;wot:PubKey&gt;`:
+Then, manually add in a `<wot:pubkeyAddress>` element within `<wot:PubKey>`:
 
 [source,xml]
 ----
@@ -493,7 +495,7 @@ Then, manually add in a `&lt;wot:pubkeyAddress&gt;` element within `&lt;wot:PubK
   <wot:PubKey>
     <wot:fingerprint>nnnn nnnn nnnn nnnn nnnn  nnnn nnnn nnnn nnnn nnnn</wot:fingerprint>
     <wot:hex_id>nnnnnnnn</wot:hex_id>
-    <wot:pubkeyAddress rdf:resource="http://people.apache.org/~username/nnnnnnnn.asc/">
+    <wot:pubkeyAddress rdf:resource="http://people.apache.org/~username/nnnnnnnn.asc/"/>
   </wot:PubKey>
 </wot:hasKey>
 ----
