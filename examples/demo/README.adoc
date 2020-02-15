@@ -1,4 +1,4 @@
-:demo_module_root: src/main/adoc/modules/ROOT
+:demo_module_root: src/main/adoc/modules/demo
 image:https://github.com/apache-isis-committers/isis-nightly/workflows/Nightly/badge.svg[link="https://github.com/apache-isis-committers/isis-nightly/actions?query=workflow%3A%22Nightly%22"]
 
 include::{demo_module_root}/pages/about.adoc[] 
