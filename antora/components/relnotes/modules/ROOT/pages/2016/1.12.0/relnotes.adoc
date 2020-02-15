@@ -6,7 +6,7 @@
 
 
 The main feature in 1.12.0 is much enhanced support for custom layouts, using an optional separate XML layout file `Xxx.layout.xml` (where `Xxx` is the class of the object being rendered).  This is similar in concept to the earlier support we have had for custom layouts through a `.layout.json` file, but introduces the ability to position object members anywhere using bootstrap columns and rows.  It also brings in
-support for tabgroups, and allows object members to be included in the page more than once (eg a table view and also a (non-ASF) link:https://platform.incode.org[Incode Platform^]'s fullcalendar2 view).
+support for tabgroups, and allows object members to be included in the page more than once (eg a table view and also a (non-ASF) link:https://platform.incode.org[Incode Platform^]`'s fullcalendar2 view).
 
 As a result of this change, the support for editing objects has been modified; rather than an 'edit' button which toggles the entire
 page into edit mode, instead each property is edited individually.  The current implementation of this is using a prompt dialog (very
