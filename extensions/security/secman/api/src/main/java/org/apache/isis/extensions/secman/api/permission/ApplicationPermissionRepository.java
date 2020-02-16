@@ -21,16 +21,47 @@ package org.apache.isis.extensions.secman.api.permission;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 
 public interface ApplicationPermissionRepository {
 
     ApplicationPermission findByUserAndPermissionValue(String username,
             ApplicationPermissionValue changingPermissionValue);
 
-    List<? extends ApplicationPermission> findByFeatureCached(ApplicationFeatureId featureId);
+    List<ApplicationPermission> findByFeatureCached(ApplicationFeatureId featureId);
 
-    List<? extends ApplicationPermission> findOrphaned();
+    List<ApplicationPermission> findByRoleAndRuleAndFeatureTypeCached(
+            ApplicationRole holder,
+            ApplicationPermissionRule rule, 
+            ApplicationFeatureType type);
+    
+    ApplicationPermission findByRoleAndRuleAndFeature(
+            ApplicationRole holder, 
+            ApplicationPermissionRule rule,
+            ApplicationFeatureType type, 
+            String featureFqn);
+    
+    List<ApplicationPermission> findOrphaned();
 
-    List<? extends ApplicationPermission> allPermissions();
+    List<ApplicationPermission> allPermissions();
+
+    ApplicationPermission newPermission(
+            ApplicationRole role,
+            ApplicationPermissionRule rule, 
+            ApplicationPermissionMode mode,
+            String packageFqn, 
+            String className, 
+            String memberName);
+
+    ApplicationPermission newPermission(
+            ApplicationRole holder, 
+            ApplicationPermissionRule rule, 
+            ApplicationPermissionMode mode,
+            ApplicationFeatureType featureType, 
+            String featureFqn);
+
+    
+    
 
 }

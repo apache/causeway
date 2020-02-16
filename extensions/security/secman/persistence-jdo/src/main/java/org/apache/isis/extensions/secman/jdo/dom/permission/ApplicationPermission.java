@@ -382,9 +382,6 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
                             input.getRule(), 
                             input.getMode());
 
-        public static final Function<ApplicationPermission, String> GET_FQN = 
-                ApplicationPermission::getFeatureFqn;
-
     }
 
     @Inject private ApplicationFeatureRepositoryDefault applicationFeatureRepository;

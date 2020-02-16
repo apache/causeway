@@ -29,12 +29,14 @@ import org.springframework.stereotype.Repository;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.query.QueryDefault;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
+import org.apache.isis.extensions.secman.model.dom.permission.ApplicationPermission_delete;
 
 import lombok.val;
 
@@ -43,6 +45,7 @@ import lombok.val;
 public class ApplicationRoleRepository 
 implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository {
 
+    @Inject private FactoryService factoryService;
     @Inject private RepositoryService repository;
     @Inject private QueryResultsCache queryResultsCache;
     @Inject private ApplicationRoleFactory applicationRoleFactory;
@@ -144,6 +147,20 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository 
     public boolean isAdminRole(org.apache.isis.extensions.secman.api.role.ApplicationRole genericRole) {
         final ApplicationRole adminRole = findByNameCached(configBean.getAdminRoleName());
         return adminRole.equals(genericRole);
+    }
+
+    @Override
+    public void deleteRole(org.apache.isis.extensions.secman.api.role.ApplicationRole genericRole) {
+        
+        val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
+        
+        role.getUsers().clear();
+        val permissions = role.getPermissions();
+        for (val permission : permissions) {
+            val deleteMixin = factoryService.mixin(ApplicationPermission_delete.class, permission);
+            deleteMixin.act();
+        }
+        repository.removeAndFlush(role);
     }
 
 }

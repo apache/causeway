@@ -28,7 +28,6 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.InheritanceStrategy;
 
-import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.Collection;
@@ -37,36 +36,22 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
-import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
-import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.types.DescriptionType;
 import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
-import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
-import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserRepository;
-import org.apache.isis.extensions.secman.model.dom.permission.ApplicationPermission_delete;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 
 @javax.jdo.annotations.PersistenceCapable(
         identityType = IdentityType.DATASTORE,
@@ -105,6 +90,9 @@ import lombok.val;
 public class ApplicationRole 
 implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparable<ApplicationRole> {
 
+    @Inject private ApplicationFeatureRepository applicationFeatureRepository;
+    @Inject private ApplicationPermissionRepository applicationPermissionRepository;
+    
     // -- identification
     /**
      * having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use
@@ -130,29 +118,6 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
     private String name;
 
 
-
-    // -- updateName (action)
-
-    public static class UpdateNameDomainEvent extends ActionDomainEvent {}
-
-    @Action(
-            domainEvent = UpdateNameDomainEvent.class,
-            semantics = SemanticsOf.IDEMPOTENT
-            )
-    @MemberOrder(name="name", sequence = "1")
-    public ApplicationRole updateName(
-            @Parameter(maxLength = MAX_LENGTH_NAME) @ParameterLayout(named="Name", typicalLength = TYPICAL_LENGTH_NAME)
-            final String name) {
-        setName(name);
-        return this;
-    }
-
-    public String default0UpdateName() {
-        return getName();
-    }
-
-
-
     // -- description (property)
 
     public static class DescriptionDomainEvent extends PropertyDomainEvent<String> {}
@@ -170,34 +135,6 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
     @Getter @Setter
     private String description;
 
-
-
-    // -- updateDescription (action)
-
-    public static class UpdateDescriptionDomainEvent extends ActionDomainEvent {}
-
-    @Action(
-            domainEvent = UpdateDescriptionDomainEvent.class,
-            semantics = SemanticsOf.IDEMPOTENT
-            )
-    @MemberOrder(name="description", sequence = "1")
-    public ApplicationRole updateDescription(
-            @Parameter(
-                    maxLength = DescriptionType.Meta.MAX_LEN,
-                    optionality = Optionality.OPTIONAL
-                    )
-            @ParameterLayout(named="Description", typicalLength=TYPICAL_LENGTH_DESCRIPTION)
-            final String description) {
-        setDescription(description);
-        return this;
-    }
-
-    public String default0UpdateDescription() {
-        return getDescription();
-    }
-
-
-
     // -- permissions (derived collection)
     public static class PermissionsCollectionDomainEvent extends CollectionDomainEvent<ApplicationPermission> {}
 
@@ -214,78 +151,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
     }
 
 
-    // -- addPackage (action)
 
-    public static class AddPackageDomainEvent extends ActionDomainEvent {}
-
-    /**
-     * Adds a {@link org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission permission} for this role to a
-     * {@link ApplicationFeatureType#PACKAGE package}
-     * {@link ApplicationFeature feature}.
-     */
-    @Action(
-            domainEvent = AddPackageDomainEvent.class,
-            semantics = SemanticsOf.NON_IDEMPOTENT
-            )
-    @MemberOrder(name = "Permissions", sequence = "1")
-    public ApplicationRole addPackage(
-            @ParameterLayout(named="Rule")
-            final ApplicationPermissionRule rule,
-            @ParameterLayout(named="Mode")
-            final ApplicationPermissionMode mode,
-            @ParameterLayout(named="Package", typicalLength= ApplicationFeature.TYPICAL_LENGTH_PKG_FQN)
-            final String packageFqn) {
-        applicationPermissionRepository.newPermission(this, rule, mode, ApplicationFeatureType.PACKAGE, packageFqn);
-        return this;
-    }
-
-    public ApplicationPermissionRule default0AddPackage() {
-        return ApplicationPermissionRule.ALLOW;
-    }
-
-    public ApplicationPermissionMode default1AddPackage() {
-        return ApplicationPermissionMode.CHANGING;
-    }
-
-    public java.util.Collection<String> choices2AddPackage() {
-        return applicationFeatureRepository.packageNames();
-    }
-
-
-    // -- addClass (action)
-    public static class AddClassDomainEvent extends ActionDomainEvent {}
-
-    /**
-     * Adds a {@link org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission permission} for this role to a
-     * {@link ApplicationFeatureType#MEMBER member}
-     * {@link ApplicationFeature feature}.
-     */
-    @Action(
-            domainEvent = AddClassDomainEvent.class,
-            semantics = SemanticsOf.NON_IDEMPOTENT
-            )
-    @MemberOrder(name = "Permissions", sequence = "2")
-    public ApplicationRole addClass(
-            @ParameterLayout(named="Rule")
-            final ApplicationPermissionRule rule,
-            @ParameterLayout(named="Mode")
-            final ApplicationPermissionMode mode,
-            @ParameterLayout(named="Package", typicalLength=ApplicationFeature.TYPICAL_LENGTH_PKG_FQN)
-            final String packageFqn,
-            @ParameterLayout(named="Class", typicalLength=ApplicationFeature.TYPICAL_LENGTH_CLS_NAME)
-            final String className) {
-        applicationPermissionRepository.newPermission(this, rule, mode, ApplicationFeatureType.CLASS,
-                packageFqn + "." + className);
-        return this;
-    }
-
-    public ApplicationPermissionRule default0AddClass() {
-        return ApplicationPermissionRule.ALLOW;
-    }
-
-    public ApplicationPermissionMode default1AddClass() {
-        return ApplicationPermissionMode.CHANGING;
-    }
 
     /**
      * Package names that have classes in them.
@@ -303,243 +169,6 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
             final String packageFqn) {
         return applicationFeatureRepository.classNamesContainedIn(packageFqn, null);
     }
-
-
-
-    // -- addAction (action)
-    public static class AddActionDomainEvent extends ActionDomainEvent {}
-
-    /**
-     * Adds a {@link org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission permission} for this role to a
-     * {@link ApplicationMemberType#ACTION action}
-     * {@link ApplicationFeatureType#MEMBER member}
-     * {@link ApplicationFeature feature}.
-     */
-    @Action(
-            domainEvent = AddActionDomainEvent.class,
-            semantics = SemanticsOf.NON_IDEMPOTENT
-            )
-    @MemberOrder(name = "Permissions", sequence = "3")
-    public ApplicationRole addAction(
-            @ParameterLayout(named="Rule")
-            final ApplicationPermissionRule rule,
-            @ParameterLayout(named="Mode")
-            final ApplicationPermissionMode mode,
-            @ParameterLayout(named="Package", typicalLength=ApplicationFeature.TYPICAL_LENGTH_PKG_FQN)
-            final String packageFqn,
-            @ParameterLayout(named="Class", typicalLength=ApplicationFeature.TYPICAL_LENGTH_CLS_NAME)
-            final String className,
-            @ParameterLayout(named="Action", typicalLength = ApplicationFeature.TYPICAL_LENGTH_MEMBER_NAME)
-            final String memberName) {
-        applicationPermissionRepository.newPermission(this, rule, mode, packageFqn, className, memberName);
-        return this;
-    }
-
-    public ApplicationPermissionRule default0AddAction() {
-        return ApplicationPermissionRule.ALLOW;
-    }
-
-    public ApplicationPermissionMode default1AddAction() {
-        return ApplicationPermissionMode.CHANGING;
-    }
-
-    public java.util.Collection<String> choices2AddAction() {
-        return applicationFeatureRepository.packageNamesContainingClasses(ApplicationMemberType.ACTION);
-    }
-
-    public java.util.Collection<String> choices3AddAction(
-            final ApplicationPermissionRule rule,
-            final ApplicationPermissionMode mode,
-            final String packageFqn) {
-        return applicationFeatureRepository.classNamesContainedIn(packageFqn, ApplicationMemberType.ACTION);
-    }
-
-    public java.util.Collection<String> choices4AddAction(
-            final ApplicationPermissionRule rule,
-            final ApplicationPermissionMode mode,
-            final String packageFqn,
-            final String className) {
-        return applicationFeatureRepository.memberNamesOf(packageFqn, className, ApplicationMemberType.ACTION);
-    }
-
-
-
-    // -- addProperty (action)
-    public static class AddPropertyDomainEvent extends ActionDomainEvent {}
-    /**
-     * Adds a {@link org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission permission} for this role to a
-     * {@link ApplicationMemberType#PROPERTY property}
-     * {@link ApplicationFeatureType#MEMBER member}
-     * {@link ApplicationFeature feature}.
-     */
-    @Action(
-            domainEvent = AddPropertyDomainEvent.class,
-            semantics = SemanticsOf.NON_IDEMPOTENT
-            )
-    @MemberOrder(name = "Permissions", sequence = "4")
-    public ApplicationRole addProperty(
-            @ParameterLayout(named="Rule")
-            final ApplicationPermissionRule rule,
-            @ParameterLayout(named="Mode")
-            final ApplicationPermissionMode mode,
-            @ParameterLayout(named="Package", typicalLength=ApplicationFeature.TYPICAL_LENGTH_PKG_FQN)
-            final String packageFqn,
-            @ParameterLayout(named="Class", typicalLength=ApplicationFeature.TYPICAL_LENGTH_CLS_NAME)
-            final String className,
-            @ParameterLayout(named="Property", typicalLength=ApplicationFeature.TYPICAL_LENGTH_MEMBER_NAME)
-            final String memberName) {
-        applicationPermissionRepository.newPermission(this, rule, mode, packageFqn, className, memberName);
-        return this;
-    }
-
-    public ApplicationPermissionRule default0AddProperty() {
-        return ApplicationPermissionRule.ALLOW;
-    }
-
-    public ApplicationPermissionMode default1AddProperty() {
-        return ApplicationPermissionMode.CHANGING;
-    }
-
-    /**
-     * Package names that have classes in them.
-     */
-    public java.util.Collection<String> choices2AddProperty() {
-        return applicationFeatureRepository.packageNamesContainingClasses(ApplicationMemberType.PROPERTY);
-    }
-
-    /**
-     * Class names for selected package.
-     */
-    public java.util.Collection<String> choices3AddProperty(
-            final ApplicationPermissionRule rule,
-            final ApplicationPermissionMode mode,
-            final String packageFqn) {
-        return applicationFeatureRepository.classNamesContainedIn(packageFqn, ApplicationMemberType.PROPERTY);
-    }
-
-    /**
-     * Member names for selected class.
-     */
-    public java.util.Collection<String> choices4AddProperty(
-            final ApplicationPermissionRule rule,
-            final ApplicationPermissionMode mode,
-            final String packageFqn,
-            final String className) {
-        return applicationFeatureRepository.memberNamesOf(packageFqn, className, ApplicationMemberType.PROPERTY);
-    }
-
-
-    // -- addCollection (action)
-    public static class AddCollectionDomainEvent extends ActionDomainEvent {}
-
-    /**
-     * Adds a {@link org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission permission} for this role to a
-     * {@link ApplicationMemberType#COLLECTION collection}
-     * {@link ApplicationFeatureType#MEMBER member}
-     * {@link ApplicationFeature feature}.
-     */
-    @Action(
-            domainEvent = AddCollectionDomainEvent.class,
-            semantics = SemanticsOf.NON_IDEMPOTENT
-            )
-    @MemberOrder(name = "Permissions", sequence = "5")
-    public ApplicationRole addCollection(
-            @ParameterLayout(named="Rule")
-            final ApplicationPermissionRule rule,
-            @ParameterLayout(named="Mode")
-            final ApplicationPermissionMode mode,
-            @ParameterLayout(named="Package", typicalLength=ApplicationFeature.TYPICAL_LENGTH_PKG_FQN)
-            final String packageFqn,
-            @ParameterLayout(named="Class", typicalLength=ApplicationFeature.TYPICAL_LENGTH_CLS_NAME)
-            final String className,
-            @ParameterLayout(named="Collection", typicalLength=ApplicationFeature.TYPICAL_LENGTH_MEMBER_NAME)
-            final String memberName) {
-        applicationPermissionRepository.newPermission(this, rule, mode, packageFqn, className, memberName);
-        return this;
-    }
-
-    public ApplicationPermissionRule default0AddCollection() {
-        return ApplicationPermissionRule.ALLOW;
-    }
-
-    public ApplicationPermissionMode default1AddCollection() {
-        return ApplicationPermissionMode.CHANGING;
-    }
-
-    public java.util.Collection<String> choices2AddCollection() {
-        return applicationFeatureRepository.packageNamesContainingClasses(ApplicationMemberType.COLLECTION);
-    }
-
-    public java.util.Collection<String> choices3AddCollection(
-            final ApplicationPermissionRule rule,
-            final ApplicationPermissionMode mode,
-            final String packageFqn) {
-        return applicationFeatureRepository.classNamesContainedIn(packageFqn, ApplicationMemberType.COLLECTION);
-    }
-
-    public java.util.Collection<String> choices4AddCollection(
-            final ApplicationPermissionRule rule,
-            final ApplicationPermissionMode mode,
-            final String packageFqn,
-            final String className) {
-        return applicationFeatureRepository.memberNamesOf(packageFqn, className, ApplicationMemberType.COLLECTION);
-    }
-
-
-
-    // -- removePermission (action)
-    public static class RemovePermissionDomainEvent extends ActionDomainEvent {}
-
-    @Action(
-            domainEvent= RemovePermissionDomainEvent.class,
-            semantics = SemanticsOf.IDEMPOTENT
-            )
-    @MemberOrder(name = "Permissions", sequence = "9")
-    public ApplicationRole removePermission(
-            @ParameterLayout(named="Rule")
-            final ApplicationPermissionRule rule,
-            @ParameterLayout(named="Type")
-            final ApplicationFeatureType type,
-            @ParameterLayout(named="Feature", typicalLength=ApplicationFeature.TYPICAL_LENGTH_MEMBER_NAME)
-            final String featureFqn) {
-        final ApplicationPermission permission = applicationPermissionRepository.findByRoleAndRuleAndFeature(this,
-                rule, type, featureFqn);
-        if(permission != null) {
-            repository.remove(permission);
-        }
-        return this;
-    }
-
-    public String validateRemovePermission(
-            @ParameterLayout(named="Rule")
-            final ApplicationPermissionRule rule,
-            @ParameterLayout(named="Type")
-            final ApplicationFeatureType type,
-            @ParameterLayout(named="Feature", typicalLength=ApplicationFeature.TYPICAL_LENGTH_MEMBER_NAME)
-            final String featureFqn) {
-        if(applicationRoleRepository.isAdminRole(this) && configBean.isStickyAdminPackage(featureFqn)) {
-            return "Cannot remove top-level package permissions for the admin role.";
-        }
-        return null;
-    }
-    public ApplicationPermissionRule default0RemovePermission() {
-        return ApplicationPermissionRule.ALLOW;
-    }
-    public ApplicationFeatureType default1RemovePermission() {
-        return ApplicationFeatureType.PACKAGE;
-    }
-
-    public java.util.Collection<String> choices2RemovePermission(
-            final ApplicationPermissionRule rule,
-            final ApplicationFeatureType type) {
-        final List<ApplicationPermission> permissions = applicationPermissionRepository.findByRoleAndRuleAndFeatureTypeCached(
-                this, rule, type);
-        return _Lists.map(
-                permissions,
-                ApplicationPermission.Functions.GET_FQN);
-    }
-
-
 
     // -- users (collection)
 
@@ -565,30 +194,6 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
     // necessary for integration tests
     public void removeFromUsers(final ApplicationUser applicationUser) {
         getUsers().remove(applicationUser);
-    }
-
-
-    // -- delete (action)
-    public static class DeleteDomainEvent extends ActionDomainEvent {}
-
-    @Action(
-            domainEvent = DeleteDomainEvent.class,
-            semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE
-            )
-    @MemberOrder(sequence = "1")
-    public java.util.Collection<org.apache.isis.extensions.secman.api.role.ApplicationRole> delete() {
-        getUsers().clear();
-        final List<ApplicationPermission> permissions = getPermissions();
-        for (final ApplicationPermission permission : permissions) {
-            val deleteMixin = factoryService.mixin(ApplicationPermission_delete.class, permission);
-            deleteMixin.act();
-        }
-        repository.removeAndFlush(this);
-        return applicationRoleRepository.allRoles();
-    }
-
-    public String disableDelete() {
-        return applicationRoleRepository.isAdminRole(this) ? "Cannot delete the admin role" : null;
     }
 
 
@@ -627,13 +232,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
         return toString.toString(this);
     }
 
-    @Inject FactoryService factoryService;
-    @Inject RepositoryService repository;
-    @Inject ApplicationFeatureRepository applicationFeatureRepository;
-    @Inject ApplicationPermissionRepository applicationPermissionRepository;
-    @Inject ApplicationUserRepository applicationUserRepository;
-    @Inject ApplicationRoleRepository applicationRoleRepository;
-    @Inject private SecurityModuleConfig configBean;
+
 
 
 }

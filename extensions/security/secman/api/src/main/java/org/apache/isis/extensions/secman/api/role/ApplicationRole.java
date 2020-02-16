@@ -27,6 +27,10 @@ public interface ApplicationRole {
     public static final int TYPICAL_LENGTH_DESCRIPTION = 50;
 
     String getName();
+    void setName(String name);
+    
+    String getDescription();
+    void setDescription(String description);
     
     // -- EVENTS
     
@@ -36,5 +40,19 @@ public interface ApplicationRole {
     
     public static class AddUserDomainEvent extends ActionDomainEvent {}
     public static class RemoveUserDomainEvent extends ActionDomainEvent {}
+    public static class AddActionDomainEvent extends ActionDomainEvent {}
+    public static class AddClassDomainEvent extends ActionDomainEvent {}
+    public static class AddCollectionDomainEvent extends ActionDomainEvent {}
+    public static class AddPackageDomainEvent extends ActionDomainEvent {}
+    public static class AddPropertyDomainEvent extends ActionDomainEvent {}
+    public static class RemovePermissionDomainEvent extends ActionDomainEvent {}
+    
+    public static class DeleteDomainEvent extends ActionDomainEvent {}
+    
+    public static class UpdateDescriptionDomainEvent extends ActionDomainEvent {}
+    public static class UpdateNameDomainEvent extends ActionDomainEvent {}
+    
+    
+
 
 }

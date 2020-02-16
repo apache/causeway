@@ -40,6 +40,8 @@ public interface ApplicationRoleRepository {
     void removeRoleFromUser(ApplicationRole role, ApplicationUser holder);
 
     boolean isAdminRole(ApplicationRole role);
+
+    void deleteRole(ApplicationRole holder);
     
 
 }
