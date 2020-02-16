@@ -70,21 +70,21 @@ public class ServerSentEventsServlet extends HttpServlet {
         val eventStream = eventStreamType.flatMap(sseService::lookupByType)
                 .orElse(null);
 
+        response.setStatus(200);
+        
         if(eventStream==null) {
-            response.setStatus(200);
             response.setContentType(null);
-            response.flushBuffer();
+            flushBuffer(response);
             return;
         }
 
-        response.setStatus(200);
         response.setContentType("text/event-stream");
         response.setCharacterEncoding("UTF-8");
         //response.setHeader("Access-Control-Allow-Origin", "*"); // not secure, can be used for debugging
         response.setHeader("Cache-Control", "no-cache,no-store");
-        response.flushBuffer();
+        flushBuffer(response);
 
-        final AsyncContext asyncContext = request.startAsync();
+        val asyncContext = request.startAsync();
 
         // javac explicitly requires curly-braces here (to tell it we want a Runnable)
         ForkJoinPool.commonPool().submit(()->{fork(asyncContext, eventStream);});
@@ -92,6 +92,14 @@ public class ServerSentEventsServlet extends HttpServlet {
     }
 
     // -- HELPER
+
+    private void flushBuffer(HttpServletResponse response) {
+        try {
+            response.flushBuffer();
+        } catch (IOException e) {
+            log.warn("failed to flush response buffer", e);
+        }
+    }
 
     private void fork(final AsyncContext asyncContext, final SseChannel eventStream) {
 
@@ -122,7 +130,7 @@ public class ServerSentEventsServlet extends HttpServlet {
                 return true; // continue listening                
 
             } catch (Exception e) {
-                e.printStackTrace();
+                log.warn("failed to run the fork task", e);
                 return false; // stop listening
             }
 
@@ -151,7 +159,9 @@ public class ServerSentEventsServlet extends HttpServlet {
         try {
             return Optional.of(_Context.loadClass(eventStreamId));
         } catch (Throwable e) {
-            e.printStackTrace();
+            
+            log.warn("failed to resolve class by event stream id {}", eventStreamId, e);
+            
             return Optional.empty();
         }
     }

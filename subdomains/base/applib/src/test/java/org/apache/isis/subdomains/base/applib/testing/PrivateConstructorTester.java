@@ -2,6 +2,8 @@ package org.apache.isis.subdomains.base.applib.testing;
 
 import java.lang.reflect.Constructor;
 
+import org.apache.isis.core.commons.internal.reflection._Reflect;
+
 public final class PrivateConstructorTester {
 
     private Class<?> cls;
@@ -12,7 +14,6 @@ public final class PrivateConstructorTester {
 
 	public void exercise() throws Exception {
         final Constructor<?> constructor = cls.getDeclaredConstructor();
-        constructor.setAccessible(true);
-        constructor.newInstance();
+        _Reflect.invokeConstructor(constructor);
     }
 }

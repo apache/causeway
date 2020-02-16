@@ -29,6 +29,7 @@ import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -50,6 +51,7 @@ import org.apache.isis.core.commons.internal.base._With;
 import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.commons.internal.functions._Predicates;
 
+import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
@@ -64,9 +66,9 @@ import lombok.experimental.UtilityClass;
  * </p>
  * @since 2.0
  */
+@UtilityClass
 public final class _Reflect {
 
-    private _Reflect() {}
 
     // -- PREDICATES
 
@@ -378,9 +380,11 @@ public final class _Reflect {
 
     public static MethodHandle handleOf(Method method) throws IllegalAccessException {
         if(!method.isAccessible()) { // java9+ to replace by canAccess 
+            /*sonar-ignore-on*/
             method.setAccessible(true);
             MethodHandle mh = MethodHandles.publicLookup().unreflect(method);
             method.setAccessible(false);
+            /*sonar-ignore-off*/
             return mh;
         }
         return MethodHandles.publicLookup().unreflect(method);
@@ -388,9 +392,11 @@ public final class _Reflect {
 
     public static MethodHandle handleOfGetterOn(Field field) throws IllegalAccessException {
         if(!field.isAccessible()) { // java9+ to replace by canAccess
+            /*sonar-ignore-on*/
             field.setAccessible(true);
             MethodHandle mh = MethodHandles.lookup().unreflectGetter(field);
             field.setAccessible(false);
+            /*sonar-ignore-off*/
             return mh;
         }
         return MethodHandles.lookup().unreflectGetter(field);
@@ -406,6 +412,79 @@ public final class _Reflect {
             return pd.getReadMethod();
         }
         return null;
+    }
+    
+    // -- MODIFIERS
+    
+    public static Object getFieldOn(
+            @NonNull final Field field,
+            @NonNull final Object target) throws IllegalArgumentException, IllegalAccessException {
+        
+        /*sonar-ignore-on*/
+        if(field.isAccessible()) {
+            return field.get(target);
+        }
+        try {
+            field.setAccessible(true);
+            return field.get(target);
+        } finally {
+            field.setAccessible(false);
+        }
+        /*sonar-ignore-off*/
+    }
+    
+    public static void setFieldOn(
+            @NonNull final Field field,
+            @NonNull final Object target,
+            final Object fieldValue) throws IllegalArgumentException, IllegalAccessException {
+        
+        /*sonar-ignore-on*/
+        if(field.isAccessible()) {
+            field.set(target, fieldValue);
+            return;
+        }
+        try {
+            field.setAccessible(true);
+            field.set(target, fieldValue);
+        } finally {
+            field.setAccessible(false);
+        }
+        /*sonar-ignore-off*/
+    }
+    
+    public static Object invokeMethodOn(
+            @NonNull final Method method, 
+            @NonNull final Object target, 
+            final Object... args) throws IllegalAccessException, InvocationTargetException {
+        
+        /*sonar-ignore-on*/
+        if(method.isAccessible()) {
+            return method.invoke(target, args);
+        }
+        try {
+            method.setAccessible(true);
+            return method.invoke(target, args);
+        } finally {
+            method.setAccessible(false);
+        }
+        /*sonar-ignore-off*/
+    }
+    
+    public static <T> T invokeConstructor(
+            @NonNull final Constructor<T> constructor, 
+            final Object... args) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        
+        /*sonar-ignore-on*/
+        if(constructor.isAccessible()) {
+            return constructor.newInstance(args);
+        }
+        try {
+            constructor.setAccessible(true);
+            return constructor.newInstance(args);
+        } finally {
+            constructor.setAccessible(false);
+        }
+        /*sonar-ignore-off*/
     }
     
     

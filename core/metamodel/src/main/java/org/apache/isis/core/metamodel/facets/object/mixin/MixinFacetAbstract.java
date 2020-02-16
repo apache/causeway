@@ -24,6 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+import org.apache.isis.core.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
@@ -119,9 +120,8 @@ implements MixinFacet {
         val mixinFields = mixinType.getDeclaredFields();
         for (val mixinField : mixinFields) {
             if(mixinField.getType().isAssignableFrom(constructorType)) {
-                mixinField.setAccessible(true);
                 try {
-                    val holderPojo = mixinField.get(mixinPojo);
+                    val holderPojo = _Reflect.getFieldOn(mixinField, mixinPojo);
                     return holderPojo;
                 } catch (IllegalAccessException e) {
                     if(policy == Policy.FAIL_FAST) {

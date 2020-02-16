@@ -78,21 +78,27 @@ public class TemplateResourceServlet extends HttpServlet {
 
     // -- HELPER
 
-    private void processRequest(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
+    private void processRequest(final HttpServletRequest request, final HttpServletResponse response) {
         final String servletPath = StringExtensions.stripLeadingSlash(request.getServletPath());
         log.debug("request: {}", servletPath);
 
-        val inputStream = ifPresentElseGet(
+        val resourceInputStream = ifPresentElseGet(
                 loadFromFileSystem(request), // try to load from file-system first 
                 ()->loadFromClassPath(servletPath)); // otherwise, try to load from class-path  
 
-        if (inputStream != null) {
+        if (resourceInputStream != null) {
             try {
                 writeContentType(request, response);
-                processContent(inputStream, request, response);
+                processContent(resourceInputStream, request, response);
                 return;
+            } catch (Exception e) {
+                // fall through
             } finally {
-                inputStream.close();    
+                try {
+                    resourceInputStream.close();
+                } catch (IOException e) {
+                    // fall through
+                }    
             }
         }
 

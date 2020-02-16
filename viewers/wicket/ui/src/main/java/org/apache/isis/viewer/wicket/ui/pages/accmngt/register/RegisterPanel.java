@@ -52,6 +52,7 @@ public abstract class RegisterPanel extends PanelBase<UserDetails> {
 
     private static final long serialVersionUID = 1L;
     
+    /*sonar-ignore-on*/
     protected static final String ID_REGISTER_FORM = "registerForm";
     private static final String ID_USERNAME = "username";
     private static final String ID_USERNAME_FORM_GROUP = "usernameFormGroup";
@@ -60,6 +61,7 @@ public abstract class RegisterPanel extends PanelBase<UserDetails> {
     private static final String ID_CONFIRM_PASSWORD = "confirmPassword";
     private static final String ID_CONFIRM_PASSWORD_FORM_GROUP = "confirmPasswordFormGroup";
     private static final String ID_EMAIL = "email";
+    /*sonar-ignore-off*/
 
     private final UserDetails userDetails;
     private final String uuid;

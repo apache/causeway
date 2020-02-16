@@ -64,7 +64,10 @@ final class _Annotations_AttributeMethods {
     private final boolean hasNestedAnnotation;
 
 
-    private _Annotations_AttributeMethods(@Nullable Class<? extends Annotation> annotationType, Method[] attributeMethods) {
+    private _Annotations_AttributeMethods(
+            @Nullable final Class<? extends Annotation> annotationType, 
+            final Method[] attributeMethods) {
+        
         this.annotationType = annotationType;
         this.attributeMethods = attributeMethods;
         this.canThrowTypeNotPresentException = new boolean[attributeMethods.length];
@@ -80,7 +83,7 @@ final class _Annotations_AttributeMethods {
                     (type.isArray() && type.getComponentType().isAnnotation())) {
                 foundNestedAnnotation = true;
             }
-            method.setAccessible(true);
+            //method.setAccessible(true); ... why?
             this.canThrowTypeNotPresentException[i] =
                     type == Class.class ||
                     type == Class[].class ||

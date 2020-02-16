@@ -29,6 +29,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 public class RedirectServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -42,7 +45,12 @@ public class RedirectServlet extends HttpServlet {
     @Override
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
 
-        response.sendRedirect(StringExtensions.combinePath(request.getContextPath(), redirectTo));
+        try {
+            response.sendRedirect(StringExtensions.combinePath(request.getContextPath(), redirectTo));
+        } catch (Exception e) {
+            log.error("failed to redirect request to {}", redirectTo, e);
+        }
+        
     }
 
 }

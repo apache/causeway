@@ -40,6 +40,7 @@ import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.commons.internal.collections._Collections;
 import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.reflection._Reflect;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
@@ -51,6 +52,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class ServiceInjectorLegacy implements ServiceInjector {
 
+    @SuppressWarnings("unused")
     @Inject private IsisConfiguration configuration;
     @Inject private ServiceRegistry serviceRegistry;
     @Inject private InjectorMethodEvaluator injectorMethodEvaluator;
@@ -228,8 +230,7 @@ public class ServiceInjectorLegacy implements ServiceInjector {
 
     private static void invokeInjectorField(final Field field, final Object target, final Object parameter) {
         try {
-            field.setAccessible(true);
-            field.set(target, parameter);
+            _Reflect.setFieldOn(field, target, parameter);
         } catch (final IllegalArgumentException e) {
             throw new MetaModelException(e);
         } catch (final IllegalAccessException e) {

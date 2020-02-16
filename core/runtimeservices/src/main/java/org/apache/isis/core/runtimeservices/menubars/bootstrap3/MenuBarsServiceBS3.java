@@ -280,13 +280,13 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
             final List<ServiceAndAction> serviceActionsForName = serviceActionsByName.get(serviceName);
             for (ServiceAndAction serviceAndAction : serviceActionsForName) {
 
-                if(serviceAndAction.separator && !menuSection.getServiceActions().isEmpty()) {
+                if(serviceAndAction.isPrependSeparator() && !menuSection.getServiceActions().isEmpty()) {
                     menu.getSections().add(menuSection);
                     menuSection = new BS3MenuSection();
                 }
 
-                ObjectAction objectAction = serviceAndAction.objectAction;
-                final String objectType = serviceAndAction.serviceAdapter.getSpecification().getSpecId().asString();
+                ObjectAction objectAction = serviceAndAction.getObjectAction();
+                final String objectType = serviceAndAction.getServiceAdapter().getSpecification().getSpecId().asString();
                 ServiceActionLayoutData action = new ServiceActionLayoutData(objectType, objectAction.getId());
                 action.setNamed(objectAction.getName());
                 menuSection.getServiceActions().add(action);
@@ -317,8 +317,8 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
         }
         // then, any other services (eg due to misspellings, at the end)
         for (ServiceAndAction serviceAction : serviceActions) {
-            if(!serviceNameOrder.contains(serviceAction.serviceName)) {
-                serviceNameOrder.add(serviceAction.serviceName);
+            if(!serviceNameOrder.contains(serviceAction.getServiceName())) {
+                serviceNameOrder.add(serviceAction.getServiceName());
             }
         }
         return serviceNameOrder;
@@ -331,22 +331,23 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
      */
     private static Map<String, List<ServiceAndAction>> groupByServiceName(
             final List<ServiceAndAction> serviceActions) {
-        final Map<String, List<ServiceAndAction>> serviceActionsByName = _Maps.newTreeMap();
+        val serviceActionsByName = _Maps.<String, List<ServiceAndAction>>newTreeMap();
 
         // map available services
         ManagedObject lastServiceAdapter = null;
 
         for (ServiceAndAction serviceAction : serviceActions) {
-            List<ServiceAndAction> serviceActionsForName = serviceActionsByName.get(serviceAction.serviceName);
+            List<ServiceAndAction> serviceActionsForName = 
+                    serviceActionsByName.get(serviceAction.getServiceName());
 
-            final ManagedObject serviceAdapter = serviceAction.serviceAdapter;
+            val serviceAdapter = serviceAction.getServiceAdapter();
 
             if(serviceActionsForName == null) {
                 serviceActionsForName = _Lists.newArrayList();
-                serviceActionsByName.put(serviceAction.serviceName, serviceActionsForName);
+                serviceActionsByName.put(serviceAction.getServiceName(), serviceActionsForName);
             } else {
                 // capture whether this action is from a different service; if so, add a separator before it
-                serviceAction.separator = lastServiceAdapter != serviceAdapter;
+                serviceAction.setPrependSeparator(lastServiceAdapter != serviceAdapter);
             }
             serviceActionsForName.add(serviceAction);
             lastServiceAdapter = serviceAdapter;

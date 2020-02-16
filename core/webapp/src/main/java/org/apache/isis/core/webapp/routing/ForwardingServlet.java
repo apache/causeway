@@ -21,13 +21,16 @@ package org.apache.isis.core.webapp.routing;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 public class ForwardingServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -44,8 +47,15 @@ public class ForwardingServlet extends HttpServlet {
 
     @Override
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
-        final RequestDispatcher requestDispatcher = request.getRequestDispatcher(forwardTo);
-        requestDispatcher.forward(request, response);
+
+        val requestDispatcher = request.getRequestDispatcher(forwardTo);
+        
+        try {
+            requestDispatcher.forward(request, response);
+        } catch (Exception e) {
+            log.error("failed to forward request to {}", forwardTo, e);
+        }
+        
     }
 
 }

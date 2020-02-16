@@ -18,9 +18,13 @@
  */
 package org.apache.isis.testing.unittestsupport.applib.core.jmocking;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Date;
@@ -36,13 +40,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import org.apache.isis.core.commons.internal.context._Context;
+import org.apache.isis.core.commons.internal.reflection._Reflect;
+
+import lombok.val;
 
 class ImposteriserTestUsingCodegenPlugin_Test {
 
@@ -318,15 +319,7 @@ class ImposteriserTestUsingCodegenPlugin_Test {
         imposteriser.imposterise(new VoidAction(), Object.class, AnInterface2.class);
     }
 
-    private static Object invokeMethod(Object object, Method method, Object... args) throws IllegalAccessException, InvocationTargetException {
-        method.setAccessible(true);
-        return method.invoke(object, args);
-    }
-
-
-
     // //////////////////////////////////////
-
 
 
     // See issue JMOCK-256 (Github #36)
@@ -340,8 +333,9 @@ class ImposteriserTestUsingCodegenPlugin_Test {
             }
         };
 
-        Object imposter = imposteriser.imposterise(failIfInvokedAction, Object.class);
-        invokeMethod(imposter, Object.class.getDeclaredMethod("finalize"));
+        val imposter = imposteriser.imposterise(failIfInvokedAction, Object.class);
+        _Reflect.invokeMethodOn(Object.class.getDeclaredMethod("finalize"), imposter);
+        
     }
 
 }

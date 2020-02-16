@@ -21,21 +21,18 @@ package org.apache.isis.core.runtimeservices.menubars.bootstrap3;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+
+@RequiredArgsConstructor
 class ServiceAndAction {
-    final String serviceName;
-    final ManagedObject serviceAdapter;
-    final ObjectAction objectAction;
+    
+    @Getter private final String serviceName;
+    @Getter private final ManagedObject serviceAdapter;
+    @Getter private final ObjectAction objectAction;
 
-    public boolean separator;
-
-    ServiceAndAction(
-            final String serviceName,
-            final ManagedObject serviceAdapter,
-            final ObjectAction objectAction) {
-        this.serviceName = serviceName;
-        this.serviceAdapter = serviceAdapter;
-        this.objectAction = objectAction;
-    }
+    @Getter @Setter private boolean prependSeparator = false;
 
     @Override
     public String toString() {

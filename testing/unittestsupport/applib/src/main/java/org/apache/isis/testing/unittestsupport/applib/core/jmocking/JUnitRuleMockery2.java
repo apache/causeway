@@ -44,6 +44,7 @@ import static org.junit.Assert.fail;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
+import org.apache.isis.core.commons.internal.reflection._Reflect;
 
 import lombok.RequiredArgsConstructor;
 
@@ -178,8 +179,8 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
                     container.addComponent(cutType);
 
                     final Object cut = container.getComponent(cutType);
-                    cutField.setAccessible(true);
-                    cutField.set(target, cut);
+                    _Reflect.setFieldOn(cutField, target, cut);
+                    
 
                 } else {
                     cutType = null;

@@ -27,6 +27,8 @@ import org.jmock.States;
 import org.jmock.auto.Auto;
 import org.jmock.auto.Mock;
 
+import org.apache.isis.core.commons.internal.reflection._Reflect;
+
 class MyMockomatic {
     private final JUnitRuleMockery2 context;
 
@@ -100,8 +102,7 @@ class MyMockomatic {
 
     private void setAutoField(final Field field, final Object object, final Object value, final String description) {
         try {
-            field.setAccessible(true);
-            field.set(object, value);
+            _Reflect.setFieldOn(field, object, value);
         } catch (final IllegalAccessException e) {
             throw new IllegalStateException("cannot " + description, e);
         }

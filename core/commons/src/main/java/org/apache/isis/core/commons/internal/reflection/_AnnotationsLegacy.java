@@ -33,10 +33,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.apache.isis.core.commons.internal.base._Casts;
-import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.base._NullSafe;
-
-import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
+import org.apache.isis.core.commons.internal.collections._Lists;
 
 import lombok.val;
 

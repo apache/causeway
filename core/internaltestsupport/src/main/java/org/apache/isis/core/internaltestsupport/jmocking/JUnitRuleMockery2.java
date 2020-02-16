@@ -18,15 +18,16 @@
  */
 package org.apache.isis.core.internaltestsupport.jmocking;
 
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static org.junit.Assert.fail;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.function.Consumer;
-
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -39,15 +40,13 @@ import org.junit.runners.model.Statement;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 
-import static org.junit.Assert.fail;
-
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
-
-import lombok.RequiredArgsConstructor;
+import org.apache.isis.core.commons.internal.reflection._Reflect;
 
 import junit.framework.AssertionFailedError;
+import lombok.RequiredArgsConstructor;
 
 
 /**
@@ -178,8 +177,8 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
                     container.addComponent(cutType);
 
                     final Object cut = container.getComponent(cutType);
-                    cutField.setAccessible(true);
-                    cutField.set(target, cut);
+                    
+                    _Reflect.setFieldOn(cutField, target, cut);
 
                 } else {
                     cutType = null;
