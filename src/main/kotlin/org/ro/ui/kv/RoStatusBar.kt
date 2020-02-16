@@ -31,7 +31,6 @@ object RoStatusBar {
         navbar.add(nav)
         nav.add(lastError)
         nav.add(userLink)
-        nav.add(urlLink)
     }
 
     fun updateUser(user: String) {
