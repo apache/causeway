@@ -16,14 +16,29 @@ This chapter describes the configuration properties available to configure an Ap
 Apache Isis distinguishes between the application being run in prototyping mode vs running in production mode.
 The framework calls this the "deployment type" (corresponding internally to the `DeploymentType` class).
 
-A similar concept appears in the link:https://wicket.apache.org[Wicket] framework (which is the library with which the xref:vw:ROOT:about.adoc[Wicket viewer] is implemented, of course).
+A similar concept appears in the link:https://wicket.apache.org[Apache Wicket] framework (which is the library with which the xref:vw:ROOT:about.adoc[Wicket viewer] is implemented, of course).
+Wicket's term is the "configuration".
 
-* the term "deployment type" is called the runtime "configuration" by Wicket
-* the _prototyping_ deployment type corresponds to Wicket's _development_ configuration
-* the _production_ deployment type corresponds to Wicket's _deployment_ configuration
+.Wicket equivalent concepts
+[cols="1a,1a", options="header"]
+|===
+
+| Apache Isis +
+deployment type
+| Apache Wicket library +
+configuration
+
+|_prototyping_
+|_development_
+
+|_production_
+|_deployment_
+
+
+|===
 
 By default Apache Isis runs in production mode.
-If running in prototyping mode, then any actions xref:refguide:applib-ant:Action.adoc#restrictto[restricted to] to prototype mode are visible.
+But if configured to run instead in prototyping mode, then any actions xref:refguide:applib-ant:Action.adoc#restrictto[restricted to] to prototype mode are visible.
 In particular, the "Prototyping" menu will appear, containing a number of framework-provided menu services - all restricted to prototyping mode.
 For example, menu items to run in xref:testing:fixtures:about.adoc[fixture scripts] are on this menu.
 
@@ -36,7 +51,7 @@ Prototyping mode can be enabled in a number of ways:
 export PROTOTYPING=true
 ----
 
-* `PRODUCTION` system property
+* `PROTOTYPING` system property
 +
 [source,bash]
 ----
@@ -69,7 +84,7 @@ It is also possible to explicitly specify production mode:
 If (by a combination of mechanisms) both prototyping and production modes are specified, then production mode wins.
 
 
-=== `IsisSystemEnvironment` service
+=== `IsisSystemEnvironment` domain service
 
 Applications can discover the prototyping mode by injecting the xref:refguide:applib-svc:testing/IsisSystemEnvironment.adoc[IsisSystemEnvironment] service.
 
@@ -77,10 +92,74 @@ Applications can discover the prototyping mode by injecting the xref:refguide:ap
 
 == Specifying components
 
-WARNING: TODO: v2 - discuss the Spring bootstrap and IsisModuleXxx.  Perhaps just copy similar material already in the starter apps.
+Components are pluggable parts of the Apache Isis framework that are responsible for the presentation layer, for security, or for persistence.
+Each component corresponds to one or more Maven module(s), and are specified using the Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html[@Import] statements from a top-level class annotated with Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] annotation.
+These are then bootstrapped from a link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/autoconfigure/SpringBootApplication.html[@SpringBootApplication] or link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/test/context/SpringBootTest.html[@SpringBootTest].
 
+For example, the xref:docs:starters:simpleapp.adoc[simpleapp starter app] project is bootstrapped using `SimpleApp`, annotated with `@SpringBootApplication`:
+
+[source,java]
+----
+@SpringBootApplication
+@Import({
+    AppManifest.class,                                          //<!--1-->
+})
+public class SimpleApp
+            extends SpringBootServletInitializer {
+
+    public static void main(String[] args) {
+        IsisPresets.prototyping();                              //<!--2-->
+        SpringApplication.run(
+                new Class[] { SimpleApp.class }, args);
+    }
+}
+----
+<1> references the `AppManifest`, discussed below.
+<2> specifies prototyping mode.
+This enables actions marked for prototyping to become available, useful during the early stages of development.
+
+In turn, the "app manifest" (the name has been retained from Apache Isis v1.x) is the top-level Spring `@Configuration`.
+It looks like this:
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        IsisModuleCoreRuntimeServices.class,                    //<!--1-->
+        IsisModuleSecurityShiro.class,                          //<!--2-->
+        IsisModuleJdoDataNucleus5.class,                        //<!--3-->
+        IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,     //<!--4-->
+        IsisModuleViewerWicketViewer.class,                     //<!--5-->
+        ...
+        ApplicationModule.class,                                //<!--6-->
+        ...
+})
+public class AppManifest {
+}
+----
+<1> Mandatory - specifies the core of the Apache Isis framework
+<2> Enables the Shiro security mechanism.
+There are several security implementations, precisely one must be selected
+<3> Enables JDO/DataNucleus for persistence.
+Optional (though if omitted then only xref:userguide:fun:building-blocks/types-of-domain-objects.adoc[view models] may be used, with hand-rolled persistence).
+<4> Enables the xref:vro:ROOT:about.adoc[Restful Objects viewer] (ie REST API).
+<5> Enables the xref:vw:ROOT:about.adoc[Wicket viewer]
+<6> References the application's module(s), in this case just the one, `ApplicationModule`. +
+
+All of the components available are named in the form`IsisModuleXxx`, so they are easy to discover.
+
+NOTE: Components currently do _not_ use Spring Boot's auto-configuration capabilities.
+That means that it's not enough to just add the appropriate Maven module to the classpath; its corresponding `IsisModuleXxx` must be referenced using an `@Import`.
 
 
 == Configuration Properties
 
-WARNING: TODO: v2 - quick intro to the subsections that follow...
+The core framework has a large number of configuration properties, as do the various xref:about.adoc#specifying-components[components].
+For that matter, so do some of the xref:subdomains:ROOT:about.adoc[subdomain] libraries, bounded context xref:mappings:ROOT:about.adoc[mapping] libraries and xref:valuetypes:ROOT:about.adoc[value type] libraries.
+
+The remainder of this guide lists the various configuration properties available, broken out into logical sections.
+
+=== `IsisConfiguration` domain service
+
+Applications can discover the current configuration properties by injecting the xref:refguide:applib-svc:core-domain-api/IsisConfiguration.adoc[`IsisConfiguration`] domain service.

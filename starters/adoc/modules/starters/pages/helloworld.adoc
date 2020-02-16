@@ -327,7 +327,7 @@ public class AppManifest {
 ----
 <1> Mandatory - specifies the core of the Apache Isis framework
 <2> Enables the Shiro security mechanism.
-There are several implementations, precisely one must be selected
+There are several security implementations, precisely one must be selected
 <3> Enables JDO/DataNucleus for persistence.
 Optional (though if omitted then only xref:userguide:fun:building-blocks/types-of-domain-objects.adoc[view models] may be used, with hand-rolled persistence).
 <4> Enables the xref:vro:ROOT:about.adoc[Restful Objects viewer] (ie REST API).
