@@ -1,5 +1,6 @@
 package org.ro.ui.kv
 
+import org.ro.core.event.EventStore
 import org.ro.to.mb.Menubars
 import org.ro.ui.ExportAlert
 import org.ro.ui.IconManager
@@ -48,18 +49,19 @@ object RoMenuBar : SimplePanel() {
                 LoginPrompt().open(at)
             }
 
+            val sampleTitle = "History"
+            ddLink(sampleTitle,
+                    icon = IconManager.find(sampleTitle)
+            ).onClick {
+                val model = EventStore.log
+                UiManager.add("Log Entries", EventLogTable(model))
+            }
+
             val exportTitle = "Export Events for Replay"
             ddLink(exportTitle,
                     icon = IconManager.find("Export")
             ).onClick {
                 ExportAlert().open()
-            }
-            val sampleTitle = "Image Sample"
-            ddLink(sampleTitle,
-                    icon = IconManager.find(sampleTitle)
-            ).onClick {
-                val panel = PlantumlPanel() as SimplePanel
-                UiManager.add(sampleTitle, panel)
             }
         }
     }

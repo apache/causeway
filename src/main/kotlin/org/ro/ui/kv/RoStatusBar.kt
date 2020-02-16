@@ -1,10 +1,7 @@
 package org.ro.ui
 
 import org.ro.core.event.EventState
-import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
-import org.ro.ui.kv.EventLogTable
-import org.ro.ui.kv.UiManager
 import pl.treksoft.kvision.core.Background
 import pl.treksoft.kvision.core.Col
 import pl.treksoft.kvision.core.CssSize
@@ -24,10 +21,6 @@ object RoStatusBar {
         width = CssSize(100, UNIT.perc)
     }
     private val nav = Nav(rightAlign = true)
-    private val urlLink = nav.navLink("", icon = "fas fa-history").onClick {
-        val model = EventStore.log
-        UiManager.add("Log Entries", EventLogTable(model))
-    }
     private val userLink = nav.navLink("", icon = "far fa-user")
     private val lastError: Button = Button(text = "OK", style = ButtonStyle.SUCCESS).apply {
         padding = CssSize(-16, UNIT.px)
@@ -47,9 +40,7 @@ object RoStatusBar {
     }
 
     fun update(le: LogEntry?) {
-        val url = le?.title!!
-        urlLink.setAttribute(name = "title", value = url)
-        when (le.state) {
+        when (le?.state) {
             EventState.ERROR -> turnRed(le)
             EventState.MISSING -> turnRed(le)
             else -> turnGreen(nav)

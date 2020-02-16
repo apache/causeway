@@ -6,8 +6,7 @@ See kroviz.css
 
 Colours and dimensions can be influenced here, as well as images:
 
-```
-
+```css
 .text-danger {
     color: red !important;
 }
@@ -45,7 +44,6 @@ div {
     background-size: contain, cover;
     background-image : url("https://svn.apache.org/repos/asf/comdev/project-logos/originals/isis.svg");
 }
-
 ```  
 
 ## Rendering
@@ -65,3 +63,13 @@ it is reasonable to render it as horizontal bar on a timeline. If there is a lis
 The number of renderers included with kroviz is limited and there isn't yet an example of selecting one of possibly many applicale renderers, but there is room for impovement and creativity.
 Such renderes should as well have links leading back to 'plain old object' renderings.
 
+## Sneak Preview (Demo)
+* Burger Menu -> Connect, OK
+* Primitives -> Temporals
+* Primitives -> Blob
+* _Burger Menu -> History_: Sort, Move Column, Filter
+* History -> Details Menu, Visualize
+- Wiki Button
+- add History back to BurgerMenu
+- remove Sample Image
+- Button In StatusLine
