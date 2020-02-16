@@ -16,24 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.blob;
+package org.apache.isis.testdomain.model.actnsemantics;
+
+import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.ActionLayout.Position;
-import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.services.factory.FactoryService;
 
-import lombok.RequiredArgsConstructor;
+import lombok.val;
 
-@Action(associateWith = "logo")
-@ActionLayout(position = Position.PANEL)
-@RequiredArgsConstructor
-public class BlobDemo_downloadLogo  {
+@DomainService(nature=NatureOfService.VIEW, objectType = "smoketests.BlobDemoMenu")
+@DomainObjectLayout(named="Blob Demo Menu")
+public class BlobDemoMenu {
 
-    private final BlobDemo holder;
+    @Inject private FactoryService factoryService;
 
-    public Blob act() {
-        return holder.getLogo();
+    @Action
+    @ActionLayout(cssClassFa="fa-cloud")
+    public BlobDemo blobs(){
+        val demo = factoryService.viewModel(BlobDemo.class);
+        demo.initDefaults();  
+        return demo;
     }
 
 }

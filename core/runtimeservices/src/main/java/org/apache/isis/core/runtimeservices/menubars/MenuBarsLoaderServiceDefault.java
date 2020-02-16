@@ -19,14 +19,10 @@
 package org.apache.isis.core.runtimeservices.menubars;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
@@ -81,25 +77,31 @@ public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
 
         val xmlString = loadMenubarsLayoutResource(menubarsLayoutXmlResource);
         if(xmlString == null) {
-            warnNotFound();
+            warnNotFound(menubarsLayoutXmlResource);
             return null;
         }
 
         try {
             return jaxbService.fromXml(BS3MenuBars.class, xmlString);
         } catch (Exception e) {
-            severeCannotLoad(e);
+            severeCannotLoad(menubarsLayoutXmlResource, e);
             return null;
         }
     }
 
-    private String loadMenubarsLayoutResource(AbstractResource menubarsLayoutResource) {
+    private String loadMenubarsLayoutResource(final AbstractResource menubarsLayoutXmlResource) {
         try {
+
+            if(!menubarsLayoutXmlResource.exists()) {
+                return null;
+            }
+            
+            val source = menubarsLayoutXmlResource.getInputStream(); // throws if not found
             final String xml = 
-                    _Strings.read(menubarsLayoutResource.getInputStream(), StandardCharsets.UTF_8); 
+                    _Strings.read(source, StandardCharsets.UTF_8); 
             return xml;
         } catch (Exception e) {
-            severeCannotLoad(e);
+            severeCannotLoad(menubarsLayoutXmlResource, e);
             return null;
         }
 
@@ -109,22 +111,23 @@ public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
 
     private boolean warnedOnce = false;
 
-    private void warnNotFound() {
+    private void warnNotFound(AbstractResource menubarsLayoutXmlResource) {
         if(warnedOnce) {
             return;
         }
 
         log.warn( 
-                String.format("'%s': could not find readable resource for the Menubars-Layout.",
-                        WebAppContextPath.class.getName()));
+                "{}: could not find readable resource {} for the Menubars-Layout.",
+                        WebAppContextPath.class.getName(),
+                        menubarsLayoutXmlResource);
         warnedOnce = true; 
     }
 
-    private void severeCannotLoad(Exception cause) {
+    private void severeCannotLoad(AbstractResource menubarsLayoutXmlResource, Exception cause) {
 
-        log.error(
-                String.format("'%s': could not find readable resource for the Menubars-Layout.",
-                        WebAppContextPath.class.getName()),
+        log.error("{}: could not find readable resource {} for the Menubars-Layout.",
+                        WebAppContextPath.class.getName(),
+                        menubarsLayoutXmlResource,
                 cause);
     }
 }

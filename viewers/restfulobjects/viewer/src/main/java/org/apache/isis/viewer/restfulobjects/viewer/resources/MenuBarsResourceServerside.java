@@ -81,7 +81,12 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
     }
 
     void addLinksForServiceActions(final ResourceContext resourceContext, final MenuBars menuBars) {
-        menuBars.visit(new MenuBars.Visitor() {
+        menuBars.visit(linksForServiceActionsAddingVisitor(resourceContext));
+    }
+    
+    // public ... for testing
+    public static MenuBars.Visitor linksForServiceActionsAddingVisitor(final ResourceContext resourceContext) {
+        return new MenuBars.Visitor() {
             @Override
             public void visit(final ServiceActionLayoutData actionLayoutData) {
                 final String objectType = actionLayoutData.getObjectType();
@@ -95,7 +100,7 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
                         RepresentationType.OBJECT_ACTION.getJsonMediaType().toString());
                 actionLayoutData.setLink(link);
             }
-        });
+        };
     }
 
     @Override

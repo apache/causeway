@@ -16,24 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.blob;
+package org.apache.isis.testdomain.model.actnsemantics;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.ActionLayout.Position;
-import org.apache.isis.applib.value.Blob;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-import lombok.RequiredArgsConstructor;
+import org.apache.isis.incubator.model.metamodel.IsisModuleIncModelMetaModel;
 
-@Action(associateWith = "logo")
-@ActionLayout(position = Position.PANEL)
-@RequiredArgsConstructor
-public class BlobDemo_downloadLogo  {
-
-    private final BlobDemo holder;
-
-    public Blob act() {
-        return holder.getLogo();
-    }
+@Configuration
+@Import({
+    IsisModuleIncModelMetaModel.class
+})
+@ComponentScan(
+        basePackageClasses= {               
+                Configuration_usingActionSemantics.class
+        })
+public class Configuration_usingActionSemantics {
 
 }

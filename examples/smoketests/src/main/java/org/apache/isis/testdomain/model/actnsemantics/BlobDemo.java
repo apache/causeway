@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.blob;
+package org.apache.isis.testdomain.model.actnsemantics;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -36,27 +36,23 @@ import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.core.commons.internal.base._Bytes;
 import org.apache.isis.core.commons.internal.resources._Resources;
 
-import demoapp.utils.DemoStub;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@XmlRootElement(name = "Demo")
+@XmlRootElement(name = "BlobDemo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.Blob", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, objectType="smoketests.BlobDemo")
 @Log4j2
-public class BlobDemo extends DemoStub {
+public class BlobDemo {
 
-    @Override
     public void initDefaults() {
-
-        log.info("BlobDemo::initDefaults");
 
         try {
             val bytes = _Bytes.of(_Resources.load(BlobDemo.class, "isis-logo-568x286.png"));
-            logo = Blob.of("isis-logo-568x286", CommonMimeType.PNG, bytes);
+            logo = Blob.of("isis-logo-56x64", CommonMimeType.PNG, bytes);
         } catch (Exception e) {
             log.error("failed to create Blob from image resource", e);
         }
@@ -65,18 +61,9 @@ public class BlobDemo extends DemoStub {
 
     // -- EDITABLE
 
-    @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
+    @Property(editing=Editing.ENABLED)
     @PropertyLayout
     @XmlElement @XmlJavaTypeAdapter(JaxbAdapters.BlobAdapter.class)
     @Getter @Setter private Blob logo;
-
-    // -- READONLY
-
-    //    @Property(editing=Editing.DISABLED)
-    //    @XmlElement @Getter @Setter private Blob blobReadonly;
-    //    
-    //    @Property(editing=Editing.DISABLED)
-    //    @PropertyLayout(multiLine=3)
-    //    @XmlElement @Getter @Setter private String stringMultilineReadonly;
-
+    
 }
