@@ -5,7 +5,7 @@
 *  License: MIT License
 *  Website: https://github.com/mouse0270/bootstrap-growl
 */
-;(function ( $, window, document, undefined ) {
+;(function ( $, window, document ) {
 	// Create the defaults once
 	var pluginName = "growl",
 		dataKey = "plugin_" + pluginName,

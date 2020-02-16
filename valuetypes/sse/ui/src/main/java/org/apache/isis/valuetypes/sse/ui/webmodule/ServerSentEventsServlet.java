@@ -18,6 +18,8 @@
  */
 package org.apache.isis.valuetypes.sse.ui.webmodule;
 
+import static org.apache.isis.core.commons.internal.base._With.requires;
+
 import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.ForkJoinPool;
@@ -36,8 +38,6 @@ import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.valuetypes.sse.applib.service.SseChannel;
 import org.apache.isis.valuetypes.sse.applib.service.SseService;
 import org.apache.isis.valuetypes.sse.applib.value.ListeningMarkup;
-
-import static org.apache.isis.core.commons.internal.base._With.requires;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -82,23 +82,42 @@ public class ServerSentEventsServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         //response.setHeader("Access-Control-Allow-Origin", "*"); // not secure, can be used for debugging
         response.setHeader("Cache-Control", "no-cache,no-store");
-        flushBuffer(response);
+        
+        if(!flushBuffer(response)) {
+            return;
+        }
+        
+        asyncContext(request)
+        .ifPresent(asyncContext->{
 
-        val asyncContext = request.startAsync();
-
-        // javac explicitly requires curly-braces here (to tell it we want a Runnable)
-        ForkJoinPool.commonPool().submit(()->{fork(asyncContext, eventStream);});
+            // javac explicitly requires curly-braces here (to tell it we want a Runnable)
+            ForkJoinPool.commonPool().submit(()->{
+                fork(asyncContext, eventStream);
+            });
+            
+        });
 
     }
 
     // -- HELPER
 
-    private void flushBuffer(HttpServletResponse response) {
+    private Optional<AsyncContext> asyncContext(HttpServletRequest request) {
+        try {
+            return Optional.of(request.startAsync());
+        } catch (IllegalStateException e) {
+            log.warn("failed to put request into asynchronous mode", e);
+            return Optional.empty();
+        }
+    }
+
+    private boolean flushBuffer(HttpServletResponse response) {
         try {
             response.flushBuffer();
+            return true;
         } catch (IOException e) {
             log.warn("failed to flush response buffer", e);
         }
+        return false;
     }
 
     private void fork(final AsyncContext asyncContext, final SseChannel eventStream) {

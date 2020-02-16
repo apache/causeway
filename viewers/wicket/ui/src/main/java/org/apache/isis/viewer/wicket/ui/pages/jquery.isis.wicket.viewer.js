@@ -127,7 +127,7 @@ $(function() {
     });
 
     Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_COMPLETE, function(jqEvent, attributes, jqXHR, status) {
-        isisHideVeil(attributes, jqXHR, status);
+        isisHideVeil(/*attributes, jqXHR, status*/);
     });
     
 

@@ -15,7 +15,7 @@ $.extend($.fn, {
 
         // Handle different call patterns
         if ($.isFunction(type))
-            fn2 = fn, fn = type, type = undefined;
+            fn2 = fn; fn = type; type = undefined;
 
         // See if Live Query already exists
         $.each( $.livequery.queries, function(i, query) {
@@ -34,7 +34,7 @@ $.extend($.fn, {
         // Run it immediately for the first time
         q.run();
 
-        // Contnue the chain
+        // Continue the chain
         return this;
     },
 
@@ -43,7 +43,7 @@ $.extend($.fn, {
 
         // Handle different call patterns
         if ($.isFunction(type))
-            fn2 = fn, fn = type, type = undefined;
+            fn2 = fn; fn = type; type = undefined;
 
         // Find the Live Query based on arguments and stop it
         $.each( $.livequery.queries, function(i, query) {
