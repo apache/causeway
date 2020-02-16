@@ -32,7 +32,7 @@ else
   WC=$(git status --porcelain | grep examples | wc -l)
   if [ "$WC" -ne "0" ]; then
     git status --porcelain
-    echo "Some examples are out of date; run sync-adoc.sh and commit, then try again" >&2
+    echo "Some examples are out of date; commit changes and then try again" >&2
     exit 1
   fi
 fi

@@ -27,10 +27,8 @@ import java.util.Map;
 
 import javax.xml.bind.SchemaOutputResolver;
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
@@ -41,6 +39,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import org.apache.isis.core.commons.internal.codec._DocumentFactories;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Maps;
 
@@ -74,14 +73,14 @@ class CatalogingSchemaOutputResolver extends SchemaOutputResolver {
         String xsd = streamResult.asString();
 
         try {
-            final DocumentBuilderFactory docBuildFactory = DocumentBuilderFactory.newInstance();
-            final DocumentBuilder parser = docBuildFactory.newDocumentBuilder();
+            
+            final DocumentBuilder parser = _DocumentFactories.documentBuilder();
             final Document document = parser.parse(new InputSource(new StringReader(xsd)));
 
             final Element el = document.getDocumentElement();
             replaceCommonSchemaLocationIfAny(el);
 
-            final Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            final Transformer transformer = _DocumentFactories.transformer();
             final StringWriter writer = new StringWriter();
             transformer.transform(new DOMSource(document), new StreamResult(writer));
             xsd = writer.toString();

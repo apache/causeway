@@ -51,6 +51,7 @@ import org.apache.isis.schema.ixn.v2.PropertyEditDto;
 import org.apache.isis.schema.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Represents an action invocation or property modification, resulting in some state change of the system.  It captures
@@ -77,6 +78,7 @@ import lombok.val;
  * </p>
  *
  */
+@Log4j2
 public class Interaction implements HasUniqueId {
 
     // -- transactionId (property)
@@ -181,7 +183,7 @@ public class Interaction implements HasUniqueId {
                 // we rather print all of them, no matter whether recognized or not later on
                 // examples are IllegalArgument- or NullPointer- exceptions being swallowed when using the
                 // WrapperFactory utilizing async calls
-                ex.printStackTrace();
+                log.error("failed to execute an interaction", ex);
                 
                 // just because an exception has thrown, does not mean it is that significant; 
                 // it could be that it is recognized by an ExceptionRecognizer and is not severe 

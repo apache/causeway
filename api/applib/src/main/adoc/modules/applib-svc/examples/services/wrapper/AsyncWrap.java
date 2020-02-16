@@ -18,12 +18,12 @@
  */
 package org.apache.isis.applib.services.wrapper;
 
-import java.util.EnumSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.function.Consumer;
 
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
+import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 
 /**
  * Binds to a domain object, to prepare for type-safe asynchronous action invocation.
@@ -97,7 +97,7 @@ public interface AsyncWrap<T> {
     Consumer<Exception> getExceptionHandler();
     AsyncWrap<T> withExceptionHandler(Consumer<Exception> handler);
     
-    EnumSet<ExecutionMode> getExecutionMode();
+    ImmutableEnumSet<ExecutionMode> getExecutionMode();
     
     // -- INVOCATION (WITH RETURN VALUE)
     

@@ -168,7 +168,7 @@ public interface WrapperFactory {
      * Otherwise, will do all the validations (raise exceptions as required
      * etc.), but doesn't modify the model.
      */
-    <T> T wrap(T domainObject, EnumSet<ExecutionMode> mode);
+    <T> T wrap(T domainObject, ImmutableEnumSet<ExecutionMode> mode);
 
 
     /**
@@ -203,7 +203,7 @@ public interface WrapperFactory {
      * 
      * @since 2.0
      */
-    <T> AsyncWrap<T> async(T domainObject, EnumSet<ExecutionMode> mode);
+    <T> AsyncWrap<T> async(T domainObject, ImmutableEnumSet<ExecutionMode> mode);
     
     /**
      * Shortcut for {@link #async(Object, EnumSet)} using execution mode 
@@ -228,7 +228,7 @@ public interface WrapperFactory {
      * 
      * @since 2.0
      */
-    <T> AsyncWrap<T> asyncMixin(Class<T> mixinClass, Object mixedIn, EnumSet<ExecutionMode> mode);
+    <T> AsyncWrap<T> asyncMixin(Class<T> mixinClass, Object mixedIn, ImmutableEnumSet<ExecutionMode> mode);
     
     /**
      * Shortcut for {@link #asyncMixin(Class, Object, EnumSet)} using execution mode 
