@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collections;
@@ -33,6 +34,7 @@ import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.commons.internal.assertions._Assert;
 import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
@@ -49,8 +51,10 @@ import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.p
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @RequiredArgsConstructor(staticName = "ofEventService")
+@Log4j2
 public class DomainEventHelper {
 
     public static DomainEventHelper ofServiceRegistry(final ServiceRegistry serviceRegistry) {
@@ -171,7 +175,7 @@ public class DomainEventHelper {
         
         for (val constructor : noArgConstructors) {
             
-            final Object event = constructor.newInstance();
+            final Object event = invokeConstructor(constructor);
             final ActionDomainEvent<S> ade = uncheckedCast(event);
             
             ade.initSource(source);
@@ -190,7 +194,7 @@ public class DomainEventHelper {
                         );
         
         for (val constructor : updateEventConstructors) {
-            val event = constructor.newInstance(source, identifier, arguments);
+            val event = invokeConstructor(constructor, source, identifier, arguments);
             return uncheckedCast(event);
         }
         
@@ -265,7 +269,7 @@ public class DomainEventHelper {
         val noArgConstructors = constructors.filter(paramCount(0));
         
         for (val constructor : noArgConstructors) {
-            final Object event = constructor.newInstance();
+            final Object event = invokeConstructor(constructor);
             final PropertyDomainEvent<S, T> pde = uncheckedCast(event);
             pde.initSource(source);
             pde.setIdentifier(identifier);
@@ -284,7 +288,7 @@ public class DomainEventHelper {
                         );
         
         for (val constructor : updateEventConstructors) {
-            val event = constructor.newInstance(source, identifier, oldValue, newValue);
+            val event = invokeConstructor(constructor, source, identifier, oldValue, newValue);
             return uncheckedCast(event);
         }
 
@@ -348,7 +352,7 @@ public class DomainEventHelper {
         val noArgConstructors = constructors.filter(paramCount(0));
         
         for (val constructor : noArgConstructors) {
-            final Object event = constructor.newInstance();
+            final Object event = invokeConstructor(constructor);
             final CollectionDomainEvent<S, T> cde = uncheckedCast(event);
 
             cde.initSource(source);
@@ -369,7 +373,7 @@ public class DomainEventHelper {
                         );
         
         for (val constructor : updateEventConstructors) {
-            val event = constructor.newInstance(source, identifier, of, value);
+            val event = invokeConstructor(constructor, source, identifier, of, value);
             return uncheckedCast(event);
         }
         
@@ -387,7 +391,7 @@ public class DomainEventHelper {
                                 .and(paramAssignableFromValue(2, value))
                                 );
                 for (val constructor : eventConstructors) {
-                    val event = constructor.newInstance(source, identifier, value);
+                    val event = invokeConstructor(constructor, source, identifier, value);
                     return uncheckedCast(event);
                 }
             }
@@ -397,5 +401,18 @@ public class DomainEventHelper {
         throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + Identifier.class.getName() + ", java.lang.Object)");
     }
 
+    private static <T> T invokeConstructor(
+            @NonNull final Constructor<T> constructor, 
+            final Object... args){
+        
+        try {
+            return constructor.newInstance(args);
+        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+                | InvocationTargetException e) {
+            throw _Exceptions.unrecoverableFormatted(
+                    "failed to invoke constructor %s", constructor, e);
+        }
+    }
+    
 
 }
