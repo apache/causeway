@@ -4,7 +4,7 @@
 The Demo app provides an introduction to some of the features and components available in Apache Isis.
 It is bundled as a Docker image (link:https://hub.docker.com/r/apacheisis/demo-springboot/tags/[apacheisis/demo-springboot]) on Docker Hub.
 
-The app allows you to allow you to learn the very basics with a minimum of hassle.
+The app allows you to learn the very basics with a minimum of hassle.
 You can also use it to discover some of the more advanced features that the framework has to offer.
 
 
