@@ -50,6 +50,10 @@ public class MeService {
 
     public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<MeService> {}
 
+    @Inject private ApplicationUserRepository applicationUserRepository;
+    @Inject private UserService userService;
+    @Inject private QueryResultsCache queryResultsCache;
+    
     // -- iconName
     public String iconName() {
         return "applicationUser";
@@ -85,10 +89,7 @@ public class MeService {
         return applicationUserRepository.findOrCreateUserByUsername(myName);
     }
 
-    // -- DEPENDENCIES
-    @Inject ApplicationUserRepository applicationUserRepository;
-    @Inject UserService userService;
-    @Inject QueryResultsCache queryResultsCache;
+
 
 
 }

@@ -30,12 +30,14 @@ import org.springframework.stereotype.Repository;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.query.QueryDefault;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
+import org.apache.isis.extensions.secman.model.dom.tenancy.ApplicationTenancy_users;
 
 import lombok.NonNull;
 import lombok.val;
@@ -46,6 +48,7 @@ public class ApplicationTenancyRepository
 implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository {
 
     @Inject private ApplicationTenancyFactory applicationTenancyFactory;
+    @Inject private FactoryService factory;
     @Inject private RepositoryService repository;
     @Inject private QueryResultsCache queryResultsCache;
     
@@ -140,7 +143,8 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
     public Collection<org.apache.isis.extensions.secman.api.user.ApplicationUser> getUsers(
             @NonNull final org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy genericTenancy) {
         val tenancy = _Casts.<ApplicationTenancy>uncheckedCast(genericTenancy);
-        return tenancy.getUsers()
+        return factory.mixin(ApplicationTenancy_users.class, tenancy)
+                .col()
                 .stream()
                 .map(org.apache.isis.extensions.secman.api.user.ApplicationUser.class::cast)
                 .collect(_Sets.toUnmodifiableSorted());

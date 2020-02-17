@@ -22,6 +22,7 @@ import java.util.SortedSet;
 
 import org.apache.isis.applib.services.HasUsername;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValueSet;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.tenancy.HasAtPath;
@@ -46,6 +47,21 @@ public interface ApplicationUser extends HasUsername, HasAtPath {
     
     public static class AddRoleDomainEvent extends ActionDomainEvent {}
     public static class UpdateAtPathDomainEvent extends ActionDomainEvent {}
+    public static class UpdateUsernameDomainEvent extends ActionDomainEvent {}
+    public static class UpdateNameDomainEvent extends ActionDomainEvent {}
+    public static class UpdateEmailAddressDomainEvent extends ActionDomainEvent {}
+    public static class UpdatePhoneNumberDomainEvent extends ActionDomainEvent {}
+    public static class UpdateFaxNumberDomainEvent extends ActionDomainEvent {}
+    public static class UpdateAccountTypeDomainEvent extends ActionDomainEvent {}
+    public static class UnlockDomainEvent extends ActionDomainEvent {}
+    public static class LockDomainEvent extends ActionDomainEvent {}
+    public static class UpdatePasswordDomainEvent extends ActionDomainEvent {}
+    public static class ResetPasswordDomainEvent extends ActionDomainEvent {}
+    public static class RemoveRoleDomainEvent extends ActionDomainEvent {}
+    public static class DeleteDomainEvent extends ActionDomainEvent {}
+    public static class NewDelegateUserDomainEvent extends ActionDomainEvent {}
+    public static class NewLocalUserDomainEvent extends ActionDomainEvent {}
+    public static class UserDuplicateDomainEvent extends ActionDomainEvent {}
 
     // -- MODEL
     
@@ -54,14 +70,56 @@ public interface ApplicationUser extends HasUsername, HasAtPath {
     String getEncryptedPassword();
 
     AccountType getAccountType();
+    void setAccountType(AccountType accountType);
 
     ApplicationPermissionValueSet getPermissionSet();
 
     SortedSet<? extends ApplicationRole> getRoles();
 
     ApplicationUserStatus getStatus();
+    void setStatus(ApplicationUserStatus disabled);
 
     void setAtPath(String atPath);
+
+    String getEmailAddress();
+    void setEmailAddress(String emailAddress);
+
+    String getFaxNumber();
+    void setFaxNumber(String faxNumber);
+
+    String getFamilyName();
+    void setFamilyName(String familyName);
+
+    String getGivenName();
+    void setGivenName(String givenName);
+
+    String getKnownAs();
+    void setKnownAs(String knownAs);
+
+    String getPhoneNumber();
+    void setPhoneNumber(String phoneNumber);
+
+    void setUsername(String username);
+    
+    void setEncryptedPassword(String encryptedPassword);
+
+    boolean isForSelfOrRunAsAdministrator();
+
+    boolean isHasPassword();
+    
+    // -- VALIDATION
+    
+    default boolean isDelegateAccountOrPasswordEncryptionNotAvailable(
+            final PasswordEncryptionService passwordEncryptionService) {
+        return !isLocalAccountWithPasswordEncryptionAvailable(passwordEncryptionService);
+    }
+
+    default boolean isLocalAccountWithPasswordEncryptionAvailable(
+            final PasswordEncryptionService passwordEncryptionService) {
+        return getAccountType() == AccountType.LOCAL && passwordEncryptionService != null;
+    }
+
+
     
 
 }

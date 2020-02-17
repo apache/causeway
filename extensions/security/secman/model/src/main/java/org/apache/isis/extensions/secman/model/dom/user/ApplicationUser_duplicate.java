@@ -16,49 +16,49 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.role;
-
-import java.util.Collection;
-import java.util.List;
+package org.apache.isis.extensions.secman.model.dom.user;
 
 import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
-import org.apache.isis.extensions.secman.api.role.ApplicationRole.AddUserDomainEvent;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.ApplicationUser.UserDuplicateDomainEvent;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = AddUserDomainEvent.class, 
-        associateWith = "users",
-        associateWithSequence = "1")
-@ActionLayout(named="Add")
+        domainEvent = UserDuplicateDomainEvent.class 
+        )
 @RequiredArgsConstructor
-public class ApplicationRole_addUser {
-    
-    @Inject private ApplicationRoleRepository applicationRoleRepository;
+public class ApplicationUser_duplicate {
+
     @Inject private ApplicationUserRepository applicationUserRepository;
+    @Inject private ApplicationRoleRepository applicationRoleRepository;
+
+    private final ApplicationUser holder;
+
+    @Model
+    public ApplicationUser act(
+            @Parameter(optionality = Optionality.MANDATORY)
+            final String username,
+            @Parameter(optionality = Optionality.OPTIONAL)
+            final String emailAddress) {
+        
+        final ApplicationUser user = applicationUserRepository.newUser(username, holder.getAccountType());
+        user.setStatus(ApplicationUserStatus.DISABLED);
+        user.setEmailAddress(emailAddress);
+        
+        for (ApplicationRole role : holder.getRoles()) {
+            applicationRoleRepository.addRoleToUser(role, user);
+        }
+        return user;
+    }
     
-    private final ApplicationRole holder;
-
-    @Model
-    public ApplicationRole act(final ApplicationUser applicationUser) {
-        applicationRoleRepository.addRoleToUser(holder, applicationUser);
-        return holder;
-    }
-
-    @Model
-    public List<ApplicationUser> autoComplete0Act(final String search) {
-        final Collection<ApplicationUser> matchingSearch = applicationUserRepository.find(search);
-        final List<ApplicationUser> list = _Lists.newArrayList(matchingSearch);
-        list.removeAll(applicationRoleRepository.getUsers(holder));
-        return list;
-    }
 }

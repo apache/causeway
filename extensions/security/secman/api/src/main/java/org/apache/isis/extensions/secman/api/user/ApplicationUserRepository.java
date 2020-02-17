@@ -21,7 +21,6 @@ package org.apache.isis.extensions.secman.api.user;
 import java.util.Collection;
 
 import org.apache.isis.applib.value.Password;
-import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 
 public interface ApplicationUserRepository {
 
@@ -33,17 +32,17 @@ public interface ApplicationUserRepository {
 
     Collection<ApplicationUser> find(String search);
 
-    String validateNewLocalUser(String username, Password password, Password passwordRepeat,
-            ApplicationRole initialRole, Boolean enabled, String emailAddress);
-
-    ApplicationUser newLocalUser(String username, Password password, Password passwordRepeat,
-            ApplicationRole initialRole, Boolean enabled, String emailAddress);
-
-    ApplicationUser newDelegateUser(String username, ApplicationRole initialRole, Boolean enabled);
-
+    ApplicationUser newUser(String username, AccountType accountType);
+    ApplicationUser newLocalUser(String username, Password password, ApplicationUserStatus status);
+    ApplicationUser newDelegateUser(String username, ApplicationUserStatus status);
+    
     void enable(ApplicationUser svenUser);
     void disable(ApplicationUser svenUser);
 
     boolean isAdminUser(ApplicationUser user);
+
+    Collection<? extends ApplicationUser> findByAtPath(String atPath);
+
+    
 
 }

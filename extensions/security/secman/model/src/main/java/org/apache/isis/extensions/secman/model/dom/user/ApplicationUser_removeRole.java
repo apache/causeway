@@ -16,49 +16,62 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.role;
+package org.apache.isis.extensions.secman.model.dom.user;
 
 import java.util.Collection;
-import java.util.List;
 
 import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
-import org.apache.isis.extensions.secman.api.role.ApplicationRole.AddUserDomainEvent;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.ApplicationUser.RemoveRoleDomainEvent;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = AddUserDomainEvent.class, 
-        associateWith = "users",
-        associateWithSequence = "1")
-@ActionLayout(named="Add")
+        domainEvent = RemoveRoleDomainEvent.class, 
+        associateWith = "roles",
+        associateWithSequence = "2")
+@ActionLayout(
+        named="Remove"
+        )
 @RequiredArgsConstructor
-public class ApplicationRole_addUser {
+public class ApplicationUser_removeRole {
     
     @Inject private ApplicationRoleRepository applicationRoleRepository;
     @Inject private ApplicationUserRepository applicationUserRepository;
     
-    private final ApplicationRole holder;
+    private final ApplicationUser holder;
 
     @Model
-    public ApplicationRole act(final ApplicationUser applicationUser) {
-        applicationRoleRepository.addRoleToUser(holder, applicationUser);
+    public ApplicationUser act(final ApplicationRole role) {
+        applicationRoleRepository.removeRoleFromUser(role, holder);
         return holder;
     }
 
     @Model
-    public List<ApplicationUser> autoComplete0Act(final String search) {
-        final Collection<ApplicationUser> matchingSearch = applicationUserRepository.find(search);
-        final List<ApplicationUser> list = _Lists.newArrayList(matchingSearch);
-        list.removeAll(applicationRoleRepository.getUsers(holder));
-        return list;
+    public String disableAct() {
+        return holder.getRoles().isEmpty()? "No roles to remove": null;
+    }
+
+    @Model
+    public Collection<? extends ApplicationRole> choices0Act() {
+        return applicationRoleRepository.getRoles(holder);
+    }
+
+    @Model
+    // duplicated in ApplicationRole_removeUser mixin
+    public String validateAct(
+            final ApplicationRole applicationRole) {
+        if(applicationUserRepository.isAdminUser(holder) 
+                && applicationRoleRepository.isAdminRole(applicationRole)) {
+            return "Cannot remove admin user from the admin role.";
+        }
+        return null;
     }
 }

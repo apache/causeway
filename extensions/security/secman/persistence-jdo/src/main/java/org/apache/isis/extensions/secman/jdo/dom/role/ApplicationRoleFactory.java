@@ -54,6 +54,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
  *     public class MyApplicationRole extends ApplicationRole { ... }
  * </pre>
  */
+@Deprecated
 public interface ApplicationRoleFactory {
 
     public ApplicationRole newApplicationRole();

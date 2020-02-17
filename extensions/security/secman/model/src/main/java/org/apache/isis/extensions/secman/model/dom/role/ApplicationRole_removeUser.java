@@ -20,11 +20,11 @@ package org.apache.isis.extensions.secman.model.dom.role;
 
 import java.util.Collection;
 
+import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole.RemoveUserDomainEvent;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
@@ -33,7 +33,10 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(domainEvent = RemoveUserDomainEvent.class, associateWith = "users")
+@Action(
+        domainEvent = RemoveUserDomainEvent.class,
+        associateWith = "users",
+        associateWithSequence = "2")
 @ActionLayout(named="Remove")
 @RequiredArgsConstructor
 public class ApplicationRole_removeUser {
@@ -43,16 +46,18 @@ public class ApplicationRole_removeUser {
     
     private final ApplicationRole holder;
 
-    @MemberOrder(sequence = "2")
+    @Model
     public ApplicationRole act(final ApplicationUser applicationUser) {
         applicationRoleRepository.removeRoleFromUser(holder, applicationUser);
         return holder;
     }
 
+    @Model
     public Collection<ApplicationUser> choices0Act() {
         return applicationRoleRepository.getUsers(holder);
     }
 
+    @Model
     public String validateAct(final ApplicationUser applicationUser) {
         if(applicationUserRepository.isAdminUser(applicationUser) 
                 && applicationRoleRepository.isAdminRole(holder)) {

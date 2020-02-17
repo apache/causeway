@@ -29,7 +29,9 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.BuilderScriptWithR
 import org.apache.isis.testing.fixtures.applib.fixturescripts.BuilderScriptWithoutResult;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
+import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
 import org.apache.isis.testdomain.ldap.LdapConstants;
 
 import lombok.val;
@@ -99,12 +101,13 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
 
                     val regularUserRoleName = securityConfig.getRegularUserRoleName();
                     val regularUserRole = applicationRoleRepository.findByName(regularUserRoleName);
-                    val enabled = true;
                     val username = LdapConstants.SVEN_PRINCIPAL;
-                    val svenUser = applicationUserRepository.findByUsername(username);
+                    ApplicationUser svenUser = applicationUserRepository.findByUsername(username);
                     if(svenUser==null) {
-                        applicationUserRepository
-                        .newDelegateUser(username, regularUserRole, enabled);
+                        svenUser = applicationUserRepository
+                                .newDelegateUser(username, ApplicationUserStatus.ENABLED);
+                        applicationRoleRepository.addRoleToUser(regularUserRole, svenUser);
+                        
                     } else {
                         applicationUserRepository.enable(svenUser);
                     }

@@ -127,32 +127,6 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
     private String path;
 
 
-    // -- users (collection)
-
-    public static class UsersDomainEvent extends CollectionDomainEvent<ApplicationUser> {}
-
-    @Collection(
-            domainEvent = UsersDomainEvent.class,
-            editing = Editing.DISABLED
-            )
-    @CollectionLayout(
-            defaultView="table"
-            )
-    @MemberOrder(sequence = "10")
-    public List<ApplicationUser> getUsers() {
-        return applicationUserRepository.findByAtPath(getPath());
-    }
-
-    // necessary for integration tests
-    public void addToUsers(final ApplicationUser applicationUser) {
-        applicationUser.setAtPath(getPath());
-    }
-    // necessary for integration tests
-    public void removeFromUsers(final ApplicationUser applicationUser) {
-        applicationUser.setAtPath(null);
-    }
-
-
     // -- parent (property)
 
     public static class ParentDomainEvent extends PropertyDomainEvent<ApplicationTenancy> {}

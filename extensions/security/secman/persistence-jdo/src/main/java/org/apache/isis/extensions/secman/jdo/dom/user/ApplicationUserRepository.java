@@ -31,15 +31,19 @@ import org.springframework.stereotype.Repository;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.query.QueryDefault;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
-import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.AccountType;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
-import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
+import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_lock;
+import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_unlock;
+import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_updatePassword;
+
+import lombok.val;
 
 @Repository
 @Named("isisExtSecman.applicationUserRepository")
@@ -47,9 +51,8 @@ public class ApplicationUserRepository
 implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository {
 
     @Inject private QueryResultsCache queryResultsCache;
-    @Inject private ApplicationUserFactory applicationUserFactory;
+    @Inject private FactoryService factoryService;
     @Inject private RepositoryService repository;
-    @Inject private ApplicationRoleRepository applicationRoleRepository;
     @Inject private SecurityModuleConfig configBean;
     
     // -- findOrCreateUserByUsername (programmatic)
@@ -73,7 +76,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
                 if (applicationUser != null) {
                     return applicationUser;
                 }
-                return newDelegateUser(username, null, null);
+                return (ApplicationUser) newDelegateUser(username, null);
             }
         }, ApplicationUserRepository.class, "findOrCreateUserByUsername", username);
     }
@@ -125,84 +128,9 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
                 .collect(_Sets.toUnmodifiableSorted());
     }
 
-    // -- newDelegateUser (action)
-
-    @Override
-    public ApplicationUser newDelegateUser(
-            final String username,
-            final org.apache.isis.extensions.secman.api.role.ApplicationRole initialRole,
-            final Boolean enabled) {
-        final ApplicationUser user = applicationUserFactory.newApplicationUser();
-        user.setUsername(username);
-        user.setStatus(ApplicationUserStatus.parse(enabled));
-        user.setAccountType(AccountType.DELEGATED);
-        if (initialRole != null) {
-            applicationRoleRepository.addRoleToUser(initialRole, user);
-        }
-        repository.persist(user);
-        return user;
-    }
-
-    // -- newLocalUser (action)
-
-    @Override
-    public ApplicationUser newLocalUser(
-            final String username,
-            final Password password,
-            final Password passwordRepeat,
-            final org.apache.isis.extensions.secman.api.role.ApplicationRole initialRole,
-            final Boolean enabled,
-            final String emailAddress) {
-        ApplicationUser user = findByUsername(username);
-        if (user == null) {
-            user = applicationUserFactory.newApplicationUser();
-            user.setUsername(username);
-            user.setStatus(ApplicationUserStatus.parse(enabled));
-            user.setAccountType(AccountType.LOCAL);
-        }
-        if (initialRole != null) {
-            applicationRoleRepository.addRoleToUser(initialRole, user);
-        }
-        if (password != null) {
-            user.updatePassword(password.getPassword());
-        }
-        if (emailAddress != null) {
-            user.updateEmailAddress(emailAddress);
-        }
-        repository.persist(user);
-        return user;
-    }
-
-    @Override
-    public String validateNewLocalUser(
-            final String username,
-            final Password password,
-            final Password passwordRepeat,
-            final org.apache.isis.extensions.secman.api.role.ApplicationRole initialRole,
-            final Boolean enabled,
-            final String emailAddress) {
-        final ApplicationUser user = applicationUserFactory.newApplicationUser();
-        return user.validateResetPassword(password, passwordRepeat);
-    }
-
-    // -- newLocalUserBasedOn (action)
-
-    public ApplicationUser newLocalUserBasedOn(
-            final String username,
-            final Password password,
-            final Password passwordRepeat,
-            final ApplicationUser userWhosRolesShouldBeCloned,
-            final Boolean enabled,
-            final String emailAddress) {
-        final ApplicationUser user = this.newLocalUser(username, password, passwordRepeat, null, enabled, emailAddress);
-        for (ApplicationRole role : userWhosRolesShouldBeCloned.getRoles()) {
-            user.addToRoles(role);
-        }
-        return user;
-    }
-
     // -- allUsers
 
+    @Override
     public List<ApplicationUser> findByAtPath(final String atPath) {
         return repository.allMatches(new QueryDefault<>(
                 ApplicationUser.class,
@@ -232,14 +160,16 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
     @Override
     public void enable(org.apache.isis.extensions.secman.api.user.ApplicationUser user) {
         if(user.getStatus() != ApplicationUserStatus.ENABLED) {
-            ((ApplicationUser) user).unlock();
+             factoryService.mixin(ApplicationUser_unlock.class, user)
+             .act();
         }
     }
 
     @Override
     public void disable(org.apache.isis.extensions.secman.api.user.ApplicationUser user) {
         if(user.getStatus() != ApplicationUserStatus.DISABLED) {
-            ((ApplicationUser) user).lock();
+            factoryService.mixin(ApplicationUser_lock.class, user)
+            .act();
         }
     }
 
@@ -248,4 +178,43 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
         return configBean.getAdminUserName().equals(user.getName());
     }
 
+    @Override
+    public org.apache.isis.extensions.secman.api.user.ApplicationUser newUser(String username, AccountType accountType) {
+        val user = factoryService.detachedEntity(ApplicationUser.class);
+        user.setUsername(username);
+        user.setAccountType(accountType);
+        user.setStatus(ApplicationUserStatus.DISABLED);
+        repository.persist(user);
+        return user;
+    }
+
+    @Override
+    public org.apache.isis.extensions.secman.api.user.ApplicationUser newLocalUser(
+            String username, 
+            Password password,
+            ApplicationUserStatus status) {
+        
+        val user = newUser(username, AccountType.LOCAL);
+        user.setStatus(status);
+        
+        if (password != null) {
+            factoryService.mixin(ApplicationUser_updatePassword.class, user)
+            .updatePassword(password.getPassword());
+        }
+        
+        repository.persistAndFlush(user);
+        return user;
+    }
+    
+    @Override
+    public org.apache.isis.extensions.secman.api.user.ApplicationUser newDelegateUser(
+            String username,
+            ApplicationUserStatus status) {
+      
+          val user = newUser(username, AccountType.DELEGATED);
+          user.setStatus(status);
+          repository.persistAndFlush(user);
+          return user;
+      }
+    
 }

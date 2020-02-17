@@ -55,6 +55,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
  *     public class MyApplicationPermission extends ApplicationPermission { ... }
  * </pre>
  */
+@Deprecated
 public interface ApplicationPermissionFactory {
 
     public ApplicationPermission newApplicationPermission();

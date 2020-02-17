@@ -16,49 +16,47 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.role;
-
-import java.util.Collection;
-import java.util.List;
+package org.apache.isis.extensions.secman.model.dom.user;
 
 import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.extensions.secman.api.role.ApplicationRole;
-import org.apache.isis.extensions.secman.api.role.ApplicationRole.AddUserDomainEvent;
-import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
+import org.apache.isis.extensions.secman.api.user.AccountType;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.ApplicationUser.UpdateAccountTypeDomainEvent;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
-        domainEvent = AddUserDomainEvent.class, 
-        associateWith = "users",
+        domainEvent = UpdateAccountTypeDomainEvent.class, 
+        associateWith = "accountType",
         associateWithSequence = "1")
-@ActionLayout(named="Add")
 @RequiredArgsConstructor
-public class ApplicationRole_addUser {
+public class ApplicationUser_updateAccountType {
     
-    @Inject private ApplicationRoleRepository applicationRoleRepository;
     @Inject private ApplicationUserRepository applicationUserRepository;
     
-    private final ApplicationRole holder;
+    private final ApplicationUser holder;
 
     @Model
-    public ApplicationRole act(final ApplicationUser applicationUser) {
-        applicationRoleRepository.addRoleToUser(holder, applicationUser);
+    public ApplicationUser act(
+            final AccountType accountType) {
+        holder.setAccountType(accountType);
         return holder;
     }
-
+    
     @Model
-    public List<ApplicationUser> autoComplete0Act(final String search) {
-        final Collection<ApplicationUser> matchingSearch = applicationUserRepository.find(search);
-        final List<ApplicationUser> list = _Lists.newArrayList(matchingSearch);
-        list.removeAll(applicationRoleRepository.getUsers(holder));
-        return list;
+    public String disableUpdateAccountType() {
+        return applicationUserRepository.isAdminUser(holder)
+                ? "Cannot change account type for admin user"
+                        : null;
     }
+    
+    @Model
+    public AccountType default0UpdateAccountType() {
+        return holder.getAccountType();
+    }
+
 }

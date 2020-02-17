@@ -16,49 +16,47 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.role;
-
-import java.util.Collection;
-import java.util.List;
+package org.apache.isis.extensions.secman.model.dom.user;
 
 import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
-import org.apache.isis.extensions.secman.api.role.ApplicationRole.AddUserDomainEvent;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.ApplicationUser.NewDelegateUserDomainEvent;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(
-        domainEvent = AddUserDomainEvent.class, 
-        associateWith = "users",
-        associateWithSequence = "1")
-@ActionLayout(named="Add")
+@Action(domainEvent = NewDelegateUserDomainEvent.class, associateWith = "allUsers")
 @RequiredArgsConstructor
-public class ApplicationRole_addUser {
+public class ApplicationUserManager_newDelegateUser {
     
     @Inject private ApplicationRoleRepository applicationRoleRepository;
     @Inject private ApplicationUserRepository applicationUserRepository;
+    @Inject private RepositoryService repository;
+
+    @SuppressWarnings("unused")
+    private final ApplicationUserManager holder;
     
-    private final ApplicationRole holder;
-
     @Model
-    public ApplicationRole act(final ApplicationUser applicationUser) {
-        applicationRoleRepository.addRoleToUser(holder, applicationUser);
-        return holder;
+    public ApplicationUser act(
+            final String username,
+            final ApplicationRole initialRole,
+            final Boolean enabled) {
+        
+        final ApplicationUser user = applicationUserRepository
+                .newDelegateUser(username, ApplicationUserStatus.parse(enabled));
+
+        if (initialRole != null) {
+            applicationRoleRepository.addRoleToUser(initialRole, user);
+        }
+        repository.persist(user);
+        return user;
     }
 
-    @Model
-    public List<ApplicationUser> autoComplete0Act(final String search) {
-        final Collection<ApplicationUser> matchingSearch = applicationUserRepository.find(search);
-        final List<ApplicationUser> list = _Lists.newArrayList(matchingSearch);
-        list.removeAll(applicationRoleRepository.getUsers(holder));
-        return list;
-    }
 }

@@ -23,45 +23,39 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
+import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
+import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@Mixin @RequiredArgsConstructor
+@Action(
+        semantics = SemanticsOf.SAFE,
+        associateWith = "permissions",
+        associateWithSequence = "1"
+        )
+@RequiredArgsConstructor
 public class ApplicationUser_filterPermissions {
 
-
-    public static class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUser_filterPermissions> {
-    }
+    @Inject private FactoryService factory;
+    @Inject private ApplicationFeatureRepositoryDefault applicationFeatureRepository;
 
     private final ApplicationUser holder;
 
-
-    // -- filterPermissions (action)
-
-    @Action(
-            domainEvent = ActionDomainEvent.class,
-            semantics = SemanticsOf.SAFE
-            )
-    @MemberOrder(sequence = "1", name="permissions")
-    public List<UserPermissionViewModel> $$(
+    @Model
+    public List<UserPermissionViewModel> act(
             @ParameterLayout(named="Package", typicalLength=ApplicationFeature.TYPICAL_LENGTH_PKG_FQN)
             final String packageFqn,
             @Parameter(optionality = Optionality.OPTIONAL)
@@ -75,7 +69,8 @@ public class ApplicationUser_filterPermissions {
     /**
      * Package names that have classes in them.
      */
-    public Collection<String> choices0$$() {
+    @Model
+    public Collection<String> choices0Act() {
         return applicationFeatureRepository.packageNames();
     }
 
@@ -83,7 +78,8 @@ public class ApplicationUser_filterPermissions {
     /**
      * Class names for selected package.
      */
-    public Collection<String> choices1$$(final String packageFqn) {
+    @Model
+    public Collection<String> choices1Act(final String packageFqn) {
         return applicationFeatureRepository.classNamesRecursivelyContainedIn(packageFqn);
     }
 
@@ -110,8 +106,5 @@ public class ApplicationUser_filterPermissions {
                 UserPermissionViewModel.Functions.asViewModel(holder, factory));
     }
 
-    @Inject RepositoryService repository;
-    @Inject FactoryService factory;
-    @Inject ApplicationFeatureRepositoryDefault applicationFeatureRepository;
 
 }

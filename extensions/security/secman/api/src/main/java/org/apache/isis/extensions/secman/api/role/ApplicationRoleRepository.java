@@ -26,9 +26,12 @@ public interface ApplicationRoleRepository {
 
     Collection<ApplicationRole> allRoles();
 
+    @Deprecated
     ApplicationRole newRole(String name, String description);
+    //ApplicationRole createDetachedRole(String name, String descripton);
 
     Collection<ApplicationRole> findNameContaining(String search);
+    Collection<? extends ApplicationRole> getRoles(ApplicationUser user);
     
     Collection<ApplicationUser> getUsers(ApplicationRole role);
 
@@ -42,6 +45,8 @@ public interface ApplicationRoleRepository {
     boolean isAdminRole(ApplicationRole role);
 
     void deleteRole(ApplicationRole holder);
+
+    
     
 
 }

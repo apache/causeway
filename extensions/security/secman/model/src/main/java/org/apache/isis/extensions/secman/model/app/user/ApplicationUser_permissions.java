@@ -18,61 +18,55 @@
  */
 package org.apache.isis.extensions.secman.model.app.user;
 
-import java.util.Collection;
+
 import java.util.List;
 
+import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Mixin;
-import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@Mixin @RequiredArgsConstructor
+@Collection(
+        domainEvent = ApplicationUser_permissions.CollectionDomainEvent.class)
+@CollectionLayout(
+        paged=50,
+        defaultView = "table"
+        )
+@RequiredArgsConstructor
 public class ApplicationUser_permissions {
 
-    public static class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUser_permissions> {}
+    public static class CollectionDomainEvent 
+    extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationUser_permissions, UserPermissionViewModel> {}
+    
+    @Inject private FactoryService factory;
+    @Inject private ApplicationFeatureRepositoryDefault applicationFeatureRepository;
 
     private final ApplicationUser holder;
 
-    @Action(
-            semantics = SemanticsOf.SAFE,
-            domainEvent = ActionDomainEvent.class
-            )
-    @ActionLayout(
-            contributed = Contributed.AS_ASSOCIATION
-            )
-    @CollectionLayout(
-            paged=50,
-            defaultView = "table"
-            )
     @MemberOrder(sequence = "30")
-    public List<UserPermissionViewModel> $$() {
+    @Model
+    public List<UserPermissionViewModel> col() {
         val allMembers = applicationFeatureRepository.allMembers();
         return asViewModels(allMembers);
     }
 
-    List<UserPermissionViewModel> asViewModels(final Collection<ApplicationFeature> features) {
+    List<UserPermissionViewModel> asViewModels(final java.util.Collection<ApplicationFeature> features) {
         return _Lists.map(
                 features,
                 UserPermissionViewModel.Functions.asViewModel(holder, factory));
     }
 
-    @Inject RepositoryService repository;
-    @Inject FactoryService factory;
-    @Inject ApplicationFeatureRepositoryDefault applicationFeatureRepository;
+
 
 }

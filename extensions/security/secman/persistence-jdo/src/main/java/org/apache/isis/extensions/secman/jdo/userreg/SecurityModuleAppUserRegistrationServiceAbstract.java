@@ -22,13 +22,17 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.userreg.UserDetails;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.applib.value.Password;
+import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_updatePassword;
 
 /**
  * An abstract implementation of {@link org.apache.isis.applib.services.userreg.UserRegistrationService}
@@ -38,6 +42,7 @@ public abstract class SecurityModuleAppUserRegistrationServiceAbstract implement
 
     @Inject private ApplicationUserRepository applicationUserRepository;
     @Inject private ApplicationRoleRepository applicationRoleRepository;
+    @Inject private FactoryService factoryService;
     
     @Override
     public boolean usernameExists(final String username) {
@@ -50,11 +55,19 @@ public abstract class SecurityModuleAppUserRegistrationServiceAbstract implement
 
         final Password password = new Password(userDetails.getPassword());
         final ApplicationRole initialRole = getInitialRole();
-        final Boolean enabled = true;
+        
         final String username = userDetails.getUsername();
         final String emailAddress = userDetails.getEmailAddress();
-        final ApplicationUser applicationUser = applicationUserRepository.newLocalUser(username, password, password, initialRole, enabled, emailAddress);
-
+        final ApplicationUser applicationUser = (ApplicationUser) applicationUserRepository
+                .newLocalUser(username, password, ApplicationUserStatus.ENABLED);
+        
+        if(_Strings.isNotEmpty(emailAddress)) {
+            applicationUser.setEmailAddress(emailAddress);
+        }
+        if(initialRole!=null) {
+            applicationRoleRepository.addRoleToUser(initialRole, applicationUser);
+        }
+        
         final Set<ApplicationRole> additionalRoles = getAdditionalInitialRoles();
         if(additionalRoles != null) {
             for (final ApplicationRole additionalRole : additionalRoles) {
@@ -72,9 +85,10 @@ public abstract class SecurityModuleAppUserRegistrationServiceAbstract implement
     @Override
     public boolean updatePasswordByEmail(final String emailAddress, final String password) {
         boolean passwordUpdated = false;
-        final ApplicationUser user = applicationUserRepository.findByEmailAddress(emailAddress);
+        final ApplicationUser user = (ApplicationUser) applicationUserRepository.findByEmailAddress(emailAddress);
         if (user != null) {
-            user.updatePassword(password);
+            factoryService.mixin(ApplicationUser_updatePassword.class, user)
+            .updatePassword(password);
             passwordUpdated = true;
         }
         return passwordUpdated;

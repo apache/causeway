@@ -54,6 +54,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
  *     public class MyApplicationTenancy extends ApplicationTenancy { ... }
  * </pre>
  */
+@Deprecated
 public interface ApplicationTenancyFactory {
 
     public ApplicationTenancy newApplicationTenancy();

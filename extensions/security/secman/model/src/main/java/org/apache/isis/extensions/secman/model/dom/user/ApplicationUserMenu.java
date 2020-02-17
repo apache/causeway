@@ -31,6 +31,7 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
@@ -53,6 +54,11 @@ import lombok.val;
         )
 public class ApplicationUserMenu {
 
+    @Inject private SecurityModuleConfig configBean;
+    @Inject private ApplicationRoleRepository applicationRoleRepository;
+    @Inject private ApplicationUserRepository applicationUserRepository;
+    @Inject private SecurityRealmService securityRealmService;
+    @Inject private FactoryService factory;
 
     public static abstract class PropertyDomainEvent<T> 
     extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationUserMenu, T> {
@@ -92,6 +98,7 @@ public class ApplicationUserMenu {
             semantics = SemanticsOf.NON_IDEMPOTENT
             )
     @MemberOrder(sequence = "100.10.3")
+    @Deprecated
     public ApplicationUser newDelegateUser(
             @Parameter(maxLength = ApplicationUser.MAX_LENGTH_USERNAME)
             @ParameterLayout(named = "Name")
@@ -102,7 +109,11 @@ public class ApplicationUserMenu {
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(named = "Enabled?")
             final Boolean enabled) {
-        return applicationUserRepository.newDelegateUser(username, initialRole, enabled);
+        
+        val applicationUserManager = factory.viewModel(ApplicationUserManager.class);
+        val newDelegateUserMixin = factory.mixin(
+                ApplicationUserManager_newDelegateUser.class, applicationUserManager);
+        return newDelegateUserMixin.act(username, initialRole, enabled);
     }
 
     public boolean hideNewDelegateUser() {
@@ -121,6 +132,7 @@ public class ApplicationUserMenu {
             semantics = SemanticsOf.IDEMPOTENT
             )
     @MemberOrder(sequence = "100.10.4")
+    @Deprecated
     public ApplicationUser newLocalUser(
             @Parameter(maxLength = ApplicationUser.MAX_LENGTH_USERNAME)
             @ParameterLayout(named = "Name")
@@ -140,8 +152,11 @@ public class ApplicationUserMenu {
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(named = "Email Address")
             final String emailAddress) {
-        return applicationUserRepository.newLocalUser(
-                username, password, passwordRepeat, initialRole, enabled, emailAddress);
+        
+        val applicationUserManager = factory.viewModel(ApplicationUserManager.class);
+        val newLocalUserMixin = factory.mixin(
+                ApplicationUserManager_newLocalUser.class, applicationUserManager);
+        return newLocalUserMixin.act(username, password, passwordRepeat, initialRole, enabled, emailAddress);
     }
 
     public String validateNewLocalUser(
@@ -151,7 +166,12 @@ public class ApplicationUserMenu {
             final ApplicationRole initialRole,
             final Boolean enabled,
             final String emailAddress) {
-        return applicationUserRepository.validateNewLocalUser(
+        
+        val applicationUserManager = factory.viewModel(ApplicationUserManager.class);
+        val newLocalUserMixin = factory.mixin(
+                ApplicationUserManager_newLocalUser.class, applicationUserManager);
+        
+        return newLocalUserMixin.validateAct(
                 username, password, passwordRepeat, initialRole, enabled, emailAddress);
     }
 
@@ -176,12 +196,6 @@ public class ApplicationUserMenu {
         return realm == null || !realm.getCharacteristics().contains(SecurityRealmCharacteristic.DELEGATING);
     }
 
-    // -- DEPENDENCIES
-
-    @Inject SecurityModuleConfig configBean;
-    @Inject ApplicationRoleRepository applicationRoleRepository;
-    @Inject ApplicationUserRepository applicationUserRepository;
-    @Inject SecurityRealmService securityRealmService;
 
 
 }

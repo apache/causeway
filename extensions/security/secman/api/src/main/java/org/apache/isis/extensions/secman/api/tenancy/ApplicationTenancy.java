@@ -42,7 +42,7 @@ public interface ApplicationTenancy {
     
     // -- MODEL
     
-    public Object getPath();
+    public String getPath();
 
     public String getName();
     public void setName(String name);

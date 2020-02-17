@@ -129,7 +129,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository 
         val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
         val user = _Casts.<ApplicationUser>uncheckedCast(genericUser);
         // no need to add to users set, since will be done by JDO/DN.
-        user.addToRoles(role);
+        user.getRoles().add(role);
     }
     
     @Override
@@ -140,7 +140,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository 
         val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
         val user = _Casts.<ApplicationUser>uncheckedCast(genericUser);
         // no need to remove from users set, since will be done by JDO/DN.
-        user.removeRole(role);
+        user.getRoles().remove(role);
     }
 
     @Override
@@ -161,6 +161,13 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository 
             deleteMixin.act();
         }
         repository.removeAndFlush(role);
+    }
+
+    @Override
+    public Collection<? extends org.apache.isis.extensions.secman.api.role.ApplicationRole> getRoles(
+            org.apache.isis.extensions.secman.api.user.ApplicationUser genericUser) {
+        val user = _Casts.<ApplicationUser>uncheckedCast(genericUser);
+        return user.getRoles();
     }
 
 }
