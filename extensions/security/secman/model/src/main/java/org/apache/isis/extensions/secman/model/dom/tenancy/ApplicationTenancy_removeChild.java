@@ -24,38 +24,34 @@ import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy;
-import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.RemoveUserDomainEvent;
+import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.RemoveChildDomainEvent;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(domainEvent = RemoveUserDomainEvent.class, associateWith = "users", 
+@Action(domainEvent = RemoveChildDomainEvent.class, associateWith = "children", 
 associateWithSequence = "2")
-@ActionLayout(named="Remove")
 @RequiredArgsConstructor
-public class ApplicationTenancy_removeUser {
+public class ApplicationTenancy_removeChild {
     
     @Inject private ApplicationTenancyRepository applicationTenancyRepository;
-    
+
     private final ApplicationTenancy holder;
-    
+
     @Model
-    public ApplicationTenancy act(final ApplicationUser applicationUser) {
-        applicationTenancyRepository.clearTenancyOnUser(applicationUser);
+    public ApplicationTenancy act(final ApplicationTenancy child) {
+        applicationTenancyRepository.clearParentOnTenancy(child);
         return holder;
     }
     
     @Model
-    public Collection<ApplicationUser> choices0Act() {
-        return applicationTenancyRepository.getUsers(holder);
+    public Collection<ApplicationTenancy> choices0Act() {
+        return applicationTenancyRepository.getChildren(holder);
     }
     
     @Model
     public String disableAct() {
-        return choices0Act().isEmpty()? "No users to remove": null;
+        return choices0Act().isEmpty()? "No children to remove": null;
     }
-
 }

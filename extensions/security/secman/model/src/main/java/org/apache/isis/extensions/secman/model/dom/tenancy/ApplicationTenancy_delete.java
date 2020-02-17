@@ -24,38 +24,38 @@ import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy;
-import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.RemoveUserDomainEvent;
+import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.DeleteDomainEvent;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
+import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_updateAtPath;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
-@Action(domainEvent = RemoveUserDomainEvent.class, associateWith = "users", 
-associateWithSequence = "2")
-@ActionLayout(named="Remove")
+@Action(domainEvent = 
+        DeleteDomainEvent.class, 
+        semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE, 
+        associateWithSequence = "1")
 @RequiredArgsConstructor
-public class ApplicationTenancy_removeUser {
+public class ApplicationTenancy_delete {
     
     @Inject private ApplicationTenancyRepository applicationTenancyRepository;
-    
-    private final ApplicationTenancy holder;
-    
-    @Model
-    public ApplicationTenancy act(final ApplicationUser applicationUser) {
-        applicationTenancyRepository.clearTenancyOnUser(applicationUser);
-        return holder;
-    }
-    
-    @Model
-    public Collection<ApplicationUser> choices0Act() {
-        return applicationTenancyRepository.getUsers(holder);
-    }
-    
-    @Model
-    public String disableAct() {
-        return choices0Act().isEmpty()? "No users to remove": null;
-    }
+    @Inject private FactoryService factoryService;
+    @Inject private RepositoryService repository;
 
+    private final ApplicationTenancy holder;
+
+    
+    @Model
+    public Collection<ApplicationTenancy> act() {
+        for (val user : applicationTenancyRepository.getUsers(holder)) {
+            val updateAtPathMixin = factoryService.mixin(ApplicationUser_updateAtPath.class, user);
+            updateAtPathMixin.act(null);
+        }
+        repository.removeAndFlush(this);
+        return applicationTenancyRepository.allTenancies();
+    }
 }

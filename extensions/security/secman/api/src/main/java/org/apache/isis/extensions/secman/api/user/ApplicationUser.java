@@ -29,15 +29,26 @@ import org.apache.isis.extensions.secman.api.tenancy.HasAtPath;
 
 public interface ApplicationUser extends HasUsername, HasAtPath {
 
-    // -- constants
+    // -- CONSTANTS
+    
     public static final int MAX_LENGTH_USERNAME = 30;
     public static final int MAX_LENGTH_FAMILY_NAME = 50;
     public static final int MAX_LENGTH_GIVEN_NAME = 50;
     public static final int MAX_LENGTH_KNOWN_AS = 20;
     public static final int MAX_LENGTH_EMAIL_ADDRESS = 50;
     public static final int MAX_LENGTH_PHONE_NUMBER = 25;
+    
+    // -- DOMAIN EVENTS 
+    
+    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationUser, T> {}
+    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationUser, T> {}
+    public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUser> {}
+    
+    public static class AddRoleDomainEvent extends ActionDomainEvent {}
+    public static class UpdateAtPathDomainEvent extends ActionDomainEvent {}
 
-
+    // -- MODEL
+    
     String getName();
 
     String getEncryptedPassword();
@@ -50,22 +61,7 @@ public interface ApplicationUser extends HasUsername, HasAtPath {
 
     ApplicationUserStatus getStatus();
 
-    @Override
-    String getUsername();
-    
-    // -- EVENTS 
-    
-    public static abstract class PropertyDomainEvent<T>
-    extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationUser, T> {}
-
-    public static abstract class CollectionDomainEvent<T> 
-    extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationUser, T> {}
-
-    public static abstract class ActionDomainEvent 
-    extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUser> {}
-    
-    public static class AddRoleDomainEvent extends ActionDomainEvent {}
-
+    void setAtPath(String atPath);
     
 
 }

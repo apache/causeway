@@ -29,8 +29,6 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.InheritanceStrategy;
 import javax.jdo.annotations.VersionStrategy;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
@@ -38,16 +36,10 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
@@ -100,6 +92,8 @@ import lombok.Setter;
 public class ApplicationTenancy implements Comparable<ApplicationTenancy>,
 org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
 
+    @Inject private ApplicationUserRepository applicationUserRepository;
+    
     // -- name (property, title)
 
     public static class NameDomainEvent extends PropertyDomainEvent<String> {}
@@ -117,27 +111,6 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
     @Getter @Setter
     private String name;
 
-    // -- updateName (action)
-
-    public static class UpdateNameDomainEvent extends ActionDomainEvent {}
-
-    @Action(
-            domainEvent =UpdateNameDomainEvent.class,
-            semantics = SemanticsOf.IDEMPOTENT
-            )
-    @MemberOrder(name="name", sequence = "1")
-    public ApplicationTenancy updateName(
-            @Parameter(maxLength = MAX_LENGTH_NAME)
-            @ParameterLayout(named="Name", typicalLength=TYPICAL_LENGTH_NAME)
-            final String name) {
-        setName(name);
-        return this;
-    }
-
-    public String default0UpdateName() {
-        return getName();
-    }
-
 
     // -- path
 
@@ -152,7 +125,6 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
             )
     @Getter @Setter
     private String path;
-
 
 
     // -- users (collection)
@@ -181,8 +153,6 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
     }
 
 
-
-
     // -- parent (property)
 
     public static class ParentDomainEvent extends PropertyDomainEvent<ApplicationTenancy> {}
@@ -198,31 +168,6 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
             )
     @Getter @Setter
     private ApplicationTenancy parent;
-
-
-
-    // -- updateParent (action)
-
-    public static class UpdateParentDomainEvent extends ActionDomainEvent {}
-
-    @Action(
-            domainEvent = UpdateParentDomainEvent.class,
-            semantics = SemanticsOf.IDEMPOTENT
-            )
-    @MemberOrder(name="parent", sequence = "1")
-    public ApplicationTenancy updateParent(
-            @Parameter(optionality = Optionality.OPTIONAL)
-            final ApplicationTenancy tenancy
-            ) {
-        // no need to add to children set, since will be done by JDO/DN.
-        setParent(tenancy);
-        return this;
-    }
-
-    public ApplicationTenancy default0UpdateParent() {
-        return getParent();
-    }
-
 
 
     // -- children
@@ -248,64 +193,6 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
     // necessary for integration tests
     public void removeFromChildren(final ApplicationTenancy applicationTenancy) {
         getChildren().remove(applicationTenancy);
-    }
-
-
-    // -- addChild (action)
-
-    public static class AddChildDomainEvent extends ActionDomainEvent {}
-
-    @Action(
-            domainEvent = AddChildDomainEvent.class,
-            semantics = SemanticsOf.IDEMPOTENT
-            )
-    @ActionLayout(
-            named="Add"
-            )
-    @MemberOrder(name="Children", sequence = "1")
-    public ApplicationTenancy addChild(final ApplicationTenancy applicationTenancy) {
-        applicationTenancy.setParent(this);
-        // no need to add to children set, since will be done by JDO/DN.
-        return this;
-    }
-
-
-    // -- removeChild (action)
-
-    public static class RemoveChildDomainEvent extends ActionDomainEvent {}
-
-    @Action(
-            domainEvent = RemoveChildDomainEvent.class,
-            semantics = SemanticsOf.IDEMPOTENT
-            )
-    @MemberOrder(name="Children", sequence = "2")
-    public ApplicationTenancy removeChild(final ApplicationTenancy applicationTenancy) {
-        applicationTenancy.setParent(null);
-        // no need to remove from children set, since will be done by JDO/DN.
-        return this;
-    }
-    public java.util.Collection<ApplicationTenancy> choices0RemoveChild() {
-        return getChildren();
-    }
-    public String disableRemoveChild() {
-        return choices0RemoveChild().isEmpty()? "No children to remove": null;
-    }
-
-
-    // -- delete (action)
-    public static class DeleteDomainEvent extends ActionDomainEvent {}
-
-    @Action(
-            domainEvent = DeleteDomainEvent.class,
-            semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE
-            )
-    @MemberOrder(sequence = "1")
-    public java.util.Collection<org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy> delete() {
-        for (final ApplicationUser user : getUsers()) {
-            user.updateAtPath(null);
-        }
-        repository.removeAndFlush(this);
-        return applicationTenancyRepository.allTenancies();
     }
 
 
@@ -344,10 +231,5 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
     public int compareTo(final ApplicationTenancy o) {
         return comparator.compare(this, o);
     }
-
-    @Inject ApplicationUserRepository applicationUserRepository;
-    @Inject ApplicationTenancyRepository applicationTenancyRepository;
-    @Inject FactoryService factoryService;
-    @Inject RepositoryService repository;
 
 }

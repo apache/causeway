@@ -18,44 +18,34 @@
  */
 package org.apache.isis.extensions.secman.model.dom.tenancy;
 
-import java.util.Collection;
-
 import javax.enterprise.inject.Model;
-import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy;
-import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.RemoveUserDomainEvent;
-import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
+import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.UpdateNameDomainEvent;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(domainEvent = RemoveUserDomainEvent.class, associateWith = "users", 
-associateWithSequence = "2")
-@ActionLayout(named="Remove")
+@Action(domainEvent = UpdateNameDomainEvent.class, associateWith = "name", 
+associateWithSequence = "1")
 @RequiredArgsConstructor
-public class ApplicationTenancy_removeUser {
-    
-    @Inject private ApplicationTenancyRepository applicationTenancyRepository;
+public class ApplicationTenancy_updateName {
     
     private final ApplicationTenancy holder;
-    
+
     @Model
-    public ApplicationTenancy act(final ApplicationUser applicationUser) {
-        applicationTenancyRepository.clearTenancyOnUser(applicationUser);
+    public ApplicationTenancy act(
+            @Parameter(maxLength = ApplicationTenancy.MAX_LENGTH_NAME)
+            @ParameterLayout(named="Name", typicalLength=ApplicationTenancy.TYPICAL_LENGTH_NAME)
+            final String name) {
+        holder.setName(name);
         return holder;
     }
-    
-    @Model
-    public Collection<ApplicationUser> choices0Act() {
-        return applicationTenancyRepository.getUsers(holder);
-    }
-    
-    @Model
-    public String disableAct() {
-        return choices0Act().isEmpty()? "No users to remove": null;
-    }
 
+    @Model
+    public String default0Act() {
+        return holder.getName();
+    }
 }

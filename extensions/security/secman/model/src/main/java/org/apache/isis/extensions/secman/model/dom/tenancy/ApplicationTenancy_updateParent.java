@@ -18,44 +18,40 @@
  */
 package org.apache.isis.extensions.secman.model.dom.tenancy;
 
-import java.util.Collection;
-
 import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy;
-import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.RemoveUserDomainEvent;
+import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.UpdateParentDomainEvent;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(domainEvent = RemoveUserDomainEvent.class, associateWith = "users", 
-associateWithSequence = "2")
-@ActionLayout(named="Remove")
+@Action(
+        domainEvent = UpdateParentDomainEvent.class, 
+        associateWith = "parent", 
+        associateWithSequence = "1")
 @RequiredArgsConstructor
-public class ApplicationTenancy_removeUser {
+public class ApplicationTenancy_updateParent {
     
     @Inject private ApplicationTenancyRepository applicationTenancyRepository;
     
     private final ApplicationTenancy holder;
-    
+
     @Model
-    public ApplicationTenancy act(final ApplicationUser applicationUser) {
-        applicationTenancyRepository.clearTenancyOnUser(applicationUser);
+    public ApplicationTenancy act(
+            @Parameter(optionality = Optionality.OPTIONAL)
+            final ApplicationTenancy parent) {
+        
+        applicationTenancyRepository.setParentOnTenancy(holder, parent);
         return holder;
     }
-    
-    @Model
-    public Collection<ApplicationUser> choices0Act() {
-        return applicationTenancyRepository.getUsers(holder);
-    }
-    
-    @Model
-    public String disableAct() {
-        return choices0Act().isEmpty()? "No users to remove": null;
-    }
 
+    @Model
+    public ApplicationTenancy default0Act() {
+        return holder.getParent();
+    }
 }

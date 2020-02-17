@@ -24,6 +24,21 @@ import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 
 public interface ApplicationPermission {
     
+    // -- DOMAIN EVENTS
+    
+    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationPermission, T> {}
+    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationPermission, T> {}
+    public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationPermission> {}
+    
+    public static class AllowDomainEvent extends ActionDomainEvent {}
+    public static class UpdateRoleDomainEvent extends ActionDomainEvent {}
+    public static class VetoDomainEvent extends ActionDomainEvent {}
+    public static class DeleteDomainEvent extends ActionDomainEvent {}
+    public static class ChangingDomainEvent extends ActionDomainEvent {}
+    public static class ViewingDomainEvent extends ActionDomainEvent {}
+    
+    // -- MODEL
+    
     ApplicationFeatureType getFeatureType();
 
     String getFeatureFqn();
@@ -36,19 +51,6 @@ public interface ApplicationPermission {
     
     ApplicationRole getRole();
     void setRole(ApplicationRole applicationRole);
-    
-    // DOMAIN EVENTS
-    
-    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationPermission, T> {}
-    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationPermission, T> {}
-    public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationPermission> {}
-    
-    public static class AllowDomainEvent extends ActionDomainEvent {}
-    public static class UpdateRoleDomainEvent extends ActionDomainEvent {}
-    public static class VetoDomainEvent extends ActionDomainEvent {}
-    public static class DeleteDomainEvent extends ActionDomainEvent {}
-    public static class ChangingDomainEvent extends ActionDomainEvent {}
-    public static class ViewingDomainEvent extends ActionDomainEvent {}
     
 
 }

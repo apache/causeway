@@ -480,26 +480,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
 
 
-    // -- updateAtPath (action)
 
-    public static class UpdateAtPathDomainEvent extends ActionDomainEvent {}
-
-    @Action(
-            domainEvent = UpdateAtPathDomainEvent.class,
-            semantics = SemanticsOf.IDEMPOTENT
-            )
-    @MemberOrder(name="atPath", sequence = "1")
-    public ApplicationUser updateAtPath(
-            @Parameter(optionality = Optionality.OPTIONAL)
-            @ParameterLayout(named = "AtPath")
-            final String atPath) {
-        setAtPath(atPath);
-        return this;
-    }
-
-    public String default0UpdateAtPath() {
-        return getAtPath();
-    }
 
 
     // -- accountType (property)

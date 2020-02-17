@@ -37,6 +37,7 @@ import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
 
+import lombok.NonNull;
 import lombok.val;
 
 @Repository
@@ -137,8 +138,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
 
     @Override
     public Collection<org.apache.isis.extensions.secman.api.user.ApplicationUser> getUsers(
-            org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy genericTenancy) {
-
+            @NonNull final org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy genericTenancy) {
         val tenancy = _Casts.<ApplicationTenancy>uncheckedCast(genericTenancy);
         return tenancy.getUsers()
                 .stream()
@@ -166,9 +166,8 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
     
     @Override
     public void setTenancyOnUser(
-            org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy genericTenancy, 
-            org.apache.isis.extensions.secman.api.user.ApplicationUser genericUser) {
-        
+            @NonNull final org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy genericTenancy, 
+            @NonNull final org.apache.isis.extensions.secman.api.user.ApplicationUser genericUser) {
         val tenancy = _Casts.<ApplicationTenancy>uncheckedCast(genericTenancy);
         val user = _Casts.<ApplicationUser>uncheckedCast(genericUser);
         // no need to add to users set, since will be done by JDO/DN.
@@ -177,11 +176,38 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
     
     @Override
     public void clearTenancyOnUser(
-            org.apache.isis.extensions.secman.api.user.ApplicationUser genericUser) {
-        
+            @NonNull final org.apache.isis.extensions.secman.api.user.ApplicationUser genericUser) {
         val user = _Casts.<ApplicationUser>uncheckedCast(genericUser);
         // no need to remove from users set, since will be done by JDO/DN.
         user.setAtPath(null);
+    }
+
+    @Override
+    public void setParentOnTenancy(
+            @NonNull final org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy genericTenancy,
+            @NonNull final org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy genericParent) {
+        val tenancy = _Casts.<ApplicationTenancy>uncheckedCast(genericTenancy);
+        val parent = _Casts.<ApplicationTenancy>uncheckedCast(genericParent);
+        // no need to add to children set, since will be done by JDO/DN.
+        tenancy.setParent(parent);
+    }
+
+    @Override
+    public void clearParentOnTenancy(
+            @NonNull final org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy genericTenancy) {
+        val tenancy = _Casts.<ApplicationTenancy>uncheckedCast(genericTenancy);
+        // no need to remove from children set, since will be done by JDO/DN.
+        tenancy.setParent(null);
+    }
+
+    @Override
+    public Collection<org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy> getChildren(
+            @NonNull final org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy genericTenancy) {
+        val tenancy = _Casts.<ApplicationTenancy>uncheckedCast(genericTenancy);
+        return tenancy.getChildren()
+                .stream()
+                .map(org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.class::cast)
+                .collect(_Sets.toUnmodifiableSorted());
     }
 
 }

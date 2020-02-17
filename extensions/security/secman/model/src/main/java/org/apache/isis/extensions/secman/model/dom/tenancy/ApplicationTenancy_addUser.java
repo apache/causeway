@@ -21,11 +21,11 @@ package org.apache.isis.extensions.secman.model.dom.tenancy;
 import java.util.Collection;
 import java.util.List;
 
+import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.AddUserDomainEvent;
@@ -35,7 +35,10 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(domainEvent = AddUserDomainEvent.class, associateWith = "users")
+@Action(
+        domainEvent = AddUserDomainEvent.class, 
+        associateWith = "users", 
+        associateWithSequence = "1")
 @ActionLayout(named="Add")
 @RequiredArgsConstructor
 public class ApplicationTenancy_addUser {
@@ -45,12 +48,13 @@ public class ApplicationTenancy_addUser {
     
     private final ApplicationTenancy holder;
 
-    @MemberOrder(sequence = "1")
+    @Model
     public ApplicationTenancy act(final ApplicationUser applicationUser) {
         applicationTenancyRepository.setTenancyOnUser(holder, applicationUser);
         return holder;
     }
 
+    @Model
     public List<ApplicationUser> autoComplete0Act(final String search) {
         final Collection<ApplicationUser> matchingSearch = applicationUserRepository.find(search);
         final List<ApplicationUser> list = _Lists.newArrayList(matchingSearch);

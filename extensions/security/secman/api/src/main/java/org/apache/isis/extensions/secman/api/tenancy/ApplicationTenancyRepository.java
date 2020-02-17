@@ -25,16 +25,19 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 public interface ApplicationTenancyRepository {
 
     Collection<ApplicationTenancy> allTenancies();
-
-    Collection<ApplicationTenancy> findByNameOrPathMatchingCached(String partialNameOrPath);
     
     Collection<ApplicationUser> getUsers(ApplicationTenancy tenancy);
+    Collection<ApplicationTenancy> getChildren(ApplicationTenancy tenancy);
+    
+    Collection<ApplicationTenancy> findByNameOrPathMatchingCached(String partialNameOrPath);
 
     ApplicationTenancy newTenancy(String name, String path, ApplicationTenancy parent);
 
     void setTenancyOnUser(ApplicationTenancy tenancy, ApplicationUser user);
     void clearTenancyOnUser(ApplicationUser user);
 
+    void setParentOnTenancy(ApplicationTenancy tenancy, ApplicationTenancy parent);
+    void clearParentOnTenancy(ApplicationTenancy tenancy);
     
 
 }

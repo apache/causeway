@@ -26,12 +26,6 @@ public interface ApplicationRole {
     public static final int TYPICAL_LENGTH_NAME = 30;
     public static final int TYPICAL_LENGTH_DESCRIPTION = 50;
 
-    String getName();
-    void setName(String name);
-    
-    String getDescription();
-    void setDescription(String description);
-    
     // -- EVENTS
     
     public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationRole, T> {}
@@ -52,7 +46,13 @@ public interface ApplicationRole {
     public static class UpdateDescriptionDomainEvent extends ActionDomainEvent {}
     public static class UpdateNameDomainEvent extends ActionDomainEvent {}
     
+    // -- MODEL
     
+    String getName();
+    void setName(String name);
+    
+    String getDescription();
+    void setDescription(String description);
 
 
 }

@@ -34,6 +34,9 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.MessageBroker;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
+
 /**
  * Attach to any Ajax button that might trigger a notification (ie calls
  * {@link MessageBroker#addMessage(String)}, {@link MessageBroker#addWarning(String)},
@@ -46,6 +49,7 @@ import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
  * editButton.add(new JGrowlBehaviour());
  * </pre>
  */
+@Log4j2
 public class JGrowlBehaviour extends AbstractDefaultAjaxBehavior {
 
     private static final long serialVersionUID = 1L;
@@ -90,8 +94,12 @@ public class JGrowlBehaviour extends AbstractDefaultAjaxBehavior {
     }
 
     protected Optional<MessageBroker> getMessageBroker() {
-        return Optional.ofNullable(commonContext.getAuthenticationSession())
+        val messageBroker = Optional.ofNullable(commonContext.getAuthenticationSession())
                 .map(AuthenticationSession::getMessageBroker);
+        if(!messageBroker.isPresent()) {
+            log.warn("failed to locate a MessageBroker on current AuthenticationSession");
+        }
+        return messageBroker;
     }
 
 }
