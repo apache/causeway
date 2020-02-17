@@ -291,7 +291,7 @@ public class DomainMemberDefault implements DomainMember {
                 .contains(name);
     }
 
-    private final static Comparator<DomainMember> comparator = 
+    private static final Comparator<DomainMember> comparator = 
             Comparator.comparing(DomainMember::getClassType)
             .thenComparing(DomainMember::getClassName)
             .thenComparing(DomainMember::getType, Comparator.reverseOrder()) // desc

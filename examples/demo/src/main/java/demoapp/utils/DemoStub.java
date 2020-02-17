@@ -46,7 +46,7 @@ public abstract class DemoStub {
         return AsciiDoc.valueOfAdoc(readAsciiDocDescription());
     }
 
-    protected final static Map<String, String> constants = createConstants();
+    protected static final Map<String, String> constants = createConstants();
     private static Map<String, String> createConstants() {
         val map = new HashMap<String, String>();
         map.put("SOURCES_ISIS", "https://github.com/apache/isis/blob/master/core/applib/src/main/java");

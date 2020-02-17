@@ -79,7 +79,7 @@ public interface WithInterval<T extends WithInterval<T>> extends WithStartDate {
     @Programmatic
     public boolean isCurrent();
 
-    public final static class Util {
+    public static final class Util {
         private Util() {
         }
 
@@ -115,7 +115,7 @@ public interface WithInterval<T extends WithInterval<T>> extends WithStartDate {
         }
     }
     
-    public final static class Predicates {
+    public static final class Predicates {
         
         private Predicates(){}
         

@@ -27,7 +27,7 @@ package org.apache.isis.core.commons.internal.base;
 final class _Strings_HtmlEscaper {
 
     // as declared int guava's com.google.common.html.HtmlEscapers
-    private final static _Strings.KeyValuePair[] replacements = {
+    private static final _Strings.KeyValuePair[] replacements = {
             _Strings.pair("\"", "&quot;"),
             // Note: "&apos;" is not defined in HTML 4.01.
             _Strings.pair("'", "&#39;"),

@@ -311,17 +311,17 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
 
     // -- CONTRACT
 
-    private final static Equality<ApplicationTenancy> equality =
+    private static final Equality<ApplicationTenancy> equality =
             ObjectContracts.checkEquals(ApplicationTenancy::getPath);
 
-    private final static Hashing<ApplicationTenancy> hashing =
+    private static final Hashing<ApplicationTenancy> hashing =
             ObjectContracts.hashing(ApplicationTenancy::getPath);
 
-    private final static ToString<ApplicationTenancy> toString =
+    private static final ToString<ApplicationTenancy> toString =
             ObjectContracts.toString("path", ApplicationTenancy::getPath)
             .thenToString("name", ApplicationTenancy::getName);
 
-    private final static Comparator<ApplicationTenancy> comparator =
+    private static final Comparator<ApplicationTenancy> comparator =
             Comparator.comparing(ApplicationTenancy::getPath);
 
 

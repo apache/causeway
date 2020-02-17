@@ -36,7 +36,7 @@ class NavigableParentTestSamples {
     // has navigable parent 'Root' specified via Annotation
     protected static class DomainObjectA {
 
-        private final static Object myParent = new DomainObjectRoot();
+        private static final Object myParent = new DomainObjectRoot();
 
         @Override
         public String toString() {
@@ -53,7 +53,7 @@ class NavigableParentTestSamples {
     // has navigable parent 'A' specified via method
     protected static class DomainObjectB {
 
-        private final static Object myParent = new DomainObjectA();
+        private static final Object myParent = new DomainObjectA();
 
         @Override
         public String toString() {

@@ -83,7 +83,7 @@ public final class _MethodCache implements AutoCloseable {
     private Set<Class<?>> inspectedTypes = new HashSet<>();
     
     @AllArgsConstructor(staticName = "of") @EqualsAndHashCode
-    private final static class Key {
+    private static final class Key {
         private final Class<?> type;
         private final String name;
         private final Class<?>[] paramTypes;

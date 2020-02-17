@@ -186,7 +186,7 @@ public final class _Mementos {
 
     }
 
-    private final static Memento EMPTY_MEMENTO = new EmptyMemento();
+    private static final Memento EMPTY_MEMENTO = new EmptyMemento();
 
     public static Memento empty() {
         return EMPTY_MEMENTO;

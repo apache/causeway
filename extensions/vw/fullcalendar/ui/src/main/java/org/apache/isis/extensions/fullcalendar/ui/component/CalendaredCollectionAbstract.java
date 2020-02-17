@@ -48,7 +48,7 @@ public abstract class CalendaredCollectionAbstract extends PanelAbstract<EntityC
     private static final String ID_FULL_CALENDAR = "fullCalendar";
     private static final String ID_FEEDBACK = "feedback";
 
-    private final static String[] COLORS = {
+    private static final String[] COLORS = {
         "#63BA68", "#B1ADAC", "#E6CC7F"
     };
     

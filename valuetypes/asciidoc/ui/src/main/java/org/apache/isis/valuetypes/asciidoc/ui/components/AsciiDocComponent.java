@@ -59,7 +59,7 @@ public class AsciiDocComponent extends MarkupComponent {
 
     }
 
-    private final static _Lazy<JavaScriptResourceReference> jsRef = _Lazy.threadSafe(()->
+    private static final _Lazy<JavaScriptResourceReference> jsRef = _Lazy.threadSafe(()->
     new JavaScriptResourceReference(AsciiDocComponent.class, "js/prism1.14.js"));
 
 }

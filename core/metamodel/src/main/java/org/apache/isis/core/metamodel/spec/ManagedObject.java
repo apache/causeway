@@ -90,7 +90,7 @@ public interface ManagedObject {
     // -- SIMPLE
 
     @Value @RequiredArgsConstructor(staticName="of") @EqualsAndHashCode(of = "pojo") 
-    final static class SimpleManagedObject implements ManagedObject {
+    static final class SimpleManagedObject implements ManagedObject {
         @NonNull private final ObjectSpecification specification;
         @NonNull private final Object pojo;
     }
@@ -98,7 +98,7 @@ public interface ManagedObject {
     // -- LAZY
 
     @ToString(of = {"specification", "pojo"}) @EqualsAndHashCode(of = "pojo")
-    final static class LazyManagedObject implements ManagedObject {
+    static final class LazyManagedObject implements ManagedObject {
 
         @NonNull private final Function<Class<?>, ObjectSpecification> specLoader;  
 
@@ -790,7 +790,7 @@ public interface ManagedObject {
     }
 
     static class EmptyUtil {
-        private final static ManagedObject EMPTY = new ManagedObject() {
+        private static final ManagedObject EMPTY = new ManagedObject() {
 
             @Override
             public ObjectSpecification getSpecification() {

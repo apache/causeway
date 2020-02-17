@@ -135,7 +135,7 @@ public interface ServiceRegistry {
 
     static class InstanceByPriorityComparator implements Comparator<Object> {
 
-        private final static InstanceByPriorityComparator INSTANCE =
+        private static final InstanceByPriorityComparator INSTANCE =
                 new InstanceByPriorityComparator();
 
         public static InstanceByPriorityComparator instance() {

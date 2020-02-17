@@ -46,7 +46,7 @@ public class JdoMetamodelUtil {
     
     // -- HELPER
 
-    private final static Set<String> jdoMethodsProvidedByEnhancement = _Sets.newHashSet();
+    private static final Set<String> jdoMethodsProvidedByEnhancement = _Sets.newHashSet();
     
     private static Method[] getMethodsProvidedByEnhancement() {
         return org.datanucleus.enhancement.Persistable.class.getDeclaredMethods();

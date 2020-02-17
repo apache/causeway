@@ -229,7 +229,7 @@ public interface ObjectAction extends ObjectMember {
     // -- Util
     public static final class Util {
 
-        final static MemberOrderFacetComparator memberOrderFacetComparator = new MemberOrderFacetComparator(false);
+        static final MemberOrderFacetComparator memberOrderFacetComparator = new MemberOrderFacetComparator(false);
 
         private Util() {
         }

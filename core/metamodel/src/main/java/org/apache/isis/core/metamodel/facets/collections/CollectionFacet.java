@@ -166,7 +166,7 @@ public interface CollectionFacet extends Facet {
         
         // -- HELPER
         
-        private final static Map<Class<?>, Supplier<Collection<?>>> factoriesByType = _With.hashMap(
+        private static final Map<Class<?>, Supplier<Collection<?>>> factoriesByType = _With.hashMap(
                 map-> {
                     // specific list implementations
                     map.put(CopyOnWriteArrayList.class, _Lists::newConcurrentList);

@@ -100,7 +100,7 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
     }
     
 
-    private final static ToString<PropertyDomainEvent<?,?>> toString = 
+    private static final ToString<PropertyDomainEvent<?,?>> toString = 
     		ObjectContracts.<PropertyDomainEvent<?,?>>
 		    toString("source", PropertyDomainEvent::getSource)
 		    .thenToString("identifier", PropertyDomainEvent::getIdentifier)

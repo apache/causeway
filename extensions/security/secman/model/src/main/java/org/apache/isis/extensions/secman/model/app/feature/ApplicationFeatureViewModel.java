@@ -303,13 +303,13 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     // -- equals, hashCode, toString
 
 
-    private final static Equality<ApplicationFeatureViewModel> equality =
+    private static final Equality<ApplicationFeatureViewModel> equality =
             ObjectContracts.checkEquals(ApplicationFeatureViewModel::getFeatureId);
 
-    private final static Hashing<ApplicationFeatureViewModel> hashing =
+    private static final Hashing<ApplicationFeatureViewModel> hashing =
             ObjectContracts.hashing(ApplicationFeatureViewModel::getFeatureId);
 
-    private final static ToString<ApplicationFeatureViewModel> toString =
+    private static final ToString<ApplicationFeatureViewModel> toString =
             ObjectContracts.toString("featureId", ApplicationFeatureViewModel::getFeatureId);
 
 

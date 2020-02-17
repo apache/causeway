@@ -85,7 +85,7 @@ public class _Ints {
         return value!=Long.MAX_VALUE;
     }
 
-    private final static Consumer<String> IGNORE_ERRORS = t->{};
+    private static final Consumer<String> IGNORE_ERRORS = t->{};
     
     /**
      * @implNote Copied over from JDK's {@link Integer#parseInt(String)} to provide a variant 

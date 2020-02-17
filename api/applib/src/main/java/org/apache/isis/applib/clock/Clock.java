@@ -60,7 +60,7 @@ public abstract class Clock {
      *
      * @return
      */
-    public final static Clock getInstance() {
+    public static final Clock getInstance() {
         if (!isInitialized()) {
             instance = new SystemClock();
         }

@@ -51,7 +51,7 @@ import lombok.Getter;
 @Qualifier("Wicket")
 public final class WebModuleWicket extends WebModuleAbstract {
 
-    private final static String WICKET_FILTER_NAME = "WicketFilter";
+    private static final String WICKET_FILTER_NAME = "WicketFilter";
 
     private final IsisSystemEnvironment isisSystemEnvironment;
     private final IsisConfiguration isisConfiguration;

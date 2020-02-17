@@ -28,6 +28,6 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class AuthenticationSessionWormhole {
 
-    public final static ThreadLocal<AuthenticationSession> sessionByThread = new ThreadLocal<>();
+    public static final ThreadLocal<AuthenticationSession> sessionByThread = new ThreadLocal<>();
 
 }

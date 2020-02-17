@@ -25,7 +25,7 @@ import org.apache.isis.schema.common.v2.OidDto;
 
 final class Oid_Value implements RootOid {
 
-    private final static long serialVersionUID = 2L;
+    private static final long serialVersionUID = 2L;
 
     static final Oid_Value INSTANCE = new Oid_Value();
 

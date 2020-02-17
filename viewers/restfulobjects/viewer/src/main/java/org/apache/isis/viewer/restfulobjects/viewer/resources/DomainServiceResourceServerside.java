@@ -62,7 +62,7 @@ import lombok.val;
 @Path("/services")
 public class DomainServiceResourceServerside extends ResourceAbstract implements DomainServiceResource {
 
-    private final static Predicate<ManagedObject> NATURE_REST_ALSO = (final ManagedObject input) -> {
+    private static final Predicate<ManagedObject> NATURE_REST_ALSO = (final ManagedObject input) -> {
         final ObjectSpecification specification = input.getSpecification();
         final DomainServiceFacet facet = specification.getFacet(DomainServiceFacet.class);
         if (facet == null) {

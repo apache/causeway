@@ -27,9 +27,9 @@ public final class UrlParserUtils {
 
     private UrlParserUtils(){}
 
-    private final static Pattern DOMAIN_TYPE = Pattern.compile(".*domain-types\\/([^/]+).*");
+    private static final Pattern DOMAIN_TYPE = Pattern.compile(".*domain-types\\/([^/]+).*");
 
-    public final static String domainTypeFrom(final JsonRepresentation link) {
+    public static final String domainTypeFrom(final JsonRepresentation link) {
         return domainTypeFrom(link.getString("href"));
     }
 

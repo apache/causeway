@@ -42,10 +42,10 @@ import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
 
 public class RestfulResponse<T> {
 
-    public final static class HttpStatusCode {
+    public static final class HttpStatusCode {
 
-        private final static Map<Status, HttpStatusCode> statii = _Maps.newHashMap();
-        private final static Map<Integer, HttpStatusCode> statusCodes = _Maps.newHashMap();
+        private static final Map<Status, HttpStatusCode> statii = _Maps.newHashMap();
+        private static final Map<Integer, HttpStatusCode> statusCodes = _Maps.newHashMap();
 
         private static class StatusTypeImpl implements StatusType {
 
@@ -100,8 +100,8 @@ public class RestfulResponse<T> {
         // public static final int SC_SWITCHING_PROTOCOLS = 101;
         // public static final int SC_PROCESSING = 102;
 
-        public final static HttpStatusCode OK = new HttpStatusCode(200, Status.OK);
-        public final static HttpStatusCode CREATED = new HttpStatusCode(201, Status.CREATED);
+        public static final HttpStatusCode OK = new HttpStatusCode(200, Status.OK);
+        public static final HttpStatusCode CREATED = new HttpStatusCode(201, Status.CREATED);
 
         // public static final int SC_ACCEPTED = 202;
         // public static final int SC_NON_AUTHORITATIVE_INFORMATION = 203;
@@ -115,26 +115,26 @@ public class RestfulResponse<T> {
         // public static final int SC_MOVED_PERMANENTLY = 301;
         // public static final int SC_MOVED_TEMPORARILY = 302;
         // public static final int SC_SEE_OTHER = 303;
-        public final static HttpStatusCode NOT_MODIFIED = new HttpStatusCode(304, Status.BAD_REQUEST);
+        public static final HttpStatusCode NOT_MODIFIED = new HttpStatusCode(304, Status.BAD_REQUEST);
 
         // public static final int SC_NOT_MODIFIED = 304;
         // public static final int SC_USE_PROXY = 305;
         // public static final int SC_TEMPORARY_REDIRECT = 307;
 
-        public final static HttpStatusCode BAD_REQUEST = new HttpStatusCode(400, Status.BAD_REQUEST);
-        public final static HttpStatusCode UNAUTHORIZED = new HttpStatusCode(401, Status.UNAUTHORIZED);
+        public static final HttpStatusCode BAD_REQUEST = new HttpStatusCode(400, Status.BAD_REQUEST);
+        public static final HttpStatusCode UNAUTHORIZED = new HttpStatusCode(401, Status.UNAUTHORIZED);
 
         // public static final int SC_PAYMENT_REQUIRED = 402;
         public static final HttpStatusCode FORBIDDEN = new HttpStatusCode(403, Status.FORBIDDEN);
 
-        public final static HttpStatusCode NOT_FOUND = new HttpStatusCode(404, Status.NOT_FOUND);
-        public final static HttpStatusCode METHOD_NOT_ALLOWED = new HttpStatusCode(405, new StatusTypeImpl(405, Family.CLIENT_ERROR, "Method not allowed"));
-        public final static HttpStatusCode NOT_ACCEPTABLE = new HttpStatusCode(406, Status.NOT_ACCEPTABLE);
+        public static final HttpStatusCode NOT_FOUND = new HttpStatusCode(404, Status.NOT_FOUND);
+        public static final HttpStatusCode METHOD_NOT_ALLOWED = new HttpStatusCode(405, new StatusTypeImpl(405, Family.CLIENT_ERROR, "Method not allowed"));
+        public static final HttpStatusCode NOT_ACCEPTABLE = new HttpStatusCode(406, Status.NOT_ACCEPTABLE);
 
         // public static final int SC_PROXY_AUTHENTICATION_REQUIRED = 407;
         // public static final int SC_REQUEST_TIMEOUT = 408;
 
-        public final static HttpStatusCode CONFLICT = new HttpStatusCode(409, Status.CONFLICT);
+        public static final HttpStatusCode CONFLICT = new HttpStatusCode(409, Status.CONFLICT);
 
         // public static final int SC_GONE = 410;
         // public static final int SC_LENGTH_REQUIRED = 411;
@@ -143,24 +143,24 @@ public class RestfulResponse<T> {
         // public static final int SC_REQUEST_URI_TOO_LONG = 414;
         // public static final int SC_UNSUPPORTED_MEDIA_TYPE = 415;
 
-        public final static HttpStatusCode UNSUPPORTED_MEDIA_TYPE = new HttpStatusCode(415, Status.UNSUPPORTED_MEDIA_TYPE);
+        public static final HttpStatusCode UNSUPPORTED_MEDIA_TYPE = new HttpStatusCode(415, Status.UNSUPPORTED_MEDIA_TYPE);
 
         // public static final int SC_REQUESTED_RANGE_NOT_SATISFIABLE = 416;
         // public static final int SC_EXPECTATION_FAILED = 417;
         // public static final int SC_INSUFFICIENT_SPACE_ON_RESOURCE = 419;
 
-        public final static HttpStatusCode METHOD_FAILURE = new HttpStatusCode(420, new StatusTypeImpl(420, Family.CLIENT_ERROR, "Method failure"));
+        public static final HttpStatusCode METHOD_FAILURE = new HttpStatusCode(420, new StatusTypeImpl(420, Family.CLIENT_ERROR, "Method failure"));
 
         // public static final int SC_UNPROCESSABLE_ENTITY = 422;
-        public final static HttpStatusCode VALIDATION_FAILED = new HttpStatusCode(422, new StatusTypeImpl(422, Family.CLIENT_ERROR, "Validation failed"));
+        public static final HttpStatusCode VALIDATION_FAILED = new HttpStatusCode(422, new StatusTypeImpl(422, Family.CLIENT_ERROR, "Validation failed"));
 
         // public static final int SC_LOCKED = 423;
         // public static final int SC_FAILED_DEPENDENCY = 424;
 
-        public final static HttpStatusCode PRECONDITION_HEADER_MISSING = new HttpStatusCode(428, new StatusTypeImpl(428, Family.CLIENT_ERROR, "Precondition header missing"));
+        public static final HttpStatusCode PRECONDITION_HEADER_MISSING = new HttpStatusCode(428, new StatusTypeImpl(428, Family.CLIENT_ERROR, "Precondition header missing"));
 
-        public final static HttpStatusCode INTERNAL_SERVER_ERROR = new HttpStatusCode(500, Status.INTERNAL_SERVER_ERROR);
-        public final static HttpStatusCode NOT_IMPLEMENTED = new HttpStatusCode(501, new StatusTypeImpl(501, Family.SERVER_ERROR, "Not implemented"));
+        public static final HttpStatusCode INTERNAL_SERVER_ERROR = new HttpStatusCode(500, Status.INTERNAL_SERVER_ERROR);
+        public static final HttpStatusCode NOT_IMPLEMENTED = new HttpStatusCode(501, new StatusTypeImpl(501, Family.SERVER_ERROR, "Not implemented"));
 
         // public static final int SC_BAD_GATEWAY = 502;
         // public static final int SC_SERVICE_UNAVAILABLE = 503;
@@ -168,7 +168,7 @@ public class RestfulResponse<T> {
         // public static final int SC_HTTP_VERSION_NOT_SUPPORTED = 505;
         // public static final int SC_INSUFFICIENT_STORAGE = 507;
 
-        public final static HttpStatusCode statusFor(final int statusCode) {
+        public static final HttpStatusCode statusFor(final int statusCode) {
             final HttpStatusCode httpStatusCode = statusCodes.get(statusCode);
             if (httpStatusCode != null) {
                 return httpStatusCode;
@@ -176,11 +176,11 @@ public class RestfulResponse<T> {
             return statusForSynchronized(statusCode);
         }
 
-        public final static HttpStatusCode statusFor(final Status status) {
+        public static final HttpStatusCode statusFor(final Status status) {
             return statii.get(status);
         }
 
-        private final static synchronized HttpStatusCode statusForSynchronized(final int statusCode) {
+        private static final synchronized HttpStatusCode statusForSynchronized(final int statusCode) {
             HttpStatusCode httpStatusCode = statusCodes.get(statusCode);
             if (httpStatusCode != null) {
                 return httpStatusCode;
@@ -245,12 +245,12 @@ public class RestfulResponse<T> {
 
     public static class Header<X> {
 
-        public final static Header<String> WARNING = new Header<String>("Warning", warningParser());
-        public final static Header<Date> LAST_MODIFIED = new Header<Date>("Last-Modified", Parser.forDate());
-        public final static Header<CacheControl> CACHE_CONTROL = new Header<CacheControl>("Cache-Control", Parser.forCacheControl());
-        public final static Header<MediaType> CONTENT_TYPE = new Header<MediaType>("Content-Type", Parser.forJaxRsMediaType());
-        public final static Header<Integer> CONTENT_LENGTH = new Header<Integer>("Content-Length", Parser.forInteger());
-        public final static Header<String> ETAG = new Header<String>("ETag", Parser.forETag());
+        public static final Header<String> WARNING = new Header<String>("Warning", warningParser());
+        public static final Header<Date> LAST_MODIFIED = new Header<Date>("Last-Modified", Parser.forDate());
+        public static final Header<CacheControl> CACHE_CONTROL = new Header<CacheControl>("Cache-Control", Parser.forCacheControl());
+        public static final Header<MediaType> CONTENT_TYPE = new Header<MediaType>("Content-Type", Parser.forJaxRsMediaType());
+        public static final Header<Integer> CONTENT_LENGTH = new Header<Integer>("Content-Length", Parser.forInteger());
+        public static final Header<String> ETAG = new Header<String>("ETag", Parser.forETag());
 
         private final String name;
         private final Parser<X> parser;

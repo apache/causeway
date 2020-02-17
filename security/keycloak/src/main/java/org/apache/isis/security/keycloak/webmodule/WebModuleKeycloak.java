@@ -44,7 +44,7 @@ import lombok.Getter;
 @Qualifier("Keycloak")
 public final class WebModuleKeycloak extends WebModuleAbstract {
 
-    private final static String KEYCLOAK_FILTER_NAME = "KeycloakFilter";
+    private static final String KEYCLOAK_FILTER_NAME = "KeycloakFilter";
 
     @Getter
     private final String name = "Keycloak";

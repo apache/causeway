@@ -6,7 +6,7 @@ public class FqcnType {
 
     public static class Meta {
 
-        public final static int MAX_LEN = 254;
+        public static final int MAX_LEN = 254;
 
         private Meta() {}
 

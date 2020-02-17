@@ -309,7 +309,7 @@ public enum RepresentationType {
         return null;
     }
 
-    private final static Parser<RepresentationType> PARSER = new Parser<RepresentationType>() {
+    private static final Parser<RepresentationType> PARSER = new Parser<RepresentationType>() {
         @Override
         public RepresentationType valueOf(final String str) {
             return RepresentationType.lookup(str);

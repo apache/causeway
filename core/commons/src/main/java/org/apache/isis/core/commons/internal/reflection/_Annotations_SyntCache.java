@@ -37,7 +37,7 @@ final class _Annotations_SyntCache {
     // -- L2 CACHE
     
     @Value(staticConstructor = "of")
-    private final static class Key {
+    private static final class Key {
         AnnotatedElement annotatedElement; 
         Class<? extends Annotation> annotationType;
     }

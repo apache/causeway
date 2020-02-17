@@ -185,7 +185,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
         super.addFacet(facet);
     }
     
-    private final static class AnnotHelper {
+    private static final class AnnotHelper {
         AnnotHelper(DomainObject domainObject) {
             this.autoCompleteRepository = domainObject.autoCompleteRepository();
             this.autoCompleteAction = domainObject.autoCompleteAction();

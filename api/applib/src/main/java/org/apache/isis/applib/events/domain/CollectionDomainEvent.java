@@ -122,7 +122,7 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
 
 
 
-    private final static ToString<CollectionDomainEvent<?,?>> toString =
+    private static final ToString<CollectionDomainEvent<?,?>> toString =
             ObjectContracts.<CollectionDomainEvent<?,?>>
     toString("source", CollectionDomainEvent::getSource)
     .thenToString("identifier", CollectionDomainEvent::getIdentifier)

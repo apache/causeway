@@ -433,34 +433,34 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
     // -- equals, hashCode, compareTo, toString
 
-    private final static Comparator<ApplicationFeatureId> byType =
+    private static final Comparator<ApplicationFeatureId> byType =
             comparing(ApplicationFeatureId::getType, nullsFirst(naturalOrder()));
-    private final static Comparator<ApplicationFeatureId> byPackageName =
+    private static final Comparator<ApplicationFeatureId> byPackageName =
             comparing(ApplicationFeatureId::getPackageName, nullsFirst(naturalOrder()));
-    private final static Comparator<ApplicationFeatureId> byClassName =
+    private static final Comparator<ApplicationFeatureId> byClassName =
             comparing(ApplicationFeatureId::getClassName, nullsFirst(naturalOrder()));
-    private final static Comparator<ApplicationFeatureId> byMemberName =
+    private static final Comparator<ApplicationFeatureId> byMemberName =
             comparing(ApplicationFeatureId::getMemberName, nullsFirst(naturalOrder()));
 
-    private final static Comparator<ApplicationFeatureId> applicationFeatureIdOrdering =
+    private static final Comparator<ApplicationFeatureId> applicationFeatureIdOrdering =
             Comparator.nullsFirst(byType)
             .thenComparing(byPackageName)
             .thenComparing(byClassName)
             .thenComparing(byMemberName);
 
-    private final static Equality<ApplicationFeatureId> equality =
+    private static final Equality<ApplicationFeatureId> equality =
             ObjectContracts.checkEquals(ApplicationFeatureId::getType)
             .thenCheckEquals(ApplicationFeatureId::getPackageName)
             .thenCheckEquals(ApplicationFeatureId::getClassName)
             .thenCheckEquals(ApplicationFeatureId::getMemberName);
 
-    private final static Hashing<ApplicationFeatureId> hashing =
+    private static final Hashing<ApplicationFeatureId> hashing =
             ObjectContracts.hashing(ApplicationFeatureId::getType)
             .thenHashing(ApplicationFeatureId::getPackageName)
             .thenHashing(ApplicationFeatureId::getClassName)
             .thenHashing(ApplicationFeatureId::getMemberName);
 
-    private final static ToString<ApplicationFeatureId> toString =
+    private static final ToString<ApplicationFeatureId> toString =
             ObjectContracts.toString("type", ApplicationFeatureId::getType)
             .thenToString("packageName", ApplicationFeatureId::getPackageName)
             .thenToStringOmmitIfAbsent("className", ApplicationFeatureId::getClassName)

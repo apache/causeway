@@ -60,7 +60,7 @@ public final class _Blackhole {
 
     // -- HELPER
 
-    public final static class _Blackhole_Internal {
+    public static final class _Blackhole_Internal {
 
         public int tlr;
         public volatile int tlrMask;
@@ -75,6 +75,6 @@ public final class _Blackhole {
 
     }
 
-    private final static _Blackhole_Internal internal = new _Blackhole_Internal();
+    private static final _Blackhole_Internal internal = new _Blackhole_Internal();
 
 }

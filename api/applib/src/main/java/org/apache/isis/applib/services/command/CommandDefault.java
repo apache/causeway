@@ -192,7 +192,7 @@ public class CommandDefault implements Command {
 
     // -- toString
 
-    private final static ToString<CommandDefault> toString = ObjectContracts
+    private static final ToString<CommandDefault> toString = ObjectContracts
             .toString("startedAt", CommandDefault::getStartedAt)
             .thenToString("user", CommandDefault::getUser)
             .thenToString("memberIdentifier", CommandDefault::getMemberIdentifier)

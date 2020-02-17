@@ -6,7 +6,7 @@ public class MoneyType {
 
     public static class Meta {
 
-        public final static int SCALE = 2;
+        public static final int SCALE = 2;
 
         private Meta() {}
 

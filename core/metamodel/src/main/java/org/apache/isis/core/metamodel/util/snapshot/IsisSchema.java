@@ -39,7 +39,7 @@ final class IsisSchema {
      * The base of the namespace URI to use for application namespaces if none
      * explicitly supplied in the constructor.
      */
-    public final static String DEFAULT_URI_BASE = "http://isis.apache.org/ns/app/";
+    public static final String DEFAULT_URI_BASE = "http://isis.apache.org/ns/app/";
 
     /**
      * Enumeration of isis:feature attribute representing a class

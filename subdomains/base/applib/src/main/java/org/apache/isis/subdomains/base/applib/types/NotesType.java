@@ -6,7 +6,7 @@ public class NotesType {
 
     public static class Meta {
 
-        public final static int MAX_LEN = 4000;
+        public static final int MAX_LEN = 4000;
 
         private Meta() {}
 

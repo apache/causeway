@@ -81,7 +81,7 @@ class PoWriter extends PoAbstract {
         log.info(buf.toString());
     }
 
-    final static DateTimeFormatter timestampFormat = 
+    static final DateTimeFormatter timestampFormat = 
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss+Z", Locale.US);
     
     /**

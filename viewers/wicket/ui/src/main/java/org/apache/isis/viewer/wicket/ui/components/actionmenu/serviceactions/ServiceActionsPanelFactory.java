@@ -37,7 +37,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
  */
 public class ServiceActionsPanelFactory extends ComponentFactoryAbstract {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     
     public ServiceActionsPanelFactory() {
         super(ComponentType.SERVICE_ACTIONS, ServiceActionsPanel.class);

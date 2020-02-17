@@ -111,7 +111,7 @@ public class TemplateResourceCachingFilter implements Filter {
     /** The cache time in seconds. */
     private long cacheTime = 0L;
 
-    private final static DateFormat httpDateFormat() { 
+    private static final DateFormat httpDateFormat() { 
         // not thread-safe, so each thread should have its own instance
         val dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));

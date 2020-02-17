@@ -33,7 +33,7 @@ import java.util.SortedSet;
  */
 class _Collections_SortedSetOfList<T> implements SortedSet<T> {
 
-    private final static String JUST_AN_ADAPTER =
+    private static final String JUST_AN_ADAPTER =
             "this set is just an adapter, it has no information about the intended comparator";
 
     static <T> _Collections_SortedSetOfList<T> of(List<T> list){

@@ -39,7 +39,7 @@ public final class ValidationFailure implements Comparable<ValidationFailure> {
     @NonNull private Identifier origin;
     @NonNull private String message;
     
-    private final static Comparator<ValidationFailure> comparator = Comparator
+    private static final Comparator<ValidationFailure> comparator = Comparator
             .<ValidationFailure, String>comparing(failure->failure.getOrigin().getClassName(), nullsFirst(naturalOrder()))
             .<String>thenComparing(failure->failure.getOrigin().getMemberName(), nullsFirst(naturalOrder()))
             .thenComparing(ValidationFailure::getMessage);

@@ -890,9 +890,9 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
 
     // -- equals, hashCode, compareTo, toString
-    private final static String propertyNames = "username";
+    private static final String propertyNames = "username";
 
-    private final static ObjectContract<ApplicationUser> contract = 
+    private static final ObjectContract<ApplicationUser> contract = 
             ObjectContracts.parse(ApplicationUser.class, propertyNames);
 
 

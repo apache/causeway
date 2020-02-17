@@ -33,7 +33,7 @@ import demoapp.utils.DemoStub;
 public class TreeDemo extends DemoStub {
 
     // this is the actual view model rendered by the framework
-    private final static TreeNode<FileNode> createTree() {
+    private static final TreeNode<FileNode> createTree() {
         val root = FileNodeFactory.defaultRoot();
         val tree = TreeNode.lazy(root, FileSystemTreeAdapter.class);
         tree.expand(TreePath.of(0)); // expand the root node

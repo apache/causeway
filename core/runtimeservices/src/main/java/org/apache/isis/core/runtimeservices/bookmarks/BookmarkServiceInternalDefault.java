@@ -205,7 +205,7 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
 
     // -- HELPER
 
-    private final static Set<Class<? extends Serializable>> serializableFinalTypes = _Sets.of(
+    private static final Set<Class<? extends Serializable>> serializableFinalTypes = _Sets.of(
             String.class, String[].class,
             Class.class, Class[].class,
             Character.class, Character[].class, char[].class,
@@ -219,7 +219,7 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
             Double[].class, double[].class
             );
 
-    private final static List<Class<? extends Serializable>> serializableTypes = _Lists.of(
+    private static final List<Class<? extends Serializable>> serializableTypes = _Lists.of(
             java.util.Date.class,
             java.sql.Date.class,
             Enum.class,

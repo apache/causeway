@@ -57,7 +57,7 @@ implements ContributeeMemberFacetFactory {
 //     *     <li>methodNameRegex:cssClassFa:(left|right) - will render the Font Awesome icon on the specified position of the title</li>
 //     * </ul>
 //     */
-//    private final static Pattern FA_ICON_REGEX_PATTERN = Pattern.compile("([^:]+):(.+)");
+//    private static final Pattern FA_ICON_REGEX_PATTERN = Pattern.compile("([^:]+):(.+)");
 
     private CssClassFaFacet createFromConfiguredRegexIfPossible(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();

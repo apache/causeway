@@ -37,7 +37,7 @@ import lombok.experimental.UtilityClass;
 public class DataNucleusContextUtil {
     
     // required to be lower-case for DN to be accepted
-    private final static String METAMODELCONTEXT_PROPERTY_KEY = "isis.metamodelcontext"; 
+    private static final String METAMODELCONTEXT_PROPERTY_KEY = "isis.metamodelcontext"; 
 
     public static void putMetaModelContext(
             Map<String, Object> map, 

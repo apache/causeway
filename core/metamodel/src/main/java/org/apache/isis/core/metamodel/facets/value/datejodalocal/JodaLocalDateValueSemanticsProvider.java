@@ -79,10 +79,10 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
     /**
      * @deprecated possible memory leak issue, because this one is never cleared up
      */
-    private final static ThreadLocal<String> OVERRIDE_TITLE_PATTERN = ThreadLocal.withInitial(()->null);
+    private static final ThreadLocal<String> OVERRIDE_TITLE_PATTERN = ThreadLocal.withInitial(()->null);
 
 
-    private final static List<DateTimeFormatter> PARSE_FORMATTERS = _Lists.newArrayList();
+    private static final List<DateTimeFormatter> PARSE_FORMATTERS = _Lists.newArrayList();
     static {
         PARSE_FORMATTERS.add(DateTimeFormat.forStyle("L-"));
         PARSE_FORMATTERS.add(DateTimeFormat.forStyle("M-"));

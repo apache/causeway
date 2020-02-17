@@ -50,7 +50,7 @@ public interface ImmutableFacet extends Facet, DisablingInteractionAdvisor {
      */
     void copyOnto(FacetHolder holder);
 
-    public final static class Utils {
+    public static final class Utils {
 
         private Utils(){}
         public static boolean isAlwaysImmutable(

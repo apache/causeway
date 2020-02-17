@@ -68,8 +68,8 @@ final class ThreadPoolSupport implements AutoCloseable {
     public static ThreadPoolExecutionMode HIGHEST_CONCURRENCY_EXECUTION_MODE_ALLOWED = 
             ThreadPoolExecutionMode.PARALLEL;
 
-    private final static int KEEP_ALIVE_TIME_SECS = 5;
-    private final static int QUEUE_CAPACITY = Integer.MAX_VALUE;
+    private static final int KEEP_ALIVE_TIME_SECS = 5;
+    private static final int QUEUE_CAPACITY = Integer.MAX_VALUE;
 
     private final ThreadGroup group;
     private final ThreadPoolExecutor concurrentExecutor;

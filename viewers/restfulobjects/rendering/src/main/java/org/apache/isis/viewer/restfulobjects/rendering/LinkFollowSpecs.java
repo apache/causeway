@@ -28,7 +28,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.util.FollowSpecUtil;
 
 public final class LinkFollowSpecs {
 
-    public final static LinkFollowSpecs create(final List<List<String>> links) {
+    public static final LinkFollowSpecs create(final List<List<String>> links) {
         final List<List<PathNode>> specs = FollowSpecUtil.asFollowSpecs(links);
         return new LinkFollowSpecs(specs, Mode.FOLLOWING, null);
     }

@@ -48,8 +48,8 @@ import lombok.val;
 @Qualifier("H2Console")
 public class WebModuleH2Console extends WebModuleAbstract {
 
-    private final static String SERVLET_NAME = "H2Console";
-    private final static String CONSOLE_PATH = "/db";
+    private static final String SERVLET_NAME = "H2Console";
+    private static final String CONSOLE_PATH = "/db";
 
     @Getter
     private final LocalResourcePath localResourcePathIfEnabled;

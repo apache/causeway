@@ -59,7 +59,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class IsisWebAppContextInitializer implements ServletContextInitializer {
     
-    private final static _Oneshot oneshot = new _Oneshot();
+    private static final _Oneshot oneshot = new _Oneshot();
     
     @Inject private ServiceRegistry serviceRegistry; // this dependency ensures Isis has been initialized/provisioned
     @Inject private IsisConfiguration isisConfiguration;

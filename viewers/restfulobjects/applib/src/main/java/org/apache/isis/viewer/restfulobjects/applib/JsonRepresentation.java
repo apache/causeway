@@ -325,7 +325,7 @@ public class JsonRepresentation {
     // getDate, asDate
     // ///////////////////////////////////////////////////////////////////////
 
-    public final static DateTimeFormatter yyyyMMdd = ISODateTimeFormat.date().withZoneUTC();
+    public static final DateTimeFormatter yyyyMMdd = ISODateTimeFormat.date().withZoneUTC();
 
     public java.util.Date getDate(final String path) {
         return getDate(path, getNode(path));
@@ -351,7 +351,7 @@ public class JsonRepresentation {
     // getDateTime, asDateTime
     // ///////////////////////////////////////////////////////////////////////
 
-    public final static DateTimeFormatter yyyyMMddTHHmmssZ = ISODateTimeFormat.dateTimeNoMillis().withZoneUTC();
+    public static final DateTimeFormatter yyyyMMddTHHmmssZ = ISODateTimeFormat.dateTimeNoMillis().withZoneUTC();
 
     public java.util.Date getDateTime(final String path) {
         return getDateTime(path, getNode(path));
@@ -377,7 +377,7 @@ public class JsonRepresentation {
     // getTime, asTime
     // ///////////////////////////////////////////////////////////////////////
 
-    public final static DateTimeFormatter _HHmmss = ISODateTimeFormat.timeNoMillis().withZoneUTC();
+    public static final DateTimeFormatter _HHmmss = ISODateTimeFormat.timeNoMillis().withZoneUTC();
 
     public java.util.Date getTime(final String path) {
         return getTime(path, getNode(path));
@@ -1612,7 +1612,7 @@ public class JsonRepresentation {
         }
     }
 
-    private final static Function<Entry<String, JsonNode>, Entry<String, JsonRepresentation>> MAP_ENTRY_JSON_NODE_TO_JSON_REPRESENTATION = new Function<Entry<String, JsonNode>, Entry<String, JsonRepresentation>>() {
+    private static final Function<Entry<String, JsonNode>, Entry<String, JsonRepresentation>> MAP_ENTRY_JSON_NODE_TO_JSON_REPRESENTATION = new Function<Entry<String, JsonNode>, Entry<String, JsonRepresentation>>() {
 
         @Override
         public Entry<String, JsonRepresentation> apply(final Entry<String, JsonNode> input) {

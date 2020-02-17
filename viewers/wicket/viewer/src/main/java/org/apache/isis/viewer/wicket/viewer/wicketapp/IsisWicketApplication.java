@@ -460,7 +460,7 @@ IsisWebAppCommonContext.Provider {
         references.add(PanelUtil.cssResourceReferenceFor(MultiLineStringPanel.class));
     }
 
-    protected final static Function<ComponentFactory, Iterable<CssResourceReference>> getCssResourceReferences =
+    protected static final Function<ComponentFactory, Iterable<CssResourceReference>> getCssResourceReferences =
             (ComponentFactory input) -> {
                 final CssResourceReference cssResourceReference = input.getCssResourceReference();
                 return cssResourceReference != null?

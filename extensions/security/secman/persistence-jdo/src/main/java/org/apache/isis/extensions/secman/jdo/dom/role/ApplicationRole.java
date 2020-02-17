@@ -199,16 +199,16 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
 
     // -- equals, hashCode, compareTo, toString
 
-    private final static Comparator<ApplicationRole> comparator =
+    private static final Comparator<ApplicationRole> comparator =
             Comparator.comparing(ApplicationRole::getName);
 
-    private final static Equality<ApplicationRole> equality =
+    private static final Equality<ApplicationRole> equality =
             ObjectContracts.checkEquals(ApplicationRole::getName);
 
-    private final static Hashing<ApplicationRole> hashing =
+    private static final Hashing<ApplicationRole> hashing =
             ObjectContracts.hashing(ApplicationRole::getName);
 
-    private final static ToString<ApplicationRole> toString =
+    private static final ToString<ApplicationRole> toString =
             ObjectContracts.toString("name", ApplicationRole::getName);
 
 

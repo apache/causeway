@@ -12,7 +12,7 @@ public interface WithNameGetter {
     /**
      * Utility class for obtaining the string value of an object that implements {@link WithNameGetter}. 
      */
-    public final static class ToString {
+    public static final class ToString {
         private ToString() {}
         public static ObjectContracts.ToStringEvaluator evaluator() {
             return new ObjectContracts.ToStringEvaluator() {

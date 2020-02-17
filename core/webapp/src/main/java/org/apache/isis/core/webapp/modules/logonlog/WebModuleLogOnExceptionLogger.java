@@ -47,7 +47,7 @@ import lombok.Getter;
 @Qualifier("LogOnExceptionLogger")
 public final class WebModuleLogOnExceptionLogger extends WebModuleAbstract {
 
-    private final static String LOGONLOGGER_FILTER_NAME = "IsisLogOnExceptionFilter";
+    private static final String LOGONLOGGER_FILTER_NAME = "IsisLogOnExceptionFilter";
 
 
     @Getter

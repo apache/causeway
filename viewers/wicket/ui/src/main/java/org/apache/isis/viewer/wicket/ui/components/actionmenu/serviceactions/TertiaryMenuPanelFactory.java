@@ -37,7 +37,7 @@ import lombok.val;
  */
 public class TertiaryMenuPanelFactory extends ComponentFactoryAbstract {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     
     public TertiaryMenuPanelFactory() {
         super(ComponentType.SERVICE_ACTIONS, ServiceActionsPanel.class);

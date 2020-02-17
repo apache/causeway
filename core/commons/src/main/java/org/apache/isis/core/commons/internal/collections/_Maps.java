@@ -229,7 +229,7 @@ public final class _Maps {
     // -- ALIAS MAP
     
     @Value(staticConstructor = "of") 
-    private final static class KeyPair<K> {
+    private static final class KeyPair<K> {
         K key;
         Can<K> aliasKeys;
     }

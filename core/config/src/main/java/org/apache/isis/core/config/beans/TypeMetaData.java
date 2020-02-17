@@ -67,7 +67,7 @@ final class TypeMetaData {
      * Holds either the class or the failure string when attempting to load by name. 
      */
     @Value(staticConstructor = "of")
-    final static class ClassOrFailure {
+    static final class ClassOrFailure {
         Class<?> underlyingClass;
         String failure;
         public boolean isFailure() {

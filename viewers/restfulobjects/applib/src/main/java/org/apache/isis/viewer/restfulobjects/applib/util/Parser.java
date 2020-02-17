@@ -72,7 +72,7 @@ public abstract class Parser<T> {
 
     public abstract String asString(T t);
 
-    public final static Parser<String> forString() {
+    public static final Parser<String> forString() {
         return new Parser<String>() {
             @Override
             public String valueOf(final String str) {

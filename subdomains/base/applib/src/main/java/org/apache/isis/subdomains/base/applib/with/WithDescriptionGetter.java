@@ -12,7 +12,7 @@ public interface WithDescriptionGetter {
     /**
      * Utility class for obtaining the string value of an object that implements {@link WithDescriptionGetter}. 
      */
-    public final static class ToString {
+    public static final class ToString {
         private ToString() {}
         public static ToStringEvaluator evaluator() {
             return new ToStringEvaluator() {

@@ -8,7 +8,7 @@ import com.google.common.base.Strings;
 public final class MessageUtils {
 
     private MessageUtils(){}
-    private final static Pattern pattern = Pattern.compile(".*Reason: (.+?)[ ]*Identifier:.*");
+    private static final Pattern pattern = Pattern.compile(".*Reason: (.+?)[ ]*Identifier:.*");
 
     public static String normalize(final Exception ex) {
         if(ex == null || Strings.isNullOrEmpty(ex.getMessage())) {

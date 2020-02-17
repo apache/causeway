@@ -33,7 +33,7 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 public final class UrlEncodingUtils {
 
-    public final static Function<String, String> FUNCTION = new Function<String, String>() {
+    public static final Function<String, String> FUNCTION = new Function<String, String>() {
 
         @Override
         public String apply(final String input) {

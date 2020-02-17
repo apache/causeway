@@ -39,7 +39,7 @@ public class BytesTest {
     final int n = 256;
     private final byte[] allBytes = new byte[n];
 
-    private final static byte[] testimonial = 
+    private static final byte[] testimonial = 
             _Strings.toBytes(
                     "https://docs.oracle.com/javase/8/docs/api/java/util/Base64.html#basic?"+
                             "0-theme-entityPageContainer-entity-rows-2-rowContents-1-col-tabGroups-1-panel-"

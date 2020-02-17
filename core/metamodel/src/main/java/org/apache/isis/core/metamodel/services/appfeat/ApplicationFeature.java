@@ -202,16 +202,16 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
 
     // -- equals, hashCode, compareTo, toString
 
-    private final static Comparator<ApplicationFeature> comparator =
+    private static final Comparator<ApplicationFeature> comparator =
             Comparator.comparing(ApplicationFeature::getFeatureId);
 
-    private final static Equality<ApplicationFeature> equality =
+    private static final Equality<ApplicationFeature> equality =
             ObjectContracts.checkEquals(ApplicationFeature::getFeatureId);
 
-    private final static Hashing<ApplicationFeature> hashing =
+    private static final Hashing<ApplicationFeature> hashing =
             ObjectContracts.hashing(ApplicationFeature::getFeatureId);
 
-    private final static ToString<ApplicationFeature> toString =
+    private static final ToString<ApplicationFeature> toString =
             ObjectContracts.toString("featureId", ApplicationFeature::getFeatureId);
 
     @Override

@@ -31,7 +31,7 @@ import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
  */
 class ObjectContract_Empty<T> implements ObjectContract<T> {
 
-    private final static String UNDEFINED_CONTRACT = "object's contract is not defined (empty)";
+    private static final String UNDEFINED_CONTRACT = "object's contract is not defined (empty)";
 
     private Function<Object, String> valueToStringFunction;
 
@@ -86,7 +86,7 @@ class ObjectContract_Empty<T> implements ObjectContract<T> {
 
     // -- HELPER
 
-    private final static IllegalArgumentException undefined() {
+    private static final IllegalArgumentException undefined() {
         return new IllegalArgumentException(UNDEFINED_CONTRACT);
     }
 

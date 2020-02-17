@@ -34,8 +34,8 @@ public class Color extends Magnitude<Color> {
 
     private static final long serialVersionUID = 1L;
 
-    public final static Color WHITE = new Color(0xffffff);
-    public final static Color BLACK = new Color(0);
+    public static final Color WHITE = new Color(0xffffff);
+    public static final Color BLACK = new Color(0);
 
     private final int color;
 

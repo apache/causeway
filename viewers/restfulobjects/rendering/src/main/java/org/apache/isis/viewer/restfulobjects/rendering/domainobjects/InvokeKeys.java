@@ -24,7 +24,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 public final class InvokeKeys {
 
-    private final static EnumMap<SemanticsOf, String> map = new EnumMap<>(SemanticsOf.class);
+    private static final EnumMap<SemanticsOf, String> map = new EnumMap<>(SemanticsOf.class);
     static {
         map.put(SemanticsOf.SAFE_AND_REQUEST_CACHEABLE, "invokeQueryOnly");
         map.put(SemanticsOf.SAFE, "invokeQueryOnly");

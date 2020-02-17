@@ -64,7 +64,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
     private ObjectActionParameter stubObjectActionParameterString2;
 
 
-    private final static class ObjectActionParameterAbstractToTest extends ObjectActionParameterAbstract {
+    private static final class ObjectActionParameterAbstractToTest extends ObjectActionParameterAbstract {
         private ObjectActionParameterAbstractToTest(final int number, final ObjectActionDefault objectAction, final TypedHolder peer) {
             super(FeatureType.ACTION_PARAMETER_SCALAR, number, objectAction, peer);
         }

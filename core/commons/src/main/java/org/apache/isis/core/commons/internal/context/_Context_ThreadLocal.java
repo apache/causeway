@@ -49,7 +49,7 @@ final class _Context_ThreadLocal {
     // -- MIXINS
 
     @Value(staticConstructor = "of")
-    private final static class ThreadKey {
+    private static final class ThreadKey {
         long threadId;
         int threadHashCode;
         static ThreadKey of(Thread thread) {
@@ -118,17 +118,17 @@ final class _Context_ThreadLocal {
     //	/**
     //	 * Inheritable... allows to have concurrent computations utilizing the ForkJoinPool.
     //	 */
-    //    private final static ThreadLocal<Map<Class<?>, Bin<?>>> THREAD_LOCAL_MAP = 
+    //    private static final ThreadLocal<Map<Class<?>, Bin<?>>> THREAD_LOCAL_MAP = 
     //    		InheritableThreadLocal.withInitial(HashMap::new);
 
     /**
      * Inheritable... allows to have concurrent computations utilizing the ForkJoinPool.
      */
-    private final static ThreadLocal<ThreadKey> THREAD_LOCAL_MAP_KEY = 
+    private static final ThreadLocal<ThreadKey> THREAD_LOCAL_MAP_KEY = 
             InheritableThreadLocal.withInitial(()->ThreadKey.of(Thread.currentThread()));
 
 
-    private final static _Multimaps.MapMultimap<ThreadKey, Class<?>, Can<?>> MAPS_BY_KEY =
+    private static final _Multimaps.MapMultimap<ThreadKey, Class<?>, Can<?>> MAPS_BY_KEY =
             _Multimaps.newConcurrentMapMultimap(); 
 
     private static Map<Class<?>, Can<?>> getThreadLocalMap() {

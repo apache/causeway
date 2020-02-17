@@ -61,7 +61,7 @@ public class MarkdownComponent extends MarkupComponent {
 
     // -- HELPER
 
-    private final static _Lazy<JavaScriptResourceReference> jsRef = _Lazy.threadSafe(()->
+    private static final _Lazy<JavaScriptResourceReference> jsRef = _Lazy.threadSafe(()->
     new JavaScriptResourceReference(MarkdownComponent.class, "js/prism1.14.js"));
 
 }

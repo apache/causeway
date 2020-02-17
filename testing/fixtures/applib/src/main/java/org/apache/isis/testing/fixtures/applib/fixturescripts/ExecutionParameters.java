@@ -36,7 +36,7 @@ import org.apache.isis.core.commons.internal.collections._Maps;
 
 public class ExecutionParameters {
 
-    private final static Pattern keyEqualsValuePattern = Pattern.compile("([^=]*)=(.*)");
+    private static final Pattern keyEqualsValuePattern = Pattern.compile("([^=]*)=(.*)");
 
     private final String parameters;
     private final Map<String, String> parameterMap;

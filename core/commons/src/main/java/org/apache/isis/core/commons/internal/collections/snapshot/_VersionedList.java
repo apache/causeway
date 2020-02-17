@@ -49,7 +49,7 @@ public final class _VersionedList<T> {
     private int size;
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public final static class Snapshot<T> {
+    public static final class Snapshot<T> {
         private UUID ownerUuid;
         @SuppressWarnings("unused")
         private final int fromIndex; //low endpoint (inclusive) of the copy

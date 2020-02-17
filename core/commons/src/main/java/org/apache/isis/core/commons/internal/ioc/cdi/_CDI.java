@@ -182,7 +182,7 @@ public final class _CDI {
 
     // -- ENUMERATE BEANS
 
-    public final static AnnotationLiteral<Any> QUALIFIER_ANY = 
+    public static final AnnotationLiteral<Any> QUALIFIER_ANY = 
             new AnnotationLiteral<Any>() {
         private static final long serialVersionUID = 1L;};
 

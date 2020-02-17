@@ -80,7 +80,7 @@ public final class _Annotations {
     
     //final static _Probe probe1 = _Probe.unlimited().label("synthesizeInherited");
     //final static _Probe probe2 = _Probe.unlimited().label("synthesizeInherited");
-    private final static _Annotations_SyntCache syntCache = new _Annotations_SyntCache();
+    private static final _Annotations_SyntCache syntCache = new _Annotations_SyntCache();
     public static void clearCache() {
         syntCache.clear();
     }

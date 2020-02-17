@@ -40,7 +40,7 @@ import lombok.val;
  */
 public class JsonParserHelper {
 
-    private final static Pattern OBJECT_OID = Pattern.compile(".*objects\\/([^/]+)\\/(.+)");
+    private static final Pattern OBJECT_OID = Pattern.compile(".*objects\\/([^/]+)\\/(.+)");
 
     private final IResourceContext resourceContext;
     private final ObjectSpecification objectSpec;

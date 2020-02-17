@@ -46,7 +46,7 @@ public final class XmlSchema {
      * The base part of the namespace prefix to use if none explicitly supplied
      * in the constructor.
      */
-    public final static String DEFAULT_PREFIX = "app";
+    public static final String DEFAULT_PREFIX = "app";
 
     public static interface ExtensionData<T> {
         public int size();

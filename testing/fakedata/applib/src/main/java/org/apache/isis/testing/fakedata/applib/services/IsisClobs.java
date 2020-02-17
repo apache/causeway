@@ -18,7 +18,7 @@ public class IsisClobs extends AbstractRandomValueGenerator {
         super(fakeDataService);
     }
 
-    private final static List<String> fileNames = Arrays.asList(
+    private static final List<String> fileNames = Arrays.asList(
             "a_and_c.xml",
             "all_well.xml",
             "as_you.xml",

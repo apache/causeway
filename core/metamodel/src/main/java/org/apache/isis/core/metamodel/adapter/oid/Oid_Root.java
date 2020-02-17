@@ -32,7 +32,7 @@ import lombok.val;
 
 final class Oid_Root implements RootOid {
 
-    private final static long serialVersionUID = 3L;
+    private static final long serialVersionUID = 3L;
 
     private final ObjectSpecId objectSpecId;
     private final String identifier;

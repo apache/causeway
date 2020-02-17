@@ -158,7 +158,7 @@ public class AuthenticationManager {
 
     // -- DEBUGGING
  
-    private final static ToString<AuthenticationManager> toString =
+    private static final ToString<AuthenticationManager> toString =
             ToString.<AuthenticationManager>toString("class", obj->obj.getClass().getSimpleName())
             .thenToString("authenticators", obj->""+obj.authenticators.size())
             .thenToString("users", obj->""+obj.userByValidationCode.size());

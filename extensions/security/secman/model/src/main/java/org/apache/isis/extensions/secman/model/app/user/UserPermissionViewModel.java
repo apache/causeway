@@ -372,7 +372,7 @@ public class UserPermissionViewModel implements ViewModel {
 
     // -- toString
 
-    private final static ToString<UserPermissionViewModel> toString = 
+    private static final ToString<UserPermissionViewModel> toString = 
             ObjectContracts
             .toString("user", UserPermissionViewModel::getUser)
             .thenToString("featureId", UserPermissionViewModel::getFeatureId);

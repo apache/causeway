@@ -136,7 +136,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
 
     // -- toString
 
-    private final static ToString<AuthenticationSessionAbstract> toString = ToString
+    private static final ToString<AuthenticationSessionAbstract> toString = ToString
             .toString("name", AuthenticationSessionAbstract::getUserName)
             .thenToString("code", AuthenticationSessionAbstract::getValidationCode);
 

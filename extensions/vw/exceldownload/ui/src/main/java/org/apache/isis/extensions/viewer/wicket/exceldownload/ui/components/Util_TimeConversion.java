@@ -40,7 +40,7 @@ final class Util_TimeConversion {
 
     // -- HELPER
 
-    private final static ZoneId zId = ZoneId.systemDefault();
+    private static final ZoneId zId = ZoneId.systemDefault();
 
     private static long toEpochMilli(LocalDateTime localDateTime){
         return localDateTime.atZone(zId).toInstant().toEpochMilli();

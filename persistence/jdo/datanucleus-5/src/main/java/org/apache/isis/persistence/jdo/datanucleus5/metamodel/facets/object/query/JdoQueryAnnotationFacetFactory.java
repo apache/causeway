@@ -81,14 +81,14 @@ implements MetaModelRefiner {
         }
     }
 
-    private final static Pattern fromPattern = Pattern.compile("SELECT.*?FROM[\\s]+([^\\s]+).*", Pattern.CASE_INSENSITIVE);
+    private static final Pattern fromPattern = Pattern.compile("SELECT.*?FROM[\\s]+([^\\s]+).*", Pattern.CASE_INSENSITIVE);
 
     static String from(final String query) {
         final Matcher matcher = fromPattern.matcher(query);
         return matcher.matches() ? matcher.group(1) :  null;
     }
 
-    private final static Pattern variablesPattern = Pattern.compile(".*?VARIABLES[\\s]+([^\\s]+).*", Pattern.CASE_INSENSITIVE);
+    private static final Pattern variablesPattern = Pattern.compile(".*?VARIABLES[\\s]+([^\\s]+).*", Pattern.CASE_INSENSITIVE);
     static String variables(final String query) {
         final Matcher matcher = variablesPattern.matcher(query);
         return matcher.matches() ? matcher.group(1) :  null;

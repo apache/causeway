@@ -243,7 +243,7 @@ public final class _NullSafe {
      * @param defaultValue
      * @return
      */
-    public final static <K,V> V getOrDefault(final Map<K, V> map, final K key, final V defaultValue) {
+    public static final <K,V> V getOrDefault(final Map<K, V> map, final K key, final V defaultValue) {
         if(map==null || key==null) {
             return defaultValue;
         }

@@ -67,7 +67,7 @@ import lombok.val;
 public class WebModuleShiro extends WebModuleAbstract {
     
 
-    private final static String SHIRO_FILTER_NAME = "ShiroFilter";
+    private static final String SHIRO_FILTER_NAME = "ShiroFilter";
 
     @Inject
     public WebModuleShiro(final ServiceInjector serviceInjector) {

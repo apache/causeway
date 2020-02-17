@@ -94,7 +94,7 @@ public class ActionParameterListBuilder {
 
     // -- HELPER
 
-    private final static String JSON_NULL_LITERAL = "null";
+    private static final String JSON_NULL_LITERAL = "null";
 
     private String value(String valueLiteral) {
         return "{\"value\" : " + valueLiteral + "}";

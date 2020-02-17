@@ -25,7 +25,7 @@ import org.apache.isis.core.commons.internal.base._Reduction;
 
 class Util {
 
-    final static class LowestCommonSuperclassFinder {
+    static final class LowestCommonSuperclassFinder {
 
         private final _Reduction<Class<?>> reduction = _Reduction.of((common, next) -> {
             Class<?> refine = common;

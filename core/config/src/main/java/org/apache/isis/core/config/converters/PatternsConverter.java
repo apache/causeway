@@ -34,7 +34,7 @@ public class PatternsConverter implements Converter<String, Map<Pattern, String>
      *     Used for associating cssClass and cssClassFa (font awesome icon) values to method pattern names.
      * </p>
      */
-    private final static Pattern PATTERN_FOR_COLON_SEPARATED_PAIR = Pattern.compile("(?<methodRegex>[^:]+):(?<value>.+)");
+    private static final Pattern PATTERN_FOR_COLON_SEPARATED_PAIR = Pattern.compile("(?<methodRegex>[^:]+):(?<value>.+)");
 
     private static Map<Pattern, String> toPatternMap(String cssClassPatterns) {
         final Map<Pattern,String> valueByPattern = _Maps.newLinkedHashMap();

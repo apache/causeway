@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.facets.TypedHolder;
 public class FallbackFacetFactory extends FacetFactoryAbstract {
 
     @SuppressWarnings("unused")
-    private final static Map<Class<?>, Integer> TYPICAL_LENGTHS_BY_CLASS = new HashMap<Class<?>, Integer>() {
+    private static final Map<Class<?>, Integer> TYPICAL_LENGTHS_BY_CLASS = new HashMap<Class<?>, Integer>() {
         private static final long serialVersionUID = 1L;
         {
             putTypicalLength(byte.class, Byte.class, 3);

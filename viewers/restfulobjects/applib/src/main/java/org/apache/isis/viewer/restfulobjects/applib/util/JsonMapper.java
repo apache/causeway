@@ -105,11 +105,11 @@ public final class JsonMapper {
     /**
      * Returns a {@link org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper.PrettyPrinting#ENABLE pretty-printing enabled} JSON mapper.
      */
-    public final static JsonMapper instance() {
+    public static final JsonMapper instance() {
         return instance(PrettyPrinting.ENABLE);
     }
 
-    public final static JsonMapper instance(final PrettyPrinting prettyPrinting) {
+    public static final JsonMapper instance(final PrettyPrinting prettyPrinting) {
         final JsonMapper jsonMapper = instanceByConfig.get(prettyPrinting);
         if (jsonMapper != null) {
             return jsonMapper;

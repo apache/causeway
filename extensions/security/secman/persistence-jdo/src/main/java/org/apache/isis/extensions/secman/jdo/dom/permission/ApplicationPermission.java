@@ -333,7 +333,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
 
     // -- CONTRACT
 
-    private final static ObjectContract<ApplicationPermission> contract	= 
+    private static final ObjectContract<ApplicationPermission> contract	= 
             ObjectContracts.contract(ApplicationPermission.class)
             .thenUse("role", ApplicationPermission::getRole)
             .thenUse("featureType", ApplicationPermission::getFeatureType)

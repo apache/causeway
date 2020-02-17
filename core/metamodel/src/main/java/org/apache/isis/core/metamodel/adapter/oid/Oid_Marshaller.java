@@ -83,7 +83,7 @@ import static org.apache.isis.core.commons.internal.base._Strings.splitThenStrea
  */
 final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
 
-    public final static Oid_Marshaller INSTANCE = new Oid_Marshaller();
+    public static final Oid_Marshaller INSTANCE = new Oid_Marshaller();
 
     private Oid_Marshaller(){}
 

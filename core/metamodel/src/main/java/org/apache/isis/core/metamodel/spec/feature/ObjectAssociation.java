@@ -141,20 +141,20 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
         private Predicates(){}
 
-        public final static Predicate<ObjectAssociation> PROPERTIES = new Predicate<ObjectAssociation>() {
+        public static final Predicate<ObjectAssociation> PROPERTIES = new Predicate<ObjectAssociation>() {
             @Override
             public boolean test(final ObjectAssociation association) {
                 return association.isOneToOneAssociation();
             }
         };
-        public final static Predicate<ObjectAssociation> REFERENCE_PROPERTIES = new Predicate<ObjectAssociation>() {
+        public static final Predicate<ObjectAssociation> REFERENCE_PROPERTIES = new Predicate<ObjectAssociation>() {
             @Override
             public boolean test(final ObjectAssociation association) {
                 return association.isOneToOneAssociation() &&
                         !association.getSpecification().containsNonFallbackFacet(ValueFacet.class);
             }
         };
-        public final static Predicate<ObjectAssociation> COLLECTIONS = new Predicate<ObjectAssociation>() {
+        public static final Predicate<ObjectAssociation> COLLECTIONS = new Predicate<ObjectAssociation>() {
             @Override
             public boolean test(final ObjectAssociation property) {
                 return property.isOneToManyAssociation();
@@ -213,7 +213,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
     public static class Util {
         private Util(){}
 
-        public final static String LAYOUT_DEFAULT_GROUP = "General";
+        public static final String LAYOUT_DEFAULT_GROUP = "General";
 
         public static Map<String, List<ObjectAssociation>> groupByMemberOrderName(
                 final List<ObjectAssociation> associations) {

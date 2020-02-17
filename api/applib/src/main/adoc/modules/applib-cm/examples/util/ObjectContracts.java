@@ -34,13 +34,13 @@ import lombok.extern.log4j.Log4j2;
  *
  *
  * <pre>
- * private final static Equality<ApplicationFeature> equality =
+ * private static final Equality<ApplicationFeature> equality =
  * 		ObjectContracts.checkEquals(ApplicationFeature::getFeatureId);
  *
- * private final static Hashing<ApplicationFeature> hashing =
+ * private static final Hashing<ApplicationFeature> hashing =
  * 		ObjectContracts.hashing(ApplicationFeature::getFeatureId);
  *
- * private final static ToString<ApplicationFeature> toString =
+ * private static final ToString<ApplicationFeature> toString =
  * 		ObjectContracts.toString("featureId", ApplicationFeature::getFeatureId);
  *
  * public boolean equals(final Object obj) {
@@ -59,7 +59,7 @@ import lombok.extern.log4j.Log4j2;
  * For 'compareTo' use JDK's comparator composition ...
  *
  * <pre>
- * private final static Comparator<ApplicationFeature> comparator =
+ * private static final Comparator<ApplicationFeature> comparator =
  * 		Comparator.comparing(ApplicationFeature::getFeatureId);
  *
  * public int compareTo(final ApplicationFeature other) {

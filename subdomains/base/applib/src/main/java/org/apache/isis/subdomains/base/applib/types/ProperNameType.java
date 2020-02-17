@@ -6,7 +6,7 @@ public class ProperNameType {
 
     public static class Meta {
 
-        public final static int MAX_LEN = 50;
+        public static final int MAX_LEN = 50;
 
         private Meta() {}
 

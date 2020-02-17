@@ -197,7 +197,7 @@ public class _Probe {
     }
 
 
-    private final static Map<String, String> abbreviations = 
+    private static final Map<String, String> abbreviations = 
             _Maps.unmodifiableEntries(
                     _Maps.entry("org.apache.isis", "~"),
                     _Maps.entry("core", "c"),

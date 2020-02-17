@@ -57,9 +57,9 @@ public final class _Context {
      * the first one wins.<br/>
      * If synchronization is required it should happen elsewhere, not here!<br/>
      */
-    private final static Map<Class<?>, Object> singletonMap = new ConcurrentHashMap<>();
+    private static final Map<Class<?>, Object> singletonMap = new ConcurrentHashMap<>();
 
-    private final static Object $LOCK = new Object[0];
+    private static final Object $LOCK = new Object[0];
 
 
     /**
@@ -301,7 +301,7 @@ public final class _Context {
 
     // -- DEFAULT CLASSLOADER
 
-    private final static Supplier<ClassLoader> FALLBACK_CLASSLOADER =
+    private static final Supplier<ClassLoader> FALLBACK_CLASSLOADER =
             Thread.currentThread()::getContextClassLoader;
 
     /**

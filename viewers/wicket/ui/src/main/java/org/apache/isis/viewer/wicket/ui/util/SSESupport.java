@@ -30,7 +30,7 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
  */
 public class SSESupport {
 
-    private final static JavaScriptResourceReference SSE_SUPPORT_JS = 
+    private static final JavaScriptResourceReference SSE_SUPPORT_JS = 
             new JavaScriptResourceReference(SSESupport.class, "SSESupport.js");
 
     /**

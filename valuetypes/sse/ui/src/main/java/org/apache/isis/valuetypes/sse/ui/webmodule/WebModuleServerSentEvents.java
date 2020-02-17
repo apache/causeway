@@ -46,7 +46,7 @@ import lombok.Getter;
 @Order(OrderPrecedence.MIDPOINT)
 public final class WebModuleServerSentEvents extends WebModuleAbstract {
 
-    private final static String SERVLET_NAME = "ServerSentEventsServlet";
+    private static final String SERVLET_NAME = "ServerSentEventsServlet";
 
     @Getter
     private final String name = "ServerSentEvents";

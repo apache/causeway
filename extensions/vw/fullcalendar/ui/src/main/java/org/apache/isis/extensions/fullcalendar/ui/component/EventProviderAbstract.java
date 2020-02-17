@@ -137,7 +137,7 @@ public abstract class EventProviderAbstract implements EventProvider {
         };
     }
 
-    final static Predicate<Event> NOT_NULL = Objects::nonNull;
+    static final Predicate<Event> NOT_NULL = Objects::nonNull;
 
     // //////////////////////////////////////
 

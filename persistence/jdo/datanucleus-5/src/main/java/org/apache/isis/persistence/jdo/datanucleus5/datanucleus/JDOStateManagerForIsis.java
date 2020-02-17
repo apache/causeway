@@ -62,7 +62,7 @@ public class JDOStateManagerForIsis extends ReferentialStateManagerImpl {
     /**
      * Tunnel down the thread stack as a hint to the {@link EventBusServiceJdo}.
      */
-    public final static ThreadLocal<Hint> hint = new ThreadLocal<JDOStateManagerForIsis.Hint>() {
+    public static final ThreadLocal<Hint> hint = new ThreadLocal<JDOStateManagerForIsis.Hint>() {
         @Override
         protected Hint initialValue() {
             return Hint.NONE;

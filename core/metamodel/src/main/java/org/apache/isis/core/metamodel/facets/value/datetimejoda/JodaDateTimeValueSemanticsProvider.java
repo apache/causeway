@@ -167,7 +167,7 @@ public class JodaDateTimeValueSemanticsProvider extends ValueSemanticsProviderAb
     // EncoderDecoder
     // //////////////////////////////////////////////////////////////////
 
-    private final static DateTimeFormatter encodingFormatter() {
+    private static final DateTimeFormatter encodingFormatter() {
         return ISODateTimeFormat.basicDateTime();
     }
 

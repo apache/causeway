@@ -84,7 +84,7 @@ public class CalendarEvent implements Serializable {
 	    return new CalendarEvent(this.dateTime, this.calendarName, this.title, notes);
 	}
 
-	private final static ObjectContract<CalendarEvent> objectContract = 
+	private static final ObjectContract<CalendarEvent> objectContract = 
 	    ObjectContracts.contract(CalendarEvent.class)
 	    .thenUse("dateTime", CalendarEvent::getDateTime)
 	    .thenUse("calendarName", CalendarEvent::getCalendarName);

@@ -47,7 +47,7 @@ public class CollectionContentsAsSummaryFactory extends ComponentFactoryAbstract
 
     private static final String NAME = "summary";
 
-    final static Predicate<ObjectAssociation> OF_TYPE_BIGDECIMAL = (final ObjectAssociation objectAssoc) -> {
+    static final Predicate<ObjectAssociation> OF_TYPE_BIGDECIMAL = (final ObjectAssociation objectAssoc) -> {
         final ObjectSpecification objectSpec = objectAssoc.getSpecification();
         return objectSpec.containsNonFallbackFacet(BigDecimalValueFacet.class);
     };

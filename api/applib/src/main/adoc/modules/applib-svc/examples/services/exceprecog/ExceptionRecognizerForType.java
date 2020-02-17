@@ -54,7 +54,7 @@ public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
         public static final NestedExceptionResolver NOOP = __->Stream.empty();
     }
     
-    protected final static Predicate<Throwable> ofTypeExcluding(
+    protected static final Predicate<Throwable> ofTypeExcluding(
             final Class<? extends Throwable> exceptionType, 
             final NestedExceptionResolver nestedExceptionResolver,
             final String... messages) {
@@ -62,7 +62,7 @@ public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
         return ofType(exceptionType).and(excluding(nestedExceptionResolver, messages));
     }
 
-    protected final static Predicate<Throwable> ofTypeIncluding(
+    protected static final Predicate<Throwable> ofTypeIncluding(
             final Class<? extends Throwable> exceptionType,
             final NestedExceptionResolver nestedExceptionResolver,
             final String... messages) {
@@ -70,7 +70,7 @@ public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
         return ofType(exceptionType).and(including(nestedExceptionResolver, messages));
     }
 
-    protected final static Predicate<Throwable> ofType(
+    protected static final Predicate<Throwable> ofType(
             final Class<? extends Throwable> exceptionType) {
         
         return input->exceptionType.isAssignableFrom(input.getClass());
@@ -84,7 +84,7 @@ public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
      * <p>
      * Intended to prevent too eager matching of an overly general exception type.
      */
-    protected final static Predicate<Throwable> excluding(
+    protected static final Predicate<Throwable> excluding(
             final NestedExceptionResolver nestedExceptionResolver,
             final String... messages) {
         
@@ -120,7 +120,7 @@ public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
      * <p>
      * Intended to prevent more precise matching of a specific general exception type.
      */
-    protected final static Predicate<Throwable> including(
+    protected static final Predicate<Throwable> including(
             final NestedExceptionResolver nestedExceptionResolver,
             final String... messages) {
         

@@ -18,7 +18,7 @@ public class IsisBlobs extends AbstractRandomValueGenerator {
         super(fakeDataService);
     }
 
-    private final static List<String> fileNames = Arrays.asList(
+    private static final List<String> fileNames = Arrays.asList(
             "image01-150x150.jpg",
             "image01-240x180.jpg",
             "image01-640x480.jpg",

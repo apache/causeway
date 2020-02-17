@@ -79,7 +79,7 @@ public final class Filters {
         };
     }
 
-    public final static <T> Filter<T> anyOfType(final Class<T> clazz) {
+    public static final <T> Filter<T> anyOfType(final Class<T> clazz) {
         return any();
     }
 

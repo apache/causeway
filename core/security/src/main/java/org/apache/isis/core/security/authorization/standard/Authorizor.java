@@ -38,7 +38,7 @@ public interface Authorizor {
 
     // -- NOP IMPLEMENTATIOn 
 
-    final static Authorizor NOP = new Authorizor() {
+    static final Authorizor NOP = new Authorizor() {
 
         @Override
         public boolean isVisibleInRole(final String user, final Identifier identifier) {

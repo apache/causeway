@@ -94,7 +94,7 @@ implements MetaModelRefiner {
         }
     }
 
-    private final static Integer valueElseDefaults(final int value, final Integer underlying, int defaultVal) {
+    private static final Integer valueElseDefaults(final int value, final Integer underlying, int defaultVal) {
         return value != -1
                 ? value
                         : underlying != null

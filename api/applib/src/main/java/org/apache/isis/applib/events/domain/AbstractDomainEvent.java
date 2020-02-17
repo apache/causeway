@@ -331,7 +331,7 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
         userData.put(key, value);
     }
 
-    private final static ToString<AbstractDomainEvent<?>> toString =
+    private static final ToString<AbstractDomainEvent<?>> toString =
             ObjectContracts.<AbstractDomainEvent<?>>
     toString("source", AbstractDomainEvent::getSource)
     .thenToString("identifier", AbstractDomainEvent::getIdentifier)

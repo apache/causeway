@@ -30,7 +30,7 @@ class IsisConfiguration_specialCharTest {
 
     IsisConfigurationLegacy configuration;
 
-    private final static String specialCharString =
+    private static final String specialCharString =
             "jdbc:sqlserver://HALCHILLBLAST;instance=.;databaseName=estatio";
 
     @BeforeEach

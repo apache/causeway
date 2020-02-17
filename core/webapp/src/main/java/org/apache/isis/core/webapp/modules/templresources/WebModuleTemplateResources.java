@@ -46,11 +46,11 @@ import lombok.Getter;
 @Qualifier("TemplateResources")
 public final class WebModuleTemplateResources extends WebModuleAbstract {
 
-    private final static String[] urlPatterns = { "*.thtml" };
-    private final static int cacheTimeSeconds = 86400;
+    private static final String[] urlPatterns = { "*.thtml" };
+    private static final int cacheTimeSeconds = 86400;
 
-    private final static String FILTER_NAME = "TemplateResourceCachingFilter";
-    private final static String SERVLET_NAME = "TemplateResourceServlet";
+    private static final String FILTER_NAME = "TemplateResourceCachingFilter";
+    private static final String SERVLET_NAME = "TemplateResourceServlet";
 
     @Getter
     private final String name = "TemplateResources";

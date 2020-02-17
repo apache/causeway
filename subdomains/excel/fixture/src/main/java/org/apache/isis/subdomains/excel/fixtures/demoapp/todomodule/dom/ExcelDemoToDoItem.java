@@ -386,7 +386,7 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
 
     }
        
-    private final static Comparator<ExcelDemoToDoItem> comparator = 
+    private static final Comparator<ExcelDemoToDoItem> comparator = 
             Comparator.comparing(ExcelDemoToDoItem::isComplete).reversed() // true first
                 .thenComparing(ExcelDemoToDoItem::getDueBy)
                 .thenComparing(ExcelDemoToDoItem::getDescription);

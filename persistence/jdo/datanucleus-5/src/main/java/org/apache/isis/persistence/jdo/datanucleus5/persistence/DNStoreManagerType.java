@@ -75,7 +75,7 @@ enum DNStoreManagerType {
     // -- HELPER
 
     /* not necessarily complete, just for speed up */
-    private final static String[] knownSchemaAwareIfNotFederated = {
+    private static final String[] knownSchemaAwareIfNotFederated = {
             "jdbc:hsqldb:",
             "jdbc:sqlserver:",
             "jdbc:h2:",

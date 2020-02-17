@@ -85,33 +85,33 @@ public enum FeatureType {
         }
     };
 
-    public final static ImmutableEnumSet<FeatureType> COLLECTIONS_ONLY = ImmutableEnumSet.of(COLLECTION);
-    public final static ImmutableEnumSet<FeatureType> COLLECTIONS_AND_ACTIONS = ImmutableEnumSet.of(COLLECTION, ACTION);
-    public final static ImmutableEnumSet<FeatureType> ACTIONS_ONLY = ImmutableEnumSet.of(ACTION);
-    public final static ImmutableEnumSet<FeatureType> PARAMETERS_ONLY = ImmutableEnumSet.of(ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION);
-    public final static ImmutableEnumSet<FeatureType> PROPERTIES_ONLY = ImmutableEnumSet.of(PROPERTY);
-    public final static ImmutableEnumSet<FeatureType> PROPERTIES_AND_ACTIONS = ImmutableEnumSet.of(PROPERTY, ACTION);
-    public final static ImmutableEnumSet<FeatureType> OBJECTS_ONLY = ImmutableEnumSet.of(OBJECT);
-    public final static ImmutableEnumSet<FeatureType> MEMBERS = ImmutableEnumSet.of(PROPERTY, COLLECTION, ACTION);
-    public final static ImmutableEnumSet<FeatureType> OBJECTS_AND_PROPERTIES = ImmutableEnumSet.of(OBJECT, PROPERTY);
-    public final static ImmutableEnumSet<FeatureType> PROPERTIES_AND_COLLECTIONS = ImmutableEnumSet.of(PROPERTY, COLLECTION);
-    public final static ImmutableEnumSet<FeatureType> OBJECTS_AND_COLLECTIONS = ImmutableEnumSet.of(OBJECT, COLLECTION);
-    public final static ImmutableEnumSet<FeatureType> OBJECTS_AND_ACTIONS = ImmutableEnumSet.of(OBJECT, ACTION);
-    public final static ImmutableEnumSet<FeatureType> OBJECTS_PROPERTIES_AND_COLLECTIONS = ImmutableEnumSet.of(OBJECT, PROPERTY, COLLECTION);
-    public final static ImmutableEnumSet<FeatureType> ACTIONS_AND_PARAMETERS = ImmutableEnumSet.of(ACTION, ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION);
+    public static final ImmutableEnumSet<FeatureType> COLLECTIONS_ONLY = ImmutableEnumSet.of(COLLECTION);
+    public static final ImmutableEnumSet<FeatureType> COLLECTIONS_AND_ACTIONS = ImmutableEnumSet.of(COLLECTION, ACTION);
+    public static final ImmutableEnumSet<FeatureType> ACTIONS_ONLY = ImmutableEnumSet.of(ACTION);
+    public static final ImmutableEnumSet<FeatureType> PARAMETERS_ONLY = ImmutableEnumSet.of(ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION);
+    public static final ImmutableEnumSet<FeatureType> PROPERTIES_ONLY = ImmutableEnumSet.of(PROPERTY);
+    public static final ImmutableEnumSet<FeatureType> PROPERTIES_AND_ACTIONS = ImmutableEnumSet.of(PROPERTY, ACTION);
+    public static final ImmutableEnumSet<FeatureType> OBJECTS_ONLY = ImmutableEnumSet.of(OBJECT);
+    public static final ImmutableEnumSet<FeatureType> MEMBERS = ImmutableEnumSet.of(PROPERTY, COLLECTION, ACTION);
+    public static final ImmutableEnumSet<FeatureType> OBJECTS_AND_PROPERTIES = ImmutableEnumSet.of(OBJECT, PROPERTY);
+    public static final ImmutableEnumSet<FeatureType> PROPERTIES_AND_COLLECTIONS = ImmutableEnumSet.of(PROPERTY, COLLECTION);
+    public static final ImmutableEnumSet<FeatureType> OBJECTS_AND_COLLECTIONS = ImmutableEnumSet.of(OBJECT, COLLECTION);
+    public static final ImmutableEnumSet<FeatureType> OBJECTS_AND_ACTIONS = ImmutableEnumSet.of(OBJECT, ACTION);
+    public static final ImmutableEnumSet<FeatureType> OBJECTS_PROPERTIES_AND_COLLECTIONS = ImmutableEnumSet.of(OBJECT, PROPERTY, COLLECTION);
+    public static final ImmutableEnumSet<FeatureType> ACTIONS_AND_PARAMETERS = ImmutableEnumSet.of(ACTION, ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION);
 
     /**
      * Use of this is discouraged; instead use multiple {@link FacetFactory}s
      * for different features.
      */
-    public final static ImmutableEnumSet<FeatureType> EVERYTHING_BUT_PARAMETERS = 
+    public static final ImmutableEnumSet<FeatureType> EVERYTHING_BUT_PARAMETERS = 
             ImmutableEnumSet.complementOf(
                     ImmutableEnumSet.of(ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION));
     /**
      * Use of this is discouraged; instead use multiple {@link FacetFactory}s
      * for different features.
      */
-    public final static ImmutableEnumSet<FeatureType> EVERYTHING = ImmutableEnumSet.allOf(FeatureType.class); 
+    public static final ImmutableEnumSet<FeatureType> EVERYTHING = ImmutableEnumSet.allOf(FeatureType.class); 
 
     private final String name;
 

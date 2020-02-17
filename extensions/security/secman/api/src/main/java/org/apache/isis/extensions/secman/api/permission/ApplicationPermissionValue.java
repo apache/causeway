@@ -139,12 +139,12 @@ public class ApplicationPermissionValue implements Comparable<ApplicationPermiss
 
     // -- CONTRACT
 
-    private final static Comparator<ApplicationPermissionValue> comparator =
+    private static final Comparator<ApplicationPermissionValue> comparator =
             Comparator.comparing(ApplicationPermissionValue::getRule)
             .thenComparing(ApplicationPermissionValue::getMode)
             .thenComparing(ApplicationPermissionValue::getFeatureId);
 
-    private final static ToString<ApplicationPermissionValue> toString =
+    private static final ToString<ApplicationPermissionValue> toString =
             ObjectContracts.toString("name", ApplicationPermissionValue::getRule)
             .thenToString("mode", ApplicationPermissionValue::getMode)
             .thenToString("featureId", ApplicationPermissionValue::getFeatureId);

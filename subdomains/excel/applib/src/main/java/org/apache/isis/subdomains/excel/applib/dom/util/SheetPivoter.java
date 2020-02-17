@@ -46,26 +46,26 @@ public class SheetPivoter {
     // layout info source sheet
     private static class SourceLayOut {
         // conventions source sheet
-        final static int ANNOTATION_ROW_NUMBER = 0;
-        final static int ORDER_ROW_NUMBER = 1;
-        final static int TYPE_ROW_NUMBER = 2;
-        final static int FIELDNAME_ROW_NUMBER = 3;
-        final static int VALUES_START_AT_ROWNUMBER = 4;
-        final static int numberOfRowAnnotationsInSource = 1; // multiple row labels are not supported at the moment
+        static final int ANNOTATION_ROW_NUMBER = 0;
+        static final int ORDER_ROW_NUMBER = 1;
+        static final int TYPE_ROW_NUMBER = 2;
+        static final int FIELDNAME_ROW_NUMBER = 3;
+        static final int VALUES_START_AT_ROWNUMBER = 4;
+        static final int numberOfRowAnnotationsInSource = 1; // multiple row labels are not supported at the moment
     }
 
     // layout target sheet
     private static class TargetLayOut {
 
-        final static int rowLabelColumnNumber = 0; // row labels in first colu
+        static final int rowLabelColumnNumber = 0; // row labels in first colu
 
         //offsets
-        final static int columnLabelOffsetY = 0; // top row used for pivot
+        static final int columnLabelOffsetY = 0; // top row used for pivot
 
         //some styling
-        final static short fieldnameBgColorIndex = HSSFColor.HSSFColorPredefined.GREY_25_PERCENT.getIndex();
-        final static short columnHeaderValueBgColorIndex = HSSFColor.HSSFColorPredefined.GREY_40_PERCENT.getIndex();
-        final static short sumBgColorIndex = HSSFColor.HSSFColorPredefined.GREY_25_PERCENT.getIndex();
+        static final short fieldnameBgColorIndex = HSSFColor.HSSFColorPredefined.GREY_25_PERCENT.getIndex();
+        static final short columnHeaderValueBgColorIndex = HSSFColor.HSSFColorPredefined.GREY_40_PERCENT.getIndex();
+        static final short sumBgColorIndex = HSSFColor.HSSFColorPredefined.GREY_25_PERCENT.getIndex();
         static CellStyle fieldNameStyle;
         static CellStyle columnHeaderValueStyle;
         static CellStyle rowSumStyle;

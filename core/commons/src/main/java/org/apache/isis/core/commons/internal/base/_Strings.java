@@ -81,7 +81,7 @@ public final class _Strings {
      * Convenient e.g. for toArray conversions
      * (a duplicate of in {@link _Constants.emptyStringArray} )
      */
-    public final static String[] emptyArray = new String[0];
+    public static final String[] emptyArray = new String[0];
 
     // -- PAIR OF STRINGS
 
@@ -534,7 +534,7 @@ public final class _Strings {
      * @param charset
      * @return null if {@code str} is null
      */
-    public final static byte[] toBytes(@Nullable final String str, Charset charset) {
+    public static final byte[] toBytes(@Nullable final String str, Charset charset) {
         requires(charset, "charset");
         return mapIfPresentElse(str, __->str.getBytes(charset), null);
     }
@@ -545,7 +545,7 @@ public final class _Strings {
      * @param charset
      * @return null if {@code bytes} is null
      */
-    public final static String ofBytes(@Nullable final byte[] bytes, Charset charset) {
+    public static final String ofBytes(@Nullable final byte[] bytes, Charset charset) {
         requires(charset, "charset");
         return mapIfPresentElse(bytes, __->new String(bytes, charset), null);
     }
@@ -559,7 +559,7 @@ public final class _Strings {
      * @param charset
      * @return null if {@code input} is null
      */
-    public final static String convert(@Nullable final String input, final BytesOperator converter, final Charset charset) {
+    public static final String convert(@Nullable final String input, final BytesOperator converter, final Charset charset) {
         requires(converter, "converter");
         requires(charset, "charset");
         return mapIfPresentElse(input, __->ofBytes(converter.apply(toBytes(input, charset)), charset), null);
@@ -570,7 +570,7 @@ public final class _Strings {
     /**
      * Monadic StringOperator that allows composition of unary string operators.
      */
-    public final static class StringOperator {
+    public static final class StringOperator {
 
         private final UnaryOperator<String> operator;
 
@@ -600,18 +600,18 @@ public final class _Strings {
 
     // using naming convention asXxx...
 
-    public final static StringOperator asLowerDashed = operator()
+    public static final StringOperator asLowerDashed = operator()
             .andThen(_Strings::lower)
             .andThen(s->_Strings.condenseWhitespaces(s, "-"));
 
-    public final static StringOperator asNormalized = operator()
+    public static final StringOperator asNormalized = operator()
             .andThen(s->_Strings.condenseWhitespaces(s, " "));
 
-    public final static StringOperator asNaturalName2 = operator()
+    public static final StringOperator asNaturalName2 = operator()
             .andThen(s->_Strings_NaturalNames.naturalName2(s, true));
 
 
-    public final static String asFileNameWithExtension(final String fileName, String fileExtension) {
+    public static final String asFileNameWithExtension(final String fileName, String fileExtension) {
         requires(fileName, "fileName");
         requires(fileExtension, "fileExtension");
         return suffix(fileName, prefix(fileExtension, "."));

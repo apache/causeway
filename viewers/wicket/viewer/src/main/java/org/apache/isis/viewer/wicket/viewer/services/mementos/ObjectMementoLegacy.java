@@ -474,7 +474,7 @@ final class ObjectMementoLegacy implements Serializable {
     // -- FUNCTIONS
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    private final static class Functions {
+    private static final class Functions {
 
         private static Function<ObjectMementoLegacy, Object> toPojo(SpecificationLoader specificationLoader) {
 

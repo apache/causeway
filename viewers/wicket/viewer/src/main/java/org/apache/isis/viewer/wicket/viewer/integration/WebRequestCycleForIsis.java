@@ -80,7 +80,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class WebRequestCycleForIsis implements IRequestCycleListener {
 
-    public final static MetaDataKey<IsisRequestCycle> REQ_CYCLE_HANDLE_KEY = 
+    public static final MetaDataKey<IsisRequestCycle> REQ_CYCLE_HANDLE_KEY = 
             new MetaDataKey<IsisRequestCycle>() {private static final long serialVersionUID = 1L; };
     
     private PageClassRegistry pageClassRegistry;
@@ -298,7 +298,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
     }
 
     // special case handling for PageExpiredException, otherwise infinite loop
-    private final static ExceptionRecognizerForType pageExpiredExceptionRecognizer =
+    private static final ExceptionRecognizerForType pageExpiredExceptionRecognizer =
             new ExceptionRecognizerForType(PageExpiredException.class, $->"Requested page is no longer available.");
 
     protected IRequestablePage errorPageFor(Exception ex) {

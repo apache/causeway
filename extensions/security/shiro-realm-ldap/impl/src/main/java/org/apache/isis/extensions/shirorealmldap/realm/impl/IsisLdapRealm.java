@@ -137,7 +137,7 @@ import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 public class IsisLdapRealm extends DefaultLdapRealm {
 
     private static final String UNIQUEMEMBER_SUBSTITUTION_TOKEN = "{0}";
-    private final static SearchControls SUBTREE_SCOPE = new SearchControls();
+    private static final SearchControls SUBTREE_SCOPE = new SearchControls();
 
     static {
         SUBTREE_SCOPE.setSearchScope(SearchControls.SUBTREE_SCOPE);

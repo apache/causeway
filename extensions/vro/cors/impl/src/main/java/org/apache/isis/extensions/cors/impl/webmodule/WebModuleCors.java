@@ -52,7 +52,7 @@ import lombok.Getter;
 @Order(OrderPrecedence.EARLY)
 public final class WebModuleCors extends WebModuleAbstract {
 
-    private final static String CORS_FILTER_NAME = "CORS Filter";
+    private static final String CORS_FILTER_NAME = "CORS Filter";
 
     @Getter
     private final String name = "CORS";

@@ -79,11 +79,11 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     final class Comparators{
         private Comparators(){}
 
-        public final static Comparator<ObjectSpecification> FULLY_QUALIFIED_CLASS_NAME = 
+        public static final Comparator<ObjectSpecification> FULLY_QUALIFIED_CLASS_NAME = 
                 (final ObjectSpecification o1, final ObjectSpecification o2) -> 
         o1.getFullIdentifier().compareTo(o2.getFullIdentifier());
 
-        public final static Comparator<ObjectSpecification> SHORT_IDENTIFIER_IGNORE_CASE = 
+        public static final Comparator<ObjectSpecification> SHORT_IDENTIFIER_IGNORE_CASE = 
                 (final ObjectSpecification s1, final ObjectSpecification s2) -> 
         s1.getShortIdentifier().compareToIgnoreCase(s2.getShortIdentifier());
     }

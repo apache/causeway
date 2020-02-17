@@ -42,7 +42,7 @@ import lombok.val;
  */
 public class AuthenticationSessionStrategyDefault extends AuthenticationSessionStrategyAbstract {
 
-    public final static String HTTP_SESSION_AUTHENTICATION_SESSION_KEY = AuthenticationSessionStrategyDefault.class.getPackage().getName() + ".authenticationSession";
+    public static final String HTTP_SESSION_AUTHENTICATION_SESSION_KEY = AuthenticationSessionStrategyDefault.class.getPackage().getName() + ".authenticationSession";
 
     @Override
     public AuthenticationSession lookupValid(

@@ -200,7 +200,7 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
 
 
 
-    private final static ToString<ActionDomainEvent<?>> toString = ObjectContracts.<ActionDomainEvent<?>>
+    private static final ToString<ActionDomainEvent<?>> toString = ObjectContracts.<ActionDomainEvent<?>>
     toString("source", ActionDomainEvent::getSource)
     .thenToString("identifier", ActionDomainEvent::getIdentifier)
     .thenToString("eventPhase", ActionDomainEvent::getEventPhase)
