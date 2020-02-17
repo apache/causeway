@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.webapp.context;
 
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -33,18 +34,22 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.session.IsisSession;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.MessageBroker;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.core.webapp.context.memento.ObjectMementoService;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * 
  * @since 2.0
  *
  */
+@Log4j2
 public class IsisWebAppCommonContext implements MetaModelContext.Delegating {
 
     /**
@@ -70,6 +75,15 @@ public class IsisWebAppCommonContext implements MetaModelContext.Delegating {
     
     public IsisSession getCurrentSession() {
         return IsisSession.currentOrElseNull();
+    }
+    
+    public Optional<MessageBroker> getMessageBroker() {
+        val messageBroker = Optional.ofNullable(getAuthenticationSession())
+                .map(AuthenticationSession::getMessageBroker);
+        if(!messageBroker.isPresent()) {
+            log.warn("failed to locate a MessageBroker on current AuthenticationSession");
+        }
+        return messageBroker;
     }
     
     // -- SHORTCUTS

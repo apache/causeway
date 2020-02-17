@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.errors;
 
-import java.util.Optional;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -30,12 +28,9 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.MessageBroker;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 
 /**
  * Attach to any Ajax button that might trigger a notification (ie calls
@@ -49,11 +44,10 @@ import lombok.extern.log4j.Log4j2;
  * editButton.add(new JGrowlBehaviour());
  * </pre>
  */
-@Log4j2
 public class JGrowlBehaviour extends AbstractDefaultAjaxBehavior {
 
     private static final long serialVersionUID = 1L;
-    private final transient IsisWebAppCommonContext commonContext;
+    private transient IsisWebAppCommonContext commonContext;
     
     public JGrowlBehaviour(IsisWebAppCommonContext commonContext) {
         this.commonContext = commonContext;
@@ -62,7 +56,7 @@ public class JGrowlBehaviour extends AbstractDefaultAjaxBehavior {
     @Override
     protected void respond(AjaxRequestTarget target) {
         
-        getMessageBroker().ifPresent(messageBroker->{
+        getCommonContext().getMessageBroker().ifPresent(messageBroker->{
             String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker);
             if(!_Strings.isNullOrEmpty(feedbackMsg)) {
                 target.appendJavaScript(feedbackMsg);
@@ -82,7 +76,7 @@ public class JGrowlBehaviour extends AbstractDefaultAjaxBehavior {
                 JavaScriptHeaderItem
                 .forReference(new JavaScriptResourceReference(JGrowlBehaviour.class, "js/bootstrap-growl.js")));
 
-        getMessageBroker().ifPresent(messageBroker->{
+        getCommonContext().getMessageBroker().ifPresent(messageBroker->{
         
             String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker);
             if(_Strings.isNotEmpty(feedbackMsg)) {
@@ -93,13 +87,8 @@ public class JGrowlBehaviour extends AbstractDefaultAjaxBehavior {
         
     }
 
-    protected Optional<MessageBroker> getMessageBroker() {
-        val messageBroker = Optional.ofNullable(commonContext.getAuthenticationSession())
-                .map(AuthenticationSession::getMessageBroker);
-        if(!messageBroker.isPresent()) {
-            log.warn("failed to locate a MessageBroker on current AuthenticationSession");
-        }
-        return messageBroker;
+    protected IsisWebAppCommonContext getCommonContext() {
+        return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
 
 }
