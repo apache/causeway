@@ -19,13 +19,16 @@
 
 package org.apache.isis.applib.value;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class PasswordTest {
+class PasswordTest {
+    
+    private static final String STARS = "********************";
+    
     @Test
     public void testCheckPassword() {
         final Password password = new Password("secret");
@@ -37,9 +40,27 @@ public class PasswordTest {
     @Test
     public void testTitleObscuresPassword() {
         Password password = new Password("secret");
-        assertEquals("******", password.toString());
+        assertEquals(STARS, password.toString());
 
         password = new Password("a very very very long password");
-        assertEquals("********************", password.toString());
+        assertEquals(STARS, password.toString());
     }
+    
+    @Test
+    public void emptyPassword() {
+        final Password password = new Password("");
+        assertTrue(password.checkPassword(""));
+        assertFalse(password.checkPassword("SECRET"));
+    }
+    
+    @Test
+    public void nullPassword() {
+        final Password password = new Password(null);
+        assertFalse(password.checkPassword(""));
+        assertFalse(password.checkPassword("SECRET"));
+        assertTrue(password.checkPassword(null));
+        
+        assertEquals(password, new Password(null));
+    }
+    
 }
