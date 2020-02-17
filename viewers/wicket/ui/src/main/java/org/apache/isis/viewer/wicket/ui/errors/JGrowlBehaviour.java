@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.errors;
 
+import java.util.Optional;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -28,6 +30,7 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.MessageBroker;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
@@ -54,10 +57,13 @@ public class JGrowlBehaviour extends AbstractDefaultAjaxBehavior {
 
     @Override
     protected void respond(AjaxRequestTarget target) {
-        String feedbackMsg = JGrowlUtil.asJGrowlCalls(getMessageBroker());
-        if(!_Strings.isNullOrEmpty(feedbackMsg)) {
-            target.appendJavaScript(feedbackMsg);
-        }
+        
+        getMessageBroker().ifPresent(messageBroker->{
+            String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker);
+            if(!_Strings.isNullOrEmpty(feedbackMsg)) {
+                target.appendJavaScript(feedbackMsg);
+            }
+        });
     }
 
     @Override
@@ -68,19 +74,24 @@ public class JGrowlBehaviour extends AbstractDefaultAjaxBehavior {
     }
 
     public void renderFeedbackMessages(IHeaderResponse response) {
-        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(JGrowlBehaviour.class, "js/bootstrap-growl.js")));
+        response.render(
+                JavaScriptHeaderItem
+                .forReference(new JavaScriptResourceReference(JGrowlBehaviour.class, "js/bootstrap-growl.js")));
 
-        String feedbackMsg = JGrowlUtil.asJGrowlCalls(getMessageBroker());
-        if(!_Strings.isNullOrEmpty(feedbackMsg)) {
-            response.render(OnDomReadyHeaderItem.forScript(feedbackMsg));
-        }
+        getMessageBroker().ifPresent(messageBroker->{
+        
+            String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker);
+            if(_Strings.isNotEmpty(feedbackMsg)) {
+                response.render(OnDomReadyHeaderItem.forScript(feedbackMsg));
+            }
+            
+        });
+        
     }
 
-
-    protected MessageBroker getMessageBroker() {
-        return commonContext.getAuthenticationSession().getMessageBroker();
+    protected Optional<MessageBroker> getMessageBroker() {
+        return Optional.ofNullable(commonContext.getAuthenticationSession())
+                .map(AuthenticationSession::getMessageBroker);
     }
-
-    
 
 }
