@@ -23,23 +23,21 @@ import java.util.Collection;
 import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser.RemoveRoleDomainEvent;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(
-        domainEvent = RemoveRoleDomainEvent.class, 
-        associateWith = "roles",
-        associateWithSequence = "2")
-@ActionLayout(
-        named="Remove"
-        )
+//@Action(
+//        domainEvent = RemoveRoleDomainEvent.class, 
+//        associateWith = "roles",
+//        associateWithSequence = "2")
+//@ActionLayout(
+//        named="Remove"
+//        )
+@Deprecated
 @RequiredArgsConstructor
 public class ApplicationUser_removeRole {
     
