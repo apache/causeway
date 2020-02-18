@@ -40,6 +40,7 @@ import lombok.val;
  * This API is currently extremely limited, but the intention is to extend it gradually as use cases emerge.
  * </p>
  */
+// tag::refguide[]
 public interface MetaModelService {
 
     /**
@@ -51,7 +52,6 @@ public interface MetaModelService {
      * Provides a lookup of a domain class' object type, as defined by {@link DomainObject#objectType()} (or any other mechanism that corresponds to Isis' <code>ObjectSpecIdFacet</code>).
      */
     String toObjectType(final Class<?> domainType);
-
 
     void rebuild(final Class<?> domainType);
 
@@ -73,6 +73,11 @@ public interface MetaModelService {
 
     BeanSort sortOf(Bookmark bookmark, Mode mode);
 
+    CommandDtoProcessor commandDtoProcessorFor(String memberIdentifier);
+
+// end::refguide[]
+
+// tag::refguide-1[]
     enum Mode {
         /**
          * If the {@link #sortOf(Class, Mode) sort of} object type is unknown, then throw an exception.
@@ -83,21 +88,21 @@ public interface MetaModelService {
          */
         RELAXED
     }
+// end::refguide-1[]
 
-    CommandDtoProcessor commandDtoProcessorFor(String memberIdentifier);
-
-    public static class Config {
+// tag::refguide-2[]
+    class Config {
 
         private static final int IGNORE_NOOP_FACETS = 1;
         private static final int IGNORE_INTERFACES = 2;
         private static final int IGNORE_ABSTRACT_CLASSES = 4;
         private static final int IGNORE_BUILT_IN_VALUE_TYPES = 8;
         private static final int IGNORE_MIXINS = 16;
-        
+
         private static final String WILDCARD = "*";
 
         private final int mask;
-        
+
         private final Set<String> packagePrefixes = _Sets.newHashSet();
 
         public Config() {
@@ -107,7 +112,7 @@ public interface MetaModelService {
             this.mask = mask;
             this.packagePrefixes.addAll(packagePrefixes);
         }
-        
+
         public Set<String> getPackagePrefixes() {
             return Collections.unmodifiableSet(packagePrefixes);
         }
@@ -138,13 +143,13 @@ public interface MetaModelService {
             newPrefixes.add(WILDCARD);
             return new Config(mask, newPrefixes);
         }
-        
+
         public boolean isPackagePrefixAny() {
             return packagePrefixes.contains(WILDCARD);
         }
-        
+
         /**
-         * Returns a new {@code Config} with given {@code packagePrefix} added to the set of 
+         * Returns a new {@code Config} with given {@code packagePrefix} added to the set of
          * this {@code Config}'s packagePrefixes.
          * @param packagePrefix - prefix to be added
          */
@@ -175,9 +180,13 @@ public interface MetaModelService {
         private boolean hasFlag(final int x) {
             return (mask & x) == x;
         }
-        
+
     }
+// end::refguide-2[]
+
+// tag::refguide[]
 
     MetamodelDto exportMetaModel(final Config config);
 
 }
+// end::refguide[]

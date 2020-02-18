@@ -28,6 +28,8 @@ import org.apache.isis.core.commons.handler.MethodReferences.Call3;
 import org.apache.isis.core.commons.handler.MethodReferences.Call4;
 import org.apache.isis.core.commons.handler.MethodReferences.Call5;
 
+import lombok.Data;
+import lombok.Getter;
 
 
 /**
@@ -40,11 +42,10 @@ import org.apache.isis.core.commons.handler.MethodReferences.Call5;
  * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
  * available for use; no further configuration is required.
  */
+// tag::refguide[]
 public interface QueryResultsCache {
 
-    // -- INTERFACE
-
-    public <T> T execute(Callable<T> callable, Class<?> callingClass, String methodName, Object... keys);
+    <T> T execute(Callable<T> callable, Class<?> callingClass, String methodName, Object... keys);
 
     <R> R execute(Call0<? extends R> action, Class<?> callingClass, String methodName);
     
@@ -63,30 +64,23 @@ public interface QueryResultsCache {
     <R, A0, A1, A2, A3, A4> R execute(Call5<? extends R, A0, A1, A2, A3, A4> action, Class<?> callingClass, String methodName,
             A0 arg0, A1 arg1, A2 arg2, A3 arg3, A4 arg4);
     
-    public void resetForNextTransaction();
-    
-    
-    // -- KEY
+    void resetForNextTransaction();
 
-    public static class Key {
+// end::refguide[]
+// tag::refguide-1[]
+    class Key {
+
+        @Getter
         private final Class<?> callingClass;
+        @Getter
         private final String methodName;
+        @Getter
         private final Object[] keys;
 
         public Key(Class<?> callingClass, String methodName, Object... keys) {
             this.callingClass = callingClass;
             this.methodName = methodName;
             this.keys = keys;
-        }
-
-        public Class<?> getCallingClass() {
-            return callingClass;
-        }
-        public String getMethodName() {
-            return methodName;
-        }
-        public Object[] getKeys() {
-            return keys;
         }
 
         @Override
@@ -136,19 +130,15 @@ public interface QueryResultsCache {
             return callingClass.getName() + "#" + methodName  + Arrays.toString(keys);
         }
     }
+// end::refguide-1[]
 
-    // -- VALUE
-
-    public static class Value<T> {
-        private T result;
-        public Value(T result) {
-            this.result = result;
-        }
-        public T getResult() {
-            return result;
-        }
+// tag::refguide-2[]
+    @Data
+    class Value<T> {
+        private final T result;
     }
+// end::refguide-2[]
 
-
-
+// tag::refguide[]
 }
+// end::refguide[]

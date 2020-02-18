@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.Programmatic;
  *     &quot;Me&quot; menu bar.
  * </p>
  */
+// tag::refguide[]
 public interface UserProfileService {
 
     /**
@@ -38,6 +39,7 @@ public interface UserProfileService {
      *     If returns <tt>null</tt>, then the current user name is used instead.
      * </p>
      */
-    @Programmatic
     String userProfileName();
+
 }
+// end::refguide[]

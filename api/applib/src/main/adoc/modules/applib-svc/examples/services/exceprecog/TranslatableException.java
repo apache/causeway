@@ -30,6 +30,7 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
  *     ensuring tha the message is captured in the <code>translations.po</code> file so that it can be translated.
  * </p>
  */
+// tag::refguide[]
 public interface TranslatableException {
 
     /**
@@ -49,4 +50,6 @@ public interface TranslatableException {
      * as ultimately passed through to {@link org.apache.isis.applib.services.i18n.TranslationService#translate(String, String)}.
      */
     String getTranslationContext();
+
 }
+// end::refguide[]

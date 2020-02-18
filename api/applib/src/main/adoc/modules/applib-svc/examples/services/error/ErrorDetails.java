@@ -20,6 +20,9 @@ package org.apache.isis.applib.services.error;
 
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * Details of the error (obtained from the thrown exception), passed as part of the request to the
  * {@link ErrorReportingService}.
@@ -28,55 +31,21 @@ import java.util.List;
  *     Implementation note: a class has been used here so that additional fields might be added in the future.
  * </p>
  */
+@AllArgsConstructor
 public class ErrorDetails {
 
+    @Getter
     private final String mainMessage;
+    @Getter
     private final boolean recognized;
+    @Getter
     private final boolean authorizationCause;
+    @Getter
     private final List<String> stackTraceDetailListCombined;
-    private final List<List<String>> stackDetailListPerCause;
-
-    public ErrorDetails(
-            final String mainMessage,
-            final boolean recognized,
-            final boolean authorizationCause,
-            final List<String> stackTraceDetailListCombined,
-            final List<List<String>> stackDetailListPerCause) {
-        this.mainMessage = mainMessage;
-        this.recognized = recognized;
-        this.authorizationCause = authorizationCause;
-        this.stackTraceDetailListCombined = stackTraceDetailListCombined;
-        this.stackDetailListPerCause = stackDetailListPerCause;
-    }
-
-    public String getMainMessage() {
-        return mainMessage;
-    }
-
-    public boolean isRecognized() {
-        return recognized;
-    }
-
-    public boolean isAuthorizationCause() {
-        return authorizationCause;
-    }
-
-    /**
-     * @deprecated  - renamed to {@link #getStackTraceDetailCombined()}.
-     */
-    @Deprecated
-    public List<String> getStackTraceDetailList() {
-        return stackTraceDetailListCombined;
-    }
-
-    public List<String> getStackTraceDetailCombined() {
-        return stackTraceDetailListCombined;
-    }
-
     /**
      * One per exception cause.
      */
-    public List<List<String>> getStackTraceDetailPerCause() {
-        return stackDetailListPerCause;
-    }
+    @Getter
+    private final List<List<String>> stackDetailListPerCause;
+
 }

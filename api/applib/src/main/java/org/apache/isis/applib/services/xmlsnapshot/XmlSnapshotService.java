@@ -32,23 +32,30 @@ import org.apache.isis.applib.annotation.Programmatic;
  * registered and available for use; no further configuration is required.
  * </p>
  */
+// tag::refguide[]
 public interface XmlSnapshotService {
 
-    public interface Snapshot {
-        public Document getXmlDocument();
-        public Document getXsdDocument();
+// end::refguide[]
+// tag::refguide-1[]
+    interface Snapshot {
+        Document getXmlDocument();
+        Document getXsdDocument();
 
-        public String getXmlDocumentAsString();
-        public String getXsdDocumentAsString();
+        String getXmlDocumentAsString();
+        String getXsdDocumentAsString();
     }
+// end::refguide-1[]
 
-    public interface Builder {
-        public void includePath(final String path);
-        public void includePathAndAnnotation(final String path, final String annotation);
-        public XmlSnapshotService.Snapshot build();
+// tag::refguide-2[]
+    interface Builder {
+        void includePath(final String path);
+        void includePathAndAnnotation(final String path, final String annotation);
+        XmlSnapshotService.Snapshot build();
     }
+// end::refguide-2[]
 
-    public static class Exception extends RuntimeException {
+// tag::refguide-3[]
+    class Exception extends RuntimeException {
 
         private static final long serialVersionUID = 1L;
 
@@ -68,36 +75,33 @@ public interface XmlSnapshotService {
             super(cause);
         }
     }
+// end::refguide-3[]
 
-    @Programmatic
-    public XmlSnapshotService.Snapshot snapshotFor(final Object domainObject);
+// tag::refguide[]
+    XmlSnapshotService.Snapshot snapshotFor(final Object domainObject);
 
-    @Programmatic
-    public XmlSnapshotService.Builder builderFor(final Object domainObject);
+    XmlSnapshotService.Builder builderFor(final Object domainObject);
 
     /**
      * Convenience to convert xml string (eg as obtained by {@link Snapshot#getXmlDocumentAsString()} or
      * {@link Snapshot#getXsdDocumentAsString()}) back into a {@link Document W3C Document}.
      */
-    @Programmatic
-    public Document asDocument(String xmlStr);
+    Document asDocument(String xmlStr);
 
     /**
      * Convenience method to extract value of an XML element, based on its type.
      */
-    @Programmatic
-    public <T> T getChildElementValue(final Element el, final String tagname, final Class<T> expectedCls);
+    <T> T getChildElementValue(final Element el, final String tagname, final Class<T> expectedCls);
 
     /**
      * Convenience method to walk XML document.
      */
-    @Programmatic
-    public Element getChildElement(final Element el, final String tagname);
+    Element getChildElement(final Element el, final String tagname);
 
     /**
      * Convenience method to obtain value of child text node.
      */
-    @Programmatic
-    public String getChildTextValue(final Element el);
+    String getChildTextValue(final Element el);
 
 }
+// end::refguide[]

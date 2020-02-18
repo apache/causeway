@@ -25,8 +25,11 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.ViewModel;
 
+// tag::refguide[]
 public interface SwaggerService {
 
+// end::refguide[]
+// tag::refguide-1[]
     enum Visibility {
         /**
          * Specification for use by third-party clients, ie public use.
@@ -55,11 +58,13 @@ public interface SwaggerService {
             return this == PUBLIC;
         }
     }
+// end::refguide-1[]
+// tag::refguide[]
 
     enum Format {
         JSON,
         YAML;
-
+// end::refguide[]
         /**
          * Implementation note: not using subclasses, otherwise the key in translations.po becomes more complex.
          */
@@ -70,9 +75,10 @@ public interface SwaggerService {
                 return "application/yaml";
             }
         }
+// tag::refguide[]
     }
 
-    @Programmatic
     String generateSwaggerSpec(final Visibility visibility, final Format format);
 
 }
+// end::refguide[]

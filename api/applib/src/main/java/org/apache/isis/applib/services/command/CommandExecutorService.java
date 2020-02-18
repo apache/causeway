@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.services.command;
 
+// tag::refguide[]
 public interface CommandExecutorService {
 
     enum SudoPolicy {
@@ -33,6 +34,7 @@ public interface CommandExecutorService {
 
     /**
      * Executes the specified command.
+     *
      * @param sudoPolicy
      * @param commandWithDto
      * @return - any exception raised by the command.
@@ -40,3 +42,4 @@ public interface CommandExecutorService {
     void executeCommand(SudoPolicy sudoPolicy, CommandWithDto commandWithDto);
 
 }
+// end::refguide[]

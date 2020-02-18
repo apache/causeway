@@ -21,6 +21,7 @@ package org.apache.isis.applib.services.command;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
+// tag::refguide[]
 public interface CommandWithDto extends Command {
 
     String USERDATA_KEY_TARGET_CLASS = "targetClass";
@@ -29,6 +30,6 @@ public interface CommandWithDto extends Command {
     String USERDATA_KEY_RETURN_VALUE = "returnValue";
     String USERDATA_KEY_EXCEPTION = "exception";
 
-    @Programmatic
     CommandDto asDto();
 }
+// end::refguide[]

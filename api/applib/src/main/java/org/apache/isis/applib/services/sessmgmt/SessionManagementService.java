@@ -37,9 +37,10 @@ import org.apache.isis.applib.annotation.Programmatic;
  *
  * @see org.apache.isis.applib.services.xactn.TransactionService
  */
+// tag::refguide[]
 public interface SessionManagementService {
 
-    @Programmatic
-    public void nextSession();
+    void nextSession();
 
 }
+// end::refguide[]

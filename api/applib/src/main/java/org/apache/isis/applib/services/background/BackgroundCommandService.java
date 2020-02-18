@@ -38,6 +38,7 @@ import org.apache.isis.schema.cmd.v2.CommandDto;
  * a service.
  *
  */
+// tag::refguide[]
 public interface BackgroundCommandService extends AutoCloseable {
 
     void schedule(
@@ -48,12 +49,11 @@ public interface BackgroundCommandService extends AutoCloseable {
             final String targetArgs);
 
     /**
-     * @since 2.0
      * @apiNote refined from AutoCloseable to not throw catched exceptions
      */
     @Override
-    default void close() { 
-
+    default void close() {
     }
 
 }
+// end::refguide[]

@@ -21,37 +21,35 @@ package org.apache.isis.applib.services.grid;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.grid.Grid;
 
+// tag::refguide[]
 public interface GridLoaderService {
 
     /**
      * Whether dynamic reloading of layouts is enabled.
      */
-    @Programmatic
     boolean supportsReloading();
 
     /**
      * To support metamodel invalidation/rebuilding of spec.
      */
-    @Programmatic void remove(Class<?> domainClass);
+    void remove(Class<?> domainClass);
 
     /**
      * Whether any persisted layout metadata (eg a <code>.layout.xml</code> file) exists for this domain class.
      */
-    @Programmatic
     boolean existsFor(Class<?> domainClass);
 
     /**
      * Returns a new instance of a {@link Grid} for the specified domain class, eg from a
      * <code>layout.xml</code> file, else <code>null</code>.
      */
-    @Programmatic
     Grid load(final Class<?> domainClass);
 
     /**
      * Returns a new instance of a {@link Grid} for the specified domain class, eg from a
      * <code>layout.xml</code> file, else <code>null</code>.
      */
-    @Programmatic
     Grid load(final Class<?> domainClass, String layout);
 
 }
+// end::refguide[]

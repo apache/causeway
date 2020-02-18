@@ -41,26 +41,26 @@ import lombok.val;
  * @since 2.0
  *
  */
+// tag::refguide[]
 public interface ServiceRegistry {
-
 
     /**
      * Obtains a {@link Can} container containing any matching instances for the given required type
-     * and additional required qualifiers. 
+     * and additional required qualifiers.
+     *
      * @param type
      * @param qualifiers
      * @return non-null
-     * 
      */
-    public <T> Can<T> select(Class<T> type, Annotation[] qualifiers);
+    <T> Can<T> select(Class<T> type, Annotation[] qualifiers);
 
     /**
      * Obtains a {@link Can} container containing any matching instances for the given required type.
+     *
      * @param type
      * @return non-null
-     * 
      */
-    default public <T> Can<T> select(final Class<T> type){
+    default <T> Can<T> select(final Class<T> type){
         return select(type, _Constants.emptyAnnotations);
     }
 
@@ -75,37 +75,37 @@ public interface ServiceRegistry {
     /**
      * Returns all bean adapters that have been registered.
      */
-    public Stream<ManagedBeanAdapter> streamRegisteredBeans();
+    Stream<ManagedBeanAdapter> streamRegisteredBeans();
 
     /**
      * Returns a registered bean of given {@code name}.
-     *   
+     *
      * @param id - corresponds to the ObjectSpecificationId of the bean's type
      */
-    public Optional<ManagedBeanAdapter> lookupRegisteredBeanById(String id);
+    Optional<ManagedBeanAdapter> lookupRegisteredBeanById(String id);
 
 
     /**
      * Returns a registered bean of given {@code name}, or throws when no such bean.
-     *   
+     *
      * @param id - corresponds to the ObjectSpecificationId of the bean's type
      */
-    public default ManagedBeanAdapter lookupRegisteredBeanByIdElseFail(String id) {
+    default ManagedBeanAdapter lookupRegisteredBeanByIdElseFail(String id) {
         return lookupRegisteredBeanById(id).orElseThrow(
                 ()->_Exceptions.unrecoverable(
-                        "Failed to lookup BeanAdapter by id '" + id + "'")); 
+                        "Failed to lookup BeanAdapter by id '" + id + "'"));
     }
 
-    public Optional<?> lookupBeanById(final String id);
+    Optional<?> lookupBeanById(final String id);
 
     /**
      * Returns a domain service implementing the requested type.
      * <p>
      * If this lookup is ambiguous, the service annotated with highest priority is returned.
-     * see {@link Priority}   
+     * see {@link Priority}
      */
-    default public <T> Optional<T> lookupService(final Class<T> serviceClass) {
-
+    default <T> Optional<T> lookupService(final Class<T> serviceClass) {
+// end::refguide[]
         val bin = select(serviceClass);
         if(bin.isEmpty()) {
             return Optional.empty();
@@ -123,9 +123,11 @@ public interface ServiceRegistry {
         bin.forEach(toMaxPrioReduction);
 
         return toMaxPrioReduction.getResult();
+// tag::refguide[]
+        // ...
     }
 
-    public default <T> T lookupServiceElseFail(final Class<T> serviceClass) {
+    default <T> T lookupServiceElseFail(final Class<T> serviceClass) {
         return lookupService(serviceClass)
                 .orElseThrow(()->
                 new NoSuchElementException("Could not locate service of type '" + serviceClass + "'"));
@@ -133,7 +135,9 @@ public interface ServiceRegistry {
 
     // -- PRIORITY ANNOTATION HANDLING
 
-    static class InstanceByPriorityComparator implements Comparator<Object> {
+// end::refguide[]
+// tag::refguide-1[]
+    class InstanceByPriorityComparator implements Comparator<Object> {
 
         private static final InstanceByPriorityComparator INSTANCE =
                 new InstanceByPriorityComparator();
@@ -151,7 +155,7 @@ public interface ServiceRegistry {
                 } else {
                     return -1; // o1 < o2
                 }
-            } 
+            }
             if(o2==null) {
                 return 1; // o1 > o2
             }
@@ -168,6 +172,8 @@ public interface ServiceRegistry {
         }
 
     }
+// end::refguide-1[]
 
-
+// tag::refguide[]
 }
+// end::refguide[]

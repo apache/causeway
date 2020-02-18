@@ -26,37 +26,33 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.layout.grid.Grid;
 
+// tag::refguide[]
 public interface GridService {
 
     /**
      * Whether dynamic reloading of layouts is enabled.
      */
-    @Programmatic
     boolean supportsReloading();
 
     /**
      * To support metamodel invalidation/rebuilding of spec.
      */
-    @Programmatic
     void remove(Class<?> domainClass);
 
     /**
      * Whether any persisted layout metadata (eg a <code>.layout.xml</code> file) exists for this domain class.
      */
-    @Programmatic
     boolean existsFor(Class<?> domainClass);
 
     /**
      * Returns a new instance of a {@link Grid} for the specified domain class, eg from a
      * <code>layout.xml</code> file, else <code>null</code>.
      */
-    @Programmatic
     Grid load(final Class<?> domainClass);
 
     /**
      * Returns a default grid; eg where none can be loaded using {@link #load(Class)}.
      */
-    @Programmatic
     Grid defaultGridFor(Class<?> domainClass);
 
     /**
@@ -73,7 +69,6 @@ public interface GridService {
      *     <code>layout.xml</code> file takes precedence over any annotations.
      * </p>
      */
-    @Programmatic
     Grid normalize(final Grid grid);
 
     /**
@@ -86,7 +81,6 @@ public interface GridService {
      *     to be required in the domain class itself.
      * </p>
      */
-    @Programmatic
     Grid complete(Grid grid);
 
     /**
@@ -101,15 +95,13 @@ public interface GridService {
      * @param grid
      * @return
      */
-    @Programmatic
     Grid minimal(Grid grid);
 
     /**
      * Returns a new instance of a {@link Grid} for the specified domain class, eg from a
      * <code>[domainClass].layout.[layout].xml</code> file, else <code>null</code>.
      */
-    @Programmatic
     Grid load(Class<?> domainClass, String layout);
 
-
 }
+// end::refguide[]

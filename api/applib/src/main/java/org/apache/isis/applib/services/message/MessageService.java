@@ -22,6 +22,7 @@ package org.apache.isis.applib.services.message;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 
+// tag::refguide[]
 public interface MessageService {
 
     /**
@@ -33,7 +34,6 @@ public interface MessageService {
      * @see #warnUser(String)
      * @see #raiseError(String)
      */
-    @Programmatic
     void informUser(String message);
 
     /**
@@ -49,14 +49,11 @@ public interface MessageService {
      * @see #warnUser(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
      * @see #raiseError(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
      */
-    @Programmatic
     String informUser(TranslatableString message, final Class<?> contextClass, final String contextMethod);
-
 
     /**
      * Override of {@link MessageService#informUser(TranslatableString, Class, String)}, but with last two parameters combined into a context string.
      */
-    @Programmatic
     String informUser(TranslatableString message, final String translationContext);
 
     /**
@@ -68,7 +65,6 @@ public interface MessageService {
      * @see #raiseError(String)
      * @see #informUser(String)
      */
-    @Programmatic
     void warnUser(String message);
 
     /**
@@ -84,13 +80,11 @@ public interface MessageService {
      * @see #informUser(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
      * @see #raiseError(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
      */
-    @Programmatic
     String warnUser(TranslatableString message, final Class<?> contextClass, final String contextMethod);
 
     /**
      * Override of {@link MessageService#warnUser(TranslatableString, Class, String)}, but with last two parameters combined into a context string.
      */
-    @Programmatic
     String warnUser(TranslatableString message, final String translationContext);
 
     /**
@@ -102,7 +96,6 @@ public interface MessageService {
      * @see #warnUser(String)
      * @see #informUser(String)
      */
-    @Programmatic
     void raiseError(String message);
 
     /**
@@ -118,14 +111,12 @@ public interface MessageService {
      * @see #informUser(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
      * @see #warnUser(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
      */
-    @Programmatic
     String raiseError(TranslatableString message, final Class<?> contextClass, final String contextMethod);
 
     /**
      * Override of {@link MessageService#raiseError(TranslatableString, Class, String)}, but with last two parameters combined into a context string.
      */
-    @Programmatic
     String raiseError(TranslatableString message, final String translationContext);
 
-
 }
+// end::refguide[]

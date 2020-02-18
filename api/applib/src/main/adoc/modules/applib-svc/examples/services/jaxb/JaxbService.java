@@ -40,30 +40,25 @@ import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Maps;
 
+// tag::refguide[]
 public interface JaxbService {
 
-    @Programmatic
     Object fromXml(JAXBContext jaxbContext, String xml);
 
-    @Programmatic
     Object fromXml(JAXBContext jaxbContext, String xml, Map<String,Object> unmarshallerProperties);
 
     /**
      * As {@link #fromXml(JAXBContext, String)}, but downcast to a specific type.
      */
-    @Programmatic
     <T> T fromXml(Class<T> domainClass, String xml);
 
     /**
      * As {@link #fromXml(JAXBContext, String, Map)}, but downcast to a specific type.
      */
-    @Programmatic
     <T> T fromXml(Class<T> domainClass, String xml, Map<String,Object> unmarshallerProperties);
 
-    @Programmatic
     String toXml(final Object domainObject);
 
-    @Programmatic
     String toXml(final Object domainObject, Map<String,Object> marshallerProperties);
 
 
@@ -83,6 +78,7 @@ public interface JaxbService {
     enum IsisSchemas {
         INCLUDE,
         IGNORE;
+// end::refguide[]
 
         /**
          * Implementation note: not using subclasses, otherwise the key in translations.po becomes more complex.
@@ -94,13 +90,13 @@ public interface JaxbService {
                 return namespaceUri.matches(".*isis\\.apache\\.org.*");
             }
         }
+// tag::refguide[]
     }
 
-    @Programmatic
     Map<String, String> toXsd(final Object domainObject, final IsisSchemas isisSchemas);
 
-
-    public static class Simple implements JaxbService {
+// end::refguide[]
+    class Simple implements JaxbService {
 
         @Override
         public Object fromXml(final JAXBContext jaxbContext, final String xml) {
@@ -249,5 +245,6 @@ public interface JaxbService {
             }
         }
     }
-
+// tag::refguide[]
 }
+// end::refguide[]

@@ -22,6 +22,6 @@ import java.util.List;
 
 public interface DomainModel {
 
-    public List<DomainMember> getDomainMembers();
+    List<DomainMember> getDomainMembers();
 
 }

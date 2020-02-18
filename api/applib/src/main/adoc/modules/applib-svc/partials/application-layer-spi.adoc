@@ -1,0 +1,81 @@
+= Application Layer SPI
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+Domain service SPIs influence how the framework handles application layer concerns, for example which home page to render to the end-user.
+
+
+The table below summarizes the application layer SPIs defined by Apache Isis.
+It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the (non-ASF) link:https://platform.incode.org[Incode Platform^] modules.
+
+.Application Layer SPI
+[cols="2,4a,1,1", options="header"]
+|===
+
+|API
+|Description
+|Implementation
+|Notes
+
+
+|xref:refguide:applib-svc:application-layer-spi/BackgroundCommandService.adoc[`o.a.i.applib.` +
+`services.background` +
+`BackgroundCommandService`]
+|Persisted a memento of an action invocation such that it can be executed asynchronously ("in the background") eg by a scheduler.
+|`BackgroundCommandServiceJdo` +
+``o.ia.m.command`` +
+``isis-module-command``
+|related services:
+`BackgroundCommandService-` +
+`JdoContributions`,
+`BackgroundCommandService-` +
+`JdoRepository`
+
+
+
+|xref:refguide:applib-svc:application-layer-spi/CommandService.adoc[`o.a.i.applib.` +
+`services.command.spi` +
+`CommandService`]
+|Service to act as a factory and repository (create and save) of command instances, ie representations of an action invocation.  Used for command/auditing and background services.
+|`CommandServiceJdo` +
+``o.ia.m.command`` +
+``isis-module-command``
+|related services: +
+`CommandService-` ++
+`JdoContributions`,
+`CommandService-` ++
+`JdoRepository`
+
+|xref:refguide:applib-svc:application-layer-spi/HealthCheckService.adoc[`o.a.i.applib.` +
+`services.health` +
+`HealthCheckService`]
+|Performs a health check so that the runtime infrastructure can determine if the application is still healthy (and perform remedial action, such as restarting the app, if not).
+|No default implementation.
+|Exposed via REST API, typically on `/restful/health`.
+
+
+|xref:refguide:applib-svc:application-layer-spi/HomePageProviderService.adoc[`o.a.i.applib.` +
+`services.homepage` +
+`HomePageProviderService`]
+|Returns the home page object, if any is defined.
+|`HomePageProvider` +
+`ServiceDefault` +
+``o.a.i.core`` +
+``isis-core-runtime``
+|Used by the default implementation of xref:refguide:applib-svc:presentation-layer-spi/RoutingService.adoc[`RoutingService`].
+
+
+
+
+
+|===
+
+Key:
+
+* `o.a.i` is an abbreviation for `org.apache.isis`
+* `o.ia.m` is an abbreviation for `org.isisaddons.module`
+* `o.a.i.c.m.s` is an abbreviation for `org.apache.isis.core.metamodel.services`
+* `o.a.i.c.r.s` is an abbreviation for `org.apache.isis.core.runtime.services`
+
+
+

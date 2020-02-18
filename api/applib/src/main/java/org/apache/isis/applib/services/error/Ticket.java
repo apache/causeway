@@ -31,9 +31,10 @@ import java.io.Serializable;
  *     </ul>
  * </p>
  */
+// tag::refguide[]
 public interface Ticket extends Serializable {
 
-    public enum StackTracePolicy {
+    enum StackTracePolicy {
         SHOW,
         HIDE
     }
@@ -46,7 +47,7 @@ public interface Ticket extends Serializable {
      *     which case the {@link #getReference() reference} would be the JIRA issue number <tt>XXX-1234</tt>.
      * </p>
      */
-    public String getReference();
+    String getReference();
 
     /**
      * Message to display to the user.
@@ -55,7 +56,7 @@ public interface Ticket extends Serializable {
      *     Typically this message should be short, one line long.
      * </p>
      */
-    public String getUserMessage();
+    String getUserMessage();
 
     /**
      * Optional additional details to show to the end-user.
@@ -65,7 +66,7 @@ public interface Ticket extends Serializable {
      *     details on contacting the help desk if the issue is severe and requires immediate attention.
      * </p>
      */
-    public String getDetails();
+    String getDetails();
 
     /**
      * Whether the stack trace for the exception should be displayed or be hidden.
@@ -75,11 +76,12 @@ public interface Ticket extends Serializable {
      *     the support team, meaning there's no need to expose this info to the end-user.
      * </p>
      */
-    public StackTracePolicy getStackTracePolicy();
-
+    StackTracePolicy getStackTracePolicy();
 
     /**
      * Returns a Html representation of this ticket.
      */
-    public String getMarkup();
+    String getMarkup();
+
 }
+// end::refguide[]

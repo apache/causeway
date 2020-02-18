@@ -30,13 +30,14 @@ import org.apache.isis.applib.annotation.Programmatic;
  *     implementation is available, for the Wicket viewer.
  * </p>
  */
+// tag::refguide[]
 public interface DeepLinkService {
 
     /**
      * Creates a URI that can be used to obtain a representation of the provided domain object in one of the
      * Isis viewers.
      */
-    @Programmatic
     URI deepLinkFor(Object domainObject);
 
 }
+// end::refguide[]

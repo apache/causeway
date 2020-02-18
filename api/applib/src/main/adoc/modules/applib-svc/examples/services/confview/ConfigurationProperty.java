@@ -19,6 +19,8 @@
 
 package org.apache.isis.applib.services.confview;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -29,52 +31,40 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+// tag::refguide[]
 @XmlRootElement(name = "configurationProperty")
 @XmlType(
         propOrder = {
                 "key",
                 "value"
         }
-        )
+)
 @DomainObject(
         editing = Editing.DISABLED,
         objectType = "isisApplib.ConfigurationProperty"
         )
-@DomainObjectLayout(
-        paged = 999
-        )
+@XmlAccessorType(XmlAccessType.FIELD)
+@DomainObjectLayout(paged = 999)
+@NoArgsConstructor
 public class ConfigurationProperty implements Comparable<ConfigurationProperty> {
-
-    public ConfigurationProperty(){}
 
     public ConfigurationProperty(final String key, final String value){
         this.key = key;
         this.value = value;
     }
 
+    @XmlElement(required = true)
+    @Title
+    @Getter @Setter
     private String key;
 
     @XmlElement(required = true)
-    @Title
-    public String getKey() {
-        return key;
-    }
-    public void setKey(final String key) {
-        this.key = key;
-    }
-
-
+    @Getter @Setter
     private String value;
-
-    @XmlElement(required = true)
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(final String value) {
-        this.value = value;
-    }
-
 
     @Override
     public int compareTo(final ConfigurationProperty other) {
@@ -82,3 +72,4 @@ public class ConfigurationProperty implements Comparable<ConfigurationProperty> 
     }
 
 }
+// end::refguide[]

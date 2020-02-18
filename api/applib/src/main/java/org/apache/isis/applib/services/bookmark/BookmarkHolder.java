@@ -20,8 +20,10 @@ package org.apache.isis.applib.services.bookmark;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+// tag::refguide[]
 public interface BookmarkHolder {
 
-    @Programmatic
     Bookmark bookmark();
+
 }
+// end::refguide[]

@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 
+// tag::refguide[]
 public interface TableColumnOrderService {
 
     List<String> orderParented(
@@ -41,6 +42,7 @@ public interface TableColumnOrderService {
             final Class<?> collectionType,
             final List<String> propertyIds);
 
+// end::refguide[]
     /**
      * Used as a fallback.
      */
@@ -67,4 +69,7 @@ public interface TableColumnOrderService {
             return propertyIds;
         }
     }
+// tag::refguide[]
+
 }
+// end::refguide[]

@@ -58,6 +58,7 @@ import lombok.val;
  * Initially introduced for the Wicket viewer; check the documentation
  * of other viewers to determine whether they also support this service.
  */
+// tag::refguide[]
 public interface ExceptionRecognizer {
 
     /**
@@ -70,8 +71,10 @@ public interface ExceptionRecognizer {
      * {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Category category} 
      * and reason that will be included with the user-friendly message. 
      */
-    public Optional<Recognition> recognize(Throwable ex);
+    Optional<Recognition> recognize(Throwable ex);
 
+// end::refguide[]
+// tag::refguide-1[]
     @RequiredArgsConstructor
     enum Category {
         /**
@@ -100,25 +103,27 @@ public interface ExceptionRecognizer {
         OTHER("other")
         ;
         
-        @Getter private final String friendlyName;
-        
+        @Getter
+        private final String friendlyName;
     }
+// end::refguide-1[]
 
+// tag::refguide-2[]
     @Value
     class Recognition {
 
         /**
-         * @return optionally a recognition of the specified type, based on a whether given reason is non-null 
+         * @return optionally a recognition of the specified type, based on a whether given reason is non-null
          */
         public static Optional<Recognition> of(
-                @Nullable final Category category, 
+                @Nullable final Category category,
                 @Nullable final String reason) {
-            
+
             if(reason==null) {
                 return Optional.empty();
             }
-            
-            val nonNullCategory = category!=null? category: Category.OTHER;  
+
+            val nonNullCategory = category!=null? category: Category.OTHER;
             return Optional.of(new Recognition(nonNullCategory, reason));
         }
 
@@ -140,4 +145,7 @@ public interface ExceptionRecognizer {
             return String.format("[%s]: %s", categoryLiteral, reasonLiteral);
         }
     }
+// end::refguide-2[]
+// tag::refguide[]
 }
+// end::refguide[]

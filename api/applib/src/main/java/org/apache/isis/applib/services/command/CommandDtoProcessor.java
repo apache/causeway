@@ -21,6 +21,7 @@ package org.apache.isis.applib.services.command;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
+// tag::refguide[]
 public interface CommandDtoProcessor {
 
     /**
@@ -29,10 +30,9 @@ public interface CommandDtoProcessor {
      * @param command
      * @param commandDto
      */
-    @Programmatic
     CommandDto process(final Command command, CommandDto commandDto);
 
-
+// end::refguide[]
     /**
      * Convenience implementation to simply indicate that no DTO should be returned for a command,
      * effectively ignoring it for replay purposes.
@@ -46,4 +46,6 @@ public interface CommandDtoProcessor {
         }
     }
 
+// tag::refguide[]
 }
+// end::refguide[]

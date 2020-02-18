@@ -42,6 +42,7 @@ import org.apache.isis.applib.clock.Clock;
  * co-ordinated time management through a centralized time service.
  *
  */
+// tag::refguide[]
 @Service
 @Named("isisApplib.ClockService")
 @Order(OrderPrecedence.MIDPOINT)
@@ -82,3 +83,4 @@ public class ClockService {
         return new org.joda.time.LocalDate(nowAsMillis(), timeZone);
     }
 }
+// end::refguide[]

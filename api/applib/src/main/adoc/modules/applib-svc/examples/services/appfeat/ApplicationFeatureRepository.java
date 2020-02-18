@@ -22,21 +22,25 @@ import java.util.SortedSet;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+// tag::refguide[]
 public interface ApplicationFeatureRepository  {
 
-    @Programmatic
     SortedSet<String> packageNames();
 
-    @Programmatic
-    SortedSet<String> packageNamesContainingClasses(ApplicationMemberType memberType);
+    SortedSet<String> packageNamesContainingClasses(
+            ApplicationMemberType memberType);
 
-    @Programmatic
-    SortedSet<String> classNamesContainedIn(String packageFqn, ApplicationMemberType memberType);
+    SortedSet<String> classNamesContainedIn(
+            String packageFqn,
+            ApplicationMemberType memberType);
 
-    @Programmatic
-    SortedSet<String> classNamesRecursivelyContainedIn(String packageFqn);
+    SortedSet<String> classNamesRecursivelyContainedIn(
+            String packageFqn);
 
-    @Programmatic
-    SortedSet<String> memberNamesOf(String packageFqn, String className, ApplicationMemberType memberType);
+    SortedSet<String> memberNamesOf(
+            String packageFqn,
+            String className,
+            ApplicationMemberType memberType);
 
 }
+// end::refguide[]

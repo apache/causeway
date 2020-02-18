@@ -20,50 +20,25 @@ package org.apache.isis.applib.services.userreg;
 
 import java.io.Serializable;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * A model object for the signup page
  */
+// tag::refguide[]
 public class UserDetails implements Serializable {
 
     private static final long serialVersionUID = -7308102332765149525L;
 
+    @Getter @Setter
     private String username;
+    @Getter @Setter
     private String password;
+    @Getter @Setter
     private String confirmPassword;
+    @Getter @Setter
     private String emailAddress;
 
-    public String getUsername()
-    {
-        return username;
-    }
-
-    public void setUsername(final String username)
-    {
-        this.username = username;
-    }
-
-    public String getPassword()
-    {
-        return password;
-    }
-    public void setPassword(final String password)
-    {
-        this.password = password;
-    }
-
-    public String getConfirmPassword() {
-        return confirmPassword;
-    }
-
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
-    }
-
-    public String getEmailAddress() {
-        return emailAddress;
-    }
-
-    public void setEmailAddress(final String emailAddress) {
-        this.emailAddress = emailAddress;
-    }
 }
+// end::refguide[]

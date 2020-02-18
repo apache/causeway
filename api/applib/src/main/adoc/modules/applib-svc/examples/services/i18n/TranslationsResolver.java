@@ -22,9 +22,10 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+// tag::refguide[]
 public interface TranslationsResolver {
 
-    @Programmatic
-    public List<String> readLines(final String file);
+    List<String> readLines(final String file);
 
 }
+// end::refguide[]

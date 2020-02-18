@@ -25,27 +25,22 @@ import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.applib.services.HasUsername;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 
+// tag::refguide[]
 public interface PublishedObjects extends HasUniqueId, HasUsername {
 
-    @Programmatic
     Timestamp getCompletedAt();
 
-    @Programmatic
     ChangesDto getDto();
 
-    @Programmatic
     int getNumberLoaded();
 
-    @Programmatic
     int getNumberCreated();
 
-    @Programmatic
     int getNumberUpdated();
 
-    @Programmatic
     int getNumberDeleted();
 
-    @Programmatic
     int getNumberPropertiesModified();
 
 }
+// end::refguide[]

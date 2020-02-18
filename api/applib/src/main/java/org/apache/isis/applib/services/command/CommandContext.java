@@ -37,6 +37,7 @@ import lombok.Getter;
  * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
  * available for use; no further configuration is required.
  */
+// tag::refguide[]
 @Service
 @Named("isisApplib.CommandContext")
 @RequestScoped
@@ -48,6 +49,7 @@ public class CommandContext {
     @Getter
     private Command command;
 
+// end::refguide[]
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      */
@@ -55,4 +57,6 @@ public class CommandContext {
         this.command = command;
     }
 
+// tag::refguide[]
 }
+// end::refguide[]

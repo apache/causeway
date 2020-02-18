@@ -32,16 +32,24 @@ import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
+// tag::refguide[]
 @Named("isisApplib.ConfigurationMenu")
 @DomainService(objectType = "isisApplib.ConfigurationMenu")
 @DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.TERTIARY)
 public class ConfigurationMenu {
 
     public static abstract class ActionDomainEvent
-    extends IsisModuleApplib.ActionDomainEvent<ConfigurationMenu> {}
+        extends IsisModuleApplib.ActionDomainEvent<ConfigurationMenu> {}
+
+    private final ConfigurationViewService configurationService;
+
+    @Inject
+    public ConfigurationMenu(ConfigurationViewService configurationService) {
+        this.configurationService = configurationService;
+    }
 
     public static class AllConfigurationPropertiesDomainEvent
-    extends ActionDomainEvent {}
+        extends ActionDomainEvent {}
 
     @Action(
             domainEvent = AllConfigurationPropertiesDomainEvent.class,
@@ -55,6 +63,5 @@ public class ConfigurationMenu {
         return configurationService.allProperties();
     }
 
-    @Inject private ConfigurationViewService configurationService;
-
 }
+// end::refguide[]

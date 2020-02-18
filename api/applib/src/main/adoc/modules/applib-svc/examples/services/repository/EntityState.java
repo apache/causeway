@@ -25,11 +25,12 @@ package org.apache.isis.applib.services.repository;
  *  
  * @since 2.0
  */
+// tag::refguide[]
 public enum EntityState {
 
     not_Persistable,
     persistable_Attached,
-    persistable_Detached, 
+    persistable_Detached,
     persistable_Destroyed
 
     ;
@@ -51,3 +52,4 @@ public enum EntityState {
     }
 
 }
+// end::refguide[]

@@ -29,10 +29,10 @@ import org.apache.isis.schema.cmd.v2.CommandDto;
  *
  * Similar to {@link CommandDtoProcessor}, but applied to all {@link CommandDto}s globally.
  */
+// tag::refguide[]
 public interface CommandDtoProcessorService {
 
-    @Programmatic
     CommandDto process(final Command command, CommandDto commandDto);
 
-
 }
+// end::refguide[]

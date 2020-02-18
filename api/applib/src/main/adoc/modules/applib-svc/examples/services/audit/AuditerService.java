@@ -39,12 +39,11 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
  * <p>
  * To use either service, must include on the classpath and also register the service (eg in <tt>application.properties</tt>).
  */
+// tag::refguide[]
 public interface AuditerService {
 
-    @Programmatic
     boolean isEnabled();
 
-    @Programmatic
     void audit(
             final UUID interactionId, final int sequence,
             final String targetClassName, final Bookmark target,
@@ -52,5 +51,5 @@ public interface AuditerService {
             final String preValue, final String postValue,
             final String user, final Timestamp timestamp);
 
-
 }
+// end::refguide[]

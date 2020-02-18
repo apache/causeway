@@ -38,17 +38,16 @@ import org.apache.isis.applib.annotation.Programmatic;
  *     to be set (specifying the SMTP mail server/accounts/password).
  * </p>
  */
+// tag::refguide[]
 public interface UserRegistrationService {
 
-    @Programmatic
     boolean usernameExists(String username);
 
-    @Programmatic
     void registerUser(UserDetails userDetails);
 
-    @Programmatic
     boolean emailExists(String emailAddress);
 
-    @Programmatic
     boolean updatePasswordByEmail(String emailAddress, String password);
+
 }
+// end::refguide[]

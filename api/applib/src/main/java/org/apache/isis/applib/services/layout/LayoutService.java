@@ -22,11 +22,14 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 
+// tag::refguide[]
 public interface LayoutService {
 
+// end::refguide[]
+// tag::refguide-1[]
     /**
-     * Mode of operation when downloading a layout file (while prototyping). It affects the way the file's 
-     * content is assembled. Once a layout file is in place, its layout data takes precedence over any 
+     * Mode of operation when downloading a layout file (while prototyping). It affects the way the file's
+     * content is assembled. Once a layout file is in place, its layout data takes precedence over any
      * conflicting layout data from annotations.
      */
     enum Style {
@@ -41,7 +44,7 @@ public interface LayoutService {
          * also {@link org.apache.isis.applib.services.grid.GridService#normalize(Grid) normalized}.
          */
         CURRENT,
-        
+
         /**
          * As per {@link #NORMALIZED}, but also with all (non-null) facets for all
          * properties/collections/actions also included included in the grid.
@@ -54,7 +57,7 @@ public interface LayoutService {
          * </ul>
          */
         COMPLETE,
-        
+
         /**
          * Default, whereby missing properties/collections/actions are added to regions,
          * and unused/empty regions are removed/trimmed.
@@ -68,7 +71,7 @@ public interface LayoutService {
          * </ul>
          */
         NORMALIZED,
-        
+
         /**
          * As per {@link #NORMALIZED}, but with no properties/collections/actions.
          * <p>
@@ -82,7 +85,9 @@ public interface LayoutService {
          */
         MINIMAL
     }
+// end::refguide-1[]
 
+// tag::refguide[]
     /**
      * Obtains the serialized XML form of the layout (grid) for the specified domain class.
      */
@@ -100,3 +105,4 @@ public interface LayoutService {
     String toMenuBarsXml(final MenuBarsService.Type type);
 
 }
+// end::refguide[]

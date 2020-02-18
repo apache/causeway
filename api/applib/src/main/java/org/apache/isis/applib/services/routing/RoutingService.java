@@ -23,12 +23,12 @@ import org.apache.isis.applib.annotation.Programmatic;
 /**
  * Provides the ability to return (and therefore have rendered) an alternative object from an action invocation.
  */
+// tag::refguide[]
 public interface RoutingService {
 
-    @Programmatic
     boolean canRoute(Object original);
 
-    @Programmatic
     Object route(Object original);
 
 }
+// end::refguide[]

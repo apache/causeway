@@ -21,6 +21,7 @@ package org.apache.isis.applib.services.i18n;
 import java.util.Objects;
 import java.util.function.Predicate;
 
+// tag::refguide[]
 public interface TranslationService {
 
     /**
@@ -34,7 +35,7 @@ public interface TranslationService {
      * @param text
      * @return
      */
-    public String translate(final String context, final String text);
+    String translate(final String context, final String text);
 
     /**
      * Return a translation of either the singular or the plural text, dependent on the <tt>num</tt> parameter,
@@ -50,17 +51,18 @@ public interface TranslationService {
      * @param num - whether to return the translation of the singular (if =1) or of the plural (if != 1)
      * @return
      */
-    public String translate(final String context, final String singularText, final String pluralText, int num);
+    String translate(final String context, final String singularText, final String pluralText, int num);
 
-
-    public enum Mode {
+// end::refguide[]
+// tag::refguide-1[]
+    enum Mode {
         DISABLED(configValue->configValue != null &&
                 ("disable".equalsIgnoreCase(configValue) ||
                         "disabled".equalsIgnoreCase(configValue))),
-        
+
         // synonym, needs to be defined, such that config beans (since 2.0) do work
         DISABLE(configValue->false),
-        
+
         READ(configValue->configValue != null &&
         ("read".equalsIgnoreCase(configValue) ||
                 "reader".equalsIgnoreCase(configValue))),
@@ -89,6 +91,8 @@ public interface TranslationService {
             return this == DISABLED || this == DISABLE;
         }
     }
+// end::refguide-1[]
+// tag::refguide[]
 
     /**
      * Whether this implementation is operating in read or in write mode.
@@ -110,3 +114,4 @@ public interface TranslationService {
      */
     Mode getMode();
 }
+// end::refguide[]

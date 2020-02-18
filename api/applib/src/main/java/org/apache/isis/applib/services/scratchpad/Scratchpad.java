@@ -41,6 +41,7 @@ import org.apache.isis.core.commons.internal.collections._Maps;
  * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
  * available for use; no further configuration is required.
  */
+// tag::refguide[]
 @Service
 @RequestScoped
 @Order(OrderPrecedence.EARLY)
@@ -76,3 +77,4 @@ public class Scratchpad {
     }
 
 }
+// end::refguide[]

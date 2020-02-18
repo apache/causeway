@@ -21,9 +21,10 @@ package org.apache.isis.applib.services.bookmarkui;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+// tag::refguide[]
 public interface BookmarkUiService {
 
-    @Programmatic
     void clear();
 
 }
+// end::refguide[]

@@ -29,6 +29,7 @@ import org.apache.isis.applib.query.Query;
 
 import lombok.val;
 
+// tag::refguide[]
 public interface RepositoryService {
 
     /**
@@ -38,14 +39,14 @@ public interface RepositoryService {
      * @since 2.0
      */
     EntityState getEntityState(@Nullable Object object);
-    
+
     /**
      * Same as {@link org.apache.isis.applib.services.factory.FactoryService#detachedEntity(Class)}; provided as a
      * convenience because instantiating and {@link #persist(Object) persisting} are often done together.
      * @since 2.0
      */
     <T> T detachedEntity(Class<T> ofType);
-        
+
     /**
      * Persist the specified object (or do nothing if already persistent).
      *
@@ -215,11 +216,12 @@ public interface RepositoryService {
      * @see #firstMatch(Query)
      */
     <T> Optional<T> firstMatch(Query<T> query);
+// end::refguide[]
 
     // -- DEPRECATIONS
 
     /**
-     * @deprecated if applicable use {@link #detachedEntity(Class)} instead 
+     * @deprecated if applicable use {@link #detachedEntity(Class)} instead
      */
     @Deprecated
     default <T> T instantiate(Class<T> ofType) {
@@ -251,5 +253,7 @@ public interface RepositoryService {
         val entityState = getEntityState(domainObject);
         return entityState.isDestroyed();
     }
-    
+
+// tag::refguide[]
 }
+// end::refguide[]

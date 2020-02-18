@@ -19,14 +19,28 @@ The diagram below shows these categories:
 image::reference-services/categories.png[width="600px",link="{imagesdir}/reference-services/categories.png"]
 
 
-A small number of domain services can be considered both API and SPI; a good example is the xref:refguide:applib-svc:integration-api/EmailService.adoc[`EmailService`] that is of direct use for domain objects wishing to send out emails, but is also used by the framework to support the xref:vw:ROOT:features.adoc#user-registration[user registration] functionality supported by the xref:vw:ROOT:about.adoc[Wicket viewer].
-The same is true of the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`]; this can be used by domain objects to broadcast arbitrary events, but is also used by the framework to automatically emit events for
+A small number of domain services can be considered both API and SPI; a good example is the xref:refguide:applib-svc:.EmailService.adoc[`EmailService`] that is of direct use for domain objects wishing to send out emails, but is also used by the framework to support the xref:vw:ROOT:features.adoc#user-registration[user registration] functionality supported by the xref:vw:ROOT:about.adoc[Wicket viewer].
+The same is true of the xref:refguide:applib-svc:.EventBusService.adoc[`EventBusService`]; this can be used by domain objects to broadcast arbitrary events, but is also used by the framework to automatically emit events for
 xref:refguide:applib-ant:Action.adoc#domainEvent[`@Action#domainEvent()`] etc.
 
 For these hybrid services we have categorized the service as an "API" service.
 This chapter therefore contains only the strictly SPI services.
 
 This rest of this guide is broken out into several chapters, one for each of the various types/categories of domain service.
+
+
+
+include::refguide:applib-svc:partial$presentation-layer-api.adoc[leveloffset=+2]
+include::refguide:applib-svc:partial$presentation-layer-spi.adoc[leveloffset=+2]
+include::refguide:applib-svc:partial$application-layer-api.adoc[leveloffset=+2]
+include::refguide:applib-svc:partial$application-layer-spi.adoc[leveloffset=+2]
+include::refguide:applib-svc:partial$core-domain-api.adoc[leveloffset=+2]
+include::refguide:applib-svc:partial$integration-api.adoc[leveloffset=+2]
+include::refguide:applib-svc:partial$metadata-api.adoc[leveloffset=+2]
+include::refguide:applib-svc:partial$testing.adoc[leveloffset=+2]
+include::refguide:applib-svc:partial$persistence-layer-api.adoc[leveloffset=+2]
+include::refguide:applib-svc:partial$persistence-layer-spi.adoc[leveloffset=+2]
+include::refguide:applib-svc:partial$bootstrapping-spi.adoc[leveloffset=+2]
 
 
 
@@ -72,9 +86,9 @@ public class Customer {
 For objects that are already persisted, the service is automatically injected just after the object is rehydrated by
 JDO/DataNucleus.
 
-For transient objects (instantiated programmatically), the xref:refguide:applib-svc:core-domain-api/FactoryService.adoc[`FactoryService#instantiate(...)`] or the xref:refguide:applib-svc:core-domain-api/RepositoryService.adoc[`RepositoryService#instantiate(...)`]'s will automatically inject the services.
+For transient objects (instantiated programmatically), the xref:refguide:applib-svc:.FactoryService.adoc[`FactoryService#instantiate(...)`] or the xref:refguide:applib-svc:.RepositoryService.adoc[`RepositoryService#instantiate(...)`]'s will automatically inject the services.
 
-Alternatively the object can be instantiated simply using `new`, then services injected using xref:refguide:applib-svc:metadata-api/ServiceRegistry.adoc[`ServiceRegistry`]'s ``injectServicesInto(...)`` method.
+Alternatively the object can be instantiated simply using `new`, then services injected using xref:refguide:applib-svc:.ServiceRegistry.adoc[`ServiceRegistry`]'s ``injectServicesInto(...)`` method.
 
 
 
@@ -97,11 +111,11 @@ Spring offers a number of other mechanisms to specify the ordering; these can al
 For some domain services, all framework will delegate to all available implementation, using a chain-of-responsibility pattern):
 These include:
 
-xref:refguide:applib-svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`],
-xref:refguide:applib-svc:presentation-layer-spi/GridSystemService.adoc[`GridSystemService`], and
-xref:refguide:applib-svc:presentation-layer-spi/RoutingService.adoc[`RoutingService`].
+xref:refguide:applib-svc:.ContentMappingService.adoc[`ContentMappingService`],
+xref:refguide:applib-svc:.GridSystemService.adoc[`GridSystemService`], and
+xref:refguide:applib-svc:.RoutingService.adoc[`RoutingService`].
 
-For example, suppose you wanted to provide your own implementation of xref:refguide:applib-svc:presentation-layer-spi/LocaleProvider.adoc[`LocaleProvider`].
+For example, suppose you wanted to provide your own implementation of xref:refguide:applib-svc:.LocaleProvider.adoc[`LocaleProvider`].
 The default implementation has these annotations:
 
 [source,java]
@@ -139,16 +153,16 @@ image::reference-services/commands-and-events.png[width="960px",link="{imagesdir
 
 To explain:
 
-* the (request-scoped) xref:refguide:applib-svc:application-layer-api/CommandContext.adoc[`CommandContext`] captures the user's intention to
+* the (request-scoped) xref:refguide:applib-svc:.CommandContext.adoc[`CommandContext`] captures the user's intention to
 invoke an action or edit a property; this is held by the `Command` object.
 
-* if a xref:refguide:applib-svc:application-layer-spi/CommandService.adoc[`CommandService`] has been configured, then this will be used to create the `Command` object implementation, generally so that it can then also be persisted.
+* if a xref:refguide:applib-svc:.CommandService.adoc[`CommandService`] has been configured, then this will be used to create the `Command` object implementation, generally so that it can then also be persisted.
 +
 If the action or property is annotated to be invoked in the background (using xref:refguide:applib-ant:Action.adoc#command[`@Action#command...()`] or xref:refguide:applib-ant:Property.adoc#command[`@Property#command...()`]) then no further work is done.
 But, if the action/property is to be executed in the foreground, then the interaction continues.
 
-* the (request-scoped) xref:refguide:applib-svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] domain service acts as a factory for the ``Interaction`` object, which keeps track of the call-graph of executions (``Interaction.Execution``) of either action invocations or property edits.
-In the majority of cases there is likely to be just a single top-level node of this graph, but for applications that use the xref:refguide:applib-svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] extensively each successive call results in a new child execution.
+* the (request-scoped) xref:refguide:applib-svc:.InteractionContext.adoc[`InteractionContext`] domain service acts as a factory for the ``Interaction`` object, which keeps track of the call-graph of executions (``Interaction.Execution``) of either action invocations or property edits.
+In the majority of cases there is likely to be just a single top-level node of this graph, but for applications that use the xref:refguide:applib-svc:.WrapperFactory.adoc[`WrapperFactory`] extensively each successive call results in a new child execution.
 
 * before and after each action invocation/property edit, a xref:refguide:applib-cm:classes/domainevent.adoc[domain event] is may be broadcast to all subscribers.
 Whether this occurs depends on whether the action/property has been annotated (using xref:refguide:applib-ant:Action.adoc#domainEvent[`@Action#domainEvent()`] or xref:refguide:applib-ant:Property.adoc#domainEvent[`@Property#domainEvent()`]).
@@ -156,33 +170,33 @@ Whether this occurs depends on whether the action/property has been annotated (u
 (Note that susbcribers will also receive events for vetoing the action/property; this is not shown on the diagram).
 
 * As each execution progresses, and objects that are modified are "enlisted" into the (internal) xref:runtime-services:ROOT:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] domain service.
-Metrics as to which objects are merely loaded into memory are also captured using the xref:refguide:applib-svc:persistence-layer-api/MetricsService.adoc[`MetricsService`] (not shown on the diagram).
+Metrics as to which objects are merely loaded into memory are also captured using the xref:refguide:applib-svc:.MetricsService.adoc[`MetricsService`] (not shown on the diagram).
 
 * At the end of each execution, details of that execution are published through the (internal)
 xref:runtime-services:ROOT:spi/PublisherServiceInternal.adoc[`PublisherServiceInternal`] domain service.  This is only done for actions/properties annotated appropriate (with xref:refguide:applib-ant:Action.adoc#publishing[`@Action#publishing()`] or xref:refguide:applib-ant:Property.adoc#publishing[`@Property#publishing()`]).
 +
-The internal service delegates in turn to any registered xref:refguide:applib-svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`]s (there may be more than one).
+The internal service delegates in turn to any registered xref:refguide:applib-svc:.PublisherService.adoc[`PublisherService`]s (there may be more than one).
 
 * At the end of each transaction, details of all changed objects are published, again through the (internal) xref:runtime-services:ROOT:spi/PublisherServiceInternal.adoc[`PublisherServiceInternal`] to any registered `PublisherService` implementations.
 Only domain objects specified to be published with xref:refguide:applib-ant:DomainObject.adoc#publishing[`@DomainObject#publishing()`] are published. +
 +
 [NOTE]
 ====
-Note that it's possible for there to be more than one transaction per top-level interaction, by virtue of the xref:refguide:applib-svc:application-layer-api/TransactionService.adoc[`TransactionService`].
+Note that it's possible for there to be more than one transaction per top-level interaction, by virtue of the xref:refguide:applib-svc:.TransactionService.adoc[`TransactionService`].
 ====
 
-* Also at the end of each transaction, details of all changed properties are passed to any registered xref:refguide:applib-svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`](s) by way of the (internal) xref:runtime-services:ROOT:persistence-layer/AuditingServiceInternal.adoc[`AuditingServiceInternal`] domain service.
+* Also at the end of each transaction, details of all changed properties are passed to any registered xref:refguide:applib-svc:.AuditerService.adoc[`AuditerService`](s) by way of the (internal) xref:runtime-services:ROOT:persistence-layer/AuditingServiceInternal.adoc[`AuditingServiceInternal`] domain service.
 
-Implementations of xref:refguide:applib-svc:application-layer-spi/CommandService.adoc[`CommandService`] can use the `Command#getMemento()` method to obtain a XML equivalent of that `Command`, reified using the xref:refguide:schema:cmd.adoc[`cmd.xsd`] schema.
+Implementations of xref:refguide:applib-svc:.CommandService.adoc[`CommandService`] can use the `Command#getMemento()` method to obtain a XML equivalent of that `Command`, reified using the xref:refguide:schema:cmd.adoc[`cmd.xsd`] schema.
 This can be converted back into a `CommandDto` using the `CommandDtoUtils` utility class (part of the applib).
 
-Similarly, implementations of xref:refguide:applib-svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`] can use the `InteractionDtoUtils` utility class to obtain a `InteractionDto` representing the interaction, either just for a single execution or for the entire call-graph.
+Similarly, implementations of xref:refguide:applib-svc:.PublisherService.adoc[`PublisherService`] can use the `InteractionDtoUtils` utility class to obtain a `InteractionDto` representing the interaction, either just for a single execution or for the entire call-graph.
 This can be converted into XML in a similar fashion.
 
 Likewise, the `PublishedObjects` class passed to the `PublisherService` at the end of the interaction provides the `PublishedObjects#getDto()` method which returns a `ChangesDto` instance.
 This can be converted into XML using the `ChangesDtoUtils` utility class.
 
-One final point: multiple xref:refguide:applib-svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`] implementations are supported because different implementations may have different responsibilities.
+One final point: multiple xref:refguide:applib-svc:.PublisherService.adoc[`PublisherService`] implementations are supported because different implementations may have different responsibilities.
 For example, the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s publishmq module is responsible for publishing messages onto an ActiveMQ event bus, for inter-system communication.
 However, the SPI can also be used for profiling; each execution within the call-graph contains metrics of the number of objects loaded or modified as a result of that execution, and thus could be used for application profiling.
 The framework provides a default `PublisherServiceLogging` implementation that logs this using SLF4J.

@@ -95,23 +95,18 @@ import org.apache.isis.schema.cmd.v2.CommandDto;
  * </p>
  *
  */
+// tag::refguide[]
 public interface Command extends HasUniqueId {
 
-    // -- user (property)
     /**
      * The user that created the command.
      */
-
     String getUser();
-
-    // -- timestamp (property)
 
     /**
      * The date/time at which this command was created.
      */
     Timestamp getTimestamp();
-
-    // -- target (property)
 
     /**
      * {@link Bookmark} of the target object (entity or service) on which this action was performed.
@@ -121,22 +116,16 @@ public interface Command extends HasUniqueId {
      */
     Bookmark getTarget();
 
-    // -- memberIdentifier (property)
-
     /**
      * Holds a string representation of the invoked action, or the edited property, equivalent to
      * {@link Identifier#toClassAndNameIdentityString()}.
      */
     String getMemberIdentifier();
 
-    // -- targetClass (property)
-
     /**
      * A human-friendly description of the class of the target object.
      */
     String getTargetClass();
-
-    // -- targetAction (property)
 
     /**
      * The human-friendly name of the action invoked/property edited on the target object.
@@ -147,22 +136,15 @@ public interface Command extends HasUniqueId {
      */
     String getTargetAction();
 
-    // -- arguments (property)
-
     /**
      * A human-friendly description of the arguments with which the action was invoked.
      */
     String getArguments();
 
-
-    // -- memento (property)
-
     /**
      * A formal (XML or similar) specification of the action to invoke/being invoked.
      */
     String getMemento();
-
-    // -- executeIn (property)
 
     /**
      * The mechanism by which this command is to be executed, either synchronously &quot;in the
@@ -170,8 +152,6 @@ public interface Command extends HasUniqueId {
      * {@link CommandExecuteIn#BACKGROUND background}&quot; through the {@link BackgroundCommandService}.
      */
     CommandExecuteIn getExecuteIn();
-
-    // -- executor (property)
 
     enum Executor {
         /**
@@ -209,8 +189,6 @@ public interface Command extends HasUniqueId {
      */
     Executor getExecutor();
 
-    // -- startedAt (property)
-
     /**
      * For an command that has actually been executed, holds the date/time at which the {@link Interaction} that
      * executed the command started.
@@ -225,8 +203,6 @@ public interface Command extends HasUniqueId {
      * {@link Interaction.Execution#getStartedAt()}.
      */
     Timestamp getStartedAt();
-
-    // -- completedAt (property, deprecated)
 
     /**
      * For an command that has actually been executed, holds the date/time at which the {@link Interaction} that
@@ -243,15 +219,11 @@ public interface Command extends HasUniqueId {
      */
     Timestamp getCompletedAt();
 
-    // -- parent (property)
-
     /**
      * For actions created through the {@link BackgroundService} and {@link BackgroundCommandService},
      * captures the parent action.
      */
     Command getParent();
-
-    // -- exception (property, deprecated)
 
     /**
      * For an command that has actually been executed, holds the exception stack
@@ -267,9 +239,6 @@ public interface Command extends HasUniqueId {
      */
     String getException();
 
-    // -- result (property, deprecated)
-
-
     /**
      * For an command that has actually been executed, holds a {@link Bookmark} to the object returned by the corresponding action/property modification.
      *
@@ -282,9 +251,6 @@ public interface Command extends HasUniqueId {
      * See also  {@link Interaction#getCurrentExecution()} and  {@link org.apache.isis.applib.services.iactn.Interaction.Execution#getReturned()}.
      */
     Bookmark getResult();
-
-
-    // -- persistence (property)
 
     /**
      * Whether this command should ultimately be persisted (if the configured {@link BackgroundCommandService} supports
@@ -311,15 +277,11 @@ public interface Command extends HasUniqueId {
      */
     CommandPersistence getPersistence();
 
-    // -- persistHint (programmatic)
-
     /**
      * Whether that this {@link Command} should be persisted, if possible.
      */
-    @Programmatic
     boolean isPersistHint();
-
-    // -- FRAMEWORK INTERNATA
+// end::refguide[]
 
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
@@ -462,7 +424,8 @@ public interface Command extends HasUniqueId {
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      */
-    @Programmatic
     Internal internal();
 
+// tag::refguide[]
 }
+// end::refguide[]

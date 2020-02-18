@@ -33,6 +33,7 @@ import lombok.val;
  * 
  * @since 2.0
  */
+// tag::refguide[]
 public interface ServiceInjector {
 
     <T> T injectServicesInto(final T domainObject, Consumer<InjectionPoint> onNotResolvable);
@@ -44,13 +45,12 @@ public interface ServiceInjector {
             val requiredType = injectionPoint.getDeclaredType();
             val msg = String
                     .format("Could not resolve injection point [%s] in target '%s' of required type '%s'",
-                            injectionPointName,        
+                            injectionPointName,
                             domainObject.getClass().getName(),
                             requiredType);
             throw new NoSuchElementException(msg);
         });
 
     }
-
-
 }
+// end::refguide[]

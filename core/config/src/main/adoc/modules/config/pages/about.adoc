@@ -1,4 +1,4 @@
-= Configuration Properties
+= Configuration Guide
 
 Apache Isis' is a Spring Boot application, and so is typically configured using an `application.properties` or `application.yml` file.
 

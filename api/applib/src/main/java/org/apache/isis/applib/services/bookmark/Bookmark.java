@@ -40,15 +40,16 @@ import lombok.val;
  */
 @Value 
 @lombok.Value @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+// tag::refguide[]
 public class Bookmark implements Serializable {
 
     private static final long serialVersionUID = 2L;
 
     protected static final String SEPARATOR = ":";
-    
+
     /**
-     * corresponds directly to the object's specification-id 
-     * @see <tt>RootOid</tt> 
+     * corresponds directly to the object's specification-id
+     * @see <code>RootOid</code>
      */
     @NonNull  private final String objectType;
     @NonNull  private final String identifier;
@@ -57,7 +58,7 @@ public class Bookmark implements Serializable {
     public static Bookmark of(String objectType, String identifier) {
         return new Bookmark(objectType, identifier, /*hintId*/ null);
     }
-    
+
     /**
      * Round-trip with {@link #toString()} representation.
      */
@@ -100,8 +101,7 @@ public class Bookmark implements Serializable {
         return objectType + SEPARATOR + identifier;
     }
 
-    // -- HINT-ID EXTENSION
-    
+
     public Bookmark withHintId(@NonNull String hintId) {
         return new Bookmark(this.getObjectType(), this.getIdentifier(), hintId); 
     }
@@ -109,6 +109,6 @@ public class Bookmark implements Serializable {
     public String toStringUsingIdentifier(String id) {
         return objectType + SEPARATOR + id;
     }
-    
 
 }
+// end::refguide[]

@@ -19,6 +19,7 @@
 
 package org.apache.isis.applib.services.title;
 
+// tag::refguide[]
 public interface TitleService {
 
     /**
@@ -33,5 +34,5 @@ public interface TitleService {
      */
     String iconNameOf(Object domainObject);
 
-
 }
+// end::refguide[]

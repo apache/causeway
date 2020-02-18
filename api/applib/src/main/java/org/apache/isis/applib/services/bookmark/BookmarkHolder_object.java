@@ -27,6 +27,7 @@ import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
+// tag::refguide[]
 @Mixin(method = "prop")
 public class BookmarkHolder_object {
 
@@ -53,3 +54,4 @@ public class BookmarkHolder_object {
     @Inject private BookmarkService bookmarkService;
 
 }
+// end::refguide[]

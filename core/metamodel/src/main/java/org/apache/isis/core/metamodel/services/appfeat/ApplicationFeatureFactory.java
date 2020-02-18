@@ -34,13 +34,8 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 @Qualifier("Default")
 public class ApplicationFeatureFactory {
 
-    // @Inject FactoryService factoryService;
-    
     public ApplicationFeature newApplicationFeature() {
-        
         return new ApplicationFeature(); // value type
-        
-        // return factoryService.instantiate(ApplicationFeature.class);
     }
 
 }

@@ -25,26 +25,30 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 
+// tag::refguide[]
 public interface FactoryService {
 
     /**
-     * Carefree general purpose factory method, to automatically get or create an instance of
-     * {@code requiredType}. 
+     * General purpose factory method, to automatically get or create an instance of
+     * {@code requiredType}.
+     *
      * <p>
      * Maps onto one of the specialized factory methods {@link #get(Class)} or {@link #create(Class)} 
      * based on the type's meta-data.
+     * </p>
+     *
      * @param <T>
      * @param requiredType
      * @return
      * @throws NoSuchElementException if result is empty
      * @throws IsisException if instance creation failed
      * @throws IllegalArgumentException if requiredType is not recognized by the meta-model
-     * 
+     *
      * @since 2.0
-     * 
+     *
      */
     <T> T getOrCreate(Class<T> requiredType);
-    
+
     /**
      * Gets an instance (possibly shared or independent) of the specified {@code requiredType}, 
      * with injection points resolved 
@@ -62,7 +66,7 @@ public interface FactoryService {
      * @since 2.0
      */
     <T> T get(Class<T> requiredType);
-    
+
     /**
      * Creates a new detached entity instance, with injection points resolved
      * and defaults applied.
@@ -121,6 +125,7 @@ public interface FactoryService {
      * @since 2.0
      */
     <T> T create(Class<T> domainClass);
+// end::refguide[]
 
     // -- DEPRECATIONS
 
@@ -159,5 +164,7 @@ public interface FactoryService {
     default <T> T instantiate(Class<T> domainClass) {
         return getOrCreate(domainClass);
     }
-    
+
+// tag::refguide[]
 }
+// end::refguide[]

@@ -34,25 +34,24 @@ import org.apache.isis.applib.annotation.Programmatic;
  * HTML message, using an external SMTP provider.  See the Isis website for further details.
  * </p>
  */
+// tag::refguide[]
 public interface EmailService extends Serializable {
 
     /**
      * Always called by the framework, and allows the implementation to read configuration properties and initialize itself
      */
     @PostConstruct
-    @Programmatic
     public void init() ;
 
     /**
      * Main API to send email and optional attachments.
      */
-    @Programmatic
     boolean send(List<String> to, List<String> cc, List<String> bcc, String subject, String body, DataSource... attachments);
 
     /**
      * Whether this service has been configured and thus available for use.
      */
-    @Programmatic
     boolean isConfigured();
 
 }
+// end::refguide[]

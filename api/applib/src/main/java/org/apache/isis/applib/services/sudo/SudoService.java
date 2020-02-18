@@ -30,6 +30,7 @@ import org.apache.isis.applib.services.user.UserService;
  * while the {@link org.apache.isis.applib.DomainObjectContainer container}'s
  * {@link UserService#getUser() getUser()} method returns the specified user/role as the effective user.
  */
+// tag::refguide[]
 public interface SudoService {
 
     /**
@@ -44,7 +45,6 @@ public interface SudoService {
      *    The roles of this user will be the same as the currently logged-in user.
      * </p>
      */
-    @Programmatic
     void sudo(String username, final Runnable runnable);
 
     /**
@@ -54,21 +54,20 @@ public interface SudoService {
      *    The roles of this user will be the same as the currently logged-in user.
      * </p>
      */
-    @Programmatic
     <T> T sudo(String username, final Callable<T> callable);
 
     /**
      * Executes the supplied block, with the {@link DomainObjectContainer} returning the specified user with the specified roles.
      */
-    @Programmatic
     void sudo(String username, List<String> roles, final Runnable runnable);
 
     /**
      * Executes the supplied block, with the {@link DomainObjectContainer} returning the specified user with the specified roles.
      */
-    @Programmatic
     <T> T sudo(String username, List<String> roles, final Callable<T> callable);
 
+// end::refguide[]
+// tag::refguide-1[]
     /**
      * Allows the {@link SudoService} to notify other services/components that the effective user has been changed.
      */
@@ -88,7 +87,9 @@ public interface SudoService {
         /**
          *
          */
-        @Programmatic
         void releaseRunAs();
     }
+// end::refguide-1[]
+// tag::refguide[]
 }
+// end::refguide[]

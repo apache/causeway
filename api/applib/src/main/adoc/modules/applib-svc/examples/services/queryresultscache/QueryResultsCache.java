@@ -21,6 +21,9 @@ package org.apache.isis.applib.services.queryresultscache;
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * This service (API and implementation) provides a mechanism by which idempotent query results can be cached for the duration of an interaction.
  * Most commonly this allows otherwise &quot;naive&quot; - eg that makes a repository call many times within a loop - to
@@ -31,30 +34,19 @@ import java.util.concurrent.Callable;
  * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
  * available for use; no further configuration is required.
  */
+// tag::refguide[]
 public interface QueryResultsCache {
 
-    // -- KEY
+// end::refguide[]
 
-    public static class Key {
+    @AllArgsConstructor
+    class Key {
+        @Getter
         private final Class<?> callingClass;
+        @Getter
         private final String methodName;
+        @Getter
         private final Object[] keys;
-
-        public Key(Class<?> callingClass, String methodName, Object... keys) {
-            this.callingClass = callingClass;
-            this.methodName = methodName;
-            this.keys = keys;
-        }
-
-        public Class<?> getCallingClass() {
-            return callingClass;
-        }
-        public String getMethodName() {
-            return methodName;
-        }
-        public Object[] getKeys() {
-            return keys;
-        }
 
         @Override
         public boolean equals(Object obj) {
@@ -106,20 +98,16 @@ public interface QueryResultsCache {
 
     // -- VALUE
 
-    public static class Value<T> {
-        private T result;
-        public Value(T result) {
-            this.result = result;
-        }
-        public T getResult() {
-            return result;
-        }
+    @AllArgsConstructor
+    class Value<T> {
+        @Getter
+        private final T result;
     }
 
-    // -- INTERFACE
+// tag::refguide[]
+    <T> T execute(Callable<T> callable, Class<?> callingClass, String methodName, Object... keys);
 
-    public <T> T execute(Callable<T> callable, Class<?> callingClass, String methodName, Object... keys);
-
-    public void resetForNextTransaction();
+    void resetForNextTransaction();
 
 }
+// end::refguide[]

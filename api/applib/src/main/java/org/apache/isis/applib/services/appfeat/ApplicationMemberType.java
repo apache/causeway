@@ -20,14 +20,18 @@ package org.apache.isis.applib.services.appfeat;
 
 import org.apache.isis.core.commons.internal.base._Strings;
 
+// tag::refguide[]
 public enum ApplicationMemberType {
     PROPERTY,
     COLLECTION,
     ACTION;
+// end::refguide[]
 
     @Override
     public String toString() {
         return _Strings.capitalize(name());
     }
 
+// tag::refguide[]
 }
+// end::refguide[]

@@ -27,168 +27,68 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 
-public class CommandDefault implements Command {
+import lombok.Getter;
 
-    // -- constructor
+public class CommandDefault implements Command {
 
     public CommandDefault() {
         this.executor = Executor.OTHER;
         this.uniqueId = UUID.randomUUID();
     }
 
-    // -- actionIdentifier (property)
+    @Getter
+    private String memberIdentifier;
 
-    private String actionIdentifier;
-    @Override
-    public String getMemberIdentifier() {
-        return actionIdentifier;
-    }
-
-    // -- targetClass (property)
-
+    @Getter
     private String targetClass;
-    @Override
-    public String getTargetClass() {
-        return targetClass;
-    }
 
-    // -- targetAction (property)
-
+    @Getter
     private String targetAction;
-    @Override
-    public String getTargetAction() {
-        return targetAction;
-    }
 
-    // -- arguments (property)
-
+    @Getter
     private String arguments;
-    @Override
-    public String getArguments() {
-        return arguments;
-    }
 
-    // -- memento (property)
-
+    @Getter
     private String memento;
 
-    @Override
-    public String getMemento() {
-        return memento;
-    }
-
-    // -- target (property)
-
+    @Getter
     private Bookmark target;
-    @Override
-    public Bookmark getTarget() {
-        return target;
-    }
 
-    // -- timestamp (property)
-
+    @Getter
     private Timestamp timestamp;
-    @Override
-    public Timestamp getTimestamp() {
-        return timestamp;
-    }
 
-    // -- startedAt (property)
-
+    @Getter
     private Timestamp startedAt;
-    @Override
-    public Timestamp getStartedAt() {
-        return startedAt;
-    }
 
-    // -- completedAt (property)
-
+    @Getter
     private Timestamp completedAt;
 
-    @Override
-    public Timestamp getCompletedAt() {
-        return completedAt;
-    }
-
-    // -- user (property)
-
+    @Getter
     private String user;
-    @Override
-    public String getUser() {
-        return user;
-    }
 
-    // -- executor (property)
-
+    @Getter
     private Executor executor;
 
-    @Override
-    public Executor getExecutor() {
-        return executor;
-    }
+    @Getter
+    private CommandExecuteIn executeIn;
 
-    // -- executionType (property)
-
-    private CommandExecuteIn executionType;
-
-    @Override
-    public CommandExecuteIn getExecuteIn() {
-        return executionType;
-    }
-
-    // -- parent (property)
-
+    @Getter
     private Command parent;
 
-    @Override
-    public Command getParent() {
-        return parent;
-    }
-
-    // -- result (property)
-
+    @Getter
     private Bookmark result;
 
-    @Override
-    public Bookmark getResult() {
-        return result;
-    }
+    @Getter
+    private String exception;
 
-    // -- exceptionStackTrace (property)
-
-    private String exceptionStackTrace;
-
-    @Override
-    public String getException() {
-        return exceptionStackTrace;
-    }
-
-    // -- transactionId (property)
-
+    @Getter
     private UUID uniqueId;
 
-    @Override
-    public UUID getUniqueId() {
-        return uniqueId;
-    }
-
-    // -- persistence
-
+    @Getter
     private CommandPersistence persistence;
 
-    @Override
-    public CommandPersistence getPersistence() {
-        return persistence;
-    }
-
-    // -- persistHint
-
+    @Getter
     private boolean persistHint;
-
-    @Override
-    public boolean isPersistHint() {
-        return persistHint;
-    }
 
     // -- toString
 
@@ -205,12 +105,12 @@ public class CommandDefault implements Command {
     }
 
 
-    // -- FRAMEWORK INTERNATA
+    // -- FRAMEWORK INTERNAL
 
     private final Command.Internal INTERNAL = new Command.Internal() {
         @Override
         public void setMemberIdentifier(String actionIdentifier) {
-            CommandDefault.this.actionIdentifier = actionIdentifier;
+            CommandDefault.this.memberIdentifier = actionIdentifier;
         }
         @Override
         public void setTargetClass(String targetClass) {
@@ -258,7 +158,7 @@ public class CommandDefault implements Command {
         }
         @Override
         public void setException(final String exceptionStackTrace) {
-            CommandDefault.this.exceptionStackTrace = exceptionStackTrace;
+            CommandDefault.this.exception = exceptionStackTrace;
         }
         @Override
         public void setPersistence(CommandPersistence persistence) {
@@ -278,7 +178,5 @@ public class CommandDefault implements Command {
     public Command.Internal internal() {
         return INTERNAL;
     }
-
-
 
 }

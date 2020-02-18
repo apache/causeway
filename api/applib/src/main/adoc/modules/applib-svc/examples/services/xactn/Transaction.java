@@ -24,9 +24,9 @@ import org.apache.isis.applib.annotation.Programmatic;
 /**
  * Representation of the current transaction, which conceptually wraps the underlying transaction context's transaction.
  */
+// tag::refguide[]
 public interface Transaction {
 
-    @Programmatic
     TransactionId getId();
 
     /**
@@ -41,11 +41,9 @@ public interface Transaction {
      *     Equivalent to {@link TransactionService#flushTransaction()}.
      * </p>
      */
-    @Programmatic
     void flush();
 
-    @Programmatic
     TransactionState getTransactionState();
 
-
 }
+// end::refguide[]

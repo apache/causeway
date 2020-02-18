@@ -26,6 +26,7 @@ import org.apache.isis.applib.util.schema.InteractionDtoUtils;
  * {@link #publish(Interaction.Execution) published}.
  * Note that re-publishing is not part of this SPI.
  */
+// tag::refguide[]
 public interface PublisherService {
 
     /**
@@ -37,5 +38,4 @@ public interface PublisherService {
 
     void publish(final PublishedObjects publishedObjects);
 }
-
-
+// end::refguide[]

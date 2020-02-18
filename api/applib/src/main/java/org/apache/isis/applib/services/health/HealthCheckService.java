@@ -20,11 +20,12 @@ package org.apache.isis.applib.services.health;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+// tag::refguide[]
 public interface HealthCheckService {
 
-    @Programmatic
-    public Health check();
+    Health check();
 
 }
+// end::refguide[]
 
 

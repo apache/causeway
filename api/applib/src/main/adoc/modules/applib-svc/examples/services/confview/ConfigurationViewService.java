@@ -23,13 +23,14 @@ import java.util.Set;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+// tag::refguide[]
 public interface ConfigurationViewService {
 
     /**
      * Returns all properties, each as an instance of {@link ConfigurationProperty} (a view model).
      * Mask sensitive values if required.
      */
-    @Programmatic
     Set<ConfigurationProperty> allProperties();
 
 }
+// end::refguide[]

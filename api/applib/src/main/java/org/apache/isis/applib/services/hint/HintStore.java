@@ -23,12 +23,16 @@ import java.util.Set;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 
-@Programmatic
+// tag::refguide[]
 public interface HintStore {
 
+// end::refguide[]
+// tag::refguide-1[]
     interface HintIdProvider {
         String hintId();
     }
+// end::refguide-1[]
+// tag::refguide[]
 
     String get(final Bookmark bookmark, String hintKey);
 
@@ -41,3 +45,4 @@ public interface HintStore {
     Set<String> findHintKeys(Bookmark bookmark);
 
 }
+// end::refguide[]

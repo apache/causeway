@@ -68,8 +68,11 @@ import lombok.RequiredArgsConstructor;
  * <tt>o.a.i.core:isis-core-wrapper</tt> on the classpath; no further configuration is required.
  * </p>
  */
+// tag::refguide[]
 public interface WrapperFactory {
 
+// end::refguide[]
+// tag::refguide-1[]
     /**
      * Whether interactions with the wrapper are actually passed onto the
      * underlying domain object.
@@ -77,56 +80,58 @@ public interface WrapperFactory {
      * @see WrapperFactory#wrap(Object, ExecutionMode)
      */
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    public static enum ExecutionMode {
-        
+    enum ExecutionMode {
+
         /**
          * Skip all business rules.
          */
         SKIP_RULE_VALIDATION,
-        
+
         /**
          * Skip execution.
          */
         SKIP_EXECUTION,
-        
+
         /**
          * Don't fail fast, swallow any exception during validation or execution.
          */
         SWALLOW_EXCEPTIONS,
-        
+
         ;
-        
+
         // -- PRESET ENUM SETS
 
         /**
-         * Validate all business rules and then execute. May throw exceptions in order to fail fast. 
+         * Validate all business rules and then execute. May throw exceptions in order to fail fast.
          */
-        public static final ImmutableEnumSet<ExecutionMode> EXECUTE = ImmutableEnumSet.noneOf(ExecutionMode.class); 
+        public static final ImmutableEnumSet<ExecutionMode> EXECUTE = ImmutableEnumSet.noneOf(ExecutionMode.class);
 
         /**
          * Skip all business rules and then execute, does throw an exception if execution fails.
          */
         public static final ImmutableEnumSet<ExecutionMode> SKIP_RULES = ImmutableEnumSet.of(SKIP_RULE_VALIDATION);
-        
+
         /**
-         * Validate all business rules but do not execute, throw an exception if validation 
-         * fails. 
+         * Validate all business rules but do not execute, throw an exception if validation
+         * fails.
          */
         public static final ImmutableEnumSet<ExecutionMode> NO_EXECUTE = ImmutableEnumSet.of(SKIP_EXECUTION);
-        
+
         /**
-         * Validate all business rules and then execute, but don't throw an exception if validation 
+         * Validate all business rules and then execute, but don't throw an exception if validation
          * or execution fails.
          */
-        public static final ImmutableEnumSet<ExecutionMode> TRY = ImmutableEnumSet.of(SWALLOW_EXCEPTIONS); 
-        
+        public static final ImmutableEnumSet<ExecutionMode> TRY = ImmutableEnumSet.of(SWALLOW_EXCEPTIONS);
+
         /**
          * Skips all steps.
          * @since 2.0
          */
         public static final ImmutableEnumSet<ExecutionMode> NOOP = ImmutableEnumSet.of(SKIP_RULE_VALIDATION, SKIP_EXECUTION);
-        
+
     }
+// end::refguide-1[]
+// tag::refguide[]
 
     /**
      * Provides the &quot;wrapper&quot; of the underlying domain object.
@@ -192,59 +197,59 @@ public interface WrapperFactory {
     <T> boolean isWrapper(T possibleWrappedDomainObject);
 
     // -- ASYNC WRAPPING
-    
+
     /**
-     * Returns a {@link AsyncWrap} bound to the provided {@code domainObject}, 
-     * to prepare for type-safe asynchronous action execution. 
-     * 
+     * Returns a {@link AsyncWrap} bound to the provided {@code domainObject},
+     * to prepare for type-safe asynchronous action execution.
+     *
      * @param <T>
      * @param domainObject
      * @param mode
-     * 
+     *
      * @since 2.0
      */
     <T> AsyncWrap<T> async(T domainObject, ImmutableEnumSet<ExecutionMode> mode);
-    
+
     /**
-     * Shortcut for {@link #async(Object, EnumSet)} using execution mode 
+     * Shortcut for {@link #async(Object, EnumSet)} using execution mode
      * {@link ExecutionMode#EXECUTE}.
      * @param <T>
      * @param domainObject
-     * 
+     *
      * @since 2.0
      */
     default <T> AsyncWrap<T> async(T domainObject) {
         return async(domainObject, ExecutionMode.EXECUTE);
     }
-    
+
     /**
-     * Returns a {@link AsyncWrap} bound to the provided {@code mixinClass}, 
-     * to prepare for type-safe asynchronous action execution. 
-     * 
+     * Returns a {@link AsyncWrap} bound to the provided {@code mixinClass},
+     * to prepare for type-safe asynchronous action execution.
+     *
      * @param <T>
      * @param mixinClass
      * @param mixedIn
      * @param mode
-     * 
+     *
      * @since 2.0
      */
     <T> AsyncWrap<T> asyncMixin(Class<T> mixinClass, Object mixedIn, ImmutableEnumSet<ExecutionMode> mode);
-    
+
     /**
-     * Shortcut for {@link #asyncMixin(Class, Object, EnumSet)} using execution mode 
+     * Shortcut for {@link #asyncMixin(Class, Object, EnumSet)} using execution mode
      * {@link ExecutionMode#EXECUTE}.
      * @param <T>
      * @param mixinClass
      * @param mixedIn
-     * 
+     *
      * @since 2.0
      */
     default <T> AsyncWrap<T> asyncMixin(Class<T> mixinClass, Object mixedIn) {
         return asyncMixin(mixinClass, mixedIn, ExecutionMode.EXECUTE);
     }
-    
+
     // -- ITERACTION EVENT HANDLING
-    
+
     /**
      * All {@link InteractionListener}s that have been registered using
      * {@link #addInteractionListener(InteractionListener)}.
@@ -264,7 +269,7 @@ public interface WrapperFactory {
      * @param listener
      * @return
      */
-    public boolean addInteractionListener(InteractionListener listener);
+    boolean addInteractionListener(InteractionListener listener);
 
     /**
      * Remove an {@link InteractionListener}, to no longer be notified of
@@ -279,8 +284,9 @@ public interface WrapperFactory {
      * @param listener
      * @return
      */
-    public boolean removeInteractionListener(InteractionListener listener);
+    boolean removeInteractionListener(InteractionListener listener);
 
-    public void notifyListeners(InteractionEvent ev);
+    void notifyListeners(InteractionEvent ev);
 
 }
+// end::refguide[]

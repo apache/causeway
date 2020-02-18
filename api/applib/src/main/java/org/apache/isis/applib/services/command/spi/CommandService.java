@@ -23,10 +23,11 @@ import org.apache.isis.applib.services.command.Command;
 /**
  * Default factory service for {@link Command}s.
  */
+// tag::refguide[]
 public interface CommandService {
 
     /**
-     * Simply instantiate the appropriate instance of the {@link Command}.
+     * Simply instantiates the appropriate instance of the {@link Command}.
      *
      * <p>
      * Its members will be populated automatically by the framework (the {@link Command}'s
@@ -56,3 +57,4 @@ public interface CommandService {
     void complete(final Command command);
 
 }
+// end::refguide[]

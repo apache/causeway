@@ -53,27 +53,11 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
     
     @Getter @Setter private boolean disabled = false;
 
-//    /**
-//     * Normally recognized exceptions are not logged (because they are expected and handled).
-//     *
-//     * <p>
-//     * This key is primarily for diagnostic purposes, to log the exception regardless.
-//     */
-//    private static final String KEY_LOG_RECOGNIZED_EXCEPTIONS = 
-//            "isis.services.exceprecog.logRecognizedExceptions";
-
-
     /**
      * Convenience for subclass implementations that always return a fixed message.
      */
     protected static Function<String, String> constant(final String message) {
-        return new Function<String, String>() {
-
-            @Override
-            public String apply(String input) {
-                return message;
-            }
-        };
+        return input -> message;
     }
 
     /**
@@ -84,18 +68,11 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
         return $->prefix + ": " + $;
     }
 
-    // //////////////////////////////////////
-
-
     private final Category category;
     private final Predicate<Throwable> predicate;
     private final Function<String,String> messageParser;
 
-    private boolean logRecognizedExceptions;
-
-    // //////////////////////////////////////
-
-    // -- JAVA 8+
+    protected boolean logRecognizedExceptions;
 
     public ExceptionRecognizerAbstract(final Category category, Predicate<Throwable> predicate, final Function<String,String> messageParser) {
         Objects.requireNonNull(predicate);
@@ -117,7 +94,6 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
     }
 
 
-    // //////////////////////////////////////
 
     private Optional<String> recognizeRootCause(Throwable ex) {
 
@@ -144,7 +120,6 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
                 .findFirst();
     }
 
-    @Programmatic
     @Override
     public Optional<Recognition> recognize(Throwable ex) {
         if(disabled) {
@@ -152,7 +127,5 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
         }
         return Recognition.of(category, recognizeRootCause(ex).orElse(null));
     }
-
-    
 
 }

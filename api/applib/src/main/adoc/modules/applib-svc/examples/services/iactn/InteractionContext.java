@@ -38,6 +38,7 @@ import lombok.Getter;
  * {@link DomainService}.  This means that it is automatically registered and
  * available for use; no further configuration is required.
  */
+// tag::refguide[]
 @Service
 @Named("isisApplib.InteractionContext")
 @Order(OrderPrecedence.MIDPOINT)
@@ -49,8 +50,9 @@ public class InteractionContext {
     /**
      * The currently active {@link Interaction} for this thread.
      */
-    @Getter                                 // <1>
+    @Getter
     private Interaction interaction;
+// end::refguide[]
 
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
@@ -58,4 +60,6 @@ public class InteractionContext {
     public void setInteraction(final Interaction interaction) {
         this.interaction = interaction;
     }
+// tag::refguide[]
 }
+// end::refguide[]

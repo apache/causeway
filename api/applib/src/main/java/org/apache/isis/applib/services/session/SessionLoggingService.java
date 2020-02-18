@@ -26,24 +26,26 @@ import org.apache.isis.applib.annotation.Programmatic;
  * Similar to the {@link org.apache.isis.applib.services.audit.AuditerService}, this defines an API to track
  * the status of the current sessions (&quot;users logged on&quot;) on the system.
  */
+// tag::refguide[]
 public interface SessionLoggingService {
 
-    public enum Type {
+    enum Type {
         LOGIN,
         LOGOUT
     }
 
-    public enum CausedBy {
+    enum CausedBy {
         USER,
         SESSION_EXPIRATION,
         RESTART
     }
 
-    @Programmatic
     void log(Type type, String username, Date date, CausedBy causedBy, String sessionId);
 
+// end::refguide[]
 
-    public static class Stderr implements SessionLoggingService {
+// tag::refguide-1[]
+    class Stderr implements SessionLoggingService {
 
         @Override
         public void log(final Type type, final String username, final Date date, final CausedBy causedBy, final String sessionId) {
@@ -63,4 +65,7 @@ public interface SessionLoggingService {
             System.err.println(logMessage);
         }
     }
+// end::refguide-1[]
+// tag::refguide[]
 }
+// end::refguide[]

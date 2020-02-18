@@ -28,6 +28,7 @@ import org.apache.isis.core.commons.collections.Can;
  * @since 2.0
  *
  */
+// tag::refguide[]
 public interface ExceptionRecognizerService {
 
     /**
@@ -39,6 +40,7 @@ public interface ExceptionRecognizerService {
 
     /**
      * Takes into consideration ExceptionRecognizers as given by {@link #getExceptionRecognizers()}.
+     *
      * @param ex
      * @return optionally a recognition object, that describes both the category and reason, 
      * that will be included with the user-friendly message. 
@@ -56,5 +58,5 @@ public interface ExceptionRecognizerService {
      */
     Optional<Recognition> recognizeFromSelected(Can<ExceptionRecognizer> recognizers, Exception ex);
 
-
 }
+// end::refguide[]

@@ -50,6 +50,8 @@ import org.apache.isis.schema.ixn.v2.ObjectCountsDto;
 import org.apache.isis.schema.ixn.v2.PropertyEditDto;
 import org.apache.isis.schema.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -78,37 +80,49 @@ import lombok.extern.log4j.Log4j2;
  * </p>
  *
  */
+// tag::refguide[]
 @Log4j2
 public class Interaction implements HasUniqueId {
 
-    // -- transactionId (property)
 
-    private UUID interactionId;
-
-    @Programmatic
-    @Override
-    public UUID getUniqueId() {
-        return interactionId;
-    }
-
-    @Programmatic
-    public void setUniqueId(final UUID transactionId) {
-        this.interactionId = transactionId;
-    }
-
-    // -- push/pop/current/get/clear Execution(s)
+    @Getter @Setter
+    private UUID uniqueId;
 
     private final List<Execution<?,?>> executionGraphs = _Lists.newArrayList();
-    private Execution<?,?> currentExecution;
-    private Execution<?,?> priorExecution;
+    /**
+     * Returns a (list of) {@link Execution}s in the order that they were pushed.  Generally there will be just one entry in this list, but additional entries may arise from the use of mixins/contributions when re-rendering a modified object.
+     *
+     * <p>
+     *     Each {@link Execution} represents a call stack of domain events (action invocations or property edits),
+     *     that may in turn cause other domain events to be fired (by virtue of the {@link WrapperFactory}).
+     *     The reason that a list is returned is to support bulk command/actions (against multiple targets).  A non-bulk
+     *     action will return a list of just one element.
+     * </p>
+     */
+    public List<Execution<?,?>> getExecutions() {
+        return Collections.unmodifiableList(executionGraphs);
+    }
 
+    /**
+     * The current (most recently pushed) {@link Execution}.
+     */
+    @Getter
+    private Execution<?,?> currentExecution;
 
     /**
      * The execution that preceded the current one.
      */
-    @Programmatic
-    public Execution<?,?> getPriorExecution() {
-        return priorExecution;
+    @Getter
+    private Execution<?,?> priorExecution;
+
+// end::refguide[]
+    /**
+     * <b>NOT API</b>: intended to be called only by the framework.
+     *
+     * Clears the set of {@link Execution}s that may have been {@link #push(Execution)}ed.
+     */
+    public void clear() {
+        executionGraphs.clear();
     }
 
     /**
@@ -119,7 +133,6 @@ public class Interaction implements HasUniqueId {
      * by which the framework actually performs the interaction.
      */
     public interface MemberExecutor<T extends Execution<?,?>> {
-        @Programmatic
         Object execute(final T currentExecution);
     }
 
@@ -131,7 +144,6 @@ public class Interaction implements HasUniqueId {
      * {@link ActionInvocation} capturing the details of said action.
      * </p>
      */
-    @Programmatic
     public Object execute(
             final MemberExecutor<ActionInvocation> memberExecutor,
             final ActionInvocation actionInvocation,
@@ -151,7 +163,6 @@ public class Interaction implements HasUniqueId {
      * {@link PropertyEdit} capturing the details of said property edit.
      * </p>
      */
-    @Programmatic
     public Object execute(
             final MemberExecutor<PropertyEdit> memberExecutor,
             final PropertyEdit propertyEdit,
@@ -199,13 +210,6 @@ public class Interaction implements HasUniqueId {
         }
     }
 
-    /**
-     * The current (most recently pushed) {@link Execution}.
-     */
-    @Programmatic
-    public Execution<?,?> getCurrentExecution() {
-        return currentExecution;
-    }
 
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
@@ -215,7 +219,6 @@ public class Interaction implements HasUniqueId {
      * onto the stack of events held by the command.
      * </p>
      */
-    @Programmatic
     private Execution<?,?> push(final Execution<?,?> execution) {
 
         if(currentExecution == null) {
@@ -242,7 +245,6 @@ public class Interaction implements HasUniqueId {
      * from the stack of events held by the command.
      * </p>
      */
-    @Programmatic
     private Execution<?,?> pop(
             final Timestamp completedAt,
             final MetricsService metricsService) {
@@ -261,34 +263,8 @@ public class Interaction implements HasUniqueId {
         currentExecution = newExecution;
     }
 
-    /**
-     * Returns a (list of) {@link Execution}s in the order that they were pushed.  Generally there will be just one entry in this list, but additional entries may arise from the use of mixins/contributions when re-rendering a modified object.
-     *
-     * <p>
-     *     Each {@link Execution} represents a call stack of domain events (action invocations or property edits),
-     *     that may in turn cause other domain events to be fired (by virtue of the {@link WrapperFactory}).
-     *     The reason that a list is returned is to support bulk command/actions (against multiple targets).  A non-bulk
-     *     action will return a list of just one element.
-     * </p>
-     */
-    @Programmatic
-    public List<Execution<?,?>> getExecutions() {
-        return Collections.unmodifiableList(executionGraphs);
-    }
 
-    /**
-     * <b>NOT API</b>: intended to be called only by the framework.
-     *
-     * Clears the set of {@link Execution}s that may have been {@link #push(Execution)}ed.
-     */
-    @Programmatic
-    public void clear() {
-        executionGraphs.clear();
-    }
-
-
-    // -- next (programmatic)
-
+// tag::refguide-1[]
     /**
      * Enumerates the different reasons why multiple occurrences of a certain type might occur within a single
      * (top-level) interaction.
@@ -313,12 +289,13 @@ public class Interaction implements HasUniqueId {
         TRANSACTION,
         ;
 
-        @Programmatic
         public String id() {
             return Interaction.Sequence.class.getName() + "#" + name();
         }
     }
+// end::refguide-1[]
 
+// tag::refguide[]
     private final Map<String, LongAdder> maxBySequence = _Maps.newHashMap();
 
     /**
@@ -326,12 +303,12 @@ public class Interaction implements HasUniqueId {
      * framework also uses this capability to generate sequence numbers corresponding to the sequences enumerated by
      * the {@link Sequence} enum.
      */
-    @Programmatic
     public int next(final String sequenceId) {
         final LongAdder adder = maxBySequence.computeIfAbsent(sequenceId, this::newAdder);
         adder.increment();
         return adder.intValue();
     }
+// end::refguide[]
 
     private LongAdder newAdder(String ignore) {
         final LongAdder adder = new LongAdder();
@@ -339,6 +316,7 @@ public class Interaction implements HasUniqueId {
         return adder;
     }
 
+// tag::refguide-2[]
     /**
      * Represents an action invocation/property edit as a node in a call-stack execution graph, with sub-interactions
      * being made by way of the {@link WrapperFactory}).
@@ -347,12 +325,28 @@ public class Interaction implements HasUniqueId {
 
         // -- fields, constructor
 
-        private final String memberIdentifier;
-        private final Object target;
-        private final String targetMember;
-        private final String targetClass;
+        @Getter
         private final Interaction interaction;
+        @Getter
         private final InteractionType interactionType;
+        @Getter
+        private final String memberIdentifier;
+        /**
+         * The target of the action invocation.  If this interaction is for a mixin action, then will be the
+         * mixed-in target (not the transient mixin itself).
+         */
+        @Getter
+        private final Object target;
+        /**
+         * A human-friendly description of the class of the target object.
+         */
+        @Getter
+        private final String targetClass;
+        /**
+         * The human-friendly name of the action invoked/property edited on the target object.
+         */
+        @Getter
+        private final String targetMember;
 
         protected Execution(
                 final Interaction interaction,
@@ -361,7 +355,7 @@ public class Interaction implements HasUniqueId {
                 final Object target,
                 final String targetMember,
                 final String targetClass) {
-            
+
             this.interaction = interaction;
             this.interactionType = interactionType;
             this.memberIdentifier = memberIdentifier;
@@ -371,67 +365,18 @@ public class Interaction implements HasUniqueId {
         }
 
 
-        // -- via constructor: interaction, interactionType, memberId, target, targetMember, targetClass
-
-        @Programmatic
-        public Interaction getInteraction() {
-            return interaction;
-        }
-
-        @Programmatic
-        public InteractionType getInteractionType() {
-            return interactionType;
-        }
-
-        @Programmatic
-        public String getMemberIdentifier() {
-            return memberIdentifier;
-        }
-
-        /**
-         * The target of the action invocation.  If this interaction is for a mixin action, then will be the
-         * mixed-in target (not the transient mixin itself).
-         */
-        @Programmatic
-        public Object getTarget() {
-            return target;
-        }
-
-        /**
-         * A human-friendly description of the class of the target object.
-         */
-        @Programmatic
-        public String getTargetClass() {
-            return targetClass;
-        }
-
-        /**
-         * The human-friendly name of the action invoked/property edited on the target object.
-         */
-        @Programmatic
-        public String getTargetMember() {
-            return targetMember;
-        }
-
-
-
         // -- parent, children
 
         private final List<Execution<?,?>> children = _Lists.newArrayList();
-        private Execution<?,?> parent;
-
         /**
          * The action/property that invoked this action/property edit (if any).
          */
-        @Programmatic
-        public Execution<?,?> getParent() {
-            return parent;
-        }
+        @Getter
+        private Execution<?,?> parent;
 
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
-        @Programmatic
         public void setParent(final Execution<?,?> parent) {
             this.parent = parent;
             if(parent != null) {
@@ -442,16 +387,13 @@ public class Interaction implements HasUniqueId {
         /**
          * The actions/property edits made in turn via the {@link WrapperFactory}.
          */
-        @Programmatic
         public List<Execution<?,?>> getChildren() {
             return Collections.unmodifiableList(children);
         }
 
 
-
         // -- event
 
-        private E event;
         /**
          * The domain event fired on the {@link EventBusService event bus} representing the execution of
          * this action invocation/property edit.
@@ -462,15 +404,12 @@ public class Interaction implements HasUniqueId {
          *     {@link AbstractDomainEvent.Phase#EXECUTING executing} phase.
          * </p>
          */
-        @Programmatic
-        public E getEvent() {
-            return event;
-        }
+        @Getter
+        private E event;
 
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
-        @Programmatic
         public void setEvent(final E event) {
             this.event = event;
         }
@@ -478,33 +417,24 @@ public class Interaction implements HasUniqueId {
 
         // -- startedAt, completedAt
 
-        private Timestamp startedAt;
-        private Timestamp completedAt;
-
         /**
          * The date/time at which this execution started.
          */
-        @Programmatic
-        public Timestamp getStartedAt() {
-            return startedAt;
-        }
+        @Getter
+        private Timestamp startedAt;
 
-        @Programmatic
+        /**
+         * The date/time at which this execution completed.
+         */
+        @Getter
+        private Timestamp completedAt;
+
         public Timestamp start(
                 final ClockService clockService,
                 final MetricsService metricsService) {
             val startedAt = clockService.nowAsJavaSqlTimestamp();
             syncMetrics(When.BEFORE, startedAt, metricsService);
             return startedAt;
-        }
-
-
-        /**
-         * The date/time at which this execution completed.
-         */
-        @Programmatic
-        public Timestamp getCompletedAt() {
-            return completedAt;
         }
 
         /**
@@ -517,10 +447,6 @@ public class Interaction implements HasUniqueId {
         }
 
 
-
-        // -- returned, threw (properties)
-
-        private Object returned;
         /**
          * The object returned by the action invocation/property edit.
          *
@@ -532,39 +458,28 @@ public class Interaction implements HasUniqueId {
          * For <tt>void</tt> methods and for actions returning collections, the value
          * will be <tt>null</tt>.
          */
-        @Programmatic
-        public Object getReturned() {
-            return returned;
-        }
+        @Getter
+        private Object returned;
 
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
-        @Programmatic
         public void setReturned(Object returned) {
             this.returned = returned;
         }
 
+        @Getter
         private Exception threw;
-        @Programmatic
-        public Exception getThrew() {
-            return threw;
-        }
 
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
-        @Programmatic
         public void setThrew(Exception threw) {
             this.threw = threw;
         }
 
 
-
-
         // -- dto (property)
-
-        private T dto;
 
         /**
          * A serializable representation of this action invocation/property edit.
@@ -575,15 +490,13 @@ public class Interaction implements HasUniqueId {
          *     {@link Execution#getReturned()}) will (obviously) still be null.
          * </p>
          */
-        @Programmatic
-        public T getDto() {
-            return dto;
-        }
+        @Getter
+        private T dto;
+
 
         /**
-         * Set by framework (implementation of {@link MemberExecutor})
+         * <b>NOT API</b>: Set by framework (implementation of {@link MemberExecutor})
          */
-        @Programmatic
         public void setDto(final T executionDto) {
             this.dto = executionDto;
         }
@@ -592,6 +505,7 @@ public class Interaction implements HasUniqueId {
 
         // -- helpers (syncMetrics)
 
+// tag::refguide-2a[]
         enum When {
             BEFORE {
                 @Override
@@ -657,7 +571,6 @@ public class Interaction implements HasUniqueId {
                 return MemberExecutionDtoUtils.timingsFor(metricsDto);
             }
 
-
             abstract void syncMetrics(
                     final Execution<?, ?> teExecution,
                     final Timestamp timestamp,
@@ -674,13 +587,15 @@ public class Interaction implements HasUniqueId {
 
             when.syncMetrics(this, timestamp, numberObjectsLoaded, numberObjectsDirtied);
         }
-
-
+// end::refguide-2a[]
 
     }
+// end::refguide-2[]
 
+// tag::refguide-3[]
     public static class ActionInvocation extends Execution<ActionInvocationDto, ActionDomainEvent<?>> {
 
+        @Getter
         private final List<Object> args;
 
         public ActionInvocation(
@@ -693,15 +608,13 @@ public class Interaction implements HasUniqueId {
             super(interaction, InteractionType.ACTION_INVOCATION, memberId, target, targetMember, targetClass);
             this.args = args;
         }
-
-        @Programmatic
-        public List<Object> getArgs() {
-            return args;
-        }
     }
+// end::refguide-3[]
 
+// tag::refguide-4[]
     public static class PropertyEdit extends Execution<PropertyEditDto, PropertyDomainEvent<?,?>> {
 
+        @Getter
         private final Object newValue;
 
         public PropertyEdit(
@@ -714,11 +627,9 @@ public class Interaction implements HasUniqueId {
             super(interaction, InteractionType.PROPERTY_EDIT, memberId, target, targetMember, targetClass);
             this.newValue = newValue;
         }
-
-        @Programmatic
-        public Object getNewValue() {
-            return newValue;
-        }
     }
+// end::refguide-4[]
 
+// tag::refguide[]
 }
+// end::refguide[]

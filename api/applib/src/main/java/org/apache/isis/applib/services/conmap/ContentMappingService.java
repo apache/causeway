@@ -27,14 +27,15 @@ import javax.ws.rs.core.MediaType;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 
+// tag::refguide[]
 public interface ContentMappingService {
 
     /**
      * Typically for mapping from a domain object to a DTO.
      */
-    @Programmatic
     Object map(Object object, final List<MediaType> acceptableMediaTypes);
 
+// end::refguide[]
     /**
      * Convenience utilities for implementations of {@link ContentMappingService}.
      */
@@ -63,4 +64,7 @@ public interface ContentMappingService {
             return clazz.getName().equals(domainType);
         }
     }
+
+// tag::refguide[]
 }
+// end::refguide[]

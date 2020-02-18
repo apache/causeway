@@ -18,8 +18,10 @@
  */
 package org.apache.isis.applib.services.health;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+@AllArgsConstructor
 public class Health {
 
     public static Health ok() {
@@ -36,11 +38,6 @@ public class Health {
     private final String message;
     @Getter
     private final Throwable cause;
-
-    private Health(final String message, Throwable cause) {
-        this.message = message;
-        this.cause = cause;
-    }
 
     public boolean getResult() { return message == null; }
 }

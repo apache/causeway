@@ -24,24 +24,21 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.memento._Mementos.EncoderDecoder;
 
+// tag::refguide[]
 public interface UrlEncodingService extends EncoderDecoder {
 
-    // -- INHERITED from EncoderDecoder (make explicitly programmatic, in order to avoid meta-model validation)
     @Override
-    @Programmatic public String encode(final byte[] bytes);
+    String encode(final byte[] bytes);
     @Override
-    @Programmatic public byte[] decode(String str);
+    byte[] decode(String str);
 
-    // -- EXTENSIONS
-
-    @Programmatic
-    public default String encodeString(final String str) {
+    default String encodeString(final String str) {
         return encode(_Strings.toBytes(str, StandardCharsets.UTF_8));
     }
 
-    @Programmatic
-    public default String decodeToString(final String str) {
+    default String decodeToString(final String str) {
         return _Strings.ofBytes(decode(str), StandardCharsets.UTF_8);
     }
 
 }
+// end::refguide[]

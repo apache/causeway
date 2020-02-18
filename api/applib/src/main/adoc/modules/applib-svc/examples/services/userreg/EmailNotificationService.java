@@ -34,21 +34,20 @@ import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
  *     {@link org.apache.isis.applib.services.email.EmailService}, namely <code>EmailServiceDefault</code>.
  * </p>
  */
+// tag::refguide[]
 public interface EmailNotificationService extends Serializable {
 
     @PostConstruct
-    @Programmatic
-    public void init() ;
+    void init() ;
 
-    @Programmatic
     boolean send(EmailRegistrationEvent ev);
 
-    @Programmatic
     boolean send(PasswordResetEvent ev);
 
     /**
      * Whether this service has been configured and thus available for use.
      */
-    @Programmatic
     boolean isConfigured();
+
 }
+// end::refguide[]

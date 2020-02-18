@@ -23,8 +23,10 @@ package org.apache.isis.applib.services.error;
  * recording system (such as JIRA) and to provide a user-friendly (jargon-free) error message to the end-user, along
  * with incident reference.
  */
+// tag::refguide[]
 public interface ErrorReportingService {
 
     Ticket reportError(final ErrorDetails errorDetails);
 
 }
+// end::refguide[]
