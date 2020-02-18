@@ -26,6 +26,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
@@ -38,7 +39,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationRole_addClass {
     
-    @Inject private ApplicationPermissionRepository applicationPermissionRepository;
+    @Inject private ApplicationPermissionRepository<? extends ApplicationPermission> applicationPermissionRepository;
     
     private final ApplicationRole holder;
 

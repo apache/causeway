@@ -18,7 +18,7 @@
  */
 package org.apache.isis.extensions.secman.model.dom.permission;
 
-import java.util.List;
+import java.util.Collection;
 
 import javax.inject.Inject;
 
@@ -45,11 +45,10 @@ public class ApplicationPermissionMenu {
 
     // -- domain event classes
     public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationPermissionMenu, T> {}
-
     public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationPermissionMenu, T> {}
-
     public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationPermissionMenu> {}
 
+    @Inject private ApplicationPermissionRepository<? extends ApplicationPermission> applicationPermissionRepository;
 
     // -- iconName
     public String iconName() {
@@ -65,7 +64,7 @@ public class ApplicationPermissionMenu {
             semantics = SemanticsOf.SAFE
             )
     @MemberOrder(sequence = "100.50.1")
-    public List<? extends ApplicationPermission> findOrphanedPermissions() {
+    public Collection<? extends ApplicationPermission> findOrphanedPermissions() {
         return applicationPermissionRepository.findOrphaned();
     }
 
@@ -79,12 +78,9 @@ public class ApplicationPermissionMenu {
             restrictTo = RestrictTo.PROTOTYPING
             )
     @MemberOrder(sequence = "100.50.2")
-    public List<? extends ApplicationPermission> allPermissions() {
+    public Collection<? extends ApplicationPermission> allPermissions() {
         return applicationPermissionRepository.allPermissions();
     }
-
-    // -- DEPENDENCIES
-    @Inject private ApplicationPermissionRepository applicationPermissionRepository;
 
 
 }

@@ -18,40 +18,39 @@
  */
 package org.apache.isis.extensions.secman.api.permission;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Optional;
 
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 
-public interface ApplicationPermissionRepository {
+public interface ApplicationPermissionRepository<P extends ApplicationPermission> {
 
-    ApplicationPermission findByUserAndPermissionValue(String username,
-            ApplicationPermissionValue changingPermissionValue);
+    Optional<P> findByUserAndPermissionValue(String username, ApplicationPermissionValue changingPermissionValue);
 
-    List<ApplicationPermission> findByFeatureCached(ApplicationFeatureId featureId);
-
-    List<ApplicationPermission> findByRoleAndRuleAndFeatureTypeCached(
-            ApplicationRole holder,
-            ApplicationPermissionRule rule, 
-            ApplicationFeatureType type);
-    
-    ApplicationPermission findByRoleAndRuleAndFeature(
+    Optional<P> findByRoleAndRuleAndFeature(
             ApplicationRole holder, 
             ApplicationPermissionRule rule,
             ApplicationFeatureType type, 
             String featureFqn);
-    
-    List<ApplicationPermission> findOrphaned();
 
-    List<ApplicationPermission> allPermissions();
+    Collection<P> allPermissions();
+    
+    Collection<P> findOrphaned();
+    Collection<P> findByFeatureCached(ApplicationFeatureId featureId);
+    Collection<P> findByRoleAndRuleAndFeatureTypeCached(
+            ApplicationRole holder,
+            ApplicationPermissionRule rule, 
+            ApplicationFeatureType type);
+
 
     /**
      * @return detached entity
      */
-    ApplicationPermission newApplicationPermission();
+    P newApplicationPermission();
     
-    ApplicationPermission newPermission(
+    P newPermission(
             ApplicationRole role,
             ApplicationPermissionRule rule, 
             ApplicationPermissionMode mode,
@@ -59,7 +58,7 @@ public interface ApplicationPermissionRepository {
             String className, 
             String memberName);
 
-    ApplicationPermission newPermission(
+    P newPermission(
             ApplicationRole holder, 
             ApplicationPermissionRule rule, 
             ApplicationPermissionMode mode,

@@ -19,7 +19,6 @@
 package org.apache.isis.extensions.secman.model.dom.role;
 
 import java.util.Collection;
-import java.util.List;
 
 import javax.enterprise.inject.Model;
 import javax.inject.Inject;
@@ -48,7 +47,7 @@ public class ApplicationRole_removePermission {
     @Inject private SecurityModuleConfig configBean;
     @Inject private RepositoryService repository;
     @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
-    @Inject private ApplicationPermissionRepository applicationPermissionRepository;
+    @Inject private ApplicationPermissionRepository<? extends ApplicationPermission> applicationPermissionRepository;
     
     private final ApplicationRole holder;
 
@@ -62,7 +61,8 @@ public class ApplicationRole_removePermission {
             final String featureFqn) {
         
         final ApplicationPermission permission = applicationPermissionRepository
-                .findByRoleAndRuleAndFeature(holder, rule, type, featureFqn);
+                .findByRoleAndRuleAndFeature(holder, rule, type, featureFqn)
+                .orElse(null);
         if(permission != null) {
             repository.remove(permission);
         }
@@ -99,7 +99,7 @@ public class ApplicationRole_removePermission {
             final ApplicationPermissionRule rule,
             final ApplicationFeatureType type) {
         
-        final List<ApplicationPermission> permissions = applicationPermissionRepository
+        final Collection<? extends ApplicationPermission> permissions = applicationPermissionRepository
                 .findByRoleAndRuleAndFeatureTypeCached(holder, rule, type);
         return _Lists.map(
                 permissions,

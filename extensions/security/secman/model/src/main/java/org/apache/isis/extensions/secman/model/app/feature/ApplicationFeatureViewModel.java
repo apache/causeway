@@ -33,20 +33,19 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
+import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository;
 
 import lombok.val;
 
@@ -61,12 +60,12 @@ import lombok.val;
 public abstract class ApplicationFeatureViewModel implements ViewModel {
 
     public static abstract class PropertyDomainEvent<S extends ApplicationFeatureViewModel,T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<S, T> {}
-
     public static abstract class CollectionDomainEvent<S extends ApplicationFeatureViewModel,T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<S, T> {}
-
     public static abstract class ActionDomainEvent<S extends ApplicationFeatureViewModel> extends IsisModuleExtSecmanApi.ActionDomainEvent<S> {}
 
-
+    @Inject private FactoryService factory;
+    @Inject private ApplicationFeatureRepositoryDefault applicationFeatureRepository;
+    @Inject private ApplicationPermissionRepository<? extends ApplicationPermission> applicationPermissionRepository;
 
     // -- constructors
     public static ApplicationFeatureViewModel newViewModel(
@@ -283,7 +282,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
             defaultView="table"
             )
     @MemberOrder(sequence = "10")
-    public List<? extends ApplicationPermission> getPermissions() {
+    public java.util.Collection<? extends ApplicationPermission> getPermissions() {
         return applicationPermissionRepository.findByFeatureCached(getFeatureId());
     }
 
@@ -360,12 +359,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
         }
     }
 
-    // -- DEPENDENCIES
 
-    @Inject RepositoryService repository;
-    @Inject FactoryService factory;
-    @Inject ApplicationFeatureRepositoryDefault applicationFeatureRepository;
-    @Inject ApplicationPermissionRepository applicationPermissionRepository;
 
 
 }

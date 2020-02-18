@@ -25,14 +25,14 @@ import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
-import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyEvaluator;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyEvaluator;
+import org.apache.isis.extensions.secman.api.user.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 
 public class TenantedAuthorizationFacetDefault extends FacetAbstract implements TenantedAuthorizationFacet {
 
@@ -41,13 +41,13 @@ public class TenantedAuthorizationFacetDefault extends FacetAbstract implements 
     }
 
     private final List<ApplicationTenancyEvaluator> evaluators;
-    private final ApplicationUserRepository applicationUserRepository;
+    private final ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     private final QueryResultsCache queryResultsCache;
     private final UserService userService;
 
     public TenantedAuthorizationFacetDefault(
             final List<ApplicationTenancyEvaluator> evaluators,
-            final ApplicationUserRepository applicationUserRepository,
+            final ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository,
             final QueryResultsCache queryResultsCache,
             final UserService userService,
             final FacetHolder holder) {

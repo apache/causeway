@@ -82,7 +82,7 @@ public class UserPermissionViewModel implements ViewModel {
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private FactoryService factory;
     @Inject private ApplicationFeatureRepositoryDefault applicationFeatureRepository;
-    @Inject private ApplicationPermissionRepository applicationPermissionRepository;
+    @Inject private ApplicationPermissionRepository<? extends ApplicationPermission> applicationPermissionRepository;
 
     // -- constructors, factory methods
     public static UserPermissionViewModel newViewModel(
@@ -329,7 +329,8 @@ public class UserPermissionViewModel implements ViewModel {
         if(getViewingPermissionValue() == null) {
             return null;
         }
-        return applicationPermissionRepository.findByUserAndPermissionValue(username, getViewingPermissionValue());
+        return applicationPermissionRepository.findByUserAndPermissionValue(username, getViewingPermissionValue())
+                .orElse(null);
     }
 
     private ApplicationPermissionValue getViewingPermissionValue() {
@@ -359,7 +360,8 @@ public class UserPermissionViewModel implements ViewModel {
         if(getChangingPermissionValue() == null) {
             return null;
         }
-        return applicationPermissionRepository.findByUserAndPermissionValue(username, getChangingPermissionValue());
+        return applicationPermissionRepository.findByUserAndPermissionValue(username, getChangingPermissionValue())
+                .orElse(null);
     }
 
     private ApplicationPermissionValue getChangingPermissionValue() {
