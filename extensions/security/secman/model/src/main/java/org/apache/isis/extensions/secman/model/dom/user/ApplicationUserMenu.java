@@ -121,7 +121,7 @@ public class ApplicationUserMenu {
     }
 
     public ApplicationRole default1NewDelegateUser() {
-        return applicationRoleRepository.findByNameCached(configBean.getRegularUserRoleName());
+        return applicationRoleRepository.findByNameCached(configBean.getRegularUserRoleName()).orElse(null);
     }
 
     public static class NewLocalUserDomainEvent extends ActionDomainEvent {
@@ -176,7 +176,7 @@ public class ApplicationUserMenu {
     }
 
     public ApplicationRole default3NewLocalUser() {
-        return applicationRoleRepository.findByNameCached(configBean.getRegularUserRoleName());
+        return applicationRoleRepository.findByNameCached(configBean.getRegularUserRoleName()).orElse(null);
     }
 
     public static class AllUsersDomainEvent extends ActionDomainEvent {

@@ -82,7 +82,8 @@ public abstract class SecurityModuleAppUserRegistrationServiceAbstract implement
     @Override
     public boolean updatePasswordByEmail(final String emailAddress, final String password) {
         boolean passwordUpdated = false;
-        final ApplicationUser user = (ApplicationUser) applicationUserRepository.findByEmailAddress(emailAddress);
+        final ApplicationUser user = applicationUserRepository.findByEmailAddress(emailAddress)
+                .orElse(null);
         if (user != null) {
             passwordUpdated = applicationUserRepository.updatePassword(user, password);;
         }

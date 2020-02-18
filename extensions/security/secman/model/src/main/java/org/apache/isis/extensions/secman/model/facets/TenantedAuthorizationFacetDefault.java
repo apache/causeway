@@ -122,7 +122,7 @@ public class TenantedAuthorizationFacetDefault extends FacetAbstract implements 
     }
 
     protected ApplicationUser findApplicationUserNoCache(final String userName) {
-        return applicationUserRepository.findByUsername(userName);
+        return applicationUserRepository.findByUsername(userName).orElse(null);
     }
 
 }

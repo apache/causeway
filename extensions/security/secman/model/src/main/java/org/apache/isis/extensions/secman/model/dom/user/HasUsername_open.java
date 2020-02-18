@@ -55,7 +55,7 @@ public class HasUsername_open {
         if (holder == null || holder.getUsername() == null) {
             return null;
         }
-        return applicationUserRepository.findByUsername(holder.getUsername());
+        return applicationUserRepository.findByUsername(holder.getUsername()).orElse(null);
     }
     public boolean hideExec() {
         return holder instanceof ApplicationUser;

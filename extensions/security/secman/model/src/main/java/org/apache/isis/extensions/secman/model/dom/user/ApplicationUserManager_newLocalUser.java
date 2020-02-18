@@ -55,7 +55,7 @@ public class ApplicationUserManager_newLocalUser {
             final Boolean enabled,
             final String emailAddress) {
         
-        ApplicationUser user = applicationUserRepository.findByUsername(username);
+        ApplicationUser user = applicationUserRepository.findByUsername(username).orElse(null);
         if (user == null) {
             user = applicationUserRepository
                     .newLocalUser(username, password, ApplicationUserStatus.parse(enabled));

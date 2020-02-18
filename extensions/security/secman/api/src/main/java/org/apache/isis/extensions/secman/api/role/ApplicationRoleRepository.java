@@ -19,6 +19,7 @@
 package org.apache.isis.extensions.secman.api.role;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 
@@ -37,10 +38,14 @@ public interface ApplicationRoleRepository<R extends ApplicationRole> {
     Collection<R> findNameContaining(String search);
     Collection<R> getRoles(ApplicationUser user);
     
-    //Collection<ApplicationUser> getUsers(ApplicationRole role); 
+    /**
+     * auto-complete support
+     * @param search
+     */
+    Collection<R> findMatching(String search);
 
-    R findByName(String roleName);
-    R findByNameCached(String roleName);
+    Optional<R> findByName(String roleName);
+    Optional<R> findByNameCached(String roleName);
 
     void addRoleToUser(ApplicationRole role, ApplicationUser user);
     void removeRoleFromUser(ApplicationRole role, ApplicationUser user);
@@ -48,6 +53,7 @@ public interface ApplicationRoleRepository<R extends ApplicationRole> {
     boolean isAdminRole(ApplicationRole role);
 
     void deleteRole(ApplicationRole holder);
+
     
 
 }

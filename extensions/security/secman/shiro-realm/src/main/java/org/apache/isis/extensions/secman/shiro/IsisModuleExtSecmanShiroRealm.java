@@ -40,14 +40,15 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.commons.internal.assertions._Assert;
+import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.security.authorization.standard.Authorizor;
 import org.apache.isis.extensions.secman.api.SecurityRealm;
 import org.apache.isis.extensions.secman.api.SecurityRealmCharacteristic;
 import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.api.user.AccountType;
+import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.shiro.util.ShiroUtils;
-import org.apache.isis.core.runtime.session.IsisSessionFactory;
-import org.apache.isis.core.security.authorization.standard.Authorizor;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -220,10 +221,10 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements S
         return execute(new Supplier<PrincipalForApplicationUser>() {
             @Override
             public PrincipalForApplicationUser get() {
-                val applicationUser = applicationUserRepository.findByUsername(username);
+                val applicationUser = applicationUserRepository.findByUsername(username).orElse(null);
                 return PrincipalForApplicationUser.from(applicationUser);
             }
-            @Inject private ApplicationUserRepository applicationUserRepository;
+            @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
         });
     }
 
@@ -235,7 +236,7 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements S
                 val applicationUser = applicationUserRepository.findOrCreateUserByUsername(username);
                 return PrincipalForApplicationUser.from(applicationUser);
             }
-            @Inject private ApplicationUserRepository applicationUserRepository;
+            @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
         });
     }
 

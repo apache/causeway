@@ -20,14 +20,14 @@ package org.apache.isis.extensions.secman.jdo.dom.role;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Repository;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
@@ -57,17 +57,17 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository<
     }
     
     @Override
-    public ApplicationRole findByNameCached(final String name) {
+    public Optional<ApplicationRole> findByNameCached(final String name) {
         return queryResultsCache.execute(()->findByName(name),
                 ApplicationRoleRepository.class, "findByNameCached", name);
     }
 
     @Override
-    public ApplicationRole findByName(final String name) {
+    public Optional<ApplicationRole> findByName(final String name) {
         if(name == null) {
             return null;
         }
-        return repository.uniqueMatch(new QueryDefault<>(ApplicationRole.class, "findByName", "name", name)).orElse(null);
+        return repository.uniqueMatch(new QueryDefault<>(ApplicationRole.class, "findByName", "name", name));
     }
 
     @Override
@@ -88,7 +88,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository<
     public ApplicationRole newRole(
             final String name,
             final String description) {
-        ApplicationRole role = findByName(name);
+        ApplicationRole role = findByName(name).orElse(null);
         if (role == null){
             role = newApplicationRole();
             role.setName(name);
@@ -105,7 +105,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository<
                 .collect(_Sets.toUnmodifiableSorted());
     }
 
-    @Action(semantics = SemanticsOf.SAFE)
+    @Override
     public Collection<ApplicationRole> findMatching(String search) {
         if (search != null && search.length() > 0 ) {
             return findNameContaining(search);
@@ -137,8 +137,8 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository<
 
     @Override
     public boolean isAdminRole(org.apache.isis.extensions.secman.api.role.ApplicationRole genericRole) {
-        final ApplicationRole adminRole = findByNameCached(configBean.getAdminRoleName());
-        return adminRole.equals(genericRole);
+        final ApplicationRole adminRole = findByNameCached(configBean.getAdminRoleName()).orElse(null);
+        return Objects.equals(adminRole, genericRole);
     }
 
     @Override

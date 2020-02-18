@@ -27,9 +27,9 @@ import javax.inject.Inject;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
+import org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
@@ -110,7 +110,7 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
             return;
         }
 
-        ApplicationRole securityRole = applicationRoleRepository.findByName(roleName);
+        ApplicationRole securityRole = applicationRoleRepository.findByName(roleName).orElse(null);
         if(securityRole == null) {
             securityRole = applicationRoleRepository.newRole(roleName, roleDescription);
         }

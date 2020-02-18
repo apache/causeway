@@ -19,6 +19,7 @@
 package org.apache.isis.extensions.secman.api.user;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
@@ -36,7 +37,7 @@ public interface ApplicationUserRepository<U extends ApplicationUser> {
      */
     U newApplicationUser();
 
-    U findByUsername(String username);
+    Optional<U> findByUsername(String username);
     U findOrCreateUserByUsername(String username);
 
     Collection<U> allUsers();
@@ -44,6 +45,12 @@ public interface ApplicationUserRepository<U extends ApplicationUser> {
     Collection<U> findByAtPath(String atPath);
     Collection<U> findByRole(ApplicationRole role);
     Collection<U> findByTenancy(ApplicationTenancy tenancy);
+    
+    /**
+     * auto-complete support
+     * @param search
+     */
+    Collection<U> findMatching(String search);
 
     void enable(ApplicationUser user);
     void disable(ApplicationUser user);
@@ -80,6 +87,8 @@ public interface ApplicationUserRepository<U extends ApplicationUser> {
         });
 
     }
+
+    
 
 
 }

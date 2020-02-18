@@ -28,6 +28,7 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.BuilderScriptAbstr
 import org.apache.isis.testing.fixtures.applib.fixturescripts.BuilderScriptWithResult;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.BuilderScriptWithoutResult;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
@@ -100,9 +101,9 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
                 protected void execute(ExecutionContext ec) {
 
                     val regularUserRoleName = securityConfig.getRegularUserRoleName();
-                    val regularUserRole = applicationRoleRepository.findByName(regularUserRoleName);
+                    val regularUserRole = applicationRoleRepository.findByName(regularUserRoleName).orElse(null);
                     val username = LdapConstants.SVEN_PRINCIPAL;
-                    ApplicationUser svenUser = applicationUserRepository.findByUsername(username);
+                    ApplicationUser svenUser = applicationUserRepository.findByUsername(username).orElse(null);
                     if(svenUser==null) {
                         svenUser = applicationUserRepository
                                 .newDelegateUser(username, ApplicationUserStatus.ENABLED);
@@ -114,8 +115,8 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
                     
                 }
                 
-                @Inject private ApplicationUserRepository applicationUserRepository;
-                @Inject private ApplicationRoleRepository applicationRoleRepository;
+                @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+                @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
                 @Inject private SecurityModuleConfig securityConfig;
 
             };

@@ -396,18 +396,6 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     private SortedSet<ApplicationRole> roles = new TreeSet<>();
 
 
-//    // necessary only because otherwise call to getRoles() through wrapped object
-//    // (in integration tests) is ambiguous.
-//    public void addToRoles(final ApplicationRole applicationRole) {
-//        getRoles().add(applicationRole);
-//    }
-//    // necessary only because otherwise call to getRoles() through wrapped object
-//    // (in integration tests) is ambiguous.
-//    public void removeFromRoles(final ApplicationRole applicationRole) {
-//        getRoles().remove(applicationRole);
-//    }
-
-
     // -- PermissionSet (programmatic)
 
     // short-term caching

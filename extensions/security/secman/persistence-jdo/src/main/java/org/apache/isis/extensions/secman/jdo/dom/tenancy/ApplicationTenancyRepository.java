@@ -27,8 +27,6 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Repository;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
@@ -110,15 +108,13 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
 
 
     // -- autoComplete
-
-    @Action(semantics = SemanticsOf.SAFE)
+    @Override
     public Collection<ApplicationTenancy> findMatching(final String search) {
         if (search != null && search.length() > 0) {
             return findByNameOrPathMatching(search);
         }
         return Collections.emptySortedSet();
     }
-
 
     // -- newTenancy
 

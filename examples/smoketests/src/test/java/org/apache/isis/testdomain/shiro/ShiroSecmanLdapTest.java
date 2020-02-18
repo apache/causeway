@@ -39,7 +39,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
+import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleExtSecmanEncryptionJbcrypt;
 import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
@@ -82,8 +84,8 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
 
     @Inject FixtureScripts fixtureScripts;
     @Inject LdapServerService ldapServerService;
-    @Inject ApplicationUserRepository applicationUserRepository;
-    @Inject ApplicationRoleRepository applicationRoleRepository;
+    @Inject ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+    @Inject ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
     @Inject SecurityModuleConfig securityConfig;
     @Inject ServiceInjector serviceInjector;
 
@@ -143,7 +145,7 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
             subject.login(token);
         });
 
-        val olafUser = applicationUserRepository.findByUsername(username);
+        val olafUser = applicationUserRepository.findByUsername(username).orElse(null);
         assertNotNull(olafUser);
         assertNotNull(olafUser.getStatus());
         assertFalse(olafUser.getStatus().isEnabled());

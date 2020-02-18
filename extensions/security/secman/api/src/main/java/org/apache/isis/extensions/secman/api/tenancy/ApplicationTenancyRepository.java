@@ -33,6 +33,12 @@ public interface ApplicationTenancyRepository<T extends ApplicationTenancy> {
     Collection<T> allTenancies();
     Collection<T> getChildren(ApplicationTenancy tenancy);
     Collection<T> findByNameOrPathMatchingCached(String partialNameOrPath);
+    
+    /**
+     * auto-complete support
+     * @param search
+     */
+    Collection<T> findMatching(String search);
 
     T newTenancy(String name, String path, ApplicationTenancy parent);
 
@@ -41,6 +47,7 @@ public interface ApplicationTenancyRepository<T extends ApplicationTenancy> {
 
     void setParentOnTenancy(ApplicationTenancy tenancy, ApplicationTenancy parent);
     void clearParentOnTenancy(ApplicationTenancy tenancy);
-    
+
+
 
 }

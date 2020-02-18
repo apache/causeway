@@ -20,9 +20,7 @@ package org.apache.isis.extensions.secman.jdo.dom.user;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
 import javax.inject.Inject;
@@ -30,8 +28,6 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Repository;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
@@ -80,50 +76,36 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
     public ApplicationUser findOrCreateUserByUsername(
             final String username) {
         // slightly unusual to cache a function that modifies state, but safe because this is idempotent
-        return queryResultsCache.execute(new Callable<ApplicationUser>() {
-            @Override
-            public ApplicationUser call() throws Exception {
-                final ApplicationUser applicationUser = findByUsername(username);
-                if (applicationUser != null) {
-                    return applicationUser;
-                }
-                return (ApplicationUser) newDelegateUser(username, null);
-            }
-        }, ApplicationUserRepository.class, "findOrCreateUserByUsername", username);
+        return queryResultsCache.execute(()->
+            findByUsername(username).orElseGet(()->newDelegateUser(username, null)), 
+            ApplicationUserRepository.class, "findOrCreateUserByUsername", username);
     }
 
     // -- findByUsername
 
-    public ApplicationUser findByUsernameCached(final String username) {
-        return queryResultsCache.execute(new Callable<ApplicationUser>() {
-            @Override public ApplicationUser call() throws Exception {
-                return findByUsername(username);
-            }
-        }, ApplicationUserRepository.class, "findByUsernameCached", username);
+    public Optional<ApplicationUser> findByUsernameCached(final String username) {
+        return queryResultsCache.execute(this::findByUsername, 
+                ApplicationUserRepository.class, "findByUsernameCached", username);
     }
 
     @Override
-    public ApplicationUser findByUsername(final String username) {
+    public Optional<ApplicationUser> findByUsername(final String username) {
         return repository.uniqueMatch(new QueryDefault<>(
                 ApplicationUser.class,
-                "findByUsername", "username", username)).orElse(null);
+                "findByUsername", "username", username));
     }
 
     // -- findByEmailAddress (programmatic)
 
-    public ApplicationUser findByEmailAddressCached(final String emailAddress) {
-        return queryResultsCache.execute(new Callable<ApplicationUser>() {
-            @Override public ApplicationUser call() throws Exception {
-                return findByEmailAddress(emailAddress);
-            }
-        }, ApplicationUserRepository.class, "findByEmailAddressCached", emailAddress);
+    public Optional<ApplicationUser> findByEmailAddressCached(final String emailAddress) {
+        return queryResultsCache.execute(this::findByEmailAddress, 
+                ApplicationUserRepository.class, "findByEmailAddressCached", emailAddress);
     }
 
-    public ApplicationUser findByEmailAddress(final String emailAddress) {
+    public Optional<ApplicationUser> findByEmailAddress(final String emailAddress) {
         return repository.uniqueMatch(new QueryDefault<>(
                 ApplicationUser.class,
-                "findByEmailAddress", "emailAddress", emailAddress))
-                .orElse(null);
+                "findByEmailAddress", "emailAddress", emailAddress));
     }
 
     // -- findByName
@@ -141,10 +123,12 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
     // -- allUsers
 
     @Override
-    public List<ApplicationUser> findByAtPath(final String atPath) {
+    public Collection<ApplicationUser> findByAtPath(final String atPath) {
         return repository.allMatches(new QueryDefault<>(
                 ApplicationUser.class,
-                "findByAtPath", "atPath", atPath));
+                "findByAtPath", "atPath", atPath))
+                .stream()
+                .collect(_Sets.toUnmodifiableSorted());
     }
     
     @Override
@@ -174,7 +158,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
                 .collect(_Sets.toUnmodifiableSorted());
     }
 
-    @Action(semantics = SemanticsOf.SAFE)
+    @Override
     public Collection<ApplicationUser> findMatching(final String search) {
         if (search != null && search.length() > 0) {
             return find(search);
