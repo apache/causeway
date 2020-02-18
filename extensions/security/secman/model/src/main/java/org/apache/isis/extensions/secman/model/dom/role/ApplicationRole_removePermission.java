@@ -23,8 +23,6 @@ import java.util.Collection;
 import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.commons.internal.collections._Lists;
@@ -35,12 +33,16 @@ import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
-import org.apache.isis.extensions.secman.api.role.ApplicationRole.RemovePermissionDomainEvent;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(domainEvent = RemovePermissionDomainEvent.class, associateWith = "permissions")
+//@Action(
+//        domainEvent = RemovePermissionDomainEvent.class, 
+//        associateWith = "permissions",
+//        associateWithSequence = "9"
+//        )
+@Deprecated
 @RequiredArgsConstructor
 public class ApplicationRole_removePermission {
 
@@ -51,7 +53,7 @@ public class ApplicationRole_removePermission {
     
     private final ApplicationRole holder;
 
-    @MemberOrder(sequence = "9")
+    @Model
     public ApplicationRole act(
             @ParameterLayout(named="Rule")
             final ApplicationPermissionRule rule,
