@@ -21,6 +21,15 @@ package org.apache.isis.applib.services.queryresultscache;
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 
+import org.apache.isis.core.commons.handler.MethodReferences.Call0;
+import org.apache.isis.core.commons.handler.MethodReferences.Call1;
+import org.apache.isis.core.commons.handler.MethodReferences.Call2;
+import org.apache.isis.core.commons.handler.MethodReferences.Call3;
+import org.apache.isis.core.commons.handler.MethodReferences.Call4;
+import org.apache.isis.core.commons.handler.MethodReferences.Call5;
+
+
+
 /**
  * This service (API and implementation) provides a mechanism by which idempotent query results can be cached for the duration of an interaction.
  * Most commonly this allows otherwise &quot;naive&quot; - eg that makes a repository call many times within a loop - to
@@ -33,6 +42,30 @@ import java.util.concurrent.Callable;
  */
 public interface QueryResultsCache {
 
+    // -- INTERFACE
+
+    public <T> T execute(Callable<T> callable, Class<?> callingClass, String methodName, Object... keys);
+
+    <R> R execute(Call0<? extends R> action, Class<?> callingClass, String methodName);
+    
+    <R, A0> R execute(Call1<? extends R, A0> action, Class<?> callingClass, String methodName,
+            A0 arg0);
+    
+    <R, A0, A1> R execute(Call2<? extends R, A0, A1> action, Class<?> callingClass, String methodName, 
+            A0 arg0, A1 arg1);
+    
+    <R, A0, A1, A2> R execute(Call3<? extends R, A0, A1, A2> action, Class<?> callingClass, String methodName,
+            A0 arg0, A1 arg1, A2 arg2);
+    
+    <R, A0, A1, A2, A3> R execute(Call4<? extends R, A0, A1, A2, A3> action, Class<?> callingClass, String methodName,
+            A0 arg0, A1 arg1, A2 arg2, A3 arg3);
+    
+    <R, A0, A1, A2, A3, A4> R execute(Call5<? extends R, A0, A1, A2, A3, A4> action, Class<?> callingClass, String methodName,
+            A0 arg0, A1 arg1, A2 arg2, A3 arg3, A4 arg4);
+    
+    public void resetForNextTransaction();
+    
+    
     // -- KEY
 
     public static class Key {
@@ -116,10 +149,6 @@ public interface QueryResultsCache {
         }
     }
 
-    // -- INTERFACE
 
-    public <T> T execute(Callable<T> callable, Class<?> callingClass, String methodName, Object... keys);
-
-    public void resetForNextTransaction();
 
 }

@@ -32,6 +32,12 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.WithTransactionScope;
+import org.apache.isis.core.commons.handler.MethodReferences.Call0;
+import org.apache.isis.core.commons.handler.MethodReferences.Call1;
+import org.apache.isis.core.commons.handler.MethodReferences.Call2;
+import org.apache.isis.core.commons.handler.MethodReferences.Call3;
+import org.apache.isis.core.commons.handler.MethodReferences.Call4;
+import org.apache.isis.core.commons.handler.MethodReferences.Call5;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Maps;
@@ -58,6 +64,64 @@ import lombok.extern.log4j.Log4j2;
 public class QueryResultsCacheDefault implements QueryResultsCache, WithTransactionScope {
 
     private final Map<Key, Value<?>> cache = _Maps.newHashMap();
+    
+    @Override
+    public <R> R execute(Call0<? extends R> action, Class<?> callingClass, String methodName) {
+        if(isIgnoreCache()) {
+            return action.call();
+        }
+        final Key cacheKey = new Key(callingClass, methodName);
+        return executeWithCaching(()->action.call(), cacheKey);
+    }
+
+    @Override
+    public <R, A0> R execute(Call1<? extends R, A0> action, Class<?> callingClass, String methodName, A0 arg0) {
+        if(isIgnoreCache()) {
+            return action.call(arg0);
+        }
+        final Key cacheKey = new Key(callingClass, methodName, arg0);
+        return executeWithCaching(()->action.call(arg0), cacheKey);
+    }
+
+    @Override
+    public <R, A0, A1> R execute(Call2<? extends R, A0, A1> action, Class<?> callingClass, String methodName, A0 arg0,
+            A1 arg1) {
+        if(isIgnoreCache()) {
+            return action.call(arg0, arg1);
+        }
+        final Key cacheKey = new Key(callingClass, methodName, arg0, arg1);
+        return executeWithCaching(()->action.call(arg0, arg1), cacheKey);
+    }
+
+    @Override
+    public <R, A0, A1, A2> R execute(Call3<? extends R, A0, A1, A2> action, Class<?> callingClass, String methodName,
+            A0 arg0, A1 arg1, A2 arg2) {
+        if(isIgnoreCache()) {
+            return action.call(arg0, arg1, arg2);
+        }
+        final Key cacheKey = new Key(callingClass, methodName, arg0, arg1, arg2);
+        return executeWithCaching(()->action.call(arg0, arg1, arg2), cacheKey);
+    }
+
+    @Override
+    public <R, A0, A1, A2, A3> R execute(Call4<? extends R, A0, A1, A2, A3> action, Class<?> callingClass,
+            String methodName, A0 arg0, A1 arg1, A2 arg2, A3 arg3) {
+        if(isIgnoreCache()) {
+            return action.call(arg0, arg1, arg2, arg3);
+        }
+        final Key cacheKey = new Key(callingClass, methodName, arg0, arg1, arg2, arg3);
+        return executeWithCaching(()->action.call(arg0, arg1, arg2, arg3), cacheKey);
+    }
+
+    @Override
+    public <R, A0, A1, A2, A3, A4> R execute(Call5<? extends R, A0, A1, A2, A3, A4> action, Class<?> callingClass,
+            String methodName, A0 arg0, A1 arg1, A2 arg2, A3 arg3, A4 arg4) {
+        if(isIgnoreCache()) {
+            return action.call(arg0, arg1, arg2, arg3, arg4);
+        }
+        final Key cacheKey = new Key(callingClass, methodName, arg0, arg1, arg2, arg3, arg4);
+        return executeWithCaching(()->action.call(arg0, arg1, arg2, arg3, arg4), cacheKey);
+    }
 
     @Override
     public <T> T execute(
@@ -75,18 +139,6 @@ public class QueryResultsCacheDefault implements QueryResultsCache, WithTransact
         final Key cacheKey = new Key(callingClass, methodName, keys);
         return executeWithCaching(callable, cacheKey);
     }
-
-//XXX not used    
-//    private <T> T execute(final Callable<T> callable, final Key cacheKey) {
-//        if(isIgnoreCache()) {
-//            try {
-//                return callable.call();
-//            } catch (Exception e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-//        return executeWithCaching(callable, cacheKey);
-//    }
 
     private <T> T executeWithCaching(final Callable<T> callable, final Key cacheKey) {
         try {
@@ -112,18 +164,6 @@ public class QueryResultsCacheDefault implements QueryResultsCache, WithTransact
             throw new RuntimeException(e);
         }
     }
-
-//XXX not used    
-//    private <T> Value<T> get(final Class<?> callingClass, final String methodName, final Object... keys) {
-//        return get(new Key(callingClass, methodName, keys));
-//    }
-//
-//    @SuppressWarnings("unchecked")
-//    private <T> Value<T> get(final Key cacheKey) {
-//        Value<T> value = (Value<T>) cache.get(cacheKey);
-//        logHitOrMiss(cacheKey, value);
-//        return value;
-//    }
 
     private <T> void put(final Key cacheKey, final T result) {
         log.debug("PUT: {}", cacheKey);
@@ -159,5 +199,31 @@ public class QueryResultsCacheDefault implements QueryResultsCache, WithTransact
         return _NullSafe.stream(cacheControl)
                 .anyMatch(c->c.isIgnoreCache());
     }
+    
+    // -- REMOVED
+    
+  //XXX not used    
+//  private <T> Value<T> get(final Class<?> callingClass, final String methodName, final Object... keys) {
+//      return get(new Key(callingClass, methodName, keys));
+//  }
+//
+//  @SuppressWarnings("unchecked")
+//  private <T> Value<T> get(final Key cacheKey) {
+//      Value<T> value = (Value<T>) cache.get(cacheKey);
+//      logHitOrMiss(cacheKey, value);
+//      return value;
+//  }
+    
+  //XXX not used    
+//  private <T> T execute(final Callable<T> callable, final Key cacheKey) {
+//      if(isIgnoreCache()) {
+//          try {
+//              return callable.call();
+//          } catch (Exception e) {
+//              throw new RuntimeException(e);
+//          }
+//      }
+//      return executeWithCaching(callable, cacheKey);
+//  }
 
 }

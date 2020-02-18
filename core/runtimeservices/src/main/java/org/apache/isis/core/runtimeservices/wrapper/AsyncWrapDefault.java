@@ -30,6 +30,11 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.collections.ImmutableEnumSet;
+import org.apache.isis.core.commons.handler.MethodReferences.Call1;
+import org.apache.isis.core.commons.handler.MethodReferences.Call2;
+import org.apache.isis.core.commons.handler.MethodReferences.Call3;
+import org.apache.isis.core.commons.handler.MethodReferences.Call4;
+import org.apache.isis.core.commons.handler.MethodReferences.Call5;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
@@ -41,7 +46,6 @@ import lombok.NonNull;
 import lombok.With;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
-
 /**
  * 
  * @since 2.0
@@ -83,7 +87,7 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
     // -- METHOD REFERENCE MATCHERS (WITH RETURN VALUE)
     
     @Override
-    public <R> Future<R> call(Call0<? super T, ? extends R> action) {
+    public <R> Future<R> call(Call1<? extends R, ? super T> action) {
         
         if(shouldValidate()) {
             // do validation synchronous (with the calling thread)
@@ -103,7 +107,7 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
 
 
     @Override
-    public <R, A1> Future<R> call(Call1<? super T, ? extends R, A1> action, A1 arg1) {
+    public <R, A1> Future<R> call(Call2<? extends R, ? super T, A1> action, A1 arg1) {
         
         if(shouldValidate()) {
             // do validation synchronous (with the calling thread)
@@ -122,7 +126,7 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
     }
 
     @Override
-    public <R, A1, A2> Future<R> call(Call2<? super T, ? extends R, A1, A2> action, A1 arg1, A2 arg2) {
+    public <R, A1, A2> Future<R> call(Call3<? extends R, ? super T, A1, A2> action, A1 arg1, A2 arg2) {
 
         if(shouldValidate()) {
             // do validation synchronous (with the calling thread)
@@ -142,7 +146,7 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
     
 
     @Override
-    public <R, A1, A2, A3> Future<R> call(Call3<? super T, ? extends R, A1, A2, A3> action, 
+    public <R, A1, A2, A3> Future<R> call(Call4<? extends R, ? super T, A1, A2, A3> action, 
             A1 arg1, A2 arg2, A3 arg3) {
         
         if(shouldValidate()) {
@@ -163,7 +167,7 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
 
 
     @Override
-    public <R, A1, A2, A3, A4> Future<R> call(Call4<? super T, ? extends R, A1, A2, A3, A4> action, 
+    public <R, A1, A2, A3, A4> Future<R> call(Call5<? extends R, ? super T, A1, A2, A3, A4> action, 
             A1 arg1, A2 arg2, A3 arg3, A4 arg4) {
 
         if(shouldValidate()) {
