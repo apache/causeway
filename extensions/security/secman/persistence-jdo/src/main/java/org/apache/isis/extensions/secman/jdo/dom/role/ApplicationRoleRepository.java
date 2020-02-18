@@ -48,9 +48,14 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository 
     @Inject private FactoryService factoryService;
     @Inject private RepositoryService repository;
     @Inject private QueryResultsCache queryResultsCache;
-    @Inject private ApplicationRoleFactory applicationRoleFactory;
     @Inject private SecurityModuleConfig configBean;
 
+    
+    @Override
+    public ApplicationRole newApplicationRole() {
+        return factoryService.detachedEntity(ApplicationRole.class);
+    }
+    
     @Override
     public ApplicationRole findByNameCached(final String name) {
         return queryResultsCache.execute(()->findByName(name),
@@ -86,7 +91,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository 
             final String description) {
         ApplicationRole role = findByName(name);
         if (role == null){
-            role = applicationRoleFactory.newApplicationRole();
+            role = newApplicationRole();
             role.setName(name);
             role.setDescription(description);
             repository.persist(role);

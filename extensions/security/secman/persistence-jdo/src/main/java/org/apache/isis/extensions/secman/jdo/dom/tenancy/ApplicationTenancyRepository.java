@@ -47,10 +47,14 @@ import lombok.val;
 public class ApplicationTenancyRepository 
 implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository {
 
-    @Inject private ApplicationTenancyFactory applicationTenancyFactory;
     @Inject private FactoryService factory;
     @Inject private RepositoryService repository;
     @Inject private QueryResultsCache queryResultsCache;
+    
+    @Override
+    public ApplicationTenancy newApplicationTenancy() {
+        return factory.detachedEntity(ApplicationTenancy.class);
+    }
     
     // -- findByNameOrPathMatching
 
@@ -128,7 +132,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
             final org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy parent) {
         ApplicationTenancy tenancy = findByPath(path);
         if (tenancy == null) {
-            tenancy = applicationTenancyFactory.newApplicationTenancy();
+            tenancy = newApplicationTenancy();
             tenancy.setName(name);
             tenancy.setPath(path);
             tenancy.setParent((ApplicationTenancy) parent);

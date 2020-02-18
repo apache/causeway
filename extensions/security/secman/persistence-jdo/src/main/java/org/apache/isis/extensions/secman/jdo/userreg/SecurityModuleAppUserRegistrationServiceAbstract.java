@@ -22,7 +22,6 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.userreg.UserDetails;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.applib.value.Password;
@@ -32,7 +31,6 @@ import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserRepository;
-import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_updatePassword;
 
 /**
  * An abstract implementation of {@link org.apache.isis.applib.services.userreg.UserRegistrationService}
@@ -42,7 +40,6 @@ public abstract class SecurityModuleAppUserRegistrationServiceAbstract implement
 
     @Inject private ApplicationUserRepository applicationUserRepository;
     @Inject private ApplicationRoleRepository applicationRoleRepository;
-    @Inject private FactoryService factoryService;
     
     @Override
     public boolean usernameExists(final String username) {
@@ -87,9 +84,7 @@ public abstract class SecurityModuleAppUserRegistrationServiceAbstract implement
         boolean passwordUpdated = false;
         final ApplicationUser user = (ApplicationUser) applicationUserRepository.findByEmailAddress(emailAddress);
         if (user != null) {
-            factoryService.mixin(ApplicationUser_updatePassword.class, user)
-            .updatePassword(password);
-            passwordUpdated = true;
+            passwordUpdated = applicationUserRepository.updatePassword(user, password);;
         }
         return passwordUpdated;
     }

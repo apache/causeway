@@ -25,11 +25,10 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.value.Password;
-import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser.ResetPasswordDomainEvent;
+import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -40,8 +39,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationUser_resetPassword {
     
-    @Inject private PasswordEncryptionService passwordEncryptionService;
-    @Inject private FactoryService factory;
+    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     
     private final ApplicationUser holder;
 
@@ -52,25 +50,24 @@ public class ApplicationUser_resetPassword {
             @ParameterLayout(named="Repeat password")
             final Password newPasswordRepeat) {
         
-        factory.mixin(ApplicationUser_updatePassword.class, holder)
-        .updatePassword(newPassword.getPassword());
-        
-        
+        applicationUserRepository.updatePassword(holder, newPassword.getPassword());
         return holder;
     }
 
     @Model
     public boolean hideAct() {
-        return holder.isDelegateAccountOrPasswordEncryptionNotAvailable(passwordEncryptionService);
+        return !applicationUserRepository.isPasswordFeatureEnabled(holder);
     }
 
     @Model
     public String validateAct(
             final Password newPassword,
             final Password newPasswordRepeat) {
-        if(holder.isDelegateAccountOrPasswordEncryptionNotAvailable(passwordEncryptionService)) {
-            return null;
+        
+        if(!applicationUserRepository.isPasswordFeatureEnabled(holder)) {
+            return "Password feature is not available for this User";
         }
+        
         if (!Objects.equals(newPassword, newPasswordRepeat)) {
             return "Passwords do not match";
         }

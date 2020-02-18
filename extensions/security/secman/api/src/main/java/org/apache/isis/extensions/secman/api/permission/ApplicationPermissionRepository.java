@@ -46,6 +46,11 @@ public interface ApplicationPermissionRepository {
 
     List<ApplicationPermission> allPermissions();
 
+    /**
+     * @return detached entity
+     */
+    ApplicationPermission newApplicationPermission();
+    
     ApplicationPermission newPermission(
             ApplicationRole role,
             ApplicationPermissionRule rule, 
@@ -60,8 +65,6 @@ public interface ApplicationPermissionRepository {
             ApplicationPermissionMode mode,
             ApplicationFeatureType featureType, 
             String featureFqn);
-
-    
     
 
 }

@@ -24,6 +24,12 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 
 public interface ApplicationTenancyRepository {
 
+    /**
+     * 
+     * @return detached entity
+     */
+    ApplicationTenancy newApplicationTenancy();
+    
     Collection<ApplicationTenancy> allTenancies();
     
     Collection<ApplicationUser> getUsers(ApplicationTenancy tenancy);

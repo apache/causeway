@@ -49,7 +49,6 @@ import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
-import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValueSet;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
@@ -128,8 +127,8 @@ import lombok.val;
 public class ApplicationUser implements Comparable<ApplicationUser>, 
 org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
+    @Inject private ApplicationUserRepository applicationUserRepository;
     @Inject private ApplicationPermissionRepository applicationPermissionRepository;
-    @Inject private PasswordEncryptionService passwordEncryptionService;
     @Inject private UserService userService;
     /**
      * Optional service, if configured then is used to evaluate permissions within
@@ -357,7 +356,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     private String encryptedPassword;
 
     public boolean hideEncryptedPassword() {
-        return isDelegateAccountOrPasswordEncryptionNotAvailable(passwordEncryptionService);
+        return !applicationUserRepository.isPasswordFeatureEnabled(this);
     }
 
 
@@ -376,7 +375,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     }
 
     public boolean hideHasPassword() {
-        return isDelegateAccountOrPasswordEncryptionNotAvailable(passwordEncryptionService);
+        return !applicationUserRepository.isPasswordFeatureEnabled(this);
     }
 
     // -- roles (collection)

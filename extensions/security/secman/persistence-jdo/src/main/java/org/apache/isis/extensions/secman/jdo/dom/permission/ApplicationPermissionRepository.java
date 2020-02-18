@@ -42,15 +42,15 @@ import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Multimaps;
 import org.apache.isis.core.commons.internal.collections._Sets;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValue;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 
 import lombok.val;
 
@@ -59,7 +59,17 @@ import lombok.val;
 public class ApplicationPermissionRepository 
 implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository {
 
-
+    @Inject private RepositoryService repository;
+    @Inject private ApplicationFeatureRepositoryDefault applicationFeatureRepository;
+    @Inject private QueryResultsCache queryResultsCache;
+    @Inject private FactoryService factory;
+    @Inject private MessageService messages;
+    
+    @Override
+    public ApplicationPermission newApplicationPermission() {
+        return factory.detachedEntity(ApplicationPermission.class);
+    }
+    
     // -- findByRole (programmatic)
     public List<ApplicationPermission> findByRoleCached(final ApplicationRole role) {
         return queryResultsCache.execute(new Callable<List<ApplicationPermission>>() {
@@ -270,7 +280,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
         if (permission != null) {
             return permission;
         }
-        permission = applicationPermissionFactory.newApplicationPermission();
+        permission = newApplicationPermission();
         permission.setRole(role);
         permission.setRule(rule);
         permission.setMode(mode);
@@ -406,15 +416,6 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
                 applicationFeatureRepository.memberNamesOf(packageName, className, applicationMemberType);
         memberNames.addAll(memberNamesOf);
     }
-
-    // -- DEPENDENCIES
-
-    @Inject RepositoryService repository;
-    @Inject ApplicationFeatureRepositoryDefault applicationFeatureRepository;
-    @Inject ApplicationPermissionFactory applicationPermissionFactory;
-    @Inject QueryResultsCache queryResultsCache;
-    @Inject FactoryService factory;
-    @Inject MessageService messages;
 
 
 }

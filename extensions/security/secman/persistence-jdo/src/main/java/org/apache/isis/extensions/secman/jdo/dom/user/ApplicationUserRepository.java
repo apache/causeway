@@ -21,7 +21,9 @@ package org.apache.isis.extensions.secman.jdo.dom.user;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.Callable;
+import java.util.function.Consumer;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -34,26 +36,32 @@ import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.applib.value.Password;
 import org.apache.isis.core.commons.internal.collections._Sets;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.api.user.AccountType;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
 import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_lock;
 import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_unlock;
-import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_updatePassword;
 
 import lombok.val;
 
 @Repository
 @Named("isisExtSecman.applicationUserRepository")
 public class ApplicationUserRepository
-implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository {
+implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<ApplicationUser> {
 
     @Inject private QueryResultsCache queryResultsCache;
     @Inject private FactoryService factoryService;
     @Inject private RepositoryService repository;
     @Inject private SecurityModuleConfig configBean;
+    @Inject private Optional<PasswordEncryptionService> passwordEncryptionService; // empty if no candidate is available
+    
+    @Override
+    public ApplicationUser newApplicationUser() {
+        return factoryService.detachedEntity(ApplicationUser.class);
+    }
     
     // -- findOrCreateUserByUsername (programmatic)
 
@@ -118,13 +126,12 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
     // -- findByName
 
     @Override
-    public Collection<org.apache.isis.extensions.secman.api.user.ApplicationUser> find(final String search) {
+    public Collection<ApplicationUser> find(final String search) {
         final String regex = String.format("(?i).*%s.*", search.replace("*", ".*").replace("?", "."));
         return repository.allMatches(new QueryDefault<>(
                 ApplicationUser.class,
                 "find", "regex", regex))
                 .stream()
-                .map(org.apache.isis.extensions.secman.api.user.ApplicationUser.class::cast)
                 .collect(_Sets.toUnmodifiableSorted());
     }
 
@@ -140,15 +147,14 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
     // -- allUsers
 
     @Override
-    public Collection<org.apache.isis.extensions.secman.api.user.ApplicationUser> allUsers() {
+    public Collection<ApplicationUser> allUsers() {
         return repository.allInstances(ApplicationUser.class)
                 .stream()
-                .map(org.apache.isis.extensions.secman.api.user.ApplicationUser.class::cast)
                 .collect(_Sets.toUnmodifiableSorted());
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public Collection<org.apache.isis.extensions.secman.api.user.ApplicationUser> findMatching(final String search) {
+    public Collection<ApplicationUser> findMatching(final String search) {
         if (search != null && search.length() > 0) {
             return find(search);
         }
@@ -179,42 +185,40 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository 
     }
 
     @Override
-    public org.apache.isis.extensions.secman.api.user.ApplicationUser newUser(String username, AccountType accountType) {
-        val user = factoryService.detachedEntity(ApplicationUser.class);
+    public ApplicationUser newUser(
+            String username, 
+            AccountType accountType,
+            Consumer<ApplicationUser> beforePersist) {
+        
+        val user = newApplicationUser();
         user.setUsername(username);
         user.setAccountType(accountType);
         user.setStatus(ApplicationUserStatus.DISABLED);
-        repository.persist(user);
-        return user;
-    }
-
-    @Override
-    public org.apache.isis.extensions.secman.api.user.ApplicationUser newLocalUser(
-            String username, 
-            Password password,
-            ApplicationUserStatus status) {
-        
-        val user = newUser(username, AccountType.LOCAL);
-        user.setStatus(status);
-        
-        if (password != null) {
-            factoryService.mixin(ApplicationUser_updatePassword.class, user)
-            .updatePassword(password.getPassword());
-        }
-        
+        beforePersist.accept(user);
         repository.persistAndFlush(user);
         return user;
     }
     
     @Override
-    public org.apache.isis.extensions.secman.api.user.ApplicationUser newDelegateUser(
-            String username,
-            ApplicationUserStatus status) {
-      
-          val user = newUser(username, AccountType.DELEGATED);
-          user.setStatus(status);
-          repository.persistAndFlush(user);
-          return user;
-      }
+    public boolean updatePassword(
+            final org.apache.isis.extensions.secman.api.user.ApplicationUser user, 
+            final String password) {
+        // in case called programmatically
+        if(!isPasswordFeatureEnabled(user)) {
+            return false;
+        }
+        val encrypter = passwordEncryptionService.orElseThrow(_Exceptions::unexpectedCodeReach);
+        user.setEncryptedPassword(encrypter.encrypt(password));
+        repository.persistAndFlush(user);
+        return true;
+    }
+    
+    @Override
+    public boolean isPasswordFeatureEnabled(org.apache.isis.extensions.secman.api.user.ApplicationUser user) {
+        return user.isLocalAccount() 
+                && passwordEncryptionService!=null 
+                && passwordEncryptionService.isPresent();
+    }
+
     
 }

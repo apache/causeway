@@ -39,7 +39,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationUser_duplicate {
 
-    @Inject private ApplicationUserRepository applicationUserRepository;
+    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private ApplicationRoleRepository applicationRoleRepository;
 
     private final ApplicationUser holder;
@@ -51,14 +51,18 @@ public class ApplicationUser_duplicate {
             @Parameter(optionality = Optionality.OPTIONAL)
             final String emailAddress) {
         
-        final ApplicationUser user = applicationUserRepository.newUser(username, holder.getAccountType());
-        user.setStatus(ApplicationUserStatus.DISABLED);
-        user.setEmailAddress(emailAddress);
+        return applicationUserRepository
+                .newUser(username, holder.getAccountType(), user->{
         
-        for (ApplicationRole role : holder.getRoles()) {
-            applicationRoleRepository.addRoleToUser(role, user);
-        }
-        return user;
+                    user.setStatus(ApplicationUserStatus.DISABLED);
+                    user.setEmailAddress(emailAddress);
+        
+                    for (ApplicationRole role : holder.getRoles()) {
+                        applicationRoleRepository.addRoleToUser(role, user);
+                    }
+                    
+                });
+        
     }
     
 }

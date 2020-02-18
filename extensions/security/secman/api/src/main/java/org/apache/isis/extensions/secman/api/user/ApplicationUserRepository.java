@@ -19,30 +19,68 @@
 package org.apache.isis.extensions.secman.api.user;
 
 import java.util.Collection;
+import java.util.function.Consumer;
+
+import javax.annotation.Nullable;
 
 import org.apache.isis.applib.value.Password;
 
-public interface ApplicationUserRepository {
+import lombok.NonNull;
 
-    ApplicationUser findByUsername(String username);
+public interface ApplicationUserRepository<U extends ApplicationUser> {
 
-    ApplicationUser findOrCreateUserByUsername(String username);
+    /**
+     * @return detached entity
+     */
+    U newApplicationUser();
 
-    Collection<ApplicationUser> allUsers();
+    U findByUsername(String username);
 
-    Collection<ApplicationUser> find(String search);
+    U findOrCreateUserByUsername(String username);
 
-    ApplicationUser newUser(String username, AccountType accountType);
-    ApplicationUser newLocalUser(String username, Password password, ApplicationUserStatus status);
-    ApplicationUser newDelegateUser(String username, ApplicationUserStatus status);
-    
-    void enable(ApplicationUser svenUser);
-    void disable(ApplicationUser svenUser);
+    Collection<U> allUsers();
+
+    Collection<U> find(String search);
+
+    U newUser(String username, AccountType accountType, Consumer<U> beforePersist);
+
+
+    default U newLocalUser(
+            @NonNull String username, 
+            @Nullable Password password,
+            @NonNull ApplicationUserStatus status) {
+
+        return newUser(username, AccountType.LOCAL, user->{
+
+            user.setStatus(status);
+
+            if (password != null) {
+                updatePassword(user, password.getPassword());
+            }
+
+        });
+    }
+
+    default U newDelegateUser(
+            String username,
+            ApplicationUserStatus status) {
+
+        return newUser(username, AccountType.DELEGATED, user->{
+            user.setStatus(status);
+        });
+
+    }
+
+    void enable(ApplicationUser user);
+    void disable(ApplicationUser user);
 
     boolean isAdminUser(ApplicationUser user);
 
-    Collection<? extends ApplicationUser> findByAtPath(String atPath);
+    Collection<U> findByAtPath(String atPath);
 
-    
+    boolean updatePassword(ApplicationUser user, String password);
+
+    boolean isPasswordFeatureEnabled(ApplicationUser holder);
+
 
 }

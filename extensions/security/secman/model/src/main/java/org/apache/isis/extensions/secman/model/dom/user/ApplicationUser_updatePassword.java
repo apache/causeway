@@ -19,17 +19,19 @@
 package org.apache.isis.extensions.secman.model.dom.user;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.value.Password;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser.UpdatePasswordDomainEvent;
+import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -41,7 +43,8 @@ import lombok.val;
 @RequiredArgsConstructor
 public class ApplicationUser_updatePassword {
     
-    @Inject private PasswordEncryptionService passwordEncryptionService;
+    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+    @Inject private Optional<PasswordEncryptionService> passwordEncryptionService; // empty if no candidate is available
     
     private final ApplicationUser holder;
 
@@ -54,13 +57,13 @@ public class ApplicationUser_updatePassword {
             @ParameterLayout(named="Re-enter password")
             final Password newPasswordRepeat) {
         
-        updatePassword(newPassword.getPassword());
+        applicationUserRepository.updatePassword(holder, newPassword.getPassword());
         return holder;
     }
 
     @Model
     public boolean hideAct() {
-        return holder.isDelegateAccountOrPasswordEncryptionNotAvailable(passwordEncryptionService);
+        return !applicationUserRepository.isPasswordFeatureEnabled(holder);
     }
 
     @Model
@@ -81,14 +84,16 @@ public class ApplicationUser_updatePassword {
             final Password newPassword,
             final Password newPasswordRepeat) {
 
-        if(holder.isDelegateAccountOrPasswordEncryptionNotAvailable(passwordEncryptionService)) {
-            return null;
+        if(!applicationUserRepository.isPasswordFeatureEnabled(holder)) {
+            return "Password feature is not available for this User";
         }
 
+        val encrypter = passwordEncryptionService.orElseThrow(_Exceptions::unexpectedCodeReach);
+        
         val encryptedPassword = holder.getEncryptedPassword();
         
         if(holder.getEncryptedPassword() != null) {
-            if (!passwordEncryptionService.matches(existingPassword.getPassword(), encryptedPassword)) {
+            if (!encrypter.matches(existingPassword.getPassword(), encryptedPassword)) {
                 return "Existing password is incorrect";
             }
         }
@@ -98,16 +103,6 @@ public class ApplicationUser_updatePassword {
         }
 
         return null;
-    }
-
-    @Programmatic
-    public void updatePassword(final String password) {
-        // in case called programmatically
-        if(holder.isDelegateAccountOrPasswordEncryptionNotAvailable(passwordEncryptionService)) {
-            return;
-        }
-        final String encryptedPassword = passwordEncryptionService.encrypt(password);
-        holder.setEncryptedPassword(encryptedPassword);
     }
     
 

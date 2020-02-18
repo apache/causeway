@@ -22,7 +22,6 @@ import java.util.SortedSet;
 
 import org.apache.isis.applib.services.HasUsername;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
-import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValueSet;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.tenancy.HasAtPath;
@@ -107,19 +106,8 @@ public interface ApplicationUser extends HasUsername, HasAtPath {
 
     boolean isHasPassword();
     
-    // -- VALIDATION
-    
-    default boolean isDelegateAccountOrPasswordEncryptionNotAvailable(
-            final PasswordEncryptionService passwordEncryptionService) {
-        return !isLocalAccountWithPasswordEncryptionAvailable(passwordEncryptionService);
+    default boolean isLocalAccount() {
+        return getAccountType() == AccountType.LOCAL;
     }
-
-    default boolean isLocalAccountWithPasswordEncryptionAvailable(
-            final PasswordEncryptionService passwordEncryptionService) {
-        return getAccountType() == AccountType.LOCAL && passwordEncryptionService != null;
-    }
-
-
-    
 
 }
