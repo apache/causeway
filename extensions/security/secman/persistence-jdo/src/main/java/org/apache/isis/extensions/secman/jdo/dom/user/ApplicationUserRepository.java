@@ -36,12 +36,14 @@ import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.api.user.AccountType;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
+import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_lock;
 import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_unlock;
 
@@ -142,6 +144,16 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
         return repository.allMatches(new QueryDefault<>(
                 ApplicationUser.class,
                 "findByAtPath", "atPath", atPath));
+    }
+    
+    @Override
+    public Collection<ApplicationUser> findByRole(
+            org.apache.isis.extensions.secman.api.role.ApplicationRole genericRole) {
+        
+        val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
+        return role.getUsers()
+                .stream()
+                .collect(_Sets.toUnmodifiableSorted());
     }
 
     // -- allUsers

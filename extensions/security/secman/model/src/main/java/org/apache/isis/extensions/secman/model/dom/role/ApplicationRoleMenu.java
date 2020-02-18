@@ -48,11 +48,12 @@ public class  ApplicationRoleMenu {
 
     // -- domain event classes
     public static class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationRoleMenu, T> {}
-
     public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationRoleMenu, T> {}
-
     public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationRoleMenu> {}
 
+    
+    @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
+    
 
     // -- iconName
     public String iconName() {
@@ -68,7 +69,7 @@ public class  ApplicationRoleMenu {
             semantics = SemanticsOf.SAFE
             )
     @MemberOrder(sequence = "100.20.1")
-    public Collection<ApplicationRole> findRoles(
+    public Collection<? extends ApplicationRole> findRoles(
             @Parameter(maxLength = ApplicationRole.MAX_LENGTH_NAME)
             @ParameterLayout(named = "Search", typicalLength = ApplicationRole.TYPICAL_LENGTH_NAME)
             final String search) {
@@ -103,11 +104,9 @@ public class  ApplicationRoleMenu {
             semantics = SemanticsOf.SAFE
             )
     @MemberOrder(sequence = "100.20.3")
-    public Collection<ApplicationRole> allRoles() {
+    public Collection<? extends ApplicationRole> allRoles() {
         return applicationRoleRepository.allRoles();
     }
 
-    // -- DEPENDENCIES
 
-    @Inject ApplicationRoleRepository applicationRoleRepository;
 }

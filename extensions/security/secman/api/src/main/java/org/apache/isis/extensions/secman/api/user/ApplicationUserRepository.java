@@ -24,6 +24,7 @@ import java.util.function.Consumer;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.value.Password;
+import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 
 import lombok.NonNull;
 
@@ -39,11 +40,20 @@ public interface ApplicationUserRepository<U extends ApplicationUser> {
     U findOrCreateUserByUsername(String username);
 
     Collection<U> allUsers();
-
     Collection<U> find(String search);
+    Collection<U> findByAtPath(String atPath);
+    Collection<U> findByRole(ApplicationRole genericRole);
 
+    void enable(ApplicationUser user);
+    void disable(ApplicationUser user);
+
+    boolean isAdminUser(ApplicationUser user);
+
+    boolean isPasswordFeatureEnabled(ApplicationUser holder);
+
+    boolean updatePassword(ApplicationUser user, String password);
+    
     U newUser(String username, AccountType accountType, Consumer<U> beforePersist);
-
 
     default U newLocalUser(
             @NonNull String username, 
@@ -70,17 +80,6 @@ public interface ApplicationUserRepository<U extends ApplicationUser> {
         });
 
     }
-
-    void enable(ApplicationUser user);
-    void disable(ApplicationUser user);
-
-    boolean isAdminUser(ApplicationUser user);
-
-    Collection<U> findByAtPath(String atPath);
-
-    boolean updatePassword(ApplicationUser user, String password);
-
-    boolean isPasswordFeatureEnabled(ApplicationUser holder);
 
 
 }

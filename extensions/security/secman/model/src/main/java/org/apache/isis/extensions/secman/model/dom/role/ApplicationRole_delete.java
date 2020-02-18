@@ -36,12 +36,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationRole_delete {
     
-    @Inject private ApplicationRoleRepository applicationRoleRepository;
+    @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
     
     private final ApplicationRole holder;
     
     @MemberOrder(sequence = "1")
-    public Collection<ApplicationRole> act() {
+    public Collection<? extends ApplicationRole> act() {
         applicationRoleRepository.deleteRole(holder);
         return applicationRoleRepository.allRoles();
     }

@@ -41,7 +41,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationRole_removeUser {
     
-    @Inject private ApplicationRoleRepository applicationRoleRepository;
+    @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     
     private final ApplicationRole holder;
@@ -53,8 +53,8 @@ public class ApplicationRole_removeUser {
     }
 
     @Model
-    public Collection<ApplicationUser> choices0Act() {
-        return applicationRoleRepository.getUsers(holder);
+    public Collection<? extends ApplicationUser> choices0Act() {
+        return applicationUserRepository.findByRole(holder);
     }
 
     @Model

@@ -47,7 +47,7 @@ public class ApplicationRole_removePermission {
 
     @Inject private SecurityModuleConfig configBean;
     @Inject private RepositoryService repository;
-    @Inject private ApplicationRoleRepository applicationRoleRepository;
+    @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
     @Inject private ApplicationPermissionRepository applicationPermissionRepository;
     
     private final ApplicationRole holder;

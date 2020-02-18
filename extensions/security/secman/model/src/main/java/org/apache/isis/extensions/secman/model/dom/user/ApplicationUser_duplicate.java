@@ -40,7 +40,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationUser_duplicate {
 
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
-    @Inject private ApplicationRoleRepository applicationRoleRepository;
+    @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
 
     private final ApplicationUser holder;
 

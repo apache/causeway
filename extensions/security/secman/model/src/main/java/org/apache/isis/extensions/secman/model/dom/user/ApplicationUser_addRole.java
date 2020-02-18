@@ -18,7 +18,7 @@
  */
 package org.apache.isis.extensions.secman.model.dom.user;
 
-import java.util.SortedSet;
+import java.util.Collection;
 
 import javax.inject.Inject;
 
@@ -39,7 +39,7 @@ import lombok.val;
 @RequiredArgsConstructor
 public class ApplicationUser_addRole {
     
-    @Inject private ApplicationRoleRepository applicationRoleRepository;
+    @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
     
     private final ApplicationUser holder;
 
@@ -49,7 +49,7 @@ public class ApplicationUser_addRole {
         return holder;
     }
 
-    public SortedSet<ApplicationRole> choices0Act() {
+    public Collection<? extends ApplicationRole> choices0Act() {
         val allRoles = applicationRoleRepository.allRoles();
         val applicationRoles = _Sets.newTreeSet(allRoles);
         applicationRoles.removeAll(holder.getRoles());

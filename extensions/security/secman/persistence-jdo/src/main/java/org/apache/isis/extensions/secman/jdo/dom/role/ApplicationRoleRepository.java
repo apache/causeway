@@ -43,7 +43,7 @@ import lombok.val;
 @Repository
 @Named("isisExtSecman.applicationRoleRepository")
 public class ApplicationRoleRepository 
-implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository {
+implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository<ApplicationRole> {
 
     @Inject private FactoryService factoryService;
     @Inject private RepositoryService repository;
@@ -71,7 +71,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository 
     }
 
     @Override
-    public Collection<org.apache.isis.extensions.secman.api.role.ApplicationRole> findNameContaining(final String search) {
+    public Collection<ApplicationRole> findNameContaining(final String search) {
         
         if(search != null && search.length() > 0) {
             String nameRegex = String.format("(?i).*%s.*", search.replace("*", ".*").replace("?", "."));
@@ -79,7 +79,6 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository 
                     new QueryDefault<>(ApplicationRole.class, 
                             "findByNameContaining", "nameRegex", nameRegex))
                     .stream()
-                    .map(org.apache.isis.extensions.secman.api.role.ApplicationRole.class::cast)
                     .collect(_Sets.toUnmodifiableSorted());
         }
         return Collections.emptySortedSet();
@@ -100,30 +99,18 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository 
     }
 
     @Override
-    public Collection<org.apache.isis.extensions.secman.api.role.ApplicationRole> allRoles() {
+    public Collection<ApplicationRole> allRoles() {
         return repository.allInstances(ApplicationRole.class)
                 .stream()
-                .map(org.apache.isis.extensions.secman.api.role.ApplicationRole.class::cast)
                 .collect(_Sets.toUnmodifiableSorted());
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public Collection<org.apache.isis.extensions.secman.api.role.ApplicationRole> findMatching(String search) {
+    public Collection<ApplicationRole> findMatching(String search) {
         if (search != null && search.length() > 0 ) {
             return findNameContaining(search);
         }
         return Collections.emptySortedSet();
-    }
-    
-    @Override
-    public Collection<org.apache.isis.extensions.secman.api.user.ApplicationUser> getUsers(
-            org.apache.isis.extensions.secman.api.role.ApplicationRole genericRole) {
-        
-        val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
-        return role.getUsers()
-                .stream()
-                .map(org.apache.isis.extensions.secman.api.user.ApplicationUser.class::cast)
-                .collect(_Sets.toUnmodifiableSorted());
     }
 
     @Override
@@ -169,7 +156,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository 
     }
 
     @Override
-    public Collection<? extends org.apache.isis.extensions.secman.api.role.ApplicationRole> getRoles(
+    public Collection<ApplicationRole> getRoles(
             org.apache.isis.extensions.secman.api.user.ApplicationUser genericUser) {
         val user = _Casts.<ApplicationUser>uncheckedCast(genericUser);
         return user.getRoles();

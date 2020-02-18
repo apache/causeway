@@ -23,11 +23,6 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
-import org.apache.isis.extensions.secman.api.SecurityRealmService;
-import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 
@@ -37,11 +32,7 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
         )
 public class ApplicationUserManager {
 
-    @Inject private SecurityModuleConfig configBean;
-    @Inject private ApplicationRoleRepository applicationRoleRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
-    @Inject private SecurityRealmService securityRealmService;
-    @Inject private FactoryService factory;
 
     @Collection
     public java.util.Collection<? extends ApplicationUser> getAllUsers() {

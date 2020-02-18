@@ -22,29 +22,28 @@ import java.util.Collection;
 
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 
-public interface ApplicationRoleRepository {
+public interface ApplicationRoleRepository<R extends ApplicationRole> {
 
     /**
      * 
      * @return detached entity
      */
-    ApplicationRole newApplicationRole();
+    R newApplicationRole();
     
-    Collection<ApplicationRole> allRoles();
+    Collection<R> allRoles();
 
-    ApplicationRole newRole(String name, String description);
+    R newRole(String name, String description);
 
-    Collection<ApplicationRole> findNameContaining(String search);
-    Collection<? extends ApplicationRole> getRoles(ApplicationUser user);
+    Collection<R> findNameContaining(String search);
+    Collection<R> getRoles(ApplicationUser user);
     
-    Collection<ApplicationUser> getUsers(ApplicationRole role);
+    //Collection<ApplicationUser> getUsers(ApplicationRole role); 
 
-    ApplicationRole findByName(String roleName);
+    R findByName(String roleName);
+    R findByNameCached(String roleName);
 
-    ApplicationRole findByNameCached(String roleName);
-
-    void addRoleToUser(ApplicationRole role, ApplicationUser holder);
-    void removeRoleFromUser(ApplicationRole role, ApplicationUser holder);
+    void addRoleToUser(ApplicationRole role, ApplicationUser user);
+    void removeRoleFromUser(ApplicationRole role, ApplicationUser user);
 
     boolean isAdminRole(ApplicationRole role);
 
