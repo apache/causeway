@@ -37,7 +37,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationUserManager_newDelegateUser {
     
     @Inject private ApplicationRoleRepository applicationRoleRepository;
-    @Inject private ApplicationUserRepository applicationUserRepository;
+    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private RepositoryService repository;
 
     @SuppressWarnings("unused")

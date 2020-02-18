@@ -37,6 +37,8 @@ import lombok.RequiredArgsConstructor;
 @Mixin(method = "exec") @RequiredArgsConstructor
 public class HasUsername_open {
 
+    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+    
     private final HasUsername holder;
 
     public static class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<HasUsername_open> {}
@@ -65,8 +67,6 @@ public class HasUsername_open {
         }
         return null;
     }
-
-    @Inject
-    private ApplicationUserRepository applicationUserRepository;
+    
 
 }

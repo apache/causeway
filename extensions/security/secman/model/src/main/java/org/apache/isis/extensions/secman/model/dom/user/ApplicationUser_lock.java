@@ -39,7 +39,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationUser_lock {
     
-    @Inject private ApplicationUserRepository applicationUserRepository;
+    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private SecurityModuleConfig configBean;
     
     private final ApplicationUser holder;

@@ -44,7 +44,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationRole_addUser {
     
     @Inject private ApplicationRoleRepository applicationRoleRepository;
-    @Inject private ApplicationUserRepository applicationUserRepository;
+    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     
     private final ApplicationRole holder;
 
@@ -55,9 +55,9 @@ public class ApplicationRole_addUser {
     }
 
     @Model
-    public List<ApplicationUser> autoComplete0Act(final String search) {
-        final Collection<ApplicationUser> matchingSearch = applicationUserRepository.find(search);
-        final List<ApplicationUser> list = _Lists.newArrayList(matchingSearch);
+    public List<? extends ApplicationUser> autoComplete0Act(final String search) {
+        final Collection<? extends ApplicationUser> matchingSearch = applicationUserRepository.find(search);
+        final List<? extends ApplicationUser> list = _Lists.newArrayList(matchingSearch);
         list.removeAll(applicationRoleRepository.getUsers(holder));
         return list;
     }

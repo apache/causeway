@@ -39,12 +39,12 @@ public class ApplicationUserManager {
 
     @Inject private SecurityModuleConfig configBean;
     @Inject private ApplicationRoleRepository applicationRoleRepository;
-    @Inject private ApplicationUserRepository applicationUserRepository;
+    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private SecurityRealmService securityRealmService;
     @Inject private FactoryService factory;
 
     @Collection
-    public java.util.Collection<ApplicationUser> getAllUsers() {
+    public java.util.Collection<? extends ApplicationUser> getAllUsers() {
         return applicationUserRepository.allUsers();
     }
     

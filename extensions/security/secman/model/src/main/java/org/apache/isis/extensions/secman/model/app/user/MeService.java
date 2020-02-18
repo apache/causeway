@@ -45,12 +45,10 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 public class MeService {
 
     public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<MeService, T> {}
-
     public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<MeService, T> {}
-
     public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<MeService> {}
 
-    @Inject private ApplicationUserRepository applicationUserRepository;
+    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private UserService userService;
     @Inject private QueryResultsCache queryResultsCache;
     

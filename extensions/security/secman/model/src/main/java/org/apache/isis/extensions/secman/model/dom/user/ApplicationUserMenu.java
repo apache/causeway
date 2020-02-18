@@ -56,7 +56,7 @@ public class ApplicationUserMenu {
 
     @Inject private SecurityModuleConfig configBean;
     @Inject private ApplicationRoleRepository applicationRoleRepository;
-    @Inject private ApplicationUserRepository applicationUserRepository;
+    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private SecurityRealmService securityRealmService;
     @Inject private FactoryService factory;
 
@@ -85,7 +85,7 @@ public class ApplicationUserMenu {
             semantics = SemanticsOf.SAFE
             )
     @MemberOrder(sequence = "100.10.2")
-    public Collection<ApplicationUser> findUsers(
+    public Collection<? extends ApplicationUser> findUsers(
             final @ParameterLayout(named = "Search") String search) {
         return applicationUserRepository.find(search);
     }
@@ -187,7 +187,7 @@ public class ApplicationUserMenu {
             semantics = SemanticsOf.SAFE
             )
     @MemberOrder(sequence = "100.10.5")
-    public Collection<ApplicationUser> allUsers() {
+    public Collection<? extends ApplicationUser> allUsers() {
         return applicationUserRepository.allUsers();
     }
 

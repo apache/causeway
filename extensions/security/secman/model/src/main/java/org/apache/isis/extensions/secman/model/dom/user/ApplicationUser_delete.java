@@ -18,6 +18,8 @@
  */
 package org.apache.isis.extensions.secman.model.dom.user;
 
+import java.util.Collection;
+
 import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
@@ -35,13 +37,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationUser_delete {
     
-    @Inject private ApplicationUserRepository applicationUserRepository;
+    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private RepositoryService repository;
     
     private final ApplicationUser holder;
 
     @Model
-    public java.util.Collection<ApplicationUser> act() {
+    public Collection<? extends ApplicationUser> act() {
         repository.removeAndFlush(this);
         return applicationUserRepository.allUsers();
     }

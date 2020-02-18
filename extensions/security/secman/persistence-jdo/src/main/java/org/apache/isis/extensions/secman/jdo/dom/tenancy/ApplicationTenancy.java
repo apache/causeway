@@ -19,11 +19,9 @@
 package org.apache.isis.extensions.secman.jdo.dom.tenancy;
 
 import java.util.Comparator;
-import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import javax.inject.Inject;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.InheritanceStrategy;
@@ -44,8 +42,6 @@ import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
-import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
-import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUserRepository;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -92,8 +88,6 @@ import lombok.Setter;
 public class ApplicationTenancy implements Comparable<ApplicationTenancy>,
 org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
 
-    @Inject private ApplicationUserRepository applicationUserRepository;
-    
     // -- name (property, title)
 
     public static class NameDomainEvent extends PropertyDomainEvent<String> {}

@@ -38,11 +38,14 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
@@ -53,10 +56,6 @@ import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionVal
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.model.app.feature.ApplicationFeatureViewModel;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 
 import lombok.val;
 
@@ -75,14 +74,15 @@ import lombok.val;
 public class UserPermissionViewModel implements ViewModel {
 
     public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<UserPermissionViewModel, T> {}
-
     public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<UserPermissionViewModel, T> {}
-
     public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<UserPermissionViewModel> {}
 
-
-
     private static final int TYPICAL_LENGTH_VERB = 12;
+    
+    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+    @Inject private FactoryService factory;
+    @Inject private ApplicationFeatureRepositoryDefault applicationFeatureRepository;
+    @Inject private ApplicationPermissionRepository applicationPermissionRepository;
 
     // -- constructors, factory methods
     public static UserPermissionViewModel newViewModel(
@@ -406,14 +406,6 @@ public class UserPermissionViewModel implements ViewModel {
             };
         }
     }
-
-    // -- DEPENDENCIES
-
-    @Inject RepositoryService repository;
-    @Inject FactoryService factory;
-    @Inject ApplicationFeatureRepositoryDefault applicationFeatureRepository;
-    @Inject ApplicationPermissionRepository applicationPermissionRepository;
-    @Inject ApplicationUserRepository applicationUserRepository;
 
 
 }
