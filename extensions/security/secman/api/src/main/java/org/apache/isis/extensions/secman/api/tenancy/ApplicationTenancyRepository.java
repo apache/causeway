@@ -22,22 +22,19 @@ import java.util.Collection;
 
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 
-public interface ApplicationTenancyRepository {
+public interface ApplicationTenancyRepository<T extends ApplicationTenancy> {
 
     /**
      * 
      * @return detached entity
      */
-    ApplicationTenancy newApplicationTenancy();
+    T newApplicationTenancy();
     
-    Collection<ApplicationTenancy> allTenancies();
-    
-    Collection<ApplicationUser> getUsers(ApplicationTenancy tenancy);
-    Collection<ApplicationTenancy> getChildren(ApplicationTenancy tenancy);
-    
-    Collection<ApplicationTenancy> findByNameOrPathMatchingCached(String partialNameOrPath);
+    Collection<T> allTenancies();
+    Collection<T> getChildren(ApplicationTenancy tenancy);
+    Collection<T> findByNameOrPathMatchingCached(String partialNameOrPath);
 
-    ApplicationTenancy newTenancy(String name, String path, ApplicationTenancy parent);
+    T newTenancy(String name, String path, ApplicationTenancy parent);
 
     void setTenancyOnUser(ApplicationTenancy tenancy, ApplicationUser user);
     void clearTenancyOnUser(ApplicationUser user);

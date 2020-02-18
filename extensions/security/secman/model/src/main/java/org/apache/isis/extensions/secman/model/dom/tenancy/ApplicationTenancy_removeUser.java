@@ -29,6 +29,7 @@ import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.RemoveUserDomainEvent;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -38,7 +39,8 @@ associateWithSequence = "2")
 @RequiredArgsConstructor
 public class ApplicationTenancy_removeUser {
     
-    @Inject private ApplicationTenancyRepository applicationTenancyRepository;
+    @Inject private ApplicationTenancyRepository<? extends ApplicationTenancy> applicationTenancyRepository;
+    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     
     private final ApplicationTenancy holder;
     
@@ -49,8 +51,8 @@ public class ApplicationTenancy_removeUser {
     }
     
     @Model
-    public Collection<ApplicationUser> choices0Act() {
-        return applicationTenancyRepository.getUsers(holder);
+    public Collection<? extends ApplicationUser> choices0Act() {
+        return applicationUserRepository.findByTenancy(holder);
     }
     
     @Model

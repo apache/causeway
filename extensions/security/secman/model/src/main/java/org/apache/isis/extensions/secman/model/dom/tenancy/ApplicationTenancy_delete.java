@@ -29,6 +29,8 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.DeleteDomainEvent;
+import org.apache.isis.extensions.secman.api.user.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository;
 import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_updateAtPath;
 
@@ -42,7 +44,8 @@ import lombok.val;
 @RequiredArgsConstructor
 public class ApplicationTenancy_delete {
     
-    @Inject private ApplicationTenancyRepository applicationTenancyRepository;
+    @Inject private ApplicationTenancyRepository<? extends ApplicationTenancy> applicationTenancyRepository;
+    @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private FactoryService factoryService;
     @Inject private RepositoryService repository;
 
@@ -50,8 +53,8 @@ public class ApplicationTenancy_delete {
 
     
     @Model
-    public Collection<ApplicationTenancy> act() {
-        for (val user : applicationTenancyRepository.getUsers(holder)) {
+    public Collection<? extends ApplicationTenancy> act() {
+        for (val user : applicationUserRepository.findByTenancy(holder)) {
             val updateAtPathMixin = factoryService.mixin(ApplicationUser_updateAtPath.class, user);
             updateAtPathMixin.act(null);
         }

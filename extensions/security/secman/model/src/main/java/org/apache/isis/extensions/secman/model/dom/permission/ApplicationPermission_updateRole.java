@@ -20,6 +20,7 @@ package org.apache.isis.extensions.secman.model.dom.permission;
 
 import java.util.Collection;
 
+import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
@@ -34,20 +35,22 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationPermission_updateRole {
 
-    @Inject private ApplicationRoleRepository applicationRoleRepository;
+    @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
     
     private final ApplicationPermission holder;
     
-    //@MemberOrder(name="Role", sequence = "1")
+    @Model
     public ApplicationPermission act(final ApplicationRole applicationRole) {
         holder.setRole(applicationRole);
         return holder;
     }
 
+    @Model
     public ApplicationRole default0Act() {
         return holder.getRole();
     }
 
+    @Model
     public Collection<? extends ApplicationRole> choices0Act() {
         return applicationRoleRepository.allRoles();
     }

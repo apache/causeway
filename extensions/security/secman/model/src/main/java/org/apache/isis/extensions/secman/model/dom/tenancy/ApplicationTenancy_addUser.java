@@ -43,7 +43,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationTenancy_addUser {
     
-    @Inject private ApplicationTenancyRepository applicationTenancyRepository;
+    @Inject private ApplicationTenancyRepository<? extends ApplicationTenancy> applicationTenancyRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     
     private final ApplicationTenancy holder;
@@ -58,7 +58,7 @@ public class ApplicationTenancy_addUser {
     public List<? extends ApplicationUser> autoComplete0Act(final String search) {
         final Collection<? extends ApplicationUser> matchingSearch = applicationUserRepository.find(search);
         final List<? extends ApplicationUser> list = _Lists.newArrayList(matchingSearch);
-        list.removeAll(applicationTenancyRepository.getUsers(holder));
+        list.removeAll(applicationUserRepository.findByTenancy(holder));
         return list;
     }
 }

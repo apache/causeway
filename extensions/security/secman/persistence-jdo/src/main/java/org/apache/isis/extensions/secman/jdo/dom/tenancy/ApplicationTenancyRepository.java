@@ -34,10 +34,8 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.commons.internal.base._Casts;
-import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
-import org.apache.isis.extensions.secman.model.dom.tenancy.ApplicationTenancy_users;
 
 import lombok.NonNull;
 import lombok.val;
@@ -45,7 +43,7 @@ import lombok.val;
 @Repository
 @Named("isisExtSecman.applicationTenancyRepository")
 public class ApplicationTenancyRepository 
-implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository {
+implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository<ApplicationTenancy> {
 
     @Inject private FactoryService factory;
     @Inject private RepositoryService repository;
@@ -59,22 +57,21 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
     // -- findByNameOrPathMatching
 
     @Override
-    public Collection<org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy> findByNameOrPathMatchingCached(final String search) {
-        return queryResultsCache.execute(new Callable<Collection<org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy>>() {
-            @Override public Collection<org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy> call() throws Exception {
+    public Collection<ApplicationTenancy> findByNameOrPathMatchingCached(final String search) {
+        return queryResultsCache.execute(new Callable<Collection<ApplicationTenancy>>() {
+            @Override public Collection<ApplicationTenancy> call() throws Exception {
                 return findByNameOrPathMatching(search);
             }
         }, ApplicationTenancyRepository.class, "findByNameOrPathMatchingCached", search);
     }
 
-    public Collection<org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy> findByNameOrPathMatching(final String search) {
+    public Collection<ApplicationTenancy> findByNameOrPathMatching(final String search) {
         if (search == null) {
             return Collections.emptySortedSet();
         }
         return repository.allMatches(new QueryDefault<>(ApplicationTenancy.class, "findByNameOrPathMatching", "regex", String.format("(?i).*%s.*", search.replace("*", ".*").replace("?", "."))))
                 .stream()
-                .map(org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.class::cast)
-                .collect(_Lists.toUnmodifiable());
+                .collect(_Sets.toUnmodifiableSorted());
     }
 
     // -- findByName
@@ -115,7 +112,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
     // -- autoComplete
 
     @Action(semantics = SemanticsOf.SAFE)
-    public Collection<org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy> findMatching(final String search) {
+    public Collection<ApplicationTenancy> findMatching(final String search) {
         if (search != null && search.length() > 0) {
             return findByNameOrPathMatching(search);
         }
@@ -144,31 +141,19 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
     // -- 
 
     @Override
-    public Collection<org.apache.isis.extensions.secman.api.user.ApplicationUser> getUsers(
-            @NonNull final org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy genericTenancy) {
-        val tenancy = _Casts.<ApplicationTenancy>uncheckedCast(genericTenancy);
-        return factory.mixin(ApplicationTenancy_users.class, tenancy)
-                .col()
-                .stream()
-                .map(org.apache.isis.extensions.secman.api.user.ApplicationUser.class::cast)
-                .collect(_Sets.toUnmodifiableSorted());
-    }
-    
-    
-    @Override
-    public Collection<org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy> allTenancies() {
-        return queryResultsCache.execute(new Callable<Collection<org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy>>() {
+    public Collection<ApplicationTenancy> allTenancies() {
+        return queryResultsCache.execute(new Callable<Collection<ApplicationTenancy>>() {
             @Override
-            public Collection<org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy> call() throws Exception {
+            public Collection<ApplicationTenancy> call() throws Exception {
                 return allTenanciesNoCache();
             }
         }, ApplicationTenancyRepository.class, "allTenancies");
     }
 
-    public Collection<org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy> allTenanciesNoCache() {
+    public Collection<ApplicationTenancy> allTenanciesNoCache() {
         return repository.allInstances(ApplicationTenancy.class)
                 .stream()
-                .map(org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.class::cast)
+                .map(ApplicationTenancy.class::cast)
                 .collect(_Sets.toUnmodifiableSorted());
     }
     
@@ -209,12 +194,11 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
     }
 
     @Override
-    public Collection<org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy> getChildren(
+    public Collection<ApplicationTenancy> getChildren(
             @NonNull final org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy genericTenancy) {
         val tenancy = _Casts.<ApplicationTenancy>uncheckedCast(genericTenancy);
         return tenancy.getChildren()
                 .stream()
-                .map(org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.class::cast)
                 .collect(_Sets.toUnmodifiableSorted());
     }
 

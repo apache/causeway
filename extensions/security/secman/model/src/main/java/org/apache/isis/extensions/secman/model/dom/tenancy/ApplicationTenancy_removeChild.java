@@ -35,7 +35,7 @@ associateWithSequence = "2")
 @RequiredArgsConstructor
 public class ApplicationTenancy_removeChild {
     
-    @Inject private ApplicationTenancyRepository applicationTenancyRepository;
+    @Inject private ApplicationTenancyRepository<? extends ApplicationTenancy> applicationTenancyRepository;
 
     private final ApplicationTenancy holder;
 
@@ -46,7 +46,7 @@ public class ApplicationTenancy_removeChild {
     }
     
     @Model
-    public Collection<ApplicationTenancy> choices0Act() {
+    public Collection<? extends ApplicationTenancy> choices0Act() {
         return applicationTenancyRepository.getChildren(holder);
     }
     

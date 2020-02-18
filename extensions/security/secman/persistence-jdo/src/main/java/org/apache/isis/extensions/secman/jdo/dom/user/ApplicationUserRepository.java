@@ -47,6 +47,7 @@ import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_lock;
 import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_unlock;
 
+import lombok.NonNull;
 import lombok.val;
 
 @Repository
@@ -152,6 +153,14 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
         
         val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
         return role.getUsers()
+                .stream()
+                .collect(_Sets.toUnmodifiableSorted());
+    }
+    
+    @Override
+    public Collection<ApplicationUser> findByTenancy(
+            @NonNull final org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy genericTenancy) {
+        return findByAtPath(genericTenancy.getPath()) 
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());
     }

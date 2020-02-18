@@ -49,11 +49,10 @@ public class ApplicationTenancyMenu {
 
     // -- domain event classes
     public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationTenancyMenu, T> {}
-
     public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationTenancyMenu, T> {}
-
     public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationTenancyMenu> {}
 
+    @Inject private ApplicationTenancyRepository<? extends ApplicationTenancy> applicationTenancyRepository;
 
     // -- iconName
     public String iconName() {
@@ -69,7 +68,7 @@ public class ApplicationTenancyMenu {
             semantics = SemanticsOf.SAFE
             )
     @MemberOrder(sequence = "100.30.1")
-    public Collection<ApplicationTenancy> findTenancies(
+    public Collection<? extends ApplicationTenancy> findTenancies(
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(named = "Partial Name Or Path", describedAs = "String to search for, wildcard (*) can be used")
             @MinLength(1) // for auto-complete
@@ -109,13 +108,9 @@ public class ApplicationTenancyMenu {
             restrictTo = RestrictTo.PROTOTYPING
             )
     @MemberOrder(sequence = "100.30.4")
-    public Collection<ApplicationTenancy> allTenancies() {
+    public Collection<? extends ApplicationTenancy> allTenancies() {
         return applicationTenancyRepository.allTenancies();
     }
-
-    // -- DEPENDENCIES
-
-    @Inject ApplicationTenancyRepository applicationTenancyRepository;
 
 
 }

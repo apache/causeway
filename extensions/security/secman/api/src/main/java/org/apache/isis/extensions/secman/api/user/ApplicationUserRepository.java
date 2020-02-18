@@ -25,6 +25,7 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
+import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy;
 
 import lombok.NonNull;
 
@@ -36,19 +37,18 @@ public interface ApplicationUserRepository<U extends ApplicationUser> {
     U newApplicationUser();
 
     U findByUsername(String username);
-
     U findOrCreateUserByUsername(String username);
 
     Collection<U> allUsers();
     Collection<U> find(String search);
     Collection<U> findByAtPath(String atPath);
-    Collection<U> findByRole(ApplicationRole genericRole);
+    Collection<U> findByRole(ApplicationRole role);
+    Collection<U> findByTenancy(ApplicationTenancy tenancy);
 
     void enable(ApplicationUser user);
     void disable(ApplicationUser user);
 
     boolean isAdminUser(ApplicationUser user);
-
     boolean isPasswordFeatureEnabled(ApplicationUser holder);
 
     boolean updatePassword(ApplicationUser user, String password);
