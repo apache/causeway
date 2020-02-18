@@ -1101,3 +1101,8 @@ div.sidebar-panel div.extra-content {
     margin-top: 30px;
 }
 
+/*checkbox checked color fix*/
+.cbx .fa-check {
+    color: green;
+}
+
