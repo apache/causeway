@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.context;
 
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -80,6 +81,8 @@ public interface MetaModelContext {
 
     RepositoryService getRepositoryService();
 
+    FactoryService getFactoryService();
+
     TransactionService getTransactionService();
 
     TransactionState getTransactionState();
@@ -122,6 +125,11 @@ public interface MetaModelContext {
         @Override
         public default ServiceRegistry getServiceRegistry() {
             return getMetaModelContext().getServiceRegistry();
+        }
+
+        @Override
+        public default FactoryService getFactoryService() {
+            return getMetaModelContext().getFactoryService();
         }
 
         @Override

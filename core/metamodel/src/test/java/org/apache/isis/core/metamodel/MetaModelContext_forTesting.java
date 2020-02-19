@@ -26,6 +26,7 @@ import static java.util.Objects.requireNonNull;
 
 import org.springframework.core.env.AbstractEnvironment;
 
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -100,6 +101,8 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     private TitleService titleService;
 
     private RepositoryService repositoryService;
+
+    private FactoryService factoryService;
 
     private TransactionService transactionService;
 
@@ -201,6 +204,15 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
         }
         return serviceInjector;
     }
+
+    @Override
+    public FactoryService getFactoryService() {
+        if(factoryService==null) {
+            factoryService = new FactoryService_forTesting((MetaModelContext)this);
+        }
+        return factoryService;
+    }
+
     
     @Override
     public TranslationService getTranslationService() {

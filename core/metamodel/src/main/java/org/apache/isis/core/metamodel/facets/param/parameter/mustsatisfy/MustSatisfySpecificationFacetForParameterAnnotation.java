@@ -19,15 +19,12 @@
 
 package org.apache.isis.core.metamodel.facets.param.parameter.mustsatisfy;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -40,30 +37,23 @@ public class MustSatisfySpecificationFacetForParameterAnnotation extends MustSat
     public static Facet create(
             final Optional<Parameter> parameterIfAny,
             final FacetHolder holder,
-            final ServiceInjector servicesInjector) {
+            final FactoryService factoryService) {
 
         val specifications = parameterIfAny
                 .map(Parameter::mustSatisfy)
-                .map(MustSatisfySpecificationFacetForParameterAnnotation::toSpecifications)
+                .map(classes -> toSpecifications(factoryService, classes))
                 .orElse(Collections.emptyList());
         
         return specifications.size() > 0
-                ? new MustSatisfySpecificationFacetForParameterAnnotation(specifications, holder, servicesInjector)
+                ? new MustSatisfySpecificationFacetForParameterAnnotation(specifications, holder)
                         : null;
     }
 
     private MustSatisfySpecificationFacetForParameterAnnotation(
             final List<Specification> specifications,
-            final FacetHolder holder,
-            final ServiceInjector servicesInjector) {
-        super(specifications, holder, servicesInjector);
+            final FacetHolder holder) {
+        super(specifications, holder);
     }
     
-    private static List<Specification> toSpecifications(Class<? extends Specification>[] classes) {
-        return Arrays.stream(classes)
-        .map(MustSatisfySpecificationFacetAbstract::newSpecificationElseNull)
-        .filter(Objects::nonNull)
-        .collect(Collectors.toList());
-    }
 
 }

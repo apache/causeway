@@ -79,7 +79,7 @@ implements MetaModelRefiner {
         val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
 
         super.addFacet(
-                MustSatisfySpecificationFacetForParameterAnnotation.create(parameterIfAny, holder, getServiceInjector()));
+                MustSatisfySpecificationFacetForParameterAnnotation.create(parameterIfAny, holder, getFactoryService()));
     }
 
     void processParamsRegEx(final ProcessParameterContext processParameterContext) {

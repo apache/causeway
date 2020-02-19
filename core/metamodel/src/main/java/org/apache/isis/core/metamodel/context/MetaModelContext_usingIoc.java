@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -67,6 +68,10 @@ class MetaModelContext_usingIoc implements MetaModelContext {
     @Getter(lazy=true) 
     private final ServiceInjector serviceInjector =
     getSingletonElseFail(ServiceInjector.class);
+
+    @Getter(lazy=true) 
+    private final FactoryService factoryService =
+    getSingletonElseFail(FactoryService.class);
 
     @Getter(lazy=true) 
     private final ServiceRegistry serviceRegistry =

@@ -27,7 +27,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -40,27 +40,21 @@ public class MustSatisfySpecificationFacetForPropertyAnnotation extends MustSati
     public static Facet create(
             final Optional<Property> propertyIfAny,
             final FacetHolder holder,
-            final ServiceInjector servicesInjector) {
+            final FactoryService factoryService) {
         
         val specifications = propertyIfAny
                 .map(Property::mustSatisfy)
-                .map(MustSatisfySpecificationFacetForPropertyAnnotation::toSpecifications)
+                .map(classes -> toSpecifications(factoryService, classes))
                 .orElse(Collections.emptyList());
         
         return specifications.size() > 0
-                ? new MustSatisfySpecificationFacetForPropertyAnnotation(specifications, holder, servicesInjector)
+                ? new MustSatisfySpecificationFacetForPropertyAnnotation(specifications, holder)
                         : null;
     }
 
-    private MustSatisfySpecificationFacetForPropertyAnnotation(final List<Specification> specifications, final FacetHolder holder, final ServiceInjector servicesInjector) {
-        super(specifications, holder, servicesInjector);
+    private MustSatisfySpecificationFacetForPropertyAnnotation(final List<Specification> specifications, final FacetHolder holder) {
+        super(specifications, holder);
     }
 
-    private static List<Specification> toSpecifications(Class<? extends Specification>[] classes) {
-        return Arrays.stream(classes)
-        .map(MustSatisfySpecificationFacetAbstract::newSpecificationElseNull)
-        .filter(Objects::nonNull)
-        .collect(Collectors.toList());
-    }
 
 }

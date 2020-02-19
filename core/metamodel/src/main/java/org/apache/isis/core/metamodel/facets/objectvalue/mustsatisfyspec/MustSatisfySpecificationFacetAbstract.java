@@ -19,9 +19,13 @@
 
 package org.apache.isis.core.metamodel.facets.objectvalue.mustsatisfyspec;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
@@ -55,10 +59,9 @@ public abstract class MustSatisfySpecificationFacetAbstract extends FacetAbstrac
 
     public MustSatisfySpecificationFacetAbstract(
             final List<Specification> specifications,
-            final FacetHolder holder,
-            final ServiceInjector servicesInjector) {
+            final FacetHolder holder) {
         super(type(), holder, Derivation.NOT_DERIVED);
-        inject(specifications, servicesInjector);
+
         this.specifications = specifications;
 
         final TranslationService translationService = getTranslationService();
@@ -66,10 +69,6 @@ public abstract class MustSatisfySpecificationFacetAbstract extends FacetAbstrac
         final String translationContext = ((IdentifiedHolder) holder).getIdentifier().toClassAndNameIdentityString();
 
         specificationEvaluator = new SpecificationEvaluator(translationService, translationContext);
-    }
-
-    private static void inject(final List<?> specifications, final ServiceInjector servicesInjector) {
-        servicesInjector.injectServicesInto(specifications);
     }
 
     @Override
@@ -91,31 +90,16 @@ public abstract class MustSatisfySpecificationFacetAbstract extends FacetAbstrac
     /**
      * For benefit of subclasses.
      */
-    protected static List<Specification> specificationsFor(final Class<?>[] values) {
-        final List<Specification> specifications = _Lists.newArrayList();
-        for (final Class<?> value : values) {
-            final Specification specification = newSpecificationElseNull(value);
-            if (specification != null) {
-                specifications.add(specification);
-            }
-        }
+    protected static List<Specification> toSpecifications(
+            final FactoryService factoryService,
+            final Class<? extends Specification>[] classes) {
+        List<Specification> specifications = Arrays.stream(classes)
+                .map(factoryService::getOrCreate)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
         return specifications;
     }
 
-
-    /**
-     * For benefit of subclasses.
-     */
-    protected static Specification newSpecificationElseNull(final Class<?> value) {
-        if (!(Specification.class.isAssignableFrom(value))) {
-            return null;
-        }
-        try {
-            return (Specification) value.newInstance();
-        } catch (final InstantiationException | IllegalAccessException e) {
-            return null;
-        }
-    }
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
