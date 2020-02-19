@@ -21,8 +21,16 @@ package org.apache.isis.applib.services.queryresultscache;
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 
-import lombok.AllArgsConstructor;
+import org.apache.isis.core.commons.handler.MethodReferences.Call0;
+import org.apache.isis.core.commons.handler.MethodReferences.Call1;
+import org.apache.isis.core.commons.handler.MethodReferences.Call2;
+import org.apache.isis.core.commons.handler.MethodReferences.Call3;
+import org.apache.isis.core.commons.handler.MethodReferences.Call4;
+import org.apache.isis.core.commons.handler.MethodReferences.Call5;
+
+import lombok.Data;
 import lombok.Getter;
+
 
 /**
  * This service (API and implementation) provides a mechanism by which idempotent query results can be cached for the duration of an interaction.
@@ -37,16 +45,43 @@ import lombok.Getter;
 // tag::refguide[]
 public interface QueryResultsCache {
 
-// end::refguide[]
+    <T> T execute(Callable<T> callable, Class<?> callingClass, String methodName, Object... keys);
 
-    @AllArgsConstructor
+    <R> R execute(Call0<? extends R> action, Class<?> callingClass, String methodName);
+    
+    <R, A0> R execute(Call1<? extends R, A0> action, Class<?> callingClass, String methodName,
+            A0 arg0);
+    
+    <R, A0, A1> R execute(Call2<? extends R, A0, A1> action, Class<?> callingClass, String methodName, 
+            A0 arg0, A1 arg1);
+    
+    <R, A0, A1, A2> R execute(Call3<? extends R, A0, A1, A2> action, Class<?> callingClass, String methodName,
+            A0 arg0, A1 arg1, A2 arg2);
+    
+    <R, A0, A1, A2, A3> R execute(Call4<? extends R, A0, A1, A2, A3> action, Class<?> callingClass, String methodName,
+            A0 arg0, A1 arg1, A2 arg2, A3 arg3);
+    
+    <R, A0, A1, A2, A3, A4> R execute(Call5<? extends R, A0, A1, A2, A3, A4> action, Class<?> callingClass, String methodName,
+            A0 arg0, A1 arg1, A2 arg2, A3 arg3, A4 arg4);
+    
+    void resetForNextTransaction();
+
+// end::refguide[]
+// tag::refguide-1[]
     class Key {
+
         @Getter
         private final Class<?> callingClass;
         @Getter
         private final String methodName;
         @Getter
         private final Object[] keys;
+
+        public Key(Class<?> callingClass, String methodName, Object... keys) {
+            this.callingClass = callingClass;
+            this.methodName = methodName;
+            this.keys = keys;
+        }
 
         @Override
         public boolean equals(Object obj) {
@@ -95,19 +130,15 @@ public interface QueryResultsCache {
             return callingClass.getName() + "#" + methodName  + Arrays.toString(keys);
         }
     }
+// end::refguide-1[]
 
-    // -- VALUE
-
-    @AllArgsConstructor
+// tag::refguide-2[]
+    @Data
     class Value<T> {
-        @Getter
         private final T result;
     }
+// end::refguide-2[]
 
 // tag::refguide[]
-    <T> T execute(Callable<T> callable, Class<?> callingClass, String methodName, Object... keys);
-
-    void resetForNextTransaction();
-
 }
 // end::refguide[]
