@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.util.rest;
+package org.apache.isis.testdomain.util.kv;
 
 import java.util.Map;
 import java.util.Optional;
@@ -75,11 +75,16 @@ public class KVStoreForTesting {
         clear(caller.getClass());
     }
     
+    public long count(Class<?> callerType) {
+        return keyValueMap.entrySet()
+        .stream()
+        .filter(entry->entry.getKey().getCaller().equals(callerType))
+        .count();
+    }
+    
     @Value(staticConstructor = "of")
     private final static class Key {
         @NonNull Class<?> caller;
         @NonNull String keyStr;
     }
-    
-    
 }

@@ -74,7 +74,7 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
     @Override
     public void publishObjects() {
 
-        if(suppress) {
+        if(isSuppressed()) {
             return;
         }
 
@@ -127,7 +127,7 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
     @Override
     public void publishAction(final Interaction.Execution<?,?> execution) {
 
-        if(suppress) {
+        if(isSuppressed()) {
             return;
         }
 
@@ -138,7 +138,7 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
     @Override
     public void publishProperty(final Interaction.Execution<?,?> execution) {
 
-        if(suppress) {
+        if(isSuppressed()) {
             return;
         }
 
@@ -157,16 +157,23 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
         }
     }
 
+    private final ThreadLocal<Boolean> suppress = ThreadLocal.withInitial(()->false);
 
-    boolean suppress;
-
+    private boolean isSuppressed() {
+        try {
+            return suppress.get();
+        } finally {
+            suppress.remove();
+        }
+    }
+    
     @Override
     public <T> T withPublishingSuppressed(final Block<T> block) {
         try {
-            suppress = true;
+            suppress.set(true);
             return block.exec();
         } finally {
-            suppress = false;
+            suppress.remove();
         }
     }
 

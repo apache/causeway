@@ -69,7 +69,7 @@ class WrapperSyncTest {
         fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
     }
 
-    @Test //@Tag("Incubating")
+    @Test @Tag("Incubating")
     void testWrapper_waitingOnDomainEvent() throws InterruptedException, ExecutionException {
 
         val inventoryManager = facoryService.viewModel(InventoryManager.class);

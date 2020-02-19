@@ -16,24 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.services.publishing;
+package org.apache.isis.testdomain.publishing;
 
-import org.apache.isis.applib.services.iactn.Interaction;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-public interface PublisherDispatchService {
+import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
-    void publishObjects();
+@Configuration
+@Import({
+    KVStoreForTesting.class,
+    PublisherServiceForTesting.class
+})
+public class Configuration_usingPublishing {
 
-    void publishAction(Interaction.Execution<?,?> execution);
-
-    void publishProperty(Interaction.Execution<?,?> execution);
-
-    interface Block<T> {
-        T exec();
-    }
-
-    /**
-     * Slightly hokey wormhole (anti)pattern to disable publishing for mixin associations.
-     */
-    <T> T withPublishingSuppressed(final Block<T> block);
 }

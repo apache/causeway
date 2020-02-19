@@ -18,22 +18,18 @@
  */
 package org.apache.isis.testdomain.auditing;
 
-import java.sql.Timestamp;
-import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -42,8 +38,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.apache.isis.applib.services.audit.AuditerService;
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
@@ -53,18 +47,16 @@ import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.Book;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
-import org.apache.isis.testdomain.util.rest.KVStoreForTesting;
+import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 @Smoketest
 @SpringBootTest(
         classes = {
-                AuditerServiceTest.AuditerServiceProbe.class,
-                Configuration_usingJdo.class, 
-                KVStoreForTesting.class
+                Configuration_usingJdo.class,
+                Configuration_usingAuditing.class
         }, 
         properties = {
                 "logging.config=log4j2-test.xml",
@@ -74,7 +66,7 @@ import lombok.extern.log4j.Log4j2;
     IsisPresets.SilenceWicket
     ,IsisPresets.UseLog4j2Test
 })
-@DirtiesContext(classMode = ClassMode.AFTER_CLASS) // because of the temporary installed AuditerServiceProbe
+@DirtiesContext // because of the temporary installed AuditerServiceProbe
 class AuditerServiceTest {
 
     @Inject private RepositoryService repository;
@@ -82,6 +74,11 @@ class AuditerServiceTest {
     @Inject private WrapperFactory wrapper;
     @Inject private PlatformTransactionManager txMan; 
     @Inject private KVStoreForTesting kvStore;
+    
+    @Configuration
+    public class Config {
+        // so that we get a new ApplicationContext.
+    }
 
     @BeforeEach
     void setUp() {
@@ -102,7 +99,7 @@ class AuditerServiceTest {
         assertEquals(1, books.size());
         val book = books.listIterator().next();
         
-        kvStore.clear(AuditerServiceProbe.class);
+        kvStore.clear(AuditerServiceForTesting.class);
 
         // when - running within its own transactional boundary
         val transactionTemplate = new TransactionTemplate(txMan);
@@ -112,14 +109,14 @@ class AuditerServiceTest {
             repository.persist(book);
 
             // then - before the commit
-            assertFalse(kvStore.get(AuditerServiceProbe.class, "audit").isPresent());
+            assertFalse(kvStore.get(AuditerServiceForTesting.class, "audit").isPresent());
 
             return null;
         });
 
         // then - after the commit
         assertEquals("targetClassName=Book,propertyName=name,preValue=Sample Book,postValue=Book #2;",
-                kvStore.get(AuditerServiceProbe.class, "audit").orElse(null));
+                kvStore.get(AuditerServiceForTesting.class, "audit").orElse(null));
     }
 
     @Test @Tag("Incubating")
@@ -130,7 +127,7 @@ class AuditerServiceTest {
         val books = repository.allInstances(Book.class);
         assertEquals(1, books.size());
         val book = books.listIterator().next();
-        kvStore.clear(AuditerServiceProbe.class);
+        kvStore.clear(AuditerServiceForTesting.class);
 
         // when - running within its own background task
         val future = wrapper.async(book, ExecutionMode.SKIP_RULES) // don't enforce rules for this test
@@ -140,7 +137,7 @@ class AuditerServiceTest {
         
         // then - after the commit
         assertEquals("targetClassName=Book,propertyName=name,preValue=Sample Book,postValue=Book #2;",
-                kvStore.get(AuditerServiceProbe.class, "audit").orElse(null));
+                kvStore.get(AuditerServiceForTesting.class, "audit").orElse(null));
     }
     
     @Test @Tag("Incubating")
@@ -151,7 +148,7 @@ class AuditerServiceTest {
         val books = repository.allInstances(Book.class);
         assertEquals(1, books.size());
         val book = books.listIterator().next();
-        kvStore.clear(AuditerServiceProbe.class);
+        kvStore.clear(AuditerServiceForTesting.class);
 
         // when - running within its own background task
         assertThrows(DisabledException.class, ()->{
@@ -164,41 +161,8 @@ class AuditerServiceTest {
         });
         
         // then - after the exception
-        assertFalse(kvStore.get(AuditerServiceProbe.class, "audit").isPresent());
+        assertFalse(kvStore.get(AuditerServiceForTesting.class, "audit").isPresent());
     }
 
-    // -- HELPER
-
-    @Service @Log4j2
-    public static class AuditerServiceProbe implements AuditerService {
-
-        @Inject private KVStoreForTesting kvStore;
-        
-        @PostConstruct
-        public void init() {
-            log.info("about to initialize");
-        }
-        
-        @Override
-        public boolean isEnabled() {
-            return true;
-        }
-
-        @Override
-        public void audit(UUID interactionId, int sequence, String targetClassName, Bookmark target,
-                String memberIdentifier, String propertyName, String preValue, String postValue, String user,
-                Timestamp timestamp) {
-
-            val audit = new StringBuilder()
-                    .append("targetClassName=").append(targetClassName).append(",").append("propertyName=")
-                    .append(propertyName).append(",").append("preValue=").append(preValue).append(",")
-                    .append("postValue=").append(postValue).append(";")
-                    .toString();
-
-            kvStore.put(this, "audit", audit);
-            log.debug("audit {}", audit);
-        }
-
-    }
 
 }
