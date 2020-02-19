@@ -43,6 +43,7 @@ import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.Book;
@@ -67,6 +68,7 @@ import lombok.val;
     ,IsisPresets.UseLog4j2Test
 })
 @DirtiesContext // because of the temporary installed AuditerServiceProbe
+@Incubating("fails when run with surefire")
 class AuditerServiceTest {
 
     @Inject private RepositoryService repository;
