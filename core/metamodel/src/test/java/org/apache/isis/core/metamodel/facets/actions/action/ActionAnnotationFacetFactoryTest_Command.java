@@ -54,12 +54,12 @@ public class ActionAnnotationFacetFactoryTest_Command extends ActionAnnotationFa
     }
     
     @Test
-    public void givenHasTransactionId_thenIgnored() {
+    public void given_HasUniqueId_thenIgnored() {
         // given
-        final Method actionMethod = findMethod(SomeTransactionalId.class, "someAction");
+        final Method actionMethod = findMethod(SomeHasUniqueId.class, "someAction");
 
         // when
-        processCommand(facetFactory, new ProcessMethodContext(SomeTransactionalId.class, null, actionMethod, mockMethodRemover, facetedMethod));
+        processCommand(facetFactory, new ProcessMethodContext(SomeHasUniqueId.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.getFacet(CommandFacet.class);

@@ -65,7 +65,7 @@ The `Command` type referenced above is in fact an interface, defined as:
 
 [source,java]
 ----
-public interface Command extends HasTransactionId {
+public interface Command extends HasUniqueId {
 
     public abstract String getUser();               // <1>
     public abstract Timestamp getTimestamp();       // <2>

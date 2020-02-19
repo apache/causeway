@@ -48,11 +48,11 @@ public class ActionAnnotationFacetFactoryTest_Publishing extends ActionAnnotatio
     }
     
     @Test
-    public void givenHasTransactionId_thenIgnored() {
+    public void given_HasUniqueId_thenIgnored() {
 
-        final Method actionMethod = findMethod(SomeTransactionalId.class, "someAction");
+        final Method actionMethod = findMethod(SomeHasUniqueId.class, "someAction");
 
-        processPublishing(facetFactory, new ProcessMethodContext(SomeTransactionalId.class, null, actionMethod, mockMethodRemover, facetedMethod));
+        processPublishing(facetFactory, new ProcessMethodContext(SomeHasUniqueId.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(PublishedActionFacet.class);
         assertNull(facet);

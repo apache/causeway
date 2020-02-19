@@ -4,6 +4,8 @@
 :page-partial:
 
 
+WARNING: TODO: v2: remove this page, instead just xref:refguide:applib-svc:about.adoc[ref guide domain services].
+
 Most framework domain services are API: they exist to provide support functionality to the application's domain objects and services.
 In this case an implementation of the service will be available, either in Apache Isis core or as an extension.
 
@@ -93,9 +95,6 @@ Other API:
 * xref:refguide:applib-svc:testing/SudoService.adoc[`SudoService`]
 * xref:refguide:applib-svc:application-layer-api/TransactionService.adoc[`TransactionService`]
 
-Other SPI:
-
-* xref:refguide:applib-svc:bootstrapping-spi/ClassDiscoveryService.adoc[`ClassDiscoveryService`] (SPI)
 
 Extensions:
 

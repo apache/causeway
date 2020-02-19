@@ -57,15 +57,6 @@ The xref:refguide:applib-svc:application-layer-api/InteractionContext.adoc[`Inte
 |
 
 
-|xref:refguide:applib-svc:application-layer-api/DtoMappingHelper.adoc[`o.a.i.applib.` +
-`services.dto` +
-`DtoMappingHelper`]
-|Maps domain objects internal identifier to an `OidDto` for use in serialized representations.
-|`DtoMappingHelper` +
-``o.a.i.core`` +
-``isis-core-applib``
-|API is also a concrete class.
-
 
 |xref:refguide:applib-svc:application-layer-api/InteractionContext.adoc[`o.a.i.applib.` +
 `services.iactn` +

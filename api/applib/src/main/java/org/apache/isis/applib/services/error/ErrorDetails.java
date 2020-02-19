@@ -46,6 +46,6 @@ public class ErrorDetails {
      * One per exception cause.
      */
     @Getter
-    private final List<List<String>> stackDetailListPerCause;
+    private final List<List<String>> stackTraceDetailPerCause;
 
 }

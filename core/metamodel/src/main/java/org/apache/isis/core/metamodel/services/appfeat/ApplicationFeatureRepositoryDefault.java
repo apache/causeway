@@ -67,11 +67,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRepository {
 
-    private final IsisConfiguration configuration;
-    private final ServiceRegistry serviceRegistry;
-    private final SpecificationLoader specificationLoader;
-    private final ApplicationFeatureFactory applicationFeatureFactory;
-    
     // -- caches
     final SortedMap<ApplicationFeatureId, ApplicationFeature> packageFeatures = _Maps.newTreeMap();
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> classFeatures = _Maps.newTreeMap();
@@ -80,16 +75,25 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> collectionFeatures = _Maps.newTreeMap();
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> actionFeatures = _Maps.newTreeMap();
 
-    // -- init
+    private final IsisConfiguration configuration;
+    private final ServiceRegistry serviceRegistry;
+    private final SpecificationLoader specificationLoader;
+    private final ApplicationFeatureFactory applicationFeatureFactory;
 
     @Inject
-    public ApplicationFeatureRepositoryDefault(IsisConfiguration configuration, ServiceRegistry serviceRegistry,
-            SpecificationLoader specificationLoader, ApplicationFeatureFactory applicationFeatureFactory) {
+    public ApplicationFeatureRepositoryDefault(
+            IsisConfiguration configuration,
+            ServiceRegistry serviceRegistry,
+            SpecificationLoader specificationLoader,
+            ApplicationFeatureFactory applicationFeatureFactory) {
         this.configuration = configuration;
         this.serviceRegistry = serviceRegistry;
         this.specificationLoader = specificationLoader;
         this.applicationFeatureFactory = applicationFeatureFactory;
     }
+
+    // -- init
+
 
     @PostConstruct
     public void init() {
@@ -557,10 +561,6 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
                 .map(ApplicationFeatureId.Functions.GET_MEMBER_NAME)
                 .collect(_Sets.toUnmodifiableSorted());
     }
-
-
-
-
 
 
 }

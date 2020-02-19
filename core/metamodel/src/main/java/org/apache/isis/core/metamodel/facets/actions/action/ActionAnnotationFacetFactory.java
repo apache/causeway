@@ -201,7 +201,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
         //
         if(HasUniqueId.class.isAssignableFrom(processMethodContext.getCls())) {
-            // do not install on any implementation of HasTransactionId
+            // do not install on any implementation of HasUniqueId
             // (ie commands, audit entries, published events).
             return;
         }
@@ -221,7 +221,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         // and for commands, see above
         //
         if(HasUniqueId.class.isAssignableFrom(processMethodContext.getCls())) {
-            // do not install on any implementation of HasTransactionId
+            // do not install on any implementation of HasUniqueId
             // (ie commands, audit entries, published events).
             return;
         }

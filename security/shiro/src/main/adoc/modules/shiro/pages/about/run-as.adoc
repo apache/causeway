@@ -48,7 +48,6 @@ public class ShiroService {
 }
 ----
 <1> "jdbcRealm" is realm as configured in Shiro config (shiro.ini).
-Might want to look this up from `ConfigurationService`.
 <2> The username of the currently logged in user (by which permissions are determined).
 This could be the user name the real user is running as.
 <3> The username of the real currently logged in user.

@@ -36,7 +36,7 @@ Behind the scenes this uses the xref:refguide:applib-svc:.SudoService.adoc[`Sudo
 <2> provided `Command` must implement `CommandDto`.
 
 When the `Command` is executed, it will also be returned by xref:refguide:applib-svc:.CommandContext.adoc[`CommandContext`].
-Any associated objects that implement `HasTransactionId` (audit entries and the like) will therefore have the correct transactionId and will correctly be associated with the `Command` being executed.
+Any associated objects that implement `HasUniqueId` (audit entries and the like) will therefore have the correct transactionId and will correctly be associated with the `Command` being executed.
 
 The framework provides a default implementation of this service,
 `o.a.i.core.runtime.services.background.CommandExecutorServiceDefault`

@@ -40,7 +40,6 @@ include::refguide:applib-svc:partial$metadata-api.adoc[leveloffset=+2]
 include::refguide:applib-svc:partial$testing.adoc[leveloffset=+2]
 include::refguide:applib-svc:partial$persistence-layer-api.adoc[leveloffset=+2]
 include::refguide:applib-svc:partial$persistence-layer-spi.adoc[leveloffset=+2]
-include::refguide:applib-svc:partial$bootstrapping-spi.adoc[leveloffset=+2]
 
 
 

@@ -45,16 +45,13 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 @Qualifier("Default")
 public class ServiceInjectorDefault implements ServiceInjector {
 
-    @Inject private AutowireCapableBeanFactory autowireCapableBeanFactory;
-    
-    
-//    @PostConstruct
-//    public void init() {
-//        if(autowireCapableBeanFactory==null) {
-//            autowireCapableBeanFactory = _Spring.context().getAutowireCapableBeanFactory();
-//        }
-//    }
-    
+    private final AutowireCapableBeanFactory autowireCapableBeanFactory;
+
+    @Inject
+    public ServiceInjectorDefault(AutowireCapableBeanFactory autowireCapableBeanFactory) {
+        this.autowireCapableBeanFactory = autowireCapableBeanFactory;
+    }
+
     @Override
     public <T> T injectServicesInto(T domainObject, Consumer<InjectionPoint> onNotResolvable) {
         injectServices(domainObject, onNotResolvable);

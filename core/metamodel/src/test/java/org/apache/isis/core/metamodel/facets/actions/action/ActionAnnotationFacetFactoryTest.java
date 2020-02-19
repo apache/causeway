@@ -93,7 +93,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         }
     }
 
-    class SomeTransactionalId implements HasUniqueId {
+    class SomeHasUniqueId implements HasUniqueId {
         public void someAction() {
         }
 

@@ -63,17 +63,6 @@ SpecificationProvider`].
 |API is also a concrete class
 
 
-|xref:refguide:applib-svc:testing/SwitchUserService.adoc[`o.a.i.applib.` +
-`fixtures.switchuser` +
-`SwitchUserServiceService`]
-|(deprecated)
-|`SwitchUserServiceImpl` +
-``o.a.i.core`` +
-``isis-core-runtime``
-|
-
-
-
 
 |===
 

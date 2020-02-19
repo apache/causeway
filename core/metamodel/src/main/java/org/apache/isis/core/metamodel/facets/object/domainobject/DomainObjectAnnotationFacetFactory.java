@@ -134,7 +134,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
         // but think should apply in general
         //
         if(HasUniqueId.class.isAssignableFrom(cls)) {
-            // do not install on any implementation of HasTransactionId
+            // do not install on any implementation of HasUniqueId
             // (ie commands, audit entries, published events).
             return;
         }
@@ -157,7 +157,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
         // this rule inspired by a similar rule for auditing, see above
         //
         if(HasUniqueId.class.isAssignableFrom(cls)) {
-            // do not install on any implementation of HasTransactionId
+            // do not install on any implementation of HasUniqueId
             // (ie commands, audit entries, published events).
             return;
         }

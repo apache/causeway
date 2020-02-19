@@ -43,6 +43,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
@@ -80,7 +81,6 @@ public class ApplicationFeatureRepositoryDefaultTest {
     public void setUp() throws Exception {
 
         final ApplicationFeatureFactory applicationFeatureFactory = new ApplicationFeatureFactory();
-        //applicationFeatureFactory.factoryService = mockFactoryService;
 
         applicationFeatureRepository = new ApplicationFeatureRepositoryDefault(
                 /*configuration*/ null, 

@@ -240,7 +240,7 @@ implements MetaModelRefiner {
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
         //
         if(HasUniqueId.class.isAssignableFrom(processMethodContext.getCls())) {
-            // do not install on any implementation of HasTransactionId
+            // do not install on any implementation of HasUniqueId
             // (ie commands, audit entries, published events).
             return;
         }
@@ -273,7 +273,7 @@ implements MetaModelRefiner {
         // and for commands, see above
         //
         if(HasUniqueId.class.isAssignableFrom(processMethodContext.getCls())) {
-            // do not install on any implementation of HasTransactionId
+            // do not install on any implementation of HasUniqueId
             // (ie commands, audit entries, published events).
             return;
         }
@@ -301,7 +301,7 @@ implements MetaModelRefiner {
         val holder = processMethodContext.getFacetHolder();
 
         // search for @Property(mustSatisfy=...)
-        val facet = MustSatisfySpecificationFacetForPropertyAnnotation.create(propertyIfAny, holder, getServiceInjector());
+        val facet = MustSatisfySpecificationFacetForPropertyAnnotation.create(propertyIfAny, holder, getFactoryService());
 
         super.addFacet(facet);
     }

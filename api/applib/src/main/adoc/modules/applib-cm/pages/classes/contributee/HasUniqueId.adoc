@@ -1,10 +1,10 @@
-[[HasTransactionId]]
-= `HasTransactionId`
+[[HasUniqueId]]
+= `HasUniqueId`
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
 
-The `HasTransactionId` interface is a mix-in for any domain objects that reference a transaction id, such as
+The `HasUniqueId` interface is a mix-in for any domain objects that reference a transaction id, such as
 auditing entries or commands, or for xref:refguide:applib-svc:application-layer-api/InteractionContext.adoc[``Interaction`]s persisted as published events.
 
 [NOTE]
@@ -16,7 +16,7 @@ The interface is defined is:
 
 [source,java]
 ----
-public interface HasTransactionId {
+public interface HasUniqueId {
     public UUID getTransactionId();                             // <1>
     public void setTransactionId(final UUID transactionId);
 }
@@ -33,11 +33,11 @@ Modules in the (non-ASF) link:https://platform.incode.org[Incode Platform^] that
 
 == `RepresentsInteractionMemberExecution`
 
-The `RepresentsInteractionMemberExecution` interface is a sub-interface of `HasTransactionId` that also includes a sequence property:
+The `RepresentsInteractionMemberExecution` interface is a sub-interface of `HasUniqueId` that also includes a sequence property:
 
 [source,java]
 ----
-public interface RepresentsInteractionMemberExecution extends HasTransactionId {
+public interface RepresentsInteractionMemberExecution extends HasUniqueId {
     int getSequence();
 }
 ----

@@ -3,6 +3,7 @@
 :page-partial:
 
 
+WARNING: TODO: v2 - these mignotes themselves are out of date...
 
 Deprecated types have been moved into new "legacy" modules.
  For example, applib types have been moved into `org.apache.isis.core:isis-core-applib-legacy` module.

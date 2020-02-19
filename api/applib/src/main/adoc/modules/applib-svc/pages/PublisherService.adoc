@@ -38,7 +38,7 @@ The full API of `PublishedObjects` itself is:
 
 [source,java]
 ----
-public interface PublishedObjects extends HasTransactionId, HasUsername {
+public interface PublishedObjects extends HasUniqueId, HasUsername {
     UUID getTransactionId();                                    // <1>
     String getUsername();                                       // <2>
     Timestamp getCompletedAt();                                 // <3>
@@ -51,7 +51,7 @@ public interface PublishedObjects extends HasTransactionId, HasUsername {
     int getNumberPropertiesModified();
 }
 ----
-<1> inherited from `HasTransactionId`, correlates back to the unique identifier of the transaction in which these objects were changed.
+<1> inherited from `HasUniqueId`, correlates back to the unique identifier of the transaction in which these objects were changed.
 <2> inherited from `HasUsername`, is the user that initiated the transaction causing these objects to change
 <3> the time that this set of objects was collated (just before the completion of the transaction completes)..
 <4> returns a DTO (as per the xref:refguide:schema:chg.adoc["chg" schema]) which can be converted into a serializable XML representation can be obtained using the `ChangesDtoUtils` utility class.

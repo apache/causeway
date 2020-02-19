@@ -87,7 +87,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
     }
 
 
-    class SomeTransactionalId implements HasUniqueId {
+    class SomeHasUniqueId implements HasUniqueId {
 
         @Override
         public UUID getUniqueId() {
@@ -136,7 +136,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         }
 
         @Test
-        public void ignoreHasTransactionId() {
+        public void ignore_HasUniqueId() {
 
             allowingAuditObjectsToReturn(AuditObjectsConfiguration.ALL);
 
@@ -261,7 +261,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         }
 
         @Test
-        public void ignoreHasTransactionId() {
+        public void ignore_HasUniqueId() {
 
             allowingPublishObjectsToReturn(PublishObjectsConfiguration.ALL);
 

@@ -131,18 +131,6 @@ class ReflectTest {
     }
 
 
-    @Test
-    void annotationLookup2() throws NoSuchMethodException, SecurityException {
-
-        Class<?> type = JaxbServiceDefault.class;
-        Method method = type.getMethod("fromXml", new Class[] {JAXBContext.class, String.class, Map.class});
-
-        Programmatic annot = getAnnotation(method, Programmatic.class, true, true);
-
-        assertNotNull(annot);
-
-    }
-    
     // -- HELPER
     
     private static void assertSetContainsAll(Set<String> shouldContain, Set<String> actuallyContains) {

@@ -83,7 +83,7 @@ public interface Transaction2 {
 }
 ----
 <1> is a unique identifier for the interaction/request, as defined by the
-xref:refguide:applib-cm:classes/mixins.adoc#HasTransactionId[`HasTransactionId`] mixin.
+xref:refguide:applib-cm:classes/mixins.adoc#HasUniqueId[`HasUniqueId`] mixin.
 <2> there can actually be multiple transactions within such a request/interaction; the sequence is a (0-based) is used to distinguish such.
 <3> as per `TransactionService#flushTransaction()` described above.
 <4> The state of this transaction (same as `TransactionService#getTransactionState()`).

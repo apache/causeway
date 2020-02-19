@@ -31,18 +31,6 @@ It also lists their corresponding implementation, either a default implementatio
 
 
 
-|xref:refguide:applib-svc:core-domain-api/ConfigurationService.adoc[`o.a.i.applib.` +
-`services.config` +
-`ConfigurationService`]
-|Access configuration properties (eg from `application.properties` file)
-|`ConfigurationService-` +
-``Default`` +
-``o.a.i.core`` +
-``isis-core-runtime``
-|The ``ConfigurationServiceMenu`` exposes the ``allConfigurationProperties`` action in the user interface.
-
-
-
 |xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`o.a.i.applib.` +
 `services.eventbus` +
 `EventBusService`]

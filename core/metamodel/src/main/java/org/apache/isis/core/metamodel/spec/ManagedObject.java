@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -597,7 +598,7 @@ public interface ManagedObject {
             val additionalArgCount = additionalArgValues.size();
             val pendingArgsToConsiderCount = paramCount - additionalArgCount;
             
-            val argIterator = pendingArgs!=null ? pendingArgs.iterator() : Collections.<ManagedObject>emptyIterator();
+            val argIterator = argIteratorFrom(pendingArgs);
             val adjusted = new Object[paramCount];
             for(int i=0; i<pendingArgsToConsiderCount; i++) {
                 
@@ -618,7 +619,11 @@ public interface ManagedObject {
             return adjusted;
 
         }
-        
+
+        private static Iterator<? extends ManagedObject> argIteratorFrom(List<? extends ManagedObject> pendingArgs) {
+            return pendingArgs!=null ? pendingArgs.iterator() : Collections.emptyIterator();
+        }
+
         private static Object honorPrimitiveDefaults(
                 final Class<?> expectedType, 
                 final @Nullable Object value) {
