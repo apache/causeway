@@ -26,7 +26,6 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
@@ -54,9 +53,8 @@ public class ApplicationUser_permissions {
 
     private final ApplicationUser holder;
 
-    @MemberOrder(sequence = "30")
     @Model
-    public List<UserPermissionViewModel> col() {
+    public List<UserPermissionViewModel> coll() {
         val allMembers = applicationFeatureRepository.allMembers();
         return asViewModels(allMembers);
     }

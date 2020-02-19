@@ -22,7 +22,6 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.CollectionDomainEvent;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
@@ -46,8 +45,7 @@ public class ApplicationTenancy_users {
 
     public static class UsersDomainEvent extends CollectionDomainEvent<ApplicationUser> {}
 
-    @MemberOrder(sequence = "10")
-    public java.util.Collection<? extends ApplicationUser> col() {
+    public java.util.Collection<? extends ApplicationUser> coll() {
         return applicationUserRepository.findByAtPath(holder.getPath());
     }
 

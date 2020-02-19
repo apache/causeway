@@ -43,7 +43,7 @@ public abstract class SecurityModuleAppUserRegistrationServiceAbstract implement
     
     @Override
     public boolean usernameExists(final String username) {
-        return applicationUserRepository.findByUsername(username) != null;
+        return applicationUserRepository.findByUsername(username).isPresent();
     }
 
     @Override
@@ -76,7 +76,7 @@ public abstract class SecurityModuleAppUserRegistrationServiceAbstract implement
 
     @Override
     public boolean emailExists(final String emailAddress) {
-        return applicationUserRepository.findByEmailAddress(emailAddress) != null;
+        return applicationUserRepository.findByEmailAddress(emailAddress).isPresent();
     }
 
     @Override

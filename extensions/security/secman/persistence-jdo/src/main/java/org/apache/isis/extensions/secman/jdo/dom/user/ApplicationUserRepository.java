@@ -221,7 +221,9 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
     @Override
     public boolean isPasswordFeatureEnabled(org.apache.isis.extensions.secman.api.user.ApplicationUser user) {
         return user.isLocalAccount() 
-                && passwordEncryptionService!=null 
+                /*sonar-ignore-on*/
+                && passwordEncryptionService!=null // if for any reason injection fails
+                /*sonar-ignore-off*/
                 && passwordEncryptionService.isPresent();
     }
 
