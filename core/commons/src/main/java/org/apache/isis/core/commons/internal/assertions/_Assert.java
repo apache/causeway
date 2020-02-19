@@ -20,6 +20,7 @@
 package org.apache.isis.core.commons.internal.assertions;
 
 import java.util.Objects;
+import java.util.function.Supplier;
 
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
@@ -53,6 +54,12 @@ public final class _Assert {
             fail(message, true, false);
         }
     }
+    
+    public static void assertTrue(boolean condition, Supplier<String> lazyMessage) {
+        if (!condition) {
+            fail(lazyMessage.get(), true, false);
+        }
+    }
 
     // -- FALSE
 
@@ -66,6 +73,12 @@ public final class _Assert {
         }
     }
     
+    public static void assertFalse(boolean condition, Supplier<String> lazyMessage) {
+        if (condition) {
+            fail(lazyMessage.get(), true, false);
+        }
+    }
+    
     // -- NOT NULL
 
     public static void assertNotNull(Object object) {
@@ -75,6 +88,12 @@ public final class _Assert {
     public static void assertNotNull(Object object, String message) {
         if (object==null) {
             fail(message, "not null", "null");
+        }
+    }
+    
+    public static void assertNotNull(Object object, Supplier<String> lazyMessage) {
+        if (object==null) {
+            fail(lazyMessage.get(), "not null", "null");
         }
     }
     
@@ -98,6 +117,12 @@ public final class _Assert {
     public static void assertEquals(Object left, Object right, String message) {
         if (!Objects.equals(left, right)) {
             fail(message, left, right);
+        }
+    }
+    
+    public static void assertEquals(Object left, Object right, Supplier<String> lazyMessage) {
+        if (!Objects.equals(left, right)) {
+            fail(lazyMessage.get(), left, right);
         }
     }
     

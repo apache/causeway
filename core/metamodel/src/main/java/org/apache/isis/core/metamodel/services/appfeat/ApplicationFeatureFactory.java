@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.services.appfeat;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,7 +26,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.factory.FactoryService;
 
 @Service
 @Named("isisMetaModel.ApplicationFeatureFactory")
@@ -36,7 +34,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 @Qualifier("Default")
 public class ApplicationFeatureFactory {
 
-    @Inject FactoryService factoryService;
+    // @Inject FactoryService factoryService;
     
     public ApplicationFeature newApplicationFeature() {
         

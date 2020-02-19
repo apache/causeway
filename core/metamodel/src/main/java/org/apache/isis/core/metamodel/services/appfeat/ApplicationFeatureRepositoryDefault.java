@@ -37,10 +37,8 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.core.commons.internal.base._Lazy;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.collections._Sets;
-import org.apache.isis.core.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -69,8 +67,13 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRepository {
 
+    private final IsisConfiguration configuration;
+    private final ServiceRegistry serviceRegistry;
+    private final SpecificationLoader specificationLoader;
+    private final ApplicationFeatureFactory applicationFeatureFactory;
+    
     // -- caches
-    SortedMap<ApplicationFeatureId, ApplicationFeature> packageFeatures = _Maps.newTreeMap();
+    final SortedMap<ApplicationFeatureId, ApplicationFeature> packageFeatures = _Maps.newTreeMap();
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> classFeatures = _Maps.newTreeMap();
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> memberFeatures = _Maps.newTreeMap();
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> propertyFeatures = _Maps.newTreeMap();
@@ -79,14 +82,21 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
     // -- init
 
+    @Inject
+    public ApplicationFeatureRepositoryDefault(IsisConfiguration configuration, ServiceRegistry serviceRegistry,
+            SpecificationLoader specificationLoader, ApplicationFeatureFactory applicationFeatureFactory) {
+        this.configuration = configuration;
+        this.serviceRegistry = serviceRegistry;
+        this.specificationLoader = specificationLoader;
+        this.applicationFeatureFactory = applicationFeatureFactory;
+    }
+
     @PostConstruct
     public void init() {
         if(isEagerInitialize()) {
             initializeIfRequired();
         }
     }
-
-    @Inject IsisConfiguration configuration;
 
     private boolean isEagerInitialize() {
         ApplicationFeaturesInitConfiguration setting = configuration.getCore().getRuntimeServices().getApplicationFeatures().getInit();
@@ -548,16 +558,9 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
                 .collect(_Sets.toUnmodifiableSorted());
     }
 
-    @Inject ServiceRegistry serviceRegistry;
-    @Inject SpecificationLoader specificationLoader;
-    @Inject ApplicationFeatureFactory applicationFeatureFactory;
 
-    private _Lazy<List<ManagedBeanAdapter>> registeredServices = _Lazy.threadSafe(()->{
-        val registeredServices = 
-                serviceRegistry.streamRegisteredBeans()
-                .collect(Collectors.toList());
-        return registeredServices;
-    });
+
+
 
 
 }

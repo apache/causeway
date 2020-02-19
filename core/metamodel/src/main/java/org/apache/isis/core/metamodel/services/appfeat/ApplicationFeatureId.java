@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.services.appfeat;
 
 import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -39,7 +38,6 @@ import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.util.ToString;
-import org.apache.isis.core.commons.internal.base._Bytes;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -128,7 +126,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
      * Round-trip with {@link #asEncodedString()}
      */
     public static ApplicationFeatureId parseEncoded(final String encodedString) {
-        return new ApplicationFeatureId(base64UrlDecode(encodedString));
+        return new ApplicationFeatureId(_Strings.base64UrlDecode(encodedString));
     }
 
 
@@ -319,16 +317,9 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
     @Programmatic
     public String asEncodedString() {
-        return base64UrlEncode(asString());
+        return _Strings.base64UrlEncode(asString());
     }
-
-    private static String base64UrlDecode(final String str) {
-        return _Strings.convert(str, _Bytes.ofUrlBase64, StandardCharsets.UTF_8);
-    }
-
-    private static String base64UrlEncode(final String str) {
-        return _Strings.convert(str, _Bytes.asUrlBase64, StandardCharsets.UTF_8);
-    }
+    
 
     // //////////////////////////////////////
 

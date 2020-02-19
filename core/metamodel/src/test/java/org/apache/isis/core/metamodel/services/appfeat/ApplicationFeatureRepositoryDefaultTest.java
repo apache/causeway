@@ -42,6 +42,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
@@ -56,44 +57,36 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 
 public class ApplicationFeatureRepositoryDefaultTest {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
-    @Mock
-    ObjectSpecification mockSpec;
-    @Mock
-    OneToOneAssociation mockProp;
-    @Mock
-    OneToManyAssociation mockColl;
-    @Mock
-    ObjectAction mockAct;
+    @Mock ObjectSpecification mockSpec;
+    @Mock OneToOneAssociation mockProp;
+    @Mock OneToManyAssociation mockColl;
+    @Mock ObjectAction mockAct;
+    
     ObjectAction mockActThatIsHidden;
 
-    @Mock
-    FactoryService mockFactoryService;
+    @Mock FactoryService mockFactoryService;
+    @Mock ServiceRegistry mockServiceRegistry;
+    @Mock SpecificationLoader mockSpecificationLoader;
 
-    @Mock
-    ServiceRegistry mockServiceRegistry;
-
-    @Mock
-    SpecificationLoader mockSpecificationLoader;
-
-    ApplicationFeatureRepositoryDefault applicationFeatureRepository;
+    protected ApplicationFeatureRepositoryDefault applicationFeatureRepository;
 
     @Before
     public void setUp() throws Exception {
-        applicationFeatureRepository = new ApplicationFeatureRepositoryDefault();
-        applicationFeatureRepository.serviceRegistry = mockServiceRegistry;
-        applicationFeatureRepository.specificationLoader = mockSpecificationLoader;
 
         final ApplicationFeatureFactory applicationFeatureFactory = new ApplicationFeatureFactory();
-        applicationFeatureRepository.applicationFeatureFactory = applicationFeatureFactory;
-        applicationFeatureFactory.factoryService = mockFactoryService;
+        //applicationFeatureFactory.factoryService = mockFactoryService;
 
+        applicationFeatureRepository = new ApplicationFeatureRepositoryDefault(
+                /*configuration*/ null, 
+                mockServiceRegistry, 
+                mockSpecificationLoader, 
+                applicationFeatureFactory);
 
         mockActThatIsHidden = context.mock(ObjectAction.class, "mockActThatIsHidden");
     }
