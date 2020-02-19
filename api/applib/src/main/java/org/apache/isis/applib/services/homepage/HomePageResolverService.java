@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.services.homepage;
+package org.apache.isis.applib.services.homepage;
 
 import org.apache.isis.applib.annotation.HomePage;
 
@@ -24,8 +24,10 @@ import org.apache.isis.applib.annotation.HomePage;
  * Returns a view model annotated with {@link HomePage}.
  * @since 2.0
  */
+// tag::refguide[]
 public interface HomePageResolverService {
 
     Object getHomePage();
 
 }
+// end::refguide[]

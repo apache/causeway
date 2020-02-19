@@ -60,7 +60,7 @@ Layout and UI Management:
 * xref:refguide:applib-svc:presentation-layer-spi/GridLoaderService.adoc[`GridLoaderService`] (SPI)
 * xref:refguide:applib-svc:presentation-layer-spi/GridService.adoc[`GridService`] (SPI)
 * xref:refguide:applib-svc:presentation-layer-spi/GridSystemService.adoc[`GridSystemService`] (SPI)
-* xref:refguide:applib-svc:application-layer-spi/HomePageProviderService.adoc[`HomePageProviderService`]
+* xref:refguide:applib-svc:application-layer-spi/HomePageResolverService.adoc[`HomePageResolverService`]
 * xref:refguide:applib-svc:presentation-layer-spi/HintStore.adoc[`HintStore`] (SPI)
 * xref:refguide:applib-svc:metadata-api/LayoutService.adoc[`LayoutService`]
 * xref:refguide:applib-svc:presentation-layer-spi/RoutingService.adoc[`RoutingService`] (SPI)

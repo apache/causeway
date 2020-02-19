@@ -24,9 +24,7 @@ import javax.inject.Named;
 import org.springframework.stereotype.Controller;
 
 import org.apache.isis.applib.services.routing.RoutingService;
-import org.apache.isis.core.metamodel.services.homepage.HomePageResolverService;
-
-import lombok.val;
+import org.apache.isis.applib.services.homepage.HomePageResolverService;
 
 @Controller
 @Named("isisRuntimeServices.RoutingServiceDefault")

@@ -18,7 +18,7 @@
  */
 
 /**
- * The {@link org.apache.isis.core.metamodel.services.homepage.HomePageResolverService} service simply provides access
+ * The {@link org.apache.isis.applib.services.homepage.HomePageResolverService} service simply provides access
  * to the home page object (if any) annotated with {@link org.apache.isis.applib.annotation.HomePage @HomePage}.
  *
  * p/rgsvc.html#_rgsvc_application-layer-spi_HomePageProviderService">Reference guide</a>

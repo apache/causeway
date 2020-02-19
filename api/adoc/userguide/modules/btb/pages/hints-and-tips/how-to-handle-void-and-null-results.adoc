@@ -56,10 +56,10 @@ public class RoutingServiceUsingBreadcrumbs extends RoutingServiceDefault {
         return firstViewModelOrNonDeletedPojoIfAny.orElse(homePage());          // <9>
     }
     private Object homePage() {
-        return homePageProviderService.homePage();
+        return homePageResolverService.homePage();
     }
     @Inject
-    HomePageProviderService homePageProviderService;
+    HomePageResolverService homePageResolverService;
     @Inject
     RepositoryService repositoryService;
 }
