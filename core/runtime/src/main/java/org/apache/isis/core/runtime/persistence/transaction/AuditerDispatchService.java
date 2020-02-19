@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -37,6 +38,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
@@ -58,23 +60,18 @@ public class AuditerDispatchService {
     @Inject private UserService userService;
     @Inject private ClockService clockService;
     @Inject private TransactionService transactionService;
-
-    Boolean whetherCanAudit;
-
-    private boolean canAudit() {
-        if(whetherCanAudit == null) {
-            whetherCanAudit = determineWhetherCanAudit();
-        }
-        return whetherCanAudit;
+    
+    private Can<AuditerService> enabledAuditerServices;
+    
+    @PostConstruct
+    public void init() {
+        System.out.println("hihiohio");
+        enabledAuditerServices = Can.ofCollection(auditerServices)
+                .filter(AuditerService::isEnabled);
     }
 
-    private boolean determineWhetherCanAudit() {
-        for (val auditerService : auditerServices) {
-            if (auditerService.isEnabled()) {
-                return true;
-            }
-        }
-        return false;
+    private boolean canAudit() {
+        return enabledAuditerServices.isNotEmpty();
     }
 
     public void audit() {
@@ -120,11 +117,9 @@ public class AuditerDispatchService {
         final UUID transactionId = txId.getUniqueId();
         final int sequence = txId.getSequence();
 
-        for (val auditerService : auditerServices) {
-            if (auditerService.isEnabled()) {
-                auditerService
-                .audit(transactionId, sequence, targetClass, target, memberId, propertyId, preValue, postValue, user, timestamp);
-            }
+        for (val auditerService : enabledAuditerServices) {
+            auditerService
+            .audit(transactionId, sequence, targetClass, target, memberId, propertyId, preValue, postValue, user, timestamp);
         }
     }
 

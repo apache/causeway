@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.rest;
+package org.apache.isis.testdomain.util.rest;
 
 import java.util.List;
 

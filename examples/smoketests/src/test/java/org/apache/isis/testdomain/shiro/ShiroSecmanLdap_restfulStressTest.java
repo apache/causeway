@@ -49,7 +49,7 @@ import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.ldap.LdapServerService;
-import org.apache.isis.testdomain.rest.RestEndpointService;
+import org.apache.isis.testdomain.util.rest.RestEndpointService;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleViewerRestfulObjectsViewer;
 

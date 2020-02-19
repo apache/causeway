@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.event.EventListener;
@@ -80,7 +81,7 @@ class WrapperAsyncTest {
         fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
     }
 
-    @Test
+    @Test //@Tag("Incubating")
     void testWrapper_waitingOnDomainEvent() throws InterruptedException, ExecutionException {
 
         val inventoryManager = facoryService.viewModel(InventoryManager.class);
@@ -100,7 +101,7 @@ class WrapperAsyncTest {
         assertEquals(123d, product.getPrice(), 1E-6);
     }
 
-    @Test
+    @Test //@Tag("Incubating")
     void testWrapper_async_waitingOnDomainEvent() throws InterruptedException, ExecutionException {
 
         val inventoryManager = facoryService.viewModel(InventoryManager.class);

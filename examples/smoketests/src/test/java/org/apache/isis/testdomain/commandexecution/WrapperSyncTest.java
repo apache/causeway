@@ -23,6 +23,7 @@ import java.util.concurrent.ExecutionException;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -68,7 +69,7 @@ class WrapperSyncTest {
         fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
     }
 
-    @Test
+    @Test //@Tag("Incubating")
     void testWrapper_waitingOnDomainEvent() throws InterruptedException, ExecutionException {
 
         val inventoryManager = facoryService.viewModel(InventoryManager.class);

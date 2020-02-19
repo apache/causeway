@@ -368,7 +368,6 @@ public class IsisTransactionJdo implements Transaction {
 
         try {
             auditerDispatchService.audit();
-
             publisherDispatchService.publishObjects();
             doFlush();
 

@@ -21,6 +21,7 @@ package org.apache.isis.testdomain.domainmodel;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -70,7 +71,7 @@ class SpecloaderPerformanceTest {
     static long ITERATIONS = 100; /* should typically run in ~10s */
     static long EXPECTED_MILLIS_PER_ITERATION = 100;
     
-    @Test 
+    @Test @Tag("LongRunning")
     void repeatedConcurrentSpecloading_shouldNotDeadlock() {
         
         

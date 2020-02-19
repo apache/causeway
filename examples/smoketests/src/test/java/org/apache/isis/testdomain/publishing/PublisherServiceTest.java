@@ -29,10 +29,13 @@ import javax.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Service;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -48,7 +51,6 @@ import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.Book;
@@ -74,7 +76,8 @@ import lombok.val;
     IsisPresets.UseLog4j2Test
 })
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Incubating("inconsitent state when run in a test batch")
+
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS) // because of the temporary installed PublisherServiceProbe
 class PublisherServiceTest {
 
     @Inject private RepositoryService repository;
@@ -93,7 +96,7 @@ class PublisherServiceTest {
         fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
     }
 
-    @Test @Order(1)
+    @Test @Order(1) @Tag("Incubating")
     void publisherServiceShouldBeAwareOfInventoryChanges() {
 
         // given
@@ -123,7 +126,7 @@ class PublisherServiceTest {
 
     }
 
-    @Test @Order(2)
+    @Test @Order(2) @Tag("Incubating")
     void publisherService_shouldBeAwareOfInventoryChanges_whenUsingAsyncExecution() 
             throws InterruptedException, ExecutionException, TimeoutException {
 
@@ -148,7 +151,7 @@ class PublisherServiceTest {
     }
     
     
-    @Test @Order(3)
+    @Test @Order(3) @Tag("Incubating")
     void publisherService_shouldNotBeAwareOfInventoryChanges_whenUsingAsyncExecutionFails() 
             throws InterruptedException, ExecutionException, TimeoutException {
 
