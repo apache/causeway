@@ -16,7 +16,6 @@
                 <cpt:property id="role"/>
             </cpt:fieldSet>
             <cpt:fieldSet name="Metadata" id="metadata">
-                <cpt:action id="recentAuditEntries" position="PANEL_DROPDOWN"/>
                 <cpt:property id="datanucleusIdLong"/>
                 <cpt:property id="datanucleusVersionLong"/>
                 <cpt:property id="datanucleusVersionTimestamp"/>
