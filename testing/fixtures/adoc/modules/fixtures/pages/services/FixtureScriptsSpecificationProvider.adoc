@@ -4,7 +4,7 @@
 
 
 
-The `FixtureScriptsSpecificationProvider` configures the xref:refguide:applib-svc:.FixtureScripts.adoc[`FixtureScripts`] domain service, providing the location to search for fixture scripts and other settings.
+The `FixtureScriptsSpecificationProvider` configures the xref:testing:fixtures:services/FixtureScripts.adoc[`FixtureScripts`] domain service, providing the location to search for fixture scripts and other settings.
 
 The service is used only by the default implementation of `FixtureScripts`, namely `FixtureScriptsDefault`.
 

@@ -42,25 +42,6 @@ Impl'n (g: a:)
 |
 
 
-|xref:refguide:applib-cm:classes.adoc#FixtureScript[`o.a.i.applib.` +
-`fixturescript` +
-`FixtureScript`]
-|``o.a.i.core`` +
-``isis-core-applib``
-|(abstract class)
-|
-
-
-|xref:refguide:applib-cm:classes.adoc#FixtureScripts[`o.a.i.applib.` +
-`fixturescripts` +
-`FixtureScripts`]
-|``o.a.i.core`` +
-``isis-core-applib``
-|(abstract class). +
-`FixtureScriptsDefault` is a default implementation that is used when the alternative xref:refguide:applib-svc:testing/FixtureScriptsSpecificationProvider.adoc[`FixtureScriptsSpecificationProvider`] is provided
-  (and no other implementation of `FixtureScripts` was found).
-|depends on: +
-`ClassDiscoveryService`
 
 
 |===
@@ -73,6 +54,4 @@ Impl'n (g: a:)
 include::super/AbstractService.adoc[leveloffset=+1]
 include::super/AbstractSubscriber.adoc[leveloffset=+1]
 include::super/AbstractViewModel.adoc[leveloffset=+1]
-include::super/FixtureScript.adoc[leveloffset=+1]
-include::super/FixtureScripts.adoc[leveloffset=+1]
 

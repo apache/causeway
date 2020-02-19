@@ -98,8 +98,8 @@ Other API:
 
 Extensions:
 
-* xref:refguide:applib-svc:testing/FixtureScripts.adoc[`FixtureScripts`]
-* xref:refguide:applib-svc:testing/FixtureScriptsSpecificationProvider.adoc[`FixtureScriptsSpecificationProvider`] (SPI)
+* xref:testing:fixtures:services/FixtureScripts.adoc[`FixtureScripts`]
+* xref:testing:fixtures:services/FixtureScriptsSpecificationProvider.adoc[`FixtureScriptsSpecificationProvider`] (SPI)
 
 A full list of services can be found in the xref:refguide:applib-svc:about.adoc[Domain Services] reference guide.
 

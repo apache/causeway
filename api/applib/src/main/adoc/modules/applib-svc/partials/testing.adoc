@@ -22,37 +22,6 @@ It also lists their corresponding implementation, either a default implementatio
 |Notes
 
 
-|xref:refguide:applib-svc:testing/ExecutionParametersService.adoc[`o.a.i.applib.` +
-`fixturescripts.` +
-`ExecutionParametersService`]
-|...
-|`ExecutionParametersService` +
-``o.a.i.core`` +
-``isis-core-applib``
-|API is also a concrete class
-
-
-|xref:refguide:applib-svc:testing/FixtureScripts.adoc[`o.a.i.applib.` +
-`fixturescripts` +
-`FixtureScripts`]
-|Provides the ability to execute fixture scripts.
-|`FixtureScriptsDefault` +
-``o.a.i.core`` +
-``isis-core-applib``
-|Default implementation uses xref:refguide:applib-svc:testing/FixtureScriptsSpecificationProvider.adoc[`FixtureScripts-
-SpecificationProvider`].
-
-
-
-|xref:refguide:applib-svc:testing/FixtureScriptsSpecificationProvider.adoc[`o.a.i.applib.` +
-`services.fixturespec` +
-`FixtureScripts-` +
-`SpecificationProvider`]
-|Provides settings for xref:refguide:applib-svc:testing/FixtureScripts.adoc[`FixtureScripts`] default domain service (`FixtureScriptsDefault`) for executing fixture scripts.
-|
-|
-
-
 |xref:refguide:applib-svc:testing/SudoService.adoc[`o.a.i.applib.` +
 `services.sudo` +
 `SudoService`]

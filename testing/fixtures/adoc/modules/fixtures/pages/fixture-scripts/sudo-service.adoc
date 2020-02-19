@@ -6,26 +6,22 @@
 Sometimes in our fixture scripts we want to perform a business action running as a particular user.
 This might be for the usual reason - so that our fixtures accurately reflect the reality of the system with all business constraints enforced using the `WrapperFactory` - or more straightforwardly it might be simply that the action depends on the identity of the user invoking the action.
 
-An example of the latter case is in the http://github.com/apache/isis-app-todoapp[TodoApp]'s `ToDoItem` class:
+For example, consider this code that creates a todo item:
 
 [source,java]
 .Production code that depends on current user
 ----
+// annotations omitted for clarity
 public ToDoItem newToDo(
-        @Parameter(regexPattern = "\\w[@&:\\-\\,\\.\\+ \\w]*") @ParameterLayout(named="Description")
         final String description,
-        @ParameterLayout(named="Category")
         final Category category,
-        @Parameter(optionality = Optionality.OPTIONAL) @ParameterLayout(named="Subcategory")
         final Subcategory subcategory,
-        @Parameter(optionality = Optionality.OPTIONAL) @ParameterLayout(named="Due by")
         final LocalDate dueBy,
-        @Parameter(optionality = Optionality.OPTIONAL) @ParameterLayout(named="Cost")
         final BigDecimal cost) {
     return newToDo(description, category, subcategory, currentUserName(), dueBy, cost);
 }
 private String currentUserName() {
-    return container.getUser().getName(); // <1>
+    return container.getUser().getName();       // <1>
 }
 ----
 <1> is the current user.

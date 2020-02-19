@@ -1,3 +1,5 @@
 * xref:testing:hsqldbmgr:about.adoc[HSQLDB Manager]
 
+* Domain Services
+** xref:testing:hsqldbmgr:services/HsqlDbManagerMenu.adoc[HsqlDbManagerMenu]
 
