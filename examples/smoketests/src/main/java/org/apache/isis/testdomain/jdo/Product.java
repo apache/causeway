@@ -58,6 +58,10 @@ public class Product {
     @Property(editing = Editing.DISABLED) // used for an async rule check test
     @Getter @Setter @Column(allowsNull = "true")
     private String name;
+//    public void setName(String name) {
+//        System.err.println("!!! setting name " + name);
+//        this.name = name;
+//    }
 
     @Property
     @Getter @Setter @Column(allowsNull = "true")

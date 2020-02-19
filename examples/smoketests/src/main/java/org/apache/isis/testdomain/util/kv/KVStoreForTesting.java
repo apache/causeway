@@ -20,12 +20,14 @@ package org.apache.isis.testdomain.util.kv;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.core.commons.concurrent.AwaitableLatch;
 import org.apache.isis.core.commons.internal.collections._Maps;
 
 import lombok.NonNull;
@@ -38,11 +40,13 @@ import lombok.extern.log4j.Log4j2;
 public class KVStoreForTesting {
     
     private Map<Key, Object> keyValueMap;
+    private Map<Class<?>, CountDownLatch> latchMap;
     
     @PostConstruct
     public void init() {
         log.info("about to initialize");
         keyValueMap = _Maps.newConcurrentHashMap();
+        latchMap = _Maps.newConcurrentHashMap();
     }
     
     @PreDestroy
@@ -55,6 +59,10 @@ public class KVStoreForTesting {
         val key = Key.of(caller.getClass(), keyStr);
         log.debug("writing {} -> {}", key, value);
         keyValueMap.put(key, value);
+        val latch = latchMap.remove(caller.getClass());
+        if(latch!=null) {
+            latch.countDown();
+        }
     }
     
     public Optional<Object> get(Class<?> callerType, String keyStr) {
@@ -86,5 +94,11 @@ public class KVStoreForTesting {
     private final static class Key {
         @NonNull Class<?> caller;
         @NonNull String keyStr;
+    }
+
+    public AwaitableLatch latch(Class<?> callerType) {
+        val latch = new CountDownLatch(1);
+        latchMap.put(callerType, latch);
+        return AwaitableLatch.of(latch);
     }
 }

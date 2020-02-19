@@ -36,4 +36,5 @@ public interface PublisherDispatchService {
      * Slightly hokey wormhole (anti)pattern to disable publishing for mixin associations.
      */
     <T> T withPublishingSuppressed(final Block<T> block);
+
 }

@@ -65,7 +65,6 @@ public class AuditerDispatchService {
     
     @PostConstruct
     public void init() {
-        System.out.println("hihiohio");
         enabledAuditerServices = Can.ofCollection(auditerServices)
                 .filter(AuditerService::isEnabled);
     }

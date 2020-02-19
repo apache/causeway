@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Predicate;
+import java.util.concurrent.atomic.LongAdder;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -50,7 +50,10 @@ import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.persistence.transaction.ChangedObjectsService;
+
+import lombok.val;
 
 /**
  * Wrapper around {@link PublisherService}.  Is a no-op if there is no injected service.
@@ -70,7 +73,7 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
     @Inject private ClockService clockService;
     @Inject private UserService userService;
     @Inject private MetricsService metricsService;
-
+    
     @Override
     public void publishObjects() {
 
@@ -79,25 +82,23 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
         }
 
         // take a copy of enlisted adapters ... the JDO implementation of the PublishingService
-        // creates further entities which would be enlisted; taking copy of the map avoids ConcurrentModificationException
+        // creates further entities which would be enlisted; 
+        // taking copy of the map avoids ConcurrentModificationException
 
-        final Map<ObjectAdapter, PublishingChangeKind> changeKindByEnlistedAdapter = _Maps.newHashMap();
-        changeKindByEnlistedAdapter.putAll(changedObjectsServiceInternal.getChangeKindByEnlistedAdapter());
-
-        final Map<ObjectAdapter, PublishingChangeKind> changeKindByPublishedAdapter =
+        val changeKindByPublishedAdapter =
                 _Maps.filterKeys(
-                        changeKindByEnlistedAdapter,
-                        isPublished(),
+                        changedObjectsServiceInternal.getChangeKindByEnlistedAdapter(),
+                        this::isPublished,
                         HashMap::new);
 
         if(changeKindByPublishedAdapter.isEmpty()) {
             return;
         }
 
-        final int numberLoaded = metricsService.numberObjectsLoaded();
-        final int numberObjectPropertiesModified = changedObjectsServiceInternal.numberObjectPropertiesModified();
-        final PublishedObjects publishedObjects = newPublishedObjects(numberLoaded, numberObjectPropertiesModified,
-                changeKindByPublishedAdapter);
+        val publishedObjects = newPublishedObjects(
+                        metricsService.numberObjectsLoaded(), 
+                        changedObjectsServiceInternal.numberObjectPropertiesModified(), 
+                        changeKindByPublishedAdapter);
 
         for (PublisherService publisherService : publisherServices) {
             publisherService.publish(publishedObjects);
@@ -126,29 +127,19 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
 
     @Override
     public void publishAction(final Interaction.Execution<?,?> execution) {
-
-        if(isSuppressed()) {
-            return;
-        }
-
         publishToPublisherServices(execution);
     }
 
 
     @Override
     public void publishProperty(final Interaction.Execution<?,?> execution) {
-
-        if(isSuppressed()) {
-            return;
-        }
-
         publishToPublisherServices(execution);
     }
 
 
     private void publishToPublisherServices(final Interaction.Execution<?,?> execution) {
 
-        if(publisherServices == null || publisherServices.isEmpty()) {
+        if(isSuppressed()) {
             return;
         }
 
@@ -157,36 +148,28 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
         }
     }
 
-    private final ThreadLocal<Boolean> suppress = ThreadLocal.withInitial(()->false);
-
+    private final LongAdder suppressionRequestCounter = new LongAdder();
+    
     private boolean isSuppressed() {
-        try {
-            return suppress.get();
-        } finally {
-            suppress.remove();
-        }
+        return publisherServices == null 
+                || publisherServices.isEmpty() 
+                || suppressionRequestCounter.intValue() > 0;
     }
     
     @Override
     public <T> T withPublishingSuppressed(final Block<T> block) {
         try {
-            suppress.set(true);
+            suppressionRequestCounter.increment();
             return block.exec();
         } finally {
-            suppress.remove();
+            suppressionRequestCounter.decrement();
         }
     }
 
-
-    private static Predicate<ObjectAdapter> isPublished() {
-        return (final ObjectAdapter objectAdapter) -> {
-            final PublishedObjectFacet publishedObjectFacet =
-                    objectAdapter.getSpecification().getFacet(PublishedObjectFacet.class);
-            return publishedObjectFacet != null;
-        };
+    private boolean isPublished(ManagedObject objectAdapter) {
+        val publishedObjectFacet = objectAdapter.getSpecification().getFacet(PublishedObjectFacet.class);
+        return publishedObjectFacet != null;
     }
-
-
 
 
 }

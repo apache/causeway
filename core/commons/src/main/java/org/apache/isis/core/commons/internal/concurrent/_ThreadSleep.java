@@ -44,7 +44,7 @@ public class _ThreadSleep {
     public static void millis(long millis) {
         
         try {
-            Thread.sleep(1000);
+            Thread.sleep(millis);
         } catch (InterruptedException e) {
             log.warn("Interrupted!", e);
             // Restore interrupted state...

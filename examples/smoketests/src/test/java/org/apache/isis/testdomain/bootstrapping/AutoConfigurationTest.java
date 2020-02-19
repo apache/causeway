@@ -63,12 +63,10 @@ import lombok.val;
                 // "logging.level.ObjectSpecificationAbstract=TRACE"
         })
 @TestPropertySource({
-    //IsisPresets.DebugDiscovery
     IsisPresets.SilenceMetaModel,
     IsisPresets.SilenceProgrammingModel,
     IsisPresets.UseLog4j2Test,
 })
-//@Incubating("under construction, not tested with surefire yet")
 class AutoConfigurationTest {
     
     @Inject private ApplicationContext applicationContext;

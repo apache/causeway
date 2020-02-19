@@ -42,11 +42,15 @@ public class PublisherServiceForTesting implements PublisherService {
 
     @Override
     public void publish(Execution<?, ?> execution) {
+        System.err.println("!!! writing execution");
         kvStore.put(this, "execution", 999);
     }
 
     @Override
     public void publish(PublishedObjects publishedObjects) {
+        
+        System.err.println("!!! writing objects");
+        
         kvStore.put(this, "created", publishedObjects.getNumberCreated());
         kvStore.put(this, "deleted", publishedObjects.getNumberDeleted());
         kvStore.put(this, "loaded", publishedObjects.getNumberLoaded());
