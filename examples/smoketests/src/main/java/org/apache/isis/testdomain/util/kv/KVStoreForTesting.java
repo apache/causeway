@@ -24,6 +24,7 @@ import java.util.concurrent.CountDownLatch;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Singleton;
 
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,7 @@ import lombok.Value;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Service
+@Service @Singleton
 @Log4j2
 public class KVStoreForTesting {
     
@@ -72,6 +73,21 @@ public class KVStoreForTesting {
     public Optional<Object> get(Object caller, String keyStr) {
         return get(caller.getClass(), keyStr);
     }
+
+    // -- COUNTING
+    
+    public long incrementCounter(Class<?> callerType, String keyStr) {
+        val key = Key.of(callerType, keyStr);
+        return (long) keyValueMap.compute(key, (k, v) -> (v == null) ? 1L : 1L + (long)v);
+    }
+    
+    public long getCounter(Class<?> callerType, String keyStr) {
+        val key = Key.of(callerType, keyStr);
+        return (long) keyValueMap.getOrDefault(key, 0L);
+    }
+    
+    // --
+    
     
     public void clear(Class<?> callerType) {
         log.debug("clearing {}", callerType);
@@ -83,7 +99,7 @@ public class KVStoreForTesting {
         clear(caller.getClass());
     }
     
-    public long count(Class<?> callerType) {
+    public long countEntries(Class<?> callerType) {
         return keyValueMap.entrySet()
         .stream()
         .filter(entry->entry.getKey().getCaller().equals(callerType))
@@ -101,4 +117,5 @@ public class KVStoreForTesting {
         latchMap.put(callerType, latch);
         return AwaitableLatch.of(latch);
     }
+
 }

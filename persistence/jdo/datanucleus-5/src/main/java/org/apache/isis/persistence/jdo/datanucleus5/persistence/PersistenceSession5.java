@@ -686,9 +686,9 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     @Override
     public ObjectAdapter initializeEntity(final Persistable pojo) {
 
-        // need to do eagerly, because (if a viewModel then) a
-        // viewModel's #viewModelMemento might need to use services
-        serviceInjector.injectServicesInto(pojo);
+//        // need to do eagerly, because (if a viewModel then) a
+//        // viewModel's #viewModelMemento might need to use services
+//        serviceInjector.injectServicesInto(pojo); //redundant
 
         final RootOid originalOid = objectAdapterContext.createPersistentOrViewModelOid(pojo);
         final ObjectAdapter adapter = objectAdapterContext.recreatePojo(originalOid, pojo);

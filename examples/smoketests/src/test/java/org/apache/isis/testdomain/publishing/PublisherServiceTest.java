@@ -115,7 +115,7 @@ class PublisherServiceTest {
             repository.persist(book);
 
             // then - before the commit
-            assertEquals(0, kvStore.count(PublisherServiceForTesting.class));
+            assertEquals(0, kvStore.countEntries(PublisherServiceForTesting.class));
             
             return null;
         });

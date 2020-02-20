@@ -1,6 +1,6 @@
 package org.apache.isis.core.commons.internal.primitives;
 
-import java.util.OptionalInt;
+import java.util.OptionalLong;
 import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
@@ -15,7 +15,7 @@ import lombok.experimental.UtilityClass;
 /**
  * <h1>- internal use only -</h1>
  * <p>
- * Integer Utility
+ * Long Utility
  * </p>
  * <p>
  * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
@@ -25,23 +25,23 @@ import lombok.experimental.UtilityClass;
  * @since 2.0
  */
 @UtilityClass
-public class _Ints {
+public class _Longs {
     
     // -- RANGE
     
     @Value(staticConstructor = "of")
     public static class Bound {
-        int value;
+        long value;
         boolean inclusive;
-        public static @NonNull Bound inclusive(int value) { return of(value, true); }
-        public static @NonNull Bound exclusive(int value) { return of(value, true); }
+        public static @NonNull Bound inclusive(long value) { return of(value, true); }
+        public static @NonNull Bound exclusive(long value) { return of(value, true); }
     }
     
     @Value(staticConstructor = "of")
     public static class Range {
         @NonNull Bound lowerBound;
         @NonNull Bound upperBound;
-        public boolean contains(int value) {
+        public boolean contains(long value) {
             val isBelowLower = lowerBound.isInclusive() 
                     ? value < lowerBound.getValue() 
                     : value <= lowerBound.getValue();  
@@ -77,6 +77,7 @@ public class _Ints {
      * ({@code '\u005Cu002B'}) to indicate a positive value. The
      * resulting integer value is returned.
      *
+     *
      * <li>The radix is either smaller than
      * {@link java.lang.Character#MIN_RADIX} or
      * larger than {@link java.lang.Character#MAX_RADIX}.
@@ -95,105 +96,85 @@ public class _Ints {
      *                  representation to be parsed
      * @param      radix   the radix to be used while parsing {@code s}.
      * @param      onFailure on parsing failure consumes the failure message
-     * @return optionally the integer represented by the string argument in the specified radix
-     * 
-     */
-    public OptionalInt parseInt(final String s, final int radix, final Consumer<String> onFailure) {
-        final long parseResult = parseIntElseLongMaxValue(s, radix, onFailure);
-        if(isParseSuccess(parseResult)) {
-            return OptionalInt.of(Math.toIntExact(parseResult));
-        }
-        return OptionalInt.empty();
-    }
-    
-    // -- SHORTCUTS
-    
-    public OptionalInt parseInt(final String s, final int radix) {
-        return parseInt(s, radix, IGNORE_ERRORS);
-    }
-    
-    // -- LOW LEVEL HELPER
-    
-    private static boolean isParseSuccess(long value) {
-        return value!=Long.MAX_VALUE;
-    }
-
-    private static final Consumer<String> IGNORE_ERRORS = t->{};
-    
-    /**
+     * @return optionally the long represented by the string argument in the specified radix
      * @implNote Copied over from JDK's {@link Integer#parseInt(String)} to provide a variant 
      * with minimum potential heap pollution (does not produce stack-traces on parsing failures)
      */
-    private static long parseIntElseLongMaxValue(
-            @Nullable final String s, 
-            final int radix, 
-            final Consumer<String> onFailure) {
-        
-        requires(onFailure, "onFailure");
+    public OptionalLong parseLong(@Nullable final String s, final int radix, final Consumer<String> onFailure) {
+       requires(onFailure, "onFailure");
         
         if (s == null) {
             onFailure.accept("null");
-            return Long.MAX_VALUE;
+            OptionalLong.empty();
         }
 
         if (radix < Character.MIN_RADIX) {
-            onFailure.accept("radix " + radix +
-                                            " less than Character.MIN_RADIX");
-            return Long.MAX_VALUE;
+            onFailure.accept("radix " + radix + " less than Character.MIN_RADIX");
+            OptionalLong.empty();
         }
-
         if (radix > Character.MAX_RADIX) {
-            onFailure.accept("radix " + radix +
-                                            " greater than Character.MAX_RADIX");
-            return Long.MAX_VALUE;
+            onFailure.accept("radix " + radix + " greater than Character.MAX_RADIX");
+            OptionalLong.empty();
         }
 
+        long result = 0;
         boolean negative = false;
         int i = 0, len = s.length();
-        int limit = -Integer.MAX_VALUE;
+        long limit = -Long.MAX_VALUE;
+        long multmin;
+        int digit;
 
         if (len > 0) {
             char firstChar = s.charAt(0);
             if (firstChar < '0') { // Possible leading "+" or "-"
                 if (firstChar == '-') {
                     negative = true;
-                    limit = Integer.MIN_VALUE;
+                    limit = Long.MIN_VALUE;
                 } else if (firstChar != '+') {
                     onFailure.accept(s);
-                    return Long.MAX_VALUE;
+                    OptionalLong.empty();
                 }
-
-                if (len == 1) { // Cannot have lone "+" or "-"
+                if (len == 1) {// Cannot have lone "+" or "-"
                     onFailure.accept(s);
-                    return Long.MAX_VALUE;
+                    OptionalLong.empty();
                 }
                 i++;
             }
-            int multmin = limit / radix;
-            int result = 0;
+            multmin = limit / radix;
             while (i < len) {
                 // Accumulating negatively avoids surprises near MAX_VALUE
-                int digit = Character.digit(s.charAt(i++), radix);
-                if (digit < 0 || result < multmin) {
+                digit = Character.digit(s.charAt(i++),radix);
+                if (digit < 0) {
                     onFailure.accept(s);
-                    return Long.MAX_VALUE;
+                    OptionalLong.empty();
+                }
+                if (result < multmin) {
+                    onFailure.accept(s);
+                    OptionalLong.empty();
                 }
                 result *= radix;
                 if (result < limit + digit) {
                     onFailure.accept(s);
-                    return Long.MAX_VALUE;
+                    OptionalLong.empty();
                 }
                 result -= digit;
             }
-            val value = negative ? result : -result;
-            return value;
         } else {
             onFailure.accept(s);
-            return Long.MAX_VALUE;
+            OptionalLong.empty();
         }
+        return OptionalLong.of(negative ? result : -result);
     }
     
+    // -- SHORTCUTS
     
+    public OptionalLong parseLong(final String s, final int radix) {
+        return parseLong(s, radix, IGNORE_ERRORS);
+    }
+    
+    // -- HELPER
+
+    private static final Consumer<String> IGNORE_ERRORS = t->{};
     
     
 }

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.testdomain.jdo.entities;
 
+import javax.inject.Inject;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.Discriminator;
 import javax.jdo.annotations.Inheritance;
@@ -28,12 +29,16 @@ import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.testdomain.model.stereotypes.MyService;
+import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @PersistenceCapable
 @Inheritance(strategy=InheritanceStrategy.SUPERCLASS_TABLE)
@@ -44,8 +49,24 @@ import lombok.ToString;
         auditing = Auditing.ENABLED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(callSuper = true)
+@Log4j2
 public class JdoBook extends JdoProduct {
 
+    @Inject private KVStoreForTesting kvStore;
+    
+    // -- ENTITY SERVICE INJECTION TEST
+    private MyService myService;
+    @Inject 
+    public void setMyService(MyService myService) {
+        val count = kvStore.incrementCounter(JdoBook.class, "injection-count");
+        log.debug("INJECTION " + count);
+        this.myService = myService;
+    }
+    public boolean hasInjectionPointsResolved() {
+        return myService != null;
+    }
+    // --
+    
     @Override
     public String title() {
         return toString();

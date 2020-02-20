@@ -24,6 +24,8 @@ import java.util.function.Supplier;
 
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.primitives._Ints;
+import org.apache.isis.core.commons.internal.primitives._Longs;
 
 import lombok.experimental.UtilityClass;
 
@@ -40,8 +42,9 @@ import lombok.experimental.UtilityClass;
  * @since 2.0
  */
 @UtilityClass
+
 public final class _Assert {
-    
+
 
     // -- TRUE
 
@@ -54,7 +57,7 @@ public final class _Assert {
             fail(message, true, false);
         }
     }
-    
+
     public static void assertTrue(boolean condition, Supplier<String> lazyMessage) {
         if (!condition) {
             fail(lazyMessage.get(), true, false);
@@ -72,13 +75,13 @@ public final class _Assert {
             fail(message, false, true);
         }
     }
-    
+
     public static void assertFalse(boolean condition, Supplier<String> lazyMessage) {
         if (condition) {
             fail(lazyMessage.get(), true, false);
         }
     }
-    
+
     // -- NOT NULL
 
     public static void assertNotNull(Object object) {
@@ -90,13 +93,13 @@ public final class _Assert {
             fail(message, "not null", "null");
         }
     }
-    
+
     public static void assertNotNull(Object object, Supplier<String> lazyMessage) {
         if (object==null) {
             fail(lazyMessage.get(), "not null", "null");
         }
     }
-    
+
     /**
      * <em>Assert</em> that {@code expected} and {@code actual} are equal.
      * <p>If both are {@code null}, they are considered equal.
@@ -119,13 +122,39 @@ public final class _Assert {
             fail(message, left, right);
         }
     }
-    
+
     public static void assertEquals(Object left, Object right, Supplier<String> lazyMessage) {
         if (!Objects.equals(left, right)) {
             fail(lazyMessage.get(), left, right);
         }
     }
+
+    // -- RANGE CHECKS
+
+    public static void assertRangeContains(_Ints.Range range, int value, String message) {
+        if(!range.contains(value)) {
+            fail(message, range.toString(), value);
+        }
+    }
     
+    public static void assertRangeContains(_Ints.Range range, int value, Supplier<String> lazyMessage) {
+        if(!range.contains(value)) {
+            fail(lazyMessage.get(), range.toString(), value);
+        }
+    }
+
+    public static void assertRangeContains(_Longs.Range range, long value, String message) {
+        if(!range.contains(value)) {
+            fail(message, range.toString(), value);
+        }
+    }
+    
+    public static void assertRangeContains(_Longs.Range range, long value, Supplier<String> lazyMessage) {
+        if(!range.contains(value)) {
+            fail(lazyMessage.get(), range.toString(), value);
+        }
+    }
+
     // -- TYPE INSTANCE OF
 
     public static void assertTypeIsInstanceOf(Class<?> type, Class<?> requiredType) {
@@ -134,13 +163,13 @@ public final class _Assert {
                     "unexpected type: <%s> is not an instance of <%s> ", ""+type, ""+requiredType));
         }
     }
-    
+
     // -- HELPER
-    
+
     static String buildPrefix(String message) {
         return _Strings.isNotEmpty(message) ? message + " ==> " : "";
     }
-    
+
     private static void fail(String message, Object expected, Object actual) {
         throw _Exceptions.assertionError(
                 buildPrefix(message) 
