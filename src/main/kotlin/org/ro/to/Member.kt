@@ -28,7 +28,6 @@ data class Member(val id: String,
     }
 
     fun isReadOnly(): Boolean {
-        console.log("[Member.isReadOnly] $id disabledReason = '$disabledReason'")
         return !isReadWrite()
     }
 
