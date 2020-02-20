@@ -263,8 +263,8 @@ In the case of `HelloWorldModule`, it is extremely simple:
 package domainapp.modules.hello;
 ... imports omitted ...
 @Configuration
-@Import({})                         //<!--1-->
-@ComponentScan                      //<!--2-->
+@Import({})                         // <1>
+@ComponentScan                      // <2>
 public class HelloWorldModule {
 }
 ----
@@ -311,17 +311,17 @@ In the case of the helloworld starter app, the `AppManifest` looks like this:
 ----
 @Configuration
 @Import({
-        IsisModuleCoreRuntimeServices.class,                    //<!--1-->
-        IsisModuleSecurityShiro.class,                          //<!--2-->
-        IsisModuleJdoDataNucleus5.class,                        //<!--3-->
-        IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,     //<!--4-->
-        IsisModuleViewerWicketViewer.class,                     //<!--5-->
+        IsisModuleCoreRuntimeServices.class,                    // <1>
+        IsisModuleSecurityShiro.class,                          // <2>
+        IsisModuleJdoDataNucleus5.class,                        // <3>
+        IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,     // <4>
+        IsisModuleViewerWicketViewer.class,                     // <5>
 
-        IsisModuleTestingH2ConsoleUi.class,                     //<!--6-->
+        IsisModuleTestingH2ConsoleUi.class,                     // <6>
 
-        HelloWorldModule.class                                  //<!--7-->
+        HelloWorldModule.class                                  // <7>
 })
-@PropertySource(IsisPresets.NoTranslations)                     //<!--8-->
+@PropertySource(IsisPresets.NoTranslations)                     // <8>
 public class AppManifest {
 }
 ----
@@ -347,13 +347,13 @@ It is mostly boilerplate:
 ----
 @SpringBootApplication
 @Import({
-    AppManifest.class,                                          //<!--1-->
+    AppManifest.class,                                          // <1>
 })
 public class HelloWorldApp
             extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-        IsisPresets.prototyping();                              //<!--2-->
+        IsisPresets.prototyping();                              // <2>
         SpringApplication.run(
                 new Class[] { HelloWorldApp.class }, args);
     }

@@ -40,7 +40,7 @@ The API defined by `BookmarkService` is:
 ----
 include::refguide:applib-svc:example$services/bookmark/BookmarkService.java[tags="refguide"]
 ----
-<2> same as `lookup(Bookmark bookmark)`, but downcasts to the specified type.
+<.> same as `lookup(Bookmark bookmark)`, but downcasts to the specified type.
 
 
 The core framework provides a default implementation of this API, namely `o.a.i.core.metamodel.services.bookmarks.BookmarkServiceInternalDefault`

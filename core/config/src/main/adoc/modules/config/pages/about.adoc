@@ -102,13 +102,13 @@ For example, the xref:docs:starters:simpleapp.adoc[simpleapp starter app] projec
 ----
 @SpringBootApplication
 @Import({
-    AppManifest.class,                                          //<!--1-->
+    AppManifest.class,                                          // <1>
 })
 public class SimpleApp
             extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-        IsisPresets.prototyping();                              //<!--2-->
+        IsisPresets.prototyping();                              // <2>
         SpringApplication.run(
                 new Class[] { SimpleApp.class }, args);
     }
@@ -126,13 +126,13 @@ It looks like this:
 ----
 @Configuration
 @Import({
-        IsisModuleCoreRuntimeServices.class,                    //<!--1-->
-        IsisModuleSecurityShiro.class,                          //<!--2-->
-        IsisModuleJdoDataNucleus5.class,                        //<!--3-->
-        IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,     //<!--4-->
-        IsisModuleViewerWicketViewer.class,                     //<!--5-->
+        IsisModuleCoreRuntimeServices.class,                    // <1>
+        IsisModuleSecurityShiro.class,                          // <2>
+        IsisModuleJdoDataNucleus5.class,                        // <3>
+        IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,     // <4>
+        IsisModuleViewerWicketViewer.class,                     // <5>
         ...
-        ApplicationModule.class,                                //<!--6-->
+        ApplicationModule.class,                                // <6>
         ...
 })
 public class AppManifest {

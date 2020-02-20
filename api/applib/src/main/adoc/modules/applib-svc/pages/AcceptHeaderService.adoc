@@ -19,16 +19,15 @@ The API defined by the service is:
 ----
 include::refguide:applib-svc:example$services/acceptheader/AcceptHeaderService.java[tags=refguide]
 ----
+
 <.> returns the list of media types found in the HTTP Accept header.
 
 The intention is that this service only returns a list when the request is initiated through the xref:vro:ROOT:about.adoc[Restful Objects viewer].
 Otherwise the service will likely return `null`.
 
-
 == Implementation
 
 The default implementation is provided by `o.a.i.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest`, and is xref:refguide:applib-ant:RequestScoped.adoc[`@RequestScoped`].
-
 
 == Usage
 

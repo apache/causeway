@@ -42,14 +42,16 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 // tag::refguide[]
 public interface AuditerService {
 
-    boolean isEnabled();
+    boolean isEnabled();                                            // <1>
 
     void audit(
-            final UUID interactionId, final int sequence,
-            final String targetClassName, final Bookmark target,
-            final String memberIdentifier, final String propertyName,
-            final String preValue, final String postValue,
-            final String user, final Timestamp timestamp);
+            final UUID interactionId, final int sequence,           // <2>
+            final String targetClassName,
+            final Bookmark target,                                  // <3>
+            final String memberIdentifier,
+            final String propertyName,                              // <4>
+            final String preValue, final String postValue,          // <5>
+            final String user, final Timestamp timestamp);          // <6>
 
 }
 // end::refguide[]

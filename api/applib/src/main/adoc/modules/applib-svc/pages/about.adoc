@@ -4,11 +4,7 @@
 
 
 
-This guide documents Apache Isis' domain services, both those that act as an API (implemented by the framework for
-your domain objects to call), and those domain services that act as an SPI (implemented by your domain application and
-which are called by the framework).
-
-
+This guide documents Apache Isis' domain services, both those that act as an API (implemented by the framework for your domain objects to call), and those domain services that act as an SPI (implemented by your domain application and which are called by the framework).
 
 == Types of Domain Service
 
@@ -40,21 +36,15 @@ include::refguide:applib-svc:partial$metadata-api.adoc[leveloffset=+2]
 include::refguide:applib-svc:partial$persistence-layer-api.adoc[leveloffset=+2]
 include::refguide:applib-svc:partial$persistence-layer-spi.adoc[leveloffset=+2]
 
-
-
 == Public API vs Internal Services
 
 The vast majority of Apache Isis' domain services are defined in Apache Isis' applib (`o.a.i.core:isis-applib` module) as stable, public classes.
 Importantly, this also minimizes the coupling between your code and Apache Isis, allowing you to easily mock out these services in your unit tests.
 
-
 The framework also defines a number of "internal" services.
 These are not part of the framework's formal API, in that they use classes that are outside of the applib.
 These internal framework services should be thought of as part of the internal design of the framework, and are liable to change from release to release.
 The internal framework services are documented in the xref:runtime-services:ROOT:about.adoc[Framework Internal Services] guide.
-
-
-
 
 == Using the services
 
@@ -81,15 +71,11 @@ public class Customer {
 ----
 <1> Service automatically injected by the framework.
 
-For objects that are already persisted, the service is automatically injected just after the object is rehydrated by
-JDO/DataNucleus.
+For objects that are already persisted, the service is automatically injected just after the object is rehydrated by JDO/DataNucleus.
 
 For transient objects (instantiated programmatically), the xref:refguide:applib-svc:FactoryService.adoc[`FactoryService#instantiate(...)`] or the xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService#instantiate(...)`]'s will automatically inject the services.
 
 Alternatively the object can be instantiated simply using `new`, then services injected using xref:refguide:applib-svc:ServiceRegistry.adoc[`ServiceRegistry`]'s ``injectServicesInto(...)`` method.
-
-
-
 
 == Overriding the services
 
@@ -137,7 +123,6 @@ public class MyLocaleProvider implements LocaleProvider { /* ... */ }
 
 It's not necessary to annotate `@Named` or `@Qualifier`, but could be considered good practice.
 
-
 == Command and Events
 
 A good number of the domain services manage the execution of action invocations/property edits, along with the state of domain objects that are modified as a result of these.
@@ -151,8 +136,7 @@ image::reference-services/commands-and-events.png[width="960px",link="{imagesdir
 
 To explain:
 
-* the (request-scoped) xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`] captures the user's intention to
-invoke an action or edit a property; this is held by the `Command` object.
+* the (request-scoped) xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`] captures the user's intention to invoke an action or edit a property; this is held by the `Command` object.
 
 * if a xref:refguide:applib-svc:CommandService.adoc[`CommandService`] has been configured, then this will be used to create the `Command` object implementation, generally so that it can then also be persisted.
 +
@@ -171,7 +155,8 @@ Whether this occurs depends on whether the action/property has been annotated (u
 Metrics as to which objects are merely loaded into memory are also captured using the xref:refguide:applib-svc:MetricsService.adoc[`MetricsService`] (not shown on the diagram).
 
 * At the end of each execution, details of that execution are published through the (internal)
-xref:runtime-services:ROOT:spi/PublisherServiceInternal.adoc[`PublisherServiceInternal`] domain service.  This is only done for actions/properties annotated appropriate (with xref:refguide:applib-ant:Action.adoc#publishing[`@Action#publishing()`] or xref:refguide:applib-ant:Property.adoc#publishing[`@Property#publishing()`]).
+xref:runtime-services:ROOT:spi/PublisherServiceInternal.adoc[`PublisherServiceInternal`] domain service.
+This is only done for actions/properties annotated appropriate (with xref:refguide:applib-ant:Action.adoc#publishing[`@Action#publishing()`] or xref:refguide:applib-ant:Property.adoc#publishing[`@Property#publishing()`]).
 +
 The internal service delegates in turn to any registered xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`]s (there may be more than one).
 

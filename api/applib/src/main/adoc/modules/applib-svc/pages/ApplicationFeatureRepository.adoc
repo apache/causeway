@@ -6,25 +6,25 @@
 
 The `ApplicationFeatureRepository` provides the access to string representations of the packages, classes and class members (collectively: "application features") of the domain classes within the Apache Isis' internal metamodel.
 
-== API & Implementation
+== API
 
 The API defined by the service is:
 
 [source,java]
 ----
-include::refguide:applib-svc:example$services/appfeat/ApplicationFeatureRepository.java[tags="refguide"]
+include::refguide:applib-svc:example$services/appfeat/ApplicationFeatureRepository.java[tags=refguide]
 ----
 
 where `ApplicationMemberType` in turn is:
 
 [source,java]
 ----
-include::refguide:applib-svc:example$services/appfeat/ApplicationMemberType.java[tags=*]
+include::refguide:applib-svc:example$services/appfeat/ApplicationMemberType.java[tags=refguide]
 ----
 
 These methods are designed primarily to return lists of strings for use in drop-downs.
 
-== Implementation & Config Properties
+== Implementation
 
 The default implementation of this domain service is `o.a.i.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault`.
 

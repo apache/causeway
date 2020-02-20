@@ -397,10 +397,10 @@ In the case of `SimpleModule`, it consists of:
 package domainapp.modules.simple;
 ... imports omitted ...
 @Configuration
-@Import({})                                                                 //<!--1-->
-@ComponentScan                                                              //<!--2-->
+@Import({})                                                                 // <1>
+@ComponentScan                                                              // <2>
 public class SimpleModule
-                implements ModuleWithFixtures {                             //<!--3-->
+                implements ModuleWithFixtures {                             // <3>
 
     @Override
     public FixtureScript getTeardownFixture() {
@@ -412,7 +412,7 @@ public class SimpleModule
         };
     }
 
-    public static class PropertyDomainEvent<S,T>                            //<!--4-->
+    public static class PropertyDomainEvent<S,T>                            // <4>
     extends org.apache.isis.applib.events.domain.PropertyDomainEvent<S,T> {}
 
     public static class CollectionDomainEvent<S,T>
@@ -421,7 +421,7 @@ public class SimpleModule
     public static class ActionDomainEvent<S> extends
     org.apache.isis.applib.events.domain.ActionDomainEvent<S> {}
 
-    @ConfigurationProperties("app.simple-module")                           //<!--5-->
+    @ConfigurationProperties("app.simple-module")                           // <5>
     @Data
     @Validated
     public static class Configuration {
@@ -525,22 +525,22 @@ The `SimpleModuleIntegTestAbstract` is the superclass of all integration tests i
 .SimpleModuleIntegTestAbstract.java
 ----
 @SpringBootTest(
-        classes = SimpleModuleIntegTestAbstract.AppManifest.class   //<!--1-->
+        classes = SimpleModuleIntegTestAbstract.AppManifest.class   // <1>
 )
-@TestPropertySource({                                               //<!--2-->
-        IsisPresets.H2InMemory_withUniqueSchema,                    //<!--3-->
-        IsisPresets.DataNucleusAutoCreate,                          //<!--4-->
-        IsisPresets.UseLog4j2Test,                                  //<!--5-->
+@TestPropertySource({                                               // <2>
+        IsisPresets.H2InMemory_withUniqueSchema,                    // <3>
+        IsisPresets.DataNucleusAutoCreate,                          // <4>
+        IsisPresets.UseLog4j2Test,                                  // <5>
 })
 public abstract class SimpleModuleIntegTestAbstract
-        extends IsisIntegrationTestAbstractWithFixtures {           //<!--6-->
+        extends IsisIntegrationTestAbstractWithFixtures {           // <6>
 
     @Configuration
     @Import({
-        IsisModuleCoreRuntimeServices.class,                        //<!--7-->
+        IsisModuleCoreRuntimeServices.class,                        // <7>
         IsisModuleSecurityBypass.class,
         IsisModuleJdoDataNucleus5.class,
-        IsisModuleTestingFixturesApplib.class,                      //<!--8-->
+        IsisModuleTestingFixturesApplib.class,                      // <8>
 
         SimpleModule.class
     })
@@ -642,22 +642,22 @@ It looks like this:
 ----
 @Configuration
 @Import({
-        IsisModuleCoreRuntimeServices.class,                    //<!--1-->
-        IsisModuleSecurityShiro.class,                          //<!--2-->
-        IsisModuleJdoDataNucleus5.class,                        //<!--3-->
-        IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,     //<!--4-->
-        IsisModuleViewerWicketViewer.class,                     //<!--5-->
+        IsisModuleCoreRuntimeServices.class,                    // <1>
+        IsisModuleSecurityShiro.class,                          // <2>
+        IsisModuleJdoDataNucleus5.class,                        // <3>
+        IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,     // <4>
+        IsisModuleViewerWicketViewer.class,                     // <5>
 
-        IsisModuleTestingH2ConsoleUi.class,                     //<!--6-->
-        IsisModuleTestingFixturesApplib.class,                  //<!--7-->
+        IsisModuleTestingH2ConsoleUi.class,                     // <6>
+        IsisModuleTestingFixturesApplib.class,                  // <7>
 
-        IsisModuleExtFlywayImpl.class,                          //<!--8-->
+        IsisModuleExtFlywayImpl.class,                          // <8>
 
-        ApplicationModule.class,                                //<!--9-->
+        ApplicationModule.class,                                // <9>
 
-        DomainAppDemo.class                                     //<!--10-->
+        DomainAppDemo.class                                     // <10>
 })
-@PropertySource(IsisPresets.NoTranslations)                     //<!--11-->
+@PropertySource(IsisPresets.NoTranslations)                     // <11>
 @PropertySource(IsisPresets.DebugDiscovery),
 public class AppManifest {
 }
@@ -688,13 +688,13 @@ It is mostly boilerplate:
 ----
 @SpringBootApplication
 @Import({
-    AppManifest.class,                                          //<!--1-->
+    AppManifest.class,                                          // <1>
 })
 public class SimpleApp
             extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-        IsisPresets.prototyping();                              //<!--2-->
+        IsisPresets.prototyping();                              // <2>
         SpringApplication.run(
                 new Class[] { SimpleApp.class }, args);
     }
