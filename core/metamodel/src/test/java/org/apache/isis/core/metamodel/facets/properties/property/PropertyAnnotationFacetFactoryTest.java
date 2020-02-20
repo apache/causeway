@@ -455,75 +455,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
         }
 
     }
-    
-    public static class Editing_honoringClasslevelDefault extends PropertyAnnotationFacetFactoryTest {
-
-        @Test
-        public void withClassLevelAnnotation_enabling() {
-
-            @DomainObject(
-                    nature=Nature.INMEMORY_ENTITY, 
-                    editing=org.apache.isis.applib.annotation.Editing.ENABLED)
-            class Customer {
-                @Property(
-                     // should disable editing regardless of class-level
-                        editing = org.apache.isis.applib.annotation.Editing.DISABLED, 
-                        editingDisabledReason = "you cannot edit the name property"
-                        )
-                @Getter @Setter private String name;
-            }
-
-            // given
-            val customerClass = Customer.class;
-            propertyMethod = findMethod(customerClass, "getName");
-
-            // when
-            val processMethodContext = new FacetFactory.ProcessMethodContext(customerClass, null,
-                    propertyMethod, mockMethodRemover, facetedMethod);
-            processEditing(facetFactory, processMethodContext);
-
-            // then
-            val disabledFacet = facetedMethod.getFacet(DisabledFacet.class);
-            assertNotNull(disabledFacet);
-            assertTrue(disabledFacet instanceof DisabledFacetForPropertyAnnotation);
-            val disabledFacetImpl = (DisabledFacetForPropertyAnnotation) disabledFacet;
-            assertThat(disabledFacet.where(), is(Where.EVERYWHERE));
-            assertThat(disabledFacetImpl.getReason(), is("you cannot edit the name property"));
-        }
-        
-        @Test
-        public void withClassLevelAnnotation_disabling() {
-
-            @DomainObject(
-                    nature=Nature.INMEMORY_ENTITY, 
-                    editing=org.apache.isis.applib.annotation.Editing.DISABLED,
-                    editingDisabledReason = "you cannot edit this object")
-            class Customer {
-                @Property(
-                     // should enable editing regardless of class-level
-                        editing = org.apache.isis.applib.annotation.Editing.ENABLED)
-                @Getter @Setter private String name; 
-            }
-
-            // given
-            val customerClass = Customer.class;
-            propertyMethod = findMethod(customerClass, "getName");
-
-            // when
-            val processMethodContext = new FacetFactory.ProcessMethodContext(customerClass, null,
-                    propertyMethod, mockMethodRemover, facetedMethod);
-            processEditing(facetFactory, processMethodContext);
-
-            // then
-            val disabledFacet = facetedMethod.getFacet(DisabledFacet.class);
-            assertNotNull(disabledFacet);
-            assertTrue(disabledFacet instanceof DisabledFacetForPropertyAnnotation);
-            val disabledFacetImpl = (DisabledFacetForPropertyAnnotation) disabledFacet;
-            assertThat(disabledFacet.where(), is(Where.EVERYWHERE));
-            assertThat(disabledFacetImpl.getReason(), is("you cannot edit the name property"));
-        }
-        
-    }
+   
 
     public static class Editing extends PropertyAnnotationFacetFactoryTest {
 
