@@ -34,8 +34,8 @@ import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.extensions.restclient.ResponseDigest;
 import org.apache.isis.extensions.restclient.RestfulClient;
 import org.apache.isis.extensions.restclient.RestfulClientConfig;
-import org.apache.isis.testdomain.jdo.JdoBook;
 import org.apache.isis.testdomain.jdo.JdoBookDto;
+import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.ldap.LdapConstants;
 
 import lombok.val;

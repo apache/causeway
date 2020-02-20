@@ -33,6 +33,9 @@ import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
+import org.apache.isis.testdomain.jdo.entities.JdoBook;
+import org.apache.isis.testdomain.jdo.entities.JdoInventory;
+import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 import org.apache.isis.testdomain.ldap.LdapConstants;
 
 import lombok.val;

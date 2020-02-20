@@ -31,8 +31,8 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
-import org.apache.isis.testdomain.jdo.JdoProduct;
-import org.apache.isis.testdomain.jdo.JdoProductComment;
+import org.apache.isis.testdomain.jdo.entities.JdoProduct;
+import org.apache.isis.testdomain.jdo.entities.JdoProductComment;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.val;

@@ -16,41 +16,46 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.jpa;
+package org.apache.isis.testdomain.jpa.entities;
 
-import java.util.Set;
+import java.sql.Timestamp;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.mixins.timestamp.Timestampable;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
-//@PersistenceCapable(identityType=IdentityType.DATASTORE, schema = "testdomain")
-//@DatastoreIdentity(strategy=IdGeneratorStrategy.IDENTITY, column="id")
-//@Version(strategy= VersionStrategy.DATE_TIME, column="version")
-@DomainObject(auditing = Auditing.ENABLED)
-@DomainObjectLayout()  // causes UI events to be triggered
-@NoArgsConstructor @AllArgsConstructor(staticName = "of") @ToString
-public class JpaInventory {
+@DomainObject(
+        objectType = "testdomain.jpa.ProductComment")
+public class JpaProductComment implements Timestampable {
 
-    public String title() {
-        return toString();
-    }
-
-    @Property
-    @Getter @Setter //@Column(allowsNull = "true")
-    private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Getter @Setter @Column(name = "id")
+    private Long id;
+    
+    @Property @Column(nullable = false)
+    @Getter @Setter private JpaProduct product;
 
     @Property
-    @Getter @Setter //@Column(allowsNull = "true")
-    private Set<JpaProduct> products;
+    @Getter @Setter private String comment;
+
+    // -- TIMESTAMPABLE
+    
+    @Property
+    @Getter @Setter private String updatedBy;
+    
+    @Property
+    @Getter @Setter private Timestamp updatedAt;
+
+    
 }

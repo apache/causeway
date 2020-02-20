@@ -14,6 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.isis.core.commons.internal.base._Bytes;
 import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.testdomain.jdo.entities.JdoBook;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -16,9 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.jpa;
+package org.apache.isis.testdomain.jdo.entities;
 
-import javax.persistence.Entity;
+import javax.jdo.annotations.Column;
+import javax.jdo.annotations.Discriminator;
+import javax.jdo.annotations.Inheritance;
+import javax.jdo.annotations.InheritanceStrategy;
+import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -29,19 +33,22 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Entity
-//@Inheritance(strategy=InheritanceStrategy.SUPERCLASS_TABLE)
-//@Discriminator(value="Book")
-@DomainObject(publishing=Publishing.ENABLED, auditing = Auditing.ENABLED)
+@PersistenceCapable
+@Inheritance(strategy=InheritanceStrategy.SUPERCLASS_TABLE)
+@Discriminator(value="Book")
+@DomainObject(
+        objectType = "testdomain.jdo.Book",
+        publishing=Publishing.ENABLED, 
+        auditing = Auditing.ENABLED)
 @ToString(callSuper = true)
-public class JpaBook extends JpaProduct {
+public class JdoBook extends JdoProduct {
 
     @Override
     public String title() {
         return toString();
     }
 
-    public static JpaBook of(
+    public static JdoBook of(
             String name, 
             String description, 
             double price, 
@@ -49,24 +56,24 @@ public class JpaBook extends JpaProduct {
             String isbn, 
             String publisher) {
 
-        return new JpaBook(name, description, price, author, isbn, publisher);
+        return new JdoBook(name, description, price, author, isbn, publisher);
     }
 
     @Property
-    @Getter @Setter //@Column(allowsNull = "true")
+    @Getter @Setter @Column(allowsNull = "true")
     private String author;
 
     @Property
-    @Getter @Setter //@Column(allowsNull = "true")
+    @Getter @Setter @Column(allowsNull = "true")
     private String isbn;
 
     @Property
-    @Getter @Setter //@Column(allowsNull = "true")
+    @Getter @Setter @Column(allowsNull = "true")
     private String publisher;
 
     // -- CONSTRUCTOR
 
-    private JpaBook(
+    private JdoBook(
             String name, 
             String description, 
             double price, 

@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -61,6 +62,7 @@ import lombok.val;
     IsisPresets.SilenceMetaModel,
     IsisPresets.SilenceProgrammingModel
 })
+@DirtiesContext // because of the temporary installed 'bad' domain
 //@Incubating("does not work, when executed in sequence with other smoketests")
 class DomainModelTest_usingBadDomain {
     

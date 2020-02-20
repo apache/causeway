@@ -16,13 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.jdo;
+package org.apache.isis.testdomain.jpa.entities;
 
-import javax.jdo.annotations.Column;
-import javax.jdo.annotations.Discriminator;
-import javax.jdo.annotations.Inheritance;
-import javax.jdo.annotations.InheritanceStrategy;
-import javax.jdo.annotations.PersistenceCapable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 
 import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -33,19 +30,22 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@PersistenceCapable
-@Inheritance(strategy=InheritanceStrategy.SUPERCLASS_TABLE)
-@Discriminator(value="Book")
-@DomainObject(publishing=Publishing.ENABLED, auditing = Auditing.ENABLED)
+@Entity
+//@Inheritance(strategy=InheritanceStrategy.SUPERCLASS_TABLE)
+//@Discriminator(value="Book")
+@DomainObject(
+        objectType = "testdomain.jpa.Book",
+        publishing=Publishing.ENABLED, 
+        auditing = Auditing.ENABLED)
 @ToString(callSuper = true)
-public class JdoBook extends JdoProduct {
+public class JpaBook extends JpaProduct {
 
     @Override
     public String title() {
         return toString();
     }
 
-    public static JdoBook of(
+    public static JpaBook of(
             String name, 
             String description, 
             double price, 
@@ -53,24 +53,24 @@ public class JdoBook extends JdoProduct {
             String isbn, 
             String publisher) {
 
-        return new JdoBook(name, description, price, author, isbn, publisher);
+        return new JpaBook(name, description, price, author, isbn, publisher);
     }
 
     @Property
-    @Getter @Setter @Column(allowsNull = "true")
+    @Getter @Setter @Column(nullable = true)
     private String author;
 
     @Property
-    @Getter @Setter @Column(allowsNull = "true")
+    @Getter @Setter @Column(nullable = true)
     private String isbn;
 
     @Property
-    @Getter @Setter @Column(allowsNull = "true")
+    @Getter @Setter @Column(nullable = true)
     private String publisher;
 
     // -- CONSTRUCTOR
 
-    private JdoBook(
+    private JpaBook(
             String name, 
             String description, 
             double price, 
@@ -78,7 +78,7 @@ public class JdoBook extends JdoProduct {
             String isbn, 
             String publisher) {
 
-        super(name, description, price, /*comments*/null);
+        super(/*id*/ null, name, description, price, /*comments*/null);
         this.author = author;
         this.isbn = isbn;
         this.publisher = publisher;

@@ -33,6 +33,9 @@ import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
+import org.apache.isis.testdomain.jpa.entities.JpaBook;
+import org.apache.isis.testdomain.jpa.entities.JpaInventory;
+import org.apache.isis.testdomain.jpa.entities.JpaProduct;
 import org.apache.isis.testdomain.ldap.LdapConstants;
 
 import lombok.val;

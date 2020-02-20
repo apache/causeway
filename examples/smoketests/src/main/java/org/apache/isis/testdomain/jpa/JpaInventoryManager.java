@@ -26,6 +26,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.domain.DomainObjectList.ActionDomainEvent;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.testdomain.jpa.entities.JpaProduct;
 
 @ViewModel
 public class JpaInventoryManager {

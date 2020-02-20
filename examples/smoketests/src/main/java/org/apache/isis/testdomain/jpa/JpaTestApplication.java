@@ -20,7 +20,7 @@ package org.apache.isis.testdomain.jpa;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-//@SpringBootApplication(scanBasePackageClasses= {JpaTestDomainModule.class})
+@SpringBootApplication(scanBasePackageClasses= {JpaTestDomainModule.class})
 @Deprecated
 public class JpaTestApplication {
 

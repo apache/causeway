@@ -16,37 +16,44 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.jpa;
+package org.apache.isis.testdomain.jpa.entities;
 
-import java.sql.Timestamp;
+import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
+import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.mixins.timestamp.Timestampable;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
+//@PersistenceCapable(identityType=IdentityType.DATASTORE, schema = "testdomain")
 //@DatastoreIdentity(strategy=IdGeneratorStrategy.IDENTITY, column="id")
-@DomainObject
-public class JpaProductComment implements Timestampable {
-    
-    @Property //@Column(allowsNull = "false")
-    @Getter @Setter private JpaProduct product;
+//@Version(strategy= VersionStrategy.DATE_TIME, column="version")
+@DomainObject(
+        objectType = "testdomain.jdo.Inventory",
+        auditing = Auditing.ENABLED)
+@DomainObjectLayout()  // causes UI events to be triggered
+@NoArgsConstructor @AllArgsConstructor(staticName = "of") @ToString
+public class JpaInventory {
+
+    public String title() {
+        return toString();
+    }
 
     @Property
-    @Getter @Setter private String comment;
+    @Getter @Setter @Column(nullable = true)
+    private String name;
 
-    // -- TIMESTAMPABLE
-    
     @Property
-    @Getter @Setter private String updatedBy;
-    
-    @Property
-    @Getter @Setter private Timestamp updatedAt;
-
-    
+    @Getter @Setter @Column(nullable = true)
+    private Set<JpaProduct> products;
 }

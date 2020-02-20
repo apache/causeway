@@ -16,19 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.jdo;
+package org.apache.isis.testdomain.jpa.entities;
 
 import java.util.List;
 
-import javax.jdo.annotations.Column;
-import javax.jdo.annotations.DatastoreIdentity;
-import javax.jdo.annotations.Discriminator;
-import javax.jdo.annotations.DiscriminatorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.Inheritance;
-import javax.jdo.annotations.InheritanceStrategy;
-import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -41,22 +38,27 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@PersistenceCapable(identityType=IdentityType.DATASTORE, schema = "testdomain")
-@Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
-@Discriminator(strategy=DiscriminatorStrategy.VALUE_MAP, value="Product")
-@DatastoreIdentity(
-        strategy=javax.jdo.annotations.IdGeneratorStrategy.INCREMENT,
-        column="id")
-@DomainObject
+@Entity
+//@PersistenceCapable(identityType=IdentityType.DATASTORE, schema = "testdomain")
+//@Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
+//@Discriminator(strategy=DiscriminatorStrategy.VALUE_MAP, value="Product")
+@DomainObject(
+        objectType = "testdomain.jpa.Product"
+        )
 @AllArgsConstructor(access = AccessLevel.PROTECTED) @ToString
-public class JdoProduct {
+public class JpaProduct {
 
     public String title() {
         return toString();
     }
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Getter @Setter @Column(name = "id")
+    private Long id;
 
     @Property(editing = Editing.DISABLED) // used for an async rule check test
-    @Getter @Setter @Column(allowsNull = "true")
+    @Getter @Setter @Column(nullable = true)
     private String name;
 //    public void setName(String name) {
 //        System.err.println("!!! setting name " + name);
@@ -64,16 +66,16 @@ public class JdoProduct {
 //    }
 
     @Property
-    @Getter @Setter @Column(allowsNull = "true")
+    @Getter @Setter @Column(nullable = true)
     private String description;
 
     @Property
-    @Getter @Setter @Column(allowsNull = "false")
+    @Getter @Setter @Column(nullable = false)
     private double price;
     
     @Collection 
-    @Persistent(mappedBy="product") @Column(allowsNull = "true") 
+    @Persistent(mappedBy="product") @Column(nullable = true) 
     @Getter @Setter 
-    private List<JdoProductComment> comments;
+    private List<JpaProductComment> comments;
 
 }
