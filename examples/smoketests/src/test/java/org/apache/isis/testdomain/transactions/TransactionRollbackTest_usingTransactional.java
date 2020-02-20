@@ -35,7 +35,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
-import org.apache.isis.testdomain.jdo.Book;
+import org.apache.isis.testdomain.jdo.JdoBook;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
@@ -67,12 +67,12 @@ class TransactionRollbackTest_usingTransactional {
     void happyCaseTx_shouldCommit() {
         
         // expected pre condition
-        assertEquals(0, repository.allInstances(Book.class).size());
+        assertEquals(0, repository.allInstances(JdoBook.class).size());
             
         fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
         
         // expected post condition
-        assertEquals(1, repository.allInstances(Book.class).size());
+        assertEquals(1, repository.allInstances(JdoBook.class).size());
         
     }
     
@@ -80,7 +80,7 @@ class TransactionRollbackTest_usingTransactional {
     void previousTest_shouldHaveBeenRolledBack() {
         
         // expected condition
-        assertEquals(0, repository.allInstances(Book.class).size());
+        assertEquals(0, repository.allInstances(JdoBook.class).size());
     }
 
 }

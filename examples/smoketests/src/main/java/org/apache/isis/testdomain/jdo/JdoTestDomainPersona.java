@@ -48,13 +48,13 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
                 @Override
                 protected void execute(ExecutionContext ec) {
 
-                    repository.allInstances(Inventory.class)
+                    repository.allInstances(JdoInventory.class)
                     .forEach(repository::remove);
 
-                    repository.allInstances(Book.class)
+                    repository.allInstances(JdoBook.class)
                     .forEach(repository::remove);
 
-                    repository.allInstances(Product.class)
+                    repository.allInstances(JdoProduct.class)
                     .forEach(repository::remove);
 
                 }
@@ -67,19 +67,19 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
 
     InventoryWith1Book {
         @Override
-        public BuilderScriptWithResult<Inventory> builder() {
-            return new BuilderScriptWithResult<Inventory>() {
+        public BuilderScriptWithResult<JdoInventory> builder() {
+            return new BuilderScriptWithResult<JdoInventory>() {
 
                 @Override
-                protected Inventory buildResult(ExecutionContext ec) {
+                protected JdoInventory buildResult(ExecutionContext ec) {
 
-                    val products = new HashSet<Product>();
+                    val products = new HashSet<JdoProduct>();
 
-                    products.add(Book.of(
+                    products.add(JdoBook.of(
                             "Sample Book", "A sample book for testing.", 99.,
                             "Sample Author", "Sample ISBN", "Sample Publisher"));
 
-                    val inventory = Inventory.of("Sample Inventory", products);
+                    val inventory = JdoInventory.of("Sample Inventory", products);
                     repository.persist(inventory);
                     
                     return inventory;

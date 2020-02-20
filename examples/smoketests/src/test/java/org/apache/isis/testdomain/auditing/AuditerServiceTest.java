@@ -46,7 +46,7 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
-import org.apache.isis.testdomain.jdo.Book;
+import org.apache.isis.testdomain.jdo.JdoBook;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
@@ -97,7 +97,7 @@ class AuditerServiceTest {
     void auditerService_shouldBeAwareOfInventoryChanges() {
 
         // given
-        val books = repository.allInstances(Book.class);
+        val books = repository.allInstances(JdoBook.class);
         assertEquals(1, books.size());
         val book = books.listIterator().next();
         
@@ -126,14 +126,14 @@ class AuditerServiceTest {
             throws InterruptedException, ExecutionException, TimeoutException {
 
         // given
-        val books = repository.allInstances(Book.class);
+        val books = repository.allInstances(JdoBook.class);
         assertEquals(1, books.size());
         val book = books.listIterator().next();
         kvStore.clear(AuditerServiceForTesting.class);
 
         // when - running within its own background task
         val future = wrapper.async(book, ExecutionMode.SKIP_RULES) // don't enforce rules for this test
-        .run(Book::setName, "Book #2");
+        .run(JdoBook::setName, "Book #2");
 
         future.get(1000, TimeUnit.SECONDS);
         
@@ -147,7 +147,7 @@ class AuditerServiceTest {
             throws InterruptedException, ExecutionException, TimeoutException {
 
         // given
-        val books = repository.allInstances(Book.class);
+        val books = repository.allInstances(JdoBook.class);
         assertEquals(1, books.size());
         val book = books.listIterator().next();
         kvStore.clear(AuditerServiceForTesting.class);
@@ -156,7 +156,7 @@ class AuditerServiceTest {
         assertThrows(DisabledException.class, ()->{
         
             val future = wrapper.async(book, ExecutionMode.EXECUTE)
-                    .run(Book::setName, "Book #2");
+                    .run(JdoBook::setName, "Book #2");
 
             future.get(1000, TimeUnit.SECONDS);
             

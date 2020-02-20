@@ -28,7 +28,7 @@ import org.apache.isis.applib.domain.DomainObjectList.ActionDomainEvent;
 import org.apache.isis.applib.services.repository.RepositoryService;
 
 @ViewModel
-public class InventoryManager {
+public class JdoInventoryManager {
 
     @Inject private RepositoryService repository;
     
@@ -37,7 +37,7 @@ public class InventoryManager {
     public static class UpdateProductPriceEvent extends ActionDomainEvent {}
 
     @Action(domainEvent = UpdateProductPriceEvent.class)
-    public Product updateProductPrice(Product product, double newPrice) {
+    public JdoProduct updateProductPrice(JdoProduct product, double newPrice) {
         product.setPrice(newPrice);
         return product;
     }
@@ -50,8 +50,8 @@ public class InventoryManager {
     }
     
     @Action
-    public List<Product> listAllProducts() {
-        return repository.allInstances(Product.class);
+    public List<JdoProduct> listAllProducts() {
+        return repository.allInstances(JdoProduct.class);
     }
 
     

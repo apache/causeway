@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @XmlRootElement(name = "book")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
-public class BookDto {
+public class JdoBookDto {
 
     private String name;
     private String description;
@@ -33,8 +33,8 @@ public class BookDto {
     private String isbn;
     private String publisher;
     
-    public static BookDto from(Book book) {
-        return BookDto.builder()
+    public static JdoBookDto from(JdoBook book) {
+        return JdoBookDto.builder()
         .author(book.getAuthor())
         .description(book.getDescription())
         .isbn(book.getIsbn())
@@ -44,13 +44,13 @@ public class BookDto {
         .build();
     }
    
-    public Book toBook() {
-       return Book.of(this.getName(), this.getDescription(), this.getPrice(), 
+    public JdoBook toBook() {
+       return JdoBook.of(this.getName(), this.getDescription(), this.getPrice(), 
                 this.getAuthor(), this.getIsbn(), this.getPublisher());   
     }
 
     public String encode() throws JAXBException {
-        JAXBContext jaxbContext = JAXBContext.newInstance(BookDto.class);
+        JAXBContext jaxbContext = JAXBContext.newInstance(JdoBookDto.class);
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
         
         StringWriter sw = new StringWriter();
@@ -62,12 +62,12 @@ public class BookDto {
         return encoded;
     }
     
-    public static BookDto decode(String encoded) throws JAXBException {
+    public static JdoBookDto decode(String encoded) throws JAXBException {
         String bookXml = _Strings.convert(encoded, _Bytes.ofCompressedUrlBase64, StandardCharsets.UTF_8);
         
-        JAXBContext jaxbContext = JAXBContext.newInstance(BookDto.class);
+        JAXBContext jaxbContext = JAXBContext.newInstance(JdoBookDto.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-        BookDto bookDto = (BookDto) jaxbUnmarshaller.unmarshal(new StringReader(bookXml)); 
+        JdoBookDto bookDto = (JdoBookDto) jaxbUnmarshaller.unmarshal(new StringReader(bookXml)); 
         
         return bookDto;
     }

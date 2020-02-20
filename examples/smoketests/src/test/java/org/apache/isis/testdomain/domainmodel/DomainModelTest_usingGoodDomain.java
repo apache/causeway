@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.schema.metamodel.v2.DomainClassDto;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
-import org.apache.isis.testdomain.jdo.Product;
+import org.apache.isis.testdomain.jdo.JdoProduct;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
 import org.apache.isis.testdomain.model.good.ProperMemberSupport;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
@@ -158,7 +158,7 @@ class DomainModelTest_usingGoodDomain {
     @Test
     void pluginProvidedMixins_shouldBePickedUp() {
         
-        val holderSpec = specificationLoader.loadSpecification(Product.class);
+        val holderSpec = specificationLoader.loadSpecification(JdoProduct.class);
         
         val mx_datanucleusIdLong = holderSpec.getAssociationElseFail("datanucleusIdLong"); // plugged in mixin
         assertNotNull(mx_datanucleusIdLong);

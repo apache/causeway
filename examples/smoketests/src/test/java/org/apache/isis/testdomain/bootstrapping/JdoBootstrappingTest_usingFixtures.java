@@ -32,7 +32,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
-import org.apache.isis.testdomain.jdo.Inventory;
+import org.apache.isis.testdomain.jdo.JdoInventory;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
@@ -67,7 +67,7 @@ class JdoBootstrappingTest_usingFixtures {
     @Test
     void sampleInventoryShouldBeSetUp() {
 
-        val inventories = repository.allInstances(Inventory.class);
+        val inventories = repository.allInstances(JdoInventory.class);
         assertEquals(1, inventories.size());
 
         val inventory = inventories.get(0);

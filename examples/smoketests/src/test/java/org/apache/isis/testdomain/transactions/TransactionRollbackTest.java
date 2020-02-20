@@ -34,7 +34,7 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
-import org.apache.isis.testdomain.jdo.Book;
+import org.apache.isis.testdomain.jdo.JdoBook;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
@@ -61,7 +61,7 @@ class TransactionRollbackTest {
     void happyCaseTx_shouldCommit() {
         
         // expected pre condition
-        assertEquals(0, repository.allInstances(Book.class).size());
+        assertEquals(0, repository.allInstances(JdoBook.class).size());
         
         transactionService.executeWithinTransaction(()->{
             
@@ -70,7 +70,7 @@ class TransactionRollbackTest {
         });
         
         // expected post condition
-        assertEquals(1, repository.allInstances(Book.class).size());
+        assertEquals(1, repository.allInstances(JdoBook.class).size());
         
     }
     
@@ -78,7 +78,7 @@ class TransactionRollbackTest {
     void whenExceptionWithinTx_shouldRollback() {
         
         // expected pre condition
-        assertEquals(0, repository.allInstances(Book.class).size());
+        assertEquals(0, repository.allInstances(JdoBook.class).size());
         
         assertThrows(RuntimeException.class, ()->{
             
@@ -93,7 +93,7 @@ class TransactionRollbackTest {
         });
         
         // expected post condition
-        assertEquals(0, repository.allInstances(Book.class).size());
+        assertEquals(0, repository.allInstances(JdoBook.class).size());
         
     }
     

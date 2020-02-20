@@ -18,44 +18,38 @@
  */
 package org.apache.isis.testdomain.jdo;
 
-import java.util.Set;
+import java.sql.Timestamp;
 
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Version;
-import javax.jdo.annotations.VersionStrategy;
 
-import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.mixins.timestamp.Timestampable;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
-@PersistenceCapable(identityType=IdentityType.DATASTORE, schema = "testdomain")
+@PersistenceCapable
 @DatastoreIdentity(strategy=IdGeneratorStrategy.IDENTITY, column="id")
-@Version(strategy= VersionStrategy.DATE_TIME, column="version")
-@DomainObject(auditing = Auditing.ENABLED)
-@DomainObjectLayout()  // causes UI events to be triggered
-@NoArgsConstructor @AllArgsConstructor(staticName = "of") @ToString
-public class Inventory {
-
-    public String title() {
-        return toString();
-    }
+@DomainObject
+public class JdoProductComment implements Timestampable {
+    
+    @Property @Column(allowsNull = "false")
+    @Getter @Setter private JdoProduct product;
 
     @Property
-    @Getter @Setter @Column(allowsNull = "true")
-    private String name;
+    @Getter @Setter private String comment;
 
+    // -- TIMESTAMPABLE
+    
     @Property
-    @Getter @Setter @Column(allowsNull = "true")
-    private Set<Product> products;
+    @Getter @Setter private String updatedBy;
+    
+    @Property
+    @Getter @Setter private Timestamp updatedAt;
+
+    
 }

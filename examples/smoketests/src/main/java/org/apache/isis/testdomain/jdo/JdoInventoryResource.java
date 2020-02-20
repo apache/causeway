@@ -40,48 +40,48 @@ import lombok.val;
 @DomainService(
         nature = NatureOfService.REST,
         objectType = "testdomain.InventoryResource")
-public class InventoryResource {
+public class JdoInventoryResource {
 
     @Inject private RepositoryService repository;
     
     @Action
-    public List<Product> listProducts() {
-        return repository.allInstances(Product.class);
+    public List<JdoProduct> listProducts() {
+        return repository.allInstances(JdoProduct.class);
     }
 
     @Action
-    public List<Book> listBooks() {
-        return repository.allInstances(Book.class);
+    public List<JdoBook> listBooks() {
+        return repository.allInstances(JdoBook.class);
     }
 
     @Action
-    public Book recommendedBookOfTheWeek() {
+    public JdoBook recommendedBookOfTheWeek() {
         // for this test we do not care if we generate duplicates
-        val book = Book.of("Book of the week", "An awesome Book", 12, "Author", "ISBN", "Publisher");
+        val book = JdoBook.of("Book of the week", "An awesome Book", 12, "Author", "ISBN", "Publisher");
         return repository.persist(book);
     }
 
     @Action
-    public List<Book> multipleBooks(
+    public List<JdoBook> multipleBooks(
             
             @ParameterLayout(named = "")
             int nrOfBooks
             
             ) {
         
-        val books = _Lists.<Book>newArrayList();
+        val books = _Lists.<JdoBook>newArrayList();
         
         // for this test we do not care if we generate duplicates
         for(int i=0; i<nrOfBooks; ++i) {
-            val book = Book.of("MultipleBooksTest", "An awesome Book["+i+"]", 12, "Author", "ISBN", "Publisher");
+            val book = JdoBook.of("MultipleBooksTest", "An awesome Book["+i+"]", 12, "Author", "ISBN", "Publisher");
             books.add(repository.persist(book));
         }
         return books;
     }
     
     @Action //TODO improve the REST client such that the param can be of type Book
-    public Book storeBook(String newBook) throws JAXBException { 
-        Book book = BookDto.decode(newBook).toBook();
+    public JdoBook storeBook(String newBook) throws JAXBException { 
+        JdoBook book = JdoBookDto.decode(newBook).toBook();
         return repository.persist(book);
     }
     
@@ -105,26 +105,26 @@ public class InventoryResource {
     }
     
     @Action
-    public BookDto recommendedBookOfTheWeekAsDto() {
+    public JdoBookDto recommendedBookOfTheWeekAsDto() {
         // for this test we do not care if we generate duplicates
-        val book = Book.of("Book of the week", "An awesome Book", 12, "Author", "ISBN", "Publisher");
-        return BookDto.from(book);
+        val book = JdoBook.of("Book of the week", "An awesome Book", 12, "Author", "ISBN", "Publisher");
+        return JdoBookDto.from(book);
     }
 
     @Action
-    public List<BookDto> multipleBooksAsDto(
+    public List<JdoBookDto> multipleBooksAsDto(
             
             @ParameterLayout(named = "")
             int nrOfBooks
             
             ) {
         
-        val books = _Lists.<BookDto>newArrayList();
+        val books = _Lists.<JdoBookDto>newArrayList();
         
         // for this test we do not care if we generate duplicates
         for(int i=0; i<nrOfBooks; ++i) {
-            val book = Book.of("MultipleBooksTest", "An awesome Book["+i+"]", 12, "Author", "ISBN", "Publisher");
-            books.add(BookDto.from(book));
+            val book = JdoBook.of("MultipleBooksTest", "An awesome Book["+i+"]", 12, "Author", "ISBN", "Publisher");
+            books.add(JdoBookDto.from(book));
         }
         return books;
     }

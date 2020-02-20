@@ -37,10 +37,10 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
-import org.apache.isis.testdomain.jdo.Book;
-import org.apache.isis.testdomain.jdo.InventoryManager;
+import org.apache.isis.testdomain.jdo.JdoBook;
+import org.apache.isis.testdomain.jdo.JdoInventoryManager;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
-import org.apache.isis.testdomain.jdo.Product;
+import org.apache.isis.testdomain.jdo.JdoProduct;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.val;
@@ -72,15 +72,15 @@ class WrapperSyncTest {
     @Test @Tag("Incubating")
     void testWrapper_waitingOnDomainEvent() throws InterruptedException, ExecutionException {
 
-        val inventoryManager = facoryService.viewModel(InventoryManager.class);
-        val product = repository.allInstances(Product.class).get(0);
+        val inventoryManager = facoryService.viewModel(JdoInventoryManager.class);
+        val product = repository.allInstances(JdoProduct.class).get(0);
 
         assertEquals(99d, product.getPrice(), 1E-6);
         
         val products = wrapper.wrap(inventoryManager).listAllProducts();
         
         assertEquals(1, products.size());
-        assertEquals(Book.class, products.get(0).getClass());
+        assertEquals(JdoBook.class, products.get(0).getClass());
     }
 
 

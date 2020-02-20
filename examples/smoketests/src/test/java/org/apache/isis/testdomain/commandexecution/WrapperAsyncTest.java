@@ -48,9 +48,9 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
-import org.apache.isis.testdomain.jdo.InventoryManager;
+import org.apache.isis.testdomain.jdo.JdoInventoryManager;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
-import org.apache.isis.testdomain.jdo.Product;
+import org.apache.isis.testdomain.jdo.JdoProduct;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.Getter;
@@ -92,8 +92,8 @@ class WrapperAsyncTest {
     @Test @Tag("Incubating")
     void testWrapper_waitingOnDomainEvent() throws InterruptedException, ExecutionException {
 
-        val inventoryManager = facoryService.viewModel(InventoryManager.class);
-        val product = repository.allInstances(Product.class).get(0);
+        val inventoryManager = facoryService.viewModel(JdoInventoryManager.class);
+        val product = repository.allInstances(JdoProduct.class).get(0);
 
         assertEquals(99d, product.getPrice(), 1E-6);
 
@@ -112,16 +112,16 @@ class WrapperAsyncTest {
     @Test @Tag("Incubating")
     void testWrapper_async_waitingOnDomainEvent() throws InterruptedException, ExecutionException {
 
-        val inventoryManager = facoryService.viewModel(InventoryManager.class);
-        val product = repository.allInstances(Product.class).get(0);
+        val inventoryManager = facoryService.viewModel(JdoInventoryManager.class);
+        val product = repository.allInstances(JdoProduct.class).get(0);
 
         assertEquals(99d, product.getPrice(), 1E-6);
 
         actionDomainEventListener.prepareLatch();
 
-        Future<Product> invocationResult = wrapper.async(inventoryManager)
+        Future<JdoProduct> invocationResult = wrapper.async(inventoryManager)
                 .withExecutor(Executors.newCachedThreadPool()) // use of custom executor (optional)
-                .call(InventoryManager::updateProductPrice, product, 123d);
+                .call(JdoInventoryManager::updateProductPrice, product, 123d);
 
 //XXX type-safety should prevent this snippet from being compiled!        
 //        Future<String> invocationResult2 = wrapper.async(inventoryManager)
@@ -147,8 +147,8 @@ class WrapperAsyncTest {
 
         @Getter private CountDownLatch countDownLatch;
 
-        @EventListener(InventoryManager.UpdateProductPriceEvent.class)
-        public void onDomainEvent(InventoryManager.UpdateProductPriceEvent event) {
+        @EventListener(JdoInventoryManager.UpdateProductPriceEvent.class)
+        public void onDomainEvent(JdoInventoryManager.UpdateProductPriceEvent event) {
             if(event.getEventPhase()==Phase.EXECUTED) {
                 log.info("UpdateProductPriceEvent received.");
                 countDownLatch.countDown();

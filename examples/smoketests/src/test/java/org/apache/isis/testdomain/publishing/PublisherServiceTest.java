@@ -49,7 +49,7 @@ import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchServi
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
-import org.apache.isis.testdomain.jdo.Book;
+import org.apache.isis.testdomain.jdo.JdoBook;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
@@ -101,7 +101,7 @@ class PublisherServiceTest {
     void publisherService_shouldBeAwareOfInventoryChanges() {
 
         // given
-        val book = repository.allInstances(Book.class).listIterator().next();
+        val book = repository.allInstances(JdoBook.class).listIterator().next();
         kvStore.clear(PublisherServiceForTesting.class);
 
         val latch = kvStore.latch(PublisherServiceForTesting.class);
@@ -139,13 +139,13 @@ class PublisherServiceTest {
             throws InterruptedException, ExecutionException, TimeoutException {
 
         // given
-        val book = repository.allInstances(Book.class).listIterator().next();
+        val book = repository.allInstances(JdoBook.class).listIterator().next();
         kvStore.clear(PublisherServiceForTesting.class);
         val latch = kvStore.latch(PublisherServiceForTesting.class);
 
         // when - running within its own background task
         val future = wrapper.async(book, ExecutionMode.SKIP_RULES) // don't enforce rules for this test
-                .run(Book::setName, "Book #2");
+                .run(JdoBook::setName, "Book #2");
 
         future.get(10, TimeUnit.SECONDS);
 
@@ -168,14 +168,14 @@ class PublisherServiceTest {
             throws InterruptedException, ExecutionException, TimeoutException {
 
         // given
-        val book = repository.allInstances(Book.class).listIterator().next();
+        val book = repository.allInstances(JdoBook.class).listIterator().next();
         kvStore.clear(PublisherServiceForTesting.class);
 
         // when - running within its own background task
         assertThrows(DisabledException.class, ()->{
             
             val future = wrapper.async(book, ExecutionMode.EXECUTE) 
-                .run(Book::setName, "Book #2");
+                .run(JdoBook::setName, "Book #2");
             
             future.get(10, TimeUnit.SECONDS);
             

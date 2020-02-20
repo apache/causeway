@@ -34,8 +34,8 @@ import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.extensions.restclient.ResponseDigest;
 import org.apache.isis.extensions.restclient.RestfulClient;
 import org.apache.isis.extensions.restclient.RestfulClientConfig;
-import org.apache.isis.testdomain.jdo.Book;
-import org.apache.isis.testdomain.jdo.BookDto;
+import org.apache.isis.testdomain.jdo.JdoBook;
+import org.apache.isis.testdomain.jdo.JdoBookDto;
 import org.apache.isis.testdomain.ldap.LdapConstants;
 
 import lombok.val;
@@ -94,7 +94,7 @@ public class RestEndpointService {
     
     // -- ENDPOINTS
 
-    public ResponseDigest<Book> getRecommendedBookOfTheWeek(RestfulClient client) {
+    public ResponseDigest<JdoBook> getRecommendedBookOfTheWeek(RestfulClient client) {
         Invocation.Builder request = client.request(
                 "services/testdomain.InventoryResource/actions/recommendedBookOfTheWeek/invoke",
                 SuppressionType.ALL);
@@ -103,12 +103,12 @@ public class RestEndpointService {
                 .build();
 
         val response = request.post(args);
-        val digest = client.digest(response, Book.class);
+        val digest = client.digest(response, JdoBook.class);
 
         return digest;
     }
     
-    public ResponseDigest<Book> getMultipleBooks(RestfulClient client) throws JAXBException {
+    public ResponseDigest<JdoBook> getMultipleBooks(RestfulClient client) throws JAXBException {
         
         Invocation.Builder request = client.request(
                 "services/testdomain.InventoryResource/actions/multipleBooks/invoke",
@@ -119,28 +119,28 @@ public class RestEndpointService {
                 .build();
 
         val response = request.post(args);
-        val digest = client.digestList(response, Book.class, new GenericType<List<Book>>() {});
+        val digest = client.digestList(response, JdoBook.class, new GenericType<List<JdoBook>>() {});
 
         return digest;
     }
     
     
-    public ResponseDigest<Book> storeBook(RestfulClient client, Book newBook) throws JAXBException {
+    public ResponseDigest<JdoBook> storeBook(RestfulClient client, JdoBook newBook) throws JAXBException {
         val request = client.request(
                 "services/testdomain.InventoryResource/actions/storeBook/invoke", 
                 SuppressionType.ALL);
         
         val args = client.arguments()
-                .addActionParameter("newBook", BookDto.from(newBook).encode())
+                .addActionParameter("newBook", JdoBookDto.from(newBook).encode())
                 .build();
 
         val response = request.post(args);
-        val digest = client.digest(response, Book.class);
+        val digest = client.digest(response, JdoBook.class);
 
         return digest;
     }
 
-    public ResponseDigest<BookDto> getRecommendedBookOfTheWeekAsDto(RestfulClient client) {
+    public ResponseDigest<JdoBookDto> getRecommendedBookOfTheWeekAsDto(RestfulClient client) {
         Invocation.Builder request = client.request(
                 "services/testdomain.InventoryResource/actions/recommendedBookOfTheWeekAsDto/invoke",
                 SuppressionType.ALL);
@@ -149,12 +149,12 @@ public class RestEndpointService {
                 .build();
 
         val response = request.post(args);
-        val digest = client.digest(response, BookDto.class);
+        val digest = client.digest(response, JdoBookDto.class);
 
         return digest;
     }
     
-    public ResponseDigest<BookDto> getMultipleBooksAsDto(RestfulClient client) throws JAXBException {
+    public ResponseDigest<JdoBookDto> getMultipleBooksAsDto(RestfulClient client) throws JAXBException {
         
         Invocation.Builder request = client.request(
                 "services/testdomain.InventoryResource/actions/multipleBooksAsDto/invoke",
@@ -165,7 +165,7 @@ public class RestEndpointService {
                 .build();
 
         val response = request.post(args);
-        val digest = client.digestList(response, BookDto.class, new GenericType<List<BookDto>>() {});
+        val digest = client.digestList(response, JdoBookDto.class, new GenericType<List<JdoBookDto>>() {});
 
         return digest;
     }

@@ -42,9 +42,9 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
-import org.apache.isis.testdomain.jdo.Book;
-import org.apache.isis.testdomain.jdo.Inventory;
-import org.apache.isis.testdomain.jdo.Product;
+import org.apache.isis.testdomain.jdo.JdoBook;
+import org.apache.isis.testdomain.jdo.JdoInventory;
+import org.apache.isis.testdomain.jdo.JdoProduct;
 
 import lombok.val;
 
@@ -77,21 +77,21 @@ class JdoBootstrappingTest {
 
     void cleanUp() {
 
-        repository.allInstances(Inventory.class).forEach(repository::remove);
-        repository.allInstances(Book.class).forEach(repository::remove);
-        repository.allInstances(Product.class).forEach(repository::remove);
+        repository.allInstances(JdoInventory.class).forEach(repository::remove);
+        repository.allInstances(JdoBook.class).forEach(repository::remove);
+        repository.allInstances(JdoProduct.class).forEach(repository::remove);
         System.out.println("!!! CLEANUP DONE");
     }
 
     void setUp() {
 
         // setup sample Inventory
-        Set<Product> products = new HashSet<>();
+        Set<JdoProduct> products = new HashSet<>();
 
-        products.add(Book.of("Sample Book", "A sample book for testing.", 99., "Sample Author", "Sample ISBN",
+        products.add(JdoBook.of("Sample Book", "A sample book for testing.", 99., "Sample Author", "Sample ISBN",
                 "Sample Publisher"));
 
-        val inventory = Inventory.of("Sample Inventory", products);
+        val inventory = JdoInventory.of("Sample Inventory", products);
         repository.persist(inventory);
 
         System.out.println("!!! SETUP DONE");
@@ -103,7 +103,7 @@ class JdoBootstrappingTest {
         // given - expected pre condition: no inventories
 
         cleanUp();
-        assertEquals(0, repository.allInstances(Inventory.class).size());
+        assertEquals(0, repository.allInstances(JdoInventory.class).size());
         System.out.println("!!! VERIFY CLEANUP DONE");
 
         // when
@@ -112,7 +112,7 @@ class JdoBootstrappingTest {
 
         // then - expected post condition: ONE inventory
 
-        val inventories = repository.allInstances(Inventory.class);
+        val inventories = repository.allInstances(JdoInventory.class);
         assertEquals(1, inventories.size());
 
         val inventory = inventories.get(0);

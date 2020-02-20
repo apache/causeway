@@ -18,62 +18,69 @@
  */
 package org.apache.isis.testdomain.jdo;
 
-import java.util.List;
-
 import javax.jdo.annotations.Column;
-import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.Discriminator;
-import javax.jdo.annotations.DiscriminatorStrategy;
-import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Inheritance;
 import javax.jdo.annotations.InheritanceStrategy;
 import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
 
-import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Publishing;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@PersistenceCapable(identityType=IdentityType.DATASTORE, schema = "testdomain")
-@Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
-@Discriminator(strategy=DiscriminatorStrategy.VALUE_MAP, value="Product")
-@DatastoreIdentity(
-        strategy=javax.jdo.annotations.IdGeneratorStrategy.INCREMENT,
-        column="id")
-@DomainObject
-@AllArgsConstructor(access = AccessLevel.PROTECTED) @ToString
-public class Product {
+@PersistenceCapable
+@Inheritance(strategy=InheritanceStrategy.SUPERCLASS_TABLE)
+@Discriminator(value="Book")
+@DomainObject(publishing=Publishing.ENABLED, auditing = Auditing.ENABLED)
+@ToString(callSuper = true)
+public class JdoBook extends JdoProduct {
 
+    @Override
     public String title() {
         return toString();
     }
 
-    @Property(editing = Editing.DISABLED) // used for an async rule check test
-    @Getter @Setter @Column(allowsNull = "true")
-    private String name;
-//    public void setName(String name) {
-//        System.err.println("!!! setting name " + name);
-//        this.name = name;
-//    }
+    public static JdoBook of(
+            String name, 
+            String description, 
+            double price, 
+            String author, 
+            String isbn, 
+            String publisher) {
+
+        return new JdoBook(name, description, price, author, isbn, publisher);
+    }
 
     @Property
     @Getter @Setter @Column(allowsNull = "true")
-    private String description;
+    private String author;
 
     @Property
-    @Getter @Setter @Column(allowsNull = "false")
-    private double price;
-    
-    @Collection 
-    @Persistent(mappedBy="product") @Column(allowsNull = "true") 
-    @Getter @Setter 
-    private List<ProductComment> comments;
+    @Getter @Setter @Column(allowsNull = "true")
+    private String isbn;
 
+    @Property
+    @Getter @Setter @Column(allowsNull = "true")
+    private String publisher;
+
+    // -- CONSTRUCTOR
+
+    private JdoBook(
+            String name, 
+            String description, 
+            double price, 
+            String author, 
+            String isbn, 
+            String publisher) {
+
+        super(name, description, price, /*comments*/null);
+        this.author = author;
+        this.isbn = isbn;
+        this.publisher = publisher;
+    }
 }
