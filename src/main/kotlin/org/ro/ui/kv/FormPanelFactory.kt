@@ -51,12 +51,13 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
     }
 
     private fun createBoolean(fi: FormItem): Component {
-        if (fi.content is Boolean) {
-            val item = CheckBox(label = fi.label, value = fi.content as Boolean)
-            return item
-        } else {
-            return createText(fi)
+       if (fi.content == "true") {
+            return CheckBox(label = fi.label, value = true)
         }
+        if (fi.content == "false") {
+            return CheckBox(label = fi.label, value = false)
+        }
+        return createText(fi)
     }
 
     private fun createTime(fi: FormItem): DateTime {

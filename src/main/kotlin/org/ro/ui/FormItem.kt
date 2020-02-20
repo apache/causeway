@@ -43,10 +43,10 @@ class FormItem(
         dspl = displayable
     }
 
+    @Deprecated("this needs a better home")
     fun setOpacity(value: String?) {
         if (type == ValueType.SLIDER.type) {
             val opacity = value?.toDouble()!!
-            //(dspl as Window).opacity = opacity
             (dspl as Window).getElementJQuery()?.css(
                     "background-color",
                     "rgba(255, 255, 255, $opacity)"
