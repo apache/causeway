@@ -29,7 +29,6 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
@@ -60,7 +59,6 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         }
     }
 
-    protected ObjectAdapterProvider mockObjectAdapterProvider;
     protected TranslationService mockTranslationService;
     protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
     protected AuthenticationSession mockAuthenticationSession;
@@ -108,7 +106,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
         mockSpecificationLoader = context.mock(SpecificationLoader.class);
 
-        mockObjectAdapterProvider = context.mock(ObjectAdapterProvider.class);
+//        mockObjectAdapterProvider = context.mock(ObjectAdapterProvider.class);
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)

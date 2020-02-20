@@ -36,7 +36,6 @@ import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -70,7 +69,7 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     @Mock protected OneToOneAssociation mockOneToOneAssociation;
     @Mock protected OneToManyAssociation mockOneToManyAssociation;
     @Mock protected OneToOneActionParameter mockOneToOneActionParameter;
-    @Mock protected ObjectAdapterProvider mockObjectAdapterProvider;
+//    @Mock protected ObjectAdapterProvider mockObjectAdapterProvider;
     @Mock protected MetamodelEventService mockMetamodelEventService;
 
     

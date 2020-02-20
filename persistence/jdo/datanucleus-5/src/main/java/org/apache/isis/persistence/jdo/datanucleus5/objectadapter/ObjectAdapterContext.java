@@ -24,7 +24,6 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.commons.internal.assertions._Assert;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;

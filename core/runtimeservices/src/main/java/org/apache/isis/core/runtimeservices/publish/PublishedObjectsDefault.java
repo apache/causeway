@@ -33,7 +33,6 @@ import org.apache.isis.core.commons.internal.base._Lazy;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.collections._Multimaps.ListMultimap;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.schema.chg.v2.ChangesDto;

@@ -19,8 +19,6 @@
 package org.apache.isis.core.runtime.persistence.transaction;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
@@ -39,7 +37,6 @@ import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 

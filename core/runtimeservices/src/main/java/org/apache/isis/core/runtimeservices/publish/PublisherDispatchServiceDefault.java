@@ -47,7 +47,6 @@ import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.applib.services.publish.PublisherService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;

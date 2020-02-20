@@ -16,9 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.adapter;
+package org.apache.isis.persistence.jdo.datanucleus5.objectadapter;
 
 import javax.annotation.Nullable;
+
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 /**
  * 

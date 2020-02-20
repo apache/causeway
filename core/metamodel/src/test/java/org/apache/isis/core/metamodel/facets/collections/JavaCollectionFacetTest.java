@@ -31,16 +31,14 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.collections.javautilcollection.JavaCollectionFacet;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.collections.javautilcollection.JavaCollectionFacet;
 
 public class JavaCollectionFacetTest {
 
@@ -52,7 +50,7 @@ public class JavaCollectionFacetTest {
     @Mock private FacetHolder mockFacetHolder;
     @Mock private ObjectAdapter mockCollection;
     @Mock private Collection<ObjectAdapter> mockWrappedCollection;
-    @Mock private ObjectAdapterProvider mockOAProvider;
+//    @Mock private ObjectAdapterProvider mockOAProvider;
 
     private MetaModelContext_forTesting metaModelContext;
 
