@@ -22,13 +22,17 @@ import java.lang.annotation.Annotation;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.internal.base._With;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+
+import lombok.val;
 
 /**
  * 
@@ -70,8 +74,24 @@ public interface IocContainer {
      * @throws NoSuchElementException - if the singleton is not resolvable
      */
     public default <T> T getSingletonElseFail(@Nullable Class<T> type) {
-        return getSingleton(type)
-                .orElseThrow(()->_Exceptions.noSuchElement("Cannot resolve singleton '%s'", type));
+        _With.requires(type, "type");
+        
+        val candidates = select(type);
+        
+        switch (candidates.getCardinality()) {
+        case ZERO:
+            throw _Exceptions.noSuchElement("Cannot resolve singleton '%s'", type);
+        case ONE:
+            return candidates.getFirstOrFail();
+        default:
+            throw _Exceptions.unrecoverableFormatted("Cannot resolve singleton '%s' got more than one: {%s}",
+                    type,
+                    candidates.stream()
+                    .map(Object::getClass)
+                    .map(Class::getName)
+                    .collect(Collectors.joining(", "))
+                    );
+        }
 
     }
 

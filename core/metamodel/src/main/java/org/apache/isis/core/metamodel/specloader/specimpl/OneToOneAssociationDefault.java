@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.Collections;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
@@ -312,10 +313,11 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
             final ManagedObject targetAdapter,
             final ManagedObject valueAdapterOrNull) {
 
-        final CommandContext commandContext = getCommandContext();
-        final Command command = commandContext.getCommand();
+        val currentExecutor = getCommandContext()
+                .getCurrentExecutor()
+                .orElse(Command.Executor.OTHER);
 
-        if (command.getExecutor() != Command.Executor.USER) {
+        if (currentExecutor != Command.Executor.USER) {
             return;
         }
 

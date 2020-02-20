@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.services.command;
 
+import java.util.Optional;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
@@ -27,6 +29,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.command.Command.Executor;
 
 import lombok.Getter;
 
@@ -56,6 +59,12 @@ public class CommandContext {
     public void setCommand(final Command command) {
         this.command = command;
     }
+    
+    public Optional<Executor> getCurrentExecutor() {
+        return Optional.ofNullable(getCommand())
+                .map(Command::getExecutor); 
+    }
+    
 
 // tag::refguide[]
 }

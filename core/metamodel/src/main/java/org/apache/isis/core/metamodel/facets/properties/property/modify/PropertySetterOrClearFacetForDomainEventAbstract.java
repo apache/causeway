@@ -178,14 +178,17 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
 
         final CommandContext commandContext = getCommandContext();
         final Command command = commandContext.getCommand();
+        if( command==null ) {
+            return;
+        }
 
         final InteractionContext interactionContext = getInteractionContext();
         final Interaction interaction = interactionContext.getInteraction();
 
         final String propertyId = owningProperty.getIdentifier().toClassAndNameIdentityString();
 
-        if( command.getExecutor() == Command.Executor.USER &&
-                command.getExecuteIn() == org.apache.isis.applib.annotation.CommandExecuteIn.BACKGROUND) {
+        if( command.getExecutor() == Command.Executor.USER
+                && command.getExecuteIn() == org.apache.isis.applib.annotation.CommandExecuteIn.BACKGROUND) {
 
             // deal with background commands
 

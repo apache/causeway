@@ -52,44 +52,44 @@ import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 })
 public class Configuration_headless {
 
-    @Bean @Singleton
-    public TransactionService transactionService() {
-        return new TransactionService() {
-
-            @Override
-            public TransactionId currentTransactionId() {
-                return null;
-            }
-
-            @Override
-            public void flushTransaction() {
-            }
-
-            @Override
-            public TransactionState currentTransactionState() {
-                return null;
-            }
-
-            @Override
-            public void executeWithinTransaction(Runnable task) {
-            }
-
-            @Override
-            public <T> T executeWithinTransaction(Supplier<T> task) {
-                return null;
-            }
-
-            @Override
-            public void executeWithinNewTransaction(Runnable task) {
-            }
-
-            @Override
-            public <T> T executeWithinNewTransaction(Supplier<T> task) {
-                return null;
-            }
-
-        };
-    }
+//    @Bean @Singleton
+//    public TransactionService transactionService() {
+//        return new TransactionService() {
+//
+//            @Override
+//            public TransactionId currentTransactionId() {
+//                return null;
+//            }
+//
+//            @Override
+//            public void flushTransaction() {
+//            }
+//
+//            @Override
+//            public TransactionState currentTransactionState() {
+//                return null;
+//            }
+//
+//            @Override
+//            public void executeWithinTransaction(Runnable task) {
+//            }
+//
+//            @Override
+//            public <T> T executeWithinTransaction(Supplier<T> task) {
+//                return null;
+//            }
+//
+//            @Override
+//            public void executeWithinNewTransaction(Runnable task) {
+//            }
+//
+//            @Override
+//            public <T> T executeWithinNewTransaction(Supplier<T> task) {
+//                return null;
+//            }
+//
+//        };
+//    }
     
     @Bean @Singleton
     public PlatformTransactionManager platformTransactionManager() {

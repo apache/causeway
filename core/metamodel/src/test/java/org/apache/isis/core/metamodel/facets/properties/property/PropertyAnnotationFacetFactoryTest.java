@@ -32,8 +32,11 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.MementoSerialization;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
@@ -78,6 +81,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.val;
 
 public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
@@ -213,14 +218,9 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
         public void withDeprecatedPostsPropertyChangedEvent_andGetterFacet_andSetterFacet() {
 
             class Customer {
-                class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {
-                }
+                class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {}
                 @Property(domainEvent = NamedChangedDomainEvent.class)
-                public String getName() {
-                    return null;
-                }
-                public void setName(final String name) {
-                }
+                @Getter @Setter private String name;
             }
 
             // given
@@ -243,7 +243,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             }});
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processModify(facetFactory, processMethodContext);
 
@@ -274,14 +274,9 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
         public void withPropertyInteractionEvent() {
 
             class Customer {
-                class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {
-                }
+                class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {}
                 @Property(domainEvent = NamedChangedDomainEvent.class)
-                public String getName() {
-                    return null;
-                }
-                public void setName(final String name) {
-                }
+                @Getter @Setter private String name;
             }
 
             // given
@@ -301,7 +296,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             }});
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processModify(facetFactory, processMethodContext);
 
@@ -334,11 +329,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
                 class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {
                 }
                 @Property(domainEvent= NamedChangedDomainEvent.class)
-                public String getName() {
-                    return null;
-                }
-                public void setName(final String name) {
-                }
+                @Getter @Setter private String name;
             }
 
             // given
@@ -357,7 +348,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
                 will(returnValue(null));
             }});
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processModify(facetFactory, processMethodContext);
 
@@ -387,11 +378,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
         public void withDefaultEvent() {
 
             class Customer {
-                public String getName() {
-                    return null;
-                }
-                public void setName(final String name) {
-                }
+                @Getter @Setter private String name;
             }
 
             // given
@@ -408,7 +395,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             allowingLoadSpecificationRequestsFor(cls, propertyMethod.getReturnType());
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processModify(facetFactory, processMethodContext);
 
@@ -440,13 +427,10 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
         @Test
         public void withAnnotation() {
 
+            @SuppressWarnings("unused")
             class Customer {
                 @Property(hidden = Where.REFERENCES_PARENT)
-                public String getName() {
-                    return null;
-                }
-                public void setName(final String name) {
-                }
+                @Getter @Setter private String name;
             }
 
             // given
@@ -454,7 +438,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processHidden(facetFactory, processMethodContext);
 
@@ -471,6 +455,75 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
         }
 
     }
+    
+    public static class Editing_honoringClasslevelDefault extends PropertyAnnotationFacetFactoryTest {
+
+        @Test
+        public void withClassLevelAnnotation_enabling() {
+
+            @DomainObject(
+                    nature=Nature.INMEMORY_ENTITY, 
+                    editing=org.apache.isis.applib.annotation.Editing.ENABLED)
+            class Customer {
+                @Property(
+                     // should disable editing regardless of class-level
+                        editing = org.apache.isis.applib.annotation.Editing.DISABLED, 
+                        editingDisabledReason = "you cannot edit the name property"
+                        )
+                @Getter @Setter private String name;
+            }
+
+            // given
+            val customerClass = Customer.class;
+            propertyMethod = findMethod(customerClass, "getName");
+
+            // when
+            val processMethodContext = new FacetFactory.ProcessMethodContext(customerClass, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
+            processEditing(facetFactory, processMethodContext);
+
+            // then
+            val disabledFacet = facetedMethod.getFacet(DisabledFacet.class);
+            assertNotNull(disabledFacet);
+            assertTrue(disabledFacet instanceof DisabledFacetForPropertyAnnotation);
+            val disabledFacetImpl = (DisabledFacetForPropertyAnnotation) disabledFacet;
+            assertThat(disabledFacet.where(), is(Where.EVERYWHERE));
+            assertThat(disabledFacetImpl.getReason(), is("you cannot edit the name property"));
+        }
+        
+        @Test
+        public void withClassLevelAnnotation_disabling() {
+
+            @DomainObject(
+                    nature=Nature.INMEMORY_ENTITY, 
+                    editing=org.apache.isis.applib.annotation.Editing.DISABLED,
+                    editingDisabledReason = "you cannot edit this object")
+            class Customer {
+                @Property(
+                     // should enable editing regardless of class-level
+                        editing = org.apache.isis.applib.annotation.Editing.ENABLED)
+                @Getter @Setter private String name; 
+            }
+
+            // given
+            val customerClass = Customer.class;
+            propertyMethod = findMethod(customerClass, "getName");
+
+            // when
+            val processMethodContext = new FacetFactory.ProcessMethodContext(customerClass, null,
+                    propertyMethod, mockMethodRemover, facetedMethod);
+            processEditing(facetFactory, processMethodContext);
+
+            // then
+            val disabledFacet = facetedMethod.getFacet(DisabledFacet.class);
+            assertNotNull(disabledFacet);
+            assertTrue(disabledFacet instanceof DisabledFacetForPropertyAnnotation);
+            val disabledFacetImpl = (DisabledFacetForPropertyAnnotation) disabledFacet;
+            assertThat(disabledFacet.where(), is(Where.EVERYWHERE));
+            assertThat(disabledFacetImpl.getReason(), is("you cannot edit the name property"));
+        }
+        
+    }
 
     public static class Editing extends PropertyAnnotationFacetFactoryTest {
 
@@ -485,6 +538,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
                 public String getName() {
                     return null;
                 }
+                @SuppressWarnings("unused")
                 public void setName(final String name) {
                 }
             }
@@ -494,7 +548,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processEditing(facetFactory, processMethodContext);
 
@@ -517,11 +571,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
                 @Property(
                         maxLength = 30
                         )
-                public String getName() {
-                    return null;
-                }
-                public void setName(final String name) {
-                }
+                @Getter @Setter private String name;
             }
 
             // given
@@ -529,7 +579,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processMaxLength(facetFactory, processMethodContext);
 
@@ -565,11 +615,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
                 @Property(
                         mustSatisfy = {NotTooHot.class, NotTooCold.class}
                         )
-                public String getName() {
-                    return null;
-                }
-                public void setName(final String name) {
-                }
+                @Getter @Setter private String name;
             }
 
             // given
@@ -581,7 +627,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processMustSatisfy(facetFactory, processMethodContext);
 
@@ -606,11 +652,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
             class Customer {
                 @Property(mementoSerialization = MementoSerialization.EXCLUDED)
-                public String getName() {
-                    return null;
-                }
-                public void setName(final String name) {
-                }
+                @Getter @Setter private String name;
             }
 
             // given
@@ -618,7 +660,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processNotPersisted(facetFactory, processMethodContext);
 
@@ -639,11 +681,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
                 @Property(
                         optionality = Optionality.OPTIONAL
                         )
-                public String getName() {
-                    return null;
-                }
-                public void setName(final String name) {
-                }
+                @Getter @Setter private String name;
             }
 
             // given
@@ -651,7 +689,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processOptional(facetFactory, processMethodContext);
 
@@ -668,11 +706,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
                 @Property(
                         optionality = Optionality.MANDATORY
                         )
-                public String getName() {
-                    return null;
-                }
-                public void setName(final String name) {
-                }
+                @Getter @Setter private String name;
             }
 
             // given
@@ -680,7 +714,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processOptional(facetFactory, processMethodContext);
 
@@ -697,11 +731,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
                 @Property(
                         optionality = Optionality.DEFAULT
                         )
-                public String getName() {
-                    return null;
-                }
-                public void setName(final String name) {
-                }
+                @Getter @Setter private String name;
             }
 
             // given
@@ -709,7 +739,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processOptional(facetFactory, processMethodContext);
 
@@ -724,11 +754,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             class Customer {
                 @Property(
                         )
-                public String getName() {
-                    return null;
-                }
-                public void setName(final String name) {
-                }
+                @Getter @Setter private String name;
             }
 
             // given
@@ -736,7 +762,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processOptional(facetFactory, processMethodContext);
 
@@ -756,11 +782,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
                         regexPattern = "[123].*",
                         regexPatternFlags = Pattern.CASE_INSENSITIVE | Pattern.MULTILINE
                         )
-                public String getName() {
-                    return null;
-                }
-                public void setName(final String name) {
-                }
+                @Getter @Setter private String name;
             }
 
             // given
@@ -768,7 +790,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processRegEx(facetFactory, processMethodContext);
 
@@ -786,11 +808,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             class Customer {
                 @Property(
                         )
-                public String getName() {
-                    return null;
-                }
-                public void setName(final String name) {
-                }
+                @Getter @Setter private String name;
             }
 
             // given
@@ -798,7 +816,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processRegEx(facetFactory, processMethodContext);
 
@@ -814,11 +832,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
                 @Property(
                         regexPattern = ""
                         )
-                public String getName() {
-                    return null;
-                }
-                public void setName(final String name) {
-                }
+                @Getter @Setter private String name;
             }
 
             // given
@@ -826,7 +840,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processRegEx(facetFactory, processMethodContext);
 
@@ -842,11 +856,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
                 @Property(
                         regexPattern = "[abc].*"
                         )
-                public int getName() {
-                    return 0;
-                }
-                public void setName(final int name) {
-                }
+                public int getName() {return 0; }
+                @SuppressWarnings("unused") public void setName(final int name) { }
             }
 
             // given
@@ -854,7 +865,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             propertyMethod = findMethod(Customer.class, "getName");
 
             // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
+            val processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
                     propertyMethod, mockMethodRemover, facetedMethod);
             processRegEx(facetFactory, processMethodContext);
 
