@@ -12,6 +12,7 @@ import pl.treksoft.kvision.panel.splitPanel
 import pl.treksoft.kvision.panel.vPanel
 import pl.treksoft.kvision.utils.px
 
+@Deprecated("Useful as FlexSample")
 object PlantumlPanel : VPanel() {
 
     var diagramPanel = vPanel(spacing = 3) {

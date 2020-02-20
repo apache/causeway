@@ -22,7 +22,10 @@ object RoStatusBar {
     }
     private val nav = Nav(rightAlign = true)
     private val userLink = nav.navLink("", icon = "far fa-user")
-    private val lastError: Button = Button(text = "OK", style = ButtonStyle.SUCCESS).apply {
+    private val lastError: Button = Button(
+            text = "OK",
+            icon = IconManager.find("OK"),
+            style = ButtonStyle.SUCCESS).apply {
         padding = CssSize(-16, UNIT.px)
         margin = CssSize(0, UNIT.px)
     }
@@ -54,9 +57,9 @@ object RoStatusBar {
     }
 
     private fun turnRed(logEntry: LogEntry) {
-        console.log("[RSB.turnRed]")
         lastError.text = logEntry.url
         lastError.style = ButtonStyle.DANGER
+        lastError.icon = IconManager.find("Error")
     }
 
 }

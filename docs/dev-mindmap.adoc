@@ -31,24 +31,23 @@
 +++ Yarn
 +++ webpack
 +++ DCE
-++_ <&bug>debug
-+++ Chrome
-++++ Plugins
-+++ JavaScript
+
 ++_ test
 +++ Karma
-+++ Broswerify
 +++ ~~Mocha~~
 +++ ChromeHeadless
-+++ jasmine
 +++ qunit
 +++ PhtantomJS
 +++ coverage
 ++++ istanbul
 ++++ nyc
-++_ CI
-+++ Travis
-+++ Coveralls
+--_ CI
+--- Travis
+--- Coveralls
+--_ <&bug>debug
+--- Chrome
+---- Plugins
+--- JavaScript
 @endmindmap
 --
 ~~

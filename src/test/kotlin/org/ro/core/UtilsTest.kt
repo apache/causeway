@@ -7,8 +7,18 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-// UnitTest
 class UtilsTest {
+
+    @Test
+    fun testDecamel() {
+        //given
+        val word = "OK"
+        val expected = "OK"
+        //when
+        val actual = Utils.deCamel(word)
+        //
+        assertEquals(expected, actual)
+    }
 
     @Test
     fun testDate() {

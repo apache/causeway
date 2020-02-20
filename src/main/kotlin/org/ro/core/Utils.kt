@@ -43,6 +43,11 @@ object Utils {
             }
             i++
         }
+        // Skip acronyms like OK, USA
+        val outputWithoutWhiteSpace = output.replace("\\s".toRegex(), "")
+        if (input.equals(outputWithoutWhiteSpace)) {
+            return input
+        }
         return output
     }
 

@@ -67,5 +67,8 @@ Such renderes should as well have links leading back to 'plain old object' rende
 * Burger Menu -> Connect, OK
 * Primitives -> Temporals
 * Primitives -> Blob
-* _Burger Menu -> History_: Sort, Move Column, Filter
+* _Burger Menu -> History_: 
+** Sort, 
+** Move Column, 
+** Filter
 * History -> Details Menu, Visualize
