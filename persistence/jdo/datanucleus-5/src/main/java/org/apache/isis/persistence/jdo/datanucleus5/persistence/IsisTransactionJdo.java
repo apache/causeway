@@ -30,6 +30,7 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionState;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.internal.collections._Inbox;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
@@ -157,7 +158,7 @@ public class IsisTransactionJdo implements Transaction {
     private final PublisherDispatchService publisherDispatchService;
     private final AuditerDispatchService auditerDispatchService;
 
-    private final Iterable<WithTransactionScope> withTransactionScopes;
+    private final Can<WithTransactionScope> withTransactionScopes;
 
     private IsisException abortCause;
 
@@ -167,9 +168,7 @@ public class IsisTransactionJdo implements Transaction {
             final int sequence) {
 
         id = TransactionId.of(interactionId, sequence);
-        //        this.authenticationSession = authenticationSession;
-
-        //        this.messageBroker = authenticationSession.getMessageBroker();
+        
         this.publisherDispatchService = serviceRegistry.lookupServiceElseFail(PublisherDispatchService.class);
         this.auditerDispatchService = serviceRegistry.lookupServiceElseFail(AuditerDispatchService.class);
 

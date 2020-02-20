@@ -30,8 +30,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -64,6 +66,7 @@ import lombok.extern.log4j.Log4j2;
 )
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @Incubating("wrapper.wrap(inventoryManager) throws NPE")
+@DirtiesContext // because of the temporary installed ActionDomainEventListener
 class WrapperAsyncTest {
 
     @Inject private FixtureScripts fixtureScripts;
@@ -71,6 +74,11 @@ class WrapperAsyncTest {
     @Inject private FactoryService facoryService;
     @Inject private WrapperFactory wrapper;
     @Inject private ActionDomainEventListener actionDomainEventListener;
+    
+    @Configuration
+    public class Config {
+        // so that we get a new ApplicationContext.
+    }
 
     @BeforeEach
     void setUp() {
@@ -81,7 +89,7 @@ class WrapperAsyncTest {
         fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
     }
 
-    @Test //@Tag("Incubating")
+    @Test @Tag("Incubating")
     void testWrapper_waitingOnDomainEvent() throws InterruptedException, ExecutionException {
 
         val inventoryManager = facoryService.viewModel(InventoryManager.class);
@@ -101,7 +109,7 @@ class WrapperAsyncTest {
         assertEquals(123d, product.getPrice(), 1E-6);
     }
 
-    @Test //@Tag("Incubating")
+    @Test @Tag("Incubating")
     void testWrapper_async_waitingOnDomainEvent() throws InterruptedException, ExecutionException {
 
         val inventoryManager = facoryService.viewModel(InventoryManager.class);

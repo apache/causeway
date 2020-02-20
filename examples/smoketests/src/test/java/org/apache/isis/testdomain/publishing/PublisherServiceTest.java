@@ -18,7 +18,6 @@
  */
 package org.apache.isis.testdomain.publishing;
 
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -41,7 +40,6 @@ import org.springframework.transaction.support.TransactionTemplate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.apache.isis.applib.services.publish.PublisherService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
@@ -65,9 +63,7 @@ import lombok.val;
                 Configuration_usingPublishing.class
         }, 
         properties = {
-                "logging.level.org.apache.isis.incubator.IsisPlatformTransactionManagerForJdo=DEBUG",
-                // "isis.core.meta-model.introspector.parallelize=false",
-                // "logging.level.ObjectSpecificationAbstract=TRACE"
+                "logging.level.org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisTransactionJdo=DEBUG"
         })
 @TestPropertySource({
     IsisPresets.SilenceWicket, // just to have any config properties at all
