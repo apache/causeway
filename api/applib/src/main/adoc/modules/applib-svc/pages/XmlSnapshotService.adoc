@@ -196,8 +196,6 @@ The core framework provides an implementation of this service (`o.a.i.core.runti
 
 The xref:refguide:applib-svc:.BookmarkService.adoc[`BookmarkService`] provides a mechanism for obtaining a string representations of a single domain object.
 
-The xref:refguide:applib-svc:.MementoService.adoc[`MementoService`] also provides a mechanism for generating string representations of domain objects.
-
 The xref:refguide:applib-svc:.JaxbService.adoc[`JaxbService`] is a simple wrapper around
 standard JAXB functionality for generating both XMLs and XSDs from JAXB-annotated classes.  Note that there is built-in support for JAXB classes (ie annotated with
 xref:refguide:applib-ant:XmlRootElement.adoc[`@XmlRootElement`]) to be used as view models.

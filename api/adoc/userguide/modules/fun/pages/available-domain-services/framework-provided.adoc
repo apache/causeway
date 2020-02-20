@@ -50,7 +50,6 @@ UserManagement:
 Bookmarks and Mementos:
 
 * xref:refguide:applib-svc:integration-api/BookmarkService.adoc[`BookmarkService`]
-* xref:refguide:applib-svc:integration-api/MementoService.adoc[`MementoService`]
 * xref:refguide:applib-svc:presentation-layer-api/DeepLinkService.adoc[`DeepLinkService`]
 * xref:refguide:applib-svc:integration-api/JaxbService.adoc[`JaxbService`]
 * xref:refguide:applib-svc:integration-api/XmlSnapshotService.adoc[`XmlSnapshotService`]

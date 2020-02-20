@@ -115,6 +115,5 @@ The implementations of `CommandService` and `BackgroundCommandService` go togeth
 The (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module provides implementations of both (see xref:refguide:applib-svc:.CommandService.adoc[`CommandService`] and xref:refguide:applib-svc:.BackgroundCommandService.adoc[`BackgroundCommandService`]).
 
 The xref:runtime-services:ROOT:application-layer/CommandDtoServiceInternal.adoc[`CommandDtoServiceInternal`] is used to obtain a memento of the command such that it can be persisted.
-(In earlier versions, xref:refguide:applib-svc:.MementoService.adoc[`MementoService`] was used for this purpose).
 
 

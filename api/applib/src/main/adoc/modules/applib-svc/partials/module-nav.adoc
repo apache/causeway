@@ -33,7 +33,6 @@
 ** xref:refguide:applib-svc:JaxbService.adoc[JaxbService]
 ** xref:refguide:applib-svc:LayoutService.adoc[LayoutService]
 ** xref:refguide:applib-svc:LocaleProvider.adoc[LocaleProvider]
-** xref:refguide:applib-svc:_MementoService.adoc[MementoService]
 ** xref:refguide:applib-svc:MenuBarsLoaderService.adoc[MenuBarsLoaderService]
 ** xref:refguide:applib-svc:MenuBarsService.adoc[MenuBarsService]
 ** xref:refguide:applib-svc:MessageService.adoc[MessageService]

@@ -56,14 +56,6 @@ It also lists their corresponding implementation, either a default implementatio
 |
 
 
-|xref:refguide:applib-svc:integration-api/MementoService.adoc[`o.a.i.applib.` +
-`services.memento` +
-`MementoService`]
-|Capture a serializable memento of a set of primitives or xref:refguide:applib-svc:integration-api/BookmarkService.adoc[bookmarks].  Primarily used internally, eg in support of commands/auditing.
-|`MementoServiceDefault` +
-``o.a.i.core`` +
-``isis-core-runtime``
-|
 
 
 |xref:refguide:applib-svc:integration-api/XmlSnapshotService.adoc[`o.a.i.applib.` +
