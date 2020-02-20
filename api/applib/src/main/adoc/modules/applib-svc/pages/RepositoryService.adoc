@@ -9,7 +9,7 @@ It acts as an abstraction over the JDO/DataNucleus objectstore.
 
 You can use it during prototyping to write naive queries (find all rows, then filter using the Guava `Predicate` API, or you can use it to call JDO link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/query.html#named[named queries] using JDOQL.
 
-As an alternative, you could also use link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[JDO typesafe queries] through the xref:refguide:applib-svc:.IsisJdoSupport.adoc[`IsisJdoSupport`] service.
+
 
 
 
@@ -232,8 +232,8 @@ The first parameter is the `start` (0-based, the second is the `count`.
 
 [TIP]
 ====
-It is also possible to query using DataNucleus' type-safe query API.
-For more details, see xref:refguide:applib-svc:.IsisJdoSupport.adoc[`IsisJdoSupport`].
+If using JDO/DataNucleus, it is also possible to use the DataNucleus type-safe query API.
+For more details, see xref:pjdo:ROOT:services/IsisJdoSupport.adoc[`IsisJdoSupport`].
 ====
 
 

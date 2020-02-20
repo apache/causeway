@@ -86,7 +86,7 @@ If (by a combination of mechanisms) both prototyping and production modes are sp
 
 === `IsisSystemEnvironment` domain service
 
-Applications can discover the prototyping mode by injecting the xref:refguide:applib-svc:testing/IsisSystemEnvironment.adoc[IsisSystemEnvironment] service.
+Applications can discover the prototyping mode by injecting the `IsisSystemEnvironment` service.
 
 
 
@@ -162,4 +162,5 @@ The remainder of this guide lists the various configuration properties available
 
 === `IsisConfiguration` domain service
 
-Applications can discover the current configuration properties by injecting the xref:refguide:applib-svc:core-domain-api/IsisConfiguration.adoc[`IsisConfiguration`] domain service.
+Applications can discover the current configuration properties for the framework (under the `isis` top-level key) by injecting the `IsisConfiguration` domain service.
+Applications can also create their own configuration properties file; the xref:docs:starters:simpleapp.adoc[simpleapp] starter app provides an example.

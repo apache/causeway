@@ -20,16 +20,6 @@ It also lists their corresponding implementation, either a default implementatio
 |Notes
 
 
-|xref:refguide:applib-svc:persistence-layer-api/IsisJdoSupport.adoc[`o.a.i.applib.` +
-`services.jdosupport` +
-`IsisJdoSupport`]
-|Lower level access to the JDO Persistence API.
-|`IsisJdoSupportImpl` +
-``o.a.i.core`` +
-``isis-core-runtime``
-|
-
-
 |xref:refguide:applib-svc:persistence-layer-api/MetricsService.adoc[`o.a.i.applib.` +
 `services.metrics` +
 `MetricsService`]

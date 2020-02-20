@@ -74,8 +74,8 @@ It further provides a number of supporting services:
 
 * `org.isisaddons.module.command.dom.CommandServiceJdoContributions` contributes actions for searching for persisted child and sibling ``Command``s.
 
-* implementation of the
-xref:refguide:applib-svc:.CommandService.adoc[`BackgroundCommandService`].
+//* implementation of the
+//xref:refguide:applib-svc:.CommandService.adoc[`BackgroundCommandService`].
 
 All of these can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
 
@@ -86,7 +86,7 @@ If contributions are not required in the UI, these can be suppressed either usin
 == Alternative Implementations
 
 The (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module provides an implementation of this service (`CommandService`), and also provides a number of related domain services (`CommandJdoRepository` and `CommandServiceJdoContributions`).
-This module also provides service implementations of the xref:refguide:applib-svc:.CommandService.adoc[`BackgroundCommandService`].
+//This module also provides service implementations of the xref:refguide:applib-svc:.CommandService.adoc[`BackgroundCommandService`].
 
 If contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:userguide:btb:about.adoc#vetoing-visibility[vetoing subscriber].
 
@@ -96,7 +96,7 @@ If contributions are not required in the UI, these can be suppressed either usin
 == Related Services
 
 As discussed above, this service supports the xref:refguide:applib-svc:.CommandContext.adoc[`CommandContext`], providing the ability for `Command` objects to be persisted.
-//This is closely related to the xref:refguide:applib-svc:.BackgroundCommandService.adoc[`BackgroundCommandService`]that allows the xref:refguide:applib-svc:.BackgroundService.adoc[`BackgroundService`] to schedule commands for background/asynchronous execution.
+//This is closely related to the xref:refguide:applib-svc:._BackgroundCommandService.adoc[`BackgroundCommandService`]that allows the xref:refguide:applib-svc:.BackgroundService.adoc[`BackgroundService`] to schedule commands for background/asynchronous execution.
 
 //The implementations of `CommandService` and `BackgroundCommandService` are intended to go together, so that persistent parent `Command`s can be associated with their child background `Command`s.
 

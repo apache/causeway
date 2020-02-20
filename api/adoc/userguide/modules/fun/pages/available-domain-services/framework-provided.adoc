@@ -19,7 +19,6 @@ General purpose:
 * xref:refguide:applib-svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`]
 * xref:refguide:applib-svc:metadata-api/ServiceRegistry.adoc[`ServiceRegistry`]
 * xref:refguide:applib-svc:core-domain-api/UserService.adoc[`UserService`]
-* xref:refguide:applib-svc:persistence-layer-api/IsisJdoSupport.adoc[`IsisJdoSupport`]
 * xref:refguide:applib-svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`]
 * xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`]
 * xref:refguide:applib-svc:integration-api/EmailService.adoc[`EmailService`]

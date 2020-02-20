@@ -56,14 +56,7 @@ It also lists their corresponding implementation, either a default implementatio
 
 
 
-|xref:refguide:applib-svc:core-domain-api/IsisConfiguration.adoc[`o.a.i.applib.` +
-`core.config` +
-`IsisConfiguration`]
-|Access configuration properties (eg from `application.properties` file)
-|`IsisConfiguration`
-``o.a.i.core`` +
-``isis-core-config``
-|A lower-level mechanism to obtain configuration properties.
+
 
 
 

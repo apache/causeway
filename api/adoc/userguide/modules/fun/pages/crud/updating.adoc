@@ -12,7 +12,7 @@ That said, it is possible to "flush" pending changes:
 
 * xref:refguide:applib-svc:application-layer-api/TransactionService.adoc[`TransactionService`] acts at the Apache Isis layer, and flushes any pending object persistence or object deletions
 
-* using xref:refguide:applib-svc:persistence-layer-api/IsisJdoSupport.adoc[`IsisJdoSupport`] it is possible to reach down to the underlying JDO API, and perform a flush of pending object updates also.
+* using xref:pjdo:ROOT:services/IsisJdoSupport.adoc[`IsisJdoSupport`] it is possible to reach down to the underlying JDO API, and perform a flush of pending object updates also.
 
 
 When an object is updated the framework will emit `ObjectUpdatingEvent` and `ObjectUpdatedEvent` xref:userguide:fun:building-blocks.adoc#lifecycle-events[lifecycle events].

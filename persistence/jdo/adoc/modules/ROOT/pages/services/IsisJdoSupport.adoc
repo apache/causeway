@@ -50,7 +50,7 @@ The returned value is the number of rows updated.
 
 [TIP]
 ====
-As an alternative, consider using DataNucleus' link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[type-safe JDO query API], discussed xref:refguide:applib-svc:.IsisJdoSupport.adoc#type-safe-query-api[below].
+As an alternative, consider using DataNucleus' link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[type-safe JDO query API], discussed xref:pjdo:ROOT:services/IsisJdoSupport.adoc#type-safe-query-api[below].
 ====
 
 
@@ -144,14 +144,13 @@ private static <T> List<T> executeListAndClose(final TypesafeQuery<T> query) {
 
 == Fixture support
 
-When writing xref:testing:integtestsupport:about.adoc[integration tests] you'll usually need to tear down some/all mutable transactional data before each test.  One way to do that is to use the `executeUpdate(...)` method described xref:refguide:applib-svc:.IsisJdoSupport.adoc#executing-sql[above].
+When writing xref:testing:integtestsupport:about.adoc[integration tests] you'll usually need to tear down some/all mutable transactional data before each test.  One way to do that is to use the `executeUpdate(...)` method described xref:pjdo:ROOT:services/IsisJdoSupport.adoc#executing-sql[above].
 
 Alternatively, the `deleteAll(...)` method will let your test delete all instances of a class without resorting to SQL:
 
 [source,java]
 ----
 public interface IsisJdoSupport {
-    @Programmatic
     void deleteAll(Class<?>... pcClasses);
     ...
 }

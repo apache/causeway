@@ -61,5 +61,5 @@ When an object is loaded from the database the framework will emit `ObjectLoaded
 
 == Type-safe queries
 
-DataNucleus also supports type-safe queries; see xref:refguide:applib-svc:persistence-layer-api/IsisJdoSupport.adoc#type-safe-jdoql-queries[here] for further details.
+DataNucleus also supports type-safe queries; see xref:pjdo:ROOT:services/IsisJdoSupport.adoc#type-safe-jdoql-queries[here] for further details.
 
