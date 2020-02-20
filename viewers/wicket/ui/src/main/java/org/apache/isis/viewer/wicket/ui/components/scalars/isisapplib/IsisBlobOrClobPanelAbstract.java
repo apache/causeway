@@ -46,8 +46,6 @@ import org.apache.wicket.request.resource.IResource;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType;
 import org.apache.isis.core.metamodel.commons.CloseableExtensions;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
@@ -219,9 +217,8 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
                         }
 
                         val blob = getBlobOrClobFrom(fileUploads);
-
-                        final ManagedObject adapter = PojoAdapter.ofValue(blob);
-                        getModel().setObject(adapter);
+                        val objectAdapter = scalarModel.getCommonContext().getPojoToAdapter().apply(blob);
+                        getModel().setObject(objectAdapter);
                     }
 
                     @Override

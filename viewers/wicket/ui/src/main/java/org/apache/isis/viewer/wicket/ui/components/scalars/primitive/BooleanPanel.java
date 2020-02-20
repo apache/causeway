@@ -31,7 +31,6 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
@@ -141,7 +140,7 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
 
             @Override
             public void setObject(final Boolean object) {
-                val objectAdapter = PojoAdapter.ofValue(object);
+                val objectAdapter = scalarModel.getCommonContext().getPojoToAdapter().apply(object);
                 getModel().setObject(objectAdapter);
             }
         }) {
@@ -180,7 +179,8 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
         final ObjectSpecification objectSpecification = getModel().getTypeOfSpecification();
         if(objectSpecification.getFullIdentifier().equals("boolean")) {
             if(getModel().getObject() == null) {
-                getModel().setObject(PojoAdapter.ofValue(false));
+                val objectAdapter = scalarModel.getCommonContext().getPojoToAdapter().apply(Boolean.FALSE);
+                getModel().setObject(objectAdapter);
             }
         }
 

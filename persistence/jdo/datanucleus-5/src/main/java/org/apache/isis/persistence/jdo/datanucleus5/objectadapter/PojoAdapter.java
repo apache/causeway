@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.persistence.adapter;
+package org.apache.isis.persistence.jdo.datanucleus5.objectadapter;
 
 import java.io.Serializable;
 import java.util.Objects;
