@@ -29,7 +29,10 @@ class FormItem(
         if (member != null) {
             member.value?.content = value
         }
-        setOpacity(value)
+        //IMPROVE this is special logic in a generic place
+        if (type == ValueType.SLIDER.type) {
+            setOpacity(value!!)
+        }
     }
 
     fun reset() {
@@ -44,14 +47,12 @@ class FormItem(
     }
 
     @Deprecated("this needs a better home")
-    fun setOpacity(value: String?) {
-        if (type == ValueType.SLIDER.type) {
-            val opacity = value?.toDouble()!!
-            (dspl as Window).getElementJQuery()?.css(
-                    "background-color",
-                    "rgba(255, 255, 255, $opacity)"
-            )
-        }
+    fun setOpacity(value: String) {
+        val opacity = value.toDouble()
+        (dspl as Window).getElementJQuery()?.css(
+                "background-color",
+                "rgba(255, 255, 255, $opacity)"
+        )
     }
 
 }

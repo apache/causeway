@@ -25,7 +25,7 @@ object RoStatusBar {
     private val lastError: Button = Button(
             text = "OK",
             icon = IconManager.find("OK"),
-            style = ButtonStyle.SUCCESS).apply {
+            style = ButtonStyle.OUTLINESUCCESS).apply {
         padding = CssSize(-16, UNIT.px)
         margin = CssSize(0, UNIT.px)
     }
@@ -58,7 +58,7 @@ object RoStatusBar {
 
     private fun turnRed(logEntry: LogEntry) {
         lastError.text = logEntry.url
-        lastError.style = ButtonStyle.DANGER
+        lastError.style = ButtonStyle.OUTLINEDANGER
         lastError.icon = IconManager.find("Error")
     }
 

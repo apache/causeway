@@ -79,6 +79,17 @@ Used for building tables dynamically.
 ### Remote Facade
 The Restful Objects API.
 
+# Code
+Thanks to Kotlin, code is very compact and readable. 
+And, since Kotlin is a typed language and IDE's can infer a lot about the code, there are only few surprises.
+Nevertheless Kotlin/JS allows to use Javascript features along side the typed part, what effectively makes it a dynamic language.
+
+## Hot Spots
+Look out for places where typing is escaped and the DOM is manipulated directly:
+
+* asDynamic()
+* getElementById()
+
 # Trouble Shooting
    
 ## Corporate Firewall with SSL 'inspection'
@@ -203,7 +214,28 @@ mvn -Djetty.port=8080 jetty:run -DPROTOTYPING
 ```
 
 
- ## CORS
+ 
+
+# Appendix
+## JSON Terminology
+See: elp.kapowsoftware.com/9.4/index.jsp?topic=/doc/rm/JSONTerminology.html
+
+
+|                |             | 
+|---------------|-------------| 
+| JSON Text        | JSON Object &vert; JSON Array | 
+| JSON&nbsp;Object | {} &vert; { Properties }     | 
+| JSON Array       | [] &vert; [ Items ]      | 
+| Properties       | Property, Properties |
+| Property         | String : JSON Value |
+| Items            | JSON Value, Items |
+| JSON Value       | JSON Text &vert; String &vert; Number &vert; false &vert; null &vert; true |
+| String           | "" &vert; " Characters " |
+| Characters       | Character Characters |
+| Character        | any Unicode character except ", \ or control character &vert; \" &vert; \\ &vert; \/ &vert; \b &vert; \f &vert; \n &vert; \r &vert; \t &vert; \u 4 hex digits |
+| Number           | a number very much like a C or Java number, see RFC 4627 for details. |
+
+## CORS
  CORS stands for 'Cross Origin Resource Sharing' aka: 'Same Origin Policy' was designed to improve security and is implemented in browsers.
  In short it means: your browser will allow loading of resources only if host and port are identical to the url you are on.
  Ie. webpage loaded from http://localhost:8088/ resources from http://localhost:8080/restful will not be accessible.
@@ -255,23 +287,3 @@ mvn -Djetty.port=8080 jetty:run -DPROTOTYPING
  
  ### Solution 3:
  Incorporate kroviz.js eg. in the WAR containing your Apache Isis backend. 
- 
-
-## Appendix
-### JSON Terminology
-See: elp.kapowsoftware.com/9.4/index.jsp?topic=/doc/rm/JSONTerminology.html
-
-
-|                |             | 
-|---------------|-------------| 
-| JSON Text        | JSON Object &vert; JSON Array | 
-| JSON&nbsp;Object | {} &vert; { Properties }     | 
-| JSON Array       | [] &vert; [ Items ]      | 
-| Properties       | Property, Properties |
-| Property         | String : JSON Value |
-| Items            | JSON Value, Items |
-| JSON Value       | JSON Text &vert; String &vert; Number &vert; false &vert; null &vert; true |
-| String           | "" &vert; " Characters " |
-| Characters       | Character Characters |
-| Character        | any Unicode character except ", \ or control character &vert; \" &vert; \\ &vert; \/ &vert; \b &vert; \f &vert; \n &vert; \r &vert; \t &vert; \u 4 hex digits |
-| Number           | a number very much like a C or Java number, see RFC 4627 for details. |

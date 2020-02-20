@@ -27,6 +27,7 @@ object RoMenuBar : SimplePanel() {
                 marginLeft = CssSize(-32, UNIT.px)
                 height = CssSize(40, UNIT.px)
                 nav = nav()
+                logoButton()
                 val mainEntry = buildMainMenu()
                 nav.add(mainEntry)
             }
@@ -67,7 +68,6 @@ object RoMenuBar : SimplePanel() {
     }
 
     fun amendMenu(menuBars: Menubars) {
-        logoButton()
         menuBars.primary.menu.forEach { m ->
             nav.add(MenuFactory.buildFor(m))
         }
