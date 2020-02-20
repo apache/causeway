@@ -20,4 +20,4 @@ The API described in this chapter is reasonably low-level, allowing code to inte
 
 
 include::headless-access/AbstractIsisSessionTemplate.adoc[leveloffset=+1]
-include::headless-access/BackgroundCommandExecution.adoc[leveloffset=+1]
+//include::headless-access/BackgroundCommandExecution.adoc[leveloffset=+1]

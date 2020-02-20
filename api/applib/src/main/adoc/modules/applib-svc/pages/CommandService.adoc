@@ -7,9 +7,11 @@
 
 The `CommandService` service supports the xref:refguide:applib-svc:.CommandContext.adoc[`CommandContext`] service such that `Command` objects (that reify the invocation of an action/edit of a property on a domain object) can be persisted.
 
-The primary use case for persistent ``Command``s is in support of background commands; they act as a parent to any background commands that can be persisted either explicitly using the xref:refguide:applib-svc:.BackgroundService.adoc[`BackgroundService`], or implicitly by way of the xref:refguide:applib-ant:Action.adoc#command[`@Action#command()`] annotation.
+//The primary use case for persistent ``Command``s is in support of background commands; they act as a parent to any background commands that can be persisted either explicitly using the xref:refguide:applib-svc:.BackgroundService.adoc[`BackgroundService`], or implicitly by way of the xref:refguide:applib-ant:Action.adoc#command[`@Action#command()`] annotation.
 
-Persistent ``Command``s also support the ability to replicate from a master to a slave instance of an application.
+Persistent ``Command``s
+//also
+support the ability to replicate from a master to a slave instance of an application.
 One use case for this is for regression testing, allowing a production usages to be replayed against a new release candidate, eg after upgrading that application to a new version of Apache Isis itself (or some other dependency).
 
 There are a number of related use cases:
@@ -94,9 +96,9 @@ If contributions are not required in the UI, these can be suppressed either usin
 == Related Services
 
 As discussed above, this service supports the xref:refguide:applib-svc:.CommandContext.adoc[`CommandContext`], providing the ability for `Command` objects to be persisted.
-This is closely related to the xref:refguide:applib-svc:.BackgroundCommandService.adoc[`BackgroundCommandService`]that allows the xref:refguide:applib-svc:.BackgroundService.adoc[`BackgroundService`] to schedule commands for background/asynchronous execution.
+//This is closely related to the xref:refguide:applib-svc:.BackgroundCommandService.adoc[`BackgroundCommandService`]that allows the xref:refguide:applib-svc:.BackgroundService.adoc[`BackgroundService`] to schedule commands for background/asynchronous execution.
 
-The implementations of `CommandService` and `BackgroundCommandService` are intended to go together, so that persistent parent `Command`s can be associated with their child background `Command`s.
+//The implementations of `CommandService` and `BackgroundCommandService` are intended to go together, so that persistent parent `Command`s can be associated with their child background `Command`s.
 
 The services provided by this module combines very well with the xref:refguide:applib-svc:.AuditerService.adoc[`AuditerService`].
 The `CommandService` captures the __cause__ of an interaction (an action was invoked, a property was edited), while the `AuditerService` captures the __effect__ of that interaction in terms of changed state.

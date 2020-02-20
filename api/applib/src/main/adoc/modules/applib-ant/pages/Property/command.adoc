@@ -15,8 +15,8 @@ The annotation works with (and is influenced by the behaviour of) a number of do
 
 * xref:refguide:applib-svc:application-layer-api/CommandContext.adoc[`CommandContext`]
 * xref:refguide:applib-svc:application-layer-spi/CommandService.adoc[`CommandService`]
-* xref:refguide:applib-svc:spi/BackgroundService.adoc[`BackgroundService`] and
-* xref:refguide:applib-svc:application-layer-spi/BackgroundCommandService.adoc[`BackgroundCommandService`]
+//* xref:refguide:applib-svc:spi/BackgroundService.adoc[`BackgroundService`] and
+//* xref:refguide:applib-svc:application-layer-spi/BackgroundCommandService.adoc[`BackgroundCommandService`]
 
 
 Each property edit is automatically reified by the xref:refguide:applib-svc:application-layer-api/CommandContext.adoc[`CommandContext`] service into a `Command` object, capturing details of the target object, the property, the proposed new value fo the property, the user, a timestamp and so on.
@@ -24,12 +24,12 @@ Each property edit is automatically reified by the xref:refguide:applib-svc:appl
 If an appropriate `CommandService` is configured (for example using (non-ASF) link:https://platform.incode.org/modules/spi/command/spi-command.html[Incode Platform's command] module), then the `Command` itself is persisted.
 
 By default, actions are invoked in directly in the thread of the invocation.
-If there is an implementation of `BackgroundCommandService` (as the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module does provide), then this means in turn that the `BackgroundService` can be used by the domain object code to programmatically create background ``Command``s.
+//If there is an implementation of `BackgroundCommandService` (as the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module does provide), then this means in turn that the `BackgroundService` can be used by the domain object code to programmatically create background ``Command``s.
 
-[NOTE]
-====
-If background ``Command``s are used, then an external scheduler, using xref:userguide:btb:about.adoc#BackgroundCommandExecution[headless access], must also be configured.
-====
+//[NOTE]
+//====
+//If background ``Command``s are used, then an external scheduler, using xref:userguide:btb:about.adoc#BackgroundCommandExecution[headless access], must also be configured.
+//====
 
 == `command()` and `commandPersistence()`
 
@@ -193,24 +193,27 @@ If `command` is `DISABLED` or does not otherwise apply due to the action's decla
 
 For persisted commands, the `commandExecuteIn` attribute determines whether the `Command` should be executed in the foreground (the default) or executed in the background.
 
-Background execution means that the command is not executed immediately, but is available for a configured xref:refguide:applib-svc:application-layer-spi/BackgroundCommandService.adoc[`BackgroundCommandService`] to execute, eg by way of an in-memory scheduler such as Quartz.  See xref:userguide:btb:about.adoc#BackgroundCommandExecution[here] for further information on this topic.
+WARNING: TODO: v2 - background execution has temporarily been removed, will be reinstated for v2.0.
 
-For example:
+//Background execution means that the command is not executed immediately, but is available for a configured xref:refguide:applib-svc:application-layer-spi/BackgroundCommandService.adoc[`BackgroundCommandService`] to execute, eg by way of an in-memory scheduler such as Quartz.
+//See xref:userguide:btb:about.adoc#BackgroundCommandExecution[here] for further information on this topic.
 
-[source,java]
-----
-public class Order {
-    @Property(
-        command=CommandReification.ENABLED,
-        commandExecuteIn=CommandExecuteIn.BACKGROUND
-    )
-    public Product getProduct() { /* ... */ }
-    public void setProduct(Product p) { /* ... */ }
-}
-----
-
-will result in the `Command` being persisted but its execution deferred to a background execution mechanism.
-The returned object from this property edit is the persisted `Command` itself.
+//For example:
+//
+//[source,java]
+//----
+//public class Order {
+//    @Property(
+//        command=CommandReification.ENABLED,
+//        commandExecuteIn=CommandExecuteIn.BACKGROUND
+//    )
+//    public Product getProduct() { /* ... */ }
+//    public void setProduct(Product p) { /* ... */ }
+//}
+//----
+//
+//will result in the `Command` being persisted but its execution deferred to a background execution mechanism.
+//The returned object from this property edit is the persisted `Command` itself.
 
 
 
