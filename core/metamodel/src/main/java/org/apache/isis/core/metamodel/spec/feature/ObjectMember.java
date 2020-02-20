@@ -27,7 +27,6 @@ import javax.annotation.meta.When;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;

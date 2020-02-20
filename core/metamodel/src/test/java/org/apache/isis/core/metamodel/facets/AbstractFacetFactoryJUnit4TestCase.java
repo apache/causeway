@@ -69,7 +69,6 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     @Mock protected OneToOneAssociation mockOneToOneAssociation;
     @Mock protected OneToManyAssociation mockOneToManyAssociation;
     @Mock protected OneToOneActionParameter mockOneToOneActionParameter;
-//    @Mock protected ObjectAdapterProvider mockObjectAdapterProvider;
     @Mock protected MetamodelEventService mockMetamodelEventService;
 
     

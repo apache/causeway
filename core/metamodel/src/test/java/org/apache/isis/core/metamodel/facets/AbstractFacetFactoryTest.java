@@ -106,12 +106,9 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
         mockSpecificationLoader = context.mock(SpecificationLoader.class);
 
-//        mockObjectAdapterProvider = context.mock(ObjectAdapterProvider.class);
-
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
                 .translationService(mockTranslationService)
-//                .objectAdapterProvider(mockPersistenceSessionServiceInternal)
                 .authenticationSessionProvider(mockAuthenticationSessionProvider)
                 .build();
 

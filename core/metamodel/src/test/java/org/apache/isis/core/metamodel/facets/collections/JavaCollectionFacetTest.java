@@ -50,7 +50,6 @@ public class JavaCollectionFacetTest {
     @Mock private FacetHolder mockFacetHolder;
     @Mock private ObjectAdapter mockCollection;
     @Mock private Collection<ObjectAdapter> mockWrappedCollection;
-//    @Mock private ObjectAdapterProvider mockOAProvider;
 
     private MetaModelContext_forTesting metaModelContext;
 
