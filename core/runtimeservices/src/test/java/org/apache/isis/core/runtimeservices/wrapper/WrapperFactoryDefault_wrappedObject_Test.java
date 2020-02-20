@@ -22,6 +22,7 @@ package org.apache.isis.core.runtimeservices.wrapper;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -35,6 +36,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.Command.Executor;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.message.MessageService;
@@ -174,6 +176,9 @@ public class WrapperFactoryDefault_wrappedObject_Test {
                 
                 allowing(mockCommandContext).getCommand();
                 will(returnValue(mockCommand));
+                
+                allowing(mockCommandContext).getCurrentExecutor();
+                will(returnValue(Optional.of(Executor.USER)));
 
                 allowing(mockSpecificationLoader).loadSpecification(String.class);
                 will(returnValue(mockStringSpec));
