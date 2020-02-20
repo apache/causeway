@@ -18,11 +18,9 @@
  */
 package org.apache.isis.core.runtime.persistence.transaction;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.enterprise.context.RequestScoped;
@@ -39,7 +37,6 @@ import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.collections._Sets;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -72,13 +69,13 @@ public class ChangedObjectsService implements WithTransactionScope {
      *  Will be null until {@link #getChangedObjectProperties()} is called, thereafter contains the actual changes.
      * </p>
      */
-    private Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties;
+    private Set<AuditEntry> changedObjectProperties;
 
 
     // used for publishing
-    private final Map<ObjectAdapter,PublishingChangeKind> changeKindByEnlistedAdapter = _Maps.newLinkedHashMap();
+    private final Map<ManagedObject,PublishingChangeKind> changeKindByEnlistedAdapter = _Maps.newLinkedHashMap();
 
-    public boolean isEnlisted(ObjectAdapter adapter) {
+    public boolean isEnlisted(ManagedObject adapter) {
         return changeKindByEnlistedAdapter.containsKey(adapter);
     }
 
@@ -93,7 +90,7 @@ public class ChangedObjectsService implements WithTransactionScope {
      * <p>
      * Supported by the JDO object store; check documentation for support in other objectstores.
      */
-    public void enlistCreated(final ObjectAdapter adapter) {
+    public void enlistCreated(final ManagedObject adapter) {
 
         if(shouldIgnore(adapter)) {
             return;
@@ -111,7 +108,7 @@ public class ChangedObjectsService implements WithTransactionScope {
 
     /**
      * Auditing and publishing support: for object stores to enlist an object that is about to be updated,
-     * capturing the pre-modification values of the properties of the {@link ObjectAdapter}.
+     * capturing the pre-modification values of the properties of the {@link ManagedObject}.
      *
      * <p>
      * The post-modification values are captured when the transaction commits.
@@ -119,7 +116,7 @@ public class ChangedObjectsService implements WithTransactionScope {
      * <p>
      * Supported by the JDO object store; check documentation for support in other objectstores.
      */
-    public void enlistUpdating(final ObjectAdapter adapter) {
+    public void enlistUpdating(final ManagedObject adapter) {
 
         if(shouldIgnore(adapter)) {
             return;
@@ -136,7 +133,7 @@ public class ChangedObjectsService implements WithTransactionScope {
 
     /**
      * Auditing and publishing support: for object stores to enlist an object that is about to be deleted,
-     * capturing the pre-deletion value of the properties of the {@link ObjectAdapter}.
+     * capturing the pre-deletion value of the properties of the {@link ManagedObject}.
      *
      * <p>
      * The post-modification values are captured  when the transaction commits.  In the case of deleted objects, a
@@ -145,7 +142,7 @@ public class ChangedObjectsService implements WithTransactionScope {
      * <p>
      * Supported by the JDO object store; check documentation for support in other objectstores.
      */
-    public void enlistDeleting(final ObjectAdapter adapter) {
+    public void enlistDeleting(final ManagedObject adapter) {
 
         if(shouldIgnore(adapter)) {
             return;
@@ -168,7 +165,7 @@ public class ChangedObjectsService implements WithTransactionScope {
     /**
      * @return <code>true</code> if successfully enlisted, <code>false</code> if was already enlisted
      */
-    private boolean enlistForPublishing(final ObjectAdapter adapter, final PublishingChangeKind current) {
+    private boolean enlistForPublishing(final ManagedObject adapter, final PublishingChangeKind current) {
         final PublishingChangeKind previous = changeKindByEnlistedAdapter.get(adapter);
         if(previous == null) {
             changeKindByEnlistedAdapter.put(adapter, current);
@@ -203,52 +200,52 @@ public class ChangedObjectsService implements WithTransactionScope {
     /**
      * Intended to be called at the end of the transaction.  Use {@link #resetForNextTransaction()} once fully read.
      */
-    public Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> getChangedObjectProperties() {
+    public Set<AuditEntry> getChangedObjectProperties() {
         return changedObjectProperties != null
                 ? changedObjectProperties
                         : (changedObjectProperties = capturePostValuesAndDrain(enlistedObjectProperties));
     }
 
-    private Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> capturePostValuesAndDrain(final Map<AdapterAndProperty, PreAndPostValues> changedObjectProperties) {
+    private Set<AuditEntry> capturePostValuesAndDrain(final Map<AdapterAndProperty, PreAndPostValues> changedObjectProperties) {
 
         final Map<AdapterAndProperty, PreAndPostValues> processedObjectProperties = _Maps.newLinkedHashMap();
 
         while(!changedObjectProperties.isEmpty()) {
 
             final Set<AdapterAndProperty> keys = _Sets.newLinkedHashSet(changedObjectProperties.keySet());
-            for (final AdapterAndProperty aap : keys) {
+            for (val adapterAndProperty : keys) {
 
-                val preAndPostValues = changedObjectProperties.remove(aap);
+                val preAndPostValues = changedObjectProperties.remove(adapterAndProperty);
 
-                val adapter = aap.getAdapter();
+                ManagedObject adapter = adapterAndProperty.getAdapter();
                 if(ManagedObject._isDestroyed(adapter)) {
                     // don't touch the object!!!
                     // JDO, for example, will complain otherwise...
                     preAndPostValues.setPost(IsisTransactionPlaceholder.DELETED);
                 } else {
-                    preAndPostValues.setPost(aap.getPropertyValue());
+                    preAndPostValues.setPost(adapterAndProperty.getPropertyValue());
                 }
 
                 // if we encounter the same objectProperty again, this will simply overwrite it
-                processedObjectProperties.put(aap, preAndPostValues);
+                processedObjectProperties.put(adapterAndProperty, preAndPostValues);
             }
         }
 
-        return Collections.unmodifiableSet(
-                processedObjectProperties.entrySet().stream()
-                .filter(PreAndPostValues.Predicates.SHOULD_AUDIT)
-                .collect(Collectors.toSet())    );
+        return processedObjectProperties.entrySet().stream()
+                .filter(PreAndPostValues::shouldAudit)
+                .map(entry->AuditEntry.of(entry.getKey(), entry.getValue()))
+                .collect(_Sets.toUnmodifiable());
 
     }
 
-    protected boolean shouldIgnore(final ObjectAdapter adapter) {
+    protected boolean shouldIgnore(final ManagedObject adapter) {
         final ObjectSpecification adapterSpec = adapter.getSpecification();
         final Class<?> adapterClass = adapterSpec.getCorrespondingClass();
         return HasUniqueId.class.isAssignableFrom(adapterClass);
     }
 
 
-    public Map<ObjectAdapter, PublishingChangeKind> getChangeKindByEnlistedAdapter() {
+    public Map<ManagedObject, PublishingChangeKind> getChangeKindByEnlistedAdapter() {
         return changeKindByEnlistedAdapter;
     }
 
@@ -280,7 +277,7 @@ public class ChangedObjectsService implements WithTransactionScope {
     }
 
     private void enlist(
-            final ObjectAdapter adapter, 
+            final ManagedObject adapter, 
             final Stream<ObjectAssociation> properties, 
             final Function<AdapterAndProperty, PreAndPostValues> pre) {
         properties

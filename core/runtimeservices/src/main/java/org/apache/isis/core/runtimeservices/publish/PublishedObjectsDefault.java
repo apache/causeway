@@ -35,6 +35,7 @@ import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 import org.apache.isis.schema.chg.v2.ObjectsDto;
 import org.apache.isis.schema.common.v2.OidDto;
@@ -56,7 +57,7 @@ public class PublishedObjectsDefault implements PublishedObjects, RepresentsInte
     private final Timestamp completedAt;
     private final int numberLoaded;
     private final int numberObjectPropertiesModified;
-    private final Map<ObjectAdapter, PublishingChangeKind> changesByAdapter;
+    private final Map<ManagedObject, PublishingChangeKind> changesByAdapter;
 
     public PublishedObjectsDefault(
             final UUID transactionUuid,
@@ -65,7 +66,7 @@ public class PublishedObjectsDefault implements PublishedObjects, RepresentsInte
             final Timestamp completedAt,
             final int numberLoaded,
             final int numberObjectPropertiesModified,
-            final Map<ObjectAdapter, PublishingChangeKind> changesByAdapter) {
+            final Map<ManagedObject, PublishingChangeKind> changesByAdapter) {
         
         this.transactionUuid = transactionUuid;
         this.sequence = sequence;
@@ -148,7 +149,7 @@ public class PublishedObjectsDefault implements PublishedObjects, RepresentsInte
     }
 
     private int numAdaptersOfKind(final PublishingChangeKind kind) {
-        final Collection<ObjectAdapter> objectAdapters = adaptersByChange.get().get(kind);
+        final Collection<ManagedObject> objectAdapters = adaptersByChange.get().get(kind);
         return objectAdapters != null ? objectAdapters.size() : 0;
     }
 
@@ -156,10 +157,10 @@ public class PublishedObjectsDefault implements PublishedObjects, RepresentsInte
     /**
      * Lazily calculate the inverse of 'changesByAdapter'
      */
-    private _Lazy<ListMultimap<PublishingChangeKind, ObjectAdapter>> adaptersByChange = 
+    private _Lazy<ListMultimap<PublishingChangeKind, ManagedObject>> adaptersByChange = 
             _Lazy.of(this::initAdaptersByChange);
 
-    private ListMultimap<PublishingChangeKind, ObjectAdapter> initAdaptersByChange(){
+    private ListMultimap<PublishingChangeKind, ManagedObject> initAdaptersByChange(){
         return _Maps.invertToListMultimap(changesByAdapter);
     }
 
@@ -187,11 +188,11 @@ public class PublishedObjectsDefault implements PublishedObjects, RepresentsInte
     private OidsDto oidsDtoFor(final PublishingChangeKind kind) {
         final OidsDto oidsDto = new OidsDto();
 
-        final Collection<ObjectAdapter> adapters = adaptersByChange.get().get(kind);
+        final Collection<ManagedObject> adapters = adaptersByChange.get().get(kind);
         if(adapters != null) {
             final List<OidDto> oidDtos = _Lists.map(adapters, 
-                    (final ObjectAdapter objectAdapter) -> {
-                        final RootOid rootOid = (RootOid) objectAdapter.getOid();
+                    (final ManagedObject objectAdapter) -> {
+                        final RootOid rootOid = ManagedObject._identify(objectAdapter);
                         return rootOid.asOidDto();
                     });
             oidsDto.getOid().addAll(oidDtos);

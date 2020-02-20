@@ -29,7 +29,9 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -40,6 +42,7 @@ import lombok.ToString;
         objectType = "testdomain.jdo.Book",
         publishing=Publishing.ENABLED, 
         auditing = Auditing.ENABLED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public class JdoBook extends JdoProduct {
 

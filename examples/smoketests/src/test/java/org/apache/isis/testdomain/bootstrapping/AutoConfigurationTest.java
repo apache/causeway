@@ -58,7 +58,6 @@ import lombok.val;
                 Configuration_usingStereotypes.class
         },
         properties = {
-                "logging.config=log4j2-test.xml",
                 // "isis.core.meta-model.introspector.parallelize=false",
                 // "logging.level.ObjectSpecificationAbstract=TRACE"
         })

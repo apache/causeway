@@ -18,18 +18,24 @@
  */
 package org.apache.isis.testdomain.conf;
 
+import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 import org.apache.isis.testdomain.jpa.JpaTestDomainModule;
 
-@Configuration
+@SpringBootConfiguration
+@EnableAutoConfiguration
+@EnableJpaRepositories
+
+//@Configuration
 @Import({
     IsisModuleCoreRuntimeServices.class
     ,IsisModuleSecurityBypass.class

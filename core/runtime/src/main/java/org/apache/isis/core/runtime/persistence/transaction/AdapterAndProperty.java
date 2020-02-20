@@ -19,94 +19,51 @@
 package org.apache.isis.core.runtime.persistence.transaction;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.ToString;
 import lombok.val;
 
+@EqualsAndHashCode(of = {"bookmarkStr", "propertyId"})
+@ToString(of = {"bookmarkStr", "propertyId"})
 public class AdapterAndProperty {
 
-    private final ObjectAdapter objectAdapter;
-    private final ObjectAssociation property;
-    private final Bookmark bookmark;
-    private final String propertyId;
+    @Getter private final ManagedObject adapter;
+    @Getter private final ObjectAssociation property;
+    @Getter private final Bookmark bookmark;
+    @Getter private final String propertyId;
     private final String bookmarkStr;
 
-    public static AdapterAndProperty of(ObjectAdapter adapter, ObjectAssociation property) {
+    public static AdapterAndProperty of(
+            @NonNull final ManagedObject adapter, 
+            @NonNull final ObjectAssociation property) {
         return new AdapterAndProperty(adapter, property);
     }
 
-    private AdapterAndProperty(ObjectAdapter adapter, ObjectAssociation property) {
-        this.objectAdapter = adapter;
-        this.property = property;
-
-        final RootOid oid = (RootOid) adapter.getOid();
+    private AdapterAndProperty(ManagedObject adapter, ObjectAssociation property) {
         
-        oid.asBookmark();
+        this.adapter = adapter;
+        this.property = property;
+        this.propertyId = property.getId();
 
-        final String objectType = oid.getObjectSpecId().asString();
-        final String identifier = oid.getIdentifier();
-        bookmark = Bookmark.of(objectType, identifier);
-        bookmarkStr = bookmark.toString();
-
-        propertyId = property.getId();
-    }
-
-    public ObjectAdapter getAdapter() {
-        return objectAdapter;
-    }
-
-    public ObjectAssociation getProperty() {
-        return property;
-    }
-
-    public Bookmark getBookmark() {
-        return bookmark;
-    }
-
-    public String getPropertyId() {
-        return propertyId;
+        val oid = ManagedObject._identify(adapter);
+        this.bookmark = oid.asBookmark();
+        this.bookmarkStr = bookmark.toString();
+        
     }
 
     public String getMemberId() {
         return property.getIdentifier().toClassAndNameIdentityString();
     }
 
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-
-        final AdapterAndProperty that = (AdapterAndProperty) o;
-
-        if (bookmarkStr != null ? !bookmarkStr.equals(that.bookmarkStr) : that.bookmarkStr != null)
-            return false;
-        if (propertyId != null ? !propertyId.equals(that.propertyId) : that.propertyId != null)
-            return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = propertyId != null ? propertyId.hashCode() : 0;
-        result = 31 * result + (bookmarkStr != null ? bookmarkStr.hashCode() : 0);
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return bookmarkStr + " , " + getProperty().getId();
-    }
-
     Object getPropertyValue() {
-        val referencedAdapter = property.get(objectAdapter, InteractionInitiatedBy.FRAMEWORK);
+        val referencedAdapter = property.get(adapter, InteractionInitiatedBy.FRAMEWORK);
         return referencedAdapter == null ? null : referencedAdapter.getPojo();
     }
-
 
 }

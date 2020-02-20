@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Property;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,7 +43,9 @@ import lombok.ToString;
         objectType = "testdomain.jdo.Inventory",
         auditing = Auditing.ENABLED)
 @DomainObjectLayout()  // causes UI events to be triggered
-@NoArgsConstructor @AllArgsConstructor(staticName = "of") @ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED) 
+@AllArgsConstructor(staticName = "of") 
+@ToString
 public class JpaInventory {
 
     public String title() {

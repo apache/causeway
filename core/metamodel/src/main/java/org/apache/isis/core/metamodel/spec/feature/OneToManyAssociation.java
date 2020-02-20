@@ -36,10 +36,10 @@ public interface OneToManyAssociation extends ObjectAssociation, OneToManyFeatur
      * represented as a {@link Consent}.
      *
      * <p>
-     * If allowed the {@link #addElement(ObjectAdapter, ObjectAdapter, InteractionInitiatedBy) add}
+     * If allowed the {@link #addElement(ManagedObject, ManagedObject, InteractionInitiatedBy) add}
      * method can be called with the same parameters.
      *
-     * @see #addElement(ObjectAdapter, ObjectAdapter, InteractionInitiatedBy)
+     * @see #addElement(ManagedObject, ManagedObject, InteractionInitiatedBy)
      */
     Consent isValidToAdd(
             ManagedObject owningObjectAdapter,
@@ -51,10 +51,10 @@ public interface OneToManyAssociation extends ObjectAssociation, OneToManyFeatur
      * object.
      *
      * <p>
-     *     Should be preceded by call to {@link #isValidToAdd(ObjectAdapter, ObjectAdapter)}.
+     *     Should be preceded by call to {@link #isValidToAdd(ManagedObject, ManagedObject)}.
      * </p>
      *
-     * @see #isValidToAdd(ObjectAdapter, ObjectAdapter)
+     * @see #isValidToAdd(ManagedObject, ManagedObject)
      */
     void addElement(
             ManagedObject owningObjectAdapter,
@@ -71,10 +71,10 @@ public interface OneToManyAssociation extends ObjectAssociation, OneToManyFeatur
      * field, represented as a {@link Consent}.
      *
      * <p>
-     * If allowed the {@link #removeElement(ObjectAdapter, ObjectAdapter, InteractionInitiatedBy)
+     * If allowed the {@link #removeElement(ManagedObject, ManagedObject, InteractionInitiatedBy)
      * remove} method can be called with the same parameters.
      *
-     * @see #removeElement(ObjectAdapter, ObjectAdapter, InteractionInitiatedBy)
+     * @see #removeElement(ManagedObject, ManagedObject, InteractionInitiatedBy)
      */
     Consent isValidToRemove(
             ManagedObject owningObjectAdapter,
@@ -86,10 +86,10 @@ public interface OneToManyAssociation extends ObjectAssociation, OneToManyFeatur
      * object.
      *
      * <p>
-     *     Should be preceded by call to {@link #isValidToRemove(ObjectAdapter, ObjectAdapter)}.
+     *     Should be preceded by call to {@link #isValidToRemove(ManagedObject, ManagedObject)}.
      * </p>
      *
-     * @see #isValidToRemove(ObjectAdapter, ObjectAdapter)
+     * @see #isValidToRemove(ManagedObject, ManagedObject)
      */
     void removeElement(
             ManagedObject owningObjectAdapter,

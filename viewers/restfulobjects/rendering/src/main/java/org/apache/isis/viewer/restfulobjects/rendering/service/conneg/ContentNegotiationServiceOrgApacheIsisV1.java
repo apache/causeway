@@ -211,7 +211,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
      * (ie invocations returning void or scalar value are not supported).
      *
      * Action invocations returning a domain object will be rendered as a map with the RO v1.0 representation as a
-     * '$$ro' property within (same as {@link #buildResponse(RepresentationService.Context2, ObjectAdapter)}), while
+     * '$$ro' property within (same as {@link #buildResponse(RepresentationService.Context2, ManagedObject)}), while
      * action invocations returning a list will be rendered as a list with the RO v1.0 representation as a map object
      * with a single '$$ro' property (similar to {@link #buildResponse(RepresentationService.Context2, ObjectAndCollection)})
      */

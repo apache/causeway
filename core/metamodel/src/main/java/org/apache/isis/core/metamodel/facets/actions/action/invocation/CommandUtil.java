@@ -24,9 +24,10 @@ import java.util.List;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Arrays;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -45,7 +46,11 @@ public class CommandUtil {
     }
 
     public static String targetClassNameFor(final ManagedObject targetAdapter) {
-        return StringExtensions.asNaturalName2(targetAdapter.getSpecification().getSingularName());
+        return targetClassNameFor(targetAdapter.getSpecification());
+    }
+    
+    public static String targetClassNameFor(final ObjectSpecification spec) {
+        return StringExtensions.asNaturalName2(spec.getSingularName());
     }
 
     public static String memberIdentifierFor(final ObjectMember objectMember) {
@@ -103,10 +108,10 @@ public class CommandUtil {
 
     public static ManagedObject[] adaptersFor(
             final Object[] args, 
-            final ObjectAdapterProvider adapterProvider) {
+            final ObjectManager objectManager) {
         
         return _NullSafe.stream(args)
-                .map(adapterProvider::adapterFor)
+                .map(objectManager::adapt)
                 .collect(_Arrays.toArray(ManagedObject.class, _NullSafe.size(args)));
     }
 

@@ -74,16 +74,13 @@ public class AuditerDispatchService {
     }
 
     public void audit() {
-        if(!canAudit()) {
-            return;
-        }
-        final Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties =
-                changedObjectsService.getChangedObjectProperties();
-
-        final String currentUser = userService.getUser().getName();
-        final java.sql.Timestamp currentTime = clockService.nowAsJavaSqlTimestamp();
-
-        for (Map.Entry<AdapterAndProperty, PreAndPostValues> auditEntry : changedObjectProperties) {
+        if(!canAudit()) { return; }
+        
+        val currentUser = userService.getUser().getName();
+        val currentTime = clockService.nowAsJavaSqlTimestamp();
+        val changedObjectProperties = changedObjectsService.getChangedObjectProperties();
+    
+        for (val auditEntry : changedObjectProperties) {
             auditChangedProperty(currentTime, currentUser, auditEntry);
         }
     }
@@ -91,25 +88,25 @@ public class AuditerDispatchService {
     private void auditChangedProperty(
             final java.sql.Timestamp timestamp,
             final String user,
-            final Map.Entry<AdapterAndProperty, PreAndPostValues> auditEntry) {
+            final AuditEntry auditEntry) {
 
-        final AdapterAndProperty aap = auditEntry.getKey();
-        final ObjectAdapter adapter = aap.getAdapter();
+        val adapterAndProperty = auditEntry.getAdapterAndProperty();
+        val spec = adapterAndProperty.getAdapter().getSpecification();
 
-        final AuditableFacet auditableFacet = adapter.getSpecification().getFacet(AuditableFacet.class);
+        final AuditableFacet auditableFacet = spec.getFacet(AuditableFacet.class);
         if(auditableFacet == null || auditableFacet.isDisabled()) {
             return;
         }
 
-        final Bookmark target = aap.getBookmark();
-        final String propertyId = aap.getPropertyId();
-        final String memberId = aap.getMemberId();
+        final Bookmark target = adapterAndProperty.getBookmark();
+        final String propertyId = adapterAndProperty.getPropertyId();
+        final String memberId = adapterAndProperty.getMemberId();
 
-        final PreAndPostValues papv = auditEntry.getValue();
+        final PreAndPostValues papv = auditEntry.getPreAndPostValues();
         final String preValue = papv.getPreString();
         final String postValue = papv.getPostString();
 
-        final String targetClass = CommandUtil.targetClassNameFor(adapter);
+        final String targetClass = CommandUtil.targetClassNameFor(spec);
 
         val txId = transactionService.currentTransactionId();
 

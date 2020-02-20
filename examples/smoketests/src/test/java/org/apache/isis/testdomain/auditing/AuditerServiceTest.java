@@ -60,7 +60,6 @@ import lombok.val;
                 Configuration_usingAuditing.class
         }, 
         properties = {
-                "logging.config=log4j2-test.xml",
                 "logging.level.org.apache.isis.testdomain.util.rest.KVStoreForTesting=DEBUG"
         })
 @TestPropertySource({
@@ -117,7 +116,7 @@ class AuditerServiceTest {
         });
 
         // then - after the commit
-        assertEquals("targetClassName=Book,propertyName=name,preValue=Sample Book,postValue=Book #2;",
+        assertEquals("targetClassName=Jdo Book,propertyName=name,preValue=Sample Book,postValue=Book #2;",
                 kvStore.get(AuditerServiceForTesting.class, "audit").orElse(null));
     }
 
@@ -138,7 +137,7 @@ class AuditerServiceTest {
         future.get(1000, TimeUnit.SECONDS);
         
         // then - after the commit
-        assertEquals("targetClassName=Book,propertyName=name,preValue=Sample Book,postValue=Book #2;",
+        assertEquals("targetClassName=Jdo Book,propertyName=name,preValue=Sample Book,postValue=Book #2;",
                 kvStore.get(AuditerServiceForTesting.class, "audit").orElse(null));
     }
     

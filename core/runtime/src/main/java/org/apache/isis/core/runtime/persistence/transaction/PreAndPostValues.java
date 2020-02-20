@@ -20,17 +20,8 @@ package org.apache.isis.core.runtime.persistence.transaction;
 
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Predicate;
 
 public class PreAndPostValues {
-
-    public static class Predicates {
-        public static final Predicate<Map.Entry<?, PreAndPostValues>> SHOULD_AUDIT = 
-                (Map.Entry<?, PreAndPostValues> input) -> {
-                    final PreAndPostValues papv = input.getValue();
-                    return papv.shouldAudit();
-                };
-    }
 
     private final Object pre;
     /**
@@ -102,4 +93,10 @@ public class PreAndPostValues {
         // else - for updated objects - audit only if the property value has changed
         return !Objects.equals(getPre(), getPost());
     }
+    
+    public static boolean shouldAudit(Map.Entry<?, PreAndPostValues> input) { 
+        final PreAndPostValues papv = input.getValue();
+        return papv.shouldAudit();
+    }
+    
 }

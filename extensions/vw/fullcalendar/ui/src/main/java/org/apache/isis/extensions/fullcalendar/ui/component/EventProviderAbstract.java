@@ -33,7 +33,7 @@ import org.joda.time.DateTime;
 import org.joda.time.Interval;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -110,10 +110,10 @@ public abstract class EventProviderAbstract implements EventProvider {
                         final ObjectSpecification spec = specificationLoader.loadSpecification(dereferencedObject.getClass());
                         final ManagedObject dereferencedManagedObject = ManagedObject.of(spec, dereferencedObject);
 
-                        if(dereferencedManagedObject instanceof ObjectAdapter) {
-                            final ObjectAdapter dereferencedObjectAdapter = (ObjectAdapter) dereferencedManagedObject;
+                        final RootOid rootOid = ManagedObject._identify(dereferencedManagedObject);
+                        if(rootOid!=null) {
 
-                            final String oidStr = dereferencedObjectAdapter.getOid().enString();
+                            final String oidStr = rootOid.enString();
                             event.setId(oidStr + "-" + calendarName);
 
                             event.setClassName("fullCalendar2-event-" + calendarName);

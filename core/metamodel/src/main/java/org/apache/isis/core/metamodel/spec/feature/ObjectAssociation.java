@@ -51,15 +51,15 @@ import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
 public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
     /**
-     * As per {@link #get(ObjectAdapter, InteractionInitiatedBy)}, with {@link InteractionInitiatedBy#USER}.
+     * As per {@link #get(ManagedObject, InteractionInitiatedBy)}, with {@link InteractionInitiatedBy#USER}.
      */
     public default ManagedObject get(ManagedObject owner) {
         return get(owner, InteractionInitiatedBy.USER);
     }
 
     /**
-     * Returns the referenced {@link ObjectAdapter} for the owning
-     * {@link ObjectAdapter}.
+     * Returns the referenced {@link ManagedObject} for the owning
+     * {@link ManagedObject}.
      *
      * <p>
      * For example, if this is an {@link OneToOneAssociation}, then returns the

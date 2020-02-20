@@ -348,7 +348,7 @@ public class XmlSnapshot implements Snapshot {
      * Taken from the <code>fullyQualifiedClassName</code> (which also is used as
      * the basis for the <code>targetNamespace</code>.
      *
-     * Populated in {@link #appendXml(ObjectAdapter)}.
+     * Populated in {@link #appendXml(ManagedObject)}.
      */
     public String getSchemaLocationFileName() {
         return schemaLocationFileName;

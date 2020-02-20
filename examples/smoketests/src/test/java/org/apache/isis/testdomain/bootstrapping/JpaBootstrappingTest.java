@@ -25,16 +25,10 @@ import javax.inject.Inject;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -44,21 +38,20 @@ import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 
-//@Smoketest
-//@SpringBootTest(
-//        classes = { 
-//                Configuration_usingJpa.class,
-//        }
-//)
+@Smoketest
+@SpringBootTest(
+        classes = { 
+                Configuration_usingJpa.class,
+        }
+)
 
 //@DataJpaTest
 //@Import({
 //    Configuration_usingJpa.class
 //})
-//@TestPropertySource(IsisPresets.UseLog4j2Test)
+@TestPropertySource(IsisPresets.UseLog4j2Test)
 ////@Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-//@Incubating("JPA support is under construction")
-@Disabled
+@Incubating("JPA support is under construction")
 class JpaBootstrappingTest {
 
     @Inject private Optional<PlatformTransactionManager> platformTransactionManager; 

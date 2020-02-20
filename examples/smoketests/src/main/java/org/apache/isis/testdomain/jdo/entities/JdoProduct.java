@@ -38,6 +38,7 @@ import org.apache.isis.applib.annotation.Property;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -50,7 +51,9 @@ import lombok.ToString;
 @DomainObject(
         objectType = "testdomain.jdo.Product"
         )
-@AllArgsConstructor(access = AccessLevel.PROTECTED) @ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED) 
+@ToString
 public class JdoProduct {
 
     public String title() {

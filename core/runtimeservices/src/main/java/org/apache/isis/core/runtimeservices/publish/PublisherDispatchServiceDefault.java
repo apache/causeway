@@ -100,7 +100,7 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
                         changedObjectsServiceInternal.numberObjectPropertiesModified(), 
                         changeKindByPublishedAdapter);
 
-        for (PublisherService publisherService : publisherServices) {
+        for (val publisherService : publisherServices) {
             publisherService.publish(publishedObjects);
         }
     }
@@ -108,7 +108,7 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
     private PublishedObjects newPublishedObjects(
             final int numberLoaded,
             final int numberObjectPropertiesModified,
-            final Map<ObjectAdapter, PublishingChangeKind> changeKindByPublishedAdapter) {
+            final Map<ManagedObject, PublishingChangeKind> changeKindByPublishedAdapter) {
 
         final Command command = commandContext.getCommand();
         final UUID transactionUuid = command.getUniqueId();
