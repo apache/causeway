@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.commons.internal.collections._Lists;
@@ -73,9 +74,17 @@ public class PrimitivesDemo extends DemoStub {
     
     // -- BOOLEAN
     
-    @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
+    @Property(
+            optionality = Optionality.MANDATORY,
+            editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
     @PropertyLayout(describedAs="java.lang.Boolean")
     @Getter @Setter private Boolean javaLangBoolean;
+    
+    @Property(
+            optionality = Optionality.OPTIONAL,
+            editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970)
+    @PropertyLayout(describedAs="Nullable (3 state)")
+    @Getter @Setter private Boolean nullableBoolean;
     
     @Getter private boolean primitiveFalse = false;
     @Getter private boolean primitiveTrue = true;
@@ -87,7 +96,7 @@ public class PrimitivesDemo extends DemoStub {
     
     @Action
     public List<Boolean> calculateBooleans() {
-        return _Lists.of(Boolean.FALSE, Boolean.TRUE);
+        return _Lists.of(Boolean.FALSE, Boolean.TRUE, null);
     }
     
     
