@@ -16,13 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.jdo;
+package org.apache.isis.testdomain.jpa;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-//@SpringBootApplication(scanBasePackageClasses= {JdoTestDomainModule.class})
-@Deprecated
-public class JdoTestApplication {
+/**
+ * Just an entry-point to initialize class-path scanning. 
+ */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class JpaTestDomainModule {
 
 
 }

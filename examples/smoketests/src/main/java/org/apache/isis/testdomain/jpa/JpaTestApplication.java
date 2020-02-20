@@ -16,13 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.jdo;
+package org.apache.isis.testdomain.jpa;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-//@SpringBootApplication(scanBasePackageClasses= {JdoTestDomainModule.class})
+//@SpringBootApplication(scanBasePackageClasses= {JpaTestDomainModule.class})
 @Deprecated
-public class JdoTestApplication {
+public class JpaTestApplication {
 
 
 }

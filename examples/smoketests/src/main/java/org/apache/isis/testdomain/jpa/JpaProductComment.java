@@ -16,13 +16,37 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.jdo;
+package org.apache.isis.testdomain.jpa;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import java.sql.Timestamp;
 
-//@SpringBootApplication(scanBasePackageClasses= {JdoTestDomainModule.class})
-@Deprecated
-public class JdoTestApplication {
+import javax.persistence.Entity;
 
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.mixins.timestamp.Timestampable;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Entity
+//@DatastoreIdentity(strategy=IdGeneratorStrategy.IDENTITY, column="id")
+@DomainObject
+public class JpaProductComment implements Timestampable {
+    
+    @Property //@Column(allowsNull = "false")
+    @Getter @Setter private JpaProduct product;
+
+    @Property
+    @Getter @Setter private String comment;
+
+    // -- TIMESTAMPABLE
+    
+    @Property
+    @Getter @Setter private String updatedBy;
+    
+    @Property
+    @Getter @Setter private Timestamp updatedAt;
+
+    
 }
