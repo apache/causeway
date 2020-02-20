@@ -12,4 +12,6 @@ data class Extensions(val oid: String = "",
                       val actionType: String = "",
                       @SerialName("x-isis-format") val xIsisFormat: String? = null,
                       val friendlyName: String = "",
-                      val collectionSemantics: String? = null) : TransferObject
+                      val collectionSemantics: String? = null,
+                      val pluralName: String = ""
+) : TransferObject

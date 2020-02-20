@@ -2,7 +2,6 @@ package org.ro.ui
 
 import org.ro.core.Utils
 import org.ro.core.event.LogEntry
-import org.ro.org.ro.ui.ImageAlert
 import org.ro.ui.kv.RoDialog
 
 class EventLogDetail(val logEntry: LogEntry) : Command {

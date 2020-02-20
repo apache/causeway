@@ -3,7 +3,7 @@ package org.ro.snapshots.simpleapp1_16_0
 import org.ro.snapshots.Response
 
 object RESTFUL_DOMAIN_TYPES : Response() {
-    override val url = "http://localhost:8080/restful/menuBars"
+    override val url = "http://localhost:8080/restful/domain-types"
     override val str = """
 {
   "links" : [ {

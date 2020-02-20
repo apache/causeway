@@ -1,10 +1,8 @@
-package org.ro.org.ro.ui
+package org.ro.ui
 
-import org.ro.org.ro.utils.UmlUtils
 import org.ro.to.ValueType
-import org.ro.ui.Command
-import org.ro.ui.FormItem
 import org.ro.ui.kv.RoDialog
+import org.ro.utils.UmlUtils
 import kotlin.js.Date
 
 class ImageAlert(val label: String = "UML Diagram Sample") : Command {

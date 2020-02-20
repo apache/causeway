@@ -1,4 +1,4 @@
-package org.ro.org.ro.utils
+package org.ro.utils
 
 import org.ro.core.aggregator.DiagramDispatcher
 import org.ro.core.event.RoXmlHttpRequest

@@ -1,6 +1,6 @@
 package org.ro.ui.kv
 
-import org.ro.org.ro.utils.UmlUtils
+import org.ro.utils.UmlUtils
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.form.text.TextArea

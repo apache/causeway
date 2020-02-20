@@ -7,7 +7,8 @@ import kotlinx.serialization.Serializable
 //TODO either have kotlinx.serialization cope with empty key or implement custom serialization (cf. to.Value)
 data class Argument(var key: String = "",
                     var value: String? = null,
-                    val potFileName: String = "") : TransferObject {
+                    val potFileName: String = "",
+                    val href: String? = null) : TransferObject {
     init {
         if (value == null) {
             value = ""

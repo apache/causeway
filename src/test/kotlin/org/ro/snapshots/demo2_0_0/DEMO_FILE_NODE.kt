@@ -1,3 +1,10 @@
+package org.ro.snapshots.demo2_0_0
+
+import org.ro.snapshots.Response
+
+object DEMO_FILE_NODE : Response() {
+    override val url = "http://localhost:8080/restful/domain-types/demo.FileNode"
+    override val str = """
 {
     "links": [
         {
@@ -93,4 +100,6 @@
         "pluralName": "File Nodes",
         "isService": false
     }
+}
+"""
 }
