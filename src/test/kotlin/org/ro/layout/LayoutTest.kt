@@ -28,11 +28,11 @@ class LayoutTest : IntegrationTest() {
 
         // row0 ^= DomainObject
         val cols00 = cols0List[0]
-        val col00 = cols00.col
+        val col00 = cols00.getCol()
         assertNotNull(col00)  // 3
         val do00 = col00.domainObject
         assertNotNull(do00) //4
-        assertEquals(5, col00.action.size) //5
+        assertEquals(5, col00.action?.size) //5
         assertEquals(12, col00.span)  //6
 
         // row1 ^= Body (Editable, ReadOnly, Description)
@@ -40,13 +40,13 @@ class LayoutTest : IntegrationTest() {
         val cols1List = row1.cols
         assertEquals(2, cols1List.size) //7
         val cslBody = cols1List[0]
-        val clBody = cslBody.col
+        val clBody = cslBody.getCol()
         assertNotNull(clBody)  //8
         assertEquals(6, clBody.span as Int)  //9
         val fslList = clBody.fieldSet
-        assertEquals(2, fslList.size) //10
+        assertEquals(2, fslList?.size) //10
         // Editable
-        val fslEditable = fslList[0]
+        val fslEditable = fslList!![0]
         assertEquals("Editable", fslEditable.name)
         val editableProperties = fslEditable.property
         assertEquals(2, editableProperties.size) //11
@@ -58,12 +58,12 @@ class LayoutTest : IntegrationTest() {
 
         // Description
         val descCslBody = cols1List[1]
-        val descClBody = descCslBody.col
+        val descClBody = descCslBody.getCol()
         assertNotNull(descClBody)  //14
         assertEquals(6, descClBody.span as Int)  //15
         val descFslList = descClBody.fieldSet
-        assertEquals(1, descFslList.size) //16
-        val fslDescription = descFslList[0]
+        assertEquals(1, descFslList?.size) //16
+        val fslDescription = descFslList!![0]
         assertEquals("Description", fslDescription.name) //17
         val descriptionProperties = fslDescription.property
         assertEquals(1, descriptionProperties.size) //18
@@ -103,11 +103,11 @@ class LayoutTest : IntegrationTest() {
         console.log(row0)
         val cols00 = row0.cols[0]
         console.log(cols00)
-        val col000 = cols00.col
+        val col000 = cols00.getCol()
         console.log(col000)
         val action = col000.action
         // then
-        assertEquals(5, action.size)    //1
+        assertEquals(5, action?.size)    //1
         //assertEquals("field1", fieldSet[0].id)  //2
     }
 

@@ -1,6 +1,6 @@
 package org.ro.ui.builder
 
-import org.ro.layout.RowLayout
+import org.ro.layout.Row
 import org.ro.to.TObject
 import org.ro.ui.kv.MenuFactory
 import org.ro.ui.kv.RoDisplay
@@ -11,7 +11,7 @@ import pl.treksoft.kvision.panel.VPanel
 
 class RowBuilder {
 
-    fun create(rowLayout: RowLayout, tObject: TObject, dsp: RoDisplay): VPanel {
+    fun create(rowLayout: Row, tObject: TObject, dsp: RoDisplay): VPanel {
         val result = VPanel()
         result.width = CssSize(100, UNIT.perc)
         result.height = CssSize(100, UNIT.perc)

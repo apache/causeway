@@ -11,28 +11,26 @@ import org.ro.to.TransferObject
  */
 @Serializable
 data class Layout(val cssClass: String? = null,
-                  val row: MutableList<RowLayout> = mutableListOf<RowLayout>()) : TransferObject {
-//TODO check if :TransferObject is required
-    var properties = listOf<PropertyLayout>()
+                  val row: List<Row> = emptyList()) : TransferObject {
+    //TODO check if :TransferObject is required
+    var properties = listOf<Property>()
 
     init {
         // row[0] (head) contains the object title and actions
         // row[1] contains data, tabs, collections, etc.
         val secondRow = row[1] // traditional C braintwist
         var colsLyt = secondRow.cols.first()
-        var colLyt = colsLyt.col
-        if (colLyt != null) {
-            val tgLyts = colLyt.tabGroup
-            if (tgLyts.isNotEmpty()) {
-                val tabGroup = tgLyts.first()
-                val tab = tabGroup.tab.first()
-                val row = tab.row.first()
-                colsLyt = row.cols.first()
-            }
+        var colLyt = colsLyt.getCol()
+        val tgLyts = colLyt.tabGroup
+        if (tgLyts.isNotEmpty()) {
+            val tabGroup = tgLyts.first()
+            val tab = tabGroup.tab.first()
+            val row = tab.row.first()
+            colsLyt = row.cols.first()
         }
-        colLyt = colsLyt.col
+        colLyt = colsLyt.getCol()
         val fsList = colLyt.fieldSet
-        if (fsList.isNotEmpty()) {
+        if (fsList!!.isNotEmpty()) {
             val fsLyt = fsList.first()
             properties = fsLyt.property
         }

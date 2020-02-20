@@ -1,6 +1,6 @@
 package org.ro.ui.builder
 
-import org.ro.layout.TabLayout
+import org.ro.layout.Tab
 import org.ro.to.TObject
 import org.ro.ui.kv.RoDisplay
 import pl.treksoft.kvision.core.Component
@@ -10,7 +10,7 @@ import pl.treksoft.kvision.panel.VPanel
 
 class TabBuilder {
 
-    fun create(tabLayout: TabLayout, tObject: TObject, tab: RoDisplay): Component {
+    fun create(tabLayout: Tab, tObject: TObject, tab: RoDisplay): Component {
         val result = VPanel()
         result.width = CssSize(100, UNIT.perc)
         result.height = CssSize(100, UNIT.perc)
