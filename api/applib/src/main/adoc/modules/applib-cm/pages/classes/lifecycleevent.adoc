@@ -24,7 +24,7 @@ Impl'n (g: a:)
 `AbstractLifecycleEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
-``isis-core-applib``
+``isis-applib``
 |(abstract class)
 |Superclass of the other lifecycle events, listed below in this table.
 
@@ -33,7 +33,7 @@ Impl'n (g: a:)
 `ObjectCreatedEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
-``isis-core-applib``
+``isis-applib``
 |(abstract class). +
 `ObjectCreatedEvent.Default` is the concrete implementation that is used.
 |Broadcast when an object is first instantiated using the xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`]'s
@@ -44,7 +44,7 @@ Impl'n (g: a:)
 `ObjectLoadedEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
-``isis-core-applib``
+``isis-applib``
 |(abstract class). +
 `ObjectLoadedEvent.Default` is the concrete implementation that is used.
 |Broadcast when an object is retrieved from the database.
@@ -54,7 +54,7 @@ Impl'n (g: a:)
 `ObjectPersistedEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
-``isis-core-applib``
+``isis-applib``
 |(abstract class). +
 `ObjectPersistedEvent.Default` is the concrete implementation that is used.
 |Broadcast when an object is first saved (inserted) into the database using the xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`]'s
@@ -65,7 +65,7 @@ Impl'n (g: a:)
 `ObjectPersistingEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
-``isis-core-applib``
+``isis-applib``
 |(abstract class). +
 `ObjectPersistingEvent.Default` is the concrete implementation that is used.
 |Broadcast when an object is about to be saved (inserted) into the database using the xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`]'s
@@ -76,7 +76,7 @@ Impl'n (g: a:)
 `ObjectRemovingEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
-``isis-core-applib``
+``isis-applib``
 |(abstract class). +
 `ObjectRemovingEvent.Default` is the concrete implementation that is used.
 |Broadcast when an object is about to be deleted from the database using the xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`]'s
@@ -87,7 +87,7 @@ Impl'n (g: a:)
 `ObjectUpdatedEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
-``isis-core-applib``
+``isis-applib``
 |(abstract class). +
 `ObjectUpdatedEvent.Default` is the concrete implementation that is used.
 |Broadcast when an object has just been updated in the database.
@@ -98,7 +98,7 @@ This is done either explicitly when the current transaction is flushed using the
 `ObjectUpdatingEvent`]
 |``o.a.i.core`` +
 ``events.lifecycle`` +
-``isis-core-applib``
+``isis-applib``
 |(abstract class). +
 `ObjectUpdatingEvent.Default` is the concrete implementation that is used.
 |Broadcast when an object is about to be updated in the database.

@@ -5,7 +5,6 @@
 
 
 
-
 [__migration-notes_1.16.0-to-2.0.0-M1_other-changes_view-model-urls]
 == View model URLs
 

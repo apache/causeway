@@ -21,7 +21,7 @@ Impl'n (g: a:)
 |xref:refguide:applib-cm:classes.adoc#AbstractService[`o.a.i.applib.` +
 `AbstractService`]
 |``o.a.i.core`` +
-``isis-core-applib``
+``isis-applib``
 |(abstract class)
 |
 
@@ -29,7 +29,7 @@ Impl'n (g: a:)
 |xref:refguide:applib-cm:classes.adoc#AbstractSubscriber[`o.a.i.applib.` +
 `AbstractSubscriber`]
 |``o.a.i.core`` +
-``isis-core-applib``
+``isis-applib``
 |(abstract class)
 |
 
@@ -37,7 +37,7 @@ Impl'n (g: a:)
 |xref:refguide:applib-cm:classes.adoc#AbstractViewModel[`o.a.i.applib.` +
 `AbstractViewModel`]
 |``o.a.i.core`` +
-``isis-core-applib``
+``isis-applib``
 |(abstract class)
 |
 

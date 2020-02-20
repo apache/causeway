@@ -26,7 +26,7 @@ It also lists their corresponding implementation, either a default implementatio
 |Access the current time (and for testing, allow the time to be changed)
 |`ClockService` +
 ``o.a.i.core`` +
-``isis-core-applib``
+``isis-applib``
 |API is also a concrete class.
 
 
@@ -66,7 +66,7 @@ It also lists their corresponding implementation, either a default implementatio
 |Request-scoped service for interchanging information between and aggregating over multiple method calls; in particular for use by "bulk" actions (invoking of an action for all elements of a collection)
 |`Scratchpad` +
 ``o.a.i.core`` +
-``isis-core-applib``
+``isis-applib``
 |API is also a concrete class
 
 

@@ -25,7 +25,7 @@ Impl'n (g: a:)
 `AbstractDomainEvent`]
 |``o.a.i.core`` +
 ``events.domain`` +
-``isis-core-applib``
+``isis-applib``
 |(abstract class)
 |Superclass of the other domain events, listed below in this table.
 
@@ -34,7 +34,7 @@ Impl'n (g: a:)
 `ActionDomainEvent`]
 |``o.a.i.core`` +
 ``events.domain`` +
-``isis-core-applib``
+``isis-applib``
 |(abstract class). +
 `ActionDomainEvent.Default` is the concrete implementation used if no `@Action#domainEvent` attribute is specified
 |Broadcast whenever there is an interaction (hide/disable/validate/pre-execute/post-execute) with an object's action.
@@ -44,7 +44,7 @@ Impl'n (g: a:)
 `CollectionDomainEvent`]
 |``o.a.i.core`` +
 ``events.domain`` +
-``isis-core-applib``
+``isis-applib``
 |(abstract class). +
 `CollectionDomainEvent.Default` is the concrete implementation used if no `@Collection#domainEvent` attribute
 is specified.
@@ -55,7 +55,7 @@ is specified.
 `PropertyDomainEvent`]
 |``o.a.i.core`` +
 ``events.domain`` +
-``isis-core-applib``
+``isis-applib``
 |(abstract class). +
 `PropertyDomainEvent.Default` is the concrete implementation used if no `@Propert#domainEvent` attribute is specified
 |Broadcast whenever there is an interaction (hide/disable/validate/access) with an object's property.

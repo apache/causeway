@@ -38,7 +38,7 @@ It also lists their corresponding implementation, either a default implementatio
 |Request-scoped access to capture the users's __intention__ to invoke an action or to edit a property.
 |`CommandContext` +
 ``o.a.i.core`` +
-``isis-core-applib``
+``isis-applib``
 |API is also a concrete class. +
 depends on: +
 xref:refguide:applib-svc:CommandService.adoc[`CommandService`] for persistent `Command`, else in-memory impl. used.
@@ -65,7 +65,7 @@ The xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`] manag
 represented as the `Interaction` context.
 |`InteractionContext` +
 ``o.a.i.core`` +
-``isis-core-applib``
+``isis-applib``
 |API is also a concrete class.
 
 
@@ -90,6 +90,16 @@ represented as the `Interaction` context.
 ``o.a.i.core`` +
 ``isis-core-runtime``
 |
+
+|xref:refguide:applib-svc:SudoService.adoc[`o.a.i.applib.` +
+`services.sudo` +
+`SudoService`]
+|Typically for use in testing while running xref:testing:fixtures:services/FixtureScripts.adoc[fixture scripts], allows a block of code to run as a specified user account.
+|`SudoServiceDefault` +
+``o.a.i.core`` +
+``isis-core-runtime``
+|API is also a concrete class
+
 
 
 |xref:refguide:applib-svc:TitleService.adoc[`o.a.i.applib.` +

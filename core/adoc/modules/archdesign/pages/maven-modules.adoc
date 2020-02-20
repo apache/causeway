@@ -55,7 +55,7 @@ core/
 | Module
 | Description
 
-| `isis-core-applib`
+| `isis-applib`
 | Core application library.
 
 | `isis-core-commons`

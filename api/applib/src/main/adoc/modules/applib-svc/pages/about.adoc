@@ -37,7 +37,6 @@ include::refguide:applib-svc:partial$application-layer-spi.adoc[leveloffset=+2]
 include::refguide:applib-svc:partial$core-domain-api.adoc[leveloffset=+2]
 include::refguide:applib-svc:partial$integration-api.adoc[leveloffset=+2]
 include::refguide:applib-svc:partial$metadata-api.adoc[leveloffset=+2]
-include::refguide:applib-svc:partial$testing.adoc[leveloffset=+2]
 include::refguide:applib-svc:partial$persistence-layer-api.adoc[leveloffset=+2]
 include::refguide:applib-svc:partial$persistence-layer-spi.adoc[leveloffset=+2]
 
@@ -45,7 +44,7 @@ include::refguide:applib-svc:partial$persistence-layer-spi.adoc[leveloffset=+2]
 
 == Public API vs Internal Services
 
-The vast majority of Apache Isis' domain services are defined in Apache Isis' applib (`o.a.i.core:isis-core-applib` module) as stable, public classes.
+The vast majority of Apache Isis' domain services are defined in Apache Isis' applib (`o.a.i.core:isis-applib` module) as stable, public classes.
 Importantly, this also minimizes the coupling between your code and Apache Isis, allowing you to easily mock out these services in your unit tests.
 
 

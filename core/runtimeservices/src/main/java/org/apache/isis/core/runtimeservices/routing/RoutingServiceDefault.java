@@ -30,7 +30,12 @@ import org.apache.isis.applib.services.homepage.HomePageResolverService;
 @Named("isisRuntimeServices.RoutingServiceDefault")
 public class RoutingServiceDefault implements RoutingService {
     
-    @Inject private HomePageResolverService homePageProviderService;
+    private final HomePageResolverService homePageResolverService;
+
+    @Inject
+    public RoutingServiceDefault(final HomePageResolverService homePageResolverService) {
+        this.homePageResolverService = homePageResolverService;
+    }
 
     @Override
     public boolean canRoute(final Object original) {
@@ -39,9 +44,7 @@ public class RoutingServiceDefault implements RoutingService {
 
     @Override
     public Object route(final Object original) {
-        return original != null ? original : homePageProviderService.getHomePage();
+        return original != null ? original : homePageResolverService.getHomePage();
     }
-
-    
 
 }
