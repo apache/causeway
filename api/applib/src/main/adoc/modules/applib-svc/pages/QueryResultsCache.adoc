@@ -111,4 +111,4 @@ This refactoring will be worthwhile provided that enough of the orders being pro
 
 == Related Services
 
-The xref:refguide:applib-svc:.Scratchpad.adoc[`Scratchpad`] service is also intended for actions that are called many times, allowing arbitrary information to be shared between them. Those methods could be called from some outer loop in domain code, or by the framework itself if the action invoked has the xref:refguide:applib-ant:Action.adoc#invokeOn[`@Action#invokeOn()`] annotation attribute set to `OBJECT_AND_COLLECTION` or `COLLECTION_ONLY`.
+The xref:refguide:applib-svc:Scratchpad.adoc[`Scratchpad`] service is also intended for actions that are called many times, allowing arbitrary information to be shared between them. Those methods could be called from some outer loop in domain code, or by the framework itself if the action invoked has the xref:refguide:applib-ant:Action.adoc#invokeOn[`@Action#invokeOn()`] annotation attribute set to `OBJECT_AND_COLLECTION` or `COLLECTION_ONLY`.

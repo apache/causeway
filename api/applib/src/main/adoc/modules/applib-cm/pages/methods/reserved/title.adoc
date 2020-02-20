@@ -44,7 +44,7 @@ public String title() {
 ----
 <1> simple xref:refguide:applib-cm:classes.adoc#TitleBuffer[utility class] to help construct the title string
 <2> imperative conditional logic
-<3> using the xref:refguide:applib-svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] to determine if the `dueBy` field is visible for this user ...
+<3> using the xref:refguide:applib-svc:WrapperFactory.adoc[`WrapperFactory`] to determine if the `dueBy` field is visible for this user ...
 <4> ... but ignore if not
 
 As the example above shows, the implementation can be as complex as you like.

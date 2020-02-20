@@ -5,7 +5,7 @@
 
 
 Retrieving domain entities typically requires a JDOQL query defined on the domain entity, and a corresponding repository service for that domain entity type.
-This repository calls the framework-provided xref:refguide:applib-svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`] to actually submit the query.
+This repository calls the framework-provided xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`] to actually submit the query.
 
 For example:
 
@@ -47,7 +47,7 @@ public class CustomerRepository {
     RepositoryService repositoryService;
 }
 ----
-<1>	The xref:refguide:applib-svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`] is a generic facade over the JDO/DataNucleus API.
+<1>	The xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`] is a generic facade over the JDO/DataNucleus API.
 <2> Specifies the class that is annotated with @Query
 <3> Corresponds to the `@Query#name` attribute
 <4> Corresponds to the `:name` parameter in the query JDOQL string

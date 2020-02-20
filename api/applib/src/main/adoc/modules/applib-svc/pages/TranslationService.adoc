@@ -98,5 +98,5 @@ translations can be downloaded as a single file.
 
 == Related Services
 
-This service works in conjunction with xref:refguide:applib-svc:.LocaleProvider.adoc[`LocaleProvider`] and xref:refguide:applib-svc:.TranslationsResolver.adoc[`TranslationsResolver`] in order to provide i18n support.
+This service works in conjunction with xref:refguide:applib-svc:LocaleProvider.adoc[`LocaleProvider`] and xref:refguide:applib-svc:TranslationsResolver.adoc[`TranslationsResolver`] in order to provide i18n support.
 

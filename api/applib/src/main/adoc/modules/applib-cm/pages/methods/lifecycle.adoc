@@ -23,7 +23,7 @@ The lifecycle callback methods supported by Apache Isis are:
 |Description
 
 |xref:refguide:applib-cm:methods.adoc#created[`created()`]
-|called when an object has just been created using xref:refguide:applib-svc:core-domain-api/FactoryService.adoc[`FactoryService#instantiate(..)`] or xref:refguide:applib-svc:core-domain-api/RepositoryService.adoc[`RepositoryService#instantiate(...)`]
+|called when an object has just been created using xref:refguide:applib-svc:FactoryService.adoc[`FactoryService#instantiate(..)`] or xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService#instantiate(...)`]
 
 |xref:refguide:applib-cm:methods.adoc#loaded[`loaded()`]
 |called when a (persistent) object has just been loaded from the object store.

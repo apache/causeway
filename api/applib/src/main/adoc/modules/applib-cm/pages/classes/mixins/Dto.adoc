@@ -52,4 +52,4 @@ The `IsisSchemas` parameter to the action can be used to optionally ignore the c
 
 == Related Services
 
-The `Dto_downloadXml` and `Dto_downloadXsd` delegate to the xref:refguide:applib-svc:integration-api/JaxbService.adoc[`JaxbService`] to actually generate the XML/XSD.
+The `Dto_downloadXml` and `Dto_downloadXsd` delegate to the xref:refguide:applib-svc:JaxbService.adoc[`JaxbService`] to actually generate the XML/XSD.

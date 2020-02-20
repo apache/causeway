@@ -3,7 +3,7 @@
 
 :page-role: -toc
 
-The xref:refguide:applib-svc:metadata-api/SwaggerService.adoc[SwaggerService] serializes the domain's meta model as a Swagger 2.0 specification, either as JSON or YAML.
+The xref:refguide:applib-svc:SwaggerService.adoc[SwaggerService] serializes the domain's meta model as a Swagger 2.0 specification, either as JSON or YAML.
 The `SwaggerExporter` in turn is a utility class that simply writes this serialization out to a file from within an integration test.
 The idea is that subsequent jobs in the build process could then pick up this file, typically to code-generation REST clients in other languages.
 
@@ -32,7 +32,7 @@ class SwaggerExport_IntegTest extends ApplicationIntegTestAbstract {
 }
 ----
 <1> bootstrap using the usual `AppManifest` for integration tests ...
-<2> \... and _also_ include the xref:vro:ROOT:about.adoc[Restful Objects] viewer because this contains the implementation of xref:refguide:applib-svc:metadata-api/SwaggerService.adoc[SwaggerService].
+<2> \... and _also_ include the xref:vro:ROOT:about.adoc[Restful Objects] viewer because this contains the implementation of xref:refguide:applib-svc:SwaggerService.adoc[SwaggerService].
 <3> instantiate the `SwaggerExporter` utility class
 <4> Export specifies the required visibility and format.
 

@@ -7,7 +7,7 @@ Whenever a domain object is to be rendered, the framework fires off an CSS class
 This is as an alternative to implementing xref:refguide:applib-cm:methods.adoc#cssClass[`cssClass()`] reserved method.
 (If `cssClass()` is present, then it will take precedence).
 
-Subscribers subscribe through the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] and can use obtain a reference to the domain object from the event.
+Subscribers subscribe through the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] and can use obtain a reference to the domain object from the event.
 From this they can, if they wish, specify a CSS class for the domain object using the event's API.
 
 [NOTE]
@@ -52,7 +52,7 @@ The benefit is that subscribers can be more targeted as to the events that they 
 == Subscribers
 
 Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API
-or (if the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] has been appropriately configured)
+or (if the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] has been appropriately configured)
 using the link:http://www.axonframework.org/[Axon Framework] API.
 The examples below are compatible with both.
 
@@ -113,7 +113,7 @@ And, conversely, the framework also provides `CssClassUiEvent.Noop`; if `cssClas
 == Raising events programmatically
 
 Normally events are only raised for interactions through the UI.
-However, events can be raised programmatically either by calling the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] API directly.
+However, events can be raised programmatically either by calling the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] API directly.
 
 
 == See also

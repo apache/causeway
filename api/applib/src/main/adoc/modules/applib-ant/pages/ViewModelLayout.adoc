@@ -36,7 +36,7 @@ The table below summarizes the annotation's attributes.
 |xref:refguide:applib-ant:ViewModelLayout.adoc#cssClassUiEvent[`cssClassUiEvent()`]
 |subtype of `CssClassUiEvent` +
 (`CssClassUiEvent.Default`)
-|the event type to be posted to the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain a CSS class for the domain object.
+|the event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] to obtain a CSS class for the domain object.
 
 
 |xref:refguide:applib-ant:ViewModelLayout.adoc#describedAs[`describedAs()`]
@@ -46,12 +46,12 @@ The table below summarizes the annotation's attributes.
 |xref:refguide:applib-ant:ViewModelLayout.adoc#iconUiEvent[`iconUiEvent()`]
 |subtype of `IconUiEvent` +
 (`IconUiEvent.Default`)
-|the event type to be posted to the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain the icon (name) for the domain object.
+|the event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] to obtain the icon (name) for the domain object.
 
 |xref:refguide:applib-ant:ViewModelLayout.adoc#layoutUiEvent[`layoutUiEvent()`]
 |subtype of `LayoutUiEvent` +
 (`LayoutUiEvent.Default`)
-|the event type to be posted to the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain the layout (name) for the domain object.
+|the event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] to obtain the layout (name) for the domain object.
 
 |xref:refguide:applib-ant:ViewModelLayout.adoc#named[`named()`]
 |String.
@@ -73,7 +73,7 @@ A typical use case is if the desired name is a reserved Java keyword, such as `d
 |xref:refguide:applib-ant:ViewModelLayout.adoc#titleUiEvent[`titleUiEvent()`]
 |subtype of `TitleUiEvent` +
 (`TitleUiEvent.Default`)
-|the event type to be posted to the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] to obtain the title for the domain object.
+|the event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] to obtain the title for the domain object.
 
 |===
 

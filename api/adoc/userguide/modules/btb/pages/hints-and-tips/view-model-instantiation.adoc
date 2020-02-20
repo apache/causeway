@@ -7,7 +7,7 @@
 Vith view models, some care must be taken in how they are instantiated.
 Specifically, it's important that the framework doesn't "know" about the view model until its state is "sufficiently" populated to distinguish from other view models.
 
-In practical terms, this means that view models should be instantiated using a constructor, and then injecting services (if required) using the xref:refguide:applib-svc:metadata-api/ServiceRegistry.adoc[`ServiceRegistry`] service:
+In practical terms, this means that view models should be instantiated using a constructor, and then injecting services (if required) using the xref:refguide:applib-svc:ServiceRegistry.adoc[`ServiceRegistry`] service:
 
 [source,java]
 ----
@@ -15,7 +15,7 @@ CustomerViewModel viewModel = new CustomerViewModel("Joe", "Bloggs");
 serviceRegistry.injectServicesInto(viewModel);
 ----
 
-What will most likely *fail* is to use the xref:refguide:applib-svc:core-domain-api/FactoryService.adoc[`FactoryService`]:
+What will most likely *fail* is to use the xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`]:
 
 
 [source,java]

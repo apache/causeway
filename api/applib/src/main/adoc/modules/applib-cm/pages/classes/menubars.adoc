@@ -13,7 +13,7 @@ This is similar to the `ActionLayoutData` component class used for object layout
 Service actions are grouped into menu sections.
 
 All of the classes in this package are JAXB-annotated, meaning that they can be serialized to/from XML (in the `http://isis.apache.org/applib/layout/menubars/bootstrap3` XSD namespace).
-This ability to serialize to/from XML is used by the xref:refguide:applib-svc:presentation-layer-spi/MenuBarsLoaderService.adoc[`MenuBarsLoaderService`], the default implementation of which reads the grid layout for a domain class from a `.layout.xml` file on the classpath.
+This ability to serialize to/from XML is used by the xref:refguide:applib-svc:MenuBarsLoaderService.adoc[`MenuBarsLoaderService`], the default implementation of which reads the grid layout for a domain class from a `.layout.xml` file on the classpath.
 It also allows the menu bars to be exposed through the REST API provided by the xref:vro:ROOT:about.adoc[Restful Objects viewer], as either XML or JSON.
 
 The service action component also allows a link to be associated with it.

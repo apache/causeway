@@ -14,7 +14,7 @@ File-based layouts offer a number of benefits:
 
 * UI hints can be provided for contributed xref:userguide:fun:programming-model.adoc#contributed-action[actions] that are synthesised at runtime.
 
-It is also possible to download an initial `.layout.xml` - capturing any existing layout metadata - using the xref:refguide:applib-svc:metadata-api/LayoutService.adoc[`LayoutService`] (exposed on the prototyping menu) or using a xref:refguide:applib-cm:classes/mixins.adoc#Object[mixin action] contributed to every domain object.
+It is also possible to download an initial `.layout.xml` - capturing any existing layout metadata - using the xref:refguide:applib-svc:LayoutService.adoc[`LayoutService`] (exposed on the prototyping menu) or using a xref:refguide:applib-cm:classes/mixins.adoc#Object[mixin action] contributed to every domain object.
 
 There are some downsides, though:
 
@@ -361,7 +361,7 @@ from the top of the page slightly, using the following CSS:
 
 == Migrating from earlier versions
 
-As noted earlier on, it is possible to download layout XML files using the xref:refguide:applib-svc:metadata-api/LayoutService.adoc[`LayoutService`] (exposed on the prototyping menu); this will download a ZIP file of layout XML files for all domain entities and view models.
+As noted earlier on, it is possible to download layout XML files using the xref:refguide:applib-svc:LayoutService.adoc[`LayoutService`] (exposed on the prototyping menu); this will download a ZIP file of layout XML files for all domain entities and view models.
 Alternatively the layout XML for a single domain object can be downloaded using the xref:refguide:applib-cm:classes/mixins.adoc#Object[mixin action] (contributed to every domain object).
 
 There are four "styles":
@@ -424,9 +424,9 @@ Download either for a single domain object, or download all domain objects (enti
 
 For more information about layouts, see:
 
-* xref:refguide:applib-svc:metadata-api/LayoutService.adoc[`LayoutService`] (whose functionality is exposed on the prototyping menu as an action) and lso the a xref:refguide:applib-cm:classes/mixins.adoc#Object[mixin action]
+* xref:refguide:applib-svc:LayoutService.adoc[`LayoutService`] (whose functionality is exposed on the prototyping menu as an action) and lso the a xref:refguide:applib-cm:classes/mixins.adoc#Object[mixin action]
 
-* xref:refguide:applib-svc:presentation-layer-spi/GridService.adoc[`GridService`] and its supporting services, xref:refguide:applib-svc:presentation-layer-spi/GridLoaderService.adoc[`GridLoaderService`] and xref:refguide:applib-svc:presentation-layer-spi/GridSystemService.adoc[`GridSystemService`]
+* xref:refguide:applib-svc:GridService.adoc[`GridService`] and its supporting services, xref:refguide:applib-svc:GridLoaderService.adoc[`GridLoaderService`] and xref:refguide:applib-svc:GridSystemService.adoc[`GridSystemService`]
 
 * xref:refguide:applib-cm:classes/layout.adoc[grid layout classes], defined in the Apache Isis applib
 

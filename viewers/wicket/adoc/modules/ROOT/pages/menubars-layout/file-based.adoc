@@ -25,7 +25,7 @@ is that IDEs such as IntelliJ and Eclipse can provide "intellisense", making it 
 
 == Obtaining an initial layout
 
-An initial `menubars.layout.xml` - capturing any existing metadata either implicit or explicitly specified through annotations can be downloaded from the xref:refguide:applib-svc:metadata-api/MenuBarsService.adoc[`MenuBarsService`] (exposed on the prototyping menu):
+An initial `menubars.layout.xml` - capturing any existing metadata either implicit or explicitly specified through annotations can be downloaded from the xref:refguide:applib-svc:MenuBarsService.adoc[`MenuBarsService`] (exposed on the prototyping menu):
 
 image::/menubars/010-download.png[width="300px",link="{imagesdir}/menubars/010-download.png"]
 

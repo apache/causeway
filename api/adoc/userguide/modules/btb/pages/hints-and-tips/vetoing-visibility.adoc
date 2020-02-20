@@ -4,7 +4,7 @@
 :page-partial:
 
 
-NOTE: FIXME - a write-up of the "vetoing subscriber" design pattern, eg as described in the  xref:refguide:applib-svc:integration-api/BookmarkService.adoc[`BookmarkService`]
+NOTE: FIXME - a write-up of the "vetoing subscriber" design pattern, eg as described in the  xref:refguide:applib-svc:BookmarkService.adoc[`BookmarkService`]
 
 
 eg if included an addon such as auditing or security.

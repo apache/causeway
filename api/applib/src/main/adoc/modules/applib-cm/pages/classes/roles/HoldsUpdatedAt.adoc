@@ -15,7 +15,7 @@ public interface HoldsUpdatedAt {
 }
 ----
 
-The current time is obtained from the xref:refguide:applib-svc:core-domain-api/ClockService.adoc[`ClockService`].
+The current time is obtained from the xref:refguide:applib-svc:ClockService.adoc[`ClockService`].
 
 Entities that implement this interface often also implement xref:refguide:applib-cm:classes.adoc#HoldsUpdatedBy[`HoldsUpdatedBy`] role interface; as a convenience the xref:refguide:applib-cm:classes.adoc#Timestampable[`Timestampable`] interface combines the two roles.
 

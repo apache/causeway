@@ -58,4 +58,4 @@ The framework provides `GridSystemServiceBS3`, an implementation that encodes th
 
 == Related Services
 
-This service is used by xref:refguide:applib-svc:.GridService.adoc[`GridService`].
+This service is used by xref:refguide:applib-svc:GridService.adoc[`GridService`].

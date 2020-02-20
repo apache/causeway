@@ -21,19 +21,19 @@ It is also possible to apply the annotation to actions of domain services that a
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
 |whether the property edit should be reified into a `o.a.i.applib.` +
-`services.command.Command` object through the xref:refguide:applib-svc:application-layer-api/CommandContext.adoc[`CommandContext`] service.
+`services.command.Command` object through the xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`] service.
 
 
 |`commandExecuteIn()`
 |`FOREGROUND`,`BACKGROUND` +
 (`FOREGROUND`)
-|whether to execute the command immediately, or to persist it (assuming that an appropriate implementation of xref:refguide:applib-svc:application-layer-spi/CommandService.adoc[`CommandService`] has been configured) such that a background scheduler can execute the command asynchronously
+|whether to execute the command immediately, or to persist it (assuming that an appropriate implementation of xref:refguide:applib-svc:CommandService.adoc[`CommandService`] has been configured) such that a background scheduler can execute the command asynchronously
 
 
 |`commandPersistence()`
 |`PERSISTED`, `NOT_PERSISTED`, `IF_HINTED` +
 (`PERSISTED`)
-|whether the reified `Command` (as provided by the `CommandContext` domain service) should actually be persisted (assuming an appropriate implementation of xref:refguide:applib-svc:application-layer-spi/CommandService.adoc[`CommandService`] has been configured).
+|whether the reified `Command` (as provided by the `CommandContext` domain service) should actually be persisted (assuming an appropriate implementation of xref:refguide:applib-svc:CommandService.adoc[`CommandService`] has been configured).
 
 
 
@@ -47,7 +47,7 @@ It is also possible to apply the annotation to actions of domain services that a
 |xref:refguide:applib-ant:Property.adoc#domainEvent[`domainEvent()`]
 |subtype of `PropertyDomainEvent` +
 (`PropertyDomainEvent.Default`)
-|the event type to be posted to the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] to broadcast the property's business rule checking (hide, disable, validate) and its modification (before and after).
+|the event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] to broadcast the property's business rule checking (hide, disable, validate) and its modification (before and after).
 
 
 |xref:refguide:applib-ant:Property.adoc#editing[`editing()`]

@@ -93,7 +93,7 @@ public class Customer {
 
 [NOTE]
 ====
-An alternative and almost equivalent design would be to publish an event using the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] and implement the domain services as subscribers to the event.
+An alternative and almost equivalent design would be to publish an event using the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] and implement the domain services as subscribers to the event.
 This alternative design is used in the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s poly module, for example.
 ====
 
@@ -104,7 +104,7 @@ This alternative design is used in the (non-ASF) link:https://platform.incode.or
 == Manually injecting services
 
 Apache Isis performs dependency injection when domain entities are recreated.
-It will also perform dependency injection if an object is created through the xref:refguide:applib-svc:core-domain-api/FactoryService.adoc[`FactoryService`] or xref:refguide:applib-svc:core-domain-api/RepositoryService.adoc[`RepositoryService`].
+It will also perform dependency injection if an object is created through the xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`] or xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`].
 
 For example, to create a new (transient) domain object, the idiom is:
 
@@ -123,7 +123,7 @@ TodoAppDashboard dashboard = repositoryService.instantiate(TodoAppDashboard.clas
 ----
 
 
-If you prefer, though, you can simply instantiate domain objects using "new" and then inject domain services manually using xref:refguide:applib-svc:core-domain-api/ServiceRegistry.adoc[`ServiceRegistry`]:
+If you prefer, though, you can simply instantiate domain objects using "new" and then inject domain services manually using xref:refguide:applib-svc:ServiceRegistry.adoc[`ServiceRegistry`]:
 
 
 [source,java]

@@ -5,7 +5,7 @@
 
 Whenever a (just created, still transient) domain object has been saved (INSERTed in)to the database, a "persisted" lifecycle event is fired.
 
-Subscribers subscribe through the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] and can use the event to obtain a reference to the domain object.
+Subscribers subscribe through the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] and can use the event to obtain a reference to the domain object.
 The subscriber could then, for example, maintain an external datastore.
 
 [WARNING]
@@ -48,7 +48,7 @@ The benefit is that subscribers can be more targeted as to the events that they 
 
 == Subscribers
 
-Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.
+Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.
 The examples below are compatible with both.
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):

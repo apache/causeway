@@ -146,7 +146,7 @@ public class CustomerAgent {
 
 [NOTE]
 ====
-It ought to be possible to implement an xref:refguide:applib-svc:.ExceptionRecognizer.adoc[`ExceptionRecognizer`]s that would allow the above boilerplate to be removed.
+It ought to be possible to implement an xref:refguide:applib-svc:ExceptionRecognizer.adoc[`ExceptionRecognizer`]s that would allow the above boilerplate to be removed.
 This recognizer service would recognize the `InteractionException` and convert to a suitable message.
 
 At the time of writing Apache Isis does not provide an out-of-the-box implementation of such an `ExceptionRecognizer`; but it should be simple enough to write one…

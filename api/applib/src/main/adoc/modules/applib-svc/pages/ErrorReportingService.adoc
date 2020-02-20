@@ -34,8 +34,8 @@ public class ErrorDetails {
 }
 ----
 <1> the main message to be displayed to the end-user.
-The service is responsible for translating this into the language of the end-user (it can use xref:refguide:applib-svc:.LocaleProvider.adoc[`LocaleProvider`] if required).
-<2> whether this message has already been recognized by an xref:refguide:applib-svc:.ExceptionRecognizer.adoc[`ExceptionRecognizer`] service.
+The service is responsible for translating this into the language of the end-user (it can use xref:refguide:applib-svc:LocaleProvider.adoc[`LocaleProvider`] if required).
+<2> whether this message has already been recognized by an xref:refguide:applib-svc:ExceptionRecognizer.adoc[`ExceptionRecognizer`] service.
 Generally this converts potentially non-recoverable (fatal) exceptions into recoverable exceptions (warnings) as well providing an alternative mechanism for generating user-friendly error messages.
 <3> whether the cause of the exception was due to a lack of privileges.
 In such cases the UI restricts the information shown to the end-user, to avoid leaking potentially sensitive information

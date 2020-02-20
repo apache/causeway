@@ -5,7 +5,7 @@
 
 
 
-The `LocaleProvider` service is one of the services that work together to implement Apache Isis' support for i18n, being used by Isis' default implementation of xref:refguide:applib-svc:.TranslationService.adoc[`TranslationService`].
+The `LocaleProvider` service is one of the services that work together to implement Apache Isis' support for i18n, being used by Isis' default implementation of xref:refguide:applib-svc:TranslationService.adoc[`TranslationService`].
 
 The role of the service itself is simply to return the `Locale` of the current user.
 
@@ -50,7 +50,7 @@ Currently there is no equivalent implementation for the xref:vro:ROOT:about.adoc
 
 == Related Services
 
-This service works in conjunction with xref:refguide:applib-svc:.TranslationService.adoc[`TranslationService`] and xref:refguide:applib-svc:.TranslationsResolver.adoc[`TranslationsResolver`] in order to provide i18n support.
+This service works in conjunction with xref:refguide:applib-svc:TranslationService.adoc[`TranslationService`] and xref:refguide:applib-svc:TranslationsResolver.adoc[`TranslationsResolver`] in order to provide i18n support.
 
 
 

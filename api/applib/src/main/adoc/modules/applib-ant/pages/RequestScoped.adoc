@@ -8,7 +8,7 @@ The `@javax.enterprise.context.RequestScoped` link:https://jcp.org/en/jsr/detail
 
 Although Apache Isis does not (currently) leverage CDI, the semantics are the same as request-scoped service; a new instance is created for each HTTP request, reserved for the exclusive use of all objects interacted with during that request.
 
-One of the built-in domain services that uses this annotation is xref:refguide:applib-svc:core-domain-api/Scratchpad.adoc[`Scratchpad`], intended to allow the arbitrary sharing of data between objects.  Here is the full source code of this service is:
+One of the built-in domain services that uses this annotation is xref:refguide:applib-svc:Scratchpad.adoc[`Scratchpad`], intended to allow the arbitrary sharing of data between objects.  Here is the full source code of this service is:
 
 
 [source,java]

@@ -29,7 +29,7 @@ public interface HintStore {
 }
 ----
 <1> obtain a hint (eg which tab to open) for a particular object.  Object identity is represented by `Bookmark`, as
-per the xref:refguide:applib-svc:.BookmarkService.adoc[`BookmarkService`], so that alternative implementations can easily serialize this state to a string.
+per the xref:refguide:applib-svc:BookmarkService.adoc[`BookmarkService`], so that alternative implementations can easily serialize this state to a string.
 <2> set the state of a hint.  (The value of) all hints are represented as strings.
 <3> remove a single hint for an object;
 <4> remove all hints

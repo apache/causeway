@@ -9,7 +9,7 @@ TODO: v2: this service has been deleted - remove this doc and update the migrati
 The `GuiceBeanProvider` domain service acts as a bridge between Apache Isis' xref:vw:ROOT:about.adoc[Wicket viewer] internal bootstrapping using link:https://github.com/google/guice[Google Guice].
 
 This service operates at a very low-level, and you are unlikely to have a need for it.
-It is used internally by the framework, in the default implementation of the xref:refguide:applib-svc:.DeepLinkService.adoc[`DeepLinkService`].
+It is used internally by the framework, in the default implementation of the xref:refguide:applib-svc:DeepLinkService.adoc[`DeepLinkService`].
 
 [NOTE]
 ====

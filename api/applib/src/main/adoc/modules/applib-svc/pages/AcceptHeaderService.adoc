@@ -8,7 +8,7 @@ Its intended use is to support multiple versions of a REST API, where the respon
 
 [NOTE]
 ====
-As an alternative to performing content negotiation within the domain classes, the xref:runtime-services:ROOT:presentation-layer/ContentNegotiationService.adoc[`ContentNegotiationService`] and xref:refguide:applib-svc:.ContentMappingService.adoc[`ContentMappingService`] SPI domain services allow the framework to perform the content negotiation responsibility.
+As an alternative to performing content negotiation within the domain classes, the xref:runtime-services:ROOT:presentation-layer/ContentNegotiationService.adoc[`ContentNegotiationService`] and xref:refguide:applib-svc:ContentMappingService.adoc[`ContentMappingService`] SPI domain services allow the framework to perform the content negotiation responsibility.
 ====
 
 == API
@@ -48,7 +48,7 @@ Based on this it delegates to the appropriate underlying domain service (with a 
 The service does not define any conventions as to the format of the media types.
 The option is to use the media type's type/subtype, eg `application/vnd.myrestapi-v1+json`; an alternative is to use a media type parameter as a hint, eg `application/json;x-my-rest-api-version=1` (where `x-my-rest-api-version` is the media type parameter).
 
-The Restful Objects specification does this something similar with its own `x-ro-domain-type` media type parameter; this is used by the xref:refguide:applib-svc:.ContentMappingService.adoc[`ContentMappingService`] to determine how to map domain objects to view models/DTOs.
+The Restful Objects specification does this something similar with its own `x-ro-domain-type` media type parameter; this is used by the xref:refguide:applib-svc:ContentMappingService.adoc[`ContentMappingService`] to determine how to map domain objects to view models/DTOs.
 ====
 
 

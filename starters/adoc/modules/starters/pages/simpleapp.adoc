@@ -198,7 +198,7 @@ public String default0UpdateName() {
 ----
 
 The `updateName` action is annotated with publishing enabled.
-This means that the action invocation is converted into XML and dispatched to all configured implementations of the xref:refguide:applib-svc:persistence-layer-spi/PublisherService.adoc[PublisherService] SPI.
+This means that the action invocation is converted into XML and dispatched to all configured implementations of the xref:refguide:applib-svc:PublisherService.adoc[PublisherService] SPI.
 
 The framework provides a default implementation that just logs the interaction:
 
@@ -508,7 +508,7 @@ src/test/java/
 <1> These are very simple unit tests of `SimpleObject` and `SimpleObjects` with the package structure the same as in `src/main/java`.
 They are written in JUnit 5, and use JMockito as the mocking library.
 <2> Integration tests for the module.
-These use the xref:refguide:applib-svc:application-layer-api/WrapperFactory.adoc[WrapperFactory] to simulate interactions through the UI.
+These use the xref:refguide:applib-svc:WrapperFactory.adoc[WrapperFactory] to simulate interactions through the UI.
 <3> The `SimpleModuleIntegTestAbstract` superclass bootstraps the module's integration tests.
 This is discussed in more detail below.
 
@@ -599,7 +599,7 @@ Used for prototyping and also integration testing.
 +
 NOTE: Fixture scenarios also need to be link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html[@Import]ed, typically in the top-level `AppManifest`.
 
-<4> An implementation of the xref:refguide:applib-svc:application-layer-spi/HealthCheckService.adoc[HealtCheckService].
+<4> An implementation of the xref:refguide:applib-svc:HealthCheckService.adoc[HealtCheckService].
 This integrates with Spring Boot's link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/actuate/health/HealthIndicator.html[HealthIndicator] SPI, surfaced through the link:https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-features.html[Spring Boot Actuator].
 <5> Annotated with xref:refguide:applib-ant:HomePage.adoc[@HomePage] and so is shown automatically as the home page.
 <6> Defines the services in the webapp module, along with dependencies onto the other modules in the application. +

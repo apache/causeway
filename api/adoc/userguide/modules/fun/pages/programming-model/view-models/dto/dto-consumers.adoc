@@ -7,9 +7,9 @@
 The actual consumers of DTOs will generally obtain the XML of the view models either by requesting the XML directly, eg using the xref:vro:ROOT:about.adoc[RestfulObjects viewer], or may have the XML sent to them asynchronously using an ESB such as Apache Camel.
 
 In the former case, the consumer requests the DTO by calling the REST API with the appropriate HTTP `Accept` header.
-An appropriate implementation of xref:refguide:applib-svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`] can then be used to return the appropriate DTO (as XML).
+An appropriate implementation of xref:refguide:applib-svc:ContentMappingService.adoc[`ContentMappingService`] can then be used to return the appropriate DTO (as XML).
 
-For the latter case, one design is simply for the application to instantiate the view model, then call the xref:refguide:applib-svc:integration-api/JaxbService.adoc[`JaxbService`] to obtain its corresponding XML.  This can then be published onto the ESB, for example using an http://activemq.apache.org[Apache ActiveMQ (TM)] queue.
+For the latter case, one design is simply for the application to instantiate the view model, then call the xref:refguide:applib-svc:JaxbService.adoc[`JaxbService`] to obtain its corresponding XML.  This can then be published onto the ESB, for example using an http://activemq.apache.org[Apache ActiveMQ (TM)] queue.
 
 However, rather than try to push all the data that might be needed by any of these external systems in a single XML event (which would require anticipating all the requirements, likely a hopeless task), a better design is to publish only the fact that something of note has changed - ie, that an action on a domain object has been invoked - and then let the consumers call back to obtain other information if required.
 This can once again be done by calling the REST API with an appropriate HTTP `Accept` header.
@@ -21,7 +21,7 @@ In our case we focus on the validation (to determine the nature of the inbound m
 ====
 
 The (non-ASF) link:https://platform.incode.org[Incode Platform^]'s publishmq module provides an out-of-the-box solution of this design.
-It provides an implementation of the xref:refguide:applib-svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`], but which simply publishes instances of xref:refguide:schema:ixn.adoc[`InteractionDto`] to an ActiveMQ queue.
+It provides an implementation of the xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`], but which simply publishes instances of xref:refguide:schema:ixn.adoc[`InteractionDto`] to an ActiveMQ queue.
 Camel (or similar) can then be hooked up to consume these events from this queue, and use a processor to parse the action memento to determine what has changed on the source system.
 Thereafter, a subsequent Camel processor can then call back to the source - via the xref:vro:ROOT:about.adoc[Restful Objects viewer] - to enrich the message with additional details using a DTO.
 

@@ -111,4 +111,4 @@ If using the xref:vw:ROOT:about.adoc[Wicket viewer], the `ToDoItemBulkUpdate` vi
 
 == Related Services
 
-The xref:refguide:applib-svc:.QueryResultsCache.adoc[`QueryResultsCache`] is useful for caching the results of expensive method calls.
+The xref:refguide:applib-svc:QueryResultsCache.adoc[`QueryResultsCache`] is useful for caching the results of expensive method calls.

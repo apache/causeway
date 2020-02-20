@@ -4,7 +4,7 @@
 
 WARNING: TODO: v2 - temporarily removed, will be reinstated for v2.0
 
-The `BackgroundService` domain service (and its various supertypes), and also the companion xref:refguide:applib-svc:.BackgroundCommandService.adoc[`BackgroundCommandService2`] SPI service, enable commands to be persisted such that they may be invoked in the background.
+The `BackgroundService` domain service (and its various supertypes), and also the companion xref:refguide:applib-svc:BackgroundCommandService.adoc[`BackgroundCommandService2`] SPI service, enable commands to be persisted such that they may be invoked in the background.
 
 The `BackgroundService` is responsible for capturing a memento representing the command in a typesafe way, and persisting it rather than executing it directly.
 
@@ -16,7 +16,7 @@ The persistence delegates the persistence of the memento to an appropriate imple
 One such implementation of `BackgroundCommandService` is provided by (non-ASF) http://github.com/incodehq/incode-platform[Incode Platform's command] module.
 
 The persisting of commands is only half the story; there needs to be a separate process to read the commands and execute them.
-The `BackgroundCommandExecution` abstract class (discussed xref:refguide:applib-svc:.BackgroundService/BackgroundCommandExecution.adoc[below]) provides infrastructure to do this; the concrete implementation of this class depends on the configured `BackgroundCommandService` (in order to query for the persisted (background) ``Command``s.
+The `BackgroundCommandExecution` abstract class (discussed xref:refguide:applib-svc:BackgroundCommandExecution.adoc[below]) provides infrastructure to do this; the concrete implementation of this class depends on the configured `BackgroundCommandService` (in order to query for the persisted (background) ``Command``s.
 
 
 
@@ -31,8 +31,8 @@ public interface BackgroundService {
     <T> T executeMixin(Class<T> mixinClass, Object mixedIn);    // <2>
 }
 ----
-<1> returns a proxy around the domain object; any methods executed against this proxy will result in a command (to invoke the corresponding action) being persisted by xref:refguide:applib-svc:.BackgroundCommandService2.adoc[`BackgroundCommandService2`]
-<2> Returns a proxy around the mixin; any methods executed against this proxy will result in a command (to invoke the corresponding mixin action) being persisted by xref:refguide:applib-svc:.BackgroundCommandService2.adoc[`BackgroundCommandService2`].
+<1> returns a proxy around the domain object; any methods executed against this proxy will result in a command (to invoke the corresponding action) being persisted by xref:refguide:applib-svc:BackgroundCommandService2.adoc[`BackgroundCommandService2`]
+<2> Returns a proxy around the mixin; any methods executed against this proxy will result in a command (to invoke the corresponding mixin action) being persisted by xref:refguide:applib-svc:BackgroundCommandService2.adoc[`BackgroundCommandService2`].
 
 The default implementation is provided by core (`o.a.i.core.runtime.services.background.BackgroundServiceDefault`).
 
@@ -78,7 +78,7 @@ In the above example, this would be the `submitInvoice()` method called upon eac
 One could imagine more complex designs where only the final command executed notifies the user.
 
 However, an alternative is to rely on the fact that the `BackgroundService` will automatically hint that the `Command` representing the original interaction (to `submitCustomerInvoices()` in the example above) should be persisted.
-This will be available if the related xref:refguide:applib-svc:.CommandContext.adoc[`CommandContext`] and xref:refguide:applib-svc:.CommandService.adoc[`CommandService`] domain services are configured, and the `CommandService` supports persistent commands.
+This will be available if the related xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`] and xref:refguide:applib-svc:CommandService.adoc[`CommandService`] domain services are configured, and the `CommandService` supports persistent commands.
 Note that (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module does indeed provide such an implementation of `CommandService` (as well as of the required `BackgroundCommandService`).
 
 Thus, the original action can run a query to obtain it corresponding `Command`, and return this to the user.
@@ -97,7 +97,7 @@ public Command submitCustomerInvoices() {
 @Inject
 CommandContext commandContext;  // <1>
 ----
-<1> the injected xref:refguide:applib-svc:.CommandContext.adoc[`CommandContext`] domain service.
+<1> the injected xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`] domain service.
 
 The user would be returned a domain object representing their action invocation.
 
@@ -106,13 +106,13 @@ The user would be returned a domain object representing their action invocation.
 
 == Related Services
 
-This service is closely related to the xref:refguide:applib-svc:.CommandContext.adoc[`CommandContext`] and also that service's supporting xref:refguide:applib-svc:.CommandService.adoc[`CommandService`] service.
+This service is closely related to the xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`] and also that service's supporting xref:refguide:applib-svc:CommandService.adoc[`CommandService`] service.
 
 The `CommandContext` service is responsible for providing a parent `Command` with which the background ``Command``s can then be associated as children, while the `CommandService` is responsible for persisting those parent `Command`s.
 The latter is analogous to the way in which the `BackgroundCommandService` persists the child background `Command`s.
 
 The implementations of `CommandService` and `BackgroundCommandService` go together; typically both parent `Command`s and child background `Command`s will be persisted in the same way.
-The (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module provides implementations of both (see xref:refguide:applib-svc:.CommandService.adoc[`CommandService`] and xref:refguide:applib-svc:.BackgroundCommandService.adoc[`BackgroundCommandService`]).
+The (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module provides implementations of both (see xref:refguide:applib-svc:CommandService.adoc[`CommandService`] and xref:refguide:applib-svc:BackgroundCommandService.adoc[`BackgroundCommandService`]).
 
 The xref:runtime-services:ROOT:application-layer/CommandDtoServiceInternal.adoc[`CommandDtoServiceInternal`] is used to obtain a memento of the command such that it can be persisted.
 

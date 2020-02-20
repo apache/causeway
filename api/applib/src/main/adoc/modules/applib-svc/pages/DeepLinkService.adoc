@@ -25,13 +25,13 @@ public interface DeepLinkService {
 
 The xref:vw:ROOT:about.adoc[Wicket viewer] provides an implementation of this service `o.a.i.viewer.wicket.viewer.services.DeepLinkServiceWicket`.
 
-For the xref:vro:ROOT:about.adoc[RestfulObjects viewer], a URL can be constructed according to the link:http://www.restfulobjects.org[Restful Objects spec] in conjunction with a `Bookmark` obtained via the xref:refguide:applib-svc:.BookmarkService.adoc[`BookmarkService`].
+For the xref:vro:ROOT:about.adoc[RestfulObjects viewer], a URL can be constructed according to the link:http://www.restfulobjects.org[Restful Objects spec] in conjunction with a `Bookmark` obtained via the xref:refguide:applib-svc:BookmarkService.adoc[`BookmarkService`].
 
 
 
 == Usage within the framework
 
-The xref:refguide:applib-svc:.EmailNotificationService.adoc[`EmailNotificationService`] uses this service in order to generate emails as part of xref:vw:ROOT:features.adoc#user-registration[user registration].
+The xref:refguide:applib-svc:EmailNotificationService.adoc[`EmailNotificationService`] uses this service in order to generate emails as part of xref:vw:ROOT:features.adoc#user-registration[user registration].
 
 
 

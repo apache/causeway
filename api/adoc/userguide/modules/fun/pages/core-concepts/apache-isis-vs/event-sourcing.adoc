@@ -21,7 +21,7 @@ Note that the event might be dispatched and consumed in-process or alternatively
 If the latter, then the subscriber will operate within a separate transaction, meaning the usual eventual consistency concerns and also compensating actions if a rollback is required.
 CQRS/event sourcing advocates point out -- correctly -- that this is just how things are in the "real world" too.
 
-In Apache Isis every business action (and indeed, property and collection) emits domain events through the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`], and can optionally also be published through the xref:refguide:applib-svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
+In Apache Isis every business action (and indeed, property and collection) emits domain events through the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`], and can optionally also be published through the xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`].
 The former are dispatched and consumed in-process and within the same transaction, and for this reason the xref:refguide:applib-cm:classes/super.adoc#AbstractSubscriber[subscribers] can also veto the events.
 
 

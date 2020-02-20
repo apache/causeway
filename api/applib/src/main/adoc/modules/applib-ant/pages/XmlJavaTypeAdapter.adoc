@@ -5,7 +5,7 @@
 The JAXB `@XmlJavaTypeAdapter` annotation is used with the framework-provided
 `PersistentEntityAdapter` to instruct JAXB to serialize references to persistent entities using the canonical
 `OidDto` complex type: the object's type and its identifier.  This is the formal XML equivalent to the `Bookmark`
-provided by the xref:refguide:applib-svc:integration-api/BookmarkService.adoc[`BookmarkService`].
+provided by the xref:refguide:applib-svc:BookmarkService.adoc[`BookmarkService`].
 
 For example:
 

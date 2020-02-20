@@ -45,7 +45,7 @@ public interface RepositoryService {
 ----
 <1> create a new non-persisted domain entity.
 This is identical to
-xref:refguide:applib-svc:.FactoryService.adoc[`FactoryService`]'s `instantiate(...)` method, but is provided in the
+xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`]'s `instantiate(...)` method, but is provided in the
 ``RepositoryService``'s API too because instantiating and persisting objects are often done together.
 <2> test whether a particular domain object is persistent or not
 <3> persist (ie save) an object to the persistent object store (or do nothing if it is already persistent).
@@ -266,5 +266,5 @@ The default implementation of this domain service supports the following configu
 
 == Usage Notes
 
-The xref:refguide:applib-svc:.FactoryService.adoc[`FactoryService`] is often used in conjunction with the `RepositoryService`, to instantiate domain objects before persisting.
+The xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`] is often used in conjunction with the `RepositoryService`, to instantiate domain objects before persisting.
 

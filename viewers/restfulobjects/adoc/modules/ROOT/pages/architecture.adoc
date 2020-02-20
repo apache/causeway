@@ -35,7 +35,7 @@ default/fallback implementation that returns the representations defined by the 
 
 * `ContentMappingService` +
 +
-The xref:refguide:applib-svc:presentation-layer-spi/ContentMappingService.adoc[`ContentMappingService`] is used by the implementation of
+The xref:refguide:applib-svc:ContentMappingService.adoc[`ContentMappingService`] is used by the implementation of
 `ContentNegotationService` that recognizes the `x-ro-domain-type`, its role being to transform a domain object
 (usually an entity) into some other form (usually a DTO), as specified by the `x-ro-domain-type` parameter.  There
 can be many such implementations, each handling a different target domain type.

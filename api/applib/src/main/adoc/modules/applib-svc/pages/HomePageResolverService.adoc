@@ -6,7 +6,7 @@
 
 This service simply provides access to the home page object (if any) annotated with xref:refguide:applib-ant:HomePage.adoc[`@HomePage`].
 
-It was originally introduced to support the default implementation of xref:refguide:applib-svc:.RoutingService.adoc[`RoutingService`], but was factored out to support alternative implementations of that service (and may be useful for other use cases).
+It was originally introduced to support the default implementation of xref:refguide:applib-svc:RoutingService.adoc[`RoutingService`], but was factored out to support alternative implementations of that service (and may be useful for other use cases).
 
 
 == API & Implementation

@@ -19,7 +19,7 @@ It also lists their corresponding implementation.
 |Implementation
 |Notes
 
-|xref:refguide:applib-svc:presentation-layer-api/AcceptHeaderService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:AcceptHeaderService.adoc[`o.a.i.applib.` +
 `services.acceptheader` +
 `AcceptHeaderService`]
 |Request-scoped access to HTTP Accept headers.
@@ -29,7 +29,7 @@ It also lists their corresponding implementation.
 |Implementation only usable within the xref:vro:ROOT:about.adoc[Restful Objects viewer].
 
 
-|xref:refguide:applib-svc:presentation-layer-api/BookmarkUiService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:BookmarkUiService.adoc[`o.a.i.applib.` +
 `services.bookmarkui` +
 `BookmarkUiService`]
 |Manage bookmarks and breadcrumbs in the (Wicket) UI.
@@ -39,7 +39,7 @@ It also lists their corresponding implementation.
 |(Implementation only usable within the xref:vw:ROOT:about.adoc[Wicket viewer].
 
 
-|xref:refguide:applib-svc:presentation-api/DeepLinkService.adoc[`o.a.i.applib` +
+|xref:refguide:applib-svc:DeepLinkService.adoc[`o.a.i.applib` +
 `services.deeplink` +
 `DeepLinkService`]
 |Obtain a URL to a domain object (eg for use within an email or report)
@@ -49,7 +49,7 @@ It also lists their corresponding implementation.
 |Implementation only usable within the xref:vw:ROOT:about.adoc[Wicket viewer].
 
 
-|xref:refguide:applib-svc:presentation-api/GuiceBeanProvider.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:GuiceBeanProvider.adoc[`o.a.i.applib.` +
 `services.guice` +
 `GuiceBeanProvider`]
 |Access to internal framework services initialized using Guice DI.

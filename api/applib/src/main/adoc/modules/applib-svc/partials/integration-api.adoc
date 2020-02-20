@@ -20,7 +20,7 @@ It also lists their corresponding implementation, either a default implementatio
 
 
 
-|xref:refguide:applib-svc:integration-api/BookmarkService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:BookmarkService.adoc[`o.a.i.applib.` +
 `services.bookmark` +
 `BookmarkService`]
 |Convert object reference to a serializable "bookmark", and vice versa.
@@ -35,7 +35,7 @@ It also lists their corresponding implementation, either a default implementatio
 `Contributions`
 
 
-|xref:refguide:applib-svc:integration-api/EmailService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:EmailService.adoc[`o.a.i.applib.` +
 `services.email` +
 `EmailService`]
 |Send a HTML email, optionally with attachments.
@@ -46,7 +46,7 @@ It also lists their corresponding implementation, either a default implementatio
 
 
 
-|xref:refguide:applib-svc:integration-api/JaxbService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:JaxbService.adoc[`o.a.i.applib.` +
 `services.jaxb` +
 `JaxbService`]
 |Marshal and unmarshal JAXB-annotated view models to/from XML.
@@ -58,7 +58,7 @@ It also lists their corresponding implementation, either a default implementatio
 
 
 
-|xref:refguide:applib-svc:integration-api/XmlSnapshotService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:XmlSnapshotService.adoc[`o.a.i.applib.` +
 `services.xmlsnapshot` +
 `XmlSnapshotService`]
 |Generate an XML representation of an object and optionally a graph of related objects.

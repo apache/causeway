@@ -20,7 +20,7 @@ It also lists their corresponding implementation, either a default implementatio
 
 
 
-|xref:refguide:applib-svc:core-domain-api/ClockService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:ClockService.adoc[`o.a.i.applib.` +
 `services.clock` +
 `ClockService`]
 |Access the current time (and for testing, allow the time to be changed)
@@ -31,7 +31,7 @@ It also lists their corresponding implementation, either a default implementatio
 
 
 
-|xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:EventBusService.adoc[`o.a.i.applib.` +
 `services.eventbus` +
 `EventBusService`]
 |Programmatically post events to the internal event bus.  Also used by Apache Isis itself to broadcast domain events:
@@ -44,7 +44,7 @@ It also lists their corresponding implementation, either a default implementatio
 ``isis-core-runtime``
 |
 
-|xref:refguide:applib-svc:core-domain-api/FactoryService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:FactoryService.adoc[`o.a.i.applib.` +
 `services.factory` +
 `FactoryService`]
 |Methods to instantiate and initialize domain objects
@@ -60,7 +60,7 @@ It also lists their corresponding implementation, either a default implementatio
 
 
 
-|xref:refguide:applib-svc:core-domain-api/Scratchpad.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:Scratchpad.adoc[`o.a.i.applib.` +
 `services.scratchpad` +
 `Scratchpad`]
 |Request-scoped service for interchanging information between and aggregating over multiple method calls; in particular for use by "bulk" actions (invoking of an action for all elements of a collection)
@@ -72,7 +72,7 @@ It also lists their corresponding implementation, either a default implementatio
 
 
 
-|xref:refguide:applib-svc:core-domain-api/UserService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:UserService.adoc[`o.a.i.applib.` +
 `services.xactn` +
 `UserService`]
 |Methods to access the currently-logged on user.

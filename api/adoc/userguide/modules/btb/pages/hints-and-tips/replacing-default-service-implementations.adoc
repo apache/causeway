@@ -8,7 +8,7 @@
 The framework provides default implementations for many of the xref:refguide:applib-svc:about.adoc[domain services].
 This is convenient, but sometimes you will want to replace the default implementation with your own service implementation.
 
-For example, suppose you wanted to provide your own implementation of xref:refguide:applib-svc:presentation-layer-spi/LocaleProvider.adoc[`LocaleProvider`].
+For example, suppose you wanted to provide your own implementation of xref:refguide:applib-svc:LocaleProvider.adoc[`LocaleProvider`].
 The trick is to use the Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation or equivalent mechanism.
 
 Here's how:

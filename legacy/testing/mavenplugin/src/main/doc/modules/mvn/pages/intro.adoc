@@ -14,11 +14,11 @@ This runs the `MetaModelValidator` that is also run when the application is star
 
 * `swagger` +
 +
-Uses the xref:refguide:applib-svc:metadata-api/SwaggerService.adoc[`SwaggerService`] to generate link:http://swagger.io[Swagger] spec files that describe the public and/or private RESTful APIs exposed by the xref:vro:ROOT:about.adoc[RestfulObjects viewer].
+Uses the xref:refguide:applib-svc:SwaggerService.adoc[`SwaggerService`] to generate link:http://swagger.io[Swagger] spec files that describe the public and/or private RESTful APIs exposed by the xref:vro:ROOT:about.adoc[RestfulObjects viewer].
 
 * `xsd` +
 +
-Uses the xref:refguide:applib-svc:integration-api/JaxbService.adoc[`JaxbService`] to generate XSD schemas from any JAXB-annotated view models/DTOs. +
+Uses the xref:refguide:applib-svc:JaxbService.adoc[`JaxbService`] to generate XSD schemas from any JAXB-annotated view models/DTOs. +
 +
 This is instead of and preferable to using the JAXB link:https://jaxb.java.net/2.2.4/docs/schemagen.html[schemagen] tool, because it uses the framework's support (via xref:refguide:applib-ant:XmlJavaTypeAdapter.adoc[`@XmlJavaTypeAdapter`]) to translate any references to domain objects into ``OidDto``s (as defined by the Apache Isis xref:refguide:schema:common.adoc[common schema]).
 

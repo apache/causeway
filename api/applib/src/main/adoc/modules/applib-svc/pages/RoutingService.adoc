@@ -52,7 +52,7 @@ public interface RoutingService {
 == Implementation
 
 The framework provides a default implementation - `RoutingServiceDefault` - which will always return the original object provided, or the home page if a `null` or `void` was provided.
-It uses the xref:refguide:applib-svc:.HomePageResolverService.adoc[`HomePageResolverService`].
+It uses the xref:refguide:applib-svc:HomePageResolverService.adoc[`HomePageResolverService`].
 
 There can be multiple implementations of `RoutingService` registered.
 These are checked in turn (chain of responsibility pattern), ordered according to the Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation or equivalent (as explained in the xref:refguide:applib-svc:about.adoc#overriding-the-services.adoc[introduction] to this guide).
@@ -65,4 +65,4 @@ The route from the first service that returns `true` from its `canRoute(...)` me
 == Related Services
 
 The default implementation of this service uses the
-xref:refguide:applib-svc:.HomePageResolverService.adoc[`HomePageResolverService`].
+xref:refguide:applib-svc:HomePageResolverService.adoc[`HomePageResolverService`].

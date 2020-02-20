@@ -3,7 +3,7 @@
 
 
 
-The `TickingClockFixture` is a pre-built fixture script that resets the date/time returned by the xref:refguide:applib-svc:core-domain-api/ClockService.adoc[`ClockService`] to a known value.
+The `TickingClockFixture` is a pre-built fixture script that resets the date/time returned by the xref:refguide:applib-svc:ClockService.adoc[`ClockService`] to a known value.
 
 Thereafter the time returned continues to tick forward (as would the real clock) until reset once more.
 

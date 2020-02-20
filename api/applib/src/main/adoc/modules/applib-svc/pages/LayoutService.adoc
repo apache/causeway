@@ -6,7 +6,7 @@
 
 
 The `LayoutService` provides the ability to obtain the XML layout for a single domain object or for all domain
-objects.  This functionality is surfaced through the user interface through a related xref:refguide:applib-svc:.LayoutService.adoc#related-mixins-and-menus[mixin and menu action].
+objects.  This functionality is surfaced through the user interface through a related xref:refguide:applib-svc:LayoutService.adoc#related-mixins-and-menus[mixin and menu action].
 
 
 
@@ -97,6 +97,6 @@ desired.
 
 == Related Domain Services
 
-The xref:refguide:applib-svc:.GridService.adoc[`GridService`] is responsible for loading and normalizing layout XML for
-a domain class.  It in turn uses the xref:refguide:applib-svc:.GridLoaderService.adoc[`GridLoaderService`] and  xref:refguide:applib-svc:.GridSystemService.adoc[`GridSystemService`]
+The xref:refguide:applib-svc:GridService.adoc[`GridService`] is responsible for loading and normalizing layout XML for
+a domain class.  It in turn uses the xref:refguide:applib-svc:GridLoaderService.adoc[`GridLoaderService`] and  xref:refguide:applib-svc:GridSystemService.adoc[`GridSystemService`]
 services.

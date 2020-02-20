@@ -18,6 +18,6 @@ public class MyService extends AbstractService {
 }
 ----
 
-The framework provides a number of request-scoped services, including a xref:refguide:applib-svc:core-domain-api/Scratchpad.adoc[`Scratchpad`] service and a query results caching through the xref:refguide:applib-svc:persistence-layer-api/QueryResultsCache.adoc[`QueryResultsCache`].
+The framework provides a number of request-scoped services, including a xref:refguide:applib-svc:Scratchpad.adoc[`Scratchpad`] service and a query results caching through the xref:refguide:applib-svc:QueryResultsCache.adoc[`QueryResultsCache`].
 See the xref:refguide:applib-svc:about.adoc[domain services] reference guide for further details.
 

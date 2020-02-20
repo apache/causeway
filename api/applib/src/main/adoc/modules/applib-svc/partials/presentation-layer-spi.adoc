@@ -19,7 +19,7 @@ It also lists their corresponding implementation, either a default implementatio
 |Notes
 
 
-|xref:refguide:applib-svc:presentation-layer-spi/ContentMappingService.adoc[`o.a.i.applb.` +
+|xref:refguide:applib-svc:ContentMappingService.adoc[`o.a.i.applb.` +
 `services.conmap` +
 `ContentMappingService`]
 |(Attempt to) map the returned data into the representation required by the client's HTTP `Accept` header.
@@ -31,10 +31,10 @@ No default implementation.
 
 
 
-|xref:refguide:applib-svc:presentation-layer-spi/EmailNotificationService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:EmailNotificationService.adoc[`o.a.i.applib.` +
 `services.userreg` +
 `EmailNotificationService`]
-|Notify a user during xref:refguide:applib-svc:persistence-layer-spi/UserRegistrationService.adoc[self-registration] of users.
+|Notify a user during xref:refguide:applib-svc:UserRegistrationService.adoc[self-registration] of users.
 |`EmailNotificationService-` +
 `Default` +
 ``o.a.i.core`` +
@@ -43,7 +43,7 @@ No default implementation.
 a configured `EmailService`
 
 
-|xref:refguide:applib-svc:presentation-layer-spi/ErrorReportingService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:ErrorReportingService.adoc[`o.a.i.applib.` +
 `services.error` +
 `ErrorReportingService`]
 |Record details of an error occurring in the system (eg in an external incident recording system such as JIRA), and return a more friendly (jargon-free) message to display to the end user, with optional reference (eg `XXX-1234`).
@@ -51,7 +51,7 @@ a configured `EmailService`
 |
 
 
-|xref:refguide:applib-svc:presentation-layer-spi/ExceptionRecognizer.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:ExceptionRecognizer.adoc[`o.a.i.applib.` +
 `services.exceprecog` +
 `ExceptionRecognizer`]
 |Convert certain exceptions (eg foreign or unique key violation in the database) into a format that can be rendered to the end-user.
@@ -63,7 +63,7 @@ a configured `EmailService`
 |Extensible using composite pattern if required
 
 
-|xref:refguide:applib-svc:presentation-layer-spi/GridSystemService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:GridSystemService.adoc[`o.a.i.applib.` +
 `services.grid` +
 `GridSystemService`]
 |Validates and normalizes the grid layout for a domain class (with respect to a particular grid
@@ -74,7 +74,7 @@ system such as Bootstrap3), also providing a default grid (for those domain clas
 |
 
 
-|xref:refguide:applib-svc:presentation-layer-spi/GridLoaderService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:GridLoaderService.adoc[`o.a.i.applib.` +
 `services.grid` +
 `GridLoaderService`]
 |Responsible for loading a grid layout for a domain class, eg from a `layout.xml` file.
@@ -84,11 +84,11 @@ system such as Bootstrap3), also providing a default grid (for those domain clas
 |
 
 
-|xref:refguide:applib-svc:presentation-layer-spi/GridService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:GridService.adoc[`o.a.i.applib.` +
 `services.grid` +
 `GridService`]
-|A facade on top of both xref:refguide:applib-svc:presentation-layer-spi/GridLoaderService.adoc[`GridLoaderService`] and
-xref:refguide:applib-svc:presentation-layer-spi/GridSystemService.adoc[`GridSystemService`], thus being able to return normalized
+|A facade on top of both xref:refguide:applib-svc:GridLoaderService.adoc[`GridLoaderService`] and
+xref:refguide:applib-svc:GridSystemService.adoc[`GridSystemService`], thus being able to return normalized
 grids for any domain class.
 |`GridServiceDefault` +
 ``o.a.i.core`` +
@@ -96,7 +96,7 @@ grids for any domain class.
 |
 
 
-|xref:refguide:applib-svc:presentation-layer-spi/HintStore.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:HintStore.adoc[`o.a.i.applib.` +
 `services.hint` +
 `HintStore`]
 |Stores UI hints on a per-object basis. For example, the viewer remembers which tabs are selected, and for collections which view is selected (eg table or hidden), which page of a table to render, or whether "show all" (rows) is toggled.
@@ -106,29 +106,29 @@ grids for any domain class.
 |
 
 
-|xref:refguide:applib-svc:presentation-layer-spi/LocaleProvider.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:LocaleProvider.adoc[`o.a.i.applib.` +
 `services.i18n` +
 `LocaleProvider`]
-|Request-scoped service to return the locale of the current user, in support of i18n (ie so that the app's UI, messages and exceptions can be translated to the required locale by the xref:refguide:applib-svc:presentation-layer-spi/TranslationService.adoc[`TranslationService`].
+|Request-scoped service to return the locale of the current user, in support of i18n (ie so that the app's UI, messages and exceptions can be translated to the required locale by the xref:refguide:applib-svc:TranslationService.adoc[`TranslationService`].
 |`LocaleProviderWicket` +
 ``o.a.i.viewer`` +
 ``isis-viewer-wicket-impl``
 |
 
 
-|xref:refguide:applib-svc:presentation-layer-spi/RoutingService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:RoutingService.adoc[`o.a.i.applib.` +
 `services.routing` +
 `RoutingService`]
 |Return an alternative object than that returned by an action.
 |`RoutingServiceDefault` +
 ``o.a.i.core`` +
 ``isis-core-applib``
-|The default implementation will return the home page (per xref:refguide:applib-svc:application-layer-spi/HomePageResolverService.adoc[`HomePageResolverService`]) if a void or null is returned. +
+|The default implementation will return the home page (per xref:refguide:applib-svc:HomePageResolverService.adoc[`HomePageResolverService`]) if a void or null is returned. +
 Used by the xref:vw:ROOT:about.adoc[Wicket viewer] only.
 
 
 
-|xref:refguide:applib-svc:presentation-layer-spi/TableColumnOrderService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:TableColumnOrderService.adoc[`o.a.i.applib.` +
 `services.tablecol` +
 `TableColumn-` +
 `OrderService`]
@@ -140,10 +140,10 @@ Used by the xref:vw:ROOT:about.adoc[Wicket viewer] only.
 |
 
 
-|xref:refguide:applib-svc:presentation-layer-spi/TranslationService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:TranslationService.adoc[`o.a.i.applib.` +
 `services.i18n` +
 `TranslationService`]
-|Translate an app's UI, messages and exceptions for the current user (as per the locale provided by xref:refguide:applib-svc:presentation-layer-spi/LocaleProvider.adoc[`LocalProvider`].
+|Translate an app's UI, messages and exceptions for the current user (as per the locale provided by xref:refguide:applib-svc:LocaleProvider.adoc[`LocalProvider`].
 |`TranslationServicePo` +
 ``o.a.i.core`` +
 ``isis-core-runtime``
@@ -152,17 +152,17 @@ depends on: +
 `TranslationsResolver`, `LocaleProvider`
 
 
-|xref:refguide:applib-svc:presentation-layer-spi/TranslationsResolver.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:TranslationsResolver.adoc[`o.a.i.applib.` +
 `services.i18n` +
 `TranslationsResolver`]
-|Obtain translations for a particuar phrase and locale, in support of i18n (ie so that the app's UI, messages and exceptions can be translated to the required locale by the xref:refguide:applib-svc:presentation-layer-spi/TranslationService.adoc[`TranslationService`]
+|Obtain translations for a particuar phrase and locale, in support of i18n (ie so that the app's UI, messages and exceptions can be translated to the required locale by the xref:refguide:applib-svc:TranslationService.adoc[`TranslationService`]
 |`TranslationsResolverWicket` +
 ``o.a.i.viewer`` +
 ``isis-viewer-wicket-impl``
 |
 
 
-|xref:refguide:applib-svc:presentation-layer-spi/UrlEncodingService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:UrlEncodingService.adoc[`o.a.i.applib.` +
 `services.urlencoding` +
 `UrlEncodingService`]
 |Converts strings into a form safe for use within a URL.  Used to convert view models mementos into usable URL form.
@@ -174,7 +174,7 @@ depends on: +
 |
 
 
-|xref:refguide:applib-svc:presentation-layer-spi/UserProfileService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:UserProfileService.adoc[`o.a.i.applib.` +
 `services.userprof` +
 `UserProfileService`]
 |Obtain an alternative (usually enriched/customized) name for the current user, to render in the UI.

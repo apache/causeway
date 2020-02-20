@@ -39,7 +39,7 @@ public interface ContentMappingService {
 
 == Implementations
 
-The framework provides two implementations of this service, both in support of the xref:refguide:applib-svc:.CommandService.adoc[`CommandService`] SPI.
+The framework provides two implementations of this service, both in support of the xref:refguide:applib-svc:CommandService.adoc[`CommandService`] SPI.
 
 By way of background: implementations of the SPI `CommandService` work with custom implementations of the `Command` interface, typically being persisted to a datastore.
 The `CommandWithDto` interface is a subtype of `Command` for implementations that can be reified into xref:refguide:schema:cmd.adoc[`CommandDto`] XML instances.
@@ -73,4 +73,4 @@ public static class Util {
 
 This service is a companion to the default implementation of the xref:runtime-services:ROOT:presentation-layer/ContentNegotiationService.adoc[`ContentNegotiationService`].
 
-The framework implementations of `ContentMappingService` use the xref:refguide:applib-svc:.MetamodelService.adoc[`MetaModelService`] to lookup any custom implementations of `CommandDtoProcessor`.
+The framework implementations of `ContentMappingService` use the xref:refguide:applib-svc:MetamodelService.adoc[`MetaModelService`] to lookup any custom implementations of `CommandDtoProcessor`.

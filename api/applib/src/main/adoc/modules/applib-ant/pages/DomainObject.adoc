@@ -20,7 +20,7 @@ The table below summarizes the annotation's attributes.
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
 |indicates whether each of the changed properties of an object should be submitted to the registered
-xref:refguide:applib-svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`](s)
+xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`](s)
 
 
 |xref:refguide:applib-ant:DomainObject.adoc#autoCompleteRepository[`autoCompleteRepository()`]
@@ -43,7 +43,7 @@ xref:refguide:applib-svc:persistence-layer-spi/AuditerService.adoc[`AuditerServi
 `LifecycleEvent()`]
 |subtype of `ObjectCreatedEvent` +
 (`ObjectCreatedEvent.Default`)
-|the event type to be posted to the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] whenever an instance is created
+|the event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] whenever an instance is created
 
 |xref:refguide:applib-ant:DomainObject.adoc#editing[`editing()`]
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
@@ -73,37 +73,37 @@ If an entity, indicates how its persistence is managed.
 `LifecycleEvent()`]
 |subtype of `ObjectPersistedEvent` +
 (`ObjectPersistedEvent.Default`)
-|the event type to be posted to the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] whenever an instance has just been persisted
+|the event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] whenever an instance has just been persisted
 
 |xref:refguide:applib-ant:DomainObject.adoc#persistingLifecycleEvent[`persisting-` +
 `LifecycleEvent()`]
 |subtype of `ObjectPersistingEvent` +
 (`ObjectPersistingEvent.Default`)
-|the event type to be posted to the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] whenever an instance is about to be persisted
+|the event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] whenever an instance is about to be persisted
 
 |xref:refguide:applib-ant:DomainObject.adoc#publishing[`publishing()`]
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
-|whether changes to the object should be published to the registered xref:refguide:applib-svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
+|whether changes to the object should be published to the registered xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`].
 
 
 |xref:refguide:applib-ant:DomainObject.adoc#removingLifecycleEvent[`removing-` +
 `LifecycleEvent()`]
 |subtype of `ObjectRemovingEvent` +
 (`ObjectRemovingEvent.Default`)
-|the event type to be posted to the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] whenever an instance is about to be deleted
+|the event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] whenever an instance is about to be deleted
 
 |xref:refguide:applib-ant:DomainObject.adoc#updatedLifecycleEvent[`updated-` +
 `LifecycleEvent()`]
 |subtype of `ObjectUpdatedEvent` +
 (`ObjectUpdatedEvent.Default`)
-|the event type to be posted to the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] whenever an instance has just been updated
+|the event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] whenever an instance has just been updated
 
 |xref:refguide:applib-ant:DomainObject.adoc#updatingLifecycleEvent[`updating-` +
 `LifecycleEvent()`]
 |subtype of `ObjectUpdatingEvent` +
 (`ObjectUpdatingEvent.Default`)
-|the event type to be posted to the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`] whenever an instance is about to be updated
+|the event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] whenever an instance is about to be updated
 
 |===
 

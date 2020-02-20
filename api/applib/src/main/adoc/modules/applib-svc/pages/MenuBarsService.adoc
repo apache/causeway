@@ -31,4 +31,4 @@ public interface MenuBarsService {
 
 
 The framework provides a default implementation of this service, namely `o.a.i.core.runtime.services.menu.MenuBarsServiceDefault`.
-This uses the xref:refguide:applib-svc:.MenuBarsLoaderService.adoc[MenuBarsLoaderService] to load a serialized form of `MenuBars` instance, called `menubars.layout.xml`, from the classpath.
+This uses the xref:refguide:applib-svc:MenuBarsLoaderService.adoc[MenuBarsLoaderService] to load a serialized form of `MenuBars` instance, called `menubars.layout.xml`, from the classpath.

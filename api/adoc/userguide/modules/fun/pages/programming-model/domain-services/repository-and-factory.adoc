@@ -4,7 +4,7 @@
 
 
 
-The repository/factory uses an injected xref:refguide:applib-svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`] to both instantiate new objects and to query the database for existing objects of a given entity type.
+The repository/factory uses an injected xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`] to both instantiate new objects and to query the database for existing objects of a given entity type.
 It is not visible in UI, rather other services delegate to it.
 
 We suggest naming such classes `XxxRepository`, eg:

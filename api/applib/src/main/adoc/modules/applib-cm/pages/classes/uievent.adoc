@@ -5,7 +5,7 @@
 
 This section catalogues the various UI event classes defined by Apache Isis.
 
-These events are broadcast on the xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[`EventBusService`].  The domain
+These events are broadcast on the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`].  The domain
 events are broadcast as a result of being specified in the xref:refguide:applib-ant:DomainObjectLayout.adoc#titleUiEvent[`@DomainObjectLayout#titleUiEvent()`],  xref:refguide:applib-ant:DomainObjectLayout.adoc#iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] or xref:refguide:applib-ant:DomainObjectLayout.adoc#cssClassUiEvent[`@DomainObjectLayout#cssClassUiEvent()`] attributes.
 
 They are listed in the table below.

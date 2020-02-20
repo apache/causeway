@@ -4,7 +4,7 @@
 
 
 
-The `publishing` attribute determines whether and how a modified object instance is published via the registered implementation of xref:refguide:applib-svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`].
+The `publishing` attribute determines whether and how a modified object instance is published via the registered implementation of xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`].
 
 A common use case is to notify external "downstream" systems of changes in the state of the Apache Isis application.
 

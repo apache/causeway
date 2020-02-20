@@ -21,7 +21,7 @@ For example, a `Bookmark` could be converted into a barcode, and then this used 
 ====
 
 ``Bookmark``s are used by several other domain services as a means of storing a reference to an arbitrary object
-(a polymorphic relationship).  For example, the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s auditing module's implementation of xref:refguide:applib-svc:.AuditerService.adoc[`AuditerService`] uses bookmarks to capture the object that is being audited.
+(a polymorphic relationship).  For example, the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s auditing module's implementation of xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`] uses bookmarks to capture the object that is being audited.
 
 [TIP]
 ====
@@ -92,9 +92,9 @@ A more sophisticated implementation could look inside the passed `ev` argument a
 
 == Usage by other services
 
-//Bookmarks are used by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module's implementation of  xref:refguide:applib-svc:._BackgroundCommandService.adoc[`BackgroundCommandService`], which uses a bookmark to capture the target object on which an action will be invoked subsequently.
+//Bookmarks are used by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module's implementation of  xref:refguide:applib-svc:_BackgroundCommandService.adoc[`BackgroundCommandService`], which uses a bookmark to capture the target object on which an action will be invoked subsequently.
 
-Bookmarks are also used by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s auditing module's implementation of xref:refguide:applib-svc:.AuditerService.adoc[`AuditerService`].
+Bookmarks are also used by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s auditing module's implementation of xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`].
 
 
 

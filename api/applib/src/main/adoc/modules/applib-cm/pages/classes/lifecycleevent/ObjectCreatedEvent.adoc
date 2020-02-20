@@ -5,7 +5,7 @@
 
 
 
-Subclass of xref:refguide:applib-cm:classes.adoc#AbstractLifecycleEvent[`AbstractLifecycleEvent`], broadcast when an object is first instantiated using the xref:refguide:applib-svc:core-domain-api/FactoryService.adoc[`FactoryServuce`]'s `#instantiate(...)` method.
+Subclass of xref:refguide:applib-cm:classes.adoc#AbstractLifecycleEvent[`AbstractLifecycleEvent`], broadcast when an object is first instantiated using the xref:refguide:applib-svc:FactoryService.adoc[`FactoryServuce`]'s `#instantiate(...)` method.
 
 `ObjectCreatedEvent.Default` is the implementation that is used by default, but this can be overridden using xref:refguide:applib-ant:DomainObject.adoc#createdLifecycleEvent[`@DomainObject#createdLifecycleEvent`].
 

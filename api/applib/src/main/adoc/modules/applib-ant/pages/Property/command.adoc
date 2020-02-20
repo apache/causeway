@@ -13,13 +13,13 @@ The primary use cases for this are to support the deferring the execution of the
 
 The annotation works with (and is influenced by the behaviour of) a number of domain services:
 
-* xref:refguide:applib-svc:application-layer-api/CommandContext.adoc[`CommandContext`]
-* xref:refguide:applib-svc:application-layer-spi/CommandService.adoc[`CommandService`]
-//* xref:refguide:applib-svc:spi/BackgroundService.adoc[`BackgroundService`] and
-//* xref:refguide:applib-svc:application-layer-spi/_BackgroundCommandService.adoc[`BackgroundCommandService`]
+* xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`]
+* xref:refguide:applib-svc:CommandService.adoc[`CommandService`]
+//* xref:refguide:applib-svc:BackgroundService.adoc[`BackgroundService`] and
+//* xref:refguide:applib-svc:_BackgroundCommandService.adoc[`BackgroundCommandService`]
 
 
-Each property edit is automatically reified by the xref:refguide:applib-svc:application-layer-api/CommandContext.adoc[`CommandContext`] service into a `Command` object, capturing details of the target object, the property, the proposed new value fo the property, the user, a timestamp and so on.
+Each property edit is automatically reified by the xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`] service into a `Command` object, capturing details of the target object, the property, the proposed new value fo the property, the user, a timestamp and so on.
 
 If an appropriate `CommandService` is configured (for example using (non-ASF) link:https://platform.incode.org/modules/spi/command/spi-command.html[Incode Platform's command] module), then the `Command` itself is persisted.
 
@@ -195,7 +195,7 @@ For persisted commands, the `commandExecuteIn` attribute determines whether the 
 
 WARNING: TODO: v2 - background execution has temporarily been removed, will be reinstated for v2.0.
 
-//Background execution means that the command is not executed immediately, but is available for a configured xref:refguide:applib-svc:application-layer-spi/_BackgroundCommandService.adoc[`BackgroundCommandService`] to execute, eg by way of an in-memory scheduler such as Quartz.
+//Background execution means that the command is not executed immediately, but is available for a configured xref:refguide:applib-svc:_BackgroundCommandService.adoc[`BackgroundCommandService`] to execute, eg by way of an in-memory scheduler such as Quartz.
 //See xref:userguide:btb:about.adoc#BackgroundCommandExecution[here] for further information on this topic.
 
 //For example:

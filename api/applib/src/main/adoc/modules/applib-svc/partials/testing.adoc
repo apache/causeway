@@ -22,7 +22,7 @@ It also lists their corresponding implementation, either a default implementatio
 |Notes
 
 
-|xref:refguide:applib-svc:testing/SudoService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:SudoService.adoc[`o.a.i.applib.` +
 `services.sudo` +
 `SudoService`]
 |For use in testing while running xref:refguide:applib-cm:classes/super.adoc#FixtureScripts[fixture scripts], allows a block of code to run as a specified user account.

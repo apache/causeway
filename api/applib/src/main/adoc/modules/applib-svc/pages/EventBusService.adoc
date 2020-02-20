@@ -55,7 +55,7 @@ To use an alternative implementation, implement the `EventBusService` domain ser
 == Registering Subscribers
 
 The `register()` method should be called in the xref:refguide:applib-ant:PostConstruct.adoc[`@PostConstruct`] lifecycle method.
-It is valid and probably the least confusing to readers to also "unregister" in the xref:refguide:applib-ant:PreDestroy.adoc[`@PreDestroy`] lifecycle method (though as noted xref:refguide:applib-svc:.EventBusService.adoc#api-and-implementation[above], unregistering is actually a no-op).
+It is valid and probably the least confusing to readers to also "unregister" in the xref:refguide:applib-ant:PreDestroy.adoc[`@PreDestroy`] lifecycle method (though as noted xref:refguide:applib-svc:EventBusService.adoc#api-and-implementation[above], unregistering is actually a no-op).
 
 For example:
 
@@ -145,7 +145,7 @@ public class LibraryMember {
     ...
 }
 ----
-<1> `LibraryMemberLeaveEvent` is a subclass of `o.a.i.applib.eventbus.ActionDomainEvent`.  The topic of subclassing is discussed in more detail xref:refguide:applib-svc:.EventBusService.adoc#event-hierarchy[below].
+<1> `LibraryMemberLeaveEvent` is a subclass of `o.a.i.applib.eventbus.ActionDomainEvent`.  The topic of subclassing is discussed in more detail xref:refguide:applib-svc:EventBusService.adoc#event-hierarchy[below].
 
 Meanwhile, in the `BookRepository` domain service, we subscribe to the event and act upon it.
 For example:
@@ -292,7 +292,7 @@ In practice we suspect there will be few cases where the programmatic approach i
 
 == Using `WrapperFactory`
 
-An alternative way to cause events to be posted is through the xref:refguide:applib-svc:.WrapperFactory.adoc[`WrapperFactory`].
+An alternative way to cause events to be posted is through the xref:refguide:applib-svc:WrapperFactory.adoc[`WrapperFactory`].
 This is useful when you wish to enforce a (lack-of-) trust boundary between the caller and the callee.
 
 For example, suppose that `Customer#placeOrder(...)` emits a `PlaceOrderEvent`, which is subscribed to by a `ReserveStockSubscriber`.
@@ -343,14 +343,14 @@ The default implementation of this service defines the following configuration p
 `implementation` +
 | `guava`, `axon`, +
 FQCN (`_guava_`)
-|which implementation to use by the xref:refguide:applib-svc:.EventBusService.adoc[`EventBusService`] as the underlying event bus.
+|which implementation to use by the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] as the underlying event bus.
 
 The implementation of `EventBusService` provided by Apache Isis will by default use link:https://code.google.com/p/guava-libraries/[Guava]'s https://code.google.com/p/guava-libraries/wiki/EventBusExplained[`EventBus`] as the underlying in-memory event bus.  Alternatively the link:http://www.axonframework.org/[AxonFramework]'s link:http://www.axonframework.org/docs/2.4/single.html#d5e1489[SimpleEventBus] can be used.
 
 [NOTE]
 .Guava vs Axon, which to use?
 ====
-Guava actually queues up events; they are not guaranteed to be dispatched immediately.  This generally is not problem, but can be for cases where the subscriber may in turn want to post its own events (using xref:refguide:applib-svc:.WrapperFactory.adoc[`WrapperFactory`]).
+Guava actually queues up events; they are not guaranteed to be dispatched immediately.  This generally is not problem, but can be for cases where the subscriber may in turn want to post its own events (using xref:refguide:applib-svc:WrapperFactory.adoc[`WrapperFactory`]).
 
 The Axon `SimpleEventBus`-based implementation on the other hand is fully synchronous; events are dispatched as soon as they are posted.  This works well in all scenarios (that we have tested).
 ====
@@ -362,7 +362,7 @@ The Axon `SimpleEventBus`-based implementation on the other hand is fully synchr
 `Registration` +
 |`true`,`false` +
 (`false`)
-|whether a domain service can register with the xref:refguide:applib-svc:.EventBusService.adoc[`EventBusService`] after any events have posted. +
+|whether a domain service can register with the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] after any events have posted. +
 
 Late registration refers to the idea that a domain service can register itself with the `EventBusService` after events have been posted.
 Since domain services are set up at boot time, this almost certainly constitutes a bug in the code and so by default late registration is _not_ allowed.
@@ -409,4 +409,4 @@ isis.services.eventbus.implementation=com.mycompany.isis.MyEventBusServiceImplem
 
 The `EventBusService` is intended for fine-grained publish/subscribe for object-to-object interactions within an Apache Isis domain object model. The event propagation is strictly in-memory, and there are no restrictions on the object acting as the event (it need not be serializable, for example).
 
-The xref:refguide:applib-svc:.PublisherService.adoc[`PublisherService`] meanwhile is intended for coarse-grained publish/subscribe for system-to-system interactions, from Apache Isis to some other system. Here the only events published are those that action invocations (for actions annotated with xref:refguide:applib-ant:Action.adoc#publishing[`@Action#publishing()`]) and of changed objects (for objects annotated with xref:refguide:applib-ant:DomainObject.adoc#publishing[`@DomainObject#publishing()`]).
+The xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`] meanwhile is intended for coarse-grained publish/subscribe for system-to-system interactions, from Apache Isis to some other system. Here the only events published are those that action invocations (for actions annotated with xref:refguide:applib-ant:Action.adoc#publishing[`@Action#publishing()`]) and of changed objects (for objects annotated with xref:refguide:applib-ant:DomainObject.adoc#publishing[`@DomainObject#publishing()`]).

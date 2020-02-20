@@ -9,5 +9,5 @@ See also xref:refguide:applib-cm:methods.adoc#updated[`updated()`].
 
 [TIP]
 ====
-Alternatively, consider using a xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[event bus] xref:refguide:applib-cm:classes.adoc#AbstractSubscriber[subscriber] on the xref:refguide:applib-cm:classes.adoc#ObjectUpdatingEvent[`ObjectUpdatingEvent`].
+Alternatively, consider using a xref:refguide:applib-svc:EventBusService.adoc[event bus] xref:refguide:applib-cm:classes.adoc#AbstractSubscriber[subscriber] on the xref:refguide:applib-cm:classes.adoc#ObjectUpdatingEvent[`ObjectUpdatingEvent`].
 ====

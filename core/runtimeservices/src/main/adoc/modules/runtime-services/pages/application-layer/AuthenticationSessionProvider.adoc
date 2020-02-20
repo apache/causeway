@@ -28,4 +28,4 @@ isisSessionFactory.getCurrentSession().getAuthenticationSession();
 ----
 
 
-If xref:refguide:applib-svc:testing/SudoService.adoc[`SudoService`] has been used to temporarily override the user and/or roles, then this service will report the overridden values.
+If xref:refguide:applib-svc:SudoService.adoc[`SudoService`] has been used to temporarily override the user and/or roles, then this service will report the overridden values.

@@ -51,7 +51,7 @@ The default implementation of this domain service supports the following configu
 |Whether fixture `FixturesInstallingEvent` and `FixturesInstalledEvent` events should be posted while the system is bootstrapping.
 
 Fixture events are fired to indicate the start and end of fixtures are being installed.
-This are listened to by the xref:refguide:applib-svc:.QueryResultsCache.adoc[`QueryResultsCache`] to disable caching during this period.
+This are listened to by the xref:refguide:applib-svc:QueryResultsCache.adoc[`QueryResultsCache`] to disable caching during this period.
 
 |===
 

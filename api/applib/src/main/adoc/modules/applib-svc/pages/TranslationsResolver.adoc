@@ -5,7 +5,7 @@
 
 
 
-The `TranslationsResolver` service is one of the services that work together to implement Apache Isis' support for i18n, being used by Isis' default implementation of xref:refguide:applib-svc:.TranslationService.adoc[`TranslationService`].
+The `TranslationsResolver` service is one of the services that work together to implement Apache Isis' support for i18n, being used by Isis' default implementation of xref:refguide:applib-svc:TranslationService.adoc[`TranslationService`].
 
 The role of the service itself is locate and return translations.
 
@@ -48,6 +48,6 @@ Currently there is no equivalent implementation for the xref:vro:ROOT:about.adoc
 == Related Services
 
 
-This service works in conjunction with xref:refguide:applib-svc:.LocaleProvider.adoc[`LocaleProvider`] and xref:refguide:applib-svc:.TranslationService.adoc[`TranslationService`] in order to provide i18n support.
+This service works in conjunction with xref:refguide:applib-svc:LocaleProvider.adoc[`LocaleProvider`] and xref:refguide:applib-svc:TranslationService.adoc[`TranslationService`] in order to provide i18n support.
 
 

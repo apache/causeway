@@ -24,17 +24,17 @@ Some examples:
 * the information within an OID could be converted into a barcode, and stamped onto a PDF form.
 When the PDF is scanned by the mail room, the barcode could be read to attach the correspondence to the relevant domain object.
 
-* as a handle to any object in an audit record, as used by xref:refguide:applib-svc:persistence-layer-spi/AuditerService.adoc[`AuditerService`];
+* as a handle to any object in an audit record, as used by xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`];
 
-* similarly within implementations of xref:refguide:applib-svc:application-layer-spi/CommandService.adoc[`CommandService`] to persist `Command` objects
+* similarly within implementations of xref:refguide:applib-svc:CommandService.adoc[`CommandService`] to persist `Command` objects
 
-* similarly within implementations of xref:refguide:applib-svc:persistence-layer-spi/PublisherService.adoc[`PublisherService`] to persist published action invocations
+* similarly within implementations of xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`] to persist published action invocations
 
 * and of course both the xref:vro:ROOT:about.adoc[RestfulObjects viewer] and xref:vw:ROOT:about.adoc[Wicket viewer] use the oid tuple to look up, render and allow the user to interact with domain objects.
 
 Although the exact content of an OID should be considered opaque by domain objects, it is possible for domain objects to obtain OIDs.
-These are represented as ``Bookmark``s, obtained from the xref:refguide:applib-svc:integration-api/BookmarkService.adoc[``BookmarkService`].
-Deep links meanwhile can be obtained from the xref:refguide:applib-svc:presentation-layer-api/DeepLinkService.adoc[``DeepLinkService`].
+These are represented as ``Bookmark``s, obtained from the xref:refguide:applib-svc:BookmarkService.adoc[``BookmarkService`].
+Deep links meanwhile can be obtained from the xref:refguide:applib-svc:DeepLinkService.adoc[``DeepLinkService`].
 
 OIDs can also be converted into XML format, useful for integration scenarios.
 The xref:refguide:schema:common.adoc[common schema] XSD defines the `oidDto` complex type for precisely this purpose.

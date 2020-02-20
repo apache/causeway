@@ -3,7 +3,7 @@
 
 
 The `@Programmatic` annotation causes the method to be excluded completely from the Apache Isis metamodel.
-This means it won't appear in any UI or more generally in serializations obtained using the metamodel, for example xref:refguide:applib-svc:integration-api/XmlSnapshotService.adoc[snapshot]s.
+This means it won't appear in any UI or more generally in serializations obtained using the metamodel, for example xref:refguide:applib-svc:XmlSnapshotService.adoc[snapshot]s.
 
 A common use-case is to ignore implementation-level artifacts. For example:
 

@@ -18,7 +18,7 @@ It also lists their corresponding implementation, either a default implementatio
 |Implementation
 |Notes
 
-//|xref:refguide:applib-svc:application-layer-api/BackgroundService.adoc[`o.a.i.applib.` +
+//|xref:refguide:applib-svc:BackgroundService.adoc[`o.a.i.applib.` +
 //`services.background` +
 //`BackgroundService`]
 //|Programmatic persistence of commands to be persisted (so can be executed by a background mechanism, eg scheduler)
@@ -27,12 +27,12 @@ It also lists their corresponding implementation, either a default implementatio
 //``o.a.i.core`` +
 //``isis-core-runtime``
 //|depends on: +
-//xref:refguide:applib-svc:application-layer-spi/_BackgroundCommandService.adoc[`BackgroundCommand-Service`]
+//xref:refguide:applib-svc:_BackgroundCommandService.adoc[`BackgroundCommand-Service`]
 //
 //NOTE: TODO: v2: this has been replaced by `WrapperFactory#async(...)`
 
 
-|xref:refguide:applib-svc:application-layer-api/CommandContext.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:CommandContext.adoc[`o.a.i.applib.` +
 `services.command` +
 `CommandContext`]
 |Request-scoped access to capture the users's __intention__ to invoke an action or to edit a property.
@@ -41,12 +41,12 @@ It also lists their corresponding implementation, either a default implementatio
 ``isis-core-applib``
 |API is also a concrete class. +
 depends on: +
-xref:refguide:applib-svc:application-layer-spi/CommandService.adoc[`CommandService`] for persistent `Command`, else in-memory impl. used.
+xref:refguide:applib-svc:CommandService.adoc[`CommandService`] for persistent `Command`, else in-memory impl. used.
 
-The xref:refguide:applib-svc:application-layer-api/InteractionContext.adoc[`InteractionContext`] manages the actual execution of the command.
+The xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`] manages the actual execution of the command.
 
 
-|xref:refguide:applib-svc:application-layer-api/CommandExecutorService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:CommandExecutorService.adoc[`o.a.i.applib.` +
 `services.command` +
 `CommandExecutorService`]
 |Executes the specified `Command`.
@@ -58,7 +58,7 @@ The xref:refguide:applib-svc:application-layer-api/InteractionContext.adoc[`Inte
 
 
 
-|xref:refguide:applib-svc:application-layer-api/InteractionContext.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:InteractionContext.adoc[`o.a.i.applib.` +
 `services.iactn` +
 `InteractionContext`]
 |Request-scoped access to the current member execution (action invocation or property edit),
@@ -70,7 +70,7 @@ represented as the `Interaction` context.
 
 
 
-|xref:refguide:applib-svc:application-layer-api/MessageService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:MessageService.adoc[`o.a.i.applib.` +
 `services.message` +
 `MessageService`]
 |Methods to inform or warn the user, or to raise errors.
@@ -81,7 +81,7 @@ represented as the `Interaction` context.
 |
 
 
-|xref:refguide:applib-svc:application-layer-api/SessionManagementService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:SessionManagementService.adoc[`o.a.i.applib.` +
 `services.sessmgmt` +
 `SessionManagementService`]
 |Methods for batching long-running work (eg data migration) into multiple sessions.
@@ -92,7 +92,7 @@ represented as the `Interaction` context.
 |
 
 
-|xref:refguide:applib-svc:application-layer-api/TitleService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:TitleService.adoc[`o.a.i.applib.` +
 `services.title` +
 `TitleService`]
 |Methods to programmatically obtain the title or icon of a domain object.
@@ -104,7 +104,7 @@ represented as the `Interaction` context.
 
 
 
-|xref:refguide:applib-svc:application-layer-api/TransactionService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:TransactionService.adoc[`o.a.i.applib.` +
 `services.xactn` +
 `TransactionService`]
 |Methods for managing transactions.
@@ -116,7 +116,7 @@ represented as the `Interaction` context.
 
 
 
-|xref:refguide:applib-svc:application-layer-api/WrapperFactory.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:WrapperFactory.adoc[`o.a.i.applib.` +
 `services.wrapper` +
 `WrapperFactory`]
 |Interact with another domain object "as if" through the UI (enforcing business rules, firing domain events)

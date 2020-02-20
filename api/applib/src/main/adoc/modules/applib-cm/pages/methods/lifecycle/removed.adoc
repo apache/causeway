@@ -10,5 +10,5 @@ See also xref:refguide:applib-cm:methods.adoc#removing[`removing()`].
 
 [TIP]
 ====
-Alternatively, consider using a xref:refguide:applib-svc:core-domain-api/EventBusService.adoc[event bus] xref:refguide:applib-cm:classes.adoc#AbstractSubscriber[subscriber] on the xref:refguide:applib-cm:classes.adoc#ObjectRemovedEvent[`ObjectRemovedEvent`].
+Alternatively, consider using a xref:refguide:applib-svc:EventBusService.adoc[event bus] xref:refguide:applib-cm:classes.adoc#AbstractSubscriber[subscriber] on the xref:refguide:applib-cm:classes.adoc#ObjectRemovedEvent[`ObjectRemovedEvent`].
 ====

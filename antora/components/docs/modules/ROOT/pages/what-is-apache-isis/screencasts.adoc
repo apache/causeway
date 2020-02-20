@@ -338,7 +338,7 @@ How to validate action parameters using the xref:refguide:applib-ant:Parameter.a
 
 
 |link:https://www.youtube.com/watch?v=fYJjXAepWAs[032^] +
-How to instantiate/initialize objects using xref:refguide:applib-svc:persistence-layer-api/RepositoryService.adoc[`RepositoryService`], xref:refguide:applib-svc:metadata-api/ServiceRegistry.adoc[`ServiceRegistry`] and/or xref:refguide:applib-svc:core-domain-api/FactoryService.adoc[`FactoryService`].
+How to instantiate/initialize objects using xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`], xref:refguide:applib-svc:ServiceRegistry.adoc[`ServiceRegistry`] and/or xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`].
 |x||||||||x||
 
 

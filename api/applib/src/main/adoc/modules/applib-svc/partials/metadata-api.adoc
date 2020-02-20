@@ -18,7 +18,7 @@ It also lists their corresponding implementation, either a default implementatio
 |Notes
 
 
-|xref:refguide:applib-svc:metadata-api/ApplicationFeatureRepository.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:ApplicationFeatureRepository.adoc[`o.a.i.applib.` +
 `services.appfeat` +
 `ApplicationFeatureRepository`]
 |Provides access to string representations of the features (package, class, class members) of the domain classes
@@ -30,7 +30,7 @@ within the metamodel.
 
 
 
-|xref:refguide:applib-svc:metadata-api/LayoutService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:LayoutService.adoc[`o.a.i.applib.` +
 `services.layout` +
 `LayoutService`]
 |Provides the ability to download `Xxx.layout.xml` files, in various styles.
@@ -42,7 +42,7 @@ within the metamodel.
 
 
 
-|xref:refguide:applib-svc:metadata-api/MetamodelService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:MetamodelService.adoc[`o.a.i.applib.` +
 `services.metamodel` +
 `MetaModelService`]
 |Access to certain information from the Apache Isis metamodel.
@@ -52,7 +52,7 @@ within the metamodel.
 |Functionality surfaced in the UI through related menu.
 
 
-|xref:refguide:applib-svc:metadata-api/ServiceRegistry.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:ServiceRegistry.adoc[`o.a.i.applib.` +
 `services.registry` +
 `ServiceRegistry`]
 |Methods to access and use other domain services.
@@ -65,7 +65,7 @@ within the metamodel.
 
 
 
-|xref:refguide:applib-svc:metadata-api/SwaggerService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:SwaggerService.adoc[`o.a.i.applib.` +
 `services.swagger` +
 `SwaggerService`]
 |Generates link:http://swagger.io/[Swagger] spec files to describe the public and/or private RESTful APIs exposed by the xref:vro:ROOT:about.adoc[RestfulObjects viewer].  These can then be used with the link:http://swagger.io/swagger-ui/[Swagger UI] page to explore the REST API, or used to generate client-side stubs using the link:http://swagger.io/swagger-codegen/[Swagger codegen] tool, eg for use in a custom REST client app.

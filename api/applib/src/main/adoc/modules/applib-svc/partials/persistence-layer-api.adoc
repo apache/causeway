@@ -20,7 +20,7 @@ It also lists their corresponding implementation, either a default implementatio
 |Notes
 
 
-|xref:refguide:applib-svc:persistence-layer-api/MetricsService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:MetricsService.adoc[`o.a.i.applib.` +
 `services.metrics` +
 `MetricsService`]
 |Gathers and provides metrics on the numbers of objects used within a transaction.
@@ -30,7 +30,7 @@ It also lists their corresponding implementation, either a default implementatio
 |
 
 
-|xref:refguide:applib-svc:persistence-layer-api/QueryResultsCache.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:QueryResultsCache.adoc[`o.a.i.applib.` +
 `services.` +
 `queryresultscache` +
 `QueryResultsCache`]
@@ -42,7 +42,7 @@ It also lists their corresponding implementation, either a default implementatio
 
 
 
-|xref:refguide:applib-svc:persistence-layer-api/RepositoryService.adoc[`o.a.i.applib.` +
+|xref:refguide:applib-svc:RepositoryService.adoc[`o.a.i.applib.` +
 `services.repository` +
 `RepositoryService`]
 |Methods to help implement repositories: query for existing objects, persist new or delete existing objects

@@ -61,7 +61,7 @@ When we talk about integration tests/specs here, we mean tests that exercise the
 
 For most other frameworks that would require having to test the application in a very heavy weight/fragile fashion using a tool such as link:http://docs.seleniumhq.org/[Selenium], driving a web browser to navigate .  In this regard though, Apache Isis has a significant trick up its sleeve.  Because Apache Isis implements the naked objects pattern, it means that the UI is generated automatically from declared domain-objects, -views and -services. This therefore allows for other implementations of the UI.
 
-The xref:refguide:applib-svc:application-layer-api/WrapperFactory.adoc[`WrapperFactory`] domain service allows a test to wrap domain objects and thus to interact with said objects "as if" through the UI:
+The xref:refguide:applib-svc:WrapperFactory.adoc[`WrapperFactory`] domain service allows a test to wrap domain objects and thus to interact with said objects "as if" through the UI:
 
 .Wrapper objects
 image::testing:integtestsupport:wrapper-factory.png[width="400px",link="testing:integtestsupport:{imagesdir}/wrapper-factory.png"]
