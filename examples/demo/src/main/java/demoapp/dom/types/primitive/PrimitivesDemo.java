@@ -76,7 +76,7 @@ public class PrimitivesDemo extends DemoStub {
     
     @Property(
             optionality = Optionality.MANDATORY,
-            editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
+            editing=Editing.NOT_SPECIFIED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
     @PropertyLayout(describedAs="java.lang.Boolean")
     @Getter @Setter private Boolean javaLangBoolean;
     

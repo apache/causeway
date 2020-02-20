@@ -668,7 +668,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
                         CustomerWithDomainObjectAndEditingSetToEnabled.class, mockMethodRemover, facetHolder));
 
                 final ImmutableFacet facet = facetHolder.getFacet(ImmutableFacet.class);
-                Assert.assertNotNull(facet); 
+                Assert.assertNull(facet); 
 
                 expectNoMethodsRemoved();
             }

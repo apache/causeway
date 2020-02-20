@@ -34,6 +34,8 @@ import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
+import lombok.val;
+
 public class ImmutableFacetForDomainObjectAnnotation extends ImmutableFacetAbstract {
 
     private final String reason;
@@ -43,37 +45,40 @@ public class ImmutableFacetForDomainObjectAnnotation extends ImmutableFacetAbstr
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final EditingObjectsConfiguration setting = configuration.getApplib().getAnnotation().getDomainObject().getEditing();
+        final boolean editingDisabledByDefault = 
+                configuration.getApplib().getAnnotation().getDomainObject().getEditing()
+                == EditingObjectsConfiguration.FALSE;
 
-        return domainObjectIfAny
-                .map(domainObject -> {
-                    final String disabledReason = domainObject.editingDisabledReason();
-                    switch (domainObject.editing()) {
-                    case NOT_SPECIFIED:
-                    case AS_CONFIGURED:
+        if(domainObjectIfAny.isPresent()) {
+            val domainObject = domainObjectIfAny.get();
+            val disabledReason = domainObject.editingDisabledReason();
 
-                        if(holder.containsNonFallbackFacet(ImmutableFacet.class)) {
-                            // do not replace
-                            return null;
-                        }
+            switch (domainObject.editing()) {
+            case NOT_SPECIFIED:
+            case AS_CONFIGURED:
 
-                        return setting == EditingObjectsConfiguration.FALSE
-                                ? (ImmutableFacet) new ImmutableFacetForDomainObjectAnnotationAsConfigured(disabledReason, holder)
-                                        : null;
-                    case DISABLED:
-                        return new ImmutableFacetForDomainObjectAnnotation(disabledReason, holder);
-                    case ENABLED:
-                        return null;
-                    default:
-                    }
-                    throw _Exceptions.unmatchedCase(domainObject.editing());
-                })
-                .orElseGet(() -> setting == EditingObjectsConfiguration.FALSE
-                ? new ImmutableFacetFromConfiguration("Disabled", holder)
-                        : null
-                        );
+                if(holder.containsNonFallbackFacet(ImmutableFacet.class)) {
+                    // do not replace
+                    return null;
+                }
+
+                return editingDisabledByDefault
+                        ? (ImmutableFacet) new ImmutableFacetForDomainObjectAnnotationAsConfigured(disabledReason, holder)
+                                : null;
+            case DISABLED:
+                return new ImmutableFacetForDomainObjectAnnotation(disabledReason, holder);
+            case ENABLED:
+                return null;
+            default:
+                throw _Exceptions.unmatchedCase(domainObject.editing());
+            }
+        }
+        
+        return editingDisabledByDefault
+                    ? new ImmutableFacetFromConfiguration("Disabled", holder)
+                    : null;
     }
-
+    
     public ImmutableFacetForDomainObjectAnnotation(final String reason, final FacetHolder holder) {
         super(holder);
         this.reason = reason;
@@ -83,7 +88,7 @@ public class ImmutableFacetForDomainObjectAnnotation extends ImmutableFacetAbstr
     public String disabledReason(final ManagedObject targetAdapter) {
         return !_Strings.isNullOrEmpty(reason)
                 ? reason
-                        : super.disabledReason(targetAdapter);
+                : super.disabledReason(targetAdapter);
     }
 
     @Override
@@ -97,5 +102,6 @@ public class ImmutableFacetForDomainObjectAnnotation extends ImmutableFacetAbstr
         super.appendAttributesTo(attributeMap);
         attributeMap.put("reason", reason);
     }
+    
 
 }

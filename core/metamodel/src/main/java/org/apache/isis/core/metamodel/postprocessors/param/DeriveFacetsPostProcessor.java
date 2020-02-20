@@ -552,10 +552,11 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
             return;
         }
         final ObjectSpecification onType = property.getOnType();
-        final ImmutableFacet specFacet = onType.getFacet(ImmutableFacet.class);
-        if(existsAndIsDoOp(specFacet)) {
+        final ImmutableFacet immutableFacet = onType.getFacet(ImmutableFacet.class);
+        if(existsAndIsDoOp(immutableFacet)) {
             this.addFacet(
-                    new DisabledFacetOnPropertyDerivedFromImmutable(facetedMethodFor(property)));
+                    DisabledFacetOnPropertyDerivedFromImmutable
+                        .forImmutable(facetedMethodFor(property), immutableFacet));
         }
     }
 

@@ -24,7 +24,8 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+
+import lombok.val;
 
 public class DisabledFacetOnPropertyDerivedFromImmutableFactory extends FacetFactoryAbstract {
 
@@ -34,18 +35,20 @@ public class DisabledFacetOnPropertyDerivedFromImmutableFactory extends FacetFac
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final Class<?> declaringClass = processMethodContext.getMethod().getDeclaringClass();
-        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(
-                declaringClass);
-        if (spec.containsNonFallbackFacet(ImmutableFacet.class)) {
-            //final ImmutableFacet immutableFacet = spec.getFacet(ImmutableFacet.class);
+        val declaringClass = processMethodContext.getMethod().getDeclaringClass();
+        val spec = getSpecificationLoader().loadSpecification(declaringClass);
+        
+        val immutableFacet = spec.getFacet(ImmutableFacet.class);
+        
+        if (immutableFacet!=null && !immutableFacet.isFallback()) {
             final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
             DisabledFacet facet = facetHolder.getFacet(DisabledFacet.class);
             if(facet != null && facet.isInvertedSemantics()) {
                 // @Property(editing=ENABLED)
                 return;
             }
-            super.addFacet(new DisabledFacetOnPropertyDerivedFromImmutable(facetHolder));
+            super.addFacet(DisabledFacetOnPropertyDerivedFromImmutable
+                    .forImmutable(facetHolder, immutableFacet));
         }
     }
 

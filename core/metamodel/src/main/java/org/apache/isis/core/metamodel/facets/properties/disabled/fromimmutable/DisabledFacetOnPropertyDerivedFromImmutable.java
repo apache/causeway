@@ -19,20 +19,44 @@
 
 package org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable;
 
+import java.util.function.Function;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
+import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+
+import lombok.NonNull;
 
 public class DisabledFacetOnPropertyDerivedFromImmutable extends DisabledFacetAbstract {
 
-    public DisabledFacetOnPropertyDerivedFromImmutable(final FacetHolder holder) {
+    private final Function<ManagedObject, String> reasonProvider;
+
+    public DisabledFacetOnPropertyDerivedFromImmutable(
+            @NonNull final FacetHolder holder, 
+            @NonNull final Function<ManagedObject, String> reasonProvider) {
+        
         super(Where.ANYWHERE, holder);
+        this.reasonProvider = reasonProvider;
     }
 
     @Override
     public String disabledReason(final ManagedObject target) {
-        return "Immutable";
+        return reasonProvider.apply(target);
+    }
+
+    public static DisabledFacetOnPropertyDerivedFromImmutable forImmutable(
+            @NonNull final FacetedMethod facetedMethodFor,
+            @NonNull final ImmutableFacet immutableFacet) {
+        
+        final Function<ManagedObject, String> reasonProvider = (immutableFacet instanceof ImmutableFacetAbstract)
+                ? ((ImmutableFacetAbstract) immutableFacet)::disabledReason
+                : adapter -> "Immutable";
+        
+        return new DisabledFacetOnPropertyDerivedFromImmutable(facetedMethodFor, reasonProvider);
     }
 
 }

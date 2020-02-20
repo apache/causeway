@@ -19,6 +19,7 @@
 package org.apache.isis.testdomain.domainmodel;
 
 import javax.inject.Inject;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -51,7 +52,7 @@ import lombok.val;
                 Configuration_headless.class,
         }, 
         properties = {
-                "isis.applib.annotation.domain-object.editing=TRUE",
+                "isis.applib.annotation.domain-object.editing=FALSE",
                 "isis.core.meta-model.validator.explicit-object-type=FALSE", // does not override any of the imports
         })
 @TestPropertySource({
@@ -61,7 +62,7 @@ import lombok.val;
     IsisPresets.SilenceProgrammingModel
 })
 @DirtiesContext
-@Incubating("fails when run with surefire")
+//@Incubating("fails when run with surefire")
 class DomainModelTest_forEditing {
 
     @Inject private WrapperFactory wrapper;
@@ -72,16 +73,16 @@ class DomainModelTest_forEditing {
     // type:ENABLED + property:NOT_SPECIFIED -> effective ENABLED
     // -------------------------------------------------------
 
-
+    @XmlRootElement(name = "CustomerEna")
     @DomainObject(
-            nature=Nature.INMEMORY_ENTITY, 
+            nature=Nature.VIEW_MODEL, 
             editing=org.apache.isis.applib.annotation.Editing.ENABLED)
     public static class CustomerEna {
         @Property
         @Getter @Setter private String name;
     }
 
-    @Test @Disabled("fails ... Non-cloneable view models are read-only; Immutable")
+    @Test
     void classLevelAnnotation_whenEnabling_shouldSetTheDefault() {
 
         val holderSpec = specificationLoader.loadSpecification(CustomerEna.class, 
@@ -97,8 +98,9 @@ class DomainModelTest_forEditing {
     // type:DISABLED + property:NOT_SPECIFIED -> effective DISABLED
     // -------------------------------------------------------
 
+    @XmlRootElement(name = "CustomerDis")
     @DomainObject(
-            nature=Nature.INMEMORY_ENTITY, 
+            nature=Nature.VIEW_MODEL, 
             editing=org.apache.isis.applib.annotation.Editing.DISABLED,
             editingDisabledReason = "you cannot edit this object")
     public static class CustomerDis {
@@ -106,7 +108,7 @@ class DomainModelTest_forEditing {
         @Getter @Setter private String name;
     }
 
-    @Test @Disabled("fails for the wrong reason: Non-cloneable view models are read-only; Immutable")
+    @Test
     void classLevelAnnotation_whenDisabling_shouldSetTheDefault() {
 
         val holderSpec = specificationLoader.loadSpecification(CustomerDis.class, 
@@ -117,6 +119,8 @@ class DomainModelTest_forEditing {
         val disabledException = assertThrows(DisabledException.class, 
                 ()->wrapper.wrap(new CustomerDis()).setName("Bob"));
 
+        System.out.println(disabledException.getMessage());
+        
         assertTrue(disabledException.getMessage()
                         .contains("you cannot edit this object"));
     }
@@ -125,8 +129,9 @@ class DomainModelTest_forEditing {
     // type:ENABLED + property:DISABLED -> effective DISABLED
     // -------------------------------------------------------
 
+    @XmlRootElement(name = "CustomerEnaDis")
     @DomainObject(
-            nature=Nature.INMEMORY_ENTITY, 
+            nature=Nature.VIEW_MODEL, 
             editing=org.apache.isis.applib.annotation.Editing.ENABLED)
     public static class CustomerEnaDis {
         @Property(
@@ -156,8 +161,9 @@ class DomainModelTest_forEditing {
     // type:DISABLED + property:ENABLED -> effective ENABLED
     // -------------------------------------------------------
 
+    @XmlRootElement(name = "CustomerDisEna")
     @DomainObject(
-            nature=Nature.INMEMORY_ENTITY,
+            nature=Nature.VIEW_MODEL,
             editing=org.apache.isis.applib.annotation.Editing.DISABLED,
             editingDisabledReason = "you cannot edit this object")
     public static class CustomerDisEna {
