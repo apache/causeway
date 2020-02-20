@@ -39,7 +39,7 @@ import lombok.val;
 
 @DomainService(
         nature = NatureOfService.REST,
-        objectType = "testdomain.InventoryResource")
+        objectType = "testdomain.jpa.InventoryResource")
 public class JpaInventoryResource {
 
     @Inject private RepositoryService repository;
