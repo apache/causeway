@@ -27,7 +27,7 @@ object RoMenuBar : SimplePanel() {
                 marginLeft = CssSize(-32, UNIT.px)
                 height = CssSize(40, UNIT.px)
                 nav = nav()
-                logoButton()
+//                logoButton() leaves an empty space here without network connection
                 val mainEntry = buildMainMenu()
                 nav.add(mainEntry)
             }
@@ -35,7 +35,7 @@ object RoMenuBar : SimplePanel() {
     }
 
     private fun buildMainMenu(): DropDown {
-        val iconName = IconManager.find("Burger") //IMPROVE use for branding
+        val iconName = IconManager.find("Burger")
         return dropDown(
                 "",
                 icon = iconName,
@@ -68,6 +68,7 @@ object RoMenuBar : SimplePanel() {
     }
 
     fun amendMenu(menuBars: Menubars) {
+        logoButton()
         menuBars.primary.menu.forEach { m ->
             nav.add(MenuFactory.buildFor(m))
         }
