@@ -36,11 +36,12 @@ import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.core.commons.internal.base._Bytes;
 import org.apache.isis.core.commons.internal.resources._Resources;
 
-import demoapp.utils.DemoStub;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
+
+import demoapp.utils.DemoStub;
 
 @XmlRootElement(name = "Demo")
 @XmlType
@@ -65,7 +66,7 @@ public class BlobDemo extends DemoStub {
 
     // -- EDITABLE
 
-    @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
+    @Property
     @PropertyLayout
     @XmlElement @XmlJavaTypeAdapter(JaxbAdapters.BlobAdapter.class)
     @Getter @Setter private Blob logo;

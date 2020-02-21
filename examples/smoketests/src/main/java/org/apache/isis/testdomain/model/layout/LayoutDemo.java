@@ -39,7 +39,7 @@ import lombok.Setter;
 @DomainObject(nature=Nature.VIEW_MODEL, objectType="smoketests.LayoutDemo", editing=Editing.ENABLED)
 public class LayoutDemo {
 
-    @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
+    @Property
     @PropertyLayout(multiLine=3)
     @XmlElement @Getter @Setter private String stringMultiline;
     

@@ -62,36 +62,36 @@ public class TemporalDemo extends DemoStub {
 
     // -- DATE ONLY (LOCAL TIME)
 
-    @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
+    @Property
     @PropertyLayout(describedAs="java.sql.Date")
     @XmlElement @XmlJavaTypeAdapter(SqlDateAdapter.class)
     @Getter @Setter private java.sql.Date javaSqlDate;
 
-    @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
+    @Property
     @PropertyLayout(describedAs="java.time.LocalDate")
     @XmlElement @XmlJavaTypeAdapter(LocalDateAdapter.class)
     @Getter @Setter private LocalDate javaLocalDate;
 
     // -- DATE AND TIME (LOCAL TIME)
 
-    @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
+    @Property
     @PropertyLayout(describedAs="java.util.Date")
     @XmlElement @XmlJavaTypeAdapter(DateAdapter.class)
     @Getter @Setter private Date javaUtilDate;
 
-    @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
+    @Property
     @PropertyLayout(describedAs="java.sql.Timestamp")
     @XmlElement @XmlJavaTypeAdapter(SqlTimestampAdapter.class)
     @Getter @Setter private java.sql.Timestamp javaSqlTimestamp;
 
-    @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
+    @Property
     @PropertyLayout(describedAs="java.time.LocalDateTime")
     @XmlElement @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     @Getter @Setter private LocalDateTime javaLocalDateTime;
 
     // -- DATE AND TIME (WITH TIMEZONE OFFSET)
 
-    @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
+    @Property
     @PropertyLayout(describedAs="java.time.OffsetDateTime")
     @XmlElement @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
     @Getter @Setter private OffsetDateTime javaOffsetDateTime;

@@ -75,14 +75,12 @@ public class PrimitivesDemo extends DemoStub {
     // -- BOOLEAN
     
     @Property(
-            optionality = Optionality.MANDATORY,
-            editing=Editing.NOT_SPECIFIED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
+            optionality = Optionality.MANDATORY)
     @PropertyLayout(describedAs="java.lang.Boolean")
     @Getter @Setter private Boolean javaLangBoolean;
     
     @Property(
-            optionality = Optionality.OPTIONAL,
-            editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970)
+            optionality = Optionality.OPTIONAL)
     @PropertyLayout(describedAs="Nullable (3 state)")
     @Getter @Setter private Boolean nullableBoolean;
     
@@ -102,7 +100,7 @@ public class PrimitivesDemo extends DemoStub {
     
     // -- BYTE
 
-    @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
+    @Property
     @PropertyLayout(describedAs="java.lang.Byte")
     @Getter @Setter private Byte javaLangByte;
     
@@ -120,7 +118,7 @@ public class PrimitivesDemo extends DemoStub {
     
     // -- SHORT
 
-    @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
+    @Property
     @PropertyLayout(describedAs="java.lang.Short")
     @Getter @Setter private Short javaLangShort;
     
@@ -138,7 +136,7 @@ public class PrimitivesDemo extends DemoStub {
     
     // -- INTEGER
     
-    @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
+    @Property
     @PropertyLayout(describedAs="java.lang.Integer")
     @Getter @Setter private Integer javaLangInteger;
     
@@ -156,7 +154,7 @@ public class PrimitivesDemo extends DemoStub {
     
     // -- LONG
     
-    @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
+    @Property
     @PropertyLayout(describedAs="java.lang.Long")
     @Getter @Setter private Long javaLangLong;
     
@@ -174,7 +172,7 @@ public class PrimitivesDemo extends DemoStub {
 
     // -- FLOAT
     
-    @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
+    @Property
     @PropertyLayout(describedAs="java.lang.Float")
     @Getter @Setter private Float javaLangFloat;
     
@@ -192,7 +190,7 @@ public class PrimitivesDemo extends DemoStub {
     
     // -- DOUBLE
     
-    @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
+    @Property
     @PropertyLayout(describedAs="java.lang.Double")
     @Getter @Setter private Double javaLangDouble;
     

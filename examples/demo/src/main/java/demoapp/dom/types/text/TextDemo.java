@@ -57,10 +57,10 @@ public class TextDemo extends DemoStub {
 
     // -- EDITABLE
 
-    @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
+    @Property
     @XmlElement @Getter @Setter private String string;
 
-    @Property(editing=Editing.ENABLED) //TODO should not be required, https://issues.apache.org/jira/browse/ISIS-1970
+    @Property
     @PropertyLayout(multiLine=3)
     @XmlElement @Getter @Setter private String stringMultiline;
 
