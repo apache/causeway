@@ -21,7 +21,6 @@ package org.apache.isis.testdomain.domainmodel;
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -38,7 +37,6 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
-import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 
@@ -119,8 +117,6 @@ class DomainModelTest_forEditing {
         val disabledException = assertThrows(DisabledException.class, 
                 ()->wrapper.wrap(new CustomerDis()).setName("Bob"));
 
-        System.out.println(disabledException.getMessage());
-        
         assertTrue(disabledException.getMessage()
                         .contains("you cannot edit this object"));
     }

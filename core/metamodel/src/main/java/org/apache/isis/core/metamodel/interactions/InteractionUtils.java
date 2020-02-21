@@ -50,6 +50,9 @@ public final class InteractionUtils {
         facetHolder.streamFacets(DisablingInteractionAdvisor.class)
         .forEach(advisor->{
             val disablingReason = advisor.disables(context);
+// debugging            
+//            if(disablingReason!=null)
+//                System.out.println(String.format("disabling %s -> %s", advisor, disablingReason) );
             isResult.advise(disablingReason, advisor);
         });
         

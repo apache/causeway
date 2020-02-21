@@ -17,14 +17,26 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.domainobject.editing;
+package org.apache.isis.core.metamodel.facets.object.immutable;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.object.value.EqualByContentFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 
-public class ImmutableFacetForDomainObjectAnnotationAsConfigured extends ImmutableFacetForDomainObjectAnnotation {
+/**
+ * Indicates that the instances of this class are not immutable and so may be
+ * modified either through the viewer or indeed programmatically.
+ * <p>
+ * Overrides at type level the object editing configuration  
+ * {@link IsisConfiguration.Applib.Annotation.DomainObject#getEditing()}
+ *
+ * @see EqualByContentFacet
+ * @see ValueFacet
+ * 
+ * @since 2.0
+ */
+public interface EditingEnabledFacet extends Facet {
 
-    public ImmutableFacetForDomainObjectAnnotationAsConfigured(final String reason, final FacetHolder holder) {
-        super(reason, holder);
-    }
-
+    
 }

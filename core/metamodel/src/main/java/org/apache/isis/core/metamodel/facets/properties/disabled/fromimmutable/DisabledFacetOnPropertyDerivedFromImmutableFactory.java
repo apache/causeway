@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable;
 
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 
@@ -38,18 +37,21 @@ public class DisabledFacetOnPropertyDerivedFromImmutableFactory extends FacetFac
         val declaringClass = processMethodContext.getMethod().getDeclaringClass();
         val spec = getSpecificationLoader().loadSpecification(declaringClass);
         
-        val immutableFacet = spec.getFacet(ImmutableFacet.class);
-        
-        if (immutableFacet!=null && !immutableFacet.isFallback()) {
-            final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
-            DisabledFacet facet = facetHolder.getFacet(DisabledFacet.class);
-            if(facet != null && facet.isInvertedSemantics()) {
+        spec.lookupNonFallbackFacet(ImmutableFacet.class)
+        .ifPresent(immutableFacet->{
+            val facetHolder = processMethodContext.getFacetHolder();
+            
+            val isInvertedSemantics = facetHolder.lookupNonFallbackFacet(DisabledFacet.class)
+            .map(DisabledFacet::isInvertedSemantics)
+            .orElse(false);
+            
+            if(isInvertedSemantics) {
                 // @Property(editing=ENABLED)
                 return;
             }
             super.addFacet(DisabledFacetOnPropertyDerivedFromImmutable
                     .forImmutable(facetHolder, immutableFacet));
-        }
+        });
     }
 
 }

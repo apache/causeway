@@ -63,11 +63,11 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.choices.Choices
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.CollectionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.PropertyDomainEventDefaultFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.editing.EditingEnabledFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.publishing.PublishedObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
-import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MetaModelValidatorForMixinTypes;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
@@ -264,11 +264,14 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
 
         // check from @DomainObject(editing=...)
         val domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
-        ImmutableFacet facet = ImmutableFacetForDomainObjectAnnotation
-                .create(domainObjectIfAny, getConfiguration(), facetHolder);
-
-        // then add
-        super.addFacet(facet);
+        
+        super.addFacet(
+                EditingEnabledFacetForDomainObjectAnnotation
+                .create(domainObjectIfAny, facetHolder));
+        
+        super.addFacet(
+                ImmutableFacetForDomainObjectAnnotation
+                .create(domainObjectIfAny, getConfiguration(), facetHolder));
     }
 
     void processObjectType(final ProcessObjectSpecIdContext processClassContext) {

@@ -68,25 +68,27 @@ public class ImmutableFacetForDomainObjectAnnotation extends ImmutableFacetAbstr
             case DISABLED:
                 return new ImmutableFacetForDomainObjectAnnotation(disabledReason, holder);
             case ENABLED:
-                return null;
+                return null; // see also EditingEnabledFacetForDomainObjectAnnotation
             default:
                 throw _Exceptions.unmatchedCase(domainObject.editing());
             }
         }
         
         return editingDisabledByDefault
-                    ? new ImmutableFacetFromConfiguration("Disabled", holder)
+                    ? new ImmutableFacetFromConfiguration("Disabled (by configuration defaults)", holder)
                     : null;
     }
     
-    public ImmutableFacetForDomainObjectAnnotation(final String reason, final FacetHolder holder) {
+    protected ImmutableFacetForDomainObjectAnnotation(
+            final String reason, 
+            final FacetHolder holder) {
         super(holder);
         this.reason = reason;
     }
 
     @Override
     public String disabledReason(final ManagedObject targetAdapter) {
-        return !_Strings.isNullOrEmpty(reason)
+        return _Strings.isNotEmpty(reason)
                 ? reason
                 : super.disabledReason(targetAdapter);
     }

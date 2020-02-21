@@ -19,10 +19,14 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
+import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.apache.isis.core.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -37,8 +41,28 @@ public interface FacetHolder {
      * Get the facet of the specified type (as per the type it reports from
      * {@link Facet#facetType()}).
      */
-    <T extends Facet> T getFacet(Class<T> cls);
-
+    <T extends Facet> T getFacet(Class<T> facetType);
+    
+    // -- LOOKUP
+    
+    default <T extends Facet> Optional<T> lookupFacet(
+            @NonNull final Class<T> facetType) {
+        return Optional.ofNullable(getFacet(facetType));
+    }
+    
+    default <T extends Facet> Optional<T> lookupFacet(
+            @NonNull final Class<T> facetType, 
+            @NonNull final Predicate<T> filter) {
+        return lookupFacet(facetType).map(facet->filter.test(facet) ? facet : null);
+    }
+    
+    default <T extends Facet> Optional<T> lookupNonFallbackFacet(
+            @NonNull final Class<T> facetType) {
+        return lookupFacet(facetType, _Predicates.not(Facet::isFallback));
+    }
+    
+    // -- CONTAINS
+    
     /**
      * Whether there is a facet registered of the specified type.
      */

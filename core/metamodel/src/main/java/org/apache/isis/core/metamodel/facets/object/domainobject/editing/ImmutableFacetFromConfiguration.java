@@ -46,7 +46,7 @@ public class ImmutableFacetFromConfiguration extends ImmutableFacetAbstract {
 
     @Override
     public void copyOnto(final FacetHolder holder) {
-        final Facet facet = new ImmutableFacetForDomainObjectAnnotation(reason, holder);
+        final Facet facet = new ImmutableFacetFromConfiguration(reason, holder);
         FacetUtil.addFacet(facet);
     }
 

@@ -52,9 +52,5 @@ public abstract class ImmutableFacetAbstract extends FacetAbstract implements Im
         }
     }
 
-    public String disabledReason(
-            final ManagedObject targetAdapter) {
-        return "Always immmutable";
-    }
 
 }

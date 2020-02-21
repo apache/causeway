@@ -24,6 +24,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.EqualByContentFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
@@ -49,8 +50,12 @@ public interface ImmutableFacet extends Facet, DisablingInteractionAdvisor {
      * {@link ObjectMember}s.
      */
     void copyOnto(FacetHolder holder);
-
-    public static final class Utils {
+    
+    default String disabledReason(final ManagedObject targetAdapter) {
+        return "Always immmutable";
+    }
+    
+     public static final class Utils {
 
         private Utils(){}
         public static boolean isAlwaysImmutable(
@@ -64,6 +69,7 @@ public interface ImmutableFacet extends Facet, DisablingInteractionAdvisor {
             return specification.getFacet(ImmutableFacet.class) != null;
         }
 
-
     }
+
+    
 }

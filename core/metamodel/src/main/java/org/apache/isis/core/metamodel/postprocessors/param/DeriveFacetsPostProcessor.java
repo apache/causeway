@@ -54,7 +54,9 @@ import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.CollectionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.PropertyDomainEventDefaultFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetFromConfiguration;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
+import org.apache.isis.core.metamodel.facets.object.immutable.EditingEnabledFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacetFromProjectingProperty;
 import org.apache.isis.core.metamodel.facets.object.projection.ident.IconFacetDerivedFromProjectionFacet;
@@ -385,11 +387,13 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         if(objectAction.containsNonFallbackFacet(DescribedAsFacet.class)) {
             return;
         }
-        final ObjectSpecification returnSpec = objectAction.getReturnType();
-        final DescribedAsFacet specFacet = returnSpec.getFacet(DescribedAsFacet.class);
-        if(existsAndIsDoOp(specFacet)) {
-            this.addFacet(new DescribedAsFacetOnMemberDerivedFromType(specFacet, facetedMethodFor(objectAction)));
-        }
+        objectAction.getReturnType()
+        .lookupNonFallbackFacet(DescribedAsFacet.class)
+        .ifPresent(specFacet->
+            this.addFacet(
+                    new DescribedAsFacetOnMemberDerivedFromType(specFacet, 
+                            facetedMethodFor(objectAction))));
+        
     }
 
     /**
@@ -425,13 +429,12 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         if(parameter.containsNonFallbackFacet(ActionParameterChoicesFacet.class)) {
             return;
         }
-        final ObjectSpecification paramSpec = parameter.getSpecification();
-        final ChoicesFacet specFacet = paramSpec.getFacet(ChoicesFacet.class);
-        if(existsAndIsDoOp(specFacet)) {
+        parameter.getSpecification()
+        .lookupNonFallbackFacet(ChoicesFacet.class)
+        .ifPresent(choicesFacet->
             this.addFacet(
                     new ActionParameterChoicesFacetDerivedFromChoicesFacet(
-                            peerFor(parameter)));
-        }
+                            peerFor(parameter))));
     }
 
     /**
@@ -458,11 +461,12 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         if(parameter.containsNonFallbackFacet(TypicalLengthFacet.class)) {
             return;
         }
-        final ObjectSpecification paramSpec = parameter.getSpecification();
-        final TypicalLengthFacet specFacet = paramSpec.getFacet(TypicalLengthFacet.class);
-        if(existsAndIsDoOp(specFacet)) {
-            this.addFacet(new TypicalLengthFacetOnParameterDerivedFromType(specFacet, peerFor(parameter)));
-        }
+        parameter.getSpecification()
+        .lookupNonFallbackFacet(TypicalLengthFacet.class)
+        .ifPresent(specFacet->
+            this.addFacet(
+                    new TypicalLengthFacetOnParameterDerivedFromType(specFacet, 
+                            peerFor(parameter))));
     }
 
     /**
@@ -472,13 +476,13 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         if(property.containsNonFallbackFacet(PropertyChoicesFacet.class)) {
             return;
         }
-        final ObjectSpecification propertySpec = property.getSpecification();
-        final ChoicesFacet specFacet = propertySpec.getFacet(ChoicesFacet.class);
-        if(existsAndIsDoOp(specFacet)) {
+        property.getSpecification()
+        .lookupNonFallbackFacet(ChoicesFacet.class)
+        .ifPresent(specFacet->
             this.addFacet(
-                    new PropertyChoicesFacetDerivedFromChoicesFacet(facetedMethodFor(property)));
-        }
-    }
+                    new PropertyChoicesFacetDerivedFromChoicesFacet(
+                            facetedMethodFor(property))));
+   }
 
     /**
      * Replaces {@link PropertyDefaultFacetDerivedFromTypeFactory}
@@ -487,13 +491,12 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         if(property.containsNonFallbackFacet(PropertyDefaultFacet.class)) {
             return;
         }
-        final ObjectSpecification propertySpec = property.getSpecification();
-        final DefaultedFacet specFacet = propertySpec.getFacet(DefaultedFacet.class);
-        if(existsAndIsDoOp(specFacet)) {
+        property.getSpecification()
+        .lookupNonFallbackFacet(DefaultedFacet.class)
+        .ifPresent(specFacet->
             this.addFacet(
                     new PropertyDefaultFacetDerivedFromDefaultedFacet(
-                            specFacet, facetedMethodFor(property)));
-        }
+                            specFacet, facetedMethodFor(property))));
     }
 
     /**
@@ -503,12 +506,13 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         if(property.containsNonFallbackFacet(TypicalLengthFacet.class)) {
             return;
         }
-        final ObjectSpecification propertySpec = property.getSpecification();
-        final TypicalLengthFacet specFacet = propertySpec.getFacet(TypicalLengthFacet.class);
-        if(existsAndIsDoOp(specFacet)) {
+        property.getSpecification()
+        .lookupNonFallbackFacet(TypicalLengthFacet.class)
+        .ifPresent(specFacet->
             this.addFacet(
-                    new TypicalLengthFacetOnPropertyDerivedFromType(specFacet, facetedMethodFor(property)));
-        }
+                    new TypicalLengthFacetOnPropertyDerivedFromType(
+                            specFacet, facetedMethodFor(property))));
+        
     }
 
     /**
@@ -518,12 +522,12 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         if(objectAssociation.containsNonFallbackFacet(DescribedAsFacet.class)) {
             return;
         }
-        final ObjectSpecification returnSpec = objectAssociation.getSpecification();
-        final DescribedAsFacet specFacet = returnSpec.getFacet(DescribedAsFacet.class);
-        if(existsAndIsDoOp(specFacet)) {
+        objectAssociation.getSpecification()
+        .lookupNonFallbackFacet(DescribedAsFacet.class)
+        .ifPresent(specFacet->
             this.addFacet(
-                    new DescribedAsFacetOnMemberDerivedFromType(specFacet, facetedMethodFor(objectAssociation)));
-        }
+                    new DescribedAsFacetOnMemberDerivedFromType(
+                            specFacet, facetedMethodFor(objectAssociation))));
     }
 
     /**
@@ -534,13 +538,12 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         if(property.containsNonFallbackFacet(DisabledFacet.class)){
             return;
         }
-
-        final ObjectSpecification propertySpec = property.getOnType();
-        final ViewModelFacet specFacet = propertySpec.getFacet(ViewModelFacet.class);
-        if(existsAndIsDoOp(specFacet)) {
-            final DisabledFacetAbstract.Semantics semantics = inferSemanticsFrom(specFacet);
-            this.addFacet(new DisabledFacetOnPropertyDerivedFromRecreatableObject(facetedMethodFor(property), semantics));
-        }
+        property.getOnType()
+        .lookupNonFallbackFacet(ViewModelFacet.class)
+        .ifPresent(specFacet->
+            this.addFacet(
+                    new DisabledFacetOnPropertyDerivedFromRecreatableObject(
+                            facetedMethodFor(property), inferSemanticsFrom(specFacet))));
     }
 
 
@@ -551,13 +554,29 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         if(property.containsNonFallbackFacet(DisabledFacet.class)) {
             return;
         }
-        final ObjectSpecification onType = property.getOnType();
-        final ImmutableFacet immutableFacet = onType.getFacet(ImmutableFacet.class);
-        if(existsAndIsDoOp(immutableFacet)) {
+        
+        val typeSpec = property.getOnType();
+        
+        typeSpec
+        .lookupNonFallbackFacet(ImmutableFacet.class)
+        .ifPresent(immutableFacet->{
+            
+            if(immutableFacet instanceof ImmutableFacetFromConfiguration) {
+            
+                val isEditingEnabledOnType = typeSpec.lookupNonFallbackFacet(EditingEnabledFacet.class)
+                        .isPresent();
+                
+                if(isEditingEnabledOnType) {
+                    // @DomainObject(editing=ENABLED)
+                    return;
+                }
+            
+            }
+            
             this.addFacet(
                     DisabledFacetOnPropertyDerivedFromImmutable
                         .forImmutable(facetedMethodFor(property), immutableFacet));
-        }
+        });
     }
 
     /**
@@ -568,14 +587,12 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         if(collection.containsNonFallbackFacet(DisabledFacet.class)){
             return;
         }
-
-        final ObjectSpecification collectionSpec = collection.getOnType();
-        final ViewModelFacet specFacet = collectionSpec.getFacet(ViewModelFacet.class);
-        if(existsAndIsDoOp(specFacet)) {
-            final DisabledFacetAbstract.Semantics semantics = inferSemanticsFrom(specFacet);
-            this.addFacet(new DisabledFacetOnCollectionDerivedFromRecreatableObject(facetedMethodFor(collection), semantics));
-        }
-
+        collection.getOnType()
+        .lookupNonFallbackFacet(ViewModelFacet.class)
+        .ifPresent(specFacet->
+            this.addFacet(
+                    new DisabledFacetOnCollectionDerivedFromRecreatableObject(
+                            facetedMethodFor(collection), inferSemanticsFrom(specFacet))));
     }
 
     /**
@@ -585,14 +602,13 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         if(collection.containsNonFallbackFacet(DisabledFacet.class)) {
             return;
         }
-        final ObjectSpecification onType = collection.getOnType();
-        final ImmutableFacet specFacet = onType.getFacet(ImmutableFacet.class);
-        if(existsAndIsDoOp(specFacet)) {
+        collection.getOnType()
+        .lookupNonFallbackFacet(ImmutableFacet.class)
+        .ifPresent(specFacet->
             this.addFacet(
-                    new DisabledFacetOnCollectionDerivedFromImmutable(specFacet, facetedMethodFor(collection)));
-        }
+                    new DisabledFacetOnCollectionDerivedFromImmutable(
+                            specFacet, facetedMethodFor(collection))));
     }
-
 
 
     private void addCollectionParamDefaultsFacetIfNoneAlready(final ObjectActionParameter collectionParam) {
@@ -613,10 +629,6 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         this.addFacet(
                 new ActionParameterChoicesFacetFromParentedCollection(
                         scalarOrCollectionParam, otma));
-    }
-
-    private static boolean existsAndIsDoOp(final Facet facet) {
-        return facet != null && !facet.isFallback();
     }
 
     private ImmutableEnumSet<ActionType> inferActionTypes() {
