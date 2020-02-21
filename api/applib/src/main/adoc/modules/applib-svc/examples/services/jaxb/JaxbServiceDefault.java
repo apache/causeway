@@ -20,6 +20,7 @@ package org.apache.isis.applib.services.jaxb;
 
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.xml.bind.JAXBContext;
@@ -40,21 +41,32 @@ import org.apache.isis.applib.jaxbadapters.PersistentEntitiesAdapter;
 import org.apache.isis.applib.jaxbadapters.PersistentEntityAdapter;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Service
 @Named("isisApplib.JaxbServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
+@NoArgsConstructor @AllArgsConstructor
 public class JaxbServiceDefault extends JaxbService.Simple {
 
-    private final ServiceInjector serviceInjector;
-    private final MetaModelService metaModelService;
+    @Inject private ServiceRegistry serviceRegistry;
+    @Inject private ServiceInjector serviceInjector;
+    /*@Inject circular dependency*/private MetaModelService metaModelService;
 
-    @Inject
+    /*@Inject circular dependency*/
     public JaxbServiceDefault(ServiceInjector serviceInjector, MetaModelService metaModelService) {
         this.serviceInjector = serviceInjector;
         this.metaModelService = metaModelService;
+    }
+    
+    @PostConstruct
+    public void init(){
+        this.metaModelService = serviceRegistry.lookupServiceElseFail(MetaModelService.class);
     }
 
     @Override
