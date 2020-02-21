@@ -100,7 +100,8 @@ public class Object_downloadMetaModelXml {
 
     @Inject MetaModelService metaModelService;
     @Inject JaxbService jaxbService;
-    @Inject MetaModelServicesMenu metaModelServicesMenu;
+    @Inject
+    MetaModelServiceMenu metaModelServiceMenu;
 
 
 

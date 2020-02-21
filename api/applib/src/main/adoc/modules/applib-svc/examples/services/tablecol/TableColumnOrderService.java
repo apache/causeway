@@ -43,33 +43,7 @@ public interface TableColumnOrderService {
             final List<String> propertyIds);
 
 // end::refguide[]
-    /**
-     * Used as a fallback.
-     */
-    @Service
-    @Named("isisApplib.TableColumnOrderService.Default")
-    @Order(OrderPrecedence.LATE)
-    @Primary
-    @Qualifier("Default")
-    public static class Default implements TableColumnOrderService {
-
-        @Override
-        public List<String> orderParented(
-                final Object parent,
-                final String collectionId,
-                final Class<?> collectionType,
-                final List<String> propertyIds) {
-            return propertyIds;
-        }
-
-        @Override
-        public List<String> orderStandalone(
-                final Class<?> collectionType,
-                final List<String> propertyIds) {
-            return propertyIds;
-        }
-    }
-// tag::refguide[]
+    // tag::refguide[]
 
 }
 // end::refguide[]

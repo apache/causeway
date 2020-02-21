@@ -47,20 +47,20 @@ import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.schema.metamodel.v2.MetamodelDto;
 
-@Named("isisApplib.MetaModelServicesMenu")
-@DomainService(objectType = "isisApplib.MetaModelServicesMenu")
+@Named("isisApplib.MetaModelServiceMenu")
+@DomainService(objectType = "isisApplib.MetaModelServiceMenu")
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-public class MetaModelServicesMenu {
+public class MetaModelServiceMenu {
 
-    public static abstract class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<MetaModelServicesMenu> { }
+    public static abstract class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<MetaModelServiceMenu> { }
 
     final MimeType mimeTypeTextCsv;
     final MimeType mimeTypeTextXml;
 
-    public MetaModelServicesMenu() {
+    public MetaModelServiceMenu() {
         try {
             mimeTypeTextCsv = new MimeType("text", "csv");
             mimeTypeTextXml = new MimeType("application", "xml");
