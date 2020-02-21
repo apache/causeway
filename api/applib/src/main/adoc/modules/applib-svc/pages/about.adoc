@@ -15,26 +15,39 @@ The diagram below shows these categories:
 image::reference-services/categories.png[width="600px",link="{imagesdir}/reference-services/categories.png"]
 
 
+What distinguishes API from SPI is primarily whether it is called by the domain application itself, or is called by the framework.
+
+* All of the "API" domain services provide a default implementation, and so can always be called by domain objects.
+* Most of the "SPI" domain services also have a default implementation, although in many cases this is a fallback implementation (such as `AuditerServiceLogging` for the xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`]).
+
+In one sense all "API" domain services are also "SPI", in that they can be overridden by the domain programmer providing another domain service implementing the same type.
+For example, the framework-provided implementation of xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`] could be overridden this way, perhaps for more monitoring or caching purposes.
+This is most easily done using the Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation.
+Generally speaking in such cases higher precedence implementation will be used instead of the framework-provided implementation.
+For a small number of services, though, _all_ available implementations are delegated to.
+One example is the (aforementioned) xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`] - all configured implementations will be delegated to.
+
 A small number of domain services can be considered both API and SPI; a good example is the xref:refguide:applib-svc:EmailService.adoc[`EmailService`] that is of direct use for domain objects wishing to send out emails, but is also used by the framework to support the xref:vw:ROOT:features.adoc#user-registration[user registration] functionality supported by the xref:vw:ROOT:about.adoc[Wicket viewer].
 The same is true of the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`]; this can be used by domain objects to broadcast arbitrary events, but is also used by the framework to automatically emit events for
 xref:refguide:applib-ant:Action.adoc#domainEvent[`@Action#domainEvent()`] etc.
-
 For these hybrid services we have categorized the service as an "API" service.
-This chapter therefore contains only the strictly SPI services.
 
-This rest of this guide is broken out into several chapters, one for each of the various types/categories of domain service.
+This body of this guide has one page per domain service, alphabetically.
+To help you navigate them, the tables also group the services by category.
 
 
-
-include::refguide:applib-svc:partial$presentation-layer-api.adoc[leveloffset=+2]
-include::refguide:applib-svc:partial$presentation-layer-spi.adoc[leveloffset=+2]
-include::refguide:applib-svc:partial$application-layer-api.adoc[leveloffset=+2]
-include::refguide:applib-svc:partial$application-layer-spi.adoc[leveloffset=+2]
-include::refguide:applib-svc:partial$core-domain-api.adoc[leveloffset=+2]
-include::refguide:applib-svc:partial$integration-api.adoc[leveloffset=+2]
-include::refguide:applib-svc:partial$metadata-api.adoc[leveloffset=+2]
-include::refguide:applib-svc:partial$persistence-layer-api.adoc[leveloffset=+2]
-include::refguide:applib-svc:partial$persistence-layer-spi.adoc[leveloffset=+2]
+include::refguide:applib-svc:partial$_presentation-layer-api.adoc[leveloffset=+2]
+include::refguide:applib-svc:partial$_presentation-layer-spi.adoc[leveloffset=+2]
+include::refguide:applib-svc:partial$_application-layer-api.adoc[leveloffset=+2]
+include::refguide:applib-svc:partial$_application-layer-spi.adoc[leveloffset=+2]
+include::refguide:applib-svc:partial$_core-domain-api.adoc[leveloffset=+2]
+include::refguide:applib-svc:partial$_integration-api.adoc[leveloffset=+2]
+include::refguide:applib-svc:partial$_integration-spi.adoc[leveloffset=+2]
+include::refguide:applib-svc:partial$_metadata-api.adoc[leveloffset=+2]
+include::refguide:applib-svc:partial$_metadata-spi.adoc[leveloffset=+2]
+include::refguide:applib-svc:partial$_persistence-layer-api.adoc[leveloffset=+2]
+include::refguide:applib-svc:partial$_persistence-layer-spi.adoc[leveloffset=+2]
+include::refguide:applib-svc:partial$_security-spi.adoc[leveloffset=+2]
 
 == Public API vs Internal Services
 
@@ -47,6 +60,9 @@ These internal framework services should be thought of as part of the internal d
 The internal framework services are documented in the xref:runtime-services:ROOT:about.adoc[Framework Internal Services] guide.
 
 == Using the services
+
+WARNING: TODO: v2 - should extend this ... a good point to discuss also the @Import and pom.xml dependency.
+
 
 Apache Isis includes an extensive number of domain services for your domain objects to use; simply define the service as an annotated field and Apache Isis will inject the service into your object.
 

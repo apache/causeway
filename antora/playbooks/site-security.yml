@@ -26,6 +26,9 @@ content:
       start_path: extensions/security/secman/adoc # security
       branches: HEAD
     - url: .
+      start_path: extensions/security/session-log/adoc # security
+      branches: HEAD
+    - url: .
       start_path: extensions/security/shiro-realm-ldap/adoc # security
       branches: HEAD
 

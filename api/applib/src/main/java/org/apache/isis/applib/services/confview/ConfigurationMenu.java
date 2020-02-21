@@ -48,11 +48,11 @@ public class ConfigurationMenu {
         this.configurationService = configurationService;
     }
 
-    public static class AllConfigurationPropertiesDomainEvent
+    public static class ConfigurationDomainEvent
         extends ActionDomainEvent {}
 
     @Action(
-            domainEvent = AllConfigurationPropertiesDomainEvent.class,
+            domainEvent = ConfigurationDomainEvent.class,
             semantics = SemanticsOf.SAFE
             )
     @ActionLayout(

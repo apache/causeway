@@ -20,8 +20,10 @@ package org.apache.isis.core.runtimeservices.exceprecog;
 
 import java.util.Optional;
 
+import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;

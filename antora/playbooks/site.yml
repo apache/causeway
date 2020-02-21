@@ -87,11 +87,17 @@ content:
       start_path: extensions/core/auditer/adoc # extensions
       branches: HEAD
     - url: .
+      start_path: extensions/core/command-log/adoc # extensions
+      branches: HEAD
+    - url: .
       start_path: extensions/core/flyway/adoc # userguide
       branches: HEAD
 
     - url: .
       start_path: extensions/security/secman/adoc # security
+      branches: HEAD
+    - url: .
+      start_path: extensions/security/session-log/adoc # security
       branches: HEAD
     - url: .
       start_path: extensions/security/shiro-realm-ldap/adoc # security
@@ -150,6 +156,9 @@ content:
       branches: HEAD
     - url: .
       start_path: mappings/minio/adoc # mappings
+      branches: HEAD
+    - url: .
+      start_path: mappings/publisher/adoc # mappings
       branches: HEAD
     - url: .
       start_path: mappings/restclient/adoc # mappings

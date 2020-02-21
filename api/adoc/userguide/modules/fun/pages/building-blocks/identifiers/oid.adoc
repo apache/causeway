@@ -40,3 +40,12 @@ OIDs can also be converted into XML format, useful for integration scenarios.
 The xref:refguide:schema:common.adoc[common schema] XSD defines the `oidDto` complex type for precisely this purpose.
 
 
+WARNING: TODO: v2 - tidy up this following text (moved from the BookmarkService refguide):
+
+[NOTE]
+====
+A `Bookmark` is little more than an API equivalent of Apache Isis' internal `Oid` (object identifier).
+Nevertheless, the ability to uniquely address _any_ domain object within an Apache Isis system -- to in effect provide a URN -- is immensely useful.
+
+For example, a `Bookmark` could be converted into a barcode, and then this used for automated scanning of correspondence from a customer.
+====

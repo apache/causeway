@@ -40,7 +40,6 @@ import org.apache.isis.applib.jaxbadapters.PersistentEntitiesAdapter;
 import org.apache.isis.applib.jaxbadapters.PersistentEntityAdapter;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
 
 @Service
 @Named("isisApplib.JaxbServiceDefault")
@@ -48,6 +47,15 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 @Primary
 @Qualifier("Default")
 public class JaxbServiceDefault extends JaxbService.Simple {
+
+    private final ServiceInjector serviceInjector;
+    private final MetaModelService metaModelService;
+
+    @Inject
+    public JaxbServiceDefault(ServiceInjector serviceInjector, MetaModelService metaModelService) {
+        this.serviceInjector = serviceInjector;
+        this.metaModelService = metaModelService;
+    }
 
     @Override
     public Object fromXml(final JAXBContext jaxbContext, final String xml, final Map<String, Object> unmarshallerProperties) {
@@ -110,8 +118,5 @@ public class JaxbServiceDefault extends JaxbService.Simple {
     }
 
 
-    @Inject ServiceRegistry serviceRegistry;
-    @Inject ServiceInjector serviceInjector;
-    @Inject MetaModelService metaModelService;
 }
 

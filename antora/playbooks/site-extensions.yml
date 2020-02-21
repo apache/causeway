@@ -24,6 +24,9 @@ content:
       start_path: extensions/core/auditer/adoc # extensions
       branches: HEAD
     - url: .
+      start_path: extensions/core/command-log/adoc # extensions
+      branches: HEAD
+    - url: .
       start_path: extensions/core/flyway/adoc # userguide
       branches: HEAD
 

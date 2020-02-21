@@ -10,3 +10,4 @@ include::security:ROOT:partial$module-nav-end.adoc[]
 * Extensions
 include::security:shiro-realm-ldap:partial$module-nav.adoc[]
 include::security:secman:partial$module-nav.adoc[]
+include::security:session-log:partial$module-nav.adoc[]

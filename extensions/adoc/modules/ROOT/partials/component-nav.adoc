@@ -2,6 +2,8 @@ include::extensions:ROOT:partial$module-nav.adoc[]
 
 * Core
 
+include::session-log:partial$module-nav.adoc[]
+include::command-log:partial$module-nav.adoc[]
 include::userguide:flyway:partial$module-nav.adoc[]
 
 * Security

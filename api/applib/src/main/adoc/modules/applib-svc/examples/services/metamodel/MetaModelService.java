@@ -59,7 +59,7 @@ public interface MetaModelService {
      * Returns a list of representations of each of member of each domain class.
      *
      * <p>
-     *     Used by {@link MetaModelServicesMenu} to return a downloadable CSV.
+     *     Used by {@link MetaModelServiceMenu} to return a downloadable CSV.
      * </p>
      *
      * <p>

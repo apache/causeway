@@ -1,10 +1,10 @@
-[[BookmarkService]]
 = `BookmarkService`
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
 
-The `BookmarkService2` domain service (and its various supertypes) provides the ability to obtain a serializable ``o.a.i.applib.bookmarks.Bookmark`` for any (persisted) domain object, and to lookup domain objects given a ``Bookmark``.  This can then in turn be converted to and from a string.
+The `BookmarkService` domain service (and its various supertypes) provides the ability to obtain a serializable ``o.a.i.applib.bookmarks.Bookmark`` for any (persisted) domain object, and to lookup domain objects given a ``Bookmark``.
+This can then in turn be converted to and from a string.
 
 For example, a `Customer` object with:
 
@@ -13,26 +13,17 @@ For example, a `Customer` object with:
 
 could correspond to a `Bookmark` with a string representation of `custmgmt.Customer|123`.
 
-[NOTE]
-====
-A `Bookmark` is little more than an API equivalent of Apache Isis' internal `Oid` (object identifier).  Nevertheless, the ability to uniquely address _any_ domain object within an Apache Isis system -- to in effect provide a URN -- is immensely useful.
+``Bookmark``s are useful to store a reference to an arbitrary object, although be aware that there is no referential integrity.
 
-For example, a `Bookmark` could be converted into a barcode, and then this used for automated scanning of correspondence from a customer.
-====
+Several of the extension libraries use bookmarks.
+For example the xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`] uses bookmarks to identify the object that is being modified.
 
-``Bookmark``s are used by several other domain services as a means of storing a reference to an arbitrary object
-(a polymorphic relationship).  For example, the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s auditing module's implementation of xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`] uses bookmarks to capture the object that is being audited.
+Serialized form of bookmarks also appear within  xref:refguide:schema:about.adoc[schema] instances, for example as used by xref:refguide:applib-svc:CommandService.adoc[`CommandService`] and the xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`].
 
-[TIP]
-====
-One downside of using ``Bookmark``s is that there is no way for the JDO/DataNucleus objectstore to enforce any kind of referental integrity.
-However, the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s poly module describes and supports a design pattern to address this requirement.
-====
+//Bookmarks are also used by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module's implementation of  xref:refguide:applib-svc:_BackgroundCommandService.adoc[`BackgroundCommandService`], which uses a bookmark to capture the target object on which an action will be invoked subsequently.
 
 
-
-
-== API & Implementation
+== API
 
 The API defined by `BookmarkService` is:
 
@@ -40,62 +31,38 @@ The API defined by `BookmarkService` is:
 ----
 include::refguide:applib-svc:example$services/bookmark/BookmarkService.java[tags="refguide"]
 ----
+
 <.> same as `lookup(Bookmark bookmark)`, but downcasts to the specified type.
 
+== Implementation
 
 The core framework provides a default implementation of this API, namely `o.a.i.core.metamodel.services.bookmarks.BookmarkServiceInternalDefault`
-
-To use an alternative implementation, implement `BookmarkService` interface and use Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation (as explained in the xref:refguide:applib-svc:about.adoc#overriding-the-services.adoc[introduction] to this guide).
-
-
 
 
 == `BookmarkHolder`
 
-The `BookmarkHolder` interface is intended to be implemented by domain objects that use a `Bookmark` to reference a (single) domain object; an example might be a class such as the audit entry, mentioned above.  The interface is simply:
-
-
-[source,java]
-----
-public interface BookmarkHolder {
-    @Programmatic
-    Bookmark bookmark();
-}
-
-----
-
-There are two services that will contribute to this interface:
-
-* `BookmarkHolderActionContributions` will provide a `lookup(...)` action
-* `BookmarkHolderAssociationContributions` provides an `object` property.
-
-Either of these can be suppressed, if required, using a vetoing subscriber.  For example, to suppress the `object` property (so that only the `lookup(...)` action is ever shown for implementations of `BookmarkHolder`, define:
+The `BookmarkHolder` interface is intended to be implemented by domain objects that use a `Bookmark` to reference a (single) domain object; an example might be a class such as the audit entry, mentioned above.
+The interface is simply:
 
 [source,java]
 ----
-import org.springframework.context.event.EventListener;
-
-@DomainService(nature=NatureOfService.DOMAIN)
-public class AlwaysHideBookmarkHolderAssociationsObjectProperty
-                                            extends AbstractSubscriber{
-    @EventListener(BookmarkHolderAssociationContributions.ObjectDomainEvent.class)
-    public void on(BookmarkHolderAssociationContributions.ObjectDomainEvent ev) {
-        ev.hide();
-    }
-}
+include::refguide:applib-svc:example$services/bookmark/BookmarkHolder.java[tags="refguide"]
 ----
 
-A more sophisticated implementation could look inside the passed `ev` argument and selectively hide or not based on the contributee.
+There are two mixins that will contribute to this interface:
+
+* `BookmarkHolder_lookup`
++
+which contributes a `lookup` action to return the referenced object
+
+* `BookmarkHolder_object`
++
+which contributes instead an `object` property, being the referenced object.
+
+Either of these can be suppressed, if required, using a vetoing subscriber that listens to the action or property domain event in order to hide the member.
 
 
 
+== Related Services
 
-== Usage by other services
-
-//Bookmarks are used by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module's implementation of  xref:refguide:applib-svc:_BackgroundCommandService.adoc[`BackgroundCommandService`], which uses a bookmark to capture the target object on which an action will be invoked subsequently.
-
-Bookmarks are also used by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s auditing module's implementation of xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`].
-
-
-
-
+The xref:refguide:applib-svc:BookmarkUiService.adoc[`BookmarkUiService`]

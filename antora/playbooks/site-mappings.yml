@@ -27,6 +27,9 @@ content:
       start_path: mappings/minio/adoc # mappings
       branches: HEAD
     - url: .
+      start_path: mappings/publisher/adoc # mappings
+      branches: HEAD
+    - url: .
       start_path: mappings/restclient/adoc # mappings
       branches: HEAD
     - url: .

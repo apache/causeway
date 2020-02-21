@@ -78,8 +78,8 @@ Metamodel:
 
 Error handling:
 
-* xref:refguide:applib-svc:ErrorReportingService.adoc[`ErrorReportingService`] (SPI)
-* xref:refguide:applib-svc:ExceptionRecognizer.adoc[`ExceptionRecognizer`] (SPI)
+* xref:refguide:applib-svc:ErrorReportingService.adoc[`ErrorReportingService`]
+* xref:refguide:applib-svc:ExceptionRecognizerService.adoc[`ExceptionRecognizerService`]
 * xref:refguide:applib-svc:MessageService.adoc[`MessageService`]
 
 i18n:

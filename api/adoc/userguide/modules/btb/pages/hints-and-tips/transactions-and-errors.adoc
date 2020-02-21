@@ -33,42 +33,38 @@ public class SomeLongRunningFixtureScript extends FixtureScript
 
 You get the idea.
 
-
 == Raise message in the UI
 
-The framework provides the xref:refguide:applib-svc:MessageService.adoc[`MessageService`] as a means to return an out-of-band
-message to the end-user.  In the xref:vw:ROOT:about.adoc[Wicket viewer] these are shown as "toast" pop-ups; the
+The framework provides the xref:refguide:applib-svc:MessageService.adoc[`MessageService`] as a means to return an out-of-band message to the end-user.
+In the xref:vw:ROOT:about.adoc[Wicket viewer] these are shown as "toast" pop-ups; the
 xref:vro:ROOT:about.adoc[Restful Objects viewer] returns an HTTP header.
 
 The `UserService` provides three APIs, for different:
 
-* `informUser()` - an informational message.  In the Wicket viewer these are short-lived pop-ups that disappear after a short time.
-* `warnUser()` - a warning.  In the Wicket viewer these do not auto-close; they must be acknowledged.
-* `raiseError()` - an error.  In the Wicket viewer these do not auto-close; they must be acknowledged.
+* `informUser()` - an informational message.
+In the Wicket viewer these are short-lived pop-ups that disappear after a short time.
+* `warnUser()` - a warning.
+In the Wicket viewer these do not auto-close; they must be acknowledged.
+* `raiseError()` - an error.
+In the Wicket viewer these do not auto-close; they must be acknowledged.
 
 Each pop-up has a different background colour indicating its severity.
 
 None of these messages/errors has any influence on the transaction; any changes to objects will be committed.
 
-
 == Aborting transactions
 
-If you want to abort Apache Isis' transaction, this can be done by throwing an exception.  The exception message
-is displayed to the user on the error page (if xref:vw:ROOT:about.adoc[Wicket viewer]) or a 500 status error code (if the
+If you want to abort Apache Isis' transaction, this can be done by throwing an exception.
+The exception message is displayed to the user on the error page (if xref:vw:ROOT:about.adoc[Wicket viewer]) or a 500 status error code (if the
 xref:vro:ROOT:about.adoc[Restful Objects] viewer).
 
-If the exception thrown is because of an unexpected error (eg a `NullPointerException` in the domain app itself), then
-the error page will include a stack trace.  If however you want to indicate that the exception is in some sense
-"expected", then throw a `RecoverableException` (or any subclass, eg `ApplicationException`); the stack trace will then
-be suppressed from the error page.
+If the exception thrown is because of an unexpected error (eg a `NullPointerException` in the domain app itself), then the error page will include a stack trace.
+If however you want to indicate that the exception is in some sense "expected", then throw a `RecoverableException` (or any subclass, eg `ApplicationException`); the stack trace will then be suppressed from the error page.
 
-Another way in which exceptions might be considered "expected" could be as the result of attempting to persist an
-object which then violates some type of database constraint.  Even if the domain application checks beforehand, it
-could be that another user operating on the object at the same moment of time might result in the conflict.
+Another way in which exceptions might be considered "expected" could be as the result of attempting to persist an object which then violates some type of database constraint.
+Even if the domain application checks beforehand, it could be that another user operating on the object at the same moment of time might result in the conflict.
 
-To handle this the xref:refguide:applib-svc:ExceptionRecognizer.adoc[`ExceptionRecognizer`] SPI can be used.  The
-framework provides a number of implementations out-of-the-box; whenever an exception is thrown it is passed to each
-known recognizer implementation to see if it recognizes the exception and can return a user-meaningful error message.
-For example, `ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException` checks if the
-exception inherits from `java.sql.SQLIntegrityConstraintViolationException`, and if so, constructs a suitable message.
+To handle this the xref:refguide:applib-svc:ExceptionRecognizerService.adoc[`ExceptionRecognizer`] SPI can be used.
+The framework provides a number of implementations out-of-the-box; whenever an exception is thrown it is passed to each known recognizer implementation to see if it recognizes the exception and can return a user-meaningful error message.
+For example, `ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException` checks if the exception inherits from `java.sql.SQLIntegrityConstraintViolationException`, and if so, constructs a suitable message.
 

@@ -29,7 +29,7 @@ import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 import org.apache.isis.core.codegen.bytebuddy.IsisModuleCoreCodegenByteBuddy;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 import org.apache.isis.core.runtimeservices.auth.AuthenticationSessionProviderDefault;
-import org.apache.isis.core.runtimeservices.bookmarks.BookmarkServiceInternalDefault;
+import org.apache.isis.core.runtimeservices.bookmarks.BookmarkServiceDefault;
 import org.apache.isis.core.runtimeservices.command.CommandDtoServiceInternalDefault;
 import org.apache.isis.core.runtimeservices.command.CommandExecutorServiceDefault;
 import org.apache.isis.core.runtimeservices.command.CommandServiceDefault;
@@ -46,10 +46,12 @@ import org.apache.isis.core.runtimeservices.menubars.MenuBarsLoaderServiceDefaul
 import org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3;
 import org.apache.isis.core.runtimeservices.message.MessageServiceDefault;
 import org.apache.isis.core.runtimeservices.publish.PublisherDispatchServiceDefault;
+import org.apache.isis.core.runtimeservices.queryresultscache.QueryResultsCacheDefault;
 import org.apache.isis.core.runtimeservices.repository.RepositoryServiceDefault;
 import org.apache.isis.core.runtimeservices.routing.RoutingServiceDefault;
 import org.apache.isis.core.runtimeservices.sessmgmt.SessionManagementServiceDefault;
 import org.apache.isis.core.runtimeservices.sudo.SudoServiceDefault;
+import org.apache.isis.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression;
 import org.apache.isis.core.runtimeservices.userprof.UserProfileServiceDefault;
 import org.apache.isis.core.runtimeservices.userreg.EmailNotificationServiceDefault;
 import org.apache.isis.core.runtimeservices.wrapper.WrapperFactoryDefault;
@@ -64,7 +66,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
 
         // @Service's
         AuthenticationSessionProviderDefault.class,
-        BookmarkServiceInternalDefault.class,
+        BookmarkServiceDefault.class,
         CommandDtoServiceInternalDefault.class,
         CommandExecutorServiceDefault.class,
         CommandServiceDefault.class,
@@ -81,9 +83,11 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         MenuBarsServiceBS3.class,
         MessageServiceDefault.class,
         PublisherDispatchServiceDefault.class,
+        QueryResultsCacheDefault.class,
         SessionManagementServiceDefault.class,
         SudoServiceDefault.class,
         TransactionServiceSpring.class,
+        UrlEncodingServiceWithCompression.class,
         UserProfileServiceDefault.class,
         WrapperFactoryDefault.class,
         XmlSnapshotServiceDefault.class,
@@ -96,6 +100,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
 
         // @DomainService's
         TranslationServicePoMenu.class,
+
 })
 public class IsisModuleCoreRuntimeServices /*implements ApplicationContextAware*/ {
 

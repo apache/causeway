@@ -28,7 +28,9 @@ import lombok.experimental.UtilityClass;
 public class OrderPrecedence {
 
     /**
-     * Useful constant for the highest precedence value.
+     * For domain services with the highest precedence value.
+     * No framework services use this constant, but some very fundamental services (eg for security)
+     * that are not expected to be overridden use a value that is only a little after this first value.
      *
      * @see java.lang.Integer#MIN_VALUE
      * @see Ordered#HIGHEST_PRECEDENCE
@@ -36,25 +38,25 @@ public class OrderPrecedence {
     public static final int FIRST = Ordered.HIGHEST_PRECEDENCE;
 
     /**
-     * Useful constant for the lowest precedence value.
+     * For framework for services that are unlikely to be overridden by application code.
+     */
+    public static final int EARLY = FIRST / 2;
+    /**
+     * For framework for services that could be overridden by application code (though not commonly).
+     */
+    public static final int MIDPOINT = 0;
+    /**
+     * For framework services that are expected to be overridden by application code, or that act as a fallback.
+     */
+    public static final int LATE = OrderPrecedence.LAST / 2;
+
+    /**
+     * For domain services that act as a fallback, and which will typically be overridden.
      *
      * @see java.lang.Integer#MAX_VALUE
      * @see Ordered#LOWEST_PRECEDENCE
      */
     public static final int LAST = Ordered.LOWEST_PRECEDENCE;
-
-    /**
-     * Used by framework services that are unlikely to be overridden by application code.
-     */
-    public static final int EARLY = FIRST / 2;
-    /**
-     * Used by framework services that could be overridden by application code (though not commonly).
-     */
-    public static final int MIDPOINT = 0;
-    /**
-     * Used by framework services that are expected to be overridden by application code, or that act as a fallback.
-     */
-    public static final int LATE = OrderPrecedence.LAST / 2;
 
 }
 // end::refguide[]

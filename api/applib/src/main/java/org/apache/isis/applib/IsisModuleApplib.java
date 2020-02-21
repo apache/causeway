@@ -40,12 +40,9 @@ import org.apache.isis.applib.services.conmap.command.ContentMappingServiceForCo
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.jaxb.JaxbServiceDefault;
 import org.apache.isis.applib.services.layout.LayoutServiceMenu;
-import org.apache.isis.applib.services.metamodel.MetaModelServicesMenu;
+import org.apache.isis.applib.services.metamodel.MetaModelServiceMenu;
 import org.apache.isis.applib.services.publish.PublisherServiceLogging;
-import org.apache.isis.applib.services.queryresultscache.QueryResultsCacheDefault;
 import org.apache.isis.applib.services.scratchpad.Scratchpad;
-import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
-import org.apache.isis.applib.services.urlencoding.UrlEncodingServiceWithCompression;
 import org.apache.isis.schema.IsisModuleSchema;
 
 @Configuration
@@ -68,7 +65,7 @@ import org.apache.isis.schema.IsisModuleSchema;
         // @DomainService's
         ConfigurationMenu.class,
         LayoutServiceMenu.class,
-        MetaModelServicesMenu.class,
+        MetaModelServiceMenu.class,
 
         // @Service's
         AuditerServiceLogging.class,
@@ -79,10 +76,7 @@ import org.apache.isis.schema.IsisModuleSchema;
         InteractionContext.class,
         JaxbServiceDefault.class,
         PublisherServiceLogging.class,
-        QueryResultsCacheDefault.class,
-        Scratchpad.class,
-        TableColumnOrderService.Default.class,
-        UrlEncodingServiceWithCompression.class,
+        Scratchpad.class
 
 })
 public class IsisModuleApplib {

@@ -52,7 +52,7 @@ while others come from services provided by Apache Isis itself, eg:
         menuBar = MenuBar.SECONDARY,
         menuOrder = "500.500"               // <2>
 )
-public class MetaModelServicesMenu {
+public class MetaModelServiceMenu {
     @MemberOrder(sequence="500.500.1")      // <3>
     public Clob downloadMetaModel( ... ) { /* ... */ }
     ...

@@ -43,6 +43,7 @@ import org.apache.isis.core.metamodel.services.grid.bootstrap3.GridSystemService
 import org.apache.isis.core.metamodel.services.layout.LayoutServiceDefault;
 import org.apache.isis.core.metamodel.services.metamodel.MetaModelServiceDefault;
 import org.apache.isis.core.metamodel.services.registry.ServiceRegistryDefault;
+import org.apache.isis.core.metamodel.services.tablecol.TableColumnOrderServiceDefault;
 import org.apache.isis.core.metamodel.services.title.TitleServiceDefault;
 import org.apache.isis.core.metamodel.services.user.UserServiceDefault;
 import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
@@ -91,6 +92,7 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         MetaModelServiceDefault.class,
         ProgrammingModelServiceDefault.class,
         ServiceRegistryDefault.class,
+        TableColumnOrderServiceDefault.class,
         TitleServiceDefault.class,
         SpecificationLoaderDefault.class,
         UserServiceDefault.class,
