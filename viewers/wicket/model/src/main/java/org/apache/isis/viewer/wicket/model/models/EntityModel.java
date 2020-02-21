@@ -40,13 +40,13 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
 
@@ -79,8 +79,8 @@ implements ObjectAdapterModel, UiHintContainer {
         val isEntity = ManagedObject.isIdentifiable(adapter);
 
         if (isEntity) {
-            val oidStr = ManagedObject._identify(adapter).enString();
-            PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr);
+            ManagedObject.stringify(adapter)
+            .ifPresent(oidStr->PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr));
         } else {
             // don't do anything; instead the page should be redirected back to
             // an EntityPage so that the underlying EntityModel that contains

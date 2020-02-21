@@ -26,6 +26,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -35,6 +36,7 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.domain.DomainObjectList;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._NullSafe;
@@ -48,7 +50,6 @@ import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.commons.MethodExtensions;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
@@ -87,6 +88,71 @@ public interface ManagedObject {
      * represents with the framework.
      */
     Object getPojo();
+    
+    /**
+     * Returns the object id as identified by the ObjectManager. 
+     * Entity IDs are considered immutable, hence will be memoized once fetched.
+     */
+    Optional<RootOid> getRootOid();
+    
+    // -- SHORTCUTS
+    
+    static Optional<RootOid> identify(@Nullable ManagedObject adapter) {
+        return adapter!=null ? adapter.getRootOid() : Optional.empty(); 
+    }
+    
+    static RootOid identifyElseFail(@Nullable ManagedObject adapter) {
+        return identify(adapter)
+                .orElseThrow(()->_Exceptions.illegalArgument("cannot identify %s", adapter));
+    }
+    
+    static Optional<Bookmark> bookmark(@Nullable ManagedObject adapter) {
+        return identify(adapter)
+                .map(RootOid::asBookmark);
+    }
+    
+    static Bookmark bookmarkElseFail(@Nullable ManagedObject adapter) {
+        return bookmark(adapter)
+                .orElseThrow(()->_Exceptions.illegalArgument("cannot bookmark %s", adapter));
+    }
+    
+    static Optional<String> stringify(@Nullable ManagedObject adapter) {
+        return identify(adapter)
+                .map(RootOid::enString);
+    }
+    
+    static String stringifyElseFail(@Nullable ManagedObject adapter) {
+        return stringify(adapter)
+                .orElseThrow(()->_Exceptions.illegalArgument("cannot stringify %s", adapter));
+    }
+    
+    
+    // -- EMPTY
+    
+    static class EmptyUtil {
+        private static final ManagedObject EMPTY = new ManagedObject() {
+
+            @Override
+            public ObjectSpecification getSpecification() {
+                throw _Exceptions.unsupportedOperation();
+            }
+
+            @Override
+            public Object getPojo() {
+                return null;
+            }
+
+            @Override
+            public Optional<RootOid> getRootOid() {
+                return Optional.empty();
+            }
+            
+        };
+    }
+    
+    static ManagedObject empty() {
+        return EmptyUtil.EMPTY;
+    }
 
     // -- SIMPLE
 
@@ -94,6 +160,9 @@ public interface ManagedObject {
     static final class SimpleManagedObject implements ManagedObject {
         @NonNull private final ObjectSpecification specification;
         @NonNull private final Object pojo;
+        
+        @Getter(lazy=true, onMethod = @__(@Override)) 
+        private final Optional<RootOid> rootOid = Optional.ofNullable(ManagedObjectInternalUtil._identify(this));
     }
 
     // -- LAZY
@@ -104,6 +173,9 @@ public interface ManagedObject {
         @NonNull private final Function<Class<?>, ObjectSpecification> specLoader;  
 
         @Getter @NonNull private final Object pojo;
+        
+        @Getter(lazy=true, onMethod = @__(@Override)) 
+        private final Optional<RootOid> rootOid = Optional.ofNullable(ManagedObjectInternalUtil._identify(this));
 
         @Getter(lazy=true) 
         private final ObjectSpecification specification = specLoader.apply(pojo.getClass());
@@ -639,29 +711,8 @@ public interface ManagedObject {
     
     // -- DEPRECATIONS (REFACTORING)
 
-    static MetaModelContext _mmc(ManagedObject adapter) {
-        return adapter.getSpecification().getMetaModelContext();
-    }
-
-    static RootOid _identify(ManagedObject adapter) {
-        return _mmc(adapter).getObjectManager().identifyObject(adapter); 
-    }
-
-    static RootOid _identifyElseThrow(ManagedObject adapter) {
-        try {
-            val rootOid = _identify(adapter);
-            if(rootOid!=null){
-                return rootOid; 
-            }
-        } catch (Exception e) {
-            throw new IllegalArgumentException(
-                    "ManagedObject must represent an identifiable object: " + adapter, e);
-        }
-        throw new IllegalArgumentException("ManagedObject must represent an identifiable object: " + adapter);
-    }
-    
     static String _instanceId(ManagedObject adapter) {
-        val identifier = ManagedObject._identifyElseThrow(adapter).getIdentifier();
+        val identifier = identifyElseFail(adapter).getIdentifier();
         return identifier; 
     }
     
@@ -794,25 +845,7 @@ public interface ManagedObject {
         return adapter.getSpecification().getBeanSort().isCollection();
     }
 
-    static class EmptyUtil {
-        private static final ManagedObject EMPTY = new ManagedObject() {
 
-            @Override
-            public ObjectSpecification getSpecification() {
-                throw _Exceptions.unsupportedOperation();
-            }
-
-            @Override
-            public Object getPojo() {
-                return null;
-            }
-            
-        };
-    }
-    
-    static ManagedObject empty() {
-        return EmptyUtil.EMPTY;
-    }
 
 
 }

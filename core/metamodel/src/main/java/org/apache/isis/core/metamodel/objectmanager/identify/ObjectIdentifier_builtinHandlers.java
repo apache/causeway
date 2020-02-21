@@ -77,9 +77,13 @@ class ObjectIdentifier_builtinHandlers {
         public RootOid handle(ManagedObject managedObject) {
             val spec = managedObject.getSpecification();
             val pojo = managedObject.getPojo();
+            if(pojo==null) {
+                val msg = String.format("entity '%s' is null, cannot identify", managedObject);
+                throw _Exceptions.unrecoverable(msg);
+            }
             val entityFacet = spec.getFacet(EntityFacet.class);
             if(entityFacet==null) {
-                val msg = String.format("entity '%s' has not EntityFacet associated", managedObject);
+                val msg = String.format("entity '%s' has no EntityFacet associated", managedObject);
                 throw _Exceptions.unrecoverable(msg);
             }
             val identifier = entityFacet.identifierFor(spec, pojo);

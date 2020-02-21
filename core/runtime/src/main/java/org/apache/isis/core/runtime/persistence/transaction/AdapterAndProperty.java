@@ -51,8 +51,7 @@ public class AdapterAndProperty {
         this.property = property;
         this.propertyId = property.getId();
 
-        val oid = ManagedObject._identify(adapter);
-        this.bookmark = oid.asBookmark();
+        this.bookmark = ManagedObject.bookmark(adapter).orElse(null);
         this.bookmarkStr = bookmark.toString();
         
     }

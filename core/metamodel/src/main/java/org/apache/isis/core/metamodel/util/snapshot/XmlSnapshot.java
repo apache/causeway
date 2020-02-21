@@ -50,7 +50,6 @@ import org.apache.isis.applib.snapshot.SnapshottableWithInclusions;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.internal.codec._DocumentFactories;
 import org.apache.isis.core.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
@@ -858,7 +857,8 @@ public class XmlSnapshot implements Snapshot {
             }
             return fakeOid;
         } else {
-            return ManagedObject._identify(adapter).enString();
+            return ManagedObject.stringify(adapter)
+                    .orElse(null);
         }
     }
 

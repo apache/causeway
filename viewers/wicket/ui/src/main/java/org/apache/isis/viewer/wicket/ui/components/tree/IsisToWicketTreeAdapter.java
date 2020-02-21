@@ -48,13 +48,13 @@ import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.functions._Functions;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
 
@@ -401,7 +401,8 @@ class IsisToWicketTreeAdapter {
         public LoadableDetachableTreeModel(TreeModel tModel) {
             super(tModel);
             this.treePath = tModel.getTreePath();
-            this.id = (RootOid) ManagedObject._identify(tModel.getObject());
+            this.id = ManagedObject.identifyElseFail(tModel.getObject());
+                    
             this.hashCode = Objects.hash(id.hashCode(), treePath.hashCode());
             this.commonContext = tModel.getCommonContext();
         }

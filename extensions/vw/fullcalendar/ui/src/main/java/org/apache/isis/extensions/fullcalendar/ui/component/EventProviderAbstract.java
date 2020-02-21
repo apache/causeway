@@ -110,7 +110,7 @@ public abstract class EventProviderAbstract implements EventProvider {
                         final ObjectSpecification spec = specificationLoader.loadSpecification(dereferencedObject.getClass());
                         final ManagedObject dereferencedManagedObject = ManagedObject.of(spec, dereferencedObject);
 
-                        final RootOid rootOid = ManagedObject._identify(dereferencedManagedObject);
+                        final RootOid rootOid = ManagedObject.identify(dereferencedManagedObject).orElse(null);
                         if(rootOid!=null) {
 
                             final String oidStr = rootOid.enString();

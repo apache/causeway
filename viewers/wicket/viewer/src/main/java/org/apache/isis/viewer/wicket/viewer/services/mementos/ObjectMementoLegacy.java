@@ -241,10 +241,9 @@ final class ObjectMementoLegacy implements Serializable {
                     SpecificationLoader specificationLoader) {
 
                 //XXX REVIEW: this may be redundant because recreateAdapter also guarantees the version will be reset.
-                final ManagedObject adapter = recreateObject(memento, specificationLoader);
+                ManagedObject adapter = recreateObject(memento, specificationLoader);
 
-                Oid oid = ManagedObject._identify(adapter);
-                memento.persistentOidStr = oid.enString();
+                memento.persistentOidStr = ManagedObject.stringifyElseFail(adapter);
             }
 
             @Override
@@ -395,7 +394,7 @@ final class ObjectMementoLegacy implements Serializable {
             return;
         }
 
-        val rootOid = (RootOid) ManagedObject._identify(adapter);
+        val rootOid = ManagedObject.identifyElseFail(adapter);
         persistentOidStr = rootOid.enString();
         bookmark = rootOid.asBookmark();
         if(adapter.getPojo() instanceof HintStore.HintIdProvider) {

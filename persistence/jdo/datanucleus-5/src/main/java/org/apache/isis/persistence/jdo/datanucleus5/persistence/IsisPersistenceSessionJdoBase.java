@@ -235,8 +235,7 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
             return null;
         }
         val adapter = ManagedObject.of(getSpecificationLoader().loadSpecification(pojo.getClass()), pojo);
-        val oid = ManagedObject._identify(adapter);
-        return oid;
+        return ManagedObject.identify(adapter).orElse(null);
     }
 
     // -- HELPERS - SERVICE LOOKUP

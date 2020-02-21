@@ -21,8 +21,8 @@ package org.apache.isis.core.runtimeservices.publish;
 
 import java.sql.Timestamp;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 import org.apache.isis.applib.annotation.Programmatic;
@@ -30,18 +30,18 @@ import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.services.RepresentsInteractionMemberExecution;
 import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.core.commons.internal.base._Lazy;
-import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 import org.apache.isis.schema.chg.v2.ObjectsDto;
-import org.apache.isis.schema.common.v2.OidDto;
 import org.apache.isis.schema.common.v2.OidsDto;
 import org.apache.isis.schema.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
 
 import lombok.ToString;
+import lombok.val;
 
 /**
  * Captures which objects were created, updated or deleted in the course of a transaction.
@@ -185,17 +185,17 @@ public class PublishedObjectsDefault implements PublishedObjects, RepresentsInte
     }
 
     private OidsDto oidsDtoFor(final PublishingChangeKind kind) {
-        final OidsDto oidsDto = new OidsDto();
+        val oidsDto = new OidsDto();
 
-        final Collection<ManagedObject> adapters = adaptersByChange.get().get(kind);
-        if(adapters != null) {
-            final List<OidDto> oidDtos = _Lists.map(adapters, 
-                    (final ManagedObject objectAdapter) -> {
-                        final RootOid rootOid = ManagedObject._identify(objectAdapter);
-                        return rootOid.asOidDto();
-                    });
-            oidsDto.getOid().addAll(oidDtos);
-        }
+        _NullSafe.stream(adaptersByChange.get().get(kind))
+        .map((final ManagedObject adapter) -> 
+            ManagedObject.identify(adapter)
+            .map(RootOid::asOidDto)
+            .orElse(null)
+        )
+        .filter(Objects::nonNull)
+        .forEach(oidsDto.getOid()::add);
+        
         return oidsDto;
     }
 

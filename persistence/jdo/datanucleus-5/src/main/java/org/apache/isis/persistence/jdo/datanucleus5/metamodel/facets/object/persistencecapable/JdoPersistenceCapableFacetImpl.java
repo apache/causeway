@@ -63,11 +63,19 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
     @Override
     public String identifierFor(ObjectSpecification spec, Object pojo) {
 
-        //TODO simplify?, spec is already loaded
-        
-        if(pojo==null || !isPersistableType(pojo.getClass())) {
-            return "?";
+        if(pojo==null) {
+            throw _Exceptions.illegalArgument(
+                    "The persistence layer cannot identify a pojo that is null (given type %s)",
+                    spec.getCorrespondingClass().getName());
         }
+        
+        if(!isPersistableType(pojo.getClass())) {
+            throw _Exceptions.illegalArgument(
+                    "The persistence layer does not recognize given type %s",
+                    pojo.getClass().getName());
+        }
+        
+        //TODO simplify?, spec is already loaded
         
         val persistenceSession = super.getPersistenceSessionJdo();
         val isRecognized = persistenceSession.isRecognized(pojo);
@@ -81,9 +89,6 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
                     + "meaning the object has no identifier that associates it with the persistence layer. "
                     + "(most likely, because the object is detached, eg. was not persisted after being new-ed up)", 
                     pojo.getClass().getName());
-            
-            //final String identifier = UUID.randomUUID().toString();
-            //return identifier;    
         }
     }
 

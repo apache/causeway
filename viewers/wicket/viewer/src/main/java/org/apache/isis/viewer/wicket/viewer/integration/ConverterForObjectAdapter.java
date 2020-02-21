@@ -74,11 +74,8 @@ public class ConverterForObjectAdapter implements IConverter<ManagedObject> {
             return null;
         }
         
-        val rootOid = ManagedObject._identify(adapter);
-        
-        return rootOid!=null
-                ? rootOid.enString()
-                        : null;
+        return ManagedObject.stringify(adapter)
+                .orElse(null);
     }
     
 

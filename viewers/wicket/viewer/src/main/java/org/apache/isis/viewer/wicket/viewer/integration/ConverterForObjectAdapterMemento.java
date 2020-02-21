@@ -72,8 +72,7 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectMement
         if(spec!=null && spec.isValue()) {
             return memento.toString();
         }
-        val oid = ManagedObject._identify(adapter);
-        return oid.enString();
+        return ManagedObject.stringifyElseFail(adapter);
     }
 
 }

@@ -21,11 +21,13 @@ package org.apache.isis.persistence.jdo.datanucleus5.objectadapter;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.internal.base._Lazy;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -151,6 +153,15 @@ public final class PojoAdapter implements ObjectAdapter {
 //            if(oid.isViewModel()) return "V";
         }
         return "S"; // standalone adapter (value)
+    }
+
+    @Override
+    public Optional<RootOid> getRootOid() {
+        val oid = getOid();
+        if (oid instanceof RootOid) {
+            return Optional.of((RootOid)oid);
+        }
+        return Optional.empty();
     }
 
 

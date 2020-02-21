@@ -37,6 +37,7 @@ import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.collections._Sets;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -239,6 +240,13 @@ public class ChangedObjectsService implements WithTransactionScope {
     }
 
     protected boolean shouldIgnore(final ManagedObject adapter) {
+        
+        if(adapter.getPojo()==null) {
+            throw _Exceptions.illegalArgument("!!! cannot reference null");
+        }
+        
+        System.out.println("enlist " + Integer.toHexString(adapter.hashCode()));
+        
         final ObjectSpecification adapterSpec = adapter.getSpecification();
         final Class<?> adapterClass = adapterSpec.getCorrespondingClass();
         return HasUniqueId.class.isAssignableFrom(adapterClass);
