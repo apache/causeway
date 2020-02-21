@@ -849,7 +849,7 @@ public class XmlSnapshot implements Snapshot {
     private String oidAsString(final ManagedObject adapter) {
         if (adapter.getPojo() instanceof ViewModel) {
             // return a fake oid for view models;
-            // a snapshot may be being used to create the memento/OID
+            // a snapshot may be used to create the memento/OID
             String fakeOid = viewModelFakeOids.get(adapter);
             if (fakeOid == null) {
                 fakeOid = "viewmodel-fakeoid-" + UUID.randomUUID().toString();
@@ -857,8 +857,7 @@ public class XmlSnapshot implements Snapshot {
             }
             return fakeOid;
         } else {
-            return ManagedObject.stringify(adapter)
-                    .orElse(null);
+            return ManagedObject.stringifyElseFail(adapter);
         }
     }
 

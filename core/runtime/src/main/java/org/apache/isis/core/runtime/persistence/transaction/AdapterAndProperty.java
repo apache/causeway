@@ -51,7 +51,7 @@ public class AdapterAndProperty {
         this.property = property;
         this.propertyId = property.getId();
 
-        this.bookmark = ManagedObject.bookmark(adapter).orElse(null);
+        this.bookmark = ManagedObject.bookmarkElseFail(adapter);
         this.bookmarkStr = bookmark.toString();
         
     }
