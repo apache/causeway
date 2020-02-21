@@ -32,7 +32,6 @@ The API defined by `BookmarkService` is:
 include::refguide:applib-svc:example$services/bookmark/BookmarkService.java[tags="refguide"]
 ----
 
-<.> same as `lookup(Bookmark bookmark)`, but downcasts to the specified type.
 
 == Implementation
 

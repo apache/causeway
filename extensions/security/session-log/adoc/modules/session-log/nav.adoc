@@ -1,1 +1,1 @@
-include::extensions:ROOT:partial$component-nav.adoc[]
+include::security:ROOT:partial$component-nav.adoc[]

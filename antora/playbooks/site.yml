@@ -84,15 +84,15 @@ content:
       branches: HEAD
 
     - url: .
-      start_path: extensions/core/auditer/adoc # extensions
-      branches: HEAD
-    - url: .
       start_path: extensions/core/command-log/adoc # extensions
       branches: HEAD
     - url: .
       start_path: extensions/core/flyway/adoc # userguide
       branches: HEAD
 
+    - url: .
+      start_path: extensions/security/audit-trail/adoc # security
+      branches: HEAD
     - url: .
       start_path: extensions/security/secman/adoc # security
       branches: HEAD

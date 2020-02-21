@@ -23,6 +23,9 @@ content:
 
 # extensions
     - url: .
+      start_path: extensions/security/audit-trail/adoc # security
+      branches: HEAD
+    - url: .
       start_path: extensions/security/secman/adoc # security
       branches: HEAD
     - url: .
