@@ -5,8 +5,6 @@
 
 Domain service APIs for the presentation layer allow the domain objects to control aspects of the user interface.
 
-CAUTION: The implementations are specific to the particular viewer (xref:vw:ROOT:about.adoc[Wicket viewer] or xref:vro:ROOT:about.adoc[Restful Objects viewer]) so domain code must guard against them being unavailable in some cases.
-
 
 .Presentation Layer API
 [cols="2m,4a,2a",options="header"]
@@ -35,5 +33,7 @@ CAUTION: The implementations are specific to the particular viewer (xref:vw:ROOT
 
 |===
 
+
+CAUTION: The implementations are specific to the particular viewer (xref:vw:ROOT:about.adoc[Wicket viewer] or xref:vro:ROOT:about.adoc[Restful Objects viewer]) so domain code must guard against them being unavailable in some cases.
 
 

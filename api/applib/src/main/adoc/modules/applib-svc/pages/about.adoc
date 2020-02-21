@@ -17,10 +17,10 @@ image::reference-services/categories.png[width="600px",link="{imagesdir}/referen
 
 What distinguishes API from SPI is primarily whether it is called by the domain application itself, or is called by the framework.
 
-* All of the "API" domain services provide a default implementation, and so can always be called by domain objects.
-* Most of the "SPI" domain services also have a default implementation, although in many cases this is a fallback implementation (such as `AuditerServiceLogging` for the xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`]).
+* All of the API domain services provide a default implementation, and so can always be called by domain objects.
+* Most of the SPI domain services also have a default implementation, although in many cases this is a fallback implementation (such as ``AuditerServiceLogging`` for the xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`]).
 
-In one sense all "API" domain services are also "SPI", in that they can be overridden by the domain programmer providing another domain service implementing the same type.
+In one sense all API domain services are also SPI, in that they can be overridden by the domain programmer providing another domain service implementing the same type.
 For example, the framework-provided implementation of xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`] could be overridden this way, perhaps for more monitoring or caching purposes.
 This is most easily done using the Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation.
 Generally speaking in such cases higher precedence implementation will be used instead of the framework-provided implementation.
@@ -30,10 +30,10 @@ One example is the (aforementioned) xref:refguide:applib-svc:AuditerService.adoc
 A small number of domain services can be considered both API and SPI; a good example is the xref:refguide:applib-svc:EmailService.adoc[`EmailService`] that is of direct use for domain objects wishing to send out emails, but is also used by the framework to support the xref:vw:ROOT:features.adoc#user-registration[user registration] functionality supported by the xref:vw:ROOT:about.adoc[Wicket viewer].
 The same is true of the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`]; this can be used by domain objects to broadcast arbitrary events, but is also used by the framework to automatically emit events for
 xref:refguide:applib-ant:Action.adoc#domainEvent[`@Action#domainEvent()`] etc.
-For these hybrid services we have categorized the service as an "API" service.
+For these hybrid services we have categorized the service as an API service.
 
 This body of this guide has one page per domain service, alphabetically.
-To help you navigate them, the tables also group the services by category.
+To help you learn about them, the tables below also group the services by category.
 
 
 include::refguide:applib-svc:partial$_presentation-layer-api.adoc[leveloffset=+2]

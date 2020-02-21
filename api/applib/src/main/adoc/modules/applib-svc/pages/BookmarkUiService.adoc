@@ -13,11 +13,9 @@ The API defined by `BookmarkUiService` is:
 
 [source,java]
 ----
-public interface BookmarkUiService {
-    void clear();   // <1>
-}
+include::refguide:applib-svc:example$services/bookmarkui/BookmarkUiService.java[tags="refguide"]
 ----
-<1> Simply clears the current list of breadcrumbs and bookmarks.
+<.> Simply clears the current list of breadcrumbs and bookmarks.
 
 
 == Implementation
