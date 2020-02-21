@@ -39,7 +39,7 @@ The following  sections explain the API and how to go about using the API.
 
 
 include::fixture-scripts/api-and-usage.adoc[leveloffset=+1]
-include::fixture-scripts/ticking-clock-fixture.adoc[leveloffset=+1]
+include::fixture-scripts/mocking-the-clock.adoc[leveloffset=+1]
 include::fixture-scripts/sudo-service.adoc[leveloffset=+1]
 
 

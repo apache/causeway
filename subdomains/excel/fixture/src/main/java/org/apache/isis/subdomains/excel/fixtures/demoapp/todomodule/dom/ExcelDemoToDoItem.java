@@ -27,6 +27,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.jaxbadapters.PersistentEntityAdapter;
+import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
@@ -110,7 +111,8 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
     @Inject private RepositoryService repositoryService;
     @Inject private TitleService titleService;
     @Inject private ExcelDemoToDoItemMenu toDoItems;
-    
+    @Inject private ClockService clockService;
+
     //region > title, iconName
 
     public String title() {
@@ -346,12 +348,12 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
     //region > Programmatic Helpers
     private static final long ONE_WEEK_IN_MILLIS = 7 * 24 * 60 * 60 * 1000L;
 
-    private static boolean isMoreThanOneWeekInPast(final LocalDate dueBy) {
+    private boolean isMoreThanOneWeekInPast(final LocalDate dueBy) {
         
         long epochMillisAtStartOfDay = 
                 dueBy.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
                 
-        return epochMillisAtStartOfDay < (Clock.getEpochMillis() - ONE_WEEK_IN_MILLIS);
+        return epochMillisAtStartOfDay < (clockService.nowAsMillis() - ONE_WEEK_IN_MILLIS);
     }
 
     //endregion

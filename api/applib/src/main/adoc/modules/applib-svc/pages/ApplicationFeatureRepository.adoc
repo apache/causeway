@@ -26,9 +26,9 @@ These methods are designed primarily to return lists of strings for use in drop-
 
 == Implementation
 
-The default implementation of this domain service is `o.a.i.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault`.
+The core framework (xref:core:metamodel:about.adoc[MetaModel] module) provides a default implementation, `o.a.i.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault`.
 
-It supports the following configuration properties:
+This implementation supports the following configuration properties:
 
 * xref:refguide:config:sections/isis.core.runtime-services.adoc#isis.core.runtime-services.application-features.init[`isis.core.runtime-services.application-features.init`]
 

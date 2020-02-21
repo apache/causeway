@@ -35,8 +35,8 @@ The framework allows multiple implementations of this service to be registered; 
 
 There are two implementations provided by the framework:
 
-* The core framework provides the `AuditerServiceLogging` (in `o.a.i.applib.services.audit` package).
-This simply logs the messages to a link:https://logging.apache.org/log4j/log4j-2.2/manual/configuration.html[Log4j2] logger.
+* The core framework provides a fallback implementation, `o.a.i.applib.services.audit.AuditerServiceLogging`.
+This simply logs the messages using a link:https://logging.apache.org/log4j/log4j-2.2/manual/configuration.html[Log4j2] logger.
 +
 [source,xml]
 .log4j2-spring.xml

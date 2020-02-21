@@ -29,6 +29,7 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.session.SessionLoggingService;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
@@ -245,7 +246,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, IsisWebAppComm
         final Runnable loggingTask = ()->{
             // use hashcode as session identifier, to avoid re-binding http sessions if using Session#getId()
             int sessionHashCode = System.identityHashCode(AuthenticatedWebSessionForIsis.this);
-            sessionLoggingService.log(type, username, new Date(Clock.getEpochMillis()), causedBy, Integer.toString(sessionHashCode));
+            sessionLoggingService.log(type, username, now(), causedBy, Integer.toString(sessionHashCode));
         };
 
         if(isisSessionFactory!=null) {
@@ -266,11 +267,26 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, IsisWebAppComm
             // fallback to System.err
             return new SessionLoggingService.Stderr();
         }
-
     }
     
     protected IsisSessionFactory getIsisSessionFactory() {
         return commonContext.lookupServiceElseFail(IsisSessionFactory.class);
+    }
+
+
+    private Date now() {
+        try {
+            return commonContext.getServiceRegistry()
+                    .lookupService(ClockService.class)
+                    .map(ClockService::nowAsJavaUtilDate)
+                    .orElse(nowFallback());
+        } catch (Exception e) {
+            return nowFallback();
+        }
+    }
+
+    private Date nowFallback() {
+        return new Date(Clock.getEpochMillis());
     }
 
     @Override

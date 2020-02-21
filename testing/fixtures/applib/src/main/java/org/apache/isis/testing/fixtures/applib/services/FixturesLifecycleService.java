@@ -59,27 +59,20 @@ import lombok.extern.log4j.Log4j2;
 public class FixturesLifecycleService {
 
     @SuppressWarnings("unused")
-    private final IsisSessionFactory isisSessionFactory; // depends on relationship
-    private final IsisSystemEnvironment isisSystemEnvironment;
-    private final IsisConfiguration isisConfiguration;
-    private final ServiceInjector serviceInjector;
-    private final FixtureScripts fixtureScripts;
+
+    @Inject
+    private IsisSessionFactory isisSessionFactory; // depends on relationship
+    @Inject
+    private IsisSystemEnvironment isisSystemEnvironment;
+    @Inject
+    private IsisConfiguration isisConfiguration;
+    @Inject
+    private ServiceInjector serviceInjector;
+    @Inject
+    private FixtureScripts fixtureScripts;
 
     private FixtureScript initialFixtureScript;
 
-    @Inject
-    public FixturesLifecycleService(
-            final IsisSessionFactory isisSessionFactory,
-            final IsisSystemEnvironment isisSystemEnvironment,
-            final IsisConfiguration isisConfiguration,
-            final ServiceInjector serviceInjector,
-            final FixtureScripts fixtureScripts) {
-        this.isisSessionFactory = isisSessionFactory;
-        this.isisSystemEnvironment = isisSystemEnvironment;
-        this.isisConfiguration = isisConfiguration;
-        this.serviceInjector = serviceInjector;
-        this.fixtureScripts = fixtureScripts;
-    }
 
     @PostConstruct
     public void postConstruct() {

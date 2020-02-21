@@ -3,7 +3,10 @@ package org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.fixturescri
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Category;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
@@ -78,20 +81,14 @@ public class ExcelDemoToDoItem_recreate5_for extends FixtureScript {
         return toDoItem;
     }
 
-    private static LocalDate daysFromToday(final int i) {
-        final LocalDate date = Clock.getTimeAsLocalDate();
+    private LocalDate daysFromToday(final int i) {
+        final LocalDate date = clockService.now();
         return date.plusDays(i);
     }
 
 
-    // //////////////////////////////////////
-    // Injected services
-    // //////////////////////////////////////
-
-    @javax.inject.Inject
-    private ExcelDemoToDoItemMenu demoToDoItemMenu;
-
-    @javax.inject.Inject
-    private IsisJdoSupport isisJdoSupport;
+    @Inject private ExcelDemoToDoItemMenu demoToDoItemMenu;
+    @Inject private IsisJdoSupport isisJdoSupport;
+    @Inject private ClockService clockService;
 
 }

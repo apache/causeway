@@ -82,5 +82,6 @@ public class ClockService {
         final DateTimeZone timeZone = DateTimeZone.forTimeZone(TimeZone.getDefault());
         return new org.joda.time.LocalDate(nowAsMillis(), timeZone);
     }
+
 }
 // end::refguide[]

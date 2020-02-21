@@ -29,7 +29,7 @@ import java.util.Map;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstractTemporal;
@@ -78,9 +78,6 @@ public class JavaSqlDateValueSemanticsProvider extends ValueSemanticsProviderAbs
         }
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // temporal-specific stuff
-    // //////////////////////////////////////////////////////////////////
 
     @Override
     protected void clearFields(final Calendar cal) {
@@ -141,16 +138,6 @@ public class JavaSqlDateValueSemanticsProvider extends ValueSemanticsProviderAbs
     }
 
 
-
-
-
-
-
-
-
-
-    private static final Date DEFAULT_VALUE = null; // no default
-
     @Override
     protected Date add(final Date original, final int years, final int months, final int days, final int hours, final int minutes) {
         final Date date = original;
@@ -181,7 +168,10 @@ public class JavaSqlDateValueSemanticsProvider extends ValueSemanticsProviderAbs
 
     @Override
     protected Date now() {
-        return new Date(Clock.getEpochMillis());
+        return getServiceRegistry().lookupService(ClockService.class)
+                .map(ClockService::nowAsMillis)
+                .map(Date::new)
+                .get();
     }
 
     @Override //[ISIS-2005] java.sql.Date requires special treatment, so overriding the default

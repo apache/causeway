@@ -24,8 +24,6 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.CommandExecuteIn;
 import org.apache.isis.applib.annotation.CommandPersistence;
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.applib.services.background.BackgroundCommandService;
@@ -300,7 +298,7 @@ public interface Command extends HasUniqueId {
          * <b>NOT API</b>: intended to be called only by the framework.
          *
          * <p>
-         * Implementation notes: set when the Isis PersistenceSession is opened.  Uses the applib {@link Clock}.
+         * Implementation notes: set when the Isis PersistenceSession is opened.
          */
         void setTimestamp(Timestamp timestamp);
 

@@ -23,8 +23,6 @@ import org.apache.isis.applib.annotation.Programmatic;
 
 // tag::refguide[]
 public interface BookmarkUiService {
-
-    void clear();
-
+    void clear();                   // <1>
 }
 // end::refguide[]

@@ -30,7 +30,7 @@ import java.util.Map;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstractTemporal;
@@ -156,7 +156,10 @@ public class JavaSqlTimeValueSemanticsProvider extends ValueSemanticsProviderAbs
 
     @Override
     protected Time now() {
-        return new java.sql.Time(Clock.getEpochMillis());
+        return getServiceRegistry().lookupService(ClockService.class)
+                .map(ClockService::nowAsMillis)
+                .map(Time::new)
+                .get();
     }
 
     @Override

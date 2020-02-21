@@ -8,7 +8,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.ViewModel;
-import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Category;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
@@ -69,15 +69,16 @@ public class DemoToDoItemRowHandler implements ExcelFixtureRowHandler {
         return Collections.<Object>singletonList(toDoItem);
     }
 
-    private static LocalDate daysFromToday(final Integer i) {
+    private LocalDate daysFromToday(final Integer i) {
         if(i == null) {
             return null;
         }
-        final LocalDate date = Clock.getTimeAsLocalDate();
+        final LocalDate date = clockService.now();
         return date.plusDays(i);
     }
 
 
     @Inject private ExcelDemoToDoItemMenu toDoItemRepository;
     @Inject private UserService userService;
+    @Inject private ClockService clockService;
 }
