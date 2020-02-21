@@ -39,6 +39,9 @@ public final class IsisPresets  {
     public static final String DataNucleusAutoCreate = "classpath:/org/apache/isis/core/config/presets/DataNucleusAutoCreate.properties";
     
     public static final String DebugPersistence = "classpath:/org/apache/isis/core/config/presets/DebugPersistence.properties";
+    public static final String DebugRequestScopedServices = "classpath:/org/apache/isis/core/config/presets/DebugRequestScopedServices.properties";
+    public static final String DebugTransactionScopedServices = "classpath:/org/apache/isis/core/config/presets/DebugTransactionScopedServices.properties";
+    
     public static final String DebugDiscovery = "classpath:/org/apache/isis/core/config/presets/DebugDiscovery.properties";
     
     public static final String DebugProgrammingModel = "classpath:/org/apache/isis/core/config/presets/DebugProgrammingModel.properties";
