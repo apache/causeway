@@ -23,6 +23,8 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
@@ -43,6 +45,7 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isisRuntime.ChangedObjectsService")
@@ -50,8 +53,25 @@ import lombok.val;
 @Primary
 @Qualifier("Default")
 @RequestScoped
+@Log4j2
 public class ChangedObjectsService implements WithTransactionScope {
 
+// end::refguide[]
+    public ChangedObjectsService() {
+        log.debug("init");
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+        log.debug("postConstruct");
+    }
+
+    @PreDestroy
+    public void preDestroy() {
+        log.debug("preDestroy");
+    }
+
+// tag::refguide[]
     /**
      * Used for auditing: this contains the pre- values of every property of every object enlisted.
      *

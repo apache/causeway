@@ -20,6 +20,8 @@ package org.apache.isis.persistence.jdo.datanucleus5.metrics;
 
 import java.util.concurrent.atomic.LongAdder;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -37,15 +39,34 @@ import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.core.runtime.persistence.transaction.ChangedObjectsService;
 
+import lombok.extern.log4j.Log4j2;
+
 @Service
 @Named("isisJdoDn5.MetricsServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 @RequestScoped
+@Log4j2
 public class MetricsServiceDefault 
 implements MetricsService, InstanceLifecycleListener, LoadLifecycleListener, WithTransactionScope {
 
+// end::refguide[]
+    public MetricsServiceDefault() {
+        log.debug("init");
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+        log.debug("postConstruct");
+    }
+
+    @PreDestroy
+    public void preDestroy() {
+        log.debug("preDestroy");
+    }
+
+// tag::refguide[]
     @Inject private ChangedObjectsService changedObjectsServiceInternal;
     
     private LongAdder numberLoaded = new LongAdder();

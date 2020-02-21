@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
@@ -65,6 +67,22 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class QueryResultsCacheDefault implements QueryResultsCache, WithTransactionScope {
 
+// end::refguide[]
+    public QueryResultsCacheDefault() {
+        log.debug("init");
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+        log.debug("postConstruct");
+    }
+
+    @PreDestroy
+    public void preDestroy() {
+        log.debug("preDestroy");
+    }
+
+// tag::refguide[]
     private final Map<Key, Value<?>> cache = _Maps.newHashMap();
     
     @Override

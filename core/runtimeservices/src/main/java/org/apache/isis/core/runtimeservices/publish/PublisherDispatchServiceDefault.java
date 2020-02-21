@@ -26,6 +26,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.LongAdder;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -53,6 +55,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.persistence.transaction.ChangedObjectsService;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Wrapper around {@link PublisherService}.  Is a no-op if there is no injected service.
@@ -63,8 +66,25 @@ import lombok.val;
 @Primary
 @RequestScoped
 @Qualifier("Default")
+@Log4j2
 public class PublisherDispatchServiceDefault implements PublisherDispatchService {
 
+// end::refguide[]
+    public PublisherDispatchServiceDefault() {
+        log.debug("init");
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+        log.debug("postConstruct");
+    }
+
+    @PreDestroy
+    public void preDestroy() {
+        log.debug("preDestroy");
+    }
+
+// tag::refguide[]
     @Inject private List<PublisherService> publisherServices;
     @Inject private ChangedObjectsService changedObjectsService;
     @Inject private CommandContext commandContext;

@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -43,14 +45,33 @@ import org.apache.isis.core.commons.internal.base._NullSafe;
 
 import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
+import lombok.extern.log4j.Log4j2;
+
 @Service
 @Named("isisRoRendering.AcceptHeaderServiceForRest")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("ForRest")
 @RequestScoped
+@Log4j2
 public class AcceptHeaderServiceForRest implements AcceptHeaderService {
 
+// end::refguide[]
+    public AcceptHeaderServiceForRest() {
+        log.debug("init");
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+        log.debug("postConstruct");
+    }
+
+    @PreDestroy
+    public void preDestroy() {
+        log.debug("preDestroy");
+    }
+
+// tag::refguide[]
     private static ThreadLocal<List<MediaType>> mediaTypesByThread = new ThreadLocal<>();
 
     /**
