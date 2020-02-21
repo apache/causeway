@@ -66,7 +66,7 @@ import lombok.val;
 public class PublisherDispatchServiceDefault implements PublisherDispatchService {
 
     @Inject private List<PublisherService> publisherServices;
-    @Inject private ChangedObjectsService changedObjectsServiceInternal;
+    @Inject private ChangedObjectsService changedObjectsService;
     @Inject private CommandContext commandContext;
     @Inject private InteractionContext interactionContext;
     @Inject private ClockService clockService;
@@ -86,7 +86,7 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
 
         val changeKindByPublishedAdapter =
                 _Maps.filterKeys(
-                        changedObjectsServiceInternal.getChangeKindByEnlistedAdapter(),
+                        changedObjectsService.getChangeKindByEnlistedAdapter(),
                         this::isPublished,
                         HashMap::new);
 
@@ -96,7 +96,7 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
 
         val publishedObjects = newPublishedObjects(
                         metricsService.numberObjectsLoaded(), 
-                        changedObjectsServiceInternal.numberObjectPropertiesModified(), 
+                        changedObjectsService.numberObjectPropertiesModified(),
                         changeKindByPublishedAdapter);
 
         for (val publisherService : publisherServices) {

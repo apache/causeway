@@ -37,7 +37,6 @@ import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.collections._Sets;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -263,12 +262,14 @@ public class ChangedObjectsService implements WithTransactionScope {
     }
 
     /**
-     * Intended to be called at the end of a transaction.  (This service really ought to be considered
-     * a transaction-scoped service; since that isn't yet supported by the framework, we have to manually reset).
+     * Intended to be called at the end of a transaction.
+     *
+     * TODO: we ought to use Spring's @TransactionScope rather than roll-our-own.
      */
     @Override
     public void resetForNextTransaction() {
         enlistedObjectProperties.clear();
+        changeKindByEnlistedAdapter.clear();
         changedObjectProperties = null;
     }
 

@@ -20,7 +20,10 @@
 package org.apache.isis.applib.services;
 
 /**
- * Hacky workaround since we don't currently support @TransactionScoped.
+ * For domain services that are transaction-scoped can implement this interface as a callback, invoked
+ * at the end of the transaction.
+ *
+ * TODO: We ought instead to use Spring's @TransactionScope rather than roll-our-own.
  */
 public interface WithTransactionScope {
     void resetForNextTransaction();
