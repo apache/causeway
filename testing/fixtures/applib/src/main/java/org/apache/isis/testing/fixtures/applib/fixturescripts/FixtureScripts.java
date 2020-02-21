@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -44,9 +43,7 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RestrictTo;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -74,7 +71,7 @@ import lombok.val;
         named="Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-public class FixtureScripts extends AbstractService {
+public class FixtureScripts {
 
     //  @Inject private FactoryService factoryService;
     @Inject private TitleService titleService;
