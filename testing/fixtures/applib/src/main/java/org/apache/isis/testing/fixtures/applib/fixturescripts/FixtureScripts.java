@@ -76,6 +76,18 @@ import lombok.val;
 )
 public class FixtureScripts extends AbstractService {
 
+    //  @Inject private FactoryService factoryService;
+    @Inject private TitleService titleService;
+    @Inject private JaxbService jaxbService;
+    //  @Inject private BookmarkService bookmarkService;
+    @Inject private ServiceRegistry serviceRegistry;
+    @Inject private ServiceInjector serviceInjector;
+    @Inject private RepositoryService repositoryService;
+    @Inject private TransactionService transactionService;
+    @Inject private ExecutionParametersService executionParametersService;
+
+    @Inject private EventBusService eventBusService;
+
 
     // -- Specification, nonPersistedObjectsStrategy, multipleExecutionStrategy enums
 
@@ -486,21 +498,6 @@ public class FixtureScripts extends AbstractService {
         };
 
     }
-
-    // -- DEPENDENCIES
-
-    @Inject FactoryService factoryService;
-    @Inject TitleService titleService;
-    @Inject JaxbService jaxbService;
-    @Inject BookmarkService bookmarkService;
-    @Inject ServiceRegistry serviceRegistry;
-    @Inject ServiceInjector serviceInjector;
-    @Inject RepositoryService repositoryService;
-    @Inject TransactionService transactionService;
-    @Inject ExecutionParametersService executionParametersService;
-
-    @Inject EventBusService eventBusService;
-
 
     // -- DEPRECATIONS
  
