@@ -36,6 +36,7 @@ import org.apache.isis.core.commons.internal.base._With;
 
 import lombok.NonNull;
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
 /**
  * <h1>- internal use only -</h1>
@@ -49,9 +50,8 @@ import lombok.val;
  *
  * @since 2.0
  */
+@UtilityClass
 public final class _Arrays {
-
-    private _Arrays(){}
 
     // -- PREDICATES
 
@@ -179,7 +179,7 @@ public final class _Arrays {
      * @return (non-null)
      */
     @SafeVarargs
-    public static <T, X extends T, Y extends T> T[] combine(Class<T> type, X first, @Nullable  Y... rest) {
+    public static <T, X extends T, Y extends T> T[] combineWithExplicitType(Class<T> type, X first, @Nullable  Y... rest) {
         _With.requires(type, "type");
         _With.requires(first, "first");
         final int restLength = _NullSafe.size(rest);
@@ -237,9 +237,10 @@ public final class _Arrays {
      */
     public static <T> T[] toArray(@Nullable final Iterable<? extends T> iterable, final Class<T> componentType) {
         _With.requires(componentType, "componentType");
-        if(iterable!=null && (iterable instanceof Collection)) {
-            return toArray((Collection<? extends T>) iterable, componentType);
-        }
+// unnecessary optimization        
+//        if(iterable!=null && (iterable instanceof Collection)) {
+//            return toArray((Collection<? extends T>) iterable, componentType);
+//        }
         return _NullSafe.stream(iterable)
                 .collect(toArray(componentType));
     }

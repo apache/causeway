@@ -135,7 +135,7 @@ public class ServiceInjectorLegacy implements ServiceInjector {
             invokeInjectorField(field, targetPojo, bean);
         } else {
             
-            val requiredAnnotations = _Arrays.combine(
+            val requiredAnnotations = _Arrays.combineWithExplicitType(
                     Annotation.class, 
                     _Constants.ANNOTATION_PRIMARY, 
                     field.getAnnotations());
