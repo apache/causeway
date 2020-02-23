@@ -74,6 +74,13 @@
 			<artifactId>isis-mavendeps-jdk11</artifactId>
 			<type>pom</type>
 		</dependency>
+		
+		<!-- INCUBATOR: VAADIN VIEWER -->
+		
+		<dependency>
+			<groupId>org.apache.isis.incubator.viewer</groupId>
+			<artifactId>isis-viewer-vaadin-viewer</artifactId>
+		</dependency>
 
 		<!-- EXTENSIONS -->
 

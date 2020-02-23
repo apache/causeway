@@ -44,6 +44,7 @@ import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanRealmShiro;
 import org.apache.isis.extensions.viewer.wicket.exceldownload.ui.IsisModuleExtExcelDownloadUi;
 import org.apache.isis.incubator.model.metamodel.IsisModuleIncModelMetaModel;
+import org.apache.isis.incubator.viewer.vaadin.viewer.IsisModuleIncViewerVaadinViewer;
 import org.apache.isis.persistence.jdo.datanucleus5.IsisModuleJdoDataNucleus5;
 import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
@@ -94,9 +95,12 @@ public class DemoApp extends SpringBootServletInitializer {
         IsisModuleCoreRuntimeServices.class,
         IsisModuleSecurityShiro.class,
         IsisModuleJdoDataNucleus5.class,
-        IsisModuleViewerWicketViewer.class,
+        IsisModuleViewerWicketViewer.class, // wicket viewer
         IsisModuleValSseUi.class, // server sent events
         IsisModuleValAsciidocUi.class, // ascii-doc rendering support
+
+        // EXPERIMENTAL
+        IsisModuleIncViewerVaadinViewer.class, // vaadin viewer
         
         // REST
         IsisModuleViewerRestfulObjectsViewer.class,
