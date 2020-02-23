@@ -243,7 +243,7 @@ public final class _Collections {
             Supplier<Collector<T, ?, R>> elementCollector) {
 
         if(iterable==null) {
-            return factory.apply(null);
+            return factory.apply(Collections.emptyList());
         }
         if(iterable instanceof Collection) {
             return factory.apply((Collection<T>) iterable);

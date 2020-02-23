@@ -148,6 +148,7 @@ class _SetsTest {
      */
     @Test
     void testNewHashSetCollectionOfT() {
+        assertEquals(HashSet.class, _Sets.newHashSet(null).getClass());
         val set = _Sets.newHashSet(_Lists.of(3, 1, 2, 3, 3));
         assertEquals(HashSet.class, set.getClass());
         Samples.assertSetEquals(_Sets.of(1, 2, 3), set);
@@ -177,6 +178,7 @@ class _SetsTest {
      */
     @Test
     void testNewLinkedHashSetCollectionOfT() {
+        assertEquals(LinkedHashSet.class, _Sets.newLinkedHashSet(null).getClass());
         val set = _Sets.newLinkedHashSet(_Lists.of(3, 1, 2, 3, 3));
         assertEquals(LinkedHashSet.class, set.getClass());
         Samples.assertListEquals(_Lists.of(3, 1, 2), set);
@@ -235,6 +237,7 @@ class _SetsTest {
      */
     @Test
     void testNewCopyOnWriteArraySetCollectionOfT() {
+        assertEquals(CopyOnWriteArraySet.class, _Sets.newCopyOnWriteArraySet(null).getClass());
         val set = _Sets.newCopyOnWriteArraySet(_Lists.of(3, 1, 2, 3, 3));
         assertEquals(CopyOnWriteArraySet.class, set.getClass());
         Samples.assertListEquals(_Lists.of(3, 1, 2), set);
@@ -310,6 +313,7 @@ class _SetsTest {
     void testMinusSetOfTSetOfTSupplierOfSetOfT() {
         val set = _Sets.<Integer>minus(null, null, TreeSet::new);
         assertUnmodifiable(set);
+        Samples.assertSetEquals(_Sets.of(), _Sets.minus(_Sets.newTreeSet(_Sets.of(1)), null, TreeSet::new));
     }
 
     /**
@@ -319,6 +323,7 @@ class _SetsTest {
     void testMinusSortedSortedSetOfTSortedSetOfTSupplierOfSortedSetOfT() {
         val set = _Sets.<Integer>minusSorted(null, null, TreeSet::new);
         assertUnmodifiable(set);
+        Samples.assertListEquals(_Lists.of(1), _Sets.minusSorted(_Sets.newTreeSet(_Sets.of(1)), null, TreeSet::new));
     }
 
     /**
