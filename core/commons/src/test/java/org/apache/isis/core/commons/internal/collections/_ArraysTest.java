@@ -20,7 +20,6 @@ package org.apache.isis.core.commons.internal.collections;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -39,6 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.collections.Samples.FiniteSpace2;
 
 import lombok.val;
 
@@ -72,28 +72,6 @@ class _ArraysTest {
     void tearDown() throws Exception {
     }
 
-    @FunctionalInterface
-    public interface IndexedBiConsumer<T, U> {
-        void accept(int i, int j, T t, U u);
-    }
-    
-    static class FiniteSpace2 {
-        
-        static void visit(
-                List<Integer[]> as, 
-                List<Integer[]> bs, 
-                IndexedBiConsumer<Integer[], Integer[]> probe) {
-            int i=0;
-            for(val a : as) {
-                int j=0;
-                for(val b : bs) {
-                    probe.accept(i, j++, a, b);
-                }
-                i++;
-            }
-        }
-    }
-    
     
     /**
      * Test method for {@link org.apache.isis.core.commons.internal.collections._Arrays#testAnyMatch(T[], T[], java.util.function.BiPredicate)}.
@@ -291,15 +269,8 @@ class _ArraysTest {
     @Test
     void testToArrayIterableOfQextendsTClassOfT() {
         
-        val iterable = new Iterable<Integer>() {
-            @Override
-            public Iterator<Integer> iterator() {
-                return Arrays.asList(1,2,3).iterator();
-            }
-        };
-        
         assertArrayEquals( new Integer[] {1, 2, 3},
-                _Arrays.toArray(iterable, Integer.class) );
+                _Arrays.toArray(Samples.iterable(1, 2, 3), Integer.class) );
     }
 
     /**

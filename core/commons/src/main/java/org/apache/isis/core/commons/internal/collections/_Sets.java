@@ -45,6 +45,7 @@ import static org.apache.isis.core.commons.internal.functions._Predicates.not;
 
 import lombok.NonNull;
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
 /**
  * <h1>- internal use only -</h1>
@@ -58,9 +59,8 @@ import lombok.val;
  *
  * @since 2.0
  */
+@UtilityClass
 public final class _Sets {
-
-    private _Sets(){}
 
     // -- UNMODIFIABLE SET
 
@@ -109,7 +109,7 @@ public final class _Sets {
             return Collections.emptySet();
         }
         return _NullSafe.stream(iterable)
-                .collect(toUnmodifiable());
+                .collect(toUnmodifiable(LinkedHashSet::new)); // preserve order
     }
 
     // -- TREE SET
