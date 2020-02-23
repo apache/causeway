@@ -92,6 +92,7 @@
 	<modules>
 		<module>core/model</module>
 		<module>mappings/microprofile</module>
+		<module>viewers/vaadin</module>
 	</modules>
 
 </project>
