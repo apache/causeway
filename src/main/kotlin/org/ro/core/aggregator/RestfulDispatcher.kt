@@ -27,8 +27,4 @@ class RestfulDispatcher() : BaseAggregator() {
         RoXmlHttpRequest().invoke(it, SystemAggregator())
     }
 
-    private fun noop() {
-        //do nothing
-    }
-
 }

@@ -5,7 +5,16 @@ import org.ro.ui.kv.RoDialog
 import org.ro.utils.UmlUtils
 import kotlin.js.Date
 
-class ImageAlert(val label: String = "UML Diagram Sample") : Command {
+class ImageAlert(var label: String = defaultLabel, var pumlCode: String = defaultPumlCode) : Command {
+
+    companion object {
+        val defaultLabel = "UML Diagram Sample"
+        val defaultPumlCode = "\"" +
+                "participant BOB [[https://en.wiktionary.org/wiki/best_of_breed]]\\n" +
+                "participant PITA [[https://en.wiktionary.org/wiki/PITA]]\\n" +
+                "BOB -> PITA: sometimes is a" +
+                "\""
+    }
 
     private val uuid: String = Date().toTimeString() //IMPROVE
 
@@ -21,12 +30,7 @@ class ImageAlert(val label: String = "UML Diagram Sample") : Command {
         dialog.open()
         slider.setDisplay(dialog)
 
-        val plantUmlCode = "\"" +
-                "participant BOB [[https://en.wiktionary.org/wiki/best_of_breed]]\\n" +
-                "participant PITA [[https://en.wiktionary.org/wiki/PITA]]\\n" +
-                "BOB -> PITA: sometimes is a" +
-                "\""
-        UmlUtils.generateDiagram(plantUmlCode, uuid)
+        UmlUtils.generateDiagram(pumlCode, uuid)
     }
 
 }

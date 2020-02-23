@@ -56,4 +56,8 @@ abstract class BaseAggregator {
         return null
     }
 
+    fun noop() {
+        // save a line break in when formatting
+    }
+
 }

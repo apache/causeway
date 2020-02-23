@@ -2,7 +2,7 @@ package org.ro.snapshots.demo2_0_0
 
 import org.ro.snapshots.Response
 
-object RESTFUL_DOMAIN_TYPES : Response() {
+object DEMO_RESTFUL_DOMAIN_TYPES : Response() {
     override val url = "http://localhost:8080/restful/domain-types"
     override val str = """
 {

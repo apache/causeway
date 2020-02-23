@@ -1,8 +1,8 @@
 package org.ro.layout
 
 import kotlinx.serialization.UnstableDefault
+import kotlinx.serialization.json.Json
 import org.ro.IntegrationTest
-import org.ro.handler.LayoutHandler
 import org.ro.snapshots.demo2_0_0.*
 import org.ro.snapshots.simpleapp1_16_0.FR_OBJECT_LAYOUT
 import org.ro.snapshots.simpleapp1_16_0.SO_OBJECT_LAYOUT
@@ -18,7 +18,7 @@ class LayoutTest : IntegrationTest() {
         //given
         val jsonStr = DEMO_TEXT_LAYOUT.str
         //when
-        val lo = LayoutHandler().parse(jsonStr) as Layout
+        val lo = Json.parse(Layout.serializer(), jsonStr)
         val rows = lo.row
         // then
         assertEquals(2, rows.size)    //1
@@ -32,7 +32,7 @@ class LayoutTest : IntegrationTest() {
         assertNotNull(col00)  // 3
         val do00 = col00.domainObject
         assertNotNull(do00) //4
-        assertEquals(5, col00.action?.size) //5
+        assertEquals(5, col00.action.size) //5
         assertEquals(12, col00.span)  //6
 
         // row1 ^= Body (Editable, ReadOnly, Description)
@@ -44,9 +44,9 @@ class LayoutTest : IntegrationTest() {
         assertNotNull(clBody)  //8
         assertEquals(6, clBody.span as Int)  //9
         val fslList = clBody.fieldSet
-        assertEquals(2, fslList?.size) //10
+        assertEquals(2, fslList.size) //10
         // Editable
-        val fslEditable = fslList!![0]
+        val fslEditable = fslList[0]
         assertEquals("Editable", fslEditable.name)
         val editableProperties = fslEditable.property
         assertEquals(2, editableProperties.size) //11
@@ -62,8 +62,8 @@ class LayoutTest : IntegrationTest() {
         assertNotNull(descClBody)  //14
         assertEquals(6, descClBody.span as Int)  //15
         val descFslList = descClBody.fieldSet
-        assertEquals(1, descFslList?.size) //16
-        val fslDescription = descFslList!![0]
+        assertEquals(1, descFslList.size) //16
+        val fslDescription = descFslList[0]
         assertEquals("Description", fslDescription.name) //17
         val descriptionProperties = fslDescription.property
         assertEquals(1, descriptionProperties.size) //18
@@ -74,7 +74,7 @@ class LayoutTest : IntegrationTest() {
         //given
         val jsonStr = DEMO_TUPLE_OBJECT_LAYOUT.str
         //when
-        val lo = LayoutHandler().parse(jsonStr) as Layout
+        val lo = Json.parse(Layout.serializer(), jsonStr)
         val rowLayoutList = lo.row
         // then
         assertEquals(2, rowLayoutList.size)    //1
@@ -85,7 +85,7 @@ class LayoutTest : IntegrationTest() {
         //given
         val jsonStr = DEMO_TOOLTIP_OBJECT_LAYOUT.str
         //when
-        val lo = LayoutHandler().parse(jsonStr) as Layout
+        val lo = Json.parse(Layout.serializer(), jsonStr)
         val fieldSet = lo.properties
         // then
         assertEquals(1, fieldSet.size)    //1
@@ -98,7 +98,7 @@ class LayoutTest : IntegrationTest() {
         //given
         val jsonStr = DEMO_ASSOCIATED_ACTION_OBJECT_LAYOUT.str
         //when
-        val lo = LayoutHandler().parse(jsonStr) as Layout
+        val lo = Json.parse(Layout.serializer(), jsonStr)
         val row0 = lo.row[0]
         console.log(row0)
         val cols00 = row0.cols[0]
@@ -107,7 +107,7 @@ class LayoutTest : IntegrationTest() {
         console.log(col000)
         val action = col000.action
         // then
-        assertEquals(5, action?.size)    //1
+        assertEquals(5, action.size)    //1
         //assertEquals("field1", fieldSet[0].id)  //2
     }
 
@@ -116,7 +116,7 @@ class LayoutTest : IntegrationTest() {
         //given
         val jsonStr = DEMO_TAB_OBJECT_LAYOUT.str
         //when
-        val lo = LayoutHandler().parse(jsonStr) as Layout
+        val lo = Json.parse(Layout.serializer(), jsonStr)
         val fieldSet = lo.properties
         // then
         assertEquals(1, fieldSet.size)    //1
@@ -128,7 +128,7 @@ class LayoutTest : IntegrationTest() {
         //given
         val jsonStr = DEMO_OBJECT_LAYOUT.str
         //when
-        val lo = LayoutHandler().parse(jsonStr) as Layout
+        val lo = Json.parse(Layout.serializer(), jsonStr)
         val fieldSet = lo.properties
         // then
         assertEquals(2, fieldSet.size)    //1
@@ -142,7 +142,7 @@ class LayoutTest : IntegrationTest() {
         //given
         val jsonStr = SO_OBJECT_LAYOUT.str
         //when
-        val lo = LayoutHandler().parse(jsonStr) as Layout
+        val lo = Json.parse(Layout.serializer(), jsonStr)
         val properties = lo.properties
         // then
         assertEquals(2, properties.size)    //1
@@ -155,7 +155,7 @@ class LayoutTest : IntegrationTest() {
     fun testParseFixtureScriptObjectLayout() {
         // given
         val jsonStr = FR_OBJECT_LAYOUT.str
-        val lo = LayoutHandler().parse(jsonStr) as Layout
+        val lo = Json.parse(Layout.serializer(), jsonStr)
         // when
         val properties = lo.properties
         // then

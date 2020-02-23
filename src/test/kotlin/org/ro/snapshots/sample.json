@@ -1,96 +1,44 @@
 {
+    "id": "string",
+    "memberType": "property",
     "links": [
         {
             "rel": "self",
-            "href": "http://localhost:8080/restful/domain-types/demo.FileNode",
+            "href": "http://localhost:8080/restful/objects/demo.Text/AR-LCAAAAAAAAACFkLEOgkAMhneeorlJB0Xj4nBASIybi9EHOKExF3s9wx0Kby8ERKIkdvrTv_36pzKpDMEDC6ctR2K9XAlAzmyu-RqJ82m_2ApwXnGuyDJGokYnkjiQOzQ2DqAp6XzRTMcKOgGzjHR2A4NzGfbeePBQktekGeMUzFv3u4G7K-ZWbKBtu-UE7QMYY4-ocstUNzmKXg6BLqUHRWSfDjxWHhwSZn4ADquTMQc3_QZPpf1z6pcayLD75QsMtJyWiwEAAA==/properties/string",
             "method": "GET",
-            "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/domain-type\""
+            "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-property\""
         },
         {
-            "rel": "urn:org.apache.isis.restfulobjects:rels/layout",
-            "href": "http://localhost:8080/restful/domain-types/demo.FileNode/layout",
+            "rel": "up",
+            "href": "http://localhost:8080/restful/objects/demo.Text/AR-LCAAAAAAAAACFkLEOgkAMhneeorlJB0Xj4nBASIybi9EHOKExF3s9wx0Kby8ERKIkdvrTv_36pzKpDMEDC6ctR2K9XAlAzmyu-RqJ82m_2ApwXnGuyDJGokYnkjiQOzQ2DqAp6XzRTMcKOgGzjHR2A4NzGfbeePBQktekGeMUzFv3u4G7K-ZWbKBtu-UE7QMYY4-ocstUNzmKXg6BLqUHRWSfDjxWHhwSZn4ADquTMQc3_QZPpf1z6pcayLD75QsMtJyWiwEAAA==",
             "method": "GET",
-            "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/layout-bs3\""
-        }
-    ],
-    "canonicalName": "demoapp.dom.tree.FileNode",
-    "members": [
-        {
-            "rel": "urn:org.restfulobjects:rels/property",
-            "href": "http://localhost:8080/restful/domain-types/demo.FileNode/properties/parent",
-            "method": "GET",
-            "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/property-description\""
+            "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object\"",
+            "title": "TextDemo"
         },
         {
-            "rel": "urn:org.restfulobjects:rels/property",
-            "href": "http://localhost:8080/restful/domain-types/demo.FileNode/properties/path",
-            "method": "GET",
-            "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/property-description\""
-        },
-        {
-            "rel": "urn:org.restfulobjects:rels/property",
-            "href": "http://localhost:8080/restful/domain-types/demo.FileNode/properties/type",
-            "method": "GET",
-            "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/property-description\""
-        },
-        {
-            "rel": "urn:org.restfulobjects:rels/action",
-            "href": "http://localhost:8080/restful/domain-types/demo.FileNode/actions/rebuildMetamodel",
-            "method": "GET",
-            "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/action-description\""
-        },
-        {
-            "rel": "urn:org.restfulobjects:rels/action",
-            "href": "http://localhost:8080/restful/domain-types/demo.FileNode/actions/openRestApi",
-            "method": "GET",
-            "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/action-description\""
-        },
-        {
-            "rel": "urn:org.restfulobjects:rels/action",
-            "href": "http://localhost:8080/restful/domain-types/demo.FileNode/actions/downloadMetaModelXml",
-            "method": "GET",
-            "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/action-description\""
-        },
-        {
-            "rel": "urn:org.restfulobjects:rels/action",
-            "href": "http://localhost:8080/restful/domain-types/demo.FileNode/actions/downloadLayoutXml",
-            "method": "GET",
-            "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/action-description\""
-        },
-        {
-            "rel": "urn:org.restfulobjects:rels/action",
-            "href": "http://localhost:8080/restful/domain-types/demo.FileNode/actions/clearHints",
-            "method": "GET",
-            "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/action-description\""
-        }
-    ],
-    "typeActions": [
-        {
-            "rel": "urn:org.restfulobjects:rels/invoke;typeaction=\"isSubtypeOf\"",
-            "href": "http://localhost:8080/restful/domain-types/demo.FileNode/type-actions/isSubtypeOf/invoke",
-            "method": "GET",
-            "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/type-action-result\"",
+            "rel": "urn:org.restfulobjects:rels/modify;property=\"string\"",
+            "href": "http://localhost:8080/restful/objects/demo.Text/AR-LCAAAAAAAAACFkLEOgkAMhneeorlJB0Xj4nBASIybi9EHOKExF3s9wx0Kby8ERKIkdvrTv_36pzKpDMEDC6ctR2K9XAlAzmyu-RqJ82m_2ApwXnGuyDJGokYnkjiQOzQ2DqAp6XzRTMcKOgGzjHR2A4NzGfbeePBQktekGeMUzFv3u4G7K-ZWbKBtu-UE7QMYY4-ocstUNzmKXg6BLqUHRWSfDjxWHhwSZn4ADquTMQc3_QZPpf1z6pcayLD75QsMtJyWiwEAAA==/properties/string",
+            "method": "PUT",
+            "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-property\"",
             "arguments": {
-                "supertype": {
-                    "href": null
-                }
+                "value": null
             }
         },
         {
-            "rel": "urn:org.restfulobjects:rels/invoke;typeaction=\"isSupertypeOf\"",
-            "href": "http://localhost:8080/restful/domain-types/demo.FileNode/type-actions/isSupertypeOf/invoke",
+            "rel": "urn:org.restfulobjects:rels/clear;property=\"string\"",
+            "href": "http://localhost:8080/restful/objects/demo.Text/AR-LCAAAAAAAAACFkLEOgkAMhneeorlJB0Xj4nBASIybi9EHOKExF3s9wx0Kby8ERKIkdvrTv_36pzKpDMEDC6ctR2K9XAlAzmyu-RqJ82m_2ApwXnGuyDJGokYnkjiQOzQ2DqAp6XzRTMcKOgGzjHR2A4NzGfbeePBQktekGeMUzFv3u4G7K-ZWbKBtu-UE7QMYY4-ocstUNzmKXg6BLqUHRWSfDjxWHhwSZn4ADquTMQc3_QZPpf1z6pcayLD75QsMtJyWiwEAAA==/properties/string",
+            "method": "DELETE",
+            "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-property\""
+        },
+        {
+            "rel": "describedby",
+            "href": "http://localhost:8080/restful/domain-types/demo.Text/properties/string",
             "method": "GET",
-            "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/type-action-result\"",
-            "arguments": {
-                "subtype": {
-                    "href": null
-                }
-            }
+            "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/property-description\""
         }
     ],
+    "value": "a string (click me)",
     "extensions": {
-        "friendlyName": "File Node",
-        "pluralName": "File Nodes",
-        "isService": false
+        "x-isis-format": "string"
     }
 }

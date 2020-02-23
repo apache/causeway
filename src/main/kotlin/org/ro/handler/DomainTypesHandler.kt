@@ -15,9 +15,7 @@ class DomainTypesHandler : BaseHandler() {
 
     override fun doHandle() {
         val url = logEntry.url
-        val model = logEntry.obj as DomainTypes
-        val mgr = DomainTypesAggregator(url, model)
-        logEntry.addAggregator(mgr)
+        logEntry.addAggregator(DomainTypesAggregator(url))
         update()
     }
 
