@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.value.datesql;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -171,7 +172,7 @@ public class JavaSqlDateValueSemanticsProvider extends ValueSemanticsProviderAbs
         return getServiceRegistry().lookupService(ClockService.class)
                 .map(ClockService::nowAsMillis)
                 .map(Date::new)
-                .get();
+                .orElseGet(()->new Date(System.currentTimeMillis())); // fallback to system time
     }
 
     @Override //[ISIS-2005] java.sql.Date requires special treatment, so overriding the default

@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.value.dateutil;
 
+import java.sql.Time;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -166,7 +167,7 @@ public class JavaUtilDateValueSemanticsProvider extends ValueSemanticsProviderAb
     protected Date now() {
         return getServiceRegistry().lookupService(ClockService.class)
                 .map(ClockService::nowAsJavaUtilDate)
-                .get();
+                .orElseGet(Date::new); // fallback to system time
     }
 
     @Override

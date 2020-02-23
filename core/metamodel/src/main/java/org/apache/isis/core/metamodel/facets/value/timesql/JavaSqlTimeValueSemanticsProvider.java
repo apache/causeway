@@ -159,7 +159,7 @@ public class JavaSqlTimeValueSemanticsProvider extends ValueSemanticsProviderAbs
         return getServiceRegistry().lookupService(ClockService.class)
                 .map(ClockService::nowAsMillis)
                 .map(Time::new)
-                .get();
+                .orElseGet(()->new Time(System.currentTimeMillis())); // fallback to system time
     }
 
     @Override
