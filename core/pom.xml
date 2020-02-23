@@ -172,6 +172,8 @@
 
 		<togglz.version>2.1.0.Final</togglz.version>
 
+		<vaadin.version>14.1.17</vaadin.version>
+
 		<wicket.version>8.7.0</wicket.version>
 		<wicket-bootstrap.version>2.0.11</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap-core -->
 		<wicket-bootstrap-core.version>2.0.11</wicket-bootstrap-core.version>
@@ -1271,6 +1273,14 @@
 				<artifactId>cors-filter</artifactId>
 				<version>${cors-filter.version}</version>
 			</dependency>
+			
+			<dependency>
+	            <groupId>com.vaadin</groupId>
+	            <artifactId>vaadin-bom</artifactId>
+	            <version>${vaadin.version}</version>
+	            <type>pom</type>
+	            <scope>import</scope>
+	        </dependency>
 
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
