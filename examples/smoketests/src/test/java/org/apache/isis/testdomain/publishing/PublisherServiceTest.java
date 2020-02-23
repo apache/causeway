@@ -155,9 +155,9 @@ class PublisherServiceTest {
 
         // then - after the commit
         assertEquals(0, getValue("created"));
-        assertEquals(1, getValue("deleted"));
+        assertEquals(0, getValue("deleted"));
         //assertEquals(0, getValue("loaded"));
-        assertEquals(2, getValue("updated"));
+        assertEquals(1, getValue("updated"));
         assertEquals(1, getValue("modified"));
 
     }
