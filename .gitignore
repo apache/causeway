@@ -53,3 +53,10 @@ rebel.xml
 /.antora-cache-dir/
 
 _commit.sh
+
+# node stuff as introduced with vaadin
+node_modules/
+package-lock.json
+package.json
+webpack.config.js
+webpack.generated.js
