@@ -49,9 +49,12 @@ public final class IsisPresets  {
     
     public static final String DebugMetaModel = "classpath:/org/apache/isis/core/config/presets/DebugMetaModel.properties";
     public static final String SilenceMetaModel = "classpath:/org/apache/isis/core/config/presets/SilenceMetaModel.properties";
+
+    public static final String DebugVaadin = "classpath:/org/apache/isis/core/config/presets/DebugVaadin.properties";
     
     public static final String SilenceWicket = "classpath:/org/apache/isis/core/config/presets/SilenceWicket.properties";
     public static final String UseLog4j2Test = "classpath:/org/apache/isis/core/config/presets/UseLog4j2Test.properties";
+    
 
 
     /**
