@@ -19,8 +19,28 @@
 
 package org.apache.isis.incubator.viewer.vaadin.viewer;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.vaadin.flow.server.Constants;
+import com.vaadin.flow.spring.RootMappedCondition;
+import com.vaadin.flow.spring.SpringBootAutoConfiguration;
+import com.vaadin.flow.spring.SpringServlet;
+import com.vaadin.flow.spring.VaadinConfigurationProperties;
+import com.vaadin.flow.spring.VaadinServletContextInitializer;
+import com.vaadin.flow.spring.VaadinWebsocketEndpointExporter;
+import com.vaadin.flow.spring.annotation.EnableVaadin;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.web.servlet.ServletContextInitializer;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.util.ClassUtils;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 import org.apache.isis.incubator.viewer.vaadin.ui.IsisModuleIncViewerVaadinUi;
 
@@ -32,6 +52,8 @@ import org.apache.isis.incubator.viewer.vaadin.ui.IsisModuleIncViewerVaadinUi;
 @Import({
         // modules
         IsisModuleIncViewerVaadinUi.class,
+        
+        VaadinConfigurationProperties.class
 
         // @Service's
 
@@ -40,6 +62,69 @@ import org.apache.isis.incubator.viewer.vaadin.ui.IsisModuleIncViewerVaadinUi;
        
 
 })
+//disable standard vaadin spring boot bootstrapping
+@EnableAutoConfiguration(exclude = { SpringBootAutoConfiguration.class })
 public class IsisModuleIncViewerVaadinViewer {
+    
+    
+    @Autowired
+    private WebApplicationContext context;
+    @Autowired
+    private VaadinConfigurationProperties configurationProperties;
 
+    static String makeContextRelative(String url) {
+        // / -> context://
+        // foo -> context://foo
+        // /foo -> context://foo
+        if (url.startsWith("/")) {
+            url = url.substring(1);
+        }
+        return "context://" + url;
+    }
+
+    /**
+     * Creates a {@link ServletContextInitializer} instance.
+     *
+     * @return a custom ServletContextInitializer instance
+     */
+    @Bean
+    public ServletContextInitializer contextInitializer() {
+        return new VaadinServletContextInitializer(context);
+    }
+
+    /**
+     * Creates a {@link ServletRegistrationBean} instance with Spring aware Vaadin servlet.
+     *
+     * @return a custom ServletRegistrationBean instance
+     */
+    @Bean
+    public ServletRegistrationBean<SpringServlet> servletRegistrationBean() {
+        String mapping = configurationProperties.getUrlMapping();
+        final Map<String, String> initParameters = new HashMap<>();
+        final boolean rootMapping = RootMappedCondition.isRootMapping(mapping);
+        if (rootMapping) {
+            mapping = "/vaadinServlet/*";
+            initParameters.put(Constants.SERVLET_PARAMETER_PUSH_URL,
+                    makeContextRelative(mapping.replace("*", "")));
+        }
+        final ServletRegistrationBean<SpringServlet> registration = new ServletRegistrationBean<>(
+                new SpringServlet(context, rootMapping), mapping);
+        registration.setInitParameters(initParameters);
+        registration
+                .setAsyncSupported(configurationProperties.isAsyncSupported());
+        registration.setName(
+                ClassUtils.getShortNameAsProperty(SpringServlet.class));
+        return registration;
+    }
+
+    /**
+     * Deploys JSR-356 websocket endpoints when Atmosphere is available.
+     *
+     * @return the server endpoint exporter which does the actual work.
+     */
+    @Bean
+    public ServerEndpointExporter websocketEndpointDeployer() {
+        return new VaadinWebsocketEndpointExporter();
+    }
+    
 }

@@ -16,24 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.vaadin.ui;
+package org.apache.isis.incubator.viewer.vaadin.model.menu;
 
-import com.vaadin.flow.spring.annotation.EnableVaadin;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import lombok.Data;
 
-import org.apache.isis.incubator.viewer.vaadin.model.IsisModuleIncViewerVaadinModel;
+@Data
+public class MenuSectionUiModel {
 
+    final String name;
 
-@Configuration
-@Import({
-        // modules
-        IsisModuleIncViewerVaadinModel.class,
+    public boolean hasSubMenuItems() {
+        return !serviceAndActionUiModels.isEmpty();
+    }
 
-        // @Service's
-        
-})
-@EnableVaadin("org.apache.isis.incubator.viewer.vaadin.ui") // scan for vaadin annotations
-public class IsisModuleIncViewerVaadinUi {
+    final List<ServiceAndActionUiModel> serviceAndActionUiModels = new ArrayList<>();
+
+    public void addAction(final ServiceAndActionUiModel serviceAndActionUiModel) {
+        serviceAndActionUiModels.add(serviceAndActionUiModel);
+    }
 }

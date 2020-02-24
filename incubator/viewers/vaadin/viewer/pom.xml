@@ -34,6 +34,7 @@
 			<groupId>org.apache.isis.incubator.viewer</groupId>
 			<artifactId>isis-viewer-vaadin-ui</artifactId>
 		</dependency>
+
 	</dependencies>
 
 

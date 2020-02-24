@@ -113,4 +113,10 @@ resteasy:
 spring:
   banner:
     location: banner.txt
+    
+vaadin:
+  whitelisted-packages: com.vaadin
+  urlMapping: "/vaadin/*"
+  servlet:
+      productionMode: true
 
