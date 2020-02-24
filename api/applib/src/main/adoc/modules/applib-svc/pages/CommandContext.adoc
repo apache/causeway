@@ -13,12 +13,18 @@ With an appropriate implementation
 // TODO: v2: update for extensions (eg as provided by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module's xref:refguide:applib-svc:CommandService.adoc[`CommandService`])
 the `Command` may then be persisted.
 
-There are a number of use cases:
+There are two main use cases:
 
-* to enable profiling of the running application (which actions are invoked then most often, what is their response time)
-* if a xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`] is configured, they provide better traceability as the `Command` is also correlated with any published events, again through the unique `transactionId` GUID
-* if a xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`] is configured, they provide better audit information, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of the action) through the `transactionId` GUID
+* to allow invocation of ``Command``s to be deferred, for example to be invoked in the background
+
 * to allow ``Command``s to be replicated and replayed to another system (usually for testing or dual-running/migration purposes).
+
+This is normally done using the `CommandWithDto` subtype, that can return a representation of the `Command` as an XML instance of the xref:refguide:schema:cmd.adoc[`cmd.xsd`] schema, which also captures a unique transactionId (GUID) for the command.
+
+Commands are often combined with implementations of the xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`] and sometimes also the xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`]:
+
+* the xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`] publishes interactions as they have  is configured, they provide better traceability as the `Command` is also correlated with any published events, again through the unique `transactionId` GUID
+* if a xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`] is configured, they provide better audit information, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of the action) through the `transactionId` GUID
 
 In general, though, However, while persistent ``Command``s _can_ be used for these use cases, it is recommended instead to use the xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`] service and persistent implementations of the ``Interaction`` object, eg as provided by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s publishmq module.
 
