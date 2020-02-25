@@ -625,7 +625,7 @@
 								<resourceBundle>org.apache:apache-jar-resource-bundle:1.4</resourceBundle>
 							</resourceBundles>
 							<properties>
-								<projectTimespan>2010~2019</projectTimespan>
+								<projectTimespan>2010~2020</projectTimespan>
 								<postDepListText>
 									The above (auto-generated) list aggregates the
 									dependencies

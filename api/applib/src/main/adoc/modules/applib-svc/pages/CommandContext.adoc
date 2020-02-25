@@ -47,7 +47,7 @@ In general, though, However, while persistent ``Command``s _can_ be used for the
 
 
 
-== API & Implementation
+== API
 
 The `CommandContext` request-scoped service defines the following very simple API:
 
@@ -60,64 +60,62 @@ public class CommandContext {
 }
 ----
 
-This class (`o.a.i.applib.services.command.CommandContext`) is also the default implementation.
-
-Under normal circumstances there shouldn't be any need to replace this implementation with another.
-But if you do need to for some reason, then subclass and use Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation (as explained in the xref:refguide:applib-svc:about.adoc#overriding-the-services.adoc[introduction] to this guide).
-
-
 The `Command` type referenced above is in fact an interface, defined as:
 
 [source,java]
 ----
 public interface Command extends HasUniqueId {
 
-    public abstract String getUser();               // <1>
-    public abstract Timestamp getTimestamp();       // <2>
+    public abstract String getUser();               // <.>
+    public abstract Timestamp getTimestamp();       // <.>
 
-    public abstract Bookmark getTarget();           // <3>
-    public abstract String getMemberIdentifier();   // <4>
-    public abstract String getTargetClass();        // <5>
-    public abstract String getTargetAction();       // <6>
-    public String getArguments();                   // <7>
-    public String getMemento();                     // <8>
+    public abstract Bookmark getTarget();           // <.>
+    public abstract String getMemberIdentifier();   // <.>
+    public abstract String getTargetClass();        // <.>
+    public abstract String getTargetAction();       // <.>
+    public String getArguments();                   // <.>
+    public String getMemento();                     // <.>
 
-    public ExecuteIn getExecuteIn();                // <9>
-    public Executor getExecutor();                  // <10>
-    public Persistence getPersistence();            // <11>
-    public boolean isPersistHint();                 // <12>
+    public ExecuteIn getExecuteIn();                // <.>
+    public Executor getExecutor();                  // <.>
+    public Persistence getPersistence();            // <.>
+    public boolean isPersistHint();                 // <.>
 
-    public abstract Timestamp getStartedAt();       // <13>
-    public abstract Timestamp getCompletedAt();     // <14>
-    public Command getParent();                     // <15>
+    public abstract Timestamp getStartedAt();       // <.>
+    public abstract Timestamp getCompletedAt();     // <.>
+    public Command getParent();                     // <.>
 
-    public Bookmark getResult();                    // <16>
-    public String getException();                   // <17>
+    public Bookmark getResult();                    // <.>
+    public String getException();                   // <.>
 
     @Deprecated
-    int next(final String sequenceAbbr);            // <18>
+    int next(final String sequenceAbbr);            // <.>
 }
 ----
-<1> `getUser()` - is the user that initiated the action.
-<2> `getTimestamp()` - the date/time at which this action was created.
-<3> `getTarget()` - bookmark of the target object (entity or service) on which this action was performed
-<4> `getMemberIdentifier()` - holds a string representation of the invoked action
-<5> `getTargetClass()` - a human-friendly description of the class of the target object
-<6> `getTargetAction()` - a human-friendly name of the action invoked on the target object
-<7> `getArguments()` - a human-friendly description of the arguments with which the action was invoked
-<8> `getMemento()` - a formal (XML or similar) specification of the action to invoke/being invoked
-<9> `getExecuteIn()` - whether this command is executed in the foreground or background
-<10> `getExecutor()` - the (current) executor of this command, either user, or background service, or other (eg redirect after post).
-<11> `getPersistence()`- the policy controlling whether this command should ultimately be persisted (either "persisted", "if hinted", or "not persisted")
-<12> `isPersistHint()` - whether that the command should be persisted, if persistence policy is "if hinted".
-<13> `getStartedAt()` - the date/time at which this action started (same as `timestamp` property for foreground commands)
-<14> `getCompletedAt()` - the date/time at which this action completed.
-<15> `getParent()` - for actions created through the `BackgroundService`, captures the parent action
-<16> `getResult()` - bookmark to object returned by action, if any
-<17> `getException()` - exception stack trace if action threw exception
-<18> No longer used by the framework; see instead
+<.> `getUser()` - is the user that initiated the action.
+<.> `getTimestamp()` - the date/time at which this action was created.
+<.> `getTarget()` - bookmark of the target object (entity or service) on which this action was performed
+<.> `getMemberIdentifier()` - holds a string representation of the invoked action
+<.> `getTargetClass()` - a human-friendly description of the class of the target object
+<.> `getTargetAction()` - a human-friendly name of the action invoked on the target object
+<.> `getArguments()` - a human-friendly description of the arguments with which the action was invoked
+<.> `getMemento()` - a formal (XML or similar) specification of the action to invoke/being invoked
+<.> `getExecuteIn()` - whether this command is executed in the foreground or background
+<.> `getExecutor()` - the (current) executor of this command, either user, or background service, or other (eg redirect after post).
+<.> `getPersistence()`- the policy controlling whether this command should ultimately be persisted (either "persisted", "if hinted", or "not persisted")
+<.> `isPersistHint()` - whether that the command should be persisted, if persistence policy is "if hinted".
+<.> `getStartedAt()` - the date/time at which this action started (same as `timestamp` property for foreground commands)
+<.> `getCompletedAt()` - the date/time at which this action completed.
+<.> `getParent()` - for actions created through the `BackgroundService`, captures the parent action
+<.> `getResult()` - bookmark to object returned by action, if any
+<.> `getException()` - exception stack trace if action threw exception
+<.> No longer used by the framework; see instead
 xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`] and `Interaction#next()`.
 
+
+== Implementation
+
+This class (`o.a.i.applib.services.command.CommandContext`) is also the default implementation.
 
 
 == Usage

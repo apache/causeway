@@ -200,4 +200,4 @@ To use an alternative implementation, use Spring's link:https://docs.spring.io/s
 
 The default implementation of `ContentNegotiationService` delegates to xref:refguide:applib-svc:ContentMappingService.adoc[`ContentMappingService`] (if present) to convert domain entities into a stable form (eg DTO).
 
-The `ContentNegotiationService` is itself called by the (default implementation of) xref:core:runtime-services:presentation-layer/RepresentationService.adoc[`RepresentationService`].
+The `ContentNegotiationService` is itself called by the (default implementation of) xref:core:runtime-services:RepresentationService.adoc[`RepresentationService`].

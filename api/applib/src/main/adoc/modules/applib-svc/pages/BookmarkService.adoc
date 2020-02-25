@@ -38,7 +38,9 @@ include::refguide:applib-svc:example$services/bookmark/BookmarkService.java[tags
 The core framework (xref:core:runtime-services:about.adoc[Runtime Services] module) provides a default implementation of this API, namely `o.a.i.core.runtimeservices.bookmarks.BookmarkServiceDefault`
 
 
-== `BookmarkHolder`
+== Related Mixins
+
+=== `BookmarkHolder`
 
 The `BookmarkHolder` interface is intended to be implemented by domain objects that use a `Bookmark` to reference a (single) domain object; an example might be a class such as the audit entry, mentioned above.
 The interface is simply:
@@ -61,7 +63,3 @@ which contributes instead an `object` property, being the referenced object.
 Either of these can be suppressed, if required, using a vetoing subscriber that listens to the action or property domain event in order to hide the member.
 
 
-
-== Related Services
-
-The xref:refguide:applib-svc:BookmarkUiService.adoc[`BookmarkUiService`]

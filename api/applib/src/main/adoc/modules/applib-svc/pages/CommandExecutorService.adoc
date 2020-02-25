@@ -14,7 +14,7 @@ This is implemented by the (non-ASF) link:https://platform.incode.org/modules/sp
 (The command replay module also provides a decorator implementation of this service that allows the command to be re-executed at the same _time_ as the original command, leveraging the `TickingClock` implementation provided by the framework).
 
 
-== API & Implementation
+== API
 
 The `CommandExecutorService` defines the following API:
 
@@ -26,18 +26,24 @@ public interface CommandExecutorService {
         SWITCH,
     }
     void executeCommand(
-            SudoPolicy sudoPolicy,          // <1>
-            CommandWithDto commandWithDto); // <2>
+            SudoPolicy sudoPolicy,          // <.>
+            CommandWithDto commandWithDto); // <.>
 }
 ----
-<1> whether to switch the effective user for the duration of executing the `Command`.
+<.> whether to switch the effective user for the duration of executing the `Command`.
 Behind the scenes this uses the xref:refguide:applib-svc:SudoService.adoc[`SudoService`].
-<2> provided `Command` must implement `CommandDto`.
+<.> provided `Command` must implement `CommandDto`.
 
 When the `Command` is executed, it will also be returned by xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`].
 Any associated objects that implement `HasUniqueId` (audit entries and the like) will therefore have the correct transactionId and will correctly be associated with the `Command` being executed.
+
+== Implementation
 
 The framework provides a default implementation of this service,
 `o.a.i.core.runtime.services.background.CommandExecutorServiceDefault`
 
 
+
+== Related Services
+
+TODO

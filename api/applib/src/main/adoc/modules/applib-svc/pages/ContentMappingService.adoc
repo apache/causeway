@@ -1,22 +1,16 @@
-[[ContentMappingService]]
 = `ContentMappingService`
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
 
 
-The `ContentMappingService` supports the (default implementation of the) xref:runtime-services:ROOT:presentation-layer/ContentNegotiationService.adoc[`ContentNegotiationService`] enabling the xref:vro:ROOT:about.adoc[RestfulObjects viewer] to represent domain objects in some other format as specified by the HTTP `Accept` header.
+The `ContentMappingService` supports the (default implementation of the) xref:core:runtime-services:ContentNegotiationService.adoc[`ContentNegotiationService`] enabling the xref:vro:ROOT:about.adoc[RestfulObjects viewer] to represent domain objects in some other format as specified by the HTTP `Accept` header.
 
-See xref:runtime-services:ROOT:presentation-layer/ContentNegotiationService.adoc[`ContentNegotiationService`] for further discussion.
-
-
-[NOTE]
-====
-Unlike most other domain services, the framework (that is, `ContentNegotiationService`) will check _all_ available implementations of `ContentMappingService` to convert the domain object to the requested media type, rather than merely the first implementation found; in other words it uses the chain-of-responsibility pattern.
+For its part, the (default implementation of the) `ContentNegotiationService` will check _all_ available implementations of `ContentMappingService` to convert the domain object to the requested media type, rather than merely the first implementation found; in other words it uses the chain-of-responsibility pattern.
 Services are checked in the ordering defined by the Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation.
 The mapped object used will be the first non-`null` result returned by an implementation.
-====
 
+See xref:core:runtime-services:ContentNegotiationService.adoc[`ContentNegotiationService`] for further discussion.
 
 
 == SPI
@@ -26,13 +20,13 @@ The SPI defined by this service is:
 [source,java]
 ----
 public interface ContentMappingService {
-    Object map(Object object,                           // <1>
-               List<MediaType> acceptableMediaTypes);   // <2>
+    Object map(Object object,                           // <.>
+               List<MediaType> acceptableMediaTypes);   // <.>
 }
 
 ----
-<1> typically the input is a domain object (whose structure might change over time), and the output is a DTO (whose structure is guaranteed to be preserved over time)
-<2> as per the caller's HTTP `Accept` header
+<.> typically the input is a domain object (whose structure might change over time), and the output is a DTO (whose structure is guaranteed to be preserved over time)
+<.> as per the caller's HTTP `Accept` header
 
 
 
@@ -71,6 +65,6 @@ public static class Util {
 
 == Related Services
 
-This service is a companion to the default implementation of the xref:runtime-services:ROOT:presentation-layer/ContentNegotiationService.adoc[`ContentNegotiationService`].
+This service is a companion to the default implementation of the xref:core:runtime-services:ContentNegotiationService.adoc[`ContentNegotiationService`].
 
 The framework implementations of `ContentMappingService` use the xref:refguide:applib-svc:MetamodelService.adoc[`MetaModelService`] to lookup any custom implementations of `CommandDtoProcessor`.

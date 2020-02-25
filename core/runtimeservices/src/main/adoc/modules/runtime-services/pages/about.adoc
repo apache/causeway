@@ -8,7 +8,7 @@ WARNING: TODO: v2: to be updated
 
 This Maven module contains implementations of both public API services (as defined in the applib) and also non-API classes.
 
-See the xref:refguide:applib-svc:[Domain Services Referenc e Guide] for details on the public API services.
+See the xref:refguide:applib-svc:[Domain Services Reference Guide] for details on the public API services.
 
 This documentation relates only to the non-API services
 These documents should be
@@ -21,3 +21,6 @@ We do not guarantee that link:http://semver.org[semantic versioning] will be hon
 ====
 
 
+include::partial$_presentation-layer.adoc[leveloffset=+1]
+include::partial$_application-layer.adoc[leveloffset=+1]
+include::partial$_persistence-layer.adoc[leveloffset=+1]

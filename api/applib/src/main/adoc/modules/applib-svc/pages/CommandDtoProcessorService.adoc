@@ -5,3 +5,10 @@
 WARNING: TODO - v2 : to document.  It's possible this might become redundant if CommandDto is rolled up into Command.
 
 Also discuss `CommandDtoProcessor`.
+
+== API
+
+== Implementation
+
+== Related Services
+

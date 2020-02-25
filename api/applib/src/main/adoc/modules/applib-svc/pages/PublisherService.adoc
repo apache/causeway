@@ -124,11 +124,17 @@ To support these use cases several other services are involved:
 
 * the xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`] is used to obtain the `Interaction` from which the member executions are published.
 
-* the (internal) xref:runtime-services:ROOT:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] domain service is used to obtain the set of objects modified throughout the transaction
+* the (internal) xref:core:runtime-services:ChangedObjectsService.adoc[`ChangedObjectsService`] domain service is used to obtain the set of objects modified throughout the transaction
 
-* the (internal) xref:runtime-services:ROOT:spi/PublisherServiceInternal.adoc[`PublisherServiceInternal`] domain service filters these down to those changed objects that are also published (as per xref:refguide:applib-ant:DomainObject.adoc#publishing[`@DomainObject#publishing()`]) and delegates to the `PublisherService`.
+* the (internal) xref:core:runtime-services:PublishingDispatchService.adoc[`PublisherDispatchService`] domain service filters these down to those changed objects that are also published (as per xref:refguide:applib-ant:DomainObject.adoc#publishing[`@DomainObject#publishing()`]) and delegates to the `PublisherService`.
 
 * the xref:refguide:applib-svc:MetricsService.adoc[`MetricsService`] is used to obtain the objects that are loaded throughout the transaction; this info is used in order to instantiate the `PublishedObjects` object passed through to the `PublisherService`.
+
+
+The services provided by this module combine very well with the xref:refguide:applib-svc:CommandService.adoc[`CommandService`] and with xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`].
+The `CommandService` captures the __cause__ of an interaction (an action was invoked, a property was edited), while the `PublisherService` captures the __effect__ of that interaction in terms of events, and the `AuditerService` captures the effect of the interaction in terms of changed state.
+You may also want to configure the xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`], which also captures the effect of the interaction but as an event.
+All three of these services collaborate implicitly by way of the xref:refguide:applib-cm:classes/mixins.adoc#HasUniqueId[`HasUniqueId`] interface.
 
 The xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] differs from the `PublisherService` in that it is intended for fine-grained publish/subscribe for object-to-object interactions within an Apache Isis domain object model.
 The event propagation is strictly in-memory, and there are no restrictions on the object acting as the event; it need not be serializable, for example.

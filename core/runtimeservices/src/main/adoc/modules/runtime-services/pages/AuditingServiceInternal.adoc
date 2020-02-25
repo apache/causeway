@@ -20,7 +20,7 @@ public class AuditingServiceInternal {
 }
 ----
 <1> minor performance optimization as to whether any auditing services are actually enabled; checks to see if any xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`] are enabled.
-<2> uses the xref:core:runtime-services:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] to obtain details of the changed properties, then call the configured xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`](s).
+<2> uses the xref:core:runtime-services:ChangedObjectsService.adoc[`ChangedObjectsServiceInternal`] to obtain details of the changed properties, then call the configured xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`](s).
 
 The service implementation is `o.a.i.c.r.s.auditing.AuditingServiceInternal`.
 
@@ -33,7 +33,7 @@ Apache Isis' default implementation of `AuditingServiceInternal` class is automa
 
 == Related Classes
 
-The service delegates between the (internal) xref:core:runtime-services:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] domain service  to the configured xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`](s).
+The service delegates between the (internal) xref:core:runtime-services:ChangedObjectsService.adoc[`ChangedObjectsServiceInternal`] domain service  to the configured xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`](s).
 If no such service(s) are configured, then _this_ service is in effect a no-op.
 
-The (internal) xref:core:runtime-services:persistence-layer/PublishingServiceInternal.adoc[`PublishingServiceInternal`] performs a similar function for the xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`], also collating details of the changed objects from `ChangedObjectsServiceInternal`.
+The (internal) xref:core:runtime-services:PublishingDispatchService.adoc[`PublishingServiceInternal`] performs a similar function for the xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`], also collating details of the changed objects from `ChangedObjectsServiceInternal`.

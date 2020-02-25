@@ -8,7 +8,7 @@ Its intended use is to support multiple versions of a REST API, where the respon
 
 [NOTE]
 ====
-As an alternative to performing content negotiation within the domain classes, the xref:runtime-services:ROOT:presentation-layer/ContentNegotiationService.adoc[`ContentNegotiationService`] and xref:refguide:applib-svc:ContentMappingService.adoc[`ContentMappingService`] SPI domain services allow the framework to perform the content negotiation responsibility.
+As an alternative to performing content negotiation within the domain classes, the xref:core:runtime-services:ContentNegotiationService.adoc[`ContentNegotiationService`] and xref:refguide:applib-svc:ContentMappingService.adoc[`ContentMappingService`] SPI domain services allow the framework to perform the content negotiation responsibility.
 ====
 
 == API
@@ -28,7 +28,6 @@ Otherwise the service will likely return `null`.
 == Implementation
 
 The xref:vro:ROOT:about.adoc[Restful Objects] viewer provides an implementation of this API, `o.a.i.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest`.
-
 
 == Usage
 

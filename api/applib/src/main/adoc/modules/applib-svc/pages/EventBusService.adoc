@@ -44,15 +44,17 @@ public abstract class EventBusService {
 This should be done in their xref:refguide:applib-ant:PostConstruct.adoc[`@PostConstruct`] initialization method (for both singleton and xref:refguide:applib-ant:RequestScoped.adoc[`@RequestScoped`] domain services.
 <3> exists for symmetry, but need never be called (it is in fact deliberately a no-op).
 
+== Implementation
 
+The framework provides a default implementation of the service, `o.a.i.objectstore.jdo.datanucleus.service.eventbus.EventBusServiceJdo`.
 
-
-To use an alternative implementation, implement the `EventBusService` domain service and use Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation (as explained in the xref:refguide:applib-svc:about.adoc#overriding-the-services.adoc[introduction] to this guide).
 
 
 
 
 == Registering Subscribers
+
+WARNING: TODO: v2: this is no longer required.
 
 The `register()` method should be called in the xref:refguide:applib-ant:PostConstruct.adoc[`@PostConstruct`] lifecycle method.
 It is valid and probably the least confusing to readers to also "unregister" in the xref:refguide:applib-ant:PreDestroy.adoc[`@PreDestroy`] lifecycle method (though as noted xref:refguide:applib-svc:EventBusService.adoc#api-and-implementation[above], unregistering is actually a no-op).
@@ -320,58 +322,6 @@ public class ReserveStockSubscriber extends AbstractSubscriber{
     WrapperFactory wrapperFactory;
 }
 ----
-
-
-== Implementation
-
-The framework provides a default implementation of the service, `o.a.i.objectstore.jdo.datanucleus.service.eventbus.EventBusServiceJdo`.
-
-
-=== Configuration Properties
-
-The default implementation of this service defines the following configuration properties:
-
-[cols="2a,1,3a", options="header"]
-|===
-|Property
-|Value +
-(default value)
-|Description
-
-| `isis.services.` +
-`eventbus.` +
-`implementation` +
-| `guava`, `axon`, +
-FQCN (`_guava_`)
-|which implementation to use by the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] as the underlying event bus.
-
-The implementation of `EventBusService` provided by Apache Isis will by default use link:https://code.google.com/p/guava-libraries/[Guava]'s https://code.google.com/p/guava-libraries/wiki/EventBusExplained[`EventBus`] as the underlying in-memory event bus.  Alternatively the link:http://www.axonframework.org/[AxonFramework]'s link:http://www.axonframework.org/docs/2.4/single.html#d5e1489[SimpleEventBus] can be used.
-
-[NOTE]
-.Guava vs Axon, which to use?
-====
-Guava actually queues up events; they are not guaranteed to be dispatched immediately.  This generally is not problem, but can be for cases where the subscriber may in turn want to post its own events (using xref:refguide:applib-svc:WrapperFactory.adoc[`WrapperFactory`]).
-
-The Axon `SimpleEventBus`-based implementation on the other hand is fully synchronous; events are dispatched as soon as they are posted.  This works well in all scenarios (that we have tested).
-====
-
-
-| `isis.services.` +
-`eventbus.` +
-`allowLate` +
-`Registration` +
-|`true`,`false` +
-(`false`)
-|whether a domain service can register with the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] after any events have posted. +
-
-Late registration refers to the idea that a domain service can register itself with the `EventBusService` after events have been posted.
-Since domain services are set up at boot time, this almost certainly constitutes a bug in the code and so by default late registration is _not_ allowed.
-Setting the above property to `true` disables this check.
-
-Since this almost certainly constitutes a bug in application code, by default this is disallowed.
-
-
-|===
 
 
 

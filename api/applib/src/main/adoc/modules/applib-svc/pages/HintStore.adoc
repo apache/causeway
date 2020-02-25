@@ -41,7 +41,6 @@ per the xref:refguide:applib-svc:BookmarkService.adoc[`BookmarkService`], so tha
 
 The core framework provides a default implementation of this service (`org.apache.isis.viewer.wicket.viewer.services.HintStoreUsingWicketSession`).
 
-To use an alternative implementation, implement the `HintStore` interface and use Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation (as explained in the xref:refguide:applib-svc:about.adoc#overriding-the-services.adoc[introduction] to this guide).
 
 
 == View models

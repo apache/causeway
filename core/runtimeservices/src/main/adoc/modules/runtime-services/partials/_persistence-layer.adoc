@@ -1,6 +1,6 @@
 = Persistence Layer internal SPI
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-:page-role: -toc -title
+:page-partial:
 
 
 These domain services are internal to the framework, controlling various aspects of the persistence layer.
@@ -23,23 +23,23 @@ Impl'n (g: a:)
 
 
 
-|xref:core:runtime-services:persistence-layer/AuditingServiceInternal.adoc[`o.a.i.c.r.s.auditing.` +
+|xref:core:runtime-services:AuditingServiceInternal.adoc[`o.a.i.c.r.s.auditing.` +
 `AuditingServiceInternal`]
 |Co-ordinates between
-xref:core:runtime-services:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] and
-xref:core:runtime-services:spi/AuditerService.adoc[`AuditerService`].
+xref:core:runtime-services:ChangedObjectsService.adoc[`ChangedObjectsServiceInternal`] and
+xref:core:runtime-services:AuditerService.adoc[`AuditerService`].
 |concrete class.
 |
 
 
-|xref:core:runtime-services:persistence-layer/ChangedObjectsServiceInternal.adoc[`o.a.i.c.r.s.changes.` +
+|xref:core:runtime-services:ChangedObjectsServiceInternal.adoc[`o.a.i.c.r.s.changes.` +
 `ChangedObjectsServiceInternal`]
 |Request-scoped service holding objects enlisted into current transaction.
 |concrete class.
 |
 
 
-|xref:core:runtime-services:persistence-layer/PersistenceSessionServiceInternal.adoc[`o.a.i.c.m.s.` +
+|xref:core:runtime-services:PersistenceSessionServiceInternal.adoc[`o.a.i.c.m.s.` +
 `persistsession.` +
 `PersistenceSessionServiceInternal`]
 |Acts as a facade to the underlying JDO persistence session / database connection.  As such it provides methods for
@@ -50,10 +50,10 @@ querying and for persisting objects.
 |
 
 
-|xref:core:runtime-services:persistence-layer/PublishingServiceInternal.adoc[`o.a.i.c.m.s.publishing.` +
+|xref:core:runtime-services:PublishingServiceInternal.adoc[`o.a.i.c.m.s.publishing.` +
 `PublishingServiceInternal`]
 |Co-ordinates between
-xref:core:runtime-services:persistence-layer/ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] and
+xref:core:runtime-services:ChangedObjectsService.adoc[`ChangedObjectsServiceInternal`] and
 xref:refguide:applib-svc:MetricsService.adoc[`MetricsService`] and the SPI services, and the
 xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`].
 |`PublishingService-` +

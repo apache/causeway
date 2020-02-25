@@ -55,7 +55,6 @@ public class RegistrationFormPanel extends PanelBase<Void> {
     @Inject private transient EmailNotificationService emailNotificationService;
     @Inject private transient EmailVerificationUrlService emailVerificationUrlService;
     @Inject private transient PageNavigationService pageNavigationService;
-    @Inject private transient WebAppContextPath webAppContextPath;
 
     /**
      * Constructor
@@ -90,16 +89,6 @@ public class RegistrationFormPanel extends PanelBase<Void> {
 
                 String email = emailField.getModelObject();
                 String confirmationUrl = emailVerificationUrlService.createVerificationUrl(PageType.SIGN_UP_VERIFY, email);
-
-                //TODO [2033] remove ...                
-                //                /**
-                //                 * We have to init() the services here because the Isis runtime is not available to us
-                //                 * (guice will have instantiated a new instance of the service).
-                //                 *
-                //                 * We do it this way just so that the programming model for the EmailService is similar to regular Isis-managed services.
-                //                 */
-                //                emailNotificationService.init();
-                //                emailService.init();
 
                 final EmailRegistrationEvent emailRegistrationEvent = new EmailRegistrationEvent(
                         email, 
