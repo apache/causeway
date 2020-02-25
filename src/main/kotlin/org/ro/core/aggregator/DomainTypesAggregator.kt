@@ -35,18 +35,17 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
     }
 
     private fun handleDomainType(obj: DomainType) {
-        when (obj.extensions.isService) {
-            false -> {
-                dsp.addData(obj)
-                val propertyList = obj.members.filter {
-                    it.rel.endsWith("/property")
-                }
-                (dsp as DiagramDisplay).addProperties(propertyList.size)
-                propertyList.forEach { p ->
-                    invoke(p)
-                }
+        if (obj.isPrimitiveOrService()) {
+            (dsp as DiagramDisplay).decNumberOfClasses()
+        } else {
+            dsp.addData(obj)
+            val propertyList = obj.members.filter {
+                it.isProperty()
             }
-            else -> noop()
+            (dsp as DiagramDisplay).incNumberOfProperties(propertyList.size)
+            propertyList.forEach { p ->
+                invoke(p)
+            }
         }
     }
 
@@ -72,6 +71,11 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
         domainTypeLinkList.forEach {
             invoke(it)
         }
+    }
+
+    fun DomainType.isPrimitiveOrService(): Boolean {
+        val primitives = arrayOf("void", "boolean", "double", "byte", "long", "char", "float", "short", "int")
+        return (primitives.contains(canonicalName) || extensions.isService)
     }
 
 }

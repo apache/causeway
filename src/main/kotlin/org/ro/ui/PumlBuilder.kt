@@ -4,21 +4,27 @@ import org.ro.to.DomainType
 
 class PumlBuilder {
 
-    fun with(domaintype: DomainType) : String {
-        val pkg = "domainapp.modules.simple.dom.impl"
-        val cls = "SimpleObject"
-        val prp = "name String"
-        val mth =  "rebuildMetamodel"
-        val defaultPumlCode = "\"" +
+    fun with(domainType: DomainType): String {
+        val cn = domainType.canonicalName
+        val cls = cn.split(".").last()
+        val pkg = cn.replace(".$cls", "")
+        var pumlCode = "\"" +
                 "@startuml\\n" +
                 "package $pkg {\\n" +
-                "class $cls\\n" +
-                "$cls : $prp\\n" +
-                "$cls : $mth()\\n" +
-                "}\\n" +
-                "@enduml\""
+                "class $cls\\n"
+        domainType.members.forEach { m ->
+            val memberName = m.name()
+            when {
+                m.isProperty() -> pumlCode += "$cls : $memberName\\n"
+                else -> {
+                    pumlCode += "$cls : $memberName()\\n"
+                }
+            }
+        }
+        pumlCode += "}\\n@enduml\""
         console.log("[PumlBuilder.with]")
-        console.log(defaultPumlCode)
-        return defaultPumlCode
+        console.log(pumlCode)
+        return pumlCode
     }
+
 }

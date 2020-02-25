@@ -16,15 +16,20 @@ class DiagramDisplay(override val title: String) : BaseDisplayable() {
     var numberOfClasses = -1
     private var numberOfProperties = 0
 
-    fun addProperties(inc: Int) {
+    fun incNumberOfProperties(inc: Int) {
         numberOfProperties += inc
+    }
+
+    fun decNumberOfClasses() {
+        numberOfClasses--
     }
 
     override fun canBeDisplayed(): Boolean {
         console.log("[DiagramDisplay.canBeDisplayed]")
         console.log(this)
         return (numberOfClasses == classes.size
-                && numberOfProperties == properties.size)
+                //&& numberOfProperties == properties.size
+        )
     }
 
     override fun addData(obj: TransferObject) {

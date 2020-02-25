@@ -3,6 +3,7 @@ package org.ro.to
 import kotlinx.serialization.UnstableDefault
 import org.ro.handler.PropertyHandler
 import org.ro.snapshots.demo2_0_0.DEMO_PROPERTY
+import org.ro.snapshots.demo2_0_0.DEMO_PROPERTY_DESCRIPTION
 import org.ro.snapshots.simpleapp1_16_0.FR_OBJECT_PROPERTY_
 import org.ro.snapshots.simpleapp1_16_0.SO_PROPERTY
 import kotlin.test.Test
@@ -11,6 +12,14 @@ import kotlin.test.assertTrue
 
 @UnstableDefault
 class PropertyTest {
+
+    @Test
+    fun testDemoPropertyDescription() {
+        val jsonStr = DEMO_PROPERTY_DESCRIPTION.str
+        val p = PropertyHandler().parse(jsonStr) as Property
+        assertEquals("parity", p.id)
+        assertEquals("The parity of this 'DemoItem'.", p.extensions!!.description)
+    }
 
     @Test
     fun testDemoObjectProperty() {

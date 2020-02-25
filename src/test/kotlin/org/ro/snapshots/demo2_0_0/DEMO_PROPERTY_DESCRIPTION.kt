@@ -1,3 +1,10 @@
+package org.ro.snapshots.demo2_0_0
+
+import org.ro.snapshots.Response
+
+object DEMO_PROPERTY_DESCRIPTION : Response() {
+    override val url = "http://localhost:8080/restful/domain-types/demo.DependentArgsDemoItem/properties/parity"
+    override val str = """
 {
     "id": "parity",
     "memberType": "property",
@@ -26,4 +33,6 @@
         "friendlyName": "Parity",
         "description": "The parity of this 'DemoItem'."
     }
+}
+        """
 }

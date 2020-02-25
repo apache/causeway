@@ -39,4 +39,12 @@ data class Link(val rel: String = "",
         return !argMap().isNullOrEmpty()
     }
 
+    fun isProperty() : Boolean {
+        return rel.endsWith("/property")
+    }
+
+    fun name() : String {
+        return href.split("/").last()
+    }
+
 }
