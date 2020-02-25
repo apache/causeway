@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.services.iactn;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
@@ -30,6 +32,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 
 import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * This service (API and implementation) provides access to context information about any {@link Interaction}.
@@ -45,8 +48,25 @@ import lombok.Getter;
 @Primary
 @Qualifier("Default")
 @RequestScoped
+@Log4j2
 public class InteractionContext {
 
+// end::refguide[]
+    public InteractionContext() {
+        log.debug("init");
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+        log.debug("postConstruct");
+    }
+
+    @PreDestroy
+    public void preDestroy() {
+        log.debug("preDestroy");
+    }
+
+// tag::refguide[]
     /**
      * The currently active {@link Interaction} for this thread.
      */

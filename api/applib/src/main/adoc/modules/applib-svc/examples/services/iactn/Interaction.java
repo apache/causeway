@@ -98,6 +98,12 @@ public class Interaction implements HasUniqueId {
      *     The reason that a list is returned is to support bulk command/actions (against multiple targets).  A non-bulk
      *     action will return a list of just one element.
      * </p>
+     *
+     * @implNote - it seems that this is never actually called.
+     *  The PropertyEdit/ActionInvocation facet diligently calls
+     *  {@link #execute(MemberExecutor, PropertyEdit, ClockService, MetricsService)} or
+     *  {@link #execute(MemberExecutor, ActionInvocation, ClockService, MetricsService)} for us, to ensure that the
+     *  graph is populated, but then delegate to the PublisherService immediately at the end... ie {@link org.apache.isis.schema.ixn.v2.InteractionDto}s are published as we go, not all in a batch at the end.
      */
     public List<Execution<?,?>> getExecutions() {
         return Collections.unmodifiableList(executionGraphs);

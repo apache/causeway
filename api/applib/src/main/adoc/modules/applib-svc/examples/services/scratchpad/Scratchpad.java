@@ -20,6 +20,8 @@ package org.apache.isis.applib.services.scratchpad;
 
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
@@ -30,6 +32,8 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.commons.internal.collections._Maps;
+
+import lombok.extern.log4j.Log4j2;
 
 /**
  * This service (API and implementation) provides a mechanism to interchange information between multiple objects invoked in the same
@@ -48,8 +52,25 @@ import org.apache.isis.core.commons.internal.collections._Maps;
 @Primary
 @Named("isisApplib.Scratchpad")
 @Qualifier("Default")
+@Log4j2
 public class Scratchpad {
 
+// end::refguide[]
+    public Scratchpad(){
+        log.debug("init");
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+        log.debug("postConstruct");
+    }
+
+    @PreDestroy
+    public void preDestroy() {
+        log.debug("preDestroy");
+    }
+
+// tag::refguide[]
     /**
      * Provides a mechanism for each object being acted upon to pass
      * data to the next object.
