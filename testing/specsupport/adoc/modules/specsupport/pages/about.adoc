@@ -170,17 +170,17 @@ We need a step definition to match the Cucumber tag to a xref:testing:fixtures:a
 [source,java]
 .DomainAppDemoStepDef.java
 ----
-package domainapp.webapp.bdd.stepdefs.fixtures;                      // <1>
+package domainapp.webapp.bdd.stepdefs.fixtures;                      // <.>
 ...
 
 public class DomainAppDemoStepDef {
 
-    @Before(value="@DomainAppDemo", order= OrderPrecedence.MIDPOINT) // <1>
+    @Before(value="@DomainAppDemo", order= OrderPrecedence.MIDPOINT) // <.>
     public void runDomainAppDemo() {
-        fixtureScripts.runFixtureScript(new DomainAppDemo(), null);  // <2>
+        fixtureScripts.runFixtureScript(new DomainAppDemo(), null);  // <.>
     }
 
-    @Inject private FixtureScripts fixtureScripts;                   // <3>
+    @Inject private FixtureScripts fixtureScripts;                   // <.>
 }
 ----
 <.> again, under the `stepdefs` package
@@ -249,7 +249,7 @@ image::intellij-idea-feature-run-configuration.png[link="{imagesdir}/intellij-id
 There are (up to) three things to change:
 
 * the "Glue" property can be simplified to just the `domainapp.webapp.bdd.stepdefs` package
-* the "Working directory" property should be set to `${MODULE_WORKING_DIR}`
+* the "Working directory" property should be set to `$\{MODULE_WORKING_DIR}`
 +
 Note: at the time of writing this doesn't seem to be in the drop-down, so just type it in
 * in the "Before launch", make sure that the domain entities are enhanced.
