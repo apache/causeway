@@ -138,9 +138,7 @@
 		<jquery-ui.version>1.12.1</jquery-ui.version>
 
 		<jsr305.version>3.0.2</jsr305.version>
-
-		<junit.jupiter.version>5.5.2</junit.jupiter.version>
-		<junit-legacy.version>4.12</junit-legacy.version>
+		<junit-platform.version>1.6.0</junit-platform.version>
 
 		<log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
 
@@ -1580,6 +1578,21 @@
 				<groupId>io.cucumber</groupId>
 				<artifactId>cucumber-junit</artifactId>
 				<version>${cucumber.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.cucumber</groupId>
+				<artifactId>cucumber-junit-platform-engine</artifactId>
+				<version>${cucumber.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-api</artifactId>
+				<version>${junit-jupiter.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.junit.platform</groupId>
+				<artifactId>junit-platform-console</artifactId>
+				<version>${junit-platform.version}</version>
 			</dependency>
 
 		</dependencies>

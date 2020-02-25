@@ -247,7 +247,6 @@ under the License.
 				<skipTests>false</skipTests>
 				<skipUTs>${skipTests}</skipUTs>
 				<skipITs>${skipTests}</skipITs>
-				<skipBSs>${skipTests}</skipBSs>
 				<surefire-plugin.argLine></surefire-plugin.argLine>
 			</properties>
 
@@ -300,30 +299,6 @@ under the License.
 										<useFile>true</useFile>
 										<printSummary>true</printSummary>
 										<reportsDirectory>${project.build.directory}/surefire-integtest-reports</reportsDirectory>
-										<forkCount>1</forkCount>
-										<reuseForks>true</reuseForks>
-										<argLine>${surefire-plugin.argLine}</argLine>
-									</configuration>
-								</execution>
-								<execution>
-									<id>integ-bddspecs</id>
-									<phase>integration-test</phase>
-									<goals>
-										<goal>test</goal>
-									</goals>
-									<configuration>
-										<skipTests>${skipBSs}</skipTests>
-										<includes>
-											<include>**/*IntegBddSpecs.java</include>
-										</includes>
-										<excludes>
-											<exclude>**/*Abstract*.java</exclude>
-											<exclude>**/*Test*.java</exclude>
-										</excludes>
-										<useFile>true</useFile>
-										<printSummary>true</printSummary>
-										<testFailureIgnore>true</testFailureIgnore>
-										<reportsDirectory>${project.build.directory}/surefire-integbddspecs-reports</reportsDirectory>
 										<forkCount>1</forkCount>
 										<reuseForks>true</reuseForks>
 										<argLine>${surefire-plugin.argLine}</argLine>
