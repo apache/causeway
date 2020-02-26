@@ -6,7 +6,7 @@ import org.ro.to.DomainType
 import org.ro.to.DomainTypes
 import org.ro.to.Link
 import org.ro.to.Property
-import org.ro.ui.ImageAlert
+import org.ro.ui.RoStatusBar
 
 class DomainTypesAggregator(val url: String) : BaseAggregator() {
 
@@ -23,10 +23,7 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
         }
 
         if (dsp.canBeDisplayed()) {
-            val dd = dsp as DiagramDisplay
-            val title = dd.title
-            val code = dd.buildDiagramCode()
-            ImageAlert(title, code).open()
+            RoStatusBar.updateDiagram(dsp as DiagramDisplay)
         }
     }
 

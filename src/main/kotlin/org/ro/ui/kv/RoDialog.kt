@@ -18,8 +18,10 @@ class RoDialog(
         caption: String,
         val items: List<FormItem>,
         val command: Command,
-        defaultAction: String = "OK") :
-        Displayable, Window(caption, 600.px, 300.px, closeButton = true) {
+        defaultAction: String = "OK",
+        widthPerc: Int = 30,
+        heightPerc: Int = 30) :
+        Displayable, Window(caption = caption, closeButton = true) {
 
     private val okButton = Button(
             text = defaultAction,
@@ -44,6 +46,8 @@ class RoDialog(
         isDraggable = true
         isResizable = true
         closeButton = true
+        contentWidth = CssSize(widthPerc, UNIT.perc)
+        contentHeight = CssSize(heightPerc, UNIT.perc)
 
         vPanel(justify = FlexJustify.SPACEBETWEEN) {
             height = 100.perc

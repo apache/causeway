@@ -4,15 +4,13 @@ import org.ro.layout.Layout
 import org.ro.to.DomainType
 import org.ro.to.Property
 import org.ro.to.TransferObject
-import org.ro.ui.PumlBuilder
-import pl.treksoft.kvision.state.observableListOf
 
 class DiagramDisplay(override val title: String) : BaseDisplayable() {
 
     override var layout: Layout? = null
 
-    private val classes = observableListOf<DomainType>()
-    private val properties = observableListOf<Property>()
+    val classes = mutableSetOf<DomainType>()
+    val properties = mutableSetOf<Property>()
     var numberOfClasses = -1
     private var numberOfProperties = 0
 
@@ -28,7 +26,7 @@ class DiagramDisplay(override val title: String) : BaseDisplayable() {
         console.log("[DiagramDisplay.canBeDisplayed]")
         console.log(this)
         return (numberOfClasses == classes.size
-                //&& numberOfProperties == properties.size
+                //TODO && numberOfProperties == properties.size
         )
     }
 
@@ -41,11 +39,6 @@ class DiagramDisplay(override val title: String) : BaseDisplayable() {
             else -> {
             }
         }
-    }
-
-    fun buildDiagramCode(): String {
-        var pumlCode: String = PumlBuilder().with(classes.first())
-        return pumlCode
     }
 
 }

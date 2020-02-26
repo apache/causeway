@@ -2,6 +2,7 @@ package org.ro.ui
 
 import org.ro.core.event.EventState
 import org.ro.core.event.LogEntry
+import org.ro.core.model.DiagramDisplay
 import pl.treksoft.kvision.core.Background
 import pl.treksoft.kvision.core.Col
 import pl.treksoft.kvision.core.CssSize
@@ -22,6 +23,13 @@ object RoStatusBar {
     }
     private val nav = Nav(rightAlign = true)
     private val userLink = nav.navLink("", icon = "far fa-user")
+    private val umlDiagram: Button = Button(
+            text = "",
+            icon = IconManager.find("Diagram"),
+            style = ButtonStyle.OUTLINEWARNING).apply {
+        padding = CssSize(-16, UNIT.px)
+        margin = CssSize(0, UNIT.px)
+    }
     private val lastError: Button = Button(
             text = "OK",
             icon = IconManager.find("OK"),
@@ -33,7 +41,17 @@ object RoStatusBar {
     init {
         navbar.add(nav)
         nav.add(lastError)
+        nav.add(umlDiagram)
         nav.add(userLink)
+    }
+
+    fun updateDiagram(dd: DiagramDisplay) {
+        umlDiagram.style = ButtonStyle.OUTLINESUCCESS
+        umlDiagram.onClick {
+            val title = dd.title
+            val code = ClassDiagram.buildDiagramCode(dd)
+            ImageAlert(title, code).open()
+        }
     }
 
     fun updateUser(user: String) {

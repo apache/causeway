@@ -26,7 +26,12 @@ class ImageAlert(var label: String = defaultLabel, var pumlCode: String = defaul
         val img = FormItem("svg", ValueType.IMAGE.type, callBackId = uuid)
         formItems.add(img)
 
-        val dialog = RoDialog(caption = label, items = formItems, command = this)
+        val dialog = RoDialog(
+                caption = label,
+                items = formItems,
+                command = this,
+                widthPerc = 80,
+                heightPerc = 80)
         dialog.open()
         slider.setDisplay(dialog)
 

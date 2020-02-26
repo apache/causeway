@@ -43,6 +43,10 @@ data class Link(val rel: String = "",
         return rel.endsWith("/property")
     }
 
+    fun isAction() : Boolean {
+        return rel.endsWith("/action")
+    }
+
     fun name() : String {
         return href.split("/").last()
     }

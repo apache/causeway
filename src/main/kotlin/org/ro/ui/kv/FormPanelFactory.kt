@@ -81,7 +81,7 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
         return item
     }
 
-    //FIXME the outer frame needs to be moved to the builder
+    //TODO move outer frame to the builder or use FieldSet Widget from KV
     private fun createHtml(fi: FormItem): Component {
         val cpt = SimplePanel()
         cpt.header(fi.label).addCssClass("panel-heading")
