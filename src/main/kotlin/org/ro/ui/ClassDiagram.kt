@@ -25,10 +25,7 @@ object ClassDiagram {
                 pkg.classes.add(cls)
             }
         }
-        //val entry = packages.maxBy { p -> p.classes.size }
-        //var pumlCode: String = PumlBuilder().with(entry!!)
-        var pumlCode: String = PumlBuilder().with(packages)
-        return pumlCode
+        return  PumlBuilder().with(packages)
     }
 
 }
