@@ -66,7 +66,7 @@ class ColumnFactory {
     }
 
     private fun buildLinkIcon(): ColumnDefinition<Exposer> {
-        val icon = ColumnDefinition<dynamic>(
+        return ColumnDefinition<dynamic>(
                 "",
                 field = "iconName",
                 align = Align.CENTER,
@@ -77,7 +77,6 @@ class ColumnFactory {
                         UiManager.displayObject(tObject)
                     }
                 })
-        return icon
     }
 
     private fun buildLink(): ColumnDefinition<Exposer> {
