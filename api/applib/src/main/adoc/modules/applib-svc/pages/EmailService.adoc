@@ -26,7 +26,7 @@ public interface EmailService {
 }
 ----
 <.> is the main API to send the email (and optional attachments).
-W.ll return `false` if failed to send
+Will return `false` if failed to send
 <.> pass either `null` or `Collections.emptyList()` if not required
 <.> should be HTML text
 <.> indicates whether the implementation was configured and initialized correctly.
