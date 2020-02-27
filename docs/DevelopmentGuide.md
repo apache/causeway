@@ -88,6 +88,8 @@ Nevertheless Kotlin/JS allows to use Javascript features along side the typed pa
 Look out for places where typing is escaped and the DOM is manipulated directly:
 
 * asDynamic()
+* hasOwnProperty()
+* stopPropagation()
 * getElementById()
 
 # Trouble Shooting
