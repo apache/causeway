@@ -97,7 +97,7 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
         val transactionBeforeBegin = 
                 IsisTransactionAspectSupport
                 .currentTransactionObject()
-                .map(x->x.getCurrentTransaction())
+                .map(IsisTransactionObject::getCurrentTransaction)
                 .orElse(null);
 
         return IsisTransactionObject.of(transactionBeforeBegin);

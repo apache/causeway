@@ -18,8 +18,6 @@
  */
 package org.apache.isis.applib.services.sessmgmt;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
 /**
  * Intended primarily for {@link org.apache.isis.applib.fixturescripts.FixtureScript}s that define long-running/large
  * jobs, eg as used for migration; the intention is to allow that work to be broken into separate batches, each in

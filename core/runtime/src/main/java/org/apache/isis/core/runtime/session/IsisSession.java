@@ -51,6 +51,7 @@ public class IsisSession extends RuntimeContextBase {
 
     /**
      * Set to System.nanoTime() when session opens.
+     * @deprecated use command timestamp instead
      */
     @Getter private long openedAtSystemNanos = -1L;
 

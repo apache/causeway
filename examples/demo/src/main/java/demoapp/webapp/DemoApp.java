@@ -90,7 +90,7 @@ public class DemoApp extends SpringBootServletInitializer {
         @PropertySource(IsisPresets.NoTranslations),
         @PropertySource(IsisPresets.SilenceWicket),
         @PropertySource(IsisPresets.DataNucleusAutoCreate),
-        @PropertySource(IsisPresets.DebugVaadin),
+        //@PropertySource(IsisPresets.DebugVaadin),
     })
     @Import({
         IsisModuleCoreRuntimeServices.class,
