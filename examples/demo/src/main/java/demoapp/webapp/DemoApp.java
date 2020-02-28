@@ -44,7 +44,6 @@ import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanRealmShiro;
 import org.apache.isis.extensions.viewer.wicket.exceldownload.ui.IsisModuleExtExcelDownloadUi;
 import org.apache.isis.incubator.model.metamodel.IsisModuleIncModelMetaModel;
-import org.apache.isis.incubator.viewer.vaadin.viewer.IsisModuleIncViewerVaadinViewer;
 import org.apache.isis.persistence.jdo.datanucleus5.IsisModuleJdoDataNucleus5;
 import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
@@ -58,6 +57,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom.DemoModule;
+import demoapp.utils.DemoRequestScopedBean;
 import demoapp.utils.LibraryPreloadingService;
 
 /**
@@ -101,7 +101,7 @@ public class DemoApp extends SpringBootServletInitializer {
         IsisModuleValAsciidocUi.class, // ascii-doc rendering support
 
         // EXPERIMENTAL
-        IsisModuleIncViewerVaadinViewer.class, // vaadin viewer
+        // IsisModuleIncViewerVaadinViewer.class, // vaadin viewer
         
         // REST
         IsisModuleViewerRestfulObjectsViewer.class,
@@ -116,12 +116,14 @@ public class DemoApp extends SpringBootServletInitializer {
         IsisModuleExtSecmanPersistenceJdo.class,
         IsisModuleExtSecmanEncryptionJbcrypt.class,
 
-        IsisModuleTestingFixturesApplib.class,
+        IsisModuleTestingFixturesApplib.class, // breaks demo app launch
 
         IsisModuleIncModelMetaModel.class, // @Model support (incubator)
         IsisModuleExtExcelDownloadUi.class, // allows for collection download as excel
         
-        LibraryPreloadingService.class // just a performance enhancement
+        LibraryPreloadingService.class, // just a performance enhancement
+        
+        DemoRequestScopedBean.class // demo @RequestScope logging
 
     })
     @ComponentScan(

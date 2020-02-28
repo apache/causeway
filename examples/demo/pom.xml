@@ -77,10 +77,10 @@
 		
 		<!-- INCUBATOR: VAADIN VIEWER -->
 		
-		<dependency>
-			<groupId>org.apache.isis.incubator.viewer</groupId>
-			<artifactId>isis-viewer-vaadin-viewer</artifactId>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.apache.isis.incubator.viewer</groupId> -->
+<!-- 			<artifactId>isis-viewer-vaadin-viewer</artifactId> -->
+<!-- 		</dependency> -->
 
 		<!-- EXTENSIONS -->
 
