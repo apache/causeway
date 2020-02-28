@@ -48,12 +48,6 @@ Domain service APIs for the application layer allow the domain objects to contro
 * xref:core:runtime-services:about.adoc[Core Runtime Services]
 
 
-|xref:refguide:applib-svc:SessionManagementService.adoc[SessionManagementService]
-|Methods for batching long-running work (eg data migration) into multiple sessions.
-|
-* xref:core:runtime-services:about.adoc[Core Runtime Services]
-
-
 |xref:refguide:applib-svc:SudoService.adoc[SudoService]
 |Typically for use in testing while running xref:testing:fixtures:services/FixtureScripts.adoc[fixture scripts], allows a block of code to run as a specified user account.
 |

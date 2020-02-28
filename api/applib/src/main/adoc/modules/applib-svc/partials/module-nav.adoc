@@ -49,7 +49,6 @@
 ** xref:refguide:applib-svc:ServiceInjector.adoc[ServiceInjector]
 ** xref:refguide:applib-svc:ServiceRegistry.adoc[ServiceRegistry]
 ** xref:refguide:applib-svc:SessionLoggingService.adoc[SessionLoggingService]
-** xref:refguide:applib-svc:SessionManagementService.adoc[SessionManagementService]
 ** xref:refguide:applib-svc:SudoService.adoc[SudoService]
 ** xref:refguide:applib-svc:SwaggerService.adoc[SwaggerService]
 ** xref:refguide:applib-svc:TableColumnOrderService.adoc[TableColumnOrderService]

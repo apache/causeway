@@ -34,7 +34,6 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.applib.services.sessmgmt.SessionManagementService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
@@ -143,6 +142,5 @@ public abstract class IsisIntegrationTestAbstract {
     @Inject protected UserService userService;
     @Inject protected WrapperFactory wrapperFactory;
     @Inject protected TransactionService transactionService;
-    @Inject protected SessionManagementService sessionManagementService;
 
 }

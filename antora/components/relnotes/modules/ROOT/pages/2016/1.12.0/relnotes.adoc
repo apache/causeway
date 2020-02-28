@@ -28,7 +28,7 @@ In all cases these mixins can be hidden using either security or by writing a li
 == New Feature
 
 * link:https://issues.apache.org/jira/browse/ISIS-1351[ISIS-1351] - Extend link:https://isis.apache.org/versions/1.12.0/guides/rgsvc/rgsvc.html#_rgsvc_core-domain-api_ConfigurationService[`ConfigurationService`] to list all configuration properties in the UI
-* link:https://issues.apache.org/jira/browse/ISIS-1325[ISIS-1325] - New link:https://isis.apache.org/versions/1.12.0/guides/rgsvc/rgsvc.html#_rgsvc_application-layer-api_SessionManagementService[`SessionManagementService`]
+* link:https://issues.apache.org/jira/browse/ISIS-1325[ISIS-1325] - New link:https://isis.apache.org/versions/1.12.0/guides/rgsvc/rgsvc.html#_rgsvc_application-layer-api_SessionManagementService[`SessionManagementService (removed in 2.0.0)`]
 * link:https://issues.apache.org/jira/browse/ISIS-1317[ISIS-1317] - Allow single domain object class to be invalidated through a mixin.
 * link:https://issues.apache.org/jira/browse/ISIS-1313[ISIS-1313] - Enhancement to link:https://isis.apache.org/versions/1.12.0/guides/rgmvn/rgmvn.html#_rgmvn_xsd[xsd] goal of the isis-maven-plugin to ignore/include the Isis common schemas.
 * link:https://issues.apache.org/jira/browse/ISIS-1292[ISIS-1292] - Extend link:https://isis.apache.org/versions/1.12.0/guides/rgsvc/rgsvc.html#_rgsvc_metadata-api_MetamodelService[`MetaModelService`] to surface packages, classes etc (as used by the security module).
