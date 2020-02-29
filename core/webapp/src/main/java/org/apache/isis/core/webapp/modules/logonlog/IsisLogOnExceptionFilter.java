@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.webapp.diagnostics;
+package org.apache.isis.core.webapp.modules.logonlog;
 
 import java.io.IOException;
 

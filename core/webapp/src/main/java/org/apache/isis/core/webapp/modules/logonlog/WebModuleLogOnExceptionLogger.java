@@ -31,7 +31,6 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.webapp.diagnostics.IsisLogOnExceptionFilter;
 import org.apache.isis.core.webapp.modules.WebModuleAbstract;
 
 import lombok.Getter;
