@@ -40,8 +40,6 @@ public class PercentageValueSemanticsProviderTest extends ValueSemanticsProvider
     @Before
     public void setUpObjects() throws Exception {
 
-        //_Config.put("isis.value.format.percentage", null);
-
         percentage = new Percentage(0.105f);
         allowMockAdapterToReturn(percentage);
 

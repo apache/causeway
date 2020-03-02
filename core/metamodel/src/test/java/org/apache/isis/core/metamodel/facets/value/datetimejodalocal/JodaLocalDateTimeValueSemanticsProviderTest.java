@@ -48,10 +48,10 @@ public class JodaLocalDateTimeValueSemanticsProviderTest {
     @Before
     public void setUp() throws Exception {
 
-//        _Config.put("isis.value.format.datetime", "iso_encoding");
-        
         metaModelContext = MetaModelContext_forTesting.builder()
                 .build();
+        
+        metaModelContext.getConfiguration();
 
         context.checking(new Expectations() {
             {

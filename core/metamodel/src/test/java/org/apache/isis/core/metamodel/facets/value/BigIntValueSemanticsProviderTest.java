@@ -45,8 +45,6 @@ public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbst
         bigInt = new BigInteger("132199");
         allowMockAdapterToReturn(bigInt);
 
-        //_Config.put("isis.value.format.int", null);
-
         holder = new FacetHolderImpl();
         ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
         

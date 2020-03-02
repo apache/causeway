@@ -294,8 +294,6 @@ public class WrapperFactoryDefault_wrappedObject_Test {
 
         allowingEmployeeHasSmithAdapter();
 
-        //_Config.put("isis.core.meta-model.filter-visibility", true);
-        
         assertTrue(
                 metaModelContext.getConfiguration().getCore().getMetaModel().isFilterVisibility());
 
@@ -336,8 +334,6 @@ public class WrapperFactoryDefault_wrappedObject_Test {
 
         allowingJonesStringValueAdapter();
 
-        //_Config.put("isis.core.meta-model.filter-visibility", true);
-        
         assertTrue(
                 metaModelContext.getConfiguration().getCore().getMetaModel().isFilterVisibility());
 

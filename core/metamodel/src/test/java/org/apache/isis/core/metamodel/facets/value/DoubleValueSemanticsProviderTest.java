@@ -40,8 +40,6 @@ public class DoubleValueSemanticsProviderTest extends ValueSemanticsProviderAbst
     @Before
     public void setUpObjects() throws Exception {
 
-        //_Config.put("isis.value.format.double", null);
-
         holder = new FacetHolderImpl();
         ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
         setValue(new DoubleWrapperValueSemanticsProvider(holder));

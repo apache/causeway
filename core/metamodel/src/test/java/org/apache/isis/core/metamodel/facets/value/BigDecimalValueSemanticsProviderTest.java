@@ -44,8 +44,6 @@ public class BigDecimalValueSemanticsProviderTest extends ValueSemanticsProvider
     public void setUp() throws Exception {
         super.setUp();
 
-        //_Config.put("isis.value.format.decimal", null);
-
         bigDecimal = new BigDecimal("34132.199");
         allowMockAdapterToReturn(bigDecimal);
         holder = new FacetHolderImpl();

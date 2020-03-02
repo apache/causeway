@@ -377,7 +377,6 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             }
 
             // given
-            //_Config.put("isis.core.meta-model.annotation.property.domain-event.post-for-default", true);
             assertTrue(metaModelContext.getConfiguration()
                     .getApplib().getAnnotation().getDomainObject().getCreatedLifecycleEvent().isPostForDefault());
 

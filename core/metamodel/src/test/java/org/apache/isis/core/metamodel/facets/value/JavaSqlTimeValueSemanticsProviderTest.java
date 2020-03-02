@@ -43,8 +43,6 @@ public class JavaSqlTimeValueSemanticsProviderTest extends ValueSemanticsProvide
     @Before
     public void setUpObjects() throws Exception {
 
-        //_Config.put("isis.value.format.time", null);
-
         final Calendar c = Calendar.getInstance();
         c.setTimeZone(TimeZone.getTimeZone("GMT"));
 
