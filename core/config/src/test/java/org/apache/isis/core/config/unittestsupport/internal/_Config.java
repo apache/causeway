@@ -51,17 +51,17 @@ public class _Config {
 
     // -- PROPERTY ACCESS BEFORE FINALIZING CONFIG
 
-    public static void putAll(Map<String, String> map) {
-        properties().putAll(map);
-    }
-
-    public static void put(String key, String value) {
-        properties().put(key, value);
-    }
-
-    public static void put(String key, boolean value) {
-        properties().put(key, ""+value);
-    }
+//    public static void putAll(Map<String, String> map) {
+//        properties().putAll(map);
+//    }
+//
+//    public static void put(String key, String value) {
+//        properties().put(key, value);
+//    }
+//
+//    public static void put(String key, boolean value) {
+//        properties().put(key, ""+value);
+//    }
 
     // -- PROPERTY PEEKING
 

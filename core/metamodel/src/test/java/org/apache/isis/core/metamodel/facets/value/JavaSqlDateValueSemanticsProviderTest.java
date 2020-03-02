@@ -47,7 +47,7 @@ public class JavaSqlDateValueSemanticsProviderTest extends ValueSemanticsProvide
     @Before
     public void setUpObjects() throws Exception {
 
-        _Config.put("isis.value.format.date", null);
+        //_Config.put("isis.value.format.date", null);
 
         TestClock.initialize();
         date = new Date(0);

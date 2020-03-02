@@ -25,13 +25,12 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import org.apache.isis.core.config.unittestsupport.internal._Config;
-import org.apache.isis.legacy.applib.value.Percentage;
-import org.apache.isis.legacy.metamodel.facets.value.percentage.PercentageValueSemanticsProvider;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstractTestCase;
+import org.apache.isis.legacy.applib.value.Percentage;
+import org.apache.isis.legacy.metamodel.facets.value.percentage.PercentageValueSemanticsProvider;
 
 public class PercentageValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
     private PercentageValueSemanticsProvider adapter;
@@ -41,7 +40,7 @@ public class PercentageValueSemanticsProviderTest extends ValueSemanticsProvider
     @Before
     public void setUpObjects() throws Exception {
 
-        _Config.put("isis.value.format.percentage", null);
+        //_Config.put("isis.value.format.percentage", null);
 
         percentage = new Percentage(0.105f);
         allowMockAdapterToReturn(percentage);

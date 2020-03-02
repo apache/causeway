@@ -47,7 +47,7 @@ public class LongValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
         holder = new FacetHolderImpl();
         ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
 
-        _Config.put("isis.value.format.long", null);
+        //_Config.put("isis.value.format.long", null);
 
         setValue(value = new LongWrapperValueSemanticsProvider(holder));
     }

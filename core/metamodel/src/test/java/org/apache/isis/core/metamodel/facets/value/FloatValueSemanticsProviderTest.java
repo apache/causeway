@@ -42,7 +42,7 @@ public class FloatValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
     @Before
     public void setUpObjects() throws Exception {
 
-        _Config.put("isis.value.format.float", null);
+        //_Config.put("isis.value.format.float", null);
 
         float1 = Float.valueOf(32.5f);
         allowMockAdapterToReturn(float1);

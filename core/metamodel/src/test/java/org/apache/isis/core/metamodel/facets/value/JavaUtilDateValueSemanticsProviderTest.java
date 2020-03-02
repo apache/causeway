@@ -45,7 +45,7 @@ public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProvid
     @Before
     public void setUpObjects() throws Exception {
 
-        _Config.put("isis.value.format.datetime", null);
+        //_Config.put("isis.value.format.datetime", null);
 
         TestClock.initialize();
         date = new java.util.Date(0);

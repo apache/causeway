@@ -30,8 +30,8 @@ import static org.junit.Assert.assertThat;
 import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
@@ -41,8 +41,6 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
-import org.apache.isis.core.config.unittestsupport.internal._Config;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 
 import lombok.val;
 
@@ -78,9 +76,6 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
 
     @Before
     public void setUp() throws Exception {
-
-        _Context.clear();
-        _Config.clear();
 
         val configuration = new IsisConfiguration(null);
         configuration.getApplib().getAnnotation().getViewModel().getValidation().getSemanticChecking().setEnable(true);

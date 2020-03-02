@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
@@ -36,11 +37,11 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
-import org.apache.isis.core.config.unittestsupport.IsisConfigurationLegacy;
 import org.apache.isis.core.config.unittestsupport.internal._Config;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
@@ -114,11 +115,6 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
 
     @Singular
     private List<Object> singletons;
-
-    //@Override
-    public IsisConfigurationLegacy getConfigurationLegacy() {
-        return _Config.getConfiguration();
-    }
     
     @Override
     public Stream<ManagedObject> streamServiceAdapters() {
@@ -147,7 +143,6 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     public Stream<Object> streamSingletons() {
 
         val fields = _Lists.of(
-                getConfigurationLegacy(),
                 getConfiguration(),
                 getObjectManager(),
                 getIsisBeanTypeRegistryHolder(),
@@ -272,6 +267,29 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
             objectManager = ObjectManagerDefault.forTesting((MetaModelContext)this);
         }
         return objectManager;
+    }
+
+    public void runWithConfigProperties(Consumer<Map<String, String>> setup, Runnable runnable) {
+        val properties = _Maps.<String, String>newHashMap();
+        setup.accept(properties);
+        
+        val currentConfigBackup = this.configuration;
+        try {
+            
+            this.configuration = new IsisConfiguration(new AbstractEnvironment() {
+                @Override
+                public String getProperty(String key) {
+                    return properties.get(key);
+                }
+            });
+            
+            runnable.run();
+        } finally {
+            this.configuration = currentConfigBackup;
+        }
+        
+         
+                
     }
     
 

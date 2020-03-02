@@ -47,7 +47,7 @@ public class ByteValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
         holder = new FacetHolderImpl();
         ((MetaModelContextAware)holder).setMetaModelContext(super.metaModelContext);
 
-        _Config.put("isis.value.format.byte", null);
+        //_Config.put("isis.value.format.byte", null);
 
         setValue(value = new ByteWrapperValueSemanticsProvider(holder));
     }

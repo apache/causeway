@@ -34,6 +34,7 @@ import org.junit.rules.ExpectedException;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command.Executor;
@@ -46,7 +47,6 @@ import org.apache.isis.applib.services.wrapper.InvalidException;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
 import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactoryService;
-import org.apache.isis.core.config.unittestsupport.internal._Config;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
@@ -292,11 +292,12 @@ public class WrapperFactoryDefault_wrappedObject_Test {
     @Test
     public void shouldBeAbleToReadVisibleProperty() {
 
-        _Config.clear();
-
         allowingEmployeeHasSmithAdapter();
 
-        _Config.put("isis.core.meta-model.filter-visibility", true);
+        //_Config.put("isis.core.meta-model.filter-visibility", true);
+        
+        assertTrue(
+                metaModelContext.getConfiguration().getCore().getMetaModel().isFilterVisibility());
 
         context.checking(new Expectations() {{
 
@@ -333,11 +334,12 @@ public class WrapperFactoryDefault_wrappedObject_Test {
     @Test
     public void shouldBeAbleToModifyEnabledPropertyUsingSetter() {
 
-        _Config.clear();
-
         allowingJonesStringValueAdapter();
 
-        _Config.put("isis.core.meta-model.filter-visibility", true);
+        //_Config.put("isis.core.meta-model.filter-visibility", true);
+        
+        assertTrue(
+                metaModelContext.getConfiguration().getCore().getMetaModel().isFilterVisibility());
 
         context.checking(new Expectations() {
             {

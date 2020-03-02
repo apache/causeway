@@ -30,10 +30,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.config.unittestsupport.internal._Config;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 
 public class JodaLocalDateTimeValueSemanticsProviderTest {
 
@@ -49,8 +48,7 @@ public class JodaLocalDateTimeValueSemanticsProviderTest {
     @Before
     public void setUp() throws Exception {
 
-        _Config.clear();
-        _Config.put("isis.value.format.datetime", "iso_encoding");
+//        _Config.put("isis.value.format.datetime", "iso_encoding");
         
         metaModelContext = MetaModelContext_forTesting.builder()
                 .build();

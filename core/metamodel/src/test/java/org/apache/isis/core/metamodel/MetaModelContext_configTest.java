@@ -20,15 +20,11 @@ package org.apache.isis.core.metamodel;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.env.ConfigurableEnvironment;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.config.unittestsupport.IsisConfigurationLegacy;
-import org.apache.isis.core.config.unittestsupport.internal._Config;
-
-import lombok.val;
 
 class MetaModelContext_configTest {
 
@@ -36,42 +32,36 @@ class MetaModelContext_configTest {
     
     @BeforeEach
     void setUp() {
-        _Config.clear();
         mmc = MetaModelContext_forTesting.buildDefault();
     }
 
     @Test
     void shouldReturnEmptyValue() {
-
-        val config = config();
-        assertEquals(null, config.getString("test"));
+        assertEquals(null, environment().getProperty("test"));
     }
 
     @Test
-    void shouldNotAllowChangeAfterFinalizedConfig() {
+    void shouldAllowOverrideForTesting() {
 
-        @SuppressWarnings("unused")
-        val config = config();
+        mmcForTesting()
+        .runWithConfigProperties(
+            map->map.put("test", "Hello World!"),
+            ()->{
+                assertEquals("Hello World!", environment().getProperty("test"));
+            });
 
-        assertThrows(IllegalStateException.class, ()->{
-            _Config.put("test", "Hello World!");    
-        });
-    }
-
-    @Test
-    void shouldReturnPrimedValue() {
-
-        _Config.put("test", "Hello World!");
-
-        val config = config();
-
-        assertEquals("Hello World!", config.getString("test"));
+        // expected post condition
+        assertEquals(null, environment().getProperty("test"));
     }
 
     // -- HELPER
 
-    private IsisConfigurationLegacy config() {
-        return ((MetaModelContext_forTesting) mmc).getConfigurationLegacy();
+    private MetaModelContext_forTesting mmcForTesting() {
+        return ((MetaModelContext_forTesting) mmc);
     }
 
+    private ConfigurableEnvironment environment() {
+        return mmcForTesting().getConfiguration().getEnvironment();
+    }
+    
 }

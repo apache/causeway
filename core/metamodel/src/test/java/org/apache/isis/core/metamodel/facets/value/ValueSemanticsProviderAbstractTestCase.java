@@ -68,7 +68,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     @Before
     public void setUp() throws Exception {
 
-        _Config.clear();
+        //_Config.clear();
         Locale.setDefault(Locale.UK);
 
         metaModelContext = MetaModelContext_forTesting.builder()

@@ -166,7 +166,6 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
     @Before
     public void setUp() throws Exception {
-        _Config.clear();
         facetFactory = new PropertyAnnotationFacetFactory();
         facetFactory.setMetaModelContext(super.metaModelContext);
     }
@@ -382,7 +381,9 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             }
 
             // given
-            _Config.put("isis.core.meta-model.annotation.property.domain-event.post-for-default", true);
+            //_Config.put("isis.core.meta-model.annotation.property.domain-event.post-for-default", true);
+            assertTrue(metaModelContext.getConfiguration()
+                    .getApplib().getAnnotation().getDomainObject().getCreatedLifecycleEvent().isPostForDefault());
 
             final Class<?> cls = Customer.class;
             propertyMethod = findMethod(Customer.class, "getName");

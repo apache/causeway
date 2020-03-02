@@ -57,7 +57,6 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
     @Before
     public void setUp() throws Exception {
-        _Config.clear();
         facetFactory = new DomainObjectLayoutFacetFactory();
         facetFactory.setMetaModelContext(super.metaModelContext);
     }
@@ -109,7 +108,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                _Config.clear();
+
             }
 
             @Test
@@ -149,7 +148,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                _Config.clear();
+
             }
 
             @Test
@@ -197,13 +196,11 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                _Config.clear();
             }
 
             @Override
             @Before
             public void setUp() throws Exception {
-                _Config.clear();
                 super.setUp();
             }
 
@@ -282,7 +279,6 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                _Config.clear();
             }
 
 
@@ -363,7 +359,6 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                _Config.clear();
             }
 
             @Test
@@ -441,7 +436,6 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                _Config.clear();
             }
 
             @Test
@@ -519,7 +513,6 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                _Config.clear();
             }
 
             @Test
@@ -597,7 +590,6 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                _Config.clear();
             }
 
             @Test
