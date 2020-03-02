@@ -44,7 +44,9 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.session.IsisSession;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisSessionTracker;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
@@ -65,6 +67,8 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     @Mock AuthenticationSession mockAuthenticationSession;
     @Mock SpecificationLoader mockSpecificationLoader;
     @Mock WebApplicationContext webApplicationContext;
+    @Mock IsisSessionTracker mockIsisSessionTracker;
+    @Mock AuthenticationManager mockAuthenticationManager;
     
     MetaModelContext metaModelContext;
 
@@ -76,6 +80,8 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
                 .authenticationSession(mockAuthenticationSession)
+                .singleton(mockAuthenticationManager)
+                .singleton(mockIsisSessionTracker)
                 .singleton(mockIsisSessionFactory)
                 .build();
 
