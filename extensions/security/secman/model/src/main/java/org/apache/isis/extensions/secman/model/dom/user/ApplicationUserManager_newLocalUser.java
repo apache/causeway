@@ -80,7 +80,7 @@ public class ApplicationUserManager_newLocalUser {
             final Boolean enabled,
             final String emailAddress) {
         
-        final ApplicationUser user = factory.get(ApplicationUser.class);
+        final ApplicationUser user = factory.create(ApplicationUser.class);
         
         return factory.mixin(ApplicationUser_resetPassword.class, user)
         .validateAct(password, passwordRepeat);
