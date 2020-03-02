@@ -37,7 +37,6 @@ import org.apache.isis.core.config.RestEasyConfiguration;
 import org.apache.isis.core.webapp.modules.WebModuleAbstract;
 import org.apache.isis.core.webapp.modules.WebModuleContext;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.IsisRestfulObjectsSessionFilter;
-import org.apache.isis.viewer.restfulobjects.viewer.webmodule.IsisTransactionFilterForRestfulObjects;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategyBasicAuth;
 
 import lombok.Getter;
@@ -62,7 +61,7 @@ import lombok.val;
 public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
 
     private static final String ISIS_SESSION_FILTER_FOR_RESTFUL_OBJECTS = "IsisSessionFilterForRestfulObjects";
-    private static final String ISIS_TRANSACTION_FILTER = "IsisTransactionFilterForRestfulObjects";
+    //private static final String ISIS_TRANSACTION_FILTER = "IsisTransactionFilterForRestfulObjects";
 
     private final RestEasyConfiguration restEasyConfiguration;
 
@@ -128,15 +127,6 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
                             this.restfulPath + "health"));
 
         } );
-
-        registerFilter(ctx, ISIS_TRANSACTION_FILTER, IsisTransactionFilterForRestfulObjects.class)
-        .ifPresent(filterReg -> {
-                filterReg.addMappingForUrlPatterns(
-                        null,
-                        true,
-                        this.urlPattern);
-        });
-
 
         return Can.empty(); // registers no listeners
     }

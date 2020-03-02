@@ -37,9 +37,11 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.TransactionalException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.factory.InstanceUtil;
@@ -156,6 +158,7 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
 
     @Autowired private IsisSessionFactory isisSessionFactory;
     @Autowired private SpecificationLoader specificationLoader;
+    @Autowired private TransactionService transactionService;
     
     private List<String> passThruList = Collections.emptyList();
 
@@ -378,7 +381,15 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
                 isisSessionFactory.runAuthenticated(
                         authenticationSession,
                         ()->{
-                            chain.doFilter(request, response);
+                            
+                            transactionService.executeWithinTransaction(()->{
+                                try {
+                                    chain.doFilter(request, response);
+                                } catch (IOException | ServletException e) {
+                                    throw new TransactionalException("", e);
+                                }
+                            });
+                            
                         });
                                 
                 return;
