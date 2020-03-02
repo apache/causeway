@@ -38,6 +38,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.core.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.isis.core.config.IsisConfiguration;
@@ -49,8 +50,11 @@ import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.session.IsisSessionTracker;
 import org.apache.isis.core.runtime.session.init.IsisLocaleInitializer;
 import org.apache.isis.core.runtime.session.init.IsisTimeZoneInitializer;
+import org.apache.isis.core.runtimeservices.user.UserServiceDefault;
+import org.apache.isis.core.runtimeservices.user.UserServiceDefault.UserAndRoleOverrides;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
+import org.apache.isis.core.security.authentication.standard.SimpleSession;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
 
@@ -136,7 +140,11 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory, IsisSessio
     @Override
     public IsisSession openSession(@NonNull final AuthenticationSession authenticationSession) {
         synchronized($lock) {
-            val isisSession = new IsisSession(metaModelContext, authenticationSession);
+            
+            val isisSession = getAuthenticationSessionOverride()
+            .map(authenticationSessionOverride->new IsisSession(metaModelContext, authenticationSessionOverride))
+            .orElseGet(()->new IsisSession(metaModelContext, authenticationSession));
+            
             isisSessionStack.get().push(isisSession);
             runtimeEventService.fireSessionOpened(isisSession); // only fire top-level
             return isisSession;
@@ -208,6 +216,31 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory, IsisSessio
 
     }
 
+    // -- HELPER - SUDO SUPPORT 
+    
+    @Inject private UserServiceDefault userServiceDefault;
+    
+    /**
+     * This class and {@link UserServiceDefault} both call each other, so the code below is carefully
+     * ordered to ensure no infinite loop.
+     *
+     * In particular, we check if there are overrides, and if so return a {@link SimpleSession} to represent those
+     * overrides.
+     */
+    public Optional<AuthenticationSession> getAuthenticationSessionOverride() {
+
+        // if user/role has been overridden by SudoService, then honor that value.
+        final UserAndRoleOverrides userAndRoleOverrides = userServiceDefault.currentOverridesIfAny();
+
+        if(userAndRoleOverrides != null) {
+            String user = userAndRoleOverrides.getUser();
+            Can<String> roles = userAndRoleOverrides.getRoles();
+            return Optional.of(new SimpleSession(user, roles));
+        }
+
+        // otherwise...
+        return Optional.empty();
+    }
     
 
 

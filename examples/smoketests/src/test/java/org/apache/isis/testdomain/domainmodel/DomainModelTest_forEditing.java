@@ -39,6 +39,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_headless;
+import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -61,7 +62,7 @@ import lombok.val;
 })
 @DirtiesContext
 //@Incubating("fails when run with surefire")
-class DomainModelTest_forEditing {
+class DomainModelTest_forEditing extends IsisIntegrationTestAbstract {
 
     @Inject private WrapperFactory wrapper;
     @Inject private SpecificationLoader specificationLoader;
