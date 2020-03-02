@@ -32,12 +32,12 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
+import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 @Smoketest
 @SpringBootTest(
@@ -45,29 +45,23 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
                 Configuration_usingJdo.class,
         })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
-class TransactionRollbackTest {
+class TransactionRollbackTest extends IsisIntegrationTestAbstract {
     
-    @Inject FixtureScripts fixtureScripts;
-    @Inject TransactionService transactionService;
-    @Inject RepositoryService repository;
-    @Inject IsisSessionFactory isisSessionFactory; 
+    @Inject private FixtureScripts fixtureScripts;
+    @Inject private TransactionService transactionService;
+    @Inject private RepositoryService repository;
     
     @BeforeEach
     void setUp() {
         // cleanup
         fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
-
     }
     
     @Test
     void happyCaseTx_shouldCommit() {
         
-        isisSessionFactory.runAnonymous(()->{
-
-            // expected pre condition
-            assertEquals(0, repository.allInstances(JdoBook.class).size());
-            
-        });
+        // expected pre condition
+        assertEquals(0, repository.allInstances(JdoBook.class).size());
         
         
         transactionService.executeWithinTransaction(()->{
@@ -76,25 +70,17 @@ class TransactionRollbackTest {
             
         });
         
-        isisSessionFactory.runAnonymous(()->{
-
-            // expected post condition
-            assertEquals(1, repository.allInstances(JdoBook.class).size());
-            
-        });
+        // expected post condition
+        assertEquals(1, repository.allInstances(JdoBook.class).size());
 
     }
     
     @Test
     void whenExceptionWithinTx_shouldRollback() {
         
-        isisSessionFactory.runAnonymous(()->{
-
-            // expected pre condition
-            assertEquals(0, repository.allInstances(JdoBook.class).size());
+        // expected pre condition
+        assertEquals(0, repository.allInstances(JdoBook.class).size());
             
-        });
-        
         assertThrows(RuntimeException.class, ()->{
             
             transactionService.executeWithinTransaction(()->{
@@ -107,12 +93,8 @@ class TransactionRollbackTest {
             
         });
         
-        isisSessionFactory.runAnonymous(()->{
-
-            // expected post condition
-            assertEquals(0, repository.allInstances(JdoBook.class).size());
-            
-        });
+        // expected post condition
+        assertEquals(0, repository.allInstances(JdoBook.class).size());
         
     }
     
