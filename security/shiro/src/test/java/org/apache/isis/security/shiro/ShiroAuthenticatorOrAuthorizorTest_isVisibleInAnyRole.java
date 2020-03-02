@@ -81,7 +81,7 @@ public class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
         SecurityUtils.setSecurityManager(securityManager);
 
         AuthenticationRequest ar = new AuthenticationRequestPassword("darkhelmet", "ludicrousspeed");
-        authenticator.authenticate(ar, null);
+        authenticator.authenticate(ar, "test code");
 
         // when, then
         Identifier changeAddressIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Customer", "changeAddress", String.class, String.class);
@@ -98,7 +98,7 @@ public class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
         SecurityUtils.setSecurityManager(securityManager);
 
         AuthenticationRequest ar = new AuthenticationRequestPassword("lonestarr", "vespa");
-        authenticator.authenticate(ar, null);
+        authenticator.authenticate(ar, "test code");
 
         // when, then
         Identifier removeCustomerIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Customer", "remove");

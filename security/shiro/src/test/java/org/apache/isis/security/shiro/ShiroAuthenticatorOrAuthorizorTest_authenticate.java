@@ -36,13 +36,13 @@ import static org.junit.Assert.assertThat;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.security.shiro.authentication.AuthenticatorShiro;
 import org.apache.isis.security.shiro.authorization.AuthorizorShiro;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 import lombok.val;
 
@@ -93,11 +93,11 @@ public class ShiroAuthenticatorOrAuthorizorTest_authenticate {
         assertThat(authenticator.canAuthenticate(AuthenticationRequestPassword.class), is(true));
 
         AuthenticationRequest ar = new AuthenticationRequestPassword("lonestarr", "vespa");
-        AuthenticationSession isisAuthSession = authenticator.authenticate(ar, null);
+        AuthenticationSession isisAuthSession = authenticator.authenticate(ar, "test code");
 
         assertThat(isisAuthSession, is(not(nullValue())));
         assertThat(isisAuthSession.getUserName(), is("lonestarr"));
-        assertThat(isisAuthSession.getValidationCode(), is(nullValue()));
+        assertThat(isisAuthSession.getValidationCode(), is("test code"));
 
         Identifier changeAddressIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Customer", "changeAddress", String.class, String.class);
         assertThat(authorizor.isVisibleInAnyRole(changeAddressIdentifier), is(true));
