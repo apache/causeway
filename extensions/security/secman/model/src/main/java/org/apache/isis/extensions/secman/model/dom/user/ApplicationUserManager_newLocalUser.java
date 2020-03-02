@@ -18,6 +18,8 @@
  */
 package org.apache.isis.extensions.secman.model.dom.user;
 
+import java.util.Objects;
+
 import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
@@ -74,16 +76,18 @@ public class ApplicationUserManager_newLocalUser {
     @Model
     public String validateAct(
             final String username,
-            final Password password,
-            final Password passwordRepeat,
+            final Password newPassword,
+            final Password newPasswordRepeat,
             final org.apache.isis.extensions.secman.api.role.ApplicationRole initialRole,
             final Boolean enabled,
             final String emailAddress) {
         
-        final ApplicationUser user = factory.create(ApplicationUser.class);
-        
-        return factory.mixin(ApplicationUser_resetPassword.class, user)
-        .validateAct(password, passwordRepeat);
+        if (!Objects.equals(newPassword, newPasswordRepeat)) {
+            return "Passwords do not match";
+        }
+
+        return null;
+
     }
     
 
