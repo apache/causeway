@@ -39,7 +39,6 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.panels.PanelBase;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
-import org.apache.isis.core.webapp.wormhole.AuthenticationSessionWormhole;
 
 /**
  * A panel responsible to render the application actions as menu in a navigation bar.
@@ -52,6 +51,8 @@ import org.apache.isis.core.webapp.wormhole.AuthenticationSessionWormhole;
 public class TertiaryActionsPanel extends PanelBase {
 
     private static final long serialVersionUID = 1L;
+    
+    @Inject private PageClassRegistry pageClassRegistry;
 
     public TertiaryActionsPanel(String id, List<CssMenuItem> menuItems) {
         super(id);
@@ -110,14 +111,18 @@ public class TertiaryActionsPanel extends PanelBase {
         };
         themeDiv.add(logoutLink);
 
-        // this is hacky, would rather ask AuthenticatedWebSessionForIsis, but that type isn't visible here.
-        final AuthenticationSession authenticationSession = AuthenticationSessionWormhole.sessionByThread.get();
-        if(authenticationSession != null && authenticationSession.getType() == AuthenticationSession.Type.EXTERNAL) {
-            logoutLink.setEnabled(false);
-            // TODO: need to improve the styling, show as grayed out.
-            logoutLink.add(new CssClassAppender("disabled"));
-            Tooltips.addTooltip(logoutLink, "External");
-        }
+        super.getMetaModelContext().getAuthenticationSessionTracker()
+        .currentAuthenticationSession()
+        .ifPresent(authenticationSession->{
+        
+            if(authenticationSession.getType() == AuthenticationSession.Type.EXTERNAL) {
+                logoutLink.setEnabled(false);
+                // TODO: need to improve the styling, show as grayed out.
+                logoutLink.add(new CssClassAppender("disabled"));
+                Tooltips.addTooltip(logoutLink, "External");
+            }
+            
+        });
 
     }
 
@@ -137,7 +142,6 @@ public class TertiaryActionsPanel extends PanelBase {
         response.render(CssHeaderItem.forReference(new CssResourceReference(TertiaryActionsPanel.class, "TertiaryActionsPanel.css")));
     }
 
-    @Inject
-    private PageClassRegistry pageClassRegistry;
+    
 
 }

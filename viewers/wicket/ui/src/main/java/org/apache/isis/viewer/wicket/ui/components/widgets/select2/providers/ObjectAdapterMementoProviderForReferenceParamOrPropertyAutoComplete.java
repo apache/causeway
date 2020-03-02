@@ -54,7 +54,7 @@ extends ObjectAdapterMementoProviderAbstract {
             // recover any pendingArgs
             val pendingArgs = reconstructDependentArgs(dependentArgMementos); 
             val autoCompleteAdapters = getScalarModel()
-                    .getAutoComplete(pendingArgs, term, commonContext.getAuthenticationSession());
+                    .getAutoComplete(pendingArgs, term);
             autoCompleteChoices.addAll(autoCompleteAdapters);
         }
         

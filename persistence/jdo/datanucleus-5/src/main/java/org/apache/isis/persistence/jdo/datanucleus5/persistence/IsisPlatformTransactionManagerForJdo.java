@@ -32,21 +32,20 @@ import org.springframework.transaction.support.DefaultTransactionStatus;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionAspectSupport;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionObject;
+import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionObject.IsisSessionLifeCycle;
 import org.apache.isis.core.runtime.persistence.transaction.events.TransactionAfterBeginEvent;
 import org.apache.isis.core.runtime.persistence.transaction.events.TransactionAfterCommitEvent;
 import org.apache.isis.core.runtime.persistence.transaction.events.TransactionAfterRollbackEvent;
 import org.apache.isis.core.runtime.persistence.transaction.events.TransactionBeforeBeginEvent;
 import org.apache.isis.core.runtime.persistence.transaction.events.TransactionBeforeCommitEvent;
 import org.apache.isis.core.runtime.persistence.transaction.events.TransactionBeforeRollbackEvent;
-import org.apache.isis.core.runtime.session.IsisSession;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisSessionTracker;
 import org.apache.isis.core.runtime.session.init.InitialisationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -63,44 +62,54 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
     private static final long serialVersionUID = 1L;
 
     private final IsisSessionFactory isisSessionFactory;
-    private final ServiceRegistry serviceRegistry;
     private final EventBusService eventBusService;
+    private final IsisSessionTracker isisSessionTracker;
 
     @Inject
     public IsisPlatformTransactionManagerForJdo(
             final IsisSessionFactory isisSessionFactory,
-            final ServiceRegistry serviceRegistry,
-            final EventBusService eventBusService) {
+            final EventBusService eventBusService,
+            final IsisSessionTracker isisSessionTracker) {
         this.isisSessionFactory = isisSessionFactory;
-        this.serviceRegistry = serviceRegistry;
         this.eventBusService = eventBusService;
+        this.isisSessionTracker = isisSessionTracker;
     }
 
     @Override
     protected Object doGetTransaction() throws TransactionException {
 
-        val isInSession = IsisSession.isInSession();
+        val isInSession = isisSessionTracker.isInSession();
         log.debug("doGetTransaction isInSession={}", isInSession);
-
-        if(!isInSession) {
-
-            // get authenticationSession from IoC, or fallback to InitialisationSession 
-            val authenticationSession = serviceRegistry.select(AuthenticationSession.class)
-                    .getFirst()
-                    .orElseGet(InitialisationSession::new);
-
-            log.debug("open new session authenticationSession={}", authenticationSession);
-
-            isisSessionFactory.openSession(authenticationSession);
-        }
 
         val transactionBeforeBegin = 
                 IsisTransactionAspectSupport
                 .currentTransactionObject()
                 .map(IsisTransactionObject::getCurrentTransaction)
                 .orElse(null);
+        
+        if(!isInSession) {
+            
+            if(Utils.isJUnitTest()) {
+            
+                val authenticationSession = isisSessionTracker.currentAuthenticationSession()
+                        .orElseGet(InitialisationSession::new);
 
-        return IsisTransactionObject.of(transactionBeforeBegin);
+                log.debug("open new session authenticationSession={}", authenticationSession);
+                isisSessionFactory.openSession(authenticationSession);
+                
+                return IsisTransactionObject.of(transactionBeforeBegin, IsisSessionLifeCycle.TEST_SCOPED);
+                
+                
+            } else {
+
+                throw _Exceptions.illegalState("No IsisSession available. "
+                        + "Transactions are expected to be nested within the life-cycle of an IsisSession.");
+                
+            }
+            
+        }
+
+        return IsisTransactionObject.of(transactionBeforeBegin, IsisSessionLifeCycle.REQUEST_SCOPED);
 
     }
 
@@ -129,9 +138,7 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
 
         eventBusService.post(new TransactionAfterCommitEvent(txObject));
 
-        txObject.getCountDownLatch().countDown();
-        txObject.setCurrentTransaction(null);
-        IsisTransactionAspectSupport.clearTransactionObject();
+        cleanUp(txObject);
     }
 
     @Override
@@ -145,11 +152,20 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
 
         eventBusService.post(new TransactionAfterRollbackEvent(txObject));
 
-        txObject.getCountDownLatch().countDown();
-        txObject.setCurrentTransaction(null);
-        IsisTransactionAspectSupport.clearTransactionObject();
+        cleanUp(txObject);
     }
 
+    // -- HELPER
+    
+    private void cleanUp(IsisTransactionObject txObject) {
+        txObject.getCountDownLatch().countDown();
+        txObject.setCurrentTransaction(null);
+        if(txObject.getIsisSessionLifeCycle() == IsisSessionLifeCycle.TEST_SCOPED) {
+            isisSessionFactory.closeSessionStack();
+        }
+        IsisTransactionAspectSupport.clearTransactionObject();
+    }
+    
     private IsisTransactionManagerJdo transactionManagerJdo() {
         return PersistenceSession.current(IsisPersistenceSessionJdoBase.class)
                     .getFirst()

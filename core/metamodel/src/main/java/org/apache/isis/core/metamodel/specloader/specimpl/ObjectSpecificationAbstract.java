@@ -88,7 +88,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.postprocessor.PostProcessor;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
@@ -614,9 +613,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     @Override
     public ObjectTitleContext createTitleInteractionContext(
-            final AuthenticationSession session, 
-            final InteractionInitiatedBy interactionMethod, 
-            final ManagedObject targetObjectAdapter) {
+            final ManagedObject targetObjectAdapter, 
+            final InteractionInitiatedBy interactionMethod) {
 
         return new ObjectTitleContext(targetObjectAdapter, getIdentifier(), targetObjectAdapter.titleString(null),
                 interactionMethod);

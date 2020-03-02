@@ -108,13 +108,17 @@ public class HeaderPanel extends PanelAbstract<Model<String>> {
             @Override
             public String userProfileName() {
                 if(getPage() instanceof ErrorPage) {
-                    return commonContext.getAuthenticationSession().getUserName();
+                    return commonContext.getAuthenticationSessionTracker()
+                            .getAuthenticationSessionElseFail()
+                            .getUserName();
                 }
                 try {
                     val userProfileService = commonContext.lookupServiceElseFail(UserProfileService.class);
                     return userProfileService.userProfileName();
                 } catch (final Exception e) {
-                    return commonContext.getAuthenticationSession().getUserName();
+                    return commonContext.getAuthenticationSessionTracker()
+                            .getAuthenticationSessionElseFail()
+                            .getUserName();
                 }
             }
         };

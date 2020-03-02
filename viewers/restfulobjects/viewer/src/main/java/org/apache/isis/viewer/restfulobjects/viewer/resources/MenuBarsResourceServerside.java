@@ -33,6 +33,7 @@ import org.apache.isis.applib.layout.menubars.MenuBars;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.runtime.session.IsisSessionTracker;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
@@ -52,8 +53,9 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
     @Inject
     public MenuBarsResourceServerside(
             final MetaModelContext metaModelContext,
-            final IsisConfiguration isisConfiguration) {
-        super(metaModelContext, isisConfiguration);
+            final IsisConfiguration isisConfiguration,
+            final IsisSessionTracker isisSessionTracker) {
+        super(metaModelContext, isisConfiguration, isisSessionTracker);
     }
 
     @Override

@@ -103,7 +103,7 @@ public class SseServiceDefault implements SseService {
             // wait for calling thread to commit its current transaction 
             callingThread_TransactionLatch.await();
 
-            isisSessionFactory.doInSession(()->run(task));
+            isisSessionFactory.runAnonymous(()->run(task));
 
         }, executor);
 

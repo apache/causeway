@@ -34,8 +34,7 @@ import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
@@ -69,13 +68,13 @@ public interface MetaModelContext {
         return type != null ? getSpecificationLoader().loadSpecification(type) : null;
     }
 
-    AuthenticationSessionProvider getAuthenticationSessionProvider();
-
     TranslationService getTranslationService();
 
     AuthorizationManager getAuthorizationManager();
 
     AuthenticationManager getAuthenticationManager();
+    
+    AuthenticationSessionTracker getAuthenticationSessionTracker();
 
     TitleService getTitleService();
 
@@ -138,17 +137,8 @@ public interface MetaModelContext {
         }
 
         @Override
-        public default AuthenticationSessionProvider getAuthenticationSessionProvider() {
-            return getMetaModelContext().getAuthenticationSessionProvider();
-        }
-
-        @Override
         public default TranslationService getTranslationService() {
             return getMetaModelContext().getTranslationService();
-        }
-
-        default AuthenticationSession getAuthenticationSession() {
-            return getAuthenticationSessionProvider().getAuthenticationSession();
         }
 
         @Override
@@ -159,6 +149,11 @@ public interface MetaModelContext {
         @Override
         public default AuthenticationManager getAuthenticationManager() {
             return getMetaModelContext().getAuthenticationManager();
+        }
+        
+        @Override
+        public default AuthenticationSessionTracker getAuthenticationSessionTracker() {
+            return getMetaModelContext().getAuthenticationSessionTracker();
         }
 
         @Override

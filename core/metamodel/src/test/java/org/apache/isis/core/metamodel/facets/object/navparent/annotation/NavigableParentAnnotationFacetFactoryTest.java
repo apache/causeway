@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFac
 import org.apache.isis.core.metamodel.facets.object.navparent.annotation.NavigableParentTestSamples.DomainObjectA;
 import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetMethod;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 
 public class NavigableParentAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -59,11 +59,11 @@ public class NavigableParentAnnotationFacetFactoryTest extends AbstractFacetFact
 
         context.checking(new Expectations() {
             {
-                allowing(mockServiceRegistry).lookupService(AuthenticationSessionProvider.class);
-                will(returnValue(Optional.of(mockAuthenticationSessionProvider)));
+                allowing(mockServiceRegistry).lookupService(AuthenticationSessionTracker.class);
+                will(returnValue(Optional.of(mockAuthenticationSessionTracker)));
 
-                allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
-                will(returnValue(mockAuthenticationSession));
+                allowing(mockAuthenticationSessionTracker).currentAuthenticationSession();
+                will(returnValue(Optional.of(mockAuthenticationSession)));
 
                 //                allowing(mockServicesInjector).getSpecificationLoader();
                 //                will(returnValue(mockSpecificationLoader));

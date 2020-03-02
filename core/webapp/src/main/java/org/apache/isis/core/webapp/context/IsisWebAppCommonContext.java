@@ -33,8 +33,7 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.session.IsisSession;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.runtime.session.IsisSessionTracker;
 import org.apache.isis.core.security.authentication.MessageBroker;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.core.webapp.context.memento.ObjectMementoService;
@@ -67,19 +66,17 @@ public class IsisWebAppCommonContext implements MetaModelContext.Delegating {
     @Getter(lazy = true)
     private final MenuBarsService menuBarsService = lookupServiceElseFail(MenuBarsService.class);
     
+    @Getter(lazy = true)
+    private final IsisSessionTracker isisSessionTracker = lookupServiceElseFail(IsisSessionTracker.class);
+    
     @Getter(lazy = true, value = AccessLevel.PRIVATE)
     private final ObjectMementoService mementoService = lookupServiceElseFail(ObjectMementoService.class);
     
     @Getter(lazy = true)
     private final Function<Object, ManagedObject> pojoToAdapter = metaModelContext.getObjectManager()::adapt;
     
-    public IsisSession getCurrentSession() {
-        return IsisSession.currentOrElseNull();
-    }
-    
     public Optional<MessageBroker> getMessageBroker() {
-        val messageBroker = Optional.ofNullable(getAuthenticationSession())
-                .map(AuthenticationSession::getMessageBroker);
+        val messageBroker = getAuthenticationSessionTracker().currentMessageBroker();
         if(!messageBroker.isPresent()) {
             log.warn("failed to locate a MessageBroker on current AuthenticationSession");
         }

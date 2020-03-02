@@ -26,6 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
 import lombok.val;
@@ -39,17 +40,20 @@ public abstract class AuthorizationFacetAbstract extends FacetAbstract implement
     }
 
     private final AuthorizationManager authorizationManager;
+    private final AuthenticationSessionTracker authenticationSessionTracker;
 
     public AuthorizationFacetAbstract(
             final FacetHolder holder) {
         super(type(), holder, Derivation.NOT_DERIVED);
         this.authorizationManager = getAuthorizationManager();
+        this.authenticationSessionTracker = getAuthenticationSessionTracker();
     }
 
     @Override
     public String hides(VisibilityContext<? extends VisibilityEvent> ic) {
         
-        val hides = authorizationManager.isVisible(getAuthenticationSession(), ic.getIdentifier()) 
+        val hides = authorizationManager
+                .isVisible(authenticationSessionTracker.getAuthenticationSessionElseFail(), ic.getIdentifier()) 
                 ? null 
                         : "Not authorized to view";
         
@@ -63,7 +67,8 @@ public abstract class AuthorizationFacetAbstract extends FacetAbstract implement
     @Override
     public String disables(UsabilityContext<? extends UsabilityEvent> ic) {
         
-        val disables = authorizationManager.isUsable(getAuthenticationSession(), ic.getIdentifier()) 
+        val disables = authorizationManager
+                .isUsable(authenticationSessionTracker.getAuthenticationSessionElseFail(), ic.getIdentifier()) 
                 ? null 
                         : "Not authorized to edit";
         

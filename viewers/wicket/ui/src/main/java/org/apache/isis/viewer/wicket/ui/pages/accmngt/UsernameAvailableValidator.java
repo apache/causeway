@@ -53,7 +53,7 @@ public class UsernameAvailableValidator extends ValidatorBase<String> {
         val isisSessionFactory = super.getCommonContext()
                 .lookupServiceElseFail(IsisSessionFactory.class);
         
-        isisSessionFactory.doInSession(() -> {
+        isisSessionFactory.runAnonymous(() -> {
 
             final String username = validatable.getValue();
             boolean usernameExists = userRegistrationService.usernameExists(username);

@@ -268,7 +268,7 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements S
     }
 
     <V> V execute(final Supplier<V> closure) {
-        return isisSessionFactory.doInSession(
+        return isisSessionFactory.callAnonymous(
                 new Callable<V>() {
                     @Override
                     public V call() {

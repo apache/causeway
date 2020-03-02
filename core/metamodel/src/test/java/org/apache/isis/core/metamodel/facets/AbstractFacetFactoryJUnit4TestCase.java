@@ -49,7 +49,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 
 public abstract class AbstractFacetFactoryJUnit4TestCase {
 
@@ -62,7 +62,7 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     @Mock protected ServiceInjector mockServiceInjector;
     @Mock protected ServiceRegistry mockServiceRegistry;
     @Mock protected TranslationService mockTranslationService;
-    @Mock protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    @Mock protected AuthenticationSessionTracker mockAuthenticationSessionTracker;
 
     @Mock protected ObjectSpecification mockOnType;
     @Mock protected ObjectSpecification mockObjSpec;
@@ -105,8 +105,8 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
             allowing(mockServiceRegistry).lookupService(TranslationService.class);
             will(returnValue(Optional.of(mockTranslationService)));
 
-            allowing(mockServiceRegistry).lookupService(AuthenticationSessionProvider.class);
-            will(returnValue(Optional.of(mockAuthenticationSessionProvider)));
+            allowing(mockServiceRegistry).lookupService(AuthenticationSessionTracker.class);
+            will(returnValue(Optional.of(mockAuthenticationSessionTracker)));
 
             allowing(mockServiceRegistry).lookupServiceElseFail(MetamodelEventService.class);
             will(returnValue(mockMetamodelEventService));

@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.security.authentication.standard;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.stream.Stream;
 
 import org.apache.isis.core.security.authentication.AuthenticationSessionAbstract;
@@ -37,16 +37,16 @@ public class SimpleSession extends AuthenticationSessionAbstract {
     /**
      * Defaults {@link #getValidationCode()} to empty string (<tt>""</tt>).
      */
-    public SimpleSession(final String name, final Iterable<String> roles) {
-        this(name, stream(roles), DEFAULT_VALIDATION_CODE);
+    public SimpleSession(final String userName, final Iterable<String> roles) {
+        this(userName, stream(roles), DEFAULT_VALIDATION_CODE);
     }
 
-    public SimpleSession(final String name, final List<String> roles, final String code) {
-        this(name, roles.stream(), code);
+    public SimpleSession(final String userName, final Collection<String> roles, final String code) {
+        this(userName, roles.stream(), code);
     }
 
-    public SimpleSession(final String name, final Stream<String> roles, final String code) {
-        super(name, roles, code);
+    public SimpleSession(final String userName, final Stream<String> roles, final String code) {
+        super(userName, roles, code);
     }
 
     @Getter @Setter

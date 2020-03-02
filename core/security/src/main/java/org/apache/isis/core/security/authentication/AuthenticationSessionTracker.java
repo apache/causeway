@@ -16,13 +16,33 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+
 package org.apache.isis.core.security.authentication;
 
+import java.util.Optional;
+
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+
 /**
- * This is implemented by an (internal) domain service
+ * @since 2.0
  */
-public interface AuthenticationSessionProvider {
+public interface AuthenticationSessionTracker {
 
-    AuthenticationSession getAuthenticationSession();
-
+    Optional<AuthenticationSession> currentAuthenticationSession();
+    
+    default AuthenticationSession getAuthenticationSessionElseFail() {
+        return currentAuthenticationSession()
+                .orElseThrow(()->
+                    _Exceptions.illegalState("no AuthenticationSession available with current thread"));
+    }
+    
+    default Optional<MessageBroker> currentMessageBroker() {
+        return currentAuthenticationSession().map(AuthenticationSession::getMessageBroker);
+    }
+    
+    default MessageBroker getMessageBrokerElseFail() {
+        return getAuthenticationSessionElseFail().getMessageBroker();
+    }
+    
+    
 }

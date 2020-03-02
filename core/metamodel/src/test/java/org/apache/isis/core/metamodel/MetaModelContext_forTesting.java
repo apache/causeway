@@ -51,7 +51,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
@@ -88,7 +88,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     
     private ProgrammingModel programmingModel;
 
-    private AuthenticationSessionProvider authenticationSessionProvider;
+    private AuthenticationSessionTracker authenticationSessionTracker;
 
     private TranslationService translationService;
 
@@ -156,7 +156,7 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
                 serviceRegistry,
                 metamodelEventService,
                 specificationLoader,
-                authenticationSessionProvider,
+                authenticationSessionTracker,
                 getTranslationService(),
                 authenticationSession,
                 authorizationManager,

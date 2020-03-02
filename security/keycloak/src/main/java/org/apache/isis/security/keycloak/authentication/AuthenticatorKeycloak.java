@@ -18,6 +18,7 @@
  */
 package org.apache.isis.security.keycloak.authentication;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
@@ -28,8 +29,8 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 import org.apache.isis.core.security.authentication.standard.Authenticator;
-import org.apache.isis.core.webapp.wormhole.AuthenticationSessionWormhole;
 
 @Service
 @Named("isisSecurityKeycloak.AuthenticatorKeycloak")
@@ -37,6 +38,8 @@ import org.apache.isis.core.webapp.wormhole.AuthenticationSessionWormhole;
 @Qualifier("Keycloak")
 @Singleton
 public class AuthenticatorKeycloak implements Authenticator {
+    
+    @Inject private AuthenticationSessionTracker authenticationSessionTracker;
 
     @Override
     public final boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
@@ -45,7 +48,8 @@ public class AuthenticatorKeycloak implements Authenticator {
 
     @Override
     public AuthenticationSession authenticate(final AuthenticationRequest request, final String code) {
-        return AuthenticationSessionWormhole.sessionByThread.get();
+        // HTTP request filters should already have taken care of AuthenticationSession creation    
+        return authenticationSessionTracker.currentAuthenticationSession().orElse(null);
     }
 
     @Override

@@ -14,13 +14,17 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.standard.SimpleSession;
-import org.apache.isis.core.webapp.wormhole.AuthenticationSessionWormhole;
 
 import lombok.val;
 
 public class KeycloakFilter implements Filter {
+    
+    @Autowired private IsisSessionFactory isisSessionFactory;
 
     @Override
     public void doFilter(
@@ -38,14 +42,15 @@ public class KeycloakFilter implements Filter {
             return;
         }
         final List<String> roles = toClaims(rolesHeader);
-        try {
-            val authenticationSession = new SimpleSession(userid, roles, subjectHeader);
-            authenticationSession.setType(AuthenticationSession.Type.EXTERNAL);
-            AuthenticationSessionWormhole.sessionByThread.set(authenticationSession);
-            filterChain.doFilter(servletRequest, servletResponse);
-        } finally {
-            AuthenticationSessionWormhole.sessionByThread.remove();
-        }
+        
+        val authenticationSession = new SimpleSession(userid, roles, subjectHeader);
+        authenticationSession.setType(AuthenticationSession.Type.EXTERNAL);
+        
+        isisSessionFactory.runAuthenticated(
+                authenticationSession,
+                ()->{
+                        filterChain.doFilter(servletRequest, servletResponse);
+                });
     }
 
     static List<String> toClaims(final String claimsHeader) {

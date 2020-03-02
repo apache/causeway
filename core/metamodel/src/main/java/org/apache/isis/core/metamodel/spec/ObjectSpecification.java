@@ -59,7 +59,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import lombok.val;
 
@@ -236,7 +235,8 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * object's title.
      */
     ObjectTitleContext createTitleInteractionContext(
-            AuthenticationSession session, InteractionInitiatedBy invocationMethod, ManagedObject targetObjectAdapter);
+            ManagedObject targetObjectAdapter,
+            InteractionInitiatedBy invocationMethod);
 
     // //////////////////////////////////////////////////////////////
     // ValidityContext, Validity

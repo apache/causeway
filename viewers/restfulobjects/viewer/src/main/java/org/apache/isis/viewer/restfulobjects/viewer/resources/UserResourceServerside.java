@@ -31,6 +31,7 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.runtime.session.IsisSessionTracker;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
@@ -50,8 +51,9 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
     @Inject
     public UserResourceServerside(
             final MetaModelContext metaModelContext,
-            final IsisConfiguration isisConfiguration) {
-        super(metaModelContext, isisConfiguration);
+            final IsisConfiguration isisConfiguration,
+            final IsisSessionTracker isisSessionTracker) {
+        super(metaModelContext, isisConfiguration, isisSessionTracker);
     }
 
     @Override
@@ -62,7 +64,7 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
                 RepresentationType.USER, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         final UserReprRenderer renderer = new UserReprRenderer(resourceContext, null, JsonRepresentation.newMap());
-        renderer.includesSelf().with(resourceContext.getAuthenticationSession());
+        renderer.includesSelf().with(resourceContext.getAuthenticationSessionTracker().getAuthenticationSessionElseFail());
 
         return Responses.ofOk(renderer, Caching.ONE_HOUR).build();
     }

@@ -25,8 +25,8 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
@@ -40,9 +40,12 @@ import net.ftlines.wicket.fullcalendar.callback.ClickedEvent;
 
 final class FullCalendarWithEventHandling extends FullCalendar {
     
+    private static final long serialVersionUID = 1L;
+    
     @SuppressWarnings("unused")
 	private final NotificationPanel feedback;
-    private static final long serialVersionUID = 1L;
+    private transient IsisWebAppCommonContext commonContext;
+    
 
     FullCalendarWithEventHandling(
             final String id,
@@ -60,26 +63,29 @@ final class FullCalendarWithEventHandling extends FullCalendar {
         final String oidStr = (String) event.getEvent().getPayload();
         final RootOid oid = RootOid.deString(oidStr);
 
-        IsisContext.getCurrentIsisSession()
-                .map(isisSession -> {
-                    final SpecificationLoader specificationLoader = isisSession.getSpecificationLoader();
-                    final MetaModelContext metaModelContext = isisSession.getMetaModelContext();
-                    final ObjectManager objectManager = isisSession.getObjectManager();
-                    final IsisWebAppCommonContext webAppCommonContext = IsisWebAppCommonContext.of(metaModelContext);
+        val commonContext = getCommonContext();
+                
+        final SpecificationLoader specificationLoader = commonContext.getSpecificationLoader();
+        final MetaModelContext metaModelContext = commonContext.getMetaModelContext();
+        final ObjectManager objectManager = commonContext.getObjectManager();
+        final IsisWebAppCommonContext webAppCommonContext = IsisWebAppCommonContext.of(metaModelContext);
 
-                    val spec = specificationLoader.loadSpecification(oid.getObjectSpecId());
-                    val objectId = oid.getIdentifier();
-                    val managedObject = objectManager.loadObject(ObjectLoader.Request.of(spec, objectId));
+        val spec = specificationLoader.loadSpecification(oid.getObjectSpecId());
+        val objectId = oid.getIdentifier();
+        val managedObject = objectManager.loadObject(ObjectLoader.Request.of(spec, objectId));
 
-                    final EntityModel entityModel = EntityModel.ofAdapter(webAppCommonContext, managedObject);
-                    return entityModel.getPageParameters();
-                }).ifPresent(pageParameters -> {
-                    throw new RestartResponseException(EntityPage.class, pageParameters);
-                });
+        final EntityModel entityModel = EntityModel.ofAdapter(webAppCommonContext, managedObject);
+        
+        val pageParameters = entityModel.getPageParameters();
+        if(pageParameters!=null) {
+            throw new RestartResponseException(EntityPage.class, pageParameters);    
+        }
 
         // otherwise ignore
     }
 
-
+    public IsisWebAppCommonContext getCommonContext() {
+        return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
+    }
 
 }

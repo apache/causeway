@@ -43,14 +43,12 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
  */
 public interface IsisSessionFactory {
 
-    public IsisSession openSession(final AuthenticationSession authenticationSession);
-    public void closeSession();
-
-    @Deprecated //TODO [2033] replace with IsisSession.current()
-    default public IsisSession getCurrentSession() {
-        return IsisSession.currentOrElseNull();
+    @FunctionalInterface
+    public interface ThrowingRunnable {
+        void run() throws Exception;
     }
 
+    public IsisSession openSession(AuthenticationSession authenticationSession);
 
     /**
      * @return whether the calling thread is within the context of an open IsisSession
@@ -62,43 +60,70 @@ public interface IsisSessionFactory {
      */
     public boolean isInTransaction();
 
+    
     /**
-     * As per {@link #doInSession(Runnable, AuthenticationSession)}, using a default {@link InitialisationSession}.
-     * @param runnable
-     */
-    public default void doInSession(final Runnable runnable) {
-        doInSession(runnable, new InitialisationSession());
-    }
-
-    /**
-     * A template method that executes a piece of code in a session.
-     * If there is an open session then it is reused, otherwise a temporary one
-     * is created.
+     * Executes a piece of code in a session.
+     * If there is an open session with the same AuthenticationSession then it is reused.
      *
-     * @param runnable The piece of code to run.
-     * @param authenticationSession
-     */
-    public default void doInSession(final Runnable runnable, final AuthenticationSession authenticationSession) {
-        final Callable<Void> callable = ()->{runnable.run(); return null;};
-        doInSession(callable, authenticationSession);
-    }
-
-    /**
-     * As per {@link #doInSession(Callable), AuthenticationSession}, using a default {@link InitialisationSession}.
-     */
-    public default <R> R doInSession(final Callable<R> callable) {
-        return doInSession(callable, new InitialisationSession());
-    }
-
-    /**
-     * A template method that executes a piece of code in a session.
-     * If there is an open session then it is reused, otherwise a temporary one
-     * is created.
-     *
-     * @param callable The piece of code to run.
      * @param authenticationSession - the user to run under
+     * @param callable - the piece of code to run
+     * 
      */
-    public <R> R doInSession(final Callable<R> callable, final AuthenticationSession authenticationSession);
+    public <R> R callAuthenticated(AuthenticationSession authenticationSession, Callable<R> callable);
+    
+    public default void runAuthenticated(AuthenticationSession authenticationSession, ThrowingRunnable runnable) {
+        final Callable<Void> callable = ()->{runnable.run(); return null;};
+        callAuthenticated(authenticationSession, callable);
+    }
+    
+    public default <R> R callAnonymous(Callable<R> callable) {
+        return callAuthenticated(new InitialisationSession(), callable);
+    }
+    
+    public default void runAnonymous(ThrowingRunnable runnable) {
+        runAuthenticated(new InitialisationSession(), runnable);
+    }
+
+    public void closeSessionStack();
+    
+
+//    /**
+//     * As per {@link #doInSession(Runnable, AuthenticationSession)}, using a default {@link InitialisationSession}.
+//     * @param runnable
+//     */
+//    public default void doInSession(final Runnable runnable) {
+//        doInSession(runnable, new InitialisationSession());
+//    }
+
+//    /**
+//     * A template method that executes a piece of code in a session.
+//     * If there is an open session then it is reused, otherwise a temporary one
+//     * is created.
+//     *
+//     * @param runnable The piece of code to run.
+//     * @param authenticationSession
+//     */
+//    public default void doInSession(final Runnable runnable, final AuthenticationSession authenticationSession) {
+//        final Callable<Void> callable = ()->{runnable.run(); return null;};
+//        doInSession(callable, authenticationSession);
+//    }
+
+//    /**
+//     * As per {@link #doInSession(Callable), AuthenticationSession}, using a default {@link InitialisationSession}.
+//     */
+//    public default <R> R doInSession(final Callable<R> callable) {
+//        return doInSession(callable, new InitialisationSession());
+//    }
+
+//    /**
+//     * A template method that executes a piece of code in a session.
+//     * If there is an open session then it is reused, otherwise a temporary one
+//     * is created.
+//     *
+//     * @param callable The piece of code to run.
+//     * @param authenticationSession - the user to run under
+//     */
+//    public <R> R doInSession(final Callable<R> callable, final AuthenticationSession authenticationSession);
 
 
 }

@@ -77,8 +77,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
         
         val commonContext = super.getCommonContext();
         
-        val choices =
-                scalarModel.getChoices(pendingArgs, commonContext.getAuthenticationSession());
+        val choices = scalarModel.getChoices(pendingArgs);
 
         return _Lists.map(choices, commonContext::mementoFor);
     }

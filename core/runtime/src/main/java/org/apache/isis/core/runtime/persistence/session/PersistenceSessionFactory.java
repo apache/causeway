@@ -19,11 +19,10 @@
 package org.apache.isis.core.runtime.persistence.session;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 public interface PersistenceSessionFactory {
 
-    PersistenceSession createPersistenceSession(AuthenticationSession authenticationSession);
+    PersistenceSession createPersistenceSession();
 
     void init(MetaModelContext metaModelContext);
 

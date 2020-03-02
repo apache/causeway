@@ -29,7 +29,6 @@ import org.apache.isis.core.runtime.persistence.session.events.PersistenceEventS
 import org.apache.isis.core.runtime.persistence.session.events.TimestampService;
 import org.apache.isis.core.runtime.persistence.transaction.AuditerDispatchService;
 import org.apache.isis.core.runtime.persistence.transaction.ChangedObjectsService;
-import org.apache.isis.core.runtime.session.IsisSessionFactoryDefault;
 
 @Configuration
 @Import({
@@ -40,7 +39,6 @@ import org.apache.isis.core.runtime.session.IsisSessionFactoryDefault;
         RuntimeEventService.class,
         PersistenceEventService.class,
         TimestampService.class,
-        IsisSessionFactoryDefault.class,
         AuditerDispatchService.class,
         ChangedObjectsService.class,
 

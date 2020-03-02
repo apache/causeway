@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -45,6 +46,8 @@ import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
 import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactoryService;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -65,10 +68,8 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.runtimeservices.wrapper.dom.employees.Employee;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 import org.apache.isis.core.security.authentication.standard.SimpleSession;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 import static org.apache.isis.core.internaltestsupport.jmocking.PostponedAction.returnValuePostponed;
 
@@ -82,7 +83,7 @@ public class WrapperFactoryDefault_wrappedObject_transient_Test {
     @Rule
     public final JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    @Mock private AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    @Mock private AuthenticationSessionTracker mockAuthenticationSessionTracker;
     @Mock private SpecificationLoader mockSpecificationLoader;
     @Mock private IsisSessionFactory mockIsisSessionFactory;
     @Mock private FactoryService mockFactoryService;
@@ -124,7 +125,7 @@ public class WrapperFactoryDefault_wrappedObject_transient_Test {
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
                 .objectManager(mockObjectManager)
-                .authenticationSessionProvider(mockAuthenticationSessionProvider)
+                .authenticationSessionTracker(mockAuthenticationSessionTracker)
                 .singleton(proxyFactoryService)
                 .singleton(wrapperFactory = createWrapperFactory(proxyFactoryService))
                 .singleton(mockFactoryService)
@@ -179,8 +180,8 @@ public class WrapperFactoryDefault_wrappedObject_transient_Test {
                 allowing(mockPasswordMember).getName();
                 will(returnValue("password"));
 
-                allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
-                will(returnValue(session));
+                allowing(mockAuthenticationSessionTracker).currentAuthenticationSession();
+                will(returnValue(Optional.of(session)));
 
                 allowing(mockPasswordMember).isOneToOneAssociation();
                 will(returnValue(true));

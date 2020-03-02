@@ -44,6 +44,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.session.IsisSessionTracker;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
@@ -76,8 +77,9 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Inject
     public DomainServiceResourceServerside(
             final MetaModelContext metaModelContext,
-            final IsisConfiguration isisConfiguration) {
-        super(metaModelContext, isisConfiguration);
+            final IsisConfiguration isisConfiguration,
+            final IsisSessionTracker isisSessionTracker) {
+        super(metaModelContext, isisConfiguration, isisSessionTracker);
     }
 
     @Override

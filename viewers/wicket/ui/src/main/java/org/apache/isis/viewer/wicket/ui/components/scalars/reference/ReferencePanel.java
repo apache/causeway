@@ -345,7 +345,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
         val commonContext = super.getCommonContext();
         
         if (getModel().hasChoices()) {
-            val choices = getModel().getChoices(pendingArgs, commonContext.getAuthenticationSession());
+            val choices = getModel().getChoices(pendingArgs);
             val choiceMementos = _Lists.map(choices, commonContext::mementoFor);
             return new ObjectAdapterMementoProviderForReferenceChoices(getModel(), choiceMementos);
         }

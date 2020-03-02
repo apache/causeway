@@ -21,14 +21,11 @@ package org.apache.isis.core.runtime.session;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
- * TODO [2125] intent is to remove direct dependencies upon Persistence/Transaction for the viewer-modules.   
  * 
  * @since 2.0
  */
@@ -49,8 +46,6 @@ public class IsisRequestCycle {
 
         txStatus = transactionTemplate.getTransactionManager().getTransaction(null);
 
-        //		IsisContext.getTransactionManagerJdo()
-        //				.ifPresent(txMan->txMan.startTransaction());
     }
 
     public void onRequestHandlerExecuted() {
@@ -73,27 +68,10 @@ public class IsisRequestCycle {
             transactionTemplate.getTransactionManager().commit(txStatus);
 
         } finally {
-            isisSessionFactory.closeSession();
+            isisSessionFactory.closeSessionStack();
         }
 
     }
-
-    // -- SUPPORTING FORM EXECUTOR DEFAULT ...
-
-    public static void onResultAdapterObtained() {
-        val isisSession = IsisSession.currentOrElseNull();
-        if (isisSession==null) {
-            return;
-        }
-
-        PersistenceSession.current(PersistenceSession.class)
-        .stream()
-        .forEach(ps->ps.flush());
-
-        //isisSession.flush();
-    }
-
-    // --
 
 
 }

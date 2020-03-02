@@ -32,14 +32,24 @@ import lombok.val;
 
 @ToString
 public class IsisTransactionObject implements SmartTransactionObject {
+    
+    public static enum IsisSessionLifeCycle {
+        /** an IsisSession was already present when creating this txObj */  
+        REQUEST_SCOPED,
+        /** an IsisSession was auto-created when creating this txObj, 
+         * so we need to take core of closing it; most likely in the context of testing */
+        TEST_SCOPED
+    }
 
-    public static IsisTransactionObject of(Transaction currentTransaction) {
+    public static IsisTransactionObject of(Transaction currentTransaction, IsisSessionLifeCycle isisSessionLifeCycle) {
         val txObject = new IsisTransactionObject();
         txObject.setCurrentTransaction(currentTransaction);
+        txObject.setIsisSessionLifeCycle(isisSessionLifeCycle);
         return txObject;
     }
 
     @Getter @Setter Transaction currentTransaction;
+    @Getter @Setter IsisSessionLifeCycle isisSessionLifeCycle;
 
 
     @Override

@@ -61,7 +61,6 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.core.commons.internal.ioc.BeanSort;
 import org.apache.isis.core.config.viewer.wicket.DialogMode;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract;
@@ -508,11 +507,6 @@ public abstract class PageAbstract extends WebPageBase implements ActionPromptPr
         return cfra.getComponentFactoryRegistry();
     }
 
-    // -- DEPS
-
-    protected AuthenticationSession getAuthenticationSession() {
-        return getCommonContext().getAuthenticationSession();
-    }
 
 
 }

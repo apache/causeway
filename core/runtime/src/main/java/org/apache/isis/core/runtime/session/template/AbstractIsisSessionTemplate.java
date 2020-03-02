@@ -36,13 +36,12 @@ public abstract class AbstractIsisSessionTemplate {
      * Sets up an {@link IsisSession} then passes along any calling framework's context.
      */
     public void execute(final AuthenticationSession authSession, final Object context) {
-        try {
-            isisSessionFactory.openSession(authSession);
+        
+        isisSessionFactory.runAuthenticated(authSession, ()->{
             serviceInjector.injectServicesInto(this);
             doExecute(context);
-        } finally {
-            isisSessionFactory.closeSession();
-        }
+        });
+        
     }
 
     // //////////////////////////////////////

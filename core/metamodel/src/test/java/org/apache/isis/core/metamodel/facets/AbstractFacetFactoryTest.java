@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 
 import org.jmock.Expectations;
 import org.junit.Rule;
@@ -37,7 +38,7 @@ import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 
 import junit.framework.TestCase;
 
@@ -60,7 +61,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     }
 
     protected TranslationService mockTranslationService;
-    protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    protected AuthenticationSessionTracker mockAuthenticationSessionTracker;
     protected AuthenticationSession mockAuthenticationSession;
     protected SpecificationLoader mockSpecificationLoader;
     protected MethodRemoverForTesting methodRemover;
@@ -99,7 +100,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
         methodRemover = new MethodRemoverForTesting();
 
-        mockAuthenticationSessionProvider = context.mock(AuthenticationSessionProvider.class);
+        mockAuthenticationSessionTracker = context.mock(AuthenticationSessionTracker.class);
 
         mockTranslationService = context.mock(TranslationService.class);
         mockAuthenticationSession = context.mock(AuthenticationSession.class);
@@ -109,13 +110,13 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
                 .translationService(mockTranslationService)
-                .authenticationSessionProvider(mockAuthenticationSessionProvider)
+                .authenticationSessionTracker(mockAuthenticationSessionTracker)
                 .build();
 
         context.checking(new Expectations() {{
 
-            allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
-            will(returnValue(mockAuthenticationSession));
+            allowing(mockAuthenticationSessionTracker).currentAuthenticationSession();
+            will(returnValue(Optional.of(mockAuthenticationSession)));
         }});
         
         ((MetaModelContextAware)facetHolder).setMetaModelContext(metaModelContext);

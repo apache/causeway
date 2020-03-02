@@ -69,6 +69,7 @@ import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEvent
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
 import org.apache.isis.core.runtimeservices.wrapper.handlers.ProxyContextHandler;
 import org.apache.isis.core.runtimeservices.wrapper.proxy.ProxyCreator;
+import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -91,6 +92,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     @Inject private IsisSessionFactory isisSessionFactory;
     @Inject private TransactionService transactionService;
     @Inject protected ProxyFactoryService proxyFactoryService; // protected to allow JUnit test
+    @Inject private AuthenticationSessionTracker authenticationSessionTracker;
 
     private final List<InteractionListener> listeners = new ArrayList<InteractionListener>();
     private final Map<Class<? extends InteractionEvent>, InteractionEventDispatcher>
@@ -189,7 +191,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     public <T> AsyncWrap<T> async(T domainObject, ImmutableEnumSet<ExecutionMode> mode) {
         val executor = ForkJoinPool.commonPool(); // default, but can be overwritten through withers on the returned AsyncWrap
         return new AsyncWrapDefault<T>(
-                this, isisSessionFactory, transactionService, domainObject, mode, executor, log::error);
+                this, isisSessionFactory, authenticationSessionTracker, transactionService, domainObject, mode, executor, log::error);
     }
     
     @Override

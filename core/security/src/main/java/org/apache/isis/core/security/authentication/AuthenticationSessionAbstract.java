@@ -35,7 +35,8 @@ import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Sets;
 
-import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
+import lombok.Getter;
+import lombok.NonNull;
 
 public abstract class AuthenticationSessionAbstract implements AuthenticationSession, Serializable {
 
@@ -43,7 +44,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
 
     // -- Constructor, fields
 
-    private final String name;
+    @Getter private final String userName;
     private final Set<String> roles = _Sets.newHashSet();
     private transient Can<String> rolesImmutable;
     private final String validationCode;
@@ -52,14 +53,19 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
 
     private final MessageBroker messageBroker;
 
-    public AuthenticationSessionAbstract(final String name, final String code) {
-        this(name, Stream.of(), code);
+    public AuthenticationSessionAbstract(
+            @NonNull final String name, 
+            @NonNull final String validationCode) {
+        this(name, Stream.empty(), validationCode);
     }
 
-    public AuthenticationSessionAbstract(final String name, final Stream<String> roleStream, final String validationCode) {
-        this.name = name;
+    public AuthenticationSessionAbstract(
+            @NonNull final String userName, 
+            @NonNull final Stream<String> roles, 
+            @NonNull final String validationCode) {
+        this.userName = userName;
 
-        stream(roleStream)
+        roles
         .filter(_Strings::isNotEmpty)
         .forEach(this.roles::add);
 
@@ -69,11 +75,6 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
     }
 
     // -- User Name
-
-    @Override
-    public String getUserName() {
-        return name;
-    }
 
     @Override
     public boolean hasUserNameOf(final String userName) {
@@ -86,7 +87,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
     public Can<String> getRoles() {
         if(rolesImmutable==null) { 
             // lazy in support of serialization, 
-            // its also (practically) thread-safe without doing any synchronization here 
+            // its also (effectively) thread-safe without doing any synchronization here 
             rolesImmutable = Can.ofCollection(roles);
         }
         return rolesImmutable;

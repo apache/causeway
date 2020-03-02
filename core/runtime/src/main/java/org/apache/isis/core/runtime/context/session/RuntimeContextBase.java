@@ -29,7 +29,8 @@ import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.runtime.session.IsisSessionTracker;
+import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
 import lombok.Getter;
@@ -49,11 +50,14 @@ public abstract class RuntimeContextBase implements RuntimeContext {
     @Getter(onMethod = @__(@Override)) protected final ServiceInjector serviceInjector;
     @Getter(onMethod = @__(@Override)) protected final ServiceRegistry serviceRegistry;
     @Getter(onMethod = @__(@Override)) protected final SpecificationLoader specificationLoader;
+    @Getter(onMethod = @__(@Override)) protected final IsisSessionTracker isisSessionTracker;
     
+    @Getter protected final IsisSessionFactory isisSessionFactory;
+    @Getter protected final AuthenticationManager authenticationManager;
     @Getter protected final TransactionService transactionService;
     @Getter protected final Supplier<ManagedObject> homePageSupplier;
     @Getter protected final ObjectManager objectManager;
-
+    
     // -- SINGLE ARG CONSTRUCTOR
 
     protected RuntimeContextBase(MetaModelContext mmc) {
@@ -65,27 +69,34 @@ public abstract class RuntimeContextBase implements RuntimeContext {
         this.objectManager = mmc.getObjectManager();
         this.transactionService = mmc.getTransactionService();
         this.homePageSupplier = mmc::getHomePageAdapter;
+        this.isisSessionFactory = serviceRegistry.lookupServiceElseFail(IsisSessionFactory.class);
+        this.authenticationManager = serviceRegistry.lookupServiceElseFail(AuthenticationManager.class);
+        this.isisSessionTracker = serviceRegistry.lookupServiceElseFail(IsisSessionTracker.class);
     }
     
-    @Override
-    public AuthenticationSession getAuthenticationSession() {
-        return metaModelContext.getAuthenticationSessionProvider().getAuthenticationSession();
-    }
-
-
     // -- AUTH
+    
+    public AuthenticationSessionTracker getAuthenticationSessionTracker() {
+        return isisSessionTracker;
+    }
 
     @Override
     public void logoutAuthenticationSession() {
         // we do the logout (removes this session from those valid)
         // similar code in wicket viewer (AuthenticatedWebSessionForIsis#onInvalidate())
-        val authenticationSession = getAuthenticationSession();
         
-        val authenticationManager = getServiceRegistry().lookupServiceElseFail(AuthenticationManager.class);
-        authenticationManager.closeSession(authenticationSession);
+        isisSessionTracker
+        .currentAuthenticationSession()
+        .ifPresent(authenticationSession->{
         
-        val isisSessionFactory = getServiceRegistry().lookupServiceElseFail(IsisSessionFactory.class);
-        isisSessionFactory.closeSession();	
+            val authenticationManager = getServiceRegistry().lookupServiceElseFail(AuthenticationManager.class);
+            authenticationManager.closeSession(authenticationSession);
+            
+            isisSessionFactory.closeSessionStack();
+            
+        });
+        
+        	
     }
 
 

@@ -49,12 +49,11 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -188,8 +187,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             public ManagedObject getDefault(
                     final ScalarModel scalarModel,
                     final List<ManagedObject> pendingArgs,
-                    final int paramNumUpdated,
-                    final AuthenticationSession authenticationSession) {
+                    final int paramNumUpdated) {
 
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
                 final OneToOneAssociation property = propertyMemento
@@ -208,8 +206,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             @Override
             public List<ManagedObject> getChoices(
                     final ScalarModel scalarModel,
-                    final List<ManagedObject> pendingArgs,
-                    final AuthenticationSession authenticationSession) {
+                    final List<ManagedObject> pendingArgs) {
 
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
                 final OneToOneAssociation property = propertyMemento
@@ -233,8 +230,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             public List<ManagedObject> getAutoComplete(
                     final ScalarModel scalarModel,
                     final List<ManagedObject> pendingArgs, // ignored for properties
-                    final String searchArg,
-                    final AuthenticationSession authenticationSession) {
+                    final String searchArg) {
 
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
                 final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
@@ -424,8 +420,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             public ManagedObject getDefault(
                     final ScalarModel scalarModel,
                     final List<ManagedObject> pendingArgs,
-                    final int paramNumUpdated,
-                    final AuthenticationSession authenticationSession) {
+                    final int paramNumUpdated) {
 
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
                 final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
@@ -444,8 +439,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             @Override
             public List<ManagedObject> getChoices(
                     final ScalarModel scalarModel,
-                    final List<ManagedObject> pendingArgs,
-                    final AuthenticationSession authenticationSession) {
+                    final List<ManagedObject> pendingArgs) {
                 
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
                 final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
@@ -471,8 +465,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             public List<ManagedObject> getAutoComplete(
                     final ScalarModel scalarModel,
                     final List<ManagedObject> pendingArgs,
-                    final String searchArg,
-                    final AuthenticationSession authenticationSession) {
+                    final String searchArg) {
                 
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
                 final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
@@ -626,21 +619,18 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
         public abstract ManagedObject getDefault(
                 ScalarModel scalarModel,
                 List<ManagedObject> pendingArgs,
-                int paramNumUpdated,
-                AuthenticationSession authenticationSession);
+                int paramNumUpdated);
 
         public abstract boolean hasChoices(ScalarModel scalarModel);
         public abstract List<ManagedObject> getChoices(
                 ScalarModel scalarModel,
-                List<ManagedObject> pendingArgs,
-                AuthenticationSession authenticationSession);
+                List<ManagedObject> pendingArgs);
 
         public abstract boolean hasAutoComplete(ScalarModel scalarModel);
         public abstract List<ManagedObject> getAutoComplete(
                 ScalarModel scalarModel,
                 List<ManagedObject> pendingArgs,
-                String searchArg,
-                AuthenticationSession authenticationSession);
+                String searchArg);
 
         public abstract int getAutoCompleteOrChoicesMinLength(ScalarModel scalarModel);
 
@@ -917,10 +907,9 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
     }
 
     public List<ManagedObject> getChoices(
-            final List<ManagedObject> pendingArgs,
-            final AuthenticationSession authenticationSession) {
+            final List<ManagedObject> pendingArgs) {
         
-        return kind.getChoices(this, pendingArgs, authenticationSession);
+        return kind.getChoices(this, pendingArgs);
     }
 
     public boolean hasAutoComplete() {
@@ -929,10 +918,9 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
 
     public List<ManagedObject> getAutoComplete(
             final List<ManagedObject> pendingArgs,
-            final String searchTerm,
-            final AuthenticationSession authenticationSession) {
+            final String searchTerm) {
         
-        return kind.getAutoComplete(this, pendingArgs, searchTerm, authenticationSession);
+        return kind.getAutoComplete(this, pendingArgs, searchTerm);
     }
 
     /**

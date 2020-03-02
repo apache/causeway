@@ -141,15 +141,11 @@ public abstract class RegisterPanel extends PanelBase<UserDetails> {
         public final void onSubmit() {
             final UserDetails userDetails = getModelObject();
 
-            isisSessionFactory.doInSession(new Runnable() {
-                @Override
-                public void run() {
-
-                    transactionService.executeWithinTransaction(() -> {
-                        userRegistrationService.registerUser(userDetails);
-                        removeAccountConfirmation();
-                    });
-                }
+            isisSessionFactory.runAnonymous(() -> {
+                transactionService.executeWithinTransaction(() -> {
+                    userRegistrationService.registerUser(userDetails);
+                    removeAccountConfirmation();
+                });
             });
 
             signIn(userDetails.getUsername(), userDetails.getPassword());

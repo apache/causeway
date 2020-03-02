@@ -47,9 +47,9 @@ import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.webapp.modules.templresources.TemplateResourceCachingFilter;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategy;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategyDefault;
-import org.apache.isis.core.webapp.modules.templresources.TemplateResourceCachingFilter;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
 
@@ -372,12 +372,15 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
             val authenticationSession =
                     authSessionStrategy.lookupValid(httpServletRequest, httpServletResponse);
             if (authenticationSession != null) {
-               
-                authSessionStrategy.bind(httpServletRequest, httpServletResponse, authenticationSession);
-
-                isisSessionFactory.openSession(authenticationSession);
-                chain.doFilter(request, response);
                 
+                authSessionStrategy.bind(httpServletRequest, httpServletResponse, authenticationSession);
+                
+                isisSessionFactory.runAuthenticated(
+                        authenticationSession,
+                        ()->{
+                            chain.doFilter(request, response);
+                        });
+                                
                 return;
             }
 
@@ -394,7 +397,7 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
             }
 
         } finally {
-            isisSessionFactory.closeSession();
+            isisSessionFactory.closeSessionStack();
         }
 
     }

@@ -41,7 +41,6 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.Breadcrum
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.core.webapp.wormhole.AuthenticationSessionWormhole;
 
 import lombok.Getter;
 import lombok.val;
@@ -121,7 +120,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, IsisWebAppComm
         //        org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard.closeSession(AuthenticationManagerStandard.java:141)
 
         getAuthenticationManager().closeSession(getAuthenticationSession());
-        getIsisSessionFactory().closeSession();
+        getIsisSessionFactory().closeSessionStack();
 
         super.invalidateNow();
     }
@@ -143,18 +142,20 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, IsisWebAppComm
     }
 
     public synchronized AuthenticationSession getAuthenticationSession() {
-        final AuthenticationSession authenticationSession = AuthenticationSessionWormhole.sessionByThread.get();
-        if (authenticationSession != null) {
-            if (getAuthenticationManager().isSessionValid(authenticationSession)) {
+        
+        commonContext.getIsisSessionTracker().currentAuthenticationSession()
+        .ifPresent(currentAuthenticationSession->{
+            
+            if (getAuthenticationManager().isSessionValid(currentAuthenticationSession)) {
                 if (this.authenticationSession != null) {
-                    if (Objects.equals(authenticationSession.getUserName(), this.authenticationSession.getUserName())) {
+                    if (Objects.equals(currentAuthenticationSession.getUserName(), this.authenticationSession.getUserName())) {
                         // ok, same session so far as Wicket is concerned
                         if (isSignedIn()) {
                             // nothing to do...
                         } else {
                             // force as signed in (though not sure if this case can occur)
                             signIn(true);
-                            this.authenticationSession = authenticationSession;
+                            this.authenticationSession = currentAuthenticationSession;
                         }
                     } else {
                         // different user name
@@ -165,14 +166,16 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, IsisWebAppComm
 
                         // either way, the current one is now signed in
                         signIn(true);
-                        this.authenticationSession = authenticationSession;
+                        this.authenticationSession = currentAuthenticationSession;
                     }
                 } else {
                     signIn(true);
-                    this.authenticationSession = authenticationSession;
+                    this.authenticationSession = currentAuthenticationSession;
                 }
             }
-        }
+            
+        });
+
         return this.authenticationSession;
     }
 
@@ -250,7 +253,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, IsisWebAppComm
         };
 
         if(isisSessionFactory!=null) {
-            isisSessionFactory.doInSession(loggingTask);
+            isisSessionFactory.runAnonymous(loggingTask::run);
         } else {
             loggingTask.run();
         }

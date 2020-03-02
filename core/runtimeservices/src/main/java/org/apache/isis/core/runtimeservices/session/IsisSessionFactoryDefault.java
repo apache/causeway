@@ -17,13 +17,13 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.session;
+package org.apache.isis.core.runtimeservices.session;
 
 import java.io.File;
-import java.util.Set;
+import java.util.Optional;
+import java.util.Stack;
 import java.util.concurrent.Callable;
 
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -38,14 +38,15 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
-import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.core.commons.internal.concurrent._ConcurrentTaskList;
-import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.session.RuntimeEventService;
+import org.apache.isis.core.runtime.session.IsisSession;
+import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisSessionTracker;
 import org.apache.isis.core.runtime.session.init.IsisLocaleInitializer;
 import org.apache.isis.core.runtime.session.init.IsisTimeZoneInitializer;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
@@ -53,6 +54,7 @@ import org.apache.isis.core.security.authentication.manager.AuthenticationManage
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
 
+import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -72,23 +74,25 @@ import lombok.extern.log4j.Log4j2;
 @Primary
 @Qualifier("Default")
 @Log4j2
-public class IsisSessionFactoryDefault implements IsisSessionFactory {
+public class IsisSessionFactoryDefault implements IsisSessionFactory, IsisSessionTracker {
 
     @Inject private AuthenticationManager authenticationManager;
     @Inject private RuntimeEventService runtimeEventService;
     @Inject private SpecificationLoader specificationLoader;
     @Inject private MetaModelContext metaModelContext;
     @Inject private IsisConfiguration configuration;
+    //@Inject private FactoryService factoryService;
 
     private IsisLocaleInitializer localeInitializer;
     private IsisTimeZoneInitializer timeZoneInitializer;
+    private final Object $lock = new Object[0];
 
     //@PostConstruct .. too early, needs services to be provisioned first
     @EventListener
     public void init(ContextRefreshedEvent event) {
-        
+
         requires(authenticationManager, "authenticationManager");
-        
+
         this.localeInitializer = new IsisLocaleInitializer();
         this.timeZoneInitializer = new IsisTimeZoneInitializer();
 
@@ -97,19 +101,19 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
         localeInitializer.initLocale(configuration);
         timeZoneInitializer.initTimeZone(configuration);
-        
+
         runtimeEventService.fireAppPreMetamodel();
-        
+
         val taskList = _ConcurrentTaskList.named("IsisSessionFactoryDefault Init")
-        .addRunnable("SpecificationLoader::createMetaModel", specificationLoader::createMetaModel)
-        .addRunnable("ChangesDtoUtils::init", ChangesDtoUtils::init)
-        .addRunnable("InteractionDtoUtils::init", InteractionDtoUtils::init)
-        .addRunnable("CommandDtoUtils::init", CommandDtoUtils::init)
-        ;
+                .addRunnable("SpecificationLoader::createMetaModel", specificationLoader::createMetaModel)
+                .addRunnable("ChangesDtoUtils::init", ChangesDtoUtils::init)
+                .addRunnable("InteractionDtoUtils::init", InteractionDtoUtils::init)
+                .addRunnable("CommandDtoUtils::init", CommandDtoUtils::init)
+                ;
 
         taskList.submit(_ConcurrentContext.forkJoin());
         taskList.await();
-        
+
         { // log any validation failures, experimental code however, not sure how to best propagate failures
             val validationResult = specificationLoader.getValidationResult();
             if(validationResult.getNumberOfFailures()==0) {
@@ -127,66 +131,69 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
     }
 
-    @PreDestroy
-    public void shutdown() {
-        // call might originate from a different thread than 'main'
-
-        // just in case we still have an open session, 
-        // must also work if called from a different thread than 'main'
-        openSessions.forEach(IsisSession::close);
-        openSessions.clear();
-    }
-
-    // -- 
-
-    private final Set<IsisSession> openSessions = _Sets.newHashSet();
-
+    private final ThreadLocal<Stack<IsisSession>> isisSessionStack = ThreadLocal.withInitial(Stack::new);
+    
     @Override
-    public IsisSession openSession(final AuthenticationSession authenticationSession) {
-
-        closeSession();
-
-        val isisSession = new IsisSession(metaModelContext, runtimeEventService, authenticationSession);
-        isisSession.open();
-        openSessions.add(isisSession);
-        return isisSession;
-    }
-
-    @Override
-    public void closeSession() {
-        final IsisSession existingSessionIfAny = getCurrentSession();
-        if (existingSessionIfAny == null) {
-            _Context.threadLocalCleanup(); // just in case, to have a well defined post condition here
-            return;
+    public IsisSession openSession(@NonNull final AuthenticationSession authenticationSession) {
+        synchronized($lock) {
+            val isisSession = new IsisSession(metaModelContext, authenticationSession);
+            isisSessionStack.get().push(isisSession);
+            runtimeEventService.fireSessionOpened(isisSession); // only fire top-level
+            return isisSession;
         }
-        existingSessionIfAny.close();
-        openSessions.remove(existingSessionIfAny);
+    }
+
+    @Override
+    public void closeSessionStack() {
+        synchronized($lock) {
+            val stack = isisSessionStack.get();
+            while(!stack.isEmpty()) {
+                val isisSession = stack.pop();
+                if(stack.isEmpty()) {                
+                    runtimeEventService.fireSessionClosing(isisSession); // only fire top-level
+                }
+            }
+            isisSessionStack.remove();
+        }
+    }
+    
+    @Override
+    public Optional<IsisSession> currentSession() {
+        val stack = isisSessionStack.get();
+        return stack.isEmpty() ? Optional.empty() : Optional.of(stack.lastElement());
     }
 
     @Override
     public boolean isInSession() {
-        return getCurrentSession() != null;
+        return !isisSessionStack.get().isEmpty();
     }
 
     @Override
     public boolean isInTransaction() {
-        if (isInSession()) {
-            if (getCurrentSession().getCurrentTransactionId() != null) {
-                if (!getCurrentSession().getCurrentTransactionState().isComplete()) {
+
+        return currentSession().map(isisSession->{
+            if (isisSession.getCurrentTransactionId() != null) {
+                if (!isisSession.getCurrentTransactionState().isComplete()) {
                     return true;
                 }
             }
-        }
-        return false;
+            return false;
+        })
+        .orElse(false);
+
     }
 
     @Override
-    public <R> R doInSession(final Callable<R> callable, final AuthenticationSession authenticationSession) {
-        final IsisSessionFactoryDefault sessionFactory = this;
-        boolean noSession = !sessionFactory.isInSession();
+    public <R> R callAuthenticated(
+            @NonNull final AuthenticationSession authenticationSession, 
+            @NonNull final Callable<R> callable) {
+        
+        val currentAuthenticationSession = currentAuthenticationSession().orElse(null);
+        val noSession = currentAuthenticationSession==null;
+        
         try {
             if (noSession) {
-                sessionFactory.openSession(authenticationSession);
+                openSession(authenticationSession);
             }
 
             return callable.call();
@@ -195,10 +202,13 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
             throw new RuntimeException(msg, cause);
         } finally {
             if (noSession) {
-                sessionFactory.closeSession();
+                closeSessionStack();
             }
         }
+
     }
+
+    
 
 
 }

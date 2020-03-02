@@ -33,7 +33,7 @@ import org.apache.isis.core.config.metamodel.facets.PublishActionsConfiguration;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 
 import lombok.val;
 
@@ -70,8 +70,8 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         facetFactory.setMetaModelContext(super.metaModelContext);
 
         context.checking(new Expectations() {{
-            allowing(mockServiceRegistry).lookupServiceElseFail(AuthenticationSessionProvider.class);
-            will(returnValue(mockAuthenticationSessionProvider));
+            allowing(mockServiceRegistry).lookupServiceElseFail(AuthenticationSessionTracker.class);
+            will(returnValue(mockAuthenticationSessionTracker));
 
             allowing(mockTypeSpec).getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class);
             will(returnValue(null));

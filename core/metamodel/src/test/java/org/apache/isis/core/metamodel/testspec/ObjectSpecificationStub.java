@@ -47,7 +47,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import lombok.val;
 
@@ -288,7 +287,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     @Override
     public ObjectTitleContext createTitleInteractionContext(
-            AuthenticationSession session, InteractionInitiatedBy invocationMethod, ManagedObject targetObjectAdapter) {
+            ManagedObject targetObjectAdapter, InteractionInitiatedBy invocationMethod) {
         return null;
     }
 

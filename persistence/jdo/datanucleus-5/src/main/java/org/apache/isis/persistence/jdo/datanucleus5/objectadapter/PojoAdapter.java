@@ -19,7 +19,6 @@
 
 package org.apache.isis.persistence.jdo.datanucleus5.objectadapter;
 
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -31,7 +30,6 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.session.IsisSession;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
 
@@ -46,28 +44,6 @@ public final class PojoAdapter implements ObjectAdapter {
     @Getter(onMethod = @__(@Override)) private final Oid oid;
 
     // -- FACTORIES
-
-    public static PojoAdapter of(
-            final Object pojo,
-            final Oid oid) {
-
-        return of(pojo, oid, IsisSession.currentOrElseNull());
-    }
-
-    public static PojoAdapter ofValue(Serializable value) {
-        val oid = Oid.Factory.value();
-        return PojoAdapter.of(value, oid);
-    }
-
-    public static PojoAdapter of(
-            final Object pojo,
-            final Oid oid,
-            final IsisSession isisSession) {
-
-        val specificationLoader = isisSession.getSpecificationLoader();
-
-        return new PojoAdapter(pojo, oid, specificationLoader);
-    }
 
     public static PojoAdapter of(
             final Object pojo,

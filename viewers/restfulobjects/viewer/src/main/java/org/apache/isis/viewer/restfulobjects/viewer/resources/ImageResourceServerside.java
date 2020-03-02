@@ -33,6 +33,7 @@ import org.apache.isis.core.commons.internal.base._Bytes;
 import org.apache.isis.core.commons.internal.resources._Resources;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.runtime.session.IsisSessionTracker;
 
 @Component
 @Path("/image")
@@ -41,8 +42,9 @@ public class ImageResourceServerside extends ResourceAbstract {
     @Inject
     public ImageResourceServerside(
             final MetaModelContext metaModelContext,
-            final IsisConfiguration isisConfiguration) {
-        super(metaModelContext, isisConfiguration);
+            final IsisConfiguration isisConfiguration,
+            final IsisSessionTracker isisSessionTracker) {
+        super(metaModelContext, isisConfiguration, isisSessionTracker);
     }
 
     @GET

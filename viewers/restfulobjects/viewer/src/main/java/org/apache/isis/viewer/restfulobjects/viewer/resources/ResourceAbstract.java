@@ -43,8 +43,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.core.runtime.session.IsisSession;
+import org.apache.isis.core.runtime.session.IsisSessionTracker;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
@@ -59,6 +58,7 @@ public abstract class ResourceAbstract {
 
     protected final MetaModelContext metaModelContext;
     protected final IsisConfiguration isisConfiguration;
+    protected final IsisSessionTracker isisSessionTracker;
 
     @Context HttpHeaders httpHeaders;
     @Context UriInfo uriInfo;
@@ -71,10 +71,12 @@ public abstract class ResourceAbstract {
     @Inject
     protected ResourceAbstract(
             final MetaModelContext metaModelContext,
-            final IsisConfiguration isisConfiguration) {
+            final IsisConfiguration isisConfiguration,
+            final IsisSessionTracker isisSessionTracker) {
         
         this.metaModelContext = metaModelContext;
         this.isisConfiguration = isisConfiguration;
+        this.isisSessionTracker = isisSessionTracker;
     }
     
     // -- FACTORIES
@@ -104,10 +106,7 @@ public abstract class ResourceAbstract {
             final ResourceDescriptor resourceDescriptor,
             final String urlUnencodedQueryString) {
         
-        if (!IsisSession.isInSession()) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
-        }
-        if (! IsisContext.getCurrentAuthenticationSession().isPresent()) {
+        if (!isisSessionTracker.isInSession()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
 

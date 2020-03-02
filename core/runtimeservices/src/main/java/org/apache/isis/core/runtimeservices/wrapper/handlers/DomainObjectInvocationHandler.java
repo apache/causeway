@@ -67,7 +67,6 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionContributee;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import lombok.val;
 
@@ -369,8 +368,8 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         resolveIfRequired(targetAdapter);
 
         val targetNoSpec = targetAdapter.getSpecification();
-        val titleContext = targetNoSpec.createTitleInteractionContext(
-                getAuthenticationSession(), InteractionInitiatedBy.FRAMEWORK, targetAdapter);
+        val titleContext = targetNoSpec
+                .createTitleInteractionContext(targetAdapter, InteractionInitiatedBy.FRAMEWORK);
         val titleEvent = titleContext.createInteractionEvent();
         notifyListeners(titleEvent);
         return titleEvent.getTitle();
@@ -883,9 +882,9 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         return mmContext.getSpecificationLoader();
     }
 
-    protected AuthenticationSession getAuthenticationSession() {
-        return mmContext.getAuthenticationSessionProvider().getAuthenticationSession();
-    }
+//    protected AuthenticationSession getAuthenticationSession() {
+//        return mmContext.getAuthenticationSessionProvider().getAuthenticationSessionElseFail();
+//    }
 
     protected ObjectManager getObjectManager() {
         return mmContext.getObjectManager();

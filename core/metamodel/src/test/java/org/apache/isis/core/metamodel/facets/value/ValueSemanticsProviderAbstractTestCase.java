@@ -36,6 +36,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
+import org.apache.isis.core.config.unittestsupport.internal._Config;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -45,10 +48,7 @@ import org.apache.isis.core.metamodel.facets.object.encodeable.encoder.Encodable
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.config.unittestsupport.internal._Config;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 
 public abstract class ValueSemanticsProviderAbstractTestCase {
 
@@ -56,7 +56,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Mock protected FacetHolder mockFacetHolder;
-    @Mock protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    @Mock protected AuthenticationSessionTracker mockAuthenticationSessionTracker;
     @Mock protected ObjectAdapter mockAdapter;
     
     protected MetaModelContext metaModelContext;
@@ -72,13 +72,13 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
         Locale.setDefault(Locale.UK);
 
         metaModelContext = MetaModelContext_forTesting.builder()
-                .authenticationSessionProvider(mockAuthenticationSessionProvider)
+                .authenticationSessionTracker(mockAuthenticationSessionTracker)
                 .build();
 
         context.checking(new Expectations() {
             {
 
-                never(mockAuthenticationSessionProvider);
+                never(mockAuthenticationSessionTracker);
                 //never(mockSessionServiceInternal);
                 
                 allowing(mockFacetHolder).getMetaModelContext();

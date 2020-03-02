@@ -209,7 +209,6 @@ public class ExcelServiceImpl {
 
     @SneakyThrows
     private ExcelConverter newExcelConverter() {
-        final ObjectManager objectManager = IsisSession.current().map(RuntimeContextBase::getObjectManager).orElseThrow((Supplier<Throwable>) _Exceptions::unexpectedCodeReach);
         return new ExcelConverter(specificationLoader, objectManager, bookmarkService, serviceInjector);
     }
 
@@ -225,6 +224,9 @@ public class ExcelServiceImpl {
 
     @javax.inject.Inject
     ServiceInjector serviceInjector;
+    
+    @javax.inject.Inject
+    ObjectManager objectManager;
 
 
 }

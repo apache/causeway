@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 
+import demoapp.utils.DemoRequestScopedBean;
 import demoapp.utils.DemoStub;
 
 @XmlRootElement(name = "Demo")
@@ -38,6 +39,9 @@ import demoapp.utils.DemoStub;
 public class JeeDemo extends DemoStub {
 
     @Inject private JeeDemoService jeeDemoService;
+    
+    //@Resource(name = "demoapp.DemoRequestScopedBean")
+    @Inject private DemoRequestScopedBean demoRequestScopedBean;
 
     @Override
     public String title() {
@@ -52,6 +56,9 @@ public class JeeDemo extends DemoStub {
             return "Sorry, no CDI available";
         }
 
+        System.out.println(demoRequestScopedBean);    
+        demoRequestScopedBean.debug();
+        
         return jeeDemoService.getMessage();
     }
 

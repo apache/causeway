@@ -76,7 +76,6 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleE
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.persistence.jdo.applib.exceptions.NotPersistableException;
 import org.apache.isis.persistence.jdo.applib.exceptions.UnsupportedFindException;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
@@ -118,12 +117,11 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      */
     public PersistenceSession5(
             final MetaModelContext metaModelContext,
-            final AuthenticationSession authenticationSession,
             final PersistenceManagerFactory jdoPersistenceManagerFactory,
             final StoreLifecycleListener storeLifecycleListener, 
             final FixturesInstalledStateHolder stateHolder) {
 
-        super(metaModelContext, authenticationSession, jdoPersistenceManagerFactory, stateHolder);
+        super(metaModelContext, jdoPersistenceManagerFactory, stateHolder);
         this.transactionService = metaModelContext.getTransactionService();
         this.storeLifecycleListener = storeLifecycleListener;
     }
@@ -157,7 +155,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
                 PersistenceQueryFindUsingApplibQueryDefault.class,
                 new PersistenceQueryFindUsingApplibQueryProcessor(this));
 
-        objectAdapterContext = ObjectAdapterContext.openContext(super.metaModelContext, authenticationSession, this);
+        objectAdapterContext = ObjectAdapterContext.openContext(super.metaModelContext, this);
 
         // tell the proxy of all request-scoped services to instantiate the underlying
         // services, store onto the thread-local and inject into them...

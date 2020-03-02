@@ -28,7 +28,6 @@ import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
 import org.apache.isis.core.codegen.bytebuddy.IsisModuleCoreCodegenByteBuddy;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
-import org.apache.isis.core.runtimeservices.auth.AuthenticationSessionProviderDefault;
 import org.apache.isis.core.runtimeservices.bookmarks.BookmarkServiceDefault;
 import org.apache.isis.core.runtimeservices.command.CommandDtoServiceInternalDefault;
 import org.apache.isis.core.runtimeservices.command.CommandExecutorServiceDefault;
@@ -49,8 +48,10 @@ import org.apache.isis.core.runtimeservices.publish.PublisherDispatchServiceDefa
 import org.apache.isis.core.runtimeservices.queryresultscache.QueryResultsCacheDefault;
 import org.apache.isis.core.runtimeservices.repository.RepositoryServiceDefault;
 import org.apache.isis.core.runtimeservices.routing.RoutingServiceDefault;
+import org.apache.isis.core.runtimeservices.session.IsisSessionFactoryDefault;
 import org.apache.isis.core.runtimeservices.sudo.SudoServiceDefault;
 import org.apache.isis.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression;
+import org.apache.isis.core.runtimeservices.user.UserServiceDefault;
 import org.apache.isis.core.runtimeservices.userprof.UserProfileServiceDefault;
 import org.apache.isis.core.runtimeservices.userreg.EmailNotificationServiceDefault;
 import org.apache.isis.core.runtimeservices.wrapper.WrapperFactoryDefault;
@@ -64,7 +65,6 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         IsisModuleCoreCodegenByteBuddy.class,
 
         // @Service's
-        AuthenticationSessionProviderDefault.class,
         BookmarkServiceDefault.class,
         CommandDtoServiceInternalDefault.class,
         CommandExecutorServiceDefault.class,
@@ -77,6 +77,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         FactoryServiceDefault.class,
         HomePageResolverServiceDefault.class,
         InteractionDtoServiceInternalDefault.class,
+        IsisSessionFactoryDefault.class,
         TranslationServicePo.class,
         MenuBarsLoaderServiceDefault.class,
         MenuBarsServiceBS3.class,
@@ -89,7 +90,9 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         UserProfileServiceDefault.class,
         WrapperFactoryDefault.class,
         XmlSnapshotServiceDefault.class,
-
+        UserServiceDefault.class,
+        UserServiceDefault.SudoServiceSpi.class,
+        
         // @Controller
         RoutingServiceDefault.class,
 

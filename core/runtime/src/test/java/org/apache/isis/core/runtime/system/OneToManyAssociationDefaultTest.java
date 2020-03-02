@@ -32,6 +32,8 @@ import static org.junit.Assert.assertThat;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -43,9 +45,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationDefault;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 
 public class OneToManyAssociationDefaultTest {
 
@@ -64,7 +64,7 @@ public class OneToManyAssociationDefaultTest {
 
     @Mock private ManagedObject mockOwnerAdapter;
     @Mock private ManagedObject mockAssociatedAdapter;
-    @Mock private AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    @Mock private AuthenticationSessionTracker mockAuthenticationSessionTracker;
     @Mock private SpecificationLoader mockSpecificationLoader;
     @Mock private ObjectSpecification mockOwnerAdapterSpec;
     @Mock private MessageService mockMessageService;
@@ -80,7 +80,7 @@ public class OneToManyAssociationDefaultTest {
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
-                .authenticationSessionProvider(mockAuthenticationSessionProvider)
+                .authenticationSessionTracker(mockAuthenticationSessionTracker)
                 .singleton(mockMessageService)
                 .build();
 

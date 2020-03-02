@@ -22,26 +22,23 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestExecutionExceptionHandler;
 
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.core.runtime.context.session.RuntimeContextBase;
-import org.apache.isis.core.runtime.session.IsisSessionFactory;
-
-import lombok.RequiredArgsConstructor;
 
 public class ExceptionRecognizerTranslate implements TestExecutionExceptionHandler {
-    
+
     @Override
     public void handleTestExecutionException(ExtensionContext extensionContext, Throwable throwable) throws Throwable {
-        IsisContext.getCurrentIsisSession()
-                .map(RuntimeContextBase::getServiceRegistry).
-                ifPresent(serviceRegistry ->
-                        serviceRegistry.select(ExceptionRecognizer.class)
-                                        .stream()
-                                        .forEach(exceptionRecognizer->{
-                                            exceptionRecognizer.recognize(throwable);
-                                        })
-                );
+
+        extensionContext.getTestInstance()
+        .filter(IsisIntegrationTestAbstract.class::isInstance)
+        .map(IsisIntegrationTestAbstract.class::cast)
+        .map(IsisIntegrationTestAbstract::getServiceRegistry)
+        .ifPresent(serviceRegistry ->
+                serviceRegistry.select(ExceptionRecognizer.class)
+                .stream()
+                .forEach(exceptionRecognizer->{
+                    exceptionRecognizer.recognize(throwable);
+                })
+        );
         throw throwable;
     }
 

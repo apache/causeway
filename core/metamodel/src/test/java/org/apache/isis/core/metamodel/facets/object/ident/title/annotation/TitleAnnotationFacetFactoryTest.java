@@ -35,16 +35,16 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
-import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 
 public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -66,11 +66,11 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
         context.checking(new Expectations() {
             {
-                allowing(mockServiceRegistry).lookupService(AuthenticationSessionProvider.class);
-                will(returnValue(Optional.of(mockAuthenticationSessionProvider)));
+                allowing(mockServiceRegistry).lookupService(AuthenticationSessionTracker.class);
+                will(returnValue(Optional.of(mockAuthenticationSessionTracker)));
 
-                allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
-                will(returnValue(mockAuthenticationSession));
+                allowing(mockAuthenticationSessionTracker).currentAuthenticationSession();
+                will(returnValue(Optional.of(mockAuthenticationSession)));
 
                 //                allowing(mockServicesInjector).getSpecificationLoader();
                 //                will(returnValue(mockSpecificationLoader));

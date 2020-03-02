@@ -39,6 +39,9 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.runtime.persistence.transaction.events.TransactionAfterBeginEvent;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+
 /**
  * Convenient base class to extend for integration tests. 
  *  
@@ -137,10 +140,12 @@ public abstract class IsisIntegrationTestAbstract {
 
     @Inject protected MetaModelService metaModelService;
     @Inject protected FactoryService factoryService;
-    @Inject protected ServiceRegistry serviceRegistry;
+    @Inject @Getter(AccessLevel.PACKAGE) protected ServiceRegistry serviceRegistry; // share with ExceptionRecognizerTranslate
     @Inject protected RepositoryService repositoryService;
     @Inject protected UserService userService;
     @Inject protected WrapperFactory wrapperFactory;
     @Inject protected TransactionService transactionService;
+    
+    
 
 }

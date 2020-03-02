@@ -45,13 +45,12 @@ import org.apache.isis.core.metamodel.services.metamodel.MetaModelServiceDefault
 import org.apache.isis.core.metamodel.services.registry.ServiceRegistryDefault;
 import org.apache.isis.core.metamodel.services.tablecol.TableColumnOrderServiceDefault;
 import org.apache.isis.core.metamodel.services.title.TitleServiceDefault;
-import org.apache.isis.core.metamodel.services.user.UserServiceDefault;
 import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 import org.apache.isis.core.metamodel.specloader.ProgrammingModelServiceDefault;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderDefault;
-import org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderForCollections;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderForBuiltin;
+import org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderForCollections;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeRegistry;
 import org.apache.isis.core.security.IsisModuleCoreSecurity;
 
@@ -95,8 +94,6 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         TableColumnOrderServiceDefault.class,
         TitleServiceDefault.class,
         SpecificationLoaderDefault.class,
-        UserServiceDefault.class,
-        UserServiceDefault.SudoServiceSpi.class,
 
         // @Repository's
         ApplicationFeatureRepositoryDefault.class,

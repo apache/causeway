@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.services.user;
+package org.apache.isis.core.runtimeservices.user;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,9 @@ import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.runtime.session.IsisSessionTracker;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import lombok.Value;
 import lombok.val;
@@ -50,7 +52,7 @@ import lombok.val;
 @Qualifier("Default")
 public class UserServiceDefault implements UserService {
     
-    @Inject private AuthenticationSessionProvider authenticationSessionProvider;
+    @Inject private IsisSessionTracker isisSessionTracker;
     
     @Service
     @Named("isisMetaModel.UserServiceDefault.SudoServiceSpi")
@@ -84,23 +86,19 @@ public class UserServiceDefault implements UserService {
 
         if (userAndRoleOverrides != null) {
 
-            final String username = userAndRoleOverrides.user;
+            val username = userAndRoleOverrides.user;
 
-            final Can<String> roles;
-            if (userAndRoleOverrides.roles != null) {
-                roles = userAndRoleOverrides.roles;
-            } else {
+            val roles = (userAndRoleOverrides.roles != null)
+                ? userAndRoleOverrides.roles
                 // preserve the roles if were not overridden
-                roles = previousRoles();
-            }
+                : currentRoles();
 
-            final List<RoleMemento> roleMementos = asRoleMementos(roles);
-            return new UserMemento(username, roleMementos);
+            return new UserMemento(username, asRoleMementos(roles));
 
         } else {
-            val authenticationSession =
-                    authenticationSessionProvider.getAuthenticationSession();
-            return authenticationSession.createUserMemento();
+            return isisSessionTracker.currentAuthenticationSession()
+            .map(AuthenticationSession::createUserMemento)
+            .orElseThrow(()->_Exceptions.illegalState("need an AuthenticationSession to create a UserMemento"));
         }
     }
 
@@ -124,18 +122,17 @@ public class UserServiceDefault implements UserService {
     
     // -- HELPER
     
-    private Can<String> previousRoles() {
-        val authenticationSession =
-                authenticationSessionProvider.getAuthenticationSession();
-        val roles = authenticationSession.getRoles();
-        return roles;
+    private Can<String> currentRoles() {
+        return isisSessionTracker.currentAuthenticationSession()
+                .map(AuthenticationSession::getRoles)
+                .orElse(Can.empty());
     }
 
     private Can<String> inheritRoles() {
         final UserAndRoleOverrides currentOverridesIfAny = currentOverridesIfAny();
         return currentOverridesIfAny != null
                 ? currentOverridesIfAny.getRoles()
-                        : authenticationSessionProvider.getAuthenticationSession().getRoles();
+                        : currentRoles();
     }
 
     private static List<RoleMemento> asRoleMementos(final Can<String> roles) {

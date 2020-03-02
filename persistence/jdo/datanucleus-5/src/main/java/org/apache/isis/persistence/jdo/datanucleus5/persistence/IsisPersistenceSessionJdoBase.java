@@ -40,11 +40,10 @@ import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.persistence.transaction.ChangedObjectsService;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.queries.PersistenceQueryProcessor;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.query.PersistenceQueryFactory;
-import org.apache.isis.core.runtime.persistence.transaction.ChangedObjectsService;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import lombok.Getter;
 import lombok.val;
@@ -59,7 +58,6 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
 
     protected final PersistenceQueryFactory persistenceQueryFactory;
     protected final SpecificationLoader specificationLoader;
-    protected final AuthenticationSession authenticationSession;
 
     @Getter protected final MetaModelContext metaModelContext;
     protected final ServiceInjector serviceInjector;
@@ -106,7 +104,6 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
      */
     protected IsisPersistenceSessionJdoBase(
             final MetaModelContext metaModelContext,
-            final AuthenticationSession authenticationSession,
             final PersistenceManagerFactory jdoPersistenceManagerFactory,
             final FixturesInstalledStateHolder fixturesInstalledStateHolder) {
 
@@ -123,7 +120,6 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
         // injected
         this.configuration = metaModelContext.getConfiguration();
         this.specificationLoader = metaModelContext.getSpecificationLoader();
-        this.authenticationSession = authenticationSession;
 
         this.commandContext = lookupService(CommandContext.class);
         this.commandService = lookupService(CommandService.class);
@@ -147,9 +143,6 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
 
     protected SpecificationLoader getSpecificationLoader() {
         return specificationLoader;
-    }
-    protected AuthenticationSession getAuthenticationSession() {
-        return authenticationSession;
     }
 
     /**

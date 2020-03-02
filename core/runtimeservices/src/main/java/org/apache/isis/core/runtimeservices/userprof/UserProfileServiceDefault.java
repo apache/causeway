@@ -28,7 +28,8 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.userprof.UserProfileService;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 
 @Service
 @Named("isisRuntimeServices.UserProfileServiceDefault")
@@ -37,11 +38,13 @@ import org.apache.isis.core.security.authentication.AuthenticationSessionProvide
 @Qualifier("Default")
 public class UserProfileServiceDefault implements UserProfileService {
 
-    @Inject private AuthenticationSessionProvider authenticationSessionProvider;
+    @Inject private AuthenticationSessionTracker authenticationSessionTracker;
     
     @Override
     public String userProfileName() {
-        return authenticationSessionProvider.getAuthenticationSession().getUserName();
+        return authenticationSessionTracker.currentAuthenticationSession()
+                .map(AuthenticationSession::getUserName)
+                .orElse(null);
     }
 
     

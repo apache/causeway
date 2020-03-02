@@ -30,15 +30,15 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ParsingException;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 
 public class ParseableFacetUsingParserTest {
 
@@ -46,7 +46,7 @@ public class ParseableFacetUsingParserTest {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Mock private FacetHolder mockFacetHolder;
-    @Mock private AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    @Mock private AuthenticationSessionTracker mockAuthenticationSessionTracker;
     @Mock private ServiceInjector mockServicesInjector;
     @Mock private ServiceRegistry mockServiceRegistry;
 
@@ -57,14 +57,13 @@ public class ParseableFacetUsingParserTest {
     public void setUp() throws Exception {
 
         metaModelContext = MetaModelContext_forTesting.builder()
-                .authenticationSessionProvider(mockAuthenticationSessionProvider)
-//                .objectAdapterProvider(mockAdapterManager)
+                .authenticationSessionTracker(mockAuthenticationSessionTracker)
                 .build();
 
 
         context.checking(new Expectations() {
             {
-                never(mockAuthenticationSessionProvider);
+                never(mockAuthenticationSessionTracker);
                 //never(mockAdapterManager);
 
                 allowing(mockFacetHolder).getMetaModelContext();

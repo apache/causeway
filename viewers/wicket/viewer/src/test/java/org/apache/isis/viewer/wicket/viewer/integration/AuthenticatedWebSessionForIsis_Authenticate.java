@@ -38,6 +38,8 @@ import static org.junit.Assert.assertThat;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.session.SessionLoggingService;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisSessionFactory.ThrowingRunnable;
+import org.apache.isis.core.runtime.session.init.InitialisationSession;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
@@ -79,7 +81,7 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
                 allowing(mockCommonContext).lookupServiceElseFail(IsisSessionFactory.class);
                 will(returnValue(mockIsisSessionFactory));
 
-                allowing(mockIsisSessionFactory).doInSession(with(any(Runnable.class)));
+                allowing(mockIsisSessionFactory).runAuthenticated(new InitialisationSession(), with(any(ThrowingRunnable.class)));
                 // ignore
 
                 // must provide explicit expectation, since Locale is final.

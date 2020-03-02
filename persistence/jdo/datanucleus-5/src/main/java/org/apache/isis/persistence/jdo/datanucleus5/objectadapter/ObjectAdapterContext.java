@@ -38,7 +38,6 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.session.RuntimeContextBase;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisPersistenceSessionJdo;
 
 import lombok.Getter;
@@ -55,11 +54,10 @@ final public class ObjectAdapterContext {
 
     public static ObjectAdapterContext openContext(
             MetaModelContext mmc,
-            AuthenticationSession authenticationSession, 
             IsisPersistenceSessionJdo persistenceSession) {
         
         val objectAdapterContext = 
-                new ObjectAdapterContext(mmc, authenticationSession, persistenceSession);
+                new ObjectAdapterContext(mmc, persistenceSession);
         objectAdapterContext.open();
         return objectAdapterContext;
     }
@@ -74,8 +72,7 @@ final public class ObjectAdapterContext {
     private final ObjectManager objectManager;
 
     private ObjectAdapterContext(
-            MetaModelContext mmc,
-            AuthenticationSession authenticationSession, 
+            MetaModelContext mmc, 
             IsisPersistenceSessionJdo persistenceSession) {
 
         val runtimeContext = new RuntimeContextBase(mmc) {};
@@ -91,7 +88,7 @@ final public class ObjectAdapterContext {
         this.specificationLoader = mmc.getSpecificationLoader();
         this.serviceInjector = mmc.getServiceInjector();
 
-        this.objectAdapterFactories = new ObjectAdapterContext_Factories();
+        this.objectAdapterFactories = new ObjectAdapterContext_Factories(specificationLoader);
     }
 
     // -- DEBUG

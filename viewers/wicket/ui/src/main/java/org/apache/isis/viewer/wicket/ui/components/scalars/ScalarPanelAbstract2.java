@@ -162,14 +162,11 @@ implements ScalarModelSubscriber2 {
             onDisabled(usabilityConsent.getReason(), target);
         }
 
-        val commonContext = super.getCommonContext();
-
         // even if now invisible or unusable, we recalculate args and ensure compatible
         // (else can hit complicated edge cases with stale data when next re-enable/make visible)
         final ScalarModel model = getModel();
         val defaultIfAny = model.getKind()
-                .getDefault(scalarModel, pendingArguments, paramNumUpdated,
-                        commonContext.getAuthenticationSession());
+                .getDefault(scalarModel, pendingArguments, paramNumUpdated);
 
         val actionParameterMemento = new ActionParameterMemento(actionParameter);
         val actionArgumentModel = actionModel.getArgumentModel(actionParameterMemento);
@@ -188,7 +185,7 @@ implements ScalarModelSubscriber2 {
                 if(scalarModel.hasChoices()) {
                     // make sure the object is one of the choices, else blank it out.
                     val choices = scalarModel
-                            .getChoices(pendingArguments, commonContext.getAuthenticationSession());
+                            .getChoices(pendingArguments);
                     
                     shouldBlankout = 
                             ! isPartOfChoicesConsideringDependentArgs(scalarModel, pendingArg, choices);

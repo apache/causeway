@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.homepage.HomePageResolverService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -39,10 +40,9 @@ import org.apache.isis.core.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
-import org.apache.isis.applib.services.homepage.HomePageResolverService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
@@ -81,10 +81,6 @@ class MetaModelContext_usingIoc implements MetaModelContext {
     private final SpecificationLoader specificationLoader =
     getSingletonElseFail(SpecificationLoader.class);
 
-    @Getter(lazy=true)
-    private final AuthenticationSessionProvider authenticationSessionProvider =
-    getSingletonElseFail(AuthenticationSessionProvider.class);
-
     @Getter(lazy=true) 
     private final TranslationService translationService =
     getSingletonElseFail(TranslationService.class);
@@ -96,6 +92,10 @@ class MetaModelContext_usingIoc implements MetaModelContext {
     @Getter(lazy=true) 
     private final AuthenticationManager authenticationManager =
     getSingletonElseFail(AuthenticationManager.class);
+    
+    @Getter(lazy=true) 
+    private final AuthenticationSessionTracker authenticationSessionTracker =
+    getSingletonElseFail(AuthenticationSessionTracker.class);
 
     @Getter(lazy=true) 
     private final TitleService titleService =

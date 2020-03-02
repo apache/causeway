@@ -43,13 +43,13 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 
 import lombok.val;
 
@@ -69,8 +69,8 @@ abstract class SpecificationLoaderTestAbstract {
             return config;
         }
 
-        AuthenticationSessionProvider mockAuthenticationSessionProvider() {
-            return Mockito.mock(AuthenticationSessionProvider.class);
+        AuthenticationSessionTracker mockAuthenticationSessionProvider() {
+            return Mockito.mock(AuthenticationSessionTracker.class);
         }
 
         GridService mockGridService() {
@@ -103,7 +103,7 @@ abstract class SpecificationLoaderTestAbstract {
 
     protected IsisConfiguration isisConfiguration;
     protected SpecificationLoader specificationLoader;
-    protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    protected AuthenticationSessionTracker mockAuthenticationSessionTracker;
     protected GridService mockGridService;
     protected MessageService mockMessageService;
     protected MetaModelContext metaModelContext;
@@ -126,7 +126,8 @@ abstract class SpecificationLoaderTestAbstract {
                 .translationService(producers.mockTranslationService())
                 .titleService(producers.mockTitleService())
 //                .objectAdapterProvider(mockPersistenceSessionServiceInternal = producers.mockPersistenceSessionServiceInternal())
-                .authenticationSessionProvider(mockAuthenticationSessionProvider = producers.mockAuthenticationSessionProvider())
+                .authenticationSessionTracker(mockAuthenticationSessionTracker = 
+                    producers.mockAuthenticationSessionProvider())
                 .singleton(mockMessageService = producers.mockMessageService())
                 .singleton(mockGridService = producers.mockGridService())
                 .serviceInjector(producers.mockServiceInjector())

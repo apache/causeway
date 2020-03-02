@@ -37,7 +37,6 @@ import org.apache.isis.core.runtime.context.session.AppLifecycleEvent;
 import org.apache.isis.core.runtime.context.session.SessionLifecycleEvent;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSessionFactory;
-import org.apache.isis.core.runtime.session.IsisSession;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -94,7 +93,7 @@ public class JdoPersistenceLifecycleService {
 
         switch (eventType) {
         case sessionOpened:
-            openSession(event.getSession());
+            openSession();
             break;
         case sessionClosing:
             closeSession();
@@ -111,10 +110,10 @@ public class JdoPersistenceLifecycleService {
 
     // -- HELPER
 
-    private void openSession(IsisSession isisSession) {
-        val authenticationSession = isisSession.getAuthenticationSession();
+    private void openSession() {
+
         val persistenceSession =
-                persistenceSessionFactory.createPersistenceSession(authenticationSession);
+                persistenceSessionFactory.createPersistenceSession();
 
         // to support static call of PersistenceSession.current(PersistenceSession.class)
         _Context.threadLocalPut(PersistenceSession.class, persistenceSession);

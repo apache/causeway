@@ -20,39 +20,51 @@ package demoapp.utils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.annotation.RequestScope;
+import org.springframework.web.context.WebApplicationContext;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.core.runtime.session.IsisSessionFactory;
 
 import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("demoapp.DemoRequestScopedBean")
-@RequestScope
+@Scope(
+        value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("demo")
 @Log4j2
 public class DemoRequestScopedBean {
+    
+    @Inject private IsisSessionFactory isisSessionFactory;
 
     public DemoRequestScopedBean() {
-        log.debug("init");
+        log.info("init " + this.hashCode());
     }
 
     @PostConstruct
     public void postConstruct() {
-        log.debug("postConstruct");
+        log.info("postConstruct");
     }
 
     @PreDestroy
     public void preDestroy() {
-        log.debug("preDestroy");
+        log.info("preDestroy");
     }
+    
+    public void debug() {
+        log.info("fact " + isisSessionFactory);
+    }
+    
 
 }

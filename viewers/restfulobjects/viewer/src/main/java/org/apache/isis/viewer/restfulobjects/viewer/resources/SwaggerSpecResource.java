@@ -92,7 +92,7 @@ public class SwaggerSpecResource {
         val format = deriveFrom(httpHeaders);
         val callable = new MyCallable(swaggerService, visibility, format);
         
-        val spec = isisSessionFactory.doInSession(callable);
+        val spec = isisSessionFactory.callAnonymous(callable);
         return spec;
     }
 

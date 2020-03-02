@@ -51,7 +51,6 @@ import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
-import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.session.IsisRequestCycle;
 import org.apache.isis.core.runtime.session.IsisSession;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
@@ -100,7 +99,6 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         val commonContext = getCommonContext();
         val authenticationSession = AuthenticatedWebSessionForIsis.get().getAuthenticationSession();
         
-        //fails yet _Assert.assertEquals("expected same", authenticationSession, commonContext.getAuthenticationSession());
         
         if (authenticationSession == null) {
             log.debug("onBeginRequest out - session was not opened (because no authenticationSession)");
@@ -394,11 +392,11 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
     }
 
     private boolean inIsisSession() {
-        return IsisSession.currentOrElseNull()!=null;
+        return commonContext.getIsisSessionTracker().isInSession();
     }
 
     private Optional<AuthenticationSession> getAuthenticationSession() {
-        return IsisContext.getCurrentAuthenticationSession();
+        return commonContext.getAuthenticationSessionTracker().currentAuthenticationSession();
     }
 
     private Optional<MessageBroker> getMessageBroker() {

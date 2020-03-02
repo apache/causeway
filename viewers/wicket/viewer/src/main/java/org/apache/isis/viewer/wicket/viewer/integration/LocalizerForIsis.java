@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.viewer.integration;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Optional;
-import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
@@ -36,8 +35,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.runtime.session.IsisSession;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisSessionTracker;
+import org.apache.isis.core.runtime.session.init.InitialisationSession;
 import org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication;
 
 import lombok.val;
@@ -48,6 +48,7 @@ import lombok.val;
  */
 public class LocalizerForIsis extends Localizer {
 
+    @Inject private IsisSessionTracker isisSessionTracker;
     @Inject private IsisSessionFactory isisSessionFactory;
     @Inject private TranslationService translationService;
     
@@ -75,15 +76,10 @@ public class LocalizerForIsis extends Localizer {
     protected String translate(final String key, final Component component) {
         final Class<?> contextClass = determineContextClassElse(component, IsisWicketApplication.class);
         final String context = contextClass.getName();
-        if(IsisSession.isInSession()) {
+        if(isisSessionTracker.isInSession()) {
             return translate(key, context);
         } else {
-            return isisSessionFactory.doInSession(new Callable<String>() {
-                @Override
-                public String call() throws Exception {
-                    return translate(key, context);
-                }
-            });
+            return isisSessionFactory.callAuthenticated(new InitialisationSession(), ()->translate(key, context));
         }
     }
 

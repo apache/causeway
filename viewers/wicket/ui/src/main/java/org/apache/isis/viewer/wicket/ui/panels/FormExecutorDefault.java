@@ -50,7 +50,9 @@ import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacet;
 import org.apache.isis.core.metamodel.facets.properties.renderunchanged.UnchangingFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.core.runtime.session.IsisRequestCycle;
+import org.apache.isis.core.runtime.session.IsisSession;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.MessageBroker;
@@ -146,7 +148,15 @@ implements FormExecutor {
             //
             val resultAdapter = obtainResultAdapter();
             // flush any queued changes; any concurrency or violation exceptions will actually be thrown here
-            IsisRequestCycle.onResultAdapterObtained();
+            {
+                val commonContext = targetEntityModel.getCommonContext();
+                if(commonContext.getIsisSessionTracker().isInSession()) {
+                    PersistenceSession.current(PersistenceSession.class)
+                    .stream()
+                    .forEach(ps->ps.flush());    
+                }
+            }
+            
 
 
             // update target, since version updated (concurrency checks)
@@ -479,7 +489,8 @@ implements FormExecutor {
     }
 
     protected AuthenticationSession getAuthenticationSession() {
-        return getCommonContext().getAuthenticationSession();
+        return getCommonContext().getAuthenticationSessionTracker()
+                .getAuthenticationSessionElseFail();
     }
 
     protected WicketViewerSettings getSettings() {

@@ -40,6 +40,8 @@ import org.apache.isis.applib.services.sudo.SudoService;
 @Qualifier("Default")
 public class SudoServiceDefault implements SudoService {
 
+    @Inject private List<SudoService.Spi> spiServices;
+    
     @Override
     public void sudo(final String username, final Runnable runnable) {
         try {
@@ -100,6 +102,6 @@ public class SudoServiceDefault implements SudoService {
         }
     }
 
-    @Inject private List<SudoService.Spi> spiServices;
+    
 
 }

@@ -22,9 +22,8 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.runtime.session.IsisSessionTracker;
 
 /**
  * TODO [2033] this was introduced when refactoring, maybe use MetaModelContext instead if possible
@@ -35,8 +34,8 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
 public interface RuntimeContext {
 
     MetaModelContext getMetaModelContext();
-    
-    AuthenticationSession getAuthenticationSession();
+
+    IsisSessionTracker getIsisSessionTracker(); 
     IsisConfiguration getConfiguration();
     SpecificationLoader getSpecificationLoader();
     ServiceInjector getServiceInjector();

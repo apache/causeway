@@ -44,7 +44,6 @@ import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSessionFactory;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledState;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.DataNucleusContextUtil;
@@ -203,8 +202,7 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
     }
 
     @Override
-    public PersistenceSession5 createPersistenceSession(
-            final AuthenticationSession authenticationSession) {
+    public PersistenceSession5 createPersistenceSession() {
 
         Objects.requireNonNull(applicationComponents.get(),
                 () -> "PersistenceSession5 requires initialization. "+this.hashCode());
@@ -214,7 +212,6 @@ implements PersistenceSessionFactory, FixturesInstalledStateHolder {
 
         return new PersistenceSession5(
                 metaModelContext, 
-                authenticationSession, 
                 persistenceManagerFactory,
                 storeLifecycleListener,
                 this);

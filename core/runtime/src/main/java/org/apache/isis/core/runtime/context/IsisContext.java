@@ -27,7 +27,6 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidExcep
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.core.runtime.session.IsisSession;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 /**
  * Provides static access to current context's singletons
@@ -58,24 +57,6 @@ public interface IsisContext {
         return CompletableFuture.supplyAsync(computation);
     }
 
-    // -- CONVENIENT SHORTCUTS
-
-    /**
-     * @return framework's current IsisSession (if any)
-     * @throws IllegalStateException - if IsisSessionFactory not resolvable
-     */
-    public static Optional<IsisSession> getCurrentIsisSession() {
-        return IsisSession.current();
-    }
-    
-    /**
-     * @return framework's current AuthenticationSession (if any)
-     * @throws IllegalStateException - if IsisSessionFactory not resolvable
-     */
-    public static Optional<AuthenticationSession> getCurrentAuthenticationSession() {
-        return IsisSession.current()
-                .map(IsisSession::getAuthenticationSession);
-    }
     
     // -- DEPRECATIONS
 

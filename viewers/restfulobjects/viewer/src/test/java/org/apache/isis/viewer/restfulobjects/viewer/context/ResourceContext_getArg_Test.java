@@ -90,8 +90,8 @@ public class ResourceContext_getArg_Test {
                 allowing(mockHttpServletRequest).getQueryString();
                 will(returnValue(""));
                 
-                allowing(mockIsisSession).getAuthenticationSession();
-                will(returnValue(mockAuthenticationSession));
+//                allowing(mockIsisSession).getAuthenticationSession();
+//                will(returnValue(mockAuthenticationSession));
          
         }});
     }

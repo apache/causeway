@@ -36,8 +36,8 @@ import org.apache.isis.core.commons.handler.MethodReferences.Call3;
 import org.apache.isis.core.commons.handler.MethodReferences.Call4;
 import org.apache.isis.core.commons.handler.MethodReferences.Call5;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -60,6 +60,9 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
     
     @With(AccessLevel.PACKAGE) @NonNull
     private IsisSessionFactory isisSessionFactory;
+    
+    @With(AccessLevel.PACKAGE) @NonNull
+    private AuthenticationSessionTracker authenticationSessionTracker;
     
     @With(AccessLevel.PACKAGE) @NonNull
     private TransactionService transactionService;
@@ -191,17 +194,15 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
     
     private <R> Future<R> submit(Supplier<R> actionInvocation) {
         
-        val authenticationSession = IsisContext.getCurrentAuthenticationSession()
-                .orElseThrow(_Exceptions::noSuchElement);
+        val authenticationSession = authenticationSessionTracker.getAuthenticationSessionElseFail();
         
         Callable<R> asyncTask = ()->{
 
             try {
                 //transactionLatch.await(); // wait for transaction of the calling thread to complete
 
-                return isisSessionFactory.doInSession(
-                        ()->transactionService.executeWithinTransaction(actionInvocation),
-                        authenticationSession);
+                return isisSessionFactory.callAuthenticated(authenticationSession,
+                        ()->transactionService.executeWithinTransaction(actionInvocation));
 
             } catch (Exception e) {
 

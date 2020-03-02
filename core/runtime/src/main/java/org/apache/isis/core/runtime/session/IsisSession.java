@@ -19,35 +19,25 @@
 
 package org.apache.isis.core.runtime.session;
 
-import java.util.Optional;
-
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionState;
-import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.context.session.RuntimeContextBase;
-import org.apache.isis.core.runtime.context.session.RuntimeEventService;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.MessageBroker;
 
 import lombok.Getter;
+import lombok.NonNull;
 
 /**
  * Holds the current set of components for a specific execution context (such as on a thread).
- *
- * <p>
- * The <code>IsisContext</code> class is responsible for locating the current execution context.
  *
  * @see IsisSessionFactory
  */
 public class IsisSession extends RuntimeContextBase {
 
-    private final RuntimeEventService runtimeEventService;
-    
-    @Getter(onMethod = @__(@Override))
-    private final AuthenticationSession authenticationSession;
+    @Getter private final AuthenticationSession authenticationSession;
 
     /**
      * Set to System.nanoTime() when session opens.
@@ -55,71 +45,31 @@ public class IsisSession extends RuntimeContextBase {
      */
     @Getter private long openedAtSystemNanos = -1L;
 
-    /**
-     * 
-     * @param runtimeEventService
-     * @param authenticationSession
-     * @implNote package private constructor, to let only IsisSessionFactory have access to it, 
-     * since it must keep track of all opened sessions
-     */
-    IsisSession(
-            final MetaModelContext mmc,
-            final RuntimeEventService runtimeEventService,
-            final AuthenticationSession authenticationSession) {
+    public IsisSession(
+            @NonNull final MetaModelContext mmc,
+            @NonNull final AuthenticationSession authenticationSession) {
 
         super(mmc);
-        this.authenticationSession = authenticationSession; // binds this session to given authenticationSession 
-        this.runtimeEventService = runtimeEventService;
-    }
-
-    // -- CURRENT
-
-    public static IsisSession currentOrElseNull() {
-        return current().orElse(null);
-    }
-
-    public static Optional<IsisSession> current() {
-        return _Context.threadLocalGet(IsisSession.class)
-                .getSingleton();
-    }
-
-    public static boolean isInSession() {
-        return currentOrElseNull() != null;
-    }
-
-    // -- SHORTCUTS
-
-    public static Optional<AuthenticationSession> authenticationSession() {
-        return current()
-                .map(IsisSession::getAuthenticationSession);
-    }
-
-    public static Optional<MessageBroker> messageBroker() {
-        return authenticationSession()
-                .map(AuthenticationSession::getMessageBroker);
-    }
-
-    // -- OPEN
-
-    private Runnable cleanupHandle;  
-
-    void open() {
+        this.authenticationSession = authenticationSession; // binds this session to given authenticationSession
+        
         openedAtSystemNanos = System.nanoTime();
-        cleanupHandle = _Context.threadLocalPut(IsisSession.class, this);
-        runtimeEventService.fireSessionOpened(this);
     }
 
-    // -- CLOSE
+//    // -- CURRENT
+//
+//    public static IsisSession currentOrElseNull() {
+//        return current().orElse(null);
+//    }
+//
+//    public static Optional<IsisSession> current() {
+//        return _Context.threadLocalGet(IsisSession.class)
+//                .getSingleton();
+//    }
+//
+//    public static boolean isInSession() {
+//        return currentOrElseNull() != null;
+//    }
 
-    /**
-     * Closes session.
-     */
-    void close() {
-        runtimeEventService.fireSessionClosing(this);
-        if(cleanupHandle!=null) {
-            cleanupHandle.run();
-        }
-    }
 
     // -- FLUSH
     //    void flush() {
@@ -141,7 +91,6 @@ public class IsisSession extends RuntimeContextBase {
     @Override
     public String toString() {
         final ToString asString = new ToString(this);
-        asString.append("authenticationSession", getAuthenticationSession());
         asString.append("persistenceSession", PersistenceSession.current(PersistenceSession.class));
         asString.append("transaction", getCurrentTransactionId());
         return asString.toString();

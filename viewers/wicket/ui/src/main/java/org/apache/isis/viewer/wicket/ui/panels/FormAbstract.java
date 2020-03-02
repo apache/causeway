@@ -83,7 +83,8 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor {
     }
     
     protected AuthenticationSession getAuthenticationSession() {
-        return getCommonContext().getAuthenticationSession();
+        return getCommonContext().getAuthenticationSessionTracker()
+                .getAuthenticationSessionElseFail();
     }
 
 }

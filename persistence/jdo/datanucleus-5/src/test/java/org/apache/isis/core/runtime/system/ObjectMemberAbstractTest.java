@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.runtime.system;
 
+import java.util.Optional;
+
 import org.datanucleus.enhancement.Persistable;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -61,7 +63,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.PojoAdapter;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
@@ -76,7 +78,7 @@ public class ObjectMemberAbstractTest {
     private ObjectAdapter persistentAdapter;
     protected MetaModelContext metaModelContext;
 
-    @Mock private AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    @Mock private AuthenticationSessionTracker mockAuthenticationSessionTracker;
     @Mock private AuthenticationSession mockAuthenticationSession;
     @Mock private SpecificationLoader mockSpecificationLoader;
     @Mock private ObjectSpecification mockSpecForCustomer;
@@ -88,12 +90,12 @@ public class ObjectMemberAbstractTest {
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
-                .authenticationSessionProvider(mockAuthenticationSessionProvider)
+                .authenticationSessionTracker(mockAuthenticationSessionTracker)
                 .build();
 
         context.checking(new Expectations() {{
-            allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
-            will(returnValue(mockAuthenticationSession));
+            allowing(mockAuthenticationSessionTracker).currentAuthenticationSession();
+            will(returnValue(Optional.of(mockAuthenticationSession)));
         }});
 
         persistentAdapter = PojoAdapter.of(

@@ -33,11 +33,11 @@ import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Settings;
 
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.runtime.session.IsisSession;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
@@ -120,13 +120,15 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
                 new AjaxFormComponentUpdatingBehavior("change"){
 
                     private static final long serialVersionUID = 1L;
+                    
+                    private transient IsisWebAppCommonContext commonContext;
 
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
                         final String oidStr = breadcrumbChoice.getInput();
                         final EntityModel selectedModel = breadcrumbModel.lookup(oidStr);
                         if(selectedModel == null) {
-                            val messageBroker = getAuthenticationSession().getMessageBroker();
+                            val messageBroker = currentAuthenticationSession().getMessageBroker();
                             messageBroker.addWarning("Cannot find object");
                             String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker);
                             target.appendJavaScript(feedbackMsg);
@@ -136,11 +138,15 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
                         setResponsePage(EntityPage.class, selectedModel.getPageParametersWithoutUiHints());
                     }
 
-                    private AuthenticationSession getAuthenticationSession() {
-                        return IsisSession.current()
-                                .orElseThrow(()->_Exceptions.unrecoverable("no current IsisSession"))
-                                .getAuthenticationSession();
+                    private AuthenticationSession currentAuthenticationSession() {
+                        return getCommonContext().getAuthenticationSessionTracker()
+                                .getAuthenticationSessionElseFail();
                     }
+                    
+                    private IsisWebAppCommonContext getCommonContext() {
+                        return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
+                    }
+                    
                 });
 
         final Settings settings = breadcrumbChoice.getSettings();

@@ -21,11 +21,8 @@ package org.apache.isis.core.metamodel.commons.internal.reflection;
 
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import javax.xml.bind.JAXBContext;
 
 import org.junit.jupiter.api.Test;
 
@@ -36,7 +33,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.jaxb.JaxbServiceDefault;
 import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.internal.reflection._Reflect.InterfacePolicy;
-import org.apache.isis.core.metamodel.services.user.UserServiceDefault;
+import org.apache.isis.core.runtimeservices.user.UserServiceDefault;
 
 import static org.apache.isis.core.commons.internal.reflection._Reflect.getAnnotation;
 import static org.apache.isis.core.commons.internal.reflection._Reflect.streamAllMethods;
@@ -59,7 +56,7 @@ class ReflectTest {
                 .collect(Collectors.toSet());
 
         assertSetContainsAll(_Sets.<String>of(
-                    "org.apache.isis.core.metamodel.services.user.UserServiceDefault$SudoServiceSpi",
+                    "org.apache.isis.core.runtimeservices.user.UserServiceDefault$SudoServiceSpi",
                     "java.lang.Object"),
                 typeSet);
 
@@ -76,7 +73,7 @@ class ReflectTest {
                 .collect(Collectors.toSet());
 
         assertSetContainsAll(_Sets.<String>of(
-                    "org.apache.isis.core.metamodel.services.user.UserServiceDefault$SudoServiceSpi",
+                    "org.apache.isis.core.runtimeservices.user.UserServiceDefault$SudoServiceSpi",
                     "org.apache.isis.applib.services.sudo.SudoService$Spi",
                     "java.lang.Object"), 
                 typeSet);
@@ -95,8 +92,8 @@ class ReflectTest {
         assertSetContainsAll(_Sets.<String>of(
                 "public abstract void org.apache.isis.applib.services.sudo.SudoService$Spi.releaseRunAs()",
                 "public abstract void org.apache.isis.applib.services.sudo.SudoService$Spi.runAs(java.lang.String,java.util.List)",
-                "public void org.apache.isis.core.metamodel.services.user.UserServiceDefault$SudoServiceSpi.releaseRunAs()",
-                "public void org.apache.isis.core.metamodel.services.user.UserServiceDefault$SudoServiceSpi.runAs(java.lang.String,java.util.List)"),
+                "public void org.apache.isis.core.runtimeservices.user.UserServiceDefault$SudoServiceSpi.releaseRunAs()",
+                "public void org.apache.isis.core.runtimeservices.user.UserServiceDefault$SudoServiceSpi.runAs(java.lang.String,java.util.List)"),
             typeSet);
 
     }

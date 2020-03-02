@@ -47,6 +47,8 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
 import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactoryService;
 import org.apache.isis.core.config.unittestsupport.internal._Config;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -73,10 +75,8 @@ import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.runtimeservices.wrapper.dom.employees.Employee;
 import org.apache.isis.core.runtimeservices.wrapper.dom.employees.EmployeeRepository;
 import org.apache.isis.core.runtimeservices.wrapper.dom.employees.EmployeeRepositoryImpl;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 import org.apache.isis.core.security.authentication.standard.SimpleSession;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import lombok.val;
@@ -89,7 +89,7 @@ public class WrapperFactoryDefault_wrappedObject_Test {
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
-    @Mock private AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    @Mock private AuthenticationSessionTracker mockAuthenticationSessionTracker;
     @Mock private MessageService mockMessageService;
     @Mock private CommandContext mockCommandContext;
     @Mock private Command mockCommand;
@@ -131,8 +131,7 @@ public class WrapperFactoryDefault_wrappedObject_Test {
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
                 .objectManager(mockObjectManager)
-//                .singleton(mockPersistenceSessionServiceInternal)
-                .authenticationSessionProvider(mockAuthenticationSessionProvider)
+                .authenticationSessionTracker(mockAuthenticationSessionTracker)
                 .singleton(proxyFactoryService)
                 .singleton(wrapperFactory = createWrapperFactory(proxyFactoryService))
                 .singleton(mockCommandContext)
@@ -186,8 +185,8 @@ public class WrapperFactoryDefault_wrappedObject_Test {
                 allowing(mockStringSpec).getShortIdentifier();
                 will(returnValue(String.class.getName()));
 
-                allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
-                will(returnValue(session));
+                allowing(mockAuthenticationSessionTracker).currentAuthenticationSession();
+                will(returnValue(Optional.of(session)));
 
 //                allowing(mockAdapterManager).adapterFor(employeeDO);
 //                will(returnValue(mockEmployeeAdapter));

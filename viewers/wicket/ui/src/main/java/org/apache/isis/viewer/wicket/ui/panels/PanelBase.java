@@ -135,7 +135,7 @@ public class PanelBase<T> extends GenericPanel<T> implements IsisWebAppCommonCon
     }
     
     protected MessageBroker getMessageBroker() {
-        return commonContext.getAuthenticationSession().getMessageBroker(); // don't cache?
+        return commonContext.getAuthenticationSessionTracker().getMessageBrokerElseFail();
     }
 
     // Hint support

@@ -94,8 +94,8 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
                 allowing(mockHttpServletRequest).getQueryString();
                 will(returnValue(""));
                 
-                allowing(mockIsisSession).getAuthenticationSession();
-                will(returnValue(mockAuthenticationSession));
+//                allowing(mockIsisSession).getAuthenticationSession();
+//                will(returnValue(mockAuthenticationSession));
                 
             }
         });

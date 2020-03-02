@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.runtimeservices.message;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -31,7 +33,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 import org.apache.isis.core.security.authentication.MessageBroker;
 
 @Service
@@ -41,12 +43,13 @@ import org.apache.isis.core.security.authentication.MessageBroker;
 @Qualifier("Default")
 public class MessageServiceDefault implements MessageService {
     
-    @Inject private IsisSessionFactory isisSessionFactory;
     @Inject private TranslationService translationService;
+    @Inject private AuthenticationSessionTracker authenticationSessionTracker;
 
     @Override
     public void informUser(final String message) {
-        getMessageBroker().addMessage(message);
+        currentMessageBroker()
+        .ifPresent(broker->broker.addMessage(message));
     }
 
     @Override
@@ -68,7 +71,8 @@ public class MessageServiceDefault implements MessageService {
 
     @Override
     public void warnUser(final String message) {
-        getMessageBroker().addWarning(message);
+        currentMessageBroker()
+        .ifPresent(broker->broker.addWarning(message));
     }
 
     @Override
@@ -114,8 +118,8 @@ public class MessageServiceDefault implements MessageService {
         return contextClass.getName()+"#"+contextMethod;
     }
 
-    private MessageBroker getMessageBroker() {
-        return isisSessionFactory.getCurrentSession().getAuthenticationSession().getMessageBroker();
+    private Optional<MessageBroker> currentMessageBroker() {
+        return authenticationSessionTracker.currentMessageBroker();
     }
 
     

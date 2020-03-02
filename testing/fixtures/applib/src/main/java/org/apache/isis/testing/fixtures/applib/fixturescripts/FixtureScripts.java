@@ -52,6 +52,7 @@ import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.testing.fixtures.applib.api.PersonaWithBuilderScript;
 import org.apache.isis.testing.fixtures.applib.events.FixturesInstalledEvent;
 import org.apache.isis.testing.fixtures.applib.events.FixturesInstallingEvent;
@@ -82,6 +83,7 @@ public class FixtureScripts {
     @Inject private RepositoryService repositoryService;
     @Inject private TransactionService transactionService;
     @Inject private ExecutionParametersService executionParametersService;
+    @Inject private IsisSessionFactory isisSessionFactory;
 
     @Inject private EventBusService eventBusService;
 
@@ -348,9 +350,12 @@ public class FixtureScripts {
     	val singleScript = toSingleScript(fixtureScriptList);
     	String parameters = null;
     	
-    	transactionService.executeWithinTransaction(()->{
-    	    runScript(singleScript, parameters);
+    	isisSessionFactory.runAnonymous(()->{
+    	    transactionService.executeWithinTransaction(()->{
+                runScript(singleScript, parameters);
+            });    
     	});
+    	
     }
 
     @SafeVarargs
@@ -379,9 +384,12 @@ public class FixtureScripts {
      */
     @Programmatic
     public <T> T runBuilder(final BuilderScriptAbstract<T> builderScript) {
-        return transactionService.executeWithinTransaction(()->{
-            return runBuilderScriptNonTransactional(builderScript);
-        });
+        
+        return isisSessionFactory.callAnonymous(()->
+            transactionService.executeWithinTransaction(()->
+                runBuilderScriptNonTransactional(builderScript)
+            )
+        );
     }
 
     /**

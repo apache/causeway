@@ -38,13 +38,13 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
 import org.apache.isis.core.commons.internal.base._Casts;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.runtime.session.IsisSession;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -220,6 +220,7 @@ implements TextFieldValueModel.ScalarModelProvider {
 
         textField.add(new IValidator<T>() {
             private static final long serialVersionUID = 1L;
+            private transient IsisWebAppCommonContext commonContext;
 
             @Override
             public void validate(final IValidatable<T> validatable) {
@@ -234,10 +235,11 @@ implements TextFieldValueModel.ScalarModelProvider {
             }
             
             private ObjectManager objectManager() {
-                return IsisSession.current()
-                        .orElseThrow(()->_Exceptions.unrecoverable("no current IsisSession"))
-                        .getMetaModelContext()
-                        .getObjectManager();
+                return getCommonContext().getObjectManager();
+            }
+            
+            private IsisWebAppCommonContext getCommonContext() {
+                return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
             }
             
         });
