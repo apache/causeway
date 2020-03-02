@@ -85,7 +85,7 @@
 
 		<camel.version>2.24.2</camel.version>
 
-		<commons-email.version>1.4</commons-email.version>
+		<commons-email.version>1.5</commons-email.version>
 		<commons-httpclient.version>3.1</commons-httpclient.version>
 		<commons-io.version>2.6</commons-io.version>
 		<commons-lang3.version>3.9</commons-lang3.version>
