@@ -44,7 +44,7 @@ public class ApplicationUser_delete {
 
     @Model
     public Collection<? extends ApplicationUser> act() {
-        repository.removeAndFlush(this);
+        repository.removeAndFlush(holder);
         return applicationUserRepository.allUsers();
     }
 
