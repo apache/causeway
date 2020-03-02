@@ -80,7 +80,12 @@ public class AuthenticatedWebSessionForIsis_SignIn {
                 allowing(mockCommonContext).lookupServiceElseFail(IsisSessionFactory.class);
                 will(returnValue(mockIsisSessionFactory));
 
-                allowing(mockIsisSessionFactory).runAuthenticated(new InitialisationSession(), with(any(ThrowingRunnable.class)));
+                allowing(mockIsisSessionFactory)
+                .runAuthenticated(with(new InitialisationSession()), with(any(ThrowingRunnable.class)));
+                
+                allowing(mockIsisSessionFactory)
+                .runAnonymous(with(any(ThrowingRunnable.class)));
+                
                 // ignore
 
                 // must provide explicit expectation, since Locale is final.

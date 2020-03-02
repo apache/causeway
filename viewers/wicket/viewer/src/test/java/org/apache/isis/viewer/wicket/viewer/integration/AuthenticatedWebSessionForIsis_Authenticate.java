@@ -37,8 +37,10 @@ import static org.junit.Assert.assertThat;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.session.SessionLoggingService;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.session.IsisSessionFactory.ThrowingRunnable;
+import org.apache.isis.core.runtime.session.IsisSessionTracker;
 import org.apache.isis.core.runtime.session.init.InitialisationSession;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
@@ -46,7 +48,6 @@ import org.apache.isis.core.security.authentication.manager.AuthenticationManage
 import org.apache.isis.core.security.authentication.standard.Authenticator;
 import org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault;
 import org.apache.isis.core.security.authentication.standard.SimpleSession;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 public class AuthenticatedWebSessionForIsis_Authenticate {
@@ -62,6 +63,7 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
     @Mock protected Authenticator mockAuthenticator;
     @Mock protected IsisWebAppCommonContext mockCommonContext;
     @Mock protected IsisSessionFactory mockIsisSessionFactory;
+    @Mock protected IsisSessionTracker mockIsisSessionTracker;
     @Mock protected ServiceRegistry mockServiceRegistry;
 
     protected AuthenticatedWebSessionForIsis webSession;
@@ -81,7 +83,18 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
                 allowing(mockCommonContext).lookupServiceElseFail(IsisSessionFactory.class);
                 will(returnValue(mockIsisSessionFactory));
 
-                allowing(mockIsisSessionFactory).runAuthenticated(new InitialisationSession(), with(any(ThrowingRunnable.class)));
+                allowing(mockCommonContext).getIsisSessionTracker();
+                will(returnValue(mockIsisSessionTracker));
+                
+                allowing(mockIsisSessionTracker).currentAuthenticationSession();
+                will(returnValue(Optional.of(new InitialisationSession())));
+                
+                allowing(mockIsisSessionFactory)
+                .runAuthenticated(with(new InitialisationSession()), with(any(ThrowingRunnable.class)));
+                
+                allowing(mockIsisSessionFactory)
+                .runAnonymous(with(any(ThrowingRunnable.class)));
+                
                 // ignore
 
                 // must provide explicit expectation, since Locale is final.
@@ -120,7 +133,7 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
                 oneOf(mockAuthenticator).canAuthenticate(AuthenticationRequestPassword.class);
                 will(returnValue(true));
                 oneOf(mockAuthenticator).authenticate(with(any(AuthenticationRequest.class)), with(any(String.class)));
-                will(returnValue(new SimpleSession(null, null)));
+                will(returnValue(new SimpleSession("test-user", null)));
             }
         });
 
