@@ -31,7 +31,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.value.shortint.ShortValueSemanticsProviderAbstract;
 import org.apache.isis.core.metamodel.facets.value.shortint.ShortWrapperValueSemanticsProvider;
-import org.apache.isis.core.config.unittestsupport.internal._Config;
 
 public class ShortValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 

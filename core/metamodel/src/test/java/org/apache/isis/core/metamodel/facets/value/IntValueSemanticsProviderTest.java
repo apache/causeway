@@ -31,7 +31,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.value.integer.IntValueSemanticsProviderAbstract;
 import org.apache.isis.core.metamodel.facets.value.integer.IntWrapperValueSemanticsProvider;
-import org.apache.isis.core.config.unittestsupport.internal._Config;
 
 public class IntValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 

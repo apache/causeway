@@ -42,7 +42,6 @@ import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
-import org.apache.isis.core.config.unittestsupport.internal._Config;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault;
@@ -175,10 +174,11 @@ public final class MetaModelContext_forTesting implements MetaModelContext {
     }
     
     private static IsisConfiguration newIsisConfiguration() {
+        val properties = _Maps.<String, String>newHashMap();
         val config = new IsisConfiguration(new AbstractEnvironment() {
             @Override
             public String getProperty(String key) {
-                return _Config.getConfiguration().getString(key);
+                return properties.get(key);
             }
         });
         return config;
