@@ -69,7 +69,6 @@ public class CommandContext {
     }
 
 // tag::refguide[]
-
     @Getter
     private Command command;
 

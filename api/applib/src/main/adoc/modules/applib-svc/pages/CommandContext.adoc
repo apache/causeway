@@ -5,13 +5,13 @@
 
 
 The `CommandContext` service is a xref:refguide:applib-ant:RequestScoped.adoc[request-scoped] service that reifies the invocation of an action on a domain object into an object itself.
-This reified information is encapsulated within the `Command` object.
+This reified information is encapsulated within the xref:CommandContext.adoc#command[`Command`] object.
 
-By default, the `Command` is held in-memory only; once the action invocation has completed, the `Command` object is gone.
-The optional supporting xref:refguide:applib-svc:CommandService.adoc[`CommandService`] enables the implementation of `Command` to be pluggable.
+By default, the command is held in-memory only; once the action invocation has completed, the command object is gone.
+The optional supporting xref:refguide:applib-svc:CommandService.adoc[`CommandService`] enables the implementation of xref:CommandContext.adoc#command[`Command`] to be pluggable.
 With an appropriate implementation
 // TODO: v2: update for extensions (eg as provided by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module's xref:refguide:applib-svc:CommandService.adoc[`CommandService`])
-the `Command` may then be persisted.
+the xref:CommandContext.adoc#command[`Command`] instance may then be persisted.
 
 There are two main use cases:
 
@@ -21,12 +21,7 @@ There are two main use cases:
 
 This is normally done using the `CommandWithDto` subtype, that can return a representation of the `Command` as an XML instance of the xref:refguide:schema:cmd.adoc[`cmd.xsd`] schema, which also captures a unique transactionId (GUID) for the command.
 
-Commands are often combined with implementations of the xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`] and sometimes also the xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`]:
 
-* the xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`] publishes interactions as they have  is configured, they provide better traceability as the `Command` is also correlated with any published events, again through the unique `transactionId` GUID
-* if a xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`] is configured, they provide better audit information, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of the action) through the `transactionId` GUID
-
-In general, though, However, while persistent ``Command``s _can_ be used for these use cases, it is recommended instead to use the xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`] service and persistent implementations of the ``Interaction`` object, eg as provided by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s publishmq module.
 
 
 
@@ -53,64 +48,51 @@ The `CommandContext` request-scoped service defines the following very simple AP
 
 [source,java]
 ----
-@RequestScoped
-public class CommandContext {
-    @Programmatic
-    public Command getCommand() { /* ... */ }
-}
+include::refguide:applib-svc:example$services/command/CommandContext.java[tags="refguide"]
 ----
 
-The `Command` type referenced above is in fact an interface, defined as:
+=== `Command`
+
+The `Command` type in turn is defined as:
 
 [source,java]
 ----
-public interface Command extends HasUniqueId {
-
-    public abstract String getUser();               // <.>
-    public abstract Timestamp getTimestamp();       // <.>
-
-    public abstract Bookmark getTarget();           // <.>
-    public abstract String getMemberIdentifier();   // <.>
-    public abstract String getTargetClass();        // <.>
-    public abstract String getTargetAction();       // <.>
-    public String getArguments();                   // <.>
-    public String getMemento();                     // <.>
-
-    public ExecuteIn getExecuteIn();                // <.>
-    public Executor getExecutor();                  // <.>
-    public Persistence getPersistence();            // <.>
-    public boolean isPersistHint();                 // <.>
-
-    public abstract Timestamp getStartedAt();       // <.>
-    public abstract Timestamp getCompletedAt();     // <.>
-    public Command getParent();                     // <.>
-
-    public Bookmark getResult();                    // <.>
-    public String getException();                   // <.>
-
-    @Deprecated
-    int next(final String sequenceAbbr);            // <.>
-}
+include::refguide:applib-svc:example$services/command/Command.java[tags="refguide"]
 ----
-<.> `getUser()` - is the user that initiated the action.
-<.> `getTimestamp()` - the date/time at which this action was created.
-<.> `getTarget()` - bookmark of the target object (entity or service) on which this action was performed
-<.> `getMemberIdentifier()` - holds a string representation of the invoked action
-<.> `getTargetClass()` - a human-friendly description of the class of the target object
-<.> `getTargetAction()` - a human-friendly name of the action invoked on the target object
-<.> `getArguments()` - a human-friendly description of the arguments with which the action was invoked
-<.> `getMemento()` - a formal (XML or similar) specification of the action to invoke/being invoked
-<.> `getExecuteIn()` - whether this command is executed in the foreground or background
-<.> `getExecutor()` - the (current) executor of this command, either user, or background service, or other (eg redirect after post).
-<.> `getPersistence()`- the policy controlling whether this command should ultimately be persisted (either "persisted", "if hinted", or "not persisted")
-<.> `isPersistHint()` - whether that the command should be persisted, if persistence policy is "if hinted".
-<.> `getStartedAt()` - the date/time at which this action started (same as `timestamp` property for foreground commands)
-<.> `getCompletedAt()` - the date/time at which this action completed.
-<.> `getParent()` - for actions created through the `BackgroundService`, captures the parent action
-<.> `getResult()` - bookmark to object returned by action, if any
-<.> `getException()` - exception stack trace if action threw exception
-<.> No longer used by the framework; see instead
-xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`] and `Interaction#next()`.
+<.> user that initiated the action.
+<.> date/time at which this action was created.
+<.> bookmark of the target object (entity or service) on which this action was performed
+<.> holds a string representation of the invoked action
+<.> human-friendly description of the class of the target object
+<.> human-friendly name of the action invoked on the target object
+<.> human-friendly description of the arguments with which the action was invoked
+<.> formal (XML or similar) specification of the action to invoke/being invoked
+<.> whether this command is executed in the foreground or background
++
+[source,java,indent=0]
+----
+include::refguide:applib-ant:example$annotation/CommandExecuteIn.java[tags="refguide"]
+----
+<.> the (current) executor of this command:
++
+[source,java,indent=0]
+----
+include::refguide:applib-svc:example$services/command/Command.java[tags="refguide2"]
+----
+<.>  date/time at which this action started (same as `timestamp` property for foreground commands)
+<.> date/time at which this action completed.
+<.> for actions created through the `BackgroundService`, captures the parent action
+<.> exception stack trace, if action threw exception
+<.> bookmark to object returned by action, if any
+<.> the policy controlling whether this command should ultimately be persisted:
++
+[source,java,indent=0]
+----
+include::refguide:applib-ant:example$annotation/CommandPersistence.java[tags="refguide"]
+----
+
+<.> whether that the command should be persisted, if persistence policy is "if hinted".
+
 
 
 == Implementation
@@ -133,12 +115,7 @@ public class ToDoItem ... {
 ----
 
 
-[TIP]
-====
-As an alternative to annotating every action with `@Action#command()`, alternatively this can be configured as the default using `isis.services.command.actions` configuration property.
-
-See xref:refguide:applib-ant:Action.adoc#command[`@Action#command()`] and xref:refguide:config:configuring-core.adoc[runtime configuration] for further details.
-====
+As an alternative to annotating every action with xref:refguide:applib-ant:Action.adoc#command[`@Action#command()`], use the xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.action.command[`isis.applib.annotation.action.command`] to define a global default.
 
 
 //The xref:refguide:applib-ant:Action.adoc#command[`@Action#command()`] annotation can also be used to specify whether the command should be performed in the background, for example:
@@ -190,24 +167,24 @@ public class ToDoItem ... {
 ----
 
 
-If run in the background, it might then notify the user (eg by email) if all work is done.
-
-This leads us onto a related point, distinguishing the current effective user vs the originating "real" user.
-When running in the foreground, the current user can be obtained from the xref:refguide:applib-svc:UserService.adoc[`UserService`], using:
-
-[source,java]
-----
-String user = userService.getUser().getName();
-----
-
-If running in the background, however, then the current user will be the credentials of the background process, for example as run by a Quartz scheduler job.
-
-The domain object can still obtain the original ("effective") user that caused the job to be created, using:
-
-[source,java]
-----
-String user = commandContext.getCommand().getUser();
-----
+//If run in the background, it might then notify the user (eg by email) if all work is done.
+//
+//This leads us onto a related point, distinguishing the current effective user vs the originating "real" user.
+//When running in the foreground, the current user can be obtained from the xref:refguide:applib-svc:UserService.adoc[`UserService`], using:
+//
+//[source,java]
+//----
+//String user = userService.getUser().getName();
+//----
+//
+//If running in the background, however, then the current user will be the credentials of the background process, for example as run by a Quartz scheduler job.
+//
+//The domain object can still obtain the original ("effective") user that caused the job to be created, using:
+//
+//[source,java]
+//----
+//String user = commandContext.getCommand().getUser();
+//----
 
 
 
@@ -215,14 +192,20 @@ String user = commandContext.getCommand().getUser();
 
 == Related Services
 
-The xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`] service is very similar in nature to the xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`], in that the `Command` object accessed through it is very similar to the `Interaction` object obtained from the `InteractionContext`.
-The principle distinction is that while `Command` represents the __intention__ to invoke an action or edit a property, the `Interaction` (and contained ``Execution``s) represents the actual execution.
+The xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`] service is very similar in nature to the xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`], in that the xref:refguide:applib-svc:CommandContext.adoc#command[`Command`] object accessed through it is very similar to the xref:refguide:applib-svc:InteractionContext.adoc#interaction[`Interaction`] object obtained from the xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`].
+The principle distinction is that while xref:refguide:applib-svc:CommandContext.adoc#command[`Command`] represents the __intention__ to invoke an action or edit a property, the xref:refguide:applib-svc:InteractionContext.adoc#interaction[`Interaction`] (and contained ``Execution``s) represents the actual execution.
 
 //Most of the time a `Command` will be followed directly by its corresponding `Interaction`.
 //However, if the `Command` is annotated to run in the background (using xref:refguide:applib-ant:Action.adoc#command[`@Action#commandExecuteIn()`], or is explicitly created through the xref:refguide:applib-svc:BackgroundService.adoc[`BackgroundService`], then the actual interaction/execution is deferred until some other mechanism invokes the command (eg as described xref:userguide:btb:about.adoc#BackgroundCommandExecution[here]).
 //The persistence of background commands requires a configured xref:refguide:applib-svc:_BackgroundCommandService.adoc[`BackgroundCommandService`]) to actually persist such commands for execution.
 
-``Command``s
+xref:refguide:applib-svc:CommandContext.adoc#command[`Command`]s
 //- even if executed in the foreground -
 can also be persisted by way of the xref:refguide:applib-svc:CommandService.adoc[`CommandService`].
 //Implementations of `CommandService` and `BackgroundCommandService` are intended to go together, so that child ``Command``s persistent (to be executed in the background) can be associated with their parent ``Command``s (executed in the foreground, with the background `Command` created explicitly through the xref:refguide:applib-svc:BackgroundService.adoc[`BackgroundService`]).
+
+Commands are often combined with implementations of the xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`] and sometimes also the xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`]:
+
+* the xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`] publishes interactions as they have  is configured, they provide better traceability as the `Command` is also correlated with any published events, again through the unique `transactionId` GUID
+* if a xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`] is configured, they provide better audit information, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of the action) through the `transactionId` GUID
+

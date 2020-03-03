@@ -6,9 +6,9 @@
 The `AcceptHeaderService` domain service is a xref:refguide:applib-ant:RequestScoped.adoc[`@RequestScoped`] service that simply exposes the HTTP `Accept` header to the domain.
 Its intended use is to support multiple versions of a REST API, where the responsibility for content negotiation (determining which version of the REST API is to be used) is managed by logic in the domain objects themselves.
 
-[NOTE]
+[TIP]
 ====
-As an alternative to performing content negotiation within the domain classes, the xref:core:runtime-services:ContentNegotiationService.adoc[`ContentNegotiationService`] and xref:refguide:applib-svc:ContentMappingService.adoc[`ContentMappingService`] SPI domain services allow the framework to perform the content negotiation responsibility.
+As an alternative to performing content negotiation within the domain classes, the xref:refguide:applib-svc:ContentMappingService.adoc[`ContentMappingService`] SPI domain service allows the framework to perform the content negotiation responsibility.
 ====
 
 == API

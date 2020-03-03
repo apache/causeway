@@ -21,23 +21,36 @@ package org.apache.isis.applib.annotation;
 /**
  * Whether the command should be persisted.
  */
+// tag::refguide[]
 public enum CommandPersistence {
+// end::refguide[]
+
     /**
      * (If the configured {@link org.apache.isis.applib.services.command.spi.CommandService} supports it), indicates that the
      * {@link org.apache.isis.applib.services.command.Command Command} object should be persisted.
      */
+// tag::refguide[]
     PERSISTED,
+// end::refguide[]
+
     /**
      * (If the configured {@link org.apache.isis.applib.services.command.spi.CommandService} supports it), indicates that the
      * {@link org.apache.isis.applib.services.command.Command Command} object should only be persisted if
      * another service, such as the {@link org.apache.isis.applib.services.background.BackgroundCommandService}, hints that it should.
      */
+// tag::refguide[]
     IF_HINTED,
+// end::refguide[]
+
     /**
      * (Even if the configured {@link org.apache.isis.applib.services.command.spi.CommandService} supports it), indicates that the
      * {@link org.apache.isis.applib.services.command.Command Command} object should <i>not</i> be persisted (even if
      * another service, such as the {@link org.apache.isis.applib.services.background.BackgroundCommandService}, hints that it should).
      */
+// tag::refguide[]
     NOT_PERSISTED;
+// end::refguide[]
 
+// tag::refguide[]
 }
+// end::refguide[]

@@ -23,8 +23,8 @@ Impl'n (g: a:)
 
 
 
-|xref:core:runtime-services:AuditingServiceInternal.adoc[`o.a.i.c.r.s.auditing.` +
-`AuditingServiceInternal`]
+|xref:core:runtime-services:AuditerDispatchService.adoc[`o.a.i.c.r.s.auditing.` +
+`AuditerDispatchService`]
 |Co-ordinates between
 xref:core:runtime-services:ChangedObjectsService.adoc[`ChangedObjectsServiceInternal`] and
 xref:core:runtime-services:AuditerService.adoc[`AuditerService`].
@@ -50,8 +50,8 @@ querying and for persisting objects.
 |
 
 
-|xref:core:runtime-services:PublishingServiceInternal.adoc[`o.a.i.c.m.s.publishing.` +
-`PublishingServiceInternal`]
+|xref:core:runtime-services:PublisherDispatchService.adoc[`o.a.i.c.m.s.publishing.` +
+`PublisherDispatchService`]
 |Co-ordinates between
 xref:core:runtime-services:ChangedObjectsService.adoc[`ChangedObjectsServiceInternal`] and
 xref:refguide:applib-svc:MetricsService.adoc[`MetricsService`] and the SPI services, and the

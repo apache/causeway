@@ -40,7 +40,7 @@ This sends email as an HTML message, using an external SMTP provider.
 === Configuration Properties
 
 The default implementation defines the a number of configuration properties, under the `isis.core.runtime-services.email` key.
-See the xref:refguide:config:sections/isis.core.runtime-services.adoc#isis.core.runtime-services.email.port[configuration guide] for further details.
+See the xref:refguide:config:about.adoc[configuration guide] for further details.
 
 
 === Alternatives

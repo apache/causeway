@@ -38,6 +38,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 @DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.TERTIARY)
 public class ConfigurationMenu {
 
+    // end::refguide[]
     public static abstract class ActionDomainEvent
         extends IsisModuleApplib.ActionDomainEvent<ConfigurationMenu> {}
 
@@ -51,6 +52,7 @@ public class ConfigurationMenu {
     public static class ConfigurationDomainEvent
         extends ActionDomainEvent {}
 
+    // tag::refguide[]
     @Action(
             domainEvent = ConfigurationDomainEvent.class,
             semantics = SemanticsOf.SAFE

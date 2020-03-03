@@ -34,5 +34,3 @@ Note that this domain service is also used by the framework itself to obtain the
 This class (`o.a.i.applib.services.clock.ClockService`) is also the default implementation.
 The time provided by this default implementation is based on the system clock.
 
-
-

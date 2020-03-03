@@ -3,17 +3,13 @@
 :page-partial:
 
 
-The `BookmarkService` domain service (and its various supertypes) provides the ability to obtain a serializable ``o.a.i.applib.bookmarks.Bookmark`` for any (persisted) domain object, and to lookup domain objects given a ``Bookmark``.
+The `BookmarkService` domain service (and its various supertypes) provides the ability to obtain a serializable xref:BookmarkService.adoc#bookmark[`Bookmark`] for any (persisted) domain object, and to lookup domain objects given a xref:BookmarkService.adoc#bookmark[`Bookmark`].
 This can then in turn be converted to and from a string.
 
-For example, a `Customer` object with:
+For example, a `Customer` object with an xref:refguide:applib-ant:DomainObject.adoc#objectType[object type] of "custmgmt.Customer" and an id of 123
+would correspond to a xref:BookmarkService.adoc#bookmark[`Bookmark`] with a string representation of "custmgmt.Customer|123".
 
-* an object type of "custmgmt.Customer" (as per xref:refguide:applib-ant:DomainObject.adoc#objectType[`DomainObject#objectType`] or equivalent) , and
-* an id=123
-
-could correspond to a `Bookmark` with a string representation of `custmgmt.Customer|123`.
-
-``Bookmark``s are useful to store a reference to an arbitrary object, although be aware that there is no referential integrity.
+Bookmarks are useful to store a reference to an arbitrary object, although be aware that there is no referential integrity.
 
 Several of the extension libraries use bookmarks.
 For example the xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`] uses bookmarks to identify the object that is being modified.
@@ -32,6 +28,15 @@ The API defined by `BookmarkService` is:
 include::refguide:applib-svc:example$services/bookmark/BookmarkService.java[tags="refguide"]
 ----
 
+=== `Bookmark`
+
+The `Bookmark` type is:
+
+[source,java]
+----
+include::refguide:applib-svc:example$services/bookmark/Bookmark.java[tags="refguide"]
+----
+
 
 == Implementation
 
@@ -39,8 +44,6 @@ The core framework (xref:core:runtime-services:about.adoc[Runtime Services] modu
 
 
 == Related Mixins
-
-=== `BookmarkHolder`
 
 The `BookmarkHolder` interface is intended to be implemented by domain objects that use a `Bookmark` to reference a (single) domain object; an example might be a class such as the audit entry, mentioned above.
 The interface is simply:

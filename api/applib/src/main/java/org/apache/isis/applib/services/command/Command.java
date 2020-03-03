@@ -96,15 +96,22 @@ import org.apache.isis.schema.cmd.v2.CommandDto;
 // tag::refguide[]
 public interface Command extends HasUniqueId {
 
+    // end::refguide[]
     /**
      * The user that created the command.
      */
-    String getUser();
+    // tag::refguide[]
+    String getUser();                           // <.>
+    // end::refguide[]
 
     /**
+     *
      * The date/time at which this command was created.
+     *
      */
-    Timestamp getTimestamp();
+    // tag::refguide[]
+    Timestamp getTimestamp();                   // <.>
+    // end::refguide[]
 
     /**
      * {@link Bookmark} of the target object (entity or service) on which this action was performed.
@@ -112,59 +119,87 @@ public interface Command extends HasUniqueId {
      * <p>
      * Will only be populated if a {@link BookmarkService} has been configured.
      */
-    Bookmark getTarget();
+    // tag::refguide[]
+    Bookmark getTarget();                       // <.>
+    // end::refguide[]
 
     /**
+     *
      * Holds a string representation of the invoked action, or the edited property, equivalent to
      * {@link Identifier#toClassAndNameIdentityString()}.
      */
-    String getMemberIdentifier();
+    // tag::refguide[]
+    String getMemberIdentifier();               // <.>
+    // end::refguide[]
 
     /**
+     *
      * A human-friendly description of the class of the target object.
      */
-    String getTargetClass();
+    // tag::refguide[]
+    String getTargetClass();                    // <.>
+    // end::refguide[]
 
     /**
+     *
      * The human-friendly name of the action invoked/property edited on the target object.
      *
      * <p>
      *     NB: in earlier versions, if the command represented an edit of a property, then it held the special value &quot;{@value ACTION_IDENTIFIER_FOR_EDIT}&quot;.  This is NO LONGER the case; it simply holds the member.
      * </p>
      */
-    String getTargetAction();
+    // tag::refguide[]
+    String getTargetAction();                   // <.>
+    // end::refguide[]
 
     /**
+     *
      * A human-friendly description of the arguments with which the action was invoked.
      */
-    String getArguments();
+    // tag::refguide[]
+    String getArguments();                      // <.>
+    // end::refguide[]
 
     /**
+     *
      * A formal (XML or similar) specification of the action to invoke/being invoked.
      */
-    String getMemento();
+    // tag::refguide[]
+    String getMemento();                        // <.>
+    // end::refguide[]
 
     /**
+     *
      * The mechanism by which this command is to be executed, either synchronously &quot;in the
      * {@link CommandExecuteIn#FOREGROUND foreground}&quot; or is to be executed asynchronously &quot;in the
      * {@link CommandExecuteIn#BACKGROUND background}&quot; through the {@link BackgroundCommandService}.
      */
-    CommandExecuteIn getExecuteIn();
+    // tag::refguide[]
+    CommandExecuteIn getExecuteIn();            // <.>
+    // end::refguide[]
 
+    // tag::refguide2[]
     enum Executor {
+        // end::refguide2[]
         /**
          * Command being executed by the end-user.
          */
+        // tag::refguide2[]
         USER,
+        // end::refguide2[]
         /**
          * Command being executed by a background execution service.
          */
+        // tag::refguide2[]
         BACKGROUND,
+        // end::refguide2[]
         /**
          * Command being executed for some other reason, eg as result of redirect-after-post, or the homePage action.
          */
+        // tag::refguide2[]
         OTHER
     }
+    // end::refguide2[]
 
     /**
      * The (current) executor of this command.
@@ -185,7 +220,9 @@ public interface Command extends HasUniqueId {
      * </ul>
      *
      */
-    Executor getExecutor();
+    // tag::refguide[]
+    Executor getExecutor();                     // <.>
+    // end::refguide[]
 
     /**
      * For an command that has actually been executed, holds the date/time at which the {@link Interaction} that
@@ -200,7 +237,9 @@ public interface Command extends HasUniqueId {
      * See also {@link Interaction#getCurrentExecution()} and
      * {@link Interaction.Execution#getStartedAt()}.
      */
-    Timestamp getStartedAt();
+    // tag::refguide[]
+    Timestamp getStartedAt();                   // <.>
+    // end::refguide[]
 
     /**
      * For an command that has actually been executed, holds the date/time at which the {@link Interaction} that
@@ -215,13 +254,17 @@ public interface Command extends HasUniqueId {
      * See also {@link Interaction#getCurrentExecution()} and
      * {@link Interaction.Execution#getCompletedAt()}.
      */
-    Timestamp getCompletedAt();
+    // tag::refguide[]
+    Timestamp getCompletedAt();                 // <.>
+    // end::refguide[]
 
     /**
      * For actions created through the {@link BackgroundService} and {@link BackgroundCommandService},
      * captures the parent action.
      */
-    Command getParent();
+    // tag::refguide[]
+    Command getParent();                        // <.>
+    // end::refguide[]
 
     /**
      * For an command that has actually been executed, holds the exception stack
@@ -235,7 +278,9 @@ public interface Command extends HasUniqueId {
      *
      * See also {@link Interaction#getCurrentExecution()} and  {@link org.apache.isis.applib.services.iactn.Interaction.Execution#getThrew()}.
      */
-    String getException();
+    // tag::refguide[]
+    String getException();                      // <.>
+    // end::refguide[]
 
     /**
      * For an command that has actually been executed, holds a {@link Bookmark} to the object returned by the corresponding action/property modification.
@@ -248,7 +293,9 @@ public interface Command extends HasUniqueId {
      *
      * See also  {@link Interaction#getCurrentExecution()} and  {@link org.apache.isis.applib.services.iactn.Interaction.Execution#getReturned()}.
      */
-    Bookmark getResult();
+    // tag::refguide[]
+    Bookmark getResult();                       // <.>
+    // end::refguide[]
 
     /**
      * Whether this command should ultimately be persisted (if the configured {@link BackgroundCommandService} supports
@@ -273,13 +320,16 @@ public interface Command extends HasUniqueId {
      * {@link Command}.  The hinting mechanism allows the service to suggest that the parent command be persisted so
      * that the app can then provide a mechanism to find all child background commands for that original parent command.
      */
-    CommandPersistence getPersistence();
+    // tag::refguide[]
+    CommandPersistence getPersistence();        // <.>
+    // end::refguide[]
 
     /**
      * Whether that this {@link Command} should be persisted, if possible.
      */
-    boolean isPersistHint();
-// end::refguide[]
+    // tag::refguide[]
+    boolean isPersistHint();                    // <.>
+    // end::refguide[]
 
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
@@ -340,7 +390,7 @@ public interface Command extends HasUniqueId {
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
-        void setExecutor(final Executor executor);   
+        void setExecutor(final Executor executor);
 
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
@@ -416,7 +466,6 @@ public interface Command extends HasUniqueId {
          * @see #getPersistence()
          */
         void setPersistHint(boolean persistHint);
-
     }
 
     /**

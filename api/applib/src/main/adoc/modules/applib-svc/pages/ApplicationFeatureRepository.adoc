@@ -35,6 +35,6 @@ This implementation supports the following configuration properties:
 
 == Related Services
 
-The default implementation of this service uses the internal `o.a.i.core.metamodel.services.appfeat.ApplicationFeatureFactory` service to instantiate `ApplicationFeature` instances.
+The default implementation of this service uses the internal xref:core:runtime-services:ApplicationFeatureFactory.adoc[`ApplicationFeatureFactory`] service to instantiate `ApplicationFeature` instances.
 
 

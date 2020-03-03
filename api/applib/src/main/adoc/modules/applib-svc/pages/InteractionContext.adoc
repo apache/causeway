@@ -31,7 +31,7 @@ of the interaction) by way of the xref:refguide:applib-cm:classes/mixins.adoc#Ha
 
 
 
-== API & Implementation
+== API
 
 The public API of the service consists of several related classes:
 
@@ -164,9 +164,9 @@ public class PropertyEdit extends Execution {
 <1> The object used as the new value of the property.  Could be `null` if the property is being cleared.
 
 
-=== Alternate Implementations
+== Implementation
 
-Apache Isis' default implementation of `InteractionContext` class is automatically registered (it is annotated with `@DomainService`).
+This class (`o.a.i.applib.services.iactn.InteractionContext`) is also the default implementation.
 
 
 

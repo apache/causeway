@@ -22,8 +22,6 @@ import org.apache.isis.applib.annotation.Programmatic;
 
 // tag::refguide[]
 public interface BookmarkHolder {
-
     Bookmark bookmark();
-
 }
 // end::refguide[]

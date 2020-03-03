@@ -34,6 +34,7 @@ import lombok.val;
 // tag::refguide[]
 public interface BookmarkService {
 
+// end::refguide[]
     /**
      * Given any {@link Bookmark} this service is able to reconstruct to originating domain object the {@link Bookmark}
      * was created for.
@@ -43,6 +44,7 @@ public interface BookmarkService {
      * @param domainObject
      * @return optionally a {@link Bookmark} representing given {@code domainObject}
      */
+// tag::refguide[]
     Bookmark bookmarkFor(@Nullable Object domainObject);
 
     default Bookmark bookmarkForElseThrow(Object domainObject) {
@@ -53,11 +55,10 @@ public interface BookmarkService {
             return bookmark;
         }
         throw _Exceptions.illegalArgument(
-                        "cannot create bookmark for type %s", domainObject.getClass().getName());
+                "cannot create bookmark for type %s", domainObject.getClass().getName());
 // tag::refguide[]
         // ...
     }
-
 
     Bookmark bookmarkFor(Class<?> cls, String identifier);
 
@@ -65,9 +66,11 @@ public interface BookmarkService {
 
     Object lookup(Bookmark bookmark);
 
+// end::refguide[]
     /**
      * As {@link #lookup(Bookmark)}, but down-casting to the specified type.
      */
+// tag::refguide[]
     default <T> T lookup(Bookmark bookmark, Class<T> cls) {
         return cls.cast(lookup(bookmark));
     }

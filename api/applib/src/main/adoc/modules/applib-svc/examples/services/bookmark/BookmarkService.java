@@ -34,6 +34,7 @@ import lombok.val;
 // tag::refguide[]
 public interface BookmarkService {
 
+// end::refguide[]
     /**
      * Given any {@link Bookmark} this service is able to reconstruct to originating domain object the {@link Bookmark}
      * was created for.
@@ -43,6 +44,7 @@ public interface BookmarkService {
      * @param domainObject
      * @return optionally a {@link Bookmark} representing given {@code domainObject}
      */
+// tag::refguide[]
     Bookmark bookmarkFor(@Nullable Object domainObject);
 
     default Bookmark bookmarkForElseThrow(Object domainObject) {
@@ -58,16 +60,17 @@ public interface BookmarkService {
         // ...
     }
 
-
     Bookmark bookmarkFor(Class<?> cls, String identifier);
 
     Object lookup(BookmarkHolder bookmarkHolder);
 
     Object lookup(Bookmark bookmark);
 
+// end::refguide[]
     /**
      * As {@link #lookup(Bookmark)}, but down-casting to the specified type.
      */
+// tag::refguide[]
     default <T> T lookup(Bookmark bookmark, Class<T> cls) {
         return cls.cast(lookup(bookmark));
     }

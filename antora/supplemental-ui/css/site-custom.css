@@ -2,6 +2,10 @@ div.paragraph code {
     color: darkmagenta;
 }
 
+div.paragraph a code {
+    color: cornflowerblue;
+}
+
 .content .ulist {
     margin-top: 0.2rem;
 }

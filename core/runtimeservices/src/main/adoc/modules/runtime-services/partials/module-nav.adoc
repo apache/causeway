@@ -1,16 +1,15 @@
 * xref:core:runtime-services:about.adoc[Runtime Services]
 
-** xref:core:runtime-services:ContentNegotiationService.adoc[ContentNegotiationService]
-** xref:core:runtime-services:RepresentationService.adoc[RepresentationService]
-
+** xref:core:runtime-services:ApplicationFeatureFactory.adoc[ApplicationFeatureFactory]
+** xref:core:runtime-services:AuditerDispatchService.adoc[AuditerDispatchService]
 ** xref:core:runtime-services:AuthenticationSessionProvider.adoc[AuthenticationSessionProvider]
+** xref:core:runtime-services:ChangedObjectsService.adoc[ChangedObjectsService]
 ** xref:core:runtime-services:CommandDtoServiceInternal.adoc[CommandDtoServiceInternal]
+** xref:core:runtime-services:ContentNegotiationService.adoc[ContentNegotiationService]
 ** xref:core:runtime-services:InteractionDtoServiceInternal.adoc[InteractionDtoServiceInternal]
-
-** xref:core:runtime-services:AuditingServiceInternal.adoc[AuditingServiceInternal]
-** xref:core:runtime-services:ChangedObjectsService.adoc[ChangedObjectsServiceInternal]
+** xref:core:runtime-services:RepresentationService.adoc[RepresentationService]
 ** xref:core:runtime-services:PersistenceSessionServiceInternal.adoc[PersistenceSessionServiceInternal]
-** xref:core:runtime-services:PublishingDispatchService.adoc[PublishingDispatchService]
+** xref:core:runtime-services:PublisherDispatchService.adoc[PublisherDispatchService]
 
 
 

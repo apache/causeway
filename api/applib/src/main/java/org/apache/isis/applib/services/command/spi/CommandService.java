@@ -26,6 +26,7 @@ import org.apache.isis.applib.services.command.Command;
 // tag::refguide[]
 public interface CommandService {
 
+// end::refguide[]
     /**
      * Simply instantiates the appropriate instance of the {@link Command}.
      *
@@ -34,13 +35,17 @@ public interface CommandService {
      * {@link Command#getTimestamp()}, {@link Command#getUser()} and {@link Command#getUniqueId()}).
      * </p>
      */
-    Command create();
+// tag::refguide[]
+    Command create();                               // <.>
+// end::refguide[]
 
     /**
      * Hint for this implementation to eagerly persist the {@link Command}s if possible; influences the behaviour
      * of actions annotated to execute in the {@link org.apache.isis.applib.annotation.CommandExecuteIn#BACKGROUND}.
      */
-    boolean persistIfPossible(Command command);
+// tag::refguide[]
+    boolean persistIfPossible(Command command);     // <.>
+// end::refguide[]
 
     /**
      * &quot;Complete&quot; the command, typically meaning to indicate that the command is completed, and to
@@ -54,7 +59,7 @@ public interface CommandService {
      *     The framework will automatically have set the {@link Command#getCompletedAt()} property.
      * </p>
      */
-    void complete(final Command command);
-
+// tag::refguide[]
+    void complete(final Command command);           // <.>
 }
 // end::refguide[]
