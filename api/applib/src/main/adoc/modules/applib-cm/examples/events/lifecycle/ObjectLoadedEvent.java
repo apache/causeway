@@ -18,43 +18,44 @@
  */
 package org.apache.isis.applib.events.lifecycle;
 
+// tag::refguide[]
 public abstract class ObjectLoadedEvent<S> extends AbstractLifecycleEvent<S> {
 
-    
-
-    // -- Default class
+    // end::refguide[]
     /**
      * This class is the default for the
      * {@link org.apache.isis.applib.annotation.DomainObject#loadedLifecycleEvent()} annotation attribute.  Whether this
      * raises an event or not depends upon the <tt>isis.core.meta-model.annotation.domain-object.loaded-lifecycle-event.post-for-default</tt>
      * configuration property.
      */
+    // tag::refguide[]
     public static class Default extends ObjectLoadedEvent<Object> {}
 
-
-    // -- Noop class
-
+    // end::refguide[]
     /**
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event.
      */
+    // tag::refguide[]
     public static class Noop extends ObjectLoadedEvent<Object> {}
 
-
-    // -- Doop class
-
+    // end::refguide[]
     /**
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event..
      */
+    // tag::refguide[]
     public static class Doop extends ObjectLoadedEvent<Object> {}
 
-
+    // end::refguide[]
     public ObjectLoadedEvent() {
     }
-    
+
     public ObjectLoadedEvent(final S source) {
         super(source);
     }
 
+    // tag::refguide[]
+
 }
+// end::refguide[]

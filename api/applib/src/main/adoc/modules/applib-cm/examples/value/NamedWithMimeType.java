@@ -28,6 +28,8 @@ import org.apache.isis.core.commons.collections.Can;
 
 import lombok.Getter;
 
+// tag::refguide[]
+// end::refguide[]
 public interface NamedWithMimeType extends Serializable {
 
     public String getName();

@@ -23,53 +23,63 @@ import org.apache.isis.applib.util.Enums;
 /**
  * @see <a href="https://isis.apache.org/guides/rgant/rgant.html#_rgant-Action_semantics">Reference Guide</a>
  */
+// tag::refguide[]
 public enum SemanticsOf {
 
+    // end::refguide[]
     /**
      * Safe, with no side effects, and caching the returned value when invoked multiple times in the same request.
      * <ul>
      * <li>Changes state: <b>No</b></li>
      * <li>HTTP verb: <b>GET</b></li>
-     * <li>Effect of multiple calls: Will <b>always return the same result</b> each time invoked 
+     * <li>Effect of multiple calls: Will <b>always return the same result</b> each time invoked
      * (within a given request scope).</li>
      * </ul>
      */
+    // tag::refguide[]
     SAFE_AND_REQUEST_CACHEABLE,
 
+    // end::refguide[]
     /**
      * Safe, with no side-effects. In other words, a query-only action.
      * <ul>
      * <li>Changes state: <b>No</b></li>
      * <li>HTTP verb: <b>GET</b></li>
-     * <li>Effect of multiple calls: Might result in <b>different results each invocation</b> 
+     * <li>Effect of multiple calls: Might result in <b>different results each invocation</b>
      * (within a given request scope).</li>
      * </ul>
      */
+    // tag::refguide[]
     SAFE,
 
+    // end::refguide[]
     /**
      * Post-conditions are always the same, irrespective as to how many times called.
      * <ul>
      * <li>Changes state: <b>Yes</b></li>
      * <li>HTTP verb: <b>PUT</b></li>
-     * <li>Effect of multiple calls: Will make <b>no further changes</b> if called multiple times 
+     * <li>Effect of multiple calls: Will make <b>no further changes</b> if called multiple times
      * (eg sets a property or adds of same item to a Set).</li>
      * </ul>
      */
+    // tag::refguide[]
     IDEMPOTENT,
 
+    // end::refguide[]
     /**
      * Neither safe nor idempotent; every invocation is likely to change the state of the object.
      * <ul>
      * <li>Changes state: <b>Yes</b></li>
      * <li>HTTP verb: <b>POST</b></li>
-     * <li>Effect of multiple calls: Might <b>change the state</b> of the system each time called 
+     * <li>Effect of multiple calls: Might <b>change the state</b> of the system each time called
      * (eg increments a counter or adds to a List).</li>
      * <li>Example: Increasing the quantity of a line item in an Order by 1.</li>
      * </ul>
      */
+    // tag::refguide[]
     NON_IDEMPOTENT,
 
+    // end::refguide[]
     /**
      * Post-conditions are always the same, irrespective as to how many times called.
      * <p>
@@ -77,12 +87,14 @@ public enum SemanticsOf {
      * <ul>
      * <li>Changes state: <b>Yes</b></li>
      * <li>HTTP verb: <b>PUT</b></li>
-     * <li>Effect of multiple calls: Will make <b>no further changes</b> if called multiple times 
+     * <li>Effect of multiple calls: Will make <b>no further changes</b> if called multiple times
      * (eg sets a property or adds of same item to a Set).</li>
      * </ul>
      */
+    // tag::refguide[]
     IDEMPOTENT_ARE_YOU_SURE,
 
+    // end::refguide[]
     /**
      * Neither safe nor idempotent; every invocation is likely to change the state of the object.
      * <p>
@@ -90,17 +102,23 @@ public enum SemanticsOf {
      * <ul>
      * <li>Changes state: <b>Yes</b></li>
      * <li>HTTP verb: <b>POST</b></li>
-     * <li>Effect of multiple calls: Might <b>change the state</b> of the system each time called 
+     * <li>Effect of multiple calls: Might <b>change the state</b> of the system each time called
      * (eg increments a counter or adds to a List).</li>
      * <li>Example: Increasing the quantity of a line item in an Order by 1.</li>
      */
+    // tag::refguide[]
     NON_IDEMPOTENT_ARE_YOU_SURE,
 
+    // end::refguide[]
     /**
      * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
      * annotations or superclasses/interfaces).
      */
-    NOT_SPECIFIED;
+    // tag::refguide[]
+    NOT_SPECIFIED
+
+    // end::refguide[]
+    ;
 
     public String getFriendlyName() {
         return Enums.getFriendlyNameOf(this);
@@ -140,4 +158,7 @@ public enum SemanticsOf {
         return this == IDEMPOTENT_ARE_YOU_SURE || this == NON_IDEMPOTENT_ARE_YOU_SURE;
     }
 
+    // tag::refguide[]
+
 }
+// end::refguide[]

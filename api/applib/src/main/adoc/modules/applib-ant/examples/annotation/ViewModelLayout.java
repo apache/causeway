@@ -46,11 +46,16 @@ import org.apache.isis.applib.layout.component.CssClassFaPosition;
  *      with just <tt>@ViewModel</tt> and <tt>@ViewModelLayout</tt>.
  * </p>
  */
+// tag::refguide[]
 @Inherited
-@Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
+@Target({
+        ElementType.TYPE,
+        ElementType.ANNOTATION_TYPE
+})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ViewModelLayout {
 
+    // end::refguide[]
     /**
      * Which subclass of {@link TitleUiEvent} should be used to obtain a title.
      *
@@ -58,10 +63,10 @@ public @interface ViewModelLayout {
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
      */
+    // tag::refguide[]
     Class<? extends TitleUiEvent<?>> titleUiEvent() default TitleUiEvent.Default.class;
 
-    // //////////////////////////////////////
-
+    // end::refguide[]
     /**
      * Which subclass of {@link IconUiEvent} should be used to obtain an icon.
      *
@@ -69,10 +74,10 @@ public @interface ViewModelLayout {
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
      */
+    // tag::refguide[]
     Class<? extends IconUiEvent<?>> iconUiEvent() default IconUiEvent.Default.class;
 
-    // //////////////////////////////////////
-
+    // end::refguide[]
     /**
      * Which subclass of {@link CssClassUiEvent} should be used to obtain a CSS class.
      *
@@ -80,10 +85,10 @@ public @interface ViewModelLayout {
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
      */
+    // tag::refguide[]
     Class<? extends CssClassUiEvent<?>> cssClassUiEvent() default CssClassUiEvent.Default.class;
 
-    // //////////////////////////////////////
-
+    // end::refguide[]
     /**
      * Which subclass of {@link LayoutUiEvent} should be used to obtain a layout.
      *
@@ -91,22 +96,25 @@ public @interface ViewModelLayout {
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
      */
+    // tag::refguide[]
     Class<? extends LayoutUiEvent<?>> layoutUiEvent() default LayoutUiEvent.Default.class;
 
-
+    // end::refguide[]
     /**
      * Indicates the css class that a domain class (type) should have.
      */
+    // tag::refguide[]
     String cssClass() default "";
 
-    // //////////////////////////////////////
-
+    // end::refguide[]
     /**
      * Indicates the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> CSS class to decorate an
      * domain object.
      */
+    // tag::refguide[]
     String cssClassFa() default "";
 
+    // end::refguide[]
     /**
      * Indicates the position of the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a>
      * icon. The icon could be rendered on the left or the right of the object's title.
@@ -115,26 +123,24 @@ public @interface ViewModelLayout {
      *     This attribute is currently ignored by Isis viewers.
      * </p>
      */
+    // tag::refguide[]
     CssClassFaPosition cssClassFaPosition() default CssClassFaPosition.LEFT;
 
-    // //////////////////////////////////////
-
+    // end::refguide[]
     /**
      * Description of this class, eg to be rendered in a tooltip.
      */
+    // tag::refguide[]
     String describedAs() default "";
 
-
-    // //////////////////////////////////////
-
+    // end::refguide[]
     /**
      * Name of this class (overriding the name derived from its name in code).
      */
+    // tag::refguide[]
     String named() default "";
 
-
-    // //////////////////////////////////////
-
+    // end::refguide[]
     /**
      * The page size for instances of this class when rendered within
      * a table.
@@ -147,21 +153,22 @@ public @interface ViewModelLayout {
      * If annotated on a type, then the page size refers to standalone
      * collections (eg as returned from a repository query).
      */
+    // tag::refguide[]
     int paged() default -1;
 
-
-    // //////////////////////////////////////
-
+    // end::refguide[]
     /**
      * The plural name of the class.
      */
+    // tag::refguide[]
     String plural() default "";
 
-    // //////////////////////////////////////
-
+    // end::refguide[]
     /**
      * Whether (and how) this domain object can be bookmarked in the UI.
      */
+    // tag::refguide[]
     BookmarkPolicy bookmarking() default BookmarkPolicy.NOT_SPECIFIED;
 
 }
+// end::refguide[]

@@ -26,11 +26,15 @@ import java.util.UUID;
  * and so can be associated together using a unique identifier.
  *
  */
+// tag::refguide[]
 public interface HasUniqueId {
 
+    // end::refguide[]
     /**
      * The unique identifier (a GUID) of the request/interaction/transaction.
      */
+    // tag::refguide[]
     UUID getUniqueId();
 
 }
+// end::refguide[]

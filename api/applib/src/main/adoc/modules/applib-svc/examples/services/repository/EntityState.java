@@ -31,25 +31,23 @@ public enum EntityState {
     not_Persistable,
     persistable_Attached,
     persistable_Detached,
-    persistable_Destroyed
-
+    persistable_Destroyed,
+    // end::refguide[]
     ;
 
     public boolean isPersistable() {
         return this != not_Persistable;
     }
-
     public boolean isAttached() {
         return this == persistable_Attached;
     }
-
     public boolean isDetached() {
         return this == persistable_Detached;
     }
-
     public boolean isDestroyed() {
         return this == persistable_Destroyed;
     }
 
+    // tag::refguide[]
 }
 // end::refguide[]

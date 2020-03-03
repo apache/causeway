@@ -21,12 +21,18 @@ package org.apache.isis.applib.annotation;
 /**
  * Whether the property or collection is included if the domain object is serialized into a memento.
  */
+// tag::refguide[]
 public enum MementoSerialization {
+
+    // end::refguide[]
     /**
      * Property or collection is included in any mementos.
      * This is the fallback/default if not explicitly excluded.
      */
+    // tag::refguide[]
     INCLUDED,
+
+    // end::refguide[]
     /**
      * Property or collection's state is excluded from any mementos.
      *
@@ -34,10 +40,16 @@ public enum MementoSerialization {
      *     Corresponds to <tt>@Property(notPersisted=true)</tt> or <tt>@Collection(notPersisted=true)</tt> prior to Isis 2.x
      * </p>
      */
+    // tag::refguide[]
     EXCLUDED,
+
+    // end::refguide[]
     /**
      * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
      * annotations or superclasses/interfaces).
      */
+    // tag::refguide[]
     NOT_SPECIFIED
+
 }
+// end::refguide[]

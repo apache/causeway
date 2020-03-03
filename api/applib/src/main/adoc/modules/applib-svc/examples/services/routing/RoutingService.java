@@ -27,7 +27,6 @@ import org.apache.isis.applib.annotation.Programmatic;
 public interface RoutingService {
 
     boolean canRoute(Object original);
-
     Object route(Object original);
 
 }

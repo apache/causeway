@@ -51,14 +51,18 @@ import org.springframework.stereotype.Component;
  * @see ViewModel
  * 
  * @apiNote Meta annotation {@link Component} allows for the Spring framework to pick up (discover) the 
- * annotated type. 
- * For more details see {@link org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring}.
+ * annotated type.
+ *
+ * For more details see <code>org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring</code>.
  */
+// tag::refguide[]
 @Inherited
-@Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
+@Target({
+        ElementType.TYPE,
+        ElementType.ANNOTATION_TYPE
+})
 @Retention(RetentionPolicy.RUNTIME)
 @Component @Scope("prototype")
 public @interface ViewModel {
-
-
 }
+// end::refguide[]

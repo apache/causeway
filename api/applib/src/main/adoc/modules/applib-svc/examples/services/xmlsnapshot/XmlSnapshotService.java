@@ -35,8 +35,8 @@ import org.apache.isis.applib.annotation.Programmatic;
 // tag::refguide[]
 public interface XmlSnapshotService {
 
-// end::refguide[]
-// tag::refguide-1[]
+    // end::refguide[]
+    // tag::refguide-1[]
     interface Snapshot {
         Document getXmlDocument();
         Document getXsdDocument();
@@ -44,17 +44,17 @@ public interface XmlSnapshotService {
         String getXmlDocumentAsString();
         String getXsdDocumentAsString();
     }
-// end::refguide-1[]
+    // end::refguide-1[]
 
-// tag::refguide-2[]
+    // tag::refguide-2[]
     interface Builder {
         void includePath(final String path);
         void includePathAndAnnotation(final String path, final String annotation);
         XmlSnapshotService.Snapshot build();
     }
-// end::refguide-2[]
+    // end::refguide-2[]
 
-// tag::refguide-3[]
+    // tag::refguide-3[]
     class Exception extends RuntimeException {
 
         private static final long serialVersionUID = 1L;
@@ -75,32 +75,40 @@ public interface XmlSnapshotService {
             super(cause);
         }
     }
-// end::refguide-3[]
+    // end::refguide-3[]
 
-// tag::refguide[]
+    // tag::refguide[]
     XmlSnapshotService.Snapshot snapshotFor(final Object domainObject);
 
     XmlSnapshotService.Builder builderFor(final Object domainObject);
 
+    // end::refguide[]
     /**
      * Convenience to convert xml string (eg as obtained by {@link Snapshot#getXmlDocumentAsString()} or
      * {@link Snapshot#getXsdDocumentAsString()}) back into a {@link Document W3C Document}.
      */
+    // tag::refguide[]
     Document asDocument(String xmlStr);
 
+    // end::refguide[]
     /**
      * Convenience method to extract value of an XML element, based on its type.
      */
+    // tag::refguide[]
     <T> T getChildElementValue(final Element el, final String tagname, final Class<T> expectedCls);
 
+    // end::refguide[]
     /**
      * Convenience method to walk XML document.
      */
+    // tag::refguide[]
     Element getChildElement(final Element el, final String tagname);
 
+    // end::refguide[]
     /**
      * Convenience method to obtain value of child text node.
      */
+    // tag::refguide[]
     String getChildTextValue(final Element el);
 
 }

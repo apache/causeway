@@ -28,15 +28,19 @@ import javax.xml.bind.annotation.XmlRootElement;
  *     difference is one of intent.
  * </p>
  */
+// tag::refguide[]
 public enum Nature {
 
+    // end::refguide[]
     /**
      * The default; allows the programmer to combine <tt>@DomainObject</tt> annotation with the
      * {@link ViewModel} annotation, or the {@link XmlRootElement} annotation, or by implementing the
      * {@link org.apache.isis.applib.ViewModel} interface.
      */
+    // tag::refguide[]
     NOT_SPECIFIED,
 
+    // end::refguide[]
     /**
      * A domain entity whose persistence is managed internally by Isis, using JDO as the persistence implementation.
      * Domain entities are considered to be part of the domain model layer.
@@ -49,7 +53,10 @@ public enum Nature {
      *    Currently implies no additional semantics other than documentation.
      * </p>
      */
+    // tag::refguide[]
     JDO_ENTITY,
+
+    // end::refguide[]
     /**
      * A domain entity that is a wrapper/proxy/stub to some externally managed entity.  Domain entities are
      * considered to be part of the domain model layer.
@@ -64,15 +71,18 @@ public enum Nature {
      *     {@link XmlRootElement} annotation instead.
      * </p>
      */
+    // tag::refguide[]
     EXTERNAL_ENTITY,
+
+    // end::refguide[]
     /**
      * A domain entity that is a wrapper/proxy/stub to a &quot;synthetic&quot; entity, for example one that is
      * constructed from some sort of internal memory data structure.
      *
      * <p>
-     *     As for a {@link #EXTERNAL_ENTITY}, the identity of a synthetic entity is determined solely by the 
+     *     As for a {@link #EXTERNAL_ENTITY}, the identity of a synthetic entity is determined solely by the
      *     state of object's properties (that have not been set to be ignored using
-     *     {@link org.apache.isis.applib.annotation.Property#notPersisted()}).
+     *     {@link Property#mementoSerialization()}).
      * </p>
      *
      * <p>
@@ -80,7 +90,10 @@ public enum Nature {
      *     {@link XmlRootElement} annotation instead.
      * </p>
      */
+    // tag::refguide[]
     INMEMORY_ENTITY,
+
+    // end::refguide[]
     /**
      * An object that is conceptually part of the application layer, and which surfaces behavior and/or state that
      * is aggregate of one or more domain entity.
@@ -100,20 +113,26 @@ public enum Nature {
      *
      * @see ViewModel
      */
+    // tag::refguide[]
     VIEW_MODEL,
 
+    // end::refguide[]
     /**
      * An object that acts as a mix-in to some other object, contributing behavior and/or derived state based on the
      * domain object.
      *
      * @see Mixin
      */
+    // tag::refguide[]
     MIXIN,
-    
+
+    // end::refguide[]
     /**
-     * An object that is entirely managed by the underlying IoC container. 
+     * An object that is entirely managed by the underlying IoC container.
      * @apiNote EXPERIMENTAL
      */
+    // tag::refguide[]
     BEAN,
-    
+
 }
+// tag::refguide[]

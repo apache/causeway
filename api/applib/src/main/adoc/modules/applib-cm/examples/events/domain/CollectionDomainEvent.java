@@ -21,38 +21,38 @@ package org.apache.isis.applib.events.domain;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 
+import lombok.Getter;
+
+// tag::refguide[]
 public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> {
 
-    // -- Default class
+    // end::refguide[]
     /**
      * This class is the default for the
      * {@link org.apache.isis.applib.annotation.Collection#domainEvent()} annotation attribute.  Whether this
      * raises an event or not depends upon the <tt>isis.core.meta-model.annotation.collection.domain-event.post-for-default</tt>
      * configuration property.
      */
+    // tag::refguide[]
     public static class Default extends CollectionDomainEvent<Object, Object> { }
 
-
-    // -- Noop class
-
+    // end::refguide[]
     /**
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event.
      */
+    // tag::refguide[]
     public static class Noop extends CollectionDomainEvent<Object, Object> {}
 
-
-    // -- Doop class
-
+    // end::refguide[]
     /**
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event..
      */
+    // tag::refguide[]
     public static class Doop extends CollectionDomainEvent<Object, Object> {}
 
-
-
-    // -- constructor
+    // end::refguide[]
 
     /**
      * If used then the framework will set state via (non-API) setters.
@@ -66,52 +66,54 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
 
 
 
-    // -- value
-    private T value;
-
     /**
      * The proposed reference to either add or remove (per {@link #getOf()}), populated at {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#VALIDATE}
      * and subsequent phases (is null for {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#HIDE hidden} and {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#DISABLE disable} phases).
      */
-    public T getValue() {
-        return value;
+    // tag::refguide[]
+    @Getter
+    private T value;
+
+    public static enum Of {
+        // end::refguide[]
+        /**
+         * The collection is being accessed
+         * ({@link Phase#HIDE hide} and
+         * {@link Phase#DISABLE disable}) checks.
+         */
+        // tag::refguide[]
+        ACCESS,
+
+        // end::refguide[]
+        /**
+         * The collection is being added to
+         * ({@link Phase#VALIDATE validity} check and
+         * {@link Phase#EXECUTED execution}).
+         */
+        // tag::refguide[]
+        ADD_TO,
+
+        // end::refguide[]
+        /**
+         * The collection is being removed from
+         * ({@link Phase#VALIDATE validity} check and
+         * {@link Phase#EXECUTED execution}).
+         */
+        // tag::refguide[]
+        REMOVE_FROM
+
     }
+
+    @Getter
+    private Of of;
+
+    // end::refguide[]
     /**
      * Not API, set by the framework.
      */
     public void setValue(T value) {
         this.value = value;
     }
-
-
-    // -- Of
-    public static enum Of {
-        /**
-         * The collection is being accessed
-         * ({@link Phase#HIDE hide} and
-         * {@link Phase#DISABLE disable}) checks.
-         */
-        ACCESS,
-        /**
-         * The collection is being added to
-         * ({@link Phase#VALIDATE validity} check and
-         * {@link Phase#EXECUTED execution}).
-         */
-        ADD_TO,
-        /**
-         * The collection is being removed from
-         * ({@link Phase#VALIDATE validity} check and
-         * {@link Phase#EXECUTED execution}).
-         */
-        REMOVE_FROM
-    }
-
-    private Of of;
-
-    public Of getOf() {
-        return of;
-    }
-
     /**
      * Not API; updates from {@link Of#ACCESS} to either {@link Of#ADD_TO} or {@link Of#REMOVE_FROM} when hits the
      * {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#VALIDATE validation phase}.
@@ -119,7 +121,6 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
     public void setOf(Of of) {
         this.of = of;
     }
-
 
 
     private static final ToString<CollectionDomainEvent<?,?>> toString =
@@ -136,4 +137,7 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
         return toString.toString(this);
     }
 
+    // tag::refguide[]
+
 }
+// end::refguide[]

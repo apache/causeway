@@ -18,8 +18,14 @@
  */
 package org.apache.isis.applib.annotation;
 
+// tag::refguide[]
 public enum PublishingChangeKind {
+
     CREATE,
+
     UPDATE,
-    DELETE;
+
+    DELETE,
+
 }
+// end::refguide[]

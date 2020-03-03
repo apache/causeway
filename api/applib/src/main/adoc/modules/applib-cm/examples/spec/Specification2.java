@@ -29,10 +29,15 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
  *     it will never be called by the framework.
  * </p>
  */
+// tag::refguide[]
 public interface Specification2 extends Specification {
 
+    // end::refguide[]
     /**
      * If <tt>null</tt> then satisfied, otherwise is the reason (as a {@link TranslatableString} translatable string) as to why the specification is not satisfied.
      */
-    public TranslatableString satisfiesTranslatable(Object obj);
+    // tag::refguide[]
+    TranslatableString satisfiesTranslatable(Object obj);
+
 }
+// end::refguide[]

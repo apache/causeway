@@ -22,12 +22,41 @@ import java.util.EventObject;
 
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 
+import lombok.Getter;
+
 /**
  * Emitted for subscribers to obtain a layout hint (equivalent to the <tt>layout()</tt> supporting method).
  */
+// tag::refguide[]
 public abstract class LayoutUiEvent<S> extends AbstractUiEvent<S> {
 
-    //region > constructors
+    // end::refguide[]
+    /**
+     * This class is the default for the
+     * {@link DomainObjectLayout#layoutUiEvent()} annotation attribute.  Whether this
+     * raises an event or not depends upon the <tt>isis.core.meta-model.annotation.domain-object-layout.layout-ui-event.post-for-default</tt>
+     * configuration property.
+     */
+    // tag::refguide[]
+    public static class Default extends LayoutUiEvent<Object> { }
+
+    // end::refguide[]
+    /**
+     * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
+     * property setting for the {@link Default} event.
+     */
+    // tag::refguide[]
+    public static class Noop extends LayoutUiEvent<Object> { }
+
+    // end::refguide[]
+    /**
+     * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
+     * property setting for the {@link Default} event..
+     */
+    // tag::refguide[]
+    public static class Doop extends LayoutUiEvent<Object> { }
+
+    // end::refguide[]
     /**
      * If used then the framework will set state via (non-API) setters.
      *
@@ -43,50 +72,19 @@ public abstract class LayoutUiEvent<S> extends AbstractUiEvent<S> {
         super(source);
     }
 
-    //endregion
-
-    //region > Default class
-    /**
-     * This class is the default for the
-     * {@link DomainObjectLayout#layoutUiEvent()} annotation attribute.  Whether this
-     * raises an event or not depends upon the <tt>isis.core.meta-model.annotation.domain-object-layout.layout-ui-event.post-for-default</tt>
-     * configuration property.
-     */
-    public static class Default extends LayoutUiEvent<Object> { }
-    //endregion
-
-    //region > Noop class
-
-    /**
-     * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
-     * property setting for the {@link Default} event.
-     */
-    public static class Noop extends LayoutUiEvent<Object> { }
-    //endregion
-
-    //region > Doop class
-
-    /**
-     * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
-     * property setting for the {@link Default} event..
-     */
-    public static class Doop extends LayoutUiEvent<Object> { }
-    //endregion
-
-    //region > layout
-    private String layout;
-
     /**
      * The name of the alternate layout to use, as provided by a subscriber using {@link #setLayout(String)}.
      */
-    public String getLayout() {
-        return layout;
-    }
+    // tag::refguide[]
+    @Getter
+    private String layout;
 
+    // end::refguide[]
     /**
      * For subscribers to call to provide a layout for this object.
      */
+    // tag::refguide[]
     public void setLayout(final String layout) { }
-    //endregion
 
 }
+// end::refguide[]

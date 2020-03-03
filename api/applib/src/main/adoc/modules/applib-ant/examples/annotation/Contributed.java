@@ -24,32 +24,50 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * The means by which a domain service action will be contributed to a domain object.
  */
+// tag::refguide[]
 @XmlType(
         namespace = "http://isis.apache.org/applib/layout/component"
         )
 public enum Contributed {
+
+    // end::refguide[]
     /**
      * Default: contributed as both an action and also (if takes a single argument and has safe semantics) as an association
      * (contributed property if returns a single value, contributed collection if returns a collection).
      */
+    // tag::refguide[]
     AS_BOTH,
+
+    // end::refguide[]
     /**
      * Contributed as an action but <i>not</i> as an association.
      */
+    // tag::refguide[]
     AS_ACTION,
+
+    // end::refguide[]
     /**
      * (If takes a single argument and has safe semantics) then is contributed as an association
      * (contributed property if returns a single value, contributed collection if returns a collection) but <i>not</i>
      * as an action.
      */
+    // tag::refguide[]
     AS_ASSOCIATION,
+
+    // end::refguide[]
     /**
      * The action is not contributed as either an action or as an association.
      */
+    // tag::refguide[]
     AS_NEITHER,
+
+    // end::refguide[]
     /**
      * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
      * annotations or superclasses/interfaces).
      */
+    // tag::refguide[]
     NOT_SPECIFIED
+
 }
+// end::refguide[]

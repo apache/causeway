@@ -21,30 +21,39 @@ package org.apache.isis.applib.annotation;
 /**
  * Whether the property or parameter is optional or is required (aka mandatory).
  */
+// tag::refguide[]
 public enum Optionality {
+
+    // end::refguide[]
     /**
      * Default, usually meaning mandatory for properties and always meaning mandatory for parameters.
      *
      * <p>
-     * For properties, will be false unless JDO {@link javax.jdo.annotations.Column} has also specified with
-     * {@link javax.jdo.annotations.Column#allowsNull()} set to <code>true</code>.
+     * For properties, will be false unless JDO <code>javax.jdo.annotations.Column</code> has also specified with
+     * <code>javax.jdo.annotations.Column#allowsNull()</code> set to <code>true</code>.
      * </p>
      */
+    // tag::refguide[]
     DEFAULT,
+
+    // end::refguide[]
     /**
      * Indicates that the property or parameter is not required.
      */
+    // tag::refguide[]
     OPTIONAL,
+
+    // end::refguide[]
     /**
-     * Indicates that the property is required (even if the JDO {@link javax.jdo.annotations.Column} annotation
+     * Indicates that the property is required (even if the JDO <code>javax.jdo.annotations.Column</code> annotation
      * says otherwise).
      *
      * <p>
      * When using the JDO/DataNucleus objectstore, it is sometimes necessary to annotate a property as optional
-     * (using {@link javax.jdo.annotations.Column#allowsNull()} set to <code>true</code>), even if the property is
+     * (using <code>javax.jdo.annotations.Column#allowsNull()</code> set to <code>true</code>), even if the property is
      * logically mandatory.  For example, this can occur when the property is in a subtype class that has been
-     * "rolled up" to the superclass table using {@link javax.jdo.annotations.Inheritance} with the
-     * {@link javax.jdo.annotations.InheritanceStrategy#SUPERCLASS_TABLE superclass}<tt> strategy.
+     * "rolled up" to the superclass table using <code>javax.jdo.annotations.Inheritance</code>> with the
+     * <code>javax.jdo.annotations.InheritanceStrategy#SUPERCLASS_TABLE</code> superclass strategy.
      * </p>
      *
      * <p>
@@ -53,10 +62,16 @@ public enum Optionality {
      * is unable to do so.
      * </p>
      */
+    // tag::refguide[]
     MANDATORY,
+
+    // end::refguide[]
     /**
      * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
      * annotations or superclasses/interfaces).
      */
+    // tag::refguide[]
     NOT_SPECIFIED
+
 }
+// end::refguide[]

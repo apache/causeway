@@ -27,51 +27,64 @@ import org.apache.isis.applib.services.user.UserService;
 
 /**
  * Intended only for use by fixture scripts and integration tests, allows a block of code to execute
- * while the {@link org.apache.isis.applib.DomainObjectContainer container}'s
- * {@link UserService#getUser() getUser()} method returns the specified user/role as the effective user.
+ * while the {@link UserService}'s {@link UserService#getUser() getUser()} method returns the specified user/role
+ * as the effective user.
  */
 // tag::refguide[]
 public interface SudoService {
 
+    // end::refguide[]
     /**
      * If included in the list of roles, then will disable security checks (can view and use all object members).
      */
+    // tag::refguide[]
     String ACCESS_ALL_ROLE = SudoService.class.getName() + "#accessAll";
 
+    // end::refguide[]
     /**
-     * Executes the supplied block, with the {@link DomainObjectContainer} returning the specified user.
+     * Executes the supplied block, with the {@link UserService} returning the specified user.
      *
      * <p>
      *    The roles of this user will be the same as the currently logged-in user.
      * </p>
      */
+    // tag::refguide[]
     void sudo(String username, final Runnable runnable);
 
+    // end::refguide[]
     /**
-     * Executes the supplied block, with the {@link DomainObjectContainer} returning the specified user.
+     * Executes the supplied block, with the {@link UserService} returning the specified user.
      *
      * <p>
      *    The roles of this user will be the same as the currently logged-in user.
      * </p>
      */
+    // tag::refguide[]
     <T> T sudo(String username, final Callable<T> callable);
 
+    // end::refguide[]
     /**
-     * Executes the supplied block, with the {@link DomainObjectContainer} returning the specified user with the specified roles.
+     * Executes the supplied block, with the {@link UserService} returning the specified user with the specified roles.
      */
+    // tag::refguide[]
     void sudo(String username, List<String> roles, final Runnable runnable);
 
+    // end::refguide[]
     /**
-     * Executes the supplied block, with the {@link DomainObjectContainer} returning the specified user with the specified roles.
+     * Executes the supplied block, with the {@link UserService} returning the specified user with the specified roles.
      */
+    // tag::refguide[]
     <T> T sudo(String username, List<String> roles, final Callable<T> callable);
 
-// end::refguide[]
-// tag::refguide-1[]
+    // end::refguide[]
+
+    // tag::refguide-1[]
     /**
      * Allows the {@link SudoService} to notify other services/components that the effective user has been changed.
      */
     interface Spi {
+
+        // end::refguide-1[]
         /**
          * Any implementation of the {@link SudoService} should call this method on all implementations of the
          * {@link Spi} service whenever {@link SudoService#sudo(String, List, Callable)} (or its overloads)
@@ -81,15 +94,14 @@ public interface SudoService {
          *     Modelled after Shiro security's <a href="https://shiro.apache.org/static/1.2.6/apidocs/org/apache/shiro/subject/Subject.html#runAs-org.apache.shiro.subject.PrincipalCollection-">runAs</a> support.
          * </p>
          */
-        @Programmatic
+        // tag::refguide-1[]
         void runAs(String username, List<String> roles);
 
-        /**
-         *
-         */
         void releaseRunAs();
     }
-// end::refguide-1[]
-// tag::refguide[]
+    // end::refguide-1[]
+
+    // tag::refguide[]
+
 }
 // end::refguide[]

@@ -36,17 +36,21 @@ import org.springframework.stereotype.Component;
  * annotated type. 
  * For more details see {@link org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring}.
  */
+// tag::refguide[]
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Component @Scope("prototype")
 public @interface Mixin {
 
+    // end::refguide[]
     /**
      * The default of {@link Mixin#method()}).
      */
+    // tag::refguide[]
     String DEFAULT_METHOD_NAME = "$$";
 
+    // end::refguide[]
     /**
      * Specifies the name of the verb to use within the mixin, eg "exec", "invoke", "apply" and so on,
      *
@@ -64,6 +68,8 @@ public @interface Mixin {
      *     valid identifiers after Java 8.
      * </p>
      */
+    // tag::refguide[]
     String method() default DEFAULT_METHOD_NAME;
 
 }
+// end::refguide[]

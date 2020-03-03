@@ -27,7 +27,8 @@ import lombok.Setter;
  * A model object for the signup page
  */
 // tag::refguide[]
-public class UserDetails implements Serializable {
+public class UserDetails
+                implements Serializable {
 
     private static final long serialVersionUID = -7308102332765149525L;
 

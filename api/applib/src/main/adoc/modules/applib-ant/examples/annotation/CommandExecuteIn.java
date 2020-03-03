@@ -30,23 +30,24 @@ package org.apache.isis.applib.annotation;
  */
 // tag::refguide[]
 public enum CommandExecuteIn {
-// end::refguide[]
+
+    // end::refguide[]
     /**
      * Execute synchronously in the &quot;foreground&quot;, wait for the results.
      */
-// tag::refguide[]
+    // tag::refguide[]
     FOREGROUND,
-// end::refguide[]
 
+    // end::refguide[]
     /**
      * Execute &quot;asynchronously&quot; through the {@link org.apache.isis.applib.services.background.BackgroundCommandService}, returning (if possible) the
      * persisted {@link org.apache.isis.applib.services.command.Command command} object as a placeholder to the
      * result.
      */
-// tag::refguide[]
+    // tag::refguide[]
     BACKGROUND,
-// end::refguide[]
 
+    // end::refguide[]
     /**
      * For commands that are replicated from a master onto a slave and are to be replayed (typically using the same
      * mechanism as "regular" background commands, eg a background job).
@@ -55,18 +56,19 @@ public enum CommandExecuteIn {
      *     For framework use, not intended to be used in application code.
      * </p>
      */
-// tag::refguide[]
+    // tag::refguide[]
     REPLAYABLE,
-// end::refguide[]
 
+    // end::refguide[]
     /**
      * For commands that have been excluded and will not run.
      * These are typically for a replayable command that has hit an exception (which normally would prevent any further
      * replayable commands from being replayed) and which the administrator has decided to skip.
      */
-// tag::refguide[]
+    // tag::refguide[]
     EXCLUDED
-// end::refguide[]
+
+    // end::refguide[]
     ;
 
     public boolean isForeground() { return this == FOREGROUND; }
@@ -82,7 +84,7 @@ public enum CommandExecuteIn {
             private Meta() {}
         }
     }
+    // tag::refguide[]
 
-// tag::refguide[]
 }
 // end::refguide[]
