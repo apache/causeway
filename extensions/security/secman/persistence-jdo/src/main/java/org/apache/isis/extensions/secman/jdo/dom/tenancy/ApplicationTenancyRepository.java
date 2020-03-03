@@ -45,7 +45,8 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
 
     @Inject private FactoryService factory;
     @Inject private RepositoryService repository;
-    @Inject private QueryResultsCache queryResultsCache;
+    
+    @Inject private javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
     
     @Override
     public ApplicationTenancy newApplicationTenancy() {
@@ -56,7 +57,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
 
     @Override
     public Collection<ApplicationTenancy> findByNameOrPathMatchingCached(final String search) {
-        return queryResultsCache.execute(new Callable<Collection<ApplicationTenancy>>() {
+        return queryResultsCacheProvider.get().execute(new Callable<Collection<ApplicationTenancy>>() {
             @Override public Collection<ApplicationTenancy> call() throws Exception {
                 return findByNameOrPathMatching(search);
             }
@@ -75,7 +76,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
     // -- findByName
 
     public ApplicationTenancy findByNameCached(final String name) {
-        return queryResultsCache.execute(new Callable<ApplicationTenancy>() {
+        return queryResultsCacheProvider.get().execute(new Callable<ApplicationTenancy>() {
             @Override
             public ApplicationTenancy call() throws Exception {
                 return findByName(name);
@@ -91,7 +92,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
     // -- findByPath
 
     public ApplicationTenancy findByPathCached(final String path) {
-        return queryResultsCache.execute(new Callable<ApplicationTenancy>() {
+        return queryResultsCacheProvider.get().execute(new Callable<ApplicationTenancy>() {
             @Override
             public ApplicationTenancy call() throws Exception {
                 return findByPath(path);
@@ -138,7 +139,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
 
     @Override
     public Collection<ApplicationTenancy> allTenancies() {
-        return queryResultsCache.execute(new Callable<Collection<ApplicationTenancy>>() {
+        return queryResultsCacheProvider.get().execute(new Callable<Collection<ApplicationTenancy>>() {
             @Override
             public Collection<ApplicationTenancy> call() throws Exception {
                 return allTenanciesNoCache();

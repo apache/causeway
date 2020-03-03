@@ -62,9 +62,10 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
 
     @Inject private RepositoryService repository;
     @Inject private ApplicationFeatureRepositoryDefault applicationFeatureRepository;
-    @Inject private QueryResultsCache queryResultsCache;
     @Inject private FactoryService factory;
     @Inject private MessageService messages;
+    
+    @Inject private javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
 
     @Override
     public ApplicationPermission newApplicationPermission() {
@@ -73,7 +74,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
 
     // -- findByRole (programmatic)
     public List<ApplicationPermission> findByRoleCached(@NonNull final ApplicationRole role) {
-        return queryResultsCache.execute(this::findByRole,
+        return queryResultsCacheProvider.get().execute(this::findByRole,
                 ApplicationPermissionRepository.class, "findByRoleCached", role);
     }
 
@@ -87,7 +88,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
 
     // -- findByUser (programmatic)
     public List<ApplicationPermission> findByUserCached(@NonNull final ApplicationUser user) {
-        return queryResultsCache.execute(this::findByUser, 
+        return queryResultsCacheProvider.get().execute(this::findByUser, 
                 ApplicationPermissionRepository.class, "findByUserCached", user);
     }
 
@@ -114,7 +115,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
         // obtain all permissions for this user, map by its value, and
         // put into query cache (so that this method can be safely called in a tight loop)
         val permissions =
-                queryResultsCache.execute(
+                queryResultsCacheProvider.get().execute(
                         this::permissionsByPermissionValue, 
                         ApplicationPermissionRepository.class, "findByUserAndPermissionValue", 
                         username);
@@ -152,7 +153,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
             org.apache.isis.extensions.secman.api.role.ApplicationRole role,
             ApplicationPermissionRule rule,
             ApplicationFeatureType type) {
-        return queryResultsCache.execute(this::findByRoleAndRuleAndFeatureType, 
+        return queryResultsCacheProvider.get().execute(this::findByRoleAndRuleAndFeatureType, 
                 ApplicationPermissionRepository.class, "findByRoleAndRuleAndFeatureTypeCached", 
                 role, rule, type);
     }
@@ -178,7 +179,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
             final ApplicationPermissionRule rule,
             final ApplicationFeatureType type,
             final String featureFqn) {
-        return queryResultsCache.execute(
+        return queryResultsCacheProvider.get().execute(
                 this::findByRoleAndRuleAndFeature,
                 ApplicationPermissionRepository.class, "findByRoleAndRuleAndFeatureCached",
                 role, rule, type, featureFqn);
@@ -206,7 +207,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
 
     @Override
     public Collection<ApplicationPermission> findByFeatureCached(final ApplicationFeatureId featureId) {
-        return queryResultsCache.execute(
+        return queryResultsCacheProvider.get().execute(
                 this::findByFeature, ApplicationPermissionRepository.class, "findByFeatureCached",
                 featureId);
     }

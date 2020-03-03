@@ -51,11 +51,12 @@ import lombok.val;
 public class ApplicationUserRepository
 implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<ApplicationUser> {
 
-    @Inject private QueryResultsCache queryResultsCache;
     @Inject private FactoryService factoryService;
     @Inject private RepositoryService repository;
     @Inject private SecurityModuleConfig configBean;
     @Inject private Optional<PasswordEncryptionService> passwordEncryptionService; // empty if no candidate is available
+    
+    @Inject private javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
     
     @Override
     public ApplicationUser newApplicationUser() {
@@ -76,7 +77,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
     public ApplicationUser findOrCreateUserByUsername(
             final String username) {
         // slightly unusual to cache a function that modifies state, but safe because this is idempotent
-        return queryResultsCache.execute(()->
+        return queryResultsCacheProvider.get().execute(()->
             findByUsername(username).orElseGet(()->newDelegateUser(username, null)), 
             ApplicationUserRepository.class, "findOrCreateUserByUsername", username);
     }
@@ -84,7 +85,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
     // -- findByUsername
 
     public Optional<ApplicationUser> findByUsernameCached(final String username) {
-        return queryResultsCache.execute(this::findByUsername, 
+        return queryResultsCacheProvider.get().execute(this::findByUsername, 
                 ApplicationUserRepository.class, "findByUsernameCached", username);
     }
 
@@ -98,7 +99,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
     // -- findByEmailAddress (programmatic)
 
     public Optional<ApplicationUser> findByEmailAddressCached(final String emailAddress) {
-        return queryResultsCache.execute(this::findByEmailAddress, 
+        return queryResultsCacheProvider.get().execute(this::findByEmailAddress, 
                 ApplicationUserRepository.class, "findByEmailAddressCached", emailAddress);
     }
 

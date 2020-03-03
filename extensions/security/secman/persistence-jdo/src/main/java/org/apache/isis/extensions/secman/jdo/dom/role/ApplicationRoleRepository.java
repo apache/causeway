@@ -47,8 +47,9 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository<
 
     @Inject private FactoryService factoryService;
     @Inject private RepositoryService repository;
-    @Inject private QueryResultsCache queryResultsCache;
     @Inject private SecurityModuleConfig configBean;
+    
+    @Inject private javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
 
     
     @Override
@@ -58,7 +59,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository<
     
     @Override
     public Optional<ApplicationRole> findByNameCached(final String name) {
-        return queryResultsCache.execute(()->findByName(name),
+        return queryResultsCacheProvider.get().execute(()->findByName(name),
                 ApplicationRoleRepository.class, "findByNameCached", name);
     }
 

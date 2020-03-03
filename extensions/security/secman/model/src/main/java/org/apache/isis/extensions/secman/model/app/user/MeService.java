@@ -50,7 +50,7 @@ public class MeService {
 
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private UserService userService;
-    @Inject private QueryResultsCache queryResultsCache;
+    @Inject private javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
     
     // -- iconName
     public String iconName() {
@@ -70,7 +70,7 @@ public class MeService {
             )
     @MemberOrder(name = "Security", sequence = "100")
     public ApplicationUser me() {
-        return queryResultsCache.execute(new Callable<ApplicationUser>() {
+        return queryResultsCacheProvider.get().execute(new Callable<ApplicationUser>() {
             @Override
             public ApplicationUser call() throws Exception {
                 return doMe();
