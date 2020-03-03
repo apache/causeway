@@ -27,6 +27,8 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.runtime.session.init.InitialisationSession;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 
+import lombok.SneakyThrows;
+
 /**
  * Is the factory of {@link IsisSession}s, also holding a reference to the current session using
  * a thread-local.
@@ -62,8 +64,7 @@ public interface IsisSessionFactory {
 
     
     /**
-     * Executes a piece of code in a session.
-     * If there is an open session with the same AuthenticationSession then it is reused.
+     * Executes a piece of code in a new (possibly nested) IsisSession.
      *
      * @param authenticationSession - the user to run under
      * @param callable - the piece of code to run
@@ -71,59 +72,48 @@ public interface IsisSessionFactory {
      */
     public <R> R callAuthenticated(AuthenticationSession authenticationSession, Callable<R> callable);
     
+    /**
+     * Variant of {@link #callAuthenticated(AuthenticationSession, Callable)} that takes a runnable.
+     * @param authenticationSession
+     * @param runnable
+     */
     public default void runAuthenticated(AuthenticationSession authenticationSession, ThrowingRunnable runnable) {
         final Callable<Void> callable = ()->{runnable.run(); return null;};
         callAuthenticated(authenticationSession, callable);
     }
-    
+
+    /**
+     * Executes a piece of code in a (possibly reused) IsisSession.
+     * If there is already an open session stacked on the current thread then that one is used, 
+     * otherwise an anonymous session is created.
+     * @param <R>
+     * @param callable
+     */
+    @SneakyThrows
     public default <R> R callAnonymous(Callable<R> callable) {
+        if(isInSession()) {
+            return callable.call(); // reuse existing session
+        }
         return callAuthenticated(new InitialisationSession(), callable);
     }
     
+    /**
+     * Variant of {@link #callAnonymous(Callable)} that takes a runnable.
+     * @param runnable
+     */
+    @SneakyThrows
     public default void runAnonymous(ThrowingRunnable runnable) {
+        if(isInSession()) {
+            runnable.run(); // reuse existing session
+            return;
+        }
         runAuthenticated(new InitialisationSession(), runnable);
     }
 
+    /**
+     * closes all open IsisSessions as stacked on the current thread
+     */
     public void closeSessionStack();
-    
-
-//    /**
-//     * As per {@link #doInSession(Runnable, AuthenticationSession)}, using a default {@link InitialisationSession}.
-//     * @param runnable
-//     */
-//    public default void doInSession(final Runnable runnable) {
-//        doInSession(runnable, new InitialisationSession());
-//    }
-
-//    /**
-//     * A template method that executes a piece of code in a session.
-//     * If there is an open session then it is reused, otherwise a temporary one
-//     * is created.
-//     *
-//     * @param runnable The piece of code to run.
-//     * @param authenticationSession
-//     */
-//    public default void doInSession(final Runnable runnable, final AuthenticationSession authenticationSession) {
-//        final Callable<Void> callable = ()->{runnable.run(); return null;};
-//        doInSession(callable, authenticationSession);
-//    }
-
-//    /**
-//     * As per {@link #doInSession(Callable), AuthenticationSession}, using a default {@link InitialisationSession}.
-//     */
-//    public default <R> R doInSession(final Callable<R> callable) {
-//        return doInSession(callable, new InitialisationSession());
-//    }
-
-//    /**
-//     * A template method that executes a piece of code in a session.
-//     * If there is an open session then it is reused, otherwise a temporary one
-//     * is created.
-//     *
-//     * @param callable The piece of code to run.
-//     * @param authenticationSession - the user to run under
-//     */
-//    public <R> R doInSession(final Callable<R> callable, final AuthenticationSession authenticationSession);
 
 
 }

@@ -59,6 +59,7 @@ import org.apache.isis.core.security.authentication.standard.SimpleSession;
 import static org.apache.isis.core.commons.internal.base._With.requires;
 
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -146,23 +147,16 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory, IsisSessio
             .orElseGet(()->new IsisSession(metaModelContext, authenticationSession));
             
             isisSessionStack.get().push(isisSession);
-            runtimeEventService.fireSessionOpened(isisSession); // only fire top-level
+            if(isisSessionStack.get().size()==1) {
+                runtimeEventService.fireSessionOpened(isisSession); // only fire on top-level session    
+            }
             return isisSession;
         }
     }
 
     @Override
     public void closeSessionStack() {
-        synchronized($lock) {
-            val stack = isisSessionStack.get();
-            while(!stack.isEmpty()) {
-                val isisSession = stack.pop();
-                if(stack.isEmpty()) {                
-                    runtimeEventService.fireSessionClosing(isisSession); // only fire top-level
-                }
-            }
-            isisSessionStack.remove();
-        }
+        closeSessionStackDownToStackSize(0);
     }
     
     @Override
@@ -192,32 +186,39 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory, IsisSessio
     }
 
     @Override
+    @SneakyThrows
     public <R> R callAuthenticated(
             @NonNull final AuthenticationSession authenticationSession, 
             @NonNull final Callable<R> callable) {
         
-        val currentAuthenticationSession = currentAuthenticationSession().orElse(null);
-        val noSession = currentAuthenticationSession==null;
+        final int stackSizeWhenEntering = isisSessionStack.get().size();
+        openSession(authenticationSession);
         
         try {
-            if (noSession) {
-                openSession(authenticationSession);
-            }
-
             return callable.call();
-        } catch (Exception cause) {
-            val msg = String.format("An error occurred while executing code in %s session", noSession ? "a temporary" : "a"); 
-            throw new RuntimeException(msg, cause);
         } finally {
-            if (noSession) {
-                closeSessionStack();
-            }
+            closeSessionStackDownToStackSize(stackSizeWhenEntering);
         }
 
     }
 
-    // -- HELPER - SUDO SUPPORT 
+    // -- HELPER - SESSION STACK CLOSING
     
+    private void closeSessionStackDownToStackSize(int downToStackSize) {
+        synchronized($lock) {
+            val stack = isisSessionStack.get();
+            while(stack.size()>downToStackSize) {
+                val isisSession = stack.pop();
+                if(stack.isEmpty()) {                
+                    runtimeEventService.fireSessionClosing(isisSession); // only fire on top-level session 
+                }
+            }
+            isisSessionStack.remove();
+        }
+    }
+    
+    // -- HELPER - SUDO SUPPORT 
+
     @Inject private UserServiceDefault userServiceDefault;
     
     /**
