@@ -90,7 +90,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory, IsisSessio
 
     private IsisLocaleInitializer localeInitializer;
     private IsisTimeZoneInitializer timeZoneInitializer;
-    private final Object $lock = new Object[0];
 
     //@PostConstruct .. too early, needs services to be provisioned first
     @EventListener
@@ -140,18 +139,17 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory, IsisSessio
     
     @Override
     public IsisSession openSession(@NonNull final AuthenticationSession authenticationSession) {
-        synchronized($lock) {
             
-            val isisSession = getAuthenticationSessionOverride()
-            .map(authenticationSessionOverride->new IsisSession(metaModelContext, authenticationSessionOverride))
-            .orElseGet(()->new IsisSession(metaModelContext, authenticationSession));
-            
-            isisSessionStack.get().push(isisSession);
-            if(isisSessionStack.get().size()==1) {
-                runtimeEventService.fireSessionOpened(isisSession); // only fire on top-level session    
-            }
-            return isisSession;
+        val isisSession = getAuthenticationSessionOverride()
+        .map(authenticationSessionOverride->new IsisSession(metaModelContext, authenticationSessionOverride))
+        .orElseGet(()->new IsisSession(metaModelContext, authenticationSession));
+        
+        isisSessionStack.get().push(isisSession);
+        if(isisSessionStack.get().size()==1) {
+            runtimeEventService.fireSessionOpened(isisSession); // only fire on top-level session    
         }
+        return isisSession;
+        
     }
 
     @Override
@@ -205,18 +203,18 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory, IsisSessio
     // -- HELPER - SESSION STACK CLOSING
     
     private void closeSessionStackDownToStackSize(int downToStackSize) {
-        synchronized($lock) {
-            val stack = isisSessionStack.get();
-            while(stack.size()>downToStackSize) {
-                val isisSession = stack.pop();
-                if(stack.isEmpty()) {                
-                    runtimeEventService.fireSessionClosing(isisSession); // only fire on top-level session 
-                }
-            }
-            if(downToStackSize == 0) {
-                isisSessionStack.remove();
+        
+        val stack = isisSessionStack.get();
+        while(stack.size()>downToStackSize) {
+            val isisSession = stack.pop();
+            if(stack.isEmpty()) {                
+                runtimeEventService.fireSessionClosing(isisSession); // only fire on top-level session 
             }
         }
+        if(downToStackSize == 0) {
+            isisSessionStack.remove();
+        }
+        
     }
     
     // -- HELPER - SUDO SUPPORT 
