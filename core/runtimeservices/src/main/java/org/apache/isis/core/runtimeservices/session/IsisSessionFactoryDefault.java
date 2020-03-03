@@ -140,15 +140,15 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory, IsisSessio
     @Override
     public IsisSession openSession(@NonNull final AuthenticationSession authenticationSession) {
             
-        val isisSession = getAuthenticationSessionOverride()
-        .map(authenticationSessionOverride->new IsisSession(metaModelContext, authenticationSessionOverride))
-        .orElseGet(()->new IsisSession(metaModelContext, authenticationSession));
+        val authSessionToUse = getAuthenticationSessionOverride()
+                .orElse(authenticationSession);
+        val newIsisSession = new IsisSession(metaModelContext, authSessionToUse);
         
-        isisSessionStack.get().push(isisSession);
+        isisSessionStack.get().push(newIsisSession);
         if(isisSessionStack.get().size()==1) {
-            runtimeEventService.fireSessionOpened(isisSession); // only fire on top-level session    
+            runtimeEventService.fireSessionOpened(newIsisSession); // only fire on top-level session    
         }
-        return isisSession;
+        return newIsisSession;
         
     }
 
