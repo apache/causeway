@@ -22,7 +22,6 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -30,6 +29,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.IsisSessionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.commons.internal.collections._Maps;
 
@@ -47,11 +47,11 @@ import lombok.extern.log4j.Log4j2;
  */
 // tag::refguide[]
 @Service
-@RequestScope
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Named("isisApplib.Scratchpad")
 @Qualifier("Default")
+@IsisSessionScope
 @Log4j2
 public class Scratchpad {
 
