@@ -44,7 +44,7 @@ class IsisSessionScope implements Scope, IsisSessionScopeCloseListener {
     @Data(staticConstructor = "of")
     private static class ScopedObject {
         final String name;
-        final Object instance;
+        Object instance;
         Runnable destructionCallback;
         void preDestroy() {
             log.debug("destroy isis-session scoped {}", name);
@@ -71,13 +71,18 @@ class IsisSessionScope implements Scope, IsisSessionScopeCloseListener {
                     + "... @Inject Provider<MyScopedBean> provider ...", name);
         }
         
-        val scopedObject = scopedObjects.get().computeIfAbsent(name, 
-                __->{
-                    log.debug("create new isis-session scoped {}", name);
-                    return ScopedObject.of(name, objectFactory.getObject());   
-                });
+        val existingScopedObject = scopedObjects.get().get(name);
+        if(existingScopedObject!=null) {
+            return existingScopedObject.getInstance();
+        }
         
-        return scopedObject.getInstance();
+        val newScopedObject = ScopedObject.of(name); 
+        scopedObjects.get().put(name, newScopedObject); // just set a stub with a name only
+        
+        log.debug("create new isis-session scoped {}", name);
+        newScopedObject.setInstance(objectFactory.getObject()); // triggers call to registerDestructionCallback
+        
+        return newScopedObject.getInstance();
     }
 
     @Override
@@ -118,5 +123,5 @@ class IsisSessionScope implements Scope, IsisSessionScopeCloseListener {
             scopedObjects.remove();    
         }
     }
-
+    
 }

@@ -19,6 +19,8 @@
 
 package org.apache.isis.persistence.jdo.datanucleus5.persistence;
 
+import java.util.function.Supplier;
+
 import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.services.command.Command;
@@ -46,15 +48,15 @@ class IsisTransactionManagerJdo {
     private final IsisPersistenceSessionJdo persistenceSession;
 
     private final ServiceRegistry serviceRegistry;
-    private final CommandContext commandContext;
-    private final InteractionContext interactionContext;
+    private final Supplier<CommandContext> commandContextProvider;
+    private final Supplier<InteractionContext> interactionContextProvider;
 
     IsisTransactionManagerJdo(ServiceRegistry serviceRegistry, IsisPersistenceSessionJdo persistenceSession) {
 
         this.serviceRegistry = serviceRegistry;
         this.persistenceSession = persistenceSession;
-        this.commandContext = serviceRegistry.lookupServiceElseFail(CommandContext.class);
-        this.interactionContext = serviceRegistry.lookupServiceElseFail(InteractionContext.class);
+        this.commandContextProvider = ()->serviceRegistry.lookupServiceElseFail(CommandContext.class);
+        this.interactionContextProvider = ()->serviceRegistry.lookupServiceElseFail(InteractionContext.class);
     }
 
     public IsisTransactionJdo beginTransaction() {
@@ -92,7 +94,8 @@ class IsisTransactionManagerJdo {
 
             // allow the command to be overridden (if running as a background command with a parent command supplied)
 
-            val interaction = interactionContext.getInteraction();
+            val interaction = interactionContextProvider.get().getInteraction();
+            val commandContext = commandContextProvider.get();
 
             if (existingCommandIfAny != null) {
                 commandContext.setCommand(existingCommandIfAny);
