@@ -48,6 +48,8 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
  * @see NonRecoverableException
  * @see FatalException
  */
+// tag::refguide[]
+// end::refguide[]
 public class RecoverableException extends RuntimeException implements TranslatableException {
 
     private static final long serialVersionUID = 1L;

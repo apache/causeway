@@ -54,9 +54,10 @@ import lombok.extern.log4j.Log4j2;
 @Qualifier("Default")
 @IsisSessionScope
 @Log4j2
+// tag::refguide[]
 public class ChangedObjectsService implements WithTransactionScope {
 
-// end::refguide[]
+    // end::refguide[]
     public ChangedObjectsService() {
         log.debug("init");
     }
@@ -71,7 +72,6 @@ public class ChangedObjectsService implements WithTransactionScope {
         log.debug("preDestroy");
     }
 
-// tag::refguide[]
     /**
      * Used for auditing: this contains the pre- values of every property of every object enlisted.
      *
@@ -80,6 +80,7 @@ public class ChangedObjectsService implements WithTransactionScope {
      *     the actual differences.
      * </p>
      */
+    // tag::refguide[]
     private final Map<AdapterAndProperty, PreAndPostValues> enlistedObjectProperties = _Maps.newLinkedHashMap();
 
     /**

@@ -21,8 +21,12 @@ package org.apache.isis.applib.security;
 
 import org.apache.isis.applib.annotation.MemberOrder;
 
+import lombok.Getter;
+
+// tag::refguide[]
 public final class RoleMemento {
 
+    // end::refguide[]
     /**
      * Creates a new role with the specified name. Description is left blank.
      */
@@ -44,29 +48,18 @@ public final class RoleMemento {
         this.description = description;
     }
 
-    // {{ Identification
+    // tag::refguide[]
     public String title() {
         return name;
     }
 
-    // }}
-
-    // {{ Name
+    @MemberOrder(sequence = "1.1")
+    @Getter
     private final String name;
 
-    @MemberOrder(sequence = "1.1")
-    public String getName() {
-        return name;
-    }
-
-    // }}
-
-    // {{ Description
+    @MemberOrder(sequence = "1.2")
+    @Getter
     private final String description;
 
-    @MemberOrder(sequence = "1.2")
-    public String getDescription() {
-        return description;
-    }
-    // }}
 }
+// end::refguide[]

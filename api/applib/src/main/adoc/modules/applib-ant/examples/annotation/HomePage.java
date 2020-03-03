@@ -34,8 +34,10 @@ import java.lang.annotation.Target;
  *     to traverse or operate on the rendered state.
  * </p>
  */
+// tag::refguide[]
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface HomePage {
 }
+// end::refguide[]

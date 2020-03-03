@@ -94,14 +94,14 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
         
         if(shouldValidate()) {
             // do validation synchronous (with the calling thread)
-            val proxy_validateOnly = wrapper.wrap(domainObject, ExecutionMode.NO_EXECUTE);
+            val proxy_validateOnly = wrapper.wrap(domainObject, WrapperFactory.ExecutionModes.NO_EXECUTE);
             action.call(proxy_validateOnly);
         }
         
         if(shouldExecute()) {
             // to also trigger domain events, we need a proxy, but validation (if required)
             // was already done above
-            val proxy_executeOnly = wrapper.wrap(domainObject, ExecutionMode.SKIP_RULES);
+            val proxy_executeOnly = wrapper.wrap(domainObject, WrapperFactory.ExecutionModes.SKIP_RULES);
             return submit(()->action.call(proxy_executeOnly));
         }
         
@@ -114,14 +114,14 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
         
         if(shouldValidate()) {
             // do validation synchronous (with the calling thread)
-            val proxy_validateOnly = wrapper.wrap(domainObject, ExecutionMode.NO_EXECUTE);
+            val proxy_validateOnly = wrapper.wrap(domainObject, WrapperFactory.ExecutionModes.NO_EXECUTE);
             action.call(proxy_validateOnly, arg1);
         }
         
         if(shouldExecute()) {
             // to also trigger domain events, we need a proxy, but validation (if required)
             // was already done above
-            val proxy_executeOnly = wrapper.wrap(domainObject, ExecutionMode.SKIP_RULES);
+            val proxy_executeOnly = wrapper.wrap(domainObject, WrapperFactory.ExecutionModes.SKIP_RULES);
             return submit(()->action.call(proxy_executeOnly, arg1));
         }
         
@@ -133,14 +133,14 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
 
         if(shouldValidate()) {
             // do validation synchronous (with the calling thread)
-            val proxy_validateOnly = wrapper.wrap(domainObject, ExecutionMode.NO_EXECUTE);
+            val proxy_validateOnly = wrapper.wrap(domainObject, WrapperFactory.ExecutionModes.NO_EXECUTE);
             action.call(proxy_validateOnly, arg1, arg2);
         }
         
         if(shouldExecute()) {
             // to also trigger domain events, we need a proxy, but validation (if required)
             // was already done above
-            val proxy_executeOnly = wrapper.wrap(domainObject, ExecutionMode.SKIP_RULES);
+            val proxy_executeOnly = wrapper.wrap(domainObject, WrapperFactory.ExecutionModes.SKIP_RULES);
             return submit(()->action.call(proxy_executeOnly, arg1, arg2));
         }
         
@@ -154,14 +154,14 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
         
         if(shouldValidate()) {
             // do validation synchronous (with the calling thread)
-            val proxy_validateOnly = wrapper.wrap(domainObject, ExecutionMode.NO_EXECUTE);
+            val proxy_validateOnly = wrapper.wrap(domainObject, WrapperFactory.ExecutionModes.NO_EXECUTE);
             action.call(proxy_validateOnly, arg1, arg2, arg3);
         }
         
         if(shouldExecute()) {
          // to also trigger domain events, we need a proxy, but validation (if required)
             // was already done above
-            val proxy_executeOnly = wrapper.wrap(domainObject, ExecutionMode.SKIP_RULES);
+            val proxy_executeOnly = wrapper.wrap(domainObject, WrapperFactory.ExecutionModes.SKIP_RULES);
             return submit(()->action.call(proxy_executeOnly, arg1, arg2, arg3));
         }
         
@@ -175,14 +175,14 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
 
         if(shouldValidate()) {
             // do validation synchronous (with the calling thread)
-            val proxy_validateOnly = wrapper.wrap(domainObject, ExecutionMode.NO_EXECUTE);
+            val proxy_validateOnly = wrapper.wrap(domainObject, WrapperFactory.ExecutionModes.NO_EXECUTE);
             action.call(proxy_validateOnly, arg1, arg2, arg3, arg4);
         }
         
         if(shouldExecute()) {
             // to also trigger domain events, we need a proxy, but validation (if required)
             // was already done above
-            val proxy_executeOnly = wrapper.wrap(domainObject, ExecutionMode.SKIP_RULES);
+            val proxy_executeOnly = wrapper.wrap(domainObject, WrapperFactory.ExecutionModes.SKIP_RULES);
             return submit(()->action.call(proxy_executeOnly, arg1, arg2, arg3, arg4));
         }
         

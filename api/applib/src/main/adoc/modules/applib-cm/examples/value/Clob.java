@@ -29,6 +29,8 @@ import org.apache.isis.core.commons.internal.base._Strings;
 
 import lombok.val;
 
+// tag::refguide[]
+// end::refguide[]
 public final class Clob implements NamedWithMimeType {
 
     private static final long serialVersionUID = 8694189924062378527L;

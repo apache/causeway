@@ -27,13 +27,17 @@ import java.util.function.Supplier;
 // tag::refguide[]
 public interface TransactionService {
 
+    // end::refguide[]
     /**
-     * When called within an existing transactional boundary returns an unique id,
+     * When called within an existing transactional boundary returns the unique identifier to the transaction,
      * {@code null} otherwise.
+     *
      * @return nullable
      */
+    // tag::refguide[]
     TransactionId currentTransactionId();
 
+    // end::refguide[]
     /**
      * Flush all changes to the object store.
      *
@@ -41,43 +45,51 @@ public interface TransactionService {
      * Occasionally useful to ensure that newly persisted domain objects
      * are flushed to the database prior to a subsequent repository query.
      * </p>
-     *
-     * <p>
-     *     Equivalent to {@link Transaction#flush()} (with {@link Transaction} obtained using {@link #currentTransaction()}).
-     * </p>
      */
+    // tag::refguide[]
     void flushTransaction();
 
+    // end::refguide[]
     /**
-     * Generally this is equivalent to using {@link #currentTransaction()} and {@link Transaction#getTransactionState()}.
-     * However, if there is no current transaction, then this will return {@link TransactionState#NONE}.
+     * @return - the state of the current transaction.  If there is no current transaction, then returns {@link TransactionState#NONE}.
      */
+    // tag::refguide[]
     TransactionState currentTransactionState();
 
+    // end::refguide[]
     /**
      * Runs given {@code task} within an existing transactional boundary, or in the absence of such a
      * boundary creates a new one.
+     *
      * @param task
      */
+    // tag::refguide[]
     void executeWithinTransaction(Runnable task);
 
+    // end::refguide[]
     /**
      * Runs given {@code task} within an existing transactional boundary, or in the absence of such a
      * boundary creates a new one.
+     *
      * @param task
      */
+    // tag::refguide[]
     <T> T executeWithinTransaction(Supplier<T> task);
 
+    // end::refguide[]
     /**
      * Runs given {@code task} within its own (new) transactional boundary.
      * @param task
      */
+    // tag::refguide[]
     void executeWithinNewTransaction(Runnable task);
 
+    // end::refguide[]
     /**
      * Runs given {@code task} within its own (new) transactional boundary.
      * @param task
      */
+    // tag::refguide[]
     <T> T executeWithinNewTransaction(Supplier<T> task);
 
 }

@@ -23,19 +23,24 @@ import java.util.Map;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.events.EventObjectBase;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 
+import lombok.Getter;
+
+// tag::refguide[]
 public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
 
+    // end::refguide[]
     /**
      * If used then the framework will set state via (non-API) setters.
      *
      * <p>
-     *     Because the {@link EventObjectBase} superclass prohibits a null source, 
+     *     Because the {@link EventObjectBase} superclass prohibits a null source,
      *     a dummy value is temporarily used.
      * </p>
      */
@@ -50,16 +55,14 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
         this.identifier = identifier;
     }
 
-    // - mixedIn
-
-    private Object mixedIn;
-
     /**
      * Populated only for mixins; holds the underlying domain object that the mixin contributes to.
      */
-    public Object getMixedIn() {
-        return mixedIn;
-    }
+    // tag::refguide[]
+    @Getter
+    private Object mixedIn;
+
+    // end::refguide[]
     /**
      * Not API - set by the framework.
      */
@@ -68,28 +71,32 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
     }
 
 
-
-    // -- Subject
-
     /**
      * The subject of the event, which will be either the {@link #getSource() source} for a regular action, or the
      * {@link #getMixedIn() mixed-in} domain object for a mixin.
      */
+    // tag::refguide[]
     public Object getSubject() {
         final Object mixedIn = getMixedIn();
         return mixedIn != null ? mixedIn : getSource();
     }
 
-
-
-    // -- Phase
-
+    // end::refguide[]
+    // tag::refguide-1[]
     public enum Phase {
+
         HIDE,
+
         DISABLE,
+
         VALIDATE,
+
         EXECUTING,
-        EXECUTED;
+
+        EXECUTED
+
+        // end::refguide-1[]
+        ;
 
         /**
          * The significance being that at this point the proposed values/arguments are known, and so the event can be
@@ -114,34 +121,35 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
         public boolean isExecuted() {
             return this == EXECUTED;
         }
-    }
+        // tag::refguide-1[]
 
-    private Phase phase;
+    }
+    // end::refguide-1[]
 
     /**
      * Whether the framework is checking visibility, enablement, validity or actually executing (invoking action,
      * updating property or collection).
      */
-    public Phase getEventPhase() {
-        return phase;
-    }
+    // tag::refguide[]
+    @Getter
+    private Phase eventPhase;
 
+    // end::refguide[]
     /**
      * Not API, set by the framework.
      */
     public void setEventPhase(Phase phase) {
-        this.phase = phase;
+        this.eventPhase = phase;
     }
 
-    // -- identifier
     /**
      * If the no-arg constructor is used, then the framework will populate this field reflectively.
      */
+    // tag::refguide[]
+    @Getter
     private Identifier identifier;
-    public Identifier getIdentifier() {
-        return identifier;
-    }
 
+    // end::refguide[]
     /**
      * Not API, set by the framework if the no-arg constructor is used.
      */
@@ -149,98 +157,117 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
         this.identifier = identifier;
     }
 
-
-    // -- hide, isHidden
+    @Getter
     private boolean hidden;
-    public boolean isHidden() {
-        return hidden;
-    }
 
     /**
      * @see #veto(String, Object...)
      */
+    // tag::refguide[]
     public void hide() {
+        // end::refguide[]
+
         this.hidden = true;
+
+        // tag::refguide[]
+        // ...
     }
+    // end::refguide[]
 
-
-    // -- disable, isDisabled, getDisabledReason, getDisabledReasonTranslatable
+    /**
+     * If {@link #isDisabled() disabled}, then either this method returns non-null or {@link #getDisabledReasonTranslatable()} will.
+     */
+    @Getter
     private String disabledReason;
+
+    /**
+     * If {@link #isDisabled() disabled}, then either this method returns non-null or {@link #getDisabledReason()} will.
+     */
+    @Getter
+    private TranslatableString disabledReasonTranslatable;
 
     public boolean isDisabled() {
         return disabledReason != null || disabledReasonTranslatable != null;
     }
 
-    /**
-     * If {@link #isDisabled() disabled}, then either this method returns non-null or {@link #getDisabledReasonTranslatable()} will.
-     */
-    public String getDisabledReason() {
-        return disabledReason;
-    }
 
     /**
      * @see #disable(org.apache.isis.applib.services.i18n.TranslatableString)
      * @see #veto(String, Object...)
      */
+    // tag::refguide[]
     public void disable(final String reason) {
-        this.disabledReason = reason;
-    }
+        // end::refguide[]
 
-    private TranslatableString disabledReasonTranslatable;
-    /**
-     * If {@link #isDisabled() disabled}, then either this method returns non-null or {@link #getDisabledReason()} will.
-     */
-    public TranslatableString getDisabledReasonTranslatable() {
-        return disabledReasonTranslatable;
+        this.disabledReason = reason;
+
+        // tag::refguide[]
+        // ...
     }
+    // end::refguide[]
+
     /**
      * @see #disable(java.lang.String)
      * @see #veto(org.apache.isis.applib.services.i18n.TranslatableString)
      */
+    // tag::refguide[]
     public void disable(final TranslatableString reason) {
+        // end::refguide[]
+
         this.disabledReasonTranslatable = reason;
-    }
 
-
-    // -- invalidate, isInvalid, getInvalidityReason, getInvalidityReasonTranslatable
-    private String invalidatedReason;
-    public boolean isInvalid() {
-        return invalidatedReason != null || invalidatedReasonTranslatable != null;
+        // tag::refguide[]
+        // ...
     }
+    // end::refguide[]
+
 
     /**
      * If {@link #isInvalid() invalid}, then either this method returns non-null or {@link #getInvalidityReasonTranslatable()} will.
      */
-    public String getInvalidityReason() {
-        return invalidatedReason;
+    @Getter
+    private String invalidityReason;
+
+    /**
+     * If {@link #isInvalid() invalid}, then either this method returns non-null or {@link #getInvalidityReason()} will.
+     */
+    @Getter
+    private TranslatableString invalidityReasonTranslatable;
+
+    public boolean isInvalid() {
+        return invalidityReason != null || invalidityReasonTranslatable != null;
     }
+
     /**
      * @see #invalidate(org.apache.isis.applib.services.i18n.TranslatableString)
      * @see #veto(String, Object...)
      */
+    // tag::refguide[]
     public void invalidate(final String reason) {
-        this.invalidatedReason = reason;
+        // end::refguide[]
+
+        this.invalidityReason = reason;
+
+        // tag::refguide[]
+        // ...
     }
 
-    private TranslatableString invalidatedReasonTranslatable;
-    /**
-     * If {@link #isInvalid() invalid}, then either this method returns non-null or {@link #getInvalidityReason()} will.
-     */
-    public TranslatableString getInvalidityReasonTranslatable() {
-        return invalidatedReasonTranslatable;
-    }
-
+    // end::refguide[]
     /**
      * @see #invalidate(String)
      * @see #veto(org.apache.isis.applib.services.i18n.TranslatableString)
      */
+    // tag::refguide[]
     public void invalidate(final TranslatableString reason) {
-        this.invalidatedReasonTranslatable = reason;
+        // end::refguide[]
+
+        this.invalidityReasonTranslatable = reason;
+
+        // tag::refguide[]
+        // ...
     }
+    // end::refguide[]
 
-
-
-    // -- veto
     /**
      * Use instead of {@link #hide()}, {@link #disable(String)} and {@link #invalidate(String)}; just delegates to
      * appropriate vetoing method based upon the {@link #getEventPhase() phase}.
@@ -254,8 +281,10 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
      *
      * @see #veto(org.apache.isis.applib.services.i18n.TranslatableString)
      */
-    @Programmatic
+    // tag::refguide[]
     public void veto(final String reason, final Object... args) {
+        // end::refguide[]
+
         switch (getEventPhase()) {
         case HIDE:
             hide();
@@ -278,7 +307,12 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
         default:
             throw _Exceptions.unmatchedCase(getEventPhase());
         }
+
+        // tag::refguide[]
+        // ...
     }
+
+    // end::refguide[]
     /**
      * Use instead of {@link #hide()}, {@link #disable(org.apache.isis.applib.services.i18n.TranslatableString)} and {@link #invalidate(org.apache.isis.applib.services.i18n.TranslatableString)}; just delegates to
      * appropriate vetoing method based upon the {@link #getEventPhase() phase}.
@@ -291,8 +325,10 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
      *
      * @see #veto(String, Object...)
      */
-    @Programmatic
+    // tag::refguide[]
     public void veto(final TranslatableString translatableReason) {
+        // end::refguide[]
+
         switch (getEventPhase()) {
         case HIDE:
             hide();
@@ -309,10 +345,12 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
         default:
             throw _Exceptions.unmatchedCase(getEventPhase());
         }
+
+        // tag::refguide[]
+        // ...
     }
+    // end::refguide[]
 
-
-    // -- userData
     /**
      * Provides a mechanism to pass data to the next {@link #getEventPhase() phase}.
      */
@@ -321,15 +359,20 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
     /**
      * Obtain user-data, as set by a previous {@link #getEventPhase() phase}.
      */
+    // tag::refguide[]
     public Object get(Object key) {
         return userData.get(key);
     }
+
+    // end::refguide[]
     /**
      * Set user-data, for the use of a subsequent {@link #getEventPhase() phase}.
      */
+    // tag::refguide[]
     public void put(Object key, Object value) {
         userData.put(key, value);
     }
+    // end::refguide[]
 
     private static final ToString<AbstractDomainEvent<?>> toString =
             ObjectContracts.<AbstractDomainEvent<?>>
@@ -343,5 +386,7 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
         return toString.toString(this);
     }
 
+    // tag::refguide[]
 
 }
+// end::refguide[]

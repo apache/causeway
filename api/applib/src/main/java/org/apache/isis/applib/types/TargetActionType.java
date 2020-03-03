@@ -24,19 +24,17 @@ import java.util.UUID;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 
+import lombok.experimental.UtilityClass;
+
 /**
  * A user-friendly name of an action, as per {@link Command#getTargetAction()}, {@link org.apache.isis.applib.services.audit.AuditerService#audit(UUID, int, String, Bookmark, String, String, String, String, String, Timestamp)}.
  */
+@UtilityClass
 public class TargetActionType {
 
-    private TargetActionType() {}
-
+    @UtilityClass
     public static class Meta {
-
         public static final int MAX_LEN = 50;
-
-        private Meta() {}
-
     }
 
 }

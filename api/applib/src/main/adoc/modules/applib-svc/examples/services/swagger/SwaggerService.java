@@ -28,9 +28,11 @@ import org.apache.isis.applib.annotation.ViewModel;
 // tag::refguide[]
 public interface SwaggerService {
 
-// end::refguide[]
-// tag::refguide-1[]
+    // end::refguide[]
+    // tag::refguide[]
     enum Visibility {
+
+        // end::refguide[]
         /**
          * Specification for use by third-party clients, ie public use.
          *
@@ -39,7 +41,10 @@ public interface SwaggerService {
          * of {@link NatureOfService#VIEW_REST_ONLY}.
          * </p>
          */
+        // tag::refguide[]
         PUBLIC,
+
+        // end::refguide[]
         /**
          * Specification for use only by internally-managed clients, ie private internal use.
          *
@@ -48,23 +53,28 @@ public interface SwaggerService {
          * </p>
          */
         PRIVATE,
+
+        // end::refguide[]
         /**
          * As {@link #PRIVATE}, also including any prototype actions (where {@link Action#restrictTo()} set to
          * {@link RestrictTo#PROTOTYPING}).
          */
-        PRIVATE_WITH_PROTOTYPING;
+        PRIVATE_WITH_PROTOTYPING
+        // end::refguide[]
+        ;
 
         public boolean isPublic() {
             return this == PUBLIC;
         }
+        // tag::refguide[]
+
     }
-// end::refguide-1[]
-// tag::refguide[]
 
     enum Format {
         JSON,
-        YAML;
-// end::refguide[]
+        YAML
+        // end::refguide[]
+        ;
         /**
          * Implementation note: not using subclasses, otherwise the key in translations.po becomes more complex.
          */
@@ -75,7 +85,7 @@ public interface SwaggerService {
                 return "application/yaml";
             }
         }
-// tag::refguide[]
+        // tag::refguide[]
     }
 
     String generateSwaggerSpec(final Visibility visibility, final Format format);

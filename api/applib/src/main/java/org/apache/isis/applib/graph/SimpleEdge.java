@@ -27,6 +27,7 @@ import lombok.Value;
  *
  * @param <T> type constraint for values contained by this edge's vertices
  */
+// tag::refguide[]
 @Value(staticConstructor = "of")
 public class SimpleEdge<T> implements Edge<T> {
 
@@ -34,3 +35,4 @@ public class SimpleEdge<T> implements Edge<T> {
     Vertex<T> to;
 
 }
+// end::refguide[]

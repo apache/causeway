@@ -41,10 +41,9 @@ public interface SessionLoggingService {
     }
 
     void log(Type type, String username, Date date, CausedBy causedBy, String sessionId);
+    // end::refguide[]
 
-// end::refguide[]
-
-// tag::refguide-1[]
+    // tag::refguide-1[]
     class Stderr implements SessionLoggingService {
 
         @Override
@@ -65,7 +64,9 @@ public interface SessionLoggingService {
             System.err.println(logMessage);
         }
     }
-// end::refguide-1[]
-// tag::refguide[]
+    // end::refguide-1[]
+
+    // tag::refguide[]
+
 }
 // end::refguide[]

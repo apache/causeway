@@ -22,7 +22,7 @@ package org.apache.isis.applib.services.wrapper.events;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.events.domain.EventObjectBase;
+import org.apache.isis.applib.events.EventObjectBase;
 
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> 

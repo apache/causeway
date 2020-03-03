@@ -25,26 +25,35 @@ import org.apache.isis.schema.common.v2.OidDto;
 
 import lombok.val;
 
+// tag::refguide[]
 public class PersistentEntityAdapter extends XmlAdapter<OidDto, Object> {
 
     @Inject private BookmarkService bookmarkService;
-    
+
     @Override
     public Object unmarshal(final OidDto oidDto) throws Exception {
+        // end::refguide[]
 
         val bookmark = Bookmark.from(oidDto);
-
         return bookmarkService.lookup(bookmark);
+
+        // tag::refguide[]
+        // ...
     }
 
     @Override
     public OidDto marshal(final Object domainObject) throws Exception {
+        // end::refguide[]
+
         if(domainObject == null) {
             return null;
         }
         val bookmark = bookmarkService.bookmarkForElseThrow(domainObject);
         return bookmark.toOidDto();
+
+        // tag::refguide[]
+        // ...
     }
 
-    
 }
+// end::refguide[]

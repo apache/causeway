@@ -42,8 +42,5 @@ public interface TableColumnOrderService {
             final Class<?> collectionType,
             final List<String> propertyIds);
 
-// end::refguide[]
-    // tag::refguide[]
-
 }
 // end::refguide[]

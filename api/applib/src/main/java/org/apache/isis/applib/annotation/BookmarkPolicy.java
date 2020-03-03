@@ -21,25 +21,40 @@ package org.apache.isis.applib.annotation;
 
 import javax.xml.bind.annotation.XmlType;
 
+// tag::refguide[]
 @XmlType(
         namespace = "http://isis.apache.org/applib/layout/component"
         )
 public enum BookmarkPolicy {
+
+    // end::refguide[]
     /**
      * Can be bookmarked, and is a top-level 'root' (or parent) bookmark.
      */
+    // tag::refguide[]
     AS_ROOT,
+
+    // end::refguide[]
     /**
      * Can be bookmarked, but only as a child or some other parent/root bookmark
      */
+    // tag::refguide[]
     AS_CHILD,
+
+    // end::refguide[]
     /**
      * An unimportant entity that should never be bookmarked.
      */
+    // tag::refguide[]
     NEVER,
+
+    // end::refguide[]
     /**
      * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
      * annotations or superclasses/interfaces).
      */
+    // tag::refguide[]
     NOT_SPECIFIED
+
 }
+// end::refguide[]

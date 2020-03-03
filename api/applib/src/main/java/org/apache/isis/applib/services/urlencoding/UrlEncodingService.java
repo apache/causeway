@@ -29,6 +29,7 @@ public interface UrlEncodingService extends EncoderDecoder {
 
     @Override
     String encode(final byte[] bytes);
+
     @Override
     byte[] decode(String str);
 

@@ -24,22 +24,28 @@ import org.apache.isis.applib.services.HasUniqueId;
 
 import lombok.Data;
 
+// tag::refguide[]
 @Data(staticConstructor = "of")
 public final class TransactionId implements HasUniqueId {
 
     private final UUID uniqueId;
 
+    // end::refguide[]
     /**
-     * The {@link HasUniqueId#getUniqueId()} is (as of 1.13.0) actually an identifier for the request/
-     * interaction, and there can actually be multiple transactions within such a request/interaction.  
+     * The {@link HasUniqueId#getUniqueId()} is actually an identifier for the request/
+     * interaction, and there can actually be multiple transactions within such a request/interaction.
      * The sequence (0-based) is used to distinguish such.
      */
+    // tag::refguide[]
     private final int sequence;
 
-    private static final TransactionId EMPTY = TransactionId.of(UUID.fromString("0000-00-00-00-000000"), 0); 
+    // end::refguide[]
+    private static final TransactionId EMPTY = TransactionId.of(UUID.fromString("0000-00-00-00-000000"), 0);
 
     public static TransactionId empty() {
         return EMPTY;
     }
 
+    // tag::refguide[]
 }
+// end::refguide[]

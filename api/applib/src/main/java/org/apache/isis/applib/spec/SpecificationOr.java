@@ -43,6 +43,7 @@ import org.apache.isis.applib.util.ReasonBuffer;
  * @see SpecificationAnd
  * @see SpecificationNot
  */
+// tag::refguide[]
 public abstract class SpecificationOr implements Specification {
 
     private final Specification[] specifications;
@@ -62,7 +63,8 @@ public abstract class SpecificationOr implements Specification {
             }
             buf.append(reasonNotSatisfiedIfAny);
         }
-        return buf.getReason(); // may be null if all were satisfied.
+        return buf.getReason(); // will be non-null if none were satisfied.
     }
 
 }
+// end::refguide[]

@@ -25,6 +25,8 @@ package org.apache.isis.applib.services;
  *
  * TODO: We ought instead to use Spring's @TransactionScope rather than roll-our-own.
  */
+// tag::refguide[]
 public interface WithTransactionScope {
     void resetForNextTransaction();
 }
+// end::refguide[]

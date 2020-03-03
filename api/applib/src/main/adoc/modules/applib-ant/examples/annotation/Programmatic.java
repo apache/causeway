@@ -38,14 +38,15 @@ import java.lang.annotation.Target;
  * It can also be added to a type, meaning that the type is ignored from the metamodel.
  * This is intended as a &quot;get out of jail&quot; for any classes from unit tests, say,
  * that end up on the classpath of integration tests but should otherwise be ignored.
- *
- * <p>
- * This is intended as a replacement for {@link Ignore} (the use of which is
- * being discouraged because of the name clash with <tt>org.junit.Ignore</tt>).
  */
+// tag::refguide[]
 @Inherited
-@Target({ ElementType.METHOD, ElementType.TYPE, ElementType.FIELD })
+@Target({
+        ElementType.METHOD,
+        ElementType.TYPE,
+        ElementType.FIELD
+})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Programmatic {
-
 }
+// end::refguide[]

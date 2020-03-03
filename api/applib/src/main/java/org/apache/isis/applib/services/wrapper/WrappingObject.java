@@ -27,8 +27,10 @@ import org.apache.isis.core.commons.collections.ImmutableEnumSet;
  * Implemented by all objects that have been viewed as per
  * {@link org.apache.isis.applib.services.wrapper.WrapperFactory#wrap(Object)}.
  */
+// tag::refguide[]
 public interface WrappingObject {
 
+    // end::refguide[]
     /**
      * Programmatic equivalent of invoking save for a transient object .
      *
@@ -37,8 +39,10 @@ public interface WrappingObject {
      * intended to reduce the risk of a collision.
      * </p>
      */
+    // tag::refguide[]
     void __isis_save();
 
+    // end::refguide[]
     /**
      * Provide access to the underlying, wrapped object.
      *
@@ -56,17 +60,22 @@ public interface WrappingObject {
      * <b>NOTE: there is a string-literal reference to this name
      * <tt>DomainObjectInvocationHandler</tt>, so it should not be changed.</b>.
      */
+    // tag::refguide[]
     Object __isis_wrapped();
 
+    // end::refguide[]
     /**
      * The {@link EnumSet<WrapperFactory.ExecutionMode> execution mode}
      * with which this wrapper was
-     * {@link WrapperFactory#wrap(Object, EnumSet) created}.
+     * {@link WrapperFactory#wrap(Object, ImmutableEnumSet) created}.
      *
      * <p>
      * NOTE: domain classes may not have a method with this name.  The <tt>__isis_</tt> prefix is
      * intended to reduce the risk of a collision.
      * </p>
      */
+    // tag::refguide[]
     ImmutableEnumSet<WrapperFactory.ExecutionMode> __isis_executionMode();
+
 }
+// end::refguide[]

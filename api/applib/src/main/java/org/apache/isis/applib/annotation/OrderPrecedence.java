@@ -27,6 +27,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class OrderPrecedence {
 
+    // end::refguide[]
     /**
      * For domain services with the highest precedence value.
      * No framework services use this constant, but some very fundamental services (eg for security)
@@ -35,28 +36,40 @@ public class OrderPrecedence {
      * @see java.lang.Integer#MIN_VALUE
      * @see Ordered#HIGHEST_PRECEDENCE
      */
+    // tag::refguide[]
     public static final int FIRST = Ordered.HIGHEST_PRECEDENCE;
 
+    // end::refguide[]
     /**
      * For framework for services that are unlikely to be overridden by application code.
      */
+    // tag::refguide[]
     public static final int EARLY = FIRST / 2;
+
+    // end::refguide[]
     /**
      * For framework for services that could be overridden by application code (though not commonly).
      */
+    // tag::refguide[]
     public static final int MIDPOINT = 0;
+
+    // end::refguide[]
     /**
      * For framework services that are expected to be overridden by application code, or that act as a fallback.
      */
+    // tag::refguide[]
     public static final int LATE = OrderPrecedence.LAST / 2;
 
+    // end::refguide[]
     /**
      * For domain services that act as a fallback, and which will typically be overridden.
      *
      * @see java.lang.Integer#MAX_VALUE
      * @see Ordered#LOWEST_PRECEDENCE
      */
+    // tag::refguide[]
     public static final int LAST = Ordered.LOWEST_PRECEDENCE;
 
 }
 // end::refguide[]
+

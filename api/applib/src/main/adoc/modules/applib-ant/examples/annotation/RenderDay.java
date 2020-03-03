@@ -23,18 +23,28 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * How to render days.
  */
+// tag::refguide[]
 @XmlType(
         namespace = "http://isis.apache.org/applib/layout/component"
         )
 public enum RenderDay {
+
     AS_DAY,
+
+    // end::refguide[]
     /**
      * Equivalent to <tt>@PropertyLayout(renderAsDayBefore=true)</tt> prior to Isis 2.x
      */
+    // tag::refguide[]
     AS_DAY_BEFORE,
+
+    // end::refguide[]
     /**
      * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
      * annotations or superclasses/interfaces).
      */
-    NOT_SPECIFIED;
+    // tag::refguide[]
+    NOT_SPECIFIED
+
 }
+// end::refguide[]

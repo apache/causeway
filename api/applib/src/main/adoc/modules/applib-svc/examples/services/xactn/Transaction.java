@@ -29,6 +29,7 @@ public interface Transaction {
 
     TransactionId getId();
 
+    // end::refguide[]
     /**
      * Flush all changes to the object store.
      *
@@ -41,6 +42,7 @@ public interface Transaction {
      *     Equivalent to {@link TransactionService#flushTransaction()}.
      * </p>
      */
+    // tag::refguide[]
     void flush();
 
     TransactionState getTransactionState();

@@ -75,7 +75,6 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
     /**
      * Loads responsive email templates borrowed from http://zurb.com/ink/templates.php (Basic)
      */
-    @Override
     @PostConstruct
     public void init() {
 

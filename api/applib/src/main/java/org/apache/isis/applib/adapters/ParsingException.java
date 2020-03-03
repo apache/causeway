@@ -23,6 +23,7 @@ package org.apache.isis.applib.adapters;
  * Indicates that parsing has failed, ie the entry is illegal (rather than
  * invalid).
  */
+// tag::refguide[]
 public class ParsingException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
@@ -43,3 +44,4 @@ public class ParsingException extends RuntimeException {
     }
 
 }
+// end::refguide[]

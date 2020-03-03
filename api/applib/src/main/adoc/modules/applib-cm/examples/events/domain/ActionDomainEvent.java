@@ -24,37 +24,38 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 
+import lombok.Getter;
+
+// tag::refguide[]
 public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
 
-    // -- Default class
+    // end::refguide[]
     /**
      * This class is the default for the
      * {@link org.apache.isis.applib.annotation.Action#domainEvent()} annotation attribute.  Whether this
      * raises an event or not depends upon the <tt>isis.core.meta-model.annotation.action.domain-event.post-for-default</tt>
      * configuration property.
      */
+    // tag::refguide[]
     public static class Default extends ActionDomainEvent<Object> {}
 
-
-    // -- Noop class
-
+    // end::refguide[]
     /**
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event.
      */
+    // tag::refguide[]
     public static class Noop extends ActionDomainEvent<Object> {}
 
-
-    // -- Doop class
-
+    // end::refguide[]
     /**
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event..
      */
+    // tag::refguide[]
     public static class Doop extends ActionDomainEvent<Object> {}
 
-
-
+    // end::refguide[]
     /**
      * If used then the framework will set state via (non-API) setters.
      *
@@ -87,95 +88,34 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     //    }
 
 
-    // -- actionSemantics
-    public SemanticsOf getSemantics() {
-        return actionSemantics;
-    }
+    // tag::refguide[]
+    @Getter
+    private SemanticsOf semantics;
 
-    private SemanticsOf actionSemantics;
-
-    /**
-     * @deprecated - use {@link #getSemantics()} instead.
-     */
-    @Deprecated
-    public SemanticsOf getActionSemantics() {
-        return actionSemantics;
-    }
-
-    /**
-     * Not API - set by the framework.
-     */
-    public void setActionSemantics(SemanticsOf actionSemantics) {
-        this.actionSemantics = actionSemantics;
-    }
-
-
-
-    // -- parameterNames
+    @Getter
     private List<String> parameterNames;
-    public List<String> getParameterNames() {
-        return parameterNames;
-    }
-    public void setParameterNames(final List<String> parameterNames) {
-        this.parameterNames = parameterNames;
-    }
 
-
-    // -- parameterTypes
+    @Getter
     private List<Class<?>> parameterTypes;
-    public List<Class<?>> getParameterTypes() {
-        return parameterTypes;
-    }
 
-    public void setParameterTypes(final List<Class<?>> parameterTypes) {
-        this.parameterTypes = parameterTypes;
-    }
-
-
-
-    // region > mixedIn
-    private Object mixedIn;
-
+    // end::refguide[]
     /**
      * Populated only for mixins; holds the underlying domain object that the mixin contributes to.
      */
-    @Override
-    public Object getMixedIn() {
-        return mixedIn;
-    }
-    /**
-     * Not API - set by the framework.
-     */
-    @Override
-    public void setMixedIn(final Object mixedIn) {
-        this.mixedIn = mixedIn;
-    }
-    // endregion
+    // tag::refguide[]
+    @Getter
+    private Object mixedIn;
 
-    // -- arguments
-    private List<Object> arguments;
+    // end::refguide[]
     /**
      * The arguments being used to invoke the action; populated at {@link Phase#VALIDATE} and subsequent phases
      * (but null for {@link Phase#HIDE hidden} and {@link Phase#DISABLE disable} phases).
      */
-    public List<Object> getArguments() {
-        return arguments;
-    }
+    // tag::refguide[]
+    @Getter
+    private List<Object> arguments;
 
-    /**
-     * Not API - set by the framework.
-     */
-    public void setArguments(List<Object> arguments) {
-        this.arguments = arguments;
-    }
-
-
-    // -- returnValue
-    /**
-     *
-     */
-    private Object returnValue;
-
+    // end::refguide[]
     /**
      * The value returned by the action.
      *
@@ -184,20 +124,54 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
      *     {@link #getEventPhase() phase}.
      * </p>
      */
-    public Object getReturnValue() {
-        return returnValue;
-    }
+    // tag::refguide[]
+    @Getter
+    private Object returnValue;
 
+    // end::refguide[]
     /**
      * Set by the framework.
      *
      * Event subscribers can replace the value with some other value if they wish, though only in the
      * {@link Phase#EXECUTED} phase.
      */
+    // tag::refguide[]
     public void setReturnValue(final Object returnValue) {
         this.returnValue = returnValue;
     }
 
+    // end::refguide[]
+    /**
+     * Not API - set by the framework.
+     */
+    public void setSemantics(SemanticsOf semantics) {
+        this.semantics = semantics;
+    }
+    /**
+     * Not API - set by the framework.
+     */
+    public void setParameterNames(final List<String> parameterNames) {
+        this.parameterNames = parameterNames;
+    }
+    /**
+     * Not API - set by the framework.
+     */
+    public void setParameterTypes(final List<Class<?>> parameterTypes) {
+        this.parameterTypes = parameterTypes;
+    }
+    /**
+     * Not API - set by the framework.
+     */
+    @Override
+    public void setMixedIn(final Object mixedIn) {
+        this.mixedIn = mixedIn;
+    }
+    /**
+     * Not API - set by the framework.
+     */
+    public void setArguments(List<Object> arguments) {
+        this.arguments = arguments;
+    }
 
 
     private static final ToString<ActionDomainEvent<?>> toString = ObjectContracts.<ActionDomainEvent<?>>
@@ -211,5 +185,7 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
         return toString.toString(this);
     }
 
+    // tag::refguide[]
 
 }
+// end::refguide[]

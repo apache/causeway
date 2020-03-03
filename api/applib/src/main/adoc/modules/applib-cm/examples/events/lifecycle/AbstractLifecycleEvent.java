@@ -18,8 +18,9 @@
  */
 package org.apache.isis.applib.events.lifecycle;
 
-import org.apache.isis.applib.events.domain.EventObjectBase;
+import org.apache.isis.applib.events.EventObjectBase;
 
+// tag::refguide[]
 public abstract class AbstractLifecycleEvent<S> extends EventObjectBase<S> {
 
     public AbstractLifecycleEvent() {
@@ -31,3 +32,4 @@ public abstract class AbstractLifecycleEvent<S> extends EventObjectBase<S> {
     }
 
 }
+// end::refguide[]

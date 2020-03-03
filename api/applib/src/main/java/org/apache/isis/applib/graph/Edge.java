@@ -25,9 +25,12 @@ package org.apache.isis.applib.graph;
  *
  * @param <T> type constraint for values contained by this edge's vertices
  */
+// tag::refguide[]
 public interface Edge<T> {
 
-    public Vertex<T> getFrom();
-    public Vertex<T> getTo();
+    Vertex<T> getFrom();
+
+    Vertex<T> getTo();
 
 }
+// end::refguide[]

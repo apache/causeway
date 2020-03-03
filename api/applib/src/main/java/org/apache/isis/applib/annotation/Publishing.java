@@ -21,7 +21,10 @@ package org.apache.isis.applib.annotation;
 /**
  * The available policies for publishing changes to the properties of the object.
  */
+// tag::refguide[]
 public enum Publishing {
+
+    // end::refguide[]
     /**
      * The publishing of the object should be as per the default publishing policy configured in <tt>application.properties</tt>.
      *
@@ -29,18 +32,30 @@ public enum Publishing {
      *     If no publishing policy is configured, then the publishing is disabled.
      * </p>
      */
+    // tag::refguide[]
     AS_CONFIGURED,
+
+    // end::refguide[]
     /**
      * Publish changes to this object.
      */
+    // tag::refguide[]
     ENABLED,
+
+    // end::refguide[]
     /**
      * Do not publish changes to this object (even if otherwise configured to enable publishing).
      */
+    // tag::refguide[]
     DISABLED,
+
+    // end::refguide[]
     /**
      * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
      * annotations or superclasses/interfaces).
      */
+    // tag::refguide[]
     NOT_SPECIFIED
+
 }
+// end::refguide[]

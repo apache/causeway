@@ -30,6 +30,8 @@ import org.apache.isis.core.commons.internal.base._Strings;
 
 import lombok.val;
 
+// tag::refguide[]
+// end::refguide[]
 public final class Blob implements NamedWithMimeType {
 
     /**

@@ -98,7 +98,7 @@ public class WrapperFactoryDefaultTest {
         wrapperFactory.wrap(domainObject);
 
         assertThat(createProxyCalledWithDomainObject, is(domainObject));
-        assertThat(createProxyCalledWithMode, is(WrapperFactory.ExecutionMode.EXECUTE));
+        assertThat(createProxyCalledWithMode, is(WrapperFactory.ExecutionModes.EXECUTE));
     }
 
 
@@ -106,10 +106,10 @@ public class WrapperFactoryDefaultTest {
     public void wrap_ofWrapped_sameMode_returnsUnchanged() throws Exception {
         // given
         final DomainObject wrappedObject = new DomainObject();
-        final DomainObject domainObject = new WrappedDomainObject(wrappedObject, WrapperFactory.ExecutionMode.EXECUTE);
+        final DomainObject domainObject = new WrappedDomainObject(wrappedObject, WrapperFactory.ExecutionModes.EXECUTE);
 
         // when
-        final DomainObject wrappingObject = wrapperFactory.wrap(domainObject, WrapperFactory.ExecutionMode.EXECUTE);
+        final DomainObject wrappingObject = wrapperFactory.wrap(domainObject, WrapperFactory.ExecutionModes.EXECUTE);
 
         // then
         assertThat(wrappingObject, is(domainObject));
@@ -120,15 +120,15 @@ public class WrapperFactoryDefaultTest {
     public void wrap_ofWrapped_differentMode_delegates_to_createProxy() throws Exception {
         // given
         final DomainObject wrappedObject = new DomainObject();
-        final DomainObject domainObject = new WrappedDomainObject(wrappedObject, WrapperFactory.ExecutionMode.EXECUTE);
+        final DomainObject domainObject = new WrappedDomainObject(wrappedObject, WrapperFactory.ExecutionModes.EXECUTE);
 
         // when
-        final DomainObject wrappingObject = wrapperFactory.wrap(domainObject, WrapperFactory.ExecutionMode.SKIP_RULES);
+        final DomainObject wrappingObject = wrapperFactory.wrap(domainObject, WrapperFactory.ExecutionModes.SKIP_RULES);
 
         // then
         assertThat(wrappingObject, is(not(domainObject)));
         assertThat(createProxyCalledWithDomainObject, is(wrappedObject));
-        assertThat(createProxyCalledWithMode, is(WrapperFactory.ExecutionMode.SKIP_RULES));
+        assertThat(createProxyCalledWithMode, is(WrapperFactory.ExecutionModes.SKIP_RULES));
     }
 
 }

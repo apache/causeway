@@ -21,8 +21,14 @@ package org.apache.isis.applib.annotation;
 /**
  * Whether an action is restricted to development mode, or available in all.
  */
+// tag::refguide[]
 public enum RestrictTo {
+
     PROTOTYPING,
+
     NO_RESTRICTIONS,
+
     NOT_SPECIFIED;
+
 }
+// end::refguide[]

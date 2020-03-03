@@ -52,7 +52,7 @@ import org.springframework.stereotype.Component;
  * 
  * @apiNote Meta annotation {@link Component} allows for the Spring framework to pick up (discover) the 
  * annotated type. 
- * For more details see {@link org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring}.
+ * For more details see <code>org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring</code>.
  */
 @Inherited
 @Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })

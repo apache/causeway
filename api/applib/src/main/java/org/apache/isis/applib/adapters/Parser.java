@@ -74,8 +74,10 @@ package org.apache.isis.applib.adapters;
  * @see EncoderDecoder
  * @see ValueSemanticsProvider
  */
+// tag::refguide[]
 public interface Parser<T> {
 
+    // end::refguide[]
     /**
      * Parses a string to an instance of the object.
      *
@@ -85,23 +87,31 @@ public interface Parser<T> {
      *            - the context domain object for which the text is being
      *            parsed. For example +3 might mean add 3 to the current number.
      */
+    // tag::refguide[]
     T parseTextEntry(Object contextPojo, String entry);
 
+    // end::refguide[]
     /**
      * The typical length of objects that can be parsed.
      */
+    // tag::refguide[]
     int typicalLength();
 
+    // end::refguide[]
     /**
      * The title of the object.
      */
+    // tag::refguide[]
     String displayTitleOf(T object);
 
+    // end::refguide[]
     /**
      * The title of the object using a mask.
      */
+    // tag::refguide[]
     String displayTitleOf(T object, String usingMask);
 
+    // end::refguide[]
     /**
      * A title for the object that is valid but which may be easier to edit than
      * the title provided by a <code>TitleFacet</code>.
@@ -112,14 +122,18 @@ public interface Parser<T> {
      * field. So, a date might be rendered via a <code>TitleFacet</code> as
      * <tt>May 2, 2007</tt>, but its editable form might be <tt>20070502</tt>.
      */
+    // tag::refguide[]
     String parseableTitleOf(T existing);
 
+    // end::refguide[]
     /**
      * The max length of objects that can be parsed (if any).
      * A return type of -1 corresponds to unlimited.
      */
+    // tag::refguide[]
     default int maxLength() {
         return -1;
     }
 
 }
+// end::refguide[]

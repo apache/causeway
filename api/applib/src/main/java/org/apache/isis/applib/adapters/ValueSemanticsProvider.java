@@ -39,24 +39,32 @@ import org.apache.isis.applib.annotation.Value;
  * @see EncoderDecoder
  * @see DefaultsProvider
  */
+// tag::refguide[]
 public interface ValueSemanticsProvider<T> {
 
+    // end::refguide[]
     /**
      * The {@link Parser}, if any.
      */
+    // tag::refguide[]
     Parser<T> getParser();
 
+    // end::refguide[]
     /**
      * The {@link EncoderDecoder}, if any.
      */
+    // tag::refguide[]
     EncoderDecoder<T> getEncoderDecoder();
 
+    // end::refguide[]
     /**
      * The {@link DefaultsProvider}, if any.
      *
      * <p>
      * If not <tt>null</tt>, implies that the value has (or may have) a default.
      */
+    // tag::refguide[]
     DefaultsProvider<T> getDefaultsProvider();
 
 }
+// end::refguide[]

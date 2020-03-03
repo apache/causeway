@@ -29,28 +29,33 @@ import java.util.Comparator;
 /**
  * Layout hints for collections.
  */
+// tag::refguide[]
 @Inherited
-@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.TYPE, ElementType.ANNOTATION_TYPE })
+@Target({
+        ElementType.METHOD,
+        ElementType.FIELD,
+        ElementType.TYPE,
+        ElementType.ANNOTATION_TYPE
+})
 @Retention(RetentionPolicy.RUNTIME)
 @Mixin(method = "coll")
 public @interface CollectionLayout {
 
-
+    // end::refguide[]
     /**
      * Indicates the css class that a collection should have.
      */
+    // tag::refguide[]
     String cssClass() default "";
 
-    // //////////////////////////////////////
-
-
+    // end::refguide[]
     /**
      * Description of this collection, eg to be rendered in a tooltip.
      */
+    // tag::refguide[]
     String describedAs() default "";
 
-    // //////////////////////////////////////
-
+    // end::refguide[]
     /**
      * Indicates which view is used by default to render the collection.
      *
@@ -62,10 +67,10 @@ public @interface CollectionLayout {
      *     &quot;<a href="https://github.com/isisaddons/isis-wicket-gmap3">map</a>&quot;.
      * </p>
      */
+    // tag::refguide[]
     String defaultView() default "";
 
-    // //////////////////////////////////////
-
+    // end::refguide[]
     /**
      * Indicates where in the UI the collection should <i>not</i>not be visible.
      *
@@ -74,24 +79,24 @@ public @interface CollectionLayout {
      *      apply for collections.
      * </p>
      */
+    // tag::refguide[]
     Where hidden() default Where.NOT_SPECIFIED;
 
-
-    // //////////////////////////////////////
-
+    // end::refguide[]
     /**
      * Name of this collection (overriding the name derived from its name in code).
      */
+    // tag::refguide[]
     String named() default "";
 
-
-    // //////////////////////////////////////
-
+    // end::refguide[]
     /**
      * A flag indicating whether the value of {@linkplain #named()} should be HTML escaped or not.
      */
+    // tag::refguide[]
     boolean namedEscaped() default true;
 
+    // end::refguide[]
     /**
      * The page size for instances of this class when rendered within
      * a table.
@@ -104,13 +109,10 @@ public @interface CollectionLayout {
      * If annotated on a type, then the page size refers to standalone
      * collections (eg as returned from a repository query).
      */
+    // tag::refguide[]
     int paged() default -1;
 
-
-
-
-    // //////////////////////////////////////
-
+    // end::refguide[]
     /**
      * Indicates that the elements in a ({@link java.util.SortedSet}) collection should be sorted according to a different order than the
      * natural sort order, as defined by the specified{@link java.util.Comparator}.
@@ -130,6 +132,8 @@ public @interface CollectionLayout {
      * may be sorted in an order more suitable to the context.
      */
     @SuppressWarnings("rawtypes")
+    // tag::refguide[]
     Class sortedBy() default Comparator.class;
 
 }
+// end::refguide[]

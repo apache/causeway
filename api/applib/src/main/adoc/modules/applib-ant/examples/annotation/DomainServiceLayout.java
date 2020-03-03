@@ -32,14 +32,20 @@ import java.lang.annotation.Target;
  * Also indicates the name, and menu ordering UI hints.
  * </p>
  */
+// tag::refguide[]
 @Inherited
-@Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
+@Target({
+        ElementType.TYPE,
+        ElementType.ANNOTATION_TYPE
+})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DomainServiceLayout {
 
+    // end::refguide[]
     /**
      * Name of this class (overriding the name derived from its name in code).
      */
+    // tag::refguide[]
     String named() default "";
 
     public enum MenuBar {
@@ -49,12 +55,15 @@ public @interface DomainServiceLayout {
         NOT_SPECIFIED
     }
 
+    // end::refguide[]
     /**
      * The menubar in which the menu that holds this service's actions should reside.
      */
+    // tag::refguide[]
     MenuBar menuBar() default MenuBar.NOT_SPECIFIED;
 
-    //TODO[2140] DomainServiceLayout 
+    // end::refguide[]
+    //TODO[2140] DomainServiceLayout
     //    /**
     //     * Number in Dewey Decimal format representing the order.
     //     *
@@ -78,4 +87,8 @@ public @interface DomainServiceLayout {
     //     * </p>
     //     */
     //    String menuOrder() default Constants.MENU_ORDER_DEFAULT;
+
+    // tag::refguide[]
+
 }
+// end::refguide[]

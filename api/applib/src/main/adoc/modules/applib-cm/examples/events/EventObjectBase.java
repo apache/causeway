@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.events.domain;
+package org.apache.isis.applib.events;
 
 import javax.annotation.Nullable;
 
@@ -27,36 +27,44 @@ import static org.apache.isis.core.commons.internal.base._With.requires;
 /**
  * @since 2.0
  */
+// tag::refguide[]
 public abstract class EventObjectBase<T> {
 
+    // end::refguide[]
     /**
      * The object on which the Event initially occurred.
      */
+    // tag::refguide[]
     protected transient T source;
 
+    // end::refguide[]
     /**
      * Constructs a prototypical Event.
      *
      * @param    source    The object on which the Event initially occurred.
      */
+    // tag::refguide[]
     protected EventObjectBase(@Nullable T source) {
         this.source = source;
     }
 
+    // end::refguide[]
     /**
      * The object on which the Event initially occurred.
      *
      * @return   The object on which the Event initially occurred.
      */
+    // tag::refguide[]
     public @Nullable T getSource() {
         return source;
     }
-    
+
+    // end::refguide[]
     /**
      * A one-shot function. Only allowed to be called if a source has not already been set.
-     * 
+     *
      * @apiNote reserved for framework internal use
-     * 
+     *
      * @param source non-null
      */
     public void initSource(T source) {
@@ -75,5 +83,7 @@ public abstract class EventObjectBase<T> {
     public String toString() {
         return getClass().getName() + "[source=" + source + "]";
     }
-    
+    // tag::refguide[]
+
 }
+// end::refguide[]

@@ -35,18 +35,18 @@ import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
  * </p>
  */
 // tag::refguide[]
-public interface EmailNotificationService extends Serializable {
-
-    @PostConstruct
-    void init() ;
+public interface EmailNotificationService
+                            extends Serializable {
 
     boolean send(EmailRegistrationEvent ev);
 
     boolean send(PasswordResetEvent ev);
 
+    // end::refguide[]
     /**
      * Whether this service has been configured and thus available for use.
      */
+    // tag::refguide[]
     boolean isConfigured();
 
 }

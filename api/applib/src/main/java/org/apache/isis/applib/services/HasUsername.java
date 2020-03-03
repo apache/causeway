@@ -26,8 +26,10 @@ package org.apache.isis.applib.services;
  * Other services can then use this username as a means to contributed actions/collections to render such additional
  * information relating to the activities of the user.
  */
+// tag::refguide[]
 public interface HasUsername {
 
-    public String getUsername();
+    String getUsername();
 
 }
+// end::refguide[]

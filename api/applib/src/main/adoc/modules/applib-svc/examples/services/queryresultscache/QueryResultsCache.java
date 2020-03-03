@@ -66,8 +66,8 @@ public interface QueryResultsCache {
     
     void resetForNextTransaction();
 
-// end::refguide[]
-// tag::refguide-1[]
+    // end::refguide[]
+    // tag::refguide-1[]
     class Key {
 
         @Getter
@@ -77,6 +77,7 @@ public interface QueryResultsCache {
         @Getter
         private final Object[] keys;
 
+        // end::refguide-1[]
         public Key(Class<?> callingClass, String methodName, Object... keys) {
             this.callingClass = callingClass;
             this.methodName = methodName;
@@ -129,16 +130,17 @@ public interface QueryResultsCache {
         public String toString() {
             return callingClass.getName() + "#" + methodName  + Arrays.toString(keys);
         }
+        // tag::refguide-1[]
     }
-// end::refguide-1[]
+    // end::refguide-1[]
 
-// tag::refguide-2[]
+    // tag::refguide-2[]
     @Data
     class Value<T> {
         private final T result;
     }
-// end::refguide-2[]
+    // end::refguide-2[]
 
-// tag::refguide[]
+    // tag::refguide[]
 }
 // end::refguide[]

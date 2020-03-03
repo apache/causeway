@@ -22,40 +22,42 @@ import java.util.EventObject;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
 
+import lombok.Getter;
+
 /**
  * Emitted for subscribers to obtain a cssClass hint (equivalent to the <tt>title()</tt> supporting method).
  */
+// tag::refguide[]
 public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
 
-    // -- Default class
+    // end::refguide[]
     /**
      * This class is the default for the
      * {@link org.apache.isis.applib.annotation.DomainObjectLayout#titleUiEvent()} annotation attribute.  Whether this
      * raises an event or not depends upon the <tt>isis.core.meta-model.annotation.domain-object-layout.title-ui-event.post-for-default</tt>
      * configuration property.
      */
+    // tag::refguide[]
     public static class Default extends TitleUiEvent<Object> {}
 
-
-    // -- Noop class
-
+    // end::refguide[]
     /**
      * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
      * property seting for the {@link Default} event.
      */
+    // tag::refguide[]
     public static class Noop extends TitleUiEvent<Object> {}
 
-
-    // -- Doop class
-
+    // end::refguide[]
     /**
      * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
      * property setting for the {@link Default} event..
      */
+    // tag::refguide[]
     public static class Doop extends TitleUiEvent<Object> {}
 
+    // end::refguide[]
 
-    // -- constructors
     /**
      * If used then the framework will set state via (non-API) setters.
      *
@@ -72,10 +74,6 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
     }
 
 
-
-    // -- title
-    private String title;
-
     /**
      * The title as provided by a subscriber using {@link #setTitle(String)}.
      *
@@ -83,21 +81,21 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
      *     Note that a {@link #getTranslatableTitle()} will be used in preference, if available.
      * </p>
      */
-    public String getTitle() {
-        return title;
-    }
+    // tag::refguide[]
+    @Getter
+    private String title;
 
+    // end::refguide[]
     /**
      * For subscribers to call to provide a (non-translated) title for this object.
      */
+    // tag::refguide[]
     public void setTitle(final String title) {
         this.title = title;
     }
 
 
-    // -- translatableTitle
-    private TranslatableString translatableTitle;
-
+    // end::refguide[]
     /**
      * The translatable (i18n) title as provided by a subscriber using {@link #setTranslatableTitle(TranslatableString)}.
      *
@@ -106,16 +104,19 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
      *     {@link #getTitle() non-translatable title}.
      * </p>
      */
-    public TranslatableString getTranslatableTitle() {
-        return translatableTitle;
-    }
+    // tag::refguide[]
+    @Getter
+    private TranslatableString translatableTitle;
 
     /**
      * For subscribers to call to provide a translatable (i18n) title for this object.
      */
+    // tag::refguide[]
     public void setTranslatableTitle(final TranslatableString translatableTitle) {
         this.translatableTitle = translatableTitle;
     }
 
+    // tag::refguide[]
 
 }
+// end::refguide[]

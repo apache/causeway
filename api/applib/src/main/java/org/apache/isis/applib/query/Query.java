@@ -40,33 +40,45 @@ import org.apache.isis.applib.services.repository.RepositoryService;
  * <b>Note:</b> that not every object store will necessarily support this
  * interface. In particular, the in-memory object store does not. For this, you
  * can use the {@link Predicate} interface to similar effect, for example in
- * {@link RepositoryService#allMatches(Class, Predicate, long...)}).
+ * {@link RepositoryService#allMatches(Class, Predicate, long, long)}).
  *
  * Note that the predicate is applied within the {@link RepositoryService}
  * (ie client-side) rather than being pushed back to the object store.
  */
+// tag::refguide[]
 public interface Query<T> extends Serializable {
 
+    // end::refguide[]
     /**
      * The {@link Class} of the objects returned by this query.
      */
-    public Class<T> getResultType();
+    // tag::refguide[]
+    Class<T> getResultType();
 
+    // end::refguide[]
     /**
      * A human-readable representation of this query and its values.
      */
-    public String getDescription();
+    // tag::refguide[]
+    String getDescription();
 
+    // end::refguide[]
     /**
      * The start index into the set table
+     *
      * @return
      */
-    public long getStart();
+    // tag::refguide[]
+    long getStart();
 
-
+    // end::refguide[]
     /**
      * The number of items to return, starting at {@link #getStart()}
+     *
      * @return
      */
-    public long getCount();
+    // tag::refguide[]
+    long getCount();
+
 }
+// end::refguide[]

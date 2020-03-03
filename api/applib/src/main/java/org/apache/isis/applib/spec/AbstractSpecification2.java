@@ -40,6 +40,8 @@ import org.apache.isis.core.commons.internal.base._Casts;
  * Implementation note: inspired by (borrowed code from) Hamcrest's
  * <tt>TypeSafeMatcher</tt>.
  */
+// tag::refguide[]
+// end::refguide[]
 public abstract class AbstractSpecification2<T> implements Specification2 {
 
     public enum TypeChecking {

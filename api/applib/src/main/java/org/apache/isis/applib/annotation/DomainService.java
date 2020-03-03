@@ -41,21 +41,34 @@ import org.springframework.stereotype.Service;
  * For more details see {@link org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring}.
  * 
  */
+// tag::refguide[]
 @Inherited
-@Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
+@Target({
+        ElementType.TYPE,
+        ElementType.ANNOTATION_TYPE
+})
 @Retention(RetentionPolicy.RUNTIME)
 @Service @Singleton
 public @interface DomainService {
 
+    // end::refguide[]
     /**
      * Provides the (first part of the) unique identifier (OID) for the service (the instanceId is always &quot;1&quot;).
      *
      * <p>
      * If not specified then either the optional &quot;getId()&quot is used, otherwise the class' name.
      */
+    // tag::refguide[]
     String objectType() default "";
 
+    // end::refguide[]
+    /**
+     * The nature of this service, eg for menus, contributed actions, repository.
+     */
+    // tag::refguide[]
+    NatureOfService nature() default NatureOfService.VIEW;
 
+    // end::refguide[]
     /**
      * If this domain service acts as a repository for an entity type, specify that entity type.
      * @deprecated was never implemented
@@ -63,10 +76,6 @@ public @interface DomainService {
     @Deprecated
     Class<?> repositoryFor() default Object.class;
 
-    /**
-     * The nature of this service, eg for menus, contributed actions, repository.
-     */
-    NatureOfService nature() default NatureOfService.VIEW;
-
-
+    // tag::refguide[]
 }
+// end::refguide[]

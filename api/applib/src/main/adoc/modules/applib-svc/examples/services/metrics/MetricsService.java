@@ -24,6 +24,7 @@ import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
 // tag::refguide[]
 public interface MetricsService {
 
+    // end::refguide[]
     /**
      * The number of objects that have, so far in this request, been loaded from the database.
      *
@@ -35,8 +36,10 @@ public interface MetricsService {
      *     Is captured within {@link MemberExecutionDto#getMetrics()} (accessible from {@link InteractionContext#getInteraction()}).
      * </p>
      */
+    // tag::refguide[]
     int numberObjectsLoaded();
 
+    // end::refguide[]
     /**
      * The number of objects that have, so far in this request, been dirtied/will need updating in the database); a
      * good measure of the footprint of the interaction.
@@ -49,6 +52,7 @@ public interface MetricsService {
      *     Is captured within {@link MemberExecutionDto#getMetrics()} (accessible from {@link InteractionContext#getInteraction()}).
      * </p>
      */
+    // tag::refguide[]
     int numberObjectsDirtied();
 
 }
