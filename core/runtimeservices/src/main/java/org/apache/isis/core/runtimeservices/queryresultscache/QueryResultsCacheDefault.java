@@ -23,7 +23,6 @@ import java.util.concurrent.Callable;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +31,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.IsisSessionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.applib.services.queryresultscache.QueryResultCacheControl;
@@ -62,7 +62,7 @@ import lombok.extern.log4j.Log4j2;
 @Named("isisRuntime.QueryResultsCacheDefault")
 @Order(OrderPrecedence.EARLY)
 @Primary
-@RequestScoped
+@IsisSessionScope
 @Qualifier("Default")
 @Log4j2
 public class QueryResultsCacheDefault implements QueryResultsCache, WithTransactionScope {
