@@ -213,7 +213,9 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory, IsisSessio
                     runtimeEventService.fireSessionClosing(isisSession); // only fire on top-level session 
                 }
             }
-            isisSessionStack.remove();
+            if(downToStackSize == 0) {
+                isisSessionStack.remove();
+            }
         }
     }
     
