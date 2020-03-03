@@ -224,13 +224,10 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory, IsisSessio
     @Inject private UserServiceDefault userServiceDefault;
     
     /**
-     * This class and {@link UserServiceDefault} both call each other, so the code below is carefully
-     * ordered to ensure no infinite loop.
-     *
-     * In particular, we check if there are overrides, and if so return a {@link SimpleSession} to represent those
+     * Checks if there are overrides, and if so return a {@link SimpleSession} to represent those
      * overrides.
      */
-    public Optional<AuthenticationSession> getAuthenticationSessionOverride() {
+    private Optional<AuthenticationSession> getAuthenticationSessionOverride() {
 
         // if user/role has been overridden by SudoService, then honor that value.
         final UserAndRoleOverrides userAndRoleOverrides = userServiceDefault.currentOverridesIfAny();
