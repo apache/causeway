@@ -61,7 +61,7 @@ import lombok.val;
 @Qualifier("Default")
 public class CommandDtoServiceInternalDefault implements CommandDtoServiceInternal {
 
-    @Inject private CommandContext commandContext;
+    @Inject private javax.inject.Provider<CommandContext> commandContextProvider;
     @Inject private BookmarkService bookmarkService;
 
     @Override
@@ -115,7 +115,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
     }
 
     protected UUID determineTransactionId() {
-        Command command = commandContext.getCommand();
+        Command command = commandContextProvider.get().getCommand();
         if (command != null && command.getUniqueId() != null) {
             return command.getUniqueId();
         } else {

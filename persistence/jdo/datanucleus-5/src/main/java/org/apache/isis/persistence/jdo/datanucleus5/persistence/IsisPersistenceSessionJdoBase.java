@@ -19,6 +19,7 @@
 package org.apache.isis.persistence.jdo.datanucleus5.persistence;
 
 import java.util.Map;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 import javax.jdo.PersistenceManager;
@@ -62,17 +63,16 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
     @Getter protected final MetaModelContext metaModelContext;
     protected final ServiceInjector serviceInjector;
     protected final ServiceRegistry serviceRegistry;
-
-    protected final CommandContext commandContext;
     protected final CommandService commandService;
-
-    protected final InteractionContext interactionContext;
-    protected final ChangedObjectsService changedObjectsServiceInternal;
     protected final FactoryService factoryService;
-    protected final MetricsService metricsService;
     protected final ClockService clockService;
     protected final UserService userService;
     protected final IsisConfiguration configuration;
+
+    protected final Supplier<ChangedObjectsService> changedObjectsServiceProvider;
+    protected final Supplier<CommandContext> commandContextProvider;
+    protected final Supplier<InteractionContext> interactionContextProvider;
+    protected final Supplier<MetricsService> metricsServiceProvider;
 
     /**
      * Set to System.nanoTime() when session opens.
@@ -121,14 +121,17 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
         this.configuration = metaModelContext.getConfiguration();
         this.specificationLoader = metaModelContext.getSpecificationLoader();
 
-        this.commandContext = lookupService(CommandContext.class);
+        
         this.commandService = lookupService(CommandService.class);
-        this.interactionContext = lookupService(InteractionContext.class);
-        this.changedObjectsServiceInternal = lookupService(ChangedObjectsService.class);
-        this.metricsService = lookupService(MetricsService.class);
         this.factoryService = lookupService(FactoryService.class);
         this.clockService = lookupService(ClockService.class);
         this.userService = lookupService(UserService.class);
+        
+        this.commandContextProvider = ()->lookupService(CommandContext.class);
+        this.interactionContextProvider = ()->lookupService(InteractionContext.class);
+        this.changedObjectsServiceProvider = ()->lookupService(ChangedObjectsService.class);
+        this.metricsServiceProvider = ()->lookupService(MetricsService.class);
+        
 
         // sub-components
         this.persistenceQueryFactory = PersistenceQueryFactory.of(

@@ -38,7 +38,7 @@ import org.springframework.stereotype.Service;
  * 
  * @apiNote Meta annotation {@link Service} allows for the Spring framework to pick up (discover) the 
  * annotated type. 
- * For more details see {@link org.apache.isis.config.beans.IsisBeanFactoryPostProcessorForSpring}.
+ * For more details see {@link org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring}.
  * 
  */
 @Inherited

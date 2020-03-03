@@ -37,7 +37,6 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.command.CommandWithDto;
 import org.apache.isis.applib.services.iactn.Interaction;
@@ -57,7 +56,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.schema.cmd.v2.ActionDto;
@@ -121,7 +119,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     protected void executeCommand(final CommandWithDto commandWithDto) {
 
         // setup for us by IsisTransactionManager; will have the transactionId of the backgroundCommand
-        val interaction = interactionContext.getInteraction();
+        val interaction = interactionContextProvider.get().getInteraction();
         val executeIn = commandWithDto.getExecuteIn();
 
         log.info("Executing: {} {} {} {}", executeIn, commandWithDto.getMemberIdentifier(), commandWithDto.getTimestamp(), commandWithDto.getUniqueId());
@@ -208,7 +206,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     protected void afterCommit(CommandWithDto commandWithDto, Exception exceptionIfAny) {
 
-        val interaction = interactionContext.getInteraction();
+        val interaction = interactionContextProvider.get().getInteraction();
 
         // it's possible that there is no priorExecution, specifically if there was an exception
         // when performing the action invocation/property edit.  We therefore need to guard that case.
@@ -334,7 +332,9 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     }
 
     protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession().orElse(null);
+        return PersistenceSession.current(PersistenceSession.class)
+                .getFirst()
+                .orElse(null);
     }
 
     protected SpecificationLoader getSpecificationLoader() {
@@ -344,12 +344,13 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     // -- DEPENDENCIES
 
     @Inject BookmarkService bookmarkService;
-    @Inject InteractionContext interactionContext;
     @Inject SudoService sudoService;
     @Inject ClockService clockService;
     @Inject TransactionService transactionService;
-    @Inject CommandContext commandContext;
     @Inject SpecificationLoader specificationLoader;
     @Inject IsisSessionFactory isisSessionFactory;
+    
+    @Inject private javax.inject.Provider<InteractionContext> interactionContextProvider;
+    //@Inject private javax.inject.Provider<CommandContext> commandContextProvider;
 
 }

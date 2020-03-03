@@ -164,9 +164,10 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         // ... and invoke all @PostConstruct
         //postConstructOnRequestScopedServices();
 
+        val metricsService = metricsServiceProvider.get();
         if(metricsService instanceof InstanceLifecycleListener) {
-            val metricsService = (InstanceLifecycleListener) this.metricsService;
-            persistenceManager.addInstanceLifecycleListener(metricsService, (Class[]) null);
+            persistenceManager
+            .addInstanceLifecycleListener((InstanceLifecycleListener)metricsService, (Class[]) null);
         }
 
         final Command command = createCommand();
@@ -180,8 +181,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
         interaction.setUniqueId(command.getUniqueId());
 
-        commandContext.setCommand(command);
-        interactionContext.setInteraction(interaction);
+        commandContextProvider.get().setCommand(command);
+        interactionContextProvider.get().setInteraction(interaction);
         
         persistenceManager.addInstanceLifecycleListener(storeLifecycleListener, (Class[]) null);
 
@@ -268,8 +269,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     private void completeCommandFromInteractionAndClearDomainEvents() {
 
-        final Command command = commandContext.getCommand();
-        final Interaction interaction = interactionContext.getInteraction();
+        final Command command = commandContextProvider.get().getCommand();
+        final Interaction interaction = interactionContextProvider.get().getInteraction();
 
 
         if(command.getStartedAt() != null && command.getCompletedAt() == null) {
@@ -295,7 +296,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
         // ensure that any changed objects means that the command should be persisted
         if(command.getMemberIdentifier() != null) {
-            if(metricsService.numberObjectsDirtied() > 0) {
+            if(metricsServiceProvider.get().numberObjectsDirtied() > 0) {
                 command.internal().setPersistHint(true);
             }
         }
@@ -675,7 +676,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     public void enlistDeletingAndInvokeIsisRemovingCallbackFacet(final Persistable pojo) {
         ObjectAdapter adapter = adapterFor(pojo);
 
-        changedObjectsServiceInternal.enlistDeleting(adapter);
+        changedObjectsServiceProvider.get().enlistDeleting(adapter);
 
         CallbackFacet.Util.callCallback(adapter, RemovingCallbackFacet.class);
         objectAdapterContext.postLifecycleEventIfRequired(adapter, RemovingLifecycleEventFacet.class);
@@ -763,7 +764,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             CallbackFacet.Util.callCallback(adapter, PersistedCallbackFacet.class);
             objectAdapterContext.postLifecycleEventIfRequired(adapter, PersistedLifecycleEventFacet.class);
 
-            changedObjectsServiceInternal.enlistCreated(adapter);
+            changedObjectsServiceProvider.get().enlistCreated(adapter);
         }
         
     }
@@ -785,11 +786,11 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
                             + pojo + "]");
         }
 
-        final boolean wasAlreadyEnlisted = changedObjectsServiceInternal.isEnlisted(adapter);
+        final boolean wasAlreadyEnlisted = changedObjectsServiceProvider.get().isEnlisted(adapter);
 
         // we call this come what may;
         // additional properties may now have been changed, and the changeKind for publishing might also be modified
-        changedObjectsServiceInternal.enlistUpdating(adapter);
+        changedObjectsServiceProvider.get().enlistUpdating(adapter);
 
         if(!wasAlreadyEnlisted) {
             // prevent an infinite loop... don't call the 'updating()' callback on this object if we have already done so

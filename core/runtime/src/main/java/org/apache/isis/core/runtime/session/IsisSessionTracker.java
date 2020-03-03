@@ -46,4 +46,7 @@ public interface IsisSessionTracker extends AuthenticationSessionTracker {
         return currentAuthenticationSession().map(AuthenticationSession::getMessageBroker);
     }
     
+    /** @return the unique id of the current top-level request- or test-scoped IsisSession*/
+    public Optional<String> getConversationId();
+    
 }

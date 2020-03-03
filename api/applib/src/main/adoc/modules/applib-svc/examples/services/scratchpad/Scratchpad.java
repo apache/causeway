@@ -47,7 +47,7 @@ import lombok.extern.log4j.Log4j2;
  */
 // tag::refguide[]
 @Service
-@RequestScoped
+@RequestScope
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Named("isisApplib.Scratchpad")

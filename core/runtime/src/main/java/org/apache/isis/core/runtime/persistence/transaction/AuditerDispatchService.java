@@ -53,7 +53,7 @@ import lombok.val;
 public class AuditerDispatchService {
     
     @Inject private List<AuditerService> auditerServices;
-    @Inject private ChangedObjectsService changedObjectsService;
+    @Inject private javax.inject.Provider<ChangedObjectsService> changedObjectsProvider;
     @Inject private UserService userService;
     @Inject private ClockService clockService;
     @Inject private TransactionService transactionService;
@@ -75,7 +75,7 @@ public class AuditerDispatchService {
         
         val currentUser = userService.getUser().getName();
         val currentTime = clockService.nowAsJavaSqlTimestamp();
-        val changedObjectProperties = changedObjectsService.getChangedObjectProperties();
+        val changedObjectProperties = changedObjectsProvider.get().getChangedObjectProperties();
     
         for (val auditEntry : changedObjectProperties) {
             auditChangedProperty(currentTime, currentUser, auditEntry);

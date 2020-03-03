@@ -28,7 +28,6 @@ import java.util.concurrent.atomic.LongAdder;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -39,6 +38,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
+import org.apache.isis.applib.annotation.IsisSessionScope;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
@@ -64,8 +64,8 @@ import lombok.extern.log4j.Log4j2;
 @Named("isisRuntimeServices.PublisherDispatchServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
-@RequestScoped
 @Qualifier("Default")
+@IsisSessionScope
 @Log4j2
 public class PublisherDispatchServiceDefault implements PublisherDispatchService {
 
@@ -86,12 +86,14 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
 
 // tag::refguide[]
     @Inject private List<PublisherService> publisherServices;
-    @Inject private ChangedObjectsService changedObjectsService;
-    @Inject private CommandContext commandContext;
-    @Inject private InteractionContext interactionContext;
+
     @Inject private ClockService clockService;
     @Inject private UserService userService;
-    @Inject private MetricsService metricsService;
+
+    @Inject private javax.inject.Provider<ChangedObjectsService> changedObjectsProvider;
+    @Inject private javax.inject.Provider<CommandContext> commandContextProvider;
+    @Inject private javax.inject.Provider<InteractionContext> interactionContextProvider;
+    @Inject private javax.inject.Provider<MetricsService> metricsServiceProvider;
     
     @Override
     public void publishObjects() {
@@ -106,7 +108,7 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
 
         val changeKindByPublishedAdapter =
                 _Maps.filterKeys(
-                        changedObjectsService.getChangeKindByEnlistedAdapter(),
+                        changedObjectsProvider.get().getChangeKindByEnlistedAdapter(),
                         this::isPublished,
                         HashMap::new);
 
@@ -115,8 +117,8 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
         }
 
         val publishedObjects = newPublishedObjects(
-                        metricsService.numberObjectsLoaded(), 
-                        changedObjectsService.numberObjectPropertiesModified(),
+                        metricsServiceProvider.get().numberObjectsLoaded(), 
+                        changedObjectsProvider.get().numberObjectPropertiesModified(),
                         changeKindByPublishedAdapter);
 
         for (val publisherService : publisherServices) {
@@ -129,13 +131,13 @@ public class PublisherDispatchServiceDefault implements PublisherDispatchService
             final int numberObjectPropertiesModified,
             final Map<ManagedObject, PublishingChangeKind> changeKindByPublishedAdapter) {
 
-        final Command command = commandContext.getCommand();
+        final Command command = commandContextProvider.get().getCommand();
         final UUID transactionUuid = command.getUniqueId();
 
         final String userName = userService.getUser().getName();
         final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();
 
-        final Interaction interaction = interactionContext.getInteraction();
+        final Interaction interaction = interactionContextProvider.get().getInteraction();
 
         final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
 

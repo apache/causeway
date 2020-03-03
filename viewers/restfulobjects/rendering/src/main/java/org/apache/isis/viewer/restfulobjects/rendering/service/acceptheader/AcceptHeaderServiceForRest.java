@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -40,6 +39,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.annotation.IsisSessionScope;
 import org.apache.isis.applib.services.acceptheader.AcceptHeaderService;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 
@@ -52,7 +52,7 @@ import lombok.extern.log4j.Log4j2;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("ForRest")
-@RequestScoped
+@IsisSessionScope
 @Log4j2
 public class AcceptHeaderServiceForRest implements AcceptHeaderService {
 

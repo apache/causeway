@@ -45,7 +45,6 @@ import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
@@ -79,7 +78,7 @@ class PublisherServiceTest {
     @Inject private WrapperFactory wrapper;
     @Inject private PlatformTransactionManager txMan; 
     @Inject private KVStoreForTesting kvStore;
-    @Inject private PublisherDispatchService publisherDispatchService;
+    //@Inject private javax.inject.Provider<PublisherDispatchService> publisherDispatchServiceProvider;
     //@Inject private List<PublisherService> publisherServices;
     
     @Configuration

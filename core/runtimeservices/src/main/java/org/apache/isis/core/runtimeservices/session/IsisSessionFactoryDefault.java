@@ -22,8 +22,10 @@ package org.apache.isis.core.runtimeservices.session;
 import java.io.File;
 import java.util.Optional;
 import java.util.Stack;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -35,6 +37,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
@@ -50,6 +53,8 @@ import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.session.IsisSessionTracker;
 import org.apache.isis.core.runtime.session.init.IsisLocaleInitializer;
 import org.apache.isis.core.runtime.session.init.IsisTimeZoneInitializer;
+import org.apache.isis.core.runtime.session.scope.IsisSessionScopeBeanFactoryPostProcessor;
+import org.apache.isis.core.runtime.session.scope.IsisSessionScopeCloseListener;
 import org.apache.isis.core.runtimeservices.user.UserServiceDefault;
 import org.apache.isis.core.runtimeservices.user.UserServiceDefault.UserAndRoleOverrides;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
@@ -86,11 +91,18 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory, IsisSessio
     @Inject private SpecificationLoader specificationLoader;
     @Inject private MetaModelContext metaModelContext;
     @Inject private IsisConfiguration configuration;
+    @Inject private ServiceInjector serviceInjector;
     //@Inject private FactoryService factoryService;
 
     private IsisLocaleInitializer localeInitializer;
     private IsisTimeZoneInitializer timeZoneInitializer;
+    private IsisSessionScopeCloseListener isisSessionScopeCloseListener;
 
+    @PostConstruct
+    public void initIsisSessionScopeSupport() {
+        this.isisSessionScopeCloseListener = IsisSessionScopeBeanFactoryPostProcessor.initIsisSessionScopeSupport(serviceInjector);        
+    }
+    
     //@PostConstruct .. too early, needs services to be provisioned first
     @EventListener
     public void init(ContextRefreshedEvent event) {
@@ -139,18 +151,21 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory, IsisSessio
     
     @Override
     public IsisSession openSession(@NonNull final AuthenticationSession authenticationSession) {
-            
+
         val authSessionToUse = getAuthenticationSessionOverride()
                 .orElse(authenticationSession);
         val newIsisSession = new IsisSession(metaModelContext, authSessionToUse);
         
         isisSessionStack.get().push(newIsisSession);
         if(isisSessionStack.get().size()==1) {
-            runtimeEventService.fireSessionOpened(newIsisSession); // only fire on top-level session    
+            conversationId.set(UUID.randomUUID());
+            postTopLevelOpen(newIsisSession);
         }
         return newIsisSession;
         
     }
+
+    
 
     @Override
     public void closeSessionStack() {
@@ -200,21 +215,39 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory, IsisSessio
 
     }
 
-    // -- HELPER - SESSION STACK CLOSING
+    private final ThreadLocal<UUID> conversationId = ThreadLocal.withInitial(()->null);
+    
+    @Override
+    public Optional<String> getConversationId() {
+        return Optional.ofNullable(conversationId.get())
+                .map(UUID::toString);
+    }
+    
+    // -- HELPER
+    
+    private void postTopLevelOpen(IsisSession newIsisSession) {
+        runtimeEventService.fireSessionOpened(newIsisSession); // only fire on top-level session 
+    }
+    
+    private void preTopLevelClose(IsisSession isisSession) {
+        runtimeEventService.fireSessionClosing(isisSession); // only fire on top-level session 
+        isisSessionScopeCloseListener.preTopLevelIsisSessionClose(); // cleanup the isis-session scope
+    }
     
     private void closeSessionStackDownToStackSize(int downToStackSize) {
         
         val stack = isisSessionStack.get();
         while(stack.size()>downToStackSize) {
-            val isisSession = stack.pop();
-            if(stack.isEmpty()) {                
-                runtimeEventService.fireSessionClosing(isisSession); // only fire on top-level session 
+            val isisSession = stack.peek();
+            if(stack.size()==1) {       
+                preTopLevelClose(isisSession);
             }
+            stack.pop();
         }
         if(downToStackSize == 0) {
             isisSessionStack.remove();
+            conversationId.remove();
         }
-        
     }
     
     // -- HELPER - SUDO SUPPORT 
@@ -239,6 +272,8 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory, IsisSessio
         // otherwise...
         return Optional.empty();
     }
+
+
     
 
 

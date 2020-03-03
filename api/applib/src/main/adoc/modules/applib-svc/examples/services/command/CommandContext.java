@@ -46,7 +46,7 @@ import lombok.extern.log4j.Log4j2;
 // tag::refguide[]
 @Service
 @Named("isisApplib.CommandContext")
-@RequestScoped
+@RequestScope
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.runtime;
 
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -29,6 +31,7 @@ import org.apache.isis.core.runtime.persistence.session.events.PersistenceEventS
 import org.apache.isis.core.runtime.persistence.session.events.TimestampService;
 import org.apache.isis.core.runtime.persistence.transaction.AuditerDispatchService;
 import org.apache.isis.core.runtime.persistence.transaction.ChangedObjectsService;
+import org.apache.isis.core.runtime.session.scope.IsisSessionScopeBeanFactoryPostProcessor;
 
 @Configuration
 @Import({
@@ -49,4 +52,9 @@ import org.apache.isis.core.runtime.persistence.transaction.ChangedObjectsServic
 })
 public class IsisModuleCoreRuntime {
 
+    @Bean
+    public static BeanFactoryPostProcessor beanFactoryPostProcessor() {
+        return new IsisSessionScopeBeanFactoryPostProcessor();
+    }
+    
 }

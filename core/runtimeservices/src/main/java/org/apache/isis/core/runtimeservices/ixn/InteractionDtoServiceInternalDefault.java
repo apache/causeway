@@ -59,7 +59,7 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
 
     @Inject private CommandDtoServiceInternal commandDtoServiceInternal;
     @Inject private BookmarkService bookmarkService;
-    @Inject private InteractionContext interactionContext;
+    @Inject private javax.inject.Provider<InteractionContext> interactionContextProvider;
     @Inject private UserService userService;
     
     @Override
@@ -68,7 +68,7 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
             final ManagedObject targetAdapter,
             final List<ManagedObject> argumentAdapters) {
 
-        final Interaction interaction = interactionContext.getInteraction();
+        final Interaction interaction = interactionContextProvider.get().getInteraction();
         final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
 
         final Object targetPojo = targetAdapter.getPojo();
@@ -112,7 +112,7 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
             final ManagedObject targetAdapter,
             final ManagedObject newValueAdapterIfAny) {
 
-        final Interaction interaction = interactionContext.getInteraction();
+        final Interaction interaction = interactionContextProvider.get().getInteraction();
 
         final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
 

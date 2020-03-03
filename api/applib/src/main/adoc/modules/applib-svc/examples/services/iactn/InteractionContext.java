@@ -47,7 +47,7 @@ import lombok.extern.log4j.Log4j2;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@RequestScoped
+@RequestScope
 @Log4j2
 public class InteractionContext {
 

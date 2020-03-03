@@ -25,7 +25,6 @@ import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -35,6 +34,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
+import org.apache.isis.applib.annotation.IsisSessionScope;
 import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.core.commons.internal.collections._Maps;
@@ -52,7 +52,7 @@ import lombok.extern.log4j.Log4j2;
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
-@RequestScoped
+@IsisSessionScope
 @Log4j2
 public class ChangedObjectsService implements WithTransactionScope {
 
