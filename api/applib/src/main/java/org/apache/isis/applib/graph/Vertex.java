@@ -27,19 +27,16 @@ import java.util.stream.Stream;
  *
  * @param <T> type constraint for values contained by this vertex
  */
+// tag::refguide[]
 public interface Vertex<T> {
-
-    // -- VALUE
 
     public T getValue();
 
-    // -- EDGES
+    int getIncomingCount();
+    int getOutgoingCount();
 
-    public int getIncomingCount();
-    public int getOutgoingCount();
-
-    public Stream<Edge<T>> streamIncoming();
-    public Stream<Edge<T>> streamOutgoing();
-
+    Stream<Edge<T>> streamIncoming();
+    Stream<Edge<T>> streamOutgoing();
 
 }
+// end::refguide[]

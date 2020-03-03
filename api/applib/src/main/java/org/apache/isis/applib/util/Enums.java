@@ -23,9 +23,10 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.core.commons.internal.base._Strings;
 
-public final class Enums {
+import lombok.experimental.UtilityClass;
 
-    private Enums(){}
+@UtilityClass
+public final class Enums {
 
     public static String getFriendlyNameOf(Enum<?> anEnum) {
         return getFriendlyNameOf(anEnum.name());

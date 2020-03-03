@@ -19,7 +19,7 @@
 
 package org.apache.isis.testing.fixtures.applib.events;
 
-import org.apache.isis.applib.events.domain.EventObjectBase;
+import org.apache.isis.applib.events.EventObjectBase;
 
 public class FixturesInstalledEvent extends EventObjectBase<Object> {
 

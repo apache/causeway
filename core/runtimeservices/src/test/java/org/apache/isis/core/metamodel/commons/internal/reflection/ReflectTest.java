@@ -31,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.jaxb.JaxbServiceDefault;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.isis.core.runtimeservices.user.UserServiceDefault;
@@ -98,11 +99,15 @@ class ReflectTest {
 
     }
 
+    @Programmatic
+    public void annotationLookupTestMethod(final String username, final List<String> roles) {
+    }
+
     @Test
     void annotationLookup() throws NoSuchMethodException, SecurityException {
 
-        Class<?> type = UserServiceDefault.SudoServiceSpi.class;
-        Method method = type.getMethod("runAs", new Class[] {String.class, List.class});
+        Class<?> type = getClass();
+        Method method = type.getMethod("annotationLookupTestMethod", new Class[] {String.class, List.class});
 
         Programmatic annot = getAnnotation(method, Programmatic.class, true, true);
 

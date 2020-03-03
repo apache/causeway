@@ -30,12 +30,19 @@ import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 /**
  * Domain semantics for domain object collection.
  */
+// tag::refguide[]
 @Inherited
-@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.TYPE, ElementType.ANNOTATION_TYPE})
+@Target({
+        ElementType.METHOD,
+        ElementType.FIELD,
+        ElementType.TYPE,
+        ElementType.ANNOTATION_TYPE
+})
 @Retention(RetentionPolicy.RUNTIME)
 @Mixin(method = "coll")
 public @interface Collection {
 
+    // end::refguide[]
     /**
      * Indicates that changes to the collection that should be posted to the
      * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
@@ -56,18 +63,17 @@ public @interface Collection {
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
      */
+    // tag::refguide[]
     Class<? extends CollectionDomainEvent<?,?>> domainEvent() default CollectionDomainEvent.Default.class;
 
-    // //////////////////////////////////////
-
+    // end::refguide[]
     /**
      * Indicates when the collection is not visible to the user.
      */
+    // tag::refguide[]
     Where hidden() default Where.NOT_SPECIFIED;
 
-
-    // //////////////////////////////////////
-
+    // end::refguide[]
     /**
      * Whether the properties of this domain object can be edited, or collections of this object be added to/removed from.
      *
@@ -75,36 +81,37 @@ public @interface Collection {
      *     Note that non-editable objects can nevertheless have actions invoked upon them.
      * </p>
      */
+    // tag::refguide[]
     Editing editing() default Editing.NOT_SPECIFIED;
 
+    // end::refguide[]
     /**
      * If {@link #editing()} is set to {@link Editing#DISABLED},
      * then the reason to provide to the user as to why this property cannot be edited.
      */
+    // tag::refguide[]
     String editingDisabledReason() default "";
 
-
-    // //////////////////////////////////////
-
-
+    // end::refguide[]
     /**
      * Indicates whether the collecion should be included or excluded from mementos.
      *
      * <p>
-     *     To ensure that the collection is actually not persisted in the objectstore, 
+     *     To ensure that the collection is actually not persisted in the objectstore,
      *     also annotate with the JDO annotation {@link javax.jdo.annotations.NotPersistent}.
      * </p>
      */
+    // tag::refguide[]
     MementoSerialization mementoSerialization() default MementoSerialization.NOT_SPECIFIED;
 
-
-
-    // //////////////////////////////////////
-
+    // end::refguide[]
     /**
      * The type-of the elements held within the collection.
+     *
      * @return
      */
+    // tag::refguide[]
     Class<?> typeOf() default Object.class;
 
 }
+// end::refguide[]

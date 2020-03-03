@@ -28,14 +28,19 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.schema.common.v2.OidsDto;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.val;
 
+// tag::refguide[]
 public class PersistentEntitiesAdapter extends XmlAdapter<OidsDto, List<Object>> {
 
-    @Inject private BookmarkService bookmarkService;
-    
+    @Inject @Getter(AccessLevel.PROTECTED)
+    private BookmarkService bookmarkService;
+
     @Override
     public List<Object> unmarshal(final OidsDto oidsDto) {
+        // end::refguide[]
 
         List<Object> domainObjects = new ArrayList<>();
         for (val oidDto : oidsDto.getOid()) {
@@ -44,10 +49,15 @@ public class PersistentEntitiesAdapter extends XmlAdapter<OidsDto, List<Object>>
             domainObjects.add(domainObject);
         }
         return domainObjects;
+
+        // tag::refguide[]
+        // ...
     }
 
     @Override
     public OidsDto marshal(final List<Object> domainObjects) {
+        // end::refguide[]
+
         if(domainObjects == null) {
             return null;
         }
@@ -57,10 +67,10 @@ public class PersistentEntitiesAdapter extends XmlAdapter<OidsDto, List<Object>>
             oidsDto.getOid().add(bookmark.toOidDto());
         }
         return oidsDto;
+
+        // tag::refguide[]
+        // ...
     }
 
-    protected BookmarkService getBookmarkService() {
-        return bookmarkService;
-    }
-    
 }
+// end::refguide[]

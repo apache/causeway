@@ -130,7 +130,7 @@ public class DomainEventHelper {
 
                 if(objectAction != null) {
                     // should always be the case...
-                    event.setActionSemantics(objectAction.getSemantics());
+                    event.setSemantics(objectAction.getSemantics());
 
                     val parameters = objectAction.getParameters();
 

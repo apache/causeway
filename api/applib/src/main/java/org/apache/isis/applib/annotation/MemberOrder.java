@@ -33,11 +33,13 @@ import java.lang.annotation.Target;
  *     where <code>Xxx</code> is the domain object name.
  * </p>
  */
+// tag::refguide[]
 @Inherited
 @Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MemberOrder {
 
+    // end::refguide[]
     /**
      * Groups or associate members with each other.
      *
@@ -47,13 +49,17 @@ public @interface MemberOrder {
      *     <li>For collections, currently has no meaning</li>
      * </ul>
      */
+    // tag::refguide[]
     String name() default "";
 
+    // end::refguide[]
     /**
      * The order of this member relative to other members in the same group, in
      * Dewey-decimal notation.  For collections this is relative to each other
      * (collections aren't grouped).
      */
+    // tag::refguide[]
     String sequence();
 
 }
+// end::refguide[]

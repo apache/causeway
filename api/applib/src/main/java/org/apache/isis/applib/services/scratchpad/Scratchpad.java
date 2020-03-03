@@ -55,7 +55,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class Scratchpad {
 
-// end::refguide[]
+    // end::refguide[]
     public Scratchpad(){
         log.debug("init");
     }
@@ -70,29 +70,37 @@ public class Scratchpad {
         log.debug("preDestroy");
     }
 
-// tag::refguide[]
+    // end::refguide[]
     /**
      * Provides a mechanism for each object being acted upon to pass
      * data to the next object.
      */
+    // tag::refguide[]
     private final Map<Object, Object> userData = _Maps.newHashMap();
 
+    // end::refguide[]
     /**
      * Obtain user-data, as set by a previous object being acted upon.
      */
+    // tag::refguide[]
     public Object get(Object key) {
         return userData.get(key);
     }
+
+    // end::refguide[]
     /**
      * Set user-data, for the use of a subsequent object being acted upon.
      */
+    // tag::refguide[]
     public void put(Object key, Object value) {
         userData.put(key, value);
     }
 
+    // end::refguide[]
     /**
      * Clear any user data.
      */
+    // tag::refguide[]
     public void clear() {
         userData.clear();
     }

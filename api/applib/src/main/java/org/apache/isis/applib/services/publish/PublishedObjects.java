@@ -33,11 +33,8 @@ public interface PublishedObjects extends HasUniqueId, HasUsername {
     ChangesDto getDto();
 
     int getNumberLoaded();
-
     int getNumberCreated();
-
     int getNumberUpdated();
-
     int getNumberDeleted();
 
     int getNumberPropertiesModified();

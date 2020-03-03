@@ -45,6 +45,8 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
  * @see NonRecoverableException
  * @see FatalException
  */
+// tag::refguide[]
+// end::refguide[]
 public class ApplicationException extends RecoverableException {
 
     private static final long serialVersionUID = 1L;

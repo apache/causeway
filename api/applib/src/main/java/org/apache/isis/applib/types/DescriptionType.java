@@ -18,16 +18,14 @@
  */
 package org.apache.isis.applib.types;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class DescriptionType {
 
-    private DescriptionType() {}
-
+    @UtilityClass
     public static class Meta {
-
         public static final int MAX_LEN = 254;
-
-        private Meta() {}
-
     }
 
 }

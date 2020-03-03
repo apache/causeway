@@ -52,6 +52,7 @@ public interface ServiceRegistry {
      * @param qualifiers
      * @return non-null
      */
+    // tag::refguide[]
     <T> Can<T> select(Class<T> type, Annotation[] qualifiers);
 
     /**
@@ -60,36 +61,54 @@ public interface ServiceRegistry {
      * @param type
      * @return non-null
      */
+    // tag::refguide[]
     default <T> Can<T> select(final Class<T> type){
+        // end::refguide[]
+
         return select(type, _Constants.emptyAnnotations);
+
+        // tag::refguide[]
+        // ...
     }
 
+    // end::refguide[]
     /**
      * Streams all registered bean adapters implementing the requested type.
      */
+    // tag::refguide[]
     default Stream<ManagedBeanAdapter> streamRegisteredBeansOfType(Class<?> requiredType) {
+        // end::refguide[]
+
         return streamRegisteredBeans()
                 .filter(beanAdapter->beanAdapter.isCandidateFor(requiredType));
+
+        // tag::refguide[]
+        // ...
     }
 
+    // end::refguide[]
     /**
      * Returns all bean adapters that have been registered.
      */
+    // tag::refguide[]
     Stream<ManagedBeanAdapter> streamRegisteredBeans();
 
+    // end::refguide[]
     /**
      * Returns a registered bean of given {@code name}.
      *
      * @param id - corresponds to the ObjectSpecificationId of the bean's type
      */
+    // tag::refguide[]
     Optional<ManagedBeanAdapter> lookupRegisteredBeanById(String id);
 
-
+    // end::refguide[]
     /**
      * Returns a registered bean of given {@code name}, or throws when no such bean.
      *
      * @param id - corresponds to the ObjectSpecificationId of the bean's type
      */
+    // tag::refguide[]
     default ManagedBeanAdapter lookupRegisteredBeanByIdElseFail(String id) {
         return lookupRegisteredBeanById(id).orElseThrow(
                 ()->_Exceptions.unrecoverable(
@@ -98,14 +117,17 @@ public interface ServiceRegistry {
 
     Optional<?> lookupBeanById(final String id);
 
+    // end::refguide[]
     /**
      * Returns a domain service implementing the requested type.
      * <p>
      * If this lookup is ambiguous, the service annotated with highest priority is returned.
      * see {@link Priority}
      */
+    // tag::refguide[]
     default <T> Optional<T> lookupService(final Class<T> serviceClass) {
-// end::refguide[]
+        // end::refguide[]
+
         val bin = select(serviceClass);
         if(bin.isEmpty()) {
             return Optional.empty();
@@ -123,20 +145,25 @@ public interface ServiceRegistry {
         bin.forEach(toMaxPrioReduction);
 
         return toMaxPrioReduction.getResult();
-// tag::refguide[]
+
+        // tag::refguide[]
         // ...
     }
 
     default <T> T lookupServiceElseFail(final Class<T> serviceClass) {
+        // end::refguide[]
+
         return lookupService(serviceClass)
                 .orElseThrow(()->
                 new NoSuchElementException("Could not locate service of type '" + serviceClass + "'"));
+
+        // tag::refguide[]
+        // ...
     }
+    // end::refguide[]
 
     // -- PRIORITY ANNOTATION HANDLING
 
-// end::refguide[]
-// tag::refguide-1[]
     class InstanceByPriorityComparator implements Comparator<Object> {
 
         private static final InstanceByPriorityComparator INSTANCE =
@@ -172,8 +199,7 @@ public interface ServiceRegistry {
         }
 
     }
-// end::refguide-1[]
 
-// tag::refguide[]
+    // tag::refguide[]
 }
 // end::refguide[]

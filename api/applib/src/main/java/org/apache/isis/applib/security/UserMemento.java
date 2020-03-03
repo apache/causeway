@@ -25,13 +25,17 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.MemberOrder;
 
+import lombok.Getter;
+import lombok.experimental.UtilityClass;
+
 /**
  * Details, obtained from the container, about the user and his roles.
  * Read-only.
  */
+// tag::refguide[]
 public final class UserMemento {
 
-    // -- constructors
+    // end::refguide[]
     /**
      * Creates a new user with the specified name and no roles.
      */
@@ -57,44 +61,30 @@ public final class UserMemento {
         this.roles.addAll(roles);
     }
 
-
-    // -- title
+    // tag::refguide[]
     public String title() {
         return name;
     }
 
-
-
-    // -- name, NameType
-
-    // {{ (User) Name, isCurrentUser
-    private final String name;
-
+    // end::refguide[]
     /**
      * The user's login name.
      */
+    // tag::refguide[]
     @MemberOrder(sequence = "1.1")
-    public String getName() {
-        return name;
-    }
+    @Getter
+    private final String name;
 
-    public static class NameType {
+    // end::refguide[]
+    /**
+     * The roles associated with this user.
+     */
+    // tag::refguide[]
+    @Getter
+    @MemberOrder(sequence = "1.1")
+    private final List<RoleMemento> roles = new ArrayList<RoleMemento>();
 
-        private NameType() {}
-
-        public static class Meta {
-
-            public static final int MAX_LEN = 50;
-
-            private Meta() {}
-
-        }
-
-    }
-
-
-
-    // -- isCurrentUser
+    // end::refguide[]
     /**
      * Determine if the specified name is this user.
      *
@@ -107,19 +97,6 @@ public final class UserMemento {
             throw new IllegalArgumentException("no user name provided");
         }
         return name.equals(userName);
-    }
-
-
-
-    // -- roles
-    private final List<RoleMemento> roles = new ArrayList<RoleMemento>();
-
-    /**
-     * The roles associated with this user.
-     */
-    @MemberOrder(sequence = "1.1")
-    public List<RoleMemento> getRoles() {
-        return roles;
     }
 
     /**
@@ -144,9 +121,6 @@ public final class UserMemento {
         return false;
     }
 
-
-
-    // -- toString
     @Override
     public String toString() {
         final StringBuilder buf = new StringBuilder();
@@ -156,6 +130,15 @@ public final class UserMemento {
         return "User [name=" + getName() + ",roles=" + buf.toString() + "]";
     }
 
+    @UtilityClass
+    public static class NameType {
+        @UtilityClass
+        public static class Meta {
+            public static final int MAX_LEN = 50;
+        }
+    }
 
+    // tag::refguide[]
 
 }
+// end::refguide[]

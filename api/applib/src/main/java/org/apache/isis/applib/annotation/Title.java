@@ -28,30 +28,44 @@ import java.lang.annotation.Target;
  * A title annotation used to annotate methods used to construct the title of a
  * domain object instance. It is used as a marker.
  */
+// tag::refguide[]
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.METHOD, ElementType.FIELD })
+@Target({
+        ElementType.METHOD,
+        ElementType.FIELD
+})
 public @interface Title {
 
+    // end::refguide[]
     /**
      * The order (in Dewey decimal notation) that the property annotated with
      * {@link Title} appears with respect to other properties also annotated
      * with {@link Title}.
      */
+    // tag::refguide[]
     String sequence() default "1.0";
 
+    // end::refguide[]
     /**
      * The string to use to separate this property from any preceding properties
      * in the title.
      */
+    // tag::refguide[]
     String prepend() default " ";
 
+    // end::refguide[]
     /**
      * The string to append to this property if non-empty.
      */
+    // tag::refguide[]
     String append() default "";
 
+    // end::refguide[]
     /**
      * The length to abbreviate this title element to.
      */
+    // tag::refguide[]
     int abbreviatedTo() default Integer.MAX_VALUE;
+
 }
+// end::refguide[]

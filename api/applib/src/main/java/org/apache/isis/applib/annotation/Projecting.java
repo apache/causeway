@@ -18,14 +18,22 @@
  */
 package org.apache.isis.applib.annotation;
 
+// tag::refguide[]
 public enum Projecting {
 
+    // end::refguide[]
     /**
      * The property holds the underlying domain object of which this (view model) object is a projection.
      */
+    // tag::refguide[]
     PROJECTED,
+
+    // end::refguide[]
     /**
      * The property
      */
+    // tag::refguide[]
     NOT_SPECIFIED;
+
 }
+// end::refguide[]

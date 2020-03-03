@@ -24,6 +24,8 @@ import java.util.Objects;
 
 import org.apache.isis.applib.annotation.Value;
 
+// tag::refguide[]
+// end::refguide[]
 @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.value.password.PasswordValueSemanticsProvider")
 @lombok.Value
 public class Password implements Serializable {

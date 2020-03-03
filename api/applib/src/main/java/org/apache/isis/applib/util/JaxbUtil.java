@@ -35,6 +35,7 @@ import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.resources._Resources;
 
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
 
 /**
@@ -46,9 +47,8 @@ import lombok.val;
  * (non-ASF)
  * </p>
  */
+@UtilityClass
 public class JaxbUtil {
-
-    private JaxbUtil(){}
 
     // -- READ
 

@@ -29,25 +29,52 @@ import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
  * 
  * @since 2.0
  */
+// tag::refguide[]
 public enum SuppressionType {
 
-    /** suppress '$$RO', RO Spec representation*/
+    // end::refguide[]
+    /**
+     * suppress '$$RO', RO Spec representation
+     */
+    // tag::refguide[]
     RO,
 
-    /** suppress '$$href', hyperlink to the representation*/
+    // end::refguide[]
+    /**
+     * suppress '$$href', hyperlink to the representation
+     */
+    // tag::refguide[]
     HREF,
 
-    /** suppress '$$instanceId', instance id of the domain object*/
+    // end::refguide[]
+    /**
+     suppress '$$instanceId', instance id of the domain object
+     */
+    // tag::refguide[]
     ID,
 
-    /** suppress '$$domainType', object spec of the domain object */
+    // end::refguide[]
+    /**
+     * suppress '$$domainType', object spec of the domain object
+     */
+    // tag::refguide[]
     DOMAIN_TYPE,
 
-    /** suppress '$$title', title of the domain object*/
+    // end::refguide[]
+    /**
+     * suppress '$$title', title of the domain object
+     */
+    // tag::refguide[]
     TITLE,
 
-    /** suppress all '$$...' entries*/
+    // end::refguide[]
+    /**
+     * suppress all '$$...' entries
+     */
+    // tag::refguide[]
     ALL
+
+    // end::refguide[]
     ;
 
     public static EnumSet<SuppressionType> setOf(SuppressionType ... types){
@@ -74,7 +101,7 @@ public enum SuppressionType {
 
             // honor pre v2 behavior
             if("true".equalsIgnoreCase(literal)) {
-                return SuppressionType.RO; 
+                return SuppressionType.RO;
             }
 
             try {
@@ -83,9 +110,8 @@ public enum SuppressionType {
                 return null;
             }
         }
-
     }
-
-
+    // tag::refguide[]
 
 }
+// end::refguide[]

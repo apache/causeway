@@ -23,11 +23,16 @@ package org.apache.isis.applib.spec;
  * An implementation of the <i>Specification</i> pattern, as described in Eric
  * Evans' <i>Domain Driven Design</i>, p224.
  */
+// tag::refguide[]
 public interface Specification {
 
+    // end::refguide[]
     /**
      * If <tt>null</tt> then satisfied, otherwise is reason why the
      * specification is not satisfied.
      */
-    public String satisfies(Object obj);
+    // tag::refguide[]
+    String satisfies(Object obj);
+
 }
+// end::refguide[]

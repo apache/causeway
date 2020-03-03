@@ -32,13 +32,18 @@ import org.apache.isis.applib.layout.component.CssClassFaPosition;
 /**
  * Layout hints for actions.
  */
+// tag::refguide[]
 @Inherited
-@Target({ ElementType.METHOD, ElementType.TYPE, ElementType.ANNOTATION_TYPE })
+@Target({
+        ElementType.METHOD,
+        ElementType.TYPE,
+        ElementType.ANNOTATION_TYPE
+})
 @Retention(RetentionPolicy.RUNTIME)
 @Mixin(method = "act")
 public @interface ActionLayout {
 
-
+    // end::refguide[]
     /**
      * Whether (and how) this action can be bookmarked in the UI.
      *
@@ -48,10 +53,10 @@ public @interface ActionLayout {
      *     identically).
      * </p>
      */
+    // tag::refguide[]
     BookmarkPolicy bookmarking() default BookmarkPolicy.NOT_SPECIFIED;
 
-    // //////////////////////////////////////
-
+    // end::refguide[]
     /**
      * Indicates the css class that an action should have.
      *
@@ -59,47 +64,47 @@ public @interface ActionLayout {
      *     For the Wicket viewer, this can be a bootstrap class such as <code>btn-info</code>.
      * </p>
      */
+    // tag::refguide[]
     String cssClass() default "";
 
-    // //////////////////////////////////////
-
+    // end::refguide[]
     /**
      * Indicates the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> CSS class to decorate an
      * action (button or menu item).
      */
+    // tag::refguide[]
     String cssClassFa() default "";
 
-    // //////////////////////////////////////
-
+    // end::refguide[]
     /**
      * Indicates the position of the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a>
      * icon. The icon could be rendered on the left or the right of the action button
      */
+    // tag::refguide[]
     CssClassFaPosition cssClassFaPosition() default CssClassFaPosition.LEFT;
 
-    // //////////////////////////////////////
-
+    // end::refguide[]
     /**
      * Description of this action, eg to be rendered in a tooltip.
      */
+    // tag::refguide[]
     String describedAs() default "";
 
-    // //////////////////////////////////////
-
+    // end::refguide[]
     /**
      * Indicates where in the UI the action should <i>not</i>not be visible.
      */
+    // tag::refguide[]
     Where hidden() default Where.NOT_SPECIFIED;
 
-    // //////////////////////////////////////
-
+    // end::refguide[]
     /**
      * Name of this action (overriding the name derived from its name in code).
      */
+    // tag::refguide[]
     String named() default "";
 
-    // //////////////////////////////////////
-
+    // end::refguide[]
     /**
      * For actions that are associated with a property, indicates the positioning of the
      * action's button relative to the property.
@@ -108,6 +113,7 @@ public @interface ActionLayout {
      * Ignored if the action has not been associated with a property.
      * </p>
      */
+    // tag::refguide[]
     Position position() default Position.NOT_SPECIFIED;
 
     @XmlType(
@@ -121,22 +127,22 @@ public @interface ActionLayout {
         NOT_SPECIFIED
     }
 
+    // end::refguide[]
     /**
      * How this parameters for this action are prompted, either {@link PromptStyle#DIALOG dialog} or {@link PromptStyle#INLINE inline}.
      */
+    // tag::refguide[]
     PromptStyle promptStyle() default PromptStyle.AS_CONFIGURED;
 
-
-    // //////////////////////////////////////
-
+    // end::refguide[]
     /**
      * If the action returns its target, then determines whether to update the page or
      * instead to redirect (forcing a re-rendering of a new page).
      */
+    // tag::refguide[]
     Redirect redirectPolicy() default Redirect.AS_CONFIGURED;
 
-    // //////////////////////////////////////
-
+    // end::refguide[]
     /**
      * For actions of domain services that can be viewed and contributed (that is, whose
      * {@link DomainService#nature() nature} is either {@link org.apache.isis.applib.annotation.NatureOfService#VIEW}
@@ -147,7 +153,8 @@ public @interface ActionLayout {
      *     Has no meaning for actions of domain entities.
      * </p>
      */
+    // tag::refguide[]
     Contributed contributed() default Contributed.NOT_SPECIFIED;
 
-
 }
+// end::refguide[]

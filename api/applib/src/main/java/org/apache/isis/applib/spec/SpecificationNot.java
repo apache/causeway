@@ -44,6 +44,7 @@ package org.apache.isis.applib.spec;
  * @see SpecificationAnd
  * @see SpecificationOr
  */
+// tag::refguide[]
 public abstract class SpecificationNot implements Specification {
 
     private final Specification specification;
@@ -58,3 +59,4 @@ public abstract class SpecificationNot implements Specification {
         return satisfies != null ? null : "not satisfied";
     }
 }
+// end::refguide[]

@@ -57,8 +57,13 @@ import java.util.HashMap;
  *     Note: This annotation is only incompletely recognized by the framework, and may be deprecated in the future.
  * </p>
  */
+// tag::refguide[]
 @Inherited
-@Target({ ElementType.TYPE, ElementType.METHOD })
+@Target({
+        ElementType.TYPE,
+        ElementType.METHOD
+})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EqualByContent {
 }
+// end::refguide[]

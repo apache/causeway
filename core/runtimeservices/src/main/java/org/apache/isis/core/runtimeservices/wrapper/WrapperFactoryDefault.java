@@ -133,22 +133,22 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
     @Override
     public <T> T wrap(T domainObject) {
-        return wrap(domainObject, ExecutionMode.EXECUTE);
+        return wrap(domainObject, ExecutionModes.EXECUTE);
     }
 
     @Override
     public <T> T wrapTry(T domainObject) {
-        return wrap(domainObject, ExecutionMode.TRY);
+        return wrap(domainObject, ExecutionModes.TRY);
     }
 
     @Override
     public <T> T wrapNoExecute(T domainObject) {
-        return wrap(domainObject, ExecutionMode.NO_EXECUTE);
+        return wrap(domainObject, ExecutionModes.NO_EXECUTE);
     }
 
     @Override
     public <T> T wrapSkipRules(T domainObject) {
-        return wrap(domainObject, ExecutionMode.SKIP_RULES);
+        return wrap(domainObject, ExecutionModes.SKIP_RULES);
     }
 
     @Override

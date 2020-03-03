@@ -29,6 +29,8 @@ package org.apache.isis.applib;
  * </p>
 
  */
+// tag::refguide[]
+// end::refguide[]
 public interface RecreatableDomainObject {
 
     /**

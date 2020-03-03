@@ -43,7 +43,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.testdomain.Incubating;
@@ -144,7 +143,7 @@ class PublisherServiceTest {
         val latch = kvStore.latch(PublisherServiceForTesting.class);
 
         // when - running within its own background task
-        val future = wrapper.async(book, ExecutionMode.SKIP_RULES) // don't enforce rules for this test
+        val future = wrapper.async(book, WrapperFactory.ExecutionModes.SKIP_RULES) // don't enforce rules for this test
                 .run(JdoBook::setName, "Book #2");
 
         future.get(10, TimeUnit.SECONDS);
@@ -174,7 +173,7 @@ class PublisherServiceTest {
         // when - running within its own background task
         assertThrows(DisabledException.class, ()->{
             
-            val future = wrapper.async(book, ExecutionMode.EXECUTE) 
+            val future = wrapper.async(book, WrapperFactory.ExecutionModes.EXECUTE)
                 .run(JdoBook::setName, "Book #2");
             
             future.get(10, TimeUnit.SECONDS);

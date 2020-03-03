@@ -29,6 +29,7 @@ import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.UtilityClass;
 
 /**
  * Provides the ability to &quot;wrap&quot; of a domain object such that it can
@@ -71,67 +72,85 @@ import lombok.RequiredArgsConstructor;
 // tag::refguide[]
 public interface WrapperFactory {
 
-// end::refguide[]
-// tag::refguide-1[]
+    // end::refguide[]
     /**
      * Whether interactions with the wrapper are actually passed onto the
      * underlying domain object.
      *
-     * @see WrapperFactory#wrap(Object, ExecutionMode)
+     * @see WrapperFactory#wrap(Object, ImmutableEnumSet)
      */
+    // tag::refguide-1[]
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     enum ExecutionMode {
 
+        // end::refguide-1[]
         /**
          * Skip all business rules.
          */
+        // tag::refguide-1[]
         SKIP_RULE_VALIDATION,
 
+        // end::refguide-1[]
         /**
          * Skip execution.
          */
+        // tag::refguide-1[]
         SKIP_EXECUTION,
 
+        // end::refguide-1[]
         /**
          * Don't fail fast, swallow any exception during validation or execution.
          */
+        // tag::refguide-1[]
         SWALLOW_EXCEPTIONS,
 
-        ;
+    }
+    // end::refguide-1[]
 
-        // -- PRESET ENUM SETS
+    // tag::refguide-2[]
+    @UtilityClass
+    class ExecutionModes {
 
+        // end::refguide-2[]
         /**
          * Validate all business rules and then execute. May throw exceptions in order to fail fast.
          */
+        // tag::refguide-2[]
         public static final ImmutableEnumSet<ExecutionMode> EXECUTE = ImmutableEnumSet.noneOf(ExecutionMode.class);
 
+        // end::refguide-2[]
         /**
          * Skip all business rules and then execute, does throw an exception if execution fails.
          */
-        public static final ImmutableEnumSet<ExecutionMode> SKIP_RULES = ImmutableEnumSet.of(SKIP_RULE_VALIDATION);
+        // tag::refguide-2[]
+        public static final ImmutableEnumSet<ExecutionMode> SKIP_RULES = ImmutableEnumSet.of(ExecutionMode.SKIP_RULE_VALIDATION);
 
+        // end::refguide-2[]
         /**
          * Validate all business rules but do not execute, throw an exception if validation
          * fails.
          */
-        public static final ImmutableEnumSet<ExecutionMode> NO_EXECUTE = ImmutableEnumSet.of(SKIP_EXECUTION);
+        // tag::refguide-2[]
+        public static final ImmutableEnumSet<ExecutionMode> NO_EXECUTE = ImmutableEnumSet.of(ExecutionMode.SKIP_EXECUTION);
 
+        // end::refguide-2[]
         /**
          * Validate all business rules and then execute, but don't throw an exception if validation
          * or execution fails.
          */
-        public static final ImmutableEnumSet<ExecutionMode> TRY = ImmutableEnumSet.of(SWALLOW_EXCEPTIONS);
+        // tag::refguide-2[]
+        public static final ImmutableEnumSet<ExecutionMode> TRY = ImmutableEnumSet.of(ExecutionMode.SWALLOW_EXCEPTIONS);
 
+        // end::refguide-2[]
         /**
          * Skips all steps.
          * @since 2.0
          */
-        public static final ImmutableEnumSet<ExecutionMode> NOOP = ImmutableEnumSet.of(SKIP_RULE_VALIDATION, SKIP_EXECUTION);
+        // tag::refguide-2[]
+        public static final ImmutableEnumSet<ExecutionMode> NOOP = ImmutableEnumSet.of(ExecutionMode.SKIP_RULE_VALIDATION, ExecutionMode.SKIP_EXECUTION);
 
     }
-// end::refguide-1[]
-// tag::refguide[]
+    // end::refguide-2[]
 
     /**
      * Provides the &quot;wrapper&quot; of the underlying domain object.
@@ -140,31 +159,41 @@ public interface WrapperFactory {
      * If the object has (see {@link #isWrapper(Object)} already been wrapped),
      * then should just return the object back unchanged.
      */
+    // tag::refguide[]
     <T> T wrap(T domainObject);
 
+    // end::refguide[]
     /**
      * {@link #wrap(Object) wraps} a {@link FactoryService#mixin(Class, Object) mixin}.
      */
+    // tag::refguide[]
     <T> T wrapMixin(Class<T> mixinClass, Object mixedIn);
 
+    // end::refguide[]
     /**
-     * Convenience method for {@link #wrap(Object, ExecutionMode)} with {@link ExecutionMode#TRY},
+     * Convenience method for {@link #wrap(Object, ImmutableEnumSet)} with {@link ExecutionModes#TRY},
      * to make this feature more discoverable.
      */
+    // tag::refguide[]
     <T> T wrapTry(T domainObject);
 
+    // end::refguide[]
     /**
-     * Convenience method for {@link #wrap(Object, ExecutionMode)} with {@link ExecutionMode#NO_EXECUTE},
+     * Convenience method for {@link #wrap(Object, ImmutableEnumSet)} with {@link ExecutionModes#NO_EXECUTE},
      * to make this feature more discoverable.
      */
+    // tag::refguide[]
     <T> T wrapNoExecute(T domainObject);
 
+    // end::refguide[]
     /**
-     * Convenience method for {@link #wrap(Object, ExecutionMode)} with {@link ExecutionMode#SKIP_RULES},
+     * Convenience method for {@link #wrap(Object, ImmutableEnumSet)} with {@link ExecutionModes#SKIP_RULES},
      * to make this feature more discoverable.
      */
+    // tag::refguide[]
     <T> T wrapSkipRules(T domainObject);
 
+    // end::refguide[]
     /**
      * Same as {@link #wrap(Object)}, except the actual execution occurs only if
      * the <tt>execute</tt> parameter indicates.
@@ -173,9 +202,10 @@ public interface WrapperFactory {
      * Otherwise, will do all the validations (raise exceptions as required
      * etc.), but doesn't modify the model.
      */
+    // tag::refguide[]
     <T> T wrap(T domainObject, ImmutableEnumSet<ExecutionMode> mode);
 
-
+    // end::refguide[]
     /**
      * Obtains the underlying domain object, if wrapped.
      *
@@ -183,9 +213,10 @@ public interface WrapperFactory {
      * If the object {@link #isWrapper(Object) is not wrapped}, then
      * should just return the object back unchanged.
      */
+    // tag::refguide[]
     <T> T unwrap(T possibleWrappedDomainObject);
 
-
+    // end::refguide[]
     /**
      * Whether the supplied object has been wrapped.
      *
@@ -194,9 +225,14 @@ public interface WrapperFactory {
      *            - object that might or might not be a wrapper.
      * @return
      */
+    // tag::refguide[]
     <T> boolean isWrapper(T possibleWrappedDomainObject);
 
+    // end::refguide[]
+
+    //
     // -- ASYNC WRAPPING
+    //
 
     /**
      * Returns a {@link AsyncWrap} bound to the provided {@code domainObject},
@@ -208,20 +244,29 @@ public interface WrapperFactory {
      *
      * @since 2.0
      */
+    // tag::refguide[]
     <T> AsyncWrap<T> async(T domainObject, ImmutableEnumSet<ExecutionMode> mode);
 
+    // end::refguide[]
     /**
-     * Shortcut for {@link #async(Object, EnumSet)} using execution mode
-     * {@link ExecutionMode#EXECUTE}.
+     * Shortcut for {@link #async(Object, ImmutableEnumSet)} using execution mode
+     * {@link ExecutionModes#EXECUTE}.
      * @param <T>
      * @param domainObject
      *
      * @since 2.0
      */
+    // tag::refguide[]
     default <T> AsyncWrap<T> async(T domainObject) {
-        return async(domainObject, ExecutionMode.EXECUTE);
+        // end::refguide[]
+
+        return async(domainObject, ExecutionModes.EXECUTE);
+
+        // tag::refguide[]
+        // ...
     }
 
+    // end::refguide[]
     /**
      * Returns a {@link AsyncWrap} bound to the provided {@code mixinClass},
      * to prepare for type-safe asynchronous action execution.
@@ -233,29 +278,43 @@ public interface WrapperFactory {
      *
      * @since 2.0
      */
+    // tag::refguide[]
     <T> AsyncWrap<T> asyncMixin(Class<T> mixinClass, Object mixedIn, ImmutableEnumSet<ExecutionMode> mode);
 
+    // end::refguide[]
     /**
-     * Shortcut for {@link #asyncMixin(Class, Object, EnumSet)} using execution mode
-     * {@link ExecutionMode#EXECUTE}.
+     * Shortcut for {@link #asyncMixin(Class, Object, ImmutableEnumSet)} using execution mode
+     * {@link ExecutionModes#EXECUTE}.
      * @param <T>
      * @param mixinClass
      * @param mixedIn
      *
      * @since 2.0
      */
+    // tag::refguide[]
     default <T> AsyncWrap<T> asyncMixin(Class<T> mixinClass, Object mixedIn) {
-        return asyncMixin(mixinClass, mixedIn, ExecutionMode.EXECUTE);
-    }
+        // end::refguide[]
 
+        return asyncMixin(mixinClass, mixedIn, ExecutionModes.EXECUTE);
+
+        // tag::refguide[]
+        // ...
+    }
+    // end::refguide[]
+
+
+    //
     // -- ITERACTION EVENT HANDLING
+    //
 
     /**
      * All {@link InteractionListener}s that have been registered using
      * {@link #addInteractionListener(InteractionListener)}.
      */
+    // tag::refguide[]
     List<InteractionListener> getListeners();
 
+    // end::refguide[]
     /**
      * Registers an {@link InteractionListener}, to be notified of interactions
      * on all wrappers.
@@ -269,8 +328,10 @@ public interface WrapperFactory {
      * @param listener
      * @return
      */
+    // tag::refguide[]
     boolean addInteractionListener(InteractionListener listener);
 
+    // end::refguide[]
     /**
      * Remove an {@link InteractionListener}, to no longer be notified of
      * interactions on wrappers.
@@ -284,6 +345,7 @@ public interface WrapperFactory {
      * @param listener
      * @return
      */
+    // tag::refguide[]
     boolean removeInteractionListener(InteractionListener listener);
 
     void notifyListeners(InteractionEvent ev);

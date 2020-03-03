@@ -32,6 +32,8 @@ package org.apache.isis.applib;
  * </p>
  *
  */
+// tag::refguide[]
+// end::refguide[]
 public abstract class AbstractViewModel implements ViewModel {
 
     @Override

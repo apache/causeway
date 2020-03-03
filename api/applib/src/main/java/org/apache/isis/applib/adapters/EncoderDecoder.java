@@ -45,8 +45,10 @@ package org.apache.isis.applib.adapters;
  * @see DefaultsProvider
  * @see ValueSemanticsProvider
  */
+// tag::refguide[]
 public interface EncoderDecoder<T> {
 
+    // end::refguide[]
     /**
      * Returns the provided object as an encoded string.
      *
@@ -56,16 +58,20 @@ public interface EncoderDecoder<T> {
      * constructor. That is, the object shouldn't encode itself, it should
      * encode the object provided to it.
      */
+    // tag::refguide[]
     String toEncodedString(T toEncode);
 
+    // end::refguide[]
     /**
      * Converts an encoded string to an instance of the object.
      *
      * <p>
      * Note that here the implementing class is acting as a factory for itself.
      *
-     * @see #toEncodedString(% toEncode)
+     * @see #toEncodedString(T toEncode)
      */
+    // tag::refguide[]
     T fromEncodedString(String encodedString);
 
 }
+// end::refguide[]
