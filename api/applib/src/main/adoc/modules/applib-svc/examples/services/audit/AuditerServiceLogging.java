@@ -59,10 +59,12 @@ public class AuditerServiceLogging implements AuditerService {
             final String preValue, final String postValue,
             final String user, final Timestamp timestamp) {
 
-        String auditMessage =
-                interactionId + "," + sequence + ": " +
-                        target.toString() + " by " + user + ", " + propertyName + ": " + preValue + " -> " + postValue;
-        log.debug(auditMessage);
+        if(log.isDebugEnabled()) {
+            String auditMessage =
+                    interactionId + "," + sequence + ": " +
+                            target.toString() + " by " + user + ", " + propertyName + ": " + preValue + " -> " + postValue;
+            log.debug(auditMessage);
+        }
     }
 
 }

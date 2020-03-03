@@ -26,13 +26,13 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 // tag::refguide[]
 public interface HintStore {
 
-// end::refguide[]
-// tag::refguide-1[]
+    // end::refguide[]
+    // tag::refguide-1[]
     interface HintIdProvider {
         String hintId();
     }
-// end::refguide-1[]
-// tag::refguide[]
+    // end::refguide-1[]
+    // tag::refguide[]
 
     String get(final Bookmark bookmark, String hintKey);
 

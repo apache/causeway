@@ -43,7 +43,7 @@ import lombok.val;
 // tag::refguide[]
 public class Bookmark implements Serializable {
 
-// end::refguide[]
+    // end::refguide[]
     private static final long serialVersionUID = 2L;
 
     protected static final String SEPARATOR = ":";
@@ -52,26 +52,28 @@ public class Bookmark implements Serializable {
      * corresponds directly to the object's specification-id
      * @see <code>RootOid</code>
      */
-// tag::refguide[]
+    // tag::refguide[]
     @NonNull  private final String objectType;
     @NonNull  private final String identifier;
-// end::refguide[]
+    // end::refguide[]
+
     @Nullable private final String hintId;
-// tag::refguide[]
+    // tag::refguide[]
 
     public static Bookmark of(String objectType, String identifier) {
         return new Bookmark(objectType, identifier, /*hintId*/ null);
     }
     // ...
 
-// end::refguide[]
+    // end::refguide[]
 
     /**
      * Round-trip with {@link #toString()} representation.
      */
-// tag::refguide[]
+    // tag::refguide[]
     public static Optional<Bookmark> parse(@Nullable String str) {
-// end::refguide[]
+    // end::refguide[]
+
         if(str==null) {
             return Optional.empty();
         }
@@ -85,10 +87,10 @@ public class Bookmark implements Serializable {
         }
         return Optional.empty();
 
-// tag::refguide[]
+        // tag::refguide[]
         // ...
     }
-// end::refguide[]
+    // end::refguide[]
 
     public OidDto toOidDto() {
         val oidDto = new OidDto();
@@ -122,6 +124,6 @@ public class Bookmark implements Serializable {
         return objectType + SEPARATOR + id;
     }
 
-// tag::refguide[]
+    // tag::refguide[]
 }
 // end::refguide[]

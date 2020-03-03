@@ -61,63 +61,86 @@ import lombok.val;
 // tag::refguide[]
 public interface ExceptionRecognizer {
 
+    // end::refguide[]
     /**
      * (Attempt to) recognize the exception and return a user-friendly
-     * message to render instead. 
+     * message to render instead.
      *
-     * @return optionally a 
-     * {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Recognition recognition} object, 
-     * that describes both the 
-     * {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Category category} 
-     * and reason that will be included with the user-friendly message. 
+     * @return optionally a
+     * {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Recognition recognition} object,
+     * that describes both the
+     * {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Category category}
+     * and reason that will be included with the user-friendly message.
      */
+    // tag::refguide[]
     Optional<Recognition> recognize(Throwable ex);
 
-// end::refguide[]
-// tag::refguide-1[]
+    // end::refguide[]
+    // tag::refguide-1[]
     @RequiredArgsConstructor
     enum Category {
+
+        // end::refguide-1[]
         /**
          * A violation of some declarative constraint (eg uniqueness or referential integrity) was detected.
          */
+        // tag::refguide-1[]
         CONSTRAINT_VIOLATION("violation of some declarative constraint"),
+
+        // end::refguide-1[]
         /**
          * The object to be acted upon cannot be found (404)
          */
+        // tag::refguide-1[]
         NOT_FOUND("object not found"),
+
+        // end::refguide-1[]
         /**
          * A concurrency exception, in other words some other user has changed this object.
          */
+        // tag::refguide-1[]
         CONCURRENCY("concurrent modification"),
+
+        // end::refguide-1[]
         /**
          * Recognized, but for some other reason... 40x error
          */
+        // tag::refguide-1[]
         CLIENT_ERROR("client side error"),
+
+        // end::refguide-1[]
         /**
          * 50x error
          */
+        // tag::refguide-1[]
         SERVER_ERROR("server side error"),
+
+        // end::refguide-1[]
         /**
          * Recognized, but uncategorized (typically: a recognizer of the original ExceptionRecognizer API).
          */
+        // tag::refguide-1[]
         OTHER("other")
         ;
-        
+
         @Getter
         private final String friendlyName;
     }
-// end::refguide-1[]
+    // end::refguide-1[]
 
-// tag::refguide-2[]
+    // tag::refguide-2[]
     @Value
     class Recognition {
 
+        // end::refguide-2[]
         /**
          * @return optionally a recognition of the specified type, based on a whether given reason is non-null
          */
+        // tag::refguide-2[]
         public static Optional<Recognition> of(
                 @Nullable final Category category,
                 @Nullable final String reason) {
+            // end::refguide-2[]
 
             if(reason==null) {
                 return Optional.empty();
@@ -125,27 +148,34 @@ public interface ExceptionRecognizer {
 
             val nonNullCategory = category!=null? category: Category.OTHER;
             return Optional.of(new Recognition(nonNullCategory, reason));
+            // tag::refguide-2[]
+            // ...
         }
 
         @NonNull private final Category category;
         @NonNull private final String reason;
 
         public String toMessage(@Nullable TranslationService translationService) {
-            
+            // end::refguide-2[]
+
             val categoryLiteral = translationService!=null
                     ? translationService.translate(
                             ExceptionRecognizer.Category.class.getName(), getCategory().getFriendlyName())
                             : getCategory().getFriendlyName();
-                            
+
             val reasonLiteral = translationService!=null
                     ? translationService.translate(
                             ExceptionRecognizer.Recognition.class.getName(), getReason())
                             : getReason();
-            
+
             return String.format("[%s]: %s", categoryLiteral, reasonLiteral);
+            // tag::refguide-2[]
+            // ...
         }
+        // end::refguide-2[]
     }
-// end::refguide-2[]
-// tag::refguide[]
+    // end::refguide-2[]
+
+    // tag::refguide[]
 }
 // end::refguide[]

@@ -30,15 +30,18 @@ import org.apache.isis.core.commons.internal.base._NullSafe;
 // tag::refguide[]
 public interface ContentMappingService {
 
+    // end::refguide[]
     /**
      * Typically for mapping from a domain object to a DTO.
      */
+    // tag::refguide[]
     Object map(Object object, final List<MediaType> acceptableMediaTypes);
 
-// end::refguide[]
+    // end::refguide[]
     /**
      * Convenience utilities for implementations of {@link ContentMappingService}.
      */
+    // tag::refguide-2[]
     public static class Util {
 
         public static String determineDomainType(final List<MediaType> acceptableMediaTypes) {
@@ -64,7 +67,8 @@ public interface ContentMappingService {
             return clazz.getName().equals(domainType);
         }
     }
+    // end::refguide-2[]
 
-// tag::refguide[]
+    // tag::refguide[]
 }
 // end::refguide[]

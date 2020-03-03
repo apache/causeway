@@ -105,9 +105,7 @@ public interface Command extends HasUniqueId {
     // end::refguide[]
 
     /**
-     *
      * The date/time at which this command was created.
-     *
      */
     // tag::refguide[]
     Timestamp getTimestamp();                   // <.>
@@ -118,13 +116,13 @@ public interface Command extends HasUniqueId {
      *
      * <p>
      * Will only be populated if a {@link BookmarkService} has been configured.
+     * </p>
      */
     // tag::refguide[]
     Bookmark getTarget();                       // <.>
     // end::refguide[]
 
     /**
-     *
      * Holds a string representation of the invoked action, or the edited property, equivalent to
      * {@link Identifier#toClassAndNameIdentityString()}.
      */
@@ -133,7 +131,6 @@ public interface Command extends HasUniqueId {
     // end::refguide[]
 
     /**
-     *
      * A human-friendly description of the class of the target object.
      */
     // tag::refguide[]
@@ -141,19 +138,13 @@ public interface Command extends HasUniqueId {
     // end::refguide[]
 
     /**
-     *
      * The human-friendly name of the action invoked/property edited on the target object.
-     *
-     * <p>
-     *     NB: in earlier versions, if the command represented an edit of a property, then it held the special value &quot;{@value ACTION_IDENTIFIER_FOR_EDIT}&quot;.  This is NO LONGER the case; it simply holds the member.
-     * </p>
      */
     // tag::refguide[]
     String getTargetAction();                   // <.>
     // end::refguide[]
 
     /**
-     *
      * A human-friendly description of the arguments with which the action was invoked.
      */
     // tag::refguide[]
@@ -390,7 +381,7 @@ public interface Command extends HasUniqueId {
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
-        void setExecutor(final Executor executor);   
+        void setExecutor(final Executor executor);
 
         /**
          * <b>NOT API</b>: intended to be called only by the framework.

@@ -33,10 +33,12 @@ import org.apache.isis.applib.annotation.Programmatic;
 // tag::refguide[]
 public interface DeepLinkService {
 
+    // end::refguide[]
     /**
      * Creates a URI that can be used to obtain a representation of the provided domain object in one of the
      * Isis viewers.
      */
+    // tag::refguide[]
     URI deepLinkFor(Object domainObject);
 
 }

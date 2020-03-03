@@ -22,6 +22,7 @@ import org.apache.isis.applib.annotation.HomePage;
 
 /**
  * Returns a view model annotated with {@link HomePage}.
+ *
  * @since 2.0
  */
 // tag::refguide[]

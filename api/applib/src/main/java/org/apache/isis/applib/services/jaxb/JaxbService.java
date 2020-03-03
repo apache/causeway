@@ -47,14 +47,18 @@ public interface JaxbService {
 
     Object fromXml(JAXBContext jaxbContext, String xml, Map<String,Object> unmarshallerProperties);
 
+    // end::refguide[]
     /**
      * As {@link #fromXml(JAXBContext, String)}, but downcast to a specific type.
      */
+    // tag::refguide[]
     <T> T fromXml(Class<T> domainClass, String xml);
 
+    // end::refguide[]
     /**
      * As {@link #fromXml(JAXBContext, String, Map)}, but downcast to a specific type.
      */
+    // tag::refguide[]
     <T> T fromXml(Class<T> domainClass, String xml, Map<String,Object> unmarshallerProperties);
 
     String toXml(final Object domainObject);
@@ -75,10 +79,11 @@ public interface JaxbService {
      *     <a href="http://isis.apache.org/schema">downloaded</a> from the Isis website.
      * </p>
      */
+    // tag::refguide[]
     enum IsisSchemas {
         INCLUDE,
         IGNORE;
-// end::refguide[]
+        // end::refguide[]
 
         /**
          * Implementation note: not using subclasses, otherwise the key in translations.po becomes more complex.
@@ -90,12 +95,12 @@ public interface JaxbService {
                 return namespaceUri.matches(".*isis\\.apache\\.org.*");
             }
         }
-// tag::refguide[]
+        // tag::refguide[]
     }
 
     Map<String, String> toXsd(final Object domainObject, final IsisSchemas isisSchemas);
 
-// end::refguide[]
+    // end::refguide[]
     class Simple implements JaxbService {
 
         @Override
@@ -245,6 +250,7 @@ public interface JaxbService {
             }
         }
     }
-// tag::refguide[]
+
+    // tag::refguide[]
 }
 // end::refguide[]

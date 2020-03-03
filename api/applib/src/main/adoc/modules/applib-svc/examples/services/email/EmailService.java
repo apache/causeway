@@ -37,20 +37,16 @@ import org.apache.isis.applib.annotation.Programmatic;
 // tag::refguide[]
 public interface EmailService extends Serializable {
 
-    /**
-     * Always called by the framework, and allows the implementation to read configuration properties and initialize itself
-     */
     @PostConstruct
     public void init() ;
 
-    /**
-     * Main API to send email and optional attachments.
-     */
     boolean send(List<String> to, List<String> cc, List<String> bcc, String subject, String body, DataSource... attachments);
 
+    // end::refguide[]
     /**
      * Whether this service has been configured and thus available for use.
      */
+    // tag::refguide[]
     boolean isConfigured();
 
 }

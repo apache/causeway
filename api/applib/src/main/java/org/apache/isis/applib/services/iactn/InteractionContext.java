@@ -51,7 +51,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class InteractionContext {
 
-// end::refguide[]
+    // end::refguide[]
     public InteractionContext() {
         log.debug("init");
     }
@@ -66,13 +66,13 @@ public class InteractionContext {
         log.debug("preDestroy");
     }
 
-// tag::refguide[]
     /**
      * The currently active {@link Interaction} for this thread.
      */
+    // tag::refguide[]
     @Getter
     private Interaction interaction;
-// end::refguide[]
+    // end::refguide[]
 
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
@@ -80,6 +80,7 @@ public class InteractionContext {
     public void setInteraction(final Interaction interaction) {
         this.interaction = interaction;
     }
-// tag::refguide[]
+
+    // tag::refguide[]
 }
 // end::refguide[]

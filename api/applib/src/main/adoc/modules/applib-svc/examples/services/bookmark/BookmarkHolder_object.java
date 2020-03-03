@@ -27,7 +27,6 @@ import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-// tag::refguide[]
 @Mixin(method = "prop")
 public class BookmarkHolder_object {
 
@@ -42,16 +41,14 @@ public class BookmarkHolder_object {
     @Action(
             semantics = SemanticsOf.SAFE,
             domainEvent = BookmarkHolder_object.ActionDomainEvent.class
-            )
+    )
     @ActionLayout(
             contributed = Contributed.AS_ASSOCIATION
-            )
+    )
     public Object prop() {
         return bookmarkService.lookup(bookmarkHolder);
     }
 
-
     @Inject private BookmarkService bookmarkService;
 
 }
-// end::refguide[]

@@ -72,7 +72,7 @@ public class CommandContext {
     @Getter
     private Command command;
 
-// end::refguide[]
+    // end::refguide[]
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      */
@@ -85,7 +85,6 @@ public class CommandContext {
                 .map(Command::getExecutor);
     }
 
-
-// tag::refguide[]
+    // tag::refguide[]
 }
 // end::refguide[]

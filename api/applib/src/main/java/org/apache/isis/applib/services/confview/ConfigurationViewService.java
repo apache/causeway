@@ -26,10 +26,12 @@ import org.apache.isis.applib.annotation.Programmatic;
 // tag::refguide[]
 public interface ConfigurationViewService {
 
+    // end::refguide[]
     /**
      * Returns all properties, each as an instance of {@link ConfigurationProperty} (a view model).
      * Mask sensitive values if required.
      */
+    // tag::refguide[]
     Set<ConfigurationProperty> allProperties();
 
 }

@@ -21,16 +21,25 @@ package org.apache.isis.applib.services.command;
 // tag::refguide[]
 public interface CommandExecutorService {
 
+    // end::refguide[]
+    // tag::refguide-2[]
     enum SudoPolicy {
+
+        // end::refguide-2[]
         /**
          * For example, regular background commands.
          */
+        // tag::refguide-2[]
         NO_SWITCH,
+
+        // end::refguide-2[]
         /**
          * For example, replayable commands.
          */
+        // tag::refguide-2[]
         SWITCH,
     }
+    // end::refguide-2[]
 
     /**
      * Executes the specified command.
@@ -39,7 +48,11 @@ public interface CommandExecutorService {
      * @param commandWithDto
      * @return - any exception raised by the command.
      */
-    void executeCommand(SudoPolicy sudoPolicy, CommandWithDto commandWithDto);
+    // tag::refguide[]
+    void executeCommand(
+            SudoPolicy sudoPolicy,              // <.>
+            CommandWithDto commandWithDto       // <.>
+    );
 
 }
 // end::refguide[]

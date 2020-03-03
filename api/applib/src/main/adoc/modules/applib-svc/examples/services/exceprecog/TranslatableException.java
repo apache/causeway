@@ -33,6 +33,7 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 // tag::refguide[]
 public interface TranslatableException {
 
+    // end::refguide[]
     /**
      * In the spirit of {@link Exception#getLocalizedMessage()}, but using {@link org.apache.isis.applib.services.i18n.TranslatableString} instead.
      *
@@ -43,12 +44,15 @@ public interface TranslatableException {
      *     accept a {@link org.apache.isis.applib.services.i18n.TranslatableString}, but can be left as null for any existing code.
      * </p>
      */
+    // tag::refguide[]
     TranslatableString getTranslatableMessage();
 
+    // end::refguide[]
     /**
      * The context to use when translating the {@link #getTranslatableMessage() translatable message},
      * as ultimately passed through to {@link org.apache.isis.applib.services.i18n.TranslationService#translate(String, String)}.
      */
+    // tag::refguide[]
     String getTranslationContext();
 
 }

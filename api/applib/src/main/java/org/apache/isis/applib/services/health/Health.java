@@ -21,6 +21,7 @@ package org.apache.isis.applib.services.health;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+// tag::refguide[]
 @AllArgsConstructor
 public class Health {
 
@@ -41,3 +42,4 @@ public class Health {
 
     public boolean getResult() { return message == null; }
 }
+// end::refguide[]

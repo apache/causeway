@@ -43,18 +43,23 @@ import lombok.val;
 // tag::refguide[]
 public interface MetaModelService {
 
+    // end::refguide[]
     /**
      * Provides a reverse lookup of a domain class' object type, as defined by {@link DomainObject#objectType()} (or any other mechanism that corresponds to Isis' <code>ObjectSpecIdFacet</code>).
      */
+    // tag::refguide[]
     Class<?> fromObjectType(final String objectType);
 
+    // end::refguide[]
     /**
      * Provides a lookup of a domain class' object type, as defined by {@link DomainObject#objectType()} (or any other mechanism that corresponds to Isis' <code>ObjectSpecIdFacet</code>).
      */
+    // tag::refguide[]
     String toObjectType(final Class<?> domainType);
 
     void rebuild(final Class<?> domainType);
 
+    // end::refguide[]
     /**
      * Returns a list of representations of each of member of each domain class.
      *
@@ -67,6 +72,7 @@ public interface MetaModelService {
      * </p>
      *
      */
+    // tag::refguide[]
     DomainModel getDomainModel();
 
     BeanSort sortOf(Class<?> domainType, Mode mode);
@@ -75,22 +81,28 @@ public interface MetaModelService {
 
     CommandDtoProcessor commandDtoProcessorFor(String memberIdentifier);
 
-// end::refguide[]
-
-// tag::refguide-1[]
+    // end::refguide[]
+    // tag::refguide-1[]
     enum Mode {
+
+        // end::refguide-1[]
         /**
          * If the {@link #sortOf(Class, Mode) sort of} object type is unknown, then throw an exception.
          */
+        // tag::refguide-1[]
         STRICT,
+
+        // end::refguide-1[]
         /**
          * If the {@link #sortOf(Class, Mode) sort of} object type is unknown, then return {@link Sort#UNKNOWN}.
          */
+        // tag::refguide-1[]
         RELAXED
-    }
-// end::refguide-1[]
 
-// tag::refguide-2[]
+    }
+    // end::refguide-1[]
+
+    // tag::refguide-2[]
     class Config {
 
         private static final int IGNORE_NOOP_FACETS = 1;
@@ -182,10 +194,9 @@ public interface MetaModelService {
         }
 
     }
-// end::refguide-2[]
+    // end::refguide-2[]
 
-// tag::refguide[]
-
+    // tag::refguide[]
     MetamodelDto exportMetaModel(final Config config);
 
 }

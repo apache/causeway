@@ -39,6 +39,8 @@ public interface ServiceInjector {
     <T> T injectServicesInto(final T domainObject, Consumer<InjectionPoint> onNotResolvable);
 
     default <T> T injectServicesInto(final T domainObject) {
+        // end::refguide[]
+
         return injectServicesInto(domainObject, injectionPoint->{
 
             val injectionPointName = injectionPoint.toString();
@@ -51,6 +53,9 @@ public interface ServiceInjector {
             throw new NoSuchElementException(msg);
         });
 
+        // tag::refguide[]
+        // ...
     }
+
 }
 // end::refguide[]

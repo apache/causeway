@@ -16,14 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.metamodel;
 
-import java.util.List;
-
-// tag::refguide[]
-public interface DomainModel {
-
-    List<DomainMember> getDomainMembers();
-
-}
-// end::refguide[]
+/**
+ * The {@link org.apache.isis.applib.services.homepage.HomePageResolverService} returns the view model, if any
+ * annotated with {@link org.apache.isis.applib.annotation.HomePage}.
+ */
+package org.apache.isis.applib.services.homepage;

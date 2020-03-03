@@ -27,9 +27,11 @@ import org.apache.isis.applib.layout.grid.Grid;
 // tag::refguide[]
 public interface GridSystemService<G extends Grid> {
 
+    // end::refguide[]
     /**
      * Which grid (implementation) is defined by this service.
      */
+    // tag::refguide[]
     Class<G> gridImplementation();
 
     String tns();
@@ -38,10 +40,12 @@ public interface GridSystemService<G extends Grid> {
 
     G defaultGrid(Class<?> domainClass);
 
+    // end::refguide[]
     /**
      * Validate the grid, derive any missing object members, and overwrite any facets in the metamodel based on the
      * layout.
      */
+    // tag::refguide[]
     void normalize(G grid, Class<?> domainClass);
 
     void complete(G grid, Class<?> domainClass);

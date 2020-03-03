@@ -20,6 +20,7 @@ package org.apache.isis.applib.services.bookmark;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 
@@ -34,21 +35,31 @@ import lombok.val;
 // tag::refguide[]
 public interface BookmarkService {
 
-// end::refguide[]
+    // end::refguide[]
     /**
-     * Given any {@link Bookmark} this service is able to reconstruct to originating domain object the {@link Bookmark}
-     * was created for.
+     * Returns the {@link Bookmark} for the given domain object.
+     *
      * <p>
-     * Note: Not every domain object is bookmark-able.
+     * <b>Note</b>: Not every domain object is bookmark-able: only entities, view models and services (NOT values or collections)
      * </p>
-     * @param domainObject
+     *
+     * @param domainObject - domain object (if any) to return a bookmark for
      * @return optionally a {@link Bookmark} representing given {@code domainObject}
      */
-// tag::refguide[]
+    // tag::refguide[]
     Bookmark bookmarkFor(@Nullable Object domainObject);
 
+    // end::refguide[]
+    /**
+     * As per {@link #bookmarkFor(Object)}, but requires that a non-null {@link Bookmark} is returned.
+     *
+     * @param domainObject - that can be bookmarked
+     * @return a (non-null) {@link Bookmark} for the provided domain object.
+     */
+    // tag::refguide[]
     default Bookmark bookmarkForElseThrow(Object domainObject) {
-// end::refguide[]
+        // end::refguide[]
+
         requires(domainObject, "domainObject");
         val bookmark = bookmarkFor(domainObject);
         if(bookmark!=null) {
@@ -56,21 +67,44 @@ public interface BookmarkService {
         }
         throw _Exceptions.illegalArgument(
                 "cannot create bookmark for type %s", domainObject.getClass().getName());
-// tag::refguide[]
+        // tag::refguide[]
         // ...
     }
 
+    // end::refguide[]
+    /**
+     * Utility method that creates a {@link Bookmark} from the constituent parts.
+     *
+     * @return - {@link Bookmark} for provided class and identifier
+     */
+    // tag::refguide[]
     Bookmark bookmarkFor(Class<?> cls, String identifier);
 
+    // end::refguide[]
+    /**
+     * @see #lookup(Bookmark)
+     *
+     * @param bookmarkHolder - from which the {@link Bookmark} is obtained
+     * @return - corresponding domain object
+     */
+    // tag::refguide[]
     Object lookup(BookmarkHolder bookmarkHolder);
 
+    // end::refguide[]
+    /**
+     * Reciprocal of {@link #bookmarkFor(Object)}
+     *
+     * @param bookmark - representing a domain object
+     * @return - the corresponding domain object
+     */
+    // tag::refguide[]
     Object lookup(Bookmark bookmark);
 
-// end::refguide[]
+    // end::refguide[]
     /**
      * As {@link #lookup(Bookmark)}, but down-casting to the specified type.
      */
-// tag::refguide[]
+    // tag::refguide[]
     default <T> T lookup(Bookmark bookmark, Class<T> cls) {
         return cls.cast(lookup(bookmark));
     }

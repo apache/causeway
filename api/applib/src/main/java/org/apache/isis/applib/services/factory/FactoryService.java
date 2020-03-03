@@ -23,17 +23,19 @@ import java.util.NoSuchElementException;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.commons.exceptions.IsisException;
 
 // tag::refguide[]
 public interface FactoryService {
 
+    // end::refguide[]
     /**
      * General purpose factory method, to automatically get or create an instance of
      * {@code requiredType}.
      *
      * <p>
-     * Maps onto one of the specialized factory methods {@link #get(Class)} or {@link #create(Class)} 
+     * Maps onto one of the specialized factory methods {@link #get(Class)} or {@link #create(Class)}
      * based on the type's meta-data.
      * </p>
      *
@@ -47,40 +49,48 @@ public interface FactoryService {
      * @since 2.0
      *
      */
+    // tag::refguide[]
     <T> T getOrCreate(Class<T> requiredType);
 
+    // end::refguide[]
     /**
-     * Gets an instance (possibly shared or independent) of the specified {@code requiredType}, 
-     * with injection points resolved 
+     * Gets an instance (possibly shared or independent) of the specified {@code requiredType},
+     * with injection points resolved
      * and any life-cycle callback processed.
-     * 
+     *
      * @param <T>
      * @param requiredType - only applicable to IoC container managed types
      * @return (non-null), an instance of {@code requiredType}, if available and unique
      * (i.e. not multiple candidates found with none marked as primary)
-     * 
+     *
      * @throws NoSuchElementException if result is empty
      * @throws IsisException if instance creation failed
-     * 
+     *
      * @apiNote does not force the requiredType to be added to the meta-model
      * @since 2.0
      */
+    // tag::refguide[]
     <T> T get(Class<T> requiredType);
 
+    // end::refguide[]
     /**
      * Creates a new detached entity instance, with injection points resolved
      * and defaults applied.
+     *
      * @param <T>
      * @param domainClass - only applicable to entity types
      * @return
-     * @throws IllegalArgumentException if domainClass is not an entity type  
+     * @throws IllegalArgumentException if domainClass is not an entity type
      * @apiNote forces the domainClass to be added to the meta-model if not already
      * @since 2.0
      */
+    // tag::refguide[]
     <T> T detachedEntity(Class<T> domainClass);
 
+    // end::refguide[]
     /**
      * Creates a new Mixin instance, with injection points resolved.
+     *
      * @param <T>
      * @param mixinClass
      * @param mixedIn
@@ -88,44 +98,52 @@ public interface FactoryService {
      * @throws IllegalArgumentException if mixinClass is not a mixin type
      * @apiNote forces the mixinClass to be added to the meta-model if not already
      */
+    // tag::refguide[]
     <T> T mixin(Class<T> mixinClass, Object mixedIn);
 
+    // end::refguide[]
     /**
-     * Creates a new ViewModel instance, with injection points resolved, 
-     * and initialized according to the given {@code mementoStr} 
+     * Creates a new ViewModel instance, with injection points resolved,
+     * and initialized according to the given {@code mementoStr}
+     *
      * @param viewModelClass
      * @param mementoStr - ignored if {@code null}
      * @throws IllegalArgumentException if viewModelClass is not a viewmodel type
      * @apiNote forces the viewModelClass to be added to the meta-model if not already
      * @since 2.0
      */
+    // tag::refguide[]
     <T> T viewModel(Class<T> viewModelClass, @Nullable String mementoStr);
 
+    // end::refguide[]
     /**
-     * Creates a new ViewModel instance, 
+     * Creates a new ViewModel instance,
      * with injection points resolved
-     * and defaults applied. 
+     * and defaults applied.
      * @param viewModelClass
      * @throws IllegalArgumentException if viewModelClass is not a viewmodel type
      * @apiNote forces the viewModelClass to be added to the meta-model if not already
      * @since 2.0
      */
+    // tag::refguide[]
     default <T> T viewModel(Class<T> viewModelClass) {
         return viewModel(viewModelClass, /*mementoStr*/null);
     }
 
+    // end::refguide[]
     /**
-     * Creates a new instance of the specified class, 
+     * Creates a new instance of the specified class,
      * with injection points resolved
      * and defaults applied.
      * @param domainClass - not applicable to IoC container managed types
-     * @throws IllegalArgumentException if domainClass is an IoC container managed type, 
+     * @throws IllegalArgumentException if domainClass is an IoC container managed type,
      *      or not recognized by the meta-model
      * @apiNote forces the domainClass to be added to the meta-model if not already
      * @since 2.0
      */
+    // tag::refguide[]
     <T> T create(Class<T> domainClass);
-// end::refguide[]
+    // end::refguide[]
 
     // -- DEPRECATIONS
 
@@ -156,8 +174,8 @@ public interface FactoryService {
      * alternatively just <i>new()</i> up the object rather than call this
      * method.
      * </p>
-     * @deprecated with semantic changes since 2.0 previous behavior is no longer guaranteed, 
-     * instead consider use of @{@link #detachedEntity(Class)} or {@link #getOrCreate(Class)} 
+     * @deprecated with semantic changes since 2.0 previous behavior is no longer guaranteed,
+     * instead consider use of @{@link #detachedEntity(Class)} or {@link #getOrCreate(Class)}
      * if applicable
      */
     @Deprecated
@@ -165,6 +183,6 @@ public interface FactoryService {
         return getOrCreate(domainClass);
     }
 
-// tag::refguide[]
+    // tag::refguide[]
 }
 // end::refguide[]

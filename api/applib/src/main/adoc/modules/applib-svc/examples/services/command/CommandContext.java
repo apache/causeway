@@ -53,7 +53,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class CommandContext {
 
-// end::refguide[]
+    // end::refguide[]
     public CommandContext() {
         log.debug("init");
     }
@@ -68,24 +68,23 @@ public class CommandContext {
         log.debug("preDestroy");
     }
 
-// tag::refguide[]
+    // tag::refguide[]
     @Getter
     private Command command;
 
-// end::refguide[]
+    // end::refguide[]
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      */
     public void setCommand(final Command command) {
         this.command = command;
     }
-    
+
     public Optional<Executor> getCurrentExecutor() {
         return Optional.ofNullable(getCommand())
-                .map(Command::getExecutor); 
+                .map(Command::getExecutor);
     }
-    
 
-// tag::refguide[]
+    // tag::refguide[]
 }
 // end::refguide[]

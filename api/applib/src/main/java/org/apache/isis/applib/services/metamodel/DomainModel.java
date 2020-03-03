@@ -20,8 +20,10 @@ package org.apache.isis.applib.services.metamodel;
 
 import java.util.List;
 
+// tag::refguide[]
 public interface DomainModel {
 
     List<DomainMember> getDomainMembers();
 
 }
+// end::refguide[]

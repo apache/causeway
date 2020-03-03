@@ -24,14 +24,18 @@ import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
 // tag::refguide[]
 public interface MenuBarsLoaderService {
 
+    // end::refguide[]
     /**
      * Whether dynamic reloading of layouts is enabled.
      */
+    // tag::refguide[]
     boolean supportsReloading();
 
+    // end::refguide[]
     /**
      * Returns a new instance of a {@link BS3MenuBars}, else <tt>null</tt>.
      */
+    // tag::refguide[]
     BS3MenuBars menuBars();
 
 }

@@ -18,37 +18,31 @@
  */
 package org.apache.isis.applib.services.metamodel;
 
+// tag::refguide[]
 public interface DomainMember extends Comparable<DomainMember> {
 
     String getClassType();
 
     String getClassName();
-
     String getPackageName();
 
     String getType();
 
     String getMemberName();
-
     String getNumParams();
 
     boolean isContributed();
-
     String getContributedBy();
 
     boolean isMixedIn();
-
     String getMixin();
 
     String getHidden();
-
     String getDisabled();
+    String getValidate();
 
     String getChoices();
-
     String getAutoComplete();
-
     String getDefault();
-
-    String getValidate();
 }
+// end::refguide[]

@@ -121,7 +121,9 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
         if(bookmark == null) {
             return null;
         }
-        //FIXME[2112] why would we ever store Service Beans as Bookmarks?        
+        //FIXME[2112] why would we ever store Service Beans as Bookmarks?
+        // - ANSWER: because it might be used by the CommandService to replay a command or exec in the background.
+        //
         //        final String objectType = bookmark.getObjectType();
         //        final Object service = lookupService(objectType);
         //        if(service != null) {

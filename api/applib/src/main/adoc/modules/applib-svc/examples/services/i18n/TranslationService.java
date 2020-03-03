@@ -24,6 +24,7 @@ import java.util.function.Predicate;
 // tag::refguide[]
 public interface TranslationService {
 
+    // end::refguide[]
     /**
      * Return a translation of the text, in the locale of the &quot;current user&quot;.
      *
@@ -35,8 +36,10 @@ public interface TranslationService {
      * @param text
      * @return
      */
+    // tag::refguide[]
     String translate(final String context, final String text);
 
+    // end::refguide[]
     /**
      * Return a translation of either the singular or the plural text, dependent on the <tt>num</tt> parameter,
      * in the locale of the &quot;current user&quot;.
@@ -51,23 +54,48 @@ public interface TranslationService {
      * @param num - whether to return the translation of the singular (if =1) or of the plural (if != 1)
      * @return
      */
+    // tag::refguide[]
     String translate(final String context, final String singularText, final String pluralText, int num);
 
-// end::refguide[]
-// tag::refguide-1[]
+    // end::refguide[]
+    // tag::refguide-1[]
     enum Mode {
-        DISABLED(configValue->configValue != null &&
-                ("disable".equalsIgnoreCase(configValue) ||
-                        "disabled".equalsIgnoreCase(configValue))),
+
+        DISABLED (
+            // end::refguide-1[]
+                configValue->
+                    ("disable".equalsIgnoreCase(configValue) ||
+                     "disabled".equalsIgnoreCase(configValue))
+            // tag::refguide-1[]
+            // ...
+        ),
 
         // synonym, needs to be defined, such that config beans (since 2.0) do work
-        DISABLE(configValue->false),
+        DISABLE(
+            // end::refguide-1[]
+                configValue->false
+            // tag::refguide-1[]
+            // ...
+        ),
 
-        READ(configValue->configValue != null &&
-        ("read".equalsIgnoreCase(configValue) ||
-                "reader".equalsIgnoreCase(configValue))),
-        // default
-        WRITE(configValue->!READ.matches(configValue) && !DISABLED.matches(configValue));
+        READ(
+            // end::refguide-1[]
+                configValue->
+                    ("read".equalsIgnoreCase(configValue) ||
+                     "reader".equalsIgnoreCase(configValue))
+            // tag::refguide-1[]
+            // ...
+        ),
+
+        WRITE(
+            // end::refguide-1[]
+                configValue ->
+                    !READ.matches(configValue) &&
+                    !DISABLED.matches(configValue)
+            // tag::refguide-1[]
+            // ...
+        );
+        // end::refguide-1[]
 
         // -- handle values from configuration
 
@@ -90,9 +118,10 @@ public interface TranslationService {
         public boolean isDisabled() {
             return this == DISABLED || this == DISABLE;
         }
+
+        // tag::refguide-1[]
     }
-// end::refguide-1[]
-// tag::refguide[]
+    // end::refguide-1[]
 
     /**
      * Whether this implementation is operating in read or in write mode.
@@ -112,6 +141,8 @@ public interface TranslationService {
      *     such that all pathways are exercised..
      * </p>
      */
+    // tag::refguide[]
     Mode getMode();
+
 }
 // end::refguide[]

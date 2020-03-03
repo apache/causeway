@@ -23,29 +23,34 @@ import org.apache.isis.applib.layout.menubars.MenuBars;
 // tag::refguide[]
 public interface MenuBarsService {
 
-// end::refguide[]
-// tag::refguide-1[]
+    // end::refguide[]
+    // tag::refguide-1[]
     enum Type {
 
+        // end::refguide-1[]
         /**
          * Either derived from annotations or as obtained elsewhere
          * (eg using the {@link MenuBarsLoaderService} if the
          * default implementation of this service is in use).
          */
+        // tag::refguide-1[]
         DEFAULT,
 
+        // end::refguide-1[]
         /**
          * As derived from annotations.
          */
+        // tag::refguide-1[]
         FALLBACK
     }
-// end::refguide-1[]
-// tag::refguide[]
+    // end::refguide-1[]
+
 
     /**
      * Returns {@link #menuBars()} with a type of {@link Type#DEFAULT}.
      * @return
      */
+    // tag::refguide[]
     default MenuBars menuBars() {
         return menuBars(Type.DEFAULT);
     }
