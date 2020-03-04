@@ -30,14 +30,12 @@ package org.apache.isis.applib.annotation;
  */
 // tag::refguide[]
 public enum CommandExecuteIn {
-
     // end::refguide[]
     /**
      * Execute synchronously in the &quot;foreground&quot;, wait for the results.
      */
     // tag::refguide[]
     FOREGROUND,
-
     // end::refguide[]
     /**
      * Execute &quot;asynchronously&quot; through the {@link org.apache.isis.applib.services.background.BackgroundCommandService}, returning (if possible) the
@@ -46,7 +44,6 @@ public enum CommandExecuteIn {
      */
     // tag::refguide[]
     BACKGROUND,
-
     // end::refguide[]
     /**
      * For commands that are replicated from a master onto a slave and are to be replayed (typically using the same
@@ -58,7 +55,6 @@ public enum CommandExecuteIn {
      */
     // tag::refguide[]
     REPLAYABLE,
-
     // end::refguide[]
     /**
      * For commands that have been excluded and will not run.
@@ -67,7 +63,6 @@ public enum CommandExecuteIn {
      */
     // tag::refguide[]
     EXCLUDED
-
     // end::refguide[]
     ;
 
@@ -75,7 +70,6 @@ public enum CommandExecuteIn {
     public boolean isBackground() { return this == BACKGROUND; }
     public boolean isReplayable() { return this == REPLAYABLE; }
     public boolean isExcluded() { return this == EXCLUDED; }
-
 
     public static class Type {
         private Type() {}
@@ -85,6 +79,5 @@ public enum CommandExecuteIn {
         }
     }
     // tag::refguide[]
-
 }
 // end::refguide[]

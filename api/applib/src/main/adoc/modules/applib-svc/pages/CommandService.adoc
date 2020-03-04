@@ -17,15 +17,8 @@ There are a number of related use cases:
 * they enable profiling of the running application (which actions are invoked then most often, what is their response time)
 
 
-* if xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`] is configured, they provide
-better traceability as the `Command` is also correlated with any published events, again through the unique
-`transactionId` GUID
-* if xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`](s) are configured, they provide better audit
-information, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of
-the action) through the `transactionId` GUID
-
-
-
+* if xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`] is configured, they provide better traceability as the `Command` is also correlated with any published events, again through the unique `transactionId` GUID
+* if xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`](s) are configured, they provide better audit information, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of the action) through the `transactionId` GUID
 
 == SPI
 
@@ -35,20 +28,17 @@ The `CommandService` service defines the following very simple API:
 ----
 include::refguide:applib-svc:example$services/command/spi/CommandService.java[tags="refguide"]
 ----
+
 <.> Instantiate the appropriate instance of the xref:refguide:applib-svc:CommandContext.adoc#command[`Command`] (as defined by the
 xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`] service).
 Its members will be populated automatically by the framework.
 <.> Set the hint that the `Command` should be persisted if possible (when completed, see below).
 <.> "Complete" the command, typically meaning that the command should be persisted it if its `Command#getPersistence()` flag and persistence hint (`Command#isPersistHint()`) indicate that it should be.  +
-+
-The framework will automatically have set the `completedAt` property of the `Command`.
-
-
++ The framework will automatically have set the `completedAt` property of the `Command`.
 
 == Implementation
 
 The xref:extensions:command-log:about.adoc[Command Log] extension provides an implementation of this service that persists commands to a database table.
-
 
 == Related Services
 

@@ -19,7 +19,7 @@ If contributions are not required in the UI, these can be suppressed either usin
 
 
 
-=== Alternatives
+== Alternatives
 
 WARNING: TODO: v2 - this is to move into the xref:mappings:ROOT:about.adoc[mappings catalogue].
 

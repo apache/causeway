@@ -61,9 +61,13 @@ public class Bookmark implements Serializable {
     // tag::refguide[]
 
     public static Bookmark of(String objectType, String identifier) {
+        // end::refguide[]
+
         return new Bookmark(objectType, identifier, /*hintId*/ null);
+
+        // tag::refguide[]
+        // ...
     }
-    // ...
 
     // end::refguide[]
 
@@ -72,7 +76,7 @@ public class Bookmark implements Serializable {
      */
     // tag::refguide[]
     public static Optional<Bookmark> parse(@Nullable String str) {
-    // end::refguide[]
+        // end::refguide[]
 
         if(str==null) {
             return Optional.empty();

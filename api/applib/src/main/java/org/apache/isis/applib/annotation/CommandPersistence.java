@@ -31,7 +31,6 @@ public enum CommandPersistence {
      */
     // tag::refguide[]
     PERSISTED,
-
     // end::refguide[]
     /**
      * (If the configured {@link org.apache.isis.applib.services.command.spi.CommandService} supports it), indicates that the
@@ -40,7 +39,6 @@ public enum CommandPersistence {
      */
     // tag::refguide[]
     IF_HINTED,
-
     // end::refguide[]
     /**
      * (Even if the configured {@link org.apache.isis.applib.services.command.spi.CommandService} supports it), indicates that the

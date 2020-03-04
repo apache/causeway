@@ -2,13 +2,50 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-WARNING: TODO - v2 : to document.  It's possible this might become redundant if CommandDto is rolled up into Command.
+The `CommandDtoProcessorService` domain serviceproviding a mechanism to convert the  instance of `Command` into a serializable `CommandDto`.
 
-Also discuss `CommandDtoProcessor`.
+Having a DTO representation of `Command` offers the ability to move or copy it across the network, for example to support replay scenarios.
+To facilitate this, the framework itself provides a default implementation of this service which copies the publicly accessible members of `Command` into the corresponding `CommandDto`.
+
+This is used by xref:refguide:applib-svc:ContentMappingService.adoc[`ContentMappingService`] to serialize ``Command``s over the REST API provided by xref:vro:ROOT:about.adoc[Restful Objects viewer].
+For many cases this default implementation will suffice.
+
+If necessary, though, a custom implementation of this service can be provided.
+For example, if a custom implementation of xref:refguide:applib-svc:CommandService.adoc[`CommandService`] provides a different implementation of `Command` with additional state, this could be copied into the `userData` map of `CommandDto` using a companion implementation of the `CommandDtoProcessorService` may be provided in order to copy over any important additional properties.
+
+WARNING: TODO: v2 - perhaps this should just be merged into `CommandService`?  (And for that matter, maybe the `BackgroundCommandService` also?)
+
 
 == API
 
+The API defined by `CommandDtoProcessorService` is:
+
+[source,java]
+----
+include::refguide:applib-svc:example$services/conmap/command/spi/CommandDtoProcessorService.java[tags="refguide"]
+----
+
+
 == Implementation
+
+As noted in the introduction, the framework provides a default implementation, namely `o.a.i.applib.services.conmap.command.ContentMappingServiceForCommandDto.CopyOverFromCommand`.
+
+
+== Related Classes
+
+The `CommandDtoProcessorService` is a global fallback for serializing actions of commands into a DTO.
+However, this can be overridden on an action-by-action basis using  xref:refguide:applib-ant:Action.adoc#commanddtoprocessor[`@Action#commandDtoProcessor`].
+The main use case is to allow certain actions to be ignored.
+
+[source,java]
+----
+include::refguide:applib-svc:example$services/command/CommandDtoProcessor.java[tags="refguide"]
+----
+<.> Returning `null` means that the command's DTO is effectively ignored.
 
 == Related Services
 
+* the `CommandDtoProcessorService` is used by xref:refguide:applib-svc:ContentMappingService.adoc[`ContentMappingService`] to serialize ``Command``s over the REST API provided by xref:vro:ROOT:about.adoc[Restful Objects viewer].
+All implementations are used.
+
+* if there is a custom implementations of xref:refguide:applib-svc:CommandService.adoc[`CommandService`] (with a corresponding custom implementation of `Command`), then it may define a corresponding implementation of this `CommandDtoProcessorService` in order to serialize out any additional state.

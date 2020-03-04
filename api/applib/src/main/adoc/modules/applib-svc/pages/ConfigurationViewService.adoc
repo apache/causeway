@@ -3,23 +3,54 @@
 :page-partial:
 
 
-WARNING: TODO: v2: to document - backing service for ConfigurationMenu; returns `ConfigurationProperty` view model.  Only returns `isis.\*` and `resteasy.*`
+The `ConfigurationViewService`
+
+WARNING: TODO: v2: to document - backing service for ConfigurationMenu;
+
+returns `ConfigurationProperty` view model.  Only returns `isis.\*` and `resteasy.*`
 
 
 == API
+
+The API defined by this service is very simple:
 
 [source,java]
 ----
 include::refguide:applib-svc:example$services/confview/ConfigurationViewService.java[tags="refguide"]
 ----
 
+where `ConfigurationProperty` is a view model:
+
+[source,java]
+----
+include::refguide:applib-svc:example$services/confview/ConfigurationProperty.java[tags="refguide"]
+----
 
 == Implementation
 
+The core framework (xref:core:runtime-services:about.adoc[Runtime Services] module) provides a default implementation of this API, namely `o.a.i.core.runtimeservices.confmenu.ConfigurationViewServiceDefault`.
+
+
+
 == Related Services
 
-The `ConfigurationMenu` provides a UI to acces
+* The configuration properties for Apache Isis can also be obtained from the xref:refguide:config:about.adoc#isisconfiguration-domain-service[`IsisConfiguration`] domain service.
+These provide link:https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-external-config-typesafe-configuration-properties[type-safe] access to all `isis.*` configuration properties.
++
+[NOTE]
+====
+`IsisConfiguration` is part of xref:refguide:config:about.adoc[`isis-core-config`] rather than the applib.
 
+To use it therefore requires this dependency:
+[source,xml]
+.pom.xml
+----
+<dependency>
+    <groupId>org.apache.isis.core</groupId>
+    <artifactId>isis-core-config</artifactId>
+</dependency>
+----
+====
 
-The configuration properties can also be obtained from the xref:refguide:config:about.adoc#isisconfiguration-domain-service[`IsisConfiguration`] domain service.
-These provide type-safe access to all `isis.*` configuration properties.
+* The xref:refguide:applib-svc:ConfigurationMenu.adoc[ `ConfigurationMenu`] provides a UI to access this service.
+
