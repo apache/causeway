@@ -38,7 +38,7 @@ class TargetRespondListenerToResetQueryResultCache implements AjaxRequestTarget.
             log.debug("RESPOND PHASE STARTED: resetting cache");
         }
         
-        queryResultsCacheProvider.get().resetForNextTransaction();
+        queryResultsCacheProvider.get().onTransactionEnded();
     }
 
 

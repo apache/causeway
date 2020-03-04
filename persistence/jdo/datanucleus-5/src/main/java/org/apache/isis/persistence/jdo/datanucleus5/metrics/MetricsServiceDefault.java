@@ -35,7 +35,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.IsisSessionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.WithTransactionScope;
+import org.apache.isis.applib.services.TransactionScopeListener;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.core.runtime.persistence.transaction.ChangedObjectsService;
 
@@ -49,7 +49,7 @@ import lombok.extern.log4j.Log4j2;
 @IsisSessionScope
 @Log4j2
 public class MetricsServiceDefault 
-implements MetricsService, InstanceLifecycleListener, LoadLifecycleListener, WithTransactionScope {
+implements MetricsService, InstanceLifecycleListener, LoadLifecycleListener, TransactionScopeListener {
 
 // end::refguide[]
     public MetricsServiceDefault() {
@@ -91,7 +91,7 @@ implements MetricsService, InstanceLifecycleListener, LoadLifecycleListener, Wit
      * a transaction-scoped service; since that isn't yet supported by the framework, we have to manually reset).
      */
     @Override
-    public void resetForNextTransaction() {
+    public void onTransactionEnded() {
         numberLoaded.reset();
     }
     

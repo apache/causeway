@@ -25,7 +25,7 @@ import java.util.concurrent.CountDownLatch;
 import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.WithTransactionScope;
+import org.apache.isis.applib.services.TransactionScopeListener;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionId;
@@ -158,7 +158,7 @@ public class IsisTransactionJdo implements Transaction {
     private final PublisherDispatchService publisherDispatchService;
     private final AuditerDispatchService auditerDispatchService;
 
-    private final Can<WithTransactionScope> withTransactionScopes;
+    private final Can<TransactionScopeListener> transactionScopeListeners;
 
     private IsisException abortCause;
 
@@ -172,11 +172,16 @@ public class IsisTransactionJdo implements Transaction {
         this.publisherDispatchService = serviceRegistry.lookupServiceElseFail(PublisherDispatchService.class);
         this.auditerDispatchService = serviceRegistry.lookupServiceElseFail(AuditerDispatchService.class);
 
-        this.withTransactionScopes = serviceRegistry.select(WithTransactionScope.class);
+        this.transactionScopeListeners = serviceRegistry.select(TransactionScopeListener.class);
 
         this.state = State.IN_PROGRESS;
 
         log.debug("new transaction {}", this);
+        
+        for (TransactionScopeListener listener : transactionScopeListeners) {
+            listener.onTransactionStarted();;
+        }
+        
     }
 
     private final CountDownLatch countDownLatch = new CountDownLatch(1);
@@ -376,8 +381,8 @@ public class IsisTransactionJdo implements Transaction {
             setAbortCause(new IsisTransactionManagerException(ex));
             throw ex;
         } finally {
-            for (WithTransactionScope withTransactionScope : withTransactionScopes) {
-                withTransactionScope.resetForNextTransaction();
+            for (TransactionScopeListener listener : transactionScopeListeners) {
+                listener.onTransactionEnded();
             }
         }
     }

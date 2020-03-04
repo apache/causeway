@@ -64,7 +64,7 @@ public interface QueryResultsCache {
     <R, A0, A1, A2, A3, A4> R execute(Call5<? extends R, A0, A1, A2, A3, A4> action, Class<?> callingClass, String methodName,
             A0 arg0, A1 arg1, A2 arg2, A3 arg3, A4 arg4);
     
-    void resetForNextTransaction();
+    void onTransactionEnded();
 
     // end::refguide[]
     // tag::refguide-1[]

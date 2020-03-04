@@ -20,13 +20,20 @@
 package org.apache.isis.applib.services;
 
 /**
- * For domain services that are transaction-scoped can implement this interface as a callback, invoked
- * at the end of the transaction.
- *
- * TODO: We ought instead to use Spring's @TransactionScope rather than roll-our-own.
+ * Domain services that need to be aware of transaction boundaries can implement this interface.
+ * 
+ * @apiNote Implementing services most likely need to be scoped in a way that binds the scope to 
+ * the current thread (eg. {@link IsisSessionScope}) 
+ *  
+ * @since 2.0 (renamed from WithTransactionScope)
  */
 // tag::refguide[]
-public interface WithTransactionScope {
-    void resetForNextTransaction();
+public interface TransactionScopeListener {
+    
+    default void onTransactionStarted() {
+        // default: do nothing
+    }
+    
+    void onTransactionEnded();
 }
 // end::refguide[]

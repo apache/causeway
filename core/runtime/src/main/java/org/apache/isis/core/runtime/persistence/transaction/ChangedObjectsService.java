@@ -36,7 +36,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.annotation.IsisSessionScope;
 import org.apache.isis.applib.services.HasUniqueId;
-import org.apache.isis.applib.services.WithTransactionScope;
+import org.apache.isis.applib.services.TransactionScopeListener;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -55,7 +55,7 @@ import lombok.extern.log4j.Log4j2;
 @IsisSessionScope
 @Log4j2
 // tag::refguide[]
-public class ChangedObjectsService implements WithTransactionScope {
+public class ChangedObjectsService implements TransactionScopeListener {
 
     // end::refguide[]
     public ChangedObjectsService() {
@@ -219,7 +219,7 @@ public class ChangedObjectsService implements WithTransactionScope {
     }
 
     /**
-     * Intended to be called at the end of the transaction.  Use {@link #resetForNextTransaction()} once fully read.
+     * Intended to be called at the end of the transaction.  Use {@link #onTransactionEnded()} once fully read.
      */
     public Set<AuditEntry> getChangedObjectProperties() {
         return changedObjectProperties != null
@@ -288,7 +288,7 @@ public class ChangedObjectsService implements WithTransactionScope {
      * TODO: we ought to use Spring's @TransactionScope rather than roll-our-own.
      */
     @Override
-    public void resetForNextTransaction() {
+    public void onTransactionEnded() {
         enlistedObjectProperties.clear();
         changeKindByEnlistedAdapter.clear();
         changedObjectProperties = null;

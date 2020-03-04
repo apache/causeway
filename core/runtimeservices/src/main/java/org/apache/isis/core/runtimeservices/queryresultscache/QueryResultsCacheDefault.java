@@ -33,7 +33,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.IsisSessionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.WithTransactionScope;
+import org.apache.isis.applib.services.TransactionScopeListener;
 import org.apache.isis.applib.services.queryresultscache.QueryResultCacheControl;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.core.commons.handler.MethodReferences.Call0;
@@ -65,7 +65,7 @@ import lombok.extern.log4j.Log4j2;
 @IsisSessionScope
 @Qualifier("Default")
 @Log4j2
-public class QueryResultsCacheDefault implements QueryResultsCache, WithTransactionScope {
+public class QueryResultsCacheDefault implements QueryResultsCache, TransactionScopeListener {
 
 // end::refguide[]
     public QueryResultsCacheDefault() {
@@ -206,7 +206,7 @@ public class QueryResultsCacheDefault implements QueryResultsCache, WithTransact
      * </p>
      */
     @Override
-    public void resetForNextTransaction() {
+    public void onTransactionEnded() {
         cache.clear();
     }
 
