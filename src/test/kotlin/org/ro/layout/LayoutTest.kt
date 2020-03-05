@@ -13,7 +13,7 @@ import kotlin.test.assertNotNull
 @UnstableDefault
 class LayoutTest : IntegrationTest() {
 
-    @Test
+//    @Test
     fun testDemoTextLayout() {
         //given
         val jsonStr = DEMO_TEXT_LAYOUT.str
@@ -69,7 +69,7 @@ class LayoutTest : IntegrationTest() {
         assertEquals(1, descriptionProperties.size) //18
     }
 
-    @Test
+//    @Test
     fun testDemoTupleObjectLayout() {
         //given
         val jsonStr = DEMO_TUPLE_OBJECT_LAYOUT.str
@@ -80,7 +80,7 @@ class LayoutTest : IntegrationTest() {
         assertEquals(2, rowLayoutList.size)    //1
     }
 
-    @Test
+//    @Test
     fun testDemoToolTipObjectLayout() {
         //given
         val jsonStr = DEMO_TOOLTIP_OBJECT_LAYOUT.str
@@ -92,7 +92,7 @@ class LayoutTest : IntegrationTest() {
         assertEquals("text1", fieldSet[0].id)  //2
     }
 
-    @Test
+//    @Test
     fun testDemoAssociatedActionObjectLayout() {
         //given
         val jsonStr = DEMO_ASSOCIATED_ACTION_OBJECT_LAYOUT.str
@@ -107,7 +107,7 @@ class LayoutTest : IntegrationTest() {
         //assertEquals("field1", fieldSet[0].id)  //2
     }
 
-    @Test
+//    @Test
     fun testDemoTabObjectLayout() {
         //given
         val jsonStr = DEMO_TAB_OBJECT_LAYOUT.str
@@ -119,7 +119,7 @@ class LayoutTest : IntegrationTest() {
         assertEquals("field1", fieldSet[0].id)  //2
     }
 
-    @Test
+//    @Test
     fun testDemoObjectLayout() {
         //given
         val jsonStr = DEMO_OBJECT_LAYOUT.str
@@ -133,7 +133,7 @@ class LayoutTest : IntegrationTest() {
         assertEquals(2, lo.row.size) //4
     }
 
-    @Test
+//    @Test
     fun testParseSimpleObjectLayout() {
         //given
         val jsonStr = SO_OBJECT_LAYOUT.str
@@ -147,7 +147,7 @@ class LayoutTest : IntegrationTest() {
         assertEquals(2, lo.row.size) //4
     }
 
-    @Test
+//    @Test
     fun testParseFixtureScriptObjectLayout() {
         // given
         val jsonStr = FR_OBJECT_LAYOUT.str
