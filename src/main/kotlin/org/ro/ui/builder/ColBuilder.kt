@@ -16,7 +16,7 @@ class ColBuilder() {
             cpt = TabGroupBuilder().create(tgl, tObject, dsp)
             result.add(cpt)
         }
-        for (fsl in colLayout.fieldSet!!) {
+        for (fsl in colLayout.fieldSet) {
             cpt = FieldSetBuilder().create(fsl, tObject, dsp)
             result.add(cpt!!)
         }

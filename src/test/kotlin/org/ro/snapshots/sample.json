@@ -1,29 +1,248 @@
 {
-    "id": "parity",
-    "memberType": "property",
-    "links": [
+    "row": [
         {
-            "rel": "self",
-            "href": "http://localhost:8080/restful/domain-types/demo.DependentArgsDemoItem/properties/parity",
-            "method": "GET",
-            "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/property-description\""
+            "cols": [
+                {
+                    "col": {
+                        "domainObject": {
+                            "named": null,
+                            "describedAs": null,
+                            "plural": null,
+                            "metadataError": null,
+                            "link": {
+                                "rel": "urn:org.restfulobjects:rels/element",
+                                "method": "GET",
+                                "href": "http://localhost:8080/restful/objects/isisApplib.FixtureResult/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PGtleT5kb21haW4tYXBwLWRlbW8vcGVyc2lzdC1hbGwvaXRlbS01PC9rZXk-PG9iamVjdC5ib29rbWFyaz5zaW1wbGUuU2ltcGxlT2JqZWN0OjExNDwvb2JqZWN0LmJvb2ttYXJrPjwvbWVtZW50bz4=",
+                                "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object\""
+                            },
+                            "bookmarking": null,
+                            "cssClass": null,
+                            "cssClassFa": null,
+                            "cssClassFaPosition": null,
+                            "namedEscaped": null
+                        },
+                        "action": [
+                            {
+                                "named": null,
+                                "describedAs": null,
+                                "metadataError": null,
+                                "link": {
+                                    "rel": "urn:org.restfulobjects:rels/action",
+                                    "method": "GET",
+                                    "href": "http://localhost:8080/restful/objects/isisApplib.FixtureResult/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PGtleT5kb21haW4tYXBwLWRlbW8vcGVyc2lzdC1hbGwvaXRlbS01PC9rZXk-PG9iamVjdC5ib29rbWFyaz5zaW1wbGUuU2ltcGxlT2JqZWN0OjExNDwvb2JqZWN0LmJvb2ttYXJrPjwvbWVtZW50bz4=/actions/clearHints",
+                                    "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object-action\""
+                                },
+                                "id": "clearHints",
+                                "bookmarking": null,
+                                "cssClass": null,
+                                "cssClassFa": null,
+                                "cssClassFaPosition": null,
+                                "hidden": null,
+                                "namedEscaped": null,
+                                "position": null,
+                                "promptStyle": null
+                            },
+                            {
+                                "named": null,
+                                "describedAs": null,
+                                "metadataError": null,
+                                "link": {
+                                    "rel": "urn:org.restfulobjects:rels/action",
+                                    "method": "GET",
+                                    "href": "http://localhost:8080/restful/objects/isisApplib.FixtureResult/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PGtleT5kb21haW4tYXBwLWRlbW8vcGVyc2lzdC1hbGwvaXRlbS01PC9rZXk-PG9iamVjdC5ib29rbWFyaz5zaW1wbGUuU2ltcGxlT2JqZWN0OjExNDwvb2JqZWN0LmJvb2ttYXJrPjwvbWVtZW50bz4=/actions/downloadLayoutXml",
+                                    "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object-action\""
+                                },
+                                "id": "downloadLayoutXml",
+                                "bookmarking": null,
+                                "cssClass": null,
+                                "cssClassFa": null,
+                                "cssClassFaPosition": null,
+                                "hidden": null,
+                                "namedEscaped": null,
+                                "position": null,
+                                "promptStyle": null
+                            },
+                            {
+                                "named": null,
+                                "describedAs": null,
+                                "metadataError": null,
+                                "link": {
+                                    "rel": "urn:org.restfulobjects:rels/action",
+                                    "method": "GET",
+                                    "href": "http://localhost:8080/restful/objects/isisApplib.FixtureResult/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PGtleT5kb21haW4tYXBwLWRlbW8vcGVyc2lzdC1hbGwvaXRlbS01PC9rZXk-PG9iamVjdC5ib29rbWFyaz5zaW1wbGUuU2ltcGxlT2JqZWN0OjExNDwvb2JqZWN0LmJvb2ttYXJrPjwvbWVtZW50bz4=/actions/rebuildMetamodel",
+                                    "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object-action\""
+                                },
+                                "id": "rebuildMetamodel",
+                                "bookmarking": null,
+                                "cssClass": null,
+                                "cssClassFa": null,
+                                "cssClassFaPosition": null,
+                                "hidden": null,
+                                "namedEscaped": null,
+                                "position": null,
+                                "promptStyle": null
+                            },
+                            {
+                                "named": null,
+                                "describedAs": null,
+                                "metadataError": null,
+                                "link": {
+                                    "rel": "urn:org.restfulobjects:rels/action",
+                                    "method": "GET",
+                                    "href": "http://localhost:8080/restful/objects/isisApplib.FixtureResult/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PGtleT5kb21haW4tYXBwLWRlbW8vcGVyc2lzdC1hbGwvaXRlbS01PC9rZXk-PG9iamVjdC5ib29rbWFyaz5zaW1wbGUuU2ltcGxlT2JqZWN0OjExNDwvb2JqZWN0LmJvb2ttYXJrPjwvbWVtZW50bz4=/actions/openRestApi",
+                                    "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object-action\""
+                                },
+                                "id": "openRestApi",
+                                "bookmarking": null,
+                                "cssClass": null,
+                                "cssClassFa": null,
+                                "cssClassFaPosition": null,
+                                "hidden": null,
+                                "namedEscaped": null,
+                                "position": null,
+                                "promptStyle": null
+                            }
+                        ],
+                        "metadataError": null,
+                        "cssClass": null,
+                        "size": null,
+                        "id": null,
+                        "span": 12,
+                        "unreferencedActions": true,
+                        "unreferencedCollections": null
+                    }
+                }
+            ],
+            "metadataError": null,
+            "cssClass": null,
+            "id": null
         },
         {
-            "rel": "up",
-            "href": "http://localhost:8080/restful/domain-types/demo.DependentArgsDemoItem",
-            "method": "GET",
-            "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/domain-type\""
-        },
-        {
-            "rel": "urn:org.restfulobjects:rels/return-type",
-            "href": "http://localhost:8080/restful/domain-types/demoapp.dom.actions.depargs.Parity",
-            "method": "GET",
-            "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/domain-type\""
+            "cols": [
+                {
+                    "col": {
+                        "domainObject": null,
+                        "fieldSet": [
+                            {
+                                "name": "General",
+                                "property": [
+                                    {
+                                        "named": null,
+                                        "describedAs": null,
+                                        "metadataError": null,
+                                        "link": {
+                                            "rel": "urn:org.restfulobjects:rels/property",
+                                            "method": "GET",
+                                            "href": "http://localhost:8080/restful/objects/isisApplib.FixtureResult/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PGtleT5kb21haW4tYXBwLWRlbW8vcGVyc2lzdC1hbGwvaXRlbS01PC9rZXk-PG9iamVjdC5ib29rbWFyaz5zaW1wbGUuU2ltcGxlT2JqZWN0OjExNDwvb2JqZWN0LmJvb2ttYXJrPjwvbWVtZW50bz4=/properties/className",
+                                            "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object-property\""
+                                        },
+                                        "id": "className",
+                                        "cssClass": null,
+                                        "hidden": null,
+                                        "labelPosition": null,
+                                        "multiLine": null,
+                                        "namedEscaped": null,
+                                        "promptStyle": null,
+                                        "renderedAsDayBefore": null,
+                                        "typicalLength": null,
+                                        "unchanging": null
+                                    },
+                                    {
+                                        "named": null,
+                                        "describedAs": null,
+                                        "metadataError": null,
+                                        "link": {
+                                            "rel": "urn:org.restfulobjects:rels/property",
+                                            "method": "GET",
+                                            "href": "http://localhost:8080/restful/objects/isisApplib.FixtureResult/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PGtleT5kb21haW4tYXBwLWRlbW8vcGVyc2lzdC1hbGwvaXRlbS01PC9rZXk-PG9iamVjdC5ib29rbWFyaz5zaW1wbGUuU2ltcGxlT2JqZWN0OjExNDwvb2JqZWN0LmJvb2ttYXJrPjwvbWVtZW50bz4=/properties/fixtureScriptClassName",
+                                            "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object-property\""
+                                        },
+                                        "id": "fixtureScriptClassName",
+                                        "cssClass": null,
+                                        "hidden": null,
+                                        "labelPosition": null,
+                                        "multiLine": null,
+                                        "namedEscaped": null,
+                                        "promptStyle": null,
+                                        "renderedAsDayBefore": null,
+                                        "typicalLength": null,
+                                        "unchanging": null
+                                    },
+                                    {
+                                        "named": null,
+                                        "describedAs": null,
+                                        "metadataError": null,
+                                        "link": {
+                                            "rel": "urn:org.restfulobjects:rels/property",
+                                            "method": "GET",
+                                            "href": "http://localhost:8080/restful/objects/isisApplib.FixtureResult/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PGtleT5kb21haW4tYXBwLWRlbW8vcGVyc2lzdC1hbGwvaXRlbS01PC9rZXk-PG9iamVjdC5ib29rbWFyaz5zaW1wbGUuU2ltcGxlT2JqZWN0OjExNDwvb2JqZWN0LmJvb2ttYXJrPjwvbWVtZW50bz4=/properties/key",
+                                            "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object-property\""
+                                        },
+                                        "id": "key",
+                                        "cssClass": null,
+                                        "hidden": null,
+                                        "labelPosition": null,
+                                        "multiLine": null,
+                                        "namedEscaped": null,
+                                        "promptStyle": null,
+                                        "renderedAsDayBefore": null,
+                                        "typicalLength": null,
+                                        "unchanging": null
+                                    },
+                                    {
+                                        "named": null,
+                                        "describedAs": null,
+                                        "metadataError": null,
+                                        "link": {
+                                            "rel": "urn:org.restfulobjects:rels/property",
+                                            "method": "GET",
+                                            "href": "http://localhost:8080/restful/objects/isisApplib.FixtureResult/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PGtleT5kb21haW4tYXBwLWRlbW8vcGVyc2lzdC1hbGwvaXRlbS01PC9rZXk-PG9iamVjdC5ib29rbWFyaz5zaW1wbGUuU2ltcGxlT2JqZWN0OjExNDwvb2JqZWN0LmJvb2ttYXJrPjwvbWVtZW50bz4=/properties/object",
+                                            "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object-property\""
+                                        },
+                                        "id": "object",
+                                        "cssClass": null,
+                                        "hidden": null,
+                                        "labelPosition": null,
+                                        "multiLine": null,
+                                        "namedEscaped": null,
+                                        "promptStyle": null,
+                                        "renderedAsDayBefore": null,
+                                        "typicalLength": null,
+                                        "unchanging": null
+                                    }
+                                ],
+                                "metadataError": null,
+                                "id": "general",
+                                "unreferencedActions": null,
+                                "unreferencedProperties": true
+                            }
+                        ],
+                        "metadataError": null,
+                        "cssClass": null,
+                        "size": null,
+                        "id": null,
+                        "span": 4,
+                        "unreferencedActions": null,
+                        "unreferencedCollections": null
+                    }
+                },
+                {
+                    "col": {
+                        "domainObject": null,
+                        "metadataError": null,
+                        "cssClass": null,
+                        "size": null,
+                        "id": null,
+                        "span": 8,
+                        "unreferencedActions": null,
+                        "unreferencedCollections": true
+                    }
+                }
+            ],
+            "metadataError": null,
+            "cssClass": null,
+            "id": null
         }
     ],
-    "optional": false,
-    "extensions": {
-        "friendlyName": "Parity",
-        "description": "The parity of this 'DemoItem'."
-    }
+    "cssClass": null
 }
