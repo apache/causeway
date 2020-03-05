@@ -19,7 +19,6 @@ class ExposerTest {
         val to = TObjectHandler().parse(jsonStr) as TObject
 
         val properties = to.getProperties()
-        console.log(properties)
 
         val exposer = Exposer(to).dynamise()
 

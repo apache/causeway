@@ -94,17 +94,13 @@ class LayoutTest : IntegrationTest() {
 
     @Test
     fun testDemoAssociatedActionObjectLayout() {
-        console.log("[LayoutTest.testDemoAssociatedActionObjectLayout]")
         //given
         val jsonStr = DEMO_ASSOCIATED_ACTION_OBJECT_LAYOUT.str
         //when
         val lo = Json.parse(Layout.serializer(), jsonStr)
         val row0 = lo.row[0]
-        console.log(row0)
         val cols00 = row0.cols[0]
-        console.log(cols00)
         val col000 = cols00.getCol()
-        console.log(col000)
         val action = col000.action
         // then
         assertEquals(5, action.size)    //1
@@ -156,10 +152,12 @@ class LayoutTest : IntegrationTest() {
         // given
         val jsonStr = FR_OBJECT_LAYOUT.str
         val lo = Json.parse(Layout.serializer(), jsonStr)
+        val cols = lo.row[1].cols.first()
+        assertEquals(2, cols.colList.size)  // (1)   //TODO is 1 expected or 2???
         // when
         val properties = lo.properties
         // then
-        assertNotNull(properties)  // (1)
+        assertNotNull(properties)  // (2)
         assertEquals(4, properties.size)
         assertEquals("className", properties[0].id)
         assertEquals("fixtureScriptClassName", properties[1].id)

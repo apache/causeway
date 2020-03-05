@@ -69,8 +69,9 @@ class UtilsTest {
         val body = Utils.argumentsAsBody(link)
 
         // then
-        console.log("[UtilsTest.test_argumentsAsBody]")
-        console.log(body)
+//        console.log("[UtilsTest.test_argumentsAsBody]")
+//        console.log(body)
+        //TODO add assert
     }
 
     @Test

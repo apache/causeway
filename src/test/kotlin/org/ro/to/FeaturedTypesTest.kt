@@ -31,9 +31,6 @@ class FeaturedTypesTest {
         assertEquals("utc-millisec", javaSqlTimestamp.format) // 6
         assertEquals("javasqltimestamp", javaSqlTimestamp.extensions!!.xIsisFormat) //7
         assertEquals(true, javaSqlTimestamp.type == ValueType.TIME.type) //8
-        console.log("[FTT.testTemporals]")
-        console.log(javaSqlTimestamp.value!!)
-        console.log(javaSqlTimestamp.value!!.content)
         val ts = javaSqlTimestamp.value?.content
         assertEquals(1579957625356, ts) //9
     }

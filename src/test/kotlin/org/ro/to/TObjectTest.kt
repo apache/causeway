@@ -16,7 +16,6 @@ class TObjectTest {
 
     @Test
     fun testIsisSecurityMe() {
-        console.log("[TObjectTest.testIsisSecurityMe]")
         //given
         val jsonStr = ISIS_SECURITY_ME_SERVICE.str
         // when

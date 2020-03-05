@@ -19,8 +19,9 @@ class LogEntryTest {
         assertTrue(0 <= le.duration)
 
         if (le.duration < 0 && le.cacheHits == 0) {
-            console.log("[LogEntry.calculate] duration out of range")
-            console.log(this)
+//            console.log("[LogEntry.calculate] duration out of range")
+//            console.log(this)
+            //TODO add assert
         }
     }
 

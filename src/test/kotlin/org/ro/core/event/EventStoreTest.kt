@@ -75,8 +75,6 @@ class EventStoreTest {
         assertNotNull(le4)                 //4
 
         EventStore.closeView(i1)
-        console.log("[EventLogTest.testFindView] $i1")
-
         assertTrue(le4.isClosedView())
     }
 
