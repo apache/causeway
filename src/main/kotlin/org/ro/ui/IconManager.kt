@@ -1,6 +1,6 @@
 package org.ro.ui
 
-import org.ro.core.Utils
+import org.ro.utils.Utils
 
 object IconManager {
     val PREFIX = "fas fa-"

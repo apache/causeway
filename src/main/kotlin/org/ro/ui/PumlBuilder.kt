@@ -63,8 +63,6 @@ class PumlBuilder {
             }
         }
         pumlCode += "}$NL@enduml$Q"
-        console.log("[PumlBuilder.with]")
-        console.log(pumlCode)
         return pumlCode
     }
 

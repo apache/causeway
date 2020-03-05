@@ -4,14 +4,13 @@ import org.ro.core.model.DiagramDisplay
 import org.ro.core.model.meta.MetaClass
 import org.ro.core.model.meta.MetaPackage
 import org.ro.to.DomainType
-import org.ro.to.Property
 
 object ClassDiagram {
 
     fun buildDiagramCode(dd: DiagramDisplay): String {
         val domainTypeList: Set<DomainType> = dd.classes
         //TODO properties needed to set type
-        val properties: Set<Property> = dd.properties
+        //val properties: Set<Property> = dd.properties
         val packages = mutableSetOf<MetaPackage>()
         domainTypeList.forEach { dt ->
             val cls = MetaClass(dt)

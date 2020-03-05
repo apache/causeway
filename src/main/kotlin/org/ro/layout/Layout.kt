@@ -12,27 +12,26 @@ import org.ro.to.TransferObject
 @Serializable
 data class Layout(val cssClass: String? = null,
                   val row: List<Row> = emptyList()) : TransferObject {
-    //TODO check if :TransferObject is required
     var properties = listOf<Property>()
 
     init {
         // row[0] (head) contains the object title and actions
         // row[1] contains data, tabs, collections, etc.
         val secondRow = row[1] // traditional C braintwist
-        var colsLyt = secondRow.cols.first()
-        var colLyt = colsLyt.getCol()
-        val tgLyts = colLyt.tabGroup
-        if (tgLyts.isNotEmpty()) {
-            val tabGroup = tgLyts.first()
+        var cols = secondRow.cols.first()
+        var col = cols.getCol()
+        val tgList = col.tabGroup
+        if (tgList.isNotEmpty()) {
+            val tabGroup = tgList.first()
             val tab = tabGroup.tab.first()
             val row = tab.row.first()
-            colsLyt = row.cols.first()
+            cols = row.cols.first()
         }
-        colLyt = colsLyt.getCol()
-        val fsList = colLyt.fieldSet
-        if (fsList!!.isNotEmpty()) {
-            val fsLyt = fsList.first()
-            properties = fsLyt.property
+        col = cols.getCol()
+        val fsList = col.fieldSet
+        if (fsList.isNotEmpty()) {
+            val fs = fsList.first()
+            properties = fs.property
         }
     }
 

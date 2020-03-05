@@ -1,8 +1,9 @@
 package org.ro.utils
 
-import org.ro.core.encodeURIComponent
 import org.w3c.dom.parsing.DOMParser
 import kotlin.browser.document
+
+external fun encodeURIComponent(encodedURI: String): String
 
 /**
  * Dom ^= Document Object Model

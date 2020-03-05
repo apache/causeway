@@ -1,7 +1,7 @@
 package org.ro.to
 
 import kotlinx.serialization.Serializable
-import org.ro.core.Utils
+import org.ro.utils.Utils
 
 @Serializable
 data class Link(val rel: String = "",

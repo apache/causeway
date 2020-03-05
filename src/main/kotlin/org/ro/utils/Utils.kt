@@ -1,11 +1,9 @@
-package org.ro.core
+package org.ro.utils
 
 import org.ro.to.Argument
 import org.ro.to.Link
 import org.ro.to.TObject
 import kotlin.js.Date
-
-external fun encodeURIComponent(encodedURI: String): String
 
 object Utils {
 

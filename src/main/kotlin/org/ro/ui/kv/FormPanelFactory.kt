@@ -1,6 +1,6 @@
 package org.ro.ui.kv
 
-import org.ro.core.Utils
+import org.ro.utils.Utils
 import org.ro.to.ValueType
 import org.ro.ui.FormItem
 import pl.treksoft.kvision.core.Component

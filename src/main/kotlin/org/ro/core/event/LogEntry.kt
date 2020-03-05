@@ -2,7 +2,7 @@ package org.ro.core.event
 
 import kotlinx.serialization.ContextualSerialization
 import kotlinx.serialization.Serializable
-import org.ro.core.Utils.removeHexCode
+import org.ro.utils.Utils.removeHexCode
 import org.ro.core.aggregator.BaseAggregator
 import org.ro.to.TransferObject
 import org.ro.ui.kv.UiManager

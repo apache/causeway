@@ -1,6 +1,6 @@
 package org.ro.core.event
 
-import org.ro.core.Utils
+import org.ro.utils.Utils
 import org.ro.core.aggregator.BaseAggregator
 import org.ro.handler.ResponseHandler
 import org.ro.to.Link

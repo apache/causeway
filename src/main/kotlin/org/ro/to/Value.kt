@@ -19,7 +19,7 @@ import kotlinx.serialization.json.content
  */
 @Serializable
 data class Value(
-        //IMROVE: make content immutable (again) and handle property edits eg. via a wrapper
+        //IMPROVE: make content immutable (again) and handle property edits eg. via a wrapper
         @ContextualSerialization @SerialName("value") var content: Any? = null
 ) : TransferObject {
 

@@ -1,7 +1,7 @@
 package org.ro.to
 
 import kotlinx.serialization.UnstableDefault
-import org.ro.core.Utils
+import org.ro.utils.Utils
 import org.ro.handler.TObjectHandler
 import org.ro.snapshots.demo2_0_0.ACTIONS_TEXT_INVOKE
 import org.ro.snapshots.demo2_0_0.ISIS_SECURITY_ME_SERVICE

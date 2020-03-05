@@ -1,6 +1,6 @@
 package org.ro.ui.kv
 
-import org.ro.core.Utils
+import org.ro.utils.Utils
 import org.ro.core.aggregator.ActionDispatcher
 import org.ro.to.Link
 import org.ro.to.Member

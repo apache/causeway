@@ -1,6 +1,5 @@
 package org.ro.core.aggregator
 
-import org.ro.core.Utils
 import org.ro.core.event.LogEntry
 import org.ro.core.event.RoXmlHttpRequest
 import org.ro.to.Action
@@ -8,6 +7,7 @@ import org.ro.to.Link
 import org.ro.to.Method
 import org.ro.ui.Point
 import org.ro.ui.kv.ActionPrompt
+import org.ro.utils.Utils
 
 class ActionDispatcher(private val at: Point = Point(100,100)) : BaseAggregator() {
 

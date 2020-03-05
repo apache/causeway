@@ -1,5 +1,6 @@
 package org.ro.core
 
+import org.ro.utils.Utils
 import org.ro.to.Argument
 import org.ro.to.Link
 import org.ro.to.Method
@@ -23,7 +24,7 @@ class UtilsTest {
     //@Test //@Test  breaks on Travis #153 ???
     fun testDate() {
         // given
-        val rawDate:Any? = "2020-01-25T13:07:05Z"
+        val rawDate: Any? = "2020-01-25T13:07:05Z"
         //when
         val dateTime = Utils.toDate(rawDate)
         // then
@@ -37,8 +38,8 @@ class UtilsTest {
     //@Test  breaks on Travis #152 ? https://travis-ci.com/joerg-rade/kroviz/builds/149958789
     fun test_javaOffsetDateTime() {
         // given
-        val rawDate:Any? = "20200125T140705.356+0100"
-        val expected:String = "2020-01-25T14:07:05.356+0100"
+        val rawDate: Any? = "20200125T140705.356+0100"
+        val expected: String = "2020-01-25T14:07:05.356+0100"
         //when Then
 
         val actual = Utils.convertJavaOffsetDateTimeToISO(rawDate as String)
@@ -62,7 +63,7 @@ class UtilsTest {
         val type = "application/json;profile='urn:org.restfulobjects:repr-types/object-action'"
         val link = Link(method = Method.POST.operation, href = href, rel = rel, type = type)
 //        val arguments = LinkedHashMap<String, String>() //
- //       link.setArgument(arguments)
+        //       link.setArgument(arguments)
 
         // when
         val body = Utils.argumentsAsBody(link)
