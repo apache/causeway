@@ -587,6 +587,15 @@ under the License.
 							</license>
 							<license
 									implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+								<licenseFamilyCategory>CC3</licenseFamilyCategory>
+								<licenseFamilyName>Creative Commons 3.0</licenseFamilyName>
+								<notes />
+								<patterns>
+									<pattern>ASCII text placed in the public domain by Moby Lexical Tools, 1992.</pattern>
+								</patterns>
+							</license>
+							<license
+									implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
 								<licenseFamilyCategory>JMOCK</licenseFamilyCategory>
 								<licenseFamilyName>JMock</licenseFamilyName>
 								<notes />
