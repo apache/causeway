@@ -504,7 +504,7 @@ under the License.
 				<plugin>
 					<groupId>org.apache.rat</groupId>
 					<artifactId>apache-rat-plugin</artifactId>
-					<version>0.12</version>
+					<version>0.13</version>
 
 					<!-- APACHE ISIS customisation 4/5: start -->
 					<configuration>
@@ -519,7 +519,6 @@ under the License.
 							<exclude>**/.classpath</exclude>
 							<exclude>**/.settings/**</exclude>
 							<exclude>**/*.launch</exclude>
-							<!-- <exclude>src/site/resources/ide/eclipse/**</exclude> -->
 
 							<exclude>**/*.iml</exclude>
 

@@ -1,5 +1,5 @@
 = Value types
-:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-role: -toc
 
 
@@ -15,7 +15,7 @@ include::../section-hooks/isis.value-types~pre.adoc[]
 isis.value-types.primitives. +
 integer.format
 
-| 
+|
 | null
 
 
@@ -24,7 +24,7 @@ integer.format
 isis.value-types.java-lang. +
 byte.format
 
-| 
+|
 | Configures the number format understood by ``ByteValueSemanticsProviderAbstract``. @deprecated
 
 
@@ -33,7 +33,7 @@ byte.format
 isis.value-types.java-lang. +
 double.format
 
-| 
+|
 | Configures the number format understood by ``DoubleValueSemanticsProviderAbstract``. @deprecated
 
 
@@ -42,7 +42,7 @@ double.format
 isis.value-types.java-lang. +
 float.format
 
-| 
+|
 | Configures the number format understood by ``FloatValueSemanticsProviderAbstract``. @deprecated
 
 
@@ -51,7 +51,7 @@ float.format
 isis.value-types.java-lang. +
 long.format
 
-| 
+|
 | Configures the number format understood by ``LongValueSemanticsProviderAbstract``. @deprecated
 
 
@@ -60,7 +60,7 @@ long.format
 isis.value-types.java-lang. +
 short.format
 
-| 
+|
 | Configures the number format understood by ``ShortValueSemanticsProviderAbstract``. @deprecated
 
 
@@ -69,7 +69,7 @@ short.format
 isis.value-types.java-math. +
 big-decimal.format
 
-| 
+|
 | Configures the number format understood by ``BigDecimalValueSemanticsProvider``. @deprecated
 
 
@@ -78,7 +78,7 @@ big-decimal.format
 isis.value-types.java-math. +
 big-integer.format
 
-| 
+|
 | Configures the number format understood by ``BigIntegerValueSemanticsProvider``. @deprecated
 
 
@@ -204,7 +204,7 @@ local-date.format
 isis.value-types.primitives. +
 int.format
 
-| 
+|
 | Configures the number format understood by ``IntValueSemanticsProviderAbstract``. @deprecated
 
 
