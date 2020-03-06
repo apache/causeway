@@ -1,5 +1,5 @@
-* xref:applying-patches.adoc[Applying Patches]
 * xref:merging-a-pull-request.adoc[Merging a Pull Request]
+* xref:applying-patches.adoc[Applying Patches]
 * xref:cutting-a-release.adoc[Cutting a Release]
 * xref:verifying-releases.adoc[Verifying Releases]
 * xref:post-release-successful.adoc[Post Release (Successful)]

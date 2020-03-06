@@ -12,8 +12,6 @@ In order that a contributor can make a release it is necessary for them to have 
 
 For further background information on this topic, see the http://www.apache.org/dev/release-signing.html[release signing page] and the http://www.apache.org/dev/openpgp.html#generate-key[openpgp page] on the Apache wiki.
 
-
-
 == Install and Configure gpg
 
 Download and install GnuPG (gpg), version 1.4.10 or higher.
@@ -27,12 +25,10 @@ cert-digest-algo SHA512
 default-preference-list SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAST5 ZLIB BZIP2 ZIP Uncompressed
 ----
 
-
-
-
 == Key Generation
 
-The Apache Software Foundation requires that keys are signed with a key (or subkey) based on RSA 4096 bits. To do this:
+The Apache Software Foundation requires that keys are signed with a key (or subkey) based on RSA 4096 bits.
+To do this:
 
 [source]
 ----
@@ -153,9 +149,11 @@ To confirm the key has been generated, use:
 $ gpg --list-keys --fingerprint
 ----
 
-The key Id is the one true way to identify the key, and is also the last 8 digits of the fingerprint. The corresponding secret key for id `nnnnnnnn` is stored in `~/.gnupg/secring.pgp` (on Windows 7, this is in `c:/Users/xxx/AppData/Roaming/gnupg/secring.pgp`).
+The key Id is the one true way to identify the key, and is also the last 8 digits of the fingerprint.
+The corresponding secret key for id `nnnnnnnn` is stored in `~/.gnupg/secring.pgp` (on Windows 7, this is in `c:/Users/xxx/AppData/Roaming/gnupg/secring.pgp`).
 
-It's also worth confirming the key has the correct preference of algorithms (reflecting the initial configuration we did earlier). For this, enter the gpg shell for your new key:
+It's also worth confirming the key has the correct preference of algorithms (reflecting the initial configuration we did earlier).
+For this, enter the gpg shell for your new key:
 
 [source]
 ----
@@ -163,7 +161,8 @@ $ gpg --edit-key nnnnnnnnn
 >gpg
 ----
 
-where `nnnnnnnn` is your key id. Now, use the 'showpref' subcommand to list details:
+where `nnnnnnnn` is your key id.
+Now, use the 'showpref' subcommand to list details:
 
 [source]
 ----
@@ -177,7 +176,8 @@ gpg> showpref
 gpg>
 ----
 
-The Digest line should list SHA-512 first and SHA-1 last. If it doesn't, use the "setpref" command:
+The Digest line should list SHA-512 first and SHA-1 last.
+If it doesn't, use the "setpref" command:
 
 [source]
 ----
@@ -188,14 +188,15 @@ Finally, remember to take a backup of your key and the keyring (ie, backup the `
 
 == Subkey Generation
 
-It's recommended to use a subkey with an expiry date to sign releases, rather than your main, non-expiring key. If a subkey is present, then gpg will use it for signing in preference to the main key.
+It's recommended to use a subkey with an expiry date to sign releases, rather than your main, non-expiring key.
+If a subkey is present, then gpg will use it for signing in preference to the main key.
 
 [NOTE]
 ====
-After (binary) release artifacts are created, they are deployed to the ASF's Nexus staging repository. However, Nexus seems unable to retrieve a subkey from the public key server. Until we find a fix/workaround for this, all releases should be signed just with a regular non-expiring main key.
+After (binary) release artifacts are created, they are deployed to the ASF's Nexus staging repository.
+However, Nexus seems unable to retrieve a subkey from the public key server.
+Until we find a fix/workaround for this, all releases should be signed just with a regular non-expiring main key.
 ====
-
-
 
 To create a subkey Enter the gpg shell using (the identifier of) your main key:
 
@@ -231,7 +232,6 @@ Select (6) to choose an RSA key for encryption:
 ====
 It would seem that Nexus repository manager does not recognize RSA subkeys with an 'S'ign usage; see this discussion on a mailing list and this issue on Sonatype's JIRA
 ====
-
 
 [source]
 ----
@@ -279,7 +279,8 @@ Quit the gpg shell; you now have a subkey.
 
 == Generate a Revocation Certificate
 
-It's good practice to generate a number of revocation certificates so that the key can be revoked if it happens to be compromised. See the http://www.apache.org/dev/openpgp.html#revocation-certs[gpg page] on the Apache wiki for more background on this topic.
+It's good practice to generate a number of revocation certificates so that the key can be revoked if it happens to be compromised.
+See the http://www.apache.org/dev/openpgp.html#revocation-certs[gpg page] on the Apache wiki for more background on this topic.
 
 First, generate a "no reason specified" key:
 
@@ -368,13 +369,12 @@ Specify reason as "3 = Key is no longer used"
 
 Backup these files also.
 
-
-
-
-
 == Publish Key
 
-It is also necessary to publish your key. There are several places where this should be done. In most cases, you'll need the "`armored`" (ie ASCII) representation of your key. This can be generated using:
+It is also necessary to publish your key.
+There are several places where this should be done.
+In most cases, you'll need the "`armored`" (ie ASCII) representation of your key.
+This can be generated using:
 
 [source]
 ----
@@ -383,18 +383,22 @@ $ gpg --armor --export nnnnnnnn > nnnnnnnn.asc
 
 where `nnnnnnnn` is the id of your public key.
 
-You'll also need the fingerprint of your key. This can be generated using:
+You'll also need the fingerprint of your key.
+This can be generated using:
 
 [source]
 ----
 $ gpg --fingerprint nnnnnnnn
 ----
 
-The output from this command includes a line beginning "Key fingerprint", followed by a (space delimited) 40 character hexadecimal fingerprint. The last 8 characters should be the same as the key id (`nnnnnnnn`).
+The output from this command includes a line beginning "Key fingerprint", followed by a (space delimited) 40 character hexadecimal fingerprint.
+The last 8 characters should be the same as the key id (`nnnnnnnn`).
 
 === Publish to a public key server
 
-To a publish your key to a public key server (eg the MIT key server hosted at http://pgp.mit.edu[http://pgp.mit.edu]), use the procedure below. Public key servers synchronize with each other, so publishing to one key server should be sufficient. For background reading on this, see the http://www.apache.org/dev/release-signing.html#keyserver-upload[release signing page] on the Apache wiki, and the http://maven.apache.org/developers/release/pmc-gpg-keys.html[gpg key page] on the Maven wiki.
+To a publish your key to a public key server (eg the MIT key server hosted at http://pgp.mit.edu[http://pgp.mit.edu]), use the procedure below.
+Public key servers synchronize with each other, so publishing to one key server should be sufficient.
+For background reading on this, see the http://www.apache.org/dev/release-signing.html#keyserver-upload[release signing page] on the Apache wiki, and the http://maven.apache.org/developers/release/pmc-gpg-keys.html[gpg key page] on the Maven wiki.
 
 To send the key up to the key server:
 
@@ -415,11 +419,13 @@ again, where `nnnnnnnn` is the key Id.
 
 === Publish to your Apache home directory
 
-The armored representation of your public key should be uploaded to your home directory on `people.apache.org`, and renamed as `.pgpkey`. Make sure this is readable by all.
+The armored representation of your public key should be uploaded to your home directory on `people.apache.org`, and renamed as `.pgpkey`.
+Make sure this is readable by all.
 
 === Publish to your Apache HTML home directory
 
-The armored representation of your public key should be uploaded to your `public_html` home directory on `people.apache.org`, named `nnnnnnnn.asc`. Make sure this is readable by all.
+The armored representation of your public key should be uploaded to your `public_html` home directory on `people.apache.org`, named `nnnnnnnn.asc`.
+Make sure this is readable by all.
 
 Check the file is accessible by browsing to:
 
@@ -533,11 +539,13 @@ Log onto `id.apache.org` and ensure that the finger print of your public key is 
 
 == Attend Key Signing Party (Apache web of trust)
 
-It is strongly advised that the contributor attend a key signing party at an Apache event, in order that other Apache committers/members can in person verify their identity against the key. The process for this is described http://www.apache.org/dev/release-signing.html#key-signing-party[here] and http://wiki.apache.org/apachecon/PgpKeySigning[here].
+It is strongly advised that the contributor attend a key signing party at an Apache event, in order that other Apache committers/members can in person verify their identity against the key.
+The process for this is described http://www.apache.org/dev/release-signing.html#key-signing-party[here] and http://wiki.apache.org/apachecon/PgpKeySigning[here].
 
 == Update Maven Settings file (`~/.m2/settings.xml`)
 
-The Maven release plugin will automatically sign the release, however it is necessary to update the `~/.m2/settings.xml` file with your GPG acronym passphrase in order that it can use your secret key. This is defined under a profile so that it is activated only when we perform a release (as defined by `[org,apache:apache]` parent POM.
+The Maven release plugin will automatically sign the release, however it is necessary to update the `~/.m2/settings.xml` file with your GPG acronym passphrase in order that it can use your secret key.
+This is defined under a profile so that it is activated only when we perform a release (as defined by `[org,apache:apache]` parent POM.
 
 Therefore, make the following edits:
 

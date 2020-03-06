@@ -5,10 +5,8 @@
 
 
 
-
-
-
-These notes recommend how contributors should work with git. To understand these notes, the only real concepts that you need to grok are:
+These notes recommend how contributors should work with git.
+To understand these notes, the only real concepts that you need to grok are:
 
 * git commits form an acyclic graph, with each commit pointing to its parent commit (or commit**s**, if a merge)
 
@@ -23,8 +21,6 @@ For more background reading, see:
 * http://git-scm.com/2011/07/11/reset.html[git reset demystified] - differentiating the working directory vs index/staging area
 
 And, of course, there is loads of good advice on http://stackoverflow.com/questions/tagged/git[stackoverflow.com]
-
-
 
 == Workflow
 
@@ -44,10 +40,9 @@ git checkout -b ISIS-999
 git push origin ISIS-999
 ----
 
-
 * `rebase` the topic branch periodically on master. +
-+
-How often you do this will depend on whether you are collaborating with others on the feature.  You need to ensure that your co-worker has no outstanding work before you do this; otherwise it'll create merge conflict hell for them:
++ How often you do this will depend on whether you are collaborating with others on the feature.
+You need to ensure that your co-worker has no outstanding work before you do this; otherwise it'll create merge conflict hell for them:
 +
 [source,bash]
 ----
@@ -76,10 +71,6 @@ git push origin --delete ISIS-999
 
 This way of working gives us the full history on the branch as to what the thought processes were for the feature, but only a single commit on to `master` to see the ultimate impact of the changes (acting a bit like a summary).
 
-
-
-
-
 == Commit message
 
 The minimum we expect in a commit messages is:
@@ -92,7 +83,6 @@ ISIS-nnn: brief summary here
 - should be written here
 - in bullet points
 ----
-
 
 where `ISIS-nnn` is a ticket raised in our https://issues.apache.org/jira/browse/ISIS[JIRA issue tracker].
 

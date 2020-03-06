@@ -16,8 +16,6 @@ The release process consists of:
 
 This section describes some guidance on what a voter (members of the Apache Isis PMC and anyone else who wishes) is expected to do before casting their vote in order to verify a release.
 
-
-
 == Background
 
 Whenever a release manager announces a vote on a release (as per the xref:comguide:ROOT:release-process.adoc[release process]) on the xref:docs:ROOT:support.adoc#[dev mailing list], it is the responsibility of the project's PMC to cast their vote on the release.
@@ -32,8 +30,6 @@ Per this http://www.apache.org/dev/release.html[ASF documentation], the legal re
 Note that the binaries are _not_ an ASF release, they merely exist on the Maven central repo as a convenience.
 That said, you might also want to verify the release by pulling the binaries from the Maven staging repository.
 Details of how to do this are also documented below.
-
-
 
 == Prerequisites
 
@@ -61,13 +57,10 @@ to unzip the ZIP files
 +
 to build the code
 
-
-
 == Verifying source artifacts
 
 The easiest way to verify the source artifacts is to use a script that automates the steps.
 Run these commands (they should also be listed in the VOTE email):
-
 
 [source,bash,subs="attributes+"]
 ----
@@ -102,11 +95,8 @@ in other words, to confirm that the release was created by an Apache Isis commit
 
 Assuming this completes successfully, you can then test the two starter applications; adjust the version if required.
 
-
 You can if you wish perform some additional optional checks, listed in the sections below.
 Alternatively, you can xref:comguide:ROOT:verifying-releases.adoc#casting-a-vote[cast your vote].
-
-
 
 == (Optional) Verifying binary artifacts
 
@@ -148,11 +138,6 @@ If there is more than one repository (as is sometimes the case if multiple compo
 Once the vote has completed, the staging repositories will be removed and so you should deactive the profile (comment out the `&lt;activeProfile&gt;` element).
 If you forget to deactive the profile, there should be no adverse effects; Maven will just spend unnecessary cycles attempting to hit a non-existent repo.
 
-
-
-
-
-
 == (Optional) Creadur Tools
 
 The http://creadur.apache.org[Apache Creadur] project exists to provide a set of tools to ensure compliance with Apache's licensing standards.
@@ -171,8 +156,6 @@ Things to check include:
 * any binaries that contain more than one LICENSE or NOTICE file
 
 In this report, each binary will have three links listed after its name '(licenses, notices, contents)'
-
-
 
 == Casting a Vote
 

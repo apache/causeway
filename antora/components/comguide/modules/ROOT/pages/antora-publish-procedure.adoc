@@ -18,8 +18,6 @@ Publishing is performed by copying the generated HTML to a different git reposit
 This is synced by ASF infrastructure over to link:http://isis.apache.org[isis.apache.org].
 This can only be done by Apache Isis committers, and is discussed below.
 
-
-
 == One-time setup
 
 The generated site is published by copying into the `content/` directory of the https://github.com/apache/isis-site.git[isis-site] git repo.
@@ -51,7 +49,6 @@ Therefore, in the `isis.git` repo site:
 git checkout asf-site
 ----
 
-
 == Preview
 
 To preview changes (ignoring PDFs), run:
@@ -71,7 +68,6 @@ sh preview-pdf.sh
 ----
 
 There's generally little point in doing this, however.
-
 
 == Publishing (full build)
 
@@ -135,7 +131,7 @@ When a new release is published, we therefore need to do a little extra work:
 
 * run `publish.sh` a first time
 +
-This will  update `content/versions/SNAPSHOT`
+This will update `content/versions/SNAPSHOT`
 * delete `content/versions/current`
 * rename `content/versions/SNAPSHOT` to `content/versions/current`
 * run `publish.sh` a second time.

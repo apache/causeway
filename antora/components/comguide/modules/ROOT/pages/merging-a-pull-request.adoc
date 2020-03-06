@@ -9,11 +9,8 @@
 
 The process for merging in github pull requests (so that they can be tested locally before committing) has been scripted in the `github-pr.sh` script.
 
-The script will merge the fork into a temporary branch, and then run a build.  Once you are happy, you can commit.
-
-
-
-
+The script will merge the fork into a temporary branch, and then run a build.
+Once you are happy, you can commit.
 
 == Process and Usage
 
@@ -28,10 +25,9 @@ The overall process is as follows:
 
 This link:https://youtu.be/CKSLZBBHjME[screencast] also shows the process.
 
-
 == Prerequisites
 
-The script uses 'jq' to parse JSON.  To install:
+The script uses 'jq' to parse JSON. To install:
 
 * on Linux: +
 +
@@ -48,10 +44,7 @@ brew install jq
 ----
 
 * on Windows: +
-+
-Download exe from http://stedolan.github.io/jq/download/[website]
-
-
++ Download exe from http://stedolan.github.io/jq/download/[website]
 
 == Syntax
 
@@ -65,22 +58,16 @@ github-pr.sh -j 1162 -g 31 [-s] [-p ISIS]
 where:
 
 * `-j 1162` +
-+
-is the JIRA ticket number
++ is the JIRA ticket number
 
 * `-g 31`   +
-+
-is the github PR issue number
++ is the github PR issue number
 
 * `-s` +
-+
-will optionally skip the build and auto-merge
++ will optionally skip the build and auto-merge
 
 * `-p ISIS` +
-+
-optionally overrids the JIRA project (defaults to 'ISIS')
-
-
++ optionally overrids the JIRA project (defaults to 'ISIS')
 
 == Example transcript
 
@@ -116,7 +103,8 @@ Merge made by the 'recursive' strategy.
 Merged the PR; hit enter to build
 ----
 
-The build now commences.  Once done, the script continues:
+The build now commences.
+Once done, the script continues:
 
 [source,bash]
 ----
@@ -131,7 +119,8 @@ image::committers/github-pr-history.png[link="{imagesdir}/committers/github-pr-h
 
 This shows the fork being merged into the temporary branch ("ISIS-1162_pr-31"), then some further tidy-up, and finally the merging of the temporary branch into mainline.
 
-Note that there is no rebasing in this model.  This is intentional: when the merged branch is pushed, github will automatically close the original pull request.
+Note that there is no rebasing in this model.
+This is intentional: when the merged branch is pushed, github will automatically close the original pull request.
 
 
 

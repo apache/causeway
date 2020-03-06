@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
+export ANTORA_CACHE_DIR=.antora-cache-dir
+
 PLAYBOOK_FILE=antora/playbooks/site.yml
-while getopts 'ecf:aksh' opt
+while getopts 'ecf:aksxh' opt
 do
   case $opt in
     e) export SKIP_EXAMPLES=true ;;
@@ -10,6 +12,7 @@ do
     a) export SKIP_GENERATION=true ;;
     k) export SKIP_STALE_EXAMPLE_CHECK=true ;;
     s) export SKIP_SERVE=true ;;
+    x) export SKIP_CLEAR_CACHE=true ;;
     h) echo ""
        echo "preview.sh options:"
        echo "  -e skip examples"
@@ -17,6 +20,7 @@ do
        echo "  -c skip config doc generation"
        echo "  -a skip Antora generation"
        echo "  -s skip serving generated site"
+       echo "  -x skip clear Antora cache"
        echo "  -f antora/playbooks/site-xxx.yml"
        exit 1
        ;;
@@ -25,6 +29,12 @@ do
       ;;
   esac
 done
+
+if [[ "$SKIP_CLEAR_CACHE" == "true" ]]; then
+  echo "skipping clearing the Antora cache"
+else
+  rm -rf $ANTORA_CACHE_DIR
+fi
 
 if [ ! -f $PLAYBOOK_FILE ]; then
   echo "no such file $PLAYBOOK_FILE" >&2

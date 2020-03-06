@@ -22,11 +22,14 @@ They should work on Linux and MacOS; for Windows, use mSysGit.
 
 == Obtain Consensus
 
-Before releasing the framework, ensure there is consensus on the xref:docs:ROOT:support.adoc#[dev mailing list] that this is the right time for a release.
+
+Before releasing the framework, ensure there is consensus on the xref:docs:support:mailing-list.adoc[dev mailing list] that this is the right time for a release.
 The discussion should include confirming the version number to be used, and to confirm content.
 
 These discussions should also confirm the version number of the module being released.
-This should be in line with our xref:comguide:ROOT:versioning-policy.adoc[semantic versioning policy].
+This should be in line with our xref:comguide:ROOT:policies/versioning-policy.adoc#semantic-versioning[semantic versioning policy].
+
+
 
 Make sure you have a JIRA ticket open against which to perform all commits.
 In most cases a JIRA ticket will have been created at the beginning of the previous release cycle.
