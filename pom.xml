@@ -41,24 +41,4 @@
 		<module>examples/smoketests</module>
 	</modules>
 
-	<profiles>
-		<profile>
-			<id>examples</id>
-			<activation>
-				<!--
-				only include within IDE as a convenience
-				-->
-				<property>
-					<name>idea.version</name>
-				</property>
-			</activation>
-			<modules>
-				<module>mixins</module>
-				<module>core</module>
-				<module>examples</module>
-			</modules>
-		</profile>
-
-	</profiles>
-
 </project>

@@ -513,6 +513,7 @@ under the License.
 						<excludes>
 							<exclude>**/target/**</exclude>
 							<exclude>**/target-ide/**</exclude>
+							<exclude>**/node_modules/**</exclude>
 
 							<exclude>**/*.project</exclude>
 							<exclude>**/.classpath</exclude>
@@ -561,6 +562,8 @@ under the License.
 							<exclude>**/swagger-ui/**</exclude>
 
 							<exclude>**/META-INF/services/**</exclude>
+
+							<exclude>**/.gitkeep</exclude>
 						</excludes>
 						<licenses>
 							<license

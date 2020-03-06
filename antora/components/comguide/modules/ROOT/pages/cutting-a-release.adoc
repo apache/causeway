@@ -22,14 +22,11 @@ They should work on Linux and MacOS; for Windows, use mSysGit.
 
 == Obtain Consensus
 
-
 Before releasing the framework, ensure there is consensus on the xref:docs:support:mailing-list.adoc[dev mailing list] that this is the right time for a release.
 The discussion should include confirming the version number to be used, and to confirm content.
 
 These discussions should also confirm the version number of the module being released.
 This should be in line with our xref:comguide:ROOT:policies/versioning-policy.adoc#semantic-versioning[semantic versioning policy].
-
-
 
 Make sure you have a JIRA ticket open against which to perform all commits.
 In most cases a JIRA ticket will have been created at the beginning of the previous release cycle.
@@ -60,7 +57,6 @@ Obviously, alter ``$ISISREL`` as required, and bump ``$ISISRC`` for re-releasing
 ====
 Note that the branch name is intentionally *not* the same as the eventual tag names (eg `isis-{isisnext}`).
 ====
-
 
 == Pull down code to release
 
@@ -120,8 +116,6 @@ so that they should read:
 
 NOTE: After release, there is a xref:comguide:ROOT:cutting-a-release.adoc#reset-revision[similar step at the end] to reset back to `2.0.0-SNAPSHOT`.
 
-
-
 === License headers
 
 The Apache Release Audit Tool `RAT` (from the http://creadur.apache.org[Apache Creadur] project) checks for missing license header files.
@@ -131,20 +125,24 @@ To run the RAT tool, use:
 
 [source,bash,subs="attributes+"]
 ----
-mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=50 -o && \
-for a in `/bin/find . -name rat.txt -print`; do grep '!???' $a; done || \
+mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=100000
+
+pushd ..
+for a in `/bin/find . -name rat.txt -print`; do grep '!???' $a; done
 for a in `/bin/find . -name rat.txt -print`; do grep '!AL' $a; done
+popd
 ----
 
-where `rat.numUnapprovedLicenses` property is set to a high figure, temporarily overriding the default value of 0. This will allow the command to run over all submodules, rather than failing after the first one.
+where `rat.numUnapprovedLicenses` property is set to a high figure, temporarily overriding the default value of 0.
+This will allow the command to run over all submodules, rather than failing after the first one.
 The command writes out a `target\rat.txt` for each submodule. missing license notes are indicated using the key `!???`.
 The `for` command collates all the errors.
 
 Investigate and fix any reported violations, typically by either:
 
 * adding genuinely missing license headers from Java (or other) source files, or
-* updating the `&lt;excludes&gt;` element for the `apache-rat-plugin` plugin to ignore test files, log files and any other non-source code files
-* also look to remove any stale `&lt;exclude&gt;` entries
+* updating the `<excludes>` element for the `apache-rat-plugin` plugin to ignore test files, log files and any other non-source code files
+* also look to remove any stale `<exclude>` entries
 
 Once you've fixed all issues, confirm once more that `apache-rat-plugin` no longer reports any license violations, this time leaving the `rat.numUnapprovedLicenses` property to its default, 0:
 
@@ -383,7 +381,6 @@ mvn -pl webapp spring-boot:run
 ----
 git push -u origin $ISISBRANCH
 ----
-
 
 == Voting
 
