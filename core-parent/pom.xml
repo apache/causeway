@@ -520,7 +520,6 @@ under the License.
 
 							<exclude>**/*.iml</exclude>
 							<exclude>**/webpack.generated.js</exclude>
-							<exclude>**/*.gitkeep</exclude>
 
 							<exclude>**/*.pdn</exclude>
 							<exclude>**/*.svg</exclude>
