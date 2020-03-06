@@ -125,7 +125,7 @@ To run the RAT tool, use:
 
 [source,bash,subs="attributes+"]
 ----
-mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=100000
+mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=100
 
 pushd ..
 for a in `/bin/find . -name rat.txt -print`; do grep '!???' $a; done

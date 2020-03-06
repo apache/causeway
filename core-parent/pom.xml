@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -18,7 +17,6 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -521,11 +519,19 @@ under the License.
 							<exclude>**/*.launch</exclude>
 
 							<exclude>**/*.iml</exclude>
+							<exclude>**/webpack.generated.js</exclude>
+							<exclude>**/*.gitkeep</exclude>
 
 							<exclude>**/*.pdn</exclude>
 							<exclude>**/*.svg</exclude>
+							<exclude>**/*.rtf</exclude>
 							<exclude>**/*.json</exclude>
 							<exclude>**/*.min.js</exclude>
+							<exclude>**/fakedata/applib/services/clobs/*.dtd</exclude>
+							<exclude>**/fakedata/applib/services/clobs/*.dcl</exclude>
+							<exclude>**/fakedata/applib/services/clobs/*.soc</exclude>
+							<exclude>**/fakedata/applib/services/clobs/vs</exclude>
+							<exclude>**/fakedata/applib/services/clobs/vx</exclude>
 
 							<exclude>**/MANIFEST.MF</exclude>
 							<exclude>**/*.ucd</exclude>
@@ -541,6 +547,8 @@ under the License.
 							<exclude>**/simple-sidebar.css</exclude>
 							<exclude>**/bootstrap-growl.js</exclude>
 							<exclude>**/moment.js</exclude>
+							<exclude>**/prism*.js</exclude>
+							<exclude>**/prism.css</exclude>
 
 							<exclude>**/bootstrap-datetimepicker.min.css</exclude>
 							<exclude>**/bootstrap-datetimepicker.css</exclude>
@@ -555,14 +563,12 @@ under the License.
 							<exclude>**/gradlew.bat</exclude>
 							<exclude>**/rebel.xml</exclude>
 							<exclude>**/translations**.po</exclude>
-							<exclude>**/integtests/translations.pot</exclude>
+							<exclude>**/translations.pot</exclude>
 							<exclude>**/intellij/launch/*.xml</exclude>
 
 							<exclude>**/swagger-ui/**</exclude>
 
 							<exclude>**/META-INF/services/**</exclude>
-
-							<exclude>**/.gitkeep</exclude>
 						</excludes>
 						<licenses>
 							<license
@@ -577,12 +583,13 @@ under the License.
 							</license>
 							<license
 									implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-								<licenseFamilyCategory>JQRY</licenseFamilyCategory>
-								<licenseFamilyName>MIT  </licenseFamilyName>
+								<licenseFamilyCategory>MIT</licenseFamilyCategory>
+								<licenseFamilyName>MIT Licensed</licenseFamilyName>
 								<notes />
 								<patterns>
 									<pattern>The MIT License (MIT)</pattern>
 									<pattern>Dual licensed under the MIT</pattern>
+									<pattern>http://prismjs.com/download.html</pattern>
 								</patterns>
 							</license>
 							<license

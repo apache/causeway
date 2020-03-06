@@ -70,5 +70,4 @@ error-screenshots/
 node/
 package-lock.json
 package.json
-webpack.config.js
 webpack.generated.js
