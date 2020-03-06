@@ -43,6 +43,9 @@ content:
       start_path: legacy/extensions/core/commons/src/main/adoc # legacy
       branches: HEAD
     - url: .
+      start_path: legacy/extensions/core/metamodel/src/main/adoc # legacy
+      branches: HEAD
+    - url: .
       start_path: legacy/extensions/core/runtime/src/main/adoc # legacy
       branches: HEAD
     - url: .
