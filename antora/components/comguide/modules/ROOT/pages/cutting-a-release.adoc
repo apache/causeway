@@ -20,7 +20,10 @@ In particular, you'll need signed public/private keys, and the ASF Nexus staging
 These release notes using bash command line tools.
 They should work on Linux and MacOS; for Windows, use mSysGit.
 
-== Obtain Consensus
+
+== Preparation
+
+=== Obtain Consensus
 
 Before releasing the framework, ensure there is consensus on the xref:docs:support:mailing-list.adoc[dev mailing list] that this is the right time for a release.
 The discussion should include confirming the version number to be used, and to confirm content.
@@ -31,47 +34,17 @@ This should be in line with our xref:comguide:ROOT:policies/versioning-policy.ad
 Make sure you have a JIRA ticket open against which to perform all commits.
 In most cases a JIRA ticket will have been created at the beginning of the previous release cycle.
 
-== Set environment variables
 
-We use environment variables to parameterize as many of the steps as possible.
-For example:
-
-[source,bash,subs="attributes+"]
-----
-export ISISTMP=/c/tmp                               # <1>
-export ISISREL={isisnext}
-export ISISRC=RC1
-export ISISBRANCH=release-$ISISREL-$ISISRC
-export ISISJIRA=ISIS-9999                           # <2>
-export ISISART=isis
-
-env | grep ISIS | sort
-----
-<1> adjust by platform
-<2> set to an "umbrella" ticket for all release activities.
-(One should exist already, xref:comguide:ROOT:post-release-successful.adoc#create-new-jira[created at] the beginning of the development cycle now completing).
-
-Obviously, alter ``$ISISREL`` as required, and bump ``$ISISRC`` for re-releasing following an xref:comguide:ROOT:post-release-unsuccessful.adoc[unsuccessful] release.
-
-[IMPORTANT]
-====
-Note that the branch name is intentionally *not* the same as the eventual tag names (eg `isis-{isisnext}`).
-====
-
-== Pull down code to release
+=== Pull down code to release
 
 Set the HEAD of your local git repo to the commit to be released.
-This will usually be the tip of the origin's `master` branch.
-Then, create a release branch for the version number being released; eg:
+This will usually be the tip of the origin's `master` branch:
 
 [source,bash,subs="attributes+"]
 ----
 git checkout master
 git pull --ff-only
-git checkout -b $ISISBRANCH
 ----
-
-The release is performed on a branch; if we are successful, this branch will be merged back into master.
 
 Check that there are no snapshot dependencies:
 
@@ -82,39 +55,12 @@ grep SNAPSHOT $(/bin/find . -name pom.xml | grep -v target  sort)
 
 The only mention of `SNAPSHOT` should be in the `revision` property of the root `core-prent/pom.xml` file.
 
-== Releasing the Framework
-
-Switch to the appropriate directory:
+Finally, switch to the `core-parent` directory:
 
 [source,bash,subs="attributes+"]
 ----
 cd core-parent
 ----
-
-=== Bump `revision` property to `$ISISREL`
-
-Previously we used the `maven-release-plugin` which took responsibility for bumping the `<version>` from -SNAPSHOT to release, and then onto the next -SNAPSHOT.
-However, we now use a simpler process, and just use `mvn versions:set`.
-
-So, bump to the release version:
-
-[source,bash,subs="attributes+"]
-----
-mvn versions:set -DnewVersion=$ISISREL
-git commit -am "$ISISJIRA: bumps version to $ISISREL"
-----
-
-so that they should read:
-
-[source,xml,subs="attributes+"]
-----
-<properties>
-    <revision>{isisnext}</revision>
-    ...
-</properties>
-----
-
-NOTE: After release, there is a xref:comguide:ROOT:cutting-a-release.adoc#reset-revision[similar step at the end] to reset back to `2.0.0-SNAPSHOT`.
 
 === License headers
 
@@ -176,6 +122,8 @@ mvn license:download-licenses
 groovy ../scripts/checkmissinglicenses.groovy
 ----
 
+WARNING: this groovy script assumes it is being run from the `core-parent` directory.
+
 The Maven plugin creates a `license.xml` file in the `target/generated-resources` directory of each module.
 The script then searches for these `licenses.xml` files, and compares them against the contents of the `supplemental-models.xml` file.
 
@@ -203,6 +151,82 @@ Commit any changes from the preceding steps:
 ----
 git commit -am "$ISISJIRA: updates to pom.xml etc for release"
 ----
+
+
+== Releasing the Framework
+
+=== Set environment variables
+
+We use environment variables to parameterize as many of the steps as possible.
+For example:
+
+[source,bash,subs="attributes+"]
+----
+export ISISTMP=/c/tmp                               # <1>
+export ISISREL={isisnext}
+export ISISRC=RC1
+export ISISBRANCH=release-$ISISREL-$ISISRC
+export ISISJIRA=ISIS-9999                           # <2>
+export ISISART=isis
+
+env | grep ISIS | sort
+----
+<1> adjust by platform
+<2> set to an "umbrella" ticket for all release activities.
+(One should exist already, xref:comguide:ROOT:post-release-successful.adoc#create-new-jira[created at] the beginning of the development cycle now completing).
+
+Obviously, alter ``$ISISREL`` as required, and bump ``$ISISRC`` for re-releasing following an xref:comguide:ROOT:post-release-unsuccessful.adoc[unsuccessful] release.
+
+[IMPORTANT]
+====
+Note that the branch name is intentionally *not* the same as the eventual tag names (eg `isis-{isisnext}`).
+====
+
+
+=== Create a release branch
+
+The release is performed on a branch; if we are successful, this branch will be merged back into master.
+
+The next step therefore is to create a release branch for the version number being released; eg:
+
+
+[source,bash,subs="attributes+"]
+----
+git checkout -b $ISISBRANCH
+----
+
+If necessary, switch to the `core-parent` directory:
+
+[source,bash,subs="attributes+"]
+----
+cd core-parent
+----
+
+=== Bump `revision` property to `$ISISREL`
+
+Previously we used the `maven-release-plugin` which took responsibility for bumping the `<version>` from -SNAPSHOT to release, and then onto the next -SNAPSHOT.
+However, we now use a simpler process, and just use `mvn versions:set`.
+
+So, bump to the release version:
+
+[source,bash,subs="attributes+"]
+----
+mvn versions:set -DnewVersion=$ISISREL
+git commit -am "$ISISJIRA: bumps version to $ISISREL"
+----
+
+so that they should read:
+
+[source,xml,subs="attributes+"]
+----
+<properties>
+    <revision>{isisnext}</revision>
+    ...
+</properties>
+----
+
+NOTE: After release, there is a xref:comguide:ROOT:cutting-a-release.adoc#reset-revision[similar step at the end] to reset back to `2.0.0-SNAPSHOT`.
+
 
 === Sanity check
 
