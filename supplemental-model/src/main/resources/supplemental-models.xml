@@ -15,12 +15,13 @@
 
     <supplement>
         <project>
-            <groupId>aopalliance</groupId>
-            <artifactId>aopalliance</artifactId>
-            <version>1.0</version>
+            <groupId>org.codehaus.jettison</groupId>
+            <artifactId>jettison</artifactId>
+            <version>1.2</version>
             <licenses>
                 <license>
-                    <name>Public Domain</name>
+                    <name>Apache License, v2.0</name>
+                    <url>http://www.apache.org/licenses/</url>
                 </license>
             </licenses>
         </project>
@@ -28,92 +29,18 @@
 
     <supplement>
         <project>
-          <groupId>javax.transaction</groupId>
-          <artifactId>transaction-api</artifactId>
-          <version>1.1</version>
-          <name>Java Transaction API (JTA)</name>
-          <organization>
-            <name>Oracle Corp</name>
-            <url>http://www.oracle.com/</url>
-          </organization>
-          <licenses>
-            <license>
-              <name>Common Development and Distribution License (CDDL) v1.0</name>
-              <url>https://glassfish.java.net/public/CDDLv1.0.html</url>
-            </license>
-          </licenses>
-        </project>
-      </supplement>
-
-    <supplement>
-        <project>
-            <groupId>net.jcip</groupId>
-            <artifactId>jcip-annotations</artifactId>
-            <version>1.0</version>
-            <licenses>
-                <license>
-                     <name>Creative Commons Attribution 2.5 License</name>
-                     <url>http://creativecommons.org/licenses/by/2.5/</url>
-                     <distribution>repo</distribution>          
-                </license>
-            </licenses>
-        </project>
-    </supplement>
-     
-    <supplement>
-        <project>
-            <groupId>org.sonatype.spice</groupId>
-            <artifactId>model-builder</artifactId>
-            <version>1.3</version>
-            <name>Maven Shared Model</name>
+            <groupId>javax.transaction</groupId>
+            <artifactId>transaction-api</artifactId>
+            <version>1.1</version>
+            <name>Java Transaction API (JTA)</name>
             <organization>
-                <name>Sonatype, Inc</name>
-                <url>http://www.sonatype.org/</url>
+                <name>Oracle Corp</name>
+                <url>http://www.oracle.com/</url>
             </organization>
             <licenses>
                 <license>
-                    <name>The Apache Software License, Version 2.0</name>
-                    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                </license>
-            </licenses>
-        </project>
-    </supplement>
-
-    <supplement>
-        <project>
-            <groupId>de.agilecoders.maven</groupId>
-            <artifactId>maven-parent-config</artifactId>
-            <version>0.3.5</version>
-            <name>Maven Parent Config</name>
-            <organization>
-                <name>AgileCoders</name>
-                <url>https://github.com/agile-coders</url>
-            </organization>
-            <licenses>
-                <license>
-                    <name>The Apache Software License, Version 2.0</name>
-                    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-                </license>
-            </licenses>
-        </project>
-    </supplement>
-
-    <supplement>
-        <project>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jsr173_api</artifactId>
-            <version>1.0</version>
-            <name>JSR173 API</name>
-            <organization>
-                <name>Sun Microsystems</name>
-                <url>http://www.sun.com/</url>
-            </organization>
-            <licenses>
-                <license>
-                    <name>
-                        COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
-                    </name>
-                    <url>http://www.sun.com/cddl/cddl.html</url>
+                    <name>Common Development and Distribution License (CDDL) v1.0</name>
+                    <url>https://glassfish.java.net/public/CDDLv1.0.html</url>
                 </license>
             </licenses>
         </project>

@@ -33,12 +33,14 @@ import javax.xml.transform.stream.*
 // phase 1: find missing dependencies from each of the license.xml files
 //
 
-def currentDir=new File(".")
+def parentDir=new File("..")
 def missing = []
 
-currentDir.eachFileRecurse { file ->
+parentDir.eachFileRecurse { file ->
+
   if ( file.name == "licenses.xml" ) {
 
+    println file.canonicalPath
 
     def fileXml = new XmlSlurper().parseText(file.text)
 
@@ -64,7 +66,7 @@ missing = missing.unique().sort()
 //
 // phase 2: convert existing supplemental model entries into list form
 //
-def supModelsFile = new File("src/main/appended-resources/supplemental-models.xml")
+def supModelsFile = new File("../supplemental-model/src/main/resources/supplemental-models.xml")
 def supModelsXml = new XmlSlurper().parseText(supModelsFile.text)
 
 def supplements = []
