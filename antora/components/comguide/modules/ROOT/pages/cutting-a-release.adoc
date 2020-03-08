@@ -212,6 +212,11 @@ So, bump to the release version:
 [source,bash,subs="attributes+"]
 ----
 mvn versions:set -DnewVersion=$ISISREL
+
+pushd ../starters
+mvn versions:set -DnewVersion=$ISISREL
+popd
+
 git commit -am "$ISISJIRA: bumps version to $ISISREL"
 ----
 
@@ -248,21 +253,25 @@ To build and deploy and tag, we use:
 
 [source,bash,subs="attributes+"]
 ----
-mvn -P apache-release \
-    clean deploy      \
-    -Dgit \
-    -Dgpg.passphrase="this is not really my passphrase"
+mvn deploy \
+    -Dapache-release \
+    -Dgit
+----
 
+When prompted, enter your GPG passphrase.
+(Or, it might be sufficient to add just `-Dgpg.passphrase="..."`)
+
+IMPORTANT: This requires `gpg` v2.1 or later.
+
+
+Finally, tag the release:
+
+[source,bash,subs="attributes+"]
+----
 git tag $ISISART-$ISISREL
 git tag $ISISART-$ISISREL-$ISISRC
 ----
 
-using your own GPG passphrase, of course.
-
-[IMPORTANT]
-====
-This requires `gpg` v2.1 or later.
-====
 
 == Check/Close Staging Repo
 
@@ -321,12 +330,16 @@ Previously we bumped to the next development snapshot.
 However, this approach doesn't play well with CI/CD when Apache Isis is mounted as a git submodule, so instead we always use `2.0.0-SNAPSHOT` for all development work.
 ====
 
-Therefore:
+Therefore (still in the `core-parent` directory):
 
 [source,bash,subs="attributes+"]
 ----
-cd core-parent
 mvn versions:set -DnewVersion=2.0.0-SNAPSHOT
+
+pushd ../starters
+mvn versions:set -DnewVersion=2.0.0-SNAPSHOT
+popd
+
 git commit -am "$ISISJIRA: resetting version"
 ----
 
