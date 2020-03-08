@@ -14,7 +14,7 @@ include::../section-hooks/resteasy~pre.adoc[]
 [[resteasy.as-map]]
 resteasy.as-map
 
-|
+| 
 | null
 
 
@@ -23,7 +23,7 @@ resteasy.as-map
 resteasy.authentication. +
 strategy-class-name
 
-|
+| 
 | Defaults to ``AuthenticationSessionStrategyBasicAuth``.
 
 
@@ -31,16 +31,15 @@ strategy-class-name
 [[resteasy.environment]]
 resteasy.environment
 
-|
+| 
 | null
 
 
 |
 [[resteasy.jaxrs.app.registration]]
-resteasy.jaxrs.app. +
-registration
+resteasy.jaxrs.app.registration
 
-|
+| 
 | How the implementation of the JAX-RS application is discovered.
 
 
@@ -58,7 +57,7 @@ Note that this is used rather than ``prefix`` because there is _NO_ implementati
 [[resteasy.jaxrs.defaultPath]]
 resteasy.jaxrs.defaultPath
 
-|
+| 
 | The path at which the RO viewer should be mounted.
 
 
@@ -66,7 +65,7 @@ resteasy.jaxrs.defaultPath
 [[resteasy.resteasy-settings]]
 resteasy.resteasy-settings
 
-|
+| 
 | null
 
 

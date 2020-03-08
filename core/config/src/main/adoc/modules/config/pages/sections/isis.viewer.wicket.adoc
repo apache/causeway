@@ -12,10 +12,9 @@ include::../section-hooks/isis.viewer.wicket~pre.adoc[]
 |Description
 |
 [[isis.viewer.wicket.ajax-debug-mode]]
-isis.viewer.wicket. +
-ajax-debug-mode
+isis.viewer.wicket.ajax-debug-mode
 
-|
+| 
 | Whether the Ajax debug should be shown, by default this is disabled.
 
 
@@ -23,8 +22,8 @@ ajax-debug-mode
 [[isis.viewer.wicket.app]]
 isis.viewer.wicket.app
 
-|  org.apache.isis.viewer. +
-wicket.viewer.wicketapp. +
+|  org.apache.isis.viewer.wicket. +
+viewer.wicketapp. +
 IsisWicketApplication
 | Specifies the subclass of ``IsisWicketApplication`` that is used to bootstrap Wicket.
 
@@ -33,19 +32,19 @@ There is usually very little reason to change this from its default.
 
 |
 [[isis.viewer.wicket.application.about]]
-isis.viewer.wicket. +
-application.about
+isis.viewer.wicket.application. +
+about
 
-|
+| 
 | Label used on the about page.
 
 
 |
 [[isis.viewer.wicket.application.brand-logo-header]]
-isis.viewer.wicket. +
-application.brand-logo-header
+isis.viewer.wicket.application. +
+brand-logo-header
 
-|
+| 
 | Either the location of the image file (relative to the class-path resource root), or an absolute URL.
 
 This is rendered on the header panel. An image with a size of 160x40 works well. If not specified, the application.name is used instead.
@@ -53,10 +52,10 @@ This is rendered on the header panel. An image with a size of 160x40 works well.
 
 |
 [[isis.viewer.wicket.application.brand-logo-signin]]
-isis.viewer.wicket. +
-application.brand-logo-signin
+isis.viewer.wicket.application. +
+brand-logo-signin
 
-|
+| 
 | Either the location of the image file (relative to the class-path resource root), or an absolute URL.
 
 This is rendered on the sign-in page. An image with a size of 400x40 works well. If not specified, the application name is used instead.
@@ -64,10 +63,9 @@ This is rendered on the sign-in page. An image with a size of 400x40 works well.
 
 |
 [[isis.viewer.wicket.application.css]]
-isis.viewer.wicket. +
-application.css
+isis.viewer.wicket.application.css
 
-|
+| 
 | URL of file to read any custom CSS, relative to ``static`` package on the class path.
 
 A typical value is ``css``. This will result in this file being read from the ``static/css`` directory (because static resources such as CSS are mounted by Spring by default under ``static`` package).
@@ -75,20 +73,19 @@ A typical value is ``css``. This will result in this file being read from the ``
 
 |
 [[isis.viewer.wicket.application.favicon-content-type]]
-isis.viewer.wicket. +
-application. +
+isis.viewer.wicket.application. +
 favicon-content-type
 
-|
+| 
 | Specifies the content type of the favIcon, if any.
 
 
 |
 [[isis.viewer.wicket.application.favicon-url]]
-isis.viewer.wicket. +
-application.favicon-url
+isis.viewer.wicket.application. +
+favicon-url
 
-|
+| 
 | Specifies the URL to use of the favIcon.
 
 This is expected to be a local resource.
@@ -96,10 +93,9 @@ This is expected to be a local resource.
 
 |
 [[isis.viewer.wicket.application.js]]
-isis.viewer.wicket. +
-application.js
+isis.viewer.wicket.application.js
 
-|
+| 
 | URL of file to read any custom Javascript, relative to ``static`` package on the class path.
 
 A typical value is ``js``. This will result in this file being read from the ``static/js`` directory (because static resources such as CSS are mounted by Spring by default under ``static`` package).
@@ -107,8 +103,7 @@ A typical value is ``js``. This will result in this file being read from the ``s
 
 |
 [[isis.viewer.wicket.application.menubars-layout-xml]]
-isis.viewer.wicket. +
-application. +
+isis.viewer.wicket.application. +
 menubars-layout-xml
 
 |  menubars.layout.xml
@@ -119,8 +114,8 @@ This is expected to be a local resource.
 
 |
 [[isis.viewer.wicket.application.name]]
-isis.viewer.wicket. +
-application.name
+isis.viewer.wicket.application. +
+name
 
 |  Apache Isis ™
 | Identifies the application on the sign-in page (unless a sign-in image is configured) and on top-left in the header (unless a header image is configured).
@@ -128,10 +123,10 @@ application.name
 
 |
 [[isis.viewer.wicket.application.version]]
-isis.viewer.wicket. +
-application.version
+isis.viewer.wicket.application. +
+version
 
-|
+| 
 | The version of the application, eg 1.0, 1.1, etc.
 
 If present, then this will be shown in the footer on every page as well as on the about page.
@@ -177,8 +172,8 @@ show-drop-down-on-footer
 
 |
 [[isis.viewer.wicket.breadcrumbs.enabled]]
-isis.viewer.wicket. +
-breadcrumbs.enabled
+isis.viewer.wicket.breadcrumbs. +
+enabled
 
 |  true
 | Whether to enable the 'where am i' feature, in other words the breadcrumbs.
@@ -186,8 +181,7 @@ breadcrumbs.enabled
 
 |
 [[isis.viewer.wicket.breadcrumbs.max-parent-chain-length]]
-isis.viewer.wicket. +
-breadcrumbs. +
+isis.viewer.wicket.breadcrumbs. +
 max-parent-chain-length
 
 |  64
@@ -199,7 +193,7 @@ max-parent-chain-length
 isis.viewer.wicket. +
 clear-original-destination
 
-|
+| 
 | If the end user uses a deep link to access the Wicket viewer, but is not authenticated, then this configuration property determines whether to continue through to that original destination once authenticated, or simply to go to the home page.
 
 The default behaviour is to honour the original destination requested.
@@ -209,7 +203,7 @@ The default behaviour is to honour the original destination requested.
 [[isis.viewer.wicket.credit]]
 isis.viewer.wicket.credit
 
-|
+| 
 | List of organisations or individuals to give credit to, shown as links and icons in the footer. A maximum of 3 credits can be specified.
 
 IntelliJ unfortunately does not provide IDE completion for lists of classes; YMMV.
@@ -219,8 +213,7 @@ NOTE: For further discussion, see for example https://stackoverflow.com/question
 
 |
 [[isis.viewer.wicket.date-pattern]]
-isis.viewer.wicket. +
-date-pattern
+isis.viewer.wicket.date-pattern
 
 |  dd-MM-yyyy
 | The pattern used for rendering and parsing dates.
@@ -230,8 +223,8 @@ Each Date scalar panel will use ``#getDatePattern()`` or ``#getDateTimePattern()
 
 |
 [[isis.viewer.wicket.date-picker.max-date]]
-isis.viewer.wicket. +
-date-picker.max-date
+isis.viewer.wicket.date-picker. +
+max-date
 
 |  2100-01-01T00:00:00.000Z
 | Defines the first date available in the date picker.
@@ -241,8 +234,8 @@ As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in I
 
 |
 [[isis.viewer.wicket.date-picker.min-date]]
-isis.viewer.wicket. +
-date-picker.min-date
+isis.viewer.wicket.date-picker. +
+min-date
 
 |  1900-01-01T00:00:00.000Z
 | Defines the first date available in the date picker.
@@ -266,7 +259,7 @@ Each Date scalar panel will use ``#getDatePattern()`` or ``#getDateTimePattern()
 isis.viewer.wicket. +
 development-utilities.enable
 
-|
+| 
 | Determines whether debug bar and other stuff influenced by ``DebugSettings#isDevelopmentUtilitiesEnabled()`` is enabled or not.
 
 By default, depends on the mode (prototyping = enabled, server = disabled). This property acts as an override.
@@ -274,10 +267,9 @@ By default, depends on the mode (prototyping = enabled, server = disabled). This
 
 |
 [[isis.viewer.wicket.dialog-mode]]
-isis.viewer.wicket. +
-dialog-mode
+isis.viewer.wicket.dialog-mode
 
-|
+| 
 | Whether the dialog mode rendered when invoking actions on domain objects should be to use the sidebar (the default) or to use a modal dialog.
 
 This can be overridden on a case-by-case basis using ``ActionLayout#promptStyle()``.
@@ -288,7 +280,7 @@ This can be overridden on a case-by-case basis using ``ActionLayout#promptStyle(
 isis.viewer.wicket. +
 dialog-mode-for-menu
 
-|
+| 
 | Whether the dialog mode rendered when invoking actions on domain services (that is, menus) should be to use a modal dialog (the default) or to use the sidebar panel.
 
 This can be overridden on a case-by-case basis using ``ActionLayout#promptStyle()``.
@@ -296,10 +288,9 @@ This can be overridden on a case-by-case basis using ``ActionLayout#promptStyle(
 
 |
 [[isis.viewer.wicket.live-reload-url]]
-isis.viewer.wicket. +
-live-reload-url
+isis.viewer.wicket.live-reload-url
 
-|
+| 
 | If specified, then is rendered on each page to enable live reload.
 
 Configuring live reload also requires an appropriate plugin to the web browser (eg see http://livereload.com/[livereload.com] and a mechanism to trigger changes, eg by watching ``xml`` files.
@@ -311,17 +302,17 @@ isis.viewer.wicket. +
 max-title-length-in-parented- +
 tables
 
-|
+| 
 | null
 
 
 |
 [[isis.viewer.wicket.max-title-length-in-standalone-tables]]
 isis.viewer.wicket. +
-max-title-length-in- +
-standalone-tables
+max-title-length-in-standalone- +
+tables
 
-|
+| 
 | null
 
 
@@ -349,8 +340,8 @@ submit
 |
 [[isis.viewer.wicket.prevent-double-click-for-no-arg-action]]
 isis.viewer.wicket. +
-prevent-double-click-for-no- +
-arg-action
+prevent-double-click-for-no-arg- +
+action
 
 |  true
 | Whether to disable a no-arg action button after it has been clicked, to prevent users causing an error if they do a double click.
@@ -360,10 +351,9 @@ This behaviour is enabled by default, but can be disabled using this flag.
 
 |
 [[isis.viewer.wicket.prompt-style]]
-isis.viewer.wicket. +
-prompt-style
+isis.viewer.wicket.prompt-style
 
-|
+| 
 | Whether to use a modal dialog for property edits and for actions associated with properties.
 
 This can be overridden on a case-by-case basis using ``@PropertyLayout#promptStyle`` and ``@ActionLayout#promptStyle``.
@@ -376,7 +366,7 @@ This behaviour is disabled by default; the viewer will use an inline prompt in t
 isis.viewer.wicket. +
 redirect-even-if-same-object
 
-|
+| 
 | Whether to redirect to a new page, even if the object being shown (after an action invocation or a property edit) is the same as the previous page.
 
 This behaviour is disabled by default; the viewer will update the existing page if it can, making for a smoother user experience. If enabled then this reinstates the pre-1.15.0 behaviour of redirecting in all cases.
@@ -384,8 +374,8 @@ This behaviour is disabled by default; the viewer will update the existing page 
 
 |
 [[isis.viewer.wicket.remember-me.cookie-key]]
-isis.viewer.wicket. +
-remember-me.cookie-key
+isis.viewer.wicket.remember-me. +
+cookie-key
 
 |  isisWicketRememberMe
 | If the "remember me" feature is available, specifies the key to hold the encrypted credentials in the cookie.
@@ -393,10 +383,10 @@ remember-me.cookie-key
 
 |
 [[isis.viewer.wicket.remember-me.encryption-key]]
-isis.viewer.wicket. +
-remember-me.encryption-key
+isis.viewer.wicket.remember-me. +
+encryption-key
 
-|
+| 
 | If the "remember me" feature is available, optionally specifies an encryption key (a complex string acting as salt to the encryption algorithm) for computing the encrypted credentials.
 
 If not set, then (in production mode) the Wicket viewer will compute a random key each time it is started. This will mean that any credentials stored between sessions will become invalid.
@@ -408,10 +398,10 @@ In prototype mode this setting is effectively ignored, because the same key will
 
 |
 [[isis.viewer.wicket.remember-me.suppress]]
-isis.viewer.wicket. +
-remember-me.suppress
+isis.viewer.wicket.remember-me. +
+suppress
 
-|
+| 
 | Whether the sign-in page should have a "remember me" link (the default), or if it should be suppressed.
 
 If "remember me" is available and checked, then the viewer will allow users to login based on encrypted credentials stored in a cookie. An encryption key can optionally be specified.
@@ -420,8 +410,8 @@ If "remember me" is available and checked, then the viewer will allow users to l
 |
 [[isis.viewer.wicket.replace-disabled-tag-with-readonly-tag]]
 isis.viewer.wicket. +
-replace-disabled-tag-with- +
-readonly-tag
+replace-disabled-tag-with-readonly- +
+tag
 
 |  true
 | In Firefox and more recent versions of Chrome 54+, cannot copy out of disabled fields; instead we use the readonly attribute (https://www.w3.org/TR/2014/REC-html5-20141028/forms.html#the-readonly-attribute)
@@ -431,8 +421,7 @@ This behaviour is enabled by default but can be disabled using this flag
 
 |
 [[isis.viewer.wicket.show-footer]]
-isis.viewer.wicket. +
-show-footer
+isis.viewer.wicket.show-footer
 
 |  true
 | Whether to show the footer menu bar.
@@ -456,7 +445,7 @@ By default this is enabled, in other words Wicket tags are stripped. Please be a
 isis.viewer.wicket. +
 suppress-password-reset
 
-|
+| 
 | Whether to suppress the password reset link on the sign-in page.
 
 Although this is disabled by default (in other words the 'reset password' link is not suppressed), note that in addition the application must provide an implementation of the ``UserRegistrationService`` as well as a configured ``EmailNotificationService`` (same conditions as for the ``#isSuppressSignUp()`` sign-up link).
@@ -467,7 +456,7 @@ Although this is disabled by default (in other words the 'reset password' link i
 isis.viewer.wicket. +
 suppress-sign-up
 
-|
+| 
 | Whether to suppress the sign-up link on the sign-in page.
 
 Although this is disabled by default (in other words the sign-up link is not suppressed), note that in addition the application must provide an implementation of the ``UserRegistrationService`` as well as a configured ``EmailNotificationService`` (same conditions as for the ``#isSuppressPasswordReset()`` password reset link).
@@ -475,17 +464,15 @@ Although this is disabled by default (in other words the sign-up link is not sup
 
 |
 [[isis.viewer.wicket.themes.enabled]]
-isis.viewer.wicket.themes. +
-enabled
+isis.viewer.wicket.themes.enabled
 
-|
+| 
 | A comma separated list of enabled theme names, as defined by https://bootswatch.com.
 
 
 |
 [[isis.viewer.wicket.themes.initial]]
-isis.viewer.wicket.themes. +
-initial
+isis.viewer.wicket.themes.initial
 
 |  Flatly
 | The initial theme to use.
@@ -495,12 +482,10 @@ Expected to be in the list of ``#getEnabled()`` themes.
 
 |
 [[isis.viewer.wicket.themes.provider]]
-isis.viewer.wicket.themes. +
-provider
+isis.viewer.wicket.themes.provider
 
-|  org.apache.isis.viewer. +
-wicket.ui.components.widgets. +
-themepicker. +
+|  org.apache.isis.viewer.wicket.ui. +
+components.widgets.themepicker. +
 IsisWicketThemeSupportDefault
 | Specifies an implementation of ``IsisWicketThemeSupport``
 
@@ -510,7 +495,7 @@ IsisWicketThemeSupportDefault
 isis.viewer.wicket.themes. +
 show-chooser
 
-|
+| 
 | Whether the theme chooser widget should be available in the footer.
 
 
@@ -528,8 +513,7 @@ This behaviour is enabled by default.
 |
 [[isis.viewer.wicket.use-indicator-for-no-arg-action]]
 isis.viewer.wicket. +
-use-indicator-for-no-arg- +
-action
+use-indicator-for-no-arg-action
 
 |  true
 | Whether to show an indicator for a no-arg action button that it has been clicked.
@@ -539,10 +523,9 @@ This behaviour is enabled by default.
 
 |
 [[isis.viewer.wicket.welcome.text]]
-isis.viewer.wicket.welcome. +
-text
+isis.viewer.wicket.welcome.text
 
-|
+| 
 | Text to be displayed on the application’s home page, used as a fallback if welcome.file is not specified. If a @HomePage action exists, then that will take precedence.
 
 
@@ -551,7 +534,7 @@ text
 isis.viewer.wicket. +
 wicket-source-plugin
 
-|
+| 
 | Whether the Wicket source plugin should be enabled; if so, the markup includes links to the Wicket source.
 
 This behaviour is disabled by default. Please be aware that enabloing it can substantially impact performance.

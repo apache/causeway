@@ -12,7 +12,7 @@ Apache Isis' documentation (meaning the website and the users' guide, the refere
 The website and guides are created by running build tools (documented below) which create the HTML version of the site and guides.
 You can therefore easily check the documentation before raising a pull request (as a contributor) or publishing the site (if a committer).
 
-For details of authoring/updating the documents and website, see the xref:conguide:ROOT:asciidoc.adoc[Contributors' Guide].
+For details of authoring/updating the documents and website, see the xref:conguide:documentation:about.adoc[Contributors' Guide].
 
 Publishing is performed by copying the generated HTML to a different git repository (link:https://github.com/apache/isis-site.git[isis-site]).
 This is synced by ASF infrastructure over to link:http://isis.apache.org[isis.apache.org].
@@ -51,6 +51,10 @@ git checkout asf-site
 
 == Preview
 
+WARNING: TODO: v2 - not yet updated.
+Need to figure out how to merge the v1 docs (as an archive) with Antora.
+Also, need to use Antora versioning rather than just 'master'
+
 To preview changes (ignoring PDFs), run:
 
 [source,bash]
@@ -70,6 +74,10 @@ sh preview-pdf.sh
 There's generally little point in doing this, however.
 
 == Publishing (full build)
+
+WARNING: TODO: v2 - not yet updated.
+Need to figure out how to merge the v1 docs (as an archive) with Antora.
+Also, need to use Antora versioning rather than just 'master'
 
 The `content` directory for the published website contains not only the "current version" of the docs, but also has an archive of older versions of the document from earlier releases:
 
@@ -126,6 +134,10 @@ This should therefore be updated whenever working on a new release.
 ====
 
 === New release
+
+WARNING: TODO: v2 - not yet updated.
+Need to figure out how to merge the v1 docs (as an archive) with Antora.
+Also, need to use Antora versioning rather than just 'master'
 
 When a new release is published, we therefore need to do a little extra work:
 

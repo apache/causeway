@@ -12,8 +12,7 @@ include::../section-hooks/isis.core.meta-model.introspector~pre.adoc[]
 |Description
 |
 [[isis.core.meta-model.introspector.lock-after-full-introspection]]
-isis.core.meta-model. +
-introspector. +
+isis.core.meta-model.introspector. +
 lock-after-full-introspection
 
 |  true
@@ -24,10 +23,10 @@ Only applies if the introspector is configured to perform full introspection up-
 
 |
 [[isis.core.meta-model.introspector.mode]]
-isis.core.meta-model. +
-introspector.mode
+isis.core.meta-model.introspector. +
+mode
 
-|
+| 
 | Whether all known types should be fully introspected as part of the bootstrapping, or should only be partially introspected initially.
 
 Leaving this as lazy means that there's a chance that metamodel validation errors will not be discovered during bootstrap. That said, metamodel validation is still run incrementally for any classes introspected lazily after initial bootstrapping (unless ``#isValidateIncrementally()`` is disabled.
@@ -35,8 +34,8 @@ Leaving this as lazy means that there's a chance that metamodel validation error
 
 |
 [[isis.core.meta-model.introspector.parallelize]]
-isis.core.meta-model. +
-introspector.parallelize
+isis.core.meta-model.introspector. +
+parallelize
 
 |  true
 | Whether to perform introspection in parallel.
@@ -44,8 +43,7 @@ introspector.parallelize
 
 |
 [[isis.core.meta-model.introspector.validate-incrementally]]
-isis.core.meta-model. +
-introspector. +
+isis.core.meta-model.introspector. +
 validate-incrementally
 
 |  true

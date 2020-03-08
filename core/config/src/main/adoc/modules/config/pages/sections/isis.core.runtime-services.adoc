@@ -15,41 +15,41 @@ include::../section-hooks/isis.core.runtime-services~pre.adoc[]
 isis.core.runtime-services. +
 application-features.init
 
-|
+| 
 | Whether the ``ApplicationFeatureRepository`` (or the default implementation of that service, at least) should compute the set of ``ApplicationFeature`` that describe the metamodel eagerly, or lazily.
 
 
 |
 [[isis.core.runtime-services.email.override.bcc]]
-isis.core.runtime-services. +
-email.override.bcc
+isis.core.runtime-services.email. +
+override.bcc
 
-|
+| 
 | Intended for testing purposes only, if set then the requested ``bcc:`` of the email will be ignored, and instead sent to this email address instead.
 
 
 |
 [[isis.core.runtime-services.email.override.cc]]
-isis.core.runtime-services. +
-email.override.cc
+isis.core.runtime-services.email. +
+override.cc
 
-|
+| 
 | Intended for testing purposes only, if set then the requested ``cc:`` of the email will be ignored, and instead sent to this email address instead.
 
 
 |
 [[isis.core.runtime-services.email.override.to]]
-isis.core.runtime-services. +
-email.override.to
+isis.core.runtime-services.email. +
+override.to
 
-|
+| 
 | Intended for testing purposes only, if set then the requested ``to:`` of the email will be ignored, and instead sent to this email address instead.
 
 
 |
 [[isis.core.runtime-services.email.port]]
-isis.core.runtime-services. +
-email.port
+isis.core.runtime-services.email. +
+port
 
 |  587
 | The port to use for sending email.
@@ -57,10 +57,10 @@ email.port
 
 |
 [[isis.core.runtime-services.email.sender.address]]
-isis.core.runtime-services. +
-email.sender.address
+isis.core.runtime-services.email. +
+sender.address
 
-|
+| 
 | Specifies the email address of the user sending the email.
 
 If the username is not specified, is also used as the username to connect to the SMTP service.
@@ -70,10 +70,10 @@ This configuration property is mandatory (for the default implementation of the 
 
 |
 [[isis.core.runtime-services.email.sender.hostname]]
-isis.core.runtime-services. +
-email.sender.hostname
+isis.core.runtime-services.email. +
+sender.hostname
 
-|
+| 
 | Specifies the host running the SMTP service.
 
 If not specified, then the value used depends upon the email implementation. The default implementation will use the ``host`` system property.
@@ -81,10 +81,10 @@ If not specified, then the value used depends upon the email implementation. The
 
 |
 [[isis.core.runtime-services.email.sender.password]]
-isis.core.runtime-services. +
-email.sender.password
+isis.core.runtime-services.email. +
+sender.password
 
-|
+| 
 | Specifies the password (corresponding to the username to connect to the SMTP service.
 
 This configuration property is mandatory (for the default implementation of the ``EmailService``, at least).
@@ -92,10 +92,10 @@ This configuration property is mandatory (for the default implementation of the 
 
 |
 [[isis.core.runtime-services.email.sender.username]]
-isis.core.runtime-services. +
-email.sender.username
+isis.core.runtime-services.email. +
+sender.username
 
-|
+| 
 | Specifies the username to use to connect to the SMTP service.
 
 If not specified, then the sender's email address will be used instead.
@@ -103,8 +103,7 @@ If not specified, then the sender's email address will be used instead.
 
 |
 [[isis.core.runtime-services.email.socket-connection-timeout]]
-isis.core.runtime-services. +
-email. +
+isis.core.runtime-services.email. +
 socket-connection-timeout
 
 |  2000
@@ -113,8 +112,8 @@ socket-connection-timeout
 
 |
 [[isis.core.runtime-services.email.socket-timeout]]
-isis.core.runtime-services. +
-email.socket-timeout
+isis.core.runtime-services.email. +
+socket-timeout
 
 |  2000
 | The maximum number of millseconds to wait to obtain a socket before timing out.
@@ -122,8 +121,8 @@ email.socket-timeout
 
 |
 [[isis.core.runtime-services.email.throw-exception-on-fail]]
-isis.core.runtime-services. +
-email.throw-exception-on-fail
+isis.core.runtime-services.email. +
+throw-exception-on-fail
 
 |  true
 | If an email fails to send, whether to propagate the exception (meaning that potentially the end-user might see the exception), or whether instead to just indicate failure through the return value of the method (\{@link org.apache.isis.applib.services.email.EmailService#send(List, List, List, String, String, DataSource...)) that's being called.
@@ -131,8 +130,8 @@ email.throw-exception-on-fail
 
 |
 [[isis.core.runtime-services.email.tls.enabled]]
-isis.core.runtime-services. +
-email.tls.enabled
+isis.core.runtime-services.email. +
+tls.enabled
 
 |  true
 | Whether TLS encryption should be started (that is, ``STARTTLS``).
@@ -141,10 +140,9 @@ email.tls.enabled
 |
 [[isis.core.runtime-services.exception-recognizer.jdo.disable]]
 isis.core.runtime-services. +
-exception-recognizer.jdo. +
-disable
+exception-recognizer.jdo.disable
 
-|
+| 
 | Whether the ``ExceptionRecognizer`` implementation for JDO/DataNucleus object store - which attempts to sanitize any exceptions arising from that object store - should be disabled (meaning that exceptions will potentially propagate as more serious to the end user).
 
 
@@ -154,7 +152,7 @@ isis.core.runtime-services. +
 repository-service. +
 disable-auto-flush
 
-|
+| 
 | Normally any queries are automatically preceded by flushing pending executions.
 
 This key allows this behaviour to be disabled.
@@ -167,7 +165,7 @@ Originally introduced as part of ISIS-1134 (fixing memory leaks in the objectsto
 isis.core.runtime-services. +
 translation.po.mode
 
-|
+| 
 | Specifies the initial mode for obtaining/discovering translations.
 
 There are three modes:

@@ -9,7 +9,7 @@
 
 
 
-This section (appendix) describes the prerequisites for the xref:comguide:ROOT:release-process.adoc[release process].
+This section (appendix) describes the prerequisites for the xref:comguide:ROOT:cutting-a-release.adoc[release process].
 
 == Configure toolchains plugin
 

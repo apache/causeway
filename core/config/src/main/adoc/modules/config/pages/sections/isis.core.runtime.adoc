@@ -14,7 +14,7 @@ include::../section-hooks/isis.core.runtime~pre.adoc[]
 [[isis.core.runtime.locale]]
 isis.core.runtime.locale
 
-|
+| 
 | If set, then overrides the application's ``Locale#getDefault()``
 
 
@@ -22,7 +22,7 @@ isis.core.runtime.locale
 [[isis.core.runtime.timezone]]
 isis.core.runtime.timezone
 
-|
+| 
 | If set, then override's the application's timezone.
 
 

@@ -15,52 +15,52 @@ include::../section-hooks/isis.value-types~pre.adoc[]
 isis.value-types.primitives. +
 integer.format
 
-|
+| 
 | null
 
 
 |
 [[isis.value-types.java-lang.byte.format]]
-isis.value-types.java-lang. +
-byte.format
+isis.value-types.java-lang.byte. +
+format
 
-|
+| 
 | Configures the number format understood by ``ByteValueSemanticsProviderAbstract``. @deprecated
 
 
 |
 [[isis.value-types.java-lang.double.format]]
-isis.value-types.java-lang. +
-double.format
+isis.value-types.java-lang.double. +
+format
 
-|
+| 
 | Configures the number format understood by ``DoubleValueSemanticsProviderAbstract``. @deprecated
 
 
 |
 [[isis.value-types.java-lang.float.format]]
-isis.value-types.java-lang. +
-float.format
+isis.value-types.java-lang.float. +
+format
 
-|
+| 
 | Configures the number format understood by ``FloatValueSemanticsProviderAbstract``. @deprecated
 
 
 |
 [[isis.value-types.java-lang.long.format]]
-isis.value-types.java-lang. +
-long.format
+isis.value-types.java-lang.long. +
+format
 
-|
+| 
 | Configures the number format understood by ``LongValueSemanticsProviderAbstract``. @deprecated
 
 
 |
 [[isis.value-types.java-lang.short.format]]
-isis.value-types.java-lang. +
-short.format
+isis.value-types.java-lang.short. +
+format
 
-|
+| 
 | Configures the number format understood by ``ShortValueSemanticsProviderAbstract``. @deprecated
 
 
@@ -69,7 +69,7 @@ short.format
 isis.value-types.java-math. +
 big-decimal.format
 
-|
+| 
 | Configures the number format understood by ``BigDecimalValueSemanticsProvider``. @deprecated
 
 
@@ -78,14 +78,14 @@ big-decimal.format
 isis.value-types.java-math. +
 big-integer.format
 
-|
+| 
 | Configures the number format understood by ``BigIntegerValueSemanticsProvider``. @deprecated
 
 
 |
 [[isis.value-types.java-sql.date.format]]
-isis.value-types.java-sql. +
-date.format
+isis.value-types.java-sql.date. +
+format
 
 |  medium
 | Configures the formats understood by ``JavaSqlDateValueSemanticsProvider``. @deprecated
@@ -93,8 +93,8 @@ date.format
 
 |
 [[isis.value-types.java-sql.time.format]]
-isis.value-types.java-sql. +
-time.format
+isis.value-types.java-sql.time. +
+format
 
 |  short
 | Configures the formats understood by ``JavaSqlTimeValueSemanticsProvider``. @deprecated
@@ -165,8 +165,8 @@ zoned-date-time.format
 
 |
 [[isis.value-types.java-util.date.format]]
-isis.value-types.java-util. +
-date.format
+isis.value-types.java-util.date. +
+format
 
 |  medium
 | Configures the formats understood by ``JavaUtilDateValueSemanticsProvider``. @deprecated
@@ -174,8 +174,8 @@ date.format
 
 |
 [[isis.value-types.joda.date-time.format]]
-isis.value-types.joda. +
-date-time.format
+isis.value-types.joda.date-time. +
+format
 
 |  medium
 | Configures the formats understood by ``JodaDateTimeValueSemanticsProvider``. @deprecated
@@ -192,8 +192,8 @@ local-date-time.format
 
 |
 [[isis.value-types.joda.local-date.format]]
-isis.value-types.joda. +
-local-date.format
+isis.value-types.joda.local-date. +
+format
 
 |  medium
 | Configures the formats understood by ``JodaLocalDateValueSemanticsProvider``. @deprecated
@@ -201,10 +201,10 @@ local-date.format
 
 |
 [[isis.value-types.primitives.int.format]]
-isis.value-types.primitives. +
-int.format
+isis.value-types.primitives.int. +
+format
 
-|
+| 
 | Configures the number format understood by ``IntValueSemanticsProviderAbstract``. @deprecated
 
 

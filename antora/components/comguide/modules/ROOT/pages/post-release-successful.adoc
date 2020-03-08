@@ -188,54 +188,11 @@ Create a new JIRA ticket as a catch-all for the _next_ release.
 
 Log the new release in the link:https://reporter.apache.org/addrelease.html?isis[ASF Reporter website].
 
-== Release image to Docker hub
-
-This is currently a placeholder.
-
-TODO:
-
-* This is currently dependent on https://issues.apache.org/jira/browse/INFRA-17518[INFRA-17518].
-
-* the entry: `<docker-plugin.imageName>` in `pom.xml` will need to change from `apacheisis/core` to simply `apache/isis-9.0.10-jre8-alpine`.
-
-* Once this has been implemented, we also need to update the documentation for helloworld and simpleapp in order to explain how to build and deploy a skinny war to a running container.
-
-The idea is to use `isis-webdocker` to create a new image, then upload.
-
-Prereqs are:
-
-[source,xml]
-.m2/settings.xml
-----
-<settings ...>
-  ...
-  <servers>
-    <server>
-      <id>docker-hub</id>
-      <username>danhaywood</username>
-      <password>xxx</password>
-      <configuration>
-        <email>xxx@xxx.xxx</email>
-      </configuration>
-    </server>
-  </servers>
-</settings>
-----
-
-\... because `isis-webdocker/pom.xml` references `docker-hub`.
-
-[source,bash]
-----
-cd core
-rm -rf ~/.m2/repository/org/apache/isis
-mvn -Drevision=$ISISREL \
-    -D docker-plugin.imageName="apacheisis/isis-9.0.10-jre8-alpine" \
-    -pl webdocker \
-    -D package-docker \
-    deploy
-----
 
 == Update website
+
+WARNING: TODO - v2 - need to update for Antora process.
+See also (or x-ref) the xref:antora-publish-procedure.adoc[antora publish procedure] section, also in this guide.
 
 In the main `isis` repo (ie containing the asciidoc source):
 

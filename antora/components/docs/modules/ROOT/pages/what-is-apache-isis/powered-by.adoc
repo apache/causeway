@@ -10,7 +10,7 @@ This page catalogues a few notable applications that are powered by Apache Isis 
 
 [TIP]
 ====
-If you have written an app in Apache Isis that you'd like to share, please mention it on the xref:docs:ROOT:support.adoc#[mailing list].
+If you have written an app in Apache Isis that you'd like to share, please mention it on the xref:docs:support:mailing-list.adoc#mailing-lists#[mailing list].
 ====
 
 include::powered-by/estatio.adoc[leveloffset=+1]

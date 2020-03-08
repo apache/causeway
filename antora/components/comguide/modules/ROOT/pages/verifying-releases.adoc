@@ -14,11 +14,11 @@ The release process consists of:
 * members of the Apache Isis PMC verifying and voting on the release (documented below)
 * the release manager performing post-release tasks, for either a xref:comguide:ROOT:post-release-successful.adoc.adoc[successful] or an xref:comguide:ROOT:post-release-unsuccessful[unsuccessful] vote.
 
-This section describes some guidance on what a voter (members of the Apache Isis PMC and anyone else who wishes) is expected to do before casting their vote in order to verify a release.
+This section describes some guidance on what a voter (members of the Apache Isis PMC and anyone else who wishes) is expected to xref:comguide:ROOT:release-process.adocdo before casting their vote in order to verify a release.
 
 == Background
 
-Whenever a release manager announces a vote on a release (as per the xref:comguide:ROOT:release-process.adoc[release process]) on the xref:docs:ROOT:support.adoc#[dev mailing list], it is the responsibility of the project's PMC to cast their vote on the release.
+Whenever a release manager announces a vote on a release (as per the [release process]) on the xref:docs:support:mailing-list.adoc#mailing-lists[dev mailing list], it is the responsibility of the project's PMC to cast their vote on the release.
 Anyone else can also vote, but only members of the Apache Isis PMC's vote are binding.
 
 Per this http://www.apache.org/dev/release.html[ASF documentation], the legal requirements for an ASF release are:
@@ -35,27 +35,12 @@ Details of how to do this are also documented below.
 
 You will also require the following commands/tools:
 
-* `bash`
-+
-to run shell script
-
-* `curl`
-+
-to download the ZIP files
-
-* `gpg`
-+
-to verify signatures
-
-* `unzip`
-+
-to unzip the ZIP files
-
-* JDK 7
-
+* `bash` - to run shell script
+* `curl` or `wget` - to download the ZIP files
+* `gpg` - to verify signatures
+* `unzip` - to unzip the ZIP files
+* JDK 8
 * Apache Maven (`mvn`) 3.5.0+
-+
-to build the code
 
 == Verifying source artifacts
 
@@ -64,15 +49,15 @@ Run these commands (they should also be listed in the VOTE email):
 
 [source,bash,subs="attributes+"]
 ----
-NEXUSREPONUM=10xx                   # <1>
 VERSION={isisnext}
+NEXUSREPONUM=10xx                   # <1>
 
 curl http://www.apache.org/dist/isis/KEYS > /tmp/KEYS
 gpg --import /tmp/KEYS
 
 rm -rf isis-$VERSION*
 
-curl -O -L https://gist.githubusercontent.com/danhaywood/xxx/raw/xxx/verify-isis-release.sh
+curl -O -L https://raw.githubusercontent.com/apache/isis/master/scripts/verify-isis-release.sh
 
 chmod +x ./verify-isis-release.sh
 ./verify-isis-release.sh $NEXUSREPONUM $VERSION
@@ -81,13 +66,13 @@ chmod +x ./verify-isis-release.sh
 
 Just copy and paste these commands to your terminal, and run.
 
-The `verify-isis-release.sh` script performs the following:
+The `verify-isis-release.sh` script:
 
-* it downloads artifacts (`.zip` files and `.asc` files from the staging repository hosted on the Apache (Nexus) repository server.
+* downloads artifacts (`.zip` files and `.asc` files from the staging repository hosted on the Apache (Nexus) repository server.
 +
 The location of this repository will be in the VOTE email.
 
-* it verifies that the signatures are correct
+* verifies that the signatures are correct
 +
 in other words, to confirm that the release was created by an Apache Isis committer
 
@@ -133,10 +118,11 @@ Configuring your local Maven install amounts to updating the `~/.m2/settings.xml
 ----
 
 where the repository URL is as provided in the VOTE email.
-If there is more than one repository (as is sometimes the case if multiple components have been released), then repeat the <repository> section for each.
+If there is more than one repository (as is sometimes the case if multiple components have been released), then repeat the `<repository>` section for each.
 
-Once the vote has completed, the staging repositories will be removed and so you should deactive the profile (comment out the `&lt;activeProfile&gt;` element).
+Once the vote has completed, the staging repositories will be removed and so you should deactive the profile (comment out the `<activeProfile>` element).
 If you forget to deactive the profile, there should be no adverse effects; Maven will just spend unnecessary cycles attempting to hit a non-existent repo.
+
 
 == (Optional) Creadur Tools
 

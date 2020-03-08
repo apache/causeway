@@ -93,16 +93,3 @@ The http://projects.apache.org/doap.html[description of a project] RDF file for 
 
 
 
-== Incode Platform
-
-The link:https://platform.incode.org[Incode Platform^] provides a number of (open source, but not ASF) supporting modules and extensions for you to use:
-
-* technical libraries, such as excel, word and freemarker
-
-* SPI implementations, such as security, commands, auditing and publishing
-
-* framework extensions, such as flyway, quartz and feature toggles
-
-* wicket components, such as maps, calendars and PDF viewer
-
-Each module can be used independently or combined, and the Incode Platform also provides a quickstart application to get you started quickly.

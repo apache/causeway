@@ -15,16 +15,16 @@ include::../section-hooks/isis.legacy~pre.adoc[]
 isis.legacy.value-types.money. +
 currency
 
-|
+| 
 | Configures the default currency code used by ``MoneyValueSemanticsProvider``. @deprecated
 
 
 |
 [[isis.legacy.value-types.percentage.format]]
-isis.legacy.value-types. +
-percentage.format
+isis.legacy.value-types.percentage. +
+format
 
-|
+| 
 | Configures the formats understood by ``PercentageValueSemanticsProvider``. @deprecated
 
 

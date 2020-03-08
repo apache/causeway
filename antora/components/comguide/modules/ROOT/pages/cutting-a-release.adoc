@@ -442,7 +442,7 @@ Use the following subject, eg:
 
 And use the following body:
 
-[source,bash,subs="attributes+"]
+[source,subs="attributes+"]
 ----
 I've just cut a new release for Apache Isis Framework.
 
@@ -453,21 +453,20 @@ In the source code repo the code has been tagged as isis-{isisnext}-RC1; see htt
 
 To verify the source code, you can use the following commands (in an empty directory):
 
-    NEXUSREPONUM=10xx
     VERSION={isisnext}
+    NEXUSREPONUM=10xx
 
     curl http://www.apache.org/dist/isis/KEYS > /tmp/KEYS
     gpg --import /tmp/KEYS
 
     rm -rf isis-$VERSION*
 
-    curl -O -L https://raw.githubusercontent.com/apache/isis/xxxx/scripts/verify-isis-release.sh
+    curl -O -L https://raw.githubusercontent.com/apache/isis/master/scripts/verify-isis-release.sh
 
     chmod +x ./verify-isis-release.sh
     ./verify-isis-release.sh $NEXUSREPONUM $VERSION
 
-
-For more details, see https://isis.apache.org/toc/comguide/about.html#verifying-releases
+For more details, see https://isis.apache.org/comguide/verifying-releases.html
 
 Please verify the release and cast your vote.  The vote will be open for a minimum of 72 hours.
 
