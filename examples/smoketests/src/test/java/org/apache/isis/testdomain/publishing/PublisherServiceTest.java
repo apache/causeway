@@ -51,6 +51,7 @@ import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
+import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 import lombok.val;
 
@@ -70,7 +71,7 @@ import lombok.val;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DirtiesContext // because of the temporary installed PublisherServiceProbe
 @Incubating("fails when run with surefire")
-class PublisherServiceTest {
+class PublisherServiceTest extends IsisIntegrationTestAbstract {
 
     @Inject private RepositoryService repository;
     @Inject private FixtureScripts fixtureScripts;

@@ -49,6 +49,7 @@ import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
+import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 import lombok.val;
 
@@ -67,7 +68,7 @@ import lombok.val;
 })
 @DirtiesContext // because of the temporary installed AuditerServiceProbe
 @Incubating("fails when run with surefire")
-class AuditerServiceTest {
+class AuditerServiceTest extends IsisIntegrationTestAbstract {
 
     @Inject private RepositoryService repository;
     @Inject private FixtureScripts fixtureScripts;
