@@ -17,7 +17,7 @@
 
 name: conguide
 title: "Contributors' Guide"
-version: master
+version: latest
 start_page: ROOT:about.adoc
 nav:
 - modules/ROOT/nav.adoc

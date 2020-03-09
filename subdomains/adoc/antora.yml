@@ -17,7 +17,7 @@
 
 name: subdomains
 title: "Subdomains Catalog"
-version: master
+version: latest
 start_page: ROOT:about.adoc
 nav:
 - modules/ROOT/nav.adoc

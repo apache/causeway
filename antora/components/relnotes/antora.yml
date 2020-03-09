@@ -17,7 +17,7 @@
 
 name: relnotes
 title: "Release Notes"
-version: master
+version: latest
 start_page: ROOT:about.adoc
 nav:
 - modules/ROOT/nav.adoc
