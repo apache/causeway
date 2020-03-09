@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.isis.extensions</groupId>
         <artifactId>isis-extensions-shiro-realm-ldap</artifactId>
-        <version>2.0.0-M3-SNAPSHOT</version>
+        <version>2.0.0-M3</version>
     </parent>
 
     <artifactId>isis-extensions-shiro-realm-ldap-impl</artifactId>
