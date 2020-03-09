@@ -28,7 +28,6 @@ bash $SCRIPT_DIR/_print-environment.sh "build-site"
 
 if [ "$SKIP_EXAMPLES" = "true" ]; then
   echo "skipping examples"
-  echo ""
 else
   bash $SCRIPT_DIR/_adoc-copy-examples.sh
 fi
@@ -36,7 +35,6 @@ fi
 
 if [ "$SKIP_CONFIGS" = "true" ]; then
   echo "skipping config generation"
-  echo ""
 else
   bash $SCRIPT_DIR/_adoc-gen-config.sh
 fi
@@ -44,7 +42,6 @@ fi
 
 if [ "$SKIP_STALE_EXAMPLE_CHECK" = "true" ]; then
   echo "skipping stale example check"
-  echo ""
 else
   WC=$(git status --porcelain | grep examples | wc -l)
   if [ "$WC" -ne "0" ]; then
@@ -56,12 +53,10 @@ fi
 
 if [ "$SKIP_GENERATION" = "true" ]; then
   echo "skipping building..."
-  echo ""
 else
   echo "building ..."
   bash $SCRIPT_DIR/_adoc-antora.sh $*
   echo "site built in ${SECONDS}s"
-  echo ""
 fi
 
 # add a marker, that tells github not to use jekyll on the github pages folder
