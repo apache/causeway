@@ -1,6 +1,7 @@
 = Applib
-:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-role: -toc
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
 include::../section-hooks/isis.applib~pre.adoc[]
@@ -16,7 +17,7 @@ isis.applib.annotation. +
 action-layout.css-class-fa. +
 patterns
 
-| 
+|
 | Provides a mapping of patterns to font-awesome CSS classes, where the pattern is used to match against the name of the action method in order to determine a CSS class to use, for example on the action's menu icon if rendered by the Wicket viewer.
 
 Providing a default set of patterns encourages a common set of verbs to be used.
@@ -29,7 +30,7 @@ The font awesome class for individual actions can be overridden using ``ActionLa
 isis.applib.annotation. +
 action-layout.css-class.patterns
 
-| 
+|
 | Provides a mapping of patterns to CSS classes, where the pattern is used to match against the name of the action method in order to determine a CSS class to use, for example on the action's button if rendered by the Wicket viewer.
 
 Providing a default set of patterns encourages a common set of verbs to be used.
@@ -42,7 +43,7 @@ The CSS class for individual actions can be overridden using ``ActionLayout#cssC
 isis.applib.annotation.action. +
 command
 
-| 
+|
 | The default for whether action invocations should be reified as a ``Command`` using the ``CommandService``, possibly so that the actual execution of the action can be deferred until later (background execution) or replayed against a copy of the system.
 
 In particular, the ``CommandWithDto`` implementation of ``Command`` represents the action invocation memento (obtained using ``CommandWithDto#asDto()``) as a ``CommandDto``.
@@ -72,7 +73,7 @@ The algorithm for determining whether (and what type of) an event is actually se
 isis.applib.annotation.action. +
 explicit
 
-| 
+|
 | Whether or not a public method needs to be annotated with @``Action`` in order to be picked up as an action in the metamodel.
 
 
@@ -81,7 +82,7 @@ explicit
 isis.applib.annotation.action. +
 publishing
 
-| 
+|
 | The default for whether action invocations should be sent through to the ``PublisherService`` for publishing.
 
 The service's publish method is called only once per transaction, with ``Execution`` collecting details of the identity of the target object, the action invoked, the action arguments and the returned object (if any).
@@ -94,7 +95,7 @@ This setting can be overridden on a case-by-case basis using ``Action#publishing
 isis.applib.annotation. +
 collection-layout.default-view
 
-| 
+|
 | Defines the initial view to display collections when rendered.
 
 The value of this can be overridden on a case-by-case basis using ``CollectionLayout#defaultView()``. Note that this default configuration property is an enum and so defines only a fixed number of values, whereas the annotation returns a string; this is to allow for flexibility that individual viewers might support their own additional types. For example, the Wicket viewer supports
@@ -211,7 +212,7 @@ The algorithm for determining whether (and what type of) an event is sent depend
 isis.applib.annotation. +
 domain-object.auditing
 
-| 
+|
 | The default for whether _domain entities_ should be audited or not (meaning that any changes are sent through to the ``AuditerService``.
 
 This setting can be overridden on a case-by-case basis using ``DomainObject#auditing()`` DomainObject#getAuditing()}
@@ -241,7 +242,7 @@ The algorithm for determining whether (and what type of) an event is sent depend
 isis.applib.annotation. +
 domain-object.editing
 
-| 
+|
 | The default for whether the properties of domain objects can be edited, or whether instead they can be modified only using actions (or programmatically as a side-effect of actions on other objects).
 
 This setting can be overridden on a case-by-case basis using DomainObject#getEditing()
@@ -309,7 +310,7 @@ Note: this applies only to domain entities, not to view models.
 isis.applib.annotation. +
 domain-object.publishing
 
-| 
+|
 | The default for whether the identities of changed objects should be sent through to the ``PublisherService`` for publishing.
 
 The service's publish method is called only once per transaction, with ``PublishedObjects`` collecting details of all changed domain objects.
@@ -381,7 +382,7 @@ Note: this applies only to domain entities, not to view models.
 isis.applib.annotation. +
 parameter-layout.label-position
 
-| 
+|
 | Defines the default position for the label for an action parameter.
 
 Can be overridden on a case-by-case basis using ``ParameterLayout#labelPosition()``.
@@ -394,7 +395,7 @@ If left as ``LabelPosition#NOT_SPECIFIED`` and not overridden, then the position
 isis.applib.annotation. +
 property-layout.label-position
 
-| 
+|
 | Defines the default position for the label for a domain object property.
 
 Can be overridden on a case-by-case basis using ``ParameterLayout#labelPosition()``.
@@ -407,7 +408,7 @@ If left as ``LabelPosition#NOT_SPECIFIED`` and not overridden, then the position
 isis.applib.annotation.property. +
 command
 
-| 
+|
 | The default for whether property edits should be reified as a ``Command`` using the ``CommandService``, possibly so that the actual execution of the property edit can be deferred until later (background execution) or replayed against a copy of the system.
 
 In particular, the ``CommandWithDto`` implementation of ``Command`` represents the action invocation memento (obtained using ``CommandWithDto#asDto()``) as a ``CommandDto``.
@@ -437,7 +438,7 @@ The algorithm for determining whether (and what type of) an event is actually se
 isis.applib.annotation.property. +
 publishing
 
-| 
+|
 | The default for whether property edits should be sent through to the ``PublisherService`` for publishing.
 
 The service's publish method is called only once per transaction, with ``Execution`` collecting details of the identity of the target object, the property edited, and the new value of the property.
@@ -518,7 +519,7 @@ isis.applib.annotation.view-model. +
 validation.semantic-checking. +
 enable
 
-| 
+|
 | Whether to check for inconsistencies between the usage of ``DomainObject``, ``ViewModel``, ``DomainObjectLayout`` and ``ViewModelLayout``.
 
 
