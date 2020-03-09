@@ -16,11 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.vaadin.ui.main;
+package org.apache.isis.incubator.viewer.vaadin.ui.pages.main;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
@@ -38,8 +39,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 
-import org.apache.logging.log4j.Logger;
-
+import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
 import org.apache.isis.applib.services.menu.MenuBarsService.Type;
 import org.apache.isis.core.config.IsisConfiguration;
@@ -47,14 +47,14 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.entity.EntityUiModel;
 import org.apache.isis.incubator.viewer.vaadin.model.menu.MenuSectionUiModel;
 import org.apache.isis.incubator.viewer.vaadin.model.menu.ServiceAndActionUiModel;
-import org.apache.isis.incubator.viewer.vaadin.ui.collection.TableView;
-import org.apache.isis.incubator.viewer.vaadin.ui.object.ObjectFormView;
+import org.apache.isis.incubator.viewer.vaadin.ui.auth.VaadinAuthenticationHandler;
+import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableView;
+import org.apache.isis.incubator.viewer.vaadin.ui.components.object.ObjectFormView;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -68,16 +68,20 @@ public class MainView extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;
 
+    private final transient VaadinAuthenticationHandler vaadinAuthenticationHandler;
+    
     /**
      * Constructs the main view of the web-application, with the menu-bar and page content. 
      */
     @Inject
     public MainView(
-            final IsisSessionFactory isisSessionFactory,
             final SpecificationLoader specificationLoader,
             final MetaModelContext metaModelContext,
-            final IsisConfiguration isisConfiguration
+            final IsisConfiguration isisConfiguration,
+            final VaadinAuthenticationHandler vaadinAuthenticationHandler 
     ) {
+        this.vaadinAuthenticationHandler = vaadinAuthenticationHandler;
+        
         val isisWebAppCommonContext = IsisWebAppCommonContext.of(metaModelContext);
 
         val menuBarsService = metaModelContext.getServiceRegistry()
@@ -93,7 +97,7 @@ public class MainView extends VerticalLayout {
         add(message);
         add(actionResult);
 
-        val menuSectionUiModels = buildMenuModel(log, isisWebAppCommonContext, bs3MenuBars);
+        val menuSectionUiModels = buildMenuModel(isisWebAppCommonContext, bs3MenuBars);
         log.warn("menu model:\n ");
         menuSectionUiModels.forEach(m -> log.warn("\t{}", m));
 
@@ -141,37 +145,59 @@ public class MainView extends VerticalLayout {
             final Div actionResult
     ) {
         return buttonClickEvent -> {
-            val actionOwner = a.getEntityUiModel().getManagedObject();
-            val result = objectAction
-                    .execute(
-                            actionOwner,
-                            null,
-                            Collections.emptyList(),
-                            InteractionInitiatedBy.USER
-                    );
+            
             actionResult.removeAll();
-            if (result.getSpecification().isParentedOrFreeCollection()) {
-                actionResult.add(new TableView(result));
-            } else {
-                actionResult.add(new ObjectFormView(result));
-            }
+            
+            val actionOwner = a.getEntityUiModel().getManagedObject();
+            
+            vaadinAuthenticationHandler.runAuthenticated(()->{ 
+                val result = objectAction
+                        .execute(
+                                actionOwner,
+                                null,
+                                Collections.emptyList(),
+                                InteractionInitiatedBy.USER
+                                );
+
+                if (result.getSpecification().isParentedOrFreeCollection()) {
+                    actionResult.add(new TableView(result));
+                } else {
+                    actionResult.add(new ObjectFormView(result));
+                }
+                
+            });
+            
         };
     }
 
-    // copied from org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions.ServiceActionUtil.buildMenu
     public static List<MenuSectionUiModel> buildMenuModel(
-            final Logger log,
             final IsisWebAppCommonContext commonContext,
             final BS3MenuBars menuBars
     ) {
 
-        // TODO handle menuBars.getSecondary(), menuBars.getTertiary()
-        val menuBar = menuBars.getPrimary();
+        val menuSections = new ArrayList<MenuSectionUiModel>();
+        
+
+        buildMenuModel(commonContext, menuBars.getPrimary(), menuSections::add);
+        
+        // TODO handle right alignment of menuBars.getSecondary(), menuBars.getTertiary()
+        buildMenuModel(commonContext, menuBars.getSecondary(), menuSections::add);
+        buildMenuModel(commonContext, menuBars.getTertiary(), menuSections::add);
+        
+        return menuSections;
+ 
+    }
+    
+    // partly copied from org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions.ServiceActionUtil.buildMenu
+    private static void buildMenuModel(
+            final IsisWebAppCommonContext commonContext,
+            final BS3MenuBar menuBar,
+            Consumer<MenuSectionUiModel> onMenuSection
+    ) {
 
         // we no longer use ServiceActionsModel#getObject() because the model only holds the services for the
         // menuBar in question, whereas the "Other" menu may reference a service which is defined for some other menubar
 
-        val menuSections = new ArrayList<MenuSectionUiModel>();
         for (val menu : menuBar.getMenus()) {
 
             val menuSectionUiModel = new MenuSectionUiModel(menu.getNamed());
@@ -222,10 +248,9 @@ public class MainView extends VerticalLayout {
                 }
             }
             if (menuSectionUiModel.hasSubMenuItems()) {
-                menuSections.add(menuSectionUiModel);
+                onMenuSection.accept(menuSectionUiModel);
             }
         }
-        return menuSections;
     }
 
 }

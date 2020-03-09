@@ -22,6 +22,8 @@ package org.apache.isis.incubator.viewer.vaadin.viewer;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import com.vaadin.flow.server.Constants;
 import com.vaadin.flow.spring.RootMappedCondition;
 import com.vaadin.flow.spring.SpringBootAutoConfiguration;
@@ -29,9 +31,7 @@ import com.vaadin.flow.spring.SpringServlet;
 import com.vaadin.flow.spring.VaadinConfigurationProperties;
 import com.vaadin.flow.spring.VaadinServletContextInitializer;
 import com.vaadin.flow.spring.VaadinWebsocketEndpointExporter;
-import com.vaadin.flow.spring.annotation.EnableVaadin;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -43,6 +43,8 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 import org.apache.isis.incubator.viewer.vaadin.ui.IsisModuleIncViewerVaadinUi;
+
+import lombok.val;
 
 /**
  * 
@@ -67,20 +69,8 @@ import org.apache.isis.incubator.viewer.vaadin.ui.IsisModuleIncViewerVaadinUi;
 public class IsisModuleIncViewerVaadinViewer {
     
     
-    @Autowired
-    private WebApplicationContext context;
-    @Autowired
-    private VaadinConfigurationProperties configurationProperties;
-
-    static String makeContextRelative(String url) {
-        // / -> context://
-        // foo -> context://foo
-        // /foo -> context://foo
-        if (url.startsWith("/")) {
-            url = url.substring(1);
-        }
-        return "context://" + url;
-    }
+    @Inject private WebApplicationContext context;
+    @Inject private VaadinConfigurationProperties configurationProperties;
 
     /**
      * Creates a {@link ServletContextInitializer} instance.
@@ -101,19 +91,17 @@ public class IsisModuleIncViewerVaadinViewer {
     public ServletRegistrationBean<SpringServlet> servletRegistrationBean() {
         String mapping = configurationProperties.getUrlMapping();
         final Map<String, String> initParameters = new HashMap<>();
-        final boolean rootMapping = RootMappedCondition.isRootMapping(mapping);
-        if (rootMapping) {
+        val isRootMapping = RootMappedCondition.isRootMapping(mapping);
+        if (isRootMapping) {
             mapping = "/vaadinServlet/*";
             initParameters.put(Constants.SERVLET_PARAMETER_PUSH_URL,
                     makeContextRelative(mapping.replace("*", "")));
         }
         final ServletRegistrationBean<SpringServlet> registration = new ServletRegistrationBean<>(
-                new SpringServlet(context, rootMapping), mapping);
+                new SpringServlet(context, isRootMapping), mapping);
         registration.setInitParameters(initParameters);
-        registration
-                .setAsyncSupported(configurationProperties.isAsyncSupported());
-        registration.setName(
-                ClassUtils.getShortNameAsProperty(SpringServlet.class));
+        registration.setAsyncSupported(configurationProperties.isAsyncSupported());
+        registration.setName(ClassUtils.getShortNameAsProperty(SpringServlet.class));
         return registration;
     }
 
@@ -125,6 +113,18 @@ public class IsisModuleIncViewerVaadinViewer {
     @Bean
     public ServerEndpointExporter websocketEndpointDeployer() {
         return new VaadinWebsocketEndpointExporter();
+    }
+    
+    // -- HELPER
+    
+    private static String makeContextRelative(String url) {
+        // / -> context://
+        // foo -> context://foo
+        // /foo -> context://foo
+        if (url.startsWith("/")) {
+            url = url.substring(1);
+        }
+        return "context://" + url;
     }
     
 }

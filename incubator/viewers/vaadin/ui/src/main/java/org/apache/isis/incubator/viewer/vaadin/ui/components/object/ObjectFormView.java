@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.vaadin.ui.object;
+package org.apache.isis.incubator.viewer.vaadin.ui.components.object;
 
 import java.io.ByteArrayInputStream;
 import java.util.Collection;
