@@ -208,13 +208,11 @@ for (property in data.properties) {
     }
 }
 
-def license = ":Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License."
+def license = "
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License."
 new File(outputDir).mkdirs()
 
 def bufNav = StringBuilder.newInstance()
-bufNav << """${license}"
-
-"""
 
 for (PropertyGroup group in groups) {
     def buf = StringBuilder.newInstance()
@@ -223,9 +221,9 @@ for (PropertyGroup group in groups) {
         bufNav << "** xref:refguide:config:sections/${group.fileName()}.adoc[${group.name}]\n"
 
         buf << """= ${group.name}
-${license}
 :page-role: -toc
 
+${license}
 
 include::../section-hooks/${group.fileName()}~pre.adoc[]
 
