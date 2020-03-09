@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Text;
@@ -37,18 +39,12 @@ import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
-import org.apache.isis.applib.layout.menubars.MenuSection;
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3Menu;
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
 import org.apache.isis.applib.services.menu.MenuBarsService.Type;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
@@ -72,28 +68,32 @@ public class MainView extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Constructs the main view of the web-application, with the menu-bar and page content. 
+     */
+    @Inject
     public MainView(
-            @Autowired final IsisSessionFactory isisSessionFactory,
-            @Autowired final SpecificationLoader specificationLoader,
-            @Autowired final MetaModelContext metaModelContext,
-            @Autowired final IsisConfiguration isisConfiguration
+            final IsisSessionFactory isisSessionFactory,
+            final SpecificationLoader specificationLoader,
+            final MetaModelContext metaModelContext,
+            final IsisConfiguration isisConfiguration
     ) {
-        final IsisWebAppCommonContext isisWebAppCommonContext = IsisWebAppCommonContext.of(metaModelContext);
+        val isisWebAppCommonContext = IsisWebAppCommonContext.of(metaModelContext);
 
-        final MenuBarsServiceBS3 menuBarsService = metaModelContext.getServiceRegistry()
+        val menuBarsService = metaModelContext.getServiceRegistry()
                 .lookupServiceElseFail(MenuBarsServiceBS3.class);
-        final BS3MenuBars bs3MenuBars = menuBarsService.menuBars(Type.DEFAULT);
+        val bs3MenuBars = menuBarsService.menuBars(Type.DEFAULT);
 
-        final MenuBar menuBar = new MenuBar();
-        final Text selectedMenuItem = new Text("");
-        final VerticalLayout actionResult = new VerticalLayout();
-        final Div message = new Div(new Text("Selected: "), selectedMenuItem);
+        val menuBar = new MenuBar();
+        val selectedMenuItem = new Text("");
+        val actionResult = new VerticalLayout();
+        val message = new Div(new Text("Selected: "), selectedMenuItem);
 
         add(menuBar);
         add(message);
         add(actionResult);
 
-        final List<MenuSectionUiModel> menuSectionUiModels = buildMenuModel(log, isisWebAppCommonContext, bs3MenuBars);
+        val menuSectionUiModels = buildMenuModel(log, isisWebAppCommonContext, bs3MenuBars);
         log.warn("menu model:\n ");
         menuSectionUiModels.forEach(m -> log.warn("\t{}", m));
 
@@ -113,7 +113,7 @@ public class MainView extends VerticalLayout {
             final SubMenu subMenu,
             final ServiceAndActionUiModel a
     ) {
-        final ObjectAction objectAction = a.getObjectAction();
+        val objectAction = a.getObjectAction();
         subMenu.addItem(objectAction.getName(),
                 e -> {
                     actionResultDiv.removeAll();
@@ -141,8 +141,8 @@ public class MainView extends VerticalLayout {
             final Div actionResult
     ) {
         return buttonClickEvent -> {
-            final ManagedObject actionOwner = a.getEntityUiModel().getManagedObject();
-            final ManagedObject result = objectAction
+            val actionOwner = a.getEntityUiModel().getManagedObject();
+            val result = objectAction
                     .execute(
                             actionOwner,
                             null,
@@ -166,46 +166,46 @@ public class MainView extends VerticalLayout {
     ) {
 
         // TODO handle menuBars.getSecondary(), menuBars.getTertiary()
-        final BS3MenuBar menuBar = menuBars.getPrimary();
+        val menuBar = menuBars.getPrimary();
 
         // we no longer use ServiceActionsModel#getObject() because the model only holds the services for the
         // menuBar in question, whereas the "Other" menu may reference a service which is defined for some other menubar
 
-        final List<MenuSectionUiModel> menuSections = new ArrayList<>();
-        for (final BS3Menu menu : menuBar.getMenus()) {
+        val menuSections = new ArrayList<MenuSectionUiModel>();
+        for (val menu : menuBar.getMenus()) {
 
-            final MenuSectionUiModel menuSectionUiModel = new MenuSectionUiModel(menu.getNamed());
+            val menuSectionUiModel = new MenuSectionUiModel(menu.getNamed());
 
-            for (final MenuSection menuSection : menu.getSections()) {
+            for (val menuSection : menu.getSections()) {
 
                 boolean isFirstSection = true;
 
-                for (final ServiceActionLayoutData actionLayoutData : menuSection.getServiceActions()) {
-                    val serviceSpecId = actionLayoutData.getObjectType();
+                for (val serviceActionLayoutData : menuSection.getServiceActions()) {
+                    val serviceSpecId = serviceActionLayoutData.getObjectType();
 
-                    final ManagedObject serviceAdapter = commonContext.lookupServiceAdapterById(serviceSpecId);
+                    val serviceAdapter = commonContext.lookupServiceAdapterById(serviceSpecId);
                     if (serviceAdapter == null) {
                         // service not recognized, presumably the menu layout is out of sync
                         // with actual configured modules
                         continue;
                     }
                     // TODO Wicket final EntityModel entityModel = EntityModel.ofAdapter(commonContext, serviceAdapter);
-                    final EntityUiModel entityUiModel =
+                    val entityUiModel =
                             new EntityUiModel(commonContext, serviceAdapter);
 
-                    final ObjectAction objectAction =
+                    val objectAction =
                             serviceAdapter
                                     .getSpecification()
-                                    .getObjectAction(actionLayoutData.getId())
+                                    .getObjectAction(serviceActionLayoutData.getId())
                                     .orElse(null);
                     if (objectAction == null) {
-                        log.warn("No such action {}", actionLayoutData.getId());
+                        log.warn("No such action {}", serviceActionLayoutData.getId());
                         continue;
                     }
-                    final ServiceAndActionUiModel serviceAndActionUiModel =
+                    val serviceAndActionUiModel =
                             new ServiceAndActionUiModel(
                                     entityUiModel,
-                                    actionLayoutData.getNamed(),
+                                    serviceActionLayoutData.getNamed(),
                                     objectAction,
                                     isFirstSection);
 

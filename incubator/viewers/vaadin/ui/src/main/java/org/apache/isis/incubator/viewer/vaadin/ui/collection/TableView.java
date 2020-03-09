@@ -18,7 +18,6 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.ui.collection;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 import com.vaadin.flow.component.grid.Grid;
@@ -26,18 +25,24 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+
+import lombok.val;
 
 public class TableView extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Constructs a (page-able) {@link Grid} from given {@code collection}  
+     * @param collection of (wrapped) domain objects
+     */
     public TableView(final ManagedObject collection) {
-        final ObjectSpecification assocObjectSpecification = collection.getSpecification();
-        final CollectionFacet facet = assocObjectSpecification.getFacet(CollectionFacet.class);
-        final List<ManagedObject> objects = facet.stream(collection).collect(Collectors.toList());
-
-        final Grid<ManagedObject> objectGrid = new Grid<>();
+        val collectionFacet = collection.getSpecification()
+                .getFacet(CollectionFacet.class);
+        val objects = collectionFacet.stream(collection)
+                .collect(Collectors.toList());
+        
+        val objectGrid = new Grid<ManagedObject>();
         objectGrid.setItems(objects);
         add(objectGrid);
     }

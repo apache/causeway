@@ -37,43 +37,48 @@ import com.vaadin.flow.server.StreamResource;
 
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+
+import lombok.val;
 
 public class ObjectFormView extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;
     
-    public static final String NULL = "<NULL>";
+    private static final String NULL_LITERAL = "<NULL>";
 
+    /**
+     * Constructs given domain object's view, with all its visible members and actions.
+     * @param managedObject - domain object
+     */
     public ObjectFormView(final ManagedObject managedObject) {
-        final ObjectSpecification specification = managedObject.getSpecification();
-        final String title = specification.getTitle(null, managedObject);
+        val specification = managedObject.getSpecification();
+        val title = specification.getTitle(null, managedObject);
         add(new H1(title));
 
-        final List<? extends ObjectAssociation> objectAssociations = specification
+        val objectAssociations = specification
                 .streamAssociations(Contributed.INCLUDED)
                 .filter(ObjectMember::isPropertyOrCollection)
                 .collect(Collectors.toList());
-        final FormLayout formLayout = new FormLayout();
-        final VerticalLayout tables = new VerticalLayout();
+        val formLayout = new FormLayout();
+        val tablesLayout = new VerticalLayout();
         objectAssociations.forEach(objectAssociation -> {
-            final ManagedObject assocObject = objectAssociation.get(managedObject);
+            val assocObject = objectAssociation.get(managedObject);
             if (assocObject == null) {
                 formLayout.add(createErrorField(objectAssociation, "assoc. object is null: "));
                 return;
             }
-            final ObjectSpecification propSpec = assocObject.getSpecification();
+            val propSpec = assocObject.getSpecification();
             switch (propSpec.getBeanSort()) {
             case VALUE: {
                 formLayout.add(createValueField(objectAssociation, assocObject));
                 break;
             }
             case COLLECTION: {
-                tables.add(new Label(objectAssociation.getName()));
-                tables.add(createCollectionComponent(objectAssociation, assocObject));
+                tablesLayout.add(new Label(objectAssociation.getName()));
+                tablesLayout.add(createCollectionComponent(objectAssociation, assocObject));
                 break;
             }
             case VIEW_MODEL:
@@ -82,9 +87,9 @@ public class ObjectFormView extends VerticalLayout {
             case MANAGED_BEAN_NOT_CONTRIBUTING:
             case MIXIN:
             case UNKNOWN:
-            default: {
-                final String value = propSpec.toString();
-                final TextField textField = new TextField(value);
+            default: 
+                val stringValue = propSpec.toString();
+                val textField = new TextField(stringValue);
                 textField.setLabel(
                         "Unhandled kind assoc.: " + propSpec.getBeanSort() + " " + objectAssociation.getName());
                 textField.setValue(propSpec.toString());
@@ -92,25 +97,26 @@ public class ObjectFormView extends VerticalLayout {
                 formLayout.add(textField);
                 break;
             }
-            }
         });
 
         add(formLayout);
         add(new H3("Tables"));
-        add(tables);
+        add(tablesLayout);
         setWidthFull();
 
     }
+    
+    // -- HELPER
 
     private Component createErrorField(final ObjectAssociation objectAssociation, final String error) {
         return createErrorField("Error:" + objectAssociation.getName(),
                 error + objectAssociation.toString());
     }
 
-    private Component createErrorField(final String s, final String s2) {
-        final TextField textField = new TextField();
-        textField.setLabel(s);
-        textField.setValue(s2);
+    private Component createErrorField(final String label, final String message) {
+        val textField = new TextField();
+        textField.setLabel(label);
+        textField.setValue(message);
         return textField;
     }
 
@@ -118,11 +124,11 @@ public class ObjectFormView extends VerticalLayout {
             final ObjectAssociation objectAssociation,
             final ManagedObject assocObject
     ) {
-        final ObjectSpecification assocObjectSpecification = assocObject.getSpecification();
-        final CollectionFacet collectionFacet = assocObjectSpecification.getFacet(CollectionFacet.class);
+        val assocObjectSpecification = assocObject.getSpecification();
+        val collectionFacet = assocObjectSpecification.getFacet(CollectionFacet.class);
 
-        final String label = "Collection:" + objectAssociation.getName();
-        final Object pojo = assocObject.getPojo();
+        val labelLiteral = "Collection: " + objectAssociation.getName();
+        val pojo = assocObject.getPojo();
         if (pojo instanceof Collection) {
 
             final List<ManagedObject> objects = collectionFacet.stream(assocObject).collect(Collectors.toList());
@@ -135,24 +141,22 @@ public class ObjectFormView extends VerticalLayout {
             //            }
             //            listBox.setItemLabelGenerator(o -> o.titleString(null));
 
-            final Grid<ManagedObject> objectGrid = new Grid<>();
+            val objectGrid = new Grid<ManagedObject>();
             if (objects.isEmpty()) {
                 return objectGrid;
             }
-            final ManagedObject firstObject = objects.get(0);
-            final List<ObjectAssociation> properties = firstObject.getSpecification()
-                    .streamAssociations(Contributed.INCLUDED)
-                    .filter(m -> m.getFeatureType().isProperty())
-                    .collect(Collectors.toList());
-            properties.forEach(p -> {
-                final Grid.Column<ManagedObject> column = objectGrid.addColumn(managedObject -> {
-                    final ManagedObject managedObject1 = p.get(managedObject);
-                    if (managedObject1 == null) {
-                        return NULL;
-                    }
-                    return managedObject1.titleString();
-                });
-                column.setHeader(p.getName());
+            val firstObject = objects.get(0);
+            firstObject.getSpecification()
+            .streamAssociations(Contributed.INCLUDED)
+            .filter(assoc -> assoc.getFeatureType().isProperty())
+            .forEach(property -> {
+                objectGrid.addColumn(targetObject -> {
+                    val propertyValue = property.get(targetObject);
+                    return propertyValue == null 
+                            ? NULL_LITERAL
+                            : propertyValue.titleString();
+                })
+                .setHeader(property.getName());
             });
             objectGrid.setItems(objects);
             objectGrid.recalculateColumnWidths();
@@ -161,17 +165,16 @@ public class ObjectFormView extends VerticalLayout {
         }
 
         if (pojo == null) {
-            final TextField textField = new TextField();
-            textField.setLabel(label);
+            val textField = new TextField();
+            textField.setLabel(labelLiteral);
 
-            textField.setValue("<NULL>");
+            textField.setValue(NULL_LITERAL);
             return textField;
         }
 
-        final TextField textField = new TextField();
-        textField.setLabel(label);
-
-        textField.setValue("Unknown collection type:" + pojo.getClass());
+        val textField = new TextField();
+        textField.setLabel(labelLiteral);
+        textField.setValue("Unknown collection type: " + pojo.getClass());
         return textField;
     }
 
@@ -185,23 +188,23 @@ public class ObjectFormView extends VerticalLayout {
         //            new Image(aByte);
         //            return null;
         //        }
-        final String description = assocObject.getSpecification().streamFacets()
+        val description = assocObject.getSpecification().streamFacets()
                 .map(facet -> facet.getClass().getName())
                 .collect(Collectors.joining("\n"));
 
-        final TextField textField = createTextField(association, assocObject);
+        val textField = createTextField(association, assocObject);
         //        Tooltips.getCurrent().setTooltip(textField, description);
         return textField;
     }
 
     private Image convertToImage(final byte[] imageData) {
-        final StreamResource streamResource = new StreamResource("isr",
+        val streamResource = new StreamResource("isr",
                 (InputStreamFactory) () -> new ByteArrayInputStream(imageData));
         return new Image(streamResource, "photo");
     }
 
     private TextField createTextField(final ObjectAssociation association, final ManagedObject assocObject) {
-        final TextField textField = new TextField();
+        val textField = new TextField();
         textField.setLabel(association.getName());
         textField.setValue(assocObject.titleString(null));
         return textField;
