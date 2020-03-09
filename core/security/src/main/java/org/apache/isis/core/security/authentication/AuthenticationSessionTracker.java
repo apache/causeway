@@ -33,7 +33,9 @@ public interface AuthenticationSessionTracker {
     default AuthenticationSession getAuthenticationSessionElseFail() {
         return currentAuthenticationSession()
                 .orElseThrow(()->
-                    _Exceptions.illegalState("no AuthenticationSession available with current thread"));
+                    _Exceptions.illegalState(
+                            "no AuthenticationSession available with current thread %s", 
+                            Thread.currentThread().getName()));
     }
     
     default Optional<MessageBroker> currentMessageBroker() {

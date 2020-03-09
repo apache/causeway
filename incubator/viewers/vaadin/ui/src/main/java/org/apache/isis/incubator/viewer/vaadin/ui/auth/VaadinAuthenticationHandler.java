@@ -18,7 +18,6 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.ui.auth;
 
-import java.util.Collections;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 
@@ -32,6 +31,7 @@ import com.vaadin.flow.server.VaadinSession;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.session.IsisSessionFactory.ThrowingRunnable;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
@@ -75,9 +75,18 @@ public class VaadinAuthenticationHandler implements VaadinServiceInitListener {
         // TODO yet does successfully login 'sven' regardless of arguments
         VaadinSession.getCurrent().setAttribute(
                 AuthenticationSession.class, 
-                new SimpleSession("sven", Collections.emptyList()));
+                new SimpleSession("sven", _Lists.of("isis-module-security-admin")));
         return true;
     }
+    
+    public void logoutFromSession() {
+        currentAuthenticationSession()
+        .ifPresent(authSession->{
+            log.info("logging out {}", authSession.getUserName());
+            VaadinSession.getCurrent().setAttribute(AuthenticationSession.class, null);
+        });
+        VaadinSession.getCurrent().close();
+    } 
 
     public static Optional<AuthenticationSession> currentAuthenticationSession() {
         return Optional.ofNullable(VaadinSession.getCurrent().getAttribute(
@@ -100,7 +109,6 @@ public class VaadinAuthenticationHandler implements VaadinServiceInitListener {
     
     /**
      * Variant of {@link #callAuthenticated(Callable)} that takes a runnable.
-     * @param authenticationSession
      * @param runnable
      */
     public void runAuthenticated(ThrowingRunnable runnable) {

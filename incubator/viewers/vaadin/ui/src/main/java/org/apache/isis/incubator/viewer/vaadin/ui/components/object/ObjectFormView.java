@@ -151,6 +151,10 @@ public class ObjectFormView extends VerticalLayout {
             .filter(assoc -> assoc.getFeatureType().isProperty())
             .forEach(property -> {
                 objectGrid.addColumn(targetObject -> {
+                    // TODO call to property.get(...) requires an IsisSession,
+                    // not sure if we want to spawn a new session for each such call.
+                    // maybe we open an IsisSession earlier, to have this table/grid built 
+                    // within a single IsisSession 
                     val propertyValue = property.get(targetObject);
                     return propertyValue == null 
                             ? NULL_LITERAL
