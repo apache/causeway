@@ -59,7 +59,6 @@ import lombok.extern.log4j.Log4j2;
 
 @Route()
 @JsModule("@vaadin/vaadin-lumo-styles/presets/compact.js")
-@JsModule("./contextMenuConnector.js")
 //@Theme(value = Material.class, variant = Material.DARK)
 @Theme(value = Lumo.class)
 @Log4j2
