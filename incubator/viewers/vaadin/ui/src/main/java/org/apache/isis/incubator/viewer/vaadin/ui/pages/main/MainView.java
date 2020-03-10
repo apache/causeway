@@ -78,14 +78,13 @@ public class MainView extends VerticalLayout {
             final SpecificationLoader specificationLoader,
             final MetaModelContext metaModelContext,
             final IsisConfiguration isisConfiguration,
-            final VaadinAuthenticationHandler vaadinAuthenticationHandler 
+            final VaadinAuthenticationHandler vaadinAuthenticationHandler,
+            final MenuBarsServiceBS3 menuBarsService
     ) {
         this.vaadinAuthenticationHandler = vaadinAuthenticationHandler;
         
-        val isisWebAppCommonContext = IsisWebAppCommonContext.of(metaModelContext);
-
-        val menuBarsService = metaModelContext.getServiceRegistry()
-                .lookupServiceElseFail(MenuBarsServiceBS3.class);
+        val commonContext = IsisWebAppCommonContext.of(metaModelContext);
+        
         val bs3MenuBars = menuBarsService.menuBars(Type.DEFAULT);
 
         val menuBar = new MenuBar();
@@ -97,7 +96,7 @@ public class MainView extends VerticalLayout {
         add(message);
         add(actionResult);
 
-        val menuSectionUiModels = buildMenuModel(isisWebAppCommonContext, bs3MenuBars);
+        val menuSectionUiModels = buildMenuModel(commonContext, bs3MenuBars);
         log.warn("menu model:\n ");
         menuSectionUiModels.forEach(m -> log.warn("\t{}", m));
 
