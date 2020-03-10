@@ -93,7 +93,7 @@ public class VaadinLoginView extends VerticalLayout {
     private void addTitleAndLogo(IsisConfiguration isisConfiguration, WebAppContextPath webAppContextPath) {
         //TODO application name/logo borrowed from Wicket's configuration
         val applicationName = isisConfiguration.getViewer().getWicket().getApplication().getName();
-        val applicationLogo = isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoHeader();
+        val applicationLogo = isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoSignin();
         
         applicationLogo.ifPresent(logoUrl->{
             add(new Image(webAppContextPath.prependContextPathIfLocal(logoUrl), "logo"));    

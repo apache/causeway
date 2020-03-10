@@ -123,8 +123,9 @@ public class VaadinAuthenticationHandler implements VaadinServiceInitListener {
         val targetView = event.getNavigationTarget();
         log.info("Detected a routing event to {}", targetView);
         
-        if(currentAuthenticationSession().isPresent()) {
-            isisSessionFactory.openSession(currentAuthenticationSession().get());
+        val authSession = currentAuthenticationSession().orElse(null);
+        if(authSession!=null) {
+            isisSessionFactory.openSession(authSession);
             return; // access granted
         }
         if(!VaadinLoginView.class.equals(targetView)) {

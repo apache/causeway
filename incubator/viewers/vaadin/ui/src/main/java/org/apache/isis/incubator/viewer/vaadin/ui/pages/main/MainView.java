@@ -170,13 +170,11 @@ public class MainView extends VerticalLayout {
         };
     }
 
-    public static List<MenuSectionUiModel> buildMenuModel(
+    private List<MenuSectionUiModel> buildMenuModel(
             final IsisWebAppCommonContext commonContext,
             final BS3MenuBars menuBars
     ) {
-
         val menuSections = new ArrayList<MenuSectionUiModel>();
-        
 
         buildMenuModel(commonContext, menuBars.getPrimary(), menuSections::add);
         
@@ -188,8 +186,8 @@ public class MainView extends VerticalLayout {
  
     }
     
-    // partly copied from org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions.ServiceActionUtil.buildMenu
-    private static void buildMenuModel(
+    // initially copied from org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions.ServiceActionUtil.buildMenu
+    private void buildMenuModel(
             final IsisWebAppCommonContext commonContext,
             final BS3MenuBar menuBar,
             Consumer<MenuSectionUiModel> onMenuSection
