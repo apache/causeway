@@ -170,7 +170,7 @@
 
 		<togglz.version>2.1.0.Final</togglz.version>
 
-		<vaadin.version>14.1.17</vaadin.version>
+		<vaadin.version>14.1.18</vaadin.version>
 
 		<wicket.version>8.7.0</wicket.version>
 		<wicket-bootstrap.version>2.0.11</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap-core -->

@@ -42,11 +42,9 @@ import com.vaadin.flow.theme.lumo.Lumo;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
 import org.apache.isis.applib.services.menu.MenuBarsService.Type;
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.entity.EntityUiModel;
@@ -61,6 +59,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Route()
 @JsModule("@vaadin/vaadin-lumo-styles/presets/compact.js")
+@JsModule("./contextMenuConnector.js")
 //@Theme(value = Material.class, variant = Material.DARK)
 @Theme(value = Lumo.class)
 @Log4j2
@@ -75,9 +74,7 @@ public class MainView extends VerticalLayout {
      */
     @Inject
     public MainView(
-            final SpecificationLoader specificationLoader,
             final MetaModelContext metaModelContext,
-            final IsisConfiguration isisConfiguration,
             final VaadinAuthenticationHandler vaadinAuthenticationHandler,
             final MenuBarsServiceBS3 menuBarsService
     ) {
@@ -103,8 +100,8 @@ public class MainView extends VerticalLayout {
         menuSectionUiModels.forEach(sectionUiModel -> {
                     final MenuItem menuItem = menuBar.addItem(sectionUiModel.getName());
                     final SubMenu subMenu = menuItem.getSubMenu();
-                    sectionUiModel.getServiceAndActionUiModels().forEach(a ->
-                            createActionOverviewAndBindRunAction(selectedMenuItem, actionResult, subMenu, a));
+                    sectionUiModel.getServiceAndActionUiModels().forEach(saModel ->
+                            createActionOverviewAndBindRunAction(selectedMenuItem, actionResult, subMenu, saModel));
                 }
         );
         setWidthFull();
@@ -114,9 +111,9 @@ public class MainView extends VerticalLayout {
             final Text selected,
             final VerticalLayout actionResultDiv,
             final SubMenu subMenu,
-            final ServiceAndActionUiModel a
+            final ServiceAndActionUiModel saModel
     ) {
-        val objectAction = a.getObjectAction();
+        val objectAction = saModel.getObjectAction();
         subMenu.addItem(objectAction.getName(),
                 e -> {
                     actionResultDiv.removeAll();
@@ -130,7 +127,7 @@ public class MainView extends VerticalLayout {
                     actionResult.setWidthFull();
 
                     if (objectAction.isAction() && objectAction.getParameters().isEmpty()) {
-                        actionResultDiv.add(new Button("run", executeAndHandleResultAction(a, objectAction, actionResult)));
+                        actionResultDiv.add(new Button("run", executeAndHandleResultAction(saModel, objectAction, actionResult)));
                         actionResultDiv.add(actionResult);
                     }
                     actionResultDiv.setWidthFull();
@@ -139,7 +136,7 @@ public class MainView extends VerticalLayout {
     }
 
     private ComponentEventListener<ClickEvent<Button>> executeAndHandleResultAction(
-            final ServiceAndActionUiModel a,
+            final ServiceAndActionUiModel saModel,
             final ObjectAction objectAction,
             final Div actionResult
     ) {
@@ -147,7 +144,7 @@ public class MainView extends VerticalLayout {
             
             actionResult.removeAll();
             
-            val actionOwner = a.getEntityUiModel().getManagedObject();
+            val actionOwner = saModel.getEntityUiModel().getManagedObject();
             
             vaadinAuthenticationHandler.runAuthenticated(()->{ 
                 val result = objectAction
