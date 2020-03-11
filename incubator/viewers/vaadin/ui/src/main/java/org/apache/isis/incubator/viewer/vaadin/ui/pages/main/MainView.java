@@ -29,7 +29,6 @@ import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.contextmenu.SubMenu;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Div;
@@ -93,12 +92,12 @@ public class MainView extends VerticalLayout {
         add(actionResult);
 
         val menuSectionUiModels = buildMenuModel(commonContext, bs3MenuBars);
-        log.warn("menu model:\n ");
-        menuSectionUiModels.forEach(m -> log.warn("\t{}", m));
+//        log.warn("menu model:\n ");
+//        menuSectionUiModels.forEach(m -> log.warn("\t{}", m));
 
         menuSectionUiModels.forEach(sectionUiModel -> {
-                    final MenuItem menuItem = menuBar.addItem(sectionUiModel.getName());
-                    final SubMenu subMenu = menuItem.getSubMenu();
+                    val menuItem = menuBar.addItem(sectionUiModel.getName());
+                    val subMenu = menuItem.getSubMenu();
                     sectionUiModel.getServiceAndActionUiModels().forEach(saModel ->
                             createActionOverviewAndBindRunAction(selectedMenuItem, actionResult, subMenu, saModel));
                 }

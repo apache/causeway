@@ -20,7 +20,6 @@
 package org.apache.isis.incubator.viewer.vaadin.viewer;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -79,6 +78,7 @@ public class IsisModuleIncViewerVaadinViewer {
      */
     @Bean
     public ServletContextInitializer contextInitializer() {
+        System.err.println("!!! contextInitializer");
         return new VaadinServletContextInitializer(context);
     }
 
@@ -89,16 +89,16 @@ public class IsisModuleIncViewerVaadinViewer {
      */
     @Bean
     public ServletRegistrationBean<SpringServlet> servletRegistrationBean() {
-        String mapping = configurationProperties.getUrlMapping();
-        final Map<String, String> initParameters = new HashMap<>();
-        val isRootMapping = RootMappedCondition.isRootMapping(mapping);
+        String urlMapping = configurationProperties.getUrlMapping();
+        val initParameters = new HashMap<String, String>();
+        val isRootMapping = RootMappedCondition.isRootMapping(urlMapping);
         if (isRootMapping) {
-            mapping = "/vaadinServlet/*";
+            urlMapping = "/vaadinServlet/*";
             initParameters.put(Constants.SERVLET_PARAMETER_PUSH_URL,
-                    makeContextRelative(mapping.replace("*", "")));
+                    makeContextRelative(urlMapping.replace("*", "")));
         }
-        final ServletRegistrationBean<SpringServlet> registration = new ServletRegistrationBean<>(
-                new SpringServlet(context, isRootMapping), mapping);
+        val registration = new ServletRegistrationBean<SpringServlet>(
+                new SpringServlet(context, isRootMapping), urlMapping);
         registration.setInitParameters(initParameters);
         registration.setAsyncSupported(configurationProperties.isAsyncSupported());
         registration.setName(ClassUtils.getShortNameAsProperty(SpringServlet.class));
