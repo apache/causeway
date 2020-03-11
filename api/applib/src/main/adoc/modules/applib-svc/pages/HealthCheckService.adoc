@@ -4,14 +4,9 @@
 :page-partial:
 
 
-This service integrates with Spring Boot's link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/actuate/health/HealthIndicator.html[HealthIndicator] SPI, surfaced through the link:https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-features.html[Spring Boot Actuator].
+This SPI service integrates with Spring Boot's link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/actuate/health/HealthIndicator.html[HealthIndicator] SPI, surfaced through the link:https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-features.html[Spring Boot Actuator].
 
-WARNING: TODO: v2: update - rest of this documentation is out of date.
-
-
-
-This service, if implemented, is used to performs a health check to determine if the application is still available.
-The results of this service are made available through a REST resource, typically mounted at `/restful/health`.
+This is accessible from the `/actuator/health` endpoint.
 
 The service, when called, will be within the context of a special internal user `__health` with the internal role `__health-role`.
 
@@ -19,7 +14,7 @@ This service was introduced to allow deployment infrastructure to monitor the ap
 For example, if deploying to Docker then both Docker Swarm and Kubernetes are orchestrators that can perform this task.
 
 
-== SPI & Implementation
+== SPI
 
 The SPI defined by `HealthCheckService` is:
 
@@ -28,7 +23,9 @@ The SPI defined by `HealthCheckService` is:
 include::refguide:applib-svc:example$services/health/HealthCheckService.java[tags="refguide"]
 ----
 
-There is no default implementation, but the xref:docs:starters:simpleapp.adoc[simpleapp] starter app provides a sample implementation:
+== Implementation
+
+The framework provides no default implementation, but the xref:docs:starters:simpleapp.adoc[simpleapp] starter app provides a sample implementation:
 
 [source,java]
 ----
@@ -56,4 +53,7 @@ public class HealthCheckServiceImpl implements HealthCheckService {
 }
 ----
 
+== Related Services
+
+The internal domain service `o.a.i.core.webapp.health.HealthIndicatorUsingHealthCheckService` acts as the bridge between Spring and the `HealthCheckService' SPI.
 
