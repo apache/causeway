@@ -3,6 +3,7 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
+WARNING: TODO - to review for v2.
 
 
 The `EmailNotificationService` supports the xref:vw:ROOT:features.adoc#user-registration[user registration] (self sign-up) features of the xref:vw:ROOT:about.adoc[Wicket viewer] whereby a user can sign-up to access an application by providing a valid email address.
@@ -21,20 +22,13 @@ The SPI defined by this service is:
 
 [source,java]
 ----
-public interface EmailNotificationService extends Serializable {
-    @Programmatic
-    boolean send(EmailRegistrationEvent ev);    // <1>
-    @Programmatic
-    boolean send(PasswordResetEvent ev);        // <2>
-    @Programmatic
-    boolean isConfigured();                     // <3>
-}
+include::refguide:applib-svc:example$services/userreg/EmailNotificationService.java[tags="refguide"]
 ----
-<1> sends an email to verify an email address as part of the initial user registration
-<2> sends an email to reset a password for an already-registered user
-<3> determines whether the implementation was configured and initialized correctly
+<.> sends an email to verify an email address as part of the initial user registration
+<.> sends an email to reset a password for an already-registered user
+<.> determines whether the implementation was configured and initialized correctly
 
-If `isConfigured()` returns false then it is _not_ valid to call `send(...)` (and doing so will result in an `IllegalStateException` being thrown.
+If `isConfigured()` returns false then it is _not_ valid to call `send(...)` (and doing so will result in an `IllegalStateException` being thrown).
 
 == Implementation
 

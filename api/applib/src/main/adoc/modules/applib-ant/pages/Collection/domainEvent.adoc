@@ -78,8 +78,10 @@ Subscribers can be either coarse-grained (if they subscribe to the top-level eve
 
 [source,java]
 ----
-@DomainService(nature=NatureOfService.DOMAIN)
-public class SomeSubscriber extends AbstractSubscriber {
+import org.springframework.stereotype.Service;
+
+@Service
+public class SomeSubscriber {
     @com.google.common.eventbus.Subscribe
     public void on(CollectionDomainEvent ev) {
         ...
@@ -92,9 +94,10 @@ or can be fine-grained (by subscribing to specific event subtypes):
 [source,java]
 ----
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
-@DomainService(nature=NatureOfService.DOMAIN)
-public class SomeSubscriber extends AbstractSubscriber {
+@Service
+public class SomeSubscriber {
     @EventListener(ToDoItem.DependenciesChangedEvent.class)
     public void on(ToDoItem.DependenciesChangedEvent ev) {
         ...

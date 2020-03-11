@@ -11,5 +11,5 @@ See also xref:refguide:applib-cm:methods.adoc#persisting[`persisting()`].
 
 [TIP]
 ====
-Alternatively, consider using a xref:refguide:applib-svc:EventBusService.adoc[event bus] xref:refguide:applib-cm:classes.adoc#AbstractSubscriber[subscriber] on the xref:refguide:applib-cm:classes.adoc#ObjectPersistedEvent[`ObjectPersistedEvent`].
+Alternatively, consider using a xref:refguide:applib-svc:EventBusService.adoc[event bus] subscriber on the xref:refguide:applib-cm:classes.adoc#ObjectPersistedEvent[`ObjectPersistedEvent`].
 ====

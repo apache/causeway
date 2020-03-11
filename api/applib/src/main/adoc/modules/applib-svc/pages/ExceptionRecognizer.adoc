@@ -3,8 +3,10 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
+WARNING: TODO - to review for v2.
 
-The `ExceptionRecognizer` service provides the mechanism for both the domain programmer and also for components to be able to recognize and handle certain exceptions that may be thrown by the system.
+
+The `ExceptionRecognizer` SPI provides the mechanism for both the domain programmer and also for components to be able to recognize and handle certain exceptions that may be thrown by the system.
 Rather than display an obscure error to the end-user, the application can instead display a user-friendly message.
 
 For example, the JDO/DataNucleus Objectstore provides a set of recognizers to recognize and handle SQL constraint exceptions such as uniqueness violations.
@@ -22,54 +24,29 @@ The SPI defined by this service is:
 
 [source,java]
 ----
-public interface ExceptionRecognizer ... {
-    public enum Category {                          // <1>
-        ...
-    }
-    public static class Recognition {               // <2>
-        private Category category;
-        private String reason;
-        ...
-    }
-    @Programmatic
-    public Recognition recognize2(Throwable ex);    // <3>
-
-    @Deprecated
-    @Programmatic
-    public String recognize(Throwable ex);          // <4>
-
-}
+include::refguide:applib-svc:example$services/exceprecog/ExceptionRecognizer.java[tags="refguide"]
 ----
-<1> an enumeration of varies categories of exceptions that are recognised
-<2> represents the fact that an exception has been recognized as has been converted into a user-friendy message, and has been categorized
-<3> the main API, to attempt to recognize an exception
-<4> deprecated API which converted exceptions into strings (reasons), ie without any categorization.
-This is no longer called.
+<.> the main API, to attempt to recognize an exception
 
-
-The categories are:
+where `Recognition` translates the recognized exception into a form that can be handled by the framework:
 
 [source,java]
 ----
-public interface ExceptionRecognizer ... {
-    public enum Category {
-        CONSTRAINT_VIOLATION,           // <1>
-        NOT_FOUND,                      // <2>
-        CONCURRENCY,                    // <3>
-        CLIENT_ERROR,                   // <4>
-        SERVER_ERROR,                   // <5>
-        OTHER                           // <6>
-    }
-    ...
-}
-
+include::refguide:applib-svc:example$services/exceprecog/ExceptionRecognizer.java[tags="refguide-2",indent=0]
 ----
-<1> a violation of some declarative constraint (eg uniqueness or referential integrity) was detected.
-<2> the object to be acted upon cannot be found (404)
-<3> a concurrency exception, in other words some other user has changed this object.
-<4> recognized, but for some other reason... 40x error
-<5> 50x error
-<6> recognized, but uncategorized (typically: a recognizer of the original `ExceptionRecognizer` API).
+
+and `Category` in turn is an enumeration of the various types of exceptions that are recognised:
+
+[source,java]
+----
+include::refguide:applib-svc:example$services/exceprecog/ExceptionRecognizer.java[tags="refguide-1",indent=0]
+----
+<.> a violation of some declarative constraint (eg uniqueness or referential integrity) was detected.
+<.> the object to be acted upon cannot be found (404)
+<.> a concurrency exception, in other words some other user has changed this object.
+<.> recognized, but for some other reason... 40x error
+<.> 50x error
+<.> recognized, but uncategorized.
 
 
 In essence, if an exception is recognized then it is also categorized.

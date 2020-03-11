@@ -27,7 +27,7 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.session.init.InitialisationSession;
 
-public class IsisSessionScoped implements BeforeEachCallback, AfterEachCallback {
+public class IsisSessionHandler implements BeforeEachCallback, AfterEachCallback {
 
     @Override
     public void beforeEach(ExtensionContext extensionContext) throws Exception {

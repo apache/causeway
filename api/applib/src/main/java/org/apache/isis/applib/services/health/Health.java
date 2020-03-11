@@ -40,6 +40,6 @@ public class Health {
     @Getter
     private final Throwable cause;
 
-    public boolean getResult() { return message == null; }
+    public boolean getResult() { return message == null || cause == null; }
 }
 // end::refguide[]

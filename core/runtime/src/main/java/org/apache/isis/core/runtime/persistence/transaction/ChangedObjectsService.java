@@ -47,6 +47,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+// tag::refguide[]
 @Service
 @Named("isisRuntime.ChangedObjectsService")
 @Order(OrderPrecedence.EARLY)
@@ -54,7 +55,6 @@ import lombok.extern.log4j.Log4j2;
 @Qualifier("Default")
 @IsisSessionScope
 @Log4j2
-// tag::refguide[]
 public class ChangedObjectsService implements TransactionScopeListener {
 
     // end::refguide[]

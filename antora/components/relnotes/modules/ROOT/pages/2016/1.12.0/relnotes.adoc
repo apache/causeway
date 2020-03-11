@@ -20,7 +20,7 @@ In addition, the link:https://isis.apache.org/versions/1.12.0/guides/rgsvc/rgsvc
 
 The release also includes a number of new mixins, to automatically surface in the UI an entity's id, version (if any), and to download the layout XML and rebuild the metamodel for a given domain entity.
 There is also a mixin to clear any UI hints (part of the file-based layouts functionality).
-In all cases these mixins can be hidden using either security or by writing a link:https://isis.apache.org/versions/1.12.0/guides/rgcms/rgcms.html#_rgcms_classes_super_AbstractSubscriber[subscriber] to veto the visibility of the corresponding domain event.
+In all cases these mixins can be hidden using either security or by writing a subscriber to veto the visibility of the corresponding domain event.
 
 
 

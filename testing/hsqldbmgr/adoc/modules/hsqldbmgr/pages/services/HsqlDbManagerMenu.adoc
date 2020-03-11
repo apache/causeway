@@ -33,9 +33,10 @@ The menu can be hidden or disabled by subscribing to its domain event, eg:
 [source,java]
 ----
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
-@DomainService(nature=DOMAIN)
-public class HideHsqlDbManagerMenu extends AbstractSubscriber {
+@Service
+public class HideHsqlDbManagerMenu {
 
     @EventListener(HsqlDbManagerMenu.ActionDomainEvent.class)
     public void on(HsqlDbManagerMenu.ActionDomainEvent ev) {

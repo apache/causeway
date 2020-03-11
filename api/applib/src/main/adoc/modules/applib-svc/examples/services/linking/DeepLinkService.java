@@ -39,7 +39,7 @@ public interface DeepLinkService {
      * Isis viewers.
      */
     // tag::refguide[]
-    URI deepLinkFor(Object domainObject);
+    URI deepLinkFor(Object domainObject);   // <.>
 
 }
 // end::refguide[]

@@ -25,9 +25,10 @@ We can then define a subscribing domain service that leverage this.
 [source,java]
 ----
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
-@DomainService(nature = NatureOfService.DOMAIN)
-public class TitlingService extends AbstractSubscriber {
+@Service
+public class TitlingService {
 
     @EventListener(ObjectPersistingEvent.class)
     public void on(ObjectPersistingEvent ev) {
@@ -56,8 +57,10 @@ It is also possible to accomplish this by accessing the JDO API directly:
 
 [source,java]
 ----
-@RequestScoped
-@DomainService(nature = NatureOfService.DOMAIN)
+import org.springframework.stereotype.Service;
+
+@IsisSessionScope
+@Service
 public class TitlingService {
     @PostConstruct
     public void init() {

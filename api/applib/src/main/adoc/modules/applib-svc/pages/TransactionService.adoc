@@ -4,7 +4,8 @@
 :page-partial:
 
 
-WARNING: TODO: v2 - document `Transaction` and `TransactionId` and `TransactionState`.
+WARNING: TODO - to review for v2.
+Document `Transaction` and `TransactionId` and `TransactionState`.
 
 The `TransactionService` (and its various supertypes) allows domain objects to influence user transactions.
 

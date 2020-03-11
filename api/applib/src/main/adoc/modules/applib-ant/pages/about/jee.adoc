@@ -45,14 +45,14 @@ The table below lists the JEE annotations currently recognized.  Expect to see m
 
 |xref:refguide:applib-ant:PostConstruct.adoc[`@javax.annotation.` +
 `PostConstruct`]
-|Callback for domain services (either singleton or xref:refguide:applib-ant:RequestScoped.adoc[request-scoped]) to initialize themselves once instantiated.
+|Callback for domain services (either singleton or xref:refguide:applib-ant:IsisSessionScope.adoc[request-scoped]) to initialize themselves once instantiated.
 
 |Domain
 |
 
 |xref:refguide:applib-ant:PreDestroy.adoc[`@javax.annotation.` +
 `PreDestroy`]
-|Callback for domain services (either singleton or xref:refguide:applib-ant:RequestScoped.adoc[request-scoped]) to clean up resources prior to destruction.
+|Callback for domain services (either singleton or xref:refguide:applib-ant:IsisSessionScope.adoc[request-scoped]) to clean up resources prior to destruction.
 
 |Domain
 |

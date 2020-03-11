@@ -50,7 +50,9 @@ The xref:docs:starters:simpleapp.adoc[SimpleApp] starter app has a simple implem
 
 [source,java]
 ----
-@DomainService(nature = NatureOfService.DOMAIN)
+import org.springframework.stereotype.Service;
+
+@Service
 public class DomainAppFixturesProvider implements FixtureScriptsSpecificationProvider {
     @Override
     public FixtureScriptsSpecification getSpecification() {

@@ -14,8 +14,8 @@ The SPI of the service is:
 
 [source,java]
 ----
-@RequestScoped
-public class ChangedObjectsServiceInternal {
+@IsisSessionScope
+public class ChangedObjectsService {
     public void enlistCreated(final ObjectAdapter adapter);                                     // <1>
     public void enlistUpdating(final ObjectAdapter adapter);
     public void enlistDeleting(final ObjectAdapter adapter);

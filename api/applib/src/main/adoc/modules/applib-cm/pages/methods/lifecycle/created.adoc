@@ -9,7 +9,7 @@ The `created()` lifecycle callback method is called when an object has just been
 
 [TIP]
 ====
-Alternatively, consider using a xref:refguide:applib-svc:EventBusService.adoc[event bus] xref:refguide:applib-cm:classes.adoc#AbstractSubscriber[subscriber] on the xref:refguide:applib-cm:classes.adoc#ObjectCreatedEvent[`ObjectCreatedEvent`].
+Alternatively, consider using a xref:refguide:applib-svc:EventBusService.adoc[event bus] subscriber on the xref:refguide:applib-cm:classes.adoc#ObjectCreatedEvent[`ObjectCreatedEvent`].
 ====
 
 

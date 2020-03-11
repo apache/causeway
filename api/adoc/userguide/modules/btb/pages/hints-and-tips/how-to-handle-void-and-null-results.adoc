@@ -28,33 +28,35 @@ The following custom implementation refines this to use the breadcrumbs (availab
 
 [source,java]
 ----
-@DomainService(nature = NatureOfService.DOMAIN)
-@DomainServiceLayout(menuOrder = "1")                                           // <1>
+import org.springframework.stereotype.Service;
+
+@Service
+@DomainServiceLayout(menuOrder = "1")                                           // <.>
 public class RoutingServiceUsingBreadcrumbs extends RoutingServiceDefault {
     @Override
     public Object route(final Object original) {
-        if(original != null) {                                                  // <2>
+        if(original != null) {                                                  // <.>
             return original;
         }
-        repositoryService.flush();                                              // <3>
+        repositoryService.flush();                                              // <.>
 
-        final BreadcrumbModelProvider wicketSession =                           // <4>
+        final BreadcrumbModelProvider wicketSession =                           // <.>
             (BreadcrumbModelProvider) AuthenticatedWebSession.get();
         final BreadcrumbModel breadcrumbModel =
             wicketSession.getBreadcrumbModel();
         final List<EntityModel> breadcrumbs = breadcrumbModel.getList();
 
         final Optional<Object> firstViewModelOrNonDeletedPojoIfAny =
-                breadcrumbs.stream()                                            // <5>
+                breadcrumbs.stream()                                            // <.>
                 .filter(entityModel -> entityModel != null)
-                .map(EntityModel::getObject)                                    // <6>
+                .map(EntityModel::getObject)                                    // <.>
                 .filter(objectAdapter -> objectAdapter != null)
-                .map(ObjectAdapter::getObject)                                  // <7>
+                .map(ObjectAdapter::getObject)                                  // <.>
                 .filter(pojo -> !(pojo instanceof Persistable) ||
-                                !((Persistable)pojo).dnIsDeleted())             // <8>
+                                !((Persistable)pojo).dnIsDeleted())             // <.>
                 .findFirst();
 
-        return firstViewModelOrNonDeletedPojoIfAny.orElse(homePage());          // <9>
+        return firstViewModelOrNonDeletedPojoIfAny.orElse(homePage());          // <.>
     }
     private Object homePage() {
         return homePageResolverService.homePage();
@@ -65,15 +67,14 @@ public class RoutingServiceUsingBreadcrumbs extends RoutingServiceDefault {
     RepositoryService repositoryService;
 }
 ----
-<1> override the default imlpementation
-<2> if a non-null object was returned, then return this
-<3> ensure that any persisted objects have been deleted.
-<4> reach inside the Wicket viewer's internals to obtain the list of breadcrumbs.
-<5> loop over all breadcrumbs
-<6> unwrap the Wicket viewer's serializable representation of each domain object (`EntityModel`) to the Isis runtime's
-representation (`ObjectAdapter`)
-<7> unwrap the Isis runtime's representation of each domain object (`ObjectAdapter`) to the domain object pojo itself
-<8> if object is persistable (not a view model) then make sure it is not deleted
-<9> return the first object if any, otherwise the home page object (if any).
+<.> override the default imlpementation
+<.> if a non-null object was returned, then return this
+<.> ensure that any persisted objects have been deleted.
+<.> reach inside the Wicket viewer's internals to obtain the list of breadcrumbs.
+<.> loop over all breadcrumbs
+<.> unwrap the Wicket viewer's serializable representation of each domain object (`EntityModel`) to the Isis runtime's representation (`ObjectAdapter`)
+<.> unwrap the Isis runtime's representation of each domain object (`ObjectAdapter`) to the domain object pojo itself
+<.> if object is persistable (not a view model) then make sure it is not deleted
+<.> return the first object if any, otherwise the home page object (if any).
 
 Note that the above implementation uses Java 8, so if you are using Java 7 then you'll need to backport accordingly.

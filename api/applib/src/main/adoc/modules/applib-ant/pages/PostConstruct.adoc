@@ -4,11 +4,12 @@
 
 WARNING: TODO: v2 - the init with args is no longer supported; instead use IsisConfiguration injected or any Spring Boot `@ConfigurationProperties` class.
 
-The `@javax.annotation.PostConstruct` annotation, as defined in link:https://jcp.org/en/jsr/detail?id=250[JSR-250],  is recognized by Apache Isis as a callback method on domain services to be called just after they have been constructed, in order that they initialize themselves.
+The `@javax.annotation.PostConstruct` annotation, as defined in link:https://jcp.org/en/jsr/detail?id=250[JSR-250], is recognized by Apache Isis as a callback method on domain services to be called just after they have been constructed, in order that they initialize themselves.
 
 It is also recognized for xref:userguide:fun:building-blocks.adoc#view-models[view models] (eg annotated with xref:refguide:applib-ant:ViewModel.adoc[`@ViewModel`]).
 
-For the default application-scoped (singleton) domain services, this means that the method, if present, is called during the bootstrapping of the application.  For xref:refguide:applib-ant:RequestScoped.adoc[`@RequestScoped`] domain services, the method is called at the beginning of the request.
+For the default application-scoped (singleton) domain services, this means that the method, if present, is called during the bootstrapping of the application.
+For xref:refguide:applib-ant:IsisSessionScope.adoc[`@IsisSessionScope`] domain services, the method is called at the beginning of the request.
 
 The signature of the method is:
 
@@ -29,6 +30,7 @@ Alternatively - for domain services only, not view models - the method can accep
 @Programmatic
 public void init(Map<String,String> properties) { /* ... */ }
 ----
+
 Apache Isis uses argument to pass in the configuration properties read from all xref:refguide:config:configuration-files.adoc[configuration files]:
 
 [TIP]
@@ -38,9 +40,5 @@ However, be aware when using this latter API that only those configuration prope
 ====
 
 Use cases include obtaining connections to external datasources, eg subscribing to an ActiveMQ router, say, or initializing/cleaning up a background scheduler such as Quartz.
-
-
-
-
 
 See also xref:refguide:applib-ant:PreDestroy.adoc[`@PreDestroy`]

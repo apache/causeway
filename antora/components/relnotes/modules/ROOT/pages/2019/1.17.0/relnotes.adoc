@@ -78,7 +78,7 @@ In terms of notable bugs, there have been several fixes for the Restful Objects 
 * link:https://issues.apache.org/jira/browse/ISIS-507[ISIS-507] - [WON'T FIX] UI: more specific icon for bookmarked repository actions
 * link:https://issues.apache.org/jira/browse/ISIS-741[ISIS-741] - [WON'T FIX] For GSOC, write an integration with Twilio or similar, for voice calls, SMS messaging, etc.
 * link:https://issues.apache.org/jira/browse/ISIS-1900[ISIS-1900] - [NOT A PROBLEM] Fix the release process to also generate .sha512 files
-* link:https://issues.apache.org/jira/browse/ISIS-1702[ISIS-1702] - [DUPLICATE] Infer @Programmatic on methods within @DomainService(nature=DOMAIN)
+* link:https://issues.apache.org/jira/browse/ISIS-1702[ISIS-1702] - [DUPLICATE] Infer @Programmatic on methods within @DomainService(natureOfService=DOMAIN)
 * link:https://issues.apache.org/jira/browse/ISIS-1671[ISIS-1671] - [DUPLICATE] Upgrade to Wicket 7.8.0
 * link:https://issues.apache.org/jira/browse/ISIS-1637[ISIS-1637] - [WON'T FIX] Non-JAXB view models do not support editable properties
 * link:https://issues.apache.org/jira/browse/ISIS-1629[ISIS-1629] - [WON'T FIX] Handle dynamic visibility of list of properties rendered

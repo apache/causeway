@@ -44,14 +44,14 @@ The properties are grouped in a "metadata" fieldset, and the mixin actions assoc
 If the domain object is a view model rather than an entity (that is, has no id or version) then the actions will instead be rendered as top-level actions.
 
 Most of these mixin object members are visible only in prototype mode, though some are visible in production mode and so potentially visible to end-users.
-If you wish to suppress these members from the view, you can either use link:https://isis.apache.org/versions/1.12.0/guides/ugsec/ugsec.html#[security], or alternatively you can write link:https://isis.apache.org/versions/1.12.0/guides/rgcms/rgcms.html#_rgcms_classes_super_AbstractSubscriber[subscriber]s to veto the visibility of these members by subscribing to their respective domain events.
+If you wish to suppress these members from the view, you can either use link:https://isis.apache.org/versions/1.12.0/guides/ugsec/ugsec.html#[security], or alternatively you can write subscribers to veto the visibility of these members by subscribing to their respective domain events.
 
 
 
 == JAXB view models are editable
 
 All link:https://isis.apache.org/versions/1.12.0/guides/rgant/rgant.html#_rgant-XmlRootElement[`@XmlRootElement`] view models are now implicitly editable.
-Therefore any view models that should be read-only should have editing attribute disabled using link:https://isis.apache.org/versions/1.12.0/guides/rgant/rgant.html#_rgant-DomainObject_editing[`@DomainObject#editing()`] (or use a link:https://isis.apache.org/versions/1.12.0/guides/rgcms/rgcms.html#_rgcms_classes_super_AbstractSubscriber[subscriber] to veto editability).
+Therefore any view models that should be read-only should have editing attribute disabled using link:https://isis.apache.org/versions/1.12.0/guides/rgant/rgant.html#_rgant-DomainObject_editing[`@DomainObject#editing()`] (or use a subscriber to veto editability).
 
 
 == `DomainObjectContainer` domain service

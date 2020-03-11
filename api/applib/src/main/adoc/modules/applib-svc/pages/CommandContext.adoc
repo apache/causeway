@@ -5,7 +5,7 @@
 
 
 
-The `CommandContext` service is a xref:refguide:applib-ant:RequestScoped.adoc[request-scoped] service that reifies the invocation of an action on a domain object into an object itself.
+The `CommandContext` service is a xref:refguide:applib-ant:IsisSessionScope.adoc[request-scoped] service that reifies the invocation of an action on a domain object into an object itself.
 This reified information is encapsulated within the xref:CommandContext.adoc#command[`Command`] object.
 
 By default, the command is held in-memory only; once the action invocation has completed, the command object is gone.

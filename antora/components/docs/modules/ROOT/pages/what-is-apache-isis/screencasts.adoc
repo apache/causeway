@@ -250,13 +250,13 @@ Shows how to refactor a domain object to move (derived) collections out of the d
 
 
 |link:https://www.youtube.com/watch?v=-AQJb9GtIqI[024^] +
-Using a domain event xref:refguide:applib-cm:classes/super.adoc#AbstractSubscriber[subscriber] to xref:userguide:fun:building-blocks.adoc#domain-events[decouple] and abstract business rules (xref:refguide:applib-cm:methods.adoc#validate[validation]).
+Using a domain event subscriber to xref:userguide:fun:building-blocks.adoc#domain-events[decouple] and abstract business rules (xref:refguide:applib-cm:methods.adoc#validate[validation]).
 ||||||x|||||
 
 
 
 |link:https://www.youtube.com/watch?v=6GjLW0hlrm4[025^] +
-Using a domain event xref:refguide:applib-cm:classes/super.adoc#AbstractSubscriber[subscriber] to hide functionality, in this
+Using a domain event subscriber to hide functionality, in this
   case the xref:refguide:applib-cm:rgcms.adoc#__rgcms_classes_mixins_Object_clearHints["clear hints"] action automatically provided by the framework.
 ||||||||||x|
 

@@ -62,9 +62,10 @@ Subscribers can be either coarse-grained (if they subscribe to the top-level eve
 [source,java]
 ----
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
-@DomainService(nature=NatureOfService.DOMAIN)
-public class SomeSubscriber extends AbstractSubscriber {
+@Service
+public class SomeSubscriber {
     @EventListener(CssClassUiEvent.class)
     public void on(CssClassUiEvent ev) {
         if(ev.getSource() instanceof ToDoItemDto) {
@@ -79,9 +80,10 @@ or can be fine-grained (by subscribing to specific event subtypes):
 [source,java]
 ----
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
-@DomainService(nature=NatureOfService.DOMAIN)
-public class SomeSubscriber extends AbstractSubscriber {
+@Service
+public class SomeSubscriber {
     @EventListener(ToDoItemDto.CssClassUiEvent.class)
     public void on(ToDoItemDto.CssClassUiEvent ev) {
         ...

@@ -19,15 +19,19 @@
 package org.apache.isis.core.webapp.health;
 
 import java.util.Optional;
+import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.boot.actuate.health.AbstractHealthIndicator;
+
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.health.HealthCheckService;
+import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.security.authentication.health.HealthAuthSession;
 
 import lombok.val;
 
@@ -35,16 +39,21 @@ import lombok.val;
 @Named("isisWebapp.HealthCheckService") // this appears in the endpoint.
 public class HealthIndicatorUsingHealthCheckService extends AbstractHealthIndicator {
 
+    private final IsisSessionFactory isisSessionFactory;
     private final Optional<HealthCheckService> healthCheckServiceIfAny;
 
     @Inject
-    public HealthIndicatorUsingHealthCheckService(final Optional<HealthCheckService> healthCheckServiceIfAny) {
+    public HealthIndicatorUsingHealthCheckService(
+            final IsisSessionFactory isisSessionFactory,
+            final Optional<HealthCheckService> healthCheckServiceIfAny) {
+        this.isisSessionFactory = isisSessionFactory;
         this.healthCheckServiceIfAny = healthCheckServiceIfAny;
     }
 
     @Override
     protected void doHealthCheck(Health.Builder builder) throws Exception {
-        val health = healthCheckServiceIfAny.map(HealthCheckService::check)
+        val health = healthCheckServiceIfAny.map(healthCheckService ->
+                        isisSessionFactory.callAuthenticated(new HealthAuthSession(), healthCheckService::check))
                      .orElse(null);
         if(health != null) {
             final boolean result = health.getResult();

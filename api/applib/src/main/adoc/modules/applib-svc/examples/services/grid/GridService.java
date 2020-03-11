@@ -34,21 +34,21 @@ public interface GridService {
      * Whether dynamic reloading of layouts is enabled.
      */
     // tag::refguide[]
-    boolean supportsReloading();
+    boolean supportsReloading();                    // <.>
 
     // end::refguide[]
     /**
      * To support metamodel invalidation/rebuilding of spec.
      */
     // tag::refguide[]
-    void remove(Class<?> domainClass);
+    void remove(Class<?> domainClass);              // <.>
 
     // end::refguide[]
     /**
      * Whether any persisted layout metadata (eg a <code>.layout.xml</code> file) exists for this domain class.
      */
     // tag::refguide[]
-    boolean existsFor(Class<?> domainClass);
+    boolean existsFor(Class<?> domainClass);        // <.>
 
     // end::refguide[]
     /**
@@ -56,14 +56,22 @@ public interface GridService {
      * <code>layout.xml</code> file, else <code>null</code>.
      */
     // tag::refguide[]
-    Grid load(final Class<?> domainClass);
+    Grid load(final Class<?> domainClass);          // <.>
+
+    // end::refguide[]
+    /**
+     * Returns a new instance of a {@link Grid} for the specified domain class, eg from a
+     * <code>[domainClass].layout.[layout].xml</code> file, else <code>null</code>.
+     */
+    // tag::refguide[]
+    Grid load(Class<?> domainClass, String layout); // <.>
 
     // end::refguide[]
     /**
      * Returns a default grid; eg where none can be loaded using {@link #load(Class)}.
      */
     // tag::refguide[]
-    Grid defaultGridFor(Class<?> domainClass);
+    Grid defaultGridFor(Class<?> domainClass);      // <.>
 
     // end::refguide[]
     /**
@@ -81,7 +89,7 @@ public interface GridService {
      * </p>
      */
     // tag::refguide[]
-    Grid normalize(final Grid grid);
+    Grid normalize(final Grid grid);                // <.>
 
     // end::refguide[]
     /**
@@ -95,7 +103,7 @@ public interface GridService {
      * </p>
      */
     // tag::refguide[]
-    Grid complete(Grid grid);
+    Grid complete(Grid grid);                       // <.>
 
     // end::refguide[]
     /**
@@ -111,15 +119,7 @@ public interface GridService {
      * @return
      */
     // tag::refguide[]
-    Grid minimal(Grid grid);
-
-    // end::refguide[]
-    /**
-     * Returns a new instance of a {@link Grid} for the specified domain class, eg from a
-     * <code>[domainClass].layout.[layout].xml</code> file, else <code>null</code>.
-     */
-    // tag::refguide[]
-    Grid load(Class<?> domainClass, String layout);
+    Grid minimal(Grid grid);                        // <.>
 
 }
 // end::refguide[]

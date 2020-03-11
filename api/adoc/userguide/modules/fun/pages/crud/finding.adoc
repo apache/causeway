@@ -33,7 +33,9 @@ and
 
 [source,java]
 ----
-@DomainService(nature=NatureOfService.DOMAIN)
+import org.springframework.stereotype.Service;
+
+@Service
 public class CustomerRepository {
 
     public List<Customer> findByName(String name) {

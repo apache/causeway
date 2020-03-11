@@ -37,8 +37,8 @@ import org.springframework.context.annotation.Scope;
  * composed annotations.
  *
  * @since 2.0
- * @see SessionScope
- * @see ApplicationScope
+ * @see org.springframework.web.context.annotation.SessionScope
+ * @see org.springframework.web.context.annotation.ApplicationScope
  * @see org.springframework.context.annotation.Scope
  * @see org.springframework.stereotype.Component
  * @see org.springframework.context.annotation.Bean

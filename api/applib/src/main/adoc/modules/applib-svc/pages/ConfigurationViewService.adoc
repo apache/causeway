@@ -4,11 +4,11 @@
 :page-partial:
 
 
-The `ConfigurationViewService`
-
 WARNING: TODO: v2: to document - backing service for ConfigurationMenu;
 
-returns `ConfigurationProperty` view model.  Only returns `isis.\*` and `resteasy.*`
+The `ConfigurationViewService` is the backing service for xref:ConfigurationMenu.adoc[`ConfigurationMenu`].
+
+It simply returns a `ConfigurationProperty` (view model) instance for all known `isis.\*` and `resteasy.*` configuration properties.
 
 
 == API

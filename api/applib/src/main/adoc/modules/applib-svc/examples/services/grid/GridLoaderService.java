@@ -29,21 +29,21 @@ public interface GridLoaderService {
      * Whether dynamic reloading of layouts is enabled.
      */
     // tag::refguide[]
-    boolean supportsReloading();
+    boolean supportsReloading();                    // <.>
 
     // end::refguide[]
     /**
      * To support metamodel invalidation/rebuilding of spec.
      */
     // tag::refguide[]
-    void remove(Class<?> domainClass);
+    void remove(Class<?> domainClass);              // <.>
 
     // end::refguide[]
     /**
      * Whether any persisted layout metadata (eg a <code>.layout.xml</code> file) exists for this domain class.
      */
     // tag::refguide[]
-    boolean existsFor(Class<?> domainClass);
+    boolean existsFor(Class<?> domainClass);        // <.>
 
     // end::refguide[]
     /**
@@ -51,7 +51,9 @@ public interface GridLoaderService {
      * <code>layout.xml</code> file, else <code>null</code>.
      */
     // tag::refguide[]
-    Grid load(final Class<?> domainClass);
+    default Grid load(final Class<?> domainClass) { // <.>
+        return load(domainClass, null);
+    }
 
     // end::refguide[]
     /**
@@ -59,7 +61,9 @@ public interface GridLoaderService {
      * <code>layout.xml</code> file, else <code>null</code>.
      */
     // tag::refguide[]
-    Grid load(final Class<?> domainClass, String layout);
+    Grid load(                                      // <.>
+            final Class<?> domainClass,
+            String layout);
 
 }
 // end::refguide[]

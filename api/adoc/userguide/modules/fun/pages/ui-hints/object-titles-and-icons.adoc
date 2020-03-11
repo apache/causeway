@@ -137,9 +137,10 @@ The subscriber can then populate this event:
 [source,java]
 ----
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
-@DomainService(nature=NatureOfService.DOMAIN)
-public class AuthorSubscriptions extends AbstractSubscriber {
+@Service
+public class AuthorSubscriptions {
 
     @EventListener(Author.TitleUiEvent.class)
     public void on(Author.TitleUiEvent ev) {
@@ -236,8 +237,10 @@ WARNING: TODO: v2: what annotation is required for SpringBoot event subscribers?
 
 [source,java]
 ----
-@DomainService(nature=NatureOfService.DOMAIN)
-public class OrderSubscriptions extends AbstractSubscriber {
+import org.springframework.stereotype.Service;
+
+@Service
+public class OrderSubscriptions {
 
     @org.axonframework.eventhandling.EventHandler       p
     @com.google.common.eventbus.Subscribe               // if using guava
@@ -319,9 +322,10 @@ The subscriber can then populate this event:
 [source,java]
 ----
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
-@DomainService(nature=NatureOfService.DOMAIN)
-public class OrderSubscriptions extends AbstractSubscriber {
+@Service
+public class OrderSubscriptions {
 
     @EventListener(Order.CssClassUiEvent.class)
     public void on(Order.CssClassUiEvent ev) {

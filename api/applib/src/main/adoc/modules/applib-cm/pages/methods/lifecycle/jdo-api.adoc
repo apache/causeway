@@ -18,34 +18,32 @@ For example:
 
 [source,java]
 ----
-@RequestScoped                                                   // <1>
-@DomainService(nature=NatureOfService.DOMAIN)
+import org.springframework.stereotype.Service;
+
+@IsisSessionScope                                                // <.>
+@Service
 public class ObjectChangedListenerService
-        implements javax.jdo.listener.StoreLifecycleListener {   // <2>
-    @Programmatic
+        implements javax.jdo.listener.StoreLifecycleListener {   // <.>
     @PostConstruct
     public void init() {
         getPmFactory().addInstanceLifecycleListener(this);
     }
-    @Programmatic
     @PreDestroy
     public void tidyUp() {
         getPmFactory().removeInstanceLifecycleListener(this);
     }
     private PersistenceManager getPersistenceManager() {
-        return jdoSupport.getPersistenceManager();               // <3>
+        return jdoSupport.getPersistenceManager();               // <.>
     }
-    @Programmatic
     public void preStore (InstanceLifecycleEvent event) { /* ... */ }
-    @Programmatic
     public void postStore (InstanceLifecycleEvent event) { /* ... */ }
     @Inject
     IsisJdoSupport jdoSupport;
 }
 ----
-<1> must be `@RequestScoped` because we register on the `PersistenceManager`, which is different for each request.
-<2> implement whichever callback lifecycle listeners are of interest
-<3> use the injected xref:pjdo:ROOT:services/IsisJdoSupport.adoc[`IsisJdoSupport`] service to obtain the `PersistenceManager`.
+<.> must be `@IsisSessionScope` because we register on the `PersistenceManager`, which is different for each request.
+<.> implement whichever callback lifecycle listeners are of interest
+<.> use the injected xref:pjdo:ROOT:services/IsisJdoSupport.adoc[`IsisJdoSupport`] service to obtain the `PersistenceManager`.
 
 Note that it isn't possible to register on the `PersistenceManagerFactory` because listeners cannot be attached once a persistence session has been created (which it will have been when the service's `@PostConstruct` method is called).
 

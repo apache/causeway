@@ -47,7 +47,7 @@ import lombok.Getter;
  *  
  * @since 2.0
  */
-@ExtendWith({ExceptionRecognizerTranslate.class, IsisSessionScoped.class})
+@ExtendWith({ExceptionRecognizerTranslate.class, IsisSessionHandler.class})
 public abstract class IsisIntegrationTestAbstract {
 
     /**

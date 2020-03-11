@@ -32,13 +32,13 @@ public interface GridSystemService<G extends Grid> {
      * Which grid (implementation) is defined by this service.
      */
     // tag::refguide[]
-    Class<G> gridImplementation();
+    Class<G> gridImplementation();                  // <.>
 
-    String tns();
+    String tns();                                   // <.>
 
-    String schemaLocation();
+    String schemaLocation();                        // <.>
 
-    G defaultGrid(Class<?> domainClass);
+    G defaultGrid(Class<?> domainClass);            // <.>
 
     // end::refguide[]
     /**
@@ -46,11 +46,11 @@ public interface GridSystemService<G extends Grid> {
      * layout.
      */
     // tag::refguide[]
-    void normalize(G grid, Class<?> domainClass);
+    void normalize(G grid, Class<?> domainClass);   // <.>
 
-    void complete(G grid, Class<?> domainClass);
+    void complete(G grid, Class<?> domainClass);    // <.>
 
-    void minimal(G grid, Class<?> domainClass);
+    void minimal(G grid, Class<?> domainClass);     // <.>
 
 }
 // end::refguide[]

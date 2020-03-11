@@ -1,9 +1,10 @@
-[[EventBusService]]
 = `EventBusService`
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
+
+WARNING: TODO - to review for v2.
 
 
 The `EventBusService` allows domain objects to emit events to subscribing domain services using an in-memory event bus.
@@ -34,65 +35,13 @@ The API defined by `EventBusService` is:
 
 [source,java]
 ----
-public abstract class EventBusService {
-    public void post(Object event) { /*...*/ }                          // <1>
-    public void register(final Object domainService) { /*...*/ }        // <2>
-    public void unregister(final Object domainService) { /*...*/ }      // <3>
-}
+include::refguide:applib-svc:example$services/eventbus/EventBusService.java[tags="refguide"]
 ----
-<1> posts the event onto event bus
-<2> allows domain services to register themselves.
-This should be done in their xref:refguide:applib-ant:PostConstruct.adoc[`@PostConstruct`] initialization method (for both singleton and xref:refguide:applib-ant:RequestScoped.adoc[`@RequestScoped`] domain services.
-<3> exists for symmetry, but need never be called (it is in fact deliberately a no-op).
 
 == Implementation
 
-The framework provides a default implementation of the service, `o.a.i.objectstore.jdo.datanucleus.service.eventbus.EventBusServiceJdo`.
+The framework provides a default implementation of the service, `o.a.i.core.runtimeservices.eventbus.EventBusServiceSpring`.
 
-
-
-
-
-== Registering Subscribers
-
-WARNING: TODO: v2: this is no longer required.
-
-The `register()` method should be called in the xref:refguide:applib-ant:PostConstruct.adoc[`@PostConstruct`] lifecycle method.
-It is valid and probably the least confusing to readers to also "unregister" in the xref:refguide:applib-ant:PreDestroy.adoc[`@PreDestroy`] lifecycle method (though as noted xref:refguide:applib-svc:EventBusService.adoc#api-and-implementation[above], unregistering is actually a no-op).
-
-For example:
-
-[source,java]
-----
-@DomainService(nature=NatureOfService.DOMAIN)   // <1>
-@DomainServiceLayout( menuOrder="1")            // <2>
-public class MySubscribingDomainService {
-
-    @PostConstruct
-    public void postConstruct() {
-        eventBusService.register(this);         // <3>
-    }
-
-    @PreDestroy
-    public void preDestroy() {
-        eventBusService.unregister(this);       // <4>
-    }
-
-    ...
-
-    @javax.inject.Inject
-    EventBusService eventBusService;
-}
-----
-<1> subscribers are typically not visible in the UI, so specify a `DOMAIN` nature
-<2> It's important that subscribers register before any domain services that might emit events on the event bus service.
-For example, the xref:security:ROOT:about.adoc[SecMan extension] provides a domain service that automatically seeds certain domain entities; these will generate xref:refguide:applib-cm:classes/lifecycleevent.adoc[lifecycle events] and so any subscribers must be registered before such seed services.
-The easiest way to do this is to use the link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation.
-<3> register with the event bus service during xref:refguide:applib-ant:PostConstruct.adoc[`@PostConstruct`]
-    initialization
-<4> corresponding deregister when shutting down
-
-This works for both singleton (application-scoped) and also xref:refguide:applib-ant:RequestScoped.adoc[`@RequestScoped`] domain services.
 
 
 
@@ -120,9 +69,10 @@ will propagate an instance of the default `o.a.i.applib.services.eventbus.Action
 [source,java]
 ----
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
-@DomainService(nature=NatureOfService.DOMAIN)
-public class MySubscribingDomainService extends AbstractSubscriber {
+@Service
+public class MySubscribingDomainService {
     @EventListener(ActionDomainEvent.class)
     public void on(ActionDomainEvent ev) {
         ...
@@ -156,9 +106,10 @@ For example:
 [source,java]
 ----
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
-@DomainService(nature = NatureOfService.DOMAIN)
-public class BookRepository extends AbstractSubscriber {
+@Service
+public class BookRepository {
 
     @EventListener(LbraryMemberLeaveEvent.class)
     public void onLibraryMemberLeaving(LibraryMemberLeaveEvent e) {
@@ -197,14 +148,14 @@ public static class LibMemModule {
     private LibMemModule() {}
     public abstract static class ActionDomainEvent<S>
                 extends org.apache.isis.applib.event.ActionDomainEvent<S> {}
-    ...                                                                             // <1>
+    ...                                                                             // <.>
     public abstract static class PropertyDomainEvent<S,T>
                 extends org.apache.isis.applib.event.PropertyDomainEvent<S,T> {}
     public abstract static class CollectionDomainEvent<S,E>
                 extends org.apache.isis.applib.event.CollectionDomainEvent<S,E> {}
 }
 ----
-<1> similar events for properties and collections should also be defined
+<.> similar events for properties and collections should also be defined
 
 For the class-level we can define:
 
@@ -213,10 +164,10 @@ For the class-level we can define:
 public static class LibraryMember {
     public abstract static class ActionDomainEvent
             extends LibMemModule.ActionDomainEvent<LibraryMember> { }
-    ...                                                                             // <1>
+    ...                                                                             // <.>
 }
 ----
-<1> similar events for properties and collections should also be defined
+<.> similar events for properties and collections should also be defined
 
 and finally at the action level we can define:
 
@@ -254,7 +205,7 @@ and instead parameterize down at the action level:
 ----
 public class LibraryMember {
     public static class LeaveEvent
-            extends LibraryMember.ActionDomainEvent<LibraryMember> { } // <1>
+            extends LibraryMember.ActionDomainEvent<LibraryMember> { }
 
     @Action(domainEvent=LeaveEvent.class)
     public void leave() {
@@ -282,12 +233,12 @@ public class LibraryMember {
     @Action()
     public void leave() {
         ...
-        eventBusService.post(new LibraryMember.LeaveEvent(/*...*/));    // <1>
+        eventBusService.post(new LibraryMember.LeaveEvent(/*...*/));    // <.>
     }
     ...
 }
 ----
-<1> `LibraryMember.LeaveEvent` could be _any_ class, not just a subclass of `o.a.i.applib.event.ActionDomainEvent`.
+<.> `LibraryMember.LeaveEvent` could be _any_ class, not just a subclass of `o.a.i.applib.event.ActionDomainEvent`.
 
 In practice we suspect there will be few cases where the programmatic approach is required rather than the declarative approach afforded by xref:refguide:applib-ant:Action.adoc#domainEvent[`@Action#domainEvent()`] et al.
 
@@ -307,9 +258,10 @@ In the `ReserveStockSubscriber`, we therefore use the `WrapperFactory`:
 [source,java]
 ----
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
-@DomainService(nature=NatureOfService.DOMAIN)
-public class ReserveStockSubscriber extends AbstractSubscriber{
+@Service
+public class ReserveStockSubscriber {
 
     @EventListener(Customer.PlaceOrderEvent.class)
     public void on(Customer.PlaceOrderEvent ev) {

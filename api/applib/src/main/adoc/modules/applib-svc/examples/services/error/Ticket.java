@@ -51,7 +51,7 @@ public interface Ticket extends Serializable {
      * </p>
      */
     // tag::refguide[]
-    String getReference();
+    String getReference();                  // <.>
 
     // end::refguide[]
     /**
@@ -62,7 +62,7 @@ public interface Ticket extends Serializable {
      * </p>
      */
     // tag::refguide[]
-    String getUserMessage();
+    String getUserMessage();                // <.>
 
     // end::refguide[]
     /**
@@ -74,7 +74,7 @@ public interface Ticket extends Serializable {
      * </p>
      */
     // tag::refguide[]
-    String getDetails();
+    String getDetails();                    // <.>
 
     // end::refguide[]
     /**
@@ -86,14 +86,14 @@ public interface Ticket extends Serializable {
      * </p>
      */
     // tag::refguide[]
-    StackTracePolicy getStackTracePolicy();
+    StackTracePolicy getStackTracePolicy(); // <.>
 
     // end::refguide[]
     /**
      * Returns a Html representation of this ticket.
      */
     // tag::refguide[]
-    String getMarkup();
+    String getMarkup();                     // <.>
 
 }
 // end::refguide[]

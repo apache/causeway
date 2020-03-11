@@ -207,11 +207,6 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
 
 
-    @Override
-    public Grid load(final Class<?> domainClass) {
-        return load(domainClass, null);
-    }
-
     private String loadXml(final DomainClassAndLayout dcal) {
         final String resourceName = resourceNameFor(dcal);
         if(resourceName == null) {

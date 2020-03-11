@@ -31,7 +31,7 @@ There are other reasons though why a separate read model might make sense, such 
 In these cases Apache Isis can often provide a reasonable alternative, namely to map domain entities against RDBMS views, either materialized views or dynamic.
 In such cases there is still only a single physical datastore, and so transactional integrity is retained.
 
-Or, the CQRS architecture can be more fully implemented with Apache Isis by introducing a separate read model, synchronized using the xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`], or using xref:refguide:applib-cm:classes/super.adoc#AbstractSubscriber[subscribers]  on the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`].
+Or, the CQRS architecture can be more fully implemented with Apache Isis by introducing a separate read model, synchronized using the xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`], or using subscribers on the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`].
 One can then use xref:userguide:fun:building-blocks.adoc#view-models[view models] to surface the data in the external read datastore.
 
 With respect to commands, Apache Isis does of course support the xref:refguide:applib-svc:CommandService.adoc[`CommandService`] which allows each business action to be reified into a `Command`.

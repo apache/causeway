@@ -54,7 +54,7 @@ functionality is simply for other domain objects to invoke programmatically), or
 You can generally recognize an Apache Isis domain class because it will be probably be annotated using `@DomainObject` and `@DomainService`.
 
 It's worth emphasising is that domain entities and view models hold state, whereas domain services are generally stateless.
-If a domain service does hold state (eg the `Scratchpad` service noted above) then it should be scoped, for example using `@RequestScoped` (so that this state is short-lived and usable only within a single request).
+If a domain service does hold state (eg the `Scratchpad` service noted above) then it should be scoped, for example using `@IsisSessionScope` (so that this state is short-lived and usable only within a single request).
 
 The framework also defines supplementary annotations, `@DomainObjectLayout` and `@DomainServiceLayout`.
 These provide hints relating to the layout of the domain object in the user interface.

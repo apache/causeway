@@ -6,46 +6,20 @@
 
 The `@javax.annotation.PreDestroy` annotation, as defined in link:https://jcp.org/en/jsr/detail?id=250[JSR-250], recognized by Apache Isis as a callback method on domain services to be called just as they go out of scope.
 
-
-For the default application-scoped (singleton) domain services, this means that the method, if present, is called just prior to the termination of the application.  For xref:refguide:applib-ant:RequestScoped.adoc[`@RequestScoped`] domain services, the method is called at the end of the request.
+For the default application-scoped (singleton) domain services, this means that the method, if present, is called just prior to the termination of the application.
+For xref:refguide:applib-ant:IsisSessionScope.adoc[`@IsisSessionScope`] domain services, the method is called at the end of the request.
 
 The signature of the method is:
 
 [source,java]
 ----
-@PreDestroy                         <1>
-public void deinit() { /* ... */ }    <2>
+@PreDestroy                           <.>
+public void deinit() { /* ... */ }    <.>
 ----
-<1> It is not necessary to annotate the method with xref:refguide:applib-ant:Programmatic.adoc[`@Programmatic`]; it will be automatically excluded from the Apache Isis metamodel.
-<2> the method can have any name, but must have `public` visibility, and accept no arguments.
+<.> It is not necessary to annotate the method with xref:refguide:applib-ant:Programmatic.adoc[`@Programmatic`]; it will be automatically excluded from the Apache Isis metamodel.
+<.> the method can have any name, but must have `public` visibility, and accept no arguments.
 
-A common use case is for domain services that interact with the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`].  For example:
-
-[source,java]
-----
-@DomainService(nature=NatureOfService.DOMAIN)
-public class MySubscribingService {
-    @PostConstruct
-    public void init() {
-        eventBusService.register(this);
-    }
-    @PreDestroy
-    public void deinit() {
-        eventBusService.unregister(this);
-    }
-    ...
-    @javax.inject.Inject
-    EventBusService eventBusService;
-}
-----
-
-[TIP]
-====
-In this particular use case, it is generally simpler to just subclass from xref:refguide:applib-cm:classes/super.adoc#AbstractSubscriber[`AbstractSubscriber`].
-====
 
 Other use cases include obtaining connections to external datasources, eg subscribing to an ActiveMQ router, say, or initializing/cleaning up a background scheduler such as Quartz.
-
-
 
 See also xref:refguide:applib-ant:PostConstruct.adoc[`@PostConstruct`]

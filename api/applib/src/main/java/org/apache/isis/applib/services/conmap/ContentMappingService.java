@@ -35,7 +35,9 @@ public interface ContentMappingService {
      * Typically for mapping from a domain object to a DTO.
      */
     // tag::refguide[]
-    Object map(Object object, final List<MediaType> acceptableMediaTypes);
+    Object map(
+            Object object,                                  // <.>
+            final List<MediaType> acceptableMediaTypes);    // <.>
 
     // end::refguide[]
     /**
@@ -55,9 +57,9 @@ public interface ContentMappingService {
             throw new IllegalArgumentException(
                     "Could not locate x-ro-domain-type parameter in any of the provided media types; got: " +
                             _NullSafe.stream(acceptableMediaTypes)
-                    .filter(_NullSafe::isPresent)
-                    .map(Object::toString)
-                    .collect(Collectors.joining(", ")) );
+                                    .filter(_NullSafe::isPresent)
+                                    .map(Object::toString)
+                                    .collect(Collectors.joining(", ")) );
         }
 
         public static boolean isSupported(

@@ -11,7 +11,9 @@ The heavy lifting is done in `ShiroService`:
 
 [source,java]
 ----
-@DomainService(nature = NatureOfService.DOMAIN)
+import org.springframework.stereotype.Service;
+
+@Service
 public class ShiroService {
 
     public void runAs(String userName) {

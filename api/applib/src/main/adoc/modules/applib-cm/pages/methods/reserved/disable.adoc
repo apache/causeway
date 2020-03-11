@@ -84,8 +84,9 @@ A vetoing subscriber can then subscribe to the domain events and veto access, eg
 [source,java]
 ----
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
-@DomainService(nature=NatureOfService.DOMAIN)
+@Service
 public class VetoOutOfOfficeHours {
     @EventListener(ToDoItem.PropertyDomainEvent.class)
     public void on(ToDoItem.PropertyDomainEvent ev) {

@@ -10,5 +10,5 @@ The `loaded()` lifecycle callback method is called when a (persistent) object ha
 
 [TIP]
 ====
-Alternatively, consider using a xref:refguide:applib-svc:EventBusService.adoc[event bus] xref:refguide:applib-cm:classes.adoc#AbstractSubscriber[subscriber] on the xref:refguide:applib-cm:classes.adoc#ObjectLoadedEvent[`ObjectLoadedEvent`].
+Alternatively, consider using a xref:refguide:applib-svc:EventBusService.adoc[event bus] subscriber on the xref:refguide:applib-cm:classes.adoc#ObjectLoadedEvent[`ObjectLoadedEvent`].
 ====

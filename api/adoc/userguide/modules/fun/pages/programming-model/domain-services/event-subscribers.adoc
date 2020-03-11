@@ -8,20 +8,17 @@ WARNING: TODO: v2: update for Spring events rather than axon/guava
 
 Domain services acting as event subscribers can subscribe to xref:userguide:fun:building-blocks.adoc#lifecycle-events[lifecycle] events, influencing the rendering and behaviour of other objects.
 
-All subscribers must subscribe to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`]; as this amounts to a few lines of boilerplate it's easiest to inherit from the convenience `AbstractSubscriber` class.
-
 We suggest naming such classes `XxxSubscriptions`, for example:
 
 [source,java]
 ----
 import org.springframework.context.event.EventListener;
 
-@DomainService( nature=NatureOfService.DOMAIN )         // <1>
-public class CustomerOrderSubscriptions
-                    extends AbstractSubscriber {        // <2>
+@DomainService( nature=NatureOfService.DOMAIN )         // <.>
+public class CustomerOrderSubscriptions {
 
-    @EventListener(Customer.DeletedEvent.class)         // <3>
-    public void on(final Customer.DeletedEvent ev) {    // <4>
+    @EventListener(Customer.DeletedEvent.class)         // <.>
+    public void on(final Customer.DeletedEvent ev) {    // <.>
         Customer customer = ev.getSource();
         orderRepository.delete(customer);
     }
@@ -30,10 +27,9 @@ public class CustomerOrderSubscriptions
     OrderRepository orderRepository;
 }
 ----
-<1> subscriptions do not appear in the UI at all
-<2> subclass from the `AbstractSubscriber` convenience superclass
-<3> use Spring Frameworkr's `@EventListener`
-<4> the parameter type of the method corresponds to the event emitted on the event bus.
+<.> subscriptions do not appear in the UI at all
+<.> use Spring Frameworkr's `@EventListener`
+<.> the parameter type of the method corresponds to the event emitted on the event bus.
 The actual method name does not matter (though it must have `public` visibility).
 
 

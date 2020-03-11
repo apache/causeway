@@ -8,7 +8,6 @@
 * xref:post-release-successful.adoc[Post Release (Successful)]
 * xref:post-release-unsuccessful.adoc[Post Release (Unsuccessful)]
 * xref:release-process-for-interim-releases.adoc[Interim Releases]
-* xref:antora-publish-procedure.adoc[Antora Publish Procedure]
 * xref:key-generation.adoc[Key Generation]
 * xref:release-process-prereqs.adoc[Appendix: Release Process Prereqs]
 * xref:policies.adoc[Appendix: Policies]

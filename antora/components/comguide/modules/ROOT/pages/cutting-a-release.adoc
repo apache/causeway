@@ -150,7 +150,8 @@ Commit any changes from the preceding steps:
 
 [source,bash,subs="attributes+"]
 ----
-git commit -am "$ISISJIRA: updates to pom.xml etc for release"
+git add ..
+git commit -m "$ISISJIRA: updates to pom.xml etc for release"
 ----
 
 
@@ -163,20 +164,21 @@ For example:
 
 [source,bash,subs="attributes+"]
 ----
-export ISISTMP=/c/tmp                               # <1>
-export ISISREL={isisnext}
-export ISISRC=RC1
+export ISISJIRA=ISIS-9999                           # <.>
+export ISISTMP=/c/tmp                               # <.>
+export ISISREL={isisnext}                           # <.>
+export ISISRC=RC1                                   # <.>
 export ISISBRANCH=release-$ISISREL-$ISISRC
-export ISISJIRA=ISIS-9999                           # <2>
 export ISISART=isis
 
 env | grep ISIS | sort
 ----
-<1> adjust by platform
-<2> set to an "umbrella" ticket for all release activities.
+<.> set to an "umbrella" ticket for all release activities.
 (One should exist already, xref:comguide:ROOT:post-release-successful.adoc#create-new-jira[created at] the beginning of the development cycle now completing).
+<.> adjust by platform
+<.> adjust as required
+<.> adjust as necessary if this is not the first attempt to release
 
-Obviously, alter ``$ISISREL`` as required, and bump ``$ISISRC`` for re-releasing following an xref:comguide:ROOT:post-release-unsuccessful.adoc[unsuccessful] release.
 
 [IMPORTANT]
 ====
@@ -215,7 +217,8 @@ pushd ../starters
 mvn versions:set -DnewVersion=$ISISREL
 popd
 
-git commit -am "$ISISJIRA: bumps version to $ISISREL"
+git add ..
+git commit -m "$ISISJIRA: bumps version to $ISISREL"
 ----
 
 so that they should read:
@@ -338,7 +341,8 @@ pushd ../starters
 mvn versions:set -DnewVersion=2.0.0-SNAPSHOT
 popd
 
-git commit -am "$ISISJIRA: resetting version"
+git add ..
+git commit -m "$ISISJIRA: resetting version"
 ----
 
 == Push branches
@@ -477,9 +481,9 @@ cd ../isis-site
 
 git add .
 git commit -m "$ISISJIRA : staging changes to website"
+
 sh preview.sh
 ----
-
 
 
 

@@ -23,7 +23,7 @@ public interface HomePageResolverService {
 
 The default implementation is provided by `o.a.i.core.runtimeservices.homepage.HomePageResolverServiceDefault`.
 
-Any custom implementations should be annotated using `@DomainService(nature = NatureOfService.DOMAIN)`.
+Any custom implementations should be annotated using `@org.springframework.stereotype.Service`.
 
 
 

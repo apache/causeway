@@ -27,13 +27,6 @@ Impl'n (g: a:)
 |
 
 
-|xref:refguide:applib-cm:classes.adoc#AbstractSubscriber[`o.a.i.applib.` +
-`AbstractSubscriber`]
-|``o.a.i.core`` +
-``isis-applib``
-|(abstract class)
-|
-
 
 |xref:refguide:applib-cm:classes.adoc#AbstractViewModel[`o.a.i.applib.` +
 `AbstractViewModel`]
@@ -53,6 +46,5 @@ Impl'n (g: a:)
 
 
 include::super/AbstractService.adoc[leveloffset=+1]
-include::super/AbstractSubscriber.adoc[leveloffset=+1]
 include::super/AbstractViewModel.adoc[leveloffset=+1]
 

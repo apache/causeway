@@ -15,7 +15,9 @@ The corresponding code is:
 
 [source,java]
 ----
-@DomainService(nature = NatureOfService.DOMAIN)
+import org.springframework.stereotype.Service;
+
+@Service
 public class TodoAppDashboardService  {
     @Action(
             semantics = SemanticsOf.SAFE

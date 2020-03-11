@@ -3,6 +3,7 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
+WARNING: TODO - to review for v2.
 
 The `FactoryService` collects together methods for instantiating domain objects.
 
@@ -14,24 +15,30 @@ The API of `FactoryService` is:
 
 [source,java]
 ----
-public interface FactoryService {
-    <T> T instantiate(Class<T> domainClass);           // <1>
-    <T> T mixin(Class<T> mixinClass, Object mixedIn);  // <2>
-}
+include::refguide:applib-svc:example$services/factory/FactoryService.java[tags="refguide"]
 ----
-<1> create a new non-persisted domain entity.  Any services will be automatically injected into the service.
-The class must have a no-arg constructor.
-<2> programmatically instantiate a mixin, for example as annotated with xref:refguide:applib-ant:Mixin.adoc[`@Mixin`].
+<.> General purpose factory method, to automatically get or create an instance of the required type.
+Maps onto one of the specialized factory methods `#get(Class)` or `#create(Class)` based on the type's meta-data.
+<.> Gets an instance (possibly shared or independent) of the specified type, with injection points resolved and any life-cycle callback processed.
+<.> Creates a new detached (not yet persisted) entity instance, with injection points resolved and defaults applied.
+The class must have a no-arg constructor (for xref:pjdo:ROOT:about.adoc[JDO/DataNucleus], the enhancer adds this automatically).
+<.> Creates a new Mixin instance, with injection points resolved.
 The class must have a 1-arg constructor of the appropriate type.
+<.> Creates a new ViewModel instance, with injection points resolved, and initialized according to the given memento string.
+<.> Creates a new ViewModel instance, with injection points resolved and defaults applied.
+<.> Creates a new instance of the specified class, with injection points resolved and defaults applied.
 
 
-The object is created in memory, but is not persisted.  The benefits of using this method (instead of simply using the Java `new` keyword) are:
+
+The object is created in memory, but (if an entity) is not persisted.
+The benefits of using this method (instead of simply using the Java `new` keyword) are:
 
 * any services will be injected into the object immediately (otherwise they will not be injected until the frameworkbecomes aware of the object, typically when it is persisted through the xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`]
 
-* the default value for any properties (usually as specified by `defaultXxx()` supporting methods) will not be set and the `created()` callback will be called.
+* the default value for any properties (usually as specified by `defaultXxx()` supporting methods) or from the value type itself will be set and the `created()` callback will be called.
 
-The corollary is: if your code never uses `defaultXxx()` or the `created()` callback, then you can just `new` up the object.  The xref:refguide:applib-svc:ServiceRegistry.adoc[`ServiceRegistry`] service can be used to inject services into the domain object.
+An alternative idiom is to just `new` up the object and then use  xref:refguide:applib-svc:ServiceInjector.adoc[`ServiceInjector`] domain service can be used to inject services into the domain object.
+Note though that no default values will be set on the created object.
 
 
 

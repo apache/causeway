@@ -10,7 +10,6 @@ WARNING: TODO: v2: update - rest of this documentation is out of date.
 
 
 
-
 This service, if implemented, is used to performs a health check to determine if the application is still available.
 The results of this service are made available through a REST resource, typically mounted at `/restful/health`.
 
@@ -26,35 +25,35 @@ The SPI defined by `HealthCheckService` is:
 
 [source,java]
 ----
-public interface HealthCheckService {
-    @Programmatic
-    public Health check();
+include::refguide:applib-svc:example$services/health/HealthCheckService.java[tags="refguide"]
+----
+
+There is no default implementation, but the xref:docs:starters:simpleapp.adoc[simpleapp] starter app provides a sample implementation:
+
+[source,java]
+----
+@Service
+@Named("domainapp.HealthCheckServiceImpl")
+@Log4j2
+public class HealthCheckServiceImpl implements HealthCheckService {
+
+    private final SimpleObjects simpleObjects;
+
+    @Inject
+    public HealthCheckServiceImpl(SimpleObjects simpleObjects) {
+        this.simpleObjects = simpleObjects;
+    }
+
+    @Override
+    public Health check() {
+        try {
+            simpleObjects.ping();
+            return Health.ok();
+        } catch (Exception ex) {
+            return Health.error(ex);
+        }
+    }
 }
 ----
 
-There is no default implementation.
-Any custom implementations should be annotated using `@DomainService(nature = NatureOfService.DOMAIN)`.
 
-
-== REST API Mapping
-
-The `/restful/health` path must be specified as a "passThru" so that no authentication challenge is issued.
-
-TODO: v2: this may have changed because we now use `WebModule_Xxx` instead of `web.xml`, ie set this stuff up programmatically.
-
-[source,xml]
-.web.xml
-----
-<filter>
-    <filter-name>IsisSessionFilterForRestfulObjects</filter-name>
-    <filter-class>org.apache.isis.core.webapp.IsisSessionFilter</filter-class>
-    ...
-    <init-param>
-        <param-name>passThru</param-name>
-        <param-value>/restful/swagger,/restful/health</param-value>
-    </init-param>
-    ...
-</filter>
-----
-
-This is a comma separated list, so there may be other values also (for example `/restful/swagger`, as shown above).

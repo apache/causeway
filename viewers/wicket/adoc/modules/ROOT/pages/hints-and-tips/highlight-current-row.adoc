@@ -33,11 +33,12 @@ Next, we define the domain service to act as the subscriber:
 .HomePageViewModel.java
 ----
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
 public class HomePageViewModel {
 
-    @DomainService(nature = NatureOfService.DOMAIN)
-    public static class CssHighlighter extends AbstractSubscriber {
+    @Service
+    public static class CssHighlighter {
         @EventListener(DemoObject.CssClassUiEvent.class)
         public void on(DemoObject.CssClassUiEvent ev) {
             if(getContext() == null) { return; }

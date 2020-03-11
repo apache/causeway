@@ -50,7 +50,7 @@ public interface FactoryService {
      *
      */
     // tag::refguide[]
-    <T> T getOrCreate(Class<T> requiredType);
+    <T> T getOrCreate(Class<T> requiredType);                               // <.>
 
     // end::refguide[]
     /**
@@ -70,7 +70,7 @@ public interface FactoryService {
      * @since 2.0
      */
     // tag::refguide[]
-    <T> T get(Class<T> requiredType);
+    <T> T get(Class<T> requiredType);                                       // <.>
 
     // end::refguide[]
     /**
@@ -85,7 +85,7 @@ public interface FactoryService {
      * @since 2.0
      */
     // tag::refguide[]
-    <T> T detachedEntity(Class<T> domainClass);
+    <T> T detachedEntity(Class<T> domainClass);                             // <.>
 
     // end::refguide[]
     /**
@@ -99,7 +99,7 @@ public interface FactoryService {
      * @apiNote forces the mixinClass to be added to the meta-model if not already
      */
     // tag::refguide[]
-    <T> T mixin(Class<T> mixinClass, Object mixedIn);
+    <T> T mixin(Class<T> mixinClass, Object mixedIn);                       // <.>
 
     // end::refguide[]
     /**
@@ -113,7 +113,7 @@ public interface FactoryService {
      * @since 2.0
      */
     // tag::refguide[]
-    <T> T viewModel(Class<T> viewModelClass, @Nullable String mementoStr);
+    <T> T viewModel(Class<T> viewModelClass, @Nullable String mementoStr);  // <.>
 
     // end::refguide[]
     /**
@@ -126,7 +126,7 @@ public interface FactoryService {
      * @since 2.0
      */
     // tag::refguide[]
-    default <T> T viewModel(Class<T> viewModelClass) {
+    default <T> T viewModel(Class<T> viewModelClass) {                      // <.>
         return viewModel(viewModelClass, /*mementoStr*/null);
     }
 
@@ -142,7 +142,7 @@ public interface FactoryService {
      * @since 2.0
      */
     // tag::refguide[]
-    <T> T create(Class<T> domainClass);
+    <T> T create(Class<T> domainClass);                                 // <.>
     // end::refguide[]
 
     // -- DEPRECATIONS
