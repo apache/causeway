@@ -143,7 +143,11 @@
 		<log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
 
 		<maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
-		<maven-release-plugin.version>2.5.3</maven-release-plugin.version>
+		<maven-release-plugin.version>2.5.3</maven-release-plugin.version>		<!-- See https://nodejs.org/en/download/ for latest node and npm (lts) versions -->
+		
+		<!-- See https://nodejs.org/en/download/ for latest node and npm (lts) versions -->
+		<node.version>v12.14.0</node.version>
+		<npm.version>6.13.1</npm.version>
 
 		<objenesis.version>2.2</objenesis.version>
 		<ognl.version>3.0.9</ognl.version>
