@@ -6,6 +6,7 @@ import kotlin.test.assertEquals
 
 class SampleTest {
 
+    @UnstableDefault
     @Test
     fun testInnerObjects() {
         //given

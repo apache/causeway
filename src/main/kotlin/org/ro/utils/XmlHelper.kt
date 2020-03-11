@@ -1,11 +1,16 @@
-package org.ro.to
+package org.ro.utils
 
 import org.w3c.dom.Document
 import org.w3c.dom.Node
 import org.w3c.dom.asList
 import org.w3c.dom.parsing.DOMParser
 
-class XmlHelper {
+object XmlHelper {
+
+    fun isXml(input: String): Boolean {
+        val s = input.trim()
+        return s.startsWith("<") && s.endsWith(">")
+    }
 
     fun nonTextChildren(node: Node): List<Node> {
         val match = "#text"
@@ -14,10 +19,10 @@ class XmlHelper {
         return list
     }
 
-    fun firstChildMatching(node: Node, match: String): Node {
+    fun firstChildMatching(node: Node, match: String): Node? {
         val childNodes = node.childNodes.asList()
         val list = childNodes.filter { it.nodeName.contains(match) }
-        return list.first()
+        return list.firstOrNull()
     }
 
     fun parseXml(xmlStr: String): Document {

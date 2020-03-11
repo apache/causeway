@@ -1,11 +1,12 @@
 package org.ro.core.event
 
-import org.ro.utils.Utils
 import org.ro.core.aggregator.BaseAggregator
 import org.ro.handler.ResponseHandler
+import org.ro.core.event.ResourceSpecification
 import org.ro.to.Link
 import org.ro.to.Method
 import org.ro.ui.kv.UiManager
+import org.ro.utils.Utils
 import org.w3c.xhr.XMLHttpRequest
 
 /**
@@ -13,23 +14,23 @@ import org.w3c.xhr.XMLHttpRequest
  */
 class RoXmlHttpRequest {
 
-    fun invoke(link: Link, aggregator: BaseAggregator?) {
-        val url = link.href
-        if (EventStore.isCached(url, link.method)) {
-            processCached(url)
+    fun invoke(link: Link, aggregator: BaseAggregator?, mimeType: String = "json") {
+        val reSpec = ResourceSpecification(link.href)
+        if (EventStore.isCached(reSpec, link.method)) {
+            processCached(reSpec)
         } else {
-            process(link, aggregator)
+            process(link, aggregator, mimeType)
         }
     }
 
-    private fun processCached(url: String) {
-        val le = EventStore.find(url)!!
+    private fun processCached(reSpec: ResourceSpecification) {
+        val le = EventStore.find(reSpec)!!
         le.retrieveResponse()
         ResponseHandler.handle(le)
-        EventStore.cached(url)
+        EventStore.cached(reSpec)
     }
 
-    private fun process(link: Link, aggregator: BaseAggregator?) {
+    private fun process(link: Link, aggregator: BaseAggregator?, mimeType: String) {
         val method = link.method
         var url = link.href
         if (method != Method.POST.operation) {
@@ -40,12 +41,13 @@ class RoXmlHttpRequest {
         val xhr = XMLHttpRequest()
         xhr.open(method, url, true)
         xhr.setRequestHeader("Authorization", "Basic $credentials")
-        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8")
-        xhr.setRequestHeader("Accept", "application/json")
+        xhr.setRequestHeader("Content-Type", "application/$mimeType;charset=UTF-8")
+        xhr.setRequestHeader("Accept", "application/$mimeType")
 
-        xhr.onload = { _ -> resultHandler(url, xhr.responseText) }
-        xhr.onerror = { _ -> errorHandler(url, xhr.responseText) }
-        xhr.ontimeout = { _ -> errorHandler(url, xhr.responseText) }
+        val reSpec = ResourceSpecification(url, mimeType)
+        xhr.onload = { _ -> resultHandler(reSpec, xhr.responseText) }
+        xhr.onerror = { _ -> errorHandler(reSpec, xhr.responseText) }
+        xhr.ontimeout = { _ -> errorHandler(reSpec, xhr.responseText) }
 
         var body = ""
         when {
@@ -63,7 +65,7 @@ class RoXmlHttpRequest {
         } else {
             xhr.send(body)
         }
-        EventStore.start(url, method, body, aggregator)
+        EventStore.start(reSpec, method, body, aggregator)
     }
 
     fun processAnonymous(link: Link, aggregator: BaseAggregator?) {
@@ -75,25 +77,25 @@ class RoXmlHttpRequest {
         xhr.setRequestHeader("Content-Type", "text/plain")
         xhr.setRequestHeader("Accept", "image/svg+xml")
 
-        xhr.onload = { _ -> resultHandler(url, xhr.responseText) }
-        xhr.onerror = { _ -> errorHandler(url, xhr.responseText) }
-        xhr.ontimeout = { _ -> errorHandler(url, xhr.responseText) }
+        val reSpec = ResourceSpecification(url, "xml")
+        xhr.onload = { _ -> resultHandler(reSpec, xhr.responseText) }
+        xhr.onerror = { _ -> errorHandler(reSpec, xhr.responseText) }
+        xhr.ontimeout = { _ -> errorHandler(reSpec, xhr.responseText) }
 
         val body = Utils.argumentsAsList(link)
         xhr.send(body)
-        EventStore.start(url, method, body, aggregator)
+        EventStore.start(reSpec, method, body, aggregator)
     }
 
-    private fun resultHandler(url: String, responseText: String) {
-        val jsonString: String = responseText
-        val logEntry: LogEntry? = EventStore.end(url, jsonString)
+    private fun resultHandler(reSpec: ResourceSpecification, responseText: String) {
+        val logEntry: LogEntry? = EventStore.end(reSpec, responseText)
         if (logEntry != null) {
             ResponseHandler.handle(logEntry)
         }
     }
 
-    private fun errorHandler(url: String, responseText: String) {
-        EventStore.fault(url, responseText)
+    private fun errorHandler(reSpec: ResourceSpecification, responseText: String) {
+        EventStore.fault(reSpec, responseText)
     }
 
 }

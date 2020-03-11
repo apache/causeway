@@ -1,25 +1,25 @@
 package org.ro.core.aggregator
 
 import org.ro.core.event.LogEntry
-import org.ro.core.event.RoXmlHttpRequest
 import org.ro.to.Action
 import org.ro.to.Link
 import org.ro.to.Method
 import org.ro.ui.Point
 import org.ro.ui.kv.ActionPrompt
 import org.ro.utils.Utils
+import org.w3c.dom.MimeType
 
-class ActionDispatcher(private val at: Point = Point(100,100)) : BaseAggregator() {
+class ActionDispatcher(private val at: Point = Point(100, 100)) : BaseAggregator() {
 
-    override fun update(logEntry: LogEntry) {
+    override fun update(logEntry: LogEntry, mimeType: String) {
         val action = logEntry.getTransferObject() as Action
-        action.links.forEach {
+        action.links.forEach { link ->
             // it.rel should be neither: (self | up | describedBy )
-            if (it.isInvokeAction()) {
-                when (it.method) {
-                    Method.GET.name -> processGet(action, it)
-                    Method.POST.name -> processPost(action, it)
-                    Method.PUT.name -> processPut(it)
+            if (link.isInvokeAction()) {
+                when (link.method) {
+                    Method.GET.name -> processGet(action, link)
+                    Method.POST.name -> processPost(action, link)
+                    Method.PUT.name -> invoke(link)
                 }
             }
         }
@@ -47,12 +47,12 @@ class ActionDispatcher(private val at: Point = Point(100,100)) : BaseAggregator(
         if (link.hasArguments()) {
             ActionPrompt(action).open(at)
         } else {
-            RoXmlHttpRequest().invoke(link, ObjectAggregator(title))
+            link.invokeWith(ObjectAggregator(title))
         }
     }
 
-    private fun processPut(link: Link) {
-        invoke(link)
+    fun invoke(link: Link) {
+        link.invokeWith(this)
     }
 
 }

@@ -6,6 +6,7 @@ import org.ro.layout.Layout
 import org.ro.to.Property
 import org.ro.to.ResultList
 import org.ro.to.TObject
+import org.ro.to.bs3.Grid
 import org.ro.ui.kv.UiManager
 
 /** sequence of operations:
@@ -13,7 +14,7 @@ import org.ro.ui.kv.UiManager
  * (1) FR_OBJECT                TObjectHandler -> invoke()
  * (2) FR_OBJECT_LAYOUT         layoutHandler -> invoke(layout.getProperties()[].getLink()) link can be null?
  * (3) FR_OBJECT_PROPERTY       PropertyHandler -> invoke()
- * (4) FR_PROPERTY_DESCRIPTION  PropertyDescriptionHandler
+ * (4) FR_PROPERTY_DESCRIPTION  <PropertyDescriptionHandler>
  */
 class ListAggregator(actionTitle: String) : BaseAggregator() {
 
@@ -21,13 +22,14 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
         dsp = DisplayList(actionTitle)
     }
 
-    override fun update(logEntry: LogEntry) {
+    override fun update(logEntry: LogEntry, mimeType: String) {
 
         when (val obj = logEntry.getTransferObject()) {
             null -> log(logEntry)
             is ResultList -> handleList(obj)
             is TObject -> handleObject(obj)
             is Layout -> handleLayout(obj)
+            is Grid -> handleGrid(obj)
             is Property -> handleProperty(obj)
             else -> log(logEntry)
         }
@@ -42,34 +44,49 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
         if (result != null) {
             val links = result.value
             links.forEach {
-                invoke(it)
+                it.invokeWith(this)
             }
         }
     }
 
     private fun handleObject(obj: TObject) {
         dsp.addData(obj)
-        val l = obj.getLayoutLink()
-        if (l != null) {
-            invoke(l)
-        }
+        val l = obj.getLayoutLink()!!
+        // Json.Layout is invoked first
+        l.invokeWith(this)
+        // then Xml.Layout is to be called as well
+        l.invokeWith(this, "xml")
     }
 
     private fun handleLayout(layout: Layout) {
         dsp.layout = layout
-        layout.properties.forEach {
-            val l = it.link!!
-            invoke(l)
+        layout.propertyList.forEach { p ->
+            val l = p.link!!
+            if (!l.href.contains("datanucleus")) {
+                l.invokeWith(this)
+            }
         }
     }
 
+    private fun handleGrid(grid: Grid) {
+   //     console.log("[LA.handleGrid]")
+   //     console.log(grid)
+   //     dsp.layout!!.initGrid(grid)
+    }
+
     private fun handleProperty(p: Property) {
+        val dspl = dsp as DisplayList
+        console.log("[LA.handleProperty]")
+        console.log(p)
         if (p.isPropertyDescription()) {
-            (dsp as DisplayList).addPropertyLabel(p)
+            dspl.addPropertyDescription(p)
         } else {
-            (dsp as DisplayList).addProperty(p)
-            val l = p.descriptionLink()!!
-            invoke(l)
+            dspl.addProperty(p)
+            val l = p.descriptionLink()
+            if (l != null) {
+                console.log(l)
+                l.invokeWith(this)
+            }
         }
     }
 

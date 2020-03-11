@@ -5,7 +5,7 @@ import org.ro.ui.FileAlert
 
 class DownloadDispatcher(val actionTitle: String) : BaseAggregator() {
 
-    override fun update(logEntry: LogEntry) {
+    override fun update(logEntry: LogEntry, mimeType: String) {
         FileAlert(logEntry).open()
     }
 

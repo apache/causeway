@@ -15,7 +15,7 @@ import org.ro.to.TObject
  * @item invokes subsequent links, and
  * @item triggers creation a view for an object or a list.
  *
- * @see: https://www.enterpriseintegrationpatterns.com/patterns/messaging/IAggregator.html
+ * @see: https://www.enterpriseintegrationpatterns.com/patterns/messaging/Aggregator.html
  *
  * Could be named collector or assembler as well.
  */
@@ -23,11 +23,10 @@ abstract class BaseAggregator {
 
     open lateinit var dsp: BaseDisplayable
 
-    open fun update(logEntry: LogEntry) {}
+    open fun update(logEntry: LogEntry, mimeType: String) {}
 
     open fun reset(): BaseAggregator {
-        //do nothing and
-        return this
+        /* do nothing and */ return this
     }
 
     open fun getObject(): TObject? {
@@ -41,7 +40,8 @@ abstract class BaseAggregator {
         console.log(logEntry)
     }
 
-    fun invoke(link: Link) {
+    @Deprecated("use extension function")
+    fun invokeWith(link: Link) {
         RoXmlHttpRequest().invoke(link, this)
     }
 
@@ -58,6 +58,10 @@ abstract class BaseAggregator {
 
     fun noop() {
         // save a line break in when formatting
+    }
+
+    fun Link.invokeWith(aggregator: BaseAggregator, mimeType: String = "json") {
+        RoXmlHttpRequest().invoke(this, aggregator, mimeType)
     }
 
 }

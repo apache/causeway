@@ -4,20 +4,27 @@ import org.w3c.dom.Node
 import org.w3c.dom.asList
 
 class Tab(node: Node) {
-    var rows = mutableListOf<Row>()
+    val rowList = mutableListOf<Row>()
     var name: String
-//    var cssClass: String
 
     init {
         val dyNode = node.asDynamic()
         name = dyNode.getAttribute("name") as String
-//        cssClass = dyNode.getAttribute("cssClass") as String
 
-        val nodeList = node.childNodes.asList()
-        val rowList = nodeList.filter { it.nodeName.equals("bs3:row") }
-        for (n: Node in rowList) {
+        val nl = node.childNodes.asList()
+        val rl = nl.filter { it.nodeName.equals("bs3:row") }
+        for (n: Node in rl) {
             val row = Row(n)
-            rows.add(row)
+            rowList.add(row)
         }
     }
+
+    fun getPropertyList(): List<Property> {
+        val list = mutableListOf<Property>()
+        rowList.forEach { r ->
+            list.addAll(r.getPropertyList())
+        }
+        return list
+    }
+
 }

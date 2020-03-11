@@ -49,7 +49,7 @@ class ColumnFactory {
             columns.add(icon)
         }
 
-        val propertyLabels = displayList.propertyLabels
+        val propertyLabels = displayList.propertyDescriptionList
         for (pl in propertyLabels) {
             val id = pl.key
             val friendlyName = pl.value

@@ -4,6 +4,7 @@ import org.ro.utils.Utils
 import org.ro.to.Argument
 import org.ro.to.Link
 import org.ro.to.Method
+import org.ro.utils.DateHelper
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -26,7 +27,7 @@ class UtilsTest {
         // given
         val rawDate: Any? = "2020-01-25T13:07:05Z"
         //when
-        val dateTime = Utils.toDate(rawDate)
+        val dateTime = DateHelper.toDate(rawDate)
         // then
         assertNotNull(dateTime)
         assertEquals(2020, dateTime.getFullYear())
@@ -42,10 +43,10 @@ class UtilsTest {
         val expected: String = "2020-01-25T14:07:05.356+0100"
         //when Then
 
-        val actual = Utils.convertJavaOffsetDateTimeToISO(rawDate as String)
+        val actual = DateHelper.convertJavaOffsetDateTimeToISO(rawDate as String)
         assertEquals(expected, actual)
 
-        val dateTime = Utils.toDate(actual)
+        val dateTime = DateHelper.toDate(actual)
         assertNotNull(dateTime)
         assertEquals(2020, dateTime.getFullYear())
         assertEquals(0, dateTime.getMonth()) // c braintwist strikes again

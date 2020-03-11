@@ -4,6 +4,7 @@ import kotlinx.serialization.UnstableDefault
 import org.ro.IntegrationTest
 import org.ro.core.event.EventStore
 import org.ro.core.model.DisplayList
+import org.ro.core.event.ResourceSpecification
 import org.ro.snapshots.simpleapp1_16_0.*
 import org.ro.to.Property
 import org.ro.to.RelType
@@ -25,7 +26,8 @@ class ListAggregatorTest : IntegrationTest() {
             mockResponse(FR_OBJECT, obs)
             mockResponse(FR_OBJECT_LAYOUT, obs)
             mockResponse(FR_OBJECT_PROPERTY, obs)
-            val pLe = EventStore.find(FR_OBJECT_PROPERTY.url)!!
+            val reSpec = ResourceSpecification(FR_OBJECT_PROPERTY.url)
+            val pLe = EventStore.find(reSpec)!!
             val pdLe = mockResponse(FR_PROPERTY_DESCRIPTION, obs)
             val layoutLe = mockResponse(FR_OBJECT_LAYOUT, obs)
 
@@ -37,7 +39,7 @@ class ListAggregatorTest : IntegrationTest() {
             val actObs = pLe.getAggregator() as ListAggregator
             val dl = obs.dsp
             val property = pdLe.getTransferObject() as Property
-            val propertyLabels = (dl as DisplayList).propertyLabels
+            val propertyLabels = (dl as DisplayList).propertyDescriptionList
             val lbl = propertyLabels.get(property.id)!!
             // then
             assertEquals("className", p.id) //1

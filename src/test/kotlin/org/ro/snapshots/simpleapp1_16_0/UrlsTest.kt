@@ -4,6 +4,7 @@ import kotlinx.serialization.UnstableDefault
 import org.ro.IntegrationTest
 import org.ro.core.aggregator.ActionDispatcher
 import org.ro.core.event.EventStore
+import org.ro.core.event.ResourceSpecification
 import org.ro.to.Link
 import org.ro.to.Method
 import kotlin.test.assertEquals
@@ -46,8 +47,8 @@ class UrlsTest : IntegrationTest() {
             // then
             wait(1000)
             for (entry in urls) {
-                val href = entry.key
-                val actual = EventStore.find(href)!!.getResponse()
+                val hrefSpec = ResourceSpecification(entry.key)
+                val actual = EventStore.find(hrefSpec)!!.getResponse()
                 assertEquals(entry.value, actual)
             }
         }

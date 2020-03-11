@@ -1,11 +1,11 @@
 package org.ro.handler
 
-import org.ro.utils.Utils
+import org.ro.utils.XmlHelper
 
 class DiagramHandler : BaseHandler() {
 
     override fun canHandle(response: String): Boolean {
-        return Utils.isXml(response) && response.contains("svg")
+        return XmlHelper.isXml(response) && response.contains("svg")
     }
 
 }

@@ -1,28 +1,28 @@
 package org.ro.to.bs3
 
 import org.ro.to.Link
-import org.ro.to.XmlHelper
+import org.ro.utils.XmlHelper
 import org.w3c.dom.Node
 
 class DomainObject(node: Node) {
-    var named: String
-    var plural: String
+    var named = ""
+    var plural = ""
     lateinit var describedAs: String
     lateinit var metadataError: String
     lateinit var link: Link
-    //    @XmlAttribute(name = "bookmarking")
-//    lateinit var bookmarking: BookmarkPolicy
     lateinit var cssClass: String
     lateinit var cssClassFa: String
-//    lateinit var cssClassFaPosition: CssClassFaPosition
-    //    @XmlAttribute(name = "namedEscaped")
-    var isNamedEscaped: Boolean = false
 
     init {
-        val namedNode = XmlHelper().firstChildMatching(node, "named")
-        named = namedNode.textContent!!.trim()
+        val nn = XmlHelper.firstChildMatching(node, "named")
+        if (nn?.textContent != null) {
+            named = nn.textContent!!.trim()
+        }
 
-        val pluralNode = XmlHelper().firstChildMatching(node, "plural")
-        plural = pluralNode.textContent!!.trim()
+        val pn = XmlHelper.firstChildMatching(node, "plural")
+        if (pn?.textContent != null) {
+            plural = pn.textContent!!.trim()
+        }
     }
+
 }

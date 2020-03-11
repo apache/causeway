@@ -8,6 +8,7 @@ import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
 import org.ro.core.model.DisplayList
 import org.ro.core.model.DisplayObject
+import org.ro.core.event.ResourceSpecification
 import org.ro.to.TObject
 import org.ro.to.mb.Menubars
 import org.ro.ui.RoStatusBar
@@ -103,7 +104,7 @@ object UiManager {
         linkLayout(tObject, aggregator)
         val logEntry = EventStore.find(tObject)!!
         logEntry.addAggregator(aggregator)
-        aggregator.update(logEntry)
+        aggregator.update(logEntry, "json")
         aggregator.handleObject(tObject)
     }
 
@@ -111,7 +112,8 @@ object UiManager {
         val layoutLink = tObject.links.firstOrNull {
             it.rel.contains("object-layout")
         }
-        val logEntry = EventStore.find(layoutLink!!.href)
+        val reSpec = ResourceSpecification(layoutLink!!.href)
+        val logEntry = EventStore.find(reSpec)
         logEntry!!.addAggregator(aggregator)
     }
 

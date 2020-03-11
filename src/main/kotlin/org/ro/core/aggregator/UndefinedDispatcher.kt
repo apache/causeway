@@ -5,7 +5,7 @@ import org.ro.view.UndefinedAlert
 
 class UndefinedDispatcher : BaseAggregator() {
 
-    override fun update(logEntry: LogEntry) {
+    override fun update(logEntry: LogEntry, mimeType: String) {
         UndefinedAlert(logEntry).open()
     }
 

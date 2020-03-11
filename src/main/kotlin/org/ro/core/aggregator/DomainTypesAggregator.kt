@@ -14,7 +14,7 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
         dsp = DiagramDisplay(url)
     }
 
-    override fun update(logEntry: LogEntry) {
+    override fun update(logEntry: LogEntry, mimeType: String) {
         when (val obj = logEntry.getTransferObject()) {
             is DomainTypes -> handleDomainTypes(obj)
             is DomainType -> handleDomainType(obj)
@@ -41,7 +41,7 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
             }
             (dsp as DiagramDisplay).incNumberOfProperties(propertyList.size)
             propertyList.forEach { p ->
-                invoke(p)
+                p.invokeWith(this)
             }
         }
     }
@@ -66,7 +66,7 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
         }
         (dsp as DiagramDisplay).numberOfClasses = domainTypeLinkList.size
         domainTypeLinkList.forEach {
-            invoke(it)
+            it.invokeWith(this)
         }
     }
 

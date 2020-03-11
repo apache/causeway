@@ -11,19 +11,20 @@ class Action(node: Node) {
     var hidden: String // USE ENUM Where? = null
     var id: String
     var position: String //USE ENUM Position? = null
-
     var named = ""
     var describedAs = ""
 
     init {
         val dyNode = node.asDynamic()
-        bookmarking = dyNode.getAttribute("bookmarking") as String
+        bookmarking = dyNode.getAttribute("bookmarking")
         cssClass = dyNode.getAttribute("cssClass")
-        cssClassFa = dyNode.getAttribute("cssClassFa") as String
-        cssClassFaPosition = dyNode.getAttribute("cssClassFaPosition") as String
-        hidden = dyNode.getAttribute("hidden") as String
-        id = dyNode.getAttribute("id") as String
-        position = dyNode.getAttribute("position") as String
+        cssClassFa = dyNode.getAttribute("cssClassFa")
+        cssClassFaPosition = dyNode.getAttribute("cssClassFaPosition")
+        hidden = dyNode.getAttribute("hidden")
+        id = dyNode.getAttribute("id")
+        position = dyNode.getAttribute("position")
+        named = dyNode.getAttribute("named")
+        describedAs = dyNode.getAttribute("describedAs")
 
         val nodeList = node.childNodes.asList()
         val namedList = nodeList.filter { it.nodeName.equals("cpt:named") }

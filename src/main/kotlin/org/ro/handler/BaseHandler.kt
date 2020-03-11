@@ -10,7 +10,7 @@ import org.ro.to.TransferObject
  * COR simplifies implementation of Dispatcher.
  *
  * Implementing classes are responsible for:
- * @item creating Objects from JSON responses,
+ * @item creating Objects by parsing responses (JSON/XML),
  * @item creating/finding Aggregators (eg. ListAggregator, ObjectAggregator), and
  * @item setting Objects and Aggregators into LogEntry.
  */
@@ -20,7 +20,6 @@ abstract class BaseHandler {
 
     /**
      * @see https://en.wikipedia.org/wiki/Template_method_pattern
-     * @param logEntry
      */
     open fun handle(logEntry: LogEntry) {
         this.logEntry = logEntry
@@ -36,8 +35,6 @@ abstract class BaseHandler {
 
     /**
      * Default implementation - may be overridden in subclasses.
-     * @param jsonObj
-     * @return
      */
     open fun canHandle(response: String): Boolean {
         try {
@@ -51,7 +48,6 @@ abstract class BaseHandler {
 
     /**
      * May be overridden in subclasses
-     * @return
      */
     open fun doHandle() {
         update()
@@ -59,14 +55,13 @@ abstract class BaseHandler {
 
     /**
      * Must be overridden in subclasses
-     * @return
      */
     open fun parse(response: String): TransferObject? {
         throw Exception("Subclass Responsibility")
     }
 
     protected fun update() {
-        logEntry.getAggregator()!!.update(logEntry)
+        logEntry.getAggregator()!!.update(logEntry, "json")
     }
 
 }

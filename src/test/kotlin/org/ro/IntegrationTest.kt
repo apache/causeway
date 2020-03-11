@@ -8,6 +8,7 @@ import org.ro.core.aggregator.BaseAggregator
 import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
 import org.ro.handler.ResponseHandler
+import org.ro.core.event.ResourceSpecification
 import org.ro.snapshots.Response
 import org.ro.to.Method
 import org.ro.ui.kv.UiManager
@@ -41,10 +42,10 @@ open class IntegrationTest {
 
     fun mockResponse(response: Response, aggregator: BaseAggregator?): LogEntry {
         val str = response.str
-        val url = response.url
         val method = Method.GET.operation
-        EventStore.start(url, method, "", aggregator)
-        val le = EventStore.end(url, str)
+        val reSpec = ResourceSpecification(response.url)
+        EventStore.start(reSpec, method, "", aggregator)
+        val le = EventStore.end(reSpec, str)
         ResponseHandler.handle(le!!)
         wait(100)
         return le
@@ -53,7 +54,7 @@ open class IntegrationTest {
     fun wait(milliseconds: Long) {
         GlobalScope.launch {
             delay(milliseconds)
-       }
+        }
     }
 
 }

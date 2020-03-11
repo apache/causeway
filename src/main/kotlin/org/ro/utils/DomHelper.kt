@@ -8,7 +8,7 @@ external fun encodeURIComponent(encodedURI: String): String
 /**
  * Dom ^= Document Object Model
  */
-object DomUtils {
+object DomHelper {
 
     fun appendTo(response: String, elementId: String, type: String = "image/svg+xml") {
         val p = DOMParser()

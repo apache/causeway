@@ -1,6 +1,6 @@
 package org.ro.ui.kv
 
-import org.ro.utils.Utils
+import org.ro.utils.DateHelper
 import org.ro.to.ValueType
 import org.ro.ui.FormItem
 import pl.treksoft.kvision.core.Component
@@ -61,13 +61,13 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
     }
 
     private fun createTime(fi: FormItem): DateTime {
-        val date = Utils.toDate(fi.content)
+        val date = DateHelper.toDate(fi.content)
         val item = dateTime(format = "YYYY-MM-DD HH:mm", label = fi.label, value = date)
         return item
     }
 
     private fun createDate(fi: FormItem): DateTime {
-        val date = Utils.toDate(fi.content)
+        val date = DateHelper.toDate(fi.content)
         val item = dateTime(
                 format = "YYYY-MM-DD",
                 label = fi.label,

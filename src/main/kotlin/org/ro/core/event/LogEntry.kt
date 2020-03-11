@@ -29,6 +29,7 @@ data class LogEntry(
         val url: String,
         val method: String? = "",
         val request: String = "",
+        val mimeType: String = "json",
         @ContextualSerialization val createdAt: Date = Date()) {
     var state = EventState.INITIAL
     var title: String = ""

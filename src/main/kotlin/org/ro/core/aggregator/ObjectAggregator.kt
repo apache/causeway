@@ -15,7 +15,7 @@ class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
         dsp = DisplayObject(actionTitle)
     }
 
-    override fun update(logEntry: LogEntry) {
+    override fun update(logEntry: LogEntry, mimeType: String) {
 
         when (val obj = logEntry.getTransferObject()) {
             is TObject -> handleObject(obj)
@@ -32,10 +32,7 @@ class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
 
     fun handleObject(obj: TObject) {
         dsp.addData(obj)
-        val l = obj.getLayoutLink()
-        if (l != null) {
-            invoke(l)
-        }
+        obj.getLayoutLink()?.invokeWith(this)
     }
 
     override fun getObject(): TObject? {
@@ -49,9 +46,11 @@ class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
 
     private fun handleLayout(layout: Layout) {
         dsp.layout = layout
-        layout.properties.forEach {
-            val l = it.link!!
-            invoke(l)
+        layout.propertyDescriptionList.forEach {
+            it.links.forEach { l ->
+                //TODO correct link?
+                l.invokeWith(this)
+            }
         }
     }
 

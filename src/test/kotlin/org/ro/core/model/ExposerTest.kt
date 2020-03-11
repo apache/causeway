@@ -18,8 +18,6 @@ class ExposerTest {
         val jsonStr = CFG_1.str
         val to = TObjectHandler().parse(jsonStr) as TObject
 
-        val properties = to.getProperties()
-
         val exposer = Exposer(to).dynamise()
 
         val actKey = exposer["key"]

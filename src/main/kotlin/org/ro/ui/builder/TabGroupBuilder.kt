@@ -1,7 +1,7 @@
 package org.ro.ui.builder
 
-import org.ro.layout.TabGroup
 import org.ro.to.TObject
+import org.ro.to.bs3.TabGroup
 import org.ro.ui.kv.RoDisplay
 import pl.treksoft.kvision.core.Component
 import pl.treksoft.kvision.core.CssSize
@@ -15,9 +15,9 @@ class TabGroupBuilder {
         result.width = CssSize(100, UNIT.perc)
         result.height = CssSize(100, UNIT.perc)
 
-        for (tl in tabGroupLayout.tab) {
-            val cpt = TabBuilder().create(tl, tObject, dsp)
-            result.addTab(tl.name!!, cpt)
+        for (t in tabGroupLayout.tabList) {
+            val cpt = TabBuilder().create(t, tObject, dsp)
+            result.addTab(t.name, cpt)
         }
         return result
     }

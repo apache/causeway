@@ -6,6 +6,7 @@ import org.ro.IntegrationTest
 import org.ro.core.aggregator.ActionDispatcher
 import org.ro.core.event.EventStore
 import org.ro.handler.ActionHandler
+import org.ro.core.event.ResourceSpecification
 import org.ro.snapshots.simpleapp1_16_0.ACTIONS_RUN_FIXTURE_SCRIPT
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -57,7 +58,8 @@ class LinkTest : IntegrationTest() {
             val arg = Argument(href)
             arguments.put("script", arg)
             ActionDispatcher().invoke(link)
-            val le = EventStore.find(url)!!
+            val urlSpec = ResourceSpecification(url)
+            val le = EventStore.find(urlSpec)!!
             assertTrue(!le.isError())
         }
     }
@@ -68,7 +70,7 @@ class LinkTest : IntegrationTest() {
         val arg = Argument(href)
         val args = mutableMapOf<String, Argument?>()
         args.put("", arg)
-        val l = Link(arguments = args)
+        val l = Link(arguments = args, href = href)
         // then
         val arguments = l.argMap()!!
         val a = arguments[""]

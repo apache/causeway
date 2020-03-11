@@ -39,7 +39,7 @@ class MemberTest() {
         val m = parse(jsonStr)
         assertEquals("className", m.id)
         val actual = m.value!!.content as Link
-        val expected = Link()
+        val expected = Link(href = "")
         assertEquals(expected::class, actual::class)
     }
 

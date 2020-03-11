@@ -1,21 +1,27 @@
 package org.ro.to.bs3
 
+import org.ro.to.Link
 import org.w3c.dom.Node
 import org.w3c.dom.asList
 
+//IMPROVE class differs in many aspects from org.ro.to.Property - to be refactored?
 class Property(node: Node) {
-    var hidden: String // USE ENUM Where? = null
     var id: String
+    var link: Link? = null
+    var hidden: String // USE ENUM Where? = null
     var typicalLength: Int = 0
-
+    var multiLine: Int = 1
+    var describedAs: String? = null
     var named = ""
     lateinit var action: Action
 
     init {
-        val dyNode = node.asDynamic()
-        hidden = dyNode.getAttribute("hidden")
-        id = dyNode.getAttribute("id") as String
-        typicalLength = dyNode.getAttribute("typicalLength")
+        val dn = node.asDynamic()
+        hidden = dn.getAttribute("hidden")
+        id = dn.getAttribute("id") as String
+        typicalLength = dn.getAttribute("typicalLength")
+        multiLine = dn.getAttribute("multiLine")
+        describedAs = dn.getAttribute("describedAs")
 
         val nodeList = node.childNodes.asList()
         val namedList = nodeList.filter { it.nodeName.equals("cpt:named") }
@@ -28,6 +34,13 @@ class Property(node: Node) {
         if (actList.isNotEmpty()) {
             val n = actList.first()
             action = Action(n)
+        }
+
+        val linkList = nodeList.filter { it.nodeName.equals("cpt:link") }
+        if (linkList.isNotEmpty()) {
+            val n = linkList.first()
+            val bs3l = org.ro.to.bs3.Link(n)
+            link = org.ro.to.Link(bs3l.rel, bs3l.method, bs3l.href, bs3l.type)
         }
     }
 

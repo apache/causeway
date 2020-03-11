@@ -1,6 +1,6 @@
 package org.ro.to
 
-import org.ro.utils.Utils
+import org.ro.utils.XmlHelper
 
 enum class ValueType(val type: String) {
     BOOLEAN("Boolean"),
@@ -41,7 +41,7 @@ class TypeMapper {
         val contentStr = value?.content.toString()
         return when {
             isoDate.matches(contentStr) -> ValueType.DATE.type
-            Utils.isXml(contentStr) -> ValueType.HTML.type
+            XmlHelper.isXml(contentStr) -> ValueType.HTML.type
             else -> ValueType.TEXT.type
         }
     }

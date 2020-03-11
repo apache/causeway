@@ -6,7 +6,7 @@ import org.ro.ui.kv.UiManager
 
 class NavigationDispatcher() : BaseAggregator() {
 
-    override fun update(logEntry: LogEntry) {
+    override fun update(logEntry: LogEntry, mimeType: String) {
         val obj = logEntry.getTransferObject()
         val result = obj as Menubars
         UiManager.amendMenu(result)

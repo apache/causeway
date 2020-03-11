@@ -1,5 +1,6 @@
 package org.ro.ui
 
+import kotlinx.serialization.UnstableDefault
 import org.ro.handler.DomainTypeHandler
 import org.ro.snapshots.simpleapp1_16_0.SO
 import org.ro.to.DomainType
@@ -13,6 +14,7 @@ class PumlBuilderTest {
     val prp = "name String"
     val mth = "rebuildMetamodel"
 
+    @UnstableDefault
     @Test
     fun testSimpleObject() {
         //given

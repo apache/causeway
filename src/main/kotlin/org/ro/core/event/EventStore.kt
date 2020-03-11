@@ -2,6 +2,7 @@ package org.ro.core.event
 
 import org.ro.utils.Utils
 import org.ro.core.aggregator.BaseAggregator
+import org.ro.core.event.ResourceSpecification
 import org.ro.to.TObject
 import org.ro.ui.kv.UiManager
 import pl.treksoft.kvision.panel.SimplePanel
@@ -26,8 +27,11 @@ object EventStore {
         }
     }
 
-    fun start(url: String, method: String, body: String = "", aggregator: BaseAggregator? = null): LogEntry {
-        val entry = LogEntry(url, method, body)
+    fun start(reSpec: ResourceSpecification,
+              method: String,
+              body: String = "",
+              aggregator: BaseAggregator? = null): LogEntry {
+        val entry = LogEntry(reSpec.url, method, body, reSpec.mimeType)
         if (aggregator != null) {
             entry.addAggregator(aggregator)
         }
@@ -58,8 +62,8 @@ object EventStore {
         }
     }
 
-    fun end(url: String, response: String): LogEntry? {
-        val entry: LogEntry? = find(url)
+    fun end(reSpec: ResourceSpecification, response: String): LogEntry? {
+        val entry: LogEntry? = find(reSpec)
         if (entry != null) {
             entry.response = response
             entry.setSuccess()
@@ -68,14 +72,14 @@ object EventStore {
         return entry
     }
 
-    fun fault(url: String, fault: String) {
-        val entry: LogEntry? = find(url)
+    fun fault(reSpec: ResourceSpecification, fault: String) {
+        val entry: LogEntry? = find(reSpec)
         entry!!.setError(fault)
         updateStatus(entry)
     }
 
-    fun cached(url: String): LogEntry {
-        val entry: LogEntry? = find(url)
+    fun cached(reSpec: ResourceSpecification): LogEntry {
+        val entry: LogEntry? = find(reSpec)
         entry!!.setCached()
         return entry
     }
@@ -89,12 +93,13 @@ object EventStore {
      * @param url
      * @return
      */
-    fun find(url: String): LogEntry? {
-        val isRedundant = urlContains(url, "object-layout") || urlContains(url, "/properties/")
+    fun find(reSpec: ResourceSpecification): LogEntry? {
+        val url = reSpec.url
+        val isRedundant = url.contains("object-layout") || url.contains("/properties/")
         return if (isRedundant) {
-            findEquivalent(url)
+            findEquivalent(reSpec)
         } else {
-            findExact(url)
+            findExact(reSpec)
         }
     }
 
@@ -108,20 +113,16 @@ object EventStore {
         return null
     }
 
-    private fun urlContains(url: String, search: String): Boolean {
-        val index = url.indexOf(search)
-        return index >= 0
-    }
-
-    internal fun findExact(url: String): LogEntry? {
-        return log.firstOrNull { it.url == url }
+    internal fun findExact(reSpec: ResourceSpecification): LogEntry? {
+        return log.firstOrNull { it.url == reSpec.url && it.mimeType == reSpec.mimeType}
     }
 
     internal fun findView(title: String): LogEntry? {
         return log.firstOrNull { it.title == title && it.isView() }
     }
 
-    internal fun findEquivalent(url: String): LogEntry? {
+    internal fun findEquivalent(reSpec: ResourceSpecification): LogEntry? {
+        val url = reSpec.url
         return log.firstOrNull { areEquivalent(it.url, url) }
     }
 
@@ -149,12 +150,12 @@ object EventStore {
         return diffCnt <= allowedDiff
     }
 
-    fun isCached(url: String, method: String): Boolean {
+    fun isCached(reSpec: ResourceSpecification, method: String): Boolean {
         var answer = false
-        val le = this.find(url)
+        val le = this.find(reSpec)
         if (le != null) {
             when {
-                le.hasResponse() && le.method == method -> answer = true
+                le.hasResponse() && le.method == method && le.mimeType == reSpec.mimeType -> answer = true
                 le.isView() -> answer = true
             }
         }

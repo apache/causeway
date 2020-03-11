@@ -1,12 +1,12 @@
 package org.ro.ui.kv
 
-import org.ro.utils.Utils
 import org.ro.core.aggregator.ActionDispatcher
 import org.ro.to.Link
 import org.ro.to.Member
 import org.ro.to.TObject
 import org.ro.to.mb.Menu
 import org.ro.ui.IconManager
+import org.ro.utils.Utils
 import pl.treksoft.kvision.core.Component
 import pl.treksoft.kvision.dropdown.Direction
 import pl.treksoft.kvision.dropdown.DropDown
@@ -71,7 +71,7 @@ object MenuFactory {
         val saveLink = tObject.links.first()
         action(dd, "save", saveLink)
 
-        val undoLink = Link()
+        val undoLink = Link(href = "")
         action(dd, "undo", undoLink)
     }
 
