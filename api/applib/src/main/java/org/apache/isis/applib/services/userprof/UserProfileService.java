@@ -41,7 +41,7 @@ public interface UserProfileService {
      * </p>
      */
     // tag::refguide[]
-    String userProfileName();
+    String userProfileName();   // <.>
 
 }
 // end::refguide[]

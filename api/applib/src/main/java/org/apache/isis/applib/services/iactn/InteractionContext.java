@@ -52,26 +52,12 @@ import lombok.extern.log4j.Log4j2;
 public class InteractionContext {
 
     // end::refguide[]
-    public InteractionContext() {
-        log.debug("init");
-    }
-
-    @PostConstruct
-    public void postConstruct() {
-        log.debug("postConstruct");
-    }
-
-    @PreDestroy
-    public void preDestroy() {
-        log.debug("preDestroy");
-    }
-
     /**
      * The currently active {@link Interaction} for this thread.
      */
     // tag::refguide[]
     @Getter
-    private Interaction interaction;
+    private Interaction interaction;    // <1>
     // end::refguide[]
 
     /**

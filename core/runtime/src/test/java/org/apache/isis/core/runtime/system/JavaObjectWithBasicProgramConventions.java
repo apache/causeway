@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.junit.Assert;
 
-import org.apache.isis.applib.security.UserMemento;
+import org.apache.isis.applib.services.user.UserMemento;
 
 public class JavaObjectWithBasicProgramConventions implements Interface1, Interface2 {
     public static String classActionValid;

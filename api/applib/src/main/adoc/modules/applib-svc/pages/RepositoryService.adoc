@@ -12,64 +12,60 @@ You can use it during prototyping to write naive queries (find all rows, then fi
 
 
 
-
-
 == API
 
 The API of `RepositoryService` is:
 
 [source,java]
 ----
-public interface RepositoryService {
-    <T> T instantiate(final Class<T> ofType);                                               // <1>
-
-    boolean isPersistent(Object domainObject);                                              // <2>
-    void persist(Object domainObject);                                                      // <3>
-    void persistAndFlush(Object domainObject);                                              // <4>
-
-    void remove(Object persistentDomainObject);                                             // <5>
-    void removeAndFlush(Object persistentDomainObject);                                     // <6>
-
-    <T> List<T> allInstances(Class<T> ofType, long... range);                               // <7>
-
-    <T> List<T> allMatches(Query<T> query);                                                 // <8>
-    <T> List<T> allMatches(Class<T> ofType, Predicate<? super T> predicate, long... range); // <9>
-
-    <T> T uniqueMatch(Query<T> query);                                                      // <10>
-    <T> T uniqueMatch(final Class<T> ofType, final Predicate<T> predicate);                 // <11>
-
-    @Deprecated
-    <T> T firstMatch(Query<T> query);                                                       // <12>
-    @Deprecated
-    <T> T firstMatch(final Class<T> ofType, final Predicate<T> predicate);                  // <13>
-}
+include::refguide:applib-svc:example$services/repository/RepositoryService.java[tags="refguide"]
 ----
-<1> create a new non-persisted domain entity.
+<.> determine the state of this domain entity:
++
+[source,java]
+----
+include::refguide:applib-svc:example$services/repository/EntityState.java[tags="refguide"]
+----
+
+<.> create a new non-persisted domain entity.
 This is identical to
-xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`]'s `instantiate(...)` method, but is provided in the
+xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`]'s `detachedEntity(...)` method, but is provided in the
 ``RepositoryService``'s API too because instantiating and persisting objects are often done together.
-<2> test whether a particular domain object is persistent or not
-<3> persist (ie save) an object to the persistent object store (or do nothing if it is already persistent).
-<4> persist (ie save) and flush; same as `persist()`, but also flushes changes to database and updates managed properties and collections (i.e., 1-1, 1-n, m-n relationships automatically maintained by the DataNucleus persistence mechanism).
-<5> remove (ie delete) an object from the persistent object store (or do nothing if it has already been deleted).
-<6> remove (delete) and flush;  same as `remove()`, but also flushes changes to database and updates managed properties and collections (i.e., 1-1, 1-n, m-n relationships automatically maintained by the DataNucleus persistence mechanism).
-<7> return all persisted instances of specified type.
+
+<.> persist (ie save) an object to the persistent object store (or do nothing if it is already persistent).
+
+<.> persist (ie save) and flush; same as `persist()`, but also flushes changes to database and updates managed properties and collections (i.e., 1-1, 1-n, m-n relationships automatically maintained by the DataNucleus persistence mechanism).
+
+<.> remove (ie delete) an object from the persistent object store (or do nothing if it has already been deleted).
+
+<.> remove (delete) and flush;  same as `remove()`, but also flushes changes to database and updates managed properties and collections (i.e., 1-1, 1-n, m-n relationships automatically maintained by the DataNucleus persistence mechanism).
+
+<.> return all persisted instances of specified type.
 Mostly for prototyping, though can be useful to obtain all instances of domain entities if the number is known to be small.
-The optional varargs parameters are for paging control; more on this below.
-<8> all persistence instances matching the specified `Query`.
-`Query` itself is an Isis abstraction on top of JDO/DataNucleus' Query API.
+
+<.> as previous, with paging.
+
+<.> all persisted instances matching the `Predicate`.
+Client-side filtering so only really intended for prototyping.
+
+<.> as previous, with paging.
+
+<.> all persisted instances matching the (server-side) `Query`.
 *This is the primary API used for querying*
-<9> As the previous, but with client-side filtering using a `Predicate`.
-Only really intended for prototyping.
-<10> Returns the first instance that matches the supplied query.
-If no instance is found then `null `will be returned, while if there is more that one instances a run-time exception will be thrown.
+
+<.> returns the one-and-only match of an instance matching the `Predicate`.
+If there is more that one instances a run-time exception will be thrown.
+Client-side filtering so only really intended for prototyping.
+
+<.> returns the one-and-only match of an instance matching the (server-side) `Query`
 Generally this method is preferred for looking up an object by its (primary or alternate) key.
-<11> As the previous, but with client-side filtering using a `Predicate`.
-Only really intended for prototyping.
-<12> (Deprecated) returns the first instance that matches the supplied query.  If no instance is found then `null `will be returned.
+
+<.> returns the first instance that matches the `Predicate`.
 No exception is thrown if more than one matches, so this is less strict that `uniqueMatch(...)`.
-<13> (Deprecated) As the previous, but with client-side filtering using a `Predicate`.
-Only really intended for prototyping.
+Client-side filtering so only really intended for prototyping.
+
+<.> returns the first instance that matches the (server-side) `Query`.
+No exception is thrown if more than one matches, so this is less strict that `uniqueMatch(...)`.
 
 
 The `uniqueMatch(...)` methods are the recommended way of querying for (precisely) one instance.
@@ -85,7 +81,7 @@ This section briefly discusses how application code can use (some of) these APIs
 
 [source,java]
 ----
-Customer cust = repositoryService.instantiate(Customer.class);
+Customer cust = repositoryService.detachedEntity(Customer.class);
 cust.setFirstName("Freddie");
 cust.setLastName("Mercury");
 repositoryService.persist(cust);
@@ -123,7 +119,7 @@ public abstract class Warehouse extends SalesVIPEntity<Marketplace> {
         MarketplaceExcludedProduct marketplaceExcludedProduct = this.findExcludedProduct(product);
         if (marketplaceExcludedProduct == null) {
             marketplaceExcludedProduct =
-                this.factoryService.instantiate(MarketplaceExcludedProduct.class);
+                this.repositoryService.detachedEntity(MarketplaceExcludedProduct.class);
         }
 
         this.wrap(marketplaceExcludedProduct).setMarketplace(this);

@@ -26,8 +26,9 @@ import org.apache.isis.applib.annotation.Programmatic;
 // tag::refguide[]
 public interface RoutingService {
 
-    boolean canRoute(Object original);
-    Object route(Object original);
+    boolean canRoute(Object original);  // <.>
+
+    Object route(Object original);      // <.>
 
 }
 // end::refguide[]

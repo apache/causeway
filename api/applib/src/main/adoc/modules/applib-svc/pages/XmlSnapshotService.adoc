@@ -23,19 +23,21 @@ The (basic) API of `XmlSnapshotService` is:
 
 [source]
 ----
-public interface XmlSnapshotService {
-    public interface Snapshot {
-        Document getXmlDocument();
-        Document getXsdDocument();
-        String getXmlDocumentAsString();
-        String getXsdDocumentAsString();
-    }
-    @Programmatic
-    public XmlSnapshotService.Snapshot snapshotFor(Object domainObject);
-    ...
-}
+include::refguide:applib-svc:example$services/xmlsnapshot/XmlSnapshotService.java[tags="refguide"]
 ----
 
+[source]
+----
+include::refguide:applib-svc:example$services/xmlsnapshot/XmlSnapshotService.java[tags="refguide-1"]
+----
+
+
+== Implementation
+
+The framework provides a default implementation of this service, `o.a.i.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefault`.
+
+
+== Usage
 
 The most straight-forward usage of this service is simply:
 

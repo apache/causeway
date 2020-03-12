@@ -24,16 +24,16 @@ import java.util.function.Consumer;
 
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.core.commons.collections.ImmutableEnumSet;
-import org.apache.isis.core.commons.handler.MethodReferences.Call1;
-import org.apache.isis.core.commons.handler.MethodReferences.Call2;
-import org.apache.isis.core.commons.handler.MethodReferences.Call3;
-import org.apache.isis.core.commons.handler.MethodReferences.Call4;
-import org.apache.isis.core.commons.handler.MethodReferences.Call5;
-import org.apache.isis.core.commons.handler.MethodReferences.Run1;
-import org.apache.isis.core.commons.handler.MethodReferences.Run2;
-import org.apache.isis.core.commons.handler.MethodReferences.Run3;
-import org.apache.isis.core.commons.handler.MethodReferences.Run4;
-import org.apache.isis.core.commons.handler.MethodReferences.Run5;
+import org.apache.isis.applib.services.MethodReferences.Call1;
+import org.apache.isis.applib.services.MethodReferences.Call2;
+import org.apache.isis.applib.services.MethodReferences.Call3;
+import org.apache.isis.applib.services.MethodReferences.Call4;
+import org.apache.isis.applib.services.MethodReferences.Call5;
+import org.apache.isis.applib.services.MethodReferences.Run1;
+import org.apache.isis.applib.services.MethodReferences.Run2;
+import org.apache.isis.applib.services.MethodReferences.Run3;
+import org.apache.isis.applib.services.MethodReferences.Run4;
+import org.apache.isis.applib.services.MethodReferences.Run5;
 
 /**
  * Binds to a domain object, to prepare for type-safe asynchronous action invocation.

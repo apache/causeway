@@ -26,7 +26,6 @@ import org.apache.isis.applib.services.menu.MenuBarsService;
 public interface LayoutService {
 
     // end::refguide[]
-
     /**
      * Mode of operation when downloading a layout file (while prototyping). It affects the way the file's
      * content is assembled. Once a layout file is in place, its layout data takes precedence over any
@@ -34,7 +33,6 @@ public interface LayoutService {
      */
     // tag::refguide-1[]
     enum Style {
-
         // end::refguide-1[]
         /**
          * The current layout for the domain class.
@@ -47,7 +45,6 @@ public interface LayoutService {
          */
         // tag::refguide-1[]
         CURRENT,
-
         // end::refguide-1[]
         /**
          * As per {@link #NORMALIZED}, but also with all (non-null) facets for all
@@ -62,7 +59,6 @@ public interface LayoutService {
          */
         // tag::refguide-1[]
         COMPLETE,
-
         // end::refguide-1[]
         /**
          * Default, whereby missing properties/collections/actions are added to regions,
@@ -78,7 +74,6 @@ public interface LayoutService {
          */
         // tag::refguide-1[]
         NORMALIZED,
-
         // end::refguide-1[]
         /**
          * As per {@link #NORMALIZED}, but with no properties/collections/actions.
@@ -96,19 +91,18 @@ public interface LayoutService {
     }
     // end::refguide-1[]
 
-    // end::refguide[]
     /**
      * Obtains the serialized XML form of the layout (grid) for the specified domain class.
      */
     // tag::refguide[]
-    String toXml(Class<?> domainClass, Style style);
+    String toXml(Class<?> domainClass, Style style);        // <.>
 
     // end::refguide[]
     /**
      * Obtains a zip file of the serialized XML of the layouts (grids) of all domain entities and view models.
      */
     // tag::refguide[]
-    byte[] toZip(final Style style);
+    byte[] toZip(final Style style);                        // <.>
 
     // end::refguide[]
     /**
@@ -116,7 +110,7 @@ public interface LayoutService {
      * @param type - either the current menubars (could be loaded from a file) or the fallback (obtained from metamodel facets)
      */
     // tag::refguide[]
-    String toMenuBarsXml(final MenuBarsService.Type type);
+    String toMenuBarsXml(final MenuBarsService.Type type);  // <.>
 
 }
 // end::refguide[]

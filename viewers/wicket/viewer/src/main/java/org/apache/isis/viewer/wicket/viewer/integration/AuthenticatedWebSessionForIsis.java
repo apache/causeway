@@ -31,6 +31,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.session.SessionLoggingService;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
@@ -244,12 +245,14 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, IsisWebAppComm
 
 
         val isisSessionFactory = getIsisSessionFactory();
-        val sessionLoggingService = getSessionLoggingService();
+        val sessionLoggingServices = getSessionLoggingServices();
 
         final Runnable loggingTask = ()->{
             // use hashcode as session identifier, to avoid re-binding http sessions if using Session#getId()
             int sessionHashCode = System.identityHashCode(AuthenticatedWebSessionForIsis.this);
-            sessionLoggingService.log(type, username, now(), causedBy, Integer.toString(sessionHashCode));
+            sessionLoggingServices.forEach(
+                sessionLoggingService -> sessionLoggingService.log(type, username, now(), causedBy, Integer.toString(sessionHashCode))
+            );
         };
 
         if(isisSessionFactory!=null) {
@@ -257,19 +260,10 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, IsisWebAppComm
         } else {
             loggingTask.run();
         }
-
     }
 
-    protected SessionLoggingService getSessionLoggingService() {
-        try {
-            final SessionLoggingService service = 
-                    commonContext.getServiceRegistry().lookupService(SessionLoggingService.class)
-                    .orElseGet(SessionLoggingService.Stderr::new);
-            return service;
-        } catch (Exception e) {
-            // fallback to System.err
-            return new SessionLoggingService.Stderr();
-        }
+    protected Can<SessionLoggingService> getSessionLoggingServices() {
+        return commonContext.getServiceRegistry().select(SessionLoggingService.class);
     }
     
     protected IsisSessionFactory getIsisSessionFactory() {

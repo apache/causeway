@@ -51,10 +51,10 @@ public interface MenuBarsService {
      * @return
      */
     // tag::refguide[]
-    default MenuBars menuBars() {
+    default MenuBars menuBars() {           // <.>
         return menuBars(Type.DEFAULT);
     }
 
-    MenuBars menuBars(final Type type);
+    MenuBars menuBars(final Type type);     // <.>
 }
 // end::refguide[]

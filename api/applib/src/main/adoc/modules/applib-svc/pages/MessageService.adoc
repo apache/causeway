@@ -15,32 +15,28 @@ The API of `MessageService` is:
 
 [source,java]
 ----
-public interface MessageService {
-
-    void informUser(String message);                                                            // <1>
-    String informUser(TranslatableString message, Class<?> contextClass, String contextMethod); // <2>
-    String informUser(TranslatableString message, String translationContext);
-
-    void warnUser(String message);                                                              // <3>
-    String warnUser(TranslatableString message, Class<?> contextClass, String contextMethod);   // <4>
-    String warnUser(TranslatableString message, String translationContext);
-
-    void raiseError(String message);                                                            // <5>
-    String raiseError(TranslatableString message, Class<?> contextClass, String contextMethod); // <6>
-    String raiseError(TranslatableString message, String translationContext);
-    ...
-}
+include::refguide:applib-svc:example$services/message/MessageService.java[tags="refguide"]
 ----
-<1> display as a transient message to the user (not requiring acknowledgement).  In the xref:vw:ROOT:about.adoc[Wicket viewer] this is implemented as a toast that automatically disappears after a period of time.
-<2> ditto, but with translatable string, for xref:userguide:btb:i18n.adoc[i18n support].
-<3> warn the user about a situation with the specified message.  In the xref:vw:ROOT:about.adoc[Wicket viewer] this is implemented as a toast that must be closed by the end-user.
-<4> ditto, but with translatable string, for i18n support.
-<5> show the user an unexpected application error.  In the xref:vw:ROOT:about.adoc[Wicket viewer] this is implemented as a toast (with a different colour) that must be closed by the end-user.
-<6> ditto, but with translatable string, for i18n support.
+<.> display as a transient message to the user (not requiring acknowledgement).  In the xref:vw:ROOT:about.adoc[Wicket viewer] this is implemented as a toast that automatically disappears after a period of time.
+<.> ditto, but with translatable string, for xref:userguide:btb:i18n.adoc[i18n support].
+<.> ditto, but with an arbitrary translation context (rather than one inferred from a context class and method)
+<.> warn the user about a situation with the specified message.  In the xref:vw:ROOT:about.adoc[Wicket viewer] this is implemented as a toast that must be closed by the end-user.
+<.> ditto, but with translatable string, for i18n support.
+<.> ditto, but with an arbitrary translation context (rather than one inferred from a context class and method)
+<.> show the user an unexpected application error.  In the xref:vw:ROOT:about.adoc[Wicket viewer] this is implemented as a toast (with a different colour) that must be closed by the end-user.
+<.> ditto, but with translatable string, for i18n support.
+<.> ditto, but with an arbitrary translation context (rather than one inferred from a context class and method)
 
-The i18n versions of these methods all have an override which simply creates a single context string from the `contextClass` and `contextMethod` parameters (eg "com.mycompany.Customer#placeOrder").
+The i18n versions of these methods that take `contextClass` and `contextMethod` parameters use this to create a context string, eg "com.mycompany.Customer#placeOrder".
 
 
+== Implementation
+
+The core framework provides a default implementation of this service, `o.a.i.core.runtime.services.message.MessageServiceDefault`.
+
+
+
+== Usage
 
 For example:
 
@@ -56,9 +52,5 @@ public Order addItem(Product product, @ParameterLayout(named="Quantity") int qua
 ----
 
 
-
-== Implementation
-
-The core framework provides a default implementation of this service, `o.a.i.core.runtime.services.message.MessageServiceDefault`.
 
 

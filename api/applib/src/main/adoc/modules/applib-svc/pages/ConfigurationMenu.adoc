@@ -7,7 +7,7 @@ The `ConfigurationMenu` service simply provides a UI in order to access the conf
 
 == Implementation
 
-The `ConfigurationMenu` implementation is very simple:
+The `ConfigurationMenu` implementation is very simple (annotations omitted):
 
 [source,java]
 ----

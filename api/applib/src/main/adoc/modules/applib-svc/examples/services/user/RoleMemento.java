@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.security;
+package org.apache.isis.applib.services.user;
 
 import org.apache.isis.applib.annotation.MemberOrder;
 
@@ -48,18 +48,22 @@ public final class RoleMemento {
         this.description = description;
     }
 
-    // tag::refguide[]
     public String title() {
         return name;
     }
 
     @MemberOrder(sequence = "1.1")
+    // tag::refguide[]
     @Getter
     private final String name;
 
+    // end::refguide[]
     @MemberOrder(sequence = "1.2")
+    // tag::refguide[]
     @Getter
     private final String description;
+
+    // ...
 
 }
 // end::refguide[]

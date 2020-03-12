@@ -29,7 +29,7 @@ public interface MetricsService {
      * The number of objects that have, so far in this request, been loaded from the database.
      *
      * <p>
-     *     Corresponds to the number of times that {@link javax.jdo.listener.LoadLifecycleListener#postLoad(InstanceLifecycleEvent)} is fired.
+     *     Corresponds to the number of times that <code>javax.jdo.listener.LoadLifecycleListener#postLoad(InstanceLifecycleEvent)</code> (or equivalent) is fired.
      * </p>
      *
      * <p>
@@ -37,7 +37,7 @@ public interface MetricsService {
      * </p>
      */
     // tag::refguide[]
-    int numberObjectsLoaded();
+    int numberObjectsLoaded();      // <.>
 
     // end::refguide[]
     /**
@@ -45,7 +45,7 @@ public interface MetricsService {
      * good measure of the footprint of the interaction.
      *
      * <p>
-     *     Corresponds to the number of times that {@link javax.jdo.listener.DirtyLifecycleListener#preDirty(InstanceLifecycleEvent)} callback is fired.
+     *     Corresponds to the number of times that <code>javax.jdo.listener.DirtyLifecycleListener#preDirty(InstanceLifecycleEvent)</code> (or equivalent) callback is fired.
      * </p>
      *
      * <p>
@@ -53,7 +53,7 @@ public interface MetricsService {
      * </p>
      */
     // tag::refguide[]
-    int numberObjectsDirtied();
+    int numberObjectsDirtied();     // <.>
 
 }
 // end::refguide[]

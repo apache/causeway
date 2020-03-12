@@ -55,3 +55,6 @@ The alternative is to use the xref:refguide:applib-svc:FactoryService.adoc[`Fact
 The core framework provides a default implementation of this service (`o.a.i.core.runtime.services.registry.ServiceRegistryDefault`).
 
 
+== Related Services
+
+See xref:refguide:applib-svc:ServiceInjector.adoc[`ServiceInjector`] to inject domain services rather than just look them up.

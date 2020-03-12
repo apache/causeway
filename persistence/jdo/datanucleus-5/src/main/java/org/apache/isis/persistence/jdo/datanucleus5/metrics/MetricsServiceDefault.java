@@ -51,22 +51,6 @@ import lombok.extern.log4j.Log4j2;
 public class MetricsServiceDefault 
 implements MetricsService, InstanceLifecycleListener, LoadLifecycleListener, TransactionScopeListener {
 
-// end::refguide[]
-    public MetricsServiceDefault() {
-        log.debug("init");
-    }
-
-    @PostConstruct
-    public void postConstruct() {
-        log.debug("postConstruct");
-    }
-
-    @PreDestroy
-    public void preDestroy() {
-        log.debug("preDestroy");
-    }
-
-// tag::refguide[]
     @Inject private javax.inject.Provider<ChangedObjectsService> changedObjectsProvider;
     
     private LongAdder numberLoaded = new LongAdder();

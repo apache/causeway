@@ -38,7 +38,8 @@ public interface SudoService {
      * If included in the list of roles, then will disable security checks (can view and use all object members).
      */
     // tag::refguide[]
-    String ACCESS_ALL_ROLE = SudoService.class.getName() + "#accessAll";
+    String ACCESS_ALL_ROLE =                                // <.>
+            SudoService.class.getName() + "#accessAll";
 
     // end::refguide[]
     /**
@@ -49,7 +50,9 @@ public interface SudoService {
      * </p>
      */
     // tag::refguide[]
-    void sudo(String username, final Runnable runnable);
+    void sudo(                                              // <.>
+            String username,
+            final Runnable runnable);
 
     // end::refguide[]
     /**
@@ -60,21 +63,27 @@ public interface SudoService {
      * </p>
      */
     // tag::refguide[]
-    <T> T sudo(String username, final Callable<T> callable);
+    <T> T sudo(                                             // <.>
+            String username,
+            final Callable<T> callable);
 
     // end::refguide[]
     /**
      * Executes the supplied block, with the {@link UserService} returning the specified user with the specified roles.
      */
     // tag::refguide[]
-    void sudo(String username, List<String> roles, final Runnable runnable);
+    void sudo(                                              // <.>
+            String username, List<String> roles,
+            final Runnable runnable);
 
     // end::refguide[]
     /**
      * Executes the supplied block, with the {@link UserService} returning the specified user with the specified roles.
      */
     // tag::refguide[]
-    <T> T sudo(String username, List<String> roles, final Callable<T> callable);
+    <T> T sudo(                                             // <.>
+            String username, List<String> roles,
+            final Callable<T> callable);
 
     // end::refguide[]
 
@@ -95,9 +104,9 @@ public interface SudoService {
          * </p>
          */
         // tag::refguide-1[]
-        void runAs(String username, List<String> roles);
+        void runAs(String username, List<String> roles);    // <.>
 
-        void releaseRunAs();
+        void releaseRunAs();                                // <.>
     }
     // end::refguide-1[]
 

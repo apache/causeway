@@ -36,7 +36,7 @@ public interface MessageService {
      * @see #raiseError(String)
      */
     // tag::refguide[]
-    void informUser(String message);
+    void informUser(String message);            // <.>
 
     // end::refguide[]
     /**
@@ -53,14 +53,19 @@ public interface MessageService {
      * @see #raiseError(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
      */
     // tag::refguide[]
-    String informUser(TranslatableString message, final Class<?> contextClass, final String contextMethod);
+    String informUser(                          // <.>
+            TranslatableString message,
+            final Class<?> contextClass,
+            final String contextMethod);
 
     // end::refguide[]
     /**
      * Override of {@link MessageService#informUser(TranslatableString, Class, String)}, but with last two parameters combined into a context string.
      */
     // tag::refguide[]
-    String informUser(TranslatableString message, final String translationContext);
+    String informUser(                          // <.>
+            TranslatableString message,
+            final String translationContext);
 
     // end::refguide[]
     /**
@@ -73,7 +78,7 @@ public interface MessageService {
      * @see #informUser(String)
      */
     // tag::refguide[]
-    void warnUser(String message);
+    void warnUser(String message);              // <.>
 
     // end::refguide[]
     /**
@@ -90,14 +95,19 @@ public interface MessageService {
      * @see #raiseError(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
      */
     // tag::refguide[]
-    String warnUser(TranslatableString message, final Class<?> contextClass, final String contextMethod);
+    String warnUser(                            // <.>
+            TranslatableString message,
+            final Class<?> contextClass,
+            final String contextMethod);
 
     // end::refguide[]
     /**
      * Override of {@link MessageService#warnUser(TranslatableString, Class, String)}, but with last two parameters combined into a context string.
      */
     // tag::refguide[]
-    String warnUser(TranslatableString message, final String translationContext);
+    String warnUser(                            // <.>
+            TranslatableString message,
+            final String translationContext);
 
     // end::refguide[]
     /**
@@ -110,7 +120,7 @@ public interface MessageService {
      * @see #informUser(String)
      */
     // tag::refguide[]
-    void raiseError(String message);
+    void raiseError(String message);            // <.>
 
     // end::refguide[]
     /**
@@ -127,14 +137,19 @@ public interface MessageService {
      * @see #warnUser(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
      */
     // tag::refguide[]
-    String raiseError(TranslatableString message, final Class<?> contextClass, final String contextMethod);
+    String raiseError(                          // <.>
+            TranslatableString message,
+            final Class<?> contextClass,
+            final String contextMethod);
 
     // end::refguide[]
     /**
      * Override of {@link MessageService#raiseError(TranslatableString, Class, String)}, but with last two parameters combined into a context string.
      */
     // tag::refguide[]
-    String raiseError(TranslatableString message, final String translationContext);
+    String raiseError(                          // <.>
+            TranslatableString message,
+            final String translationContext);
 
 }
 // end::refguide[]

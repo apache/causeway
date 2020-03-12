@@ -62,8 +62,7 @@ public class TranslationServicePo implements TranslationService {
 
         final Mode translationMode = configuration.getCore().getRuntimeServices().getTranslation().getPo().getMode();
 
-        final boolean translationDisabled = (Mode.DISABLED == translationMode || Mode.DISABLE == translationMode);
-        if(translationDisabled) {
+        if(translationMode == Mode.DISABLED) {
             // switch to disabled mode
             po = new PoDisabled(this);
             return;
@@ -74,9 +73,7 @@ public class TranslationServicePo implements TranslationService {
             return;
         }
 
-        final boolean forceRead = (Mode.READ == translationMode);
-
-        if(!forceRead) {
+        if(translationMode != Mode.READ) {
             // remain in write mode
             return;
         }
@@ -87,9 +84,6 @@ public class TranslationServicePo implements TranslationService {
         po = poReader;
     }
 
-    protected boolean isPrototypeOrTest() {
-        return systemEnvironment.isPrototyping() || systemEnvironment.isUnitTesting();
-    }
 
     @PreDestroy
     public void shutdown() {

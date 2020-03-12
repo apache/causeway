@@ -4,7 +4,7 @@
 :page-partial:
 
 WARNING: TODO - to review for v2.
-Document `WrappingObject`.
+Document `WrappingObject`, document `AsyncWrap`
 
 
 The `WrapperFactory` provides the ability to enforce business rules for programmatic interactions between domain objects.
@@ -31,64 +31,45 @@ The API provided by the service is:
 
 [source,java]
 ----
-public interface WrapperFactory {
-
-    public static enum ExecutionMode {                      // <1>
-        EXECUTE,
-        SKIP_RULES,
-        NO_EXECUTE,
-        TRY,
-    }
-
-    @Programmatic
-    <T> T wrap(T domainObject, ExecutionMode mode);         // <2>
-
-    @Programmatic
-    <T> T wrap(T domainObject);                             // <3>
-    @Programmatic
-    <T> T wrapSkipRules(T domainObject);                    // <4>
-    @Programmatic
-    <T> T wrapNoExecute(T domainObject);                    // <5>
-    @Programmatic
-    <T> T wrapTry(T domainObject);                          // <6>
-    @Programmatic
-
-    @Programmatic
-    <T> T unwrap(T possibleWrappedDomainObject);            // <7>
-    @Programmatic
-    <T> boolean isWrapper(T possibleWrappedDomainObject);   // <8>
-    ...
- }
+include::refguide:applib-svc:example$services/wrapper/WrapperFactory.java[tags="refguide"]
 ----
-<1> enumerates how the wrapper returned by `wrap(...)` interacts with the underlying domain object.
 
-<2> wraps the underlying domain object with a wrapper as specified by the execution mode.
+[source,java]
+----
+include::refguide:applib-svc:example$services/wrapper/WrapperFactory.java[tags="refguide-1",indent=0]
+----
+[source,java]
+----
+include::refguide:applib-svc:example$services/wrapper/WrapperFactory.java[tags="refguide-2",indent=0]
+----
+<.> enumerates how the wrapper returned by `wrap(...)` interacts with the underlying domain object.
+
+<.> wraps the underlying domain object with a wrapper as specified by the execution mode.
 +
 If the domain object is already wrapped, then wrapping it again does nothing; the wrapper is returned unchanged.
 
-<3> wraps the underlying domain object with a wrapper that will validate all business rules and then execute if they pass.
+<.> wraps the underlying domain object with a wrapper that will validate all business rules and then execute if they pass.
 +
 This is the same as invoke `wrap(...)` with `ExecuteMode#EXECUTE`.
 
-<4> wraps the underlying domain object with a wrapper that will validate all business rules but will not actually perform the interaction.
+<.> wraps the underlying domain object with a wrapper that will validate all business rules but will not actually perform the interaction.
 +
 This is the same as invoke `wrap(...)` with `ExecuteMode#NO_EXECUTE`.
 
-<5> wraps the underlying domain object with a wrapper that will NOT check any business rules and instead will just perform the interaction.
+<.> wraps the underlying domain object with a wrapper that will NOT check any business rules and instead will just perform the interaction.
 +
 This is the same as invoke `wrap(...)` with `ExecuteMode#SKIP_RULES`.
 
-<6> wraps the underlying domain object with a wrapper that will validate the business rules, and just return `null` if any fail.
+<.> wraps the underlying domain object with a wrapper that will validate the business rules, and just return `null` if any fail.
 If all business rules pass, then will just perform the interaction.
 +
 This is the same as invoke `wrap(...)` with `ExecuteMode#TRY`.
 
-
-<7> Obtains the underlying domain object, if wrapped.
+<.> Obtains the underlying domain object, if wrapped.
 +
 If the object is not wrapped, returns back unchanged.
 
-<8> whether the supplied object has been wrapped.
+<.> whether the supplied object has been wrapped.
 
 If the interface is performed (action invoked or property set), then - irrespective of whether the business rules were checked or skipped -  a xref:refguide:applib-ant:Action.adoc#command[command]s will be created and pre- and post-execute xref:refguide:applib-ant:Action.adoc#domainEvent[domain event]s) will be fired
 

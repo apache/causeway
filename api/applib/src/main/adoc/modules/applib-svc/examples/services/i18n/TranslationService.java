@@ -37,7 +37,9 @@ public interface TranslationService {
      * @return
      */
     // tag::refguide[]
-    String translate(final String context, final String text);
+    String translate(                   // <.>
+            final String context,
+            final String text);
 
     // end::refguide[]
     /**
@@ -55,46 +57,40 @@ public interface TranslationService {
      * @return
      */
     // tag::refguide[]
-    String translate(final String context, final String singularText, final String pluralText, int num);
+    String translate(                   // <.>
+            final String context,
+            final String singularText,
+            final String pluralText,
+            int num);
 
     // end::refguide[]
     // tag::refguide-1[]
     enum Mode {
-
-        DISABLED (
+        DISABLED
             // end::refguide-1[]
+            (
                 configValue->
                     ("disable".equalsIgnoreCase(configValue) ||
                      "disabled".equalsIgnoreCase(configValue))
+            )
             // tag::refguide-1[]
-            // ...
-        ),
-
-        // synonym, needs to be defined, such that config beans (since 2.0) do work
-        DISABLE(
+        , READ
             // end::refguide-1[]
-                configValue->false
-            // tag::refguide-1[]
-            // ...
-        ),
-
-        READ(
-            // end::refguide-1[]
+            (
                 configValue->
                     ("read".equalsIgnoreCase(configValue) ||
                      "reader".equalsIgnoreCase(configValue))
+            )
             // tag::refguide-1[]
-            // ...
-        ),
-
-        WRITE(
+        , WRITE
             // end::refguide-1[]
+            (
                 configValue ->
                     !READ.matches(configValue) &&
                     !DISABLED.matches(configValue)
-            // tag::refguide-1[]
-            // ...
-        );
+            )
+        ;
+        // tag::refguide-1[]
         // end::refguide-1[]
 
         // -- handle values from configuration
@@ -116,7 +112,7 @@ public interface TranslationService {
             return this == WRITE;
         }
         public boolean isDisabled() {
-            return this == DISABLED || this == DISABLE;
+            return this == DISABLED;
         }
 
         // tag::refguide-1[]
@@ -142,7 +138,7 @@ public interface TranslationService {
      * </p>
      */
     // tag::refguide[]
-    Mode getMode();
+    Mode getMode();                     // <.>
 
 }
 // end::refguide[]

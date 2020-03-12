@@ -4,5 +4,13 @@
 :page-partial:
 
 
-WARNING: TODO: v2 - to document.
-Just exposes xref:LayoutService.adoc[`LayoutService`] in the UI.
+The `LayoutServiceMenu` service simply provides a UI to allow layouts (obtained from xref:LayoutService.adoc[`LayoutService`]) to be downloaded within the UI.
+
+== API
+
+The `LayoutServiceMenu` implementation is very simple (annotations and supporting methods omitted):
+
+[source,java]
+----
+include::refguide:applib-svc:example$services/layout/LayoutServiceMenu.java[tags="refguide"]
+----

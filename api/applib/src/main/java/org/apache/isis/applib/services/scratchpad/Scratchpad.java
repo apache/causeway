@@ -46,64 +46,28 @@ import lombok.extern.log4j.Log4j2;
  * available for use; no further configuration is required.
  */
 // tag::refguide[]
-@Service
-@Order(OrderPrecedence.EARLY)
-@Primary
-@Named("isisApplib.Scratchpad")
-@Qualifier("Default")
-@IsisSessionScope
-@Log4j2
-public class Scratchpad {
-
-    // end::refguide[]
-    public Scratchpad(){
-        log.debug("init");
-    }
-
-    @PostConstruct
-    public void postConstruct() {
-        log.debug("postConstruct");
-    }
-
-    @PreDestroy
-    public void preDestroy() {
-        log.debug("preDestroy");
-    }
-
-    // end::refguide[]
-    /**
-     * Provides a mechanism for each object being acted upon to pass
-     * data to the next object.
-     */
-    // tag::refguide[]
-    private final Map<Object, Object> userData = _Maps.newHashMap();
+public interface Scratchpad {
 
     // end::refguide[]
     /**
      * Obtain user-data, as set by a previous object being acted upon.
      */
     // tag::refguide[]
-    public Object get(Object key) {
-        return userData.get(key);
-    }
+    public Object get(Object key);
 
     // end::refguide[]
     /**
      * Set user-data, for the use of a subsequent object being acted upon.
      */
     // tag::refguide[]
-    public void put(Object key, Object value) {
-        userData.put(key, value);
-    }
+    public void put(Object key, Object value);
 
     // end::refguide[]
     /**
      * Clear any user data.
      */
     // tag::refguide[]
-    public void clear() {
-        userData.clear();
-    }
+    public void clear();
 
 }
 // end::refguide[]

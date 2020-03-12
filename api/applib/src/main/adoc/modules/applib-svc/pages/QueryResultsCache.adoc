@@ -23,40 +23,17 @@ The API defined by `QueryResultsCache` is:
 
 [source,java]
 ----
-@IsisSessionScope
-public class QueryResultsCache {
-    public static class Key {
-        public Key(Class<?> callingClass, String methodName, Object... keys) {...}
-        public Class<?> getCallingClass() { /* ... */ }
-        public String getMethodName() { /* ... */ }
-        public Object[] getKeys() { /* ... */ }
-    }
-    public static class Value<T> {
-        public Value(T result) { /* ... */ }
-        private T result;
-        public T getResult() {
-            return result;
-        }
-    }
-    @Programmatic
-    public <T> T execute(
-        final Callable<T> callable,
-        final Class<?> callingClass, final String methodName, final Object... keys) { /* ... */ }
-    @Programmatic
-    public <T> T execute(final Callable<T> callable, final Key cacheKey) { /* ... */ }
-    @Programmatic
-    public <T> Value<T> get(
-        final Class<?> callingClass, final String methodName, final Object... keys) { /* ... */ }
-    @Programmatic
-    public <T> Value<T> get(final Key cacheKey) { /* ... */ }
-    @Programmatic
-    public <T> void put(final Key cacheKey, final T result) { /* ... */ }
-}
+include::refguide:applib-svc:example$services/queryresultscache/QueryResultsCache.java[tags="refguide"]
 ----
+<.> Execute the callable if not already cached for the supplied calling class, method and keys.
+
+There are also overloaded generics versions of  `execute(...)` that simplify the calling of this domain service.
+
 
 == Implementation
 
-TODO: v2 - QueryResultsCacheDefault in core runtime-services
+The framework provides a default implementation of `o.a.i.core.runtimeservices.queryresultscache.QueryResultsCacheDefault`.
+
 
 == Usage
 

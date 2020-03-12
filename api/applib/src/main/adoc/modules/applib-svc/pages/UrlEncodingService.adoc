@@ -28,22 +28,21 @@ The SPI defined by the service is:
 
 [source,java]
 ----
-public interface UrlEncodingService {
-    @Programmatic
-    public String encode(final String str);     // <1>
-    @Programmatic
-    public String decode(String str);           // <2>
-}
+include::refguide:applib-svc:example$services/urlencoding/UrlEncodingService.java[tags="refguide"]
 ----
-<1> convert the string (eg view model memento) into a string safe for use within an URL
-<2> unconvert the string from its URL form into its original form URL
+<.> convert the string (eg view model memento) into a string safe for use within an URL
+
+<.> unconvert the string from its URL form into its original form URL
+
 
 
 
 == Implementation
 
-The framework provides a default implementation -- `UrlEncodingServiceWithCompression` (also in the applib) --that first (gzip) compresses the state and then uses `base-64` encoding of the resulting bytes.
+The framework provides a default implementation, `o.a.i.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression`, that first (gzip) compresses the state and then uses `base-64` encoding of the resulting bytes.
 As already noted, be aware that the maximum length of a URL should not exceed 2083 characters.
 For large view models, there's the possibility that this limit could be exceeded; in such cases register an alternative implementation of this service.
+
+The applib also provides `UrlEncodingServiceUsingBaseEncodingAbstract`, which is provided as a convenient base class for alternative implementations.
 
 

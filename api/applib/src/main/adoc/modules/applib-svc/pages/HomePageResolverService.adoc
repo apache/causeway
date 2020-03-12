@@ -9,21 +9,16 @@ This service simply provides access to the home page object (if any) annotated w
 
 It was originally introduced to support the default implementation of xref:refguide:applib-svc:RoutingService.adoc[`RoutingService`], but was factored out to support alternative implementations of that service (and may be useful for other use cases).
 
-
-== API & Implementation
+== API
 
 The API defined by `HomePageResolverService` is:
 
 [source,java]
 ----
-public interface HomePageResolverService {
-    Object homePage();
-}
+include::refguide:applib-svc:example$services/homepage/HomePageResolverService.java[tags="refguide"]
 ----
 
+== Implementation
+
 The default implementation is provided by `o.a.i.core.runtimeservices.homepage.HomePageResolverServiceDefault`.
-
-Any custom implementations should be annotated using `@org.springframework.stereotype.Service`.
-
-
 

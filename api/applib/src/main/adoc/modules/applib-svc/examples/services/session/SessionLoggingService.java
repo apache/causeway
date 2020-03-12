@@ -40,7 +40,13 @@ public interface SessionLoggingService {
         RESTART
     }
 
-    void log(Type type, String username, Date date, CausedBy causedBy, String sessionId);
+    void log(
+            Type type,
+            String username,
+            Date date,
+            CausedBy causedBy,
+            String sessionId        // <.>
+    );
     // end::refguide[]
 
     // tag::refguide-1[]

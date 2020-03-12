@@ -21,12 +21,7 @@ package org.apache.isis.applib.services.queryresultscache;
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 
-import org.apache.isis.core.commons.handler.MethodReferences.Call0;
-import org.apache.isis.core.commons.handler.MethodReferences.Call1;
-import org.apache.isis.core.commons.handler.MethodReferences.Call2;
-import org.apache.isis.core.commons.handler.MethodReferences.Call3;
-import org.apache.isis.core.commons.handler.MethodReferences.Call4;
-import org.apache.isis.core.commons.handler.MethodReferences.Call5;
+import org.apache.isis.applib.services.MethodReferences;
 
 import lombok.Data;
 import lombok.Getter;
@@ -45,37 +40,56 @@ import lombok.Getter;
 // tag::refguide[]
 public interface QueryResultsCache {
 
-    <T> T execute(Callable<T> callable, Class<?> callingClass, String methodName, Object... keys);
-
-    <R> R execute(Call0<? extends R> action, Class<?> callingClass, String methodName);
-    
-    <R, A0> R execute(Call1<? extends R, A0> action, Class<?> callingClass, String methodName,
-            A0 arg0);
-    
-    <R, A0, A1> R execute(Call2<? extends R, A0, A1> action, Class<?> callingClass, String methodName, 
-            A0 arg0, A1 arg1);
-    
-    <R, A0, A1, A2> R execute(Call3<? extends R, A0, A1, A2> action, Class<?> callingClass, String methodName,
-            A0 arg0, A1 arg1, A2 arg2);
-    
-    <R, A0, A1, A2, A3> R execute(Call4<? extends R, A0, A1, A2, A3> action, Class<?> callingClass, String methodName,
-            A0 arg0, A1 arg1, A2 arg2, A3 arg3);
-    
-    <R, A0, A1, A2, A3, A4> R execute(Call5<? extends R, A0, A1, A2, A3, A4> action, Class<?> callingClass, String methodName,
-            A0 arg0, A1 arg1, A2 arg2, A3 arg3, A4 arg4);
-    
-    void onTransactionEnded();
+    <T> T execute(                                      // <.>
+            Callable<T> callable,
+            Class<?> callingClass, String methodName,
+            Object... keys);
 
     // end::refguide[]
+
+    /**
+     * Not API, for framework use only.
+     */
+    void onTransactionEnded();                          // <.>
+
+    <R> R execute(                                      // <.>
+            MethodReferences.Call0<? extends R> action,
+            Class<?> callingClass, String methodName);
+
+    <R, A0> R execute(                                  // <.>
+            MethodReferences.Call1<? extends R, A0> action,
+            Class<?> callingClass, String methodName,
+            A0 arg0);
+
+    <R, A0, A1> R execute(                              // <.>
+            MethodReferences.Call2<? extends R, A0, A1> action,
+            Class<?> callingClass, String methodName,
+            A0 arg0, A1 arg1);
+
+    <R, A0, A1, A2> R execute(                          // <.>
+            MethodReferences.Call3<? extends R, A0, A1, A2> action,
+            Class<?> callingClass, String methodName,
+            A0 arg0, A1 arg1, A2 arg2);
+
+    <R, A0, A1, A2, A3> R execute(                      // <.>
+            MethodReferences.Call4<? extends R, A0, A1, A2, A3> action,
+            Class<?> callingClass, String methodName,
+            A0 arg0, A1 arg1, A2 arg2, A3 arg3);
+
+    <R, A0, A1, A2, A3, A4> R execute(                  // <.>
+            MethodReferences.Call5<? extends R, A0, A1, A2, A3, A4> action,
+            Class<?> callingClass, String methodName,
+            A0 arg0, A1 arg1, A2 arg2, A3 arg3, A4 arg4);
+
     // tag::refguide-1[]
     class Key {
 
         @Getter
-        private final Class<?> callingClass;
+        private final Class<?> callingClass;            // <.>
         @Getter
-        private final String methodName;
+        private final String methodName;                // <.>
         @Getter
-        private final Object[] keys;
+        private final Object[] keys;                    // <.>
 
         // end::refguide-1[]
         public Key(Class<?> callingClass, String methodName, Object... keys) {

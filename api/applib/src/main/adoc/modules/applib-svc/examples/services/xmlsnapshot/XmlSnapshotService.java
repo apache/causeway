@@ -78,9 +78,11 @@ public interface XmlSnapshotService {
     // end::refguide-3[]
 
     // tag::refguide[]
-    XmlSnapshotService.Snapshot snapshotFor(final Object domainObject);
+    XmlSnapshotService.Snapshot snapshotFor(                    // <.>
+                                    final Object domainObject);
 
-    XmlSnapshotService.Builder builderFor(final Object domainObject);
+    XmlSnapshotService.Builder builderFor(                      // <.>
+                                    final Object domainObject);
 
     // end::refguide[]
     /**
@@ -88,28 +90,31 @@ public interface XmlSnapshotService {
      * {@link Snapshot#getXsdDocumentAsString()}) back into a {@link Document W3C Document}.
      */
     // tag::refguide[]
-    Document asDocument(String xmlStr);
+    Document asDocument(String xmlStr);                         // <.>
 
     // end::refguide[]
     /**
      * Convenience method to extract value of an XML element, based on its type.
      */
     // tag::refguide[]
-    <T> T getChildElementValue(final Element el, final String tagname, final Class<T> expectedCls);
+    <T> T getChildElementValue(                                 // <.>
+            final Element el, final String tagname,
+            final Class<T> expectedCls);
 
     // end::refguide[]
     /**
      * Convenience method to walk XML document.
      */
     // tag::refguide[]
-    Element getChildElement(final Element el, final String tagname);
+    Element getChildElement(                                    // <.>
+            final Element el, final String tagname);
 
     // end::refguide[]
     /**
      * Convenience method to obtain value of child text node.
      */
     // tag::refguide[]
-    String getChildTextValue(final Element el);
+    String getChildTextValue(final Element el);                 // <.>
 
 }
 // end::refguide[]

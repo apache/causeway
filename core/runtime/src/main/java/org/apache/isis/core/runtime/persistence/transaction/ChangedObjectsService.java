@@ -58,20 +58,6 @@ import lombok.extern.log4j.Log4j2;
 public class ChangedObjectsService implements TransactionScopeListener {
 
     // end::refguide[]
-    public ChangedObjectsService() {
-        log.debug("init");
-    }
-
-    @PostConstruct
-    public void postConstruct() {
-        log.debug("postConstruct");
-    }
-
-    @PreDestroy
-    public void preDestroy() {
-        log.debug("preDestroy");
-    }
-
     /**
      * Used for auditing: this contains the pre- values of every property of every object enlisted.
      *

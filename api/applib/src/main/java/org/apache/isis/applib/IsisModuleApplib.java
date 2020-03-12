@@ -43,6 +43,7 @@ import org.apache.isis.applib.services.layout.LayoutServiceMenu;
 import org.apache.isis.applib.services.metamodel.MetaModelServiceMenu;
 import org.apache.isis.applib.services.publish.PublisherServiceLogging;
 import org.apache.isis.applib.services.scratchpad.Scratchpad;
+import org.apache.isis.applib.services.session.SessionLoggingServiceLogging;
 import org.apache.isis.schema.IsisModuleSchema;
 
 @Configuration
@@ -76,7 +77,7 @@ import org.apache.isis.schema.IsisModuleSchema;
         InteractionContext.class,
         JaxbServiceDefault.class,
         PublisherServiceLogging.class,
-        Scratchpad.class
+        SessionLoggingServiceLogging.class,
 
 })
 public class IsisModuleApplib {

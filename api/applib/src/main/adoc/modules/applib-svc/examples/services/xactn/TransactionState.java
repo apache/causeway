@@ -20,14 +20,12 @@ package org.apache.isis.applib.services.xactn;
 
 // tag::refguide[]
 public enum TransactionState {
-
     // end::refguide[]
     /**
      * No transaction exists.
      */
     // tag::refguide[]
     NONE,
-
     // end::refguide[]
     /**
      * Started, still in progress.
@@ -37,7 +35,6 @@ public enum TransactionState {
      */
     // tag::refguide[]
     IN_PROGRESS,
-
     // end::refguide[]
     /**
      * Started, but has hit an exception.
@@ -51,7 +48,6 @@ public enum TransactionState {
      */
     // tag::refguide[]
     MUST_ABORT,
-
     // end::refguide[]
     /**
      * Completed, having successfully committed.
@@ -61,7 +57,6 @@ public enum TransactionState {
      */
     // tag::refguide[]
     COMMITTED,
-
     // end::refguide[]
     /**
      * Completed, having aborted.
@@ -71,7 +66,6 @@ public enum TransactionState {
      */
     // tag::refguide[]
     ABORTED
-
     // end::refguide[]
     ;
 
@@ -111,6 +105,5 @@ public enum TransactionState {
     }
 
     // tag::refguide[]
-
 }
 // end::refguide[]

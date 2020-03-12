@@ -36,8 +36,8 @@ public interface PublisherService {
      * some flexibility here, though.
      */
     // tag::refguide[]
-    void publish(final Interaction.Execution<?, ?> execution);
+    void publish(final Interaction.Execution<?, ?> execution);  // <.>
 
-    void publish(final PublishedObjects publishedObjects);
+    void publish(final PublishedObjects publishedObjects);      // <.>
 }
 // end::refguide[]

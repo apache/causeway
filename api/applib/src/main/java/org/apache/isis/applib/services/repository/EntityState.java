@@ -27,25 +27,24 @@ package org.apache.isis.applib.services.repository;
  */
 // tag::refguide[]
 public enum EntityState {
-
-    not_Persistable,
-    persistable_Attached,
-    persistable_Detached,
-    persistable_Destroyed,
+    NOT_PERSISTABLE,
+    PERSISTABLE_ATTACHED,
+    PERSISTABLE_DETACHED,
+    PERSISTABLE_DESTROYED,
     // end::refguide[]
     ;
 
     public boolean isPersistable() {
-        return this != not_Persistable;
+        return this != NOT_PERSISTABLE;
     }
     public boolean isAttached() {
-        return this == persistable_Attached;
+        return this == PERSISTABLE_ATTACHED;
     }
     public boolean isDetached() {
-        return this == persistable_Detached;
+        return this == PERSISTABLE_DETACHED;
     }
     public boolean isDestroyed() {
-        return this == persistable_Destroyed;
+        return this == PERSISTABLE_DESTROYED;
     }
 
     // tag::refguide[]

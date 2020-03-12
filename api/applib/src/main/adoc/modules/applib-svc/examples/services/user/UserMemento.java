@@ -17,10 +17,11 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.security;
+package org.apache.isis.applib.services.user;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -61,17 +62,15 @@ public final class UserMemento {
         this.roles.addAll(roles);
     }
 
-    // tag::refguide[]
     public String title() {
         return name;
     }
 
-    // end::refguide[]
     /**
      * The user's login name.
      */
-    // tag::refguide[]
     @MemberOrder(sequence = "1.1")
+    // tag::refguide[]
     @Getter
     private final String name;
 
@@ -79,11 +78,12 @@ public final class UserMemento {
     /**
      * The roles associated with this user.
      */
-    // tag::refguide[]
-    @Getter
     @MemberOrder(sequence = "1.1")
     private final List<RoleMemento> roles = new ArrayList<RoleMemento>();
-
+    // tag::refguide[]
+    public List<RoleMemento> getRoles() {
+        return Collections.unmodifiableList(roles);
+    }
     // end::refguide[]
     /**
      * Determine if the specified name is this user.
@@ -139,6 +139,8 @@ public final class UserMemento {
     }
 
     // tag::refguide[]
+
+    // ...
 
 }
 // end::refguide[]

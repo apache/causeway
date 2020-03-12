@@ -34,13 +34,13 @@ public interface RepositoryService {
 
     // end::refguide[]
     /**
-     * Returns the EntityState of given {@code object}. Returns {@link EntityState#not_Persistable} for {@code object==null}.
+     * Returns the EntityState of given {@code object}. Returns {@link EntityState#NOT_PERSISTABLE} for {@code object==null}.
      * @param object
      * @return (non-null)
      * @since 2.0
      */
     // tag::refguide[]
-    EntityState getEntityState(@Nullable Object object);
+    EntityState getEntityState(@Nullable Object object);    // <.>
 
     // end::refguide[]
     /**
@@ -49,7 +49,7 @@ public interface RepositoryService {
      * @since 2.0
      */
     // tag::refguide[]
-    <T> T detachedEntity(Class<T> ofType);
+    <T> T detachedEntity(Class<T> ofType);                  // <.>
 
     // end::refguide[]
     /**
@@ -58,7 +58,7 @@ public interface RepositoryService {
      * @see #isPersistent(Object)
      */
     // tag::refguide[]
-    <T> T persist(T domainObject);
+    <T> T persist(T domainObject);                          // <.>
 
     // end::refguide[]
     /**
@@ -67,7 +67,7 @@ public interface RepositoryService {
      * @see #persist(Object)
      */
     // tag::refguide[]
-    <T> T persistAndFlush(T domainObject);
+    <T> T persistAndFlush(T domainObject);                  // <.>
 
     // end::refguide[]
     /**
@@ -76,7 +76,7 @@ public interface RepositoryService {
      * @param domainObject
      */
     // tag::refguide[]
-    void remove(Object domainObject);
+    void remove(Object domainObject);                       // <.>
 
     // end::refguide[]
     /**
@@ -85,7 +85,7 @@ public interface RepositoryService {
      * @param domainObject
      */
     // tag::refguide[]
-    void removeAndFlush(Object domainObject);
+    void removeAndFlush(Object domainObject);               // <.>
 
     // end::refguide[]
     /**
@@ -93,7 +93,7 @@ public interface RepositoryService {
      *      * within the specified range..
      */
     // tag::refguide[]
-    <T> List<T> allInstances(Class<T> ofType);
+    <T> List<T> allInstances(Class<T> ofType);              // <.>
 
     // end::refguide[]
     /**
@@ -121,7 +121,9 @@ public interface RepositoryService {
      * @return
      */
     // tag::refguide[]
-    <T> List<T> allInstances(Class<T> ofType, long start, long count);
+    <T> List<T> allInstances(                               // <.>
+            Class<T> ofType,
+            long start, long count);
 
     // end::refguide[]
     /**
@@ -129,7 +131,9 @@ public interface RepositoryService {
      * within the specified range.
      */
     // tag::refguide[]
-    <T> List<T> allMatches(Class<T> ofType, Predicate<? super T> predicate);
+    <T> List<T> allMatches(                                 // <.>
+            Class<T> ofType,
+            Predicate<? super T> predicate);
 
     // end::refguide[]
     /**
@@ -159,7 +163,10 @@ public interface RepositoryService {
      * @return
      */
     // tag::refguide[]
-    <T> List<T> allMatches(Class<T> ofType, Predicate<? super T> predicate, long start, long count);
+    <T> List<T> allMatches(                                 // <.>
+            Class<T> ofType,
+            Predicate<? super T> predicate,
+            long start, long count);
 
     // end::refguide[]
     /**
@@ -177,7 +184,7 @@ public interface RepositoryService {
      * </p>
      */
     // tag::refguide[]
-    <T> List<T> allMatches(Query<T> query);
+    <T> List<T> allMatches(Query<T> query);                 // <.>
 
     // end::refguide[]
     /**
@@ -195,7 +202,9 @@ public interface RepositoryService {
      * </p>
      */
     // tag::refguide[]
-    <T> Optional<T> uniqueMatch(Class<T> ofType, Predicate<T> predicate);
+    <T> Optional<T> uniqueMatch(                            // <.>
+            Class<T> ofType,
+            Predicate<T> predicate);
 
     // end::refguide[]
     /**
@@ -213,7 +222,7 @@ public interface RepositoryService {
      * @see #firstMatch(Query)
      */
     // tag::refguide[]
-    <T> Optional<T> uniqueMatch(Query<T> query);
+    <T> Optional<T> uniqueMatch(Query<T> query);            // <.>
 
     // end::refguide[]
     /**
@@ -231,7 +240,9 @@ public interface RepositoryService {
      * </p>
      */
     // tag::refguide[]
-    <T> Optional<T> firstMatch(Class<T> ofType, Predicate<T> predicate);
+    <T> Optional<T> firstMatch(                             // <.>
+            Class<T> ofType,
+            Predicate<T> predicate);
 
     // end::refguide[]
     /**
@@ -245,7 +256,7 @@ public interface RepositoryService {
      * @see #firstMatch(Query)
      */
     // tag::refguide[]
-    <T> Optional<T> firstMatch(Query<T> query);
+    <T> Optional<T> firstMatch(Query<T> query);             // <.>
     // end::refguide[]
 
     // -- DEPRECATIONS

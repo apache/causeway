@@ -32,13 +32,13 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 // tag::refguide[]
 public interface TableColumnOrderService {
 
-    List<String> orderParented(
+    List<String> orderParented(                 // <.>
             final Object parent,
             final String collectionId,
             final Class<?> collectionType,
             final List<String> propertyIds);
 
-    List<String> orderStandalone(
+    List<String> orderStandalone(               // <.>
             final Class<?> collectionType,
             final List<String> propertyIds);
 

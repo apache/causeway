@@ -7,114 +7,48 @@
 WARNING: TODO - to review for v2.
 Document `Transaction` and `TransactionId` and `TransactionState`.
 
+
 The `TransactionService` (and its various supertypes) allows domain objects to influence user transactions.
 
 
 
 == API
 
-The API of `TransactionService3` is:
+The API of `TransactionService` is:
 
 [source,java]
 ----
-public interface TransactionService3 {
-    Transaction2 currentTransaction();      // <1>
-    void nextTransaction();                 // <2>
-    void nextTransaction(Policy policy);    // <3>
-    void flushTransaction();                // <4>
-    TransactionState getTransactionState(); // <5>
-}
+include::refguide:applib-svc:example$services/xactn/TransactionService.java[tags="refguide"]
 ----
-<1> to obtain a handle on the current `Transaction`, discussed further below
-<2> The framework automatically start a transaction before each user interaction (action invocation or property edit), and will commit that transaction after the interaction has completed.
-Under certain circumstances (eg actions used to perform data migration, say, or for large fixture scripts), it can be helpful to programmatically complete one transaction and start another one.
-<3> overload of nextTransaction() that provides more control on the action to be performed if the current transaction has been marked for abort only
-<4> If the user interaction creates/persists an object or deletes an object (eg using the
+
+<.> obtains the identity of the current transaction.
+(Note, although there is an internal `Transaction` object, this isn't exposed in the API).
++
+[source,java]
+----
+include::refguide:applib-svc:example$services/xactn/TransactionId.java[tags="refguide"]
+----
++
+The `uniqueId` is in effect a session Id (eg new id per HTTP request).
+The sequence is because there could be more than one transaction per request/session.
+
+<.> obtains the state of the current transaction:
++
+[source,java]
+----
+include::refguide:applib-svc:example$services/xactn/TransactionState.java[tags="refguide"]
+----
+
+<.> If the user interaction creates/persists an object or deletes an object (eg using the
 xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`]'s `persist()` or `delete()` methods), then the framework actually queues up the work and only performs the persistence command either at the end of the transaction or immediately prior to the next query.
 Performing a flush will cause any pending calls to be performed immediately.
-<5> the state of the current or most recently completed transaction.
 
-
-Here `TransactionState` is an enum defined as:
-
-[source,java]
-----
-public enum TransactionState {
-    NONE,           // <1>
-    IN_PROGRESS,    // <2>
-    MUST_ABORT,     // <3>
-    COMMITTED,      // <4>
-    ABORTED;        // <5>
-}
-----
-<1> No transaction exists.
-<2> Started, still in progress.
-May flush, commit or abort.
-<3> Started, but has hit an exception.
-May not flush or commit, can only abort.
-<4> Completed, having successfully committed.
-May not flush or abort or commit.
-<5> Completed, having aborted.
-Again, may not flush or abort or commit.
-
-
-As noted above, `nextTransaction()` can be useful for actions used to perform data migration, say, or for large fixture scripts.
-It is also used by the xref:vw:ROOT:about.adoc[Wicket viewer]'s support for bulk actions; each action is invoked in its own transaction.
-An overload of this method takes a `Policy` enum, defined as:
-
-[source,java]
-----
-public enum Policy {
-    UNLESS_MARKED_FOR_ABORT,
-    ALWAYS
-}
-----
-
-If the current transaction has been marked for abort, then the `Policy.UNLESS_MARKED_FOR_ABORT` will escalate to a runtime exception, that is, will fail fast.
-Specifying `Policy.ALWAYS` is provided for use by integration tests so that they can continue on with the test teardown even if the test caused an issue.
-
-The `Transaction2` object - as obtained by `currentTransaction()` method, above - is a minimal wrapper around the underlying database transaction.  Its API is:
-
-[source,java]
-----
-public interface Transaction2 {
-    UUID getTransactionId();                    // <1>
-    int getSequence();                          // <2>
-    void flush();                               // <3>
-    TransactionState getTransactionState();     // <4>
-    void clearAbortCause();                     // <5>
-}
-----
-<1> is a unique identifier for the interaction/request, as defined by the
-xref:refguide:applib-cm:classes/mixins.adoc#HasUniqueId[`HasUniqueId`] mixin.
-<2> there can actually be multiple transactions within such a request/interaction; the sequence is a (0-based) is used to distinguish such.
-<3> as per `TransactionService#flushTransaction()` described above.
-<4> The state of this transaction (same as `TransactionService#getTransactionState()`).
-<5> (For framework use only) If the cause has been rendered higher up in the stack, then clear the cause so that it won't be picked up and rendered elsewhere.
-
-[TIP]
-====
-One place where `clearAboutCause()` may be useful is for application-level handling of SQL integrity exceptions, eg as described in link:https://issues.apache.org/jira/browse/ISIS-1476[ISIS-1476]:
-
-[source,java]
-----
-try {
-    // do something...
-} catch (final JDODataStoreException e) {
-    if (Iterables.filter(Throwables.getCausalChain(e),
-        SQLIntegrityConstraintViolationException.class) != null) {
-        // ignore
-        this.transactionService.currentTransaction().clearAbortCause();
-    } else {
-        throw e;
-    }
-}
-----
-====
+<.> The framework automatically start a transaction before each user interaction (action invocation or property edit), and will commit that transaction after the interaction has completed.
+Under certain circumstances (eg actions used to perform data migration, say, or for large fixture scripts), it can be helpful to programmatically complete one transaction and start another one.
 
 
 == Implementation
 
-The core framework provides a default implementation of this service, `o.a.i.core.metamodel.services.xactn.TransactionServiceDefault`.
+The core framework provides a default implementation of this service, `o.a.i.core.runtimeservices.xactn.TransactionServiceSpring`.
 
 

@@ -56,22 +56,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class AcceptHeaderServiceForRest implements AcceptHeaderService {
 
-// end::refguide[]
-    public AcceptHeaderServiceForRest() {
-        log.debug("init");
-    }
-
-    @PostConstruct
-    public void postConstruct() {
-        log.debug("postConstruct");
-    }
-
-    @PreDestroy
-    public void preDestroy() {
-        log.debug("preDestroy");
-    }
-
-// tag::refguide[]
     private static ThreadLocal<List<MediaType>> mediaTypesByThread = new ThreadLocal<>();
 
     /**

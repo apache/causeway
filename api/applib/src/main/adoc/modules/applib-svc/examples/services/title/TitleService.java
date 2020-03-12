@@ -28,7 +28,7 @@ public interface TitleService {
      * Isis viewers.
      */
     // tag::refguide[]
-    String titleOf(Object domainObject);
+    String titleOf(Object domainObject);        // <.>
 
     // end::refguide[]
     /**
@@ -36,7 +36,7 @@ public interface TitleService {
      * Isis viewers.
      */
     // tag::refguide[]
-    String iconNameOf(Object domainObject);
+    String iconNameOf(Object domainObject);     // <.>
 
 }
 // end::refguide[]

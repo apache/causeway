@@ -23,40 +23,34 @@ The SPI defined by the service is:
 
 [source,java]
 ----
-public interface PublisherService {
-    void publish(final Interaction.Execution<?, ?> execution);  // <1>
-    void publish(final PublishedObjects publishedObjects);      // <2>
-}
+include::refguide:applib-svc:example$services/publish/PublisherService.java[tags="refguide"]
 ----
-<1> to publish an individual action invocation or property edit, as captured within an `Interaction.Execution`.
-<2> to publish a set of changed objects.
+<.> to publish an individual action invocation or property edit, as captured within an `Interaction.Execution`.
+<.> to publish a set of changed objects.
+
+where `PublishedObjects` is provides statistics on the interaction execution (action invocation or property edit):
+
+[source,java]
+----
+include::refguide:applib-svc:example$services/publish/PublishedObjects.java[tags="refguide"]
+----
+<.> inherited from `HasUniqueId`, correlates back to the unique identifier of the transaction in which these objects were changed.
+<.> inherited from `HasUsername`, is the user that initiated the transaction causing these objects to change
+<.> Time that the interaction execution completed
+<.> Number of domain objects loaded in this interaction
+<.> Number of domain objects created in this interaction
+<.> Number of domain objects updated in this interaction
+<.> Number of domain objects deleted in this interaction
+<.> Number of domain objects properties that were changed in this interaction
+<.> Same details, as per xref:refguide:schema:chg.adoc[`chg.xsd`] schema.
+This can be converted into a serializable XML representation using the `ChangesDtoUtils` utility class.
+
+The numbers of objects loaded, created, updated or deleted and the number of object properties modified (in other words the "size" or "weight" of the transaction).
 
 Each `Interaction.Execution` has an owning `Interaction`; this is the same object obtainable from xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`].
 Implementations that publish member executions can use `Interaction.Execution#getDto()` method to return a DTO (as per the xref:refguide:schema:ixn.adoc["ixn" schema]) which can be converted into a serializable XML representation using the `InteractionDtoUtils` utility class.
 The XML can either serialize a single execution, or can be a "deep" serialization of an execution and all sub-executions.
 
-The full API of `PublishedObjects` itself is:
-
-[source,java]
-----
-public interface PublishedObjects extends HasUniqueId, HasUsername {
-    UUID getTransactionId();                                    // <1>
-    String getUsername();                                       // <2>
-    Timestamp getCompletedAt();                                 // <3>
-    ChangesDto getDto();                                        // <4>
-
-    int getNumberLoaded();                                      // <5>
-    int getNumberCreated();
-    int getNumberUpdated();
-    int getNumberDeleted();
-    int getNumberPropertiesModified();
-}
-----
-<1> inherited from `HasUniqueId`, correlates back to the unique identifier of the transaction in which these objects were changed.
-<2> inherited from `HasUsername`, is the user that initiated the transaction causing these objects to change
-<3> the time that this set of objects was collated (just before the completion of the transaction completes)..
-<4> returns a DTO (as per the xref:refguide:schema:chg.adoc["chg" schema]) which can be converted into a serializable XML representation can be obtained using the `ChangesDtoUtils` utility class.
-<5> metrics as to the number of objects loaded, created, updated or deleted and the number of object properties modified (in other words the "size" or "weight" of the transaction).
 
 
 == Implementations

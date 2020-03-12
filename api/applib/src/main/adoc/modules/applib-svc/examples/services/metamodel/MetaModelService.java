@@ -28,7 +28,6 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.core.commons.internal.collections._Sets;
-import org.apache.isis.core.commons.internal.ioc.BeanSort;
 import org.apache.isis.schema.metamodel.v2.MetamodelDto;
 
 import lombok.val;
@@ -48,16 +47,16 @@ public interface MetaModelService {
      * Provides a reverse lookup of a domain class' object type, as defined by {@link DomainObject#objectType()} (or any other mechanism that corresponds to Isis' <code>ObjectSpecIdFacet</code>).
      */
     // tag::refguide[]
-    Class<?> fromObjectType(final String objectType);
+    Class<?> fromObjectType(final String objectType);   // <.>
 
     // end::refguide[]
     /**
      * Provides a lookup of a domain class' object type, as defined by {@link DomainObject#objectType()} (or any other mechanism that corresponds to Isis' <code>ObjectSpecIdFacet</code>).
      */
     // tag::refguide[]
-    String toObjectType(final Class<?> domainType);
+    String toObjectType(final Class<?> domainType);     // <.>
 
-    void rebuild(final Class<?> domainType);
+    void rebuild(final Class<?> domainType);            // <.>
 
     // end::refguide[]
     /**
@@ -73,43 +72,41 @@ public interface MetaModelService {
      *
      */
     // tag::refguide[]
-    DomainModel getDomainModel();
+    DomainModel getDomainModel();                       // <.>
 
-    BeanSort sortOf(Class<?> domainType, Mode mode);
+    BeanSort sortOf(Class<?> domainType, Mode mode);    // <.>
 
-    BeanSort sortOf(Bookmark bookmark, Mode mode);
+    BeanSort sortOf(Bookmark bookmark, Mode mode);      // <.>
 
-    CommandDtoProcessor commandDtoProcessorFor(String memberIdentifier);
+    CommandDtoProcessor commandDtoProcessorFor(         // <.>
+                            String memberIdentifier);
 
     // end::refguide[]
     // tag::refguide-1[]
     enum Mode {
-
         // end::refguide-1[]
         /**
          * If the {@link #sortOf(Class, Mode) sort of} object type is unknown, then throw an exception.
          */
         // tag::refguide-1[]
         STRICT,
-
         // end::refguide-1[]
         /**
          * If the {@link #sortOf(Class, Mode) sort of} object type is unknown, then return {@link Sort#UNKNOWN}.
          */
         // tag::refguide-1[]
         RELAXED
-
     }
     // end::refguide-1[]
 
     // tag::refguide-2[]
     class Config {
-
         private static final int IGNORE_NOOP_FACETS = 1;
         private static final int IGNORE_INTERFACES = 2;
         private static final int IGNORE_ABSTRACT_CLASSES = 4;
         private static final int IGNORE_BUILT_IN_VALUE_TYPES = 8;
         private static final int IGNORE_MIXINS = 16;
+        // end::refguide-2[]
 
         private static final String WILDCARD = "*";
 
@@ -165,11 +162,13 @@ public interface MetaModelService {
          * this {@code Config}'s packagePrefixes.
          * @param packagePrefix - prefix to be added
          */
+        // tag::refguide-2[]
         public Config withPackagePrefix(final String packagePrefix) {
             val newPrefixes = _Sets.newHashSet(this.packagePrefixes);
             newPrefixes.add(packagePrefix);
             return new Config(mask, newPrefixes);
         }
+        // end::refguide-2[]
 
         public boolean isIgnoreNoop() {
             return hasFlag(IGNORE_NOOP_FACETS);
@@ -193,11 +192,13 @@ public interface MetaModelService {
             return (mask & x) == x;
         }
 
+        // tag::refguide-2[]
+        // ...
     }
     // end::refguide-2[]
 
     // tag::refguide[]
-    MetamodelDto exportMetaModel(final Config config);
+    MetamodelDto exportMetaModel(final Config config);  // <.>
 
 }
 // end::refguide[]

@@ -27,6 +27,8 @@ import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
 import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 
+import static org.apache.isis.core.commons.collections.ImmutableEnumSet.*;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
@@ -79,76 +81,72 @@ public interface WrapperFactory {
      *
      * @see WrapperFactory#wrap(Object, ImmutableEnumSet)
      */
-    // tag::refguide-1[]
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    // tag::refguide-1[]
     enum ExecutionMode {
-
         // end::refguide-1[]
         /**
          * Skip all business rules.
          */
         // tag::refguide-1[]
         SKIP_RULE_VALIDATION,
-
         // end::refguide-1[]
         /**
          * Skip execution.
          */
         // tag::refguide-1[]
         SKIP_EXECUTION,
-
         // end::refguide-1[]
         /**
          * Don't fail fast, swallow any exception during validation or execution.
          */
         // tag::refguide-1[]
         SWALLOW_EXCEPTIONS,
-
     }
     // end::refguide-1[]
 
     // tag::refguide-2[]
     @UtilityClass
     class ExecutionModes {
-
         // end::refguide-2[]
         /**
          * Validate all business rules and then execute. May throw exceptions in order to fail fast.
          */
         // tag::refguide-2[]
-        public static final ImmutableEnumSet<ExecutionMode> EXECUTE = ImmutableEnumSet.noneOf(ExecutionMode.class);
-
+        public static final ImmutableEnumSet<ExecutionMode> EXECUTE =
+                                noneOf(ExecutionMode.class);
         // end::refguide-2[]
         /**
          * Skip all business rules and then execute, does throw an exception if execution fails.
          */
         // tag::refguide-2[]
-        public static final ImmutableEnumSet<ExecutionMode> SKIP_RULES = ImmutableEnumSet.of(ExecutionMode.SKIP_RULE_VALIDATION);
-
+        public static final ImmutableEnumSet<ExecutionMode> SKIP_RULES =
+                                of(ExecutionMode.SKIP_RULE_VALIDATION);
         // end::refguide-2[]
         /**
          * Validate all business rules but do not execute, throw an exception if validation
          * fails.
          */
         // tag::refguide-2[]
-        public static final ImmutableEnumSet<ExecutionMode> NO_EXECUTE = ImmutableEnumSet.of(ExecutionMode.SKIP_EXECUTION);
-
+        public static final ImmutableEnumSet<ExecutionMode> NO_EXECUTE =
+                                of(ExecutionMode.SKIP_EXECUTION);
         // end::refguide-2[]
         /**
          * Validate all business rules and then execute, but don't throw an exception if validation
          * or execution fails.
          */
         // tag::refguide-2[]
-        public static final ImmutableEnumSet<ExecutionMode> TRY = ImmutableEnumSet.of(ExecutionMode.SWALLOW_EXCEPTIONS);
-
+        public static final ImmutableEnumSet<ExecutionMode> TRY =
+                                of(ExecutionMode.SWALLOW_EXCEPTIONS);
         // end::refguide-2[]
         /**
          * Skips all steps.
          * @since 2.0
          */
         // tag::refguide-2[]
-        public static final ImmutableEnumSet<ExecutionMode> NOOP = ImmutableEnumSet.of(ExecutionMode.SKIP_RULE_VALIDATION, ExecutionMode.SKIP_EXECUTION);
-
+        public static final ImmutableEnumSet<ExecutionMode> NOOP =
+                                of(ExecutionMode.SKIP_RULE_VALIDATION,
+                                   ExecutionMode.SKIP_EXECUTION);
     }
     // end::refguide-2[]
 
@@ -160,14 +158,14 @@ public interface WrapperFactory {
      * then should just return the object back unchanged.
      */
     // tag::refguide[]
-    <T> T wrap(T domainObject);
+    <T> T wrap(T domainObject);                                     // <.>
 
     // end::refguide[]
     /**
      * {@link #wrap(Object) wraps} a {@link FactoryService#mixin(Class, Object) mixin}.
      */
     // tag::refguide[]
-    <T> T wrapMixin(Class<T> mixinClass, Object mixedIn);
+    <T> T wrapMixin(Class<T> mixinClass, Object mixedIn);           // <.>
 
     // end::refguide[]
     /**
@@ -175,7 +173,7 @@ public interface WrapperFactory {
      * to make this feature more discoverable.
      */
     // tag::refguide[]
-    <T> T wrapTry(T domainObject);
+    <T> T wrapTry(T domainObject);                                  // <.>
 
     // end::refguide[]
     /**
@@ -183,7 +181,7 @@ public interface WrapperFactory {
      * to make this feature more discoverable.
      */
     // tag::refguide[]
-    <T> T wrapNoExecute(T domainObject);
+    <T> T wrapNoExecute(T domainObject);                            // <.>
 
     // end::refguide[]
     /**
@@ -191,7 +189,7 @@ public interface WrapperFactory {
      * to make this feature more discoverable.
      */
     // tag::refguide[]
-    <T> T wrapSkipRules(T domainObject);
+    <T> T wrapSkipRules(T domainObject);                            // <.>
 
     // end::refguide[]
     /**
@@ -203,7 +201,8 @@ public interface WrapperFactory {
      * etc.), but doesn't modify the model.
      */
     // tag::refguide[]
-    <T> T wrap(T domainObject, ImmutableEnumSet<ExecutionMode> mode);
+    <T> T wrap(T domainObject,                                      // <.>
+               ImmutableEnumSet<ExecutionMode> mode);
 
     // end::refguide[]
     /**
@@ -214,7 +213,7 @@ public interface WrapperFactory {
      * should just return the object back unchanged.
      */
     // tag::refguide[]
-    <T> T unwrap(T possibleWrappedDomainObject);
+    <T> T unwrap(T possibleWrappedDomainObject);                    // <.>
 
     // end::refguide[]
     /**
@@ -226,7 +225,7 @@ public interface WrapperFactory {
      * @return
      */
     // tag::refguide[]
-    <T> boolean isWrapper(T possibleWrappedDomainObject);
+    <T> boolean isWrapper(T possibleWrappedDomainObject);           // <.>
 
     // end::refguide[]
 
@@ -245,7 +244,8 @@ public interface WrapperFactory {
      * @since 2.0
      */
     // tag::refguide[]
-    <T> AsyncWrap<T> async(T domainObject, ImmutableEnumSet<ExecutionMode> mode);
+    <T> AsyncWrap<T> async(T domainObject,                          // <.>
+                           ImmutableEnumSet<ExecutionMode> mode);
 
     // end::refguide[]
     /**
@@ -257,7 +257,7 @@ public interface WrapperFactory {
      * @since 2.0
      */
     // tag::refguide[]
-    default <T> AsyncWrap<T> async(T domainObject) {
+    default <T> AsyncWrap<T> async(T domainObject) {                // <.>
         // end::refguide[]
 
         return async(domainObject, ExecutionModes.EXECUTE);
@@ -279,7 +279,9 @@ public interface WrapperFactory {
      * @since 2.0
      */
     // tag::refguide[]
-    <T> AsyncWrap<T> asyncMixin(Class<T> mixinClass, Object mixedIn, ImmutableEnumSet<ExecutionMode> mode);
+    <T> AsyncWrap<T> asyncMixin(                                    // <.>
+                        Class<T> mixinClass, Object mixedIn,
+                        ImmutableEnumSet<ExecutionMode> mode);
 
     // end::refguide[]
     /**
@@ -292,7 +294,8 @@ public interface WrapperFactory {
      * @since 2.0
      */
     // tag::refguide[]
-    default <T> AsyncWrap<T> asyncMixin(Class<T> mixinClass, Object mixedIn) {
+    default <T> AsyncWrap<T> asyncMixin(                            // <.>
+                        Class<T> mixinClass, Object mixedIn) {
         // end::refguide[]
 
         return asyncMixin(mixinClass, mixedIn, ExecutionModes.EXECUTE);
@@ -312,7 +315,7 @@ public interface WrapperFactory {
      * {@link #addInteractionListener(InteractionListener)}.
      */
     // tag::refguide[]
-    List<InteractionListener> getListeners();
+    List<InteractionListener> getListeners();                       // <.>
 
     // end::refguide[]
     /**
@@ -329,7 +332,7 @@ public interface WrapperFactory {
      * @return
      */
     // tag::refguide[]
-    boolean addInteractionListener(InteractionListener listener);
+    boolean addInteractionListener(InteractionListener listener);   // <.>
 
     // end::refguide[]
     /**
@@ -346,9 +349,10 @@ public interface WrapperFactory {
      * @return
      */
     // tag::refguide[]
-    boolean removeInteractionListener(InteractionListener listener);
+    boolean removeInteractionListener(                              // <.>
+                    InteractionListener listener);
 
-    void notifyListeners(InteractionEvent ev);
+    void notifyListeners(InteractionEvent ev);                      // <.>
 
 }
 // end::refguide[]

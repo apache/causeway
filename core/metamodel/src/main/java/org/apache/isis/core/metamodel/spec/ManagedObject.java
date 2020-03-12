@@ -718,7 +718,7 @@ public interface ManagedObject {
     
     static EntityState _entityState(ManagedObject adapter) {
         if(adapter==null) {
-            return EntityState.not_Persistable;
+            return EntityState.NOT_PERSISTABLE;
         }
         return _entityState(adapter.getSpecification(), adapter.getPojo());
     }
@@ -726,7 +726,7 @@ public interface ManagedObject {
     static EntityState _entityState(ObjectSpecification spec, Object pojo) {
 
         if(spec==null || pojo==null || !spec.isEntity()) {
-            return EntityState.not_Persistable;
+            return EntityState.NOT_PERSISTABLE;
         }
 
         val entityFacet = spec.getFacet(EntityFacet.class);
@@ -739,7 +739,7 @@ public interface ManagedObject {
     
 
     static boolean _isDestroyed(ManagedObject adapter) {
-        return _entityState(adapter) == EntityState.persistable_Destroyed;
+        return _entityState(adapter) == EntityState.PERSISTABLE_DESTROYED;
     }
 
     static void _whenFirstIsBookmarkable_ensureSecondIsAsWell(
@@ -755,7 +755,7 @@ public interface ManagedObject {
             }
 
             val entityState = _entityState(second);
-            if(entityState != EntityState.persistable_Attached) {
+            if(entityState != EntityState.PERSISTABLE_ATTACHED) {
                 throw _Exceptions.illegalArgument(
                         "can't set a reference to a transient object [%s] from a persistent one [%s]",
                         second,

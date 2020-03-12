@@ -16,27 +16,22 @@ The API provided by the service is:
 
 [source,java]
 ----
-public interface SudoService {
-    @Programmatic
-    void sudo(String username, final Runnable runnable);
-    @Programmatic
-    <T> T sudo(String username, final Callable<T> callable);
-    @Programmatic
-    void sudo(String username, List<String> roles, final Runnable runnable);
-    @Programmatic
-    <T> T sudo(String username, List<String> roles, final Callable<T> callable);
-}
+include::refguide:applib-svc:example$services/sudo/SudoService.java[tags="refguide"]
 ----
-
-which will run the provided block of code (a `Runnable` or a `Callable`) in a way such that calls to
-`UserService#getUser()` will return the specified user (and roles, if specified).
-(If roles are not specified, then the roles of the current user are preserved).
+<.> special role which, if granted, will in effect disable security.
+See xref:#access_all_role[below] for more details.
+<.> executes the `Runnable` block of code in a way that calls to xref:UserService.adoc[`UserService`]'s `getUser()` will return the specified user.
+The roles of the current user are preserved.
+<.> ditto, but executes a `Callable`
+<.> executes the `Runnable` block of code in a way that calls to `UserService#getUser()` will return the specified user.
+The effective roles returned are those specified.
+<.> ditto, but executes a `Callable`
 
 The current user/role reported by the internal xref:core:runtime-services:AuthenticationSessionProvider.adoc[`AuthenticationSessionProvider`] will also return the specified user/roles.
 
 [IMPORTANT]
 ====
-Note however that this the "effective user" does not propagate through to the xref:security:ROOT:about.adoc[Shiro security mechanism], which will continue to be evaluated according to the permissions of the current user.
+Note that this the "effective user" does not propagate through to the xref:security:ROOT:about.adoc[Shiro security mechanism], which will continue to be evaluated according to the permissions of the current user.
 See the xref:refguide:applib-svc:SudoService.adoc#ACCESS-ALL-ROLE[`ACCESS-ALL-ROLE`] below for details of how to circumvent this.
 ====
 
@@ -108,13 +103,7 @@ The default implementation of xref:refguide:applib-svc:UserService.adoc[`UserSer
 
 [source,java]
 ----
-public interface SudoService {
-    ...
-    interface Spi {
-        void runAs(String username, List<String> roles);        // <1>
-        void releaseRunAs();                                    // <2>
-    }
-}
+include::refguide:applib-svc:example$services/sudo/SudoService.java[tags="refguide-1",indent=0]
 ----
 <1> Called by `SudoService#sudo(...)`, prior to invoking its `Runnable` or `Callable`.
 <2> Called by `SudoService#sudo(...)`, after its `Runnable` or `Callable` has been invoked.
@@ -122,5 +111,9 @@ public interface SudoService {
 The names of these methods were chosen based on link:https://shiro.apache.org/static/1.2.6/apidocs/org/apache/shiro/subject/Subject.html#runAs-org.apache.shiro.subject.PrincipalCollection-[similar names within Shiro].
 
 
+== Related Services
+
+The `IsisSessionFactory` is a lower-level framework service.
+It provides the `IsisSessionFactory#runAuthenticated(...)` method as a way to programmatically start a new `IsisSession` (these can be nested).
 
 

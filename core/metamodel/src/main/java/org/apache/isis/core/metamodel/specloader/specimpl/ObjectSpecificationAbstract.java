@@ -42,7 +42,7 @@ import org.apache.isis.core.commons.internal.collections._Multimaps.ListMultimap
 import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.internal.collections._Streams;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.commons.internal.ioc.BeanSort;
+import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.core.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;

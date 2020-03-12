@@ -38,7 +38,7 @@ import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Sets;
-import org.apache.isis.core.commons.internal.ioc.BeanSort;
+import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.core.commons.internal.reflection._Reflect;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;

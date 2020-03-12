@@ -69,22 +69,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class PublisherDispatchServiceDefault implements PublisherDispatchService {
 
-// end::refguide[]
-    public PublisherDispatchServiceDefault() {
-        log.debug("init");
-    }
-
-    @PostConstruct
-    public void postConstruct() {
-        log.debug("postConstruct");
-    }
-
-    @PreDestroy
-    public void preDestroy() {
-        log.debug("preDestroy");
-    }
-
-// tag::refguide[]
     @Inject private List<PublisherService> publisherServices;
 
     @Inject private ClockService clockService;

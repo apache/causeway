@@ -30,22 +30,13 @@ The SPI defined by the service is:
 
 [source,java]
 ----
-public interface UserRegistrationService {
-    @Programmatic
-    boolean usernameExists(String username);                                    // <1>
-    @Programmatic
-    boolean emailExists(String emailAddress);                                   // <2>
-    @Programmatic
-    void registerUser(String username, String password, String emailAddress);   // <3>
-    @Programmatic
-    boolean updatePasswordByEmail(String emailAddress, String password);        // <4>
-}
+include::refguide:applib-svc:example$services/userreg/UserRegistrationService.java[tags="refguide"]
 ----
-<1> checks if there is already a user with the specified username
-<2> checks if there is already a user with the specified email address
-<3> creates the user, with specified password and email address.
+<.> checks if there is already a user with the specified username
+<.> checks if there is already a user with the specified email address
+<.> creates the user, with specified password and email address.
 The username and email address must both be unique (not being used by an existing user)
-<4> allows the user to reset their password
+<.> allows the user to reset their password
 
 
 

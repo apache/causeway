@@ -43,29 +43,39 @@ import org.apache.isis.core.commons.internal.collections._Maps;
 // tag::refguide[]
 public interface JaxbService {
 
-    Object fromXml(JAXBContext jaxbContext, String xml);
+    Object fromXml(                                     // <.>
+            JAXBContext jaxbContext,
+            String xml);
 
-    Object fromXml(JAXBContext jaxbContext, String xml, Map<String,Object> unmarshallerProperties);
+    Object fromXml(                                     // <.>
+            JAXBContext jaxbContext,
+            String xml,
+            Map<String,Object> unmarshallerProperties);
 
     // end::refguide[]
     /**
      * As {@link #fromXml(JAXBContext, String)}, but downcast to a specific type.
      */
     // tag::refguide[]
-    <T> T fromXml(Class<T> domainClass, String xml);
+    <T> T fromXml(Class<T> domainClass, String xml);    // <.>
 
     // end::refguide[]
     /**
      * As {@link #fromXml(JAXBContext, String, Map)}, but downcast to a specific type.
      */
     // tag::refguide[]
-    <T> T fromXml(Class<T> domainClass, String xml, Map<String,Object> unmarshallerProperties);
+    <T> T fromXml(                                      // <.>
+            Class<T> domainClass,
+            String xml,
+            Map<String,Object> unmarshallerProperties);
 
-    String toXml(final Object domainObject);
+    String toXml(final Object domainObject);            // <.>
 
-    String toXml(final Object domainObject, Map<String,Object> marshallerProperties);
+    String toXml(                                       // <.>
+            final Object domainObject,
+            Map<String,Object> marshallerProperties);
 
-
+    // end::refguide[]
     /**
      * Controls whether, when generating {@link #toXsd(Object, IsisSchemas) XML schemas},
      * any of the common Isis schemas (in the namespace <code>http://org.apache.isis.schema</code>) should be included
@@ -98,7 +108,9 @@ public interface JaxbService {
         // tag::refguide[]
     }
 
-    Map<String, String> toXsd(final Object domainObject, final IsisSchemas isisSchemas);
+    Map<String, String> toXsd(                          // <.>
+            final Object domainObject,
+            final IsisSchemas isisSchemas);
 
     // end::refguide[]
     class Simple implements JaxbService {

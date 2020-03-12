@@ -6,34 +6,26 @@
 WARNING: TODO - to review for v2.
 
 
-The `Scratchpad` (request-scoped) domain service allows objects to exchange information even if they do not directly call each other.
+The `Scratchpad` domain service allows objects to exchange information even if they do not directly call each other.
 
 
 
-
-== API & Implementation
+== API
 
 The API of `Scratchpad` service is:
 
 [source,java]
 ----
-@IsisSessionScope
-public class Scratchpad {
-    @Programmatic
-    public Object get(Object key) { /* ... */ }
-    @Programmatic
-    public void put(Object key, Object value) { /* ... */ }
-    @Programmatic
-    public void clear() { /* ... */ }
-}
+include::refguide:applib-svc:example$services/scratchpad/Scratchpad.java[tags="refguide"]
 ----
+
+The key values should obey the general contract for hash maps.
 
 
 == Implementation
 
-This class (`o.a.i.applib.services.scratchpad.Scratchpad`) is also the implementation.
-And, as you can see, the service is just a request-scoped wrapper around a `java.util.Map`.
-
+This framework provides a default implementation of `o.a.i.core.runtimeservices.scratchpad.ScratchpadDefault`.
+This is just an xref:refguide:applib-ant:IsisSessionScope.adoc[`@IsisSessionScope`]'d wrapper around a `java.util.Map`.
 
 
 == Usage

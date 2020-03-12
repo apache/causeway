@@ -34,15 +34,15 @@ public interface HintStore {
     // end::refguide-1[]
     // tag::refguide[]
 
-    String get(final Bookmark bookmark, String hintKey);
+    String get(final Bookmark bookmark, String hintKey);                // <.>
 
-    void set(final Bookmark bookmark, String hintKey, String value);
+    void set(final Bookmark bookmark, String hintKey, String value);    // <.>
 
-    void remove(final Bookmark bookmark, String hintKey);
+    void remove(final Bookmark bookmark, String hintKey);               // <.>
 
-    void removeAll(Bookmark bookmark);
+    void removeAll(Bookmark bookmark);                                  // <.>
 
-    Set<String> findHintKeys(Bookmark bookmark);
+    Set<String> findHintKeys(Bookmark bookmark);                        // <.>
 
 }
 // end::refguide[]

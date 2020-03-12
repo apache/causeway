@@ -15,13 +15,17 @@ The API of `TitleService` is:
 
 [source,java]
 ----
-public interface TitleService {
-    String titleOf(Object domainObject);                // <1>
-    String iconNameOf(Object domainObject);             // <2>
-}
+include::refguide:applib-svc:example$services/title/TitleService.java[tags="refguide"]
 ----
-<1> return the title of the object, as rendered in the UI by the Apache Isis viewers.
-<2> return the icon name of the object, as rendered in the UI by the Apache Isis viewers.
+<.> return the title of the object, as rendered in the UI by the Apache Isis viewers.
+
+<.> return the icon name of the object, as rendered in the UI by the Apache Isis viewers.
+
+
+== Implementation
+
+The core framework provides a default implementation of this service (`o.a.i.core.metamodel.services.title.TitleServiceDefault`).
+
 
 
 
@@ -47,11 +51,6 @@ public class QualifiedAdult {
 
 In this example, whatever the title of a `Customer`, it is reused within the title of that customer's ``QualifiedAdult`` object.
 
-
-
-== Implementation
-
-The core framework provides a default implementation of this service (`o.a.i.core.metamodel.services.title.TitleServiceDefault`).
 
 
 

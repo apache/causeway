@@ -22,6 +22,7 @@ package org.apache.isis.core.runtimeservices.xactn;
 import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -53,19 +54,21 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class TransactionServiceSpring implements TransactionService {
 
+    private final PlatformTransactionManager platformTransactionManager;
+
     // single TransactionTemplate shared amongst all methods in this instance
     private final TransactionTemplate transactionTemplate;
 
-    // use constructor-injection to supply the PlatformTransactionManager
-    public TransactionServiceSpring(PlatformTransactionManager transactionManager) {
-        this.transactionTemplate = new TransactionTemplate(transactionManager);
-
+    @Inject
+    public TransactionServiceSpring(PlatformTransactionManager platformTransactionManager) {
+        this.platformTransactionManager = platformTransactionManager;
+        this.transactionTemplate = new TransactionTemplate(platformTransactionManager);
     }
 
     @Override
     public void flushTransaction() {
 
-        val txObject = currentTransactionObject(false);
+        val txObject = currentTransactionObject(WarnIfNonePolicy.IGNORE);
 
         if(txObject==null) {
             return;
@@ -78,7 +81,7 @@ public class TransactionServiceSpring implements TransactionService {
     @Override
     public TransactionId currentTransactionId() {
 
-        val txObject = currentTransactionObject(false);
+        val txObject = currentTransactionObject(WarnIfNonePolicy.IGNORE);
 
         if(txObject==null) {
             return null;
@@ -91,7 +94,7 @@ public class TransactionServiceSpring implements TransactionService {
     @Override @Nonnull
     public TransactionState currentTransactionState() {
 
-        val txObject = currentTransactionObject(false);
+        val txObject = currentTransactionObject(WarnIfNonePolicy.IGNORE);
 
         if(txObject==null || txObject.getCurrentTransaction()==null) {
             return TransactionState.NONE;
@@ -104,65 +107,84 @@ public class TransactionServiceSpring implements TransactionService {
     }
 
     @Override
-    public void executeWithinNewTransaction(Runnable task) {
-        
-        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-            // the code in this method executes in a transactional context
-            @Override
-            protected void doInTransactionWithoutResult(TransactionStatus status) {
-                task.run();
-            }
-        });
-    }
-
-    @Override
-    public <T> T executeWithinNewTransaction(Supplier<T> task) {
-        
-        return transactionTemplate.execute(new TransactionCallback<T>() {
-            // the code in this method executes in a transactional context
-            @Override
-            public T doInTransaction(TransactionStatus status) {
-                return task.get();
-            }
-        });
-    }
-    
-    @Override
-    public void executeWithinTransaction(Runnable task) {
-        
-        val txState = currentTransactionState();
-        if(txState != TransactionState.NONE) {
-            task.run();
-            flushTransaction();
+    public void nextTransaction() {
+        val status = platformTransactionManager.getTransaction(transactionTemplate);
+        if(status.isCompleted()) {
             return;
         }
-        
-        executeWithinNewTransaction(task);
-        
+        if(status.isRollbackOnly()) {
+            platformTransactionManager.rollback(status);
+        } else {
+            platformTransactionManager.commit(status);
+        }
+        // begins a new transaction
+        platformTransactionManager.getTransaction(transactionTemplate);
     }
 
-    @Override
-    public <T> T executeWithinTransaction(Supplier<T> task) {
-        
-        val txState = currentTransactionState();
-        if(txState != TransactionState.NONE) {
-            val result = task.get();
-            flushTransaction();
-            return result;
-        }
-        
-        return executeWithinNewTransaction(task);
-        
-    }
+//    @Override
+//    public void executeWithinNewTransaction(Runnable task) {
+//        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+//            // the code in this method executes in a transactional context
+//            @Override
+//            protected void doInTransactionWithoutResult(TransactionStatus status) {
+//                task.run();
+//            }
+//        });
+//    }
+//
+//    @Override
+//    public <T> T executeWithinNewTransaction(Supplier<T> task) {
+//
+//        return transactionTemplate.execute(new TransactionCallback<T>() {
+//            // the code in this method executes in a transactional context
+//            @Override
+//            public T doInTransaction(TransactionStatus status) {
+//                return task.get();
+//            }
+//        });
+//    }
+
+//    @Override
+//    public void executeWithinTransaction(Runnable task) {
+//
+//        val txState = currentTransactionState();
+//        if(txState != TransactionState.NONE) {
+//            task.run();
+//            flushTransaction();
+//            return;
+//        }
+//
+//        executeWithinNewTransaction(task);
+//
+//    }
+//
+//    @Override
+//    public <T> T executeWithinTransaction(Supplier<T> task) {
+//
+//        val txState = currentTransactionState();
+//        if(txState != TransactionState.NONE) {
+//            val result = task.get();
+//            flushTransaction();
+//            return result;
+//        }
+//
+//        return executeWithinNewTransaction(task);
+//
+//    }
 
     // -- HELPER
 
-    private IsisTransactionObject currentTransactionObject(boolean warnIfNone) {
+    enum WarnIfNonePolicy {
+        IGNORE,
+        LOG
+    }
+
+    private IsisTransactionObject currentTransactionObject(WarnIfNonePolicy warnIfNonePolicy) {
 
         val txObject = IsisTransactionAspectSupport.currentTransactionObject().orElse(null);
 
         if(txObject==null) {
-            if(warnIfNone) {
+            if(warnIfNonePolicy == WarnIfNonePolicy.LOG) {
                 log.warn("no current txStatus present");
                 _Exceptions.dumpStackTrace(System.out, 0, 1000);
             }

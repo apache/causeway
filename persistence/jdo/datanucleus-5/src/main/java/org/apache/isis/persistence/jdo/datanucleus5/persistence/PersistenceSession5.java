@@ -824,15 +824,15 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             val persistable = (Persistable) pojo;
             val isDeleted = persistable.dnIsDeleted();
             if(isDeleted) {
-                return EntityState.persistable_Destroyed;
+                return EntityState.PERSISTABLE_DESTROYED;
             }
             val isPersistent = persistable.dnIsPersistent();
             if(isPersistent) {
-                return EntityState.persistable_Attached;
+                return EntityState.PERSISTABLE_ATTACHED;
             }
-            return EntityState.persistable_Detached;
+            return EntityState.PERSISTABLE_DETACHED;
         }
-        return EntityState.not_Persistable;
+        return EntityState.NOT_PERSISTABLE;
     }
 
     @Override

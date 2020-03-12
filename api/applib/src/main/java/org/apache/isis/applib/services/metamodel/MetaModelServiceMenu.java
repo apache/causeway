@@ -53,8 +53,10 @@ import org.apache.isis.schema.metamodel.v2.MetamodelDto;
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
+// tag::refguide[]
 public class MetaModelServiceMenu {
 
+    // end::refguide[]
     public static abstract class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<MetaModelServiceMenu> { }
 
     final MimeType mimeTypeTextCsv;
@@ -69,10 +71,7 @@ public class MetaModelServiceMenu {
         }
     }
 
-    // //////////////////////////////////////
-
     public static class DownloadMetaModelEvent extends ActionDomainEvent { }
-
 
     @Action(
             domainEvent = DownloadMetaModelEvent.class,
@@ -84,9 +83,12 @@ public class MetaModelServiceMenu {
             named = "Download Meta Model (CSV)"
             )
     @MemberOrder(sequence="500.500.2")
+    // tag::refguide[]
+    // ...
     public Clob downloadMetaModelCsv(
             @ParameterLayout(named = ".csv file name")
             final String csvFileName) {
+        // end::refguide[]
 
         final DomainModel domainMembers =  metaModelService.getDomainModel();
         final List<String> list = asList(domainMembers);
@@ -95,22 +97,18 @@ public class MetaModelServiceMenu {
         return new Clob(
                 withSuffix(csvFileName, "csv"),
                 mimeTypeTextCsv, buf.toString().toCharArray());
+
+        // tag::refguide[]
+        // ...
     }
+
+    // end::refguide[]
 
     public String default0DownloadMetaModelCsv() {
         return "metamodel.csv";
     }
 
-//    private String toXml(MetamodelDto model) {
-//        return jaxbService.toXml(model);
-//    }
-
-
-    // //////////////////////////////////////
-
-
     public static class DownloadMetaModelXmlEvent extends ActionDomainEvent { }
-
     @Action(
             domainEvent = DownloadMetaModelXmlEvent.class,
             semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
@@ -121,6 +119,8 @@ public class MetaModelServiceMenu {
             named = "Download Meta Model (XML)"
             )
     @MemberOrder(sequence="500.500.2")
+    // tag::refguide[]
+    // ...
     public Clob downloadMetaModelXml(
             @ParameterLayout(named = ".xml file name")
             final String fileName,
@@ -131,6 +131,7 @@ public class MetaModelServiceMenu {
             @Parameter(optionality=Optionality.MANDATORY)
             final boolean ignoreInterfaces
             ) {
+        // end::refguide[]
 
         MetaModelService.Config config =
                 new MetaModelService.Config()
@@ -150,7 +151,11 @@ public class MetaModelServiceMenu {
 
         final String xml = jaxbService.toXml(metamodelDto);
         return new Clob(_Strings.asFileNameWithExtension(fileName,  ".xml"), "text/xml", xml);
+
+        // tag::refguide[]
+        // ...
     }
+    // end::refguide[]
 
     public String validateDownloadMetaModelXml(
             final String fileName, final List<String> packagePrefixes, final boolean ignoreInterfaces) {
@@ -186,9 +191,6 @@ public class MetaModelServiceMenu {
     public boolean default2DownloadMetaModelXml() {
         return true;
     }
-
-
-    // //////////////////////////////////////
 
     private static StringBuilder asBuf(final List<String> list) {
         final StringBuilder buf = new StringBuilder();
@@ -243,6 +245,9 @@ public class MetaModelServiceMenu {
         return fileName;
     }
 
+    // tag::refguide[]
+
+    // ...
 
     @Inject
     MetaModelService metaModelService;
@@ -250,3 +255,4 @@ public class MetaModelServiceMenu {
     JaxbService jaxbService;
 
 }
+// end::refguide[]

@@ -18,8 +18,20 @@
  */
 
 /**
- * The {@link UserService} allows the domain object to obtain the identity of the user interacting with said object.
+ * This package defines types that represent the
+ * currently logged-in {@link org.apache.isis.applib.services.user.UserMemento user}
+ * and their {@link org.apache.isis.applib.services.user.RoleMemento role}s, as well as
+ * {@link org.apache.isis.applib.services.user.UserService} to obtain the current user.
  *
+ * <p>
+ * Typically domain objects do not need to have any knowledge of <i>who</i>
+ * is using them, because authorization is provided declaratively by the
+ * framework and is type-based.  However, there are occasions; for example,
+ * only an <tt>Employee</tt> and his superiors might be allowed to view their salary.
  *
+ * <p>
+ * The types are suffixed &quot;Memento&quot; because they snapshot the user
+ * and roles at the time that the user logs in, but are not updated after that
+ * point.
  */
 package org.apache.isis.applib.services.user;

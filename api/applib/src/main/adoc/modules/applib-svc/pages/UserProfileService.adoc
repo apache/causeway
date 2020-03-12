@@ -18,12 +18,9 @@ The SPI defined by the service is:
 
 [source,java]
 ----
-public interface UserProfileService {
-    @Programmatic
-    String userProfileName();       // <1>
-}
+include::refguide:applib-svc:example$services/userprof/UserProfileService.java[tags="refguide"]
 ----
-<1> is used (in the Wicket viewer) as the menu name of the tertiary "Me" menu bar.
+<.> is used (in the Wicket viewer) as the menu name of the tertiary "Me" menu bar.
 
 If the method returns `null` or throws an exception then the framework will default to using the current user name.
 
@@ -36,10 +33,10 @@ In the future this API may be expanded; one obvious possibility is to return a p
 The framework provides a default implementation of this service, `o.a.i.core.runtime.services.UserProfileServiceDefault`.
 This simply returns the user's name as the user's profile name.
 
-An example implementation can also be found in the (non-ASF)
-http://github.com/apache/isis-app-todoapp[TodoApp]:
-
-image::reference-services-spi/UserProfileService/todoapp.png[width="800px",link="{imagesdir}/reference-services-spi/UserProfileService/todoapp.png"]
+//An example implementation can also be found in the (non-ASF)
+//http://github.com/apache/isis-app-todoapp[TodoApp]:
+//
+//image::reference-services-spi/UserProfileService/todoapp.png[width="800px",link="{imagesdir}/reference-services-spi/UserProfileService/todoapp.png"]
 
 
 [NOTE]

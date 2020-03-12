@@ -6,14 +6,11 @@
 WARNING: TODO - to review for v2.
 
 The `HintStore` service defines an SPI for the xref:vw:ROOT:about.adoc[Wicket viewer] to store UI hints on a per-object basis.
-For example, the viewer remembers which tabs are selected, and for collections which view is selected (eg table or hidden),
-which page of a table to render, or whether "show all" (rows) is toggled.
+For example, the viewer remembers which tabs are selected, and for collections which view is selected (eg table or hidden), which page of a table to render, or whether "show all" (rows) is toggled.
 
-The default implementation of this service uses the HTTP session.  The service is an SPI because the amount of data
-stored could potentially be quite large (for large numbers of users who use the app all day).  An SPI makes it easy to
-plug in an alternative implementation that is more sophisticated than the default (eg implementing MRU/LRU queue, or
-using a NoSQL database, or simply to disabling the functionality altogether).
-
+The default implementation of this service uses the HTTP session.
+The service is an SPI because the amount of data stored could potentially be quite large (for large numbers of users who use the app all day).
+An SPI makes it easy to plug in an alternative implementation that is more sophisticated than the default (eg implementing MRU/LRU queue, or using a NoSQL database, or simply to disabling the functionality altogether).
 
 == SPI
 
@@ -21,28 +18,18 @@ The SPI of `HintStore` is:
 
 [source,java]
 ----
-public interface HintStore {
-    String get(final Bookmark bookmark, String hintKey);                // <1>
-    void set(final Bookmark bookmark, String hintKey, String value);    // <2>
-    void remove(final Bookmark bookmark, String hintKey);               // <3>
-    void removeAll(Bookmark bookmark);                                  // <4>
-    Set<String> findHintKeys(Bookmark bookmark);                        // <5>
-}
+include::refguide:applib-svc:example$services/hint/HintStore.java[tags="refguide"]
 ----
-<1> obtain a hint (eg which tab to open) for a particular object.  Object identity is represented by `Bookmark`, as
-per the xref:refguide:applib-svc:BookmarkService.adoc[`BookmarkService`], so that alternative implementations can easily serialize this state to a string.
-<2> set the state of a hint.  (The value of) all hints are represented as strings.
-<3> remove a single hint for an object;
-<4> remove all hints
-<5> obtain all known hints for an object
 
-
+<.> obtain a hint (eg which tab to open) for a particular object.
+Object identity is represented by `Bookmark`, as per the xref:refguide:applib-svc:BookmarkService.adoc[`BookmarkService`], so that alternative implementations can easily serialize this state to a string.
+<.> set the state of a hint.
+(The value of) all hints are represented as strings.
+<.> remove a single hint for an object; <.> remove all hints <.> obtain all known hints for an object
 
 == Implementation
 
 The core framework provides a default implementation of this service (`org.apache.isis.viewer.wicket.viewer.services.HintStoreUsingWicketSession`).
-
-
 
 == View models
 
@@ -53,17 +40,12 @@ This means that any hints stored against the view model's bookmark are in effect
 To address this issue the `HintStore` provides an optional interface that the view model can implement, the intent of which is to expose the "logical" identity of the view model.
 This interface is:
 
-
 [source,java]
 ----
-public interface HintStore {
-    interface HintIdProvider {
-        String hintId();
-    }
-}
+include::refguide:applib-svc:example$services/hint/HintStore.java[tags="refguide-1",indent=0]
 ----
 
-For example, suppose that there's a view model that wraps a `Customer` and its ``Order``s
+For example, suppose that there's a view model that wraps a `Customer` and its ``Order``s.
 For this the `Customer` represents the logical identity.
 This view model might therefore be implemented as follows:
 
@@ -88,12 +70,7 @@ public class CustomerAndOrders implements HintStore.HintIdProvider {
 }
 ----
 
-
-
-
-
 == Related Services
 
 The xref:vw:ROOT:about.adoc[Wicket viewer] exposes the xref:refguide:applib-cm:rgcms.adoc#__rgcms_classes_mixins_Object_clearHints["clear hints"]
-mixin action that is for use by end-users of the application to clear any UI hints that have accumulated for a
-domain object.
+mixin action that is for use by end-users of the application to clear any UI hints that have accumulated for a domain object.

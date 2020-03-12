@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.internal.collections._Streams;
-import org.apache.isis.core.commons.internal.ioc.BeanSort;
+import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;

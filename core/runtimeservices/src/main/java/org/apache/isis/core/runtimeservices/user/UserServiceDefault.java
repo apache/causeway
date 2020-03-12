@@ -33,8 +33,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.security.RoleMemento;
-import org.apache.isis.applib.security.UserMemento;
+import org.apache.isis.applib.services.user.RoleMemento;
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.commons.collections.Can;

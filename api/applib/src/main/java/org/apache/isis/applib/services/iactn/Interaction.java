@@ -85,9 +85,9 @@ import lombok.extern.log4j.Log4j2;
 public class Interaction implements HasUniqueId {
 
     @Getter @Setter
-    private UUID uniqueId;
-    // end::refguide[]
+    private UUID uniqueId;                          // <.>
 
+    // end::refguide[]
     private final List<Execution<?,?>> executionGraphs = _Lists.newArrayList();
 
     /**
@@ -107,7 +107,7 @@ public class Interaction implements HasUniqueId {
      *  graph is populated, but then delegate to the PublisherService immediately at the end... ie {@link org.apache.isis.schema.ixn.v2.InteractionDto}s are published as we go, not all in a batch at the end.
      */
     // tag::refguide[]
-    public List<Execution<?,?>> getExecutions() {
+    public List<Execution<?,?>> getExecutions() {   // <.>
         // end::refguide[]
 
         return Collections.unmodifiableList(executionGraphs);
@@ -122,7 +122,7 @@ public class Interaction implements HasUniqueId {
      */
     // tag::refguide[]
     @Getter
-    private Execution<?,?> currentExecution;
+    private Execution<?,?> currentExecution;        // <.>
 
     // end::refguide[]
     /**
@@ -130,7 +130,7 @@ public class Interaction implements HasUniqueId {
      */
     // tag::refguide[]
     @Getter
-    private Execution<?,?> priorExecution;
+    private Execution<?,?> priorExecution;          // <.>
 
     // end::refguide[]
     /**
@@ -206,15 +206,15 @@ public class Interaction implements HasUniqueId {
                 execution.setReturned(result);
                 return result;
             } catch (Exception ex) {
-                
+
                 //TODO there is an issue with exceptions getting swallowed, unless this is fixed,
                 // we rather print all of them, no matter whether recognized or not later on
                 // examples are IllegalArgument- or NullPointer- exceptions being swallowed when using the
                 // WrapperFactory utilizing async calls
                 log.error("failed to execute an interaction", ex);
-                
-                // just because an exception has thrown, does not mean it is that significant; 
-                // it could be that it is recognized by an ExceptionRecognizer and is not severe 
+
+                // just because an exception has thrown, does not mean it is that significant;
+                // it could be that it is recognized by an ExceptionRecognizer and is not severe
                 // eg. unique index violation in the DB
                 getCurrentExecution().setThrew(ex);
 
@@ -322,10 +322,8 @@ public class Interaction implements HasUniqueId {
     }
     // end::refguide-1[]
 
-    // tag::refguide[]
     private final Map<String, LongAdder> maxBySequence = _Maps.newHashMap();
 
-    // end::refguide[]
     /**
      * Generates numbers in a named sequence.
      *
@@ -333,7 +331,7 @@ public class Interaction implements HasUniqueId {
      * generate sequence numbers corresponding to the sequences enumerated by the {@link Sequence} enum.
      */
     // tag::refguide[]
-    public int next(final String sequenceId) {
+    public int next(final String sequenceId) {      // <.>
         // end::refguide[]
 
         final LongAdder adder = maxBySequence.computeIfAbsent(sequenceId, this::newAdder);

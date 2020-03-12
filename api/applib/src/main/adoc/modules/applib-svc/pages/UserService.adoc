@@ -18,41 +18,26 @@ The API of `UserService` is:
 
 [source,java]
 ----
-public interface UserService {
-    UserMemento getUser();
-}
+include::refguide:applib-svc:example$services/user/UserService.java[tags="refguide"]
 ----
 
-where in turn (the essence of) `UserMemento` is:
+where in turn `UserMemento` is:
 
 [source,java]
 ----
-public final class UserMemento {
-    public String getName() { /* ... */ }
-    public boolean isCurrentUser(final String userName) { /* ... */ }
-
-    public List<RoleMemento> getRoles() { /* ... */ }
-    public boolean hasRole(final RoleMemento role) { /* ... */ }
-    public boolean hasRole(final String roleName) { /* ... */ }
-    ...
-}
+include::refguide:applib-svc:example$services/user/UserMemento.java[tags="refguide"]
 ----
 
-and `RoleMemento` is simpler still:
+and `RoleMemento` is still:
 
 [source,java]
 ----
-public final class RoleMemento {
-    public String getName() { /* ... */ }
-    public String getDescription() { /* ... */ }
-    ...
-}
+include::refguide:applib-svc:example$services/user/RoleMemento.java[tags="refguide"]
 ----
 
 The roles associated with the `UserMemento` will be based on the configured xref:security:ROOT:about.adoc[security] (typically Shiro).
 
 In addition, when using the xref:vw:ROOT:about.adoc[Wicket viewer] there will be an additional "org.apache.isis.viewer.wicket.roles.USER" role; this is used internally to restrict access to web pages without authenticating.
-
 
 
 

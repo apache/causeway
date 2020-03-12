@@ -35,7 +35,7 @@ import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.applib.security.UserMemento;
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.inject.ServiceInjector;

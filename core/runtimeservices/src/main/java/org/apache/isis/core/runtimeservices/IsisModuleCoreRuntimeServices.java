@@ -48,6 +48,7 @@ import org.apache.isis.core.runtimeservices.publish.PublisherDispatchServiceDefa
 import org.apache.isis.core.runtimeservices.queryresultscache.QueryResultsCacheDefault;
 import org.apache.isis.core.runtimeservices.repository.RepositoryServiceDefault;
 import org.apache.isis.core.runtimeservices.routing.RoutingServiceDefault;
+import org.apache.isis.core.runtimeservices.scratchpad.ScratchpadDefault;
 import org.apache.isis.core.runtimeservices.session.IsisSessionFactoryDefault;
 import org.apache.isis.core.runtimeservices.sudo.SudoServiceDefault;
 import org.apache.isis.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression;
@@ -84,6 +85,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         MessageServiceDefault.class,
         PublisherDispatchServiceDefault.class,
         QueryResultsCacheDefault.class,
+        ScratchpadDefault.class,
         SudoServiceDefault.class,
         TransactionServiceSpring.class,
         UrlEncodingServiceWithCompression.class,

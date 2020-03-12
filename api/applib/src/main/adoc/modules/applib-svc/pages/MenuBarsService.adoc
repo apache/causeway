@@ -9,24 +9,25 @@ WARNING: TODO - to review for v2.
 The `MenuBarsService` is responsible for returning a xref:refguide:applib-cm:classes/menubars.adoc[`MenuBars`] instance, a data structure representing the arrangement of domain service actions across multiple menu bars, menus and sections.
 This is used by the Wicket viewer to build up the menu, and is also served as the "menuBars" resource by the xref:vro:ROOT:about.adoc[Restful Objects] viewer.
 
-== SPI and Implementation
+== SPI
 
 The SPI defined by this service is:
 
 [source,java]
 ----
-public interface MenuBarsService {
-    enum Strategy {                         // <1>
-        DEFAULT,
-        FALLBACK
-    }
-    MenuBars menuBars();                    // <2>
-    MenuBars menuBars(Strategy strategy);   // <3>
-}
+include::refguide:applib-svc:example$services/menu/MenuBarsService.java[tags="refguide"]
 ----
-<1> Select whether to return the "default" `MenuBars` instance - which may be obtained from anywhere, eg read from the classpath, or to "fallback"" and derive from the metamodel facet/annotations.
-<2> Convenience API to return the default `MenuBars` instance
-<3> Returns an instance of `MenuBars` according the specified strategy.
+<.> Convenience API to return the default `MenuBars` instance
+<.> Returns an instance of `MenuBars` according the specified type...
+
+\... where `Type` is used to specify whether to return the "default" `MenuBars` instance - which may be obtained from anywhere, eg read from the classpath, or to "fallback"" and derive from the metamodel facet/annotations.
+
+[source,java]
+----
+include::refguide:applib-svc:example$services/menu/MenuBarsService.java[tags="refguide-1"]
+----
+
+== Implementation
 
 The framework provides a default implementation of this service, namely `o.a.i.core.runtime.services.menu.MenuBarsServiceDefault`.
 This uses the xref:refguide:applib-svc:MenuBarsLoaderService.adoc[MenuBarsLoaderService] to load a serialized form of `MenuBars` instance, called `menubars.layout.xml`, from the classpath.

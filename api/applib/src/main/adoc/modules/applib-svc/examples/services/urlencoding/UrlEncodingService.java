@@ -28,10 +28,10 @@ import org.apache.isis.core.commons.internal.memento._Mementos.EncoderDecoder;
 public interface UrlEncodingService extends EncoderDecoder {
 
     @Override
-    String encode(final byte[] bytes);
+    String encode(final byte[] bytes);      // <.>
 
     @Override
-    byte[] decode(String str);
+    byte[] decode(String str);              // <.>
 
     default String encodeString(final String str) {
         return encode(_Strings.toBytes(str, StandardCharsets.UTF_8));

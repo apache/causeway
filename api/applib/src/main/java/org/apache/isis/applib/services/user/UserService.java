@@ -19,8 +19,6 @@
 
 package org.apache.isis.applib.services.user;
 
-import org.apache.isis.applib.security.UserMemento;
-
 // tag::refguide[]
 public interface UserService {
 
@@ -29,7 +27,7 @@ public interface UserService {
      * Get the details about the current user.
      */
     // tag::refguide[]
-    UserMemento getUser();
+    UserMemento getUser();      // <.>
 
 }
 // end::refguide[]

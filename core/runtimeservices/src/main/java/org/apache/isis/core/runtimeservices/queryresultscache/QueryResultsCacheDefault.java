@@ -21,8 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +34,12 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.TransactionScopeListener;
 import org.apache.isis.applib.services.queryresultscache.QueryResultCacheControl;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
-import org.apache.isis.core.commons.handler.MethodReferences.Call0;
-import org.apache.isis.core.commons.handler.MethodReferences.Call1;
-import org.apache.isis.core.commons.handler.MethodReferences.Call2;
-import org.apache.isis.core.commons.handler.MethodReferences.Call3;
-import org.apache.isis.core.commons.handler.MethodReferences.Call4;
-import org.apache.isis.core.commons.handler.MethodReferences.Call5;
+import org.apache.isis.applib.services.MethodReferences.Call0;
+import org.apache.isis.applib.services.MethodReferences.Call1;
+import org.apache.isis.applib.services.MethodReferences.Call2;
+import org.apache.isis.applib.services.MethodReferences.Call3;
+import org.apache.isis.applib.services.MethodReferences.Call4;
+import org.apache.isis.applib.services.MethodReferences.Call5;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Maps;
@@ -67,22 +65,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class QueryResultsCacheDefault implements QueryResultsCache, TransactionScopeListener {
 
-// end::refguide[]
-    public QueryResultsCacheDefault() {
-        log.debug("init");
-    }
-
-    @PostConstruct
-    public void postConstruct() {
-        log.debug("postConstruct");
-    }
-
-    @PreDestroy
-    public void preDestroy() {
-        log.debug("preDestroy");
-    }
-
-// tag::refguide[]
     private final Map<Key, Value<?>> cache = _Maps.newHashMap();
     
     @Override

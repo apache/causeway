@@ -27,8 +27,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.security.RoleMemento;
-import org.apache.isis.applib.security.UserMemento;
+import org.apache.isis.applib.services.user.RoleMemento;
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Strings;

@@ -16,65 +16,72 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.commons.internal.ioc;
+package org.apache.isis.applib.services.metamodel;
 
 /**
  * Top level object classification.
- *
  */
+// tag::refguide[]
 public enum BeanSort {
-
+    // end::refguide[]
     /**
      * Stateful object, with a state that can be marshaled and unmarshaled.
-     * <p> 
-     * Includes classes annotated with {@code @DomainObject}, when *not* associated 
+     * <p>
+     * Includes classes annotated with {@code @DomainObject}, when *not* associated
      * with a persistence layer. <p>  see also {@link #ENTITY}
      */
+    // tag::refguide[]
     VIEW_MODEL,
-
+    // end::refguide[]
     /**
      * Persistable object, associated with a persistence layer/context.
      * <p>
-     * Includes classes annotated with {@code @DomainObject}, when associated 
+     * Includes classes annotated with {@code @DomainObject}, when associated
      * with a persistence layer. <p>  see also {@link #VIEW_MODEL}
-     *  
+     *
      */
+    // tag::refguide[]
     ENTITY,
-
+    // end::refguide[]
     /**
-     * Injectable object, associated with a lifecycle context 
+     * Injectable object, associated with a lifecycle context
      * (application-scoped, request-scoped, ...).
      * <p>
      * to be introspected: YES
      */
-    MANAGED_BEAN_CONTRIBUTING, 
-
+    // tag::refguide[]
+    MANAGED_BEAN_CONTRIBUTING,
+    // end::refguide[]
     /**
-     * Injectable object, associated with a lifecycle context 
+     * Injectable object, associated with a lifecycle context
      * (application-scoped, request-scoped, ...).
      * <p>
      * to be introspected: NO
      */
+    // tag::refguide[]
     MANAGED_BEAN_NOT_CONTRIBUTING,
-    
+    // end::refguide[]
     /**
-     * Object associated with an 'entity' or 'bean' to act as contributer of 
+     * Object associated with an 'entity' or 'bean' to act as contributer of
      * domain actions or properties. Might also be stateful similar to VIEW_MODEL.
      */
+    // tag::refguide[]
     MIXIN,
-
+    // end::refguide[]
     /**
      * Immutable, serializable object.
      */
+    // tag::refguide[]
     VALUE,
-
+    // end::refguide[]
     /**
      * Container of objects.
      */
+    // tag::refguide[]
     COLLECTION,
-
     UNKNOWN;
-    
+    // end::refguide[]
+
     // -- SIMPLE PREDICATES
 
     public boolean isManagedBean() {
@@ -104,20 +111,23 @@ public enum BeanSort {
     public boolean isUnknown() {
         return this == UNKNOWN;
     }
-    
+
     // -- HIGER LEVEL PREDICATES
-    
+
     public boolean isToBeIntrospected() {
-        
+
         if(isUnknown()) {
             return false;
         }
         if(this == MANAGED_BEAN_NOT_CONTRIBUTING) {
             return false;
         }
-        
+
         return true;
     }
-    
 
+
+    // tag::refguide[]
+    // ...
 }
+// end::refguide[]

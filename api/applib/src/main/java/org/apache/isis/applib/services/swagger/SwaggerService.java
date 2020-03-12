@@ -28,10 +28,13 @@ import org.apache.isis.applib.annotation.ViewModel;
 // tag::refguide[]
 public interface SwaggerService {
 
+    String generateSwaggerSpec(             // <.>
+            final Visibility visibility,
+            final Format format);
+
     // end::refguide[]
     // tag::refguide[]
     enum Visibility {
-
         // end::refguide[]
         /**
          * Specification for use by third-party clients, ie public use.
@@ -42,8 +45,7 @@ public interface SwaggerService {
          * </p>
          */
         // tag::refguide[]
-        PUBLIC,
-
+        PUBLIC,                             // <.>
         // end::refguide[]
         /**
          * Specification for use only by internally-managed clients, ie private internal use.
@@ -52,14 +54,15 @@ public interface SwaggerService {
          * Includes specifications of domain entities as well as view models.
          * </p>
          */
-        PRIVATE,
-
+        // tag::refguide[]
+        PRIVATE,                            // <.>
         // end::refguide[]
         /**
          * As {@link #PRIVATE}, also including any prototype actions (where {@link Action#restrictTo()} set to
          * {@link RestrictTo#PROTOTYPING}).
          */
-        PRIVATE_WITH_PROTOTYPING
+        // tag::refguide[]
+        PRIVATE_WITH_PROTOTYPING            // <.>
         // end::refguide[]
         ;
 
@@ -67,12 +70,11 @@ public interface SwaggerService {
             return this == PUBLIC;
         }
         // tag::refguide[]
-
     }
 
     enum Format {
-        JSON,
-        YAML
+        JSON,                               // <.>
+        YAML                                // <.>
         // end::refguide[]
         ;
         /**
@@ -87,8 +89,6 @@ public interface SwaggerService {
         }
         // tag::refguide[]
     }
-
-    String generateSwaggerSpec(final Visibility visibility, final Format format);
 
 }
 // end::refguide[]

@@ -24,13 +24,6 @@ import org.apache.isis.applib.annotation.Programmatic;
  * Required API to enable users to register an account on the system (aka &quot;sign up&quot;).
  *
  * <p>
- *     The framework does <i>not</i> provide an implementation of this API, because different Isis applications will
- *     be configured to use different security mechanisms.  However, do note that the (non-ASF)
- *     <a href="https://github.com/isisaddons/isis-module-security">Isis addon security module</a> does provide
- *     an implementation of this service.
- * </p>
- *
- * <p>
  *     User registration also requires that the {@link EmailNotificationService} and
  *     {@link org.apache.isis.applib.services.email.EmailService} to be configured.  The framework provides default
  *     implementations of both of these services.  The notification service requires no further configuration.
@@ -41,13 +34,13 @@ import org.apache.isis.applib.annotation.Programmatic;
 // tag::refguide[]
 public interface UserRegistrationService {
 
-    boolean usernameExists(String username);
+    boolean usernameExists(String username);                                // <.>
 
-    void registerUser(UserDetails userDetails);
+    boolean emailExists(String emailAddress);                               // <.>
 
-    boolean emailExists(String emailAddress);
+    void registerUser(UserDetails userDetails);                             // <.>
 
-    boolean updatePasswordByEmail(String emailAddress, String password);
+    boolean updatePasswordByEmail(String emailAddress, String password);    // <.>
 
 }
 // end::refguide[]

@@ -26,18 +26,20 @@ import org.apache.isis.applib.services.HasUsername;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 
 // tag::refguide[]
-public interface PublishedObjects extends HasUniqueId, HasUsername {
+public interface PublishedObjects
+        extends HasUniqueId,            // <.>
+                HasUsername {           // <.>
 
-    Timestamp getCompletedAt();
+    Timestamp getCompletedAt();         // <.>
 
-    ChangesDto getDto();
+    int getNumberLoaded();              // <.>
+    int getNumberCreated();             // <.>
+    int getNumberUpdated();             // <.>
+    int getNumberDeleted();             // <.>
 
-    int getNumberLoaded();
-    int getNumberCreated();
-    int getNumberUpdated();
-    int getNumberDeleted();
+    int getNumberPropertiesModified();  // <.>
 
-    int getNumberPropertiesModified();
+    ChangesDto getDto();                // <.>
 
 }
 // end::refguide[]

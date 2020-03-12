@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.core.commons.internal.ioc.BeanSort;
+import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.core.metamodel.authorization.standard.AuthorizationFacetFactory;
 import org.apache.isis.core.metamodel.facets.OrphanedSupportingMethodValidator;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;

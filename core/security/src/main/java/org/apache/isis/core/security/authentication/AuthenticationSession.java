@@ -21,7 +21,7 @@ package org.apache.isis.core.security.authentication;
 
 import java.io.Serializable;
 
-import org.apache.isis.applib.security.UserMemento;
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 

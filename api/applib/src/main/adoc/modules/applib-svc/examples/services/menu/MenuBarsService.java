@@ -26,7 +26,6 @@ public interface MenuBarsService {
     // end::refguide[]
     // tag::refguide-1[]
     enum Type {
-
         // end::refguide-1[]
         /**
          * Either derived from annotations or as obtained elsewhere
@@ -35,7 +34,6 @@ public interface MenuBarsService {
          */
         // tag::refguide-1[]
         DEFAULT,
-
         // end::refguide-1[]
         /**
          * As derived from annotations.
@@ -51,10 +49,10 @@ public interface MenuBarsService {
      * @return
      */
     // tag::refguide[]
-    default MenuBars menuBars() {
+    default MenuBars menuBars() {           // <.>
         return menuBars(Type.DEFAULT);
     }
 
-    MenuBars menuBars(final Type type);
+    MenuBars menuBars(final Type type);     // <.>
 }
 // end::refguide[]
