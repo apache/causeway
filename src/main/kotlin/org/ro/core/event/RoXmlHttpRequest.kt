@@ -14,12 +14,12 @@ import org.w3c.xhr.XMLHttpRequest
  */
 class RoXmlHttpRequest {
 
-    fun invoke(link: Link, aggregator: BaseAggregator?, mimeType: String = "json") {
+    fun invoke(link: Link, aggregator: BaseAggregator?, subType: String = "json") {
         val reSpec = ResourceSpecification(link.href)
         if (EventStore.isCached(reSpec, link.method)) {
             processCached(reSpec)
         } else {
-            process(link, aggregator, mimeType)
+            process(link, aggregator, subType)
         }
     }
 
@@ -30,7 +30,7 @@ class RoXmlHttpRequest {
         EventStore.cached(reSpec)
     }
 
-    private fun process(link: Link, aggregator: BaseAggregator?, mimeType: String) {
+    private fun process(link: Link, aggregator: BaseAggregator?, subType: String) {
         val method = link.method
         var url = link.href
         if (method != Method.POST.operation) {
@@ -41,10 +41,10 @@ class RoXmlHttpRequest {
         val xhr = XMLHttpRequest()
         xhr.open(method, url, true)
         xhr.setRequestHeader("Authorization", "Basic $credentials")
-        xhr.setRequestHeader("Content-Type", "application/$mimeType;charset=UTF-8")
-        xhr.setRequestHeader("Accept", "application/$mimeType")
+        xhr.setRequestHeader("Content-Type", "application/$subType;charset=UTF-8")
+        xhr.setRequestHeader("Accept", "application/$subType")
 
-        val reSpec = ResourceSpecification(url, mimeType)
+        val reSpec = ResourceSpecification(url, subType)
         xhr.onload = { _ -> resultHandler(reSpec, xhr.responseText) }
         xhr.onerror = { _ -> errorHandler(reSpec, xhr.responseText) }
         xhr.ontimeout = { _ -> errorHandler(reSpec, xhr.responseText) }

@@ -7,11 +7,10 @@ import org.ro.to.Method
 import org.ro.ui.Point
 import org.ro.ui.kv.ActionPrompt
 import org.ro.utils.Utils
-import org.w3c.dom.MimeType
 
 class ActionDispatcher(private val at: Point = Point(100, 100)) : BaseAggregator() {
 
-    override fun update(logEntry: LogEntry, mimeType: String) {
+    override fun update(logEntry: LogEntry, subType: String) {
         val action = logEntry.getTransferObject() as Action
         action.links.forEach { link ->
             // it.rel should be neither: (self | up | describedBy )
@@ -36,7 +35,7 @@ class ActionDispatcher(private val at: Point = Point(100, 100)) : BaseAggregator
         if (link.hasArguments()) {
             ActionPrompt(action).open(at)
         } else {
-            invoke(link)
+            link.invokeWith(this)
         }
     }
 

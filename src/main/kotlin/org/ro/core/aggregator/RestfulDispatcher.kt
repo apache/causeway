@@ -7,7 +7,7 @@ import org.ro.to.Restful
 
 class RestfulDispatcher() : BaseAggregator() {
 
-    override fun update(logEntry: LogEntry, mimeType: String) {
+    override fun update(logEntry: LogEntry, subType: String) {
         val restful = logEntry.getTransferObject() as Restful
         restful.links.forEach {
             when {

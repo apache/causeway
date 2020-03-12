@@ -45,6 +45,8 @@ class ListAggregatorTest : IntegrationTest() {
             assertEquals("className", p.id) //1
             assertNotNull(descLink)                  //2
             assertEquals(obs, actObs)              //3
+            console.log("[LAT.testFixtureResult]")
+            console.log(actObs)
             assertNotNull(actObs.dsp.layout)         // 4
             assertEquals(pdLe.getAggregator(), layoutLe.getAggregator()) // 5
             assertNotNull(dl.layout) // 6

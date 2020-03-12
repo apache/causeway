@@ -1,14 +1,58 @@
 package org.ro.to
 
 import kotlinx.serialization.UnstableDefault
+import org.ro.IntegrationTest
+import org.ro.core.aggregator.ActionDispatcher
+import org.ro.core.event.EventStore
+import org.ro.core.event.ResourceSpecification
 import org.ro.handler.ActionHandler
 import org.ro.snapshots.simpleapp1_16_0.*
+import org.ro.utils.Utils
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 @UnstableDefault
-class ActionTest {
+class ActionTest : IntegrationTest() {
+
+   // @Test
+    // IntegrationTest, assumes a server is running, furthermore expects the fingerPrint (PD94*) to be valid
+    fun testInvokeAction() {
+        val url = "http://localhost:8080/restful/services/isisApplib.FixtureScriptsDefault/actions/runFixtureScript/invoke"
+        val fingerPrint = "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PHBhdGg-PC9wYXRoPjwvbWVtZW50bz4="
+/*        val body = """{
+                "script": {
+                    "value": {
+                        "href": "http://localhost:8080/restful/objects/domainapp.application.fixture.scenarios.DomainAppDemo/$fingerPrint"}
+                        },
+                "parameters": {"value": ""}
+            }  """   */
+        val href = "\"href\": \"http://localhost:8080/restful/objects/domainapp.application.fixture.scenarios.DomainAppDemo/$fingerPrint\"".trimIndent()
+        //TODO construct link, invoke and check response
+        if (isAppAvailable()) {
+            console.log("[AT.testInvokeAction]")
+            val action = ActionHandler().parse(ACTIONS_RUN_FIXTURE_SCRIPT.str) as Action
+
+            val link = action.getInvokeLink()
+            assertNotNull(link)
+            //now pass on body in order to prepare everything to invoke
+            val arguments = link.arguments as MutableMap
+            val arg = Argument(href)
+            arguments.put("script", arg)
+            //ensure link arguments make up valid json body
+            val body = Utils.argumentsAsBody(link)
+            console.log(body)
+            val json = JSON.parse<Argument>(body)
+            console.log(json)
+            ActionDispatcher().invoke(link)
+            val urlSpec = ResourceSpecification(url)
+            val le = EventStore.find(urlSpec)!!
+            console.log(EventStore.log)
+            console.log(le)
+            assertTrue(!le.isError())
+        }
+    }
 
     @Test
     fun testParseActionGETArgument() {

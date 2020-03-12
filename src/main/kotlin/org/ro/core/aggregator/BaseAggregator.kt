@@ -23,7 +23,7 @@ abstract class BaseAggregator {
 
     open lateinit var dsp: BaseDisplayable
 
-    open fun update(logEntry: LogEntry, mimeType: String) {}
+    open fun update(logEntry: LogEntry, subType: String) {}
 
     open fun reset(): BaseAggregator {
         /* do nothing and */ return this
@@ -60,8 +60,8 @@ abstract class BaseAggregator {
         // save a line break in when formatting
     }
 
-    fun Link.invokeWith(aggregator: BaseAggregator, mimeType: String = "json") {
-        RoXmlHttpRequest().invoke(this, aggregator, mimeType)
+    fun Link.invokeWith(aggregator: BaseAggregator, subType: String = "json") {
+        RoXmlHttpRequest().invoke(this, aggregator, subType)
     }
 
 }

@@ -16,10 +16,11 @@ class LayoutBuilder {
         oCpt.width = CssSize(100, UNIT.perc)
         result.add(oCpt)
 
+        /* FIXME
         for (rl in layout.grid!!.rows) {
             val cpt = RowBuilder().create(rl, tObject, dsp)
             result.add(cpt)
-        }
+        }       */
         return result
     }
 

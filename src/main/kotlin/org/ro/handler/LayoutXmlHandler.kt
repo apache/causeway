@@ -1,6 +1,5 @@
 package org.ro.handler
 
-import org.ro.layout.Layout
 import org.ro.to.TransferObject
 import org.ro.to.bs3.Grid
 import org.ro.utils.XmlHelper

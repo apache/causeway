@@ -2,7 +2,7 @@ package org.ro.snapshots.simpleapp1_16_0
 
 import org.ro.snapshots.Response
 
-object CFG_LAYOUT: Response() {
+object CFG_LAYOUT_XML: Response() {
     override val url= "http://localhost:8080/restful/objects/isisApplib.ConfigurationProperty/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI_Pgo8Y29uZmlndXJhdGlvblByb3BlcnR5PgogICAgPGtleT5pc2lzLmFwcE1hbmlmZXN0PC9rZXk-CiAgICA8dmFsdWU-ZG9tYWluYXBwLmFwcGxpY2F0aW9uLm1hbmlmZXN0LkRvbWFpbkFwcEFwcE1hbmlmZXN0PC92YWx1ZT4KPC9jb25maWd1cmF0aW9uUHJvcGVydHk-Cg==/object-layout"
     override val str = """
 <bs3:grid xmlns:cpt="http://isis.apache.org/applib/layout/component" xmlns:lnk="http://isis.apache.org/applib/layout/links" xmlns:bs3="http://isis.apache.org/applib/layout/grid/bootstrap3">

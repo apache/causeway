@@ -12,9 +12,9 @@ import org.ro.utils.XmlHelper
 class LayoutHandler : BaseHandler() {
 
     override fun canHandle(response: String): Boolean {
-        val formatAndUrlMatches = !XmlHelper.isXml(response)
+        val isJsonLayout = !XmlHelper.isXml(response)
                 && logEntry.url.endsWith("layout")
-        if (formatAndUrlMatches) {
+        if (isJsonLayout) {
             return super.canHandle(response)
         }
         return false

@@ -25,6 +25,10 @@ class DisplayObject(override val title: String) : BaseDisplayable() {
         }
     }
 
+    fun addLayout(layout:Layout) {
+        this.layout = layout
+    }
+
     override fun addData(obj: TransferObject) {
         val exo = Exposer(obj as TObject)
         data = exo.dynamise() as? Exposer

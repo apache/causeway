@@ -42,11 +42,14 @@ open class IntegrationTest {
 
     fun mockResponse(response: Response, aggregator: BaseAggregator?): LogEntry {
         val str = response.str
-        val method = Method.GET.operation
         val reSpec = ResourceSpecification(response.url)
-        EventStore.start(reSpec, method, "", aggregator)
-        val le = EventStore.end(reSpec, str)
-        ResponseHandler.handle(le!!)
+        EventStore.start(
+                reSpec,
+                Method.GET.operation,
+                "",
+                aggregator)
+        val le = EventStore.end(reSpec, str)!!
+        ResponseHandler.handle(le)
         wait(100)
         return le
     }

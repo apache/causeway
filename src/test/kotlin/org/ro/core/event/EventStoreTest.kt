@@ -21,10 +21,15 @@ class EventStoreTest : IntegrationTest() {
             // given
             EventStore.reset()
             val obs = ListAggregator("test")
-            //val rsJson = ResourceSpecification(SO_LAYOUT_JSON.url)
+
+            val rsJson = ResourceSpecification(SO_LAYOUT_JSON.url)
+            EventStore.start(rsJson, Method.GET.operation, "", obs)
             val leJson = mockResponse(SO_LAYOUT_JSON, obs)
-            //val rsXml = ResourceSpecification(SO_LAYOUT_XML.url)
+
+            val rsXml = ResourceSpecification(SO_LAYOUT_XML.url, "xml")
+            EventStore.start(rsXml, Method.GET.operation, "", obs)
             val leXml = mockResponse(SO_LAYOUT_XML, obs)
+
             assertEquals(2, EventStore.log.size)
             console.log("[EST.testLayout]")
             console.log(EventStore.log)
@@ -48,12 +53,12 @@ class EventStoreTest : IntegrationTest() {
         val selfSpec = ResourceSpecification(selfUrl)
         val upSpec = ResourceSpecification(upUrl)
         // when
-        EventStore.start(selfSpec, method, myFirst)
-        EventStore.start(upSpec, method, myFirst)
+        EventStore.start(selfSpec, method, body = myFirst)
+        EventStore.start(upSpec, method, body = myFirst)
         EventStore.end(selfSpec, selfStr)
         EventStore.end(upSpec, upStr)
-        EventStore.start(selfSpec, method, myLast)
-        EventStore.start(upSpec, method, myLast)
+        EventStore.start(selfSpec, method, body = myLast)
+        EventStore.start(upSpec, method, body = myLast)
         // then
         val currentSize: Int = EventStore.log.size
         assertEquals(4 + initialSize, currentSize)  //1
@@ -61,6 +66,8 @@ class EventStoreTest : IntegrationTest() {
         // Entries with the same key can be written, but when updated or retrieved the first (oldest) entry should be used
         //when
         val le2 = EventStore.find(selfSpec)!!
+        console.log("[EST.testSecondEntry]")
+        console.log(le2)
         //then
         assertEquals(myFirst, le2.request)  //2
         assertEquals(selfStr.length, le2.response.length)  //3

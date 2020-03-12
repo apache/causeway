@@ -3,19 +3,10 @@ package org.ro.layout
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ColsLt(val col: ColLt? = null) {
+data class ColsLt(val col: ColLt) {
 
     fun getCol(): ColLt {
-        // return getValues().first()
-//        console.log("[layout/Cols.getCol]")
-//        console.log(col)
-        //       return col.first()
-        return col!!
+        return col//.first()
     }
-
-    //fun getValues(): MutableCollection<Col> {
-    //FIXME wrapper in between required?
-    // return col.
-    // }
 
 }

@@ -7,6 +7,7 @@ import org.ro.handler.TObjectHandler
 import org.ro.layout.Layout
 import org.ro.snapshots.simpleapp1_16_0.*
 import org.ro.to.TObject
+import org.ro.to.bs3.Grid
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -17,34 +18,33 @@ class DisplayListTest {
     @Test
     fun testConfiguration() {
         val ro0 = TObjectHandler().parse(CFG_1.str) as TObject
-        val lyt = LayoutHandler().parse(CFG_LAYOUT.str) as Layout
+        val lt = LayoutHandler().parse(CFG_LAYOUT_JSON.str) as Layout
+       // val grd = LayoutXmlHandler().parse(CFG_LAYOUT_XML.str) as Grid
 
         val dl = DisplayList("test")
         dl.addData(ro0)
 
-        dl.layout = lyt
-        assertEquals(1, dl.data.size)
+        dl.addLayout(lt)
+        assertEquals(1, dl.data.size) //1
 
-        assertNotNull(dl.layout)
-        val properties = dl.layout!!.propertyList
-        assertNotNull(properties)
-        assertEquals("key", properties[0].id)
-        assertEquals("value", properties[1].id)
+        val properties = dl.propertyList
+        assertEquals("key", properties[0].id) // 2
+        assertEquals("value", properties[1].id)   // 3
     }
 
     //@Test
     fun testFixtureResult() {
         val ro0 = TObjectHandler().parse(FR_OBJECT.str) as TObject
-        val lyt = LayoutXmlHandler().parse(FR_OBJECT_LAYOUT.str) as Layout
+        val lt = LayoutXmlHandler().parse(FR_OBJECT_LAYOUT.str) as Layout
 
         val dl = DisplayList("test")
         dl.addData(ro0)
 
-        dl.layout = lyt
+        dl.addLayout(lt)
         assertEquals(1, dl.data.size)
 
         assertNotNull(dl.layout)
-        val properties = dl.layout!!.propertyList
+        val properties = dl.propertyList
         assertNotNull(properties)
         //Sequence in FR_OBJECT differs from sequence in FR_OBJECT_LAYOUT
         // FR_OBJECT: fixtureScriptClassName, key, object, className
@@ -59,16 +59,16 @@ class DisplayListTest {
     fun testSimpleObject() {
         val ro0 = TObjectHandler().parse(SO_0.str) as TObject
         val ro1 = TObjectHandler().parse(SO_1.str) as TObject
-        val lyt = LayoutHandler().parse(SO_OBJECT_LAYOUT.str) as Layout
+        val lt = LayoutHandler().parse(SO_OBJECT_LAYOUT.str) as Layout
 
         val dl = DisplayList("test")
         dl.addData(ro0)
         dl.addData(ro1)
-        dl.layout = lyt
+        dl.addLayout(lt)
 
         assertEquals(2, dl.data.size) //1
 
-        val properties = lyt.propertyList
+        val properties = dl.propertyList
         assertEquals(2, properties.size) //2
         //FIXME
         assertEquals("name", properties[0].id) //3

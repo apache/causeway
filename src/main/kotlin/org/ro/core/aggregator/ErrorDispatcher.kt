@@ -5,11 +5,10 @@ import org.ro.core.event.LogEntry
 import org.ro.core.event.ResourceSpecification
 import org.ro.to.HttpError
 import org.ro.ui.ErrorAlert
-import org.w3c.dom.MimeType
 
 class ErrorDispatcher : BaseAggregator() {
 
-    override fun update(logEntry: LogEntry, mimeType: String) {
+    override fun update(logEntry: LogEntry, subType: String) {
         val error = logEntry.getTransferObject() as HttpError
         val url = logEntry.url
         val message = error.message

@@ -2,7 +2,6 @@ package org.ro.core.event
 
 import org.ro.utils.Utils
 import org.ro.core.aggregator.BaseAggregator
-import org.ro.core.event.ResourceSpecification
 import org.ro.to.TObject
 import org.ro.ui.kv.UiManager
 import pl.treksoft.kvision.panel.SimplePanel
@@ -29,9 +28,9 @@ object EventStore {
 
     fun start(reSpec: ResourceSpecification,
               method: String,
-              body: String = "",
+              body:String = "",
               aggregator: BaseAggregator? = null): LogEntry {
-        val entry = LogEntry(reSpec.url, method, body, reSpec.mimeType)
+        val entry = LogEntry(reSpec.url, method, request = body, subType= reSpec.subType)
         if (aggregator != null) {
             entry.addAggregator(aggregator)
         }
@@ -114,7 +113,7 @@ object EventStore {
     }
 
     internal fun findExact(reSpec: ResourceSpecification): LogEntry? {
-        return log.firstOrNull { it.url == reSpec.url && it.mimeType == reSpec.mimeType}
+        return log.firstOrNull { it.url == reSpec.url && it.subType == reSpec.subType}
     }
 
     internal fun findView(title: String): LogEntry? {
@@ -122,8 +121,9 @@ object EventStore {
     }
 
     internal fun findEquivalent(reSpec: ResourceSpecification): LogEntry? {
-        val url = reSpec.url
-        return log.firstOrNull { areEquivalent(it.url, url) }
+        return log.firstOrNull {
+            it.subType == reSpec.subType
+                    && areEquivalent(it.url, reSpec.url) }
     }
 
     private fun areEquivalent(searchUrl: String, compareUrl: String, allowedDiff: Int = 1): Boolean {
@@ -155,7 +155,7 @@ object EventStore {
         val le = this.find(reSpec)
         if (le != null) {
             when {
-                le.hasResponse() && le.method == method && le.mimeType == reSpec.mimeType -> answer = true
+                le.hasResponse() && le.method == method && le.subType == reSpec.subType -> answer = true
                 le.isView() -> answer = true
             }
         }

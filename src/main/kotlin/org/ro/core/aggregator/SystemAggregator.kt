@@ -12,7 +12,7 @@ class SystemAggregator() : BaseAggregator() {
         dsp = DisplaySystem("not filled (yet)")
     }
 
-    override fun update(logEntry: LogEntry, mimeType: String) {
+    override fun update(logEntry: LogEntry, subType: String) {
 
         when (val obj = logEntry.getTransferObject()) {
             is User -> dsp.addData(obj)

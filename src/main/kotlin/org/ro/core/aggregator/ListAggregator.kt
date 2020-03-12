@@ -3,6 +3,7 @@ package org.ro.core.aggregator
 import org.ro.core.event.LogEntry
 import org.ro.core.model.DisplayList
 import org.ro.layout.Layout
+import org.ro.layout.PropertyLt
 import org.ro.to.Property
 import org.ro.to.ResultList
 import org.ro.to.TObject
@@ -22,7 +23,7 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
         dsp = DisplayList(actionTitle)
     }
 
-    override fun update(logEntry: LogEntry, mimeType: String) {
+    override fun update(logEntry: LogEntry, subType: String) {
 
         when (val obj = logEntry.getTransferObject()) {
             null -> log(logEntry)
@@ -59,9 +60,10 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
     }
 
     private fun handleLayout(layout: Layout) {
-        dsp.layout = layout
-        layout.propertyList.forEach { p ->
-            val l = p.link!!
+        val dspl = dsp as DisplayList
+        dspl.addLayout(layout)
+        dspl.propertyList.forEach { p ->
+            val l = p.links.firstOrNull{it.rel == "describedby"}!!
             if (!l.href.contains("datanucleus")) {
                 l.invokeWith(this)
             }
@@ -69,9 +71,7 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
     }
 
     private fun handleGrid(grid: Grid) {
-   //     console.log("[LA.handleGrid]")
-   //     console.log(grid)
-   //     dsp.layout!!.initGrid(grid)
+        (dsp as DisplayList).grid = grid
     }
 
     private fun handleProperty(p: Property) {
