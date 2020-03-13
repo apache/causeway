@@ -76,8 +76,6 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
 
     private fun handleProperty(p: Property) {
         val dspl = dsp as DisplayList
-        console.log("[LA.handleProperty]")
-        console.log(p)
         if (p.isPropertyDescription()) {
             dspl.addPropertyDescription(p)
         } else {

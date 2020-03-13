@@ -37,10 +37,10 @@ class EventStoreTest : IntegrationTest() {
 
             // then
             val leJson = EventStore.find(rsJson)!!
-            assertEquals("json", leJson.subType)
+            assertEquals("json", leJson.subType) // 1
 
             val leXml = EventStore.find(rsXml)!!
-            assertEquals("xml", leXml.subType)
+            assertEquals("xml", leXml.subType) // 2
             assertTrue(XmlHelper.isXml(leXml.response)) // 3
 
 
@@ -92,22 +92,22 @@ class EventStoreTest : IntegrationTest() {
     @Test
     fun testFindView() {
         val h1 = "http://localhost:8080/restful/objects/simple.SimpleObject/51/object-layout"
+        val h1Spec = ResourceSpecification(h1)
         val h2 = "http://localhost:8080/restful/objects/simple.SimpleObject/object-layout"
+        val h2Spec = ResourceSpecification(h2)
         val i1 = "Test (1)"
         val i2 = "Test (2)"
         val agg = ObjectAggregator("testFindView")
 
         // construct list with urls
-        EventStore.add(h1)
+        EventStore.add(h1Spec)
         EventStore.addView(i1, agg, VPanel())
-        EventStore.add(h2)
+        EventStore.add(h2Spec)
         EventStore.addView(i2, agg, VPanel())
 
-        val h1Spec = ResourceSpecification(h1)
         val le1 = EventStore.find(h1Spec)!!
         assertEquals(h1, le1.url)   //1
 
-        val h2Spec = ResourceSpecification(h2)
         val le2 = EventStore.find(h2Spec)!!
         assertEquals(h2, le2.url)   //2
 
@@ -124,21 +124,21 @@ class EventStoreTest : IntegrationTest() {
     fun testFind() {
         EventStore.reset()
         val ol1 = "http://localhost:8080/restful/objects/simple.SimpleObject/51/object-layout"
+        val ol1Spec = ResourceSpecification(ol1)
         val ol2 = "http://localhost:8080/restful/objects/simple.SimpleObject/52/object-layout"
         val ol3 = "http://localhost:8080/restful/objects/simple.SimpleObject/53/object-layout"
         val ol9 = "http://localhost:8080/restful/objects/simple.SimpleObject/59/object-layout"
+        val ol9Spec = ResourceSpecification(ol9)
         val olx = "http://localhost:8080/restful/objects/simple.SimpleObject/object-layout"
 
         // construct list with urls
-        EventStore.add(ol1)
-        EventStore.add(ol2)
-        EventStore.add(ol3)
+        EventStore.add(ol1Spec)
+        EventStore.add(ResourceSpecification(ol2))
+        EventStore.add(ResourceSpecification(ol3))
 
-        val ol1Spec = ResourceSpecification(ol1)
         val le1 = EventStore.find(ol1Spec)
         assertNotNull(le1)  //1
 
-        val ol9Spec = ResourceSpecification(ol9)
         val le2 = EventStore.findExact(ol9Spec)
         assertEquals(null, le2)     //2
 
@@ -146,7 +146,11 @@ class EventStoreTest : IntegrationTest() {
         assertNotNull(le3)  //3
         assertEquals(ol1, le3.url)  //4
 
+        console.log("[EST.testFind] le3")
+        console.log(le3)
         val le4 = EventStore.find(ol9Spec)
+        console.log("[EST.testFind] le4")
+        console.log(le4)
         assertEquals(le3, le4)      //5
 
         val olxSpec = ResourceSpecification(olx)
@@ -154,21 +158,24 @@ class EventStoreTest : IntegrationTest() {
         assertNull(le5)             //6
 
         val p1 = "http://localhost:8080/restful/objects/simple.SimpleObject/11/properties/name"
+        val p1Spec = ResourceSpecification(p1)
         val p2 = "http://localhost:8080/restful/objects/simple.SimpleObject/12/properties/name"
+        val p2Spec = ResourceSpecification(p2)
         val p3 = "http://localhost:8080/restful/objects/simple.SimpleObject/13/properties/name"
-        EventStore.add(p1)
-        EventStore.add(p2)
-        EventStore.add(p3)
         val p3Spec = ResourceSpecification(p3)
+        EventStore.add(p1Spec)
+        EventStore.add(p2Spec)
+        EventStore.add(p3Spec)
         val le6 = EventStore.find(p3Spec)
         assertNotNull(le6)          //7
         assertEquals(le6.url, p1)   //8
 
         val pName = "http://localhost:8080/restful/domain-types/simple.SimpleObject/properties/name"
+        val pNameSpec = ResourceSpecification(pName)
         val pNotes = "http://localhost:8080/restful/domain-types/simple.SimpleObject/properties/notes"
-        EventStore.add(pName)
-        EventStore.add(pNotes)
         val pNotesSpec = ResourceSpecification(pNotes)
+        EventStore.add(pNameSpec)
+        EventStore.add(pNotesSpec)
         val le7 = EventStore.find(pNotesSpec)
         assertNotNull(le7)            //9
         assertEquals(le7.url, pNotes) //10
@@ -178,17 +185,17 @@ class EventStoreTest : IntegrationTest() {
     fun testFindEquivalent_ConfigurationLayout() {
         EventStore.reset()
         val ol1 = "http://localhost:8080/restful/objects/isisApplib.ConfigurationProperty/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI_Pgo8Y29uZmlndXJhdGlvblByb3BlcnR5PgogICAgPGtleT5pc2lzLnBlcnNpc3Rvci5kYXRhbnVjbGV1cy5pbXBsLmRhdGFudWNsZXVzLmNhY2hlLmxldmVsMi50eXBlPC9rZXk-CiAgICA8dmFsdWU-bm9uZTwvdmFsdWU-CjwvY29uZmlndXJhdGlvblByb3BlcnR5Pgo=/object-layout"
+        val ol1Spec = ResourceSpecification(ol1)
         val ol2 = "http://localhost:8080/restful/objects/isisApplib.ConfigurationProperty/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI_Pgo8Y29uZmlndXJhdGlvblByb3BlcnR5PgogICAgPGtleT5pc2lzLnJlZmxlY3Rvci52YWxpZGF0b3Iuc2VydmljZUFjdGlvbnNPbmx5PC9rZXk-CiAgICA8dmFsdWU-dHJ1ZTwvdmFsdWU-CjwvY29uZmlndXJhdGlvblByb3BlcnR5Pgo=/object-layout"
+        val ol2Spec = ResourceSpecification(ol2)
 
         // construct list with urls
-        EventStore.add(ol1)
-        EventStore.add(ol2)
+        EventStore.add(ol1Spec)
+        EventStore.add(ol2Spec)
 
-        val ol1Spec = ResourceSpecification(ol1)
         val le1 = EventStore.find(ol1Spec)
         assertNotNull(le1)  //1
 
-        val ol2Spec = ResourceSpecification(ol2)
         val le2 = EventStore.findEquivalent(ol2Spec)
         assertNotNull(le2)  //2
         assertEquals(ol1, le2.url)  //3

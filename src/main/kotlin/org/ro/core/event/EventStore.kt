@@ -3,7 +3,6 @@ package org.ro.core.event
 import org.ro.core.aggregator.BaseAggregator
 import org.ro.to.TObject
 import org.ro.ui.kv.UiManager
-import org.ro.utils.Utils
 import pl.treksoft.kvision.panel.SimplePanel
 import pl.treksoft.kvision.state.observableListOf
 
@@ -39,8 +38,8 @@ object EventStore {
         return entry
     }
 
-    fun add(url: String) {
-        val entry = LogEntry(url = url)
+    fun add(reSpec: ResourceSpecification) {
+        val entry = LogEntry(url = reSpec.url)
         log(entry)
         updateStatus(entry)
     }
@@ -89,14 +88,9 @@ object EventStore {
 
     /**
      * Answers the first matching entry.
-     * @param url
-     * @return
      */
     fun find(reSpec: ResourceSpecification): LogEntry? {
-        val url = reSpec.url
-        val isRedundant = url.contains("object-layout") || url.contains("/properties/")
-        //val isRedundant = false // FIXME
-        return if (isRedundant) {
+        return if (reSpec.isRedundant()) {
             findEquivalent(reSpec)
         } else {
             findExact(reSpec)
@@ -105,8 +99,10 @@ object EventStore {
 
     fun find(tObject: TObject): LogEntry? {
         log.forEach {
-            if (it.obj is TObject) {
-                if ((it.obj as TObject).instanceId == tObject.instanceId)
+            val obj = it.obj
+            if (obj is TObject) {
+                val tobj = obj as TObject
+                if (tobj.instanceId == tObject.instanceId)
                     return it
             }
         }
@@ -114,12 +110,7 @@ object EventStore {
     }
 
     internal fun findExact(reSpec: ResourceSpecification): LogEntry? {
-        log.forEach {
-            if (it.matches(reSpec)) {
-                return it
-            }
-        }
-        return null
+        return log.firstOrNull { it.matches(reSpec) }
     }
 
     internal fun findView(title: String): LogEntry? {
@@ -127,49 +118,17 @@ object EventStore {
     }
 
     internal fun findEquivalent(reSpec: ResourceSpecification): LogEntry? {
-        log.forEach {
-            if (it.matches(reSpec)
-                    && areEquivalent(it.url, reSpec.url)) {
-                return it
-            }
-        }
-        return null
-    }
-
-    private fun areEquivalent(searchUrl: String, compareUrl: String, allowedDiff: Int = 1): Boolean {
-        val sl = Utils.removeHexCode(searchUrl)
-        val cl = Utils.removeHexCode(compareUrl)
-        val searchList: List<String> = sl.split("/")
-        val compareList: List<String> = cl.split("/")
-        if (compareList.size != searchList.size) {
-            return false
-        }
-
-        var diffCnt = 0
-        for ((i, s) in searchList.withIndex()) {
-            val c = compareList[i]
-            if (s != c) {
-                diffCnt++
-                val n = s.toIntOrNull()
-                // if the difference is a String, it is not allowed and counts double
-                if (n == null) {
-                    diffCnt++
-                }
-            }
-        }
-        return diffCnt <= allowedDiff
+        return log.firstOrNull { reSpec.matches(it) }
     }
 
     fun isCached(reSpec: ResourceSpecification, method: String): Boolean {
-        var answer = false
         val le = this.find(reSpec)
-        if (le != null) {
-            when {
-                le.hasResponse() && le.method == method && le.subType == reSpec.subType -> answer = true
-                le.isView() -> answer = true
-            }
+        return when {
+            le == null -> false
+            le.hasResponse() && le.method == method && le.subType == reSpec.subType -> true
+            le.isView() -> true
+            else -> false
         }
-        return answer
     }
 
     fun reset() {
