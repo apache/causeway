@@ -32,9 +32,6 @@ class EventStoreTest : IntegrationTest() {
             EventStore.start(rsXml, Method.GET.operation, "", obs)
             mockResponse(SO_LAYOUT_XML, obs)
 
-            console.log("[EST.testLayout]")
-            console.log(EventStore.log)
-
             // then
             val leJson = EventStore.find(rsJson)!!
             assertEquals("json", leJson.subType) // 1
