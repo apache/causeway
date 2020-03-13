@@ -12,6 +12,7 @@ import org.ro.core.event.ResourceSpecification
 import org.ro.snapshots.Response
 import org.ro.to.Method
 import org.ro.ui.kv.UiManager
+import org.ro.utils.XmlHelper
 import org.w3c.xhr.XMLHttpRequest
 
 // subclasses expect a running backend, here SimpleApp localhost:8080/restful*
@@ -42,7 +43,8 @@ open class IntegrationTest {
 
     fun mockResponse(response: Response, aggregator: BaseAggregator?): LogEntry {
         val str = response.str
-        val reSpec = ResourceSpecification(response.url)
+        val subType = if (XmlHelper.isXml(response.str)) {"xml"} else {"json"}
+        val reSpec = ResourceSpecification(response.url, subType)
         EventStore.start(
                 reSpec,
                 Method.GET.operation,
