@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.webapp;
+package demoapp.vaadin.webapp;
 
 import java.util.Optional;
 
@@ -44,6 +44,7 @@ import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
 import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanRealmShiro;
 import org.apache.isis.extensions.viewer.wicket.exceldownload.ui.IsisModuleExtExcelDownloadUi;
 import org.apache.isis.incubator.model.metamodel.IsisModuleIncModelMetaModel;
+import org.apache.isis.incubator.viewer.vaadin.viewer.IsisModuleIncViewerVaadinViewer;
 import org.apache.isis.persistence.jdo.datanucleus5.IsisModuleJdoDataNucleus5;
 import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
@@ -65,10 +66,10 @@ import demoapp.utils.LibraryPreloadingService;
  */
 @SpringBootApplication
 @Import({
-    DemoApp.AppManifest.class,
+    DemoAppVaadin.AppManifest.class,
 })
 @Log4j2
-public class DemoApp extends SpringBootServletInitializer {
+public class DemoAppVaadin extends SpringBootServletInitializer {
 
     /**
      * 
@@ -78,7 +79,7 @@ public class DemoApp extends SpringBootServletInitializer {
      */
     public static void main(String[] args) {
         //IsisPresets.prototyping();
-        SpringApplication.run(new Class[] { DemoApp.class }, args);
+        SpringApplication.run(new Class[] { DemoAppVaadin.class }, args);
     }
 
     /**
@@ -100,6 +101,9 @@ public class DemoApp extends SpringBootServletInitializer {
         IsisModuleValSseUi.class, // server sent events
         IsisModuleValAsciidocUi.class, // ascii-doc rendering support
 
+        // EXPERIMENTAL
+        IsisModuleIncViewerVaadinViewer.class, // vaadin viewer
+        
         // REST
         IsisModuleViewerRestfulObjectsViewer.class,
         IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,

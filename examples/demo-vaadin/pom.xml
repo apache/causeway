@@ -22,9 +22,9 @@
 	</parent>
 
 	<groupId>org.apache.isis.examples.apps</groupId>
-	<artifactId>demo</artifactId>
+	<artifactId>demo-vaadin</artifactId>
 
-	<name>Apache Isis App - Demo</name>
+	<name>Apache Isis App - Demo (Vaadin)</name>
 
 	<packaging>${packaging.type}</packaging>
 
@@ -32,6 +32,11 @@
 		<packaging.type>jar</packaging.type>
 
 		<maven-war-plugin.warName>${project.artifactId}</maven-war-plugin.warName>
+
+		<!-- version not yet listed in isis-app-starter-parent 
+			still investigating whether there is a way to not require the 
+			vaadin-maven-plugin with the web-application -->
+		<vaadin.version>14.1.19</vaadin.version> 
 
 		<!-- this can be overridden using -Dflavor=... -->
 		<flavor>springboot</flavor>
@@ -56,9 +61,26 @@
 			</resource>
 		</resources>
 
+		<plugins>
+			<plugin>
+				<groupId>com.vaadin</groupId>
+				<artifactId>vaadin-maven-plugin</artifactId>
+				<version>${vaadin.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-frontend</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
 	</build>
 
 	<dependencies>
+	
+		
 
 		<!-- WEB APPLICATION DEPENDENCY BUNDLE -->
 
@@ -74,6 +96,13 @@
 			<groupId>org.apache.isis.mavendeps</groupId>
 			<artifactId>isis-mavendeps-jdk11</artifactId>
 			<type>pom</type>
+		</dependency>
+
+		<!-- INCUBATOR: VAADIN VIEWER -->
+
+		<dependency>
+			<groupId>org.apache.isis.incubator.viewer</groupId>
+			<artifactId>isis-viewer-vaadin-viewer</artifactId>
 		</dependency>
 
 		<!-- EXTENSIONS -->
@@ -133,6 +162,12 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.isis.examples.apps</groupId>
+			<artifactId>demo</artifactId>
+			<version>2.0.0-M3-SNAPSHOT</version>
+			<type>${packaging.type}</type>
+		</dependency>
 	</dependencies>
 
 	<profiles>
