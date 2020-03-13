@@ -78,7 +78,6 @@ public class IsisModuleIncViewerVaadinViewer {
      */
     @Bean
     public ServletContextInitializer contextInitializer() {
-        System.err.println("!!! contextInitializer");
         return new VaadinServletContextInitializer(context);
     }
 
