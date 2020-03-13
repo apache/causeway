@@ -21,8 +21,6 @@ package org.apache.isis.applib.services.xmlsnapshot;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
 /**
  * This service allows an XML document to be generated capturing the data of a root entity and specified related
  * entities.  This XML can be used for various purposes, such as mail merge/reporting, or adhoc auditing.
@@ -38,61 +36,30 @@ public interface XmlSnapshotService {
     // end::refguide[]
     // tag::refguide-1[]
     interface Snapshot {
-        Document getXmlDocument();
-        Document getXsdDocument();
-
-        String getXmlDocumentAsString();
-        String getXsdDocumentAsString();
+        Document getXmlDocument();          // <.>
+        Document getXsdDocument();          // <.>
+        // end::refguide-1[]
+        // tag::refguide-2[]
+        interface Builder {
+            void includePath(final String path);                    // <.>
+            void includePathAndAnnotation(                          // <.>
+                final String path, final String annotation);
+            XmlSnapshotService.Snapshot build();                    // <.>
+        }
+        // end::refguide-2[]
+        // tag::refguide-1[]
     }
     // end::refguide-1[]
-
-    // tag::refguide-2[]
-    interface Builder {
-        void includePath(final String path);
-        void includePathAndAnnotation(final String path, final String annotation);
-        XmlSnapshotService.Snapshot build();
-    }
-    // end::refguide-2[]
-
-    // tag::refguide-3[]
-    class Exception extends RuntimeException {
-
-        private static final long serialVersionUID = 1L;
-
-        public Exception() {
-            super();
-        }
-
-        public Exception(String message, Throwable cause) {
-            super(message, cause);
-        }
-
-        public Exception(String message) {
-            super(message);
-        }
-
-        public Exception(Throwable cause) {
-            super(cause);
-        }
-    }
-    // end::refguide-3[]
 
     // tag::refguide[]
     XmlSnapshotService.Snapshot snapshotFor(                    // <.>
                                     final Object domainObject);
 
-    XmlSnapshotService.Builder builderFor(                      // <.>
+    XmlSnapshotService.Snapshot.Builder builderFor(             // <.>
                                     final Object domainObject);
 
     // end::refguide[]
-    /**
-     * Convenience to convert xml string (eg as obtained by {@link Snapshot#getXmlDocumentAsString()} or
-     * {@link Snapshot#getXsdDocumentAsString()}) back into a {@link Document W3C Document}.
-     */
-    // tag::refguide[]
-    Document asDocument(String xmlStr);                         // <.>
 
-    // end::refguide[]
     /**
      * Convenience method to extract value of an XML element, based on its type.
      */
@@ -101,20 +68,6 @@ public interface XmlSnapshotService {
             final Element el, final String tagname,
             final Class<T> expectedCls);
 
-    // end::refguide[]
-    /**
-     * Convenience method to walk XML document.
-     */
-    // tag::refguide[]
-    Element getChildElement(                                    // <.>
-            final Element el, final String tagname);
-
-    // end::refguide[]
-    /**
-     * Convenience method to obtain value of child text node.
-     */
-    // tag::refguide[]
-    String getChildTextValue(final Element el);                 // <.>
 
 }
 // end::refguide[]

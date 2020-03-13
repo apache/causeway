@@ -875,38 +875,5 @@ public class XmlSnapshot implements Snapshot {
         this.xmlElement = xmlElement;
     }
 
-    @Override
-    public String getXmlDocumentAsString() {
-        final Document doc = getXmlDocument();
-        return asString(doc);
-    }
-
-    @Override
-    public String getXsdDocumentAsString() {
-        final Document doc = getXsdDocument();
-        return asString(doc);
-    }
-
-    private static String asString(final Document doc) {
-        try {
-            final DOMSource domSource = new DOMSource(doc);
-            final StringWriter writer = new StringWriter();
-            final StreamResult result = new StreamResult(writer);
-            
-            final Transformer transformer = _DocumentFactories.transformer();
-            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-            transformer.transform(domSource, result);
-
-            return writer.toString();
-        } catch (TransformerConfigurationException e) {
-            throw new IsisException(e);
-        } catch (TransformerException e) {
-            throw new IsisException(e);
-        }
-    }
 
 }

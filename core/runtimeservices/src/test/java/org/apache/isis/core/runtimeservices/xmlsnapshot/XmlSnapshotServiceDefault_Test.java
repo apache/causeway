@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.applib.services.xmlsnapshot;
+package org.apache.isis.core.runtimeservices.xmlsnapshot;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -30,21 +30,25 @@ import org.w3c.dom.Element;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
+import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotServiceAbstract;
 import org.apache.isis.core.commons.internal.resources._Resources;
+import org.apache.isis.core.runtimeservices.xml.XmlServiceDefault;
 
-public class XmlSnapshotServiceAbstractTest {
+public class XmlSnapshotServiceDefault_Test {
 
-    private XmlSnapshotServiceAbstract xmlSnapshotService;
+    private XmlSnapshotServiceDefault xmlSnapshotService;
     private String xmlStr;
+    private XmlServiceDefault xmlService;
 
     @Before
     public void setUp() throws Exception {
         xmlStr = _Resources.loadAsString(
-                XmlSnapshotServiceAbstractTest.class, 
+                XmlSnapshotServiceDefault_Test.class,
                 "XmlSnapshotServiceAbstractTest.xml", 
                 Charset.forName("UTF-8"));
-        xmlSnapshotService = new XmlSnapshotServiceForUnitTesting();
-
+        xmlService = new XmlServiceDefault();
+        xmlSnapshotService = new XmlSnapshotServiceDefault(xmlService, null);
     }
 
 
@@ -59,7 +63,7 @@ public class XmlSnapshotServiceAbstractTest {
 
                 Locale.setDefault(eachLocal);
 
-                Document xmlDoc = xmlSnapshotService.asDocument(xmlStr);
+                Document xmlDoc = xmlService.asDocument(xmlStr);
                 Element rootEl = xmlDoc.getDocumentElement();
 
                 assertThat(
@@ -98,18 +102,5 @@ public class XmlSnapshotServiceAbstractTest {
         throw new IllegalArgumentException("no such locale:" + language + "_" + country);
     }
 
-
-    static class XmlSnapshotServiceForUnitTesting extends XmlSnapshotServiceAbstract {
-
-        @Override
-        public Snapshot snapshotFor(Object domainObject) {
-            throw new RuntimeException();
-        }
-
-        @Override
-        public Builder builderFor(Object domainObject) {
-            throw new RuntimeException();
-        }
-    }
 
 }

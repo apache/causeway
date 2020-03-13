@@ -16,30 +16,52 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.xmlsnapshot;
+package org.apache.isis.core.runtimeservices.xml;
 
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
+import javax.inject.Named;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
+import org.apache.isis.applib.annotation.IsisSessionScope;
+import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.xml.XmlService;
+import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.internal.codec._DocumentFactories;
 
-public abstract class XmlSnapshotServiceAbstract implements XmlSnapshotService {
+import lombok.extern.log4j.Log4j2;
+
+@Service
+@Named("isisRuntimeServices.XmlService")
+@Order(OrderPrecedence.EARLY)
+@Primary
+@Qualifier("Default")
+@Log4j2
+public class XmlServiceDefault implements XmlService {
 
     @Override
     public Document asDocument(String xmlStr) {
@@ -47,7 +69,7 @@ public abstract class XmlSnapshotServiceAbstract implements XmlSnapshotService {
             final StringReader reader = new StringReader(xmlStr);
             final StreamSource streamSource = new StreamSource(reader);
             final DOMResult result = new DOMResult();
-            
+
             final Transformer transformer = _DocumentFactories.transformer();
             transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
             transformer.setOutputProperty(OutputKeys.METHOD, "xml");
@@ -59,65 +81,31 @@ public abstract class XmlSnapshotServiceAbstract implements XmlSnapshotService {
             final Node node = result.getNode();
             return (Document) node;
         } catch (TransformerException e) {
-            throw new XmlSnapshotService.Exception(e);
+            throw new Exception(e);
         }
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <T> T getChildElementValue(final Element el, final String tagname, final Class<T> expectedCls) {
-        final Element chldEl = getChildElement(el, tagname);
-        final String dataType = chldEl.getAttribute("isis:datatype");
-        if(dataType == null) {
-            throw new IllegalArgumentException("unable to locate " + tagname + "/@datatype attribute");
+    public String asString(final Document doc) {
+        try {
+            final DOMSource domSource = new DOMSource(doc);
+            final StringWriter writer = new StringWriter();
+            final StreamResult result = new StreamResult(writer);
+
+            final Transformer transformer = _DocumentFactories.transformer();
+            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+            transformer.transform(domSource, result);
+
+            return writer.toString();
+        } catch (TransformerConfigurationException e) {
+            throw new IsisException(e);
+        } catch (TransformerException e) {
+            throw new IsisException(e);
         }
-        if("isis:String".equals(dataType)) {
-            return (T)getChildTextValue(chldEl);
-        }
-        if("isis:LocalDate".equals(dataType)) {
-            final String str = getChildTextValue(chldEl);
-            final DateTimeFormatter parser = DateTimeFormatter
-                    .ofPattern("dd-MMM-yyyy", Locale.ENGLISH);
-            return (T)parser.parse(str, LocalDate::from);
-        }
-        if("isis:Byte".equals(dataType)) {
-            final String str = getChildTextValue(chldEl);
-            return (T)Byte.valueOf(str);
-        }
-        if("isis:Short".equals(dataType)) {
-            final String str = getChildTextValue(chldEl);
-            return (T)Short.valueOf(str);
-        }
-        if("isis:Integer".equals(dataType)) {
-            final String str = getChildTextValue(chldEl);
-            return (T)Integer.valueOf(str);
-        }
-        if("isis:Long".equals(dataType)) {
-            final String str = getChildTextValue(chldEl);
-            return (T)Long.valueOf(str);
-        }
-        if("isis:Float".equals(dataType)) {
-            final String str = getChildTextValue(chldEl);
-            return (T)Float.valueOf(str);
-        }
-        if("isis:Double".equals(dataType)) {
-            final String str = getChildTextValue(chldEl);
-            return (T)Double.valueOf(str);
-        }
-        if("isis:BigDecimal".equals(dataType)) {
-            final String str = getChildTextValue(chldEl);
-            return (T) new BigDecimal(str);
-        }
-        if("isis:BigInteger".equals(dataType)) {
-            final String str = getChildTextValue(chldEl);
-            return (T) new BigInteger(str);
-        }
-        if("isis:Boolean".equals(dataType)) {
-            final String str = getChildTextValue(chldEl);
-            return (T) Boolean.valueOf(str);
-        }
-        throw new IllegalArgumentException(
-                "Datatype of '" + dataType + "' for element '" + tagname + "' not recognized");
     }
 
     @Override
@@ -135,7 +123,7 @@ public abstract class XmlSnapshotServiceAbstract implements XmlSnapshotService {
     public String getChildTextValue(final Element el) {
         final NodeList childNodes = el.getChildNodes();
         if(childNodes.getLength() !=1 || !(childNodes.item(0) instanceof Text)) {
-            throw new IllegalArgumentException("unable to locate app:reference/text() node");
+            throw new IllegalArgumentException("unable to locate child Text node");
         }
         final Text referenceText = (Text) childNodes.item(0);
         return referenceText.getData();

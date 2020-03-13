@@ -66,26 +66,30 @@ public interface TransactionService {
     // tag::refguide[]
     void nextTransaction();                                 // <.>
 
-//    // end::refguide[]
-//
+    // end::refguide[]
+    /**
+     * Runs given {@code task} within an existing transactional boundary, or in the absence of such a
+     * boundary creates a new one.
+     *
+     * @param task
+     */
+    // tag::refguide[]
+    void executeWithinTransaction(Runnable task);           // <.>
+
+    // end::refguide[]
+    /**
+     * Runs given {@code task} within an existing transactional boundary, or in the absence of such a
+     * boundary creates a new one.
+     *
+     * @param task
+     */
+    // tag::refguide[]
+    <T> T executeWithinTransaction(Supplier<T> task);       // <.>
+
+    // end::refguide[]
+
+//   the executeWithinNewTransaction at time of writing is incorrect (doesn't create a new xactn).
 //   not sure there's any need for these additional methods?
-//   in any case, the executeWithinNewTransaction at time of writing is incorrect (doesn't create a new xactn).
-//
-//    /**
-//     * Runs given {@code task} within an existing transactional boundary, or in the absence of such a
-//     * boundary creates a new one.
-//     *
-//     * @param task
-//     */
-//    void executeWithinTransaction(Runnable task);           // <.>
-//
-//    /**
-//     * Runs given {@code task} within an existing transactional boundary, or in the absence of such a
-//     * boundary creates a new one.
-//     *
-//     * @param task
-//     */
-//    <T> T executeWithinTransaction(Supplier<T> task);       // <.>
 //
 //    /**
 //     * Runs given {@code task} within its own (new) transactional boundary.
@@ -100,6 +104,5 @@ public interface TransactionService {
 //    <T> T executeWithinNewTransaction(Supplier<T> task);    // <.>
 
     // tag::refguide[]
-
 }
 // end::refguide[]

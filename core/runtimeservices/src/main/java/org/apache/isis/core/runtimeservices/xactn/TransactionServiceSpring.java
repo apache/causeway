@@ -121,56 +121,52 @@ public class TransactionServiceSpring implements TransactionService {
         platformTransactionManager.getTransaction(transactionTemplate);
     }
 
-//    @Override
-//    public void executeWithinNewTransaction(Runnable task) {
-//        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-//            // the code in this method executes in a transactional context
-//            @Override
-//            protected void doInTransactionWithoutResult(TransactionStatus status) {
-//                task.run();
-//            }
-//        });
-//    }
-//
-//    @Override
-//    public <T> T executeWithinNewTransaction(Supplier<T> task) {
-//
-//        return transactionTemplate.execute(new TransactionCallback<T>() {
-//            // the code in this method executes in a transactional context
-//            @Override
-//            public T doInTransaction(TransactionStatus status) {
-//                return task.get();
-//            }
-//        });
-//    }
+    private void executeWithinNewTransaction(Runnable task) {
+        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+            // the code in this method executes in a transactional context
+            @Override
+            protected void doInTransactionWithoutResult(TransactionStatus status) {
+                task.run();
+            }
+        });
+    }
 
-//    @Override
-//    public void executeWithinTransaction(Runnable task) {
-//
-//        val txState = currentTransactionState();
-//        if(txState != TransactionState.NONE) {
-//            task.run();
-//            flushTransaction();
-//            return;
-//        }
-//
-//        executeWithinNewTransaction(task);
-//
-//    }
-//
-//    @Override
-//    public <T> T executeWithinTransaction(Supplier<T> task) {
-//
-//        val txState = currentTransactionState();
-//        if(txState != TransactionState.NONE) {
-//            val result = task.get();
-//            flushTransaction();
-//            return result;
-//        }
-//
-//        return executeWithinNewTransaction(task);
-//
-//    }
+    private <T> T executeWithinNewTransaction(Supplier<T> task) {
+
+        return transactionTemplate.execute(new TransactionCallback<T>() {
+            // the code in this method executes in a transactional context
+            @Override
+            public T doInTransaction(TransactionStatus status) {
+                return task.get();
+            }
+        });
+    }
+
+    @Override
+    public void executeWithinTransaction(Runnable task) {
+
+        val txState = currentTransactionState();
+        if(txState != TransactionState.NONE) {
+            task.run();
+            flushTransaction();
+            return;
+        }
+
+        executeWithinNewTransaction(task);
+    }
+
+    @Override
+    public <T> T executeWithinTransaction(Supplier<T> task) {
+
+        val txState = currentTransactionState();
+        if(txState != TransactionState.NONE) {
+            val result = task.get();
+            flushTransaction();
+            return result;
+        }
+
+        return executeWithinNewTransaction(task);
+    }
 
     // -- HELPER
 

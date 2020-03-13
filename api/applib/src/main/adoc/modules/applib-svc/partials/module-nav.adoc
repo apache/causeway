@@ -64,5 +64,6 @@
 ** xref:refguide:applib-svc:UserRegistrationService.adoc[UserRegistrationService]
 ** xref:refguide:applib-svc:UserService.adoc[UserService]
 ** xref:refguide:applib-svc:WrapperFactory.adoc[WrapperFactory]
+** xref:refguide:applib-svc:XmlService.adoc[XmlService]
 ** xref:refguide:applib-svc:XmlSnapshotService.adoc[XmlSnapshotService]
 

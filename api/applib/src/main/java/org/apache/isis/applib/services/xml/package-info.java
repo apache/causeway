@@ -16,23 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.xmlsnapshot;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
-
-import javax.inject.Inject;
-
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
-
-import org.apache.isis.applib.services.xml.XmlService;
-
-public abstract class XmlSnapshotServiceAbstract implements XmlSnapshotService {
-
-
-}
+/**
+ * The {@link org.apache.isis.applib.services.xml.XmlService} provides utilities for working with
+ * {@link org.w3c.dom.Document w3c DOM Document}s.
+ */
+package org.apache.isis.applib.services.xml;

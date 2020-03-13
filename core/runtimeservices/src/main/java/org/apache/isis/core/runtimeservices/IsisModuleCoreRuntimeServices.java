@@ -57,6 +57,7 @@ import org.apache.isis.core.runtimeservices.userprof.UserProfileServiceDefault;
 import org.apache.isis.core.runtimeservices.userreg.EmailNotificationServiceDefault;
 import org.apache.isis.core.runtimeservices.wrapper.WrapperFactoryDefault;
 import org.apache.isis.core.runtimeservices.xactn.TransactionServiceSpring;
+import org.apache.isis.core.runtimeservices.xml.XmlServiceDefault;
 import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefault;
 
 @Configuration
@@ -90,11 +91,12 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         TransactionServiceSpring.class,
         UrlEncodingServiceWithCompression.class,
         UserProfileServiceDefault.class,
-        WrapperFactoryDefault.class,
-        XmlSnapshotServiceDefault.class,
         UserServiceDefault.class,
         UserServiceDefault.SudoServiceSpi.class,
-        
+        WrapperFactoryDefault.class,
+        XmlServiceDefault.class,
+        XmlSnapshotServiceDefault.class,
+
         // @Controller
         RoutingServiceDefault.class,
 

@@ -46,6 +46,10 @@ Performing a flush will cause any pending calls to be performed immediately.
 <.> The framework automatically start a transaction before each user interaction (action invocation or property edit), and will commit that transaction after the interaction has completed.
 Under certain circumstances (eg actions used to perform data migration, say, or for large fixture scripts), it can be helpful to programmatically complete one transaction and start another one.
 
+<.> Primarily for internal use, will execute the task within the current transaction if there is one, but if there is none then begin and then commit a new transaction for the task.
+
+<.> Ditto, but retrieving the task to be performed from the supplier.
+
 
 == Implementation
 
