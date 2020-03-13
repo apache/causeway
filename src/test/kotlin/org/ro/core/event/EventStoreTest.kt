@@ -9,6 +9,7 @@ import org.ro.snapshots.simpleapp1_16_0.RESTFUL_SERVICES
 import org.ro.snapshots.simpleapp1_16_0.SO_LAYOUT_JSON
 import org.ro.snapshots.simpleapp1_16_0.SO_LAYOUT_XML
 import org.ro.to.Method
+import org.ro.utils.XmlHelper
 import pl.treksoft.kvision.panel.VPanel
 import kotlin.test.*
 
@@ -22,17 +23,29 @@ class EventStoreTest : IntegrationTest() {
             EventStore.reset()
             val obs = ListAggregator("test")
 
+            //when
             val rsJson = ResourceSpecification(SO_LAYOUT_JSON.url)
             EventStore.start(rsJson, Method.GET.operation, "", obs)
-            val leJson = mockResponse(SO_LAYOUT_JSON, obs)
+            mockResponse(SO_LAYOUT_JSON, obs)
 
             val rsXml = ResourceSpecification(SO_LAYOUT_XML.url, "xml")
             EventStore.start(rsXml, Method.GET.operation, "", obs)
-            val leXml = mockResponse(SO_LAYOUT_XML, obs)
+            mockResponse(SO_LAYOUT_XML, obs)
 
-            assertEquals(2, EventStore.log.size)
             console.log("[EST.testLayout]")
             console.log(EventStore.log)
+
+            // then
+            val leJson = EventStore.find(rsJson)!!
+            assertEquals("json", leJson.subType)
+
+            val leXml = EventStore.find(rsXml)!!
+            assertEquals("xml", leXml.subType)
+            assertTrue(XmlHelper.isXml(leXml.response)) // 3
+
+
+            assertEquals(2, EventStore.log.size)
+            //FIXME there should be one json response and one xml response
         }
     }
 
@@ -66,8 +79,6 @@ class EventStoreTest : IntegrationTest() {
         // Entries with the same key can be written, but when updated or retrieved the first (oldest) entry should be used
         //when
         val le2 = EventStore.find(selfSpec)!!
-        console.log("[EST.testSecondEntry]")
-        console.log(le2)
         //then
         assertEquals(myFirst, le2.request)  //2
         assertEquals(selfStr.length, le2.response.length)  //3

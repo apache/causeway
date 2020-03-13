@@ -5,10 +5,10 @@ import org.ro.to.Link
 
 @Serializable
 data class ColLt(val domainObject: DomainObjectLt? = null,
-                 val row: List<RowLt> = emptyList(),
-                 val fieldSet: List<FieldSetLt> = emptyList(),
-                 val action: List<ActionLt> = emptyList(),
-                 val collection: List<CollectionLt> = emptyList(),
+                 val row: List<RowLt> = mutableListOf<RowLt>(),
+                 val fieldSet: List<FieldSetLt> = mutableListOf<FieldSetLt>(),
+                 val action: List<ActionLt> = mutableListOf<ActionLt>(),
+                 val collection: List<CollectionLt> = mutableListOf<CollectionLt>(),
                  val metadataError: String? = "",
                  val cssClass: String? = "",
                  val size: String? = "",
@@ -24,5 +24,5 @@ data class ColLt(val domainObject: DomainObjectLt? = null,
                  val cssClassFa: String? = "",
                  val cssClassFaPosition: String? = "",
                  val namedEscaped: Boolean? = false,
-                 val tabGroup: List<TabGroupLt> = emptyList()
+                 val tabGroup: List<TabGroupLt> = mutableListOf<TabGroupLt>()
 )

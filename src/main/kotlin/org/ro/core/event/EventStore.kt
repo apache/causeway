@@ -1,9 +1,9 @@
 package org.ro.core.event
 
-import org.ro.utils.Utils
 import org.ro.core.aggregator.BaseAggregator
 import org.ro.to.TObject
 import org.ro.ui.kv.UiManager
+import org.ro.utils.Utils
 import pl.treksoft.kvision.panel.SimplePanel
 import pl.treksoft.kvision.state.observableListOf
 
@@ -28,9 +28,9 @@ object EventStore {
 
     fun start(reSpec: ResourceSpecification,
               method: String,
-              body:String = "",
+              body: String = "",
               aggregator: BaseAggregator? = null): LogEntry {
-        val entry = LogEntry(reSpec.url, method, request = body, subType= reSpec.subType)
+        val entry = LogEntry(reSpec.url, method, request = body, subType = reSpec.subType)
         if (aggregator != null) {
             entry.addAggregator(aggregator)
         }
@@ -95,6 +95,7 @@ object EventStore {
     fun find(reSpec: ResourceSpecification): LogEntry? {
         val url = reSpec.url
         val isRedundant = url.contains("object-layout") || url.contains("/properties/")
+        //val isRedundant = false // FIXME
         return if (isRedundant) {
             findEquivalent(reSpec)
         } else {
@@ -113,7 +114,12 @@ object EventStore {
     }
 
     internal fun findExact(reSpec: ResourceSpecification): LogEntry? {
-        return log.firstOrNull { it.url == reSpec.url && it.subType == reSpec.subType}
+        log.forEach {
+            if (it.matches(reSpec)) {
+                return it
+            }
+        }
+        return null
     }
 
     internal fun findView(title: String): LogEntry? {
@@ -121,9 +127,13 @@ object EventStore {
     }
 
     internal fun findEquivalent(reSpec: ResourceSpecification): LogEntry? {
-        return log.firstOrNull {
-            it.subType == reSpec.subType
-                    && areEquivalent(it.url, reSpec.url) }
+        log.forEach {
+            if (it.matches(reSpec)
+                    && areEquivalent(it.url, reSpec.url)) {
+                return it
+            }
+        }
+        return null
     }
 
     private fun areEquivalent(searchUrl: String, compareUrl: String, allowedDiff: Int = 1): Boolean {

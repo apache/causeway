@@ -177,4 +177,8 @@ data class LogEntry(
         aggregators.add(aggregator)
     }
 
+    fun matches(reSpec : ResourceSpecification) : Boolean{
+       return url.equals(reSpec.url) && subType.equals(reSpec.subType)
+    }
+
 }

@@ -16,6 +16,33 @@ import kotlin.test.assertNotNull
 class DisplayListTest {
 
     @Test
+    fun testSimpleObject() {
+        val ro0 = TObjectHandler().parse(SO_0.str) as TObject
+        val ro1 = TObjectHandler().parse(SO_1.str) as TObject
+        val lt = LayoutHandler().parse(SO_OBJECT_LAYOUT.str) as Layout
+
+        val dl = DisplayList("test")
+        dl.addData(ro0)
+        dl.addData(ro1)
+        dl.addLayout(lt)
+
+        assertEquals(2, dl.data.size) //1
+
+        val properties = dl.propertyLayoutList
+        assertEquals(2, properties.size) //2
+        //FIXME
+        assertEquals("name", properties[0].id) //3
+        assertEquals("notes", properties[1].id)  //4
+    }
+
+    //TODO add test that ensures sequence is preserved in members / getMembers
+    //  map.forEach { (key, value) -> println("$key = $value") }
+    // val numbersMap = mapOf("one" to 1, "two" to 2, "three" to 3)
+    //println(numbersMap + Pair("four", 4))
+    //println(numbersMap + Pair("one", 10))
+    //println(numbersMap + mapOf("five" to 5, "one" to 11))
+
+    @Test
     fun testConfiguration() {
         val ro0 = TObjectHandler().parse(CFG_1.str) as TObject
         val lt = LayoutHandler().parse(CFG_LAYOUT_JSON.str) as Layout
@@ -27,7 +54,7 @@ class DisplayListTest {
         dl.addLayout(lt)
         assertEquals(1, dl.data.size) //1
 
-        val properties = dl.propertyList
+        val properties = dl.propertyLayoutList
         assertEquals("key", properties[0].id) // 2
         assertEquals("value", properties[1].id)   // 3
     }
@@ -54,32 +81,5 @@ class DisplayListTest {
         assertEquals("object", properties[3].id)
         assertEquals("className", properties[0].id)
     }
-
-    @Test
-    fun testSimpleObject() {
-        val ro0 = TObjectHandler().parse(SO_0.str) as TObject
-        val ro1 = TObjectHandler().parse(SO_1.str) as TObject
-        val lt = LayoutHandler().parse(SO_OBJECT_LAYOUT.str) as Layout
-
-        val dl = DisplayList("test")
-        dl.addData(ro0)
-        dl.addData(ro1)
-        dl.addLayout(lt)
-
-        assertEquals(2, dl.data.size) //1
-
-        val properties = dl.propertyList
-        assertEquals(2, properties.size) //2
-        //FIXME
-        assertEquals("name", properties[0].id) //3
-        assertEquals("notes", properties[1].id)  //4
-    }
-
-    //TODO add test that ensures sequence is preserved in members / getMembers
-    //  map.forEach { (key, value) -> println("$key = $value") }
-    // val numbersMap = mapOf("one" to 1, "two" to 2, "three" to 3)
-    //println(numbersMap + Pair("four", 4))
-    //println(numbersMap + Pair("one", 10))
-    //println(numbersMap + mapOf("five" to 5, "one" to 11))
 
 }

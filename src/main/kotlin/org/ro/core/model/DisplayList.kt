@@ -2,6 +2,7 @@ package org.ro.core.model
 
 import org.ro.layout.Layout
 import org.ro.layout.PropertyLt
+import org.ro.layout.RowLt
 import org.ro.to.Extensions
 import org.ro.to.Property
 import org.ro.to.TObject
@@ -37,27 +38,43 @@ class DisplayList(override val title: String) : BaseDisplayable() {
     }
 
     fun addLayout(layout: Layout) {
-        this.layout = layout
-        layout.row.forEach { r ->
-            r.cols.forEach { cs ->
-                cs.col.fieldSet.forEach { fs ->
-                    fs.property.forEach { p ->
-                        propertyLayoutList.add(p)
-                    }
-                }
-                cs.col.row.forEach { r ->
-                    r.cols.forEach { cs ->
-                        cs.col.fieldSet.forEach { fs ->
-                            fs.property.forEach { p ->
-                                propertyLayoutList.add(p)
-                            }
-                        }
-                    }
-                }
-            }
+        // row[0] (head) contains the object title and actions
+        // row[1] contains data, tabs, collections, etc.
+        val secondRow = layout.row[1] // traditional C braintwist
+        var colsLyt = secondRow.cols.first()
+        var colLyt = colsLyt.getCol()
+        val tgLyts = colLyt.tabGroup
+        if (tgLyts.isNotEmpty()) {
+            val tabGroup = tgLyts.first()
+            val tab = tabGroup.tab.first()
+            val row = tab.row.first()
+            colsLyt = row.cols.first()
+        }
+        colLyt = colsLyt.getCol()
+        val fsList = colLyt.fieldSet
+        if (fsList.isNotEmpty()) {
+            val fsLyt = fsList.first()
+            propertyLayoutList.addAll(fsLyt.property)
         }
         console.log("[DL.addLayout]")
         console.log(propertyLayoutList)
+    }
+
+    fun addLayoutNew(layout: Layout) {
+        this.layout = layout
+        layout.row.forEach { r ->
+            addLayout4Row(r)
+        }
+    }
+
+    private fun addLayout4Row(r: RowLt) {
+        r.cols.forEach { cs ->
+            cs.getColList().forEach { c ->
+                c.fieldSet.forEach { fs ->
+                    propertyLayoutList.addAll(fs.property)
+                }
+            }
+        }
     }
 
     override fun addData(obj: TransferObject) {

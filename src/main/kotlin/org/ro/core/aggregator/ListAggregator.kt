@@ -82,11 +82,7 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
             dspl.addPropertyDescription(p)
         } else {
             dspl.addProperty(p)
-            val l = p.descriptionLink()
-            if (l != null) {
-                console.log(l)
-                l.invokeWith(this)
-            }
+            p.descriptionLink()?.invokeWith(this)
         }
     }
 
