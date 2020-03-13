@@ -25,6 +25,8 @@ import java.util.concurrent.Future;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.wrapper.AsyncWrap;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
@@ -39,11 +41,8 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.With;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 /**
@@ -51,58 +50,143 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0
  *
  */
-@AllArgsConstructor
 @Log4j2
 class AsyncWrapDefault<T> implements AsyncWrap<T> {
     
-    @With(AccessLevel.PACKAGE) @NonNull
-    private WrapperFactory wrapper;
+    @NonNull
+    private final WrapperFactory wrapperFactory;
     
-    @With(AccessLevel.PACKAGE) @NonNull
-    private IsisSessionFactory isisSessionFactory;
+    @NonNull
+    private final IsisSessionFactory isisSessionFactory;
     
-    @With(AccessLevel.PACKAGE) @NonNull
-    private AuthenticationSessionTracker authenticationSessionTracker;
+    @NonNull
+    private final AuthenticationSessionTracker authenticationSessionTracker;
     
-    @With(AccessLevel.PACKAGE) @NonNull
-    private TransactionService transactionService;
+    @NonNull
+    private final TransactionService transactionService;
     
-    @With(AccessLevel.PACKAGE) @NonNull
-    private T domainObject;
-    
-    /*getter is API*/
-    @Getter(onMethod = @__(@Override)) @With(AccessLevel.PACKAGE) @NonNull 
-    private ImmutableEnumSet<ExecutionMode> executionMode;
-    
-    /*getter and wither are API*/
+    @NonNull
+    private final BookmarkService bookmarkService;
+
+    @NonNull
+    private final Bookmark bookmark;
+
+    private final Class<T> domainClass;
+
+    @Getter(onMethod = @__(@Override))
+    private ImmutableEnumSet<ExecutionMode> executionModes;
+
+    private ImmutableEnumSet<ExecutionMode> executionModesSync;
+
+    private ImmutableEnumSet<ExecutionMode> executionModesAsync;
+
     @NonNull
     @Getter(onMethod = @__({@Override})) 
-    @With(value = AccessLevel.PUBLIC, onMethod = @__(@Override)) 
-    private ExecutorService executor;  
+    private ExecutorService executorService;
     
-    /*getter and wither are API*/
     @NonNull
     @Getter(onMethod = @__({@Override})) 
-    @With(value = AccessLevel.PUBLIC, onMethod = @__(@Override)) 
     private Consumer<Exception> exceptionHandler;
 
-        
+    @NonNull
+    @Getter(onMethod = @__({@Override}))
+    private WrapperFactory.RuleCheckingPolicy ruleCheckingPolicy;
+
+    AsyncWrapDefault(
+            final WrapperFactory wrapperFactory,
+            final IsisSessionFactory isisSessionFactory,
+            final AuthenticationSessionTracker authenticationSessionTracker,
+            final TransactionService transactionService,
+            final BookmarkService bookmarkService,
+            final T domainObject,
+            final ImmutableEnumSet<ExecutionMode> executionModes,
+            final ExecutorService executorService,
+            final Consumer<Exception> exceptionHandler,
+            final WrapperFactory.RuleCheckingPolicy ruleCheckingPolicy) {
+
+        this.wrapperFactory = wrapperFactory;
+        this.isisSessionFactory = isisSessionFactory;
+        this.authenticationSessionTracker = authenticationSessionTracker;
+        this.transactionService = transactionService;
+        this.bookmarkService = bookmarkService;
+        this.bookmark = bookmarkService.bookmarkFor(domainObject);
+        this.domainClass = (Class<T>) domainObject.getClass();
+        this.executionModes = executionModes;
+
+        withRuleCheckingPolicy(ruleCheckingPolicy);
+        withExecutorService(executorService);
+        withExceptionHandler(exceptionHandler);
+    }
+
+    private void deriveExecutionModes() {
+
+        if(executionModes.contains(ExecutionMode.SKIP_RULE_VALIDATION)) {
+            // ruleCheckingPolicy doesn't matter
+            executionModesSync = WrapperFactory.ExecutionModes.NOOP;
+            executionModesAsync = executionModes;
+        } else {
+            switch (ruleCheckingPolicy) {
+                case SYNC:
+                    // move rule validation to be performed synchronously.
+                    executionModesSync = WrapperFactory.ExecutionModes.NO_EXECUTE;  // ie do check rules.
+                    val tmp = executionModes.toEnumSet();
+                    tmp.add(ExecutionMode.SKIP_RULE_VALIDATION);
+                    this.executionModesAsync = ImmutableEnumSet.from(tmp);
+                    break;
+                case ASYNC:
+                    executionModesSync = WrapperFactory.ExecutionModes.NOOP;
+                    this.executionModesAsync = executionModes;
+                    break;
+            }
+        }
+    }
+
+
+    /**
+     * Fine-tune the executor.
+     */
+    public AsyncWrap<T> withExecutorService(ExecutorService executorService) {
+        this.executorService = executorService;
+        return this;
+    }
+
+    /**
+     * Fine-tune the exception handler.
+     */
+    @Override
+    public AsyncWrap<T> withExceptionHandler(Consumer<Exception> handler) {
+        this.exceptionHandler = handler;
+        return this;
+    }
+
+    /**
+     * Adjust whether rule checking happens immediately or asynchronously.
+     */
+    @Override
+    public AsyncWrap<T> withRuleCheckingPolicy(WrapperFactory.RuleCheckingPolicy ruleCheckingPolicy) {
+        this.ruleCheckingPolicy = ruleCheckingPolicy;
+        deriveExecutionModes();
+        return this;
+    }
+
     // -- METHOD REFERENCE MATCHERS (WITH RETURN VALUE)
-    
+
     @Override
     public <R> Future<R> call(Call1<? extends R, ? super T> action) {
-        
-        if(shouldValidate()) {
-            // do validation synchronous (with the calling thread)
-            val proxy_validateOnly = wrapper.wrap(domainObject, WrapperFactory.ExecutionModes.NO_EXECUTE);
-            action.call(proxy_validateOnly);
+
+        if(shouldValidateSync()) {
+            T lookup = bookmarkService.lookup(bookmark, this.domainClass);
+            val proxy = wrapperFactory.wrap(lookup, executionModesSync);
+            action.call(proxy);
         }
         
-        if(shouldExecute()) {
-            // to also trigger domain events, we need a proxy, but validation (if required)
-            // was already done above
-            val proxy_executeOnly = wrapper.wrap(domainObject, WrapperFactory.ExecutionModes.SKIP_RULES);
-            return submit(()->action.call(proxy_executeOnly));
+        if(shouldValidateAsync() || shouldExecuteAsync()) {
+            return submit(()-> {
+
+                final T lookup = bookmarkService.lookup(bookmark, this.domainClass);
+                val proxy = wrapperFactory.wrap(lookup, executionModesAsync);
+                return action.call(proxy);
+            });
         }
         
         return CompletableFuture.completedFuture(null);
@@ -111,37 +195,41 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
 
     @Override
     public <R, A1> Future<R> call(Call2<? extends R, ? super T, A1> action, A1 arg1) {
-        
-        if(shouldValidate()) {
-            // do validation synchronous (with the calling thread)
-            val proxy_validateOnly = wrapper.wrap(domainObject, WrapperFactory.ExecutionModes.NO_EXECUTE);
-            action.call(proxy_validateOnly, arg1);
+
+        if(shouldValidateSync()) {
+            T lookup = bookmarkService.lookup(bookmark, this.domainClass);
+            val proxy = wrapperFactory.wrap(lookup, executionModesSync);
+            action.call(proxy, arg1);
         }
-        
-        if(shouldExecute()) {
-            // to also trigger domain events, we need a proxy, but validation (if required)
-            // was already done above
-            val proxy_executeOnly = wrapper.wrap(domainObject, WrapperFactory.ExecutionModes.SKIP_RULES);
-            return submit(()->action.call(proxy_executeOnly, arg1));
+
+        if(shouldValidateAsync() || shouldExecuteAsync()) {
+            return submit(()-> {
+
+                final T lookup = bookmarkService.lookup(bookmark, this.domainClass);
+                val proxy = wrapperFactory.wrap(lookup, executionModesAsync);
+                return action.call(proxy, arg1);
+            });
         }
-        
+
         return CompletableFuture.completedFuture(null);
     }
 
     @Override
     public <R, A1, A2> Future<R> call(Call3<? extends R, ? super T, A1, A2> action, A1 arg1, A2 arg2) {
 
-        if(shouldValidate()) {
-            // do validation synchronous (with the calling thread)
-            val proxy_validateOnly = wrapper.wrap(domainObject, WrapperFactory.ExecutionModes.NO_EXECUTE);
-            action.call(proxy_validateOnly, arg1, arg2);
+        if(shouldValidateSync()) {
+            T lookup = bookmarkService.lookup(bookmark, this.domainClass);
+            val proxy = wrapperFactory.wrap(lookup, executionModesSync);
+            action.call(proxy, arg1, arg2);
         }
-        
-        if(shouldExecute()) {
-            // to also trigger domain events, we need a proxy, but validation (if required)
-            // was already done above
-            val proxy_executeOnly = wrapper.wrap(domainObject, WrapperFactory.ExecutionModes.SKIP_RULES);
-            return submit(()->action.call(proxy_executeOnly, arg1, arg2));
+
+        if(shouldValidateAsync() || shouldExecuteAsync()) {
+            return submit(()-> {
+
+                final T lookup = bookmarkService.lookup(bookmark, this.domainClass);
+                val proxy = wrapperFactory.wrap(lookup, executionModesAsync);
+                return action.call(proxy, arg1, arg2);
+            });
         }
         
         return CompletableFuture.completedFuture(null);
@@ -152,17 +240,19 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
     public <R, A1, A2, A3> Future<R> call(Call4<? extends R, ? super T, A1, A2, A3> action, 
             A1 arg1, A2 arg2, A3 arg3) {
         
-        if(shouldValidate()) {
-            // do validation synchronous (with the calling thread)
-            val proxy_validateOnly = wrapper.wrap(domainObject, WrapperFactory.ExecutionModes.NO_EXECUTE);
-            action.call(proxy_validateOnly, arg1, arg2, arg3);
+        if(shouldValidateSync()) {
+            T lookup = bookmarkService.lookup(bookmark, this.domainClass);
+            val proxy = wrapperFactory.wrap(lookup, executionModesSync);
+            action.call(proxy, arg1, arg2, arg3);
         }
-        
-        if(shouldExecute()) {
-         // to also trigger domain events, we need a proxy, but validation (if required)
-            // was already done above
-            val proxy_executeOnly = wrapper.wrap(domainObject, WrapperFactory.ExecutionModes.SKIP_RULES);
-            return submit(()->action.call(proxy_executeOnly, arg1, arg2, arg3));
+
+        if(shouldValidateAsync() || shouldExecuteAsync()) {
+            return submit(()-> {
+
+                final T lookup = bookmarkService.lookup(bookmark, this.domainClass);
+                val proxy = wrapperFactory.wrap(lookup, executionModesAsync);
+                return action.call(proxy, arg1, arg2, arg3);
+            });
         }
         
         return CompletableFuture.completedFuture(null);
@@ -173,17 +263,19 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
     public <R, A1, A2, A3, A4> Future<R> call(Call5<? extends R, ? super T, A1, A2, A3, A4> action, 
             A1 arg1, A2 arg2, A3 arg3, A4 arg4) {
 
-        if(shouldValidate()) {
-            // do validation synchronous (with the calling thread)
-            val proxy_validateOnly = wrapper.wrap(domainObject, WrapperFactory.ExecutionModes.NO_EXECUTE);
-            action.call(proxy_validateOnly, arg1, arg2, arg3, arg4);
+        if(shouldValidateSync()) {
+            T lookup = bookmarkService.lookup(bookmark, this.domainClass);
+            val proxy = wrapperFactory.wrap(lookup, executionModesSync);
+            action.call(proxy, arg1, arg2, arg3, arg4);
         }
-        
-        if(shouldExecute()) {
-            // to also trigger domain events, we need a proxy, but validation (if required)
-            // was already done above
-            val proxy_executeOnly = wrapper.wrap(domainObject, WrapperFactory.ExecutionModes.SKIP_RULES);
-            return submit(()->action.call(proxy_executeOnly, arg1, arg2, arg3, arg4));
+
+        if(shouldValidateAsync() || shouldExecuteAsync()) {
+            return submit(()-> {
+
+                final T lookup = bookmarkService.lookup(bookmark, this.domainClass);
+                val proxy = wrapperFactory.wrap(lookup, executionModesAsync);
+                return action.call(proxy, arg1, arg2, arg3, arg4);
+            });
         }
         
         return CompletableFuture.completedFuture(null);
@@ -199,8 +291,6 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
         Callable<R> asyncTask = ()->{
 
             try {
-                //transactionLatch.await(); // wait for transaction of the calling thread to complete
-
                 return isisSessionFactory.callAuthenticated(authenticationSession,
                         ()->transactionService.executeWithinTransaction(actionInvocation));
 
@@ -208,11 +298,12 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
 
 //              val wrappedMethod = (Method) 
 //              proxy.getClass().getMethod("__isis_wrappedMethod", _Constants.emptyClasses);
-      
+
+                Object lookup = bookmarkService.lookup(bookmark);
                 val msg = 
-                        String.format("Async execution of action '%s' on type '%s' failed.",
+                        String.format("Async execution of action '%s' on domain object '%s' failed.",
                                 "[cannot resolve method name - not implemented]",//wrappedMethod.getName(),
-                                domainObject.getClass());
+                                bookmark);
                 
                 log.warn(msg, e);
                 
@@ -222,19 +313,21 @@ class AsyncWrapDefault<T> implements AsyncWrap<T> {
             }
         };
         
-        return executor.submit(asyncTask);
+        return executorService.submit(asyncTask);
     }
     
     // -- HELPER
     
-    private boolean shouldValidate() {
-        return !executionMode.contains(ExecutionMode.SKIP_RULE_VALIDATION);
-    }
-    
-    private boolean shouldExecute() {
-        return !executionMode.contains(ExecutionMode.SKIP_EXECUTION);
+    private boolean shouldValidateSync() {
+        return !this.executionModesSync.contains(ExecutionMode.SKIP_RULE_VALIDATION);
     }
 
+    private boolean shouldValidateAsync() {
+        return !this.executionModesAsync.contains(ExecutionMode.SKIP_RULE_VALIDATION);
+    }
 
+    private boolean shouldExecuteAsync() {
+        return !executionModesAsync.contains(ExecutionMode.SKIP_EXECUTION);
+    }
 
 }

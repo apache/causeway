@@ -21,16 +21,12 @@ package org.apache.isis.core.runtimeservices.wrapper.proxy;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
-import java.util.Collections;
-import java.util.Map;
-import java.util.WeakHashMap;
 
 import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactory;
 import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactoryService;
-import org.apache.isis.core.metamodel.specloader.classsubstitutor.ProxyEnhanced;
 import org.apache.isis.core.runtimeservices.wrapper.handlers.DelegatingInvocationHandler;
 
 import lombok.NonNull;
@@ -39,12 +35,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProxyCreator {
 
-    @NonNull private final Map<Class<?>, ProxyFactory<?>> proxyFactoryByClass;
     @NonNull private final ProxyFactoryService proxyFactoryService;
-
-    public ProxyCreator(final ProxyFactoryService proxyFactoryService) {
-        this(Collections.synchronizedMap(new WeakHashMap<>()), proxyFactoryService);
-    }
 
     public <T> T instantiateProxy(final DelegatingInvocationHandler<T> handler) {
 
@@ -55,34 +46,13 @@ public class ProxyCreator {
         if (base.isInterface()) {
             return createInstanceForInterface(base, handler, WrappingObject.class);
         } else {
-            final ProxyFactory<T> proxyFactory = proxyFactoryFor(base);
+            final ProxyFactory<T> proxyFactory = proxyFactoryService.factory(base, WrappingObject.class);
             return proxyFactory.createInstance(handler, false);
         }
     }
 
     // -- HELPER
 
-    private <T> ProxyFactory<T> proxyFactoryFor(final Class<T> toProxyClass) {
-        ProxyFactory<T> proxyFactory = _Casts.uncheckedCast(proxyFactoryByClass.get(toProxyClass));
-        if(proxyFactory == null) {
-            proxyFactory = createProxyFactoryFor(toProxyClass);
-            proxyFactoryByClass.put(toProxyClass, proxyFactory);
-        }
-        return proxyFactory;
-    }
-
-    private <T> ProxyFactory<T> createProxyFactoryFor(final Class<T> toProxyClass) {
-
-        final Class<?>[] interfaces = _Arrays.combine(
-                toProxyClass.getInterfaces(),
-                new Class<?>[] { ProxyEnhanced.class, WrappingObject.class });
-
-        final ProxyFactory<T> proxyFactory = ProxyFactory.builder(toProxyClass)
-                .interfaces(interfaces)
-                .build(proxyFactoryService);
-
-        return proxyFactory;
-    }
 
     @SuppressWarnings("unchecked")
     private static <T> T createInstanceForInterface(

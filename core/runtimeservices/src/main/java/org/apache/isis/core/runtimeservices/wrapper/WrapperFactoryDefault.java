@@ -36,6 +36,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.wrapper.AsyncWrap;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
@@ -88,6 +89,7 @@ import lombok.extern.log4j.Log4j2;
 public class WrapperFactoryDefault implements WrapperFactory {
     
     @Inject private FactoryService factoryService;
+    @Inject private BookmarkService bookmarkService;
     @Inject private MetaModelContext metaModelContext;
     @Inject private IsisSessionFactory isisSessionFactory;
     @Inject private TransactionService transactionService;
@@ -166,7 +168,6 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
     protected <T> T createProxy(T domainObject, ImmutableEnumSet<ExecutionMode> mode) {
-        
         return proxyContextHandler.proxy(metaModelContext, domainObject, mode);
     }
 
@@ -188,10 +189,13 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
     
     @Override
-    public <T> AsyncWrap<T> async(T domainObject, ImmutableEnumSet<ExecutionMode> mode) {
+    public <T> T async(T domainObject, ImmutableEnumSet<ExecutionMode> modes) {
         val executor = ForkJoinPool.commonPool(); // default, but can be overwritten through withers on the returned AsyncWrap
-        return new AsyncWrapDefault<T>(
-                this, isisSessionFactory, authenticationSessionTracker, transactionService, domainObject, mode, executor, log::error);
+        AsyncWrapDefault<T> tAsyncWrapDefault = new AsyncWrapDefault<>(
+                this, isisSessionFactory,
+                authenticationSessionTracker, transactionService, bookmarkService,
+                domainObject, modes, executor, log::error, RuleCheckingPolicy.ASYNC);
+        return proxyFactoryService.factory()tAsyncWrapDefault;
     }
     
     @Override

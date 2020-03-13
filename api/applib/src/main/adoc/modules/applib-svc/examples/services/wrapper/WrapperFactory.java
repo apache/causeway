@@ -72,8 +72,12 @@ import lombok.experimental.UtilityClass;
  * </p>
  */
 // tag::refguide[]
+// tag::refguide-async[]
+// tag::refguide-listeners[]
 public interface WrapperFactory {
 
+    // end::refguide-listeners[]
+    // end::refguide-async[]
     // end::refguide[]
     /**
      * Whether interactions with the wrapper are actually passed onto the
@@ -151,6 +155,19 @@ public interface WrapperFactory {
     // end::refguide-2[]
 
     /**
+     * Same as {@link #wrap(Object)}, except the actual execution occurs only if
+     * the <tt>execute</tt> parameter indicates.
+     *
+     * <p>
+     * Otherwise, will do all the validations (raise exceptions as required
+     * etc.), but doesn't modify the model.
+     */
+    // tag::refguide[]
+    <T> T wrap(T domainObject,                                      // <.>
+               ImmutableEnumSet<ExecutionMode> mode);
+
+    // end::refguide[]
+    /**
      * Provides the &quot;wrapper&quot; of the underlying domain object.
      *
      * <p>
@@ -159,13 +176,6 @@ public interface WrapperFactory {
      */
     // tag::refguide[]
     <T> T wrap(T domainObject);                                     // <.>
-
-    // end::refguide[]
-    /**
-     * {@link #wrap(Object) wraps} a {@link FactoryService#mixin(Class, Object) mixin}.
-     */
-    // tag::refguide[]
-    <T> T wrapMixin(Class<T> mixinClass, Object mixedIn);           // <.>
 
     // end::refguide[]
     /**
@@ -193,16 +203,10 @@ public interface WrapperFactory {
 
     // end::refguide[]
     /**
-     * Same as {@link #wrap(Object)}, except the actual execution occurs only if
-     * the <tt>execute</tt> parameter indicates.
-     *
-     * <p>
-     * Otherwise, will do all the validations (raise exceptions as required
-     * etc.), but doesn't modify the model.
+     * {@link #wrap(Object) wraps} a {@link FactoryService#mixin(Class, Object) mixin}.
      */
     // tag::refguide[]
-    <T> T wrap(T domainObject,                                      // <.>
-               ImmutableEnumSet<ExecutionMode> mode);
+    <T> T wrapMixin(Class<T> mixinClass, Object mixedIn);           // <.>
 
     // end::refguide[]
     /**
@@ -229,6 +233,7 @@ public interface WrapperFactory {
 
     // end::refguide[]
 
+
     //
     // -- ASYNC WRAPPING
     //
@@ -243,11 +248,11 @@ public interface WrapperFactory {
      *
      * @since 2.0
      */
-    // tag::refguide[]
+    // tag::refguide-async[]
     <T> AsyncWrap<T> async(T domainObject,                          // <.>
                            ImmutableEnumSet<ExecutionMode> mode);
 
-    // end::refguide[]
+    // end::refguide-async[]
     /**
      * Shortcut for {@link #async(Object, ImmutableEnumSet)} using execution mode
      * {@link ExecutionModes#EXECUTE}.
@@ -256,17 +261,17 @@ public interface WrapperFactory {
      *
      * @since 2.0
      */
-    // tag::refguide[]
+    // tag::refguide-async[]
     default <T> AsyncWrap<T> async(T domainObject) {                // <.>
-        // end::refguide[]
+        // end::refguide-async[]
 
         return async(domainObject, ExecutionModes.EXECUTE);
 
-        // tag::refguide[]
+        // tag::refguide-async[]
         // ...
     }
 
-    // end::refguide[]
+    // end::refguide-async[]
     /**
      * Returns a {@link AsyncWrap} bound to the provided {@code mixinClass},
      * to prepare for type-safe asynchronous action execution.
@@ -278,12 +283,12 @@ public interface WrapperFactory {
      *
      * @since 2.0
      */
-    // tag::refguide[]
+    // tag::refguide-async[]
     <T> AsyncWrap<T> asyncMixin(                                    // <.>
                         Class<T> mixinClass, Object mixedIn,
                         ImmutableEnumSet<ExecutionMode> mode);
 
-    // end::refguide[]
+    // end::refguide-async[]
     /**
      * Shortcut for {@link #asyncMixin(Class, Object, ImmutableEnumSet)} using execution mode
      * {@link ExecutionModes#EXECUTE}.
@@ -293,17 +298,17 @@ public interface WrapperFactory {
      *
      * @since 2.0
      */
-    // tag::refguide[]
+    // tag::refguide-async[]
     default <T> AsyncWrap<T> asyncMixin(                            // <.>
                         Class<T> mixinClass, Object mixedIn) {
-        // end::refguide[]
+        // end::refguide-async[]
 
         return asyncMixin(mixinClass, mixedIn, ExecutionModes.EXECUTE);
 
-        // tag::refguide[]
+        // tag::refguide-async[]
         // ...
     }
-    // end::refguide[]
+    // end::refguide-async[]
 
 
     //
@@ -314,10 +319,11 @@ public interface WrapperFactory {
      * All {@link InteractionListener}s that have been registered using
      * {@link #addInteractionListener(InteractionListener)}.
      */
-    // tag::refguide[]
+    // tag::refguide-listeners[]
+    // ...
     List<InteractionListener> getListeners();                       // <.>
 
-    // end::refguide[]
+    // end::refguide-listeners[]
     /**
      * Registers an {@link InteractionListener}, to be notified of interactions
      * on all wrappers.
@@ -331,10 +337,10 @@ public interface WrapperFactory {
      * @param listener
      * @return
      */
-    // tag::refguide[]
+    // tag::refguide-listeners[]
     boolean addInteractionListener(InteractionListener listener);   // <.>
 
-    // end::refguide[]
+    // end::refguide-listeners[]
     /**
      * Remove an {@link InteractionListener}, to no longer be notified of
      * interactions on wrappers.
@@ -348,12 +354,16 @@ public interface WrapperFactory {
      * @param listener
      * @return
      */
-    // tag::refguide[]
+    // tag::refguide-listeners[]
     boolean removeInteractionListener(                              // <.>
                     InteractionListener listener);
 
     void notifyListeners(InteractionEvent ev);                      // <.>
+    // tag::refguide-async[]
+    // tag::refguide[]
+    // ...
 
 }
 // end::refguide[]
-w
+// end::refguide-listeners[]
+// end::refguide-async[]

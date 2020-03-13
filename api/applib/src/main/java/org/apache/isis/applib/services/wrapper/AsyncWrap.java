@@ -47,13 +47,13 @@ public interface AsyncWrap<T> {
 
     // -- CONFIGURATION
     
-    ExecutorService getExecutor();
-    AsyncWrap<T> withExecutor(ExecutorService executor);
+    ExecutorService getExecutorService();
+    AsyncWrap<T> withExecutorService(ExecutorService executor);
     
     Consumer<Exception> getExceptionHandler();
     AsyncWrap<T> withExceptionHandler(Consumer<Exception> handler);
-    
-    ImmutableEnumSet<ExecutionMode> getExecutionMode();
+
+    ImmutableEnumSet<ExecutionMode> getExecutionModes();
     
     // -- INVOCATION (WITH RETURN VALUE)
     

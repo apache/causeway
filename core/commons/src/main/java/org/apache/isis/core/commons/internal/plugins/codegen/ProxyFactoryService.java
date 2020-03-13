@@ -20,15 +20,27 @@ package org.apache.isis.core.commons.internal.plugins.codegen;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.core.commons.internal.collections._Arrays;
+
 /**
  * Replaces the former ProxyFactoryPlugin
  * @since 2.0
  */
 public interface ProxyFactoryService {
 
-    public <T> ProxyFactory<T> factory(
+    <T> ProxyFactory<T> factory(
             Class<T> base,
             @Nullable Class<?>[] interfaces,
             @Nullable Class<?>[] constructorArgTypes);
 
+
+    <T> ProxyFactory<T> factory(Class<T> toProxyClass, Class<?> additionalClass);
+
+    /**
+     * Marker interface for entities/services that have been enhanced with
+     * the framework's proxy factory.
+     */
+    interface ProxyEnhanced {
+
+    }
 }

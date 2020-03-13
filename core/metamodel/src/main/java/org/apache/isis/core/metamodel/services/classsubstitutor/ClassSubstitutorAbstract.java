@@ -25,8 +25,8 @@ import java.util.Set;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.internal.base._Blackhole;
 import org.apache.isis.core.commons.internal.collections._Sets;
+import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactoryService;
 import org.apache.isis.core.metamodel.commons.ClassUtil;
-import org.apache.isis.core.metamodel.specloader.classsubstitutor.ProxyEnhanced;
 
 import lombok.NonNull;
 import lombok.val;
@@ -71,7 +71,7 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
         if(superclass != null && superclass.isEnum()) {
             return superclass;
         }
-        if (ClassUtil.directlyImplements(cls, ProxyEnhanced.class)) {
+        if (ClassUtil.directlyImplements(cls, ProxyFactoryService.ProxyEnhanced.class)) {
             // REVIEW: arguably this should now go back to the ClassSubstitorRegistry
             return getReplacement(cls.getSuperclass());
         }
