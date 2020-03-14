@@ -120,7 +120,7 @@ public class MainView extends VerticalLayout {
         // top level right aligned ...
         buildMenuModel(commonContext, bs3MenuBars.getSecondary(), menuSectionUiModel->
             menuSectionBuilder.accept(rightMenuBar, menuSectionUiModel));
-        // TODO tertiary menu items should get collected under the a top level menu labeled with the current user's name 
+        // TODO tertiary menu items should get collected under a top level menu labeled with the current user's name 
         buildMenuModel(commonContext, bs3MenuBars.getTertiary(), menuSectionUiModel->
             menuSectionBuilder.accept(rightMenuBar, menuSectionUiModel));
         
