@@ -143,10 +143,9 @@ class PublisherServiceTest extends IsisIntegrationTestAbstract {
         val latch = kvStore.latch(PublisherServiceForTesting.class);
 
         // when - running within its own background task
-        val future = wrapper.async(book, WrapperFactory.ExecutionModes.SKIP_RULES) // don't enforce rules for this test
-                .run(JdoBook::setName, "Book #2");
+        wrapper.async(book, WrapperFactory.ExecutionModes.SKIP_RULES).setName("Book #2"); // don't enforce rules for this test
 
-        future.get(10, TimeUnit.SECONDS);
+        //future.get(10, TimeUnit.SECONDS);
 
         latch.await(2, TimeUnit.SECONDS);
         
@@ -173,10 +172,9 @@ class PublisherServiceTest extends IsisIntegrationTestAbstract {
         // when - running within its own background task
         assertThrows(DisabledException.class, ()->{
             
-            val future = wrapper.async(book, WrapperFactory.ExecutionModes.EXECUTE)
-                .run(JdoBook::setName, "Book #2");
+            wrapper.async(book, WrapperFactory.ExecutionModes.EXECUTE).setName("Book #2");
             
-            future.get(10, TimeUnit.SECONDS);
+            //future.get(10, TimeUnit.SECONDS);
             
         });
 

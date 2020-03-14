@@ -20,6 +20,8 @@
 package org.apache.isis.applib.services.wrapper;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ForkJoinPool;
 
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
@@ -30,6 +32,7 @@ import static org.apache.isis.core.commons.collections.ImmutableEnumSet.*;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -154,12 +157,13 @@ public interface WrapperFactory {
     }
     // end::refguide-2[]
 
-    // tag::refguide-2[]
+
+    // tag::refguide-3[]
     enum RuleCheckingPolicy {
         SYNC,   // <.>
         ASYNC   // <.>
     }
-    // tag::refguide-3[]
+    // end::refguide-3[]
 
     /**
      * Same as {@link #wrap(Object)}, except the actual execution occurs only if
@@ -171,7 +175,7 @@ public interface WrapperFactory {
      */
     // tag::refguide[]
     <T> T wrap(T domainObject,                                      // <.>
-               ImmutableEnumSet<ExecutionMode> mode);
+               ImmutableEnumSet<ExecutionMode> modes);
 
     // end::refguide[]
     /**
@@ -246,31 +250,38 @@ public interface WrapperFactory {
     //
 
     /**
-     * Returns a {@link AsyncWrap} bound to the provided {@code domainObject},
-     * to prepare for type-safe asynchronous action execution.
+     * Returns a proxy object for the provided {@code domainObject},
+     * through which can execute the action asynchronously.
      *
      * @param <T>
      * @param domainObject
      * @param mode
      *
+     * @param executorService
      * @since 2.0
      */
     // tag::refguide-async[]
     <T> T async(T domainObject,                          // <.>
                 ImmutableEnumSet<ExecutionMode> mode,
-                RuleCheckingPolicy ruleCheckingPolicy);
+                RuleCheckingPolicy ruleCheckingPolicy,
+                ExecutorService executorService);
 
     // end::refguide-async[]
     // tag::refguide-async[]
-    <T> T async(T domainObject,                          // <.>
-                ImmutableEnumSet<ExecutionMode> mode);
+    default <T> T async(T domainObject,                          // <.>
+                ImmutableEnumSet<ExecutionMode> modes) {
+        // end::refguide-async[]
+
+        return async(domainObject, modes, RuleCheckingPolicy.ASYNC, ForkJoinPool.commonPool());
+
+        // tag::refguide-async[]
+        // ...
+    }
 
     // end::refguide-async[]
     /**
      * Shortcut for {@link #async(Object, ImmutableEnumSet)} using execution mode
      * {@link ExecutionModes#EXECUTE}.
-     * @param <T>
-     * @param domainObject
      *
      * @since 2.0
      */
@@ -286,20 +297,48 @@ public interface WrapperFactory {
 
     // end::refguide-async[]
     /**
-     * Returns a {@link AsyncWrap} bound to the provided {@code mixinClass},
-     * to prepare for type-safe asynchronous action execution.
+     * Returns a proxy object for the provided {@code mixinClass},
+     * through which can execute the action asynchronously.
      *
      * @param <T>
      * @param mixinClass
      * @param mixedIn
-     * @param mode
+     * @param modes
      *
      * @since 2.0
      */
     // tag::refguide-async[]
     <T> T asyncMixin(                                    // <.>
                 Class<T> mixinClass, Object mixedIn,
-                ImmutableEnumSet<ExecutionMode> mode);
+                ImmutableEnumSet<ExecutionMode> modes,
+                RuleCheckingPolicy ruleCheckingPolicy,
+                ExecutorService executorService);
+
+    // end::refguide-async[]
+    /**
+     * Returns a {@link AsyncWrap} bound to the provided {@code mixinClass},
+     * to prepare for type-safe asynchronous action execution.
+     *
+     * @param <T>
+     * @param mixinClass
+     * @param mixedIn
+     * @param modes
+     *
+     * @since 2.0
+     */
+    // tag::refguide-async[]
+    default <T> T asyncMixin(                                    // <.>
+                Class<T> mixinClass, Object mixedIn,
+                ImmutableEnumSet<ExecutionMode> modes) {
+        // end::refguide-async[]
+
+        return asyncMixin(
+                mixinClass, mixedIn, modes,
+                RuleCheckingPolicy.ASYNC, ForkJoinPool.commonPool());
+
+        // tag::refguide-async[]
+        // ...
+    }
 
     // end::refguide-async[]
     /**

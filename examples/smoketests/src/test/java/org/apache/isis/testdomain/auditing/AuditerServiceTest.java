@@ -131,11 +131,8 @@ class AuditerServiceTest extends IsisIntegrationTestAbstract {
         kvStore.clear(AuditerServiceForTesting.class);
 
         // when - running within its own background task
-        val future = wrapper.async(book, WrapperFactory.ExecutionModes.SKIP_RULES) // don't enforce rules for this test
-        .run(JdoBook::setName, "Book #2");
+        wrapper.async(book, WrapperFactory.ExecutionModes.SKIP_RULES).setName("Book #2"); // don't enforce rules for this test
 
-        future.get(1000, TimeUnit.SECONDS);
-        
         // then - after the commit
         assertEquals("targetClassName=Jdo Book,propertyName=name,preValue=Sample Book,postValue=Book #2;",
                 kvStore.get(AuditerServiceForTesting.class, "audit").orElse(null));
@@ -154,10 +151,9 @@ class AuditerServiceTest extends IsisIntegrationTestAbstract {
         // when - running within its own background task
         assertThrows(DisabledException.class, ()->{
         
-            val future = wrapper.async(book, WrapperFactory.ExecutionModes.EXECUTE)
-                    .run(JdoBook::setName, "Book #2");
+            wrapper.async(book, WrapperFactory.ExecutionModes.EXECUTE).setName("Book #2");
 
-            future.get(1000, TimeUnit.SECONDS);
+            //future.get(1000, TimeUnit.SECONDS);
             
         });
         

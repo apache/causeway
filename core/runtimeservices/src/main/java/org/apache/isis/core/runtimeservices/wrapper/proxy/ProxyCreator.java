@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.runtimeservices.wrapper.proxy;
 
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 
 import org.apache.isis.applib.services.wrapper.WrappingObject;
@@ -44,20 +43,11 @@ public class ProxyCreator {
         final Class<T> base = _Casts.uncheckedCast(toProxy.getClass());
 
         if (base.isInterface()) {
-            return createInstanceForInterface(base, handler, WrappingObject.class);
+            return (T) Proxy.newProxyInstance(base.getClassLoader(), _Arrays.combine(base, (Class<?>[]) new Class[]{WrappingObject.class}) , handler);
         } else {
             final ProxyFactory<T> proxyFactory = proxyFactoryService.factory(base, WrappingObject.class);
             return proxyFactory.createInstance(handler, false);
         }
-    }
-
-    // -- HELPER
-
-
-    @SuppressWarnings("unchecked")
-    private static <T> T createInstanceForInterface(
-            final Class<T> base, final InvocationHandler handler, final Class<?>... auxiliaryTypes) {
-        return (T) Proxy.newProxyInstance(base.getClassLoader(), _Arrays.combine(base, auxiliaryTypes) , handler);
     }
 
 }

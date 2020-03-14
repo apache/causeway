@@ -21,6 +21,7 @@ package org.apache.isis.core.runtimeservices.command;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -33,6 +34,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.graph.tree.LazyTreeNode;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.clock.ClockService;
@@ -47,9 +49,13 @@ import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
+import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -57,7 +63,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
+import org.apache.isis.core.runtime.session.IsisSession;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisSessionTracker;
 import org.apache.isis.schema.cmd.v2.ActionDto;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.MemberDto;
@@ -137,71 +145,77 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 ? currentExecution.getStartedAt()
                         : clockService.nowAsJavaSqlTimestamp();
 
-                commandWithDto.internal().setStartedAt(startedAt);
+        commandWithDto.internal().setStartedAt(startedAt);
 
-                final CommandDto dto = commandWithDto.asDto();
+        final CommandDto dto = commandWithDto.asDto();
 
-                final MemberDto memberDto = dto.getMember();
-                final String memberId = memberDto.getMemberIdentifier();
+        Bookmark resultBookmark = executeCommand(dto);
+        commandWithDto.internal().setResult(resultBookmark);
+    }
 
-                final OidsDto oidsDto = CommandDtoUtils.targetsFor(dto);
-                final List<OidDto> targetOidDtos = oidsDto.getOid();
+    @Override
+    public Bookmark executeCommand(CommandDto dto) {
 
-                final InteractionType interactionType = memberDto.getInteractionType();
-                if(interactionType == InteractionType.ACTION_INVOCATION) {
+        final MemberDto memberDto = dto.getMember();
+        final String memberId = memberDto.getMemberIdentifier();
 
-                    final ActionDto actionDto = (ActionDto) memberDto;
+        final OidsDto oidsDto = CommandDtoUtils.targetsFor(dto);
+        final List<OidDto> targetOidDtos = oidsDto.getOid();
 
-                    for (OidDto targetOidDto : targetOidDtos) {
+        final InteractionType interactionType = memberDto.getInteractionType();
+        if(interactionType == InteractionType.ACTION_INVOCATION) {
 
-                        val targetAdapter = adapterFor(targetOidDto);
-                        final ObjectAction objectAction = findObjectAction(targetAdapter, memberId);
+            final ActionDto actionDto = (ActionDto) memberDto;
 
-                        // we pass 'null' for the mixedInAdapter; if this action _is_ a mixin then
-                        // it will switch the targetAdapter to be the mixedInAdapter transparently
-                        val argAdapters = argAdaptersFor(actionDto);
-                        val resultAdapter = objectAction.execute(
-                                targetAdapter, null, argAdapters, InteractionInitiatedBy.FRAMEWORK);
+            for (OidDto targetOidDto : targetOidDtos) {
 
-                        // flush any Isis PersistenceCommands pending
-                        // (else might get transient objects for the return value)
-                        transactionService.flushTransaction();
+                val targetAdapter = adapterFor(targetOidDto);
+                final ObjectAction objectAction = findObjectAction(targetAdapter, memberId);
 
-                        //
-                        // for the result adapter, we could alternatively have used...
-                        // (priorExecution populated by the push/pop within the interaction object)
-                        //
-                        // final Interaction.Execution priorExecution = backgroundInteraction.getPriorExecution();
-                        // Object unused = priorExecution.getReturned();
-                        //
+                // we pass 'null' for the mixedInAdapter; if this action _is_ a mixin then
+                // it will switch the targetAdapter to be the mixedInAdapter transparently
+                val argAdapters = argAdaptersFor(actionDto);
+                val resultAdapter = objectAction.execute(
+                        targetAdapter, null, argAdapters, InteractionInitiatedBy.FRAMEWORK);
 
-                        // REVIEW: this doesn't really make sense if >1 action
-                        if(resultAdapter != null) {
-                            Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
-                            commandWithDto.internal().setResult(resultBookmark);
-                        }
-                    }
-                } else {
+                // flush any Isis PersistenceCommands pending
+                // (else might get transient objects for the return value)
+                transactionService.flushTransaction();
 
-                    final PropertyDto propertyDto = (PropertyDto) memberDto;
+                //
+                // for the result adapter, we could alternatively have used...
+                // (priorExecution populated by the push/pop within the interaction object)
+                //
+                // final Interaction.Execution priorExecution = backgroundInteraction.getPriorExecution();
+                // Object unused = priorExecution.getReturned();
+                //
 
-                    for (OidDto targetOidDto : targetOidDtos) {
-
-                        final Bookmark bookmark = Bookmark.from(targetOidDto);
-                        final Object targetObject = bookmarkService.lookup(bookmark);
-
-                        val targetAdapter = adapterFor(targetObject);
-
-                        final OneToOneAssociation property = findOneToOneAssociation(targetAdapter, memberId);
-
-                        val newValueAdapter = newValueAdapterFor(propertyDto);
-
-                        property.set(targetAdapter, newValueAdapter, InteractionInitiatedBy.FRAMEWORK);
-
-                        // there is no return value for property modifications.
-                    }
+                // REVIEW: this doesn't really make sense if >1 action
+                if(resultAdapter != null) {
+                    return CommandUtil.bookmarkFor(resultAdapter);
                 }
+            }
+        } else {
 
+            final PropertyDto propertyDto = (PropertyDto) memberDto;
+
+            for (OidDto targetOidDto : targetOidDtos) {
+
+                final Bookmark bookmark = Bookmark.from(targetOidDto);
+                final Object targetObject = bookmarkService.lookup(bookmark);
+
+                val targetAdapter = adapterFor(targetObject);
+
+                final OneToOneAssociation property = findOneToOneAssociation(targetAdapter, memberId);
+
+                val newValueAdapter = newValueAdapterFor(propertyDto);
+
+                property.set(targetAdapter, newValueAdapter, InteractionInitiatedBy.FRAMEWORK);
+
+                // there is no return value for property modifications.
+            }
+        }
+        return null;
     }
 
     protected void afterCommit(CommandWithDto commandWithDto, Exception exceptionIfAny) {
@@ -319,11 +333,32 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     }
 
     private ManagedObject adapterFor(final Object pojo) {
+        if(pojo instanceof OidDto) {
+            return adapterFor((OidDto)pojo);
+        }
+        if(pojo instanceof RootOid) {
+            return adapterFor((RootOid) pojo);
+        }
+        // value type
         return ManagedObject.of(getSpecificationLoader()::loadSpecification, pojo);
-        
-        //legacy of
-        //return ObjectAdapterLegacy.__CommandExecutorServiceDefault.adapterFor(targetObject);
     }
+
+    private ManagedObject adapterFor(final OidDto oid) {
+        val oidStr = Oid.marshaller().joinAsOid(oid.getType(), oid.getId());
+        val rootOid = Oid.unmarshaller().unmarshal(oidStr, RootOid.class);
+        return adapterFor(rootOid);
+    }
+
+    private ManagedObject adapterFor(final RootOid oid) {
+        val objectSpec = specificationLoader.loadSpecification(oid.getObjectSpecId());
+        val loadRequest = ObjectLoader.Request.of(objectSpec, oid.getIdentifier());
+
+        Optional<IsisSession> isisSession = isisSessionTracker.currentSession();
+        return isisSession
+                .map(x -> x.getObjectManager().loadObject(loadRequest))
+                .orElse(null);
+    }
+
 
     // //////////////////////////////////////
 
@@ -349,8 +384,8 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     @Inject TransactionService transactionService;
     @Inject SpecificationLoader specificationLoader;
     @Inject IsisSessionFactory isisSessionFactory;
-    
+    @Inject IsisSessionTracker isisSessionTracker;
+
     @Inject private javax.inject.Provider<InteractionContext> interactionContextProvider;
-    //@Inject private javax.inject.Provider<CommandContext> commandContextProvider;
 
 }

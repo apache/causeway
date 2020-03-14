@@ -82,8 +82,8 @@ public class WrapperFactoryDefaultTest {
             }
             
             @Override
-            protected <T> T createProxy(T domainObject, ImmutableEnumSet<WrapperFactory.ExecutionMode> mode) {
-                WrapperFactoryDefaultTest.this.createProxyCalledWithMode = mode;
+            protected <T> T createProxy(T domainObject, ImmutableEnumSet<WrapperFactory.ExecutionMode> modes) {
+                WrapperFactoryDefaultTest.this.createProxyCalledWithMode = modes;
                 WrapperFactoryDefaultTest.this.createProxyCalledWithDomainObject = (DomainObject) domainObject;
                 return domainObject;
             }

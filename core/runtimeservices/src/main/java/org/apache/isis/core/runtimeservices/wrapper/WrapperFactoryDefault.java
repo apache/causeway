@@ -18,17 +18,23 @@
  */
 package org.apache.isis.core.runtimeservices.wrapper;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 import java.util.function.BiConsumer;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
@@ -37,8 +43,10 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.wrapper.AsyncWrap;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.applib.services.wrapper.events.ActionArgumentEvent;
@@ -63,14 +71,30 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactory;
 import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactoryService;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
+import org.apache.isis.core.runtime.session.IsisSession;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisSessionTracker;
+import org.apache.isis.core.runtime.session.init.InitialisationSession;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
 import org.apache.isis.core.runtimeservices.wrapper.handlers.ProxyContextHandler;
 import org.apache.isis.core.runtimeservices.wrapper.proxy.ProxyCreator;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
+import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -91,10 +115,14 @@ public class WrapperFactoryDefault implements WrapperFactory {
     @Inject private FactoryService factoryService;
     @Inject private BookmarkService bookmarkService;
     @Inject private MetaModelContext metaModelContext;
+    @Inject private SpecificationLoader specificationLoader;
+    @Inject private IsisSessionTracker isisSessionTracker;
     @Inject private IsisSessionFactory isisSessionFactory;
+    @Inject private CommandExecutorService commandExecutorService;
+    @Inject private Provider<CommandContext> commandContextProvider;
     @Inject private TransactionService transactionService;
     @Inject protected ProxyFactoryService proxyFactoryService; // protected to allow JUnit test
-    @Inject private AuthenticationSessionTracker authenticationSessionTracker;
+    @Inject private CommandDtoServiceInternal commandDtoServiceInternal;
 
     private final List<InteractionListener> listeners = new ArrayList<InteractionListener>();
     private final Map<Class<? extends InteractionEvent>, InteractionEventDispatcher>
@@ -108,22 +136,22 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val proxyCreator = new ProxyCreator(proxyFactoryService);
         proxyContextHandler = new ProxyContextHandler(proxyCreator);
         
-        putDispatcher(ObjectTitleEvent.class, (listener, event)->listener.objectTitleRead(event));
-        putDispatcher(PropertyVisibilityEvent.class, (listener, event)->listener.propertyVisible(event));
-        putDispatcher(PropertyUsabilityEvent.class, (listener, event)->listener.propertyUsable(event));
-        putDispatcher(PropertyAccessEvent.class, (listener, event)->listener.propertyAccessed(event));
-        putDispatcher(PropertyModifyEvent.class, (listener, event)->listener.propertyModified(event));
-        putDispatcher(CollectionVisibilityEvent.class, (listener, event)->listener.collectionVisible(event));
-        putDispatcher(CollectionUsabilityEvent.class, (listener, event)->listener.collectionUsable(event));
-        putDispatcher(CollectionAccessEvent.class, (listener, event)->listener.collectionAccessed(event));
-        putDispatcher(CollectionAddToEvent.class, (listener, event)->listener.collectionAddedTo(event));
-        putDispatcher(CollectionRemoveFromEvent.class, (listener, event)->listener.collectionRemovedFrom(event));
-        putDispatcher(ActionVisibilityEvent.class, (listener, event)->listener.actionVisible(event));
-        putDispatcher(ActionUsabilityEvent.class, (listener, event)->listener.actionUsable(event));
-        putDispatcher(ActionArgumentEvent.class, (listener, event)->listener.actionArgument(event));
-        putDispatcher(ActionInvocationEvent.class, (listener, event)->listener.actionInvoked(event));
-        putDispatcher(ObjectValidityEvent.class, (listener, event)->listener.objectPersisted(event));
-        putDispatcher(CollectionMethodEvent.class, (listener, event)->listener.collectionMethodInvoked(event));
+        putDispatcher(ObjectTitleEvent.class, InteractionListener::objectTitleRead);
+        putDispatcher(PropertyVisibilityEvent.class, InteractionListener::propertyVisible);
+        putDispatcher(PropertyUsabilityEvent.class, InteractionListener::propertyUsable);
+        putDispatcher(PropertyAccessEvent.class, InteractionListener::propertyAccessed);
+        putDispatcher(PropertyModifyEvent.class, InteractionListener::propertyModified);
+        putDispatcher(CollectionVisibilityEvent.class, InteractionListener::collectionVisible);
+        putDispatcher(CollectionUsabilityEvent.class, InteractionListener::collectionUsable);
+        putDispatcher(CollectionAccessEvent.class, InteractionListener::collectionAccessed);
+        putDispatcher(CollectionAddToEvent.class, InteractionListener::collectionAddedTo);
+        putDispatcher(CollectionRemoveFromEvent.class, InteractionListener::collectionRemovedFrom);
+        putDispatcher(ActionVisibilityEvent.class, InteractionListener::actionVisible);
+        putDispatcher(ActionUsabilityEvent.class, InteractionListener::actionUsable);
+        putDispatcher(ActionArgumentEvent.class, InteractionListener::actionArgument);
+        putDispatcher(ActionInvocationEvent.class, InteractionListener::actionInvoked);
+        putDispatcher(ObjectValidityEvent.class, InteractionListener::objectPersisted);
+        putDispatcher(CollectionMethodEvent.class, InteractionListener::collectionMethodInvoked);
     }
 
     // -- WRAPPING
@@ -154,21 +182,23 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
     @Override
-    public <T> T wrap(T domainObject, ImmutableEnumSet<ExecutionMode> mode) {
+    public <T> T wrap(
+            final T domainObject,
+            final ImmutableEnumSet<ExecutionMode> modes) {
         if (domainObject instanceof WrappingObject) {
             val wrapperObject = (WrappingObject) domainObject;
             val executionMode = wrapperObject.__isis_executionMode();
-            if(executionMode != mode) {
+            if(executionMode != modes) {
                 val underlyingDomainObject = wrapperObject.__isis_wrapped();
-                return _Casts.uncheckedCast(createProxy(underlyingDomainObject, mode));
+                return _Casts.uncheckedCast(createProxy(underlyingDomainObject, modes));
             }
             return domainObject;
         }
-        return createProxy(domainObject, mode);
+        return createProxy(domainObject, modes);
     }
 
-    protected <T> T createProxy(T domainObject, ImmutableEnumSet<ExecutionMode> mode) {
-        return proxyContextHandler.proxy(metaModelContext, domainObject, mode);
+    protected <T> T createProxy(T domainObject, ImmutableEnumSet<ExecutionMode> modes) {
+        return proxyContextHandler.proxy(metaModelContext, domainObject, modes);
     }
 
     @Override
@@ -185,24 +215,150 @@ public class WrapperFactoryDefault implements WrapperFactory {
         return possibleWrappedDomainObject;
     }
 
+
     // -- ASYNC WRAPPING
 
-    
     @Override
-    public <T> T async(T domainObject, ImmutableEnumSet<ExecutionMode> modes) {
-        val executor = ForkJoinPool.commonPool(); // default, but can be overwritten through withers on the returned AsyncWrap
-        AsyncWrapDefault<T> tAsyncWrapDefault = new AsyncWrapDefault<>(
-                this, isisSessionFactory,
-                authenticationSessionTracker, transactionService, bookmarkService,
-                domainObject, modes, executor, log::error, RuleCheckingPolicy.ASYNC);
-        return proxyFactoryService.factory()tAsyncWrapDefault;
+    public <T> T async(
+            final T domainObject,
+            final ImmutableEnumSet<ExecutionMode> executionModes,
+            final RuleCheckingPolicy ruleCheckingPolicy,
+            final ExecutorService executorService) {
+
+        Class<T> domainClass = (Class<T>) domainObject.getClass();
+        ProxyFactory<T> factory = proxyFactoryService.factory(domainClass, WrappingObject.class);
+
+        return factory.createInstance((Object proxy, Method method, Object[] args) -> {
+
+            val executionModesAsync = determineExecutionModesAsync(executionModes, ruleCheckingPolicy);
+            if (!shouldValidateAsync(executionModesAsync) && !shouldExecuteAsync(executionModesAsync)) {
+                // nothing to be done.
+                return null;
+            }
+
+            //
+            // executed in the same thread as caller..
+            //
+            final boolean inheritedFromObject = method.getDeclaringClass().equals(Object.class);
+            if(inheritedFromObject) {
+                return method.invoke(domainObject, args);
+            }
+
+            val executionModesSync = determineExecutionModesSync(executionModes, ruleCheckingPolicy);
+            if(shouldValidateSync(executionModesSync)) {
+                // normal wrapped object...
+                T syncProxy = createProxy(domainObject, executionModesSync);
+                method.invoke(syncProxy, args);
+            }
+
+            //
+            // submit async stuff
+            //
+            final ObjectSpecificationDefault targetObjSpec = (ObjectSpecificationDefault) specificationLoader.loadSpecification(method.getDeclaringClass());
+            final ObjectMember member = targetObjSpec.getMember(method);
+
+            if(member == null) {
+                return method.invoke(domainObject, args);
+            }
+
+            if(!(member instanceof ObjectAction)) {
+                throw new UnsupportedOperationException(
+                        "Only actions can be executed in the background "
+                                + "(method " + method.getName() + " represents a " + member.getFeatureType().name() + "')");
+            }
+
+            ObjectAction action = (ObjectAction) member;
+
+            val isisSession = isisSessionTracker.currentSession().orElseThrow(() -> new RuntimeException("No IsisSession is open"));
+            val authSession = isisSession.getAuthenticationSession();
+
+            final ManagedObject domainObjectAdapter = isisSession.getObjectManager().adapt(domainObject);
+            final String domainObjectClassName = CommandUtil.targetClassNameFor(domainObjectAdapter);
+
+            final String targetActionName = CommandUtil.targetMemberNameFor(action);
+
+            final List<ManagedObject> argAdapters = Arrays.asList(adaptersFor(args));
+            final String targetArgs = CommandUtil.argDescriptionFor(action, argAdapters);
+
+            final Command command = commandContextProvider.get().getCommand();
+
+            final List<ManagedObject> targetList = Collections.singletonList(domainObjectAdapter);
+            final CommandDto dto =
+                    commandDtoServiceInternal.asCommandDto(targetList, action, argAdapters);
+
+            executorService.submit(() -> {
+
+                isisSessionFactory.runAuthenticated(authSession, () -> {
+
+                    if (shouldValidateAsync(executionModesAsync)) {
+                        // TODO...
+                    }
+                    if (shouldExecuteAsync(executionModesAsync)) {
+                        commandExecutorService.executeCommand(dto);
+                    }
+
+                });
+            });
+            return null;
+
+
+        }, false);
     }
-    
+
     @Override
-    public <T> AsyncWrap<T> asyncMixin(Class<T> mixinClass, Object mixedIn, ImmutableEnumSet<ExecutionMode> mode) {
-        val mixin = factoryService.<T>mixin(mixinClass, mixedIn);
-        return async(mixin, mode);
+    public <T> T asyncMixin(
+            Class<T> mixinClass, Object mixedIn,
+            ImmutableEnumSet<ExecutionMode> modes,
+            RuleCheckingPolicy ruleCheckingPolicy,
+            ExecutorService executorService) {
+
+        throw new RuntimeException("TODO");
     }
+
+    private ManagedObject[] adaptersFor(final Object[] args) {
+        final ObjectManager objectManager =
+                isisSessionTracker.currentSession().get().getObjectManager();
+        return CommandUtil.adaptersFor(args, objectManager);
+    }
+
+    private static ImmutableEnumSet<ExecutionMode> determineExecutionModesSync(
+            ImmutableEnumSet<ExecutionMode> executionModes,
+            RuleCheckingPolicy ruleCheckingPolicy) {
+        return executionModes.contains(ExecutionMode.SKIP_RULE_VALIDATION) ||
+                ruleCheckingPolicy != RuleCheckingPolicy.SYNC
+                ? ExecutionModes.NOOP
+                : ExecutionModes.NO_EXECUTE;
+    }
+
+    private static ImmutableEnumSet<ExecutionMode> determineExecutionModesAsync(
+            ImmutableEnumSet<ExecutionMode> executionModes,
+            RuleCheckingPolicy ruleCheckingPolicy) {
+        return executionModes.contains(ExecutionMode.SKIP_RULE_VALIDATION) ||
+                RuleCheckingPolicy.SYNC == ruleCheckingPolicy
+                ? join(executionModes, ExecutionMode.SKIP_RULE_VALIDATION)
+                : executionModes;
+    }
+
+    private static ImmutableEnumSet<ExecutionMode> join(
+            ImmutableEnumSet<ExecutionMode> executionModes,
+            ExecutionMode skipRuleValidation) {
+        val tmp = executionModes.toEnumSet();
+        tmp.add(skipRuleValidation);
+        return ImmutableEnumSet.from(tmp);
+    }
+
+    private boolean shouldValidateSync(ImmutableEnumSet<ExecutionMode> executionModesSync) {
+        return !executionModesSync.contains(ExecutionMode.SKIP_RULE_VALIDATION);
+    }
+
+    private boolean shouldValidateAsync(ImmutableEnumSet<ExecutionMode> executionModesAsync) {
+        return !executionModesAsync.contains(ExecutionMode.SKIP_RULE_VALIDATION);
+    }
+
+    private boolean shouldExecuteAsync(ImmutableEnumSet<ExecutionMode> executionModesAsync) {
+        return !executionModesAsync.contains(ExecutionMode.SKIP_EXECUTION);
+    }
+
 
     // -- LISTENERS
 
@@ -248,6 +404,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         
         dispatchersByEventClass.put(type, dispatcher);
     }
+
 
 
 }

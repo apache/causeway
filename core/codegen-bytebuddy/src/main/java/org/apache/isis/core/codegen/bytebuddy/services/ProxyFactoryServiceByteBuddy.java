@@ -34,6 +34,7 @@ import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactory;
 import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactoryService;
+import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactoryServiceAbstract;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.NamingStrategy;
@@ -42,7 +43,7 @@ import net.bytebuddy.implementation.InvocationHandlerAdapter;
 import net.bytebuddy.matcher.ElementMatchers;
 
 @Service
-public class ProxyFactoryServiceByteBuddy implements ProxyFactoryService {
+public class ProxyFactoryServiceByteBuddy extends ProxyFactoryServiceAbstract {
 
     private final ClassLoadingStrategyAdvisor strategyAdvisor = new ClassLoadingStrategyAdvisor();
 

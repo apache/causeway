@@ -54,13 +54,12 @@ public class DemoEventSubscriber {
         
         val eventLogWriter = factoryService.get(EventLogWriter.class); // <-- get a new writer
         
-        wrapper.async(eventLogWriter)
-            .run(EventLogWriter::storeEvent, event);
+        wrapper.async(eventLogWriter).storeEvent(event);
 
     }
 
     @DomainObject(
-            nature = Nature.BEAN, // <-- have this Object's lifecycle managed by Spring (EXPERIMENTAL)
+            nature = Nature.BEAN, // <-- have this Object's lifecycle managed by Spring
             objectType = "demoapp.eventLogWriter")
     public static class EventLogWriter {
 

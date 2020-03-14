@@ -17,7 +17,7 @@ isis.viewer.restfulobjects. +
 base-uri
 
 |
-| If left unset (the default), then the RO viewer will use the ``UriInfo`` (injected using ``Context``) to figure out the base Uri (used to render ``href``s).
+| If left unset (the default), then the RO viewer will use the ``UriInfo`` (injected using ``AsyncContext``) to figure out the base Uri (used to render ``href``s).
 
 This will be correct much of the time, but will almost certainly be wrong if there is a reverse proxy.
 

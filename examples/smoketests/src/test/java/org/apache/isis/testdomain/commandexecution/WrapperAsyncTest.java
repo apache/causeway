@@ -119,15 +119,15 @@ class WrapperAsyncTest {
 
         actionDomainEventListener.prepareLatch();
 
-        Future<JdoProduct> invocationResult = wrapper.async(inventoryManager)
-                .withExecutor(Executors.newCachedThreadPool()) // use of custom executor (optional)
-                .call(JdoInventoryManager::updateProductPrice, product, 123d);
+        // use of custom executor (optional)
+        wrapper.async(inventoryManager, WrapperFactory.ExecutionModes.EXECUTE, WrapperFactory.RuleCheckingPolicy.ASYNC, Executors.newCachedThreadPool())
+                .updateProductPrice(product, 123d);
 
 //XXX type-safety should prevent this snippet from being compiled!        
 //        Future<String> invocationResult2 = wrapper.async(inventoryManager)
 //                .invoke(Product::toString);
         
-        assertNotNull(invocationResult);
+        // assertNotNull(invocationResult);
         
 
         assertTrue(
@@ -136,9 +136,9 @@ class WrapperAsyncTest {
         
         assertEquals(123d, product.getPrice(), 1E-6);
         
-        val product_asReturnedByTheAsyncTask = invocationResult.get();
-        assertNotNull(product_asReturnedByTheAsyncTask);
-        assertEquals(123d, product_asReturnedByTheAsyncTask.getPrice(), 1E-6);
+//        val product_asReturnedByTheAsyncTask = invocationResult.get();
+//        assertNotNull(product_asReturnedByTheAsyncTask);
+//        assertEquals(123d, product_asReturnedByTheAsyncTask.getPrice(), 1E-6);
     }
     
 
