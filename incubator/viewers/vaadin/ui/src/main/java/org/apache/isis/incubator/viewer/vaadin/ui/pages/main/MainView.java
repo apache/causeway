@@ -18,28 +18,29 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.ui.pages.main;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
 import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.SubMenu;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.menubar.MenuBar;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
 import org.apache.isis.applib.services.menu.MenuBarsService.Type;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -79,30 +80,68 @@ public class MainView extends VerticalLayout {
         this.vaadinAuthenticationHandler = vaadinAuthenticationHandler;
         
         val commonContext = IsisWebAppCommonContext.of(metaModelContext);
-        
-        val bs3MenuBars = menuBarsService.menuBars(Type.DEFAULT);
 
-        val menuBar = new MenuBar();
+        val titleOrLogo = createTitleOrLogo(commonContext);
+        val leftMenuBar = new MenuBar();
+        val horizontalSpacer = new Div();
+        horizontalSpacer.setWidthFull();
+        val rightMenuBar = new MenuBar();
+        
+        // holds the top level left and right aligned menu parts
+        // TODO does not honor small displays yet, overflow is just not visible
+        val menuBarContainer = new HorizontalLayout(titleOrLogo, leftMenuBar, horizontalSpacer, rightMenuBar);
+        add(menuBarContainer);
+        //menuBarContainer.setJustifyContentMode(JustifyContentMode.BETWEEN);
+        menuBarContainer.setFlexGrow(0, titleOrLogo, leftMenuBar, rightMenuBar);
+        menuBarContainer.setFlexGrow(1, horizontalSpacer);
+        menuBarContainer.setWidthFull();
+        
         val selectedMenuItem = new Text("");
         val actionResult = new VerticalLayout();
         val message = new Div(new Text("Selected: "), selectedMenuItem);
-
-        add(menuBar);
+        
         add(message);
         add(actionResult);
 
-        val menuSectionUiModels = buildMenuModel(commonContext, bs3MenuBars);
-//        log.warn("menu model:\n ");
-//        menuSectionUiModels.forEach(m -> log.warn("\t{}", m));
-
-        menuSectionUiModels.forEach(sectionUiModel -> {
-                    val menuItem = menuBar.addItem(sectionUiModel.getName());
-                    val subMenu = menuItem.getSubMenu();
-                    sectionUiModel.getServiceAndActionUiModels().forEach(saModel ->
-                            createActionOverviewAndBindRunAction(selectedMenuItem, actionResult, subMenu, saModel));
-                }
-        );
+        // menu section handler, that creates and adds sub-menus to their parent top level menu   
+        final BiConsumer<MenuBar, MenuSectionUiModel> menuSectionBuilder = (parentMenu, menuSectionUiModel) -> {
+            val menuItem = parentMenu.addItem(menuSectionUiModel.getName());
+            val subMenu = menuItem.getSubMenu();
+            menuSectionUiModel.getServiceAndActionUiModels().forEach(saModel ->
+                    createActionOverviewAndBindRunAction(selectedMenuItem, actionResult, subMenu, saModel));
+        };
+        
+        val bs3MenuBars = menuBarsService.menuBars(Type.DEFAULT);
+        
+        // top level left aligned ...
+        buildMenuModel(commonContext, bs3MenuBars.getPrimary(), menuSectionUiModel->
+            menuSectionBuilder.accept(leftMenuBar, menuSectionUiModel));
+        
+        // top level right aligned ...
+        buildMenuModel(commonContext, bs3MenuBars.getSecondary(), menuSectionUiModel->
+            menuSectionBuilder.accept(rightMenuBar, menuSectionUiModel));
+        // TODO tertiary menu items should get collected under the a top level menu labeled with the current user's name 
+        buildMenuModel(commonContext, bs3MenuBars.getTertiary(), menuSectionUiModel->
+            menuSectionBuilder.accept(rightMenuBar, menuSectionUiModel));
+        
         setWidthFull();
+    }
+    
+    private Component createTitleOrLogo(IsisWebAppCommonContext commonContext) {
+        
+        val isisConfiguration = commonContext.getConfiguration(); 
+        val webAppContextPath = commonContext.getWebAppContextPath();
+        
+        //TODO application name/logo borrowed from Wicket's configuration, we might generalize this config option to all viewers
+        val applicationName = isisConfiguration.getViewer().getWicket().getApplication().getName();
+        val applicationLogo = isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoHeader();
+        
+        if(applicationLogo.isPresent()) {
+            return new Image(webAppContextPath.prependContextPathIfLocal(applicationLogo.get()), "logo");
+        }
+        
+        return new Text(applicationName);
+        
     }
 
     private void createActionOverviewAndBindRunAction(
@@ -162,22 +201,6 @@ public class MainView extends VerticalLayout {
             });
             
         };
-    }
-
-    private List<MenuSectionUiModel> buildMenuModel(
-            final IsisWebAppCommonContext commonContext,
-            final BS3MenuBars menuBars
-    ) {
-        val menuSections = new ArrayList<MenuSectionUiModel>();
-
-        buildMenuModel(commonContext, menuBars.getPrimary(), menuSections::add);
-        
-        // TODO handle right alignment of menuBars.getSecondary(), menuBars.getTertiary()
-        buildMenuModel(commonContext, menuBars.getSecondary(), menuSections::add);
-        buildMenuModel(commonContext, menuBars.getTertiary(), menuSections::add);
-        
-        return menuSections;
- 
     }
     
     // initially copied from org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions.ServiceActionUtil.buildMenu

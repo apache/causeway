@@ -29,6 +29,7 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -62,6 +63,9 @@ public class IsisWebAppCommonContext implements MetaModelContext.Delegating {
     
     @Getter(onMethod = @__(@Override))
     private MetaModelContext metaModelContext;
+    
+    @Getter(lazy = true)
+    private final WebAppContextPath webAppContextPath = lookupServiceElseFail(WebAppContextPath.class);
     
     @Getter(lazy = true)
     private final MenuBarsService menuBarsService = lookupServiceElseFail(MenuBarsService.class);
