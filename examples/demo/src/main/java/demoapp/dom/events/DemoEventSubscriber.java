@@ -30,6 +30,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.applib.services.wrapper.control.AsyncControl;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -54,7 +55,7 @@ public class DemoEventSubscriber {
         
         val eventLogWriter = factoryService.get(EventLogWriter.class); // <-- get a new writer
         
-        wrapper.async(eventLogWriter).storeEvent(event);
+        wrapper.async(eventLogWriter, AsyncControl.ignoreReturn()).storeEvent(event);
 
     }
 

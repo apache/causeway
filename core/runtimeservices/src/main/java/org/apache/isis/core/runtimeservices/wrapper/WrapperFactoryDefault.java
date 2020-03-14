@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.runtimeservices.wrapper;
 
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,7 +25,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.function.BiConsumer;
@@ -47,8 +45,13 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.wrapper.control.AsyncControl;
+import org.apache.isis.applib.services.wrapper.control.AsyncControlService;
+import org.apache.isis.applib.services.wrapper.control.RuleCheckingPolicy;
+import org.apache.isis.applib.services.wrapper.control.ExecutionMode;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
+import org.apache.isis.applib.services.wrapper.control.ExecutionModes;
 import org.apache.isis.applib.services.wrapper.events.ActionArgumentEvent;
 import org.apache.isis.applib.services.wrapper.events.ActionInvocationEvent;
 import org.apache.isis.applib.services.wrapper.events.ActionUsabilityEvent;
@@ -73,27 +76,21 @@ import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactory;
 import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactoryService;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
-import org.apache.isis.core.runtime.session.IsisSession;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.session.IsisSessionTracker;
-import org.apache.isis.core.runtime.session.init.InitialisationSession;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
 import org.apache.isis.core.runtimeservices.wrapper.handlers.ProxyContextHandler;
 import org.apache.isis.core.runtimeservices.wrapper.proxy.ProxyCreator;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import lombok.val;
@@ -218,12 +215,17 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
     // -- ASYNC WRAPPING
 
+    @Inject
+    AsyncControlService asyncControlService;
+
     @Override
-    public <T> T async(
+    public <T,R> T async(
             final T domainObject,
-            final ImmutableEnumSet<ExecutionMode> executionModes,
-            final RuleCheckingPolicy ruleCheckingPolicy,
-            final ExecutorService executorService) {
+            final AsyncControl<R> asyncControl) {
+
+        final ImmutableEnumSet<ExecutionMode> executionModes = asyncControl.getExecutionModes();
+        final RuleCheckingPolicy ruleCheckingPolicy = asyncControl.getRuleCheckingPolicy();
+        final ExecutorService executorService = asyncControl.getExecutorService();
 
         Class<T> domainClass = (Class<T>) domainObject.getClass();
         ProxyFactory<T> factory = proxyFactoryService.factory(domainClass, WrappingObject.class);
@@ -273,20 +275,14 @@ public class WrapperFactoryDefault implements WrapperFactory {
             val authSession = isisSession.getAuthenticationSession();
 
             final ManagedObject domainObjectAdapter = isisSession.getObjectManager().adapt(domainObject);
-            final String domainObjectClassName = CommandUtil.targetClassNameFor(domainObjectAdapter);
-
-            final String targetActionName = CommandUtil.targetMemberNameFor(action);
-
             final List<ManagedObject> argAdapters = Arrays.asList(adaptersFor(args));
-            final String targetArgs = CommandUtil.argDescriptionFor(action, argAdapters);
-
-            final Command command = commandContextProvider.get().getCommand();
 
             final List<ManagedObject> targetList = Collections.singletonList(domainObjectAdapter);
             final CommandDto dto =
                     commandDtoServiceInternal.asCommandDto(targetList, action, argAdapters);
+            asyncControlService.init(asyncControl, method, dto.getTargets().getOid().get(0));
 
-            executorService.submit(() -> {
+            Future<?> submit = executorService.submit(() -> {
 
                 isisSessionFactory.runAuthenticated(authSession, () -> {
 
@@ -299,6 +295,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
                 });
             });
+            asyncControlService.update(asyncControl, submit);
             return null;
 
 
@@ -325,7 +322,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
             ImmutableEnumSet<ExecutionMode> executionModes,
             RuleCheckingPolicy ruleCheckingPolicy) {
         return executionModes.contains(ExecutionMode.SKIP_RULE_VALIDATION) ||
-                ruleCheckingPolicy != RuleCheckingPolicy.SYNC
+                ruleCheckingPolicy != RuleCheckingPolicy.IMMEDIATE
                 ? ExecutionModes.NOOP
                 : ExecutionModes.NO_EXECUTE;
     }
@@ -334,7 +331,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
             ImmutableEnumSet<ExecutionMode> executionModes,
             RuleCheckingPolicy ruleCheckingPolicy) {
         return executionModes.contains(ExecutionMode.SKIP_RULE_VALIDATION) ||
-                RuleCheckingPolicy.SYNC == ruleCheckingPolicy
+                RuleCheckingPolicy.IMMEDIATE == ruleCheckingPolicy
                 ? join(executionModes, ExecutionMode.SKIP_RULE_VALIDATION)
                 : executionModes;
     }

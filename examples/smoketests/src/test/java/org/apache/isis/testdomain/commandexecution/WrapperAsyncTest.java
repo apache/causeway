@@ -43,7 +43,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.applib.services.wrapper.control.AsyncControl;
+import org.apache.isis.applib.services.wrapper.control.RuleCheckingPolicy;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.applib.services.wrapper.control.ExecutionModes;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
@@ -99,8 +102,7 @@ class WrapperAsyncTest {
 
         actionDomainEventListener.prepareLatch();
 
-        wrapper.wrap(inventoryManager)
-        .updateProductPrice(product, 123);
+        wrapper.wrap(inventoryManager).updateProductPrice(product, 123);
 
         assertTrue(
                 actionDomainEventListener.getCountDownLatch()
@@ -120,14 +122,12 @@ class WrapperAsyncTest {
         actionDomainEventListener.prepareLatch();
 
         // use of custom executor (optional)
-        wrapper.async(inventoryManager, WrapperFactory.ExecutionModes.EXECUTE, WrapperFactory.RuleCheckingPolicy.ASYNC, Executors.newCachedThreadPool())
+        val control = AsyncControl.toReturn(JdoProduct.class).with(ExecutionModes.EXECUTE).with(RuleCheckingPolicy.ASYNC).with(Executors.newCachedThreadPool());
+        wrapper.async(inventoryManager, control)
                 .updateProductPrice(product, 123d);
 
-//XXX type-safety should prevent this snippet from being compiled!        
-//        Future<String> invocationResult2 = wrapper.async(inventoryManager)
-//                .invoke(Product::toString);
-        
-        // assertNotNull(invocationResult);
+        Future<JdoProduct> future = control.getFuture();
+        assertNotNull(future);
         
 
         assertTrue(

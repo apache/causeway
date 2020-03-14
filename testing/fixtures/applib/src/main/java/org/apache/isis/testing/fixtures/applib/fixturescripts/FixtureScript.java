@@ -42,6 +42,7 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.applib.services.wrapper.control.ExecutionMode;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.collections.ImmutableEnumSet;
@@ -780,7 +781,7 @@ public abstract class FixtureScript {
     /**
      * Convenience method, simply delegates to {@link WrapperFactory#wrap(Object, EnumSet)}.
      */
-    protected <T> T wrap(final T domainObject, final ImmutableEnumSet<WrapperFactory.ExecutionMode> executionMode) {
+    protected <T> T wrap(final T domainObject, final ImmutableEnumSet<ExecutionMode> executionMode) {
         return wrapperFactory.wrap(domainObject, executionMode);
     }
 

@@ -24,16 +24,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 
 import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.wrapper.control.AsyncControl;
+import org.apache.isis.applib.services.wrapper.control.ExecutionMode;
+import org.apache.isis.applib.services.wrapper.control.ExecutionModes;
+import org.apache.isis.applib.services.wrapper.control.RuleCheckingPolicy;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
 import org.apache.isis.core.commons.collections.ImmutableEnumSet;
-
-import static org.apache.isis.core.commons.collections.ImmutableEnumSet.*;
-
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.experimental.UtilityClass;
 
 /**
  * Provides the ability to &quot;wrap&quot; of a domain object such that it can
@@ -81,89 +78,6 @@ public interface WrapperFactory {
     // end::refguide-listeners[]
     // end::refguide-async[]
     // end::refguide[]
-    /**
-     * Whether interactions with the wrapper are actually passed onto the
-     * underlying domain object.
-     *
-     * @see WrapperFactory#wrap(Object, ImmutableEnumSet)
-     */
-    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    // tag::refguide-1[]
-    enum ExecutionMode {
-        // end::refguide-1[]
-        /**
-         * Skip all business rules.
-         */
-        // tag::refguide-1[]
-        SKIP_RULE_VALIDATION,
-        // end::refguide-1[]
-        /**
-         * Skip execution.
-         */
-        // tag::refguide-1[]
-        SKIP_EXECUTION,
-        // end::refguide-1[]
-        /**
-         * Don't fail fast, swallow any exception during validation or execution.
-         */
-        // tag::refguide-1[]
-        SWALLOW_EXCEPTIONS,
-    }
-
-    // end::refguide-1[]
-
-    // tag::refguide-2[]
-    @UtilityClass
-    class ExecutionModes {
-        // end::refguide-2[]
-        /**
-         * Validate all business rules and then execute. May throw exceptions in order to fail fast.
-         */
-        // tag::refguide-2[]
-        public static final ImmutableEnumSet<ExecutionMode> EXECUTE =
-                                noneOf(ExecutionMode.class);
-        // end::refguide-2[]
-        /**
-         * Skip all business rules and then execute, does throw an exception if execution fails.
-         */
-        // tag::refguide-2[]
-        public static final ImmutableEnumSet<ExecutionMode> SKIP_RULES =
-                                of(ExecutionMode.SKIP_RULE_VALIDATION);
-        // end::refguide-2[]
-        /**
-         * Validate all business rules but do not execute, throw an exception if validation
-         * fails.
-         */
-        // tag::refguide-2[]
-        public static final ImmutableEnumSet<ExecutionMode> NO_EXECUTE =
-                                of(ExecutionMode.SKIP_EXECUTION);
-        // end::refguide-2[]
-        /**
-         * Validate all business rules and then execute, but don't throw an exception if validation
-         * or execution fails.
-         */
-        // tag::refguide-2[]
-        public static final ImmutableEnumSet<ExecutionMode> TRY =
-                                of(ExecutionMode.SWALLOW_EXCEPTIONS);
-        // end::refguide-2[]
-        /**
-         * Skips all steps.
-         * @since 2.0
-         */
-        // tag::refguide-2[]
-        public static final ImmutableEnumSet<ExecutionMode> NOOP =
-                                of(ExecutionMode.SKIP_RULE_VALIDATION,
-                                   ExecutionMode.SKIP_EXECUTION);
-    }
-    // end::refguide-2[]
-
-
-    // tag::refguide-3[]
-    enum RuleCheckingPolicy {
-        SYNC,   // <.>
-        ASYNC   // <.>
-    }
-    // end::refguide-3[]
 
     /**
      * Same as {@link #wrap(Object)}, except the actual execution occurs only if
@@ -249,6 +163,7 @@ public interface WrapperFactory {
     // -- ASYNC WRAPPING
     //
 
+
     /**
      * Returns a proxy object for the provided {@code domainObject},
      * through which can execute the action asynchronously.
@@ -261,39 +176,8 @@ public interface WrapperFactory {
      * @since 2.0
      */
     // tag::refguide-async[]
-    <T> T async(T domainObject,                          // <.>
-                ImmutableEnumSet<ExecutionMode> mode,
-                RuleCheckingPolicy ruleCheckingPolicy,
-                ExecutorService executorService);
-
-    // end::refguide-async[]
-    // tag::refguide-async[]
-    default <T> T async(T domainObject,                          // <.>
-                ImmutableEnumSet<ExecutionMode> modes) {
-        // end::refguide-async[]
-
-        return async(domainObject, modes, RuleCheckingPolicy.ASYNC, ForkJoinPool.commonPool());
-
-        // tag::refguide-async[]
-        // ...
-    }
-
-    // end::refguide-async[]
-    /**
-     * Shortcut for {@link #async(Object, ImmutableEnumSet)} using execution mode
-     * {@link ExecutionModes#EXECUTE}.
-     *
-     * @since 2.0
-     */
-    // tag::refguide-async[]
-    default <T> T async(T domainObject) {                // <.>
-        // end::refguide-async[]
-
-        return async(domainObject, ExecutionModes.EXECUTE);
-
-        // tag::refguide-async[]
-        // ...
-    }
+    <T,R> T async(T domainObject,                          // <.>
+                  AsyncControl<R> asyncControl);
 
     // end::refguide-async[]
     /**
@@ -316,7 +200,7 @@ public interface WrapperFactory {
 
     // end::refguide-async[]
     /**
-     * Returns a {@link AsyncWrap} bound to the provided {@code mixinClass},
+     * Returns a {@link AsyncControl} bound to the provided {@code mixinClass},
      * to prepare for type-safe asynchronous action execution.
      *
      * @param <T>

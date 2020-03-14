@@ -43,6 +43,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.applib.services.wrapper.control.AsyncControl;
+import org.apache.isis.applib.services.wrapper.control.ExecutionModes;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
@@ -143,9 +145,10 @@ class PublisherServiceTest extends IsisIntegrationTestAbstract {
         val latch = kvStore.latch(PublisherServiceForTesting.class);
 
         // when - running within its own background task
-        wrapper.async(book, WrapperFactory.ExecutionModes.SKIP_RULES).setName("Book #2"); // don't enforce rules for this test
+        AsyncControl<Void> control = AsyncControl.voidReturn().with(ExecutionModes.SKIP_RULES);
+        wrapper.async(book, control).setName("Book #2"); // don't enforce rules for this test
 
-        //future.get(10, TimeUnit.SECONDS);
+        control.getFuture().get(10, TimeUnit.SECONDS);
 
         latch.await(2, TimeUnit.SECONDS);
         
@@ -171,10 +174,11 @@ class PublisherServiceTest extends IsisIntegrationTestAbstract {
 
         // when - running within its own background task
         assertThrows(DisabledException.class, ()->{
+
+            val control = AsyncControl.voidReturn().with(ExecutionModes.EXECUTE);
+            wrapper.async(book, control).setName("Book #2");
             
-            wrapper.async(book, WrapperFactory.ExecutionModes.EXECUTE).setName("Book #2");
-            
-            //future.get(10, TimeUnit.SECONDS);
+            control.getFuture().get(10, TimeUnit.SECONDS);
             
         });
 

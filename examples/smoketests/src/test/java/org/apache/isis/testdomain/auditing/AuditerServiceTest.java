@@ -41,6 +41,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.applib.services.wrapper.control.AsyncControl;
+import org.apache.isis.applib.services.wrapper.control.ExecutionModes;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
@@ -131,7 +133,9 @@ class AuditerServiceTest extends IsisIntegrationTestAbstract {
         kvStore.clear(AuditerServiceForTesting.class);
 
         // when - running within its own background task
-        wrapper.async(book, WrapperFactory.ExecutionModes.SKIP_RULES).setName("Book #2"); // don't enforce rules for this test
+        val control = AsyncControl.voidReturn().with(ExecutionModes.SKIP_RULES);
+        // don't enforce rules for this test
+        wrapper.async(book, control).setName("Book #2");
 
         // then - after the commit
         assertEquals("targetClassName=Jdo Book,propertyName=name,preValue=Sample Book,postValue=Book #2;",
@@ -150,10 +154,11 @@ class AuditerServiceTest extends IsisIntegrationTestAbstract {
 
         // when - running within its own background task
         assertThrows(DisabledException.class, ()->{
-        
-            wrapper.async(book, WrapperFactory.ExecutionModes.EXECUTE).setName("Book #2");
 
-            //future.get(1000, TimeUnit.SECONDS);
+            val control = AsyncControl.voidReturn().with(ExecutionModes.EXECUTE);
+            wrapper.async(book, control).setName("Book #2");
+
+            control.getFuture().get(1000, TimeUnit.SECONDS);
             
         });
         

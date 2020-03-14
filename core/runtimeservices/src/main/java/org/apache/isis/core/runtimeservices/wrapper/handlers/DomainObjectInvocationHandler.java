@@ -33,7 +33,7 @@ import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.HiddenException;
 import org.apache.isis.applib.services.wrapper.InteractionException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
-import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
+import org.apache.isis.applib.services.wrapper.control.ExecutionMode;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.applib.services.wrapper.events.CollectionAccessEvent;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;

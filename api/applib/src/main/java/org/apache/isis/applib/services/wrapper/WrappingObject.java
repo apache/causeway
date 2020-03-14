@@ -21,6 +21,7 @@ package org.apache.isis.applib.services.wrapper;
 
 import java.util.EnumSet;
 
+import org.apache.isis.applib.services.wrapper.control.ExecutionMode;
 import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 
 /**
@@ -65,7 +66,7 @@ public interface WrappingObject {
 
     // end::refguide[]
     /**
-     * The {@link EnumSet<WrapperFactory.ExecutionMode> execution mode}
+     * The {@link EnumSet< ExecutionMode > execution mode}
      * with which this wrapper was
      * {@link WrapperFactory#wrap(Object, ImmutableEnumSet) created}.
      *
@@ -75,7 +76,7 @@ public interface WrappingObject {
      * </p>
      */
     // tag::refguide[]
-    ImmutableEnumSet<WrapperFactory.ExecutionMode> __isis_executionMode();
+    ImmutableEnumSet<ExecutionMode> __isis_executionMode();
 
 }
 // end::refguide[]

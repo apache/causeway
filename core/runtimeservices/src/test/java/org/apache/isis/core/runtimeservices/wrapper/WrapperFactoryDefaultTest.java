@@ -28,8 +28,9 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.applib.services.wrapper.control.ExecutionMode;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
+import org.apache.isis.applib.services.wrapper.control.ExecutionModes;
 import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactoryService;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
@@ -45,7 +46,7 @@ public class WrapperFactoryDefaultTest {
     private static class WrappedDomainObject extends DomainObject implements WrappingObject {
 
         private final DomainObject wrappedObject;
-        private final ImmutableEnumSet<WrapperFactory.ExecutionMode> mode;
+        private final ImmutableEnumSet<ExecutionMode> mode;
 
         @Override
         public void __isis_save() {
@@ -57,7 +58,7 @@ public class WrapperFactoryDefaultTest {
         }
 
         @Override
-        public ImmutableEnumSet<WrapperFactory.ExecutionMode> __isis_executionMode() {
+        public ImmutableEnumSet<ExecutionMode> __isis_executionMode() {
             return mode;
         }
     }
@@ -69,7 +70,7 @@ public class WrapperFactoryDefaultTest {
     private WrapperFactoryDefault wrapperFactory;
 
     private DomainObject createProxyCalledWithDomainObject;
-    private ImmutableEnumSet<WrapperFactory.ExecutionMode> createProxyCalledWithMode;
+    private ImmutableEnumSet<ExecutionMode> createProxyCalledWithMode;
 
     @Before
     public void setUp() throws Exception {
@@ -82,7 +83,7 @@ public class WrapperFactoryDefaultTest {
             }
             
             @Override
-            protected <T> T createProxy(T domainObject, ImmutableEnumSet<WrapperFactory.ExecutionMode> modes) {
+            protected <T> T createProxy(T domainObject, ImmutableEnumSet<ExecutionMode> modes) {
                 WrapperFactoryDefaultTest.this.createProxyCalledWithMode = modes;
                 WrapperFactoryDefaultTest.this.createProxyCalledWithDomainObject = (DomainObject) domainObject;
                 return domainObject;
@@ -98,7 +99,7 @@ public class WrapperFactoryDefaultTest {
         wrapperFactory.wrap(domainObject);
 
         assertThat(createProxyCalledWithDomainObject, is(domainObject));
-        assertThat(createProxyCalledWithMode, is(WrapperFactory.ExecutionModes.EXECUTE));
+        assertThat(createProxyCalledWithMode, is(ExecutionModes.EXECUTE));
     }
 
 
@@ -106,10 +107,10 @@ public class WrapperFactoryDefaultTest {
     public void wrap_ofWrapped_sameMode_returnsUnchanged() throws Exception {
         // given
         final DomainObject wrappedObject = new DomainObject();
-        final DomainObject domainObject = new WrappedDomainObject(wrappedObject, WrapperFactory.ExecutionModes.EXECUTE);
+        final DomainObject domainObject = new WrappedDomainObject(wrappedObject, ExecutionModes.EXECUTE);
 
         // when
-        final DomainObject wrappingObject = wrapperFactory.wrap(domainObject, WrapperFactory.ExecutionModes.EXECUTE);
+        final DomainObject wrappingObject = wrapperFactory.wrap(domainObject, ExecutionModes.EXECUTE);
 
         // then
         assertThat(wrappingObject, is(domainObject));
@@ -120,15 +121,15 @@ public class WrapperFactoryDefaultTest {
     public void wrap_ofWrapped_differentMode_delegates_to_createProxy() throws Exception {
         // given
         final DomainObject wrappedObject = new DomainObject();
-        final DomainObject domainObject = new WrappedDomainObject(wrappedObject, WrapperFactory.ExecutionModes.EXECUTE);
+        final DomainObject domainObject = new WrappedDomainObject(wrappedObject, ExecutionModes.EXECUTE);
 
         // when
-        final DomainObject wrappingObject = wrapperFactory.wrap(domainObject, WrapperFactory.ExecutionModes.SKIP_RULES);
+        final DomainObject wrappingObject = wrapperFactory.wrap(domainObject, ExecutionModes.SKIP_RULES);
 
         // then
         assertThat(wrappingObject, is(not(domainObject)));
         assertThat(createProxyCalledWithDomainObject, is(wrappedObject));
-        assertThat(createProxyCalledWithMode, is(WrapperFactory.ExecutionModes.SKIP_RULES));
+        assertThat(createProxyCalledWithMode, is(ExecutionModes.SKIP_RULES));
     }
 
 }

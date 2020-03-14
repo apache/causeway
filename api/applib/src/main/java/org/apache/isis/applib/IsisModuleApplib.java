@@ -44,6 +44,7 @@ import org.apache.isis.applib.services.metamodel.MetaModelServiceMenu;
 import org.apache.isis.applib.services.publish.PublisherServiceLogging;
 import org.apache.isis.applib.services.scratchpad.Scratchpad;
 import org.apache.isis.applib.services.session.SessionLoggingServiceLogging;
+import org.apache.isis.applib.services.wrapper.control.AsyncControlService;
 import org.apache.isis.schema.IsisModuleSchema;
 
 @Configuration
@@ -78,6 +79,9 @@ import org.apache.isis.schema.IsisModuleSchema;
         JaxbServiceDefault.class,
         PublisherServiceLogging.class,
         SessionLoggingServiceLogging.class,
+
+        // @Component's
+        AsyncControlService.class,
 
 })
 public class IsisModuleApplib {

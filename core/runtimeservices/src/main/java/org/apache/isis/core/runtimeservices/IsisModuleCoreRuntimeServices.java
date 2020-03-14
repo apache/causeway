@@ -26,6 +26,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.OrderComparator;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
+import org.apache.isis.applib.services.wrapper.control.AsyncControlService;
 import org.apache.isis.core.codegen.bytebuddy.IsisModuleCoreCodegenByteBuddy;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 import org.apache.isis.core.runtimeservices.bookmarks.BookmarkServiceDefault;
@@ -107,12 +108,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         TranslationServicePoMenu.class,
 
 })
-public class IsisModuleCoreRuntimeServices /*implements ApplicationContextAware*/ {
-
-//    @Override
-//    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-//        // just make sure we wait for the context; (not sure if need anymore)
-//    }
+public class IsisModuleCoreRuntimeServices {
 
     @Bean @Singleton // also used by _Spring utility
     public OrderComparator orderComparator() {

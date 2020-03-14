@@ -22,7 +22,7 @@ package org.apache.isis.core.runtimeservices.wrapper.handlers;
 import java.util.Collection;
 import java.util.Map;
 
-import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
+import org.apache.isis.applib.services.wrapper.control.ExecutionMode;
 import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
