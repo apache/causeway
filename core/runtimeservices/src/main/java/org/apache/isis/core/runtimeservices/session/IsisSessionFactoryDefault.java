@@ -248,10 +248,9 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory, IsisSessio
         val stack = isisSessionStack.get();
         while(stack.size()>downToStackSize) {
             if(stack.size()==1) {       
-                preTopLevelClose(stack.pop());
-            } else {
-                stack.pop();    
-            }
+                preTopLevelClose(stack.peek());
+            } 
+            stack.pop();    
         }
         if(downToStackSize == 0) {
             isisSessionStack.remove();
