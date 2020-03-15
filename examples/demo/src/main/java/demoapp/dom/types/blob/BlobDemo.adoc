@@ -16,13 +16,13 @@ public class BlobDemo {
 
 	@Property
     @PropertyLayout
-    @XmlElement @XmlJavaTypeAdapter(DemoBlobStore.BlobAdapter.class) // <1>
+    @XmlElement @XmlJavaTypeAdapter(JaxbAdapters.BlobAdapter.class) // <1>
     @Getter @Setter private Blob logo; // <2> 
     
 }
 ----
 
-<1> we use this BlobAdapter only for demo purposes here
+<1> we use this BlobAdapter from the JaxbAdapters utility
 <2> renders as image, according to its MIME type
 
 See the blob demo link:${SOURCES_DEMO}/demoapp/dom/types/blob[sources].

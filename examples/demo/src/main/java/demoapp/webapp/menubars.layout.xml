@@ -17,8 +17,14 @@
                 <mb3:serviceAction objectType="demo.FeaturedTypesMenu" id="temporals">
                     <cpt:named>Temporal Types</cpt:named>
                 </mb3:serviceAction>
+                <mb3:serviceAction objectType="demo.FeaturedTypesMenu" id="uuid">
+                    <cpt:named>UUID Type</cpt:named>
+                </mb3:serviceAction>
                 <mb3:serviceAction objectType="demo.FeaturedTypesMenu" id="blobs">
                     <cpt:named>Blob Type</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="demo.FeaturedTypesMenu" id="clobs">
+                    <cpt:named>Clob Type</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
         </mb3:menu>

@@ -30,9 +30,11 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import lombok.val;
 
 import demoapp.dom.types.blob.BlobDemo;
+import demoapp.dom.types.clob.ClobDemo;
 import demoapp.dom.types.primitive.PrimitivesDemo;
 import demoapp.dom.types.text.TextDemo;
 import demoapp.dom.types.time.TemporalDemo;
+import demoapp.dom.types.uuid.UuidDemo;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.FeaturedTypesMenu")
 @DomainObjectLayout(named="Featured Types")
@@ -63,11 +65,27 @@ public class FeaturedTypesMenu {
         demo.initDefaults();  
         return demo;
     }
+    
+    @Action
+    @ActionLayout(cssClassFa="fa-at")
+    public UuidDemo uuid(){
+        val demo = factoryService.viewModel(UuidDemo.class);
+        demo.initDefaults();  
+        return demo;
+    }
 
     @Action
     @ActionLayout(cssClassFa="fa-cloud")
     public BlobDemo blobs(){
         val demo = factoryService.viewModel(BlobDemo.class);
+        demo.initDefaults();  
+        return demo;
+    }
+    
+    @Action
+    @ActionLayout(cssClassFa="fa-cloud")
+    public ClobDemo clobs(){
+        val demo = factoryService.viewModel(ClobDemo.class);
         demo.initDefaults();  
         return demo;
     }
