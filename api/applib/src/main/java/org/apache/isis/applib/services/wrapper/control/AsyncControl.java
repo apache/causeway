@@ -19,11 +19,21 @@
 package org.apache.isis.applib.services.wrapper.control;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
 import java.util.function.Consumer;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.user.RoleMemento;
+import org.apache.isis.applib.services.user.UserMemento;
+import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.schema.common.v2.OidDto;
 
@@ -38,42 +48,43 @@ import lombok.extern.log4j.Log4j2;
  * @param <R> - return value.
  */
 @Log4j2
-public class AsyncControl<R> {
+public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
 
+    public static AsyncControl<Void> create() {
+        return new AsyncControl<>();
+    }
+
+    public static <X> AsyncControl<X> create(final Class<X> clazz) {
+        return new AsyncControl<>();
+    }
+
+    /**
+     * Alias for {@link #create(Class)}
+     */
     public static <X> AsyncControl<X> toReturn(final Class<X> clazz) {
-        return new AsyncControl<>();
+        return create(clazz);
     }
 
+    /**
+     * Alias for {@link #create()}
+     */
     public static AsyncControl<Void> ignoreReturn() {
-        return new AsyncControl<>();
+        return create();
     }
 
+    /**
+     * Alias for {@link #create()}
+     */
     public static AsyncControl<Void> voidReturn() {
-        return new AsyncControl<>();
+        return create();
     }
 
     private AsyncControl() {
+        with((exception) -> {
+            log.error(logMessage(), exception);
+        });
     }
 
-    /**
-     * Set by framework.
-     */
-    @Setter(AccessLevel.PACKAGE)
-    private Method method;
-
-    /**
-     * Set by framework.
-     */
-    @Setter(AccessLevel.PACKAGE)
-    private OidDto oidDto;
-
-
-    @Getter @NonNull
-    private ImmutableEnumSet<ExecutionMode> executionModes = ExecutionModes.EXECUTE;
-    public AsyncControl<R> with(ImmutableEnumSet<ExecutionMode> executionModes) {
-        this.executionModes = executionModes;
-        return this;
-    }
 
     @Getter @NonNull
     private ExecutorService executorService = ForkJoinPool.commonPool();
@@ -82,35 +93,28 @@ public class AsyncControl<R> {
         return this;
     }
 
-    @Getter @NonNull
-    private RuleCheckingPolicy ruleCheckingPolicy = RuleCheckingPolicy.ASYNC;
-    public AsyncControl<R> with(RuleCheckingPolicy ruleCheckingPolicy) {
-        this.ruleCheckingPolicy = ruleCheckingPolicy;
+
+    /**
+     * Defaults to user initiating the action, if not overridden
+     */
+    @Getter
+    private String user;
+    public AsyncControl<R> withUser(final String user) {
+        this.user = user;
         return this;
     }
 
-    @Getter @NonNull
-    private Consumer<Exception> exceptionHandler = (exception) -> {
-        log.error(logMessage(), exception);
-    };
-    public AsyncControl<R> with(Consumer<Exception> exceptionHandler) {
-        this.exceptionHandler = exceptionHandler;
+    /**
+     * Defaults to roles of user initiating the action, if not overridden
+     */
+    @Getter
+    private List<String> roles;
+    public AsyncControl<R> withRoles(final List<String> roles) {
+        this.roles = Collections.unmodifiableList(roles);
         return this;
     }
-
-    private String logMessage() {
-        StringBuilder buf = new StringBuilder("Failed to execute ");
-        if(method != null) {
-            buf.append(" ").append(method.getName()).append(" ");
-            if(oidDto != null) {
-                buf.append(" on '")
-                    .append(oidDto.getType())
-                    .append(":")
-                    .append(oidDto.getId())
-                    .append("'");
-            }
-        }
-        return buf.toString();
+    public AsyncControl<R> withRoles(String... roles) {
+        return withRoles(Arrays.asList(roles));
     }
 
     /**
@@ -118,5 +122,20 @@ public class AsyncControl<R> {
      */
     @Getter @Setter(AccessLevel.PACKAGE)
     private Future<R> future;
+
+    private String logMessage() {
+        StringBuilder buf = new StringBuilder("Failed to execute ");
+        if(getMethod() != null) {
+            buf.append(" ").append(getMethod().getName()).append(" ");
+            if(getBookmark() != null) {
+                buf.append(" on '")
+                        .append(getBookmark().getObjectType())
+                        .append(":")
+                        .append(getBookmark().getIdentifier())
+                        .append("'");
+            }
+        }
+        return buf.toString();
+    }
 
 }

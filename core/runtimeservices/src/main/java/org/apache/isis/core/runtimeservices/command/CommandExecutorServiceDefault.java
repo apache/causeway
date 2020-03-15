@@ -53,6 +53,8 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
+import org.apache.isis.core.metamodel.interactions.InteractionUtils;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -175,6 +177,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 // we pass 'null' for the mixedInAdapter; if this action _is_ a mixin then
                 // it will switch the targetAdapter to be the mixedInAdapter transparently
                 val argAdapters = argAdaptersFor(actionDto);
+
                 val resultAdapter = objectAction.execute(
                         targetAdapter, null, argAdapters, InteractionInitiatedBy.FRAMEWORK);
 

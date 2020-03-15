@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.runtimeservices.wrapper;
 
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,18 +41,17 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
 import org.apache.isis.applib.services.wrapper.control.AsyncControlService;
-import org.apache.isis.applib.services.wrapper.control.RuleCheckingPolicy;
 import org.apache.isis.applib.services.wrapper.control.ExecutionMode;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
-import org.apache.isis.applib.services.wrapper.control.ExecutionModes;
+import org.apache.isis.applib.services.wrapper.control.SyncControl;
 import org.apache.isis.applib.services.wrapper.events.ActionArgumentEvent;
 import org.apache.isis.applib.services.wrapper.events.ActionInvocationEvent;
 import org.apache.isis.applib.services.wrapper.events.ActionUsabilityEvent;
@@ -92,6 +92,7 @@ import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEvent
 import org.apache.isis.core.runtimeservices.wrapper.handlers.ProxyContextHandler;
 import org.apache.isis.core.runtimeservices.wrapper.proxy.ProxyCreator;
 import org.apache.isis.schema.cmd.v2.CommandDto;
+import org.apache.isis.schema.common.v2.OidDto;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -154,48 +155,40 @@ public class WrapperFactoryDefault implements WrapperFactory {
     // -- WRAPPING
     
     @Override
-    public <T> T wrapMixin(Class<T> mixinClass, Object mixedIn) {
-        return wrap(factoryService.mixin(mixinClass, mixedIn));
-    }
-
-    @Override
     public <T> T wrap(T domainObject) {
-        return wrap(domainObject, ExecutionModes.EXECUTE);
-    }
-
-    @Override
-    public <T> T wrapTry(T domainObject) {
-        return wrap(domainObject, ExecutionModes.TRY);
-    }
-
-    @Override
-    public <T> T wrapNoExecute(T domainObject) {
-        return wrap(domainObject, ExecutionModes.NO_EXECUTE);
-    }
-
-    @Override
-    public <T> T wrapSkipRules(T domainObject) {
-        return wrap(domainObject, ExecutionModes.SKIP_RULES);
+        return wrap(domainObject, SyncControl.create());
     }
 
     @Override
     public <T> T wrap(
             final T domainObject,
-            final ImmutableEnumSet<ExecutionMode> modes) {
+            final SyncControl syncControl) {
+        final ImmutableEnumSet<ExecutionMode> modes = syncControl.getExecutionModes();
         if (domainObject instanceof WrappingObject) {
             val wrapperObject = (WrappingObject) domainObject;
-            val executionMode = wrapperObject.__isis_executionMode();
+            val executionMode = wrapperObject.__isis_executionModes();
             if(executionMode != modes) {
                 val underlyingDomainObject = wrapperObject.__isis_wrapped();
-                return _Casts.uncheckedCast(createProxy(underlyingDomainObject, modes));
+                return _Casts.uncheckedCast(createProxy(underlyingDomainObject, syncControl));
             }
             return domainObject;
         }
-        return createProxy(domainObject, modes);
+        return createProxy(domainObject, syncControl);
     }
 
-    protected <T> T createProxy(T domainObject, ImmutableEnumSet<ExecutionMode> modes) {
-        return proxyContextHandler.proxy(metaModelContext, domainObject, modes);
+    @Override
+    public <T> T wrapMixin(Class<T> mixinClass, Object mixedIn) {
+        return wrapMixin(mixinClass, mixedIn, SyncControl.create());
+    }
+
+    @Override
+    public <T> T wrapMixin(Class<T> mixinClass, Object mixedIn, SyncControl syncControl) {
+        T mixin = factoryService.mixin(mixinClass, mixedIn);
+        return wrap(mixin, syncControl);
+    }
+
+    protected <T> T createProxy(T domainObject, SyncControl syncControl) {
+        return proxyContextHandler.proxy(metaModelContext, domainObject, syncControl);
     }
 
     @Override
@@ -216,7 +209,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     // -- ASYNC WRAPPING
 
     @Inject
-    AsyncControlService asyncControlService;
+    private AsyncControlService asyncControlService;
 
     @Override
     public <T,R> T async(
@@ -224,116 +217,88 @@ public class WrapperFactoryDefault implements WrapperFactory {
             final AsyncControl<R> asyncControl) {
 
         final ImmutableEnumSet<ExecutionMode> executionModes = asyncControl.getExecutionModes();
-        final RuleCheckingPolicy ruleCheckingPolicy = asyncControl.getRuleCheckingPolicy();
         final ExecutorService executorService = asyncControl.getExecutorService();
 
         Class<T> domainClass = (Class<T>) domainObject.getClass();
         ProxyFactory<T> factory = proxyFactoryService.factory(domainClass, WrappingObject.class);
 
-        return factory.createInstance((Object proxy, Method method, Object[] args) -> {
+        return factory.createInstance(new InvocationHandler() {
+            @Override
+            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 
-            val executionModesAsync = determineExecutionModesAsync(executionModes, ruleCheckingPolicy);
-            if (!shouldValidateAsync(executionModesAsync) && !shouldExecuteAsync(executionModesAsync)) {
-                // nothing to be done.
-                return null;
-            }
+                //
+                // executed in the same thread as caller..
+                //
+                final boolean inheritedFromObject = method.getDeclaringClass().equals(Object.class);
+                if (inheritedFromObject) {
+                    return method.invoke(domainObject, args);
+                }
 
-            //
-            // executed in the same thread as caller..
-            //
-            final boolean inheritedFromObject = method.getDeclaringClass().equals(Object.class);
-            if(inheritedFromObject) {
-                return method.invoke(domainObject, args);
-            }
+                val skipRules = executionModes.contains(ExecutionMode.SKIP_RULE_VALIDATION);
+                if(!skipRules) {
+                    // normal wrapped object...
+                    SyncControl syncControl = SyncControl.create().withNoExecute();
+                    T syncProxy = WrapperFactoryDefault.this.createProxy(domainObject, syncControl);
+                    method.invoke(syncProxy, args);
+                }
 
-            val executionModesSync = determineExecutionModesSync(executionModes, ruleCheckingPolicy);
-            if(shouldValidateSync(executionModesSync)) {
-                // normal wrapped object...
-                T syncProxy = createProxy(domainObject, executionModesSync);
-                method.invoke(syncProxy, args);
-            }
 
-            //
-            // submit async stuff
-            //
-            final ObjectSpecificationDefault targetObjSpec = (ObjectSpecificationDefault) specificationLoader.loadSpecification(method.getDeclaringClass());
-            final ObjectMember member = targetObjSpec.getMember(method);
+                //
+                // submit async stuff
+                //
+                final ObjectSpecificationDefault targetObjSpec = (ObjectSpecificationDefault) specificationLoader.loadSpecification(method.getDeclaringClass());
+                final ObjectMember member = targetObjSpec.getMember(method);
 
-            if(member == null) {
-                return method.invoke(domainObject, args);
-            }
+                if (member == null) {
+                    return method.invoke(domainObject, args);
+                }
 
-            if(!(member instanceof ObjectAction)) {
-                throw new UnsupportedOperationException(
-                        "Only actions can be executed in the background "
-                                + "(method " + method.getName() + " represents a " + member.getFeatureType().name() + "')");
-            }
+                if (!(member instanceof ObjectAction)) {
+                    throw new UnsupportedOperationException(
+                            "Only actions can be executed in the background "
+                                    + "(method " + method.getName() + " represents a " + member.getFeatureType().name() + "')");
+                }
 
-            ObjectAction action = (ObjectAction) member;
+                ObjectAction action = (ObjectAction) member;
 
-            val isisSession = isisSessionTracker.currentSession().orElseThrow(() -> new RuntimeException("No IsisSession is open"));
-            val authSession = isisSession.getAuthenticationSession();
+                val isisSession = isisSessionTracker.currentSession().orElseThrow(() -> new RuntimeException("No IsisSession is open"));
+                val authSession = isisSession.getAuthenticationSession();
 
-            final ManagedObject domainObjectAdapter = isisSession.getObjectManager().adapt(domainObject);
-            final List<ManagedObject> argAdapters = Arrays.asList(adaptersFor(args));
+                final ManagedObject domainObjectAdapter = isisSession.getObjectManager().adapt(domainObject);
+                final List<ManagedObject> argAdapters = Arrays.asList(WrapperFactoryDefault.this.adaptersFor(args));
 
-            final List<ManagedObject> targetList = Collections.singletonList(domainObjectAdapter);
-            final CommandDto dto =
-                    commandDtoServiceInternal.asCommandDto(targetList, action, argAdapters);
-            asyncControlService.init(asyncControl, method, dto.getTargets().getOid().get(0));
+                final List<ManagedObject> targetList = Collections.singletonList(domainObjectAdapter);
+                final CommandDto dto =
+                        commandDtoServiceInternal.asCommandDto(targetList, action, argAdapters);
+                final OidDto oidDto = dto.getTargets().getOid().get(0);
 
-            Future<?> submit = executorService.submit(() -> {
+                asyncControlService.init(asyncControl, method, Bookmark.from(oidDto));
 
-                isisSessionFactory.runAuthenticated(authSession, () -> {
+                Future future = executorService.submit(new Runnable() {
+                    @Override
+                    public void run() {
 
-                    if (shouldValidateAsync(executionModesAsync)) {
-                        // TODO...
+                        isisSessionFactory.runAuthenticated(authSession, () -> {
+                            commandExecutorService.executeCommand(dto);
+                        });
                     }
-                    if (shouldExecuteAsync(executionModesAsync)) {
-                        commandExecutorService.executeCommand(dto);
-                    }
-
                 });
-            });
-            asyncControlService.update(asyncControl, submit);
-            return null;
+                asyncControlService.update(asyncControl, future);
+                return null;
 
-
+            }
         }, false);
     }
 
     @Override
-    public <T> T asyncMixin(
-            Class<T> mixinClass, Object mixedIn,
-            ImmutableEnumSet<ExecutionMode> modes,
-            RuleCheckingPolicy ruleCheckingPolicy,
-            ExecutorService executorService) {
-
-        throw new RuntimeException("TODO");
+    public <T, R> T asyncMixin(Class<T> mixinClass, Object mixedIn, AsyncControl<R> asyncControl) {
+        throw new RuntimeException("TODO!!!");
     }
 
     private ManagedObject[] adaptersFor(final Object[] args) {
         final ObjectManager objectManager =
                 isisSessionTracker.currentSession().get().getObjectManager();
         return CommandUtil.adaptersFor(args, objectManager);
-    }
-
-    private static ImmutableEnumSet<ExecutionMode> determineExecutionModesSync(
-            ImmutableEnumSet<ExecutionMode> executionModes,
-            RuleCheckingPolicy ruleCheckingPolicy) {
-        return executionModes.contains(ExecutionMode.SKIP_RULE_VALIDATION) ||
-                ruleCheckingPolicy != RuleCheckingPolicy.IMMEDIATE
-                ? ExecutionModes.NOOP
-                : ExecutionModes.NO_EXECUTE;
-    }
-
-    private static ImmutableEnumSet<ExecutionMode> determineExecutionModesAsync(
-            ImmutableEnumSet<ExecutionMode> executionModes,
-            RuleCheckingPolicy ruleCheckingPolicy) {
-        return executionModes.contains(ExecutionMode.SKIP_RULE_VALIDATION) ||
-                RuleCheckingPolicy.IMMEDIATE == ruleCheckingPolicy
-                ? join(executionModes, ExecutionMode.SKIP_RULE_VALIDATION)
-                : executionModes;
     }
 
     private static ImmutableEnumSet<ExecutionMode> join(

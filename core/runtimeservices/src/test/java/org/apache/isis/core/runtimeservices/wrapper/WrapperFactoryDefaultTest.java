@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.runtimeservices.wrapper;
 
+import org.assertj.core.api.Assertions;
+import org.hamcrest.CoreMatchers;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
@@ -30,7 +32,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.services.wrapper.control.ExecutionMode;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
-import org.apache.isis.applib.services.wrapper.control.ExecutionModes;
+import org.apache.isis.applib.services.wrapper.control.SyncControl;
 import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactoryService;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
@@ -43,10 +45,10 @@ public class WrapperFactoryDefaultTest {
     }
 
     @RequiredArgsConstructor
-    private static class WrappedDomainObject extends DomainObject implements WrappingObject {
+    private static class WrappingDomainObject extends DomainObject implements WrappingObject {
 
         private final DomainObject wrappedObject;
-        private final ImmutableEnumSet<ExecutionMode> mode;
+        private final ImmutableEnumSet<ExecutionMode> modes;
 
         @Override
         public void __isis_save() {
@@ -58,8 +60,8 @@ public class WrapperFactoryDefaultTest {
         }
 
         @Override
-        public ImmutableEnumSet<ExecutionMode> __isis_executionMode() {
-            return mode;
+        public ImmutableEnumSet<ExecutionMode> __isis_executionModes() {
+            return modes;
         }
     }
 
@@ -70,7 +72,7 @@ public class WrapperFactoryDefaultTest {
     private WrapperFactoryDefault wrapperFactory;
 
     private DomainObject createProxyCalledWithDomainObject;
-    private ImmutableEnumSet<ExecutionMode> createProxyCalledWithMode;
+    private SyncControl createProxyCalledWithSyncControl;
 
     @Before
     public void setUp() throws Exception {
@@ -83,8 +85,8 @@ public class WrapperFactoryDefaultTest {
             }
             
             @Override
-            protected <T> T createProxy(T domainObject, ImmutableEnumSet<ExecutionMode> modes) {
-                WrapperFactoryDefaultTest.this.createProxyCalledWithMode = modes;
+            protected <T> T createProxy(T domainObject, SyncControl syncControl) {
+                WrapperFactoryDefaultTest.this.createProxyCalledWithSyncControl = syncControl;
                 WrapperFactoryDefaultTest.this.createProxyCalledWithDomainObject = (DomainObject) domainObject;
                 return domainObject;
             }
@@ -99,7 +101,7 @@ public class WrapperFactoryDefaultTest {
         wrapperFactory.wrap(domainObject);
 
         assertThat(createProxyCalledWithDomainObject, is(domainObject));
-        assertThat(createProxyCalledWithMode, is(ExecutionModes.EXECUTE));
+        assertThat(createProxyCalledWithSyncControl, is(not(nullValue())));
     }
 
 
@@ -107,10 +109,10 @@ public class WrapperFactoryDefaultTest {
     public void wrap_ofWrapped_sameMode_returnsUnchanged() throws Exception {
         // given
         final DomainObject wrappedObject = new DomainObject();
-        final DomainObject domainObject = new WrappedDomainObject(wrappedObject, ExecutionModes.EXECUTE);
+        final DomainObject domainObject = new WrappingDomainObject(wrappedObject, ImmutableEnumSet.noneOf(ExecutionMode.class));
 
         // when
-        final DomainObject wrappingObject = wrapperFactory.wrap(domainObject, ExecutionModes.EXECUTE);
+        final DomainObject wrappingObject = wrapperFactory.wrap(domainObject);
 
         // then
         assertThat(wrappingObject, is(domainObject));
@@ -121,15 +123,15 @@ public class WrapperFactoryDefaultTest {
     public void wrap_ofWrapped_differentMode_delegates_to_createProxy() throws Exception {
         // given
         final DomainObject wrappedObject = new DomainObject();
-        final DomainObject domainObject = new WrappedDomainObject(wrappedObject, ExecutionModes.EXECUTE);
+        final DomainObject domainObject = new WrappingDomainObject(wrappedObject, ImmutableEnumSet.noneOf(ExecutionMode.class));
 
         // when
-        final DomainObject wrappingObject = wrapperFactory.wrap(domainObject, ExecutionModes.SKIP_RULES);
+        final DomainObject wrappingObject = wrapperFactory.wrap(domainObject, SyncControl.create().withSkipRules());
 
         // then
         assertThat(wrappingObject, is(not(domainObject)));
         assertThat(createProxyCalledWithDomainObject, is(wrappedObject));
-        assertThat(createProxyCalledWithMode, is(ExecutionModes.SKIP_RULES));
+        Assertions.assertThat(createProxyCalledWithSyncControl.getExecutionModes()).contains(ExecutionMode.SKIP_RULE_VALIDATION);
     }
 
 }

@@ -20,14 +20,10 @@
 package org.apache.isis.applib.services.wrapper;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ForkJoinPool;
 
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
-import org.apache.isis.applib.services.wrapper.control.ExecutionMode;
-import org.apache.isis.applib.services.wrapper.control.ExecutionModes;
-import org.apache.isis.applib.services.wrapper.control.RuleCheckingPolicy;
+import org.apache.isis.applib.services.wrapper.control.SyncControl;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
 import org.apache.isis.core.commons.collections.ImmutableEnumSet;
@@ -35,7 +31,14 @@ import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 /**
  * Provides the ability to &quot;wrap&quot; of a domain object such that it can
  * be interacted with while enforcing the hide/disable/validate rules implied by
- * the Isis programming model.
+ * the Apache Isis programming model.
+ *
+ * <p>
+ *     The wrapper can alternatively also be used to execute the action
+ *     asynchronously, through an {@link java.util.concurrent.ExecutorService}.
+ *     Any business rules will be invoked synchronously beforehand, however.
+ *     hand
+ * </p>
  *
  * <p>
  * The 'wrap' is a runtime-code-generated proxy that wraps the underlying domain
@@ -43,14 +46,13 @@ import org.apache.isis.core.commons.collections.ImmutableEnumSet;
  * <ul>
  * <li>a <tt>get</tt> method for properties or collections</li>
  * <li>a <tt>set</tt> method for properties</li>
- * <li>an <tt>addTo</tt> or <tt>removeFrom</tt> method for collections</li>
  * <li>any action</li>
  * </ul>
  *
  * <p>
  * Calling any of the above methods may result in a (subclass of)
  * {@link InteractionException} if the object disallows it. For example, if a
- * property is annotated with {@link Hidden} then a {@link HiddenException} will
+ * property is annotated as hidden then a {@link HiddenException} will
  * be thrown. Similarly if an action has a <tt>validate</tt> method and the
  * supplied arguments are invalid then a {@link InvalidException} will be
  * thrown.
@@ -63,12 +65,8 @@ import org.apache.isis.core.commons.collections.ImmutableEnumSet;
  * </ul>
  *
  * <p>
- * An exception will be thrown if any other methods are thrown.
- *
- * <p>
- * An implementation of this service (<tt>WrapperFactoryDefault</tt>) can be registered by including
- * <tt>o.a.i.core:isis-core-wrapper</tt> on the classpath; no further configuration is required.
- * </p>
+ * If the object has (see {@link #isWrapper(Object)} already been wrapped),
+ * then should just return the object back unchanged.
  */
 // tag::refguide[]
 // tag::refguide-async[]
@@ -80,8 +78,20 @@ public interface WrapperFactory {
     // end::refguide[]
 
     /**
-     * Same as {@link #wrap(Object)}, except the actual execution occurs only if
-     * the <tt>execute</tt> parameter indicates.
+     * Provides the &quot;wrapper&quot; of a domain object against which to invoke the action.
+     *
+     * <p>
+     *     The provided {@link SyncControl} determines whether business rules are checked first, and conversely
+     *     whether the action is executed.  There are therefore three typical cases:
+     *     <ul>
+     *         <li>check rules, execute action</li>
+     *         <li>skip rules, execute action</li>
+     *         <li>check rules, skip action</li>
+     *     </ul>
+     *     <p>
+     *         The last logical option (skip rules, skip action) is valid but doesn't make sense, as it's basically a no-op.
+     *     </p>
+     * </p>
      *
      * <p>
      * Otherwise, will do all the validations (raise exceptions as required
@@ -89,46 +99,35 @@ public interface WrapperFactory {
      */
     // tag::refguide[]
     <T> T wrap(T domainObject,                                      // <.>
-               ImmutableEnumSet<ExecutionMode> modes);
+               SyncControl syncControl);
 
     // end::refguide[]
     /**
-     * Provides the &quot;wrapper&quot; of the underlying domain object.
-     *
-     * <p>
-     * If the object has (see {@link #isWrapper(Object)} already been wrapped),
-     * then should just return the object back unchanged.
+     * A convenience overload for {@link #wrap(Object, SyncControl)},
+     * returning a wrapper to invoke the action synchronously, enforcing business rules.
+     * Any exceptions will be propagated, not swallowed.
      */
     // tag::refguide[]
     <T> T wrap(T domainObject);                                     // <.>
 
     // end::refguide[]
     /**
-     * Convenience method for {@link #wrap(Object, ImmutableEnumSet)} with {@link ExecutionModes#TRY},
-     * to make this feature more discoverable.
+     * Provides the wrapper for a {@link FactoryService#mixin(Class, Object) mixin}, against which to invoke the action.
+     *
+     * <p>
+     *     The provided {@link SyncControl} determines whether business rules are checked first, and conversely
+     *     whether the action is executed.  See {@link #wrap(Object, SyncControl)} for more details on this.
+     * </p>
      */
     // tag::refguide[]
-    <T> T wrapTry(T domainObject);                                  // <.>
+    <T> T wrapMixin(Class<T> mixinClass, Object mixedIn,           // <.>
+                    SyncControl syncControl);
 
     // end::refguide[]
     /**
-     * Convenience method for {@link #wrap(Object, ImmutableEnumSet)} with {@link ExecutionModes#NO_EXECUTE},
-     * to make this feature more discoverable.
-     */
-    // tag::refguide[]
-    <T> T wrapNoExecute(T domainObject);                            // <.>
-
-    // end::refguide[]
-    /**
-     * Convenience method for {@link #wrap(Object, ImmutableEnumSet)} with {@link ExecutionModes#SKIP_RULES},
-     * to make this feature more discoverable.
-     */
-    // tag::refguide[]
-    <T> T wrapSkipRules(T domainObject);                            // <.>
-
-    // end::refguide[]
-    /**
-     * {@link #wrap(Object) wraps} a {@link FactoryService#mixin(Class, Object) mixin}.
+     * A convenience overload for {@link #wrapMixin(Class, Object, SyncControl)},
+     * returning a wrapper to invoke the action synchronously, enforcing business rules.
+     * Any exceptions will be propagated, not swallowed.
      */
     // tag::refguide[]
     <T> T wrapMixin(Class<T> mixinClass, Object mixedIn);           // <.>
@@ -168,11 +167,11 @@ public interface WrapperFactory {
      * Returns a proxy object for the provided {@code domainObject},
      * through which can execute the action asynchronously.
      *
-     * @param <T>
+     * @param <T> - the type of the domain object
+     * @param <R> - the type of the return of the action
      * @param domainObject
-     * @param mode
+     * @param asyncControl
      *
-     * @param executorService
      * @since 2.0
      */
     // tag::refguide-async[]
@@ -187,63 +186,15 @@ public interface WrapperFactory {
      * @param <T>
      * @param mixinClass
      * @param mixedIn
-     * @param modes
+     * @param asyncControl
      *
      * @since 2.0
      */
     // tag::refguide-async[]
-    <T> T asyncMixin(                                    // <.>
-                Class<T> mixinClass, Object mixedIn,
-                ImmutableEnumSet<ExecutionMode> modes,
-                RuleCheckingPolicy ruleCheckingPolicy,
-                ExecutorService executorService);
+    <T,R> T asyncMixin(                                    // <.>
+             Class<T> mixinClass, Object mixedIn,
+             AsyncControl<R> asyncControl);
 
-    // end::refguide-async[]
-    /**
-     * Returns a {@link AsyncControl} bound to the provided {@code mixinClass},
-     * to prepare for type-safe asynchronous action execution.
-     *
-     * @param <T>
-     * @param mixinClass
-     * @param mixedIn
-     * @param modes
-     *
-     * @since 2.0
-     */
-    // tag::refguide-async[]
-    default <T> T asyncMixin(                                    // <.>
-                Class<T> mixinClass, Object mixedIn,
-                ImmutableEnumSet<ExecutionMode> modes) {
-        // end::refguide-async[]
-
-        return asyncMixin(
-                mixinClass, mixedIn, modes,
-                RuleCheckingPolicy.ASYNC, ForkJoinPool.commonPool());
-
-        // tag::refguide-async[]
-        // ...
-    }
-
-    // end::refguide-async[]
-    /**
-     * Shortcut for {@link #asyncMixin(Class, Object, ImmutableEnumSet)} using execution mode
-     * {@link ExecutionModes#EXECUTE}.
-     * @param <T>
-     * @param mixinClass
-     * @param mixedIn
-     *
-     * @since 2.0
-     */
-    // tag::refguide-async[]
-    default <T> T asyncMixin(                            // <.>
-                        Class<T> mixinClass, Object mixedIn) {
-        // end::refguide-async[]
-
-        return asyncMixin(mixinClass, mixedIn, ExecutionModes.EXECUTE);
-
-        // tag::refguide-async[]
-        // ...
-    }
     // end::refguide-async[]
 
 

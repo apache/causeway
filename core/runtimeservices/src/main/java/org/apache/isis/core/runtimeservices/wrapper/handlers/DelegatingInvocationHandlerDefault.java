@@ -24,9 +24,8 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.applib.services.wrapper.control.ExecutionMode;
+import org.apache.isis.applib.services.wrapper.control.SyncControl;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
-import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.commons.internal._Constants;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
@@ -43,7 +42,7 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
     // getter is API
     @Getter(onMethod = @__(@Override)) private final T delegate;
     @Getter protected final WrapperFactory wrapperFactory;
-    @Getter private final ImmutableEnumSet<ExecutionMode> executionMode;
+    @Getter private final SyncControl syncControl;
 
     protected final Method equalsMethod;
     protected final Method hashCodeMethod;
@@ -56,7 +55,7 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
     public DelegatingInvocationHandlerDefault(
             final ServiceRegistry serviceRegistry,
             final T delegate,
-            final ImmutableEnumSet<ExecutionMode> executionMode) {
+            final SyncControl syncControl) {
 
         if (delegate == null) {
             throw new IllegalArgumentException("delegate must not be null");
@@ -64,7 +63,7 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
         this.delegate = delegate;
         this.wrapperFactory = serviceRegistry.lookupServiceElseFail(WrapperFactory.class);
         this.objectManager = serviceRegistry.lookupServiceElseFail(ObjectManager.class);
-        this.executionMode = executionMode;
+        this.syncControl = syncControl;
 
         try {
             equalsMethod = delegate.getClass().getMethod("equals", new Class[] { Object.class });

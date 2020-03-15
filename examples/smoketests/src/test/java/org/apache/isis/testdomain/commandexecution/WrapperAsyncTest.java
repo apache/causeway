@@ -44,9 +44,7 @@ import org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
-import org.apache.isis.applib.services.wrapper.control.RuleCheckingPolicy;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.applib.services.wrapper.control.ExecutionModes;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
@@ -122,7 +120,9 @@ class WrapperAsyncTest {
         actionDomainEventListener.prepareLatch();
 
         // use of custom executor (optional)
-        val control = AsyncControl.toReturn(JdoProduct.class).with(ExecutionModes.EXECUTE).with(RuleCheckingPolicy.ASYNC).with(Executors.newCachedThreadPool());
+        val control = AsyncControl.toReturn(JdoProduct.class)
+                .with(ExecutionModes.EXECUTE)
+                .with(Executors.newCachedThreadPool());
         wrapper.async(inventoryManager, control)
                 .updateProductPrice(product, 123d);
 

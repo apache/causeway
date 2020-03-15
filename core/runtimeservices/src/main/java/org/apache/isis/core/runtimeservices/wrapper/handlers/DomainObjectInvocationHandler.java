@@ -35,13 +35,13 @@ import org.apache.isis.applib.services.wrapper.InteractionException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
 import org.apache.isis.applib.services.wrapper.control.ExecutionMode;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
+import org.apache.isis.applib.services.wrapper.control.SyncControl;
 import org.apache.isis.applib.services.wrapper.events.CollectionAccessEvent;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyAccessEvent;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
-import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.commons.internal.collections._Lists;
@@ -73,7 +73,6 @@ import lombok.val;
 public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandlerDefault<T> {
 
     private final ProxyContextHandler proxy;
-    private final ImmutableEnumSet<ExecutionMode> executionMode;
     private final MetaModelContext mmContext;
 
     /**
@@ -92,23 +91,20 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     protected Method __isis_wrappedMethod;
 
     /**
-     * The <tt>__isis_executionMode()</tt> method from {@link WrappingObject#__isis_executionMode()}.
+     * The <tt>__isis_executionModes()</tt> method from {@link WrappingObject#__isis_executionModes()}.
      */
-    protected Method __isis_executionMode;
+    protected Method __isis_executionModes;
 
     private EntityFacet entityFacet; 
 
     public DomainObjectInvocationHandler(
             final MetaModelContext metaModelContext,
             final T domainObject,
-            final ImmutableEnumSet<ExecutionMode> mode,
-            final ProxyContextHandler proxy) {
-        
-        super(metaModelContext.getServiceRegistry(), domainObject, mode);
+            final SyncControl syncControl, final ProxyContextHandler proxy) {
+        super(metaModelContext.getServiceRegistry(), domainObject, syncControl);
 
         this.mmContext = metaModelContext;
         this.proxy = proxy;
-        this.executionMode = mode;
 
         try {
             titleMethod = domainObject.getClass().getMethod("title", new Class[]{});
@@ -118,16 +114,17 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         try {
             __isis_saveMethod = WrappingObject.class.getMethod("__isis_save", new Class[]{});
             __isis_wrappedMethod = WrappingObject.class.getMethod("__isis_wrapped", new Class[]{});
-            __isis_executionMode = WrappingObject.class.getMethod("__isis_executionMode", new Class[]{});
+            __isis_executionModes = WrappingObject.class.getMethod("__isis_executionModes", new Class[]{});
             
-            entityFacet = metaModelContext.getSpecification(domainObject.getClass())
-                    .getFacet(EntityFacet.class);
 
         } catch (final NoSuchMethodException nsme) {
             throw new IllegalStateException(
-                    "Could not locate reserved declared methods in the WrappingObject and WrappedObject interfaces",
+                    "Could not locate reserved declared methods in the WrappingObject interfaces",
                     nsme);
         }
+
+        entityFacet = metaModelContext.getSpecification(domainObject.getClass())
+                .getFacet(EntityFacet.class);
     }
 
     @Override
@@ -147,25 +144,24 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
         final ManagedObject targetAdapter = getObjectManager().adapt(getDelegate());
 
-        if (isTitleMethod(method)) {
+        if (method.equals(titleMethod)) {
             return handleTitleMethod(targetAdapter);
         }
 
 
         final ObjectSpecification targetSpec = targetAdapter.getSpecification();
-        final ObjectSpecification targetNoSpec = targetSpec;
 
         // save method, through the proxy
-        if (isSaveMethod(method)) {
-            return handleSaveMethod(targetAdapter, targetNoSpec);
+        if (method.equals(__isis_saveMethod)) {
+            return handleSaveMethod(targetAdapter, targetSpec);
         }
 
-        if (isWrappedMethod(method)) {
+        if (method.equals(__isis_wrappedMethod)) {
             return getDelegate();
         }
 
-        if (isExecutionModeMethod(method)) {
-            return executionMode;
+        if (method.equals(__isis_executionModes)) {
+            return getSyncControl().getExecutionModes();
         }
 
         final ObjectMember objectMember = locateAndCheckMember(method);
@@ -772,22 +768,6 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         return member;
     }
 
-    protected boolean isTitleMethod(final Method method) {
-        return method.equals(titleMethod);
-    }
-
-    protected boolean isSaveMethod(final Method method) {
-        return method.equals(__isis_saveMethod);
-    }
-
-    protected boolean isWrappedMethod(final Method method) {
-        return method.equals(__isis_wrappedMethod);
-    }
-
-    protected boolean isExecutionModeMethod(final Method method) {
-        return method.equals(__isis_executionMode);
-    }
-
     // -- SPECIFICATION LOOKUP
 
     private ObjectSpecificationDefault getJavaSpecificationOfOwningClass(final Method method) {
@@ -809,45 +789,39 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     // -- HELPER
     
     private boolean shouldEnforceRules() {
-        return !getExecutionMode().contains(ExecutionMode.SKIP_RULE_VALIDATION);
+        return !getSyncControl().getExecutionModes().contains(ExecutionMode.SKIP_RULE_VALIDATION);
     }
     
     private boolean shouldExecute() {
-        return !getExecutionMode().contains(ExecutionMode.SKIP_EXECUTION);
+        return !getSyncControl().getExecutionModes().contains(ExecutionMode.SKIP_EXECUTION);
     }
     
-    private boolean shouldFailFast() {
-        return !getExecutionMode().contains(ExecutionMode.SWALLOW_EXCEPTIONS);
-    }
-    
+
     private void runValidationTask(Runnable task) {
         if(!shouldEnforceRules()) {
             return;
         }
-        if(shouldFailFast()) {
+        try {
             task.run();
-        } else {
-            try {
-                task.run();
-            } catch(Exception ex) {
-                // swallow
-            }
+        } catch(Exception ex) {
+            handleException(ex);
         }
     }
-    
+
+    private void handleException(Exception ex) {
+        getSyncControl().getExceptionHandler().accept(ex);
+    }
+
     private <X> X runExecutionTask(Supplier<X> task) {
         if(!shouldExecute()) {
             return null;
         }
-        if(shouldFailFast()) {
+        try {
             return task.get();
-        } else {
-            try {
-                return task.get();
-            } catch(Exception ex) {
-                // swallow
-                return null;
-            }
+        } catch(Exception ex) {
+            handleException(ex);
+            // in case the exception handler doesn't throw
+            return null;
         }
     }
 

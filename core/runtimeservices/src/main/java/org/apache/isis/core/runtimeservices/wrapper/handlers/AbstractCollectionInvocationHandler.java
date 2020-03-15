@@ -44,7 +44,7 @@ abstract class AbstractCollectionInvocationHandler<T, C> extends DelegatingInvoc
         
         super(otma.getMetaModelContext().getServiceRegistry(), 
                 collectionOrMapToProxy, 
-                handler.getExecutionMode());
+                handler.getSyncControl());
         
         this.collectionName = collectionName;
         this.oneToManyAssociation = otma;
