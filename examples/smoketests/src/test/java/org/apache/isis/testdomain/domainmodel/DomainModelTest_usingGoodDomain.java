@@ -37,6 +37,7 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.schema.metamodel.v2.DomainClassDto;
+import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
@@ -67,6 +68,7 @@ import lombok.val;
 })
 @DirtiesContext // because of the temporary installed 'good' domain
 //@Transactional
+@Incubating("might fail when run with surefire")
 class DomainModelTest_usingGoodDomain {
     
     @Inject private MetaModelService metaModelService;
