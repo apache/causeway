@@ -58,6 +58,13 @@
 		        <cpt:property id="javaLangBoolean"/>
 		        <cpt:property id="nullableBoolean"/>
             </cpt:fieldSet>
+            
+            <cpt:fieldSet name="Char" id="char">
+				<cpt:action id="calculateCharacter" />
+				<cpt:action id="calculateCharacters" />
+				<cpt:property id="primitiveChar"/>
+				<cpt:property id="javaLangCharacter" />
+			</cpt:fieldSet>
 		
 			<cpt:fieldSet name="Float" id="float">
 				<cpt:action id="calculateFloat" />

@@ -97,6 +97,24 @@ public class PrimitivesDemo extends DemoStub {
         return _Lists.of(Boolean.FALSE, Boolean.TRUE, null);
     }
     
+    // -- SHORT
+
+    @Property
+    @PropertyLayout(describedAs="java.lang.Character")
+    @Getter @Setter private Character javaLangCharacter;
+    
+    @Getter private char primitiveChar = 'c';
+    
+    @Action
+    public Character calculateCharacter() {
+        return 'x';
+    }
+    
+    @Action
+    public List<Character> calculateCharacters() {
+        return _Lists.of('a', 'b', 'C');
+    }
+    
     
     // -- BYTE
 
