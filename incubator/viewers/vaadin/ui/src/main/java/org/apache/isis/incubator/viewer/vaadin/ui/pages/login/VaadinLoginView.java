@@ -62,14 +62,20 @@ public class VaadinLoginView extends VerticalLayout {
         
         val usernameField = new TextField("Username");
         val passwordField = new PasswordField("Password");
-        val loginButton = new Button("Login (as Sven)");
         
+        val loginButton = new Button("Login");
+        loginButton.getElement().setAttribute("theme", "primary");
         loginButton.addClickListener((ComponentEventListener<ClickEvent<Button>>)
                 buttonClickEvent -> doLogin(
                         usernameField.getValue(), 
                         passwordField.getValue()));
-        loginButton.getElement().setAttribute("theme", "primary");
-        val buttonsLayout = new HorizontalLayout(loginButton);
+        
+        val loginAsSvenButton = new Button("Login (as Sven)");
+        loginAsSvenButton.getElement().setAttribute("theme", "primary");
+        loginAsSvenButton.addClickListener((ComponentEventListener<ClickEvent<Button>>)
+                buttonClickEvent -> doLoginAsSven());
+        
+        val buttonsLayout = new HorizontalLayout(loginButton, loginAsSvenButton);
         val divLayout = new VerticalLayout(usernameField, passwordField, buttonsLayout);
         divLayout.setAlignSelf(Alignment.START, buttonsLayout);
         val loginDiv = new Div(divLayout);
@@ -88,6 +94,12 @@ public class VaadinLoginView extends VerticalLayout {
             // TODO indicate to the user: login failed
         }
         
+    }
+
+    /** @deprecated early development only */
+    private void doLoginAsSven() {
+        vaadinAuthenticationHandler.loginToSessionAsSven();
+        getUI().ifPresent(ui->ui.navigate(MainView.class));    
     }
     
     private void addTitleAndLogo(IsisConfiguration isisConfiguration, WebAppContextPath webAppContextPath) {

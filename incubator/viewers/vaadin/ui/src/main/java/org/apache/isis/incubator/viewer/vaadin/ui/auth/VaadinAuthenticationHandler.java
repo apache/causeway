@@ -18,6 +18,8 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.ui.auth;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
@@ -32,6 +34,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.session.IsisSessionFactory.ThrowingRunnable;
+import org.apache.isis.core.security.authentication.standard.SimpleSession;
 import org.apache.isis.incubator.viewer.vaadin.ui.pages.login.VaadinLoginView;
 
 import lombok.val;
@@ -67,11 +70,18 @@ public class VaadinAuthenticationHandler implements VaadinServiceInitListener {
      * @return whether login was successful
      */
     public boolean loginToSession(String userName, String secret) {
-        log.debug("logging in {}", userName);
-        
-        // TODO yet does successfully login 'sven' regardless of arguments
+        log.warn("logging in {} not implemented yet", userName);
+        return false;
+
+     // TODO actual authentication to be done here ...        
+//        AuthSessionStoreUtil.put(new SimpleSession(userName, Collections.emptyList()));
+//        return true;
+    }
+    
+    /** @deprecated early development only */
+    public boolean loginToSessionAsSven() {
+        log.debug("logging in as Sven");
         AuthSessionStoreUtil.putSven();
-        
         return true;
     }
     
@@ -129,6 +139,8 @@ public class VaadinAuthenticationHandler implements VaadinServiceInitListener {
     private void beforeLeave(BeforeLeaveEvent event) {
         //isisSessionFactory.closeSessionStack();
     }
+
+
     
 
 

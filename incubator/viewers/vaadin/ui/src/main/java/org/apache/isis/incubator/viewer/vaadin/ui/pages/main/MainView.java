@@ -50,7 +50,6 @@ import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.entity.EntityUiModel;
 import org.apache.isis.incubator.viewer.vaadin.model.menu.MenuSectionUiModel;
 import org.apache.isis.incubator.viewer.vaadin.model.menu.ServiceAndActionUiModel;
-import org.apache.isis.incubator.viewer.vaadin.ui.auth.VaadinAuthenticationHandler;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableView;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.object.ObjectFormView;
 
@@ -66,18 +65,14 @@ public class MainView extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;
 
-    private final transient VaadinAuthenticationHandler vaadinAuthenticationHandler;
-    
     /**
      * Constructs the main view of the web-application, with the menu-bar and page content. 
      */
     @Inject
     public MainView(
             final MetaModelContext metaModelContext,
-            final VaadinAuthenticationHandler vaadinAuthenticationHandler,
             final MenuBarsServiceBS3 menuBarsService
     ) {
-        this.vaadinAuthenticationHandler = vaadinAuthenticationHandler;
         
         val commonContext = IsisWebAppCommonContext.of(metaModelContext);
 
@@ -183,22 +178,19 @@ public class MainView extends VerticalLayout {
             
             val actionOwner = saModel.getEntityUiModel().getManagedObject();
             
-            vaadinAuthenticationHandler.runAuthenticated(()->{ 
-                val result = objectAction
-                        .execute(
-                                actionOwner,
-                                null,
-                                Collections.emptyList(),
-                                InteractionInitiatedBy.USER
-                                );
+            val result = objectAction
+                    .execute(
+                            actionOwner,
+                            null,
+                            Collections.emptyList(),
+                            InteractionInitiatedBy.USER
+                            );
 
-                if (result.getSpecification().isParentedOrFreeCollection()) {
-                    actionResult.add(TableView.fromCollection(result));
-                } else {
-                    actionResult.add(new ObjectFormView(result));
-                }
-                
-            });
+            if (result.getSpecification().isParentedOrFreeCollection()) {
+                actionResult.add(TableView.fromCollection(result));
+            } else {
+                actionResult.add(new ObjectFormView(result));
+            }
             
         };
     }
