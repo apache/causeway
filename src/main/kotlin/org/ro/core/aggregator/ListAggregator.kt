@@ -3,7 +3,6 @@ package org.ro.core.aggregator
 import org.ro.core.event.LogEntry
 import org.ro.core.model.DisplayList
 import org.ro.layout.Layout
-import org.ro.layout.PropertyLt
 import org.ro.to.Property
 import org.ro.to.ResultList
 import org.ro.to.TObject
@@ -41,16 +40,14 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
     }
 
     private fun handleList(resultList: ResultList) {
-        val result = resultList.result
-        if (result != null) {
-            val links = result.value
-            links.forEach {
-                it.invokeWith(this)
-            }
+        val result = resultList.result!!
+        result.value.forEach {
+            it.invokeWith(this)
         }
     }
 
     private fun handleObject(obj: TObject) {
+        console.log("[LA.handleObject]")
         dsp.addData(obj)
         val l = obj.getLayoutLink()!!
         // Json.Layout is invoked first
@@ -62,8 +59,10 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
     private fun handleLayout(layout: Layout) {
         val dspl = dsp as DisplayList
         dspl.addLayout(layout)
+        console.log("[LA.handleLayout] dspl.propertyList")
+        console.log(dspl.propertyList)
         dspl.propertyList.forEach { p ->
-            val l = p.links.firstOrNull{it.rel == "describedby"}!!
+            val l = p.links.firstOrNull { it.rel == "describedby" }!!
             if (!l.href.contains("datanucleus")) {
                 l.invokeWith(this)
             }
@@ -71,11 +70,14 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
     }
 
     private fun handleGrid(grid: Grid) {
+        console.log("[LA.handleGrid]")
         (dsp as DisplayList).grid = grid
     }
 
     private fun handleProperty(p: Property) {
         val dspl = dsp as DisplayList
+        console.log("[LA.handleProperty]")
+        console.log(p)
         if (p.isPropertyDescription()) {
             dspl.addPropertyDescription(p)
         } else {

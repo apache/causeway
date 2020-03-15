@@ -19,6 +19,7 @@ class DisplayList(override val title: String) : BaseDisplayable() {
     var propertyLayoutList = mutableListOf<PropertyLt>()
 
     override fun canBeDisplayed(): Boolean {
+        console.log("[DL.canBeDisplayed]")
         when {
             isRendered -> return false
             layout == null -> return false
@@ -31,13 +32,13 @@ class DisplayList(override val title: String) : BaseDisplayable() {
                 //  val propertiesComplete = lps <= ps
                 console.log("[DL.canBeDisplayed] layout.properties: $lps")
                 console.log("[DL.canBeDisplayed] propertyDescriptions: $pds")
-                //   console.log("[DL.canBeDisplayed] properties: $ps")
                 return descriptionsComplete //&& propertiesComplete
             }
         }
     }
 
     fun addLayout(layout: Layout) {
+        this.layout = layout
         // row[0] (head) contains the object title and actions
         // row[1] contains data, tabs, collections, etc.
         val secondRow = layout.row[1] // traditional C braintwist
@@ -83,6 +84,7 @@ class DisplayList(override val title: String) : BaseDisplayable() {
     }
 
     fun addPropertyDescription(p: Property) {
+        console.log("[DL.addPropertyDescription]")
         val id = p.id
         val e: Extensions = p.extensions!!
         val friendlyName = e.friendlyName
@@ -90,6 +92,7 @@ class DisplayList(override val title: String) : BaseDisplayable() {
     }
 
     fun addProperty(property: Property) {
+        console.log("[DL.addProperty]")
         propertyList.add(property)
     }
 

@@ -1,5 +1,6 @@
 package org.ro.ui.kv
 
+import org.ro.core.model.DisplayList
 import org.ro.core.model.DisplayObject
 import org.ro.ui.Displayable
 import org.ro.ui.builder.LayoutBuilder
@@ -20,7 +21,8 @@ class RoDisplay(val displayObject: DisplayObject) : Displayable, VPanel() {
         if (ol != null) {
             val model = displayObject.data!!
             val tObject = model.delegate
-            objectPanel = LayoutBuilder().create(ol, tObject, this)
+            val grid = (displayObject as DisplayList).grid!!
+            objectPanel = LayoutBuilder().create(ol, grid, tObject, this)
             objectPanel.width = CssSize(100, UNIT.perc)
             add(objectPanel)
         }
