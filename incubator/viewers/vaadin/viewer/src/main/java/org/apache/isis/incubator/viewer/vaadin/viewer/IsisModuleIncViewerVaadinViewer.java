@@ -41,6 +41,7 @@ import org.springframework.util.ClassUtils;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
+import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.incubator.viewer.vaadin.ui.IsisModuleIncViewerVaadinUi;
 
 import lombok.val;
@@ -70,6 +71,7 @@ public class IsisModuleIncViewerVaadinViewer {
     
     @Inject private WebApplicationContext context;
     @Inject private VaadinConfigurationProperties configurationProperties;
+    @Inject private IsisSessionFactory isisSessionFactory;
 
     /**
      * Creates a {@link ServletContextInitializer} instance.
@@ -97,7 +99,8 @@ public class IsisModuleIncViewerVaadinViewer {
                     makeContextRelative(urlMapping.replace("*", "")));
         }
         val registration = new ServletRegistrationBean<SpringServlet>(
-                new SpringServlet(context, isRootMapping), urlMapping);
+                new IsisServletForVaadin(isisSessionFactory, context, isRootMapping), 
+                urlMapping);
         registration.setInitParameters(initParameters);
         registration.setAsyncSupported(configurationProperties.isAsyncSupported());
         registration.setName(ClassUtils.getShortNameAsProperty(SpringServlet.class));

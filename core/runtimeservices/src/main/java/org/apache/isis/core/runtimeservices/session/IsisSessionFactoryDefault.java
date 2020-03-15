@@ -245,6 +245,12 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory, IsisSessio
     
     private void closeSessionStackDownToStackSize(int downToStackSize) {
         
+        log.debug("about to close IsisSession stack down to size {} (conversation-id={}, total-sessions-on-stack={}, {})",
+                downToStackSize,
+                conversationId.get(), 
+                isisSessionStack.get().size(),
+                _Probe.currentThreadId());
+        
         val stack = isisSessionStack.get();
         while(stack.size()>downToStackSize) {
             if(stack.size()==1) {       

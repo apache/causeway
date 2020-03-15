@@ -18,32 +18,126 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.ui.components.collection;
 
+import java.util.Collection;
 import java.util.stream.Collectors;
+
+import javax.annotation.Nullable;
 
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
+import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.val;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TableView extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;
-
+    
+    private static final String NULL_LITERAL = "<NULL>";
+    
+    public static TableView empty() {
+        return new TableView();
+    }
+            
     /**
      * Constructs a (page-able) {@link Grid} from given {@code collection}  
-     * @param collection of (wrapped) domain objects
+     * @param collection - of (wrapped) domain objects
      */
-    public TableView(final ManagedObject collection) {
+    public static TableView fromCollection(final ManagedObject collection) {
         val collectionFacet = collection.getSpecification()
                 .getFacet(CollectionFacet.class);
         val objects = collectionFacet.stream(collection)
                 .collect(Collectors.toList());
+        if (_NullSafe.isEmpty(objects)) {
+            return empty();
+        }
         
+        val elementSpec = objects.iterator().next().getSpecification();
+        return new TableView(elementSpec, objects);
+    }
+    
+    /**
+     * Constructs a (page-able) {@link Grid} from given {@code objectAssociation} and {@code assocObject}   
+     * @param objectAssociation
+     * @param assocObject
+     */
+    public static TableView fromObjectAssociation(
+            @NonNull final ObjectAssociation objectAssociation,
+            @Nullable final ManagedObject assocObject) {
+        
+        val assocObjectSpecification = assocObject.getSpecification();
+        val collectionFacet = assocObjectSpecification.getFacet(CollectionFacet.class);
+
+        val pojo = assocObject.getPojo();
+        if (pojo instanceof Collection) {
+            val objects = collectionFacet.stream(assocObject).collect(Collectors.toList());
+            return new TableView(objectAssociation.getOnType(), objects);
+        }
+        
+        return empty();
+    }
+    
+    
+    /**
+     * 
+     * @param elementSpec - as is common to all given {@code objects} aka elements 
+     * @param objects - (wrapped) domain objects to be rendered by this table
+     */
+    private TableView(
+            @NonNull final ObjectSpecification elementSpec, 
+            @Nullable final Collection<ManagedObject> objects) {
+        
+        //            final ComboBox<ManagedObject> listBox = new ComboBox<>();
+        //            listBox.setLabel(label + " #" + objects.size());
+        //            listBox.setItems(objects);
+        //            if (!objects.isEmpty()) {
+        //                listBox.setValue(objects.get(0));
+        //            }
+        //            listBox.setItemLabelGenerator(o -> o.titleString(null));
+
         val objectGrid = new Grid<ManagedObject>();
-        objectGrid.setItems(objects);
         add(objectGrid);
+        
+        if (_NullSafe.isEmpty(objects)) {
+            return;
+        }
+        
+        objectGrid.setItems(objects);
+        
+        elementSpec
+        .streamAssociations(Contributed.INCLUDED)
+        .filter(assoc -> assoc.getFeatureType().isProperty())
+        .forEach(property -> {
+            
+            objectGrid.addColumn(targetObject -> {
+                // TODO call to property.get(...) requires an IsisSession,
+                // not sure if we want to spawn a new session for each such call.
+                // maybe we open an IsisSession earlier, to have this table/grid built 
+                // within a single IsisSession 
+                
+                val propertyValue = property.get(targetObject);
+                return propertyValue == null 
+                        ? NULL_LITERAL
+                        : propertyValue.titleString();
+
+//                return "<" + property.getId() + ">";
+                
+            })
+            .setHeader(property.getName());
+        });
+        objectGrid.setItems(objects);
+        objectGrid.recalculateColumnWidths();
+        objectGrid.setColumnReorderingAllowed(true);
+        
     }
 }

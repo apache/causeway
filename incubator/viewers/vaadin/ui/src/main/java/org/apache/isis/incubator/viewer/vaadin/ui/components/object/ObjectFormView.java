@@ -20,12 +20,10 @@ package org.apache.isis.incubator.viewer.vaadin.ui.components.object;
 
 import java.io.ByteArrayInputStream;
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Image;
@@ -35,11 +33,11 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.server.InputStreamFactory;
 import com.vaadin.flow.server.StreamResource;
 
-import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableView;
 
 import lombok.val;
 
@@ -124,48 +122,11 @@ public class ObjectFormView extends VerticalLayout {
             final ObjectAssociation objectAssociation,
             final ManagedObject assocObject
     ) {
-        val assocObjectSpecification = assocObject.getSpecification();
-        val collectionFacet = assocObjectSpecification.getFacet(CollectionFacet.class);
 
         val labelLiteral = "Collection: " + objectAssociation.getName();
         val pojo = assocObject.getPojo();
         if (pojo instanceof Collection) {
-
-            final List<ManagedObject> objects = collectionFacet.stream(assocObject).collect(Collectors.toList());
-
-            //            final ComboBox<ManagedObject> listBox = new ComboBox<>();
-            //            listBox.setLabel(label + " #" + objects.size());
-            //            listBox.setItems(objects);
-            //            if (!objects.isEmpty()) {
-            //                listBox.setValue(objects.get(0));
-            //            }
-            //            listBox.setItemLabelGenerator(o -> o.titleString(null));
-
-            val objectGrid = new Grid<ManagedObject>();
-            if (objects.isEmpty()) {
-                return objectGrid;
-            }
-            val firstObject = objects.get(0);
-            firstObject.getSpecification()
-            .streamAssociations(Contributed.INCLUDED)
-            .filter(assoc -> assoc.getFeatureType().isProperty())
-            .forEach(property -> {
-                objectGrid.addColumn(targetObject -> {
-                    // TODO call to property.get(...) requires an IsisSession,
-                    // not sure if we want to spawn a new session for each such call.
-                    // maybe we open an IsisSession earlier, to have this table/grid built 
-                    // within a single IsisSession 
-                    val propertyValue = property.get(targetObject);
-                    return propertyValue == null 
-                            ? NULL_LITERAL
-                            : propertyValue.titleString();
-                })
-                .setHeader(property.getName());
-            });
-            objectGrid.setItems(objects);
-            objectGrid.recalculateColumnWidths();
-            objectGrid.setColumnReorderingAllowed(true);
-            return objectGrid;
+            return TableView.fromObjectAssociation(objectAssociation, assocObject);
         }
 
         if (pojo == null) {

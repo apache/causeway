@@ -18,7 +18,6 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.ui.auth;
 
-import java.util.Optional;
 import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
@@ -31,11 +30,8 @@ import com.vaadin.flow.server.VaadinSession;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.session.IsisSessionFactory.ThrowingRunnable;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.standard.SimpleSession;
 import org.apache.isis.incubator.viewer.vaadin.ui.pages.login.VaadinLoginView;
 
 import lombok.val;
@@ -57,7 +53,7 @@ public class VaadinAuthenticationHandler implements VaadinServiceInitListener {
     @Override
     public void serviceInit(ServiceInitEvent event) {
         
-        log.info("service init event {}", event.getSource());
+        log.debug("service init event {}", event.getSource());
         
         event.getSource().addUIInitListener(uiEvent -> {
             uiEvent.getUI().addBeforeEnterListener(this::beforeEnter); 
@@ -71,27 +67,23 @@ public class VaadinAuthenticationHandler implements VaadinServiceInitListener {
      * @return whether login was successful
      */
     public boolean loginToSession(String userName, String secret) {
-        log.info("logging in {}", userName);
+        log.debug("logging in {}", userName);
+        
         // TODO yet does successfully login 'sven' regardless of arguments
-        VaadinSession.getCurrent().setAttribute(
-                AuthenticationSession.class, 
-                new SimpleSession("sven", _Lists.of("isis-module-security-admin")));
+        AuthSessionStoreUtil.putSven();
+        
         return true;
     }
     
     public void logoutFromSession() {
-        currentAuthenticationSession()
+        AuthSessionStoreUtil.get()
         .ifPresent(authSession->{
-            log.info("logging out {}", authSession.getUserName());
-            VaadinSession.getCurrent().setAttribute(AuthenticationSession.class, null);
+            log.debug("logging out {}", authSession.getUserName());
+            AuthSessionStoreUtil.clear();
         });
         VaadinSession.getCurrent().close();
+        isisSessionFactory.closeSessionStack();
     } 
-
-    public static Optional<AuthenticationSession> currentAuthenticationSession() {
-        return Optional.ofNullable(VaadinSession.getCurrent().getAttribute(
-                AuthenticationSession.class));
-    }
     
     /**
      * Executes a piece of code in a new (possibly nested) IsisSession, using the 
@@ -102,7 +94,7 @@ public class VaadinAuthenticationHandler implements VaadinServiceInitListener {
      * 
      */
     public <R> R callAuthenticated(Callable<R> callable) {
-        return currentAuthenticationSession()
+        return AuthSessionStoreUtil.get()
                 .map(authSession->isisSessionFactory.callAuthenticated(authSession, callable))
                 .orElse(null); // TODO redirect to login
     }
@@ -121,20 +113,21 @@ public class VaadinAuthenticationHandler implements VaadinServiceInitListener {
 
     private void beforeEnter(BeforeEnterEvent event) {
         val targetView = event.getNavigationTarget();
-        log.info("Detected a routing event to {}", targetView);
+        log.debug("detected a routing event to {}", targetView);
         
-        val authSession = currentAuthenticationSession().orElse(null);
+        val authSession = AuthSessionStoreUtil.get().orElse(null);
         if(authSession!=null) {
             isisSessionFactory.openSession(authSession);
             return; // access granted
         }
+        // otherwise redirect to login page
         if(!VaadinLoginView.class.equals(targetView)) {
             event.rerouteTo(VaadinLoginView.class);
         }
     }
     
     private void beforeLeave(BeforeLeaveEvent event) {
-        isisSessionFactory.closeSessionStack();
+        //isisSessionFactory.closeSessionStack();
     }
     
 

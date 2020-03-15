@@ -193,7 +193,7 @@ public class MainView extends VerticalLayout {
                                 );
 
                 if (result.getSpecification().isParentedOrFreeCollection()) {
-                    actionResult.add(new TableView(result));
+                    actionResult.add(TableView.fromCollection(result));
                 } else {
                     actionResult.add(new ObjectFormView(result));
                 }
