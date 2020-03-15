@@ -44,6 +44,7 @@ import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.core.commons.internal.concurrent._ConcurrentTaskList;
+import org.apache.isis.core.commons.internal.debug._Probe;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -161,14 +162,22 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory, IsisSessio
             conversationId.set(UUID.randomUUID());
             postTopLevelOpen(newIsisSession);
         }
+        
+        log.debug("new IsisSession created (conversation-id={}, total-sessions-on-stack={}, {})", 
+                conversationId.get(), 
+                isisSessionStack.get().size(),
+                _Probe.currentThreadId());
+        
         return newIsisSession;
         
     }
 
-    
-
     @Override
     public void closeSessionStack() {
+        log.debug("about to close IsisSession stack (conversation-id={}, total-sessions-on-stack={}, {})", 
+                conversationId.get(), 
+                isisSessionStack.get().size(),
+                _Probe.currentThreadId());
         closeSessionStackDownToStackSize(0);
     }
     
@@ -238,11 +247,11 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory, IsisSessio
         
         val stack = isisSessionStack.get();
         while(stack.size()>downToStackSize) {
-            val isisSession = stack.peek();
             if(stack.size()==1) {       
-                preTopLevelClose(isisSession);
+                preTopLevelClose(stack.pop());
+            } else {
+                stack.pop();    
             }
-            stack.pop();
         }
         if(downToStackSize == 0) {
             isisSessionStack.remove();

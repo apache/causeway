@@ -136,7 +136,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
 
         val mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
 
-        return getPublishingServiceInternal().withPublishingSuppressed(
+        return getPublisherDispatchService().withPublishingSuppressed(
                 () -> mixinAction.executeInternal(
                         mixinAdapter, mixedInAdapter, Collections.emptyList(), interactionInitiatedBy)
         );
@@ -198,7 +198,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
         return this.mixinAction == mixinAction;
     }
 
-    private PublisherDispatchService getPublishingServiceInternal() {
+    private PublisherDispatchService getPublisherDispatchService() {
         return getServiceRegistry().lookupServiceElseFail(PublisherDispatchService.class);
     }
 

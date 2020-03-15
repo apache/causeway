@@ -187,6 +187,11 @@ public class _Probe {
     }
 
     // -- CONVENIENT DEBUG TOOLS (STATIC)
+    
+    public static String currentThreadId() {
+        val ct = Thread.currentThread();
+        return String.format("Thread[%s (%d)])", ct.getName(), ct.getId());
+    }
 
     public static void sysOut(String format, Object... args) {
         System.out.println(String.format(format, args));

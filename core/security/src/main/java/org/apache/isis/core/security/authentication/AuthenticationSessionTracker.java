@@ -21,6 +21,7 @@ package org.apache.isis.core.security.authentication;
 
 import java.util.Optional;
 
+import org.apache.isis.core.commons.internal.debug._Probe;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 
 /**
@@ -34,8 +35,8 @@ public interface AuthenticationSessionTracker {
         return currentAuthenticationSession()
                 .orElseThrow(()->
                     _Exceptions.illegalState(
-                            "no AuthenticationSession available with current thread %s", 
-                            Thread.currentThread().getName()));
+                            "no AuthenticationSession available with current %s", 
+                            _Probe.currentThreadId()));
     }
     
     default Optional<MessageBroker> currentMessageBroker() {

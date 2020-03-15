@@ -26,6 +26,7 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
 
 import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.internal.debug._Probe;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.runtime.session.IsisSessionTracker;
 
@@ -66,9 +67,9 @@ class IsisSessionScope implements Scope, IsisSessionScopeCloseListener {
         
         if(!isisSessionTracker.isInSession()) {
             throw _Exceptions.illegalState("Creation of bean %s with @IsisSessionScope requires the "
-                    + "calling thread to have an open IsisSession on the thread-local stack. Running into "
+                    + "calling %s to have an open IsisSession on the thread-local stack. Running into "
                     + "this issue might be caused by use of ... @Inject MyScopedBean bean ..., instead of "
-                    + "... @Inject Provider<MyScopedBean> provider ...", name);
+                    + "... @Inject Provider<MyScopedBean> provider ...", name, _Probe.currentThreadId());
         }
         
         val existingScopedObject = scopedObjects.get().get(name);

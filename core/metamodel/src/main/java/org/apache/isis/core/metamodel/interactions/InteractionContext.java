@@ -60,13 +60,13 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
 public abstract class InteractionContext<T extends InteractionEvent> {
 
     private final InteractionContextType interactionType;
-    private final Identifier identifier;
     private final InteractionInitiatedBy interactionInitiatedBy;
+    private final Identifier identifier;
     private final ManagedObject target;
 
     private int contributeeParam = -1; // no contributee
     private ManagedObject contributee = null;
-
+    
     private ManagedObject mixedInAdapter = null; // for mixin members only, obviously
 
     public InteractionContext(
