@@ -34,10 +34,9 @@ abstract class BaseAggregator {
     }
 
     protected fun log(logEntry: LogEntry) {
-        logEntry.setUndefined("unexpected")
-        console.log("[BaseAggregator.log] unexpected:\n $logEntry}")
-        console.log(this::class.simpleName)
-        console.log(logEntry)
+        logEntry.setUndefined("no handler found")
+        console.log("[BaseAggregator.log] no handler found: ${this::class.simpleName}")
+        console.log(logEntry.response)
     }
 
     @Deprecated("use extension function")

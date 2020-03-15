@@ -23,16 +23,12 @@ class DiagramDisplay(override val title: String) : BaseDisplayable() {
     }
 
     override fun canBeDisplayed(): Boolean {
-        console.log("[DiagramDisplay.canBeDisplayed]")
-        console.log(this)
         return (numberOfClasses == classes.size
                 //TODO && numberOfProperties == properties.size
         )
     }
 
     override fun addData(obj: TransferObject) {
-        console.log("[DiagramDisplay.addData] ${obj::class}")
-        console.log(obj)
         when (obj) {
             is DomainType -> classes.add(obj)
             is Property -> properties.add(obj)
