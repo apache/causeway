@@ -26,6 +26,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.core.runtimeservices.session.IsisSessionFactoryDefault;
 import org.apache.isis.incubator.viewer.vaadin.viewer.IsisModuleIncViewerVaadinViewer;
 
 import demoapp.webapp.DemoApp;
@@ -35,6 +36,8 @@ import demoapp.webapp.DemoApp;
  */
 @SpringBootApplication
 @PropertySources({
+    // these have no effect, instead in main() use IsisPresets.logging(...);
+    @PropertySource(IsisPresets.DebugIsisSession), 
     @PropertySource(IsisPresets.DebugVaadin),
 })
 @Import({
@@ -53,7 +56,9 @@ public class DemoAppVaadin extends SpringBootServletInitializer {
      * entry point by searching for classes having a {@code main(...)}
      */
     public static void main(String[] args) {
-        //IsisPresets.prototyping();
+        
+        IsisPresets.logging(IsisSessionFactoryDefault.class, "debug");
+        
         SpringApplication.run(new Class[] { DemoAppVaadin.class }, args);
     }
 
