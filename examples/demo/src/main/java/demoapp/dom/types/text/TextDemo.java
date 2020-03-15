@@ -27,8 +27,10 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.value.Password;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -73,4 +75,10 @@ public class TextDemo extends DemoStub {
     @PropertyLayout(multiLine=3)
     @XmlElement @Getter @Setter private String stringMultilineReadonly;
 
+    // -- MASKED
+    
+    @Property(optionality = Optionality.OPTIONAL)
+    @XmlElement @Getter @Setter private Password secret;
+    
+    
 }

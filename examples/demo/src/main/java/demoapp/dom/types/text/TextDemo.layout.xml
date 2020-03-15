@@ -29,6 +29,12 @@
                 
             </cpt:fieldSet>
             
+            <cpt:fieldSet name="Masked (Password Type)" id="masked">
+                
+                <cpt:property id="secret"/>
+                
+            </cpt:fieldSet>
+            
         </bs3:col>
         <bs3:col span="6" unreferencedCollections="true">
          	<cpt:fieldSet name="Description" id="description" unreferencedProperties="true">
