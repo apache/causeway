@@ -27,6 +27,7 @@ import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.session.IsisSessionFactoryDefault;
+import org.apache.isis.incubator.viewer.vaadin.ui.auth.VaadinAuthenticationHandler;
 import org.apache.isis.incubator.viewer.vaadin.viewer.IsisModuleIncViewerVaadinViewer;
 
 import demoapp.webapp.DemoApp;
@@ -58,6 +59,7 @@ public class DemoAppVaadin extends SpringBootServletInitializer {
     public static void main(String[] args) {
         
         IsisPresets.logging(IsisSessionFactoryDefault.class, "debug");
+        IsisPresets.logging(VaadinAuthenticationHandler.class, "debug");
         
         SpringApplication.run(new Class[] { DemoAppVaadin.class }, args);
     }
