@@ -12,8 +12,9 @@ class Tab(node: Node) {
         name = dyNode.getAttribute("name") as String
 
         val nl = node.childNodes.asList()
-        val rl = nl.filter { it.nodeName.equals("bs3:row") }
-        for (n: Node in rl) {
+
+        val rNodes = nl.filter { it.nodeName.equals("bs3:row") }
+        for (n: Node in rNodes) {
             val row = Row(n)
             rowList.add(row)
         }

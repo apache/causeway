@@ -29,18 +29,10 @@ class DisplayListTest {
         assertEquals(2, dl.data.size) //1
 
         val properties = dl.propertyLayoutList
-        assertEquals(2, properties.size) //2
-        //FIXME
+        assertEquals(5, properties.size) //2    // includes datanucleus IdLong, VersionLong, VersionTimestamp
         assertEquals("name", properties[0].id) //3
         assertEquals("notes", properties[1].id)  //4
     }
-
-    //TODO add test that ensures sequence is preserved in members / getMembers
-    //  map.forEach { (key, value) -> println("$key = $value") }
-    // val numbersMap = mapOf("one" to 1, "two" to 2, "three" to 3)
-    //println(numbersMap + Pair("four", 4))
-    //println(numbersMap + Pair("one", 10))
-    //println(numbersMap + mapOf("five" to 5, "one" to 11))
 
     @Test
     fun testConfiguration() {

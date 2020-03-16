@@ -25,12 +25,12 @@ class DisplayList(override val title: String) : BaseDisplayable() {
             layout == null -> return false
             grid == null -> return false
             else -> {
-                val lps = propertyList.size
+                val ps = propertyList.size
+                val pls = propertyLayoutList.size
                 val pds = propertyDescriptionList.size
-                //  val ps =  propertyList.size
-                val descriptionsComplete = lps <= pds
-                //  val propertiesComplete = lps <= ps
-                console.log("[DL.canBeDisplayed] layout.properties: $lps")
+                val descriptionsComplete = ps >= pls
+                console.log("[DL.canBeDisplayed] properties: $ps")
+                console.log("[DL.canBeDisplayed] propertyLayout: $pls")
                 console.log("[DL.canBeDisplayed] propertyDescriptions: $pds")
                 return descriptionsComplete //&& propertiesComplete
             }
@@ -39,6 +39,10 @@ class DisplayList(override val title: String) : BaseDisplayable() {
 
     fun addLayout(layout: Layout) {
         this.layout = layout
+        initPropertyLayoutListNew(layout)
+    }
+
+    private fun initPropertyLayoutList(layout: Layout) {
         // row[0] (head) contains the object title and actions
         // row[1] contains data, tabs, collections, etc.
         val secondRow = layout.row[1] // traditional C braintwist
@@ -61,18 +65,24 @@ class DisplayList(override val title: String) : BaseDisplayable() {
         console.log(propertyLayoutList)
     }
 
-    fun addLayoutNew(layout: Layout) {
-        this.layout = layout
+    private fun initPropertyLayoutListNew(layout: Layout) {
         layout.row.forEach { r ->
-            addLayout4Row(r)
+            initLayout4Row(r)
         }
     }
 
-    private fun addLayout4Row(r: RowLt) {
+    private fun initLayout4Row(r: RowLt) {
         r.cols.forEach { cs ->
             cs.getColList().forEach { c ->
                 c.fieldSet.forEach { fs ->
                     propertyLayoutList.addAll(fs.property)
+                }
+                c.tabGroup.forEach { tg ->
+                    tg.tab.forEach { t ->
+                        t.row.forEach { r ->
+                            initLayout4Row(r)
+                        }
+                    }
                 }
             }
         }

@@ -23,7 +23,7 @@ class Row(node: Node) {
             fieldSet = FieldSet(n)
         }
 
-        val tgList = nodeList.filter { it.nodeName.equals("cpt:fieldSet") }
+        val tgList = nodeList.filter { it.nodeName.equals("cpt:fieldSet") }   //FIXME
         for (n: Node in tgList) {
             val tg = TabGroup(n)
             tabGroupList.add(tg)

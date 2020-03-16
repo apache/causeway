@@ -4,10 +4,7 @@ import kotlinx.serialization.UnstableDefault
 import org.ro.IntegrationTest
 import org.ro.core.aggregator.ListAggregator
 import org.ro.core.aggregator.ObjectAggregator
-import org.ro.snapshots.simpleapp1_16_0.RESTFUL
-import org.ro.snapshots.simpleapp1_16_0.RESTFUL_SERVICES
-import org.ro.snapshots.simpleapp1_16_0.SO_LAYOUT_JSON
-import org.ro.snapshots.simpleapp1_16_0.SO_LAYOUT_XML
+import org.ro.snapshots.simpleapp1_16_0.*
 import org.ro.to.Method
 import org.ro.utils.XmlHelper
 import pl.treksoft.kvision.panel.VPanel
@@ -24,25 +21,27 @@ class EventStoreTest : IntegrationTest() {
             val obs = ListAggregator("test")
 
             //when
+            val soList = ResourceSpecification(SO_LIST_ALL.url)
+            mockResponse(SO_LIST_ALL, obs)
+
             val rsJson = ResourceSpecification(SO_LAYOUT_JSON.url)
-            EventStore.start(rsJson, Method.GET.operation, "", obs)
             mockResponse(SO_LAYOUT_JSON, obs)
 
             val rsXml = ResourceSpecification(SO_LAYOUT_XML.url, "xml")
-            EventStore.start(rsXml, Method.GET.operation, "", obs)
             mockResponse(SO_LAYOUT_XML, obs)
 
             // then
+            val soListLe= EventStore.find(soList)!!
+            assertEquals("json", soListLe.subType) // 1
+
             val leJson = EventStore.find(rsJson)!!
-            assertEquals("json", leJson.subType) // 1
+            assertEquals("json", leJson.subType) // 2
 
             val leXml = EventStore.find(rsXml)!!
-            assertEquals("xml", leXml.subType) // 2
-            assertTrue(XmlHelper.isXml(leXml.response)) // 3
+            assertEquals("xml", leXml.subType) // 3
+            assertTrue(XmlHelper.isXml(leXml.response)) // 4
 
-            //TODO expected are 2 entries: one json response and one xml response
-            // actually there are four, 2 SUCCESS and 2 RUNNING
-            assertEquals(4, EventStore.log.size)
+            assertTrue(EventStore.log.size > 3)
         }
     }
 
