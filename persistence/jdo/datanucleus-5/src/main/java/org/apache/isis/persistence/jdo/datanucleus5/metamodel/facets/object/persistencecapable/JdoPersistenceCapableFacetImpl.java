@@ -32,17 +32,26 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoMetamodelUtil;
 
+import lombok.Getter;
 import lombok.val;
 
 public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAbstract {
 
+    /** Whether objects of this type can only be embedded, 
+     * hence have no ID that binds them to the persistence layer.*/
+    @Getter private final boolean embeddedOnly;
+    
+
+    
+    
     public JdoPersistenceCapableFacetImpl(
             final String schemaName,
             final String tableOrTypeName,
             final IdentityType identityType,
+            final boolean embeddedOnly,
             final FacetHolder holder) {
-        
         super(schemaName, tableOrTypeName, identityType, holder);
+        this.embeddedOnly = embeddedOnly;
     }
 
     @Override
@@ -50,6 +59,11 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
         
         if(!spec.isEntity()) {
             throw _Exceptions.unexpectedCodeReach();
+        }
+        
+        if(embeddedOnly) {
+            val type = spec.getCorrespondingClass();
+            return MementoUtil.parse(type, identifier);
         }
         
         val persistenceSession = super.getPersistenceSessionJdo();
@@ -75,21 +89,23 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
                     pojo.getClass().getName());
         }
         
-        //TODO simplify?, spec is already loaded
+        if(embeddedOnly) {
+            val memento = MementoUtil.createMemento(pojo);
+            return memento.asString();
+        }
         
         val persistenceSession = super.getPersistenceSessionJdo();
         val isRecognized = persistenceSession.isRecognized(pojo);
-        if(isRecognized) {
-            final String identifier = persistenceSession.identifierFor(pojo);
-            return identifier;
-        } else {
-            
+        if(!isRecognized) {
             throw _Exceptions.illegalArgument(
                     "The persistence layer does not recognize given object of type %s, "
                     + "meaning the object has no identifier that associates it with the persistence layer. "
                     + "(most likely, because the object is detached, eg. was not persisted after being new-ed up)", 
                     pojo.getClass().getName());
         }
+        
+        final String identifier = persistenceSession.identifierFor(pojo);
+        return identifier;
     }
 
     @Override

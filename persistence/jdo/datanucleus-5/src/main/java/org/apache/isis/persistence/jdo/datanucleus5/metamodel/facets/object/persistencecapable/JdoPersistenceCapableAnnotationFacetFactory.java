@@ -19,6 +19,7 @@
 package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.persistencecapable;
 
 
+import javax.jdo.annotations.EmbeddedOnly;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
@@ -67,13 +68,17 @@ implements ObjectSpecIdFacetFactory {
         if (_Strings.isNullOrEmpty(annotationTableAttribute)) {
             annotationTableAttribute = cls.getSimpleName();
         }
-
+        
+        val embeddedOnlyAttribute = annotation.embeddedOnly();
+        final boolean embeddedOnly = Boolean.valueOf(embeddedOnlyAttribute)
+                || Annotations.getAnnotation(cls, EmbeddedOnly.class)!=null; 
+        
         final IdentityType annotationIdentityType = annotation.identityType();
-
+         
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
         val jdoPersistenceCapableFacet = new JdoPersistenceCapableFacetAnnotation(
                 annotationSchemaAttribute,
-                annotationTableAttribute, annotationIdentityType, facetHolder);
+                annotationTableAttribute, annotationIdentityType, embeddedOnly, facetHolder);
         FacetUtil.addFacet(jdoPersistenceCapableFacet);
 
         FacetUtil.addFacet(ObjectSpecIdFacetForJdoPersistenceCapableAnnotation.create(jdoPersistenceCapableFacet, facetHolder));
