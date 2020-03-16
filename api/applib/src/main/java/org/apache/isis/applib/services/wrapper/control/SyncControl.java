@@ -21,6 +21,7 @@ package org.apache.isis.applib.services.wrapper.control;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
@@ -51,6 +52,28 @@ public class SyncControl extends ControlAbstract<SyncControl> {
             throw exception;
         });
     }
+
+    private boolean execute = true;
+    public SyncControl withExecute() {
+        execute = true;
+        return this;
+    }
+    public SyncControl withNoExecute() {
+        execute = false;
+        return this;
+    }
+
+    /**
+     * Not API.
+     */
+    public ImmutableEnumSet<ExecutionMode> getExecutionModes() {
+        EnumSet<ExecutionMode> modes = EnumSet.copyOf(super.getExecutionModes().toEnumSet());
+        if(!execute) {
+            modes.add(ExecutionMode.SKIP_EXECUTION);
+        }
+        return ImmutableEnumSet.from(modes);
+    }
+
 
 }
 // end::refguide[]

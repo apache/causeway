@@ -71,24 +71,15 @@ public class ControlAbstract<T extends ControlAbstract<T>> {
         return (T)this;
     }
 
-    private boolean execute = true;
-    public T withExecute() {
-        execute = true;
-        return (T)this;
-    }
-    public T withNoExecute() {
-        execute = false;
-        return (T)this;
-    }
-
     // end::refguide[]
+
+    /**
+     * Not API.
+     */
     public ImmutableEnumSet<ExecutionMode> getExecutionModes() {
         EnumSet<ExecutionMode> modes = EnumSet.noneOf(ExecutionMode.class);
         if(!checkRules) {
             modes.add(ExecutionMode.SKIP_RULE_VALIDATION);
-        }
-        if(!execute) {
-            modes.add(ExecutionMode.SKIP_EXECUTION);
         }
         return ImmutableEnumSet.from(modes);
     }

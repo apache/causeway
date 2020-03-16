@@ -27,26 +27,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
@@ -73,11 +67,9 @@ import org.apache.isis.applib.services.wrapper.events.PropertyModifyEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
 import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
-import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactory;
 import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactoryService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
@@ -90,15 +82,19 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
+import org.apache.isis.core.runtime.session.IsisSession;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.session.IsisSessionTracker;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
 import org.apache.isis.core.runtimeservices.wrapper.handlers.ProxyContextHandler;
 import org.apache.isis.core.runtimeservices.wrapper.proxy.ProxyCreator;
-import org.apache.isis.schema.cmd.v2.CommandDto;
-import org.apache.isis.schema.common.v2.OidDto;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.standard.SimpleSession;
 
+import static org.apache.isis.applib.services.wrapper.control.SyncControl.control;
+
+import lombok.Data;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -123,6 +119,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     @Inject private CommandExecutorService commandExecutorService;
     @Inject protected ProxyFactoryService proxyFactoryService; // protected to allow JUnit test
     @Inject private CommandDtoServiceInternal commandDtoServiceInternal;
+    @Inject private AsyncControlService asyncControlService;
 
     private final List<InteractionListener> listeners = new ArrayList<>();
     private final Map<Class<? extends InteractionEvent>, InteractionEventDispatcher>
@@ -157,7 +154,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     
     @Override
     public <T> T wrap(T domainObject) {
-        return wrap(domainObject, SyncControl.control());
+        return wrap(domainObject, control());
     }
 
     @Override
@@ -179,7 +176,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
     @Override
     public <T> T wrapMixin(Class<T> mixinClass, Object mixedIn) {
-        return wrapMixin(mixinClass, mixedIn, SyncControl.control());
+        return wrapMixin(mixinClass, mixedIn, control());
     }
 
     @Override
@@ -209,160 +206,173 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
     // -- ASYNC WRAPPING
 
-    @Inject
-    private AsyncControlService asyncControlService;
 
     @Override
     public <T,R> T async(
             final T domainObject,
             final AsyncControl<R> asyncControl) {
 
-        final ImmutableEnumSet<ExecutionMode> executionModes = asyncControl.getExecutionModes();
-        final ExecutorService executorService = asyncControl.getExecutorService();
+        val proxyFactory = proxyFactoryService.factory((Class<T>) domainObject.getClass(), WrappingObject.class);
 
-        Class<T> domainClass = (Class<T>) domainObject.getClass();
-        ProxyFactory<T> factory = proxyFactoryService.factory(domainClass, WrappingObject.class);
-
-        return factory.createInstance(new InvocationHandler() {
+        return proxyFactory.createInstance(new InvocationHandler() {
             @Override
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 
-                //
-                // executed in the same thread as caller..
-                //
-                final boolean inheritedFromObject = method.getDeclaringClass().equals(Object.class);
-                if (inheritedFromObject) {
+                if (isInheritedFromJavaLangObject(method)) {
                     return method.invoke(domainObject, args);
                 }
 
-                val skipRules = executionModes.contains(ExecutionMode.SKIP_RULE_VALIDATION);
-                if (!skipRules) {
-                    SyncControl syncControl = SyncControl.control().withNoExecute();
-                    T syncProxy = WrapperFactoryDefault.this.createProxy(domainObject, syncControl);
+                if (shouldCheckRules(asyncControl)) {
+                    T syncProxy = WrapperFactoryDefault.this.createProxy(domainObject, control().withNoExecute());
                     method.invoke(syncProxy, args);
                 }
 
-                //
-                // submit async stuff
-                //
-                final ObjectSpecificationDefault targetObjSpec = (ObjectSpecificationDefault) specificationLoader.loadSpecification(method.getDeclaringClass());
-                final ObjectMember member = targetObjSpec.getMember(method);
-
-                if (member == null) {
+                val actionAndTarget = forRegular(method, domainObject);
+                if( ! actionAndTarget.isMemberFound()) {
                     return method.invoke(domainObject, args);
                 }
 
-                if (!(member instanceof ObjectAction)) {
-                    throw new UnsupportedOperationException(
-                            "Only actions can be executed in the background "
-                                    + "(method " + method.getName() + " represents a " + member.getFeatureType().name() + "')");
-                }
-
-                ObjectAction action = (ObjectAction) member;
-
-                val isisSession = isisSessionTracker.currentSession().orElseThrow(() -> new RuntimeException("No IsisSession is open"));
-                val authSession = isisSession.getAuthenticationSession();
-
-                final ManagedObject domainObjectAdapter = isisSession.getObjectManager().adapt(domainObject);
-                final List<ManagedObject> argAdapters = Arrays.asList(WrapperFactoryDefault.this.adaptersFor(args));
-
-                final List<ManagedObject> targetList = Collections.singletonList(domainObjectAdapter);
-                final CommandDto dto =
-                        commandDtoServiceInternal.asCommandDto(targetList, action, argAdapters);
-                final OidDto oidDto = dto.getTargets().getOid().get(0);
-
-                asyncControlService.init(asyncControl, method, Bookmark.from(oidDto));
-
-                Future future = executorService.submit(() ->
-                        isisSessionFactory.runAuthenticated(authSession,
-                                () -> commandExecutorService.executeCommand(dto)));
-                asyncControlService.update(asyncControl, future);
-                return null;
+                return submitAsync(actionAndTarget, args, asyncControl);
             }
         }, false);
     }
 
     @Override
     public <T, R> T asyncMixin(Class<T> mixinClass, Object mixedIn, AsyncControl<R> asyncControl) {
+
         T mixin = factoryService.mixin(mixinClass, mixedIn);
+        val proxyFactory = proxyFactoryService.factory(mixinClass, new Class[]{WrappingObject.class}, new Class[]{mixedIn.getClass()});
 
-        final ImmutableEnumSet<ExecutionMode> executionModes = asyncControl.getExecutionModes();
-        final ExecutorService executorService = asyncControl.getExecutorService();
-
-        ProxyFactory<T> factory = proxyFactoryService.factory(mixinClass, new Class[]{WrappingObject.class}, new Class[]{mixedIn.getClass()});
-
-        return factory.createInstance(new InvocationHandler() {
+        return proxyFactory.createInstance(new InvocationHandler() {
             @Override
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 
-                //
-                // executed in the same thread as caller..
-                //
-                final boolean inheritedFromObject = method.getDeclaringClass().equals(Object.class);
+                final boolean inheritedFromObject = isInheritedFromJavaLangObject(method);
                 if (inheritedFromObject) {
                     return method.invoke(mixin, args);
                 }
 
-                val skipRules = executionModes.contains(ExecutionMode.SKIP_RULE_VALIDATION);
-                if (!skipRules) {
-                    T syncProxy = WrapperFactoryDefault.this.createProxy(mixin, SyncControl.control().withNoExecute());
+                if (shouldCheckRules(asyncControl)) {
+                    T syncProxy = WrapperFactoryDefault.this.createProxy(mixin, control().withNoExecute());
                     method.invoke(syncProxy, args);
                 }
 
-                //
-                // submit async stuff
-                //
-                final ObjectSpecificationDefault mixinSpec = (ObjectSpecificationDefault) specificationLoader.loadSpecification(method.getDeclaringClass());
-                final ObjectMember member = mixinSpec.getMember(method);
-                if (member == null) {
+                val actionAndTarget = forMixin(method, mixedIn);
+                if (! actionAndTarget.isMemberFound()) {
                     return method.invoke(mixin, args);
                 }
 
-                // find corresponding action of the mixedIn (this is the 'real' target).
-                String memberId = member.getId();
-
-                Class<?> mixedInClass = mixedIn.getClass();
-                final ObjectSpecificationDefault mixedInSpec = (ObjectSpecificationDefault) specificationLoader.loadSpecification(mixedInClass);
-                // don't care about anything other than actions.
-
-                //Optional<ObjectAction> targetActionIfAny = mixedInSpec.getObjectAction(memberId);
-                Optional<ObjectActionMixedIn> targetActionIfAny = mixedInSpec.streamObjectActions(Contributed.INCLUDED)
-                        .filter(ObjectActionMixedIn.class::isInstance)
-                        .map(ObjectActionMixedIn.class::cast)
-                        .filter(x -> x.hasMixinAction((ObjectAction) member))
-                        .findFirst();
-
-                if(!targetActionIfAny.isPresent()) {
-                    throw new UnsupportedOperationException(
-                            "Could not locate objectAction with id='" + memberId + "' on mixedIn class '" + mixedInClass.getName() + "'");
-                }
-                ObjectAction action = targetActionIfAny.get();
-
-                val isisSession = isisSessionTracker.currentSession().orElseThrow(() -> new RuntimeException("No IsisSession is open"));
-                val authSession = isisSession.getAuthenticationSession();
-
-                final ManagedObject mixedInAdapter = isisSession.getObjectManager().adapt(mixedIn);
-                final List<ManagedObject> argAdapters = Arrays.asList(WrapperFactoryDefault.this.adaptersFor(args));
-
-                final List<ManagedObject> targetList = Collections.singletonList(mixedInAdapter);
-                final CommandDto dto = commandDtoServiceInternal.asCommandDto(targetList, action, argAdapters);
-                final OidDto oidDto = dto.getTargets().getOid().get(0);
-
-                asyncControlService.init(asyncControl, method, Bookmark.from(oidDto));
-
-                Future future = executorService.submit(() ->
-                        isisSessionFactory.runAuthenticated(authSession,
-                                () -> commandExecutorService.executeCommand(dto)));
-                asyncControlService.update(asyncControl, future);
-                return null;
-
+                return submitAsync(actionAndTarget, args, asyncControl);
             }
         }, new Object[]{ mixedIn });
     }
 
+    private boolean isInheritedFromJavaLangObject(final Method method) {
+        return method.getDeclaringClass().equals(Object.class);
+    }
+
+    private <R> boolean shouldCheckRules(AsyncControl<R> asyncControl) {
+        val executionModes = asyncControl.getExecutionModes();
+        val skipRules = executionModes.contains(ExecutionMode.SKIP_RULE_VALIDATION);
+        return !skipRules;
+    }
+
+    private <R> Object submitAsync(
+            final ActionAndTarget actionAndTarget,
+            final Object[] args,
+            final AsyncControl<R> asyncControl) {
+
+        val executorService = asyncControl.getExecutorService();
+        val isisSession = currentIsisSession();
+        val asyncAuthSession = authSessionFrom(asyncControl, isisSession.getAuthenticationSession());
+
+        val action = actionAndTarget.getAction();
+        val targetAdapter = actionAndTarget.getTarget();
+        val method = actionAndTarget.getMethod();
+
+        val argAdapters = Arrays.asList(WrapperFactoryDefault.this.adaptersFor(args));
+        val targetList = Collections.singletonList(targetAdapter);
+        val commandDto = commandDtoServiceInternal.asCommandDto(targetList, action, argAdapters);
+        val oidDto = commandDto.getTargets().getOid().get(0);
+
+        asyncControlService.init(asyncControl, method, Bookmark.from(oidDto));
+
+        Future future = executorService.submit(() ->
+                isisSessionFactory.runAuthenticated(asyncAuthSession,
+                        () -> commandExecutorService.executeCommand(commandDto)));
+
+        asyncControlService.update(asyncControl, future);
+
+        return null;
+    }
+
+    private <T> ActionAndTarget forRegular(Method method, T domainObject) {
+
+        val targetObjSpec = (ObjectSpecificationDefault) specificationLoader.loadSpecification(method.getDeclaringClass());
+        val objectMember = targetObjSpec.getMember(method);
+        if(objectMember == null) {
+            return new ActionAndTarget(false, null, null, null);
+        }
+
+        if (!(objectMember instanceof ObjectAction)) {
+            throw new UnsupportedOperationException(
+                    "Only actions can be executed in the background "
+                            + "(method " + method.getName() + " represents a " + objectMember.getFeatureType().name() + "')");
+        }
+
+        return ActionAndTarget.found((ObjectAction) objectMember, currentObjectManager().adapt(domainObject), method);
+    }
+
+    private <T> ActionAndTarget forMixin(Method method, T mixedIn) {
+
+        final ObjectSpecificationDefault mixinSpec = (ObjectSpecificationDefault) specificationLoader.loadSpecification(method.getDeclaringClass());
+        final ObjectMember mixinMember = mixinSpec.getMember(method);
+        if (mixinMember == null) {
+            return ActionAndTarget.notFound();
+        }
+
+        // find corresponding action of the mixedIn (this is the 'real' target).
+        val mixedInClass = mixedIn.getClass();
+        val mixedInSpec = (ObjectSpecificationDefault) specificationLoader.loadSpecification(mixedInClass);
+
+        // don't care about anything other than actions.
+        Optional<ObjectActionMixedIn> targetActionIfAny = mixedInSpec.streamObjectActions(Contributed.INCLUDED)
+                .filter(ObjectActionMixedIn.class::isInstance)
+                .map(ObjectActionMixedIn.class::cast)
+                .filter(x -> x.hasMixinAction((ObjectAction) mixinMember))
+                .findFirst();
+
+        if(!targetActionIfAny.isPresent()) {
+            throw new UnsupportedOperationException(String.format(
+                    "Could not locate objectAction delegating to mixinAction id='%s' on mixedIn class '%s'",
+                    mixinMember.getId(), mixedInClass.getName()));
+        }
+
+        return ActionAndTarget.found(targetActionIfAny.get(), currentObjectManager().adapt(mixedIn), method);
+    }
+
+    private static <R> SimpleSession authSessionFrom(AsyncControl<R> asyncControl, AuthenticationSession authSession) {
+        val user = asyncControl.getUser();
+        val roles = asyncControl.getRoles();
+        return new SimpleSession(user != null ? user : authSession.getUserName(), roles != null ? roles : authSession.getRoles());
+    }
+
+    @Data
+    static class ActionAndTarget {
+        static ActionAndTarget notFound() {
+            return new ActionAndTarget(false, null, null, null);
+        }
+        static ActionAndTarget found(ObjectAction action, ManagedObject target, final Method method) {
+            return new ActionAndTarget(true, action, target, method);
+        }
+        private final boolean memberFound;
+        private final ObjectAction action;
+        private final ManagedObject target;
+        private final Method method;
+    }
+
     private ManagedObject[] adaptersFor(final Object[] args) {
-        final ObjectManager objectManager =
-                isisSessionTracker.currentSession().get().getObjectManager();
+        final ObjectManager objectManager = currentObjectManager();
         return CommandUtil.adaptersFor(args, objectManager);
     }
 
@@ -414,5 +424,12 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
 
+    private IsisSession currentIsisSession() {
+        return isisSessionTracker.currentSession().orElseThrow(() -> new RuntimeException("No IsisSession is open"));
+    }
+
+    private ObjectManager currentObjectManager() {
+        return currentIsisSession().getObjectManager();
+    }
 
 }
