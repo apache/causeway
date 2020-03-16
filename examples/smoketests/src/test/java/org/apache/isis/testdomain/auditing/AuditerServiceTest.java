@@ -42,6 +42,10 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
+import org.apache.isis.applib.services.wrapper.control.ExceptionHandler;
+import org.apache.isis.applib.services.wrapper.control.ExceptionHandlerAbstract;
+import org.apache.isis.applib.services.xactn.Transaction;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
@@ -76,7 +80,7 @@ class AuditerServiceTest extends IsisIntegrationTestAbstract {
     @Inject private RepositoryService repository;
     @Inject private FixtureScripts fixtureScripts;
     @Inject private WrapperFactory wrapper;
-    @Inject private PlatformTransactionManager txMan; 
+//    @Inject private PlatformTransactionManager txMan;
     @Inject private KVStoreForTesting kvStore;
     
     @Configuration
@@ -106,8 +110,8 @@ class AuditerServiceTest extends IsisIntegrationTestAbstract {
         kvStore.clear(AuditerServiceForTesting.class);
 
         // when - running within its own transactional boundary
-        val transactionTemplate = new TransactionTemplate(txMan);
-        transactionTemplate.execute(status -> {
+//        val transactionTemplate = new TransactionTemplate(txMan);
+//        transactionTemplate.execute(status -> {
 
             book.setName("Book #2");
             repository.persist(book);
@@ -115,16 +119,20 @@ class AuditerServiceTest extends IsisIntegrationTestAbstract {
             // then - before the commit
             assertFalse(kvStore.get(AuditerServiceForTesting.class, "audit").isPresent());
 
-            return null;
-        });
+//            return null;
+//        });
+        transactionService.nextTransaction();
 
         // then - after the commit
         assertEquals("targetClassName=Jdo Book,propertyName=name,preValue=Sample Book,postValue=Book #2;",
                 kvStore.get(AuditerServiceForTesting.class, "audit").orElse(null));
     }
 
+    @Inject
+    TransactionService transactionService;
+
     @Test @Tag("Incubating")
-    void auditerService_shouldBeAwareOfInventoryChanges_whenUsingAsyncExecution() {
+    void auditerService_shouldBeAwareOfInventoryChanges_whenUsingAsyncExecution() throws ExecutionException, InterruptedException {
 
         // given
         val books = repository.allInstances(JdoBook.class);
@@ -133,9 +141,16 @@ class AuditerServiceTest extends IsisIntegrationTestAbstract {
         kvStore.clear(AuditerServiceForTesting.class);
 
         // when - running within its own background task
-        val control = control().withSkipRules();
-        // don't enforce rules for this test
-        wrapper.async(book, control).setName("Book #2");
+        AsyncControl<Void> control = control().withSkipRules();
+        wrapper.async(book, control.with(new ExceptionHandlerAbstract() {
+            @Override
+            public Object handle(Exception ex) throws Exception {
+                getLog().error(ex);
+                return null;
+            }
+        })).setName("Book #2");
+
+        Void await = control.getFuture().get();
 
         // then - after the commit
         assertEquals("targetClassName=Jdo Book,propertyName=name,preValue=Sample Book,postValue=Book #2;",

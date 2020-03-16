@@ -21,6 +21,7 @@ package org.apache.isis.core.runtimeservices.command;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -255,28 +256,45 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     private static ObjectAction findObjectAction(
             final ManagedObject targetAdapter,
-            final String actionId) throws RuntimeException {
+            final String fullyQualifiedActionId) throws RuntimeException {
 
         final ObjectSpecification specification = targetAdapter.getSpecification();
 
-        final ObjectAction objectAction = findActionElseNull(specification, actionId);
+        // we use the local identifier because the fullyQualified version includes the class name.
+        // that is a problem for us if the property is inherited, because it will be the class name of the declaring
+        // superclass, rather than the concrete class of the target that we are inspecting here.
+        val localActionId = localPartOf(fullyQualifiedActionId);
+
+        final ObjectAction objectAction = findActionElseNull(specification, localActionId);
         if(objectAction == null) {
-            throw new RuntimeException(String.format("Unknown action '%s'", actionId));
+            throw new RuntimeException(String.format("Unknown action '%s'", localActionId));
         }
         return objectAction;
     }
 
     private static OneToOneAssociation findOneToOneAssociation(
             final ManagedObject targetAdapter,
-            final String propertyId) throws RuntimeException {
+            final String fullyQualifiedPropertyId) throws RuntimeException {
+
+        // we use the local identifier because the fullyQualified version includes the class name.
+        // that is a problem for us if the property is inherited, because it will be the class name of the declaring
+        // superclass, rather than the concrete class of the target that we are inspecting here.
+        val localPropertyId = localPartOf(fullyQualifiedPropertyId);
 
         final ObjectSpecification specification = targetAdapter.getSpecification();
 
-        final OneToOneAssociation property = findOneToOneAssociationElseNull(specification, propertyId);
+        final OneToOneAssociation property = findOneToOneAssociationElseNull(specification, localPropertyId);
         if(property == null) {
-            throw new RuntimeException(String.format("Unknown property '%s'", propertyId));
+            throw new RuntimeException(String.format("Unknown property '%s'", localPropertyId));
         }
         return property;
+    }
+
+    private static String localPartOf(String memberId) {
+        val separatorIndex = memberId.lastIndexOf("#");
+        return separatorIndex != -1
+                ? memberId.substring(separatorIndex + 1)
+                : memberId;
     }
 
     private ManagedObject newValueAdapterFor(final PropertyDto propertyDto) {
@@ -298,14 +316,14 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     private static OneToOneAssociation findOneToOneAssociationElseNull(
             final ObjectSpecification specification,
-            final String propertyId) {
+            final String localPropertyId) {
 
         final Stream<ObjectAssociation> associations = specification.streamAssociations(Contributed.INCLUDED);
 
         return associations
                 .filter(association->
-                association.getIdentifier().toClassAndNameIdentityString().equals(propertyId) &&
-                association instanceof OneToOneAssociation
+                            Objects.equals(association.getId(), localPropertyId) &&
+                            association instanceof OneToOneAssociation
                         )
                 .findAny()
                 .map(association->(OneToOneAssociation) association)

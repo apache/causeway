@@ -74,7 +74,6 @@ class LdapEmbeddedServerTest {
         } catch (NamingException e) {
             fail(e.getMessage());
         } 
-
     }
 
     @Test

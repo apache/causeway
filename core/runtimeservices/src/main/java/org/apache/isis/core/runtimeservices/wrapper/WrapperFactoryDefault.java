@@ -67,6 +67,7 @@ import org.apache.isis.applib.services.wrapper.events.PropertyModifyEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
 import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
@@ -79,6 +80,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
@@ -92,6 +94,7 @@ import org.apache.isis.core.runtimeservices.wrapper.handlers.ProxyContextHandler
 import org.apache.isis.core.runtimeservices.wrapper.proxy.ProxyCreator;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.standard.SimpleSession;
+import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import static org.apache.isis.applib.services.wrapper.control.SyncControl.control;
 
@@ -117,6 +120,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     @Inject private SpecificationLoader specificationLoader;
     @Inject private IsisSessionTracker isisSessionTracker;
     @Inject private IsisSessionFactory isisSessionFactory;
+    @Inject private TransactionService transactionService;
     @Inject private CommandExecutorService commandExecutorService;
     @Inject protected ProxyFactoryService proxyFactoryService; // protected to allow JUnit test
     @Inject private CommandDtoServiceInternal commandDtoServiceInternal;
@@ -229,12 +233,12 @@ public class WrapperFactoryDefault implements WrapperFactory {
                     doih.invoke(null, method, args);
                 }
 
-                val actionAndTarget = forRegular(method, domainObject);
-                if( ! actionAndTarget.isMemberFound()) {
+                val memberAndTarget = forRegular(method, domainObject);
+                if( ! memberAndTarget.isMemberFound()) {
                     return method.invoke(domainObject, args);
                 }
 
-                return submitAsync(actionAndTarget, args, asyncControl);
+                return submitAsync(memberAndTarget, args, asyncControl);
             }
         }, false);
     }
@@ -275,7 +279,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
     private <R> Object submitAsync(
-            final ActionAndTarget actionAndTarget,
+            final MemberAndTarget memberAndTarget,
             final Object[] args,
             final AsyncControl<R> asyncControl) {
 
@@ -283,56 +287,78 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val isisSession = currentIsisSession();
         val asyncAuthSession = authSessionFrom(asyncControl, isisSession.getAuthenticationSession());
 
-        val action = actionAndTarget.getAction();
-        val targetAdapter = actionAndTarget.getTarget();
-        val method = actionAndTarget.getMethod();
+        val targetAdapter = memberAndTarget.getTarget();
+        val method = memberAndTarget.getMethod();
 
         val argAdapters = Arrays.asList(WrapperFactoryDefault.this.adaptersFor(args));
         val targetList = Collections.singletonList(targetAdapter);
-        val commandDto = commandDtoServiceInternal.asCommandDto(targetList, action, argAdapters);
+
+        CommandDto commandDto;
+        switch (memberAndTarget.getType()) {
+            case ACTION:
+                val action = memberAndTarget.getAction();
+                commandDto = commandDtoServiceInternal.asCommandDto(targetList, action, argAdapters);
+                break;
+            case PROPERTY:
+                val property = memberAndTarget.getProperty();
+                commandDto = commandDtoServiceInternal.asCommandDto(targetList, property, argAdapters.get(0));
+                break;
+            default:
+                // shouldn't happen, already catered for this case previously
+                return null;
+        }
         val oidDto = commandDto.getTargets().getOid().get(0);
 
         asyncControlService.init(asyncControl, method, Bookmark.from(oidDto));
 
-        Future future = executorService.submit(() ->
-                isisSessionFactory.runAuthenticated(asyncAuthSession,
-                        () -> commandExecutorService.executeCommand(commandDto)));
+        Future future = executorService.submit(() -> {
+            isisSessionFactory.runAuthenticated(asyncAuthSession, () -> {
+                transactionService.executeWithinTransaction(() -> {
+                    commandExecutorService.executeCommand(commandDto);
+                });
+            });
+        });
 
         asyncControlService.update(asyncControl, future);
 
         return null;
     }
 
-    private <T> ActionAndTarget forRegular(Method method, T domainObject) {
+    private <T> MemberAndTarget forRegular(Method method, T domainObject) {
 
         val targetObjSpec = (ObjectSpecificationDefault) specificationLoader.loadSpecification(method.getDeclaringClass());
         val objectMember = targetObjSpec.getMember(method);
         if(objectMember == null) {
-            return new ActionAndTarget(false, null, null, null);
+            return MemberAndTarget.notFound();
         }
 
-        if (!(objectMember instanceof ObjectAction)) {
-            throw new UnsupportedOperationException(
-                    "Only actions can be executed in the background "
-                            + "(method " + method.getName() + " represents a " + objectMember.getFeatureType().name() + "')");
+        val targetAdapter = currentObjectManager().adapt(domainObject);
+        if (objectMember instanceof OneToOneAssociation) {
+            return MemberAndTarget.foundProperty((OneToOneAssociation) objectMember, targetAdapter, method);
+        }
+        if (objectMember instanceof ObjectAction) {
+            return MemberAndTarget.foundAction((ObjectAction) objectMember, targetAdapter, method);
         }
 
-        return ActionAndTarget.found((ObjectAction) objectMember, currentObjectManager().adapt(domainObject), method);
+        throw new UnsupportedOperationException(
+                "Only properties and actions can be executed in the background "
+                        + "(method " + method.getName() + " represents a " + objectMember.getFeatureType().name() + "')");
     }
 
-    private <T> ActionAndTarget forMixin(Method method, T mixedIn) {
+    private <T> MemberAndTarget forMixin(Method method, T mixedIn) {
 
         final ObjectSpecificationDefault mixinSpec = (ObjectSpecificationDefault) specificationLoader.loadSpecification(method.getDeclaringClass());
         final ObjectMember mixinMember = mixinSpec.getMember(method);
         if (mixinMember == null) {
-            return ActionAndTarget.notFound();
+            return MemberAndTarget.notFound();
         }
 
         // find corresponding action of the mixedIn (this is the 'real' target).
         val mixedInClass = mixedIn.getClass();
         val mixedInSpec = (ObjectSpecificationDefault) specificationLoader.loadSpecification(mixedInClass);
 
-        // don't care about anything other than actions.
+        // don't care about anything other than actions
+        // (contributed properties and collections are read-only).
         Optional<ObjectActionMixedIn> targetActionIfAny = mixedInSpec.streamObjectActions(Contributed.INCLUDED)
                 .filter(ObjectActionMixedIn.class::isInstance)
                 .map(ObjectActionMixedIn.class::cast)
@@ -345,7 +371,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
                     mixinMember.getId(), mixedInClass.getName()));
         }
 
-        return ActionAndTarget.found(targetActionIfAny.get(), currentObjectManager().adapt(mixedIn), method);
+        return MemberAndTarget.foundAction(targetActionIfAny.get(), currentObjectManager().adapt(mixedIn), method);
     }
 
     private static <R> SimpleSession authSessionFrom(AsyncControl<R> asyncControl, AuthenticationSession authSession) {
@@ -355,15 +381,35 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
     @Data
-    static class ActionAndTarget {
-        static ActionAndTarget notFound() {
-            return new ActionAndTarget(false, null, null, null);
+    static class MemberAndTarget {
+        static MemberAndTarget notFound() {
+            return new MemberAndTarget(Type.NONE, null, null, null, null);
         }
-        static ActionAndTarget found(ObjectAction action, ManagedObject target, final Method method) {
-            return new ActionAndTarget(true, action, target, method);
+        static MemberAndTarget foundAction(ObjectAction action, ManagedObject target, final Method method) {
+            return new MemberAndTarget(Type.ACTION, action, null, target, method);
         }
-        private final boolean memberFound;
+        static MemberAndTarget foundProperty(OneToOneAssociation property, ManagedObject target, final Method method) {
+            return new MemberAndTarget(Type.PROPERTY, null, property, target, method);
+        }
+
+        public boolean isMemberFound() {
+            return type != Type.NONE;
+        }
+
+        enum Type {
+            ACTION,
+            PROPERTY,
+            NONE
+        }
+        private final Type type;
+        /**
+         * Populated if and only if {@link #type} is {@link Type#ACTION}.
+         */
         private final ObjectAction action;
+        /**
+         * Populated if and only if {@link #type} is {@link Type#PROPERTY}.
+         */
+        private final OneToOneAssociation property;
         private final ManagedObject target;
         private final Method method;
     }

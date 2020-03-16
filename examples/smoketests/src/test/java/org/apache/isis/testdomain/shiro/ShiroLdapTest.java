@@ -25,6 +25,7 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -69,6 +70,11 @@ class ShiroLdapTest extends AbstractShiroTest {
         // This typically only needs to be done once per class if your shiro.ini doesn't change,
         // otherwise, you'll need to do this logic in each test that is different
         setSecurityManager(serviceInjector, "classpath:shiro-ldap.ini");
+    }
+
+    @AfterEach
+    void afterEach() {
+        SecurityUtils.setSecurityManager(null);
     }
 
     @AfterAll
