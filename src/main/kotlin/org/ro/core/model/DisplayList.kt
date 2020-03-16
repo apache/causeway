@@ -39,33 +39,10 @@ class DisplayList(override val title: String) : BaseDisplayable() {
 
     fun addLayout(layout: Layout) {
         this.layout = layout
-        initPropertyLayoutListNew(layout)
+        initPropertyLayoutList(layout)
     }
 
     private fun initPropertyLayoutList(layout: Layout) {
-        // row[0] (head) contains the object title and actions
-        // row[1] contains data, tabs, collections, etc.
-        val secondRow = layout.row[1] // traditional C braintwist
-        var colsLyt = secondRow.cols.first()
-        var colLyt = colsLyt.getCol()
-        val tgLyts = colLyt.tabGroup
-        if (tgLyts.isNotEmpty()) {
-            val tabGroup = tgLyts.first()
-            val tab = tabGroup.tab.first()
-            val row = tab.row.first()
-            colsLyt = row.cols.first()
-        }
-        colLyt = colsLyt.getCol()
-        val fsList = colLyt.fieldSet
-        if (fsList.isNotEmpty()) {
-            val fsLyt = fsList.first()
-            propertyLayoutList.addAll(fsLyt.property)
-        }
-        console.log("[DL.addLayout]")
-        console.log(propertyLayoutList)
-    }
-
-    private fun initPropertyLayoutListNew(layout: Layout) {
         layout.row.forEach { r ->
             initLayout4Row(r)
         }
