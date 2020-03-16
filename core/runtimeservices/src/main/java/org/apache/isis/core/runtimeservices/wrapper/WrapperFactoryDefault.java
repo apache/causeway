@@ -23,9 +23,11 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
@@ -177,13 +179,21 @@ public class WrapperFactoryDefault implements WrapperFactory {
         if (domainObject instanceof WrappingObject) {
             val wrapperObject = (WrappingObject) domainObject;
             val executionMode = wrapperObject.__isis_executionModes();
-            if(executionMode != modes) {
+            if(! equivalent(executionMode, modes)) {
                 val underlyingDomainObject = wrapperObject.__isis_wrapped();
                 return _Casts.uncheckedCast(createProxy(underlyingDomainObject, syncControl));
             }
             return domainObject;
         }
         return createProxy(domainObject, syncControl);
+    }
+
+    private static boolean equivalent(ImmutableEnumSet<ExecutionMode> first, ImmutableEnumSet<ExecutionMode> second) {
+        return equivalent(first.toEnumSet(), second.toEnumSet());
+    }
+
+    private static boolean equivalent(EnumSet<ExecutionMode> first, EnumSet<ExecutionMode> second) {
+        return first.containsAll(second) && second.containsAll(first);
     }
 
     @Override

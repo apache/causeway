@@ -36,10 +36,16 @@ import static org.junit.Assert.assertThat;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.wrapper.DisabledException;
+import org.apache.isis.applib.services.wrapper.control.AsyncControlService;
 import org.apache.isis.applib.services.wrapper.events.PropertyModifyEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
@@ -62,11 +68,14 @@ import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisSessionTracker;
 import org.apache.isis.core.runtimeservices.wrapper.dom.employees.Employee;
 import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 import org.apache.isis.core.security.authentication.standard.SimpleSession;
@@ -84,19 +93,24 @@ public class WrapperFactoryDefault_wrappedObject_transient_Test {
     public final JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Mock private AuthenticationSessionTracker mockAuthenticationSessionTracker;
+    @Mock private MessageService mockMessageService;
+    @Mock private CommandDtoServiceInternal mockCommandDtoServiceInternal;
+    @Mock private ObjectSpecification mockOnType;
     @Mock private SpecificationLoader mockSpecificationLoader;
     @Mock private IsisSessionFactory mockIsisSessionFactory;
+    @Mock private IsisSessionTracker mockIsisSessionTracker;
+    @Mock private CommandExecutorService mockCommandExecutorService;
+    private AsyncControlService asyncControlService = new AsyncControlService();
     @Mock private FactoryService mockFactoryService;
     @Mock private TransactionService mockTransactionService;
-    
-    
+
     @Mock private ManagedObject mockEmployeeAdapter;
-    @Mock private ObjectSpecificationDefault mockOnType;
     @Mock private ObjectSpecificationDefault mockEmployeeSpec;
     @Mock private OneToOneAssociation mockPasswordMember;
     @Mock private Identifier mockPasswordIdentifier;
     @Mock private ServiceInjector mockServiceInjector;
     @Mock private ServiceRegistry mockServiceRegistry;
+    @Mock private BookmarkService mockBookmarkService;
     @Mock protected ManagedObject mockPasswordAdapter;
     @Mock protected ObjectManager mockObjectManager;
 
@@ -130,7 +144,12 @@ public class WrapperFactoryDefault_wrappedObject_transient_Test {
                 .singleton(wrapperFactory = createWrapperFactory(proxyFactoryService))
                 .singleton(mockFactoryService)
                 .singleton(mockIsisSessionFactory)
+                .singleton(mockIsisSessionTracker)
                 .singleton(mockTransactionService)
+                .singleton(mockCommandExecutorService)
+                .singleton(mockCommandDtoServiceInternal)
+                .singleton(asyncControlService)
+                .singleton(mockBookmarkService)
                 .build();
         
         metaModelContext.getServiceInjector().injectServicesInto(wrapperFactory);

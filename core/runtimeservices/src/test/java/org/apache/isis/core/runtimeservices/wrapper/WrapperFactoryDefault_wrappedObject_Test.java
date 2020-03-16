@@ -36,14 +36,17 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command.Executor;
 import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.HiddenException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
+import org.apache.isis.applib.services.wrapper.control.AsyncControlService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
 import org.apache.isis.core.commons.internal.plugins.codegen.ProxyFactoryService;
@@ -72,6 +75,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisSessionTracker;
 import org.apache.isis.core.runtimeservices.wrapper.dom.employees.Employee;
 import org.apache.isis.core.runtimeservices.wrapper.dom.employees.EmployeeRepository;
 import org.apache.isis.core.runtimeservices.wrapper.dom.employees.EmployeeRepositoryImpl;
@@ -97,9 +101,13 @@ public class WrapperFactoryDefault_wrappedObject_Test {
     @Mock private ObjectSpecification mockOnType;
     @Mock private SpecificationLoader mockSpecificationLoader;
     @Mock private IsisSessionFactory mockIsisSessionFactory;
+    @Mock private IsisSessionTracker mockIsisSessionTracker;
+    @Mock private CommandExecutorService mockCommandExecutorService;
+    private AsyncControlService asyncControlService = new AsyncControlService();
     @Mock private ObjectSpecificationDefault mockEmployeeSpec;
     @Mock private FactoryService mockFactoryService;
     @Mock private TransactionService mockTransactionService;
+    @Mock private BookmarkService mockBookmarkService;
     @Mock protected ObjectManager mockObjectManager;
     
     private ObjectMember employeeNameMember;
@@ -138,7 +146,12 @@ public class WrapperFactoryDefault_wrappedObject_Test {
                 .singleton(mockCommandDtoServiceInternal)
                 .singleton(mockFactoryService)
                 .singleton(mockIsisSessionFactory)
+                .singleton(mockIsisSessionTracker)
                 .singleton(mockTransactionService)
+                .singleton(mockCommandExecutorService)
+                .singleton(mockCommandDtoServiceInternal)
+                .singleton(asyncControlService)
+                .singleton(mockBookmarkService)
                 .build();
         
         metaModelContext.getServiceInjector().injectServicesInto(wrapperFactory);
