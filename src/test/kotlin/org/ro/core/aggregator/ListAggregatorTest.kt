@@ -3,7 +3,7 @@ package org.ro.core.aggregator
 import kotlinx.serialization.UnstableDefault
 import org.ro.IntegrationTest
 import org.ro.core.event.EventStore
-import org.ro.core.model.DisplayList
+import org.ro.core.model.ListDM
 import org.ro.core.event.ResourceSpecification
 import org.ro.snapshots.simpleapp1_16_0.*
 import org.ro.to.Property
@@ -48,7 +48,7 @@ class ListAggregatorTest : IntegrationTest() {
             assertNotNull(descLink)  // 4
 
             // then
-            val dl = obs.dsp as DisplayList
+            val dl = obs.dsp as ListDM
             val propertyLabels = dl.propertyDescriptionList
             val property = pdLe.getTransferObject() as Property
             assertTrue(propertyLabels.size > 0)  // 5
@@ -69,7 +69,7 @@ class ListAggregatorTest : IntegrationTest() {
             // then
             val ol = obs.dsp
             assertNotNull(ol)
-            assertEquals(1,  (ol as DisplayList).data.size)
+            assertEquals(1,  (ol as ListDM).data.size)
         }
     }
 

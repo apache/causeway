@@ -2,13 +2,13 @@ package org.ro.core.aggregator
 
 import org.ro.core.event.LogEntry
 import org.ro.core.event.RoXmlHttpRequest
-import org.ro.core.model.BaseDisplayable
+import org.ro.core.model.DisplayModel
 import org.ro.to.Link
 import org.ro.to.TObject
 
 /**
  * An Aggregator:
- * @item is initially created in ResponseHandlers, DisplayObjects, Menus
+ * @item is initially created in ResponseHandlers, displayModels, Menus
  * @item is assigned to at least one LogEntry,
  * @item is passed on to related LogEntries (eg. sibblings in a list, Layout),
  * @item is notified about changes to related LogEntries,
@@ -21,7 +21,7 @@ import org.ro.to.TObject
  */
 abstract class BaseAggregator {
 
-    open lateinit var dsp: BaseDisplayable
+    open lateinit var dsp: DisplayModel
 
     open fun update(logEntry: LogEntry, subType: String) {}
 

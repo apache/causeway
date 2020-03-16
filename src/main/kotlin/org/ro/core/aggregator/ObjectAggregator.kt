@@ -1,7 +1,7 @@
 package org.ro.core.aggregator
 
 import org.ro.core.event.LogEntry
-import org.ro.core.model.DisplayObject
+import org.ro.core.model.ObjectDM
 import org.ro.layout.Layout
 import org.ro.to.HttpError
 import org.ro.to.Property
@@ -13,7 +13,7 @@ import org.ro.ui.kv.UiManager
 class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
 
     init {
-        dsp = DisplayObject(actionTitle)
+        dsp = ObjectDM(actionTitle)
     }
 
     override fun update(logEntry: LogEntry, subType: String) {
@@ -53,7 +53,7 @@ class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
     }
 
     private fun handleLayout(layout: Layout) {
-        (dsp as DisplayObject).addLayout(layout)
+        (dsp as ObjectDM).addLayout(layout)
         //FIXME do analogous to DisplayList
  /*       layout.propertyDescriptionList.forEach {
             it.links.forEach { l ->

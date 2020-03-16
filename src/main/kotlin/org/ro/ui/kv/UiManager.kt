@@ -6,8 +6,8 @@ import org.ro.core.aggregator.ObjectAggregator
 import org.ro.core.aggregator.UndefinedDispatcher
 import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
-import org.ro.core.model.DisplayList
-import org.ro.core.model.DisplayObject
+import org.ro.core.model.ListDM
+import org.ro.core.model.ObjectDM
 import org.ro.core.event.ResourceSpecification
 import org.ro.to.TObject
 import org.ro.to.mb.Menubars
@@ -48,10 +48,10 @@ object UiManager {
         })
     }
 
-    private fun activeObject(): DisplayObject? {
+    private fun activeObject(): ObjectDM? {
         val activeTab = RoView.findActive()
         if (activeTab != null) {
-            return (activeTab as RoDisplay).displayObject
+            return (activeTab as RoDisplay).displayModel
         }
         return null
     }
@@ -83,7 +83,7 @@ object UiManager {
     fun openListView(aggregator: BaseAggregator) {
         val displayable = aggregator.dsp
         val title: String = displayable.extractTitle()
-        val panel = RoTable(displayable as DisplayList)
+        val panel = RoTable(displayable as ListDM)
         add(title, panel, aggregator)
         displayable.isRendered = true
     }
@@ -94,12 +94,12 @@ object UiManager {
         if (title.isEmpty()) {
             title = aggregator.actionTitle
         }
-        val panel = RoDisplay(displayable as DisplayObject)
+        val panel = RoDisplay(displayable as ObjectDM)
         add(title, panel, aggregator)
         displayable.isRendered = true
     }
 
-    fun displayObject(tObject: TObject) {
+    fun displayModel(tObject: TObject) {
         val aggregator = ObjectAggregator(tObject.title)
         linkLayout(tObject, aggregator)
         val logEntry = EventStore.find(tObject)!!

@@ -4,7 +4,7 @@ import org.ro.layout.Layout
 import org.ro.to.TObject
 import org.ro.to.TransferObject
 
-abstract class BaseDisplayable {
+abstract class DisplayModel {
 
     var isRendered = false
 

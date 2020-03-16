@@ -1,6 +1,6 @@
 package org.ro.ui.kv
 
-import org.ro.core.model.DisplayList
+import org.ro.core.model.ListDM
 import org.ro.core.model.Exposer
 import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.ButtonStyle
@@ -31,7 +31,7 @@ class ColumnFactory {
     }
 
     fun buildColumns(
-            displayList: DisplayList,
+            displayList: ListDM,
             withCheckBox: Boolean = false): List<ColumnDefinition<dynamic>> {
 
         val columns = mutableListOf<ColumnDefinition<dynamic>>()
@@ -74,7 +74,7 @@ class ColumnFactory {
                 formatterComponentFunction = { _, _, data ->
                     Button(text = "", icon = data["iconName"] as? String, style = ButtonStyle.LINK).onClick {
                         val tObject = (data as Exposer).delegate
-                        UiManager.displayObject(tObject)
+                        UiManager.displayModel(tObject)
                     }
                 })
     }

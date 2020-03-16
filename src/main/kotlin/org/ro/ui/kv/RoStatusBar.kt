@@ -2,7 +2,7 @@ package org.ro.ui
 
 import org.ro.core.event.EventState
 import org.ro.core.event.LogEntry
-import org.ro.core.model.DiagramDisplay
+import org.ro.core.model.DiagramDM
 import pl.treksoft.kvision.core.Background
 import pl.treksoft.kvision.core.Col
 import pl.treksoft.kvision.core.CssSize
@@ -45,7 +45,7 @@ object RoStatusBar {
         nav.add(userLink)
     }
 
-    fun updateDiagram(dd: DiagramDisplay) {
+    fun updateDiagram(dd: DiagramDM) {
         umlDiagram.style = ButtonStyle.OUTLINESUCCESS
         umlDiagram.onClick {
             val title = dd.title

@@ -1,13 +1,13 @@
 package org.ro.ui
 
-import org.ro.core.model.DiagramDisplay
+import org.ro.core.model.DiagramDM
 import org.ro.core.model.meta.MetaClass
 import org.ro.core.model.meta.MetaPackage
 import org.ro.to.DomainType
 
 object ClassDiagram {
 
-    fun buildDiagramCode(dd: DiagramDisplay): String {
+    fun buildDiagramCode(dd: DiagramDM): String {
         val domainTypeList: Set<DomainType> = dd.classes
         //TODO properties needed to set type
         //val properties: Set<Property> = dd.properties

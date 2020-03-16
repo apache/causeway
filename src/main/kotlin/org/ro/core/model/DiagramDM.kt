@@ -5,7 +5,7 @@ import org.ro.to.DomainType
 import org.ro.to.Property
 import org.ro.to.TransferObject
 
-class DiagramDisplay(override val title: String) : BaseDisplayable() {
+class DiagramDM(override val title: String) : DisplayModel() {
 
     override var layout: Layout? = null
 

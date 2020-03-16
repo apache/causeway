@@ -1,7 +1,7 @@
 package org.ro.core.aggregator
 
 import org.ro.core.event.LogEntry
-import org.ro.core.model.DisplayList
+import org.ro.core.model.ListDM
 import org.ro.layout.Layout
 import org.ro.to.Property
 import org.ro.to.ResultList
@@ -19,7 +19,7 @@ import org.ro.ui.kv.UiManager
 class ListAggregator(actionTitle: String) : BaseAggregator() {
 
     init {
-        dsp = DisplayList(actionTitle)
+        dsp = ListDM(actionTitle)
     }
 
     override fun update(logEntry: LogEntry, subType: String) {
@@ -57,7 +57,7 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
     }
 
     private fun handleLayout(layout: Layout) {
-        val dspl = dsp as DisplayList
+        val dspl = dsp as ListDM
         dspl.addLayout(layout)
         console.log("[LA.handleLayout] dspl.propertyList")
         console.log(dspl.propertyList)
@@ -71,11 +71,11 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
 
     private fun handleGrid(grid: Grid) {
         console.log("[LA.handleGrid]")
-        (dsp as DisplayList).grid = grid
+        (dsp as ListDM).grid = grid
     }
 
     private fun handleProperty(p: Property) {
-        val dspl = dsp as DisplayList
+        val dspl = dsp as ListDM
         console.log("[LA.handleProperty]")
         console.log(p)
         if (p.isPropertyDescription()) {

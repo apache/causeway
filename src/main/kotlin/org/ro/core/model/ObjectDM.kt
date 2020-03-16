@@ -7,14 +7,16 @@ import org.ro.to.Link
 import org.ro.to.Method
 import org.ro.to.TObject
 import org.ro.to.TransferObject
+import org.ro.to.bs3.Grid
 
-class DisplayObject(override val title: String) : BaseDisplayable() {
+class ObjectDM(override val title: String) : DisplayModel() {
     var data: Exposer? = null
     override var layout: Layout? = null
+    var grid: Grid? = null
     private var dirty: Boolean = false
 
     fun setDirty(value: Boolean) {
-        console.log("[DisplayObject.setDirty] $value")
+        console.log("[ObjectDM.setDirty] $value")
         dirty = value
     }
 
@@ -39,7 +41,7 @@ class DisplayObject(override val title: String) : BaseDisplayable() {
     }
 
     fun save() {
-        console.log("[DisplayObject.save]")
+        console.log("[displayModel.save]")
         if (dirty) {
             val tObject = data!!.delegate
             val getLink = tObject.links.first()
@@ -61,7 +63,7 @@ class DisplayObject(override val title: String) : BaseDisplayable() {
     }
 
     fun undo() {
-        console.log("[DisplayObject.undo]")
+        console.log("[displayModel.undo]")
         if (dirty) {
             //TODO reset()
         }

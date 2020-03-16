@@ -7,7 +7,7 @@ import org.ro.ui.IconManager
 
 /**
  * Makes properties of delegate available for display in Lists.
- * For regular TObjects these are members.
+ * For regular TObjects these are members (properties).
  * For FixtureResults these are: result, resultClass etc.
  *
  * Exposer bears some similarity to the JS "Revealing Module Pattern"

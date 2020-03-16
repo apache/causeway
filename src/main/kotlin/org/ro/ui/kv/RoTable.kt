@@ -1,6 +1,6 @@
 package org.ro.ui.kv
 
-import org.ro.core.model.DisplayList
+import org.ro.core.model.ListDM
 import org.ro.core.model.Exposer
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
@@ -17,7 +17,7 @@ import pl.treksoft.kvision.tabulator.tabulator
  * - attribute types (can only be determined at runtime) and
  * - accessor names
  */
-class RoTable(displayList: DisplayList) : SimplePanel() {
+class RoTable(displayList: ListDM) : SimplePanel() {
 
     init {
         title = displayList.extractTitle()

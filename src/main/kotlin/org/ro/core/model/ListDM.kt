@@ -10,7 +10,7 @@ import org.ro.to.TransferObject
 import org.ro.to.bs3.Grid
 import pl.treksoft.kvision.state.observableListOf
 
-class DisplayList(override val title: String) : BaseDisplayable() {
+class ListDM(override val title: String) : DisplayModel() {
     var data = observableListOf<Exposer>()
     override var layout: Layout? = null
     var grid: Grid? = null

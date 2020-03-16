@@ -49,15 +49,15 @@ abstract class BaseDisplayable {
     +title()
 }
 
-class DisplayList {
+class ListDM {
     list:List<Exposer>
 }
 
 BaseDisplayable -> Layout
-BaseDisplayable <|-- DisplayList
-BaseDisplayable <|-- DisplayObject
+BaseDisplayable <|-- ListDM
+BaseDisplayable <|-- ObjectDM
 
-DisplayObject o-- DisplayList
+ObjectDM o-- ListDM
 
 @enduml
 --

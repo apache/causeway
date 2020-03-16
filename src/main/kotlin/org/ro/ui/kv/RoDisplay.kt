@@ -1,7 +1,6 @@
 package org.ro.ui.kv
 
-import org.ro.core.model.DisplayList
-import org.ro.core.model.DisplayObject
+import org.ro.core.model.ObjectDM
 import org.ro.ui.Displayable
 import org.ro.ui.builder.LayoutBuilder
 import pl.treksoft.kvision.core.CssSize
@@ -11,17 +10,17 @@ import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.dropdown.DropDown
 import pl.treksoft.kvision.panel.VPanel
 
-class RoDisplay(val displayObject: DisplayObject) : Displayable, VPanel() {
+class RoDisplay(val displayModel: ObjectDM) : Displayable, VPanel() {
 
     var menu: DropDown? = null
     lateinit private var objectPanel: VPanel
 
     init {
-        val ol = displayObject.layout
+        val ol = displayModel.layout
         if (ol != null) {
-            val model = displayObject.data!!
+            val model = displayModel.data!!
             val tObject = model.delegate
-            val grid = (displayObject as DisplayList).grid!!
+            val grid = displayModel.grid!!
             objectPanel = LayoutBuilder().create(ol, grid, tObject, this)
             objectPanel.width = CssSize(100, UNIT.perc)
             add(objectPanel)
@@ -29,7 +28,7 @@ class RoDisplay(val displayObject: DisplayObject) : Displayable, VPanel() {
     }
 
     override fun setDirty(value: Boolean) {
-        displayObject.setDirty(value)
+        displayModel.setDirty(value)
         if (value) {
             this.fontStyle = FontStyle.ITALIC
             this.fontWeight = FontWeight.BOLD

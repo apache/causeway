@@ -7,7 +7,6 @@ import org.ro.handler.TObjectHandler
 import org.ro.layout.Layout
 import org.ro.snapshots.simpleapp1_16_0.*
 import org.ro.to.TObject
-import org.ro.to.bs3.Grid
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -21,7 +20,7 @@ class DisplayListTest {
         val ro1 = TObjectHandler().parse(SO_1.str) as TObject
         val lt = LayoutHandler().parse(SO_OBJECT_LAYOUT.str) as Layout
 
-        val dl = DisplayList("test")
+        val dl = ListDM("test")
         dl.addData(ro0)
         dl.addData(ro1)
         dl.addLayout(lt)
@@ -40,7 +39,7 @@ class DisplayListTest {
         val lt = LayoutHandler().parse(CFG_LAYOUT_JSON.str) as Layout
        // val grd = LayoutXmlHandler().parse(CFG_LAYOUT_XML.str) as Grid
 
-        val dl = DisplayList("test")
+        val dl = ListDM("test")
         dl.addData(ro0)
 
         dl.addLayout(lt)
@@ -56,7 +55,7 @@ class DisplayListTest {
         val ro0 = TObjectHandler().parse(FR_OBJECT.str) as TObject
         val lt = LayoutXmlHandler().parse(FR_OBJECT_LAYOUT.str) as Layout
 
-        val dl = DisplayList("test")
+        val dl = ListDM("test")
         dl.addData(ro0)
 
         dl.addLayout(lt)

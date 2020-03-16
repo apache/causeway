@@ -6,7 +6,7 @@ import org.ro.to.TransferObject
 import org.ro.to.User
 import org.ro.to.Version
 
-class DisplaySystem(override val title: String) : BaseDisplayable() {
+class SystemDM(override val title: String) : DisplayModel() {
     override var layout: Layout? = null
     var user: User? = null
     var version: Version? = null

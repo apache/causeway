@@ -1,7 +1,7 @@
 package org.ro.core.aggregator
 
 import org.ro.core.event.LogEntry
-import org.ro.core.model.DiagramDisplay
+import org.ro.core.model.DiagramDM
 import org.ro.to.DomainType
 import org.ro.to.DomainTypes
 import org.ro.to.Link
@@ -11,7 +11,7 @@ import org.ro.ui.RoStatusBar
 class DomainTypesAggregator(val url: String) : BaseAggregator() {
 
     init {
-        dsp = DiagramDisplay(url)
+        dsp = DiagramDM(url)
     }
 
     override fun update(logEntry: LogEntry, subType: String) {
@@ -23,7 +23,7 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
         }
 
         if (dsp.canBeDisplayed()) {
-            RoStatusBar.updateDiagram(dsp as DiagramDisplay)
+            RoStatusBar.updateDiagram(dsp as DiagramDM)
         }
     }
 
@@ -33,13 +33,13 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
 
     private fun handleDomainType(obj: DomainType) {
         if (obj.isPrimitiveOrService()) {
-            (dsp as DiagramDisplay).decNumberOfClasses()
+            (dsp as DiagramDM).decNumberOfClasses()
         } else {
             dsp.addData(obj)
             val propertyList = obj.members.filter {
                 it.isProperty()
             }
-            (dsp as DiagramDisplay).incNumberOfProperties(propertyList.size)
+            (dsp as DiagramDM).incNumberOfProperties(propertyList.size)
             propertyList.forEach { p ->
                 p.invokeWith(this)
             }
@@ -64,7 +64,7 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
                 }
             }
         }
-        (dsp as DiagramDisplay).numberOfClasses = domainTypeLinkList.size
+        (dsp as DiagramDM).numberOfClasses = domainTypeLinkList.size
         domainTypeLinkList.forEach {
             it.invokeWith(this)
         }
