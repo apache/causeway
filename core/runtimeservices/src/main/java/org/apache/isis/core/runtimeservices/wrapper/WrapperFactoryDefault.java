@@ -222,7 +222,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
                     return method.invoke(domainObject, args);
                 }
 
-                if (shouldCheckRules(asyncControl)) {
+                if (asyncControlService.shouldCheckRules(asyncControl)) {
                     T syncProxy = WrapperFactoryDefault.this.createProxy(domainObject, control().withNoExecute());
                     method.invoke(syncProxy, args);
                 }
@@ -252,7 +252,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
                     return method.invoke(mixin, args);
                 }
 
-                if (shouldCheckRules(asyncControl)) {
+                if (asyncControlService.shouldCheckRules(asyncControl)) {
                     T syncProxy = WrapperFactoryDefault.this.createProxy(mixin, control().withNoExecute());
                     method.invoke(syncProxy, args);
                 }
@@ -269,12 +269,6 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
     private boolean isInheritedFromJavaLangObject(final Method method) {
         return method.getDeclaringClass().equals(Object.class);
-    }
-
-    private <R> boolean shouldCheckRules(AsyncControl<R> asyncControl) {
-        val executionModes = asyncControl.getExecutionModes();
-        val skipRules = executionModes.contains(ExecutionMode.SKIP_RULE_VALIDATION);
-        return !skipRules;
     }
 
     private <R> Object submitAsync(
