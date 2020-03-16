@@ -26,6 +26,9 @@
                 <mb3:serviceAction objectType="demo.FeaturedTypesMenu" id="clobs">
                     <cpt:named>Clob Type</cpt:named>
                 </mb3:serviceAction>
+                <mb3:serviceAction objectType="demo.FeaturedTypesMenu" id="markup">
+                    <cpt:named>Markup Type (HTML)</cpt:named>
+                </mb3:serviceAction>
             </mb3:section>
         </mb3:menu>
         

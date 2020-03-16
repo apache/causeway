@@ -1,0 +1,5 @@
+(since 1.)
+
+The framework supports Markup (plain HTML) values.
+
+See the text demo link:${SOURCES_DEMO}/demoapp/dom/types/markup[sources].

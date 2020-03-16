@@ -31,6 +31,7 @@ import lombok.val;
 
 import demoapp.dom.types.blob.BlobDemo;
 import demoapp.dom.types.clob.ClobDemo;
+import demoapp.dom.types.markup.MarkupDemo;
 import demoapp.dom.types.primitive.PrimitivesDemo;
 import demoapp.dom.types.text.TextDemo;
 import demoapp.dom.types.time.TemporalDemo;
@@ -86,6 +87,14 @@ public class FeaturedTypesMenu {
     @ActionLayout(cssClassFa="fa-cloud")
     public ClobDemo clobs(){
         val demo = factoryService.viewModel(ClobDemo.class);
+        demo.initDefaults();  
+        return demo;
+    }
+    
+    @Action
+    @ActionLayout(cssClassFa="fa-code")
+    public MarkupDemo markup(){
+        val demo = factoryService.viewModel(MarkupDemo.class);
         demo.initDefaults();  
         return demo;
     }
