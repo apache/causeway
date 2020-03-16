@@ -87,6 +87,7 @@ import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.session.IsisSessionTracker;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
+import org.apache.isis.core.runtimeservices.wrapper.handlers.DomainObjectInvocationHandler;
 import org.apache.isis.core.runtimeservices.wrapper.handlers.ProxyContextHandler;
 import org.apache.isis.core.runtimeservices.wrapper.proxy.ProxyCreator;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
@@ -223,8 +224,9 @@ public class WrapperFactoryDefault implements WrapperFactory {
                 }
 
                 if (asyncControlService.shouldCheckRules(asyncControl)) {
-                    T syncProxy = WrapperFactoryDefault.this.createProxy(domainObject, control().withNoExecute());
-                    method.invoke(syncProxy, args);
+                    val doih = new DomainObjectInvocationHandler<>(
+                            metaModelContext, domainObject, control().withNoExecute(), null);
+                    doih.invoke(null, method, args);
                 }
 
                 val actionAndTarget = forRegular(method, domainObject);
@@ -253,8 +255,9 @@ public class WrapperFactoryDefault implements WrapperFactory {
                 }
 
                 if (asyncControlService.shouldCheckRules(asyncControl)) {
-                    T syncProxy = WrapperFactoryDefault.this.createProxy(mixin, control().withNoExecute());
-                    method.invoke(syncProxy, args);
+                    val doih = new DomainObjectInvocationHandler<>(
+                            metaModelContext, mixin, control().withNoExecute(), null);
+                    doih.invoke(null, method, args);
                 }
 
                 val actionAndTarget = forMixin(method, mixedIn);

@@ -73,7 +73,7 @@ import lombok.val;
 
 public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandlerDefault<T> {
 
-    private final ProxyContextHandler proxy;
+    private final ProxyContextHandler proxyContextHandler;
     private final MetaModelContext mmContext;
 
     /**
@@ -101,14 +101,15 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     public DomainObjectInvocationHandler(
             final MetaModelContext metaModelContext,
             final T domainObject,
-            final SyncControl syncControl, final ProxyContextHandler proxy) {
+            final SyncControl syncControl,
+            final ProxyContextHandler proxyContextHandler) {
         super(metaModelContext.getServiceRegistry(), domainObject, syncControl);
 
         this.mmContext = metaModelContext;
-        this.proxy = proxy;
+        this.proxyContextHandler = proxyContextHandler;
 
         try {
-            titleMethod = domainObject.getClass().getMethod("title", new Class[]{});
+            titleMethod = getDelegate().getClass().getMethod("title", new Class[]{});
         } catch (final NoSuchMethodException e) {
             // ignore
         }
@@ -124,22 +125,27 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
                     nsme);
         }
 
-        entityFacet = metaModelContext.getSpecification(domainObject.getClass())
+        entityFacet = metaModelContext.getSpecification(getDelegate().getClass())
                 .getFacet(EntityFacet.class);
     }
 
+    /**
+     *
+     * @param proxyObjectUnused - not used.
+     * @param method - the method invoked on the proxy
+     * @param args - the args to the method invoked on the proxy
+     *
+     * @return
+     * @throws Throwable
+     */
     @Override
-    public Object invoke(final Object proxyObject, final Method method, final Object[] args) throws Throwable {
+    public Object invoke(final Object proxyObjectUnused, final Method method, final Object[] args) throws Throwable {
 
         if (isObjectMethod(method)) {
             return delegate(method, args);
         }
 
         if(isEnhancedEntityMethod(method)) {
-            return delegate(method, args);
-        }
-
-        if(isInjectMethod(method)) {
             return delegate(method, args);
         }
 
@@ -203,7 +209,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
             final OneToManyAssociation otma = (OneToManyAssociation) objectMember;
             if (intent == Intent.ACCESSOR) {
-                return handleGetterMethodOnCollection(targetAdapter, args, otma, method, memberName);
+                return handleGetterMethodOnCollection(targetAdapter, args, otma, memberName);
             }
             if (intent == Intent.MODIFY_COLLECTION_ADD) {
                 return handleCollectionAddToMethod(targetAdapter, args, otma);
@@ -243,7 +249,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
                         return handleGetterMethodOnProperty(contributeeAdapter, new Object[0], (OneToOneAssociation)mixinMember);
                     }
                     if(mixinMember instanceof OneToManyAssociation) {
-                        return handleGetterMethodOnCollection(contributeeAdapter, new Object[0], (OneToManyAssociation)mixinMember, method, memberName);
+                        return handleGetterMethodOnCollection(contributeeAdapter, new Object[0], (OneToManyAssociation)mixinMember, memberName);
                     }
                 } else {
                     throw _Exceptions.illegalState(String.format(
@@ -347,20 +353,11 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
                         : false;
     }
 
-    private static boolean isInjectMethod(final Method method) {
-        return methodStartsWith(method, "inject");
-    }
-
-    private static boolean methodStartsWith(final Method method, final String prefix) {
-        return method.getName().startsWith(prefix);
-    }
-
     // /////////////////////////////////////////////////////////////////
     // title
     // /////////////////////////////////////////////////////////////////
 
-    private Object handleTitleMethod(final ManagedObject targetAdapter)
-            throws IllegalAccessException, InvocationTargetException {
+    private Object handleTitleMethod(final ManagedObject targetAdapter) {
 
         resolveIfRequired(targetAdapter);
 
@@ -476,7 +473,6 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             final ManagedObject targetAdapter,
             final Object[] args,
             final OneToManyAssociation collection,
-            final Method method,
             final String memberName) {
 
         zeroArgsElseThrow(args, "get");
@@ -497,7 +493,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             val collectionAccessEvent = new CollectionAccessEvent(getDelegate(), collection.getIdentifier());
 
             if (currentReferencedObj instanceof Collection) {
-                val collectionViewObject = lookupWrappingObject(method, memberName,
+                val collectionViewObject = lookupWrappingObject(memberName,
                         (Collection<?>) currentReferencedObj, collection);
                 notifyListeners(collectionAccessEvent);
                 return collectionViewObject;
@@ -516,22 +512,29 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     }
 
     private Collection<?> lookupWrappingObject(
-            final Method method,
             final String memberName,
             final Collection<?> collectionToLookup,
             final OneToManyAssociation otma) {
-        return collectionToLookup instanceof WrappingObject
-                ? collectionToLookup
-                        : proxy.proxy(collectionToLookup, memberName, this, otma);
+        if (collectionToLookup instanceof WrappingObject) {
+            return collectionToLookup;
+        }
+        if(proxyContextHandler == null) {
+            throw new IllegalStateException("Unable to create proxy for collection; proxyContextHandler not provided");
+        }
+        return proxyContextHandler.proxy(collectionToLookup, memberName, this, otma);
     }
 
     private Map<?, ?> lookupWrappingObject(
             final String memberName,
             final Map<?, ?> mapToLookup,
             final OneToManyAssociation otma) {
-        return mapToLookup instanceof WrappingObject
-                ? mapToLookup
-                        : proxy.proxy(mapToLookup, memberName, this, otma);
+        if (mapToLookup instanceof WrappingObject) {
+            return mapToLookup;
+        }
+        if(proxyContextHandler == null) {
+            throw new IllegalStateException("Unable to create proxy for collection; proxyContextHandler not provided");
+        }
+        return proxyContextHandler.proxy(mapToLookup, memberName, this, otma);
     }
 
     // /////////////////////////////////////////////////////////////////
