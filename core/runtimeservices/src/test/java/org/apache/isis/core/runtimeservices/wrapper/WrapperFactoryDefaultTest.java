@@ -19,7 +19,6 @@
 package org.apache.isis.core.runtimeservices.wrapper;
 
 import org.assertj.core.api.Assertions;
-import org.hamcrest.CoreMatchers;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
@@ -126,7 +125,7 @@ public class WrapperFactoryDefaultTest {
         final DomainObject domainObject = new WrappingDomainObject(wrappedObject, ImmutableEnumSet.noneOf(ExecutionMode.class));
 
         // when
-        final DomainObject wrappingObject = wrapperFactory.wrap(domainObject, SyncControl.create().withSkipRules());
+        final DomainObject wrappingObject = wrapperFactory.wrap(domainObject, SyncControl.control().withSkipRules());
 
         // then
         assertThat(wrappingObject, is(not(domainObject)));

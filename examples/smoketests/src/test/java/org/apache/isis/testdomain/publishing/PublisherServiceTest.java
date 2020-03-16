@@ -54,6 +54,8 @@ import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
+import static org.apache.isis.applib.services.wrapper.control.AsyncControl.control;
+
 import lombok.val;
 
 @Smoketest
@@ -144,7 +146,7 @@ class PublisherServiceTest extends IsisIntegrationTestAbstract {
         val latch = kvStore.latch(PublisherServiceForTesting.class);
 
         // when - running within its own background task
-        AsyncControl<Void> control = AsyncControl.voidReturn().with(ExecutionModes.SKIP_RULES);
+        AsyncControl<Void> control = control().withSkipRules();
         wrapper.async(book, control).setName("Book #2"); // don't enforce rules for this test
 
         control.getFuture().get(10, TimeUnit.SECONDS);
@@ -174,10 +176,9 @@ class PublisherServiceTest extends IsisIntegrationTestAbstract {
         // when - running within its own background task
         assertThrows(DisabledException.class, ()->{
 
-            val control = AsyncControl.voidReturn().with(ExecutionModes.EXECUTE);
-            wrapper.async(book, control).setName("Book #2");
+            wrapper.async(book, control()).setName("Book #2");
             
-            control.getFuture().get(10, TimeUnit.SECONDS);
+            control().getFuture().get(10, TimeUnit.SECONDS);
             
         });
 

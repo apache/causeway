@@ -47,44 +47,23 @@ import lombok.extern.log4j.Log4j2;
  *
  * @param <R> - return value.
  */
+// tag::refguide[]
 @Log4j2
 public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
 
-    public static AsyncControl<Void> create() {
+    public static AsyncControl<Void> control() {
         return new AsyncControl<>();
     }
-
-    public static <X> AsyncControl<X> create(final Class<X> clazz) {
+    public static <X> AsyncControl<X> control(final Class<X> clazz) {
         return new AsyncControl<>();
-    }
-
-    /**
-     * Alias for {@link #create(Class)}
-     */
-    public static <X> AsyncControl<X> toReturn(final Class<X> clazz) {
-        return create(clazz);
-    }
-
-    /**
-     * Alias for {@link #create()}
-     */
-    public static AsyncControl<Void> ignoreReturn() {
-        return create();
-    }
-
-    /**
-     * Alias for {@link #create()}
-     */
-    public static AsyncControl<Void> voidReturn() {
-        return create();
     }
 
     private AsyncControl() {
-        with((exception) -> {
+        with(exception -> {
             log.error(logMessage(), exception);
+            return null;
         });
     }
-
 
     @Getter @NonNull
     private ExecutorService executorService = ForkJoinPool.commonPool();
@@ -93,10 +72,11 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
         return this;
     }
 
-
+    // end::refguide[]
     /**
      * Defaults to user initiating the action, if not overridden
      */
+    // tag::refguide[]
     @Getter
     private String user;
     public AsyncControl<R> withUser(final String user) {
@@ -104,9 +84,11 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
         return this;
     }
 
+    // end::refguide[]
     /**
      * Defaults to roles of user initiating the action, if not overridden
      */
+    // tag::refguide[]
     @Getter
     private List<String> roles;
     public AsyncControl<R> withRoles(final List<String> roles) {
@@ -117,12 +99,16 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
         return withRoles(Arrays.asList(roles));
     }
 
+    // end::refguide[]
     /**
      * Set by framework
      */
-    @Getter @Setter(AccessLevel.PACKAGE)
+    @Setter(AccessLevel.PACKAGE)
+    // tag::refguide[]
+    @Getter
     private Future<R> future;
 
+    // end::refguide[]
     private String logMessage() {
         StringBuilder buf = new StringBuilder("Failed to execute ");
         if(getMethod() != null) {
@@ -137,5 +123,8 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
         }
         return buf.toString();
     }
+    // tag::refguide[]
+    // ...
 
 }
+// end::refguide[]

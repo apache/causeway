@@ -43,7 +43,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.applib.services.wrapper.control.AsyncControl;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.Incubating;
@@ -53,6 +52,8 @@ import org.apache.isis.testdomain.jdo.JdoInventoryManager;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
+
+import static org.apache.isis.applib.services.wrapper.control.AsyncControl.control;
 
 import lombok.Getter;
 import lombok.val;
@@ -120,8 +121,7 @@ class WrapperAsyncTest {
         actionDomainEventListener.prepareLatch();
 
         // use of custom executor (optional)
-        val control = AsyncControl.toReturn(JdoProduct.class)
-                .with(ExecutionModes.EXECUTE)
+        val control = control(JdoProduct.class)
                 .with(Executors.newCachedThreadPool());
         wrapper.async(inventoryManager, control)
                 .updateProductPrice(product, 123d);

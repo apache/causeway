@@ -66,7 +66,7 @@ public interface WrappingObject {
 
     // end::refguide[]
     /**
-     * The {@link EnumSet<ExecutionMode > execution modes} inferred from the
+     * The {@link EnumSet<ExecutionMode> execution modes} inferred from the
      * {@link org.apache.isis.applib.services.wrapper.control.SyncControl} with which this wrapper was
      * {@link WrapperFactory#wrap(Object, org.apache.isis.applib.services.wrapper.control.SyncControl) created}.
      *

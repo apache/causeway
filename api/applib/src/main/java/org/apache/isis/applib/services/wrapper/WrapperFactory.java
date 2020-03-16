@@ -73,10 +73,9 @@ import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 // tag::refguide-listeners[]
 public interface WrapperFactory {
 
-    // end::refguide-listeners[]
-    // end::refguide-async[]
     // end::refguide[]
-
+    // end::refguide-async[]
+    // end::refguide-listeners[]
     /**
      * Provides the &quot;wrapper&quot; of a domain object against which to invoke the action.
      *
@@ -199,7 +198,7 @@ public interface WrapperFactory {
 
 
     //
-    // -- ITERACTION EVENT HANDLING
+    // -- INTERACTION EVENT HANDLING
     //
 
     /**
@@ -252,5 +251,5 @@ public interface WrapperFactory {
 
 }
 // end::refguide[]
-// end::refguide-listeners[]
 // end::refguide-async[]
+// end::refguide-listeners[]

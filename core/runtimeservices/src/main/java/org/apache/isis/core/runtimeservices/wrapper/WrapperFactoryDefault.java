@@ -26,9 +26,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -40,17 +42,18 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
 import org.apache.isis.applib.services.wrapper.control.AsyncControlService;
 import org.apache.isis.applib.services.wrapper.control.ExecutionMode;
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.applib.services.wrapper.control.SyncControl;
 import org.apache.isis.applib.services.wrapper.events.ActionArgumentEvent;
 import org.apache.isis.applib.services.wrapper.events.ActionInvocationEvent;
@@ -81,9 +84,11 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUt
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.session.IsisSessionTracker;
@@ -111,21 +116,17 @@ import lombok.extern.log4j.Log4j2;
 public class WrapperFactoryDefault implements WrapperFactory {
     
     @Inject private FactoryService factoryService;
-    @Inject private BookmarkService bookmarkService;
     @Inject private MetaModelContext metaModelContext;
     @Inject private SpecificationLoader specificationLoader;
     @Inject private IsisSessionTracker isisSessionTracker;
     @Inject private IsisSessionFactory isisSessionFactory;
     @Inject private CommandExecutorService commandExecutorService;
-    @Inject private Provider<CommandContext> commandContextProvider;
-    @Inject private TransactionService transactionService;
     @Inject protected ProxyFactoryService proxyFactoryService; // protected to allow JUnit test
     @Inject private CommandDtoServiceInternal commandDtoServiceInternal;
 
-    private final List<InteractionListener> listeners = new ArrayList<InteractionListener>();
+    private final List<InteractionListener> listeners = new ArrayList<>();
     private final Map<Class<? extends InteractionEvent>, InteractionEventDispatcher>
-        dispatchersByEventClass = 
-            new HashMap<Class<? extends InteractionEvent>, InteractionEventDispatcher>();
+        dispatchersByEventClass = new HashMap<>();
     private ProxyContextHandler proxyContextHandler;
     
     @PostConstruct
@@ -156,7 +157,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     
     @Override
     public <T> T wrap(T domainObject) {
-        return wrap(domainObject, SyncControl.create());
+        return wrap(domainObject, SyncControl.control());
     }
 
     @Override
@@ -178,7 +179,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
     @Override
     public <T> T wrapMixin(Class<T> mixinClass, Object mixedIn) {
-        return wrapMixin(mixinClass, mixedIn, SyncControl.create());
+        return wrapMixin(mixinClass, mixedIn, SyncControl.control());
     }
 
     @Override
@@ -235,13 +236,11 @@ public class WrapperFactoryDefault implements WrapperFactory {
                 }
 
                 val skipRules = executionModes.contains(ExecutionMode.SKIP_RULE_VALIDATION);
-                if(!skipRules) {
-                    // normal wrapped object...
-                    SyncControl syncControl = SyncControl.create().withNoExecute();
+                if (!skipRules) {
+                    SyncControl syncControl = SyncControl.control().withNoExecute();
                     T syncProxy = WrapperFactoryDefault.this.createProxy(domainObject, syncControl);
                     method.invoke(syncProxy, args);
                 }
-
 
                 //
                 // submit async stuff
@@ -274,25 +273,91 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
                 asyncControlService.init(asyncControl, method, Bookmark.from(oidDto));
 
-                Future future = executorService.submit(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        isisSessionFactory.runAuthenticated(authSession, () -> {
-                            commandExecutorService.executeCommand(dto);
-                        });
-                    }
-                });
+                Future future = executorService.submit(() ->
+                        isisSessionFactory.runAuthenticated(authSession,
+                                () -> commandExecutorService.executeCommand(dto)));
                 asyncControlService.update(asyncControl, future);
                 return null;
-
             }
         }, false);
     }
 
     @Override
     public <T, R> T asyncMixin(Class<T> mixinClass, Object mixedIn, AsyncControl<R> asyncControl) {
-        throw new RuntimeException("TODO!!!");
+        T mixin = factoryService.mixin(mixinClass, mixedIn);
+
+        final ImmutableEnumSet<ExecutionMode> executionModes = asyncControl.getExecutionModes();
+        final ExecutorService executorService = asyncControl.getExecutorService();
+
+        ProxyFactory<T> factory = proxyFactoryService.factory(mixinClass, new Class[]{WrappingObject.class}, new Class[]{mixedIn.getClass()});
+
+        return factory.createInstance(new InvocationHandler() {
+            @Override
+            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+
+                //
+                // executed in the same thread as caller..
+                //
+                final boolean inheritedFromObject = method.getDeclaringClass().equals(Object.class);
+                if (inheritedFromObject) {
+                    return method.invoke(mixin, args);
+                }
+
+                val skipRules = executionModes.contains(ExecutionMode.SKIP_RULE_VALIDATION);
+                if (!skipRules) {
+                    T syncProxy = WrapperFactoryDefault.this.createProxy(mixin, SyncControl.control().withNoExecute());
+                    method.invoke(syncProxy, args);
+                }
+
+                //
+                // submit async stuff
+                //
+                final ObjectSpecificationDefault mixinSpec = (ObjectSpecificationDefault) specificationLoader.loadSpecification(method.getDeclaringClass());
+                final ObjectMember member = mixinSpec.getMember(method);
+                if (member == null) {
+                    return method.invoke(mixin, args);
+                }
+
+                // find corresponding action of the mixedIn (this is the 'real' target).
+                String memberId = member.getId();
+
+                Class<?> mixedInClass = mixedIn.getClass();
+                final ObjectSpecificationDefault mixedInSpec = (ObjectSpecificationDefault) specificationLoader.loadSpecification(mixedInClass);
+                // don't care about anything other than actions.
+
+                //Optional<ObjectAction> targetActionIfAny = mixedInSpec.getObjectAction(memberId);
+                Optional<ObjectActionMixedIn> targetActionIfAny = mixedInSpec.streamObjectActions(Contributed.INCLUDED)
+                        .filter(ObjectActionMixedIn.class::isInstance)
+                        .map(ObjectActionMixedIn.class::cast)
+                        .filter(x -> x.hasMixinAction((ObjectAction) member))
+                        .findFirst();
+
+                if(!targetActionIfAny.isPresent()) {
+                    throw new UnsupportedOperationException(
+                            "Could not locate objectAction with id='" + memberId + "' on mixedIn class '" + mixedInClass.getName() + "'");
+                }
+                ObjectAction action = targetActionIfAny.get();
+
+                val isisSession = isisSessionTracker.currentSession().orElseThrow(() -> new RuntimeException("No IsisSession is open"));
+                val authSession = isisSession.getAuthenticationSession();
+
+                final ManagedObject mixedInAdapter = isisSession.getObjectManager().adapt(mixedIn);
+                final List<ManagedObject> argAdapters = Arrays.asList(WrapperFactoryDefault.this.adaptersFor(args));
+
+                final List<ManagedObject> targetList = Collections.singletonList(mixedInAdapter);
+                final CommandDto dto = commandDtoServiceInternal.asCommandDto(targetList, action, argAdapters);
+                final OidDto oidDto = dto.getTargets().getOid().get(0);
+
+                asyncControlService.init(asyncControl, method, Bookmark.from(oidDto));
+
+                Future future = executorService.submit(() ->
+                        isisSessionFactory.runAuthenticated(authSession,
+                                () -> commandExecutorService.executeCommand(dto)));
+                asyncControlService.update(asyncControl, future);
+                return null;
+
+            }
+        }, new Object[]{ mixedIn });
     }
 
     private ManagedObject[] adaptersFor(final Object[] args) {
@@ -301,25 +366,6 @@ public class WrapperFactoryDefault implements WrapperFactory {
         return CommandUtil.adaptersFor(args, objectManager);
     }
 
-    private static ImmutableEnumSet<ExecutionMode> join(
-            ImmutableEnumSet<ExecutionMode> executionModes,
-            ExecutionMode skipRuleValidation) {
-        val tmp = executionModes.toEnumSet();
-        tmp.add(skipRuleValidation);
-        return ImmutableEnumSet.from(tmp);
-    }
-
-    private boolean shouldValidateSync(ImmutableEnumSet<ExecutionMode> executionModesSync) {
-        return !executionModesSync.contains(ExecutionMode.SKIP_RULE_VALIDATION);
-    }
-
-    private boolean shouldValidateAsync(ImmutableEnumSet<ExecutionMode> executionModesAsync) {
-        return !executionModesAsync.contains(ExecutionMode.SKIP_RULE_VALIDATION);
-    }
-
-    private boolean shouldExecuteAsync(ImmutableEnumSet<ExecutionMode> executionModesAsync) {
-        return !executionModesAsync.contains(ExecutionMode.SKIP_EXECUTION);
-    }
 
 
     // -- LISTENERS

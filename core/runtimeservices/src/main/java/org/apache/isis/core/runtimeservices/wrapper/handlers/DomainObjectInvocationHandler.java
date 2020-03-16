@@ -68,6 +68,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionContributee;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 
+import lombok.SneakyThrows;
 import lombok.val;
 
 public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandlerDefault<T> {
@@ -796,7 +797,6 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         return !getSyncControl().getExecutionModes().contains(ExecutionMode.SKIP_EXECUTION);
     }
     
-
     private void runValidationTask(Runnable task) {
         if(!shouldEnforceRules()) {
             return;
@@ -808,10 +808,6 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         }
     }
 
-    private void handleException(Exception ex) {
-        getSyncControl().getExceptionHandler().accept(ex);
-    }
-
     private <X> X runExecutionTask(Supplier<X> task) {
         if(!shouldExecute()) {
             return null;
@@ -819,26 +815,32 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         try {
             return task.get();
         } catch(Exception ex) {
-            handleException(ex);
-            // in case the exception handler doesn't throw
-            return null;
+            return (X)handleException(ex);
         }
+    }
+
+    @SneakyThrows
+    private Object handleException(Exception ex) {
+        return getSyncControl().getExceptionHandler().handle(ex);
     }
 
     private Object singleArgUnderlyingElseThrow(Object[] args, String name) {
         if (args.length != 1) {
-            throw new IllegalArgumentException("Invoking '" + name + "' should only have a single argument");
+            throw new IllegalArgumentException(String.format(
+                    "Invoking '%s' should only have a single argument", name));
         }
         val argumentObj = underlying(args[0]);
         if (argumentObj == null) {
-            throw new IllegalArgumentException("Must provide a non-null object to '" + name +"'");
+            throw new IllegalArgumentException(String.format(
+                    "Must provide a non-null object to '%s'", name));
         }
         return argumentObj;
     }
     
     private Object singleArgUnderlyingElseNull(Object[] args, String name) {
         if (args.length != 1) {
-            throw new IllegalArgumentException("Invoking '" + name + "' should only have a single argument");
+            throw new IllegalArgumentException(String.format(
+                    "Invoking '%s' should only have a single argument", name));
         }
         val argumentObj = underlying(args[0]);
         return argumentObj;
@@ -846,7 +848,8 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     
     private void zeroArgsElseThrow(Object[] args, String name) {
         if (args.length != 0) {
-            throw new IllegalArgumentException("Invoking '" + name + "' should have no arguments");
+            throw new IllegalArgumentException(String.format(
+                    "Invoking '%s' should have no arguments", name));
         }
     }
     
@@ -856,13 +859,8 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         return mmContext.getSpecificationLoader();
     }
 
-//    protected AuthenticationSession getAuthenticationSession() {
-//        return mmContext.getAuthenticationSessionProvider().getAuthenticationSessionElseFail();
-//    }
-
     protected ObjectManager getObjectManager() {
         return mmContext.getObjectManager();
     }
 
-    
 }

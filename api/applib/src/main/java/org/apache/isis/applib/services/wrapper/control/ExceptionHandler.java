@@ -18,39 +18,30 @@
  */
 package org.apache.isis.applib.services.wrapper.control;
 
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.Future;
 import java.util.function.Consumer;
 
-import org.apache.isis.core.commons.collections.ImmutableEnumSet;
-import org.apache.isis.schema.common.v2.OidDto;
-
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
 /**
  */
-// end::refguide[]
-public class SyncControl extends ControlAbstract<SyncControl> {
+// tag::refguide[]
+@FunctionalInterface
+public interface ExceptionHandler {
 
-    public static SyncControl control() {
-        return new SyncControl();
-    }
-
-    private SyncControl() {
-        with(exception -> {
-            throw exception;
-        });
-    }
+    // end::refguide[]
+    /**
+     * Handle the exception in some way.
+     *
+     * Typically this will log and rethrow the exception.  If necessary though it can
+     * return some other value instead (must be compatible with the expected return value of the interaction,
+     * that is, the action invocation or property edit).
+     *
+     * @param ex - the exception that has occurred
+     * @return - optionally, the value to return.
+     */
+    // tag::refguide[]
+    Object handle(Exception ex) throws Exception;
 
 }
 // end::refguide[]

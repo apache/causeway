@@ -36,25 +36,30 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
-@Log4j2
+// tag::refguide[]
 public class ControlAbstract<T extends ControlAbstract<T>> {
 
+    // end::refguide[]
     protected ControlAbstract() {
     }
 
     /**
      * Set by framework.
      */
-    @Getter(AccessLevel.PACKAGE)
     @Setter(AccessLevel.PACKAGE)
+    // tag::refguide[]
+    @Getter(AccessLevel.PACKAGE)
     private Method method;
 
+    // end::refguide[]
     /**
      * Set by framework.
      */
-    @Getter(AccessLevel.PACKAGE)
     @Setter(AccessLevel.PACKAGE)
+    // tag::refguide[]
+    @Getter(AccessLevel.PACKAGE)
     private Bookmark bookmark;
+    // end::refguide[]
 
     private boolean checkRules = true;
     public T withCheckRules() {
@@ -76,6 +81,7 @@ public class ControlAbstract<T extends ControlAbstract<T>> {
         return (T)this;
     }
 
+    // end::refguide[]
     public ImmutableEnumSet<ExecutionMode> getExecutionModes() {
         EnumSet<ExecutionMode> modes = EnumSet.noneOf(ExecutionMode.class);
         if(!checkRules) {
@@ -91,12 +97,11 @@ public class ControlAbstract<T extends ControlAbstract<T>> {
      * Initialized in constructor.
      */
     @Getter @NonNull
-    private Consumer<Exception> exceptionHandler;
-    public T with(Consumer<Exception> exceptionHandler) {
+    private ExceptionHandler exceptionHandler;
+    public T with(ExceptionHandler exceptionHandler) {
         this.exceptionHandler = exceptionHandler;
         return (T)this;
     }
-
-
+    // tag::refguide[]
 
 }

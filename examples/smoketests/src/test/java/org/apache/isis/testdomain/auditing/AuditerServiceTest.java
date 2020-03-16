@@ -52,6 +52,8 @@ import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
+import static org.apache.isis.applib.services.wrapper.control.AsyncControl.control;
+
 import lombok.val;
 
 @Smoketest
@@ -122,8 +124,7 @@ class AuditerServiceTest extends IsisIntegrationTestAbstract {
     }
 
     @Test @Tag("Incubating")
-    void auditerService_shouldBeAwareOfInventoryChanges_whenUsingAsyncExecution() 
-            throws InterruptedException, ExecutionException, TimeoutException {
+    void auditerService_shouldBeAwareOfInventoryChanges_whenUsingAsyncExecution() {
 
         // given
         val books = repository.allInstances(JdoBook.class);
@@ -132,7 +133,7 @@ class AuditerServiceTest extends IsisIntegrationTestAbstract {
         kvStore.clear(AuditerServiceForTesting.class);
 
         // when - running within its own background task
-        val control = AsyncControl.voidReturn().with(ExecutionModes.SKIP_RULES);
+        val control = control().withSkipRules();
         // don't enforce rules for this test
         wrapper.async(book, control).setName("Book #2");
 
@@ -142,8 +143,7 @@ class AuditerServiceTest extends IsisIntegrationTestAbstract {
     }
     
     @Test @Tag("Incubating")
-    void auditerService_shouldNotBeAwareOfInventoryChanges_whenUsingAsyncExecutionThatFails() 
-            throws InterruptedException, ExecutionException, TimeoutException {
+    void auditerService_shouldNotBeAwareOfInventoryChanges_whenUsingAsyncExecutionThatFails() {
 
         // given
         val books = repository.allInstances(JdoBook.class);
@@ -154,10 +154,9 @@ class AuditerServiceTest extends IsisIntegrationTestAbstract {
         // when - running within its own background task
         assertThrows(DisabledException.class, ()->{
 
-            val control = AsyncControl.voidReturn().with(ExecutionModes.EXECUTE);
-            wrapper.async(book, control).setName("Book #2");
+            wrapper.async(book, control()).setName("Book #2");
 
-            control.getFuture().get(1000, TimeUnit.SECONDS);
+            control().getFuture().get(1000, TimeUnit.SECONDS);
             
         });
         
