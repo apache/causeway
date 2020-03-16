@@ -19,8 +19,13 @@
 
 package org.apache.isis.core.runtime.session;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionState;
+import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.context.session.RuntimeContextBase;
@@ -97,4 +102,18 @@ public class IsisSession extends RuntimeContextBase {
     }
 
 
+    private final Map<Class, Can> map = new HashMap<>();
+
+    public <T> Runnable put(Class<? super T> type, T variant) {
+        map
+                .compute(type, (k, v) -> v == null
+                        ? Can.<T>ofSingleton(variant)
+                        : Can.<T>concat(_Casts.uncheckedCast(v), variant));
+
+        return () -> map.remove(type);
+    }
+
+    public <T> Can<T> get(Class<? super T> type) {
+        return map.get(type);
+    }
 }

@@ -58,11 +58,11 @@ public class RuntimeEventService {
     // -- SESSION
 
     public void fireSessionOpened(IsisSession session) {
-        eventBusService.post(SessionLifecycleEvent.of(session, SessionLifecycleEvent.EventType.sessionOpened));
+        eventBusService.post(IsisSessionLifecycleEvent.of(session, IsisSessionLifecycleEvent.EventType.OPENED));
     }
 
     public void fireSessionClosing(IsisSession session) {
-        eventBusService.post(SessionLifecycleEvent.of(session, SessionLifecycleEvent.EventType.sessionClosing));
+        eventBusService.post(IsisSessionLifecycleEvent.of(session, IsisSessionLifecycleEvent.EventType.CLOSING));
     }
 
     //	public void fireSessionFlushing(IsisSession session) {

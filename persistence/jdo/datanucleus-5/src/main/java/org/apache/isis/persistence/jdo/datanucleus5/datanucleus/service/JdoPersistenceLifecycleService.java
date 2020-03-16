@@ -34,9 +34,10 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.context.session.AppLifecycleEvent;
-import org.apache.isis.core.runtime.context.session.SessionLifecycleEvent;
+import org.apache.isis.core.runtime.context.session.IsisSessionLifecycleEvent;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSessionFactory;
+import org.apache.isis.core.runtime.session.IsisSession;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -82,8 +83,8 @@ public class JdoPersistenceLifecycleService {
 
     }
 
-    @EventListener(SessionLifecycleEvent.class)
-    public void onSessionLifecycleEvent(SessionLifecycleEvent event) {
+    @EventListener(IsisSessionLifecycleEvent.class)
+    public void onSessionLifecycleEvent(IsisSessionLifecycleEvent event) {
 
         val eventType = event.getEventType();
 
@@ -92,11 +93,11 @@ public class JdoPersistenceLifecycleService {
         }
 
         switch (eventType) {
-        case sessionOpened:
-            openSession();
+        case OPENED:
+            openSession(event.getIsisSession());
             break;
-        case sessionClosing:
-            closeSession();
+        case CLOSING:
+            closeSession(event.getIsisSession());
             break;
             //		case sessionFlushing:
             //			flushSession();
@@ -110,18 +111,25 @@ public class JdoPersistenceLifecycleService {
 
     // -- HELPER
 
-    private void openSession() {
+    private void openSession(IsisSession isisSession) {
 
         val persistenceSession =
                 persistenceSessionFactory.createPersistenceSession();
 
         // to support static call of PersistenceSession.current(PersistenceSession.class)
+
+        // TODO: review - rather than using a thread-local, and alternative might be to have
+        //  IsisSession provide a "userData" map to allow arbitrary session-scoped objects to be stored there...
+        //  ... of which PersistenceSession is one (the other is IsisTransactionObject).
+        //  Then, only IsisSessionFactory needs to maintain a thread-local (and if we change to some other way of
+        //  finding the current IsisSession, eg from HttpRequest, then there's no impact elsewhere).
+
         _Context.threadLocalPut(PersistenceSession.class, persistenceSession);
 
         persistenceSession.open();
     }
 
-    private void closeSession() {
+    private void closeSession(IsisSession isisSession) {
         PersistenceSession.current(PersistenceSession.class)
         .getSingleton()
         .ifPresent(PersistenceSession::close);

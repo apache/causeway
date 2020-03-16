@@ -33,7 +33,7 @@ import lombok.val;
 @ToString
 public class IsisTransactionObject implements SmartTransactionObject {
     
-    public static enum IsisSessionLifeCycle {
+    public static enum IsisSessionScopeType {
         /** an IsisSession was already present when creating this txObj */  
         REQUEST_SCOPED,
         /** an IsisSession was auto-created when creating this txObj, 
@@ -41,15 +41,15 @@ public class IsisTransactionObject implements SmartTransactionObject {
         TEST_SCOPED
     }
 
-    public static IsisTransactionObject of(Transaction currentTransaction, IsisSessionLifeCycle isisSessionLifeCycle) {
+    public static IsisTransactionObject of(Transaction currentTransaction, IsisSessionScopeType isisSessionScopeType) {
         val txObject = new IsisTransactionObject();
         txObject.setCurrentTransaction(currentTransaction);
-        txObject.setIsisSessionLifeCycle(isisSessionLifeCycle);
+        txObject.setIsisSessionScopeType(isisSessionScopeType);
         return txObject;
     }
 
     @Getter @Setter Transaction currentTransaction;
-    @Getter @Setter IsisSessionLifeCycle isisSessionLifeCycle;
+    @Getter @Setter IsisSessionScopeType isisSessionScopeType;
 
 
     @Override
