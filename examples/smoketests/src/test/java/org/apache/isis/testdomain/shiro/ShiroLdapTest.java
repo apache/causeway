@@ -28,6 +28,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
@@ -59,6 +60,7 @@ import lombok.extern.log4j.Log4j2;
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @Incubating("inconsistent state when run in a test batch")
 @Log4j2
+@DisabledIfSystemProperty(named = "ldap", matches = ".*disable.*")
 class ShiroLdapTest extends AbstractShiroTest {
 
     @Inject LdapServerService ldapServerService;

@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
+import org.apache.isis.core.metamodel.objectmanager.detach.ObjectDetacher;
 import org.apache.isis.core.metamodel.objectmanager.identify.ObjectIdentifier;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.objectmanager.refresh.ObjectRefresher;
@@ -55,13 +56,15 @@ public class ObjectManagerDefault implements ObjectManager {
     @Getter(onMethod = @__(@Override)) private ObjectCreator objectCreator;
     @Getter(onMethod = @__(@Override)) private ObjectIdentifier objectIdentifier;
     @Getter(onMethod = @__(@Override)) private ObjectRefresher objectRefresher;
-    
+    @Getter(onMethod = @__(@Override)) private ObjectDetacher objectDetacher;
+
     @PostConstruct
     public void init() {
         objectCreator = ObjectCreator.createDefault(metaModelContext);
         objectLoader = ObjectLoader.createDefault(metaModelContext);
         objectIdentifier = ObjectIdentifier.createDefault();
         objectRefresher = ObjectRefresher.createDefault();
+        objectDetacher = ObjectDetacher.createDefault(metaModelContext);
     }
 
     
@@ -74,4 +77,8 @@ public class ObjectManagerDefault implements ObjectManager {
         return objectManager;
     }
 
+    @Override
+    public ObjectDetacher getObjectDetacher() {
+        return objectDetacher;
+    }
 }

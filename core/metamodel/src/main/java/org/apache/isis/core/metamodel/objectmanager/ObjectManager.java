@@ -23,6 +23,7 @@ import javax.annotation.Nullable;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
+import org.apache.isis.core.metamodel.objectmanager.detach.ObjectDetacher;
 import org.apache.isis.core.metamodel.objectmanager.identify.ObjectIdentifier;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.objectmanager.refresh.ObjectRefresher;
@@ -46,6 +47,7 @@ public interface ObjectManager {
     ObjectLoader getObjectLoader();
     ObjectIdentifier getObjectIdentifier();
     ObjectRefresher getObjectRefresher();
+    ObjectDetacher getObjectDetacher();
 
     // -- SHORTCUTS
 

@@ -49,6 +49,6 @@ public interface EntityFacet extends Facet {
      * @return
      */
     boolean isProxyEnhancement(Method method);
-    
 
+    <T> T detach(T pojo);
 }

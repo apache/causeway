@@ -42,6 +42,7 @@ import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
+import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 import lombok.val;
 
@@ -53,7 +54,7 @@ import lombok.val;
 )
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @Incubating("wrapper.wrap(inventoryManager) throws NPE")
-class WrapperSyncTest {
+class WrapperSyncTest extends IsisIntegrationTestAbstract {
 
     @Inject private FixtureScripts fixtureScripts;
     @Inject private RepositoryService repository;

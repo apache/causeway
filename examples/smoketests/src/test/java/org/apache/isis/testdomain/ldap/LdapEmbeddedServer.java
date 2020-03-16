@@ -41,7 +41,7 @@ partitions = {
         @CreatePartition(name = "mojo", suffix = "o=mojo")
 })
 @CreateLdapServer(transports = { 
-        @CreateTransport(protocol = "LDAP", address = "localhost", port = LdapConstants.PORT)})
+        @CreateTransport(protocol = "LDAP", address = "localhost")})
 @ApplyLdifFiles({"ldap-users.ldif"})
 public class LdapEmbeddedServer extends AbstractLdapTestUnit {
 
@@ -59,7 +59,7 @@ public class LdapEmbeddedServer extends AbstractLdapTestUnit {
      */
     public static CountDownLatch run() throws InitializationError, InterruptedException {
 
-        val serverLanchedLatch = new CountDownLatch(1);
+        val serverLaunchedLatch = new CountDownLatch(1);
         val serverTerminatedLatch = new CountDownLatch(1);
         val runner = new FrameworkRunner(LdapEmbeddedServer.class);
 
@@ -67,7 +67,7 @@ public class LdapEmbeddedServer extends AbstractLdapTestUnit {
         notifier.addListener(new RunListener() {
             @Override
             public void testFinished(Description description) throws Exception {
-                serverLanchedLatch.countDown();
+                serverLaunchedLatch.countDown();
                 serverTerminatedLatch.await(); // wait for the latch to be decremented by the caller
             }
         });
@@ -81,11 +81,10 @@ public class LdapEmbeddedServer extends AbstractLdapTestUnit {
 
         thread.start();
 
-        serverLanchedLatch.await(); // wait for the server to be fully launched
+        serverLaunchedLatch.await(); // wait for the server to be fully launched
 
         return serverTerminatedLatch;
 
     }
-
 
 }

@@ -101,7 +101,10 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
 
     // end::refguide[]
     /**
-     * Set by framework
+     * Set by framework.
+     *
+     * Contains the result of the invocation.  However, if an entity is returned, then the object is automatically
+     * detached because the persistence session within which it was obtained will have been closed already.
      */
     @Setter(AccessLevel.PACKAGE)
     // tag::refguide[]

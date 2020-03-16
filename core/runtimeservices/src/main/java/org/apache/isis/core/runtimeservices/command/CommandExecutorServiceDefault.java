@@ -23,6 +23,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -90,6 +92,9 @@ import lombok.extern.log4j.Log4j2;
 @Qualifier("Default")
 @Log4j2
 public class CommandExecutorServiceDefault implements CommandExecutorService {
+
+    private static final Pattern ID_PARSER =
+            Pattern.compile("(?<className>[^#]+)#?(?<localId>[^(]+)(?<args>[(][^)]*[)])?");
 
     @Override
     public void executeCommand(
@@ -291,10 +296,10 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     }
 
     private static String localPartOf(String memberId) {
-        val separatorIndex = memberId.lastIndexOf("#");
-        return separatorIndex != -1
-                ? memberId.substring(separatorIndex + 1)
-                : memberId;
+        val matcher = ID_PARSER.matcher(memberId);
+        return matcher.matches()
+                ? matcher.group("localId")
+                : "";
     }
 
     private ManagedObject newValueAdapterFor(final PropertyDto propertyDto) {
@@ -305,11 +310,12 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     private static ObjectAction findActionElseNull(
             final ObjectSpecification specification,
-            final String actionId) {
+            final String localActionId) {
         final Stream<ObjectAction> objectActions = specification.streamObjectActions(Contributed.INCLUDED);
 
         return objectActions
-                .filter(objectAction->objectAction.getIdentifier().toClassAndNameIdentityString().equals(actionId))
+                .filter(objectAction->
+                        Objects.equals(objectAction.getId(), localActionId))
                 .findAny()
                 .orElse(null);
     }

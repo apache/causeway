@@ -16,11 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.objectmanager.refresh;
+package org.apache.isis.core.metamodel.objectmanager.detach;
+
+import java.util.Optional;
 
 import org.apache.isis.core.commons.handler.ChainOfResponsibility;
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.val;
@@ -30,33 +32,29 @@ import lombok.val;
  * @since 2.0
  *
  */
-public interface ObjectRefresher {
+public interface ObjectDetacher {
 
-    /**
-     * Reloads the state of the instance from the data store.
-     * @param objectLoadRequest
-     */
-    void refreshObject(ManagedObject managedObject);
+    ManagedObject detachObject(ManagedObject managedObject);
     
     // -- HANDLER
     
     static interface Handler
     extends
-        ChainOfResponsibility.Handler<ManagedObject, Void> {
+        ChainOfResponsibility.Handler<ManagedObject, ManagedObject> {
     }
 
     // -- FACTORY
     
-    public static ObjectRefresher createDefault() {
+    public static ObjectDetacher createDefault(MetaModelContext metaModelContext) {
         
         val chainOfHandlers = _Lists.of(
-                new ObjectRefresher_builtinHandlers.GuardAgainstNull(),
-                new ObjectRefresher_builtinHandlers.RefreshEntity(),
-                new ObjectRefresher_builtinHandlers.RefreshOther());
+                new ObjectDetacher_builtinHandlers.GuardAgainstNull(),
+                new ObjectDetacher_builtinHandlers.DetachEntity(metaModelContext),
+                new ObjectDetacher_builtinHandlers.DetachOther());
         
         val chainOfRespo = ChainOfResponsibility.of(chainOfHandlers);
-        
-        return chainOfRespo::handle;
+
+        return request -> chainOfRespo.handle(request).orElse(null);
 
     }
     

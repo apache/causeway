@@ -51,6 +51,7 @@ import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 
@@ -204,7 +205,21 @@ public class RepositoryServiceDefault implements RepositoryService {
         final List<T> instances = allMatches(query); // No need to fetch more than 2.
         return firstInstanceElseEmpty(instances);
     }
-    
+
+    @Override
+    public <T> T refresh(T pojo) {
+        val managedObject = objectManager.adapt(pojo);
+        objectManager.getObjectRefresher().refreshObject(managedObject);
+        return (T) managedObject.getPojo();
+    }
+
+    @Override
+    public <T> T detach(T entity) {
+        val managedObject = objectManager.adapt(entity);
+        val managedDetachedObject = objectManager.getObjectDetacher().detachObject(managedObject);
+        return (T)managedDetachedObject.getPojo();
+    }
+
     // -- HELPER
     
     private static <T> Optional<T> firstInstanceElseEmpty(final List<T> instances) {

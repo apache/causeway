@@ -27,8 +27,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -41,8 +43,11 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
@@ -96,6 +101,7 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.standard.SimpleSession;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
+import static org.apache.isis.applib.services.metamodel.MetaModelService.Mode.*;
 import static org.apache.isis.applib.services.wrapper.control.SyncControl.control;
 
 import lombok.Data;
@@ -125,6 +131,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     @Inject protected ProxyFactoryService proxyFactoryService; // protected to allow JUnit test
     @Inject private CommandDtoServiceInternal commandDtoServiceInternal;
     @Inject private AsyncControlService asyncControlService;
+    @Inject private BookmarkService bookmarkService;
 
     private final List<InteractionListener> listeners = new ArrayList<>();
     private final Map<Class<? extends InteractionEvent>, InteractionEventDispatcher>
@@ -311,17 +318,33 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
         asyncControlService.init(asyncControl, method, Bookmark.from(oidDto));
 
-        Future future = executorService.submit(() -> {
-            isisSessionFactory.runAuthenticated(asyncAuthSession, () -> {
-                transactionService.executeWithinTransaction(() -> {
-                    commandExecutorService.executeCommand(commandDto);
-                });
-            });
-        });
+        Future future = executorService.submit(() ->
+                isisSessionFactory.callAuthenticated(asyncAuthSession, () ->
+                    transactionService.executeWithinTransaction(() -> {
+                        Bookmark bookmark = commandExecutorService.executeCommand(commandDto);
+                        if (bookmark != null) {
+                            Object entity = bookmarkService.lookup(bookmark);
+                            val metaModelService = WrapperFactoryDefault.this.getMetaModelService();
+                            if (metaModelService.sortOf(bookmark, RELAXED).isEntity()) {
+                                entity = WrapperFactoryDefault.this.getRepositoryService().detach(entity);
+                            }
+                            return entity;
+                        }
+                        return null;
+                    })
+        ));
 
         asyncControlService.update(asyncControl, future);
 
         return null;
+    }
+
+    private RepositoryService getRepositoryService() {
+        return metaModelContext.getRepositoryService();
+    }
+
+    private MetaModelService getMetaModelService() {
+        return metaModelContext.getServiceRegistry().lookupServiceElseFail(MetaModelService.class);
     }
 
     private <T> MemberAndTarget forRegular(Method method, T domainObject) {

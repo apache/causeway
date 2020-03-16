@@ -18,14 +18,17 @@
  */
 package org.apache.isis.testdomain.commandexecution;
 
-import java.util.concurrent.CountDownLatch;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -36,11 +39,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
@@ -52,6 +56,7 @@ import org.apache.isis.testdomain.jdo.JdoInventoryManager;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
+import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 import static org.apache.isis.applib.services.wrapper.control.AsyncControl.control;
 
@@ -69,11 +74,11 @@ import lombok.extern.log4j.Log4j2;
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @Incubating("wrapper.wrap(inventoryManager) throws NPE")
 @DirtiesContext // because of the temporary installed ActionDomainEventListener
-class WrapperAsyncTest {
+class WrapperAsyncTest extends IsisIntegrationTestAbstract {
 
     @Inject private FixtureScripts fixtureScripts;
     @Inject private RepositoryService repository;
-    @Inject private FactoryService facoryService;
+    @Inject private FactoryService factoryService;
     @Inject private WrapperFactory wrapper;
     @Inject private ActionDomainEventListener actionDomainEventListener;
     
@@ -94,69 +99,62 @@ class WrapperAsyncTest {
     @Test @Tag("Incubating")
     void testWrapper_waitingOnDomainEvent() throws InterruptedException, ExecutionException {
 
-        val inventoryManager = facoryService.viewModel(JdoInventoryManager.class);
-        val product = repository.allInstances(JdoProduct.class).get(0);
+        val inventoryManager = factoryService.viewModel(JdoInventoryManager.class);
+        List<JdoProduct> jdoProducts = repository.allInstances(JdoProduct.class);
+        val product = jdoProducts.get(0);
 
         assertEquals(99d, product.getPrice(), 1E-6);
-
-        actionDomainEventListener.prepareLatch();
 
         wrapper.wrap(inventoryManager).updateProductPrice(product, 123);
 
-        assertTrue(
-                actionDomainEventListener.getCountDownLatch()
-                .await(2, TimeUnit.SECONDS)); //XXX just a reasonable long time period
-
         assertEquals(123d, product.getPrice(), 1E-6);
+
+        Assertions.assertThat(actionDomainEventListener.getEvents()).hasSize(5);
     }
 
     @Test @Tag("Incubating")
-    void testWrapper_async_waitingOnDomainEvent() throws InterruptedException, ExecutionException {
+    void testWrapper_async_waitingOnDomainEvent() throws InterruptedException, ExecutionException, TimeoutException {
 
-        val inventoryManager = facoryService.viewModel(JdoInventoryManager.class);
+        val inventoryManager = factoryService.viewModel(JdoInventoryManager.class);
         val product = repository.allInstances(JdoProduct.class).get(0);
 
         assertEquals(99d, product.getPrice(), 1E-6);
 
-        actionDomainEventListener.prepareLatch();
-
-        // use of custom executor (optional)
-        val control = control(JdoProduct.class)
-                .with(Executors.newCachedThreadPool());
+        // when
+        val control = control(JdoProduct.class);
         wrapper.async(inventoryManager, control)
                 .updateProductPrice(product, 123d);
 
+        // then
         Future<JdoProduct> future = control.getFuture();
         assertNotNull(future);
-        
 
-        assertTrue(
-                actionDomainEventListener.getCountDownLatch()
-                .await(2, TimeUnit.SECONDS)); //XXX just a reasonable long time period
-        
-        assertEquals(123d, product.getPrice(), 1E-6);
-        
-//        val product_asReturnedByTheAsyncTask = invocationResult.get();
-//        assertNotNull(product_asReturnedByTheAsyncTask);
-//        assertEquals(123d, product_asReturnedByTheAsyncTask.getPrice(), 1E-6);
+        JdoProduct product_from_async = future.get(2, TimeUnit.SECONDS);
+        assertEquals(123d, product_from_async.getPrice(), 1E-6);
+        assertNotSame(product, product_from_async.getPrice()); // what is returned is a copy...
+
+        Assertions.assertThat(actionDomainEventListener.getEvents()).hasSize(5);
+
+        // given still that ...
+        assertEquals(99d, product.getPrice(), 1E-6);
+
+        // when
+        val productRefreshed = repositoryService.refresh(product);
+
+        // then
+        assertEquals(123d, productRefreshed.getPrice(), 1E-6);
     }
     
 
     @Service @Log4j2
     public static class ActionDomainEventListener {
 
-        @Getter private CountDownLatch countDownLatch;
+        @Getter
+        private final List<JdoInventoryManager.UpdateProductPriceEvent> events = new ArrayList<>();
 
         @EventListener(JdoInventoryManager.UpdateProductPriceEvent.class)
         public void onDomainEvent(JdoInventoryManager.UpdateProductPriceEvent event) {
-            if(event.getEventPhase()==Phase.EXECUTED) {
-                log.info("UpdateProductPriceEvent received.");
-                countDownLatch.countDown();
-            }
-        }
-
-        public void prepareLatch() {
-            countDownLatch = new CountDownLatch(1);
+            events.add(event);
         }
 
     }

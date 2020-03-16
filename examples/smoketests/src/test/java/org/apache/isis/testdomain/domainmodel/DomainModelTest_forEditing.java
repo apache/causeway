@@ -21,6 +21,7 @@ package org.apache.isis.testdomain.domainmodel;
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -150,8 +151,8 @@ class DomainModelTest_forEditing extends IsisIntegrationTestAbstract {
         val disabledException = assertThrows(DisabledException.class, 
                 ()->wrapper.wrap(new CustomerEnaDis()).setName("Bob"));
 
-        assertTrue(disabledException.getMessage()
-                .startsWith("Reason: you cannot edit the name property. "));
+        String message = disabledException.getMessage();
+        Assertions.assertThat(message).startsWith("you cannot edit the name property");
     }
     
     // -------------------------------------------------------

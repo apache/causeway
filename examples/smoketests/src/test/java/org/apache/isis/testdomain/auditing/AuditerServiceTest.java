@@ -20,7 +20,6 @@ package org.apache.isis.testdomain.auditing;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
 
@@ -31,8 +30,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -42,9 +40,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
-import org.apache.isis.applib.services.wrapper.control.ExceptionHandler;
 import org.apache.isis.applib.services.wrapper.control.ExceptionHandlerAbstract;
-import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.Incubating;
@@ -80,7 +76,6 @@ class AuditerServiceTest extends IsisIntegrationTestAbstract {
     @Inject private RepositoryService repository;
     @Inject private FixtureScripts fixtureScripts;
     @Inject private WrapperFactory wrapper;
-//    @Inject private PlatformTransactionManager txMan;
     @Inject private KVStoreForTesting kvStore;
     
     @Configuration
@@ -90,13 +85,11 @@ class AuditerServiceTest extends IsisIntegrationTestAbstract {
 
     @BeforeEach
     void setUp() {
-
         // cleanup
         fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
-        
+
         // given
         fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
-
     }
 
     @Test @Tag("Incubating")

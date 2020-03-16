@@ -142,6 +142,7 @@ class AbstractShiroTest {
             // mock Subject instances)
         }
         SecurityUtils.setSecurityManager(null);
+
     }
 
 }

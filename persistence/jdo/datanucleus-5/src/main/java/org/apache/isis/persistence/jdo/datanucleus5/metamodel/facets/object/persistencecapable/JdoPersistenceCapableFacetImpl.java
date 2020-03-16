@@ -137,6 +137,11 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
         return persistenceSession.getEntityState(pojo);
     }
 
+    @Override
+    public <T> T detach(T pojo) {
+        return super.getPersistenceSessionJdo().getJdoPersistenceManager().detachCopy(pojo);
+    }
+
     // -- HELPER
     
     private static boolean isPersistableType(Class<?> type) {
