@@ -2,4 +2,19 @@
 
 The framework supports Markup (plain HTML) values.
 
+[source,java]
+----
+public class MarkupDemo extends DemoStub {
+
+    @Property
+    @PropertyLayout(labelPosition = LabelPosition.NONE)
+    @XmlElement 
+    @XmlJavaTypeAdapter(JaxbAdapters.MarkupAdapter.class) // <1> 
+    @Getter @Setter private Markup markup;
+    
+}
+----
+
+<1> we use this MarkupAdapter from the JaxbAdapters utility
+
 See the text demo link:${SOURCES_DEMO}/demoapp/dom/types/markup[sources].

@@ -47,7 +47,7 @@ import demoapp.utils.DemoStub;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.AsyncAction", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.AsyncAction", editing=Editing.DISABLED)
 public class AsyncActionDemo extends DemoStub {
 
     @XmlTransient

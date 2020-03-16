@@ -153,6 +153,13 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
 
     @Override
     public List<ComponentFactory> findComponentFactories(final ComponentType componentType, final IModel<?> model) {
+        
+        val id = ""+model;
+        val isMarkup = id.endsWith("#markup");
+        if(isMarkup) {
+            System.out.println("!!! componentType:" + componentType);    
+        }
+        
         val componentFactoryList = componentFactoriesByType.get(componentType);
         val matchingFactories = _Lists.<ComponentFactory>newArrayList();
         for (val componentFactory : componentFactoryList) {

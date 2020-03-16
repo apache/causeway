@@ -31,12 +31,12 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 /**
  * Panel for rendering scalars of type {@link org.apache.isis.applib.value.Markup}.
  */
-public class MarkupPanel extends ScalarPanelTextFieldParseableAbstract {
+public class ParentedMarkupPanel extends ScalarPanelTextFieldParseableAbstract {
 
     private static final long serialVersionUID = 1L;
     private final transient MarkupComponentFactory markupComponentFactory;
 
-    public MarkupPanel(
+    public ParentedMarkupPanel(
             String id, 
             ScalarModel scalarModel, 
             MarkupComponentFactory markupComponentFactory) {
@@ -73,7 +73,7 @@ public class MarkupPanel extends ScalarPanelTextFieldParseableAbstract {
 
         return formGroup;
     }
-
+    
     @Override
     protected Component createComponentForCompact() {
         return createMarkupComponent(ID_SCALAR_IF_COMPACT);

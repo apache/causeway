@@ -32,7 +32,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import lombok.val;
 
 /**
- * {@link ComponentFactory} for {@link MarkupPanel}.
+ * {@link ComponentFactory} for {@link ParentedMarkupPanel}.
  */
 public class MarkupPanelFactories {
 
@@ -54,7 +54,7 @@ public class MarkupPanelFactories {
         private final Class<?> valueType;
 
         public ParentedAbstract(Class<?> valueType) {
-            super(ComponentType.SCALAR_NAME_AND_VALUE, MarkupPanel.class);
+            super(ComponentType.SCALAR_NAME_AND_VALUE, ParentedMarkupPanel.class);
             this.valueType = valueType;
         }
 
@@ -65,17 +65,20 @@ public class MarkupPanelFactories {
             }
 
             val scalarModel = (ScalarModel) model;
-
-            if(!scalarModel.isScalarTypeAnyOf(valueType)) {
-                return ApplicationAdvice.DOES_NOT_APPLY;
+            
+            val scalarType = scalarModel.getTypeOfSpecification().getCorrespondingClass();
+            
+            if(scalarType.equals(valueType)) {
+                return ApplicationAdvice.APPLIES_EXCLUSIVELY;
             }
-
-            return appliesIf( !scalarModel.hasChoices() );
+            
+            return appliesIf( valueType.isAssignableFrom(scalarType) );
+            
         }
 
         @Override
         public final Component createComponent(final String id, final IModel<?> model) {
-            return new MarkupPanel(id, (ScalarModel) model, getMarkupComponentFactory());        
+            return new ParentedMarkupPanel(id, (ScalarModel) model, getMarkupComponentFactory());        
         }
 
         protected abstract MarkupComponentFactory getMarkupComponentFactory();

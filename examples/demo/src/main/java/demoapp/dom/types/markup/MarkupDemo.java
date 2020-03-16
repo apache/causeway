@@ -25,11 +25,15 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.util.JaxbAdapters;
 import org.apache.isis.applib.value.Markup;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.resources._Resources;
@@ -39,13 +43,12 @@ import lombok.Setter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-import demoapp.dom.types.clob.ClobDemo;
 import demoapp.utils.DemoStub;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType="demo.Markup", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, objectType="demo.Markup", editing=Editing.DISABLED)
 @Log4j2
 public class MarkupDemo extends DemoStub {
 
@@ -55,18 +58,18 @@ public class MarkupDemo extends DemoStub {
         log.info("MarkupDemo::initDefaults");
 
         try {
-            val htmlSource = _Strings.read(_Resources.load(ClobDemo.class, "markup.html"), StandardCharsets.UTF_8);
+            val htmlSource = _Strings.read(_Resources.load(MarkupDemo.class, "markup.html"), StandardCharsets.UTF_8);
             markup = new Markup(htmlSource);
         } catch (Exception e) {
             log.error("failed to create Markup from file resource", e);
         }
         
     }
-
-    // -- EDITABLE
-
+    
     @Property
-    @XmlElement @Getter @Setter private Markup markup;
+    @PropertyLayout(labelPosition = LabelPosition.NONE)
+    @XmlElement @XmlJavaTypeAdapter(JaxbAdapters.MarkupAdapter.class)
+    @Getter @Setter private Markup markup;
     
     
 }
