@@ -231,7 +231,7 @@ so that they should read:
 </properties>
 ----
 
-NOTE: After release, there is a xref:comguide:ROOT:cutting-a-release.adoc#reset-revision[similar step at the end] to reset back to `2.0.0-SNAPSHOT`.
+NOTE: After release, there is a xref:comguide:ROOT:cutting-a-release.adoc#reset-revision-property[similar step at the end] to reset back to `2.0.0-SNAPSHOT`.
 
 
 === Sanity check
