@@ -73,7 +73,7 @@ import lombok.val;
 })
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DirtiesContext // because of the temporary installed PublisherServiceProbe
-@Incubating("fails when run with surefire")
+//@Incubating("fails when run with surefire")
 class PublisherServiceTest extends IsisIntegrationTestAbstract {
 
     @Inject private RepositoryService repository;

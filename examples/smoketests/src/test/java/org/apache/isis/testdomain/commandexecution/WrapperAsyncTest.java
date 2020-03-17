@@ -29,6 +29,7 @@ import java.util.concurrent.TimeoutException;
 import javax.inject.Inject;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -72,7 +73,6 @@ import lombok.extern.log4j.Log4j2;
         }
 )
 @TestPropertySource(IsisPresets.UseLog4j2Test)
-@Incubating("wrapper.wrap(inventoryManager) throws NPE")
 @DirtiesContext // because of the temporary installed ActionDomainEventListener
 class WrapperAsyncTest extends IsisIntegrationTestAbstract {
 
@@ -94,6 +94,11 @@ class WrapperAsyncTest extends IsisIntegrationTestAbstract {
 
         // given
         fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
+    }
+
+    @AfterEach
+    void tearDown() {
+        actionDomainEventListener.getEvents().clear();
     }
 
     @Test @Tag("Incubating")

@@ -625,13 +625,8 @@ Examples
             <div class="col-lg-6 text-left text-lg-left">
               <p>
                 <pre>
-APP=helloworld
-BRANCH=master
-
-REPO=isis-app-$APP
-curl "https://codeload.github.com/apache/$REPO/zip/$BRANCH" | jar xv
-mv $REPO-$BRANCH $REPO
-cd $REPO
+curl https://codeload.github.com/apache/isis-app-helloworld/zip/master | jar xv
+cd isis-app-helloworld-master
 
 mvn clean install
 mvn spring-boot:run</pre>
@@ -640,13 +635,8 @@ mvn spring-boot:run</pre>
             <div class="col-lg-6 text-left text-lg-left">
               <p>
                 <pre>
-APP=simpleapp
-BRANCH=master
-
-REPO=isis-app-$APP
-curl "https://codeload.github.com/apache/$REPO/zip/$BRANCH" | jar xv
-mv $REPO-$BRANCH $REPO
-cd $REPO
+curl https://codeload.github.com/apache/isis-app-simpleapp/zip/master | jar xv
+cd isis-app-simpleapp-master
 
 mvn clean install
 mvn -pl webapp spring-boot:run</pre>

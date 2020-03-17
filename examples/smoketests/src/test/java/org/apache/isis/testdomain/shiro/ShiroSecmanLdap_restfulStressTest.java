@@ -83,7 +83,7 @@ import lombok.val;
     IsisModuleExtSecmanPersistenceJdo.class,
     IsisModuleExtSecmanEncryptionJbcrypt.class,
 })
-@Incubating("does not work, when executed in sequence with other smoketests")
+//@Incubating("does not work, when executed in sequence with other smoketests")
 class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {
 
     @Inject FixtureScripts fixtureScripts;

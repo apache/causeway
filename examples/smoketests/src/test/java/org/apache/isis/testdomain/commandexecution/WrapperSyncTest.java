@@ -53,7 +53,7 @@ import lombok.val;
         }
 )
 @TestPropertySource(IsisPresets.UseLog4j2Test)
-@Incubating("wrapper.wrap(inventoryManager) throws NPE")
+//@Incubating("wrapper.wrap(inventoryManager) throws NPE")
 class WrapperSyncTest extends IsisIntegrationTestAbstract {
 
     @Inject private FixtureScripts fixtureScripts;

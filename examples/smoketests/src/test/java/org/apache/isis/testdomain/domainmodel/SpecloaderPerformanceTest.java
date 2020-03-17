@@ -56,7 +56,7 @@ import lombok.extern.log4j.Log4j2;
     IsisPresets.SilenceProgrammingModel,
     //IsisPresets.DebugProgrammingModel,
 })
-@Incubating("not a real test, just for performance tuning")
+//@Incubating("not a real test, just for performance tuning")
 @Log4j2
 class SpecloaderPerformanceTest {
     

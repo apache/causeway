@@ -35,6 +35,7 @@ import static org.junit.Assert.assertThat;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.session.SessionLoggingService;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.session.IsisSessionFactory.ThrowingRunnable;
 import org.apache.isis.core.runtime.session.init.InitialisationSession;
@@ -74,8 +75,8 @@ public class AuthenticatedWebSessionForIsis_SignIn {
                 allowing(mockCommonContext).getServiceRegistry();
                 will(returnValue(mockServiceRegistry));
 
-                allowing(mockServiceRegistry).lookupService(SessionLoggingService.class);
-                will(returnValue(Optional.empty()));
+                allowing(mockServiceRegistry).select(SessionLoggingService.class);
+                will(returnValue(Can.empty()));
 
                 allowing(mockCommonContext).lookupServiceElseFail(IsisSessionFactory.class);
                 will(returnValue(mockIsisSessionFactory));

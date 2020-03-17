@@ -57,7 +57,7 @@ import lombok.extern.log4j.Log4j2;
 )
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Incubating("fails when run with surefire")
+//@Incubating("fails when run with surefire")
 @Log4j2
 class JdoEntityInjectingTest {
 

@@ -70,7 +70,7 @@ import lombok.val;
     ,IsisPresets.UseLog4j2Test
 })
 @DirtiesContext // because of the temporary installed AuditerServiceProbe
-@Incubating("fails when run with surefire")
+//@Incubating("fails when run with surefire")
 class AuditerServiceTest extends IsisIntegrationTestAbstract {
 
     @Inject private RepositoryService repository;

@@ -46,7 +46,7 @@ import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstra
                 Configuration_usingJdo.class,
         })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
-@Incubating("might fail when run with surefire")
+//@Incubating("might fail when run with surefire")
 class TransactionRollbackTest extends IsisIntegrationTestAbstract {
     
     @Inject private FixtureScripts fixtureScripts;

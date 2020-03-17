@@ -68,7 +68,7 @@ import lombok.val;
 })
 @DirtiesContext // because of the temporary installed 'good' domain
 //@Transactional
-@Incubating("might fail when run with surefire")
+//@Incubating("might fail when run with surefire")
 class DomainModelTest_usingGoodDomain {
     
     @Inject private MetaModelService metaModelService;

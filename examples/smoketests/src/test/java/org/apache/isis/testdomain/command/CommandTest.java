@@ -61,7 +61,7 @@ import lombok.val;
     ,IsisPresets.UseLog4j2Test
 })
 @DirtiesContext // because of the temporary installed AuditerServiceProbe
-@Incubating("UNDER CONSTRUCTION")
+//@Incubating("UNDER CONSTRUCTION")
 class CommandTest extends IsisIntegrationTestAbstract {
 
     @Inject private RepositoryService repository;

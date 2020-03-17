@@ -53,7 +53,7 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 @Transactional
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Incubating("might fail when run with surefire")
+//@Incubating("might fail when run with surefire")
 class TransactionRollbackTest_usingTransactional {
     
     @Inject private FixtureScripts fixtureScripts;
