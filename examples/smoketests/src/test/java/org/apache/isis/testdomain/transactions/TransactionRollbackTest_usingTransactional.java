@@ -33,7 +33,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
@@ -53,7 +52,6 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 @Transactional
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-//@Incubating("might fail when run with surefire")
 class TransactionRollbackTest_usingTransactional {
     
     @Inject private FixtureScripts fixtureScripts;

@@ -20,6 +20,7 @@ package org.apache.isis.testdomain.auditing;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
 
@@ -30,7 +31,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -42,8 +42,8 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
 import org.apache.isis.applib.services.wrapper.control.ExceptionHandlerAbstract;
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.core.commons.internal.base._Blackhole;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
@@ -125,7 +125,7 @@ class AuditerServiceTest extends IsisIntegrationTestAbstract {
     TransactionService transactionService;
 
     @Test @Tag("Incubating")
-    void auditerService_shouldBeAwareOfInventoryChanges_whenUsingAsyncExecution() throws ExecutionException, InterruptedException {
+    void auditerService_shouldBeAwareOfInventoryChanges_whenUsingAsyncExecution() throws ExecutionException, InterruptedException, TimeoutException {
 
         // given
         val books = repository.allInstances(JdoBook.class);
@@ -143,7 +143,8 @@ class AuditerServiceTest extends IsisIntegrationTestAbstract {
             }
         })).setName("Book #2");
 
-        Void await = control.getFuture().get();
+        Void await = control.getFuture().get(10, TimeUnit.SECONDS); // blocks the current thread
+        _Blackhole.consume(await); // just use the value to suppress warnings
 
         // then - after the commit
         assertEquals("targetClassName=Jdo Book,propertyName=name,preValue=Sample Book,postValue=Book #2;",

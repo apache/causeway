@@ -23,27 +23,22 @@ import javax.inject.Inject;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.CredentialsException;
-import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
-import org.apache.isis.extensions.secman.api.role.ApplicationRole;
-import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
-import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleExtSecmanEncryptionJbcrypt;
 import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
@@ -51,10 +46,6 @@ import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanRealmShiro;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
-import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
-import org.apache.isis.testdomain.ldap.LdapConstants;
-import org.apache.isis.testdomain.ldap.LdapServerService;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.val;
 
@@ -62,41 +53,24 @@ import lombok.val;
 @SpringBootTest(
         classes = { 
                 Configuration_usingJdoAndShiro.class, 
-        }, 
-        properties = {
-                //"logging.config=log4j2-test.xml",
-                "logging.config=log4j2-debug-persistence.xml",
-                //IsisPresets.DebugPersistence,
-                "isis.persistence.jdo-datanucleus.impl.datanucleus.schema.autoCreateDatabase=true",
         })
 @Import({
-
-    // Embedded LDAP server for testing
-    LdapServerService.class,
-
     // Security Manager Extension (secman)
     IsisModuleExtSecmanModel.class,
     IsisModuleExtSecmanRealmShiro.class,
     IsisModuleExtSecmanPersistenceJdo.class,
     IsisModuleExtSecmanEncryptionJbcrypt.class,
 })
+@TestPropertySource(IsisPresets.UseLog4j2Test)
 @Incubating("does not work with surefire")
-class ShiroSecmanLdapTest extends AbstractShiroTest {
+class UnstableShiroSecmanTest extends AbstractShiroTest {
 
-    @Inject FixtureScripts fixtureScripts;
-    @Inject LdapServerService ldapServerService;
-    @Inject ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
-    @Inject ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
     @Inject SecurityModuleConfig securityConfig;
     @Inject ServiceInjector serviceInjector;
 
     @BeforeEach
     void beforeEach() {
-        
         setSecurityManager(serviceInjector, "classpath:shiro-secman-ldap.ini");
-        
-        // given
-        fixtureScripts.runPersona(JdoTestDomainPersona.SvenApplicationUser);
     }
     
     @AfterEach
@@ -107,7 +81,7 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
     @Test
     void loginLogoutRoundtrip() {
 
-        val secMan = SecurityUtils.getSecurityManager();
+        val secMan = getSecurityManager();
         assertNotNull(secMan);
 
         val subject = SecurityUtils.getSubject(); 
@@ -115,8 +89,8 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
         assertFalse(subject.isAuthenticated());
 
         val token = (AuthenticationToken) new UsernamePasswordToken(
-                LdapConstants.SVEN_PRINCIPAL,
-                "pass");
+                securityConfig.getAdminUserName(),
+                securityConfig.getAdminPassword());
 
         subject.login(token);
         assertTrue(subject.isAuthenticated());
@@ -127,43 +101,17 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
     }
 
     @Test
-    void login_withAccountOnlyKnownToLdap() {
-
-        val secMan = getSecurityManager();
-        assertNotNull(secMan);
-
-        val subject = SecurityUtils.getSubject(); 
-        assertNotNull(subject);
-        assertFalse(subject.isAuthenticated());
-
-        val username = LdapConstants.OLAF_PRINCIPAL;
-        val token = (AuthenticationToken) new UsernamePasswordToken(
-                username,
-                "pass");
-
-        // default behavior is to create the account within the DB but leave it disabled 
-        assertThrows(DisabledAccountException.class, ()->{
-            subject.login(token);
-        });
-
-        val olafUser = applicationUserRepository.findByUsername(username).orElse(null);
-        assertNotNull(olafUser);
-        assertNotNull(olafUser.getStatus());
-        assertFalse(olafUser.getStatus().isEnabled());
-    }
-
-    @Test
     void login_withInvalidPassword() {
 
         val secMan = SecurityUtils.getSecurityManager();
         assertNotNull(secMan);
-        
+
         val subject = SecurityUtils.getSubject(); 
         assertNotNull(subject);
         assertFalse(subject.isAuthenticated());
 
         val token = (AuthenticationToken) new UsernamePasswordToken(
-                LdapConstants.SVEN_PRINCIPAL,
+                securityConfig.getAdminUserName(),
                 "invalid-pass");
 
         assertThrows(CredentialsException.class, ()->{
@@ -184,9 +132,8 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
         assertNotNull(subject);
         assertFalse(subject.isAuthenticated());
 
-        val username = "non-existent-user";
         val token = (AuthenticationToken) new UsernamePasswordToken(
-                username,
+                "non-existent-user",
                 "invalid-pass");
 
         assertThrows(CredentialsException.class, ()->{
@@ -195,8 +142,6 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
 
         assertFalse(subject.isAuthenticated());
 
-        val nonUser = applicationUserRepository.findByUsername(username);
-        assertNull(nonUser);
 
     }
 

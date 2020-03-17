@@ -57,6 +57,9 @@
 					<parallel>suites</parallel>
 					<forkCount>1.0C</forkCount>
 					<reuseForks>false</reuseForks>
+					<excludes>
+						<exclude>**/Unstable*</exclude>
+					</excludes>
 				</configuration>
 				<executions>
 					<execution>
@@ -191,7 +194,6 @@
 							</includes>
 						</configuration>
 					</execution>
-<!--
 					<execution>
 						<id>shiro</id>
 						<goals>
@@ -203,7 +205,6 @@
 							</includes>
 						</configuration>
 					</execution>
--->
 					<execution>
 						<id>timestamping</id>
 						<goals>

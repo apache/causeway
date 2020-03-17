@@ -21,73 +21,91 @@ package org.apache.isis.testdomain.shiro;
 import javax.inject.Inject;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.CredentialsException;
+import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.role.ApplicationRole;
+import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
+import org.apache.isis.extensions.secman.api.user.ApplicationUser;
+import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleExtSecmanEncryptionJbcrypt;
+import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
+import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
+import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanRealmShiro;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
+import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.ldap.LdapConstants;
 import org.apache.isis.testdomain.ldap.LdapServerService;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 @Smoketest
 @SpringBootTest(
         classes = { 
                 Configuration_usingJdoAndShiro.class, 
+        }, 
+        properties = {
+                //"logging.config=log4j2-test.xml",
+                "logging.config=log4j2-debug-persistence.xml",
+                //IsisPresets.DebugPersistence,
+                "isis.persistence.jdo-datanucleus.impl.datanucleus.schema.autoCreateDatabase=true",
         })
 @Import({
-    LdapServerService.class,
-})
-@TestPropertySource(IsisPresets.UseLog4j2Test)
-@Incubating("inconsistent state when run in a test batch")
-@Log4j2
-@DisabledIfSystemProperty(named = "ldap", matches = ".*disable.*")
-class ShiroLdapTest extends AbstractShiroTest {
 
+    // Embedded LDAP server for testing
+    LdapServerService.class,
+
+    // Security Manager Extension (secman)
+    IsisModuleExtSecmanModel.class,
+    IsisModuleExtSecmanRealmShiro.class,
+    IsisModuleExtSecmanPersistenceJdo.class,
+    IsisModuleExtSecmanEncryptionJbcrypt.class,
+})
+@Incubating("does not work with surefire")
+class UnstableShiroSecmanLdapTest extends AbstractShiroTest {
+
+    @Inject FixtureScripts fixtureScripts;
     @Inject LdapServerService ldapServerService;
+    @Inject ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
+    @Inject ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
+    @Inject SecurityModuleConfig securityConfig;
     @Inject ServiceInjector serviceInjector;
 
     @BeforeEach
     void beforeEach() {
-        // Build and set the SecurityManager used to build Subject instances used in your tests
-        // This typically only needs to be done once per class if your shiro.ini doesn't change,
-        // otherwise, you'll need to do this logic in each test that is different
-        setSecurityManager(serviceInjector, "classpath:shiro-ldap.ini");
+        
+        setSecurityManager(serviceInjector, "classpath:shiro-secman-ldap.ini");
+        
+        // given
+        fixtureScripts.runPersona(JdoTestDomainPersona.SvenApplicationUser);
     }
-
+    
     @AfterEach
     void afterEach() {
-        SecurityUtils.setSecurityManager(null);
-    }
-
-    @AfterAll
-    static void afterClass() {
         tearDownShiro();
     }
 
     @Test
     void loginLogoutRoundtrip() {
-
-        log.info("starting login/logout roundtrip");
 
         val secMan = SecurityUtils.getSecurityManager();
         assertNotNull(secMan);
@@ -109,11 +127,37 @@ class ShiroLdapTest extends AbstractShiroTest {
     }
 
     @Test
+    void login_withAccountOnlyKnownToLdap() {
+
+        val secMan = getSecurityManager();
+        assertNotNull(secMan);
+
+        val subject = SecurityUtils.getSubject(); 
+        assertNotNull(subject);
+        assertFalse(subject.isAuthenticated());
+
+        val username = LdapConstants.OLAF_PRINCIPAL;
+        val token = (AuthenticationToken) new UsernamePasswordToken(
+                username,
+                "pass");
+
+        // default behavior is to create the account within the DB but leave it disabled 
+        assertThrows(DisabledAccountException.class, ()->{
+            subject.login(token);
+        });
+
+        val olafUser = applicationUserRepository.findByUsername(username).orElse(null);
+        assertNotNull(olafUser);
+        assertNotNull(olafUser.getStatus());
+        assertFalse(olafUser.getStatus().isEnabled());
+    }
+
+    @Test
     void login_withInvalidPassword() {
 
         val secMan = SecurityUtils.getSecurityManager();
         assertNotNull(secMan);
-
+        
         val subject = SecurityUtils.getSubject(); 
         assertNotNull(subject);
         assertFalse(subject.isAuthenticated());
@@ -122,7 +166,7 @@ class ShiroLdapTest extends AbstractShiroTest {
                 LdapConstants.SVEN_PRINCIPAL,
                 "invalid-pass");
 
-        assertThrows(AuthenticationException.class, ()->{
+        assertThrows(CredentialsException.class, ()->{
             subject.login(token);
         });
 
@@ -140,16 +184,19 @@ class ShiroLdapTest extends AbstractShiroTest {
         assertNotNull(subject);
         assertFalse(subject.isAuthenticated());
 
+        val username = "non-existent-user";
         val token = (AuthenticationToken) new UsernamePasswordToken(
-                "non-existent-user",
+                username,
                 "invalid-pass");
 
-        assertThrows(AuthenticationException.class, ()->{
+        assertThrows(CredentialsException.class, ()->{
             subject.login(token);
         });
 
         assertFalse(subject.isAuthenticated());
 
+        val nonUser = applicationUserRepository.findByUsername(username);
+        assertNull(nonUser);
 
     }
 

@@ -21,12 +21,14 @@ package org.apache.isis.testdomain.shiro;
 import javax.inject.Inject;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.CredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
@@ -38,16 +40,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
-import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleExtSecmanEncryptionJbcrypt;
-import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
-import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
-import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanRealmShiro;
 import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
+import org.apache.isis.testdomain.ldap.LdapConstants;
+import org.apache.isis.testdomain.ldap.LdapServerService;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Smoketest
 @SpringBootTest(
@@ -55,33 +55,41 @@ import lombok.val;
                 Configuration_usingJdoAndShiro.class, 
         })
 @Import({
-    // Security Manager Extension (secman)
-    IsisModuleExtSecmanModel.class,
-    IsisModuleExtSecmanRealmShiro.class,
-    IsisModuleExtSecmanPersistenceJdo.class,
-    IsisModuleExtSecmanEncryptionJbcrypt.class,
+    LdapServerService.class,
 })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
-@Incubating("does not work with surefire")
-class ShiroSecmanTest extends AbstractShiroTest {
+@Incubating("inconsistent state when run in a test batch")
+@Log4j2
+@DisabledIfSystemProperty(named = "ldap", matches = ".*disable.*")
+class UnstableShiroLdapTest extends AbstractShiroTest {
 
-    @Inject SecurityModuleConfig securityConfig;
+    @Inject LdapServerService ldapServerService;
     @Inject ServiceInjector serviceInjector;
 
     @BeforeEach
     void beforeEach() {
-        setSecurityManager(serviceInjector, "classpath:shiro-secman-ldap.ini");
+        // Build and set the SecurityManager used to build Subject instances used in your tests
+        // This typically only needs to be done once per class if your shiro.ini doesn't change,
+        // otherwise, you'll need to do this logic in each test that is different
+        setSecurityManager(serviceInjector, "classpath:shiro-ldap.ini");
     }
-    
+
     @AfterEach
     void afterEach() {
+        SecurityUtils.setSecurityManager(null);
+    }
+
+    @AfterAll
+    static void afterClass() {
         tearDownShiro();
     }
 
     @Test
     void loginLogoutRoundtrip() {
 
-        val secMan = getSecurityManager();
+        log.info("starting login/logout roundtrip");
+
+        val secMan = SecurityUtils.getSecurityManager();
         assertNotNull(secMan);
 
         val subject = SecurityUtils.getSubject(); 
@@ -89,8 +97,8 @@ class ShiroSecmanTest extends AbstractShiroTest {
         assertFalse(subject.isAuthenticated());
 
         val token = (AuthenticationToken) new UsernamePasswordToken(
-                securityConfig.getAdminUserName(),
-                securityConfig.getAdminPassword());
+                LdapConstants.SVEN_PRINCIPAL,
+                "pass");
 
         subject.login(token);
         assertTrue(subject.isAuthenticated());
@@ -111,10 +119,10 @@ class ShiroSecmanTest extends AbstractShiroTest {
         assertFalse(subject.isAuthenticated());
 
         val token = (AuthenticationToken) new UsernamePasswordToken(
-                securityConfig.getAdminUserName(),
+                LdapConstants.SVEN_PRINCIPAL,
                 "invalid-pass");
 
-        assertThrows(CredentialsException.class, ()->{
+        assertThrows(AuthenticationException.class, ()->{
             subject.login(token);
         });
 
@@ -136,7 +144,7 @@ class ShiroSecmanTest extends AbstractShiroTest {
                 "non-existent-user",
                 "invalid-pass");
 
-        assertThrows(CredentialsException.class, ()->{
+        assertThrows(AuthenticationException.class, ()->{
             subject.login(token);
         });
 

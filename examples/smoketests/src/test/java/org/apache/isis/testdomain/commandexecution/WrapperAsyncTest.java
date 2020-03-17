@@ -21,7 +21,6 @@ package org.apache.isis.testdomain.commandexecution;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -41,16 +40,13 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoInventoryManager;
@@ -63,7 +59,6 @@ import static org.apache.isis.applib.services.wrapper.control.AsyncControl.contr
 
 import lombok.Getter;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 @Smoketest
 @SpringBootTest(
@@ -151,7 +146,7 @@ class WrapperAsyncTest extends IsisIntegrationTestAbstract {
     }
     
 
-    @Service @Log4j2
+    @Service
     public static class ActionDomainEventListener {
 
         @Getter

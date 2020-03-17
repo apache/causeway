@@ -84,7 +84,7 @@ import lombok.val;
     IsisModuleExtSecmanEncryptionJbcrypt.class,
 })
 @Incubating("does not work, when executed in sequence with other smoketests")
-class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {
+class UnstableShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {
 
     @Inject FixtureScripts fixtureScripts;
     @Inject RestEndpointService restService;

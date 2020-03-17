@@ -33,7 +33,7 @@ import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@DisabledIfSystemProperty(named = "surefire.real.class.path", matches = ".*surefire.*")
+@DisabledIfSystemProperty(named = "surefire.real.class.path", matches = ".*surefire.*") // does not work if explicit inclusions are specified with pom file
 public @interface Incubating {
 
     /**

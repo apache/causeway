@@ -52,7 +52,7 @@ import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 ////@Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 //@Incubating("JPA support is under construction")
-class JpaBootstrappingTest {
+class UnstableJpaBootstrappingTest {
 
     @Inject private Optional<PlatformTransactionManager> platformTransactionManager; 
     @Inject private RepositoryService repository;

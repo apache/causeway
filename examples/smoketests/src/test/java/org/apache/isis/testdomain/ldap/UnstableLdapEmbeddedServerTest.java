@@ -47,7 +47,7 @@ import lombok.val;
 @Disabled // not sure why...
 @Incubating("teardown issues?")
 @TestPropertySource(IsisPresets.UseLog4j2Test)
-class LdapEmbeddedServerTest {
+class UnstableLdapEmbeddedServerTest {
 
     @Inject LdapServerService ldapServerService;
 
