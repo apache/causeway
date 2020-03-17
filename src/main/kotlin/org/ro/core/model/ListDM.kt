@@ -24,16 +24,10 @@ class ListDM(override val title: String) : DisplayModel() {
             layout == null -> return false
             grid == null -> return false
             else -> {
-                val ps = propertyList.size
                 val pls = propertyLayoutList.size
                 val pds = propertyDescriptionList.size
-                val descriptionsComplete = ps >= pls
-                if (descriptionsComplete) {
-                    console.log("[ListDM.canBeDisplayed] properties: $ps")
-                    console.log("[ListDM.canBeDisplayed] propertyLayout: $pls")
-                    console.log("[ListDM.canBeDisplayed] propertyDescriptions: $pds")
-                }
-                return descriptionsComplete //&& propertiesComplete
+                val descriptionsComplete = pds >= pls
+                return descriptionsComplete
             }
         }
     }
@@ -41,7 +35,6 @@ class ListDM(override val title: String) : DisplayModel() {
     fun addLayout(layout: Layout) {
         this.layout = layout
         initPropertyLayoutList(layout)
-        console.log("[ListDM.addLayout] propertyLayoutList: ${propertyLayoutList.size}")
     }
 
     private fun initPropertyLayoutList(layout: Layout) {
@@ -72,15 +65,17 @@ class ListDM(override val title: String) : DisplayModel() {
     }
 
     fun addPropertyDescription(p: Property) {
-        console.log("[DL.addPropertyDescription]")
         val id = p.id
         val e: Extensions = p.extensions!!
         val friendlyName = e.friendlyName
-        propertyDescriptionList.put(id, friendlyName)
+        addPropertyDescription(id, friendlyName)
+    }
+
+    fun addPropertyDescription(key: String, value: String) {
+        propertyDescriptionList.put(key, value)
     }
 
     fun addProperty(property: Property) {
-//        console.log("[DL.addProperty]")
         propertyList.add(property)
     }
 

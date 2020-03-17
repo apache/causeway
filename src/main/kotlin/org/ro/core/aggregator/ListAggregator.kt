@@ -23,7 +23,7 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
 
     override fun update(logEntry: LogEntry, subType: String) {
 
-        //TODO duplicates should be caught earlier IMPROVE
+        //TODO duplicates should no be propagated to handlers at all: IMPROVE
         if (logEntry.state != EventState.DUPLICATE) {
             when (val obj = logEntry.getTransferObject()) {
                 null -> log(logEntry)
@@ -49,12 +49,11 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
     }
 
     private fun handleObject(obj: TObject) {
-        console.log("[LA.handleObject]")
         dsp.addData(obj)
         val l = obj.getLayoutLink()!!
         // Json.Layout is invoked first
         l.invokeWith(this)
-        // then Xml.Layout is to be called as well
+        // then Xml.Layout is to be invoked as well
         l.invokeWith(this, "xml")
     }
 
@@ -64,11 +63,16 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
         //  Eventually due to parallel invocations  - only once required -> IMPROVE
         if (dspl.layout == null) {
             dspl.addLayout(layout)
-        }
-        dspl.propertyLayoutList.forEach { p ->
-            val l = p.link!!
-            if (!l.href.contains("datanucleus")) { //invoking DN links lead to an error
-                l.invokeWith(this)
+            dspl.propertyLayoutList.forEach { p ->
+                val l = p.link!!
+                val isDn = l.href.contains("datanucleus")
+                if (isDn) {
+                    //invoking DN links leads to an error
+                    val id = p.id!!
+                    dspl.addPropertyDescription(id, id)
+                } else {
+                    l.invokeWith(this)
+                }
             }
         }
     }
