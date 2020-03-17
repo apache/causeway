@@ -513,7 +513,10 @@ under the License.
 						<excludes>
 							<exclude>**/target/**</exclude>
 							<exclude>**/target-ide/**</exclude>
+
 							<exclude>**/node_modules/**</exclude>
+							<exclude>**/node/npm</exclude>
+							<exclude>**/node/npm.cmd</exclude>
 
 							<exclude>**/*.project</exclude>
 							<exclude>**/.classpath</exclude>
@@ -541,6 +544,9 @@ under the License.
 							<exclude>**/xml/objects/**</exclude>
 							<exclude>**/test.data</exclude>
 							<exclude>**/fixture-data/**</exclude>
+							<exclude>**/module-nav.adoc</exclude>
+							<exclude>**/component-nav.adoc</exclude>
+							<exclude>**/_nav.adoc</exclude>
 
 							<exclude>**/application.js</exclude>
 
