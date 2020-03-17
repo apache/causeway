@@ -60,7 +60,6 @@ import lombok.extern.log4j.Log4j2;
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @Incubating("inconsistent state when run in a test batch")
 @Log4j2
-@DisabledIfSystemProperty(named = "ldap", matches = ".*disable.*")
 class UnstableShiroLdapTest extends AbstractShiroTest {
 
     @Inject LdapServerService ldapServerService;
