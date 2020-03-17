@@ -81,9 +81,9 @@ public class ControlAbstract {
     /**
      * Initialized in constructor.
      */
-    @Getter @NonNull
+    @Getter
     private ExceptionHandler exceptionHandler;
-    public <T extends ControlAbstract> T with(ExceptionHandler exceptionHandler) {
+    public <T extends ControlAbstract> T with(@NonNull ExceptionHandler exceptionHandler) {
         this.exceptionHandler = exceptionHandler;
         return _Casts.uncheckedCast(this);
     }
