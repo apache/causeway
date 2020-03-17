@@ -425,6 +425,7 @@
 					</executions>
 					<configuration>
 						<verbose>false</verbose>
+						<useNativeGit>true</useNativeGit>
 						<dotGitDirectory>${git-plugin.gitDir}</dotGitDirectory>
 
 						<dateFormat>yyyy-MM-dd'T'HH:mm:ssZ</dateFormat>
