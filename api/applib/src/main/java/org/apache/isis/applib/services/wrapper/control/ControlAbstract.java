@@ -31,7 +31,7 @@ import lombok.NonNull;
 import lombok.Setter;
 
 // tag::refguide[]
-public class ControlAbstract {
+public class ControlAbstract<T extends ControlAbstract<T>> {
 
     // end::refguide[]
     protected ControlAbstract() {
@@ -53,14 +53,14 @@ public class ControlAbstract {
 
     // tag::refguide[]
     private boolean checkRules = true;                          // <.>
-    public <T extends ControlAbstract> T withCheckRules() {
+    public T withCheckRules() {
         // end::refguide[]
         checkRules = true;
         return _Casts.uncheckedCast(this);
         // tag::refguide[]
         // ...
     }
-    public <T extends ControlAbstract> T withSkipRules() {
+    public T withSkipRules() {
         // end::refguide[]
         checkRules = false;
         return _Casts.uncheckedCast(this);
@@ -75,10 +75,10 @@ public class ControlAbstract {
     // tag::refguide[]
     @Getter @NonNull
     private ExceptionHandler exceptionHandler;                  // <.>
-    public <T extends ControlAbstract> T with(ExceptionHandler exceptionHandler) {
+    public T with(ExceptionHandler exceptionHandler) {
         // end::refguide[]
         this.exceptionHandler = exceptionHandler;
-        return (T)this;
+        return _Casts.uncheckedCast(this);
         // tag::refguide[]
         // ...
     }

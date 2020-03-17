@@ -25,7 +25,7 @@ import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 /**
  */
 // tag::refguide[]
-public class SyncControl extends ControlAbstract {
+public class SyncControl extends ControlAbstract<SyncControl> {
 
     public static SyncControl control() {
         return new SyncControl();

@@ -37,7 +37,7 @@ import lombok.extern.log4j.Log4j2;
  */
 // tag::refguide[]
 @Log4j2
-public class AsyncControl<R> extends ControlAbstract {
+public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
 
     public static AsyncControl<Void> control() {                        // <.>
         return new AsyncControl<>();
