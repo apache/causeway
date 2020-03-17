@@ -41,32 +41,49 @@ public class ControlAbstract {
      * Set by framework.
      */
     @Setter(AccessLevel.PACKAGE)
-    // tag::refguide[]
     @Getter(AccessLevel.PACKAGE)
     private Method method;
 
-    // end::refguide[]
     /**
      * Set by framework.
      */
     @Setter(AccessLevel.PACKAGE)
-    // tag::refguide[]
     @Getter(AccessLevel.PACKAGE)
     private Bookmark bookmark;
-    // end::refguide[]
 
-    private boolean checkRules = true;
+    // tag::refguide[]
+    private boolean checkRules = true;                          // <.>
     public <T extends ControlAbstract> T withCheckRules() {
+        // end::refguide[]
         checkRules = true;
         return _Casts.uncheckedCast(this);
+        // tag::refguide[]
+        // ...
     }
     public <T extends ControlAbstract> T withSkipRules() {
+        // end::refguide[]
         checkRules = false;
         return _Casts.uncheckedCast(this);
+        // tag::refguide[]
+        // ...
     }
 
     // end::refguide[]
+    /**
+     * Initialized in constructor.
+     */
+    // tag::refguide[]
+    @Getter @NonNull
+    private ExceptionHandler exceptionHandler;                  // <.>
+    public <T extends ControlAbstract> T with(ExceptionHandler exceptionHandler) {
+        // end::refguide[]
+        this.exceptionHandler = exceptionHandler;
+        return (T)this;
+        // tag::refguide[]
+        // ...
+    }
 
+    // end::refguide[]
     /**
      * Not API.
      */
@@ -78,15 +95,6 @@ public class ControlAbstract {
         return ImmutableEnumSet.from(modes);
     }
 
-    /**
-     * Initialized in constructor.
-     */
-    @Getter
-    private ExceptionHandler exceptionHandler;
-    public <T extends ControlAbstract> T with(@NonNull ExceptionHandler exceptionHandler) {
-        this.exceptionHandler = exceptionHandler;
-        return _Casts.uncheckedCast(this);
-    }
     // tag::refguide[]
-
 }
+// end::refguide[]

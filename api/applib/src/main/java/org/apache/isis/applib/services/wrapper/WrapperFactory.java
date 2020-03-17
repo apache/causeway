@@ -69,11 +69,13 @@ import org.apache.isis.core.commons.collections.ImmutableEnumSet;
  * then should just return the object back unchanged.
  */
 // tag::refguide[]
+// tag::refguide-unwrap[]
 // tag::refguide-async[]
 // tag::refguide-listeners[]
 public interface WrapperFactory {
 
     // end::refguide[]
+    // end::refguide-unwrap[]
     // end::refguide-async[]
     // end::refguide-listeners[]
     /**
@@ -139,22 +141,22 @@ public interface WrapperFactory {
      * If the object {@link #isWrapper(Object) is not wrapped}, then
      * should just return the object back unchanged.
      */
-    // tag::refguide[]
+    // tag::refguide-unwrap[]
     <T> T unwrap(T possibleWrappedDomainObject);                    // <.>
 
-    // end::refguide[]
+    // end::refguide-unwrap[]
     /**
-     * Whether the supplied object has been wrapped.
+     * Whether the supplied object is a wrapper around a domain object.
      *
      * @param <T>
      * @param possibleWrappedDomainObject
      *            - object that might or might not be a wrapper.
      * @return
      */
-    // tag::refguide[]
+    // tag::refguide-unwrap[]
     <T> boolean isWrapper(T possibleWrappedDomainObject);           // <.>
 
-    // end::refguide[]
+    // end::refguide-unwrap[]
 
 
     //
@@ -246,10 +248,12 @@ public interface WrapperFactory {
 
     void notifyListeners(InteractionEvent ev);                      // <.>
     // tag::refguide-async[]
+    // tag::refguide-unwrap[]
     // tag::refguide[]
     // ...
 
 }
 // end::refguide[]
+// end::refguide-unwrap[]
 // end::refguide-async[]
 // end::refguide-listeners[]

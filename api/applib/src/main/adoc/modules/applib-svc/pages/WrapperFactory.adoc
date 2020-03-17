@@ -24,11 +24,11 @@ This capability is frequently used within xref:testing:integtestsupport:about.ad
 
 == API
 
-The API breaks into three.
+The API breaks into four parts, along with a number of supporting control classes.
 
-=== Main API
+=== Synchronous API
 
-The main API provided by the service is:
+The synchronous API provided by the service is:
 
 [source,java]
 ----
@@ -36,33 +36,20 @@ include::refguide:applib-svc:example$services/wrapper/WrapperFactory.java[tags="
 ----
 <.> wraps the underlying domain object so it can invoked (through its wrapper) synchronously in the same thread.
 +
-The `SyncControl` modifies the way in which the wrapper interacts with the underlying domain object, discussed xref:#synccontrol-and-asynccontrol[below].
+The `SyncControl` modifies the way in which the wrapper interacts with the underlying domain object, discussed xref:#synccontrol[below].
 
 <.> overload that wraps the underlying domain object with a wrapper that will validate all business rules and then execute if they pass.
 
 <.> instantiates and wraps a mixin so that it can be invoked (through its wrapper) synchronously in the same thread.
-Again `SyncControl` modifies the way in which the wrapper interacts with the underlying domain object, discussed xref:#synccontrol-and-asynccontrol[below]..
+Again `SyncControl` modifies the way in which the wrapper interacts with the underlying domain object, discussed xref:#synccontrol[below]..
 
-<.> Obtains the underlying domain object, if wrapped.
-+
-If the object is not wrapped, returns back unchanged.
-
-<.> whether the supplied object has been wrapped.
-
-
-=== `SyncControl` and `AsyncControl`
-
-The `SyncControl` and `AsyncControl` classes control the way that the wrapper works, for both synchronous calls using `wrap(...)`, and asynchronous calls using `asyncWrap`.
-
-[source,java]
-----
-include::refguide:applib-svc:example$services/wrapper/control/SyncControl.java[tags="refguide"]
-----
-
-
+<.> overload that instantiates and wraps a mixin with a wrapper that will validate all business rules and then execute the action if they pass.
 
 The service works by returning a "wrapper" around a supplied domain object (using link:https://bytebuddy.net/[byte buddy]), and it is this wrapper that ensures that the hide/disable/validate rules implies by the Apache Isis programming model are enforced.
-The wrapper can be interacted with as follows:
+
+==== Domain Objects
+
+For domain objects (not mixins), the wrapper can be interacted with as follows:
 
 * a `get...()` method for properties or collections
 * a `set...()` method for properties
@@ -70,8 +57,8 @@ The wrapper can be interacted with as follows:
 * any action
 
 Calling any of the above methods may result in a (subclass of) `InteractionException` if the object disallows it.
-For example, if a property is annotated with `@Hidden` then a `HiddenException` will be thrown.
-Similarly if an action has a `validateXxx()` method and the supplied arguments are invalid then an `InvalidException` will be thrown.
+For example, if a property is annotated with xref:refguide:applib-ant:ActionLayout.adoc#hidden[`@ActionLayout#hidden`] then a `HiddenException` will be thrown.
+Similarly if an action has a xref:refguide:applib-cm:methods/prefixes/validate.adoc[`validateXxx()`] method and the supplied arguments are invalid then an `InvalidException` will be thrown.
 
 In addition, the following methods may also be called:
 
@@ -82,33 +69,130 @@ An exception will be thrown if any other methods are thrown.
 
 If the interface is performed (action invoked or property set), then - irrespective of whether the business rules were checked or skipped - a xref:refguide:applib-ant:Action.adoc#command[command] will be created and pre- and post-execute xref:refguide:applib-ant:Action.adoc#domainEvent[domain event]s) will be fired.
 
+==== Mixins
+
+For mixins, the behaviour of the wrapper is similar but simpler.
+Mixin wrappers only apply to actions, and so the wrapper will enforce the hidden/disable/validate rules before executing.
+In addition, any xref:refguide:applib-cm:methods.adoc#default[`default...()`], xref:refguide:applib-cm:methods.adoc#choices[`choices...()`] or xref:refguide:applib-cm:methods.adoc#autoComplete[`autoComplete...()`] methods can be called.
+
+==== `SyncControl`
+
+The `SyncControl` class controls the way that a (synchronous) wrapper works.
+Its superclass `ControlAbstract` is:
+
+[source,java]
+.ControlAbstract.java
+----
+include::refguide:applib-svc:example$services/wrapper/control/ControlAbstract.java[tags="refguide"]
+----
+<.> whether to check business rules (hide/disable/validate) before executing the underlying property or action
+<.> how to handle exceptions if they occur, using `ExceptionHandler`:
++
+[source,java]
+.SyncControl.java
+----
+include::refguide:applib-svc:example$services/wrapper/control/ExceptionHandler.java[tags="refguide"]
+----
++
+Exceptions can be rethrown or ignored.
+If ignored, the handler can instead return a value; this must be compatible with the expected return value of the underlying action.
 
 
-=== `AsyncWrap` API
+\... and the `SyncControl` class itself is:
 
-The `WrapperFactory` also allows domain objects to be interacted with in an asynchronous fashion:
+[source,java]
+----
+include::refguide:applib-svc:example$services/wrapper/control/SyncControl.java[tags="refguide"]
+----
+<.> Default exception handler is to rethrow the exception.
+<.> Don't actually execute the action (for example, just check the rules as in a "dry-run").
+
+
+
+=== Asynchronous API
+
+The `WrapperFactory` also allows domain objects to be interacted with in an asynchronous fashion, in other words executed in a separate thread:
 
 [source,java]
 ----
 include::refguide:applib-svc:example$services/wrapper/WrapperFactory.java[tags="refguide-async"]
 ----
-<.> x
-<.> x
-<.> x
-<.> x
+<.> Wraps the underlying domain object so it can be invoked (through its wrapper) asynchronously in a separate thread.
+The `AsyncControl` modifies the way in which the wrapper interacts with the underlying domain object, discussed xref:#asynccontrol[below].
 
-WARNING: TODO: there are some caveats to using this approach.
+<.> instantiates and wraps a mixin so that it can be invoked (through its wrapper) asynchronously in a separate thread.
+Again `AsyncControl` modifies the way this is done.
+
+Executing in a separate thread means that the target and arguments are used in a new session.
+If any of these are entities, they are retrieved from the database afresh; it isn't possible to pass domain entity references from the foreground calling thread to the background threads.
+
+
+==== `AsyncControl`
+
+The `AsyncControl` class controls the way that an asynchronous wrapper -- as obtained by `asyncWrapXxx(...)` -- works.
+The class inherits from `ControlAbstract` (see above), to allow the rules checking to be skipped and to configure the `ExceptionHandler`.
+It extends with the following behaviour:
+
+[source,java]
+.AsyncControl.java
+----
+include::refguide:applib-svc:example$services/wrapper/control/AsyncControl.java[tags="refguide"]
+----
+<.> instantiate for a void action or property edit (where there is no need or intention to provide a return value through the `Future`, discussed below).
+<.> instantiate for an action returning a value of `<R>` (where this value will be returned through the `Future`, discussed below).
+<.> Default exception handler is just to log the exception, though this can be overridden.
+<.> Default executor service is the common pool.
+<.> Specify the user for the session used to execute the command asynchronously, in the background.
+If not specified, then the user of the current foreground session is used.
+<.> Specify the roles of the user for the session used to execute the command asynchronously, in the background.
+If not specified, then the roles of the current user foreground user are used.
+<.> Provides access to a `Future` representing the result of the background command.
+This may or may not hold a value.
+
+The `AsyncControl` can therefore be used to check business rules or to skip them.
+If business rules are checked, note that they are performed in the context of the _foreground_ session.
+
+
+=== Unwrap API
+
+The unwrap API provided by the service is:
+[source,java]
+----
+include::refguide:applib-svc:example$services/wrapper/WrapperFactory.java[tags="refguide-unwrap"]
+----
+<.> Obtains the underlying domain object or mixin, if wrapped.
++
+If the object is not wrapped, returns back unchanged.
+
+<.> whether the supplied object is a wrapper around a domain object or mixin.
+
 
 
 === Listener API
+
+The listener API allows the interactions between the wrapper and the underlying domain object to be observed:
 
 [source,java]
 ----
 include::refguide:applib-svc:example$services/wrapper/WrapperFactory.java[tags="refguide-listeners"]
 ----
+<.> all ``InteractionListener``s that have been registered.
+<.> registers an `InteractionListener`, to be notified of interactions on all wrappers.
+The listener will be notified of interactions even on wrappers created before the listener was installed.
+(From an implementation perspective this is because the wrappers delegate back to the container to fire the events).
+<.> remove an `InteractionListener`, to no longer be notified of interactions on wrappers.
+<.> used by the framework itself
+
+This API isn't (currently) used by the framework itself.
+
+[TIP]
+====
+One possible use case would be to autogenerate documentation, for example a sequence diagram from tests.
+Such a feature would probably also use xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`], which builds up an execution call graph of interactions between (wrapped) objects.
+====
 
 
-== Usage
+== Typical Usage
 
 The caller will typically obtain the target object (eg from some repository) and then use the injected `WrapperFactory` to wrap it before interacting with it.
 
@@ -137,42 +221,7 @@ public class CustomerAgent {
 <1> if any constraints on the `Order`'s `refund()` action would be violated, then ...
 <2> ... these will be trapped and raised to the user as a warning.
 
-[NOTE]
-====
-It ought to be possible to implement an xref:refguide:applib-svc:ExceptionRecognizerService.adoc[`ExceptionRecognizer`]s that would allow the above boilerplate to be removed.
-This recognizer service would recognize the `InteractionException` and convert to a suitable message.
 
-At the time of writing Apache Isis does not provide an out-of-the-box implementation of such an `ExceptionRecognizer`; but it should be simple enough to write one…
-====
-
-== Listener API
-
-The `WrapperFactory` also provides a listener API to allow other services to listen in on interactions.
-
-[source,java]
-----
-public interface WrapperFactory {
-    ...
-    @Programmatic
-    List<InteractionListener> getListeners();                               // <1>
-    @Programmatic
-    public boolean addInteractionListener(InteractionListener listener);    // <2>
-    @Programmatic
-    public boolean removeInteractionListener(InteractionListener listener); // <3>
-    @Programmatic
-    public void notifyListeners(InteractionEvent ev);                       // <4>
-}
-----
-<1> all ``InteractionListener``s that have been registered.
-<2> registers an `InteractionListener`, to be notified of interactions on all wrappers.
-The listener will be notified of interactions even on wrappers created before the listener was installed.
-(From an implementation perspective this is because the wrappers delegate back to the container to fire the events).
-<3> remove an `InteractionListener`, to no longer be notified of interactions on wrappers.
-<4> used by the framework itself
-
-
-One possible use case for this API is to enable test transcripts to be captured (in a BDD-like fashion) from integration tests.
-As the time of writing, no such feature has yet been implemented.
 
 
 

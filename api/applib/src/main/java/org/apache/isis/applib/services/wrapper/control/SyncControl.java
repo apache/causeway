@@ -32,26 +32,31 @@ public class SyncControl extends ControlAbstract {
     }
 
     private SyncControl() {
-        with(exception -> {
+        with(exception -> {                 // <.>
             throw exception;
         });
     }
 
-    private boolean execute = true;
+    private boolean execute = true;         // <.>
     public SyncControl withExecute() {
+        // end::refguide[]
         execute = true;
         return this;
+        // tag::refguide[]
+        // ...
     }
     public SyncControl withNoExecute() {
+        // end::refguide[]
         execute = false;
         return this;
+        // tag::refguide[]
+        // ...
     }
 
     // end::refguide[]
     /**
      * Not API.
      */
-    // tag::refguide[]
     public ImmutableEnumSet<ExecutionMode> getExecutionModes() {
         EnumSet<ExecutionMode> modes = EnumSet.copyOf(super.getExecutionModes().toEnumSet());
         if(!execute) {
@@ -59,6 +64,7 @@ public class SyncControl extends ControlAbstract {
         }
         return ImmutableEnumSet.from(modes);
     }
+    // tag::refguide[]
 
 }
 // end::refguide[]

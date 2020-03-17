@@ -39,25 +39,29 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class AsyncControl<R> extends ControlAbstract {
 
-    public static AsyncControl<Void> control() {
+    public static AsyncControl<Void> control() {                        // <.>
         return new AsyncControl<>();
     }
-    public static <X> AsyncControl<X> control(final Class<X> clazz) {
+    public static <X> AsyncControl<X> control(final Class<X> clazz) {   // <.>
         return new AsyncControl<>();
     }
 
     private AsyncControl() {
-        with(exception -> {
+        with(exception -> {                                             // <.>
             log.error(logMessage(), exception);
             return null;
         });
     }
 
     @Getter @NonNull
-    private ExecutorService executorService = ForkJoinPool.commonPool();
+    private ExecutorService executorService =                           // <.>
+                            ForkJoinPool.commonPool();
     public AsyncControl<R> with(ExecutorService executorService) {
+        // end::refguide[]
         this.executorService = executorService;
         return this;
+        // tag::refguide[]
+        // ...
     }
 
     // end::refguide[]
@@ -66,10 +70,13 @@ public class AsyncControl<R> extends ControlAbstract {
      */
     // tag::refguide[]
     @Getter
-    private String user;
+    private String user;                                                // <.>
     public AsyncControl<R> withUser(final String user) {
+        // end::refguide[]
         this.user = user;
         return this;
+        // tag::refguide[]
+        // ...
     }
 
     // end::refguide[]
@@ -78,13 +85,19 @@ public class AsyncControl<R> extends ControlAbstract {
      */
     // tag::refguide[]
     @Getter
-    private List<String> roles;
+    private List<String> roles;                                         // <.>
     public AsyncControl<R> withRoles(final List<String> roles) {
+        // end::refguide[]
         this.roles = Collections.unmodifiableList(roles);
         return this;
+        // tag::refguide[]
+        // ...
     }
     public AsyncControl<R> withRoles(String... roles) {
+        // end::refguide[]
         return withRoles(Arrays.asList(roles));
+        // tag::refguide[]
+        // ...
     }
 
     // end::refguide[]
@@ -97,7 +110,7 @@ public class AsyncControl<R> extends ControlAbstract {
     @Setter(AccessLevel.PACKAGE)
     // tag::refguide[]
     @Getter
-    private Future<R> future;
+    private Future<R> future;                                           // <.>
 
     // end::refguide[]
     private String logMessage() {
@@ -116,6 +129,5 @@ public class AsyncControl<R> extends ControlAbstract {
     }
     // tag::refguide[]
     // ...
-
 }
 // end::refguide[]
