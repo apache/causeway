@@ -50,6 +50,97 @@ public @interface Action {
 
     // end::refguide[]
     /**
+     * Associates this action with a property or collection, specifying its id.
+     *
+     * <p>
+     *     This is an alternative to using {@link MemberOrder#name()}.  To specify the order (equivalent to
+     *     {@link MemberOrder#sequence()}}), use {@link #associateWithSequence()}.
+     * </p>
+     *
+     * <p>
+     *     For example <code>@Action(associateWith="items", associateWithSequence="2.1")</code>
+     * </p>
+     *
+     * <p>
+     *     If an action is associated with a collection, then any matching parameters will have
+     *     their choices automatically inferred from the collection (if not otherwise specified)
+     *     and any collection parameter defaults can be specified using checkboxes
+     *     (in the Wicket UI, at least).
+     * </p>
+     */
+    // tag::refguide[]
+    String associateWith()                                          // <.>
+            default "";
+
+    // end::refguide[]
+    /**
+     * Specifies the sequence/order in the UI for an action that's been associated with a property or collection.
+     *
+     * <p>
+     *     This is an alternative to using {@link MemberOrder#sequence()}, but is ignored if
+     *     {@link Action#associateWith()} isn't also specified.
+     * </p>
+     *
+     * <p>
+     *     For example <code>@Action(associateWith="items", associateWithSequence="2.1")</code>
+     * </p>
+     */
+    // tag::refguide[]
+    String associateWithSequence()                                  // <.>
+            default "1";
+
+    // end::refguide[]
+    /**
+     * Whether the action invocation should be reified into a {@link org.apache.isis.applib.services.command.Command} object.
+     */
+    // tag::refguide[]
+    CommandReification command()                                    // <.>
+            default CommandReification.NOT_SPECIFIED;
+
+    // end::refguide[]
+    /**
+     * How the {@link org.apache.isis.applib.services.command.Command Command} object provided by the
+     * {@link org.apache.isis.applib.services.command.CommandContext CommandContext} domain service should be persisted.
+     */
+    // tag::refguide[]
+    CommandPersistence commandPersistence()                         // <.>
+            default CommandPersistence.PERSISTED;
+
+    // end::refguide[]
+    /**
+     * How the command/action should be executed.
+     *
+     * <p>
+     * If the corresponding {@link org.apache.isis.applib.services.command.Command Command} object is persisted,
+     * then its {@link org.apache.isis.applib.services.command.Command#getExecuteIn() invocationType} property
+     * will be set to this value.
+     * </p>
+     */
+    // tag::refguide[]
+    CommandExecuteIn commandExecuteIn()                             // <.>
+            default CommandExecuteIn.FOREGROUND;
+
+    // end::refguide[]
+    /**
+     * The {@link CommandDtoProcessor} to process this command's DTO.
+     *
+     * <p>
+     *     Specifying a processor requires that the implementation of {@link CommandService} provides a
+     *     custom implementation of {@link org.apache.isis.applib.services.command.Command} that additionally extends
+     *     from {@link CommandWithDto}.
+     * </p>
+     *
+     * <p>
+     *     The processor itself is used by {@link ContentMappingServiceForCommandDto} and
+     *     {@link ContentMappingServiceForCommandsDto} to dynamically transform the DTOs.
+     * </p>
+     */
+    // tag::refguide[]
+    Class<? extends CommandDtoProcessor> commandDtoProcessor()      // <.>
+            default CommandDtoProcessor.class;
+
+    // end::refguide[]
+    /**
      * Indicates that an invocation of the action should be posted to the
      * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
      * {@link org.apache.isis.applib.events.domain.ActionDomainEvent}.
@@ -72,7 +163,22 @@ public @interface Action {
      * </p>
      */
     // tag::refguide[]
-    Class<? extends ActionDomainEvent<?>> domainEvent() default ActionDomainEvent.Default.class;
+    Class<? extends ActionDomainEvent<?>> domainEvent()             // <.>
+            default ActionDomainEvent.Default.class;
+
+    // end::refguide[]
+    /**
+     * For uploading {@link Blob} or {@link Clob}, optionally restrict the files accepted (eg <tt>.xslx</tt>).
+     *
+     * <p>
+     * The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
+     * </p>
+     *
+     * @see <a href="http://www.w3schools.com/tags/att_input_accept.asp">http://www.w3schools.com</a>
+     */
+    // tag::refguide[]
+    String fileAccept()                                             // <.>
+            default "";
 
     // end::refguide[]
     /**
@@ -89,62 +195,8 @@ public @interface Action {
      * </p>
      */
     // tag::refguide[]
-    Where hidden() default Where.NOT_SPECIFIED;
-
-    // end::refguide[]
-    /**
-     * The action semantics, either {@link SemanticsOf#SAFE_AND_REQUEST_CACHEABLE cached}, {@link SemanticsOf#SAFE safe} (query-only),
-     * {@link SemanticsOf#IDEMPOTENT idempotent} or
-     * {@link SemanticsOf#NON_IDEMPOTENT non-idempotent}.
-     */
-    // tag::refguide[]
-    SemanticsOf semantics() default SemanticsOf.NOT_SPECIFIED;
-
-    // end::refguide[]
-    /**
-     * Whether the action invocation should be reified into a {@link org.apache.isis.applib.services.command.Command} object.
-     */
-    // tag::refguide[]
-    CommandReification command() default CommandReification.NOT_SPECIFIED;
-
-    // end::refguide[]
-    /**
-     * How the {@link org.apache.isis.applib.services.command.Command Command} object provided by the
-     * {@link org.apache.isis.applib.services.command.CommandContext CommandContext} domain service should be persisted.
-     */
-    // tag::refguide[]
-    CommandPersistence commandPersistence() default CommandPersistence.PERSISTED;
-
-    // end::refguide[]
-    /**
-     * How the command/action should be executed.
-     *
-     * <p>
-     * If the corresponding {@link org.apache.isis.applib.services.command.Command Command} object is persisted,
-     * then its {@link org.apache.isis.applib.services.command.Command#getExecuteIn() invocationType} property
-     * will be set to this value.
-     * </p>
-     */
-    // tag::refguide[]
-    CommandExecuteIn commandExecuteIn() default CommandExecuteIn.FOREGROUND;
-
-    // end::refguide[]
-    /**
-     * The {@link CommandDtoProcessor} to process this command's DTO.
-     *
-     * <p>
-     *     Specifying a processor requires that the implementation of {@link CommandService} provides a
-     *     custom implementation of {@link org.apache.isis.applib.services.command.Command} that additionally extends
-     *     from {@link CommandWithDto}.
-     * </p>
-     *
-     * <p>
-     *     The processor itself is used by {@link ContentMappingServiceForCommandDto} and
-     *     {@link ContentMappingServiceForCommandsDto} to dynamically transform the DTOs.
-     * </p>
-     */
-    // tag::refguide[]
-    Class<? extends CommandDtoProcessor> commandDtoProcessor() default CommandDtoProcessor.class;
+    Where hidden()                                                  // <.>
+            default Where.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
@@ -156,15 +208,8 @@ public @interface Action {
      * </p>
      */
     // tag::refguide[]
-    Publishing publishing() default Publishing.NOT_SPECIFIED;
-
-    // end::refguide[]
-    /**
-     * The type-of the elements returned by the action.
-     * @return
-     */
-    // tag::refguide[]
-    Class<?> typeOf() default Object.class;
+    Publishing publishing()                                         // <.>
+            default Publishing.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
@@ -175,59 +220,27 @@ public @interface Action {
      * </p>
      */
     // tag::refguide[]
-    RestrictTo restrictTo() default RestrictTo.NOT_SPECIFIED;
+    RestrictTo restrictTo()                                         // <.>
+            default RestrictTo.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
-     * Associates this action with a property or collection, specifying its id.
-     *
-     * <p>
-     *     This is an alternative to using {@link MemberOrder#name()}.  To specify the order (equivalent to
-     *     {@link MemberOrder#sequence()}}), use {@link #associateWithSequence()}.
-     * </p>
-     *
-     * <p>
-     *     For example <code>@Action(associateWith="items", associateWithSequence="2.1")</code>
-     * </p>
-     *
-     * <p>
-     *     If an action is associated with a collection, then any matching parameters will have
-     *     their choices automatically inferred from the collection (if not otherwise specified)
-     *     and any collection parameter defaults can be specified using checkboxes
-     *     (in the Wicket UI, at least).
-     * </p>
+     * The action semantics, either {@link SemanticsOf#SAFE_AND_REQUEST_CACHEABLE cached}, {@link SemanticsOf#SAFE safe} (query-only),
+     * {@link SemanticsOf#IDEMPOTENT idempotent} or
+     * {@link SemanticsOf#NON_IDEMPOTENT non-idempotent}.
      */
     // tag::refguide[]
-    String associateWith() default "";
+    SemanticsOf semantics()                                         // <.>
+            default SemanticsOf.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
-     * Specifies the sequence/order in the UI for an action that's been associated with a property or collection.
-     *
-     * <p>
-     *     This is an alternative to using {@link MemberOrder#sequence()}, but is ignored if
-     *     {@link Action#associateWith()} isn't also specified.
-     * </p>
-     *
-     * <p>
-     *     For example <code>@Action(associateWith="items", associateWithSequence="2.1")</code>
-     * </p>
+     * The type-of the elements returned by the action.
+     * @return
      */
     // tag::refguide[]
-    String associateWithSequence() default "1";
-
-    // end::refguide[]
-    /**
-     * For uploading {@link Blob} or {@link Clob}, optionally restrict the files accepted (eg <tt>.xslx</tt>).
-     *
-     * <p>
-     * The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
-     * </p>
-     *
-     * @see <a href="http://www.w3schools.com/tags/att_input_accept.asp">http://www.w3schools.com</a>
-     */
-    // tag::refguide[]
-    String fileAccept() default "";
+    Class<?> typeOf()                                               // <.>
+            default Object.class;
 
 }
 // end::refguide[]

@@ -35,5 +35,4 @@ This attribute can also be specified for:
 * xref:refguide:applib-ant:PropertyLayout.adoc#describedAs[properties]
 * xref:refguide:applib-ant:ParameterLayout.adoc#describedAs[parameters]
 * xref:refguide:applib-ant:DomainObjectLayout.adoc#describedAs[domain objects]
-* xref:refguide:applib-ant:ViewModelLayout.adoc#describedAs[view models].
 

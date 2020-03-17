@@ -42,4 +42,3 @@ As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout.adoc#
 This attribute can also be applied to:
 
 * xref:refguide:applib-ant:DomainObjectLayout.adoc#paged[domain objects]
-* xref:refguide:applib-ant:ViewModelLayout.adoc#paged[view models].

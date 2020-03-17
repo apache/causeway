@@ -39,6 +39,5 @@ The similar xref:refguide:applib-ant:DomainObjectLayout.adoc#cssClass[`@DomainOb
 
 These attributes can also be applied to:
 
-* xref:refguide:applib-ant:ViewModelLayout.adoc#cssClassFa[view models] to specify the object's icon, and
 * xref:refguide:applib-ant:ActionLayout.adoc#cssClassFa[actions] to specify an icon for the action's representation as a button or menu item.
 

@@ -30,7 +30,6 @@ As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout.adoc#
 This attribute can also be applied to:
 
 * xref:refguide:applib-ant:DomainObjectLayout.adoc#cssClass[domain objects]
-* xref:refguide:applib-ant:ViewModelLayout.adoc#cssClass[view models]
 * xref:refguide:applib-ant:ActionLayout.adoc#cssClass[actions]
 * xref:refguide:applib-ant:CollectionLayout.adoc#cssClass[collections]
 * xref:refguide:applib-ant:ParameterLayout.adoc#cssClass[parameters].

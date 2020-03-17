@@ -20,7 +20,3 @@ public class Child {
 ----
 
 
-== See also
-
-This attribute is also supported for xref:refguide:applib-ant:ViewModelLayout.adoc#plural[view models].
-

@@ -90,11 +90,6 @@ The table below summarizes these most commonly used annotations in Apache Isis.
 |Domain, Persistence
 |
 
-|xref:refguide:applib-ant:ViewModelLayout.adoc[`@ViewModelLayout`]
-|User interface hints for view models.
-For use with `@ViewModel`. If specifying view models using `@DomainObject(nature=VIEW_MODEL)` then use `@DomainObjectLayout`)
-|UI
-|Yes
 
 |===
 

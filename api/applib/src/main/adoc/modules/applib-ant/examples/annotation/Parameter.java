@@ -43,6 +43,20 @@ public @interface Parameter {
 
     // end::refguide[]
     /**
+     * For uploading {@link Blob} or {@link Clob}, optionally restrict the files accepted (eg <tt>.xslx</tt>).
+     *
+     * <p>
+     * The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
+     * </p>
+     *
+     * @see <a href="http://www.w3schools.com/tags/att_input_accept.asp">http://www.w3schools.com</a>
+     */
+    // tag::refguide[]
+    String fileAccept()                             // <.>
+            default "";
+
+    // end::refguide[]
+    /**
      * The maximum entry length of a field.
      *
      * <p>
@@ -50,7 +64,20 @@ public @interface Parameter {
      * </p>
      */
     // tag::refguide[]
-    int maxLength() default -1;
+    int maxLength()                                 // <.>
+            default -1;
+
+    // end::refguide[]
+    /**
+     * The {@link org.apache.isis.applib.spec.Specification}(s) to be satisfied by this parameter.
+     *
+     * <p>
+     * If more than one is provided, then all must be satisfied (in effect &quot;AND&quot;ed together).
+     * </p>
+     */
+    // tag::refguide[]
+    Class<? extends Specification>[] mustSatisfy()  // <.>
+            default {};
 
     // end::refguide[]
     /**
@@ -62,25 +89,16 @@ public @interface Parameter {
      * </p>
      */
     // tag::refguide[]
-    Optionality optionality() default Optionality.NOT_SPECIFIED;
-
-    // end::refguide[]
-    /**
-     * The {@link org.apache.isis.applib.spec.Specification}(s) to be satisfied by this parameter.
-     *
-     * <p>
-     * If more than one is provided, then all must be satisfied (in effect &quot;AND&quot;ed together).
-     * </p>
-     */
-    // tag::refguide[]
-    Class<? extends Specification>[] mustSatisfy() default {};
+    Optionality optionality()                       // <.>
+            default Optionality.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
      * Regular expression pattern that a value should conform to, and can be formatted as.
      */
     // tag::refguide[]
-    String regexPattern() default "";
+    String regexPattern()                           // <.>
+            default "";
 
     // end::refguide[]
     /**
@@ -91,27 +109,17 @@ public @interface Parameter {
      * </p>
      */
     // tag::refguide[]
-    int regexPatternFlags() default 0;
+    int regexPatternFlags()                         // <.>
+            default 0;
 
     // end::refguide[]
     /**
      * Replacement text for the pattern in generated error message.
      */
     // tag::refguide[]
-    String regexPatternReplacement() default "Doesn't match pattern";
+    String regexPatternReplacement()                // <.>
+            default "Doesn't match pattern";
 
-    // end::refguide[]
-    /**
-     * For uploading {@link Blob} or {@link Clob}, optionally restrict the files accepted (eg <tt>.xslx</tt>).
-     *
-     * <p>
-     * The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
-     * </p>
-     *
-     * @see <a href="http://www.w3schools.com/tags/att_input_accept.asp">http://www.w3schools.com</a>
-     */
-    // tag::refguide[]
-    String fileAccept() default "";
 
 }
 // end::refguide[]

@@ -48,6 +48,14 @@ public @interface DomainObjectLayout {
     // ...
     // end::refguide-ui-events[]
     /**
+     * Whether (and how) this domain object can be bookmarked in the UI.
+     */
+    // tag::refguide[]
+    BookmarkPolicy bookmarking()                    // <.>
+            default BookmarkPolicy.NOT_SPECIFIED;
+
+    // end::refguide[]
+    /**
      * Indicates the css class that a domain class (type) should have.
      */
     // tag::refguide[]
@@ -119,24 +127,16 @@ public @interface DomainObjectLayout {
 
     // end::refguide[]
     /**
-     * Whether (and how) this domain object can be bookmarked in the UI.
-     */
-    // tag::refguide[]
-    BookmarkPolicy bookmarking()                    // <.>
-            default BookmarkPolicy.NOT_SPECIFIED;
-
-    // end::refguide[]
-    /**
-     * Which subclass of {@link TitleUiEvent} should be used to obtain a title.
+     * Which subclass of {@link CssClassUiEvent} should be used to obtain a CSS class.
      *
      * <p>
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
      */
     // tag::refguide-ui-events[]
-    Class<? extends TitleUiEvent<?>>
-            titleUiEvent()                          // <.>
-            default TitleUiEvent.Default.class;
+    Class<? extends CssClassUiEvent<?>>
+            cssClassUiEvent()                       // <.>
+            default CssClassUiEvent.Default.class;
 
     // end::refguide-ui-events[]
     /**
@@ -153,19 +153,6 @@ public @interface DomainObjectLayout {
 
     // end::refguide-ui-events[]
     /**
-     * Which subclass of {@link CssClassUiEvent} should be used to obtain a CSS class.
-     *
-     * <p>
-     * This subclass must provide a no-arg constructor; the fields are set reflectively.
-     * </p>
-     */
-    // tag::refguide-ui-events[]
-    Class<? extends CssClassUiEvent<?>>
-            cssClassUiEvent()                       // <.>
-            default CssClassUiEvent.Default.class;
-
-    // end::refguide-ui-events[]
-    /**
      * Which subclass of {@link LayoutUiEvent} should be used to obtain a layout.
      *
      * <p>
@@ -177,8 +164,24 @@ public @interface DomainObjectLayout {
             layoutUiEvent()                         // <.>
             default LayoutUiEvent.Default.class;
 
+    // end::refguide-ui-events[]
+    /**
+     * Which subclass of {@link TitleUiEvent} should be used to obtain a title.
+     *
+     * <p>
+     * This subclass must provide a no-arg constructor; the fields are set reflectively.
+     * </p>
+     */
+    // tag::refguide-ui-events[]
+    Class<? extends TitleUiEvent<?>>
+            titleUiEvent()                          // <.>
+            default TitleUiEvent.Default.class;
+
+    // end::refguide-ui-events[]
+
     // tag::refguide[]
     // ...
     // tag::refguide-ui-events[]
 }
 // end::refguide[]
+// end::refguide-ui-events[]

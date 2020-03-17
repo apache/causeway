@@ -46,14 +46,8 @@ public @interface CollectionLayout {
      * Indicates the css class that a collection should have.
      */
     // tag::refguide[]
-    String cssClass() default "";
-
-    // end::refguide[]
-    /**
-     * Description of this collection, eg to be rendered in a tooltip.
-     */
-    // tag::refguide[]
-    String describedAs() default "";
+    String cssClass()                                   // <.>
+            default "";
 
     // end::refguide[]
     /**
@@ -68,7 +62,16 @@ public @interface CollectionLayout {
      * </p>
      */
     // tag::refguide[]
-    String defaultView() default "";
+    String defaultView()                                // <.>
+            default "";
+
+    // end::refguide[]
+    /**
+     * Description of this collection, eg to be rendered in a tooltip.
+     */
+    // tag::refguide[]
+    String describedAs()                                // <.>
+            default "";
 
     // end::refguide[]
     /**
@@ -80,21 +83,24 @@ public @interface CollectionLayout {
      * </p>
      */
     // tag::refguide[]
-    Where hidden() default Where.NOT_SPECIFIED;
+    Where hidden()                                      // <.>
+            default Where.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
      * Name of this collection (overriding the name derived from its name in code).
      */
     // tag::refguide[]
-    String named() default "";
+    String named()                                      // <.>
+            default "";
 
     // end::refguide[]
     /**
      * A flag indicating whether the value of {@linkplain #named()} should be HTML escaped or not.
      */
     // tag::refguide[]
-    boolean namedEscaped() default true;
+    boolean namedEscaped()                              // <.>
+            default true;
 
     // end::refguide[]
     /**
@@ -110,7 +116,8 @@ public @interface CollectionLayout {
      * collections (eg as returned from a repository query).
      */
     // tag::refguide[]
-    int paged() default -1;
+    int paged()                                         // <.>
+            default -1;
 
     // end::refguide[]
     /**
@@ -133,7 +140,8 @@ public @interface CollectionLayout {
      */
     @SuppressWarnings("rawtypes")
     // tag::refguide[]
-    Class sortedBy() default Comparator.class;
+    Class sortedBy()                                    // <.>
+            default Comparator.class;
 
 }
 // end::refguide[]

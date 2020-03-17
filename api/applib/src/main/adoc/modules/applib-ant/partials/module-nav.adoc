@@ -35,7 +35,6 @@
 ** xref:refguide:applib-ant:IsisSessionScope.adoc[RequestScoped]
 ** xref:refguide:applib-ant:Title.adoc[Title]
 ** xref:refguide:applib-ant:ViewModel.adoc[ViewModel]
-** xref:refguide:applib-ant:ViewModelLayout.adoc[ViewModelLayout]
 ** xref:refguide:applib-ant:XmlJavaTypeAdapter.adoc[XmlJavaTypeAdapter]
 ** xref:refguide:applib-ant:XmlRootElement.adoc[XmlRootElement]
 

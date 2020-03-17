@@ -37,5 +37,4 @@ It is also possible to specify a global default for the page size of standalone 
 
 This attribute can also be applied to:
 
-* xref:refguide:applib-ant:ViewModelLayout.adoc#paged[view models], and
 * xref:refguide:applib-ant:CollectionLayout.adoc#paged[collections]

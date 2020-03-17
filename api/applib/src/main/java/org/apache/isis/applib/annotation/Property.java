@@ -52,6 +52,56 @@ public @interface Property {
 
     // end::refguide[]
     /**
+     * Whether the property edit should be reified into a {@link org.apache.isis.applib.services.command.Command} object.
+     */
+    // tag::refguide[]
+    CommandReification command()                                // <.>
+            default CommandReification.NOT_SPECIFIED;
+
+    // end::refguide[]
+    /**
+     * How the {@link org.apache.isis.applib.services.command.Command Command} object provided by the
+     * {@link org.apache.isis.applib.services.command.CommandContext CommandContext} domain service should be persisted.
+     */
+    // tag::refguide[]
+    CommandPersistence commandPersistence()                     // <.>
+            default CommandPersistence.PERSISTED;
+
+    // end::refguide[]
+    /**
+     * How the command/property edit should be executed.
+     *
+     * <p>
+     * If the corresponding {@link org.apache.isis.applib.services.command.Command Command} object is persisted,
+     * then its {@link org.apache.isis.applib.services.command.Command#getExecuteIn() invocationType} property
+     * will be set to this value.
+     * </p>
+     */
+    // tag::refguide[]
+    CommandExecuteIn commandExecuteIn()                         // <.>
+            default CommandExecuteIn.FOREGROUND;
+
+    // end::refguide[]
+    /**
+     * The {@link CommandDtoProcessor} to process this command's DTO.
+     *
+     * <p>
+     *     Specifying a processor requires that the implementation of {@link CommandService} provides a
+     *     custom implementation of {@link org.apache.isis.applib.services.command.Command} that additional extends
+     *     from {@link CommandWithDto}.
+     * </p>
+     *
+     * <p>
+     *     Tprocessor itself is used by {@link ContentMappingServiceForCommandDto} and
+     *     {@link ContentMappingServiceForCommandsDto} to dynamically transform the DTOs.
+     * </p>
+     */
+    // tag::refguide[]
+    Class<? extends CommandDtoProcessor> commandDtoProcessor()  // <.>
+            default CommandDtoProcessor.class;
+
+    // end::refguide[]
+    /**
      * Indicates that changes to the property that should be posted to the
      * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
      * {@link org.apache.isis.applib.events.domain.PropertyDomainEvent}.
@@ -71,14 +121,102 @@ public @interface Property {
      * </p>
      */
     // tag::refguide[]
-    Class<? extends PropertyDomainEvent<?,?>> domainEvent() default PropertyDomainEvent.Default.class;
+    Class<? extends PropertyDomainEvent<?,?>> domainEvent()     // <.>
+            default PropertyDomainEvent.Default.class;
+
+    // end::refguide[]
+    /**
+     * Whether the properties of this domain object can be edited, or collections of this object be added to/removed from.
+     *
+     * <p>
+     *     Note that non-editable objects can nevertheless have actions invoked upon them.
+     * </p>
+     */
+    // tag::refguide[]
+    Editing editing()                                           // <.>
+            default Editing.NOT_SPECIFIED;
+
+    // end::refguide[]
+    /**
+     * If {@link #editing()} is set to {@link Editing#DISABLED},
+     * then the reason to provide to the user as to why this property cannot be edited.
+     */
+    // tag::refguide[]
+    String editingDisabledReason()                              // <.>
+            default "";
+
+    // end::refguide[]
+    /**
+     * For uploading {@link Blob} or {@link Clob}, optionally restrict the files accepted (eg <tt>.xslx</tt>).
+     *
+     * <p>
+     * The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
+     * </p>
+     *
+     * @see <a href="http://www.w3schools.com/tags/att_input_accept.asp">http://www.w3schools.com</a>
+     */
+    // tag::refguide[]
+    String fileAccept()                                         // <.>
+            default "";
 
     // end::refguide[]
     /**
      * Indicates where the property is not visible to the user.
      */
     // tag::refguide[]
-    Where hidden() default Where.NOT_SPECIFIED;
+    Where hidden()                                              // <.>
+            default Where.NOT_SPECIFIED;
+
+    // end::refguide[]
+    /**
+     * The maximum entry length of a field.
+     *
+     * <p>
+     *     The default value (<code>-1</code>) indicates that no maxLength has been specified.
+     * </p>
+     */
+    // tag::refguide[]
+    int maxLength()                                             // <.>
+            default -1;
+
+    // end::refguide[]
+    /**
+     * Indicates whether the property should be included or excluded from mementos.
+     *
+     * <p>
+     *     To ensure that the property is actually not persisted in the objectstore, also annotate with the JDO annotation
+     *     <code>javax.jdo.annotations.NotPersistent</code>
+     * </p>
+     */
+    // tag::refguide[]
+    MementoSerialization mementoSerialization()                 // <.>
+            default MementoSerialization.NOT_SPECIFIED;
+
+    // end::refguide[]
+    /**
+     * The {@link org.apache.isis.applib.spec.Specification}(s) to be satisfied by this property.
+     *
+     * <p>
+     * If more than one is provided, then all must be satisfied (in effect &quot;AND&quot;ed together).
+     * </p>
+     */
+    // tag::refguide[]
+    Class<? extends Specification>[] mustSatisfy()              // <.>
+            default {};
+
+    // end::refguide[]
+    /**
+     * Whether this property is optional or is mandatory (ie required).
+     *
+     * <p>
+     *     For properties the default value, {@link org.apache.isis.applib.annotation.Optionality#DEFAULT}, usually
+     *     means that the property is required unless it has been overridden by {@link javax.jdo.annotations.Column}
+     *     with its <code>javax.jdo.annotations.Column#allowsNull()</code> attribute set to true.
+     * </p>
+     */
+    // tag::refguide[]
+    Optionality optionality()                                   // <.>
+            default Optionality.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
@@ -96,53 +234,8 @@ public @interface Property {
      * </p>
      */
     // tag::refguide[]
-    Projecting projecting() default Projecting.NOT_SPECIFIED;
-
-    // end::refguide[]
-    /**
-     * Whether the properties of this domain object can be edited, or collections of this object be added to/removed from.
-     *
-     * <p>
-     *     Note that non-editable objects can nevertheless have actions invoked upon them.
-     * </p>
-     */
-    // tag::refguide[]
-    Editing editing() default Editing.NOT_SPECIFIED;
-
-    // end::refguide[]
-    /**
-     * If {@link #editing()} is set to {@link Editing#DISABLED},
-     * then the reason to provide to the user as to why this property cannot be edited.
-     */
-    // tag::refguide[]
-    String editingDisabledReason() default "";
-
-    // end::refguide[]
-    /**
-     * Whether the property edit should be reified into a {@link org.apache.isis.applib.services.command.Command} object.
-     */
-    CommandReification command() default CommandReification.NOT_SPECIFIED;
-
-    // end::refguide[]
-    /**
-     * How the {@link org.apache.isis.applib.services.command.Command Command} object provided by the
-     * {@link org.apache.isis.applib.services.command.CommandContext CommandContext} domain service should be persisted.
-     */
-    // tag::refguide[]
-    CommandPersistence commandPersistence() default CommandPersistence.PERSISTED;
-
-    // end::refguide[]
-    /**
-     * How the command/property edit should be executed.
-     *
-     * <p>
-     * If the corresponding {@link org.apache.isis.applib.services.command.Command Command} object is persisted,
-     * then its {@link org.apache.isis.applib.services.command.Command#getExecuteIn() invocationType} property
-     * will be set to this value.
-     * </p>
-     */
-    // tag::refguide[]
-    CommandExecuteIn commandExecuteIn() default CommandExecuteIn.FOREGROUND;
+    Projecting projecting()                                     // <.>
+            default Projecting.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
@@ -154,79 +247,16 @@ public @interface Property {
      * </p>
      */
     // tag::refguide[]
-    Publishing publishing() default Publishing.NOT_SPECIFIED;
-
-    // end::refguide[]
-    /**
-     * The {@link CommandDtoProcessor} to process this command's DTO.
-     *
-     * <p>
-     *     Specifying a processor requires that the implementation of {@link CommandService} provides a
-     *     custom implementation of {@link org.apache.isis.applib.services.command.Command} that additional extends
-     *     from {@link CommandWithDto}.
-     * </p>
-     *
-     * <p>
-     *     Tprocessor itself is used by {@link ContentMappingServiceForCommandDto} and
-     *     {@link ContentMappingServiceForCommandsDto} to dynamically transform the DTOs.
-     * </p>
-     */
-    // tag::refguide[]
-    Class<? extends CommandDtoProcessor> commandDtoProcessor() default CommandDtoProcessor.class;
-
-    // end::refguide[]
-    /**
-     * The maximum entry length of a field.
-     *
-     * <p>
-     *     The default value (<code>-1</code>) indicates that no maxLength has been specified.
-     * </p>
-     */
-    // tag::refguide[]
-    int maxLength() default -1;
-
-    // end::refguide[]
-    /**
-     * The {@link org.apache.isis.applib.spec.Specification}(s) to be satisfied by this property.
-     *
-     * <p>
-     * If more than one is provided, then all must be satisfied (in effect &quot;AND&quot;ed together).
-     * </p>
-     */
-    // tag::refguide[]
-    Class<? extends Specification>[] mustSatisfy() default {};
-
-    // end::refguide[]
-    /**
-     * Indicates whether the property should be included or excluded from mementos.
-     *
-     * <p>
-     *     To ensure that the property is actually not persisted in the objectstore, also annotate with the JDO annotation
-     *     <code>javax.jdo.annotations.NotPersistent</code>
-     * </p>
-     */
-    // tag::refguide[]
-    MementoSerialization mementoSerialization() default MementoSerialization.NOT_SPECIFIED;
-
-    // end::refguide[]
-    /**
-     * Whether this property is optional or is mandatory (ie required).
-     *
-     * <p>
-     *     For properties the default value, {@link org.apache.isis.applib.annotation.Optionality#DEFAULT}, usually
-     *     means that the property is required unless it has been overridden by {@link javax.jdo.annotations.Column}
-     *     with its <code>javax.jdo.annotations.Column#allowsNull()</code> attribute set to true.
-     * </p>
-     */
-    // tag::refguide[]
-    Optionality optionality() default Optionality.NOT_SPECIFIED;
+    Publishing publishing()                                     // <.>
+            default Publishing.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
      * Regular expression pattern that a value should conform to, and can be formatted as.
      */
     // tag::refguide[]
-    String regexPattern() default "";
+    String regexPattern()                                       // <.>
+            default "";
 
     // end::refguide[]
     /**
@@ -237,27 +267,16 @@ public @interface Property {
      * </p>
      */
     // tag::refguide[]
-    int regexPatternFlags() default 0;
+    int regexPatternFlags()                                     // <.>
+            default 0;
 
     // end::refguide[]
     /**
      * Replacement text for the pattern in generated error message.
      */
     // tag::refguide[]
-    String regexPatternReplacement() default "Doesn't match pattern";
-
-    // end::refguide[]
-    /**
-     * For uploading {@link Blob} or {@link Clob}, optionally restrict the files accepted (eg <tt>.xslx</tt>).
-     *
-     * <p>
-     * The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
-     * </p>
-     *
-     * @see <a href="http://www.w3schools.com/tags/att_input_accept.asp">http://www.w3schools.com</a>
-     */
-    // tag::refguide[]
-    String fileAccept() default "";
+    String regexPatternReplacement()                            // <.>
+            default "Doesn't match pattern";
 
 }
 // end::refguide[]

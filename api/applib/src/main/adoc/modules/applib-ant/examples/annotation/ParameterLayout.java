@@ -44,14 +44,16 @@ public @interface ParameterLayout {
      * Indicates the css class that a parameter should have.
      */
     // tag::refguide[]
-    String cssClass() default "";
+    String cssClass()                               // <.>
+            default "";
 
     // end::refguide[]
     /**
      * Description of this property, eg to be rendered in a tooltip.
      */
     // tag::refguide[]
-    String describedAs() default "";
+    String describedAs()                            // <.>
+            default "";
 
     // end::refguide[]
     /**
@@ -62,28 +64,32 @@ public @interface ParameterLayout {
      * </p>
      */
     // tag::refguide[]
-    LabelPosition labelPosition() default LabelPosition.NOT_SPECIFIED;
+    LabelPosition labelPosition()                   // <.>
+            default LabelPosition.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
      * Name of this action parameter.
      */
     // tag::refguide[]
-    String named() default "";
+    String named()                                  // <.>
+            default "";
 
     // end::refguide[]
     /**
      * A flag indicating whether the value of {@linkplain #named()} should be HTML escaped or not.
      */
     // tag::refguide[]
-    boolean namedEscaped() default true;
+    boolean namedEscaped()                          // <.>
+            default true;
 
     // end::refguide[]
     /**
      * For string parameters (and properties), whether to render as a text area over multiple lines.
      */
     // tag::refguide[]
-    int multiLine() default -1;
+    int multiLine()                                 // <.>
+            default -1;
 
     // end::refguide[]
     /**
@@ -111,14 +117,16 @@ public @interface ParameterLayout {
      * </p>
      */
     // tag::refguide[]
-    RenderDay renderDay() default RenderDay.NOT_SPECIFIED;
+    RenderDay renderDay()                           // <.>
+            default RenderDay.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
      * The typical entry length of a field, use to determine the optimum width for display
      */
     // tag::refguide[]
-    int typicalLength() default -1;
+    int typicalLength()                             // <.>
+            default -1;
 
 }
 // end::refguide[]

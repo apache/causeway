@@ -30,4 +30,3 @@ This attribute can also be specified for:
 * xref:refguide:applib-ant:PropertyLayout.adoc#named[properties]
 * xref:refguide:applib-ant:ParameterLayout.adoc#named[parameters]
 * xref:refguide:applib-ant:DomainObjectLayout.adoc#named[domain objects]
-* xref:refguide:applib-ant:ViewModelLayout.adoc#named[view models].

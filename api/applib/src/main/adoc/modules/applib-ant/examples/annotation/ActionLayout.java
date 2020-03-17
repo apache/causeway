@@ -54,7 +54,7 @@ public @interface ActionLayout {
      * </p>
      */
     // tag::refguide[]
-    BookmarkPolicy bookmarking()                        <.>
+    BookmarkPolicy bookmarking()                        // <.>
             default BookmarkPolicy.NOT_SPECIFIED;
 
     // end::refguide[]
@@ -69,7 +69,7 @@ public @interface ActionLayout {
      * </p>
      */
     @Deprecated
-    Contributed contributed()                           <.>
+    Contributed contributed()                           // <.>
             default Contributed.NOT_SPECIFIED;
 
     // tag::refguide[]
@@ -82,7 +82,7 @@ public @interface ActionLayout {
      * </p>
      */
     // tag::refguide[]
-    String cssClass()                                   <.>
+    String cssClass()                                   // <.>
             default "";
 
     // end::refguide[]
@@ -91,7 +91,7 @@ public @interface ActionLayout {
      * action (button or menu item).
      */
     // tag::refguide[]
-    String cssClassFa()                                 <.>
+    String cssClassFa()                                 // <.>
             default "";
 
     // end::refguide[]
@@ -100,7 +100,7 @@ public @interface ActionLayout {
      * icon. The icon could be rendered on the left or the right of the action button
      */
     // tag::refguide[]
-    CssClassFaPosition cssClassFaPosition()             <.>
+    CssClassFaPosition cssClassFaPosition()             // <.>
             default CssClassFaPosition.LEFT;
 
     // end::refguide[]
@@ -108,7 +108,7 @@ public @interface ActionLayout {
      * Description of this action, eg to be rendered in a tooltip.
      */
     // tag::refguide[]
-    String describedAs()                                <.>
+    String describedAs()                                // <.>
             default "";
 
     // end::refguide[]
@@ -116,7 +116,7 @@ public @interface ActionLayout {
      * Indicates where in the UI the action should <i>not</i>not be visible.
      */
     // tag::refguide[]
-    Where hidden()                                      <.>
+    Where hidden()                                      // <.>
             default Where.NOT_SPECIFIED;
 
     // end::refguide[]
@@ -124,7 +124,7 @@ public @interface ActionLayout {
      * Name of this action (overriding the name derived from its name in code).
      */
     // tag::refguide[]
-    String named()                                      <.>
+    String named()                                      // <.>
             default "";
 
     // end::refguide[]
@@ -137,7 +137,7 @@ public @interface ActionLayout {
      * </p>
      */
     // tag::refguide[]
-    Position position()                                 <.>
+    Position position()                                 // <.>
             default Position.NOT_SPECIFIED;
 
     // end::refguide[]
@@ -154,7 +154,7 @@ public @interface ActionLayout {
      * How this parameters for this action are prompted, either {@link PromptStyle#DIALOG dialog} or {@link PromptStyle#INLINE inline}.
      */
     // tag::refguide[]
-    PromptStyle promptStyle()                           <.>
+    PromptStyle promptStyle()                           // <.>
             default PromptStyle.AS_CONFIGURED;
 
     // end::refguide[]
@@ -163,7 +163,7 @@ public @interface ActionLayout {
      * instead to redirect (forcing a re-rendering of a new page).
      */
     // tag::refguide[]
-    Redirect redirectPolicy()                           <.>
+    Redirect redirectPolicy()                           // <.>
             default Redirect.AS_CONFIGURED;
 
 }

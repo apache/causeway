@@ -17,31 +17,19 @@ The annotation is:
 ----
 include::refguide:applib-ant:example$annotation/DomainServiceLayout.java[tags="refguide"]
 ----
+<.> xref:refguide:applib-ant:DomainServiceLayout.adoc#menuBar[`menuBar()`]
++
+The menubar in which the menu that holds this service's actions should reside:
++
+[source,java]
+----
+include::refguide:applib-ant:example$annotation/DomainServiceLayout.java[tags="refguide-menu-bar",indent=0]
+----
 
+<.> xref:refguide:applib-ant:DomainServiceLayout.adoc#named[`named()`]
++
+Name of this class (overriding the name derived from its name in code)
 
-The table below summarizes the annotation's attributes.
-
-.`@DomainServiceLayout` attributes
-[cols="2,2,4a",options="header"]
-|===
-
-| Attribute
-| Values (default)
-| Description
-
-
-|xref:refguide:applib-ant:DomainServiceLayout.adoc#menuBar[`menuBar()`]
-|`PRIMARY`, `SECONDARY`, `TERTIARY` (`PRIMARY`).
-|the menubar in which the menu that holds this service's actions should reside.
-
-
-|xref:refguide:applib-ant:DomainServiceLayout.adoc#named[`named()`]
-|string, eg "Customers"
-|name of this class (overriding the name derived from its name in code)
-
-
-
-|===
 
 For example:
 
@@ -50,7 +38,6 @@ For example:
 @DomainService
 @DomainServiceLayout(
     menuBar=MenuBar.PRIMARY,
-    menuOrder="100",
     named="ToDos"
 )
 public class ToDoItems {
@@ -58,11 +45,5 @@ public class ToDoItems {
 }
 ----
 
-[NOTE]
-====
-Note that there is (currently) no support for specifying UI hints for domain services through the dynamic xref:vw:ROOT:layout.adoc#file-based[`.layout.xml`] file (only for properties, collections and actions are supported).
-====
-
 include::DomainServiceLayout/menuBar.adoc[leveloffset=+1]
-include::DomainServiceLayout/menuOrder.adoc[leveloffset=+1]
 include::DomainServiceLayout/named.adoc[leveloffset=+1]

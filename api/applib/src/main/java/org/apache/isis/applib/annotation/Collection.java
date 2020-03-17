@@ -64,14 +64,8 @@ public @interface Collection {
      * </p>
      */
     // tag::refguide[]
-    Class<? extends CollectionDomainEvent<?,?>> domainEvent() default CollectionDomainEvent.Default.class;
-
-    // end::refguide[]
-    /**
-     * Indicates when the collection is not visible to the user.
-     */
-    // tag::refguide[]
-    Where hidden() default Where.NOT_SPECIFIED;
+    Class<? extends CollectionDomainEvent<?,?>> domainEvent()   // <.>
+            default CollectionDomainEvent.Default.class;
 
     // end::refguide[]
     /**
@@ -82,7 +76,8 @@ public @interface Collection {
      * </p>
      */
     // tag::refguide[]
-    Editing editing() default Editing.NOT_SPECIFIED;
+    Editing editing()                                           // <.>
+            default Editing.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
@@ -90,7 +85,16 @@ public @interface Collection {
      * then the reason to provide to the user as to why this property cannot be edited.
      */
     // tag::refguide[]
-    String editingDisabledReason() default "";
+    String editingDisabledReason()                              // <.>
+            default "";
+
+    // end::refguide[]
+    /**
+     * Indicates when the collection is not visible to the user.
+     */
+    // tag::refguide[]
+    Where hidden()                                              // <.>
+            default Where.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
@@ -102,7 +106,8 @@ public @interface Collection {
      * </p>
      */
     // tag::refguide[]
-    MementoSerialization mementoSerialization() default MementoSerialization.NOT_SPECIFIED;
+    MementoSerialization mementoSerialization()                 // <.>
+            default MementoSerialization.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
@@ -111,7 +116,8 @@ public @interface Collection {
      * @return
      */
     // tag::refguide[]
-    Class<?> typeOf() default Object.class;
+    Class<?> typeOf()                                           // <.>
+            default Object.class;
 
 }
 // end::refguide[]

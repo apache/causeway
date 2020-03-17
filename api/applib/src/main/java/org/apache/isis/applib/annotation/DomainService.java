@@ -53,20 +53,22 @@ public @interface DomainService {
 
     // end::refguide[]
     /**
+     * The nature of this service, eg for menus, contributed actions, repository.
+     */
+    // tag::refguide[]
+    NatureOfService nature()                    // <.>
+            default NatureOfService.VIEW;
+
+    // end::refguide[]
+    /**
      * Provides the (first part of the) unique identifier (OID) for the service (the instanceId is always &quot;1&quot;).
      *
      * <p>
      * If not specified then either the optional &quot;getId()&quot is used, otherwise the class' name.
      */
     // tag::refguide[]
-    String objectType() default "";
-
-    // end::refguide[]
-    /**
-     * The nature of this service, eg for menus, contributed actions, repository.
-     */
-    // tag::refguide[]
-    NatureOfService nature() default NatureOfService.VIEW;
+    String objectType()                         // <.>
+            default "";
 
     // end::refguide[]
     /**
@@ -74,7 +76,8 @@ public @interface DomainService {
      * @deprecated was never implemented
      */
     @Deprecated
-    Class<?> repositoryFor() default Object.class;
+    Class<?> repositoryFor()                    // <.>
+            default Object.class;
 
     // tag::refguide[]
 }

@@ -113,6 +113,3 @@ Normally events are only raised for interactions through the UI.
 However, events can be raised programmatically either by calling the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] API directly, or as a result of calling the xref:refguide:applib-svc:TitleService.adoc[`TitleService`]'s `titleOf(...)` method.
 
 
-== See also
-
-This attribute can also be applied to xref:refguide:applib-ant:ViewModelLayout.adoc#titleUiEvent[view models].

@@ -42,21 +42,24 @@ public @interface PropertyLayout {
      * Indicates the css class that a property should have.
      */
     // tag::refguide[]
-    String cssClass() default "";
+    String cssClass()                               // <.>
+            default "";
 
     // end::refguide[]
     /**
      * Description of this property, eg to be rendered in a tooltip.
      */
     // tag::refguide[]
-    String describedAs() default "";
+    String describedAs()                            // <.>
+            default "";
 
     // end::refguide[]
     /**
      * Indicates where in the UI the property should <i>not</i>not be visible.
      */
     // tag::refguide[]
-    Where hidden() default Where.NOT_SPECIFIED;
+    Where hidden()                                  // <.>
+            default Where.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
@@ -67,38 +70,54 @@ public @interface PropertyLayout {
      * </p>
      */
     // tag::refguide[]
-    LabelPosition labelPosition() default LabelPosition.NOT_SPECIFIED;
+    LabelPosition labelPosition()                   // <.>
+            default LabelPosition.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
      * For string properties (and parameters), render as a text area over specified number of lines.
      */
     // tag::refguide[]
-    int multiLine() default -1;
+    int multiLine()                                 // <.>
+            default -1;
 
     // end::refguide[]
     /**
      * Name of this property (overriding the name derived from its name in code).
      */
     // tag::refguide[]
-    String named() default "";
+    String named()                                  // <.>
+            default "";
 
     // end::refguide[]
     /**
      * A flag indicating whether the value of {@linkplain #named()} should be HTML escaped or not.
      */
     // tag::refguide[]
-    boolean namedEscaped() default true;
+    boolean namedEscaped()                          // <.>
+            default true;
 
+    // end::refguide[]
+    /**
+     * Whether this property should be used to construct the navigable chain of breadcrumbs in the UI.
+     *
+     * <p>
+     *     Only one property can be annotated as such per domain class.
+     * </p>
+     *
+     * @return
+     */
     // tag::refguide[]
-    Navigable navigable() default Navigable.NOT_SPECIFIED;
+    Navigable navigable()                           // <.>
+            default Navigable.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
      * How the properties of this domain object are be edited, either {@link PromptStyle#DIALOG dialog} or {@link PromptStyle#INLINE inline}.
      */
     // tag::refguide[]
-    PromptStyle promptStyle() default PromptStyle.NOT_SPECIFIED;
+    PromptStyle promptStyle()                       // <.>
+            default PromptStyle.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
@@ -127,14 +146,8 @@ public @interface PropertyLayout {
      * </p>
      */
     // tag::refguide[]
-    RenderDay renderDay() default RenderDay.NOT_SPECIFIED;
-
-    // end::refguide[]
-    /**
-     * The typical entry length of a field, use to determine the optimum width for display
-     */
-    // tag::refguide[]
-    int typicalLength() default -1;
+    RenderDay renderDay()                           // <.>
+            default RenderDay.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
@@ -160,7 +173,16 @@ public @interface PropertyLayout {
      * </p>
      */
     // tag::refguide[]
-    Repainting repainting() default Repainting.NOT_SPECIFIED;
+    Repainting repainting()                         // <.>
+            default Repainting.NOT_SPECIFIED;
+
+    // end::refguide[]
+    /**
+     * The typical entry length of a field, use to determine the optimum width for display
+     */
+    // tag::refguide[]
+    int typicalLength()                             // <.>
+            default -1;
 
 }
 // end::refguide[]

@@ -32,7 +32,6 @@ public class ToDoItem {
 This attribute can also be applied to:
 
 * xref:refguide:applib-ant:DomainObjectLayout.adoc#cssClass[domain objects]
-* xref:refguide:applib-ant:ViewModelLayout.adoc#cssClass[view models]
 * xref:refguide:applib-ant:ActionLayout.adoc#cssClass[actions]
 * xref:refguide:applib-ant:PropertyLayout.adoc#cssClass[properties],
 * xref:refguide:applib-ant:CollectionLayout.adoc#cssClass[collections]

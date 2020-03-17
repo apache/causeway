@@ -64,7 +64,3 @@ The nesting can be done to any level; the Estatio screenshot also shows a bookma
 
 
 
-== See also
-
-This attribute can also be applied to xref:refguide:applib-ant:ViewModelLayout.adoc#bookmarking[view models].
-

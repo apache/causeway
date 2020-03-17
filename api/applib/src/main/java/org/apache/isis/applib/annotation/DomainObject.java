@@ -53,9 +53,15 @@ import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
 })
 @Retention(RetentionPolicy.RUNTIME)
 @Component @Scope("prototype")
+// tag::refguide-lifecycle-events[]
+// tag::refguide-domain-events[]
 public @interface DomainObject {
 
     // end::refguide[]
+    // ...
+
+    // end::refguide-lifecycle-events[]
+    // end::refguide-domain-events[]
     /**
      * Whether the entity should be audited (note: does not apply to view models or other recreatable objects.
      *
@@ -65,19 +71,8 @@ public @interface DomainObject {
      * </p>
      */
     // tag::refguide[]
-    Auditing auditing() default Auditing.NOT_SPECIFIED;
-
-    // end::refguide[]
-    /**
-     * Whether changes to the object should be published.
-     *
-     * <p>
-     * Requires that an implementation of the {@link org.apache.isis.applib.services.publish.PublisherService} is
-     * registered with the framework.
-     * </p>
-     */
-    // tag::refguide[]
-    Publishing publishing() default Publishing.NOT_SPECIFIED;
+    Auditing auditing()                             // <.>
+            default Auditing.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
@@ -87,7 +82,8 @@ public @interface DomainObject {
      * It is sufficient to specify an interface rather than a concrete type.
      */
     // tag::refguide[]
-    Class<?> autoCompleteRepository() default Object.class;
+    Class<?> autoCompleteRepository()               // <.>
+            default Object.class;
 
     // end::refguide[]
     /**
@@ -98,7 +94,8 @@ public @interface DomainObject {
      * The method is required to accept a single string parameter, and must return a list of the domain type.
      */
     // tag::refguide[]
-    String autoCompleteAction() default "autoComplete";
+    String autoCompleteAction()                     // <.>
+            default "autoComplete";
 
     // end::refguide[]
     /**
@@ -114,7 +111,8 @@ public @interface DomainObject {
      *
      */
     // tag::refguide[]
-    Bounding bounding() default Bounding.NOT_SPECIFIED;
+    Bounding bounding()                             // <.>
+            default Bounding.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
@@ -125,7 +123,8 @@ public @interface DomainObject {
      * </p>
      */
     // tag::refguide[]
-    Editing editing() default Editing.NOT_SPECIFIED;
+    Editing editing()                               // <.>
+            default Editing.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
@@ -133,7 +132,28 @@ public @interface DomainObject {
      * then the reason to provide to the user as to why the object's properties cannot be edited/collections modified.
      */
     // tag::refguide[]
-    String editingDisabledReason() default "Disabled";
+    String editingDisabledReason()                  // <.>
+            default "Disabled";
+
+    // end::refguide[]
+    /**
+     * Equivalent to {@link Mixin#method()}.
+     *
+     * <p>
+     *     Applicable only if {@link #nature()} is {@link Nature#MIXIN}.
+     * </p>
+     */
+    // tag::refguide[]
+    String mixinMethod()                            // <.>
+            default Mixin.DEFAULT_METHOD_NAME;
+
+    // end::refguide[]
+    /**
+     * The nature of this domain object.
+     */
+    // tag::refguide[]
+    Nature nature()                                 // <.>
+            default Nature.NOT_SPECIFIED;
 
     // end::refguide[]
     /**
@@ -145,27 +165,24 @@ public @interface DomainObject {
      * </p>
      */
     // tag::refguide[]
-    String objectType() default "";
+    String objectType()                             // <.>
+            default "";
 
     // end::refguide[]
     /**
-     * The nature of this domain object.
-     */
-    // tag::refguide[]
-    Nature nature() default Nature.NOT_SPECIFIED;
-
-    // end::refguide[]
-    /**
-     * Equivalent to {@link Mixin#method()}.
+     * Whether changes to the object should be published.
      *
      * <p>
-     *     Applicable only if {@link #nature()} is {@link Nature#MIXIN}.
+     * Requires that an implementation of the {@link org.apache.isis.applib.services.publish.PublisherService} is
+     * registered with the framework.
      * </p>
      */
     // tag::refguide[]
-    String mixinMethod() default Mixin.DEFAULT_METHOD_NAME;
+    Publishing publishing()                         // <.>
+            default Publishing.NOT_SPECIFIED;
 
     // end::refguide[]
+
     /**
      * Indicates that the loading of the domain object should be posted to the
      * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
@@ -175,10 +192,12 @@ public @interface DomainObject {
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
      */
-    // tag::refguide[]
-    Class<? extends ObjectCreatedEvent<?>> createdLifecycleEvent() default ObjectCreatedEvent.Default.class;
+    // tag::refguide-lifecycle-events[]
+    Class<? extends ObjectCreatedEvent<?>>
+            createdLifecycleEvent()                         // <.>
+            default ObjectCreatedEvent.Default.class;
 
-    // end::refguide[]
+    // end::refguide-lifecycle-events[]
     /**
      * Indicates that the loading of the domain object should be posted to the
      * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
@@ -188,10 +207,12 @@ public @interface DomainObject {
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
      */
-    // tag::refguide[]
-    Class<? extends ObjectPersistingEvent<?>> persistingLifecycleEvent() default ObjectPersistingEvent.Default.class;
+    // tag::refguide-lifecycle-events[]
+    Class<? extends ObjectPersistingEvent<?>>
+            persistingLifecycleEvent()                      // <.>
+            default ObjectPersistingEvent.Default.class;
 
-    // end::refguide[]
+    // end::refguide-lifecycle-events[]
     /**
      * Indicates that the loading of the domain object should be posted to the
      * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
@@ -201,10 +222,12 @@ public @interface DomainObject {
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
      */
-    // tag::refguide[]
-    Class<? extends ObjectPersistedEvent<?>> persistedLifecycleEvent() default ObjectPersistedEvent.Default.class;
+    // tag::refguide-lifecycle-events[]
+    Class<? extends ObjectPersistedEvent<?>>
+            persistedLifecycleEvent()                       // <.>
+            default ObjectPersistedEvent.Default.class;
 
-    // end::refguide[]
+    // end::refguide-lifecycle-events[]
     /**
      * Indicates that the loading of the domain object should be posted to the
      * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
@@ -214,10 +237,12 @@ public @interface DomainObject {
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
      */
-    // tag::refguide[]
-    Class<? extends ObjectLoadedEvent<?>> loadedLifecycleEvent() default ObjectLoadedEvent.Default.class;
+    // tag::refguide-lifecycle-events[]
+    Class<? extends ObjectLoadedEvent<?>>
+            loadedLifecycleEvent()                          // <.>
+            default ObjectLoadedEvent.Default.class;
 
-    // end::refguide[]
+    // end::refguide-lifecycle-events[]
     /**
      * Indicates that the loading of the domain object should be posted to the
      * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
@@ -227,10 +252,12 @@ public @interface DomainObject {
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
      */
-    // tag::refguide[]
-    Class<? extends ObjectUpdatingEvent<?>> updatingLifecycleEvent() default ObjectUpdatingEvent.Default.class;
+    // tag::refguide-lifecycle-events[]
+    Class<? extends ObjectUpdatingEvent<?>>
+            updatingLifecycleEvent()                        // <.>
+            default ObjectUpdatingEvent.Default.class;
 
-    // end::refguide[]
+    // end::refguide-lifecycle-events[]
     /**
      * Indicates that the loading of the domain object should be posted to the
      * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
@@ -240,10 +267,12 @@ public @interface DomainObject {
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
      */
-    // tag::refguide[]
-    Class<? extends ObjectUpdatedEvent<?>> updatedLifecycleEvent() default ObjectUpdatedEvent.Default.class;
+    // tag::refguide-lifecycle-events[]
+    Class<? extends ObjectUpdatedEvent<?>>
+            updatedLifecycleEvent()                         // <.>
+            default ObjectUpdatedEvent.Default.class;
 
-    // end::refguide[]
+    // end::refguide-lifecycle-events[]
     /**
      * Indicates that the loading of the domain object should be posted to the
      * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
@@ -253,10 +282,12 @@ public @interface DomainObject {
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
      */
-    // tag::refguide[]
-    Class<? extends ObjectRemovingEvent<?>> removingLifecycleEvent() default ObjectRemovingEvent.Default.class;
+    // tag::refguide-lifecycle-events[]
+    Class<? extends ObjectRemovingEvent<?>>
+            removingLifecycleEvent()                        // <.>
+            default ObjectRemovingEvent.Default.class;
 
-    // end::refguide[]
+    // end::refguide-lifecycle-events[]
     /**
      * Indicates that an invocation of <i>any</i> action of the domain object (that do not themselves specify their own
      * <tt>&#64;Action(domainEvent=...)</tt> should be posted to the
@@ -284,10 +315,12 @@ public @interface DomainObject {
      * It must also use <tt>Object</tt> as its generic type.  This is to allow mixins to also emit the same event.
      * </p>
      */
-    // tag::refguide[]
-    Class<? extends ActionDomainEvent<?>> actionDomainEvent() default ActionDomainEvent.Default.class;
+    // tag::refguide-domain-events[]
+    Class<? extends ActionDomainEvent<?>>
+            actionDomainEvent()                             // <.>
+            default ActionDomainEvent.Default.class;
 
-    // end::refguide[]
+    // end::refguide-domain-events[]
     /**
      * Indicates that changes to <i>any</i> property of the domain object (that do not themselves specify their own
      * <tt>&#64;Property(domainEvent=...)</tt> should be posted to the
@@ -310,10 +343,12 @@ public @interface DomainObject {
      * It must also use <tt>Object</tt> as its generic type.  This is to allow mixins to also emit the same event.
      * </p>
      */
-    // tag::refguide[]
-    Class<? extends PropertyDomainEvent<?,?>> propertyDomainEvent() default PropertyDomainEvent.Default.class;
+    // tag::refguide-domain-events[]
+    Class<? extends PropertyDomainEvent<?,?>>
+            propertyDomainEvent()                           // <.>
+            default PropertyDomainEvent.Default.class;
 
-    // end::refguide[]
+    // end::refguide-domain-events[]
     /**
      * Indicates that changes to <i>any</i> collection of the domain object (that do not themselves specify their own
      * <tt>&#64;Collection(domainEvent=...)</tt>  should be posted to the
@@ -335,8 +370,17 @@ public @interface DomainObject {
      * It must also use <tt>Object</tt> as its generic type.  This is to allow mixins to also emit the same event.
      * </p>
      */
-    // tag::refguide[]
-    Class<? extends CollectionDomainEvent<?,?>> collectionDomainEvent() default CollectionDomainEvent.Default.class;
+    // tag::refguide-domain-events[]
+    Class<? extends CollectionDomainEvent<?,?>>
+            collectionDomainEvent()                         // <.>
+            default CollectionDomainEvent.Default.class;
 
+    // end::refguide-domain-events[]
+    // tag::refguide[]
+    // tag::refguide-lifecycle-events[]
+    // ...
+    // tag::refguide-domain-events[]
 }
 // end::refguide[]
+// end::refguide-lifecycle-events[]
+// end::refguide-domain-events[]

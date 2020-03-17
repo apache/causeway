@@ -54,11 +54,12 @@ import org.springframework.stereotype.Component;
  * annotated type. 
  * For more details see <code>org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring</code>.
  */
+// tag::refguide[]
 @Inherited
 @Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Component @Scope("prototype")
 public @interface ViewModel {
 
-
 }
+// end::refguide[]

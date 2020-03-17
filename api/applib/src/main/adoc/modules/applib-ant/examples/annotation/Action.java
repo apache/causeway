@@ -69,7 +69,7 @@ public @interface Action {
      * </p>
      */
     // tag::refguide[]
-    String associateWith()                                          <.>
+    String associateWith()                                          // <.>
             default "";
 
     // end::refguide[]
@@ -86,7 +86,7 @@ public @interface Action {
      * </p>
      */
     // tag::refguide[]
-    String associateWithSequence()                                  <.>
+    String associateWithSequence()                                  // <.>
             default "1";
 
     // end::refguide[]
@@ -94,7 +94,7 @@ public @interface Action {
      * Whether the action invocation should be reified into a {@link org.apache.isis.applib.services.command.Command} object.
      */
     // tag::refguide[]
-    CommandReification command()                                    <.>
+    CommandReification command()                                    // <.>
             default CommandReification.NOT_SPECIFIED;
 
     // end::refguide[]
@@ -103,7 +103,7 @@ public @interface Action {
      * {@link org.apache.isis.applib.services.command.CommandContext CommandContext} domain service should be persisted.
      */
     // tag::refguide[]
-    CommandPersistence commandPersistence()                         <.>
+    CommandPersistence commandPersistence()                         // <.>
             default CommandPersistence.PERSISTED;
 
     // end::refguide[]
@@ -117,7 +117,7 @@ public @interface Action {
      * </p>
      */
     // tag::refguide[]
-    CommandExecuteIn commandExecuteIn()                             <.>
+    CommandExecuteIn commandExecuteIn()                             // <.>
             default CommandExecuteIn.FOREGROUND;
 
     // end::refguide[]
@@ -136,7 +136,7 @@ public @interface Action {
      * </p>
      */
     // tag::refguide[]
-    Class<? extends CommandDtoProcessor> commandDtoProcessor()      <.>
+    Class<? extends CommandDtoProcessor> commandDtoProcessor()      // <.>
             default CommandDtoProcessor.class;
 
     // end::refguide[]
@@ -163,7 +163,7 @@ public @interface Action {
      * </p>
      */
     // tag::refguide[]
-    Class<? extends ActionDomainEvent<?>> domainEvent()             <.>
+    Class<? extends ActionDomainEvent<?>> domainEvent()             // <.>
             default ActionDomainEvent.Default.class;
 
     // end::refguide[]
@@ -177,7 +177,7 @@ public @interface Action {
      * @see <a href="http://www.w3schools.com/tags/att_input_accept.asp">http://www.w3schools.com</a>
      */
     // tag::refguide[]
-    String fileAccept()                                             <.>
+    String fileAccept()                                             // <.>
             default "";
 
     // end::refguide[]
@@ -195,7 +195,7 @@ public @interface Action {
      * </p>
      */
     // tag::refguide[]
-    Where hidden()                                                  <.>
+    Where hidden()                                                  // <.>
             default Where.NOT_SPECIFIED;
 
     // end::refguide[]
@@ -208,7 +208,7 @@ public @interface Action {
      * </p>
      */
     // tag::refguide[]
-    Publishing publishing()                                         <.>
+    Publishing publishing()                                         // <.>
             default Publishing.NOT_SPECIFIED;
 
     // end::refguide[]
@@ -220,7 +220,7 @@ public @interface Action {
      * </p>
      */
     // tag::refguide[]
-    RestrictTo restrictTo()                                         <.>
+    RestrictTo restrictTo()                                         // <.>
             default RestrictTo.NOT_SPECIFIED;
 
     // end::refguide[]
@@ -230,7 +230,7 @@ public @interface Action {
      * {@link SemanticsOf#NON_IDEMPOTENT non-idempotent}.
      */
     // tag::refguide[]
-    SemanticsOf semantics()                                         <.>
+    SemanticsOf semantics()                                         // <.>
             default SemanticsOf.NOT_SPECIFIED;
 
     // end::refguide[]
@@ -239,7 +239,7 @@ public @interface Action {
      * @return
      */
     // tag::refguide[]
-    Class<?> typeOf()                                               <.>
+    Class<?> typeOf()                                               // <.>
             default Object.class;
 
 }

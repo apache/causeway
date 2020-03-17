@@ -5,7 +5,7 @@
 
 
 
-The `describedAs` attribute is used to provide a short description of the property to the user.  In the xref:vw:ROOT:about.adoc[Wicket viewer] it is displayed as a 'tool tip'. The attribute can also be specified for xref:refguide:applib-ant:CollectionLayout.adoc#describedAs[collections],  xref:refguide:applib-ant:ActionLayout.adoc#describedAs[actions], xref:refguide:applib-ant:ParameterLayout.adoc#describedAs[parameters], xref:refguide:applib-ant:DomainObjectLayout.adoc#describedAs[domain objects] and xref:refguide:applib-ant:ViewModelLayout.adoc#describedAs[view models].
+The `describedAs` attribute is used to provide a short description of the property to the user.  In the xref:vw:ROOT:about.adoc[Wicket viewer] it is displayed as a 'tool tip'. The attribute can also be specified for xref:refguide:applib-ant:CollectionLayout.adoc#describedAs[collections],  xref:refguide:applib-ant:ActionLayout.adoc#describedAs[actions], xref:refguide:applib-ant:ParameterLayout.adoc#describedAs[parameters] and xref:refguide:applib-ant:DomainObjectLayout.adoc#describedAs[domain objects].
 
 For example:
 

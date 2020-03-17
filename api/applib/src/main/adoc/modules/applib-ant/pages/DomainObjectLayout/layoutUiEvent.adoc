@@ -113,7 +113,3 @@ However, events can be raised programmatically by calling the xref:refguide:appl
 
 
 
-== See also
-
-This attribute can also be applied to xref:refguide:applib-ant:ViewModelLayout.adoc#layoutUiEvent[view models].
-
