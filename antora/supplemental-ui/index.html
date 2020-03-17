@@ -613,13 +613,11 @@ Examples
             <div class="col-lg-6 text-left text-lg-left">
               <p class="cta-text text-center" style="margin-block-end: 0; ">
                 Learn about Apache Isis™ by running the minimal <a href="docs/latest/starters/helloworld.html">helloworld</a>&nbsp;starter&nbsp;app.
-                &nbsp;&nbsp;<span><img id="helloworld-copy" src="_/img/home/clipboard-copy.png" width="16" height="16"/></span>
               </p>
             </div>
             <div class="col-lg-6 text-left text-lg-left">
               <p class="cta-text text-center" style="margin-block-end: 0; ">
                 Develop your own Apache Isis™ app using the more structured <a href="docs/latest/starters/simpleapp.html">simpleapp</a>&nbsp;starter&nbsp;app.
-                &nbsp;&nbsp;<span><img id="simpleapp-copy" src="_/img/home/clipboard-copy.png" width="16" height="16"/></span>
               </p>
             </div>
           </div>
@@ -646,19 +644,29 @@ mvn -pl webapp spring-boot:run</pre>
             </div>
           </div>
           <div class="row">
+            <div class="col-lg-6 text-left text-lg-left">
+              <p class="cta-text text-center" style="margin-block-end: 0; margin-top: -20px;">
+                <span id="helloworld-copy" style="cursor: pointer;"><img src="_/img/home/clipboard-copy.png" width="16" height="16"/>&nbsp;&nbsp;Copy text</span>
+              </p>
+            </div>
+            <div class="col-lg-6 text-left text-lg-left">
+              <p class="cta-text text-center" style="margin-block-end: 0; margin-top: -20px;">
+                <span id="simpleapp-copy" style="cursor: pointer;"><img src="_/img/home/clipboard-copy.png" width="16" height="16"/>&nbsp;&nbsp;Copy text</span>
+              </p>
+            </div>
+          </div>
+
+          <div class="row">
             <p class="cta-text text-center" style="margin-block-end: 0; margin-left: 20px; margin-top: 20px;">
               If you want to use the previous 1.x version, you can use these Maven archetypes.
             </p>
             <div class="col-lg-6 text-left text-lg-left">
               <p>
                 <pre>
-APP=helloworld
-VERSION=1.17.0
-
 mvn archetype:generate  \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=helloworld-archetype \
-    -D archetypeVersion=$VERSION \
+    -D archetypeVersion=1.17.0 \
     -D groupId=com.mycompany \
     -D artifactId=myapp \
     -D version=1.0-SNAPSHOT \
@@ -671,13 +679,10 @@ mvn jetty:run</pre>
             <div class="col-lg-6 text-center text-lg-left">
               <p>
                 <pre>
-APP=simpleapp
-VERSION=1.17.0
-
 mvn archetype:generate  \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=$APP-archetype \
-    -D archetypeVersion=$VERSION \
+    -D archetypeVersion=1.17.0 \
     -D groupId=com.mycompany \
     -D artifactId=myapp \
     -D version=1.0-SNAPSHOT \
@@ -896,30 +901,28 @@ mvn -pl webapp jetty:run</pre>
 <script src="_/js/home/lib/sticky/sticky.js"></script>
 
 <script>
-  document.querySelector('img#helloworld-copy').addEventListener('click', async event => {
+  document.querySelector('#helloworld-copy').addEventListener('click', async event => {
     if (!navigator.clipboard) {
-      document.querySelector('#helloworld-copy').remove()
+      document.querySelector('#helloworld-copy').remove();
       return
     }
-    const text = document.querySelector('#helloworld-text').innerHTML
+    const text = document.querySelector('#helloworld-text').innerHTML;
     try {
-      await navigator.clipboard.writeText(text)
-      event.target.textContent = 'Copied to clipboard'
-      alert("text copied")
+      await navigator.clipboard.writeText(text);
+      event.target.textContent = 'Copied to clipboard';
     } catch (err) {
       alert("Failed to copy :-(", err)
     }
   });
-  document.querySelector('img#simpleapp-copy').addEventListener('click', async event => {
+  document.querySelector('#simpleapp-copy').addEventListener('click', async event => {
     if (!navigator.clipboard) {
-      document.querySelector('#simpleapp-copy').remove()
+      document.querySelector('#simpleapp-copy').remove();
       return
     }
-    const text = document.querySelector('#simpleapp-text').innerHTML
+    const text = document.querySelector('#simpleapp-text').innerHTML;
     try {
-      await navigator.clipboard.writeText(text)
-      event.target.textContent = 'Copied to clipboard'
-      alert("text copied")
+      await navigator.clipboard.writeText(text);
+      event.target.textContent = 'Copied to clipboard';
     } catch (err) {
       alert("Failed to copy :-(", err)
     }

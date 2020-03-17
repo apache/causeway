@@ -4,13 +4,8 @@
 
 [source,bash,subs="attributes+"]
 ----
-APP=simpleapp
-BRANCH=master
-
-REPO=isis-app-$APP
-curl "https://codeload.github.com/apache/$REPO/zip/$BRANCH" | jar xv
-mv $REPO-$BRANCH $REPO
-cd $REPO
+curl https://codeload.github.com/apache/isis-app-simpleapp/zip/master | jar xv
+cd isis-app-simpleapp-master
 
 mvn clean install
 mvn -pl webapp spring-boot:run

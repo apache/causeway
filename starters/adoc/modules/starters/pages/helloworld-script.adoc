@@ -3,13 +3,8 @@
 
 [source,bash,subs="attributes+"]
 ----
-APP=helloworld
-BRANCH=master
-
-REPO=isis-app-$APP
-curl "https://codeload.github.com/apache/$REPO/zip/$BRANCH" | jar xv
-mv $REPO-$BRANCH $REPO
-cd $REPO
+curl https://codeload.github.com/apache/isis-app-helloworld/zip/master | jar xv
+cd isis-app-helloworld-master
 
 mvn clean install
 mvn spring-boot:run
