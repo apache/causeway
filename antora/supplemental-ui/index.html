@@ -613,18 +613,20 @@ Examples
             <div class="col-lg-6 text-left text-lg-left">
               <p class="cta-text text-center" style="margin-block-end: 0; ">
                 Learn about Apache Isis™ by running the minimal <a href="docs/latest/starters/helloworld.html">helloworld</a>&nbsp;starter&nbsp;app.
+                &nbsp;&nbsp;<span><img id="helloworld-copy" src="_/img/home/clipboard-copy.png" width="16" height="16"/></span>
               </p>
             </div>
             <div class="col-lg-6 text-left text-lg-left">
               <p class="cta-text text-center" style="margin-block-end: 0; ">
                 Develop your own Apache Isis™ app using the more structured <a href="docs/latest/starters/simpleapp.html">simpleapp</a>&nbsp;starter&nbsp;app.
+                &nbsp;&nbsp;<span><img id="simpleapp-copy" src="_/img/home/clipboard-copy.png" width="16" height="16"/></span>
               </p>
             </div>
           </div>
           <div class="row">
             <div class="col-lg-6 text-left text-lg-left">
               <p>
-                <pre>
+                <pre id="helloworld-text">
 curl https://codeload.github.com/apache/isis-app-helloworld/zip/master | jar xv
 cd isis-app-helloworld-master
 
@@ -634,7 +636,7 @@ mvn spring-boot:run</pre>
             </div>
             <div class="col-lg-6 text-left text-lg-left">
               <p>
-                <pre>
+              <pre id="simpleapp-text">
 curl https://codeload.github.com/apache/isis-app-simpleapp/zip/master | jar xv
 cd isis-app-simpleapp-master
 
@@ -892,6 +894,37 @@ mvn -pl webapp jetty:run</pre>
 <script src="_/js/home/lib/owlcarousel/owl.carousel.min.js"></script>
 <script src="_/js/home/lib/magnific-popup/magnific-popup.min.js"></script>
 <script src="_/js/home/lib/sticky/sticky.js"></script>
+
+<script>
+  document.querySelector('img#helloworld-copy').addEventListener('click', async event => {
+    if (!navigator.clipboard) {
+      document.querySelector('#helloworld-copy').remove()
+      return
+    }
+    const text = document.querySelector('#helloworld-text').innerHTML
+    try {
+      await navigator.clipboard.writeText(text)
+      event.target.textContent = 'Copied to clipboard'
+      alert("text copied")
+    } catch (err) {
+      alert("Failed to copy :-(", err)
+    }
+  });
+  document.querySelector('img#simpleapp-copy').addEventListener('click', async event => {
+    if (!navigator.clipboard) {
+      document.querySelector('#simpleapp-copy').remove()
+      return
+    }
+    const text = document.querySelector('#simpleapp-text').innerHTML
+    try {
+      await navigator.clipboard.writeText(text)
+      event.target.textContent = 'Copied to clipboard'
+      alert("text copied")
+    } catch (err) {
+      alert("Failed to copy :-(", err)
+    }
+  })
+</script>
 
 <!-- Template Main Javascript File -->
 <script src="_/js/home/main.js"></script>
