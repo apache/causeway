@@ -6,13 +6,15 @@
 
 The `@DomainService` annotation indicates that the (concrete) class should be automatically instantiated as a domain service.
 
-Domain services with this annotation do NOT need to be registered explicitly in `isis.properties`; they will be
-discovered automatically on the CLASSPATH.
+[source,java]
+----
+include::refguide:applib-ant:example$annotation/DomainService.java[tags="refguide"]
+----
 
 The table below summarizes the annotation's attributes.
 
 .`@DomainService` attributes
-[cols="2,2,4a", options="header"]
+[cols="2,2,4a",options="header"]
 |===
 
 | Attribute
@@ -39,8 +41,6 @@ The instanceId for services is always "1".
 
 |===
 
-
-
 For example:
 
 [source,java]
@@ -54,12 +54,6 @@ public class LoanRepository {
     public List<Loan> findLoansFor(Borrower borrower) { /* ... */ }
 }
 ----
-
-
-
-
-
-
 
 include::DomainService/nature.adoc[leveloffset=+1]
 include::DomainService/objectType.adoc[leveloffset=+1]

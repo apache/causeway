@@ -9,8 +9,10 @@ Apache Isis also uses this annotation, though (currently) only in the very minim
 
 [NOTE]
 ====
-Isis parses the `@NotPersistent` annotation from the Java source code; it does not query the JDO metamodel.  This means that it the `@NotPersistent` annotation must be used rather than the equivalent `<field>` link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/fields_properties.html[XML metadata].
+Isis parses the `@NotPersistent` annotation from the Java source code; it does not query the JDO metamodel.
+This means that it the `@NotPersistent` annotation must be used rather than the equivalent `<field>` link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/fields_properties.html[XML metadata].
 
-Moreover, while JDO/DataNucleus will recognize annotations on either the field or the getter method, Apache Isis (currently) only inspects the getter method.  Therefore ensure that the annotation is placed there.
+Moreover, while JDO/DataNucleus will recognize annotations on either the field or the getter method, Apache Isis (currently) only inspects the getter method.
+Therefore ensure that the annotation is placed there.
 ====
 

@@ -6,8 +6,11 @@
 // TODO: v2: replace @MemberOrder#name() with @PropertyLayout#group(); replace @MemberOrder#sequence() with @PropertyLayout#sequence().
 
 The `@MemberOrder` annotation is used to specify the relative order of domain object members, that is: properties, collections and actions.
-It works in conjunction with the xref:refguide:applib-ant:MemberGroupLayout.adoc[`@MemberGroupLayout`] annotation.
 
+[source,java]
+----
+include::refguide:applib-ant:example$annotation/MemberOrder.java[tags="refguide"]
+----
 
 The annotation defines two attributes:
 

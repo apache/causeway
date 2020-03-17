@@ -17,7 +17,6 @@
 ** xref:refguide:applib-ant:Facets.adoc[Facets]
 ** xref:refguide:applib-ant:HomePage.adoc[HomePage]
 ** xref:refguide:applib-ant:Inject.adoc[Inject]
-** xref:refguide:applib-ant:MemberGroupLayout.adoc[MemberGroupLayout]
 ** xref:refguide:applib-ant:MemberOrder.adoc[MemberOrder]
 ** xref:refguide:applib-ant:Mixin.adoc[Mixin]
 ** xref:refguide:applib-ant:NotPersistent.adoc[NotPersistent.]

@@ -29,12 +29,11 @@ The `CURRENT` style corresponds to the layout already loaded for the domain clas
 The other three styles allow the developer to choose how much metadata is to be specified in the XML, and how much (if any) will be obtained elsewhere, typically from annotations in the metamodel.
 The table below summarises the choices:
 
-[cols="<.>,^.>,^.>,^.>",options="header"]
+[cols="<.>,^.>,^.>",options="header"]
 .Styles
 |===
 
 | Style
-|xref:refguide:applib-ant:MemberGroupLayout.adoc[`@MemberGroupLayout`]
 | xref:refguide:applib-ant:MemberOrder.adoc[`@MemberOrder`]
 | xref:refguide:applib-ant:ActionLayout.adoc[`@ActionLayout`], xref:refguide:applib-ant:PropertyLayout.adoc[`@PropertyLayout`], xref:refguide:applib-ant:CollectionLayout.adoc[`@CollectionLayout`]
 
@@ -42,17 +41,14 @@ The table below summarises the choices:
 |`COMPLETE`
 |serialized as XML
 |serialized as XML
-|serialized as XML
 
 
 |`NORMALIZED`
-|serialized as XML
 |serialized as XML
 |not in the XML
 
 
 |`MINIMAL`
-|serialized as XML
 |not in the XML
 |not in the XML
 

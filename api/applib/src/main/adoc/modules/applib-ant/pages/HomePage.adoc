@@ -4,7 +4,8 @@
 
 
 
-The `@HomePage` annotation allows a _single_ (no-arg, query-only) action on a _single_ domain service to be nominated as the action to invoke for the default home page.  This often returns a view model that acts as some sort of dashboard, presenting key information and makeing the most commonly used actions easy to invoke.
+The `@HomePage` annotation allows a _single_ (no-arg, query-only) action on a _single_ domain service to be nominated as the action to invoke for the default home page.
+This often returns a view model that acts as some sort of dashboard, presenting key information and makeing the most commonly used actions easy to invoke.
 
 For example, the http://github.com/apache/isis-app-todoapp[TodoApp] uses `@HomePage` to return a dashboard of todo items to complete:
 

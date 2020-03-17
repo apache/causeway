@@ -6,17 +6,25 @@
 
 The `@DomainObjectLayout` annotation applies to domain classes, collecting together all UI hints within a single annotation.
 
+[source,java]
+----
+include::refguide:applib-ant:example$annotation/DomainObjectLayout.java[tags="refguide"]
+----
+
+[source,java]
+----
+include::refguide:applib-ant:example$annotation/DomainObjectLayout.java[tags="refguide-ui-events"]
+----
 
 [NOTE]
 ====
 For view models that have been annotated with `@ViewModel` the equivalent xref:refguide:applib-ant:ViewModelLayout.adoc[`@ViewModelLayout`] can be used.
 ====
 
-
 The table below summarizes the annotation's attributes.
 
 .`@DomainObjectLayout` attributes
-[cols="2,2,4a", options="header"]
+[cols="2,2,4a",options="header"]
 |===
 
 | Attribute
@@ -89,8 +97,6 @@ A typical use case is if the desired name is a reserved Java keyword, such as `d
 
 |===
 
-
-
 For example:
 
 [source,java]
@@ -108,19 +114,10 @@ public class ToDoItem {
 }
 ----
 
-
-
 [NOTE]
 ====
 Note that there is (currently) no support for specifying UI hints for domain objects through the dynamic xref:vw:ROOT:layout.adoc#file-based[`.layout.xml`] file (only for properties, collections and actions are supported).
 ====
-
-
-
-
-
-
-
 
 include::DomainObjectLayout/bookmarking.adoc[leveloffset=+1]
 include::DomainObjectLayout/cssClass.adoc[leveloffset=+1]

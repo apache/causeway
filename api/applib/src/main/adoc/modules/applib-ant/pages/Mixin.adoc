@@ -11,10 +11,15 @@ However, mixins are also a convenient mechanism for grouping functionality even 
 
 For further discussion on using mixins, see xref:userguide:fun:building-blocks.adoc#mixins[mixins] in the user guide.
 
+[source,java]
+----
+include::refguide:applib-ant:example$annotation/Mixin.java[tags="refguide"]
+----
+
 The table below summarizes the annotation's attributes.
 
 .`@Mixin` attributes
-[cols="2,2,4a", options="header"]
+[cols="2,2,4a",options="header"]
 |===
 
 

@@ -41,58 +41,18 @@ import org.apache.isis.applib.layout.component.CssClassFaPosition;
         ElementType.ANNOTATION_TYPE
 })
 @Retention(RetentionPolicy.RUNTIME)
+// tag::refguide-ui-events[]
 public @interface DomainObjectLayout {
 
     // end::refguide[]
-    /**
-     * Which subclass of {@link TitleUiEvent} should be used to obtain a title.
-     *
-     * <p>
-     * This subclass must provide a no-arg constructor; the fields are set reflectively.
-     * </p>
-     */
-    // tag::refguide[]
-    Class<? extends TitleUiEvent<?>> titleUiEvent() default TitleUiEvent.Default.class;
-
-    // end::refguide[]
-    /**
-     * Which subclass of {@link IconUiEvent} should be used to obtain an icon.
-     *
-     * <p>
-     * This subclass must provide a no-arg constructor; the fields are set reflectively.
-     * </p>
-     */
-    // tag::refguide[]
-    Class<? extends IconUiEvent<?>> iconUiEvent() default IconUiEvent.Default.class;
-
-    // end::refguide[]
-    /**
-     * Which subclass of {@link CssClassUiEvent} should be used to obtain a CSS class.
-     *
-     * <p>
-     * This subclass must provide a no-arg constructor; the fields are set reflectively.
-     * </p>
-     */
-    // tag::refguide[]
-    Class<? extends CssClassUiEvent<?>> cssClassUiEvent() default CssClassUiEvent.Default.class;
-
-    // end::refguide[]
-    /**
-     * Which subclass of {@link LayoutUiEvent} should be used to obtain a layout.
-     *
-     * <p>
-     * This subclass must provide a no-arg constructor; the fields are set reflectively.
-     * </p>
-     */
-    // tag::refguide[]
-    Class<? extends LayoutUiEvent<?>> layoutUiEvent() default LayoutUiEvent.Default.class;
-
-    // end::refguide[]
+    // ...
+    // end::refguide-ui-events[]
     /**
      * Indicates the css class that a domain class (type) should have.
      */
     // tag::refguide[]
-    String cssClass() default "";
+    String cssClass()                               // <.>
+            default "";
 
     // end::refguide[]
     /**
@@ -100,7 +60,8 @@ public @interface DomainObjectLayout {
      * domain object.
      */
     // tag::refguide[]
-    String cssClassFa() default "";
+    String cssClassFa()                             // <.>
+            default "";
 
     // end::refguide[]
     /**
@@ -112,21 +73,24 @@ public @interface DomainObjectLayout {
      * </p>
      */
     // tag::refguide[]
-    CssClassFaPosition cssClassFaPosition() default CssClassFaPosition.LEFT;
+    CssClassFaPosition cssClassFaPosition()         // <.>
+            default CssClassFaPosition.LEFT;
 
     // end::refguide[]
     /**
      * Description of this class, eg to be rendered in a tooltip.
      */
     // tag::refguide[]
-    String describedAs() default "";
+    String describedAs()                            // <.>
+            default "";
 
     // end::refguide[]
     /**
      * Name of this class (overriding the name derived from its name in code).
      */
     // tag::refguide[]
-    String named() default "";
+    String named()                                  // <.>
+            default "";
 
     // end::refguide[]
     /**
@@ -142,21 +106,79 @@ public @interface DomainObjectLayout {
      * collections (eg as returned from a repository query).
      */
     // tag::refguide[]
-    int paged() default -1;
+    int paged()                                     // <.>
+            default -1;
 
     // end::refguide[]
     /**
      * The plural name of the class.
      */
     // tag::refguide[]
-    String plural() default "";
+    String plural()                                 // <.>
+            default "";
 
     // end::refguide[]
     /**
      * Whether (and how) this domain object can be bookmarked in the UI.
      */
     // tag::refguide[]
-    BookmarkPolicy bookmarking() default BookmarkPolicy.NOT_SPECIFIED;
+    BookmarkPolicy bookmarking()                    // <.>
+            default BookmarkPolicy.NOT_SPECIFIED;
 
+    // end::refguide[]
+    /**
+     * Which subclass of {@link TitleUiEvent} should be used to obtain a title.
+     *
+     * <p>
+     * This subclass must provide a no-arg constructor; the fields are set reflectively.
+     * </p>
+     */
+    // tag::refguide-ui-events[]
+    Class<? extends TitleUiEvent<?>>
+            titleUiEvent()                          // <.>
+            default TitleUiEvent.Default.class;
+
+    // end::refguide-ui-events[]
+    /**
+     * Which subclass of {@link IconUiEvent} should be used to obtain an icon.
+     *
+     * <p>
+     * This subclass must provide a no-arg constructor; the fields are set reflectively.
+     * </p>
+     */
+    // tag::refguide-ui-events[]
+    Class<? extends IconUiEvent<?>>
+            iconUiEvent()                           // <.>
+            default IconUiEvent.Default.class;
+
+    // end::refguide-ui-events[]
+    /**
+     * Which subclass of {@link CssClassUiEvent} should be used to obtain a CSS class.
+     *
+     * <p>
+     * This subclass must provide a no-arg constructor; the fields are set reflectively.
+     * </p>
+     */
+    // tag::refguide-ui-events[]
+    Class<? extends CssClassUiEvent<?>>
+            cssClassUiEvent()                       // <.>
+            default CssClassUiEvent.Default.class;
+
+    // end::refguide-ui-events[]
+    /**
+     * Which subclass of {@link LayoutUiEvent} should be used to obtain a layout.
+     *
+     * <p>
+     * This subclass must provide a no-arg constructor; the fields are set reflectively.
+     * </p>
+     */
+    // tag::refguide-ui-events[]
+    Class<? extends LayoutUiEvent<?>>
+            layoutUiEvent()                         // <.>
+            default LayoutUiEvent.Default.class;
+
+    // tag::refguide[]
+    // ...
+    // tag::refguide-ui-events[]
 }
 // end::refguide[]

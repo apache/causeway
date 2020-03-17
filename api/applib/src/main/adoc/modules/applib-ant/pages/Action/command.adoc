@@ -26,7 +26,9 @@ The annotation works with (and is influenced by the behaviour of) a number of do
 
 Each action invocation is automatically reified by the xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`] service into a `Command` object, capturing details of the target object, the action, the parameter arguments, the user, a timestamp and so on.
 
-If an appropriate `CommandService` is configured (for example using (non-ASF) link:https://platform.incode.org/modules/spi/command/spi-command.html[Incode Platform's command] module), then the `Command` itself is persisted.
+If an appropriate `CommandService` is configured
+//(for example using (non-ASF) link:https://platform.incode.org/modules/spi/command/spi-command.html[Incode Platform's command] module),
+then the `Command` itself is persisted.
 
 By default, actions are invoked in directly in the thread of the invocation.
 //If there is an implementation of `BackgroundCommandService` (as the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module does provide), then this means in turn that the `BackgroundService` can be used by the domain object code to programmatically create background ``Command``s.

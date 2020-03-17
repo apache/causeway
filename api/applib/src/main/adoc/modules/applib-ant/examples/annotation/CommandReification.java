@@ -23,7 +23,6 @@ package org.apache.isis.applib.annotation;
  */
 // tag::refguide[]
 public enum CommandReification {
-
     // end::refguide[]
     /**
      * Whether the action should be handled as a command as per the default command configured in <tt>applicationp.properties</tt>.
@@ -34,21 +33,18 @@ public enum CommandReification {
      */
     // tag::refguide[]
     AS_CONFIGURED,
-
     // end::refguide[]
     /**
      * Handle the action as a command, irrespective of any configuration settings.
      */
     // tag::refguide[]
     ENABLED,
-
     // end::refguide[]
     /**
      * Do not handle the action as a command, irrespective of any configuration settings.
      */
     // tag::refguide[]
     DISABLED,
-
     // end::refguide[]
     /**
      * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
@@ -56,6 +52,5 @@ public enum CommandReification {
      */
     // tag::refguide[]
     NOT_SPECIFIED
-
 }
 // end::refguide[]

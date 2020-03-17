@@ -11,11 +11,18 @@ The `@DomainServiceLayout` annotation applies to domain services, collecting tog
 You will also find some additional material in the xref:vw:ROOT:layout.adoc#application-menu[object layout] chapter.
 ====
 
+The annotation is:
+
+[source,java]
+----
+include::refguide:applib-ant:example$annotation/DomainServiceLayout.java[tags="refguide"]
+----
+
 
 The table below summarizes the annotation's attributes.
 
 .`@DomainServiceLayout` attributes
-[cols="2,2,4a", options="header"]
+[cols="2,2,4a",options="header"]
 |===
 
 | Attribute
@@ -36,8 +43,6 @@ The table below summarizes the annotation's attributes.
 
 |===
 
-
-
 For example:
 
 [source,java]
@@ -53,18 +58,10 @@ public class ToDoItems {
 }
 ----
 
-
-
 [NOTE]
 ====
 Note that there is (currently) no support for specifying UI hints for domain services through the dynamic xref:vw:ROOT:layout.adoc#file-based[`.layout.xml`] file (only for properties, collections and actions are supported).
 ====
-
-
-
-
-
-
 
 include::DomainServiceLayout/menuBar.adoc[leveloffset=+1]
 include::DomainServiceLayout/menuOrder.adoc[leveloffset=+1]

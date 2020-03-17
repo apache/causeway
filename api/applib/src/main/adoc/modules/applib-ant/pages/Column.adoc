@@ -9,13 +9,14 @@ Apache Isis also parses and interprets this annotation in order to build up aspe
 
 [NOTE]
 ====
-Isis parses the `@Column` annotation from the Java source code; it does not query the JDO metamodel.  This means that it the `@Column` annotation must be used rather than the equivalent `<column>` link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/orm/schema_mapping.html[XML metadata].
+Apache Isis parses the `@Column` annotation from the Java source code; it does not query the JDO metamodel.
+This means that it the `@Column` annotation must be used rather than the equivalent `<column>` link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/orm/schema_mapping.html[XML metadata].
 
-Moreover, while JDO/DataNucleus will recognize annotations on either the field or the getter method, Apache Isis (currently) only inspects the getter method.  Therefore ensure that the annotation is placed there.
+Moreover, while JDO/DataNucleus will recognize annotations on either the field or the getter method, Apache Isis (currently) only inspects the getter method.
+Therefore ensure that the annotation is placed there.
 ====
 
 This section identifies which attributes of `@Column` are recognized and used by Apache Isis.
-
 
 == Nullability
 
@@ -31,12 +32,16 @@ public class Customer {
     public void setMiddleInitial(String middleInitial) { /* ... */ }
 ----
 
-Isis also provides xref:refguide:applib-ant:Property.adoc#optionality[`@Property#optionality`] attribute.  If both are specified, Apache Isis will check when it initializes for any contradictions, and will fail-fast with an appropriate error message in the log if there are.
+Isis also provides xref:refguide:applib-ant:Property.adoc#optionality[`@Property#optionality`] attribute.
+If both are specified, Apache Isis will check when it initializes for any contradictions, and will fail-fast with an appropriate error message in the log if there are.
 
-You should also be aware that in the lack of either the `@Column#allowsNull` or the `@Property#optionality` attributes, that the JDO and Apache Isis defaults differ.  Apache Isis rule is straight-forward: properties are assumed to be required.  JDO on the other hand specifies that only primitive types are mandatory; everything else is assumed to be optional.  Therefore a lack of either annotation can also trigger the fail-fast validation check.
+You should also be aware that in the lack of either the `@Column#allowsNull` or the `@Property#optionality` attributes, that the JDO and Apache Isis defaults differ.
+Apache Isis rule is straight-forward: properties are assumed to be required.
+JDO on the other hand specifies that only primitive types are mandatory; everything else is assumed to be optional.
+Therefore a lack of either annotation can also trigger the fail-fast validation check.
 
-In the vast majority of cases you should be fine just to add the `@Column#allowsNull` attribute to the getter.  But see the documentation for xref:refguide:applib-ant:Property.adoc#optionality[`@Property#optionality`] attribute for discussion on one or two minor edge cases.
-
+In the vast majority of cases you should be fine just to add the `@Column#allowsNull` attribute to the getter.
+But see the documentation for xref:refguide:applib-ant:Property.adoc#optionality[`@Property#optionality`] attribute for discussion on one or two minor edge cases.
 
 == Length for ``String``s
 
@@ -61,10 +66,7 @@ public class Customer {
 Apache Isis also provides xref:refguide:applib-ant:Property.adoc#maxLength[`@Property#maxLength`] attribute.
 If both are specified, Apache Isis will check when it initializes for any contradictions, and will fail-fast with an appropriate error message in the log if there are.
 
-
-
 == Length/scale for ``BigDecimal``s
-
 
 The `length()` and `scale` attributes are used to infer the precision/scale of `java.math.BigDecimal` property types as they map to `decimal(n,p)` columns.
 
@@ -83,17 +85,17 @@ There is a subtle difference here: while `@Column#scale()` corresponds to `@Digi
 
 If both are specified, Apache Isis will check when it initializes for any contradictions, and will fail-fast with an appropriate error message in the log if there are.
 
-
-
 [[rg-ant-hints-and-tips]]
 == Hints and Tips
 
-This seems to be a good place to describe some additional common mappings that use `@Column`.  Unlike the sections above, the attributes specified in these hints and tips aren't actually part of Apache Isis metamodel.
-
+This seems to be a good place to describe some additional common mappings that use `@Column`.
+Unlike the sections above, the attributes specified in these hints and tips aren't actually part of Apache Isis metamodel.
 
 === Mapping foreign keys
 
-The `name` attribute can be used to override the name of the column.  References to other objects are generally mapped as foreign key columns.  If there are multiple references to a given type, then you will want to override the name that JDO/DataNucleus would otherwise default.
+The `name` attribute can be used to override the name of the column.
+References to other objects are generally mapped as foreign key columns.
+If there are multiple references to a given type, then you will want to override the name that JDO/DataNucleus would otherwise default.
 
 For example (taken from link:http://github.com/estatio/estatio[estatio] app):
 
@@ -110,11 +112,11 @@ public class PartyRelationship {
 }
 ----
 
-
-
 === Mapping ``Blob``s and ``Clob``s
 
-Isis provides custom value types for xref:refguide:applib-cm:classes/value-types.adoc#Blob[`Blob`]s and xref:refguide:applib-cm:classes/value-types.adoc#Clob[`Clob`]s.  These value types have multiple internal fields, meaning that they corresponding to multiple columns in the database.  Mapping this correctly requires using  `@Column` within JDO's `@Persistent` annotation.
+Isis provides custom value types for xref:refguide:applib-cm:classes/value-types.adoc#Blob[`Blob`]s and xref:refguide:applib-cm:classes/value-types.adoc#Clob[`Clob`]s.
+These value types have multiple internal fields, meaning that they corresponding to multiple columns in the database.
+Mapping this correctly requires using  `@Column` within JDO's `@Persistent` annotation.
 
 For example, here's how to map a `Blob` (taken from http://github.com/apache/isis-app-todoapp[TodoApp]):
 

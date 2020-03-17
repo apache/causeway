@@ -6,6 +6,11 @@
 
 The `@ParameterLayout` annotation applies to action parameters, collecting together all UI hints within a single annotation.
 
+[source,java]
+----
+include::refguide:applib-ant:example$annotation/ParameterLayout.java[tags="refguide"]
+----
+
 The table below summarizes the annotation's attributes.
 
 .`@ParameterLayout` attributes

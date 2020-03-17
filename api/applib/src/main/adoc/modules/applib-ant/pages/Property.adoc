@@ -7,6 +7,10 @@ The `@Property` annotation applies to properties collecting together all domain 
 
 It is also possible to apply the annotation to actions of domain services that are acting as contributed properties.
 
+[source,java]
+----
+include::refguide:applib-ant:example$annotation/Property.java[tags="refguide"]
+----
 
 
 .`@Property` attributes
@@ -83,7 +87,7 @@ In many/most cases you should however use xref:refguide:applib-ant:Column.adoc[`
 |allows arbitrary validation to be applied
 
 
-|xref:refguide:applib-ant:Property.adoc#notPersisted[`notPersisted()`]
+|xref:refguide:applib-ant:Property.adoc#mementoSerialization[`mementoSerialization()`]
 |`true`, `false` +
 (`false`)
 |whether to exclude from snapshots. +
@@ -176,7 +180,7 @@ include::Property/fileAccept.adoc[leveloffset=+1]
 include::Property/hidden.adoc[leveloffset=+1]
 include::Property/maxLength.adoc[leveloffset=+1]
 include::Property/mustSatisfy.adoc[leveloffset=+1]
-include::Property/notPersisted.adoc[leveloffset=+1]
+include::Property/mementoSerialization.adoc[leveloffset=+1]
 include::Property/optionality.adoc[leveloffset=+1]
 include::Property/projecting.adoc[leveloffset=+1]
 include::Property/publishing.adoc[leveloffset=+1]

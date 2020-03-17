@@ -16,9 +16,9 @@ The signature of the method is:
 @PreDestroy                           <.>
 public void deinit() { /* ... */ }    <.>
 ----
+
 <.> It is not necessary to annotate the method with xref:refguide:applib-ant:Programmatic.adoc[`@Programmatic`]; it will be automatically excluded from the Apache Isis metamodel.
 <.> the method can have any name, but must have `public` visibility, and accept no arguments.
-
 
 Other use cases include obtaining connections to external datasources, eg subscribing to an ActiveMQ router, say, or initializing/cleaning up a background scheduler such as Quartz.
 

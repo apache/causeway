@@ -5,100 +5,62 @@
 
 The `@Action` annotation groups together all domain-specific metadata for an invokable action on a domain object or domain service.
 
-The table below summarizes the annotation's attributes.
+[source,java]
+----
+include::refguide:applib-ant:example$annotation/Action.java[tags="refguide"]
+----
+<.> xref:refguide:applib-ant:Action.adoc#associateWith[`associateWith()`]
++
+associates an action with another property or collection of the action.
 
-.`@Action` attributes
-[cols="2,2,4a", options="header"]
-|===
+<.> xref:refguide:applib-ant:Action.adoc#associateWith[`associateWith()`]
++
+associates an action with another property or collection of the action.
 
-| Attribute
-| Values (default)
-| Description
+<.> xref:refguide:applib-ant:Action.adoc#associateWith[`associateWithSequence()`]
+associates an action with another property or collection of the action.
 
+<.> xref:refguide:applib-ant:Action.adoc#command[`command()`]
+whether the action invocation should be reified into a `o.a.i.applib.` +
+`services.command.Command` object through the xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`] service:
 
-|xref:refguide:applib-ant:Action.adoc#associateWith[`associateWith()`]
-|_memberId_ +
-("")
-|associates an action with another property or collection of the action.
+<.> `commandExecuteIn()`
++
+Whether to execute the command immediately, or to persist it (assuming that an appropriate implementation of xref:refguide:applib-svc:CommandService.adoc[`CommandService`] has been configured) such that a background scheduler can execute the command asynchronously
 
-|xref:refguide:applib-ant:Action.adoc#associateWith[`associateWith-Sequence()`]
-|_memberId_ +
-("")
-|associates an action with another property or collection of the action.
+<.> `commandPersistence()`
++
+Whether the reified `Command` (as provided by the `CommandContext` domain service) should actually be persisted (assuming an appropriate implementation of xref:refguide:applib-svc:CommandService.adoc[`CommandService`] has been configured).
 
-|xref:refguide:applib-ant:Action.adoc#command[`command()`]
-|`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
-(`AS_CONFIGURED`)
-|whether the action invocation should be reified into a `o.a.i.applib.` +
-`services.command.Command` object through the xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`] service.
+<.> `commandDtoProcessor()`
++
+If the `Command` also implements `CommandWithDto` (meaning that it can return a `CommandDto`, in other words be converted into an XML memento), then optionally specifies a processor that can refine this XML.
 
+<.> xref:refguide:applib-ant:Action.adoc#domainEvent[`domainEvent()`]
++
+The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] to broadcast the action's business rule checking (hide, disable, validate) and its invocation (pre-execute and post-execute).
 
-|`commandExecuteIn()`
-|`FOREGROUND`,`BACKGROUND` +
-(`FOREGROUND`)
-|whether to execute the command immediately, or to persist it (assuming that an appropriate implementation of xref:refguide:applib-svc:CommandService.adoc[`CommandService`] has been configured) such that a background scheduler can execute the command asynchronously
+<.> xref:refguide:applib-ant:Action.adoc#hidden[`hidden()`]
++
+Indicates where (in the UI) the action should be hidden from the user.
 
+<.> xref:refguide:applib-ant:Action.adoc#publishing[`publishing()`]
++
+Whether the action invocation should be published to the registered xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`].
 
-|`commandPersistence()`
-|`PERSISTED`, `NOT_PERSISTED`, `IF_HINTED` +
-(`PERSISTED`)
-|whether the reified `Command` (as provided by the `CommandContext` domain service) should actually be persisted (assuming an appropriate implementation of xref:refguide:applib-svc:CommandService.adoc[`CommandService`] has been configured).
+<.> xref:refguide:applib-ant:Action.adoc#restrictTo[`restrictTo()`]
++
+Whether the action is only available in prototyping mode, or whether it is available also in production mode.
 
-
-|`commandDtoProcessor()`
-|Implementation of `CommandDtoProcessor` interface +
-(null)
-|If the `Command` also implements `CommandWithDto` (meaning that it can return a `CommandDto`, in other words be converted into an XML memento), then optionally specifies a processor that can refine this XML.
-
-
-|xref:refguide:applib-ant:Action.adoc#domainEvent[`domainEvent()`]
-|subtype of `ActionDomainEvent` +
-(`ActionDomainEvent.Default`)
-|the event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] to
-broadcast the action's business rule checking (hide, disable, validate) and its invocation (pre-execute and
-post-execute).
-
-
-|xref:refguide:applib-ant:Action.adoc#hidden[`hidden()`]
-|`EVERYWHERE`, `NOWHERE` +
-(`NOWHERE`)
-|indicates where (in the UI) the action should be hidden from the user.
-
-
-|xref:refguide:applib-ant:Action.adoc#invokeOn[`invokeOn()`]
-|`OBJECT_ONLY`, `COLLECTION_ONLY`, `OBJECT_AND_COLLECTION` +
-(`OBJECT_ONLY`)
-|(deprecated - use view models and associated actions instead).
-
-whether an action can be invoked on a single object and/or on many objects in a collection.
-
-Currently this is only supported for no-arg actions.
-
-
-|xref:refguide:applib-ant:Action.adoc#publishing[`publishing()`]
-|`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
-(`AS_CONFIGURED`)
-|whether the action invocation should be published to the registered xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`].
-
-|xref:refguide:applib-ant:Action.adoc#restrictTo[`restrictTo()`]
-|`NO_RESTRICTIONS`,`PROTOTYPING` +
-(`NO_RESTRICTIONS`)
-|whether the action is only available in prototyping mode, or whether it is available also in production mode.
-
-|xref:refguide:applib-ant:Action.adoc#semantics[`semantics()`]
-|`SAFE_AND_REQUEST_CACHEABLE`, `SAFE`, +
-`IDEMPOTENT`, `IDEMPOTENT_ARE_YOU_SURE` +
-`NON_IDEMPOTENT`, `NON_IDEMPOTENT_ARE_YOU_SURE` + +
-(`NON_IDEMPOTENT`)
-|the action's semantics (ie whether objects are modified as the result of invoking this action, and if so whether reinvoking the action would result in no further change; if not whether the results can be cached for the remainder of the request).
-
+<.> xref:refguide:applib-ant:Action.adoc#semantics[`semantics()`]
++
+The action's semantics (ie whether objects are modified as the result of invoking this action, and if so whether reinvoking the action would result in no further change; if not whether the results can be cached for the remainder of the request).
++
 The `...ARE_YOU_SURE` variants cause a confirmation dialog to be displayed in the xref:vw:ROOT:about.adoc[Wicket viewer].
 
-|xref:refguide:applib-ant:Action.adoc#typeOf[`typeOf()`]
-|(none)
-|if the action returns a collection, hints as to the run-time type of the objects within that collection (as a fallback)
-
-|===
+<.> xref:refguide:applib-ant:Action.adoc#typeOf[`typeOf()`]
++
+If the action returns a collection, hints as to the run-time type of the objects within that collection (as a fallback)
 
 
 For example:
