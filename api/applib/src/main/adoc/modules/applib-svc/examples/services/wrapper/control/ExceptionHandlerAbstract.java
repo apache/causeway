@@ -16,30 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.urlencoding;
+package org.apache.isis.applib.services.wrapper.control;
 
-import java.nio.charset.StandardCharsets;
+import org.apache.logging.log4j.Logger;
 
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.commons.internal.memento._Mementos.EncoderDecoder;
+import lombok.extern.log4j.Log4j2;
 
+/**
+ */
 // tag::refguide[]
-public interface UrlEncodingService extends EncoderDecoder {
-
-    @Override
-    String encode(final byte[] bytes);
-
-    @Override
-    byte[] decode(String str);
-
-    default String encodeString(final String str) {
-        return encode(_Strings.toBytes(str, StandardCharsets.UTF_8));
+@Log4j2
+public abstract class ExceptionHandlerAbstract implements ExceptionHandler {
+    public static Logger getLog() {
+        return log;
     }
-
-    default String decodeToString(final String str) {
-        return _Strings.ofBytes(decode(str), StandardCharsets.UTF_8);
-    }
-
 }
 // end::refguide[]

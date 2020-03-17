@@ -16,21 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.applib.services.xmlsnapshot;
 
-/**
- * This package defines types that represent the
- * currently logged-in {@link org.apache.isis.applib.security.UserMemento user}
- * and their {@link org.apache.isis.applib.security.RoleMemento role}s.
- *
- * <p>
- * Typically domain objects do not need to have any knowledge of <i>who</i>
- * is using them, because authorization is provided declaratively by the
- * framework and is type-based.  However, there are occasions; for example,
- * only an <tt>Employee</tt> and his superiors might be allowed to view their salary.
- *
- * <p>
- * The types are suffixed &quot;Memento&quot; because they snapshot the user
- * and roles at the time that the user logs in, but are not updated after that
- * point.
- */
-package org.apache.isis.applib.security;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
+import javax.inject.Inject;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
+
+import org.apache.isis.applib.services.xml.XmlService;
+
+public abstract class XmlSnapshotServiceAbstract implements XmlSnapshotService {
+
+
+}

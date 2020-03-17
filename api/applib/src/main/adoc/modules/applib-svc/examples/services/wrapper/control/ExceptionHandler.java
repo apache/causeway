@@ -16,45 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.menu;
+package org.apache.isis.applib.services.wrapper.control;
 
-import org.apache.isis.applib.layout.menubars.MenuBars;
+import java.util.function.Consumer;
 
+import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
+
+/**
+ */
 // tag::refguide[]
-public interface MenuBarsService {
+@FunctionalInterface
+public interface ExceptionHandler {
 
     // end::refguide[]
-    // tag::refguide-1[]
-    enum Type {
-
-        // end::refguide-1[]
-        /**
-         * Either derived from annotations or as obtained elsewhere
-         * (eg using the {@link MenuBarsLoaderService} if the
-         * default implementation of this service is in use).
-         */
-        // tag::refguide-1[]
-        DEFAULT,
-
-        // end::refguide-1[]
-        /**
-         * As derived from annotations.
-         */
-        // tag::refguide-1[]
-        FALLBACK
-    }
-    // end::refguide-1[]
-
-
     /**
-     * Returns {@link #menuBars()} with a type of {@link Type#DEFAULT}.
-     * @return
+     * Handle the exception in some way.
+     *
+     * Typically this will log and rethrow the exception.  If necessary though it can
+     * return some other value instead (must be compatible with the expected return value of the interaction,
+     * that is, the action invocation or property edit).
+     *
+     * @param ex - the exception that has occurred
+     * @return - optionally, the value to return.
      */
     // tag::refguide[]
-    default MenuBars menuBars() {           // <.>
-        return menuBars(Type.DEFAULT);
-    }
+    Object handle(Exception ex) throws Exception;
 
-    MenuBars menuBars(final Type type);     // <.>
 }
 // end::refguide[]

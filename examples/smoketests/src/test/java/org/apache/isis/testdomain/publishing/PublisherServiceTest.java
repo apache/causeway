@@ -146,7 +146,7 @@ class PublisherServiceTest extends IsisIntegrationTestAbstract {
 
         // when - running within its own background task
         AsyncControl<Void> control = control().withSkipRules();
-        wrapper.async(book, control).setName("Book #2"); // don't enforce rules for this test
+        wrapper.asyncWrap(book, control).setName("Book #2"); // don't enforce rules for this test
 
         control.getFuture().get(10, TimeUnit.SECONDS);
 
@@ -175,7 +175,7 @@ class PublisherServiceTest extends IsisIntegrationTestAbstract {
         // when - running within its own background task
         assertThrows(DisabledException.class, ()->{
 
-            wrapper.async(book, control()).setName("Book #2");
+            wrapper.asyncWrap(book, control()).setName("Book #2");
             
             control().getFuture().get(10, TimeUnit.SECONDS);
             

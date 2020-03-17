@@ -119,7 +119,7 @@ public interface WrapperFactory {
      * </p>
      */
     // tag::refguide[]
-    <T> T wrapMixin(Class<T> mixinClass, Object mixedIn,           // <.>
+    <T> T wrapMixin(Class<T> mixinClass, Object mixedIn,            // <.>
                     SyncControl syncControl);
 
     // end::refguide[]
@@ -174,8 +174,8 @@ public interface WrapperFactory {
      * @since 2.0
      */
     // tag::refguide-async[]
-    <T,R> T async(T domainObject,                          // <.>
-                  AsyncControl<R> asyncControl);
+    <T,R> T asyncWrap(T domainObject,                      // <.>
+                      AsyncControl<R> asyncControl);
 
     // end::refguide-async[]
     /**
@@ -190,9 +190,9 @@ public interface WrapperFactory {
      * @since 2.0
      */
     // tag::refguide-async[]
-    <T,R> T asyncMixin(                                    // <.>
-             Class<T> mixinClass, Object mixedIn,
-             AsyncControl<R> asyncControl);
+    <T,R> T asyncWrapMixin(                                // <.>
+                   Class<T> mixinClass, Object mixedIn,
+                   AsyncControl<R> asyncControl);
 
     // end::refguide-async[]
 

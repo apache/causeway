@@ -135,7 +135,7 @@ class AuditerServiceTest extends IsisIntegrationTestAbstract {
 
         // when - running within its own background task
         AsyncControl<Void> control = control().withSkipRules();
-        wrapper.async(book, control.with(new ExceptionHandlerAbstract() {
+        wrapper.asyncWrap(book, control.with(new ExceptionHandlerAbstract() {
             @Override
             public Object handle(Exception ex) throws Exception {
                 getLog().error(ex);
@@ -163,7 +163,7 @@ class AuditerServiceTest extends IsisIntegrationTestAbstract {
         // when - running within its own background task
         assertThrows(DisabledException.class, ()->{
 
-            wrapper.async(book, control()).setName("Book #2");
+            wrapper.asyncWrap(book, control()).setName("Book #2");
 
             control().getFuture().get(1000, TimeUnit.SECONDS);
             

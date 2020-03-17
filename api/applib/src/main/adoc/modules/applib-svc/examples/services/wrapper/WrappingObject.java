@@ -21,6 +21,7 @@ package org.apache.isis.applib.services.wrapper;
 
 import java.util.EnumSet;
 
+import org.apache.isis.applib.services.wrapper.control.ExecutionMode;
 import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 
 /**
@@ -65,9 +66,9 @@ public interface WrappingObject {
 
     // end::refguide[]
     /**
-     * The {@link EnumSet<WrapperFactory.ExecutionMode> execution mode}
-     * with which this wrapper was
-     * {@link WrapperFactory#wrap(Object, ImmutableEnumSet) created}.
+     * The {@link EnumSet<ExecutionMode> execution modes} inferred from the
+     * {@link org.apache.isis.applib.services.wrapper.control.SyncControl} with which this wrapper was
+     * {@link WrapperFactory#wrap(Object, org.apache.isis.applib.services.wrapper.control.SyncControl) created}.
      *
      * <p>
      * NOTE: domain classes may not have a method with this name.  The <tt>__isis_</tt> prefix is
@@ -75,7 +76,7 @@ public interface WrappingObject {
      * </p>
      */
     // tag::refguide[]
-    ImmutableEnumSet<WrapperFactory.ExecutionMode> __isis_executionMode();
+    ImmutableEnumSet<ExecutionMode> __isis_executionModes();
 
 }
 // end::refguide[]

@@ -230,7 +230,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
 
     @Override
-    public <T,R> T async(
+    public <T,R> T asyncWrap(
             final T domainObject,
             final AsyncControl<R> asyncControl) {
 
@@ -261,7 +261,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
     @Override
-    public <T, R> T asyncMixin(Class<T> mixinClass, Object mixedIn, AsyncControl<R> asyncControl) {
+    public <T, R> T asyncWrapMixin(Class<T> mixinClass, Object mixedIn, AsyncControl<R> asyncControl) {
 
         T mixin = factoryService.mixin(mixinClass, mixedIn);
         val proxyFactory = proxyFactoryService.factory(mixinClass, new Class[]{WrappingObject.class}, new Class[]{mixedIn.getClass()});

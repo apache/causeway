@@ -49,29 +49,6 @@ public interface SessionLoggingService {
     );
     // end::refguide[]
 
-    // tag::refguide-1[]
-    class Stderr implements SessionLoggingService {
-
-        @Override
-        public void log(final Type type, final String username, final Date date, final CausedBy causedBy, final String sessionId) {
-            final StringBuilder logMessage = new StringBuilder();
-            logMessage.append("User '").append(username);
-            logMessage.append("' with sessionId '").append(sessionId)
-            .append("' has logged ");
-            if (type == Type.LOGIN) {
-                logMessage.append("in");
-            } else {
-                logMessage.append("out");
-            }
-            logMessage.append(" at '").append(date).append("'.");
-            if (causedBy == CausedBy.SESSION_EXPIRATION) {
-                logMessage.append("Cause: session expiration");
-            }
-            System.err.println(logMessage);
-        }
-    }
-    // end::refguide-1[]
-
     // tag::refguide[]
 
 }

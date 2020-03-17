@@ -7,14 +7,15 @@ WARNING: Document `WrappingObject`, document `AsyncControl`
 
 
 The `WrapperFactory` provides the ability to enforce business rules for programmatic interactions between domain objects.
-If there is a (lack-of-) trust boundary between the caller and callee -- eg if they reside in different modules -- then the wrapper factory is a useful mechanism to ensure that any business constraints defined by the callee are honoured.
+If there is a (lack of) trust boundary between the caller and callee -- eg if they reside in different modules -- then the wrapper factory is one mechanism to ensure that any business constraints defined by the callee are honoured.
 
 For example, if the calling object attempts to modify an unmodifiable property on the target object, then an exception will be thrown.
+
 Said another way: interactions are performed "as if" they are through the viewer.
 
 [NOTE]
 ====
-For a discussion of the use of the `WrapperFactory` within integration tests (the primary or at least original use case for this service) can be found xref:testing:integtestsupport:about.adoc#wrapper-factory[here]
+For a discussion of the use of the `WrapperFactory` within integration tests (the primary or at least original use case for this service) can be found xref:testing:integtestsupport:about.adoc#wrapper-factory[here].
 ====
 
 This capability goes beyond enforcing the (imperative) constraints within the `hideXxx()`, `disableXxx()` and `validateXxx()` supporting methods; it also enforces (declarative) constraints such as those represented by annotations, eg `@Parameter(maxLength=...)` or `@Property(mustSatisfy=...)`.
@@ -33,47 +34,31 @@ The main API provided by the service is:
 ----
 include::refguide:applib-svc:example$services/wrapper/WrapperFactory.java[tags="refguide"]
 ----
-<.> wraps the underlying domain object with a wrapper configured with the set of ``ExecutionMode``s.
+<.> wraps the underlying domain object so it can invoked (through its wrapper) synchronously in the same thread.
 +
-If the domain object is already wrapped, then wrapping it again does nothing; the wrapper is returned unchanged.
-+
-The `ExecutionMode` modifies the way in which the wrapper interacts with the underlying domain object:
-+
-[source,java]
-----
-include::refguide:applib-svc:example$services/wrapper/WrapperFactory.java[tags="refguide-1",indent=0]
-----
-+
-As a convenience, the `ExecutionModes` class defines some predefined sets of the `ExecutionMode` enum:
-+
-[source,java]
-----
-include::refguide:applib-svc:example$services/wrapper/WrapperFactory.java[tags="refguide-2",indent=0]
-----
+The `SyncControl` modifies the way in which the wrapper interacts with the underlying domain object, discussed xref:#synccontrol-and-asynccontrol[below].
 
-<.> wraps the underlying domain object with a wrapper that will validate all business rules and then execute if they pass.
-+
-This is the same as invoke `wrap(...)` with `ExecutionModes.EXECUTE`.
+<.> overload that wraps the underlying domain object with a wrapper that will validate all business rules and then execute if they pass.
 
-<.> wraps the underlying domain object with a wrapper that will validate all business rules and then execute if they pass, but will simply skip execution if any of the business rules fail (returning null).
-+
-This is the same as invoke `wrap(...)` with `ExecutionModes.TRY`.
-
-<.> wraps the underlying domain object with a wrapper that will validate all business rules but will not actually perform the interaction.
-+
-This is the same as invoke `wrap(...)` with `ExecuteModes#NO_EXECUTE`.
-
-<.> wraps the underlying domain object with a wrapper that will NOT check any business rules and instead will just perform the interaction.
-+
-This is the same as invoke `wrap(...)` with `ExecuteMode#SKIP_RULES`.
-
-<.> instantiates and wraps a mixin, with no modifiers to the execution.
+<.> instantiates and wraps a mixin so that it can be invoked (through its wrapper) synchronously in the same thread.
+Again `SyncControl` modifies the way in which the wrapper interacts with the underlying domain object, discussed xref:#synccontrol-and-asynccontrol[below]..
 
 <.> Obtains the underlying domain object, if wrapped.
 +
 If the object is not wrapped, returns back unchanged.
 
 <.> whether the supplied object has been wrapped.
+
+
+=== `SyncControl` and `AsyncControl`
+
+The `SyncControl` and `AsyncControl` classes control the way that the wrapper works, for both synchronous calls using `wrap(...)`, and asynchronous calls using `asyncWrap`.
+
+[source,java]
+----
+include::refguide:applib-svc:example$services/wrapper/control/SyncControl.java[tags="refguide"]
+----
+
 
 
 The service works by returning a "wrapper" around a supplied domain object (using link:https://bytebuddy.net/[byte buddy]), and it is this wrapper that ensures that the hide/disable/validate rules implies by the Apache Isis programming model are enforced.

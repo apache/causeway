@@ -258,6 +258,26 @@ public interface RepositoryService {
     // tag::refguide[]
     <T> Optional<T> firstMatch(Query<T> query);             // <.>
     // end::refguide[]
+    /**
+     * As {@link #allInstances(Class, long, long)}, but but returning all instances rather than just those
+     *      * within the specified range..
+     */
+    // tag::refguide[]
+    <T> T refresh(T pojo);                                // <.>
+
+    // end::refguide[]
+    /**
+     * Detach the entity from the current persistence session.
+     *
+     * <p>
+     * This allows the entity to be read from even after the PersistenceSession that obtained it has been closed.
+     *
+     * @param entity - to detach
+     */
+    // tag::refguide[]
+    <T> T detach(T entity);                            // <.>
+
+    // end::refguide[]
 
     // -- DEPRECATIONS
 

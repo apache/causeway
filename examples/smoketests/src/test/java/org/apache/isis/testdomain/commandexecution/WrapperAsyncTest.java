@@ -122,7 +122,7 @@ class WrapperAsyncTest extends IsisIntegrationTestAbstract {
 
         // when
         val control = control(JdoProduct.class);
-        wrapper.async(inventoryManager, control)
+        wrapper.asyncWrap(inventoryManager, control)
                 .updateProductPrice(product, 123d);
 
         // then

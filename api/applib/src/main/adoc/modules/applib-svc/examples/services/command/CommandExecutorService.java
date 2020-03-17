@@ -18,6 +18,9 @@
  */
 package org.apache.isis.applib.services.command;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.schema.cmd.v2.CommandDto;
+
 // tag::refguide[]
 public interface CommandExecutorService {
 
@@ -50,8 +53,12 @@ public interface CommandExecutorService {
      */
     // tag::refguide[]
     void executeCommand(
-            SudoPolicy sudoPolicy,              // <.>
-            CommandWithDto commandWithDto       // <.>
+            SudoPolicy sudoPolicy,          // <.>
+            CommandWithDto commandWithDto   // <.>
+    );
+
+    Bookmark executeCommand(
+            CommandDto commandDto           // <.>
     );
 
 }

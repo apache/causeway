@@ -206,15 +206,15 @@ public class Interaction implements HasUniqueId {
                 execution.setReturned(result);
                 return result;
             } catch (Exception ex) {
-                
+
                 //TODO there is an issue with exceptions getting swallowed, unless this is fixed,
                 // we rather print all of them, no matter whether recognized or not later on
                 // examples are IllegalArgument- or NullPointer- exceptions being swallowed when using the
                 // WrapperFactory utilizing async calls
                 log.error("failed to execute an interaction", ex);
-                
-                // just because an exception has thrown, does not mean it is that significant; 
-                // it could be that it is recognized by an ExceptionRecognizer and is not severe 
+
+                // just because an exception has thrown, does not mean it is that significant;
+                // it could be that it is recognized by an ExceptionRecognizer and is not severe
                 // eg. unique index violation in the DB
                 getCurrentExecution().setThrew(ex);
 
