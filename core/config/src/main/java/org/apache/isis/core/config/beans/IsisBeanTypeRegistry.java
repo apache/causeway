@@ -237,8 +237,18 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
                     .delegated(BeanSort.MANAGED_BEAN_CONTRIBUTING, objectType(aDomainService.get()));
         }
 
-        //this takes precedence over whatever @DomainObject has to say
+        //TODO would require ServiceLoader plugin to delegate the responsibility for this categorization to the
+        //module, that provides these types
         if(_Reflect.containsAnnotation(type, "javax.jdo.annotations.PersistenceCapable")) {
+            //XXX hotfix in support of the @EmbeddedOnly annotation, also requires @Value to be present
+            if(_Reflect.containsAnnotation(type, "javax.jdo.annotations.EmbeddedOnly")) {
+                //TODO does not honor @PersistenceCapable(embeddedOnly="true")
+                if(findNearestAnnotation(type, org.apache.isis.applib.annotation.Value.class).isPresent()) {
+                    
+                    return BeanClassification.selfManaged(BeanSort.VALUE);
+                }       
+            }
+            //this takes precedence over whatever @DomainObject has to say
             return BeanClassification.selfManaged(BeanSort.ENTITY);
         }
 

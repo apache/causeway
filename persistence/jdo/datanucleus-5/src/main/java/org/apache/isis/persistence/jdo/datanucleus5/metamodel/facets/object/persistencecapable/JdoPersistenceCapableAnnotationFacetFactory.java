@@ -24,7 +24,6 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -69,19 +68,24 @@ implements ObjectSpecIdFacetFactory {
             annotationTableAttribute = cls.getSimpleName();
         }
         
+        val facetHolder = processClassContext.getFacetHolder();
+        
         val embeddedOnlyAttribute = annotation.embeddedOnly();
+        // Whether objects of this type can only be embedded, 
+        // hence have no ID that binds them to the persistence layer
         final boolean embeddedOnly = Boolean.valueOf(embeddedOnlyAttribute)
                 || Annotations.getAnnotation(cls, EmbeddedOnly.class)!=null; 
         
-        final IdentityType annotationIdentityType = annotation.identityType();
-         
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
-        val jdoPersistenceCapableFacet = new JdoPersistenceCapableFacetAnnotation(
-                annotationSchemaAttribute,
-                annotationTableAttribute, annotationIdentityType, embeddedOnly, facetHolder);
-        FacetUtil.addFacet(jdoPersistenceCapableFacet);
-
-        FacetUtil.addFacet(ObjectSpecIdFacetForJdoPersistenceCapableAnnotation.create(jdoPersistenceCapableFacet, facetHolder));
+        if(embeddedOnly) {
+            // suppress
+        } else {
+            final IdentityType annotationIdentityType = annotation.identityType();
+            val jdoPersistenceCapableFacet = new JdoPersistenceCapableFacetAnnotation(
+                    annotationSchemaAttribute,
+                    annotationTableAttribute, annotationIdentityType, facetHolder);
+            FacetUtil.addFacet(jdoPersistenceCapableFacet);
+            FacetUtil.addFacet(ObjectSpecIdFacetForJdoPersistenceCapableAnnotation.create(jdoPersistenceCapableFacet, facetHolder));
+        }
 
         return;
     }

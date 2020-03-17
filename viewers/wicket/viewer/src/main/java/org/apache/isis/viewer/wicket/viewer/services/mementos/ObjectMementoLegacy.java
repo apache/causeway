@@ -28,6 +28,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -220,7 +221,7 @@ final class ObjectMementoLegacy implements Serializable {
                     SpecificationLoader specificationLoader) {
 
                 if(_NullSafe.isEmpty(memento.persistentOidStr)) {
-                    return ManagedObject.empty(); 
+                    throw _Exceptions.illegalArgument("need an id to lookup an object specId=%s", memento.objectSpecId);
                 }
                 
                 RootOid rootOid = Oid.unmarshaller().unmarshal(memento.persistentOidStr, RootOid.class);

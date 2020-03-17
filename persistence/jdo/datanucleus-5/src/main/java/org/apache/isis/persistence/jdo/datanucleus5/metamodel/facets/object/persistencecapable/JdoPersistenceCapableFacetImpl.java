@@ -32,26 +32,16 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoMetamodelUtil;
 
-import lombok.Getter;
 import lombok.val;
 
 public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAbstract {
 
-    /** Whether objects of this type can only be embedded, 
-     * hence have no ID that binds them to the persistence layer.*/
-    @Getter private final boolean embeddedOnly;
-    
-
-    
-    
     public JdoPersistenceCapableFacetImpl(
             final String schemaName,
             final String tableOrTypeName,
             final IdentityType identityType,
-            final boolean embeddedOnly,
             final FacetHolder holder) {
         super(schemaName, tableOrTypeName, identityType, holder);
-        this.embeddedOnly = embeddedOnly;
     }
 
     @Override
@@ -59,11 +49,6 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
         
         if(!spec.isEntity()) {
             throw _Exceptions.unexpectedCodeReach();
-        }
-        
-        if(embeddedOnly) {
-            val type = spec.getCorrespondingClass();
-            return MementoUtil.parse(type, identifier);
         }
         
         val persistenceSession = super.getPersistenceSessionJdo();
@@ -87,11 +72,6 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
             throw _Exceptions.illegalArgument(
                     "The persistence layer does not recognize given type %s",
                     pojo.getClass().getName());
-        }
-        
-        if(embeddedOnly) {
-            val memento = MementoUtil.createMemento(pojo);
-            return memento.asString();
         }
         
         val persistenceSession = super.getPersistenceSessionJdo();

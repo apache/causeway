@@ -29,9 +29,8 @@ public class JdoPersistenceCapableFacetAnnotation extends JdoPersistenceCapableF
             final String schemaName,
             final String tableOrTypeName,
             final IdentityType identityType,
-            final boolean embeddedOnly,
             final FacetHolder holder) {
-        super(schemaName, tableOrTypeName, identityType, embeddedOnly, holder);
+        super(schemaName, tableOrTypeName, identityType, holder);
     }
 
 }
