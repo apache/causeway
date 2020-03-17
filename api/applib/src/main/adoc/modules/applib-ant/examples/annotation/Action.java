@@ -168,20 +168,6 @@ public @interface Action {
 
     // end::refguide[]
     /**
-     * For uploading {@link Blob} or {@link Clob}, optionally restrict the files accepted (eg <tt>.xslx</tt>).
-     *
-     * <p>
-     * The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
-     * </p>
-     *
-     * @see <a href="http://www.w3schools.com/tags/att_input_accept.asp">http://www.w3schools.com</a>
-     */
-    // tag::refguide[]
-    String fileAccept()                                             // <.>
-            default "";
-
-    // end::refguide[]
-    /**
      * Indicates where (in the UI) the action is not visible to the user.
      *
      * <p>
@@ -242,5 +228,21 @@ public @interface Action {
     Class<?> typeOf()                                               // <.>
             default Object.class;
 
+    // end::refguide[]
+    /**
+     * For uploading {@link Blob} or {@link Clob}, optionally restrict the files accepted (eg <tt>.xslx</tt>).
+     *
+     * <p>
+     * The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
+     * </p>
+     *
+     * @see <a href="http://www.w3schools.com/tags/att_input_accept.asp">http://www.w3schools.com</a>
+     *
+     * @deprecated - unused; see instead @Parameter and @Property
+     */
+    @Deprecated
+    String fileAccept()                                             // <.>
+            default "";
+    // tag::refguide[]
 }
 // end::refguide[]

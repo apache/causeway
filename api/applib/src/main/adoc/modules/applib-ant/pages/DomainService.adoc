@@ -15,7 +15,7 @@ include::refguide:applib-ant:example$annotation/DomainService.java[tags="refguid
 +
 Whether the actions of this domain service should be rendered in UI menus only, or the xref:vro:ROOT:about.adoc[RestfulObjects] REST API only, or both
 
-<.> xref:refguide:applib-ant:DomainService.adoc#objectType[`objectType()`]
+<.> xref:refguide:applib-ant:DomainService.adoc#objecttype[`objectType()`]
 +
 Equivalent to xref:refguide:applib-ant:DomainObject.adoc#objectType[`@DomainObject#objectType()`], specifies the objectType of the service.
 +
@@ -38,4 +38,4 @@ public class LoanRepository {
 
 include::DomainService/nature.adoc[leveloffset=+1]
 include::DomainService/objectType.adoc[leveloffset=+1]
-include::DomainService/repositoryFor.adoc[leveloffset=+1]
+

@@ -10,15 +10,15 @@ It is also possible to apply the annotation to actions of domain services that a
 ----
 include::refguide:applib-ant:example$annotation/CollectionLayout.java[tags="refguide"]
 ----
-<.> xref:refguide:applib-ant:CollectionLayout.adoc#cssClass[`cssClass()`]
+<.> xref:refguide:applib-ant:CollectionLayout.adoc#cssclass[`cssClass()`]
 +
 The css class that a collection should have, to allow more targetted styling in xref:refguide:config:application-specific/application-css.adoc[`application.css`]
 
-<.> xref:refguide:applib-ant:CollectionLayout.adoc#defaultView[`defaultView()`]
+<.> xref:refguide:applib-ant:CollectionLayout.adoc#defaultview[`defaultView()`]
 +
 Which view is selected by default, if multiple views are available.
 
-<.> xref:refguide:applib-ant:CollectionLayout.adoc#describedAs[`describedAs()`]
+<.> xref:refguide:applib-ant:CollectionLayout.adoc#describedas[`describedAs()`]
 +
 Description of this collection, eg to be rendered in a tooltip.
 
@@ -39,7 +39,7 @@ Whether to HTML escape the name of this property.
 +
 The page size for instances of this class when rendered within a table.
 
-<.> xref:refguide:applib-ant:CollectionLayout.adoc#sortedBy[`sortedBy()`]
+<.> xref:refguide:applib-ant:CollectionLayout.adoc#sortedby[`sortedBy()`]
 +
 Indicates that the elements in the `java.util.SortedSet` collection should be sorted according to a specified `Comparator` rather than their natural sort order.
 

@@ -1,8 +1,8 @@
 = MetaModel Validator
-
-:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-role: -toc
 
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 include::../section-hooks/isis.core.meta-model.validator~pre.adoc[]
 
@@ -50,7 +50,7 @@ It is _highly advisable_ to leave this set as enabled (the default), and to also
 isis.core.meta-model.validator. +
 explicit-object-type
 
-|
+| 
 | Whether to ensure that the object type of all objects must be specified explicitly, using either ``DomainObject#objectType()`` or ``DomainService#objectType()``.
 
 It is _highly advisable_ to leave this set as enabled (the default). These object types should also (of course) be unique - that can be checked by setting the ``#isEnsureUniqueObjectTypes()`` config property.
@@ -71,7 +71,7 @@ date-time-type-adapter
 isis.core.meta-model.validator. +
 jaxb-view-model.no-arg-constructor
 
-|
+| 
 | If set, then ensures that all JAXB-style view models have a no-arg constructor.
 
 
@@ -126,7 +126,7 @@ jdoql.variables-clause
 isis.core.meta-model.validator. +
 no-params-only
 
-|
+| 
 | If set, then checks that the supports ``hideXxx`` and ``disableXxx`` methods for actions do not have take parameters.
 
 Historically, the programming model allowed these methods to accept the same number of parameters as the action method to which they relate, the rationale being for similarity with the ``validateXxx`` method. However, since these parameters serve no function, the programming model has been simplified so that these supporting methods are discovered if they have exactly no parameters.

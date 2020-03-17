@@ -1,8 +1,8 @@
 = DataNucleus Configuration
-
-:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-role: -toc
 
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 include::../section-hooks/isis.persistence.jdo-datanucleus.impl~pre.adoc[]
 
@@ -17,7 +17,7 @@ isis.persistence.jdo-datanucleus. +
 impl.datanucleus. +
 ConnectionFactory2Name
 
-|
+| 
 | null
 
 
@@ -27,7 +27,7 @@ isis.persistence.jdo-datanucleus. +
 impl.datanucleus. +
 ConnectionFactoryName
 
-|
+| 
 | null
 
 
@@ -37,7 +37,7 @@ isis.persistence.jdo-datanucleus. +
 impl.datanucleus. +
 ConnectionPasswordDecrypter
 
-|
+| 
 | null
 
 
@@ -47,7 +47,7 @@ isis.persistence.jdo-datanucleus. +
 impl.datanucleus. +
 PersistenceUnitLoadClasses
 
-|
+| 
 | null
 
 
@@ -56,7 +56,7 @@ PersistenceUnitLoadClasses
 isis.persistence.jdo-datanucleus. +
 impl.datanucleus.cache.level2.mode
 
-|
+| 
 | Values of javax.persistence.SharedCacheMode, capitalized
 
 
@@ -81,7 +81,7 @@ isis.persistence.jdo-datanucleus. +
 impl.datanucleus. +
 connection-factory-name
 
-|
+| 
 | The JNDI name for a connection factory for transactional connections.
 
 For RBDMS, it must be a JNDI name that points to a javax.sql.DataSource object.
@@ -97,7 +97,7 @@ isis.persistence.jdo-datanucleus. +
 impl.datanucleus. +
 connection-factory2-name
 
-|
+| 
 | The JNDI name for a connection factory for non-transactional connections.
 
 For RBDMS, it must be a JNDI name that points to a javax.sql.DataSource object.
@@ -113,7 +113,7 @@ isis.persistence.jdo-datanucleus. +
 impl.datanucleus. +
 connection-password-decrypter
 
-|
+| 
 | Name of a class that implements ``DecryptionProvider`` and should only be specified if the password is encrypted in the persistence properties.
 
 See also ``json`` (camelCasing instead of kebab-casing).
@@ -126,7 +126,7 @@ NOTE: this config property isn't used by the framework, but is provided as a con
 isis.persistence.jdo-datanucleus. +
 impl.datanucleus.identifier.case
 
-|
+| 
 | null
 
 
@@ -150,7 +150,7 @@ isis.persistence.jdo-datanucleus. +
 impl.datanucleus.objectProvider. +
 className
 
-|
+| 
 | null
 
 
@@ -176,7 +176,7 @@ isis.persistence.jdo-datanucleus. +
 impl.datanucleus. +
 persistenceByReachabilityAtCommit
 
-|
+| 
 | null
 
 
@@ -186,7 +186,7 @@ isis.persistence.jdo-datanucleus. +
 impl.datanucleus.schema. +
 auto-create-all
 
-|
+| 
 | Whether DN should automatically create the database schema on bootstrapping.
 
 This should be set to ``true`` when running against an in-memory database, but set to ``false`` when running against a persistent database (use something like flyway instead to manage schema evolution).
@@ -202,7 +202,7 @@ isis.persistence.jdo-datanucleus. +
 impl.datanucleus.schema. +
 auto-create-database
 
-|
+| 
 | Previously we defaulted this property to "true", but that could cause the target database to be modified
 
 See also ``json`` (camelCasing instead of kebab-casing).
@@ -216,7 +216,7 @@ isis.persistence.jdo-datanucleus. +
 impl.datanucleus.schema. +
 autoCreateAll
 
-|
+| 
 | null
 
 
@@ -226,7 +226,7 @@ isis.persistence.jdo-datanucleus. +
 impl.datanucleus.schema. +
 autoCreateDatabase
 
-|
+| 
 | null
 
 
@@ -248,7 +248,7 @@ isis.persistence.jdo-datanucleus. +
 impl.datanucleus.schema. +
 validateAll
 
-|
+| 
 | null
 
 
@@ -258,7 +258,7 @@ isis.persistence.jdo-datanucleus. +
 impl.datanucleus.schema. +
 validateConstraints
 
-|
+| 
 | null
 
 
@@ -268,7 +268,7 @@ isis.persistence.jdo-datanucleus. +
 impl.datanucleus.schema. +
 validateTables
 
-|
+| 
 | null
 
 
@@ -277,7 +277,7 @@ validateTables
 isis.persistence.jdo-datanucleus. +
 impl.datanucleus.transaction-type
 
-|
+| 
 | Type of transaction to use.
 
 If running under JavaSE the default is RESOURCE_LOCAL, and if running under JavaEE the default is JTA.
@@ -293,7 +293,7 @@ isis.persistence.jdo-datanucleus. +
 impl.javax.jdo. +
 PersistenceManagerFactoryClass
 
-|
+| 
 | null
 
 
@@ -303,7 +303,7 @@ isis.persistence.jdo-datanucleus. +
 impl.javax.jdo.option. +
 ConnectionDriverName
 
-|
+| 
 | null
 
 
@@ -313,7 +313,7 @@ isis.persistence.jdo-datanucleus. +
 impl.javax.jdo.option. +
 ConnectionPassword
 
-|
+| 
 | null
 
 
@@ -323,7 +323,7 @@ isis.persistence.jdo-datanucleus. +
 impl.javax.jdo.option. +
 ConnectionURL
 
-|
+| 
 | null
 
 
@@ -333,7 +333,7 @@ isis.persistence.jdo-datanucleus. +
 impl.javax.jdo.option. +
 ConnectionUserName
 
-|
+| 
 | null
 
 
@@ -343,7 +343,7 @@ isis.persistence.jdo-datanucleus. +
 impl.javax.jdo.option. +
 connection-driver-name
 
-|
+| 
 | JDBC driver used by JDO/DataNucleus object store to connect.
 
 See also ``json`` (PascalCasing instead of kebab-casing).
@@ -357,7 +357,7 @@ isis.persistence.jdo-datanucleus. +
 impl.javax.jdo.option. +
 connection-password
 
-|
+| 
 | Password for the user account used by JDO/DataNucleus object store to connect.
 
 See also ``json`` (PascalCasing instead of kebab-casing).
@@ -371,7 +371,7 @@ isis.persistence.jdo-datanucleus. +
 impl.javax.jdo.option. +
 connection-url
 
-|
+| 
 | URL used by JDO/DataNucleus object store to connect.
 
 See also ``json`` (PascalCasing instead of kebab-casing).
@@ -385,7 +385,7 @@ isis.persistence.jdo-datanucleus. +
 impl.javax.jdo.option. +
 connection-user-name
 
-|
+| 
 | User account used by JDO/DataNucleus object store to connect.
 
 See also ``json`` (PascalCasing instead of kebab-casing).

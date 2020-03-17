@@ -29,6 +29,8 @@ import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
 // tag::refguide[]
 public interface XmlService {
 
+    // end::refguide[]
+
     // tag::refguide-3[]
     class Exception extends RuntimeException {
 
@@ -53,7 +55,6 @@ public interface XmlService {
     // end::refguide-3[]
 
 
-    // end::refguide[]
     /**
      * Converts xml string into an {@link Document W3C Document}.
      *
@@ -63,7 +64,6 @@ public interface XmlService {
     Document asDocument(String xmlStr);                         // <.>
 
     // end::refguide[]
-
     /**
      * Serializes a {@link Document W3C Document} back into a string.
      *

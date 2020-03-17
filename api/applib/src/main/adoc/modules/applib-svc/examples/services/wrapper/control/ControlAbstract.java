@@ -19,22 +19,16 @@
 package org.apache.isis.applib.services.wrapper.control;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.EnumSet;
-import java.util.List;
-import java.util.concurrent.Future;
-import java.util.function.Consumer;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.core.commons.collections.ImmutableEnumSet;
+import org.apache.isis.core.commons.internal.base._Casts;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import lombok.extern.log4j.Log4j2;
 
 // tag::refguide[]
 public class ControlAbstract<T extends ControlAbstract<T>> {
@@ -58,18 +52,18 @@ public class ControlAbstract<T extends ControlAbstract<T>> {
     private Bookmark bookmark;
 
     // tag::refguide[]
-    private boolean checkRules = true;                  // <.>
+    private boolean checkRules = true;                          // <.>
     public T withCheckRules() {
         // end::refguide[]
         checkRules = true;
-        return (T)this;
+        return _Casts.uncheckedCast(this);
         // tag::refguide[]
         // ...
     }
     public T withSkipRules() {
         // end::refguide[]
         checkRules = false;
-        return (T)this;
+        return _Casts.uncheckedCast(this);
         // tag::refguide[]
         // ...
     }
@@ -80,11 +74,11 @@ public class ControlAbstract<T extends ControlAbstract<T>> {
      */
     // tag::refguide[]
     @Getter @NonNull
-    private ExceptionHandler exceptionHandler;          // <.>
+    private ExceptionHandler exceptionHandler;                  // <.>
     public T with(ExceptionHandler exceptionHandler) {
         // end::refguide[]
         this.exceptionHandler = exceptionHandler;
-        return (T)this;
+        return _Casts.uncheckedCast(this);
         // tag::refguide[]
         // ...
     }

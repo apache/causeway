@@ -69,7 +69,8 @@ public @interface Mixin {
      * </p>
      */
     // tag::refguide[]
-    String method() default DEFAULT_METHOD_NAME;
+    String method()                         // <.>
+            default DEFAULT_METHOD_NAME;
 
 }
 // end::refguide[]

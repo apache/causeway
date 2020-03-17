@@ -9,7 +9,7 @@ The `@Collection` annotation applies to collections collecting together all doma
 ----
 include::refguide:applib-ant:example$annotation/Collection.java[tags="refguide"]
 ----
-<.> xref:refguide:applib-ant:Collection.adoc#domainEvent[`domainEvent()`]
+<.> xref:refguide:applib-ant:Collection.adoc#domainevent[`domainEvent()`]
 +
 The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] to broadcast the collection's business rule checking (hide, disable, validate) and its modification (before and after).
 
@@ -25,11 +25,11 @@ If `editing()` is `DISABLED`, provides a reason as to why.
 +
 Indicates where (in the UI) the collection should be hidden from the user.
 
-<.> xref:refguide:applib-ant:Collection.adoc#mementoSerialization[`mementoSerialization()`]
+<.> xref:refguide:applib-ant:Collection.adoc#mementoserialization[`memento()`]
 +
 Whether to include/exclude in snapshots. +
 
-<.> xref:refguide:applib-ant:Collection.adoc#typeOf[`typeOf()`]
+<.> xref:refguide:applib-ant:Collection.adoc#typeof[`typeOf()`]
 +
 Hints as to the run-time type of the objects within that collection (as a fallback)
 

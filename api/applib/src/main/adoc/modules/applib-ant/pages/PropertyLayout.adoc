@@ -9,11 +9,11 @@ The `@PropertyLayout` annotation applies to properties collecting together all U
 ----
 include::refguide:applib-ant:example$annotation/PropertyLayout.java[tags="refguide"]
 ----
-<.> xref:refguide:applib-ant:PropertyLayout.adoc#cssClass[`cssClass()`]
+<.> xref:refguide:applib-ant:PropertyLayout.adoc#cssclass[`cssClass()`]
 +
 The css class that a property should have, to allow more targetted styling in xref:refguide:config:application-specific/application-css.adoc[`application.css`]
 
-<.> xref:refguide:applib-ant:PropertyLayout.adoc#describedAs[`describedAs()`]
+<.> xref:refguide:applib-ant:PropertyLayout.adoc#describedas[`describedAs()`]
 +
 Description of this property, eg to be rendered in a tooltip.
 
@@ -21,20 +21,20 @@ Description of this property, eg to be rendered in a tooltip.
 +
 Indicates where (in the UI) the property should be hidden from the user.
 
-<.> xref:refguide:applib-ant:PropertyLayout.adoc#labelPosition[`labelPosition()`]
+<.> xref:refguide:applib-ant:PropertyLayout.adoc#labelposition[`labelPosition()`]
 +
 In forms, the positioning of the label relative to the property value. +
 +
-Defaults is `LEFT`, unless xref:refguide:applib-ant:PropertyLayout.adoc#multiLine[`multiLine`] in which case `TOP`.
+Defaults is `LEFT`, unless xref:refguide:applib-ant:PropertyLayout.adoc#multiline[`multiLine`] in which case `TOP`.
 The value `RIGHT` is only supported for boolean properties.
 +
 It is also possible to change the default through a xref:refguide:config:configuring-core.adoc#isis-viewers-propertyLayout-labelPosition[configuration property]
 
-<.> xref:refguide:applib-ant:PropertyLayout.adoc#multiLine[`multiLine()`]
+<.> xref:refguide:applib-ant:PropertyLayout.adoc#multiline[`multiLine()`]
 +
 For string properties, render as a text area over multiple lines.  +
 +
-If set > 1, then xref:refguide:applib-ant:PropertyLayout.adoc#labelPosition[`labelPosition`] defaults to TOP.
+If set > 1, then xref:refguide:applib-ant:PropertyLayout.adoc#labelposition[`labelPosition`] defaults to TOP.
 
 <.> xref:refguide:applib-ant:PropertyLayout.adoc#named[`named()`]
 +
@@ -50,11 +50,11 @@ Whether to HTML escape the name of this property.
 +
 Whether a property should be used as the navigable parent (parent breadcrumb) of this object
 
-<.> xref:refguide:applib-ant:PropertyLayout.adoc#promptStyle[`promptStyle()`]
+<.> xref:refguide:applib-ant:PropertyLayout.adoc#promptstyle[`promptStyle()`]
 +
 How a property prompt should be displayed within the UI
 
-<.> xref:refguide:applib-ant:PropertyLayout.adoc#renderedAsDayBefore[`renderedAsDayBefore()`]
+<.> xref:refguide:applib-ant:PropertyLayout.adoc#renderedasdaybefore[`renderedAsDayBefore()`]
 +
 For date properties only, render the date as one day prior to the actually stored date.
 
@@ -64,7 +64,7 @@ Indicates that the value held by the property never changes over time (even if o
 +
 Used as a hint to the viewer not to redraw the property if possible after an AJAX update.
 
-<.> xref:refguide:applib-ant:PropertyLayout.adoc#typicalLength[`typicalLength()`]
+<.> xref:refguide:applib-ant:PropertyLayout.adoc#typicallength[`typicalLength()`]
 +
 The typical entry length of a field, use to determine the optimum width for display
 

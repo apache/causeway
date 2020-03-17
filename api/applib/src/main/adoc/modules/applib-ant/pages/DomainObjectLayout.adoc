@@ -21,7 +21,7 @@ Whether (and how) this domain object should be automatically bookmarked
 +
 The css class that a domain class (type) should have, to allow more targetted styling in xref:refguide:config:application-specific/application-css.adoc[`application.css`]
 
-<.> xref:refguide:applib-ant:DomainObjectLayout.adoc#cssClassFa[`cssClassFa`]
+<.> xref:refguide:applib-ant:DomainObjectLayout.adoc#cssclassfa[`cssClassFa`]
 +
 Any valid link:http://fortawesome.github.io/Font-Awesome/[Font awesome] icon name for the domain object's menu link or icon. +
 
@@ -31,7 +31,7 @@ Currently unused.
 
 
 
-<.> xref:refguide:applib-ant:DomainObjectLayout.adoc#describedAs[`describedAs`]
+<.> xref:refguide:applib-ant:DomainObjectLayout.adoc#describedas[`describedAs`]
 +
 Description of this class, eg to be rendered in a tooltip.
 
@@ -80,19 +80,19 @@ Note that there is (currently) no support for specifying UI hints for domain obj
 ----
 include::refguide:applib-ant:example$annotation/DomainObjectLayout.java[tags="refguide-ui-events"]
 ----
-<.> xref:refguide:applib-ant:DomainObjectLayout.adoc#cssClassUiEvent[`cssClassUiEvent`]
+<.> xref:refguide:applib-ant:DomainObjectLayout.adoc#cssclassuievent[`cssClassUiEvent`]
 +
 The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] to obtain a CSS class for the domain object.
 
-<.> xref:refguide:applib-ant:DomainObjectLayout.adoc#iconUiEvent[`iconUiEvent`]
+<.> xref:refguide:applib-ant:DomainObjectLayout.adoc#iconuievent[`iconUiEvent`]
 +
 The event type to be posted to obtain the icon (name) for the domain object.
 
-<.> xref:refguide:applib-ant:DomainObjectLayout.adoc#layoutUiEvent[`layoutUiEvent`]
+<.> xref:refguide:applib-ant:DomainObjectLayout.adoc#layoutuievent[`layoutUiEvent`]
 +
 The event type to be posted to obtain the layout (name) for the domain object.
 
-<.> xref:refguide:applib-ant:DomainObjectLayout.adoc#titleUiEvent[`titleUiEvent`]
+<.> xref:refguide:applib-ant:DomainObjectLayout.adoc#titleuievent[`titleUiEvent`]
 +
 The event type to be posted to obtain the title for the domain object.
 

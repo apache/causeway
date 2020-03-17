@@ -15,26 +15,12 @@ For further discussion on using mixins, see xref:userguide:fun:building-blocks.a
 ----
 include::refguide:applib-ant:example$annotation/Mixin.java[tags="refguide"]
 ----
-
-The table below summarizes the annotation's attributes.
-
-.`@Mixin` attributes
-[cols="2,2,4a",options="header"]
-|===
-
-
-| Attribute
-| Values (default)
-| Description
-
-
-|xref:refguide:applib-ant:Mixin.adoc#method[`method()`]
-|Method name within the mixin
-|How to recognize the "reserved" method name, meaning that the mixin's own name will be inferred from the mixin type.
+<.> xref:refguide:applib-ant:Mixin.adoc#method[`method()`]
++
+Determines how to recognize the "reserved" method name, meaning that the mixin's own name will be inferred from the mixin type.
 Typical examples are "exec", "execute", "invoke", "apply" and so on.
 The default "reserved" method name is `$$`.
 
-|===
 
 An alternative and equivalent approach is to use the
 xref:refguide:applib-ant:DomainObject.adoc#nature[`@DomainObject#nature()`] annotation with a nature of `MIXIN`.

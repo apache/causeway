@@ -50,7 +50,8 @@ public @interface MemberOrder {
      * </ul>
      */
     // tag::refguide[]
-    String name() default "";
+    String name()           // <.>
+            default "";
 
     // end::refguide[]
     /**
@@ -59,7 +60,7 @@ public @interface MemberOrder {
      * (collections aren't grouped).
      */
     // tag::refguide[]
-    String sequence();
+    String sequence();      // <.>
 
 }
 // end::refguide[]

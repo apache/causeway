@@ -11,11 +11,14 @@ The `@MemberOrder` annotation is used to specify the relative order of domain ob
 ----
 include::refguide:applib-ant:example$annotation/MemberOrder.java[tags="refguide"]
 ----
+<.> xref:refguide:applib-ant:MemberOrder.adoc#name[`name()`]
++
+Names a group of (property) members.
+All properties with this name will be grouped together.
 
-The annotation defines two attributes:
-
-* xref:refguide:applib-ant:MemberOrder.adoc#name[`name()`]
-* xref:refguide:applib-ant:MemberOrder.adoc#sequence[`sequence()`]
+<.> xref:refguide:applib-ant:MemberOrder.adoc#sequence[`sequence()`]
++
+Defines an ordering for members, within their container.
 
 As this is an important topic, there is a xref:vw:ROOT:layout.adoc[separate chapter] that discussed object layout in full.
 

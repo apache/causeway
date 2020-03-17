@@ -4,26 +4,52 @@ export ANTORA_CACHE_DIR=.antora-cache-dir
 export ANTORA_TARGET_SITE=antora/target/site
 
 PLAYBOOK_FILE=antora/playbooks/site.yml
-while getopts 'ecf:aksxyh' opt
+
+while getopts 'ECAKSecaksxyhf:' opt
 do
   case $opt in
+    E) export SKIP_EXAMPLES=false
+       forcing=true ;;
+    C) export SKIP_CONFIGS=false
+       forcing=true ;;
+    A) export SKIP_GENERATION=false
+       export SKIP_CLEAR_CACHE=false
+       export SKIP_CLEAR_PREVIOUS=false
+       forcing=true ;;
+    K) export SKIP_STALE_EXAMPLE_CHECK=false
+       forcing=true ;;
+    S) export SKIP_SERVE=false
+       forcing=true ;;
+
     e) export SKIP_EXAMPLES=true ;;
     c) export SKIP_CONFIGS=true ;;
-    f) PLAYBOOK_FILE=$OPTARG ;;
-    a) export SKIP_GENERATION=true ;;
+    a) export SKIP_GENERATION=true
+       export SKIP_CLEAR_CACHE=true
+       export SKIP_CLEAR_PREVIOUS=true
+      ;;
     k) export SKIP_STALE_EXAMPLE_CHECK=true ;;
     s) export SKIP_SERVE=true ;;
+
     x) export SKIP_CLEAR_CACHE=true ;;
     y) export SKIP_CLEAR_PREVIOUS=true ;;
+    f) PLAYBOOK_FILE=$OPTARG ;;
     h) echo ""
        echo "preview.sh options:"
+       echo ""
+       echo "  Skip options:"
        echo "  -e skip examples"
        echo "  -k skip stale example check"
        echo "  -c skip config doc generation"
        echo "  -a skip Antora generation"
        echo "  -s skip serving generated site"
-       echo "  -x skip clear Antora cache"
-       echo "  -y skip clear any previous build site"
+       echo ""
+       echo "  Force options (override skip):"
+       echo "  -E force examples"
+       echo "  -K force stale example check"
+       echo "  -C force config doc generation"
+       echo "  -A force Antora generation"
+       echo "  -S force serving generated site"
+       echo ""
        echo "  -f antora/playbooks/site-xxx.yml"
        exit 1
        ;;
@@ -32,6 +58,36 @@ do
       ;;
   esac
 done
+
+if [ "$forcing" = "true" ]; then
+    if [ -z "$SKIP_EXAMPLES" ]; then
+      export SKIP_EXAMPLES=true
+    fi
+    if [ -z "$SKIP_CONFIGS" ]; then
+      export SKIP_CONFIGS=true
+    fi
+    if [ -z "$SKIP_GENERATION" ]; then
+      export SKIP_GENERATION=true
+      export SKIP_CLEAR_CACHE=true
+      export SKIP_CLEAR_PREVIOUS=true
+    fi
+    if [ -z "$SKIP_STALE_EXAMPLE_CHECK" ]; then
+      export SKIP_STALE_EXAMPLE_CHECK=true
+    fi
+    if [ -z "$SKIP_SERVE" ]; then
+      export SKIP_SERVE=true
+    fi
+fi
+
+echo ""
+echo "SKIP_EXAMPLES              : $SKIP_EXAMPLES"
+echo "SKIP_STALE_EXAMPLE_CHECK   : $SKIP_STALE_EXAMPLE_CHECK"
+echo "SKIP_CONFIGS               : $SKIP_CONFIGS"
+echo "SKIP_GENERATION (Antora)   : $SKIP_GENERATION"
+echo "SKIP_SERVE                 : $SKIP_SERVE"
+echo "SKIP_CLEAR_PREVIOUS (site) : $SKIP_CLEAR_PREVIOUS"
+echo "SKIP_CLEAR_CACHE (template): $SKIP_SKIP_CLEAR_CACHE"
+echo ""
 
 if [[ "$SKIP_CLEAR_CACHE" == "true" ]]; then
   echo "skipping clearing the Antora cache"

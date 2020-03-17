@@ -1,9 +1,6 @@
 package org.apache.isis.applib.services.wrapper.control;
 
-import java.util.function.Consumer;
-
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.applib.services.wrapper.control.AsyncControl;
 import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 
 import lombok.AccessLevel;
@@ -29,7 +26,7 @@ public enum ExecutionMode {
      * Skip actual execution.
      *
      * <p>
-     * This is not supported for {@link WrapperFactory#async(Object, AsyncControl)}; instead just invoke {@link WrapperFactory#wrap(Object, ImmutableEnumSet)}.
+     * This is not supported for {@link WrapperFactory#asyncWrap(Object, AsyncControl)}; instead just invoke {@link WrapperFactory#wrap(Object, ImmutableEnumSet)}.
      */
     // tag::refguide[]
     SKIP_EXECUTION,

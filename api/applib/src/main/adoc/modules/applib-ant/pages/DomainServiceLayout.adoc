@@ -17,7 +17,7 @@ The annotation is:
 ----
 include::refguide:applib-ant:example$annotation/DomainServiceLayout.java[tags="refguide"]
 ----
-<.> xref:refguide:applib-ant:DomainServiceLayout.adoc#menuBar[`menuBar()`]
+<.> xref:refguide:applib-ant:DomainServiceLayout.adoc#menubar[`menuBar()`]
 +
 The menubar in which the menu that holds this service's actions should reside:
 +

@@ -1167,3 +1167,8 @@ body.mobile-nav-active #mobile-nav-toggle {
   color: wheat;
   background-color: darkslateblue;
 }
+
+img.helloworld-copy,
+img.simpleapp-copy {
+  cursor: pointer;
+}

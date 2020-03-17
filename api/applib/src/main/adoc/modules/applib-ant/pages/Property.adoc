@@ -28,7 +28,7 @@ Whether to execute the command immediately, or to persist it (assuming that an a
 +
 If the `Command` also implements `CommandWithDto` (meaning that it can return a `CommandDto`, in other words be converted into an XML memento), then optionally specifies the implementation of a `CommandDtoProcessor` that can refine this XML.
 
-<.> xref:refguide:applib-ant:Property.adoc#domainEvent[`domainEvent()`]
+<.> xref:refguide:applib-ant:Property.adoc#domainevent[`domainEvent()`]
 +
 The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] to broadcast the property's business rule checking (hide, disable, validate) and its modification (before and after).
 
@@ -40,7 +40,7 @@ Whether a property can be modified or cleared from within the UI
 +
 The reason that this property cannot be modified.
 
-<.> xref:refguide:applib-ant:Property.adoc#fileAccept[`fileAccept()`]
+<.> xref:refguide:applib-ant:Property.adoc#fileaccept[`fileAccept()`]
 +
 Hints the file type (media type or file extension) to be uploaded to a xref:refguide:applib-cm:classes/value-types.adoc#Blob[`Blob`]
  or xref:refguide:applib-cm:classes/value-types.adoc#Clob[`Clob`]. +
@@ -51,17 +51,17 @@ Note that this does not prevent the user from uploading some other file type; ra
 +
 Indicates where (in the UI) the property should be hidden from the user.
 
-<.> xref:refguide:applib-ant:Property.adoc#maxLength[`maxLength()`]
+<.> xref:refguide:applib-ant:Property.adoc#maxlength[`maxLength()`]
 +
 Maximum number of characters for string parameters; ignored otherwise +
 +
 TIP: In many/most cases you should however use xref:refguide:applib-ant:Column.adoc[`@Column#length()`]
 
-<.> xref:refguide:applib-ant:Property.adoc#mementoSerialization[`mementoSerialization()`]
+<.> xref:refguide:applib-ant:Property.adoc#mementoserialization[`mementoSerialization()`]
 +
 Whether to exclude from snapshots. +
 
-<.> xref:refguide:applib-ant:Property.adoc#mustSatisfy[`mustSatisfy()`]
+<.> xref:refguide:applib-ant:Property.adoc#mustsatisfy[`mustSatisfy()`]
 +
 Implementation of `o.a.i.applib.spec.Specification` that allows arbitrary validation to be applied.
 
@@ -79,7 +79,7 @@ Indicates that owning object is a view model that is acting as a projection of t
 +
 Determines whether the editing of a property should be published.
 
-<.> xref:refguide:applib-ant:Property.adoc#regexPattern[`regexPattern()`]
+<.> xref:refguide:applib-ant:Property.adoc#regexpattern[`regexPattern()`]
 +
 Validates the contents of a string parameter against the regular expression pattern
 

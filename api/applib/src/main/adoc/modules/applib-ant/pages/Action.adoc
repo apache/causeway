@@ -9,20 +9,16 @@ The `@Action` annotation groups together all domain-specific metadata for an inv
 ----
 include::refguide:applib-ant:example$annotation/Action.java[tags="refguide"]
 ----
-<.> xref:refguide:applib-ant:Action.adoc#associateWith[`associateWith()`]
+<.> xref:refguide:applib-ant:Action.adoc#associatewith[`associateWith()`]
 +
 associates an action with another property or collection of the action.
 
-<.> xref:refguide:applib-ant:Action.adoc#associateWith[`associateWith()`]
+<.> `associateWithSequence()`
 +
-associates an action with another property or collection of the action.
-
-<.> xref:refguide:applib-ant:Action.adoc#associateWith[`associateWithSequence()`]
-associates an action with another property or collection of the action.
+the ordering of multiple actions associated with another property/collection.
 
 <.> xref:refguide:applib-ant:Action.adoc#command[`command()`]
-whether the action invocation should be reified into a `o.a.i.applib.` +
-`services.command.Command` object through the xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`] service:
+whether the action invocation should be reified into a `Command` object using the xref:refguide:applib-svc:CommandContext.adoc[`CommandContext`] service:
 
 <.> `commandExecuteIn()`
 +
@@ -36,7 +32,7 @@ Whether the reified `Command` (as provided by the `CommandContext` domain servic
 +
 If the `Command` also implements `CommandWithDto` (meaning that it can return a `CommandDto`, in other words be converted into an XML memento), then optionally specifies a processor that can refine this XML.
 
-<.> xref:refguide:applib-ant:Action.adoc#domainEvent[`domainEvent()`]
+<.> xref:refguide:applib-ant:Action.adoc#domainevent[`domainEvent()`]
 +
 The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] to broadcast the action's business rule checking (hide, disable, validate) and its invocation (pre-execute and post-execute).
 
@@ -48,7 +44,7 @@ Indicates where (in the UI) the action should be hidden from the user.
 +
 Whether the action invocation should be published to the registered xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`].
 
-<.> xref:refguide:applib-ant:Action.adoc#restrictTo[`restrictTo()`]
+<.> xref:refguide:applib-ant:Action.adoc#restrictto[`restrictTo()`]
 +
 Whether the action is only available in prototyping mode, or whether it is available also in production mode.
 
@@ -58,7 +54,7 @@ The action's semantics (ie whether objects are modified as the result of invokin
 +
 The `...ARE_YOU_SURE` variants cause a confirmation dialog to be displayed in the xref:vw:ROOT:about.adoc[Wicket viewer].
 
-<.> xref:refguide:applib-ant:Action.adoc#typeOf[`typeOf()`]
+<.> xref:refguide:applib-ant:Action.adoc#typeof[`typeOf()`]
 +
 If the action returns a collection, hints as to the run-time type of the objects within that collection (as a fallback)
 
