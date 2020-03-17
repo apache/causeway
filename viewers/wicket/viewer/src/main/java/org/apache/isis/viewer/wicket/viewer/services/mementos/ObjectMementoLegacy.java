@@ -26,6 +26,7 @@ import java.util.function.Function;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
+import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -218,6 +219,10 @@ final class ObjectMementoLegacy implements Serializable {
                     ObjectMementoLegacy memento,
                     SpecificationLoader specificationLoader) {
 
+                if(_NullSafe.isEmpty(memento.persistentOidStr)) {
+                    return ManagedObject.empty(); 
+                }
+                
                 RootOid rootOid = Oid.unmarshaller().unmarshal(memento.persistentOidStr, RootOid.class);
                 try {
 
@@ -438,11 +443,11 @@ final class ObjectMementoLegacy implements Serializable {
             return null;
         }
 
-        // intercept when trivial
+        // intercept when managed by IoCC
         if(spec.getBeanSort().isManagedBean()) {
             return spec.getMetaModelContext().lookupServiceAdapterById(objectSpecId.asString());
         }
-
+        
         return cardinality.asAdapter(this, specificationLoader);
     }
 

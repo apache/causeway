@@ -18,11 +18,6 @@
  */
 package org.apache.isis.applib.services.wrapper.control;
 
-import java.util.function.Consumer;
-
-import lombok.SneakyThrows;
-import lombok.extern.log4j.Log4j2;
-
 /**
  */
 // tag::refguide[]
