@@ -62,7 +62,7 @@ import lombok.val;
     IsisModuleExtSecmanEncryptionJbcrypt.class,
 })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
-//@Incubating("does not work with surefire")
+@Incubating("does not work with surefire")
 class ShiroSecmanTest extends AbstractShiroTest {
 
     @Inject SecurityModuleConfig securityConfig;

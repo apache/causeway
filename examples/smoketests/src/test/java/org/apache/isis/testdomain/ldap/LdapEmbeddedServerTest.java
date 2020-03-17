@@ -35,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 
 import lombok.val;
@@ -44,6 +45,7 @@ import lombok.val;
         classes = {LdapServerService.class}
 )
 @Disabled // not sure why...
+@Incubating("teardown issues?")
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 class LdapEmbeddedServerTest {
 

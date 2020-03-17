@@ -80,7 +80,7 @@ import lombok.val;
     IsisModuleExtSecmanPersistenceJdo.class,
     IsisModuleExtSecmanEncryptionJbcrypt.class,
 })
-//@Incubating("does not work with surefire")
+@Incubating("does not work with surefire")
 class ShiroSecmanLdapTest extends AbstractShiroTest {
 
     @Inject FixtureScripts fixtureScripts;

@@ -55,7 +55,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<parallel>suites</parallel>
-					<forkCount>2.5C</forkCount>
+					<forkCount>1.0C</forkCount>
 					<reuseForks>false</reuseForks>
 				</configuration>
 				<executions>
