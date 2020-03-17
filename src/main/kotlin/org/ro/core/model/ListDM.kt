@@ -19,7 +19,6 @@ class ListDM(override val title: String) : DisplayModel() {
     var propertyLayoutList = mutableListOf<PropertyLt>()
 
     override fun canBeDisplayed(): Boolean {
-        console.log("[DL.canBeDisplayed]")
         when {
             isRendered -> return false
             layout == null -> return false
@@ -29,9 +28,11 @@ class ListDM(override val title: String) : DisplayModel() {
                 val pls = propertyLayoutList.size
                 val pds = propertyDescriptionList.size
                 val descriptionsComplete = ps >= pls
-                console.log("[DL.canBeDisplayed] properties: $ps")
-                console.log("[DL.canBeDisplayed] propertyLayout: $pls")
-                console.log("[DL.canBeDisplayed] propertyDescriptions: $pds")
+                if (descriptionsComplete) {
+                    console.log("[ListDM.canBeDisplayed] properties: $ps")
+                    console.log("[ListDM.canBeDisplayed] propertyLayout: $pls")
+                    console.log("[ListDM.canBeDisplayed] propertyDescriptions: $pds")
+                }
                 return descriptionsComplete //&& propertiesComplete
             }
         }
@@ -40,6 +41,7 @@ class ListDM(override val title: String) : DisplayModel() {
     fun addLayout(layout: Layout) {
         this.layout = layout
         initPropertyLayoutList(layout)
+        console.log("[ListDM.addLayout] propertyLayoutList: ${propertyLayoutList.size}")
     }
 
     private fun initPropertyLayoutList(layout: Layout) {
@@ -50,15 +52,14 @@ class ListDM(override val title: String) : DisplayModel() {
 
     private fun initLayout4Row(r: RowLt) {
         r.cols.forEach { cs ->
-            cs.getColList().forEach { c ->
-                c.fieldSet.forEach { fs ->
-                    propertyLayoutList.addAll(fs.property)
-                }
-                c.tabGroup.forEach { tg ->
-                    tg.tab.forEach { t ->
-                        t.row.forEach { r ->
-                            initLayout4Row(r)
-                        }
+            val c = cs.getCol()
+            c.fieldSet.forEach { fs ->
+                propertyLayoutList.addAll(fs.property)
+            }
+            c.tabGroup.forEach { tg ->
+                tg.tab.forEach { t ->
+                    t.row.forEach { r2 ->
+                        initLayout4Row(r2)
                     }
                 }
             }
@@ -79,7 +80,7 @@ class ListDM(override val title: String) : DisplayModel() {
     }
 
     fun addProperty(property: Property) {
-        console.log("[DL.addProperty]")
+//        console.log("[DL.addProperty]")
         propertyList.add(property)
     }
 

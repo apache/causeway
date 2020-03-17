@@ -1,11 +1,10 @@
 package org.ro.core.aggregator
 
+import org.ro.core.event.EventState
 import org.ro.core.event.LogEntry
 import org.ro.core.model.ListDM
 import org.ro.layout.Layout
-import org.ro.to.Property
-import org.ro.to.ResultList
-import org.ro.to.TObject
+import org.ro.to.*
 import org.ro.to.bs3.Grid
 import org.ro.ui.kv.UiManager
 
@@ -24,18 +23,21 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
 
     override fun update(logEntry: LogEntry, subType: String) {
 
-        when (val obj = logEntry.getTransferObject()) {
-            null -> log(logEntry)
-            is ResultList -> handleList(obj)
-            is TObject -> handleObject(obj)
-            is Layout -> handleLayout(obj)
-            is Grid -> handleGrid(obj)
-            is Property -> handleProperty(obj)
-            else -> log(logEntry)
-        }
+        //TODO duplicates should be caught earlier IMPROVE
+        if (logEntry.state != EventState.DUPLICATE) {
+            when (val obj = logEntry.getTransferObject()) {
+                null -> log(logEntry)
+                is ResultList -> handleList(obj)
+                is TObject -> handleObject(obj)
+                is Layout -> handleLayout(obj)
+                is Grid -> handleGrid(obj)
+                is Property -> handleProperty(obj)
+                else -> log(logEntry)
+            }
 
-        if (dsp.canBeDisplayed()) {
-            UiManager.openListView(this)
+            if (dsp.canBeDisplayed()) {
+                UiManager.openListView(this)
+            }
         }
     }
 
@@ -58,26 +60,25 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
 
     private fun handleLayout(layout: Layout) {
         val dspl = dsp as ListDM
-        dspl.addLayout(layout)
-        console.log("[LA.handleLayout] dspl.propertyList")
-        console.log(dspl.propertyList)
-        dspl.propertyList.forEach { p ->
-            val l = p.links.firstOrNull { it.rel == "describedby" }!!
-            if (!l.href.contains("datanucleus")) {
+        // TODO layout is passed in at least twice.
+        //  Eventually due to parallel invocations  - only once required -> IMPROVE
+        if (dspl.layout == null) {
+            dspl.addLayout(layout)
+        }
+        dspl.propertyLayoutList.forEach { p ->
+            val l = p.link!!
+            if (!l.href.contains("datanucleus")) { //invoking DN links lead to an error
                 l.invokeWith(this)
             }
         }
     }
 
     private fun handleGrid(grid: Grid) {
-        console.log("[LA.handleGrid]")
         (dsp as ListDM).grid = grid
     }
 
     private fun handleProperty(p: Property) {
         val dspl = dsp as ListDM
-        console.log("[LA.handleProperty]")
-        console.log(p)
         if (p.isPropertyDescription()) {
             dspl.addPropertyDescription(p)
         } else {
@@ -89,6 +90,26 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
     override fun reset(): ListAggregator {
         dsp.reset()
         return this
+    }
+
+    private fun Property.descriptionLink(): Link? {
+        return links.find {
+            it.rel == RelType.DESCRIBEDBY.type
+        }
+    }
+
+    /**
+     * property-description's have extensions.friendlyName whereas
+     * plain properties don't have them  cf.:
+     * FR_PROPERTY_DESCRIPTION
+     * FR_OBJECT_PROPERTY_
+     */
+    private fun Property.isPropertyDescription(): Boolean {
+        val hasExtensions = extensions != null
+        if (!hasExtensions) {
+            return false
+        }
+        return extensions!!.friendlyName.isNotEmpty()
     }
 
 }
