@@ -9,7 +9,7 @@ This guide documents Apache Isis' domain services, both those that act as an API
 
 == Types of Domain Service
 
-The domain services can be categories as API or SPI, and relating to a particular architectural layers:
+The domain services can be categorised as API or SPI, and within a particular architectural layer:
 
 image::reference-services/categories.png[width="600px",link="{imagesdir}/reference-services/categories.png"]
 
