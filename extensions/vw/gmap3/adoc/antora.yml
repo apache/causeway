@@ -15,12 +15,5 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-name: setupguide
-title: "Setup Guide"
+name: vw
 version: latest
-start_page: ROOT:about.adoc
-nav:
-- modules/ROOT/nav.adoc
-- modules/intellij/nav.adoc
-- modules/eclipse/nav.adoc
-- modules/hints-and-tips/nav.adoc

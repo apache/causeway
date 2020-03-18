@@ -130,6 +130,9 @@ content:
       start_path: extensions/vw/fullcalendar/adoc # vw
       branches: HEAD
     - url: .
+      start_path: extensions/vw/gmap3/adoc # vw
+      branches: HEAD
+    - url: .
       start_path: extensions/vw/pdfjs/adoc # vw
       branches: HEAD
 
@@ -237,6 +240,9 @@ content:
       branches: HEAD
     - url: .
       start_path: subdomains/pdfbox/adoc # subdomains
+      branches: HEAD
+    - url: .
+      start_path: subdomains/settings/adoc # subdomains
       branches: HEAD
     - url: .
       start_path: subdomains/spring/adoc # subdomains

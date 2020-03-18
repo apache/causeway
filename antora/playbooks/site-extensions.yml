@@ -61,6 +61,9 @@ content:
       start_path: extensions/vw/fullcalendar/adoc # vw
       branches: HEAD
     - url: .
+      start_path: extensions/vw/gmap3/adoc # vw
+      branches: HEAD
+    - url: .
       start_path: extensions/vw/pdfjs/adoc # vw
       branches: HEAD
 

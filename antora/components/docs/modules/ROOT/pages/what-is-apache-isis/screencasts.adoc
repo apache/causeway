@@ -1,15 +1,12 @@
 = Screencasts
-:page-role: -toc
+:page-role: -narrow -toc
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
 // TODO: v2: NICE-TO-HAVE: update these screenshots for v2
 
-We've prepared a number of screencasts to help you see what Apache Isis has to offer; the following were recorded using Apache Isis v1.12.x.
-
-NOTE: these screencasts were recorded using v1.12.x.
-There have since been a number of UI improvements since these releases.
+We've prepared a number of screencasts to help you see what Apache Isis has to offer.
 
 While these each follow on from each other, you should be able to watch them in any order; the typical duration is
 3 minutes.
@@ -22,7 +19,12 @@ link:https://www.youtube.com/playlist?list=PLbRpnAmQ6xsA-m4d2iwAuWrX1icJz0SnM[AL
 can use one of the themed playlists to explore particular aspects of the framework.
 The table below indicates which screencasts are in which playlist.
 
-There are some screencasts relating to the Apache Isis documentation: link:https://www.youtube.com/watch?v=vJYeuVfrctc[using/searching^] docs, and link:https://www.youtube.com/watch?v=RQ_FFYd7npU[contributing patches/editing ^].
+[NOTE]
+====
+These screencasts were recorded using v1.12.x.
+There have since been a number of UI improvements since these releases.
+====
+
 
 Finally, you can also find some screencasts for earlier versions of the framework link:./screencasts-older.html[here].
 
@@ -629,19 +631,19 @@ Improving the layout of domain entities by adding a metadata fieldset.
 ||||x|||||||
 
 
-12+| *for Contributors and Committers*
-
-include::screencasts/playlists.adoc[]
-
-
-|https://www.youtube.com/watch?v=RQ_FFYd7npU[068^] +
-Contributing to the documentation
-|||||||||||x
-
-
-|https://youtu.be/CKSLZBBHjME[069^] +
-Merging pull requests
-|||||||||||x
+//12+| *for Contributors and Committers*
+//
+//include::screencasts/playlists.adoc[]
+//
+//
+//|https://www.youtube.com/watch?v=RQ_FFYd7npU[068^] +
+//Contributing to the documentation
+//|||||||||||x
+//
+//
+//|https://youtu.be/CKSLZBBHjME[069^] +
+//Merging pull requests
+//|||||||||||x
 
 
 |===

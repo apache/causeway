@@ -4,7 +4,7 @@
 
 The quickest way to get started building an application "for real" is to use the `simpleapp` starter app.
 
-As with the xref:docs:starters:helloworld.adoc[HelloWorld] startre app, this will download a very simple one-class domain model, namely the `SimpleObject` entity and a supporting `SimpleObjects` domain service.
+As with the xref:docs:starters:helloworld.adoc[HelloWorld] starter app, this will download a very simple one-class domain model, namely the `SimpleObject` entity and a supporting `SimpleObjects` domain service.
 
 However, the app also provides more structure to assist you as your application grows, with multiple Maven modules, and examples of unit tests, integration tests and BDD (cucumber) specs.
 
@@ -14,7 +14,7 @@ However, the app also provides more structure to assist you as your application 
 
 Apache Isis is a Java based framework, so in terms of prerequisites, you'll need to install:
 
-* Java 8 JDK
+* an LTS version of Java: either Java 8 JDK or Java 11 JDK
 * link:http://maven.apache.org[Apache Maven] 3.5+
 
 You'll probably also want to use an IDE; the Apache Isis committers use either IntelliJ or Eclipse; in the xref:setupguide:ROOT:about.adoc[Setup Guide] we have detailed setup instructions for using these two IDEs.

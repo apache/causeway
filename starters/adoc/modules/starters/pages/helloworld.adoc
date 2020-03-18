@@ -5,7 +5,7 @@
 
 The quickest way to start learning about Apache Isis is to use the `helloworld` starter app.
 
-This will download a tiny Apache Isis app, consisting of a simple one-class domain model, namely the `HelloWorldObject` entity and a supporting `HelloWorldObjects` domain service.
+This will download a tiny Apache Isis app, consisting of a simple one-class domain model, namely the `HelloWorldObject` entity and a supporting `HelloWorldObjects` repository domain service.
 Both the business logic and supporting bootstrapping classes are in a single Maven module (in different Java packages).
 
 [TIP]
@@ -20,7 +20,7 @@ It also creates a minimal application, but provides more structure and example t
 
 Apache Isis is a Java based framework, so in terms of prerequisites, you'll need to install:
 
-* Java 8 JDK
+* an LTS version of Java: either Java 8 JDK or Java 11 JDK
 * link:http://maven.apache.org[Apache Maven] 3.5+
 
 You'll probably also want to use an IDE; the Apache Isis committers use either IntelliJ or Eclipse; in the xref:setupguide:ROOT:about.adoc[Setup Guide] we have detailed setup instructions for using these two IDEs.
@@ -130,7 +130,7 @@ This means that the action invocation is converted into XML and dispatched to al
 
 The framework provides a default implementation that just logs the interaction:
 
-image::helloworld/using/075-logged-action.png[width="600px",link="{imagesdir}using/075-logged-action.png.png"]
+image::helloworld/using/075-logged-action.png[width="600px",link="{imagesdir}using/075-logged-action.png"]
 
 
 ==== Edit a property
@@ -243,12 +243,12 @@ Modules may have other packages, common ones include ``types`` (as below), also 
 The associated `.layout.xml` and `.png` are optional but provide metadata/resources for rendering (Maven is configured to also treat `src/main/java` as a resource location).
 <5> The `types` package contains meta-annotations to describe the usage of common value types such as ``String``s.
 <6> `HelloWorldModule` is a Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] which allows the domain services and entities of the module to be located. +
-This is discussed in more detail below
+This is discussed in more detail xref:#helloworldmodule[below].
 <7> `AppManifest` is the top-level Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] that specifies the components of Apache Isis to use, along with the modules making up the application itself (ie `HelloWorldModule`). +
-This is discussed in more detail below
+This is discussed in more detail xref:#appmanifest[below].
 <8> `HelloWorldApp` is the link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/autoconfigure/SpringBootApplication.html[@SpringBootApplication] used to bootstrap the app.
 It's pretty much boilerplate - the important piece is that it references `AppManifest`. +
-This is discussed in more detail below
+This is discussed in more detail xref:#helloworldapp[below].
 <9> The `persistence.xml` file is required when using the JDO/DataNucleus object store (though it is basically boilerplate, an empty file).
 
 
@@ -275,7 +275,7 @@ If there were, these would be expressed in terms of module classes (each being a
 
 The scanning mechanism is leveraged by Apache Isis to pick up three types of classes:
 
-This will pick up the `HelloWorldObjects` repository because it is annotated with the framework's xref:refguide:applib-ant:DomainService.adoc[@DomainService] annotation; itself meta-annotated with `@Component`.
+This will pick up the `HelloWorldObjects` repository because it is annotated with the framework's xref:refguide:applib-ant:DomainService.adoc[@DomainService] annotation (in turn meta-annotated with `@Component`).
 
 * all domain services
 +
@@ -290,7 +290,8 @@ This appears in the menu, and also acts as a repository for the `HelloWorldObjec
 * all entities.
 +
 These are entities that are annotated with `@javax.jdo.annotations.PersistenceCapable`.
-These are passed through to the JDO/DataNucleus object store, in order to create database mappings from the entities to relational tables
+These are passed through to the JDO/DataNucleus object store, in order to create database mappings from the entities to relational tables.
+It is also annotated with xref:refguide:applib-ant:DomainObject.adoc[`@DomainObject`]
 +
 In the helloworld starter app, the only entity is `HelloWorldObject`.
 
@@ -364,13 +365,18 @@ public class HelloWorldApp
 <2> specifies prototyping mode.
 This enables actions marked for prototyping to become available, useful during the early stages of development.
 +
-TIP: As an alternative to making this call, you can also just run with a system property `-DPROTOTYPING=true`
+[TIP]
+====
+As an alternative to making this call, you can also just run with a system property:
+
+`-DPROTOTYPING=true`
+====
 
 === src/main/resources
 
 Under `src/main/resources` we have:
 
-[source]
+[source,ini]
 ----
 src/main/resources
   config/
@@ -441,11 +447,11 @@ This inherits from `isis-app-starter-parent`:
 [source,xml]
 .pom.xml
 ----
-	<parent>
-		<groupId>org.apache.isis.app</groupId>
-		<artifactId>isis-app-starter-parent</artifactId>
-		<version>XXX</version>
-	</parent>
+<parent>
+  <groupId>org.apache.isis.app</groupId>
+  <artifactId>isis-app-starter-parent</artifactId>
+  <version>XXX</version>
+</parent>
 ----
 
 \... which builds upon Spring Boot's own `org.springframework.boot:spring-boot-starter-parent`.
@@ -467,7 +473,7 @@ Here's what the setup looks like in IntelliJ IDEA:
 
 image::helloworld/helloworld.png[width="600px",link="{imagesdir}/helloworld/helloworld.png"]
 
-which uses an IntelliJ feature to run a different run configuration to run DataNucleus enhancer beforehand:
+which uses an IntelliJ feature to execute a different _Run Configuration_ for the DataNucleus enhancer beforehand:
 
 image::helloworld/helloworld-before-launch.png[width="600px",link="{imagesdir}/helloworld/helloworld-before-launch.png"]
 

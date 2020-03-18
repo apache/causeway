@@ -101,24 +101,20 @@ For example, when a collection of objects is rendered, this is just one of sever
 
 image::what-is-apache-isis/isis-in-pictures/070-pluggable-views.png[width="800px",link="{imagesdir}/what-is-apache-isis/isis-in-pictures/070-pluggable-views.png"]
 
-
-The (non-ASF) link:https://platform.incode.org[Incode Platform^] provides a number of such extensions.
-For example, the gmap3 component will render any domain entity (such as `ToDoItem`) that implements its `Locatable` interface:
+There are a number of optional extensions provided with the framework.
+One such is the xref:vw:gmap3:about.adoc[Gmap3] extension, that will render any domain entity (such as `ToDoItem`) that implements its `Locatable` interface:
 
 image::what-is-apache-isis/isis-in-pictures/080-gmap3-view.png[width="800px",link="{imagesdir}/what-is-apache-isis/isis-in-pictures/080-gmap3-view.png"]
 
 
 
 
-Similarly the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s fullcalendar2 component will render any domain entity (such as `ToDoItem`) that implements its `Calendarable` interface:
+Similarly the xref:vw:fullcalendar:about.adoc[Fullcalendar2] extension will render any domain entity (such as `ToDoItem`) that implements its `Calendarable` interface:
 
 image::what-is-apache-isis/isis-in-pictures/090-fullcalendar2-view.png[width="800px",link="{imagesdir}/what-is-apache-isis/isis-in-pictures/090-fullcalendar2-view.png"]
 
 
-
-
-
-Yet another "view" (though this one is rather simpler) is that provided by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s excel Wicket component This provides a download button to the table as a spreadsheet:
+The xref:vw:exceldownload:about.adoc[Excel Download] component is rather simplier: it simply provides a download button to the table as a spreadsheet:
 
 image::what-is-apache-isis/isis-in-pictures/100-excel-view-and-docx.png[width="800px",link="{imagesdir}/what-is-apache-isis/isis-in-pictures/100-excel-view-and-docx.png"]
 
@@ -126,7 +122,7 @@ image::what-is-apache-isis/isis-in-pictures/100-excel-view-and-docx.png[width="8
 
 
 The screenshot above also shows an "export to Word" action.
-This is _not_ a view but instead is a (contributed) action that uses the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s docx module to perform a "mail-merge":
+This is _not_ a view but instead is a (contributed) action that uses the xref:subdomains:docx:about.adoc[Docx Library] to perform a "mail-merge":
 
 image::what-is-apache-isis/isis-in-pictures/110-docx.png[width="800px",link="{imagesdir}/what-is-apache-isis/isis-in-pictures/110-docx.png"]
 
@@ -155,7 +151,7 @@ image::what-is-apache-isis/isis-in-pictures/140-i18n.png[width="800px",link="{im
 
 
 
-The (non-ASF) link:https://platform.incode.org[Incode Platform^] also provides a module for managing application and user settings.
+Thexref:subdomains:settings:about.adoc[Settings] module manages application and user settings.
 Most apps (the todoapp example included) won't expose these services directly, but will usually wrap them in their own app-specific settings service that trivially delegates to the settings module's services:
 
 image::what-is-apache-isis/isis-in-pictures/150-appsettings.png[width="800px",link="{imagesdir}/what-is-apache-isis/isis-in-pictures/150-appsettings.png"]

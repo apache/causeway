@@ -65,6 +65,9 @@ content:
       start_path: subdomains/pdfbox/adoc # subdomains
       branches: HEAD
     - url: .
+      start_path: subdomains/settings/adoc # subdomains
+      branches: HEAD
+    - url: .
       start_path: subdomains/spring/adoc # subdomains
       branches: HEAD
     - url: .
