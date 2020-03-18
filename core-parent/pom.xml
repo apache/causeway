@@ -873,19 +873,14 @@ under the License.
 			</build>
 			<modules>
 				<module>../core</module>
-				<module>../extensions</module>
-<!--
-				<module>../incubator</module>
-				<module>../legacy</module>
-				<module>../mappings</module>
--->
 				<module>../mavendeps</module>
 				<module>../starters</module>
-<!--
-				<module>../subdomains</module>
--->
 				<module>../testing</module>
+				<module>../extensions</module>
 <!--
+				<module>../legacy</module>
+				<module>../mappings</module>
+				<module>../subdomains</module>
 				<module>../valuetypes</module>
 -->
 			</modules>
@@ -894,7 +889,7 @@ under the License.
 
 		<!-- APACHE ISIS customisation 7/7: start -->
 		<profile>
-			<id>all-modules</id>
+			<id>core-modules</id>
 			<activation>
 				<property>
 					<name>!apache-release</name>

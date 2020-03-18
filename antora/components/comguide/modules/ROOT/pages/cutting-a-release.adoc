@@ -212,6 +212,7 @@ We use `mvn versions:set` to manually bump the release version:
 [source,bash,subs="attributes+"]
 ----
 mvn versions:set -DnewVersion=$ISISREL
+mvn install -o -DskipTests
 
 pushd ../starters
 mvn versions:set -DnewVersion=$ISISREL
@@ -250,7 +251,17 @@ mvn clean install -o
 Since the `<version>` has already been updated, we just use `mvn deploy` to upload the artifacts.
 We activate the (inherited) `apache-release` profile to bring in the `gpg` plugin for code signing.
 
-To build and deploy and tag, we use:
+The build creates a zip of the directory, so before executing the release we remove any other files.
+Still in the `core-parent` directory:
+
+[source,bash]
+----
+pushd ..
+git clean -dfx
+popd
+----
+
+Finally, to build and deploy and tag, we use:
 
 [source,bash,subs="attributes+"]
 ----
@@ -507,6 +518,7 @@ Once the artifacts have been uploaded, you can call a vote.
 
 In all cases, votes last for 72 hours and require a +3 (binding) vote from members.
 
+
 === Start voting thread on dev mailing list
 
 That is, link:mailto:dev@apache.isis.org[]
@@ -516,26 +528,29 @@ Adapt as required:
 
 Use the following subject, eg:
 
-[source,subs="attributes+"]
+[source,txt,subs="attributes+"]
 ----
 [VOTE] Apache Isis Core release {isisnext} RC1
 ----
 
 And use the following body:
 
-[source,subs="attributes+",txt]
+[source,txt,subs="attributes+"]
 ----
 I've just cut a new release for Apache Isis Framework.
 
-The source code artifacts have been uploaded to staging repositories on repository.apache.org.
-For each zip there is a corresponding signature file (append .asc to the zip's url).
+The source code zip artifact has been uploaded to a staging repository on
+https://repository.apache.org, along with its corresponding .asc signature.
 
-In the source code repo the code has been tagged as isis-{isisnext}-RC1; see https://github.com/apache/isis/tags
+In the source code repo the code has been tagged as isis-{isisnext}-RC1;
+see https://github.com/apache/isis/tags
 
-To verify the source code, you can use the following commands (in an empty directory):
+To verify the source code itself, you can use the following commands
+(in an empty directory):
 
-
+----------------------------------------------------------------
 VERSION={isisnext}
+RC=RC1
 NEXUSREPONUM=10xx
 
 curl https://downloads.apache.org/isis/KEYS > /tmp/KEYS
@@ -543,15 +558,17 @@ gpg --import /tmp/KEYS
 
 rm -rf isis-$VERSION*
 
-curl -O -L https://raw.githubusercontent.com/apache/isis/master/scripts/verify-isis-release.sh
+curl -O -L https://raw.githubusercontent.com/apache/isis/release-$VERSION-$RC/scripts/verify-isis-release.sh
 
 chmod +x ./verify-isis-release.sh
 ./verify-isis-release.sh $NEXUSREPONUM $VERSION
+----------------------------------------------------------------
 
+You can then test the helloworld or simpleapp starter apps, see:
+https://isis.staged.apache.org/comguide/latest/verifying-releases.html.
 
-For more details, see https://isis.apache.org/comguide/verifying-releases.html
-
-Please verify the release and cast your vote.  The vote will be open for a minimum of 72 hours.
+Please verify the release and cast your vote.
+The vote will be open for a minimum of 72 hours.
 
 [ ] +1
 [ ]  0
