@@ -197,13 +197,13 @@ public String default0UpdateName() {
 }
 ----
 <.> Publishing enabled means that the action invocation is converted into XML and dispatched to all configured implementations of the xref:refguide:applib-svc:PublisherService.adoc[PublisherService] SPI.
-
++
 The framework provides a default implementation that just logs the interaction:
-
++
 image::simpleapp/using/075-publish-logging-1.png[width="600px",link="{imagesdir}/simpleapp/using/075-publish-logging-1.png"]
-
-In fact, it also logs the fact that the object itself was modified:
-
++
+It also logs the fact that the object itself was modified:
++
 image::simpleapp/using/076-publish-logging-2.png[width="600px",link="{imagesdir}/simpleapp/using/076-publish-logging-2.png"]
 
 

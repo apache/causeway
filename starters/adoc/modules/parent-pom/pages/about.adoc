@@ -25,7 +25,7 @@ You'll see that it is used by both the xref:docs:starters:helloworld.adoc[HelloW
 
 == Relationship to other POMs
 
-The link:{attachmentsdir}/parent-pom.pptx[diagram] below shows how the parent POM relates to other POMs:
+The diagram below (link:{attachmentsdir}/parent-pom.pptx[PPT]) below shows how the parent POM relates to other POMs:
 
 image::parent-pom.png[width="800px",link="{imagesdir}/parent-pom.png"]
 

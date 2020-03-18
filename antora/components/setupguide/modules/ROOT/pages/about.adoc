@@ -6,7 +6,5 @@
 
 The vast majority of Java developers use an IDE to assist with developing their code, and we highly recommend that you do likewise as you develop your Apache Isis applications using an IDE.
 
-So the main purpose of this guide explains how to setup your IDE so you can effectively and efficiently develop your Apache Isis apps.
-
-It also provides a number of general hints-n-tips.
+The purpose of this guide therefore is to explain how to setup your IDE so you can effectively and efficiently develop your Apache Isis apps.
 

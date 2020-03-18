@@ -9,7 +9,7 @@
 ** xref:userguide:fun:crud.adoc[CRUD]
 ** xref:userguide:fun:business-rules.adoc[Business Rules]
 ** xref:userguide:fun:drop-downs-and-defaults.adoc[Drop downs and Defaults]
-** xref:userguide:fun:available-domain-services.adoc[Available Domain Services]
+
 
 
 

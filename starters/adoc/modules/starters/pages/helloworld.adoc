@@ -113,7 +113,7 @@ The above functionality is implemented by this code:
 [source,java]
 ----
 @Action(semantics = SemanticsOf.IDEMPOTENT,
-        publishing = Publishing.ENABLED,
+        publishing = Publishing.ENABLED,        // <.>
         associateWith = "name")
 public HelloWorldObject updateName(
         @Name final String name) {
@@ -124,12 +124,10 @@ public String default0UpdateName() {
     return getName();
 }
 ----
-
-The `updateName` action is annotated with publishing enabled.
-This means that the action invocation is converted into XML and dispatched to all configured implementations of the xref:refguide:applib-svc:PublisherService.adoc[PublisherService] SPI.
-
+<.> Publishing enabled means that the action invocation is converted into XML and dispatched to all configured implementations of the xref:refguide:applib-svc:PublisherService.adoc[PublisherService] SPI.
++
 The framework provides a default implementation that just logs the interaction:
-
++
 image::helloworld/using/075-logged-action.png[width="600px",link="{imagesdir}using/075-logged-action.png"]
 
 
@@ -158,13 +156,13 @@ The above functionality is implemented by this code:
 @Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)
 @ActionLayout(position = ActionLayout.Position.PANEL)
 public void delete() {
-    final String title = titleService.titleOf(this);
+    final String title = titleService.titleOf(this);                    // <.>
     messageService.informUser(String.format("'%s' deleted", title));
     repositoryService.removeAndFlush(this);
 }
 ----
+<.> Note that this method uses three services provided by the framework; these are injected into the domain object automatically.
 
-Note that this uses three services provided by the framework; these are injected into the domain object automatically.
 
 
 === Swagger (Restful Objects)

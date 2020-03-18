@@ -261,7 +261,7 @@ git clean -dfx
 popd
 ----
 
-Finally, to build and deploy and tag, we use:
+To deploy (upload the artifacts), we use:
 
 [source,bash,subs="attributes+"]
 ----
@@ -276,6 +276,8 @@ When prompted, enter your GPG passphrase.
 IMPORTANT: This requires `gpg` v2.1 or later.
 
 
+=== Tag the Release
+
 Finally, tag the release:
 
 [source,bash,subs="attributes+"]
@@ -285,7 +287,7 @@ git tag $ISISART-$ISISREL-$ISISRC
 ----
 
 
-== Check/Close Staging Repo
+=== Check/Close Staging Repo
 
 The `mvn deploy` commands will have uploaded all of the release artifacts into a newly created staging repository on the ASF Nexus repository server.
 
@@ -331,7 +333,7 @@ Unfortunately, Nexus does not seem to allow subkeys to be used for signing.
 See xref:comguide:ROOT:key-generation.adoc[Key Generation] for more details.
 ====
 
-== Reset `revision` property
+=== Reset `revision` property
 
 At the beginning of the release process we bumped the version to the release version, ie `$ISISREL`.
 With the release now deployed we now need to reset the revision back down to the base snapshot, ie `2.0.0-SNAPSHOT`.
@@ -357,7 +359,7 @@ git add ..
 git commit -m "$ISISJIRA: resetting version"
 ----
 
-== Push branches
+=== Push branch & tag
 
 Push the release branch to origin:
 
@@ -366,7 +368,7 @@ Push the release branch to origin:
 git push -u origin $ISISBRANCH
 ----
 
-and also push tags:
+and also push tag:
 
 [source,bash,subs="attributes+"]
 ----
@@ -528,16 +530,16 @@ Adapt as required:
 
 Use the following subject, eg:
 
-[source,txt,subs="attributes+"]
+[source,subs="attributes+"]
 ----
 [VOTE] Apache Isis Core release {isisnext} RC1
 ----
 
 And use the following body:
 
-[source,txt,subs="attributes+"]
+[source,subs="attributes+"]
 ----
-I've just cut a new release for Apache Isis Framework.
+I've just cut a new release of the Apache Isis Framework.
 
 The source code zip artifact has been uploaded to a staging repository on
 https://repository.apache.org, along with its corresponding .asc signature.
@@ -549,19 +551,7 @@ To verify the source code itself, you can use the following commands
 (in an empty directory):
 
 ----------------------------------------------------------------
-VERSION={isisnext}
-RC=RC1
-NEXUSREPONUM=10xx
-
-curl https://downloads.apache.org/isis/KEYS > /tmp/KEYS
-gpg --import /tmp/KEYS
-
-rm -rf isis-$VERSION*
-
-curl -O -L https://raw.githubusercontent.com/apache/isis/release-$VERSION-$RC/scripts/verify-isis-release.sh
-
-chmod +x ./verify-isis-release.sh
-./verify-isis-release.sh $NEXUSREPONUM $VERSION
+include::partial$verify-process.adoc[]
 ----------------------------------------------------------------
 
 You can then test the helloworld or simpleapp starter apps, see:
@@ -579,7 +569,7 @@ Remember to update:
 
 * the version number (`{isisnext}` or whatever)
 * the release candidate number (`RC1` or whatever)
-* the `NEXUSREPONUM` to the repository id as provided by Nexus earlier (`10xx` or whatever)
+* the `NEXUSREPONUM` to the repository id as provided by Nexus earlier (`11xx` or whatever)
 
 Note that the email also references the procedure for other committers to xref:comguide:ROOT:verifying-releases.adoc[verify the release].
 

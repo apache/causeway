@@ -6,16 +6,13 @@
 
 
 
-
-
-
 The release process consists of:
 
 * the release manager xref:comguide:ROOT:cutting-a-release.adoc[cutting the release]
 * members of the Apache Isis PMC verifying and voting on the release (documented below)
 * the release manager performing post-release tasks, for either a xref:comguide:ROOT:post-release-successful.adoc.adoc[successful] or an xref:comguide:ROOT:post-release-unsuccessful[unsuccessful] vote.
 
-This section describes some guidance on what a voter (members of the Apache Isis PMC and anyone else who wishes) is expected to xref:comguide:ROOT:release-process.adocdo before casting their vote in order to verify a release.
+This section describes some guidance on what a voter (members of the Apache Isis PMC and anyone else who wishes) is expected to do before casting their vote in order to verify a release.
 
 == Background
 
@@ -37,7 +34,7 @@ Details of how to do this are also documented below.
 You will also require the following commands/tools:
 
 * `bash` - to run shell script
-* `curl` or `wget` - to download the ZIP files
+* `curl` - to download the ZIP and ASC files
 * `gpg` - to verify signatures
 * `unzip` - to unzip the ZIP files
 * JDK 8
@@ -46,83 +43,51 @@ You will also require the following commands/tools:
 == Verifying source artifacts
 
 The easiest way to verify the source artifacts is to use a script that automates the steps.
-Run these commands (they should also be listed in the VOTE email):
+Run these commands, with the environment variables set correctly.
+(The full details should also be in the VOTE email):
 
 [source,bash,subs="attributes+"]
 ----
-VERSION={isisnext}
-NEXUSREPONUM=10xx                   # <1>
-
-curl http://www.apache.org/dist/isis/KEYS > /tmp/KEYS
-gpg --import /tmp/KEYS
-
-rm -rf isis-$VERSION*
-
-curl -O -L https://raw.githubusercontent.com/apache/isis/master/scripts/verify-isis-release.sh
-
-chmod +x ./verify-isis-release.sh
-./verify-isis-release.sh $NEXUSREPONUM $VERSION
+include::partial$verify-process.adoc[]
 ----
-<1> Adjust as per VOTE email.
 
-Just copy and paste these commands to your terminal, and run.
+The `verify-isis-release.sh` script performs these steps:
 
-The `verify-isis-release.sh` script:
+* downloads artifacts (`.zip` file and `.asc` file) from the staging repository hosted on link:https://repository.apache.org[].
 
-* downloads artifacts (`.zip` files and `.asc` files from the staging repository hosted on the Apache (Nexus) repository server.
-+
-The location of this repository will be in the VOTE email.
-
-* verifies that the signatures are correct
+* verifies that the `.asc` signature is correct
 +
 in other words, to confirm that the release was created by an Apache Isis committer
 
 * builds the framework code from source
 
-Assuming this completes successfully, you can then test the two starter applications; adjust the version if required.
+* downloads and builds the helloworld starter apps (from the correct release branch)
 
-You can if you wish perform some additional optional checks, listed in the sections below.
-Alternatively, you can xref:comguide:ROOT:verifying-releases.adoc#casting-a-vote[cast your vote].
+* ditto for the simpleapp starter app
 
-== (Optional) Verifying binary artifacts
+Assuming this completes successfully, you can then test the two starter applications:
 
-You can verify the binary releases by configuring your local Maven install to point to the Maven staging repository (or repositories) and then using them, eg to run the xref:docs:starters:helloworld.adoc[HelloWorld starter app] or the xref:docs:starters:simpleapp.adoc[SimpleApp starter app] (adjust the parent version if required).
-
-Configuring your local Maven install amounts to updating the `~/.m2/settings.xml` file:
-
-[source,xml]
+* Test out helloworld using:
++
+[source,bash]
 ----
-<profiles>
-    <profile>
-        <id>verify-isis</id>
-        <repositories>
-            <repository>
-                <id>isis-core-staging</id>
-                <name>Isis Core Staging</name>
-                <releases>
-                    <enabled>true</enabled>
-                    <updatePolicy>always</updatePolicy>
-                    <checksumPolicy>warn</checksumPolicy>
-                </releases>
-                <url>http://repository.apache.org/content/repositories/orgapacheisis-10xx</url>
-                <layout>default</layout>
-            </repository>
-            ...
-        </repositories>
-    </profile>
-    ...
-</profiles>
-<activeProfiles>
-    <activeProfile>verify-isis</activeProfile>
-    ...
-</activeProfiles>
+pushd test-helloworld/isis-app-helloworld
+mvn spring-boot:run
+popd
 ----
 
-where the repository URL is as provided in the VOTE email.
-If there is more than one repository (as is sometimes the case if multiple components have been released), then repeat the `<repository>` section for each.
+* Test out simpleapp using:
++
+[source,bash]
+----
+pushd test-simpleapp/isis-app-simpleapp
+mvn -pl webapp spring-boot:run
+popd
+----
 
-Once the vote has completed, the staging repositories will be removed and so you should deactive the profile (comment out the `<activeProfile>` element).
-If you forget to deactive the profile, there should be no adverse effects; Maven will just spend unnecessary cycles attempting to hit a non-existent repo.
+
+You can if you wish perform some additional optional checks, listed xref:#optional-creadur-tools[below].
+And/or, you can go ahead and xref:comguide:ROOT:verifying-releases.adoc#casting-a-vote[cast your vote].
 
 
 == (Optional) Creadur Tools

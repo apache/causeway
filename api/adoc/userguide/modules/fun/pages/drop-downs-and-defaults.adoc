@@ -180,6 +180,8 @@ public List<Tag> autoCompleteTag(@MinLength(1) search) {
 
 == Dependent choices for action parameters
 
+WARNING: TODO: v2: update for dependent hidden/disabled parameters.
+
 For action it is also possible (in a limited form) to define dependencies between parameters.
 Specifically, if one parameter is a drop-down choice, then other drop-down choices can be derived from it.
 
