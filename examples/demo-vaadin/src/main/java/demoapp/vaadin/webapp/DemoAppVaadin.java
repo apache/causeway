@@ -22,8 +22,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.session.IsisSessionFactoryDefault;
@@ -37,15 +35,10 @@ import demoapp.webapp.DemoApp;
  * Bootstrap the application.
  */
 @SpringBootApplication
-@PropertySources({
-    // these have no effect, instead in main() use IsisPresets.logging(...);
-    @PropertySource(IsisPresets.DebugIsisSession), 
-    @PropertySource(IsisPresets.DebugVaadin),
-})
 @Import({
     DemoApp.AppManifest.class,
     
-    // EXPERIMENTAL
+    // INCUBATING
     IsisModuleIncViewerVaadinViewer.class, // vaadin viewer
   
 })

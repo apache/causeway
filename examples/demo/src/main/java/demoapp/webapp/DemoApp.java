@@ -79,6 +79,9 @@ public class DemoApp extends SpringBootServletInitializer {
      */
     public static void main(String[] args) {
         //IsisPresets.prototyping();
+        //DebugLoggingPreset.PERSISTENCE.apply();
+        //DebugLoggingPreset.ISIS_SESSION.apply();
+        
         SpringApplication.run(new Class[] { DemoApp.class }, args);
     }
 
@@ -91,8 +94,6 @@ public class DemoApp extends SpringBootServletInitializer {
         @PropertySource(IsisPresets.NoTranslations),
         @PropertySource(IsisPresets.SilenceWicket),
         @PropertySource(IsisPresets.DataNucleusAutoCreate),
-        @PropertySource(IsisPresets.DebugIsisSession),
-        @PropertySource(IsisPresets.DebugPersistence),
     })
     @Import({
         IsisModuleCoreRuntimeServices.class,
