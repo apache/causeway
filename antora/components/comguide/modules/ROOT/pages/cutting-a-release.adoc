@@ -490,6 +490,14 @@ git commit -m "$ISISJIRA : staging changes to website"
 sh preview.sh
 ----
 
+* If happy, then push the changes:
++
+[source,bash,subs="attributes+"]
+----
+git push origin asf-staging -u
+----
+
+Wait a minute or two; the site should be available at link:https://isis.staged.apache.org[]  (nb: 'staged', not 'staging').
 
 
 
@@ -515,7 +523,7 @@ Use the following subject, eg:
 
 And use the following body:
 
-[source,subs="attributes+"]
+[source,subs="attributes+",txt]
 ----
 I've just cut a new release for Apache Isis Framework.
 
@@ -526,18 +534,20 @@ In the source code repo the code has been tagged as isis-{isisnext}-RC1; see htt
 
 To verify the source code, you can use the following commands (in an empty directory):
 
-    VERSION={isisnext}
-    NEXUSREPONUM=10xx
 
-    curl http://www.apache.org/dist/isis/KEYS > /tmp/KEYS
-    gpg --import /tmp/KEYS
+VERSION={isisnext}
+NEXUSREPONUM=10xx
 
-    rm -rf isis-$VERSION*
+curl https://downloads.apache.org/isis/KEYS > /tmp/KEYS
+gpg --import /tmp/KEYS
 
-    curl -O -L https://raw.githubusercontent.com/apache/isis/master/scripts/verify-isis-release.sh
+rm -rf isis-$VERSION*
 
-    chmod +x ./verify-isis-release.sh
-    ./verify-isis-release.sh $NEXUSREPONUM $VERSION
+curl -O -L https://raw.githubusercontent.com/apache/isis/master/scripts/verify-isis-release.sh
+
+chmod +x ./verify-isis-release.sh
+./verify-isis-release.sh $NEXUSREPONUM $VERSION
+
 
 For more details, see https://isis.apache.org/comguide/verifying-releases.html
 
