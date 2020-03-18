@@ -758,6 +758,7 @@ under the License.
 									<goal>single</goal>
 								</goals>
 								<configuration>
+									<basedir>..</basedir>
 									<runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
 									<descriptorRefs>
 										<descriptorRef>${sourceReleaseAssemblyDescriptor}</descriptorRef>
