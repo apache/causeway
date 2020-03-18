@@ -143,6 +143,11 @@
                     <cpt:named>Download Swagger Schema Definition</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
+			<mb3:section>
+                <mb3:serviceAction objectType="isisExtH2Console.H2ManagerMenu" id="openH2Console">
+                    <cpt:named>H2 Console</cpt:named>
+                </mb3:serviceAction>
+            </mb3:section>
         </mb3:menu>
         
         <mb3:menu>

@@ -47,6 +47,7 @@ import org.apache.isis.incubator.model.metamodel.IsisModuleIncModelMetaModel;
 import org.apache.isis.persistence.jdo.datanucleus5.IsisModuleJdoDataNucleus5;
 import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
+import org.apache.isis.testing.h2console.ui.IsisModuleTestingH2ConsoleUi;
 import org.apache.isis.valuetypes.asciidoc.ui.IsisModuleValAsciidocUi;
 import org.apache.isis.valuetypes.sse.ui.IsisModuleValSseUi;
 import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRestfulObjectsJaxrsResteasy4;
@@ -86,11 +87,12 @@ public class DemoApp extends SpringBootServletInitializer {
      */
     @Configuration
     @PropertySources({
-        @PropertySource(IsisPresets.HsqlDbInMemory),
+        @PropertySource(IsisPresets.H2InMemory),
         @PropertySource(IsisPresets.NoTranslations),
         @PropertySource(IsisPresets.SilenceWicket),
         @PropertySource(IsisPresets.DataNucleusAutoCreate),
-        @PropertySource(IsisPresets.DebugVaadin),
+        @PropertySource(IsisPresets.DebugIsisSession),
+        @PropertySource(IsisPresets.DebugPersistence),
     })
     @Import({
         IsisModuleCoreRuntimeServices.class,
@@ -113,7 +115,8 @@ public class DemoApp extends SpringBootServletInitializer {
         IsisModuleExtSecmanPersistenceJdo.class,
         IsisModuleExtSecmanEncryptionJbcrypt.class,
 
-        IsisModuleTestingFixturesApplib.class, // breaks demo app launch
+        IsisModuleTestingFixturesApplib.class,
+        IsisModuleTestingH2ConsoleUi.class,
 
         IsisModuleIncModelMetaModel.class, // @Model support (incubator)
         IsisModuleExtExcelDownloadUi.class, // allows for collection download as excel
