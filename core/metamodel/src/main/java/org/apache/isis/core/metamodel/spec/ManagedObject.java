@@ -39,6 +39,7 @@ import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.base._Lazy;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.base._Tuples.Indexed;
 import org.apache.isis.core.commons.internal.collections._Arrays;
@@ -177,12 +178,25 @@ public interface ManagedObject {
         @Getter(lazy=true, onMethod = @__(@Override)) 
         private final Optional<RootOid> rootOid = Optional.ofNullable(ManagedObjectInternalUtil._identify(this));
 
-        @Getter(lazy=true) 
-        private final ObjectSpecification specification = specLoader.apply(pojo.getClass());
+        private final _Lazy<ObjectSpecification> specification = _Lazy.threadSafe(this::loadSpec);
 
         public LazyManagedObject(@NonNull Function<Class<?>, ObjectSpecification> specLoader, @NonNull Object pojo) {
             this.specLoader = specLoader;
             this.pojo = pojo;
+        }
+        
+        @Override
+        public ObjectSpecification getSpecification() {
+            return specification.get();
+        }
+        
+        // specifically for the LoggingUtil
+        private boolean isSpecificationMemoized() {
+            return specification.isMemoized();
+        }
+        
+        private ObjectSpecification loadSpec() {
+            return specLoader.apply(pojo.getClass());
         }
 
     }
@@ -197,6 +211,32 @@ public interface ManagedObject {
         return TitleUtil.titleString(this, contextAdapterIfAny);
     }
 
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    static final class LoggingUtil {
+        
+        public static String toStringWithoutSideEffects(ManagedObject managedObject) {
+            if (managedObject==null) {
+                return "ManagedObject[null]";
+            }
+            if (managedObject instanceof SimpleManagedObject) {
+                return String.format("ManagedObject[spec=%s, pojo=%s]",
+                        ""+managedObject.getSpecification(),
+                        ""+managedObject.getPojo());
+            }
+            if (managedObject instanceof LazyManagedObject) {
+                val lazyManagedObject = (LazyManagedObject) managedObject;
+                if(lazyManagedObject.isSpecificationMemoized()) {
+                    return String.format("ManagedObject[spec=%s, pojo=%s]",
+                            ""+managedObject.getSpecification(),
+                            ""+managedObject.getPojo());
+                }
+                // else fall through
+            }
+            // don't load the spec
+            return String.format("ManagedObject[pojo=%s]", ""+managedObject.getPojo());
+        }
+    }
+    
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     static final class TitleUtil {
 

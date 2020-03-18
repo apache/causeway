@@ -21,6 +21,7 @@ package org.apache.isis.persistence.jdo.datanucleus5.persistence;
 
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
+import java.util.function.Supplier;
 
 import javax.enterprise.inject.Vetoed;
 
@@ -37,13 +38,13 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.CreateObjectCommand;
-import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.DestroyObjectCommand;
-import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.PersistenceCommand;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.core.runtime.persistence.transaction.AuditerDispatchService;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionFlushException;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionManagerException;
+import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.CreateObjectCommand;
+import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.DestroyObjectCommand;
+import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.PersistenceCommand;
 
 import lombok.Getter;
 import lombok.val;
@@ -230,20 +231,20 @@ public class IsisTransactionJdo implements Transaction {
             if (alreadyHasCreate(onObject)) {
                 removeCreate(onObject);
                 if (log.isDebugEnabled()) {
-                    log.debug("ignored both create and destroy command {}", command);
+                    log.debug("ignored both create and destroy command {}", toStringForLogging(command));
                 }
                 return;
             }
 
             if (alreadyHasDestroy(onObject)) {
                 if (log.isDebugEnabled()) {
-                    log.debug("ignored command {} as command already recorded", command );
+                    log.debug("ignored command {} as command already recorded", toStringForLogging(command) );
                 }
                 return;
             }
         }
 
-        log.debug("add command {}", command);
+        log.debug("add command {}", toStringForLogging(command));
         persistenceCommands.add(command);
     }
 
@@ -468,6 +469,10 @@ public class IsisTransactionJdo implements Transaction {
         return str;
     }
 
+    private static Supplier<String> toStringForLogging(PersistenceCommand command) {
+        return ()->ManagedObject.LoggingUtil.toStringWithoutSideEffects(command.onManagedObject());
+    }
+    
 
 }
 
