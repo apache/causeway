@@ -15,7 +15,7 @@
     <parent>
         <groupId>org.apache.isis.subdomains</groupId>
         <artifactId>isis-subdomains-excel</artifactId>
-        <version>2.0.0-M3-SNAPSHOT</version>
+        <version>2.0.0-M3</version>
     </parent>
 
     <artifactId>isis-subdomains-excel-testing</artifactId>
