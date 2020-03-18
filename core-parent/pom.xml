@@ -758,7 +758,7 @@ under the License.
 									<goal>single</goal>
 								</goals>
 								<configuration>
-									<basedir>..</basedir>
+									<archiveBaseDirectory>..</archiveBaseDirectory>
 <!--
 									<runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
 -->
