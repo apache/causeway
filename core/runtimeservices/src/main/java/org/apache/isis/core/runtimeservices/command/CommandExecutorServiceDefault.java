@@ -19,11 +19,9 @@
 package org.apache.isis.core.runtimeservices.command;
 
 import java.sql.Timestamp;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -37,7 +35,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.graph.tree.LazyTreeNode;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.clock.ClockService;
@@ -50,17 +47,15 @@ import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
+import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
-import org.apache.isis.core.metamodel.interactions.InteractionUtils;
-import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -338,28 +333,23 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     }
 
     private List<ManagedObject> argAdaptersFor(final ActionDto actionDto) {
-        
-        val paramDtos = paramDtosFrom(actionDto);
-
-        return paramDtos
-                .stream()
+        return streamParamDtosFrom(actionDto)
                 .map(CommonDtoUtils::getValue)
                 .map(this::adapterFor)
                 .collect(_Lists.toUnmodifiable());
     }
 
-    private static List<ParamDto> paramDtosFrom(final ActionDto actionDto) {
-        final ParamsDto parameters = actionDto.getParameters();
-        if (parameters != null) {
-            final List<ParamDto> parameterList = parameters.getParameter();
-            if (parameterList != null) {
-                return parameterList;
-            }
-        }
-        return Collections.emptyList();
+    private static Stream<ParamDto> streamParamDtosFrom(final ActionDto actionDto) {
+        return Optional.ofNullable(actionDto.getParameters())
+                .map(ParamsDto::getParameter)
+                .map(_NullSafe::stream)
+                .orElseGet(Stream::empty);
     }
 
     private ManagedObject adapterFor(final Object pojo) {
+        if(pojo==null) {
+            return ManagedObject.empty();
+        }
         if(pojo instanceof OidDto) {
             return adapterFor((OidDto)pojo);
         }
