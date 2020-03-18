@@ -23,7 +23,7 @@
 #
 # where nexus_repo_number and isis_version are as advised in RC vote message.
 #
-#    eg: ./verify_isis_release.sh 1086 1.17.0
+#    eg: ./verify_isis_release.sh 1101 2.0.0-M3 RC1
 #
 #
 # prereqs:
@@ -87,17 +87,14 @@ _build(){
 
     echo 'Building'
     # previously there were multiple directories, now just the one.
-    for module in ./isis*/
-    do
-        pushd $module
-        _execmustpass mvn clean install -Dskip.git
-	    popd
-    done
+    pushd isis*/core-parent
+    _execmustpass mvn clean install -Dskip.git
+	popd
 }
 
 _download_simpleapp(){
     APP=simpleapp
-    BRANCH=master
+    BRANCH=release-$VERSION-$RC
 
     rm -rf test-$APP
     mkdir test-$APP
@@ -114,7 +111,7 @@ _download_simpleapp(){
 
 _download_helloworld(){
     APP=helloworld
-    BRANCH=master
+    BRANCH=release-$VERSION-$RC
 
     rm -rf test-$APP
     mkdir test-$APP
@@ -147,13 +144,15 @@ if [[ -z "$download_cmd" ]]; then
     fi
 fi
 
-NEXUSREPONUM=$1
+export NEXUSREPONUM=$1
 shift
-VERSION=$1
+export VERSION=$1
+shift
+export RC=$1
 shift
 
-if [[ -z "$NEXUSREPONUM" || -z "$VERSION" ]]; then
-    echo "usage: `basename $0` [nexus_repo_number] [isis_version]" >&2
+if [[ -z "$NEXUSREPONUM" || -z "$VERSION" || -z "$RC" ]]; then
+    echo "usage: `basename $0` [nexus_repo_number] [isis_version] [RC]" >&2
     exit 1
 fi
 
@@ -175,13 +174,11 @@ cat <<EOF
 
 # Test out helloworld using:
 pushd test-helloworld/isis-app-helloworld
-mvn clean install
 mvn spring-boot:run
 popd
 
 # Test out simpleapp using:
 pushd test-simpleapp/isis-app-simpleapp
-mvn clean install
 mvn -pl webapp spring-boot:run
 popd
 
