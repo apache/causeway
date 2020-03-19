@@ -892,12 +892,7 @@ under the License.
 
 		<!-- APACHE ISIS customisation 7/7: start -->
 		<profile>
-			<id>released-modules</id>
-			<activation>
-				<property>
-					<name>released-modules</name>
-				</property>
-			</activation>
+			<id>released</id>
 			<modules>
 				<module>../core</module>
 				<module>../extensions</module>
@@ -917,7 +912,7 @@ under the License.
 		</profile>
 
 		<profile>
-			<id>all-modules</id>
+			<id>all</id>
 			<activation>
 				<property>
 					<name>!apache-release</name>
