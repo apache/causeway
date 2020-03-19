@@ -557,6 +557,9 @@ include::partial$verify-process.adoc[]
 You can then test the helloworld or simpleapp starter apps, see:
 https://isis.staged.apache.org/comguide/latest/verifying-releases.html.
 
+You can also inspect the website in general, available at:
+https://isis.staged.apache.org.
+
 Please verify the release and cast your vote.
 The vote will be open for a minimum of 72 hours.
 

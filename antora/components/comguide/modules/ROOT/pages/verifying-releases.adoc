@@ -90,6 +90,10 @@ You can if you wish perform some additional optional checks, listed xref:#option
 And/or, you can go ahead and xref:comguide:ROOT:verifying-releases.adoc#casting-a-vote[cast your vote].
 
 
+== (Optional) Verify Website
+
+The next version of the website can be found at link:https://isis.staged.apache.org[].
+
 == (Optional) Creadur Tools
 
 The http://creadur.apache.org[Apache Creadur] project exists to provide a set of tools to ensure compliance with Apache's licensing standards.
