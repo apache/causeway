@@ -885,14 +885,37 @@ under the License.
 				<module>../subdomains</module>
 -->
 				<module>../testing</module>
-<!--
 				<module>../valuetypes</module>
--->
 			</modules>
 		</profile>
 		<!-- END SNIPPET: release-profile -->
 
 		<!-- APACHE ISIS customisation 7/7: start -->
+		<profile>
+			<id>released-modules</id>
+			<activation>
+				<property>
+					<name>released-modules</name>
+				</property>
+			</activation>
+			<modules>
+				<module>../core</module>
+				<module>../extensions</module>
+<!--
+				<module>../incubator</module>
+				<module>../legacy</module>
+				<module>../mappings</module>
+-->
+				<module>../mavendeps</module>
+				<module>../starters</module>
+<!--
+				<module>../subdomains</module>
+-->
+				<module>../testing</module>
+				<module>../valuetypes</module>
+			</modules>
+		</profile>
+
 		<profile>
 			<id>all-modules</id>
 			<activation>
