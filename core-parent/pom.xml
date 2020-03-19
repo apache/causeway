@@ -878,13 +878,11 @@ under the License.
 <!--
 				<module>../incubator</module>
 				<module>../legacy</module>
-				<module>../mappings</module>
 -->
+				<module>../mappings</module>
 				<module>../mavendeps</module>
 				<module>../starters</module>
-<!--
 				<module>../subdomains</module>
--->
 				<module>../testing</module>
 				<module>../valuetypes</module>
 			</modules>
@@ -900,13 +898,11 @@ under the License.
 <!--
 				<module>../incubator</module>
 				<module>../legacy</module>
-				<module>../mappings</module>
 -->
+				<module>../mappings</module>
 				<module>../mavendeps</module>
 				<module>../starters</module>
-<!--
 				<module>../subdomains</module>
--->
 				<module>../testing</module>
 				<module>../valuetypes</module>
 			</modules>
