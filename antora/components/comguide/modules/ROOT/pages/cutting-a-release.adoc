@@ -166,11 +166,10 @@ For example:
 ----
 export ISISJIRA=ISIS-9999                           # <.>
 export ISISTMP=/c/tmp                               # <.>
-export ISISREL={isisnext}                           # <.>
+export ISISREL={isisnext}                             # <.>
 export ISISRC=RC1                                   # <.>
 export ISISBRANCH=release-$ISISREL-$ISISRC
 export ISISART=isis
-
 env | grep ISIS | sort
 ----
 <.> set to an "umbrella" ticket for all release activities.
@@ -182,7 +181,7 @@ env | grep ISIS | sort
 
 [IMPORTANT]
 ====
-Note that the branch name is intentionally *not* the same as the eventual tag names (eg `isis-{isisnext}`).
+The branch name is intentionally *not* the same as the eventual tag names (eg `isis-{isisnext}`).
 ====
 
 
