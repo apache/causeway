@@ -759,6 +759,7 @@ under the License.
 								</goals>
 								<configuration>
 									<archiveBaseDirectory>..</archiveBaseDirectory>
+                                    <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
 									<descriptorRefs>
 										<descriptorRef>${sourceReleaseAssemblyDescriptor}</descriptorRef>
 									</descriptorRefs>
