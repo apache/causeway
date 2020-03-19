@@ -119,6 +119,11 @@
                 </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
+                <mb3:serviceAction objectType="isisJdoDn5.JdoMetamodelMenu" id="downloadMetamodels">
+                    <cpt:named>Download JDO Metamodels (ZIP)</cpt:named>
+                </mb3:serviceAction>
+            </mb3:section>
+            <mb3:section>
                 <mb3:serviceAction objectType="isisApplib.TranslationServicePoMenu" id="downloadTranslations">
                     <cpt:named>Download Translations</cpt:named>
                 </mb3:serviceAction>

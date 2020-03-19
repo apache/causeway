@@ -19,7 +19,6 @@
 package org.apache.isis.persistence.jdo.datanucleus5.metamodel;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -27,8 +26,6 @@ import javax.jdo.annotations.IdentityType;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.collections._Multimaps;
 import org.apache.isis.core.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.core.config.IsisConfiguration;

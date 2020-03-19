@@ -40,14 +40,15 @@ import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport;
 
+import lombok.RequiredArgsConstructor;
+
 @Mixin(method = "act")
+@RequiredArgsConstructor
 public class Persistable_downloadJdoMetadata {
 
+    @Inject IsisJdoSupport jdoSupport;
+    
     private final Persistable persistable;
-
-    public Persistable_downloadJdoMetadata(final Persistable persistable) {
-        this.persistable = persistable;
-    }
 
     public static class ActionDomainEvent extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Persistable_downloadJdoMetadata> {}
 
@@ -79,10 +80,8 @@ public class Persistable_downloadJdoMetadata {
         return _Strings.asFileNameWithExtension(persistable.getClass().getName(), "jdo");
     }
 
-    PersistenceManagerFactory getPersistenceManagerFactory() {
+    private PersistenceManagerFactory getPersistenceManagerFactory() {
         return jdoSupport.getJdoPersistenceManager().getPersistenceManagerFactory();
     }
-
-    @Inject IsisJdoSupport jdoSupport;
 
 }
