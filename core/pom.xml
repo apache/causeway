@@ -100,7 +100,7 @@
 
 		<datanucleus-api-jdo.version>5.2.2</datanucleus-api-jdo.version>
 		<datanucleus-core.version>5.2.2</datanucleus-core.version>
-		<datanucleus-jdo-api.version>3.2.0-m12</datanucleus-jdo-api.version>
+		<datanucleus-jdo-api.version>3.2.0-m13</datanucleus-jdo-api.version>
 		<datanucleus-jdo-query.version>5.0.9</datanucleus-jdo-query.version>
 		<datanucleus-jodatime.version>5.2.0-release</datanucleus-jodatime.version>
 		<datanucleus-maven-plugin.version>5.2.1</datanucleus-maven-plugin.version>
@@ -130,7 +130,8 @@
 		<jbcrypt.version>0.4</jbcrypt.version>
 		<jboss-jaxrs-api_2.0_spec.version>1.0.0.Final</jboss-jaxrs-api_2.0_spec.version>
 
-		<jdo-api.version>3.1</jdo-api.version> <!-- see also datanucleus.x.x versions -->
+		<!-- v3.2 not available yet, use datanucleus staging for now -->
+		<!-- <jdo-api.version>3.2</jdo-api.version> -->
 
 		<jdom.version>2.0.2</jdom.version>
 		<jmock.version>2.11.0</jmock.version>
