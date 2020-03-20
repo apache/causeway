@@ -20,13 +20,9 @@ package org.apache.isis.applib.mixins.metamodel;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.mixins.MixinConstants;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -37,7 +33,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@Mixin(method="prop") 
+@Property
+@PropertyLayout(hidden = Where.ALL_TABLES)
 @RequiredArgsConstructor
 public class Object_objectIdentifier {
 
@@ -49,14 +46,6 @@ public class Object_objectIdentifier {
     public static class ActionDomainEvent 
     extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_objectIdentifier> {}
 
-    @Action(
-            domainEvent = ActionDomainEvent.class,
-            semantics = SemanticsOf.SAFE
-            )
-    @ActionLayout(
-            contributed = Contributed.AS_ASSOCIATION,
-            hidden = Where.ALL_TABLES)
-    @Property()
     @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.2")
     public String prop() {
         val bookmark = bookmarkService.bookmarkForElseThrow(this.holder);

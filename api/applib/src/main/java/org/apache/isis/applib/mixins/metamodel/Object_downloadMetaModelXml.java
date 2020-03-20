@@ -24,9 +24,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -40,7 +38,15 @@ import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@Mixin(method="act")
+@Action(
+        domainEvent = Object_downloadMetaModelXml.ActionDomainEvent.class,
+        semantics = SemanticsOf.SAFE,
+        restrictTo = RestrictTo.PROTOTYPING
+        )
+@ActionLayout(
+        cssClassFa = "fa-download",
+        position = ActionLayout.Position.PANEL_DROPDOWN
+        )
 @RequiredArgsConstructor
 public class Object_downloadMetaModelXml {
 
@@ -49,16 +55,6 @@ public class Object_downloadMetaModelXml {
     public static class ActionDomainEvent 
     extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_downloadMetaModelXml> {}
 
-    @Action(
-            domainEvent = ActionDomainEvent.class,
-            semantics = SemanticsOf.SAFE,
-            restrictTo = RestrictTo.PROTOTYPING
-            )
-    @ActionLayout(
-            contributed = Contributed.AS_ACTION,
-            cssClassFa = "fa-download",
-            position = ActionLayout.Position.PANEL_DROPDOWN
-            )
     @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.2")
     public Object act(
 
@@ -100,8 +96,7 @@ public class Object_downloadMetaModelXml {
 
     @Inject MetaModelService metaModelService;
     @Inject JaxbService jaxbService;
-    @Inject
-    MetaModelServiceMenu metaModelServiceMenu;
+    @Inject MetaModelServiceMenu metaModelServiceMenu;
 
 
 
