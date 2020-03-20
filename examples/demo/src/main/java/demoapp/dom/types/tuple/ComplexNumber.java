@@ -1,11 +1,21 @@
 package demoapp.dom.types.tuple;
 
-import lombok.Value;
+import javax.jdo.annotations.EmbeddedOnly;
+import javax.jdo.annotations.PersistenceCapable;
 
-@Value(staticConstructor = "of")
+import org.apache.isis.applib.annotation.Value;
+
+@PersistenceCapable
+@EmbeddedOnly
+@Value(semanticsProviderClass = ComplexNumberValueSemantics.class)
+@lombok.Data
+@lombok.AllArgsConstructor(staticName = "of")
 public class ComplexNumber {
     
-    final double re;
-    final double im;
+    @javax.jdo.annotations.Column(allowsNull = "false")
+    private double re;
+    
+    @javax.jdo.annotations.Column(allowsNull = "false")
+    private double im;
 
 }

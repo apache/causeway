@@ -1,10 +1,11 @@
 package demoapp.dom.types.tuple;
 
+import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
@@ -22,15 +23,12 @@ public class NumberConstant {
     @Getter @Setter
     private String name;
 
-    @javax.jdo.annotations.Column(allowsNull = "false")
+    @javax.jdo.annotations.Embedded(members={
+            @Persistent(name="re", columns=@Column(name="number-re")),
+            @Persistent(name="im", columns=@Column(name="number-im"))
+    })
     @Property
     @Getter @Setter
     private ComplexNumber number;
-    
-    @NotPersistent
-    @Property
-    public String getStringified() {
-        return "" + number;
-    }
     
 }
