@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 import static java.util.Objects.requireNonNull;
 
@@ -571,18 +570,18 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         val pojo = adapter.getPojo();
         
         if (getEntityState(pojo).isAttached()) {
-            throw new NotPersistableException("Object already persistent: " + toStringForLogging(adapter));
+            throw new NotPersistableException("Object already persistent: " + adapter);
         }
         if (ManagedObject._isParentedCollection(adapter)) {
             //or should we just ignore this?
-            throw new NotPersistableException("Cannot persist parented collection: " + toStringForLogging(adapter));
+            throw new NotPersistableException("Cannot persist parented collection: " + adapter);
         }
         val spec = adapter.getSpecification();
         if (spec.isManagedBean()) {
-            throw new NotPersistableException("Can only persist entity beans: "+ toStringForLogging(adapter));
+            throw new NotPersistableException("Can only persist entity beans: "+ adapter);
         }
         transactionService.executeWithinTransaction(()->{
-            log.debug("persist {}", toStringForLogging(adapter));               
+            log.debug("persist {}", adapter);               
             val createObjectCommand = newCreateObjectCommand(adapter);
             transactionManager.addCommand(createObjectCommand);
         });
@@ -597,7 +596,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         if (spec.isParented()) {
             return;
         }
-        log.debug("destroyObject {}", toStringForLogging(adapter));
+        log.debug("destroyObject {}", adapter);
         transactionService.executeWithinTransaction(()->{
             val destroyObjectCommand = newDestroyObjectCommand(adapter);
             transactionManager.addCommand(destroyObjectCommand);
@@ -631,9 +630,9 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         
         val pojo = adapter.getPojo();
 
-        log.debug("create object - creating command for: {}", toStringForLogging(adapter));
+        log.debug("create object - creating command for: {}", adapter);
         if (getEntityState(pojo).isAttached()) {
-            throw new IllegalArgumentException("Adapter is persistent; adapter: " + toStringForLogging(adapter));
+            throw new IllegalArgumentException("Adapter is persistent; adapter: " + adapter);
         }
         return new DataNucleusCreateObjectCommand(adapter, persistenceManager);
     }
@@ -644,9 +643,9 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         
         val pojo = adapter.getPojo();
 
-        log.debug("destroy object - creating command for: {}", toStringForLogging(adapter));
+        log.debug("destroy object - creating command for: {}", adapter);
         if (!getEntityState(pojo).isAttached()) {
-            throw new IllegalArgumentException("Adapter is not persistent; adapter: " + toStringForLogging(adapter));
+            throw new IllegalArgumentException("Adapter is not persistent; adapter: " + adapter);
         }
         return new DataNucleusDeleteObjectCommand(adapter, persistenceManager);
     }
@@ -866,10 +865,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             val oid = oidFor(domainObject);
             log.debug("refresh immediately; oid={}", oid.enString());
         }
-    }
-
-    private static Supplier<String> toStringForLogging(ManagedObject managedObject) {
-        return ()->ManagedObject.LoggingUtil.toStringWithoutSideEffects(managedObject);
     }
 
 }

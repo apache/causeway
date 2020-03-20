@@ -21,7 +21,6 @@ package org.apache.isis.persistence.jdo.datanucleus5.persistence;
 
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
-import java.util.function.Supplier;
 
 import javax.enterprise.inject.Vetoed;
 
@@ -231,20 +230,20 @@ public class IsisTransactionJdo implements Transaction {
             if (alreadyHasCreate(onObject)) {
                 removeCreate(onObject);
                 if (log.isDebugEnabled()) {
-                    log.debug("ignored both create and destroy command {}", toStringForLogging(command));
+                    log.debug("ignored both create and destroy command {}", command);
                 }
                 return;
             }
 
             if (alreadyHasDestroy(onObject)) {
                 if (log.isDebugEnabled()) {
-                    log.debug("ignored command {} as command already recorded", toStringForLogging(command) );
+                    log.debug("ignored command {} as command already recorded", command);
                 }
                 return;
             }
         }
 
-        log.debug("add command {}", toStringForLogging(command));
+        log.debug("add command {}", command);
         persistenceCommands.add(command);
     }
 
@@ -467,10 +466,6 @@ public class IsisTransactionJdo implements Transaction {
         str.append("state", state);
         str.append("commands", persistenceCommands.size());
         return str;
-    }
-
-    private static Supplier<String> toStringForLogging(PersistenceCommand command) {
-        return ()->ManagedObject.LoggingUtil.toStringWithoutSideEffects(command.onManagedObject());
     }
     
 
