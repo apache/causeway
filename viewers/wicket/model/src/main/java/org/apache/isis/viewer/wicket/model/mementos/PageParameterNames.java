@@ -25,7 +25,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 
@@ -116,10 +115,6 @@ public enum PageParameterNames {
     }
 
     public void addStringTo(final PageParameters pageParameters, final String value) {
-        //FIXME[ISIS-2315] just for debugging
-        if(this.equals(OBJECT_OID) && "images".equals(value)) {
-            _Exceptions.dumpStackTrace();
-        }
         pageParameters.add(this.toString(), value);
     }
     
