@@ -152,6 +152,7 @@ implements ObjectAdapterModel, UiHintContainer {
     public static EntityModel ofParameters(
             IsisWebAppCommonContext commonContext, 
             PageParameters pageParameters) {
+
         return ofMemento(commonContext, commonContext.mementoFor(rootOidFrom(pageParameters)));
     }
     
