@@ -16,6 +16,14 @@ In addition, mixins act as contributors of behaviour to an underlying domain obj
 Typically the behaviour being contributed is an action, but it could also be a derived property or a derived collection.
 
 
+[NOTE]
+====
+What follows _is_ a simplification; the Apache Isis programming model also recognizes a number of other supporting methods for domain object members, for associated business logic.
+This is covered in more detail in xref:userguide:fun:business-rules.adoc[business rules].
+====
+
+
+
 == Properties
 
 Properties follow the standard getter/setter pattern, with the return type being a scalar (a value object or another entity or view model).
@@ -26,13 +34,22 @@ For example (using link:https://projectlombok.org/features/GetterSetter[Project 
 [source,java]
 ----
 public class Customer
+    @Property                       <.>
+    @PropertyLayout                 <.>
     @Getter @Setter
     private String lastName;
     ...
 }
 ----
+<.> The xref:refguide:applib-ant:Property.adoc[`@Property`] annotation defines additional domain-layer semantics
+<.> The xref:refguide:applib-ant:PropertyLayout.adoc[`@PropertyLayout`] annotation defines additional presentation-layer hints
 
-the framework infers the `Customer` domain entity, which in turn has a `firstName` string _property_.
+From this the framework infers the `Customer` domain entity, which in turn has a `firstName` string _property_.
+
+`@Property` is not mandatory, though in many cases it will be present in order to specify additional semantics.
+
+`@PropertyLayout` is not mandatory either.
+Whether it is present or not depends to some extent on your preferred style: the UI semantics can be specified either in code within this annotation, or can be specified through the companion xref:userguide:fun:ui-hints.adoc#layout[layout file].
 
 
 == Collections
@@ -44,42 +61,61 @@ For example (again, using link:https://projectlombok.org/features/GetterSetter[P
 [source,java]
 ----
 public class Customer
+    @Collection                                             <.>
+    @CollectionLayout                                       <.>
     @Getter @Setter
-    private SortedSet<Order> orders = new TreeSet<Order>();
+    private SortedSet<Order> orders = new TreeSet<Order>(); <.>
     ...
 }
 ----
+<.> The xref:refguide:applib-ant:Collection.adoc[`@Collection`] annotation defines additional domain-layer semantics
+<.> The xref:refguide:applib-ant:CollectionLayout.adoc[`@CollectionLayout`] annotation defines additional presentation-layer hints
+<.> The most commonly a `java.util.SortedSet` for entities obtained from an RDBMS (with set semantics).
++
+TIP: all entities should define a natural ordering so that when rendered in the UI they will be ordered "meaningfully" to the end-user.
 
-the framework infers the `orders` _collection_.
+From this the framework infers the `orders` _collection_.
 
-[TIP]
-====
-The most commonly used collection type is `java.util.SortedSet`; entities are most commonly mapped to a relational database (ie a datastore with set semantics) and we recommend that all entities define a natural ordering so that when rendered in the UI they will be ordered "meaningfully" to the end-user.
-====
+As with properties, the `@Collection` annotation is not mandatory, though in many cases it will be present in order to specify additional semantics.
+
+Similarly, `@CollectionLayout` is not mandatory either.
+Whether it is present or not depends to some extent on your preferred style: the UI semantics can be specified either in code within this annotation, or can be specified through the companion xref:userguide:fun:ui-hints.adoc#layout[layout file].
 
 
 == Actions
 
 The third type of object member is actions.
-(To a first approximation), actions are all public methods that do not represent properties or collections.
+Broadly speaking, actions are those `public` methods that do not represent properties or collections.
 
 For example:
 
 [source,java]
 ----
 public class Customer
-    public Customer placeOrder(Product p, int quantity) { /* ... */ }
+    @Action                                                 // <.>
+    @ActionLayout                                           // <.>
+    public Customer placeOrder(
+        @Parameter                                          // <.>
+        @ParameterLayout                                    // <.>
+        Product p,
+        @Parameter
+        @ParameterLayout
+        int quantity) {
+        /* ... */
+    }
     ...
 }
 ----
+<.> The xref:refguide:applib-ant:Action.adoc[`@Action`] annotation defines additional domain-layer semantics
+<.> The xref:refguide:applib-ant:ActionLayout.adoc[`@ActionLayout`] annotation defines additional presentation-layer hints
+<.> The xref:refguide:applib-ant:Parameter.adoc[`@Parameter`] annotation defines additional domain-layer semantics
+<.> The xref:refguide:applib-ant:ParameterLayout.adoc[`@ParameterLayout`] annotation defines additional presentation-layer hints
 
-corresponds to the `placeOrder` _action_.
+From this the framework infers a the `placeOrder` _action_.
 
-[NOTE]
-====
-The above _is_ a simplification; the Apache Isis programming model also recognizes a number of other supporting methods each of which has its own prefix such as `hide`, `disable` or `validate`.
-These can be considered as "reserved words" in Apache Isis, and do _not_ correspond to actions even though they have public visibility.
-====
+Whether the `@Action` annotation is required to identify an action method is configurable; some teams prefer actions to be explicitly called out, others prefer that any "left over" public methods are identified as actions.
 
+The use of `@ActionLayout` is optional, the UI semantics can be specified either in code within this annotation, or can be specified through the companion xref:userguide:fun:ui-hints.adoc#layout[layout file].
 
-
+As with properties, both `@Parameter` and `@ParameterLayout` are also optional.
+Note though that UI hints for parameters _cannot_ be specified in the layout file.

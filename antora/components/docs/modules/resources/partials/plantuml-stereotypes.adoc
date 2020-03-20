@@ -1,0 +1,18 @@
+hide empty members
+'hide methods
+
+skinparam class {
+    BackgroundColor<<desc>> Cyan
+    BackgroundColor<<ppt>> LightGreen
+    BackgroundColor<<mi>> LightPink
+    BackgroundColor<<role>> LightYellow
+    BackgroundColor<<strategy>> White
+    BackgroundColor<<api>> White
+    BackgroundColor<<spi>> White
+    BackgroundColor<<internal>> LightGrey
+    BackgroundColor<<value>> White
+
+    BackgroundColor<<entity>> LightGreen
+    BackgroundColor<<viewmodel>> LightPink
+    BackgroundColor<<mixin>> LightYellow
+}

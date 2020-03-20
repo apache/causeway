@@ -11,31 +11,24 @@ Each layer is cohesive and depending only on the layers below.
 In particular, we have a layer dedicated to the domain model.
 The code in this layer is unencumbered with the (mostly technical) responsibilities of the other layers and so can evolve to tackle complex domains as well as simple ones.
 
-This is a well-established pattern, almost a de-facto; there's very little debate that these responsibilities should be kept separate from each other.
-With Apache Isis the responsibility for presentation is a framework concern, the responsibility for the domain logic is implemented by the (your) application code.
+This is a well-established pattern, almost de-facto; there's very little debate that these responsibilities should be kept separate from each other.
+With Apache Isis the responsibility for presentation is a framework concern, the responsibility for the domain logic is implemented by your application code.
 
-A few years ago Alistair Cockburn reworked the traditional layered architecture diagram and came up with the *_hexagonal architecture_*:.
-
-[TIP]
-====
-The hexagonal architecture is also known as the link:http://c2.com/cgi/wiki?PortsAndAdaptersArchitecture[Ports and Adapters] architecture or (less frequently) as the link:http://jeffreypalermo.com/blog/the-onion-architecture-part-1/[Onion] architecture.
-====
+A few years ago Alistair Cockburn reworked the traditional layered architecture diagram and came up with the *_hexagonal architecture_* (also known as/very similar to the link:http://jeffreypalermo.com/blog/the-onion-architecture-part-1/[Onion] architecture):
 
 .The hexagonal architecture emphasizes multiple implementations of the different layers.
 image::core-concepts/philosophy/hexagonal-architecture.png[width="700px",link="{imagesdir}/core-concepts/philosophy/hexagonal-architecture.png"]
 
-What Cockburn is emphasizing is that there's usually more than one way *into* an application (what he called the *_user-side' ports_*) and more than one way  *out of* an application too (the *_data-side ports_*).
+What Cockburn emphasizes is that there's usually more than one way *into* an application (what he called the *_user-side' ports_*) and more than one way *out of* an application too (the *_data-side ports_*).
 This is very similar to the concept of primary and secondary actors in use cases: a primary actor (often a human user but not always) is active and initiates an interaction, while a secondary actor (almost always an external system) is passive and waits to be interacted with.
 
-Associated with each port can be an *_adapter_* (in fact, Cockburn's alternative name for this architecture is *_ports and adapters_*).
-An adapter is a device (piece of software) that talks in the protocol (or  _API_) of the port.
+Associated with each port can be an *_adapter_* (in fact, Cockburn's alternative name for this architecture is link:http://c2.com/cgi/wiki?PortsAndAdaptersArchitecture[ports and adapters]).
+An adapter is a device (piece of software) that talks in the protocol (or _API_) of the port.
 Each port could have several adapters.
 
-Apache Isis maps very nicely onto the  *hexagonal architecture*.
+Apache Isis maps very nicely onto the hexagonal architecture.
 Apache Isis' viewers act as user-side adapters and use the Apache Isis metamodel API as a port into the domain objects.
 For the data side, we are mostly concerned with persisting domain objects to some sort of object store.
-Here Apache Isis delegates most of the heavy lifting to ORM implementing the JDO API.
-Most of the time this will be DataNucleus configured to persist to an RDBMS, but DataNucleus can also support other object stores, for example Neo4J.
-Alternatively Apache Isis can be configured to persist using some other JDO implementation, for example Google App Engine.
+Here Apache Isis delegates most of the heavy lifting to an ORM (DataNucleus or similar).
 
 

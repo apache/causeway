@@ -6,14 +6,12 @@
 
 
 Although not a book about object modelling, Evans' "Domain Driven Design" does use object orientation as its primary modelling tool; while xref:userguide:fun:core-concepts.adoc#naked-objects-pattern[naked objects pattern] very much comes from an OO background (it even has 'object' in its name).
-Richard Pawson -- the originator of Naked Objects pattern -- lists Alan Kay as a key influence.
 
-It's certainly true that to develop an Apache Isis application you will need to have good object oriented modelling skills.
+It's certainly true that to develop an Apache Isis application you will reasonably good object oriented modelling skills.
 But given that all the mainstream languages for developing business systems are object oriented (Java, C#, Ruby), that's not such a stretch.
 
-However, what you'll also find as you write your applications is that in some ways an Apache Isis application is more aspect-oriented than it is object oriented.
+However, what you'll also discover is that in some ways an Apache Isis application is more aspect-oriented than it is object oriented.
 Given that aspect-orientation -- as a programming paradigm at least -- hasn't caught on, that statement probably needs unpacking a little.
-
 
 == AOP Concepts
 
@@ -28,10 +26,9 @@ This is actually then one bit of AOP that is quite mainstream; DI containers suc
 Another aspect (so to speak!) of aspect-oriented programming has found its way into other programming languages, that of a mix-in or trait.
 In languages such as Scala these mix-ins are specified statically as part of the inheritance hierarchy, whereas with AOP the binding of a trait to some other class/type is done without the class "knowing" that additional behaviour is being mixed-in to it.
 
-
 == Realization within Apache Isis
 
-What has all this to do with Apache Isis, then?
+What does all this have to do with Apache Isis?
 
 Well, a different way to think of the naked objects pattern is that the visualization of a domain object within a UI is a cross-cutting concern.
 By following certain very standard programming conventions that represent the _Apache Isis Programming Model_ (POJOs plus annotations), the framework is able to build a metamodel and from this can render your domain objects in a standard generic fashion.
@@ -42,24 +39,26 @@ Whenever an object is rendered in the UI, it is filtered with respect to the use
 That is, if a user is not authorized to either view or perhaps modify an object, then this is applied transparently by the framework.
 The xref:security:ROOT:about.adoc[SecMan extension] provides a rich user/role/permissions subdomain to use out of the box; but you can integrate with a different security mechanism if you have one already.
 
-Another example of interceptors are the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command and audit modules.
-The command module captures every user interaction that modifies the state of the system (the "cause" of a change) while the audit module captures every change to every object (the "effect" of a change).
+Another example of interceptors are the xref:extensions:command-log:about.adoc[Command Log] and xref:security:audit-trail:about.adoc[Auditer] modules.
+The _Command Log_ module captures every user interaction that modifies the state of the system (the "cause" of a change) while the _Auditer_ module captures every change to every object (the "effect" of a change).
 Again, this is all transparent to the user.
 
-Apache Isis also has an internal event bus (you can switch between an underlying implementation of Gauva or Axon).
+Apache Isis also leverages the Spring framework's event bus.
 A domain event is fired whenever an object is interacted with, and this allows any subscribers to influence the operation (or even veto it).
-This is a key mechanism in ensuring that Apache Isis applications are maintainable, and we discuss it in depth in the section on  xref:userguide:btb:decoupling.adoc[Decoupling].
-But fundamentally its relying on this AOP concept of interceptors.
+This is a key mechanism in ensuring that Apache Isis applications are maintainable, by decoupling logic into separate modules.
+But fundamentally its relying on this AOP concept of interceptors, with event subscribers in one module potentially influencing or responding to interaction triggered in another.
 
-Finally, Isis also a feature that is akin to AOP mix-ins.
-A "contributed action" is one that is implemented on a domain service but that appears to be a behaviour of rendered domain object.
+Finally, Apache Isis also a feature that is akin to AOP traits.
+A "contributed action" is one that is implemented by a mixin class but that appears to be a behaviour of rendered domain object.
+Mixins can also contribute read-only properties or collections: effectively the result of running a query that returns a scalar or a vector.
 In other words, we can dissociate behaviour from data.
+
 That's not always the right thing to do of course.
-In Richard Pawson's description of the xref:userguide:fun:core-concepts.adoc#naked-objects-pattern.adoc[naked objects pattern] he talks about "behaviourally rich" objects, in other words where the business functionality encapsulated the data.
+In Richard Pawson's description of the xref:userguide:fun:core-concepts.adoc#naked-objects-pattern.adoc[naked objects pattern] he talks about "behaviourally rich" objects, in other words where the business functionality encapsulates the data.
 But on the other hand sometimes the behaviour and data structures change at different rates.
 The link:http://en.wikipedia.org/wiki/Single_responsibility_principle[single responsibility principle] says we should only lump code together that changes at the same rate.
 Apache Isis' support for contributions (not only contributed actions, but also contributed properties and contributed collections) enables this.
 And again, to loop back to the topic of this section, it's an AOP concept that being implemented by the framework.
 
 The nice thing about aspect orientation is that for the most part you can ignore these cross-cutting concerns and - at least initially - just focus on implementing your domain object.
-Later when your app starts to grow and you start to break it out into smaller modules, you can leverage Apache Isis' AOP support for xref:userguide:fun:building-blocks.adoc#mixins[mixins] and interceptors (using the xref:userguide:fun:building-blocks#domain-events[event bus]) to ensure that your codebase remains maintainable.
+Later when your app starts to grow and you start to break it out into smaller modules, you can leverage Apache Isis' AOP support for xref:userguide:fun:building-blocks.adoc#mixins[mixins] and interceptors (using the xref:refguide:applib-svc:EventBusService.adoc[event bus]) to ensure that your codebase remains maintainable.

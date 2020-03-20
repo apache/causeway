@@ -45,7 +45,7 @@ Note that the `persist()` returns the object passed to it.
 
 It's worth being aware that the framework does _not_ eagerly persist the object.
 Rather, it queues up an internal command structure representing the object persistence request.
-This is then executed either at the end of the transaction, or if a xref:userguide:fun:crud/finding.adoc[query is run], or if the internal queue is manually flushed using xref:refguide:applib-svc:TransactionService.adoc[`TransactionService`]'s `flush()` method.
+This is then executed either at the end of the transaction, or if a xref:userguide:fun:crud.adoc#finding[query is run], or if the internal queue is manually flushed using xref:refguide:applib-svc:TransactionService.adoc[`TransactionService`]'s `flush()` method.
 Flushing also happens when a repository query is executed, so that the pending persist operation is performed first.
 Generally therefore the lazy persistence approach works well enough.
 

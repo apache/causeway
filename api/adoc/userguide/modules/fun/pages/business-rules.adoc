@@ -4,30 +4,18 @@
 :page-partial:
 
 
-When a domain object is rendered in the UI or the end-user interacts with the domain object through the UI, the framework applies a series of precondition business rules to each object member (property, collection or action).
+As explained xref:building-blocks.adoc#business-rules[earlier], when a domain object is rendered in the UI or the end-user interacts with the domain object through the UI, the framework applies a series of precondition business rules to each object member.
+These can be summarised as "see it, use it, do it".
 
-When the object is being rendered, the framework checks:
+.See it, use it, do it
+****
 
-* is the object member visible? +
-+
-Members that are not visible are simply omitted from the page.
-If all the members in a fieldset (property group) are hidden, then the fieldset is not shown.
-If all the members in a tab are hidden, then the tab is not shown.
-If all the members of the object are hidden, then a "404" style message ("no such object") is returned to the user.
+* is the object member visible?
 
-* if the object member is visible, is the object member enabled? +
-+
-An enabled property can be edited (otherwise it is read-only), and an enabled action can be invoked (otherwise it's button is "greyed-out").
-Note that collections are always read-only.
+* if the object member is visible, is the object member enabled?
 
-* for enabled object members, if the user then interacts with that member, are the supplied values valid (can the user "do it"). +
-+
-For an editable property this means validating the proposed new value of the property.
-For an invokable action this means validating that arguments being used to invoke the action.
-
-
-One way to remember this is: *"see it, use it, do it"*
-
+* for enabled object members, if the user then interacts with that member, are the supplied values valid (can the user "do it").
+****
 
 The framework provides a multitude of ways to implement these business rules.
 One decoupled approach is using xref:userguide:fun:building-blocks.adoc#domain-events[domain events]; the checks above correspond to the phases of the domain event.

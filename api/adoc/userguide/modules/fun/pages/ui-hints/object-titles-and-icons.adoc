@@ -1,4 +1,5 @@
-= Object Titles and Icons
+[[object-titles-and-icons]]
+= Titles, Icons etc.
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
@@ -13,7 +14,6 @@ This could represent the state of that object (eg a shipped order, say, or overd
 It is also possible for an object to provide a CSS class hint.
 In conjunction with xref:vw:ROOT:customisation.adoc#tweaking-css-classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
 
-
 == Object Title
 
 The object title is a label to identify an object to the end-user.
@@ -22,7 +22,6 @@ There is no requirement for it to be absolutely unique, but it should be "unique
 
 The title is always shown with an icon, so there is generally no need for the title to include information about the object's type.
 For example the title of a customer object shouldn't include the literal string "Customer"; it can just have the customer's name, reference or some other meaningful business identifier.
-
 
 === Declarative style
 
@@ -69,7 +68,6 @@ could return "Clarke, Arthur".
 Note that the sequence is in Dewey Decimal Format, which allows a subclass to intersperse information within the title.
 For example:
 
-
 [source,java]
 ----
 public class Author extends Customer {
@@ -83,8 +81,6 @@ public class Author extends Customer {
 ----
 
 could return "Arthur C. Clarke".
-
-
 
 === Imperative style
 
@@ -111,7 +107,6 @@ public class Author extends Customer {
 ----
 
 A variation on this approach also supports localized names; see xref:userguide:btb:i18n.adoc[beyond-the-basics] guide for further details.
-
 
 === Using a UI subscriber
 
@@ -160,14 +155,12 @@ public class AuthorSubscriptions {
 }
 ----
 
-
 == Object Icon
 
 The icon is often the same for all instances of a particular class, and is picked up by convention.
 
 It's also possible for an individual instance to return a custom icon, typically so that some significant state of that domain object is represented.
 For example, a custom icon could be used to represent a shipped order, say, or an overdue library loan.
-
 
 === Declarative style
 
@@ -188,8 +181,6 @@ public class InvoiceRun {
 ----
 <1> will use the "fa-play" icon.
 
-
-
 === Imperative style
 
 To customise the icon on an instance-by-instance basis, we implement the reserved xref:refguide:applib-cm:methods.adoc#iconName[`iconName()`] method.
@@ -208,8 +199,6 @@ public class Order {
 
 In this case, if the `Order` has shipped then the framework will look for an icon image named "Order-shipped.png" (in the same package as the class).
 Otherwise it will just use "Order.png", as normal.
-
-
 
 === Using a UI subscriber
 
@@ -256,14 +245,10 @@ public class OrderSubscriptions {
 }
 ----
 
-
-
 == Object CSS Styling
 
 It is also possible for an object to return a xref:refguide:applib-cm:methods.adoc#cssClass[CSS class].
 In conjunction with xref:vw:ROOT:customisation.adoc#tweaking-css-classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
-
-
 
 === Declarative style
 
@@ -275,10 +260,7 @@ Or, when the domain object is rendered as a row in a collection, then the CSS cl
 
 One possible use case would be to render the most important object types with a subtle background colour: ``Customer``s shown in light green, or ``Order``s shown in a light pink, for example.
 
-
-
 === Imperative style
-
 
 To customise the icon on an instance-by-instance basis, we implement the reserved xref:refguide:applib-cm:methods.adoc#cssClass[`cssClass()`] method.
 
@@ -297,9 +279,7 @@ public class Order {
 
 If non-null value is returned then the CSS class will be rendered _in addition_ to any declarative CSS class also specified.
 
-
 === Using a UI subscriber
-
 
 As for title and icon, the determination of which CSS class to render can be externalized into a UI event subscriber.
 
@@ -340,4 +320,8 @@ public class OrderSubscriptions {
 ----
 
 
+
+== Switching Layouts
+
+WARNING: TODO: v2
 

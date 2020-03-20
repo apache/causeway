@@ -6,33 +6,11 @@ In this section we run through the main building blocks that make up an Apache I
 
 
 include::building-blocks/metamodel.adoc[leveloffset=+1]
-
-
 include::building-blocks/types-of-domain-objects.adoc[leveloffset=+1]
-include::building-blocks/types-of-domain-objects/domain-entities.adoc[leveloffset=+2]
-include::building-blocks/types-of-domain-objects/domain-services.adoc[leveloffset=+2]
-include::building-blocks/types-of-domain-objects/view-models.adoc[leveloffset=+2]
-include::building-blocks/types-of-domain-objects/mixins.adoc[leveloffset=+2]
-
-
-
 include::building-blocks/identifiers.adoc[leveloffset=+1]
-include::building-blocks/identifiers/title-and-icon-and-css-class.adoc[leveloffset=+2]
-include::building-blocks/identifiers/oid.adoc[leveloffset=+2]
-
-
-
 include::building-blocks/object-members.adoc[leveloffset=+1]
-
-
-
+include::building-blocks/business-rules.adoc[leveloffset=+1]
 include::building-blocks/events.adoc[leveloffset=+1]
-include::building-blocks/events/domain-events.adoc[leveloffset=+2]
-include::building-blocks/events/ui-events.adoc[leveloffset=+2]
-include::building-blocks/events/lifecycle-events.adoc[leveloffset=+2]
-
-
-
 include::building-blocks/modules.adoc[leveloffset=+1]
 
 

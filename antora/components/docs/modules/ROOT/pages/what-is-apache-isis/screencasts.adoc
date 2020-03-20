@@ -64,7 +64,7 @@ Importing the generated app into an xref:setupguide:ROOT:ide.adoc[IDE] +
 
 
 |link:https://www.youtube.com/watch?v=xVTjtiJM8XM[003^] +
-Walking through the main classes that make up the SimpleApp: `SimpleObject` persistent entity, `HomePageViewModel`xref:userguide:fun:programming-model/view-models.adoc[view model] and `SimpleObjects` domain service (repository).
+Walking through the main classes that make up the SimpleApp: `SimpleObject` persistent entity, `HomePageViewModel`xref:userguide:fun:programming-model.adoc#view-models[view model] and `SimpleObjects` domain service (repository).
 ||||x|||||||
 
 

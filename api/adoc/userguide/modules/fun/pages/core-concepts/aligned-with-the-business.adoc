@@ -1,0 +1,120 @@
+= Aligned with the Business
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+
+Apache Isis is primarily aimed at custom-built "enterprise" applications, with a UI provided by the xref:vw:ROOT:about.adoc[Wicket viewer] is intended to be usable by domain experts, typically end-users within the organization.
+
+This section explores some of the considerations that organizations when deciding how to maintain their core business functions.
+
+== Why Build instead of Buy?
+
+Buying packaged software makes sense for statutory requirements, such as payroll or general ledger, or document management/retrieval.
+But (we argue) it makes much less sense to buy packaged software for the systems that support the core business: the software should fit the business, not the other way around.
+
+Packaged software suffers from the problem of both having doing "too much" and "not enough":
+
+* it does "too much" because it will have features that are not required by your business.
+These extra unnecessary features make the system difficult to learn and use.;
+
+* but it may also do "too little" because there may be crucial functionality not supported by the software.
+
+The diagram below illustrates the dichotomy:
+
+.build-vs-buy
+image::core-concepts/philosophy/build-vs-buy.png[width="800px",link="{imagesdir}/core-concepts/philosophy/build-vs-buy.png"]
+
+What happens in this case is that end-users -- needing some sort of solution for their particular business problem -- will end up using unused fields to store the information they need.
+We end up with no correlation between the fields definitions and the values stored therein, sometimes with the datatypes not even matching.
+Any business rules pertaining to this extra data have to be enforced manually by the users, rather than by the system.
+The end result is a system even more complicated to learn and use, with the quality of the data held within it degrading as end users inevitably make mistakes in using it.
+
+There are other benefits too for building rather than buying.
+Packaged software is almost always sold with a support package, the cover of which can vary enormously.
+At one end of the spectrum the support package ("bronze", say) will amount to little more than the ability to raise bug reports and to receive maintenance patches.
+At the other end (let's call it "platinum"), the support package might provide the ability to influence the direction of the development of the product, perhaps specific features missing by the business.
+
+Even so, the more widely used is the software package, the less chance of getting it changed.
+Does anyone reading this think they could get a new feature added (or removed) from Microsoft Word, for example?
+
+Here's another reason why you should build, and not buy, the software supporting your core business domain.
+Although most packaged software is customisable to a degree, there is always a limit to what can be customised.
+The consequence is that the business is forced to operate according to the way in which the software requires.
+
+This might be something as relatively innocuous as imposing its own terminology onto the business, meaning that the end-users must mentally translate concepts in order to use the software.
+But it might impose larger constraints on the business; some packaged software (we carefully mention no names) is quite notorious for this
+
+If your business is using the same software as your competitor, then obviously there's no competitive advantage to be gained.
+And if your competitor has well-crafted custom software, then your business will be at a competitive __dis__advantage.
+
+So, our philosophy is that custom software -- for your core business domain -- is the way to go.
+
+== Maintainable
+
+Enterprise applications tend to stick around a long time; a business' core domains don't tend to change all that often.
+What this means in turn is that the application needs to be maintainable, so that it is as easy to modify and extend when it's 10 years old as when it was first written.
+
+That's a tall order for any application to meet, and realistically it _can_ only be met if the application is modular.
+Any application that lacks a coherent internal structure will ultimately degrade into an unmaintable "big ball of mud", and the development team's velocity/capacity to make changes will reduce accordingly.
+
+Apache Isis' architecture allows the internal structure to be maintained in two distinct ways.
+
+* first, the naked objects pattern acts as a "firewall", ensuring that any business logic in the domain layer doesn't leak out into the presentation layer (it can't, because the developer doesn't write any controllers/views).
+
+* second, the framework's provides various features (discussed in more detail below) to allow the different modules _within_ the domain layer to interact with each in a decoupled fashion.
+
+The diagram below illustrates this:
+
+.decoupled applications
+image::core-concepts/philosophy/decoupled-applications.png[width="800px",link="{imagesdir}/core-concepts/philosophy/decoupled-applications.png"]
+
+Here, the presentation layer (xref:vw:ROOT:about.adoc[Wicket UI] or xref:vro:ROOT:about.adoc[REST API]) is handled by the framework, while the developer focusses on just the domain layer.
+The framework encourages splitting this functionality into modules; each such module has its counterpart (typically tables within a given RDBMS database schema) within the persistence layer.
+
+This architecture means that it's impossible for business logic to leach out into the adjacent presentation layer because the developer doesn't (can't) write any code for presentation layer.
+We in effect have a "firewall" between the two layers.
+
+To support the business domain being split into separate modules, the framework provides various features, the most important of which are:
+
+* dependency injection of services +
++ Both xref:refguide:applib-svc:about.adoc[framework-defined domain services] and application-defined services (eg repositories and factories) are injected everywhere, using the regular xref:refguide:applib-ant:Inject.adoc[`@javax.inject.Inject`] annotation.
++
+Note that this means dependencies are _also_ injected into domain entities and view models, allowing for behaviourally complete functionality.
+
+* mixins allow functionality defined in one module to appear (in the UI) to be provided by some other module. +
++ For example, a _Document_ module might allow `Document` objects to be attached to any arbitrary domain object (such as `Order` or `Customer`) in other modules.
+A mixin would allow the UI for a `Customer` to also display these attached ``Document``s, even though the _Customer_ module would have no knowledge of/dependency on the _Workflow_ module.
++
+Dependencies are also injected into mixins.
+A common technique is to factor out from domain objects into mixins and then generalise.
+
+
+* the internal xref:refguide:applib-svc:EventBusService.adoc[event bus] allows modules to influence other modules.
++
+A good example is supporting what (in an RDBMS we would call) referential integrity.
+Suppose the _Customer_ module has a `Customer` object and a `EmailAddress` object, with a customer having a collection of email addresses.
+A _Communications_ module might then use those email addresses to create ``EmailCommunication``s. +
+ +
+If the _Customer_ module wants to delete an `EmailAddress` then the _Communications_ module will probably want to veto this because they are "in use" by those ``EmailCommunication``s.
+Or, it might conceivably perform a cascade delete of all associated communications.
+Either way, the _Communications_ module receives an internal event representing the intention to delete the `EmailAddress`.
+It can then act accordingly, either vetoing the interaction or performing the cascade delete.
+The _Customer_ module for its part does not know anything about this other module.
+
+For those cases where a module needs to interact with other modules but does not know about their implementations, the module can either define its own link:https://en.wikipedia.org/wiki/Service_provider_interface[SPI] domain services or it can define custom domain events and fire them.
+This technique is also used extensively by the framework itself.
+For example, the xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`] SPI enables custom auditing, and the xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`] SPI enables custom publishing.
+
+When building a modular application, it's important to consider the logical layering of the modules: we don't need every module to be completely decoupled from every other.
+The most important requirement is that there are no cyclic dependencies, because otherwise we run the risk of the application degrading into a link:https://en.wikipedia.org/wiki/Big_ball_of_mud["big ball of mud"].
+(Proprietary) tools such as link:https://structure101.com/[Structure 101] help detect and visualize such cycles.
+OO design techniques such as the link:https://en.wikipedia.org/wiki/Dependency_inversion_principle[dependency inversion principle] can be used to remove cycles.
+(Open source) libraries such as link:https://www.archunit.org/[ArchUnit] or https://jqassistant.org/[jQAssistant] can help enforce architectural layering to prevent the issue arising in the first place.
+
+[TIP]
+====
+For further discussion on modular monoliths, check out Dan Haywood's article on InfoQ, "In Defence of the Monolith" (link:https://www.infoq.com/articles/monolith-defense-part-1[part 1], link:https://www.infoq.com/articles/monolith-defense-part-2[part 2]).
+====
+

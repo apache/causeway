@@ -23,58 +23,23 @@ Even the so-called usability experts had little to say on the subject: try findi
 Research had demonstrated that the best way to achieve expressiveness was to create an object-oriented user interface (_OOUI_).
 In practice, though, __OOUI__s were notoriously hard to develop.
 
-Sometime in the late 1990s, it dawned on me that if the domain model really did represent the "ubiquitous language" of the business and those domain objects were behaviorally rich (that is, business logic is encapsulated as methods on the domain objects rather than in procedural scripts on top of them), then the _UI_ could be nothing more than a reflection of the user interface. This would solve both of my concerns.
+Sometime in the late 1990s, it dawned on me that if the domain model really did represent the "ubiquitous language" of the business and those domain objects were behaviorally rich (that is, business logic is encapsulated as methods on the domain objects rather than in procedural scripts on top of them), then the _UI_ could be nothing more than a reflection of the user interface.
+This would solve both of my concerns.
 It would make it easier to do domain-driven design, because one could instantly translate evolving domain modeling ideas into a working prototype.
 And it would deliver an expressive, object-oriented user interface for free.
 Thus was born the idea of Naked Objects.
 __________________________
 
-
 You can learn much more about the pattern in the book, link:http://www.amazon.com/exec/obidos/ISBN=0470844205/[Naked Objects], also freely available to link:http://www.nakedobjects.org/book/[read online].
-Richard co-wrote the book with one of Apache Isis' committers, Robert Matthews, who was in turn the author of the Naked Objects Framework for Java (the original codebase of of Apache Isis).
+Richard co-wrote the book with one of Apache Isis' committers, Robert Matthews, who was in turn the author of the Naked Objects Framework for Java (the original codebase of Apache Isis).
 
 You might also want to read Richard's link:{attachmentsdir}/core-concepts/Pawson-Naked-Objects-thesis.pdf[PhD on the subject].
-
-
-[TIP]
-====
-One of the external examiners for Richard's PhD was link:http://en.wikipedia.org/wiki/Trygve_Reenskaug[Trygve Reenskaug], who originally formulated the MVC pattern at Xeroc PARC.
-In his paper, link:http://heim.ifi.uio.no/~trygver/2007/2007.02.13-babyUML.pdf[Baby UML], Reenskaug describes that when implemented the first MVC, "the conventional wisdom in the group was that objects should be visible and tangible, thus bridging the gap between the human brain and the abstract data within the computer."
-Sound familiar?
-It's interesting to speculate what might have been if this idea had been implemented back then in the late 70s.
-
-Reenskaug then goes on to say that "this simple and powerful idea failed because ... users were used to seeing [objects] from different perspectives.
-The visible and tangible object would get very complex if it should be able to show itself and be manipulated in many different ways."
-
-In Apache Isis the responsibility of rendering an object is not the object itself, it is the framework.
-Rather, the object inspects the object and uses that to decide how to render the object.
-This is also extensible.
-In the (non-ASF) link:https://platform.incode.org[Incode Platform^] the gmap3 wicket extension renders any object with latitude/longitude on a map, while fullcalendar2 renders any object with date(s) on a calendar.
-====
-
-
 
 == Object Interface Mapping
 
 Another -- more technical -- way to think about the naked objects pattern is as an _object interface mapper_, or `OIM`.
-We sometimes use this idea to explain naked objects to a bunch of developers.
-
 Just as an ORM (such as link:http://datanucleus.org[DataNucleus] or link:http://hibernate.org[Hibernate]) maps domain entities to a database, you can think of the naked objects pattern as representing the concept of mapping domain objects to a user interface.
+We sometimes use this idea to explain naked objects to a developer audience.
 
-This is the way that the link:http://metawidget.org/[MetaWidget] team, in particular Richard Kennard, the primary contributor, likes to describe their tool.
-You can hear more from Kennard and others on this http://devchat.tv/js-jabber/150-jsj-oims[Javascript Jabber podcast].
-
-
-
-
-== What this means in practice
-
-This link:https://www.youtube.com/watch?v=ludOLyi6VyY[screencast] shows what all of this means in practice, showing the relationship between a running app and the actual code underneath.
-
-
-[NOTE]
-====
-This screencast shows Apache Isis v1.0.0, Jan 2013.  The UI has been substantially refined since that release.
-====
 
 

@@ -41,22 +41,38 @@ The vote is UNSUCCESSFUL.
 ----
 
 
-== Tidy up branches
+== Tidy up branches and tags
 
-Tidy up remote branches in the git repo:
+Branches and tags need to be removed for three repos:
 
+* Working in the release worktree, tidy up remote branches in the git repo:
++
 [source,bash,subs="attributes+"]
 ----
-git push --delete origin release-{isisnext}-RC1
-git push --delete origin isis-{isisnext}-RC1
-git tag -d isis-{isisnext}
+git push --delete origin release-{isisnext}-RC1     # <.>
+git push --delete origin isis-{isisnext}-RC1        # <.>
+git tag -d isis-{isisnext}                          # <.>
+git tag -d isis-{isisnext}-RC1
+----
+<.> deletes the remote branch (update `RCn` as necessary)
+<.> deletes the remote origin server's tag (update `RCn` as necessary)
+These steps:
+<.> delete the tags that were created locally (update `RCn` as necessary)
+
+* For helloworld starter app, similarly:
++
+[source,bash,subs="attributes+"]
+----
+git push --delete origin release-{isisnext}-RC1     # <.>
 ----
 
-These steps:
+* For simpleapp starter app, similarly:
++
+[source,bash,subs="attributes+"]
+----
+git push --delete origin release-{isisnext}-RC1     # <.>
+----
 
-* delete the remote branch
-* delete the remote origin server's tags
-* delete the tags that were created locally
 
 
 == Tidy up the Nexus repo

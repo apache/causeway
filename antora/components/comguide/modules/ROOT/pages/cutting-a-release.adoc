@@ -185,22 +185,32 @@ The branch name is intentionally *not* the same as the eventual tag names (eg `i
 ====
 
 
-=== Create a release branch
+=== Create a release branch and worktree
 
 The release is performed on a branch; if we are successful, this branch will be merged back into master.
 
-The next step therefore is to create a release branch for the version number being released; eg:
+We also recommend performing this work in a separate git worktree.
+The original worktree can stay with the `master` branch and be used for documentation fixes, etc.
 
-
+* create (but don't checkout) a release branch for the version number being released; eg:
++
 [source,bash,subs="attributes+"]
 ----
-git checkout -b $ISISBRANCH
+git branch $ISISBRANCH
 ----
 
-If necessary, switch to the `core-parent` directory:
-
+* Create a worktree for this branch:
++
 [source,bash,subs="attributes+"]
 ----
+git worktree add ../isis-release $ISISBRANCH
+----
+
+* Switch to the `core-parent` directory in the new worktree:
++
+[source,bash,subs="attributes+"]
+----
+cd ../isis-release
 cd core-parent
 ----
 
@@ -474,7 +484,7 @@ done
 popd
 ----
 
-* Back in the `isis` repo, generate the Antora site (from the top-level directory):
+* Back in the `isis` repo's worktree for `master` (as opposed to the `release` worktree, that is), generate the Antora site (from the top-level directory):
 +
 [source,bash,subs="attributes+"]
 ----

@@ -3,6 +3,11 @@
     font-weight: 500;
 }
 
+.doc .sidebarblock.float-left {
+    min-width: 400px;
+    margin-right: 30px;
+}
+
 .content .hljs-keyword,
 .content .hljs-selector-tag,
 .content .hljs-subst {
