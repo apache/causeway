@@ -26,7 +26,6 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 
 import lombok.val;
 
@@ -34,33 +33,35 @@ public class ComplexNumberValueSemantics implements ValueSemanticsProvider<Compl
     
     @Override
     public Parser<ComplexNumber> getParser() {
-        return new Parser<ComplexNumber>() {
-
-            @Override
-            public ComplexNumber parseTextEntry(Object contextPojo, String entry) {
-                throw _Exceptions.unsupportedOperation();
-            }
-
-            @Override
-            public int typicalLength() {
-                return 150;
-            }
-
-            @Override
-            public String displayTitleOf(ComplexNumber object) {
-                return object!=null ? object.toString() : "NaN";
-            }
-
-            @Override
-            public String displayTitleOf(ComplexNumber object, String usingMask) {
-                throw _Exceptions.unsupportedOperation();
-            }
-
-            @Override
-            public String parseableTitleOf(ComplexNumber existing) {
-                throw _Exceptions.unsupportedOperation();
-            }
-        }; 
+        return null;
+       
+//        return new Parser<ComplexNumber>() {
+//
+//            @Override
+//            public ComplexNumber parseTextEntry(Object contextPojo, String entry) {
+//                throw _Exceptions.unsupportedOperation();
+//            }
+//
+//            @Override
+//            public int typicalLength() {
+//                return 150;
+//            }
+//
+//            @Override
+//            public String displayTitleOf(ComplexNumber object) {
+//                return object!=null ? object.toString() : "NaN";
+//            }
+//
+//            @Override
+//            public String displayTitleOf(ComplexNumber object, String usingMask) {
+//                throw _Exceptions.unsupportedOperation();
+//            }
+//
+//            @Override
+//            public String parseableTitleOf(ComplexNumber existing) {
+//                throw _Exceptions.unsupportedOperation();
+//            }
+//        }; 
     }
 
    

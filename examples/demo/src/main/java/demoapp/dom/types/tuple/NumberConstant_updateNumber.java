@@ -18,22 +18,19 @@
  */
 package demoapp.dom.types.tuple;
 
-import javax.jdo.annotations.EmbeddedOnly;
-import javax.jdo.annotations.PersistenceCapable;
+import org.apache.isis.applib.annotation.Action;
 
-import org.apache.isis.applib.annotation.Value;
+import lombok.RequiredArgsConstructor;
 
-@PersistenceCapable
-@EmbeddedOnly
-@Value(semanticsProviderClass = ComplexNumberValueSemantics.class)
-@lombok.Data
-@lombok.AllArgsConstructor(staticName = "of")
-public class ComplexNumber {
+@Action(associateWith = "number")
+@RequiredArgsConstructor
+public class NumberConstant_updateNumber {
+
+    private final NumberConstant holder;
     
-    @javax.jdo.annotations.Column(allowsNull = "false")
-    private double re;
+    public NumberConstant act(double re, double im) {
+        holder.setNumber(ComplexNumber.of(re, im));
+        return holder;
+    }
     
-    @javax.jdo.annotations.Column(allowsNull = "false")
-    private double im;
-
 }
