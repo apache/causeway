@@ -33,4 +33,12 @@ public class NumberConstant_updateNumber {
         return holder;
     }
     
+    public double default0Act() {
+        return holder.getNumber().getRe();
+    }
+    
+    public double default1Act() {
+        return holder.getNumber().getIm();
+    }
+    
 }

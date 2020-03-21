@@ -30,6 +30,13 @@ import org.apache.isis.applib.annotation.Value;
 @lombok.AllArgsConstructor(staticName = "of")
 public class ComplexNumber {
     
+    public String title() {
+        if (im == 0) return "" + re;
+        if (re == 0) return "" + im + "i";
+        if (im < 0) return "" + re + " - " + (-im) + "i";
+        return "" + re + " + " + im + "i";
+    }
+    
     @javax.jdo.annotations.Column(allowsNull = "false")
     private double re;
     
