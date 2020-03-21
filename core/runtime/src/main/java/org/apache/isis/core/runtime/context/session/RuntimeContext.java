@@ -23,7 +23,7 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.session.IsisSessionTracker;
+import org.apache.isis.core.runtime.session.IsisInteractionTracker;
 
 /**
  * TODO [2033] this was introduced when refactoring, maybe use MetaModelContext instead if possible
@@ -35,7 +35,7 @@ public interface RuntimeContext {
 
     MetaModelContext getMetaModelContext();
 
-    IsisSessionTracker getIsisSessionTracker(); 
+    IsisInteractionTracker getIsisSessionTracker(); 
     IsisConfiguration getConfiguration();
     SpecificationLoader getSpecificationLoader();
     ServiceInjector getServiceInjector();

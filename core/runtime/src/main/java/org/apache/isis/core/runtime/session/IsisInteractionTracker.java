@@ -29,7 +29,7 @@ import org.apache.isis.core.security.authentication.MessageBroker;
  * @since 2.0
  *
  */
-public interface IsisSessionTracker extends AuthenticationSessionTracker {
+public interface IsisInteractionTracker extends AuthenticationSessionTracker {
 
     boolean isInSession();
     

@@ -93,7 +93,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.runtime.session.IsisInteraction;
 import org.apache.isis.core.runtime.session.IsisInteractionFactory;
-import org.apache.isis.core.runtime.session.IsisSessionTracker;
+import org.apache.isis.core.runtime.session.IsisInteractionTracker;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
 import org.apache.isis.core.runtimeservices.wrapper.handlers.DomainObjectInvocationHandler;
@@ -126,7 +126,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     @Inject private FactoryService factoryService;
     @Inject private MetaModelContext metaModelContext;
     @Inject private SpecificationLoader specificationLoader;
-    @Inject private IsisSessionTracker isisSessionTracker;
+    @Inject private IsisInteractionTracker isisSessionTracker;
     @Inject private IsisInteractionFactory isisSessionFactory;
     @Inject private TransactionService transactionService;
     @Inject private CommandExecutorService commandExecutorService;

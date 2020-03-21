@@ -51,7 +51,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.session.RuntimeEventService;
 import org.apache.isis.core.runtime.session.IsisInteraction;
 import org.apache.isis.core.runtime.session.IsisInteractionFactory;
-import org.apache.isis.core.runtime.session.IsisSessionTracker;
+import org.apache.isis.core.runtime.session.IsisInteractionTracker;
 import org.apache.isis.core.runtime.session.init.IsisLocaleInitializer;
 import org.apache.isis.core.runtime.session.init.IsisTimeZoneInitializer;
 import org.apache.isis.core.runtime.session.scope.IsisInteractionScopeBeanFactoryPostProcessor;
@@ -85,7 +85,7 @@ import lombok.extern.log4j.Log4j2;
 @Primary
 @Qualifier("Default")
 @Log4j2
-public class IsisInteractionFactoryDefault implements IsisInteractionFactory, IsisSessionTracker {
+public class IsisInteractionFactoryDefault implements IsisInteractionFactory, IsisInteractionTracker {
 
     @Inject private AuthenticationManager authenticationManager;
     @Inject private RuntimeEventService runtimeEventService;

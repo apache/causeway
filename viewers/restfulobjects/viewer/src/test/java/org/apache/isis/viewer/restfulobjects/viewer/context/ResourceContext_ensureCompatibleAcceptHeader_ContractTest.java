@@ -44,7 +44,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.session.IsisInteraction;
 import org.apache.isis.core.runtime.session.IsisInteractionFactory;
-import org.apache.isis.core.runtime.session.IsisSessionTracker;
+import org.apache.isis.core.runtime.session.IsisInteractionTracker;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -67,7 +67,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     @Mock AuthenticationSession mockAuthenticationSession;
     @Mock SpecificationLoader mockSpecificationLoader;
     @Mock WebApplicationContext webApplicationContext;
-    @Mock IsisSessionTracker mockIsisSessionTracker;
+    @Mock IsisInteractionTracker mockIsisSessionTracker;
     @Mock AuthenticationManager mockAuthenticationManager;
     
     MetaModelContext metaModelContext;

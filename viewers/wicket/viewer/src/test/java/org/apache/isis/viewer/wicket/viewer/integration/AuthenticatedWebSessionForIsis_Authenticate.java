@@ -41,7 +41,7 @@ import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 import org.apache.isis.core.runtime.session.IsisInteractionFactory.ThrowingRunnable;
-import org.apache.isis.core.runtime.session.IsisSessionTracker;
+import org.apache.isis.core.runtime.session.IsisInteractionTracker;
 import org.apache.isis.core.runtime.session.init.InitialisationSession;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
@@ -64,7 +64,7 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
     @Mock protected Authenticator mockAuthenticator;
     @Mock protected IsisWebAppCommonContext mockCommonContext;
     @Mock protected IsisInteractionFactory mockIsisSessionFactory;
-    @Mock protected IsisSessionTracker mockIsisSessionTracker;
+    @Mock protected IsisInteractionTracker mockIsisSessionTracker;
     @Mock protected ServiceRegistry mockServiceRegistry;
 
     protected AuthenticatedWebSessionForIsis webSession;

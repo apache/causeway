@@ -65,7 +65,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.core.runtime.session.IsisInteraction;
 import org.apache.isis.core.runtime.session.IsisInteractionFactory;
-import org.apache.isis.core.runtime.session.IsisSessionTracker;
+import org.apache.isis.core.runtime.session.IsisInteractionTracker;
 import org.apache.isis.schema.cmd.v2.ActionDto;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.MemberDto;
@@ -401,7 +401,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     @Inject TransactionService transactionService;
     @Inject SpecificationLoader specificationLoader;
     @Inject IsisInteractionFactory isisSessionFactory;
-    @Inject IsisSessionTracker isisSessionTracker;
+    @Inject IsisInteractionTracker isisSessionTracker;
 
     @Inject private javax.inject.Provider<InteractionContext> interactionContextProvider;
 

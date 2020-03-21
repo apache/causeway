@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.session.IsisSessionTracker;
+import org.apache.isis.core.runtime.session.IsisInteractionTracker;
 import org.apache.isis.core.security.authentication.MessageBroker;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.core.webapp.context.memento.ObjectMementoService;
@@ -71,7 +71,7 @@ public class IsisWebAppCommonContext implements MetaModelContext.Delegating {
     private final MenuBarsService menuBarsService = lookupServiceElseFail(MenuBarsService.class);
     
     @Getter(lazy = true)
-    private final IsisSessionTracker isisSessionTracker = lookupServiceElseFail(IsisSessionTracker.class);
+    private final IsisInteractionTracker isisSessionTracker = lookupServiceElseFail(IsisInteractionTracker.class);
     
     @Getter(lazy = true, value = AccessLevel.PRIVATE)
     private final ObjectMementoService mementoService = lookupServiceElseFail(ObjectMementoService.class);

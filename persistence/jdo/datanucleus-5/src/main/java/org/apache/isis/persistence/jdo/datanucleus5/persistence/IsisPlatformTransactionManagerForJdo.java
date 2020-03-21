@@ -44,7 +44,7 @@ import org.apache.isis.core.runtime.persistence.transaction.events.TransactionBe
 import org.apache.isis.core.runtime.persistence.transaction.events.TransactionBeforeCommitEvent;
 import org.apache.isis.core.runtime.persistence.transaction.events.TransactionBeforeRollbackEvent;
 import org.apache.isis.core.runtime.session.IsisInteractionFactory;
-import org.apache.isis.core.runtime.session.IsisSessionTracker;
+import org.apache.isis.core.runtime.session.IsisInteractionTracker;
 import org.apache.isis.core.runtime.session.init.InitialisationSession;
 
 import lombok.val;
@@ -63,13 +63,13 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
 
     private final IsisInteractionFactory isisSessionFactory;
     private final EventBusService eventBusService;
-    private final IsisSessionTracker isisSessionTracker;
+    private final IsisInteractionTracker isisSessionTracker;
 
     @Inject
     public IsisPlatformTransactionManagerForJdo(
             final IsisInteractionFactory isisSessionFactory,
             final EventBusService eventBusService,
-            final IsisSessionTracker isisSessionTracker) {
+            final IsisInteractionTracker isisSessionTracker) {
         this.isisSessionFactory = isisSessionFactory;
         this.eventBusService = eventBusService;
         this.isisSessionTracker = isisSessionTracker;
