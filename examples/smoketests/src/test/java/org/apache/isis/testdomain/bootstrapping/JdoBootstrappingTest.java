@@ -63,15 +63,12 @@ class JdoBootstrappingTest {
 
     @BeforeAll
     static void beforeAll() throws SQLException {
-        //XXX is it actually the case that tests might run in parallel?
-        //assertFalse(IsisSession.isInSession()); // expected pre condition 
         // launch H2Console for troubleshooting ...
         // Util_H2Console.main(null);
     }
 
     @AfterAll
     static void afterAll() throws SQLException {
-        //		assertFalse(IsisSession.isInSession()); // expected post condition
     }
 
 

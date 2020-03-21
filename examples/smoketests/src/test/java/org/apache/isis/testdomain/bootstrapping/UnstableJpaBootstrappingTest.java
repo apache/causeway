@@ -34,7 +34,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 
@@ -60,15 +59,12 @@ class UnstableJpaBootstrappingTest {
 
     @BeforeAll
     static void beforeAll() throws SQLException {
-        //XXX is it actually the case that tests might run in parallel?
-        //assertFalse(IsisSession.isInSession()); // expected pre condition 
         // launch H2Console for troubleshooting ...
         // Util_H2Console.main(null);
     }
 
     @AfterAll
     static void afterAll() throws SQLException {
-        //		assertFalse(IsisSession.isInSession()); // expected post condition
     }
 
     @Test //@Order(1) 
@@ -76,60 +72,6 @@ class UnstableJpaBootstrappingTest {
         assertTrue(platformTransactionManager.isPresent());
     }
     
-    
-//    void cleanUp() {
-//
-//        repository.allInstances(JpaInventory.class).forEach(repository::remove);
-//        repository.allInstances(JpaBook.class).forEach(repository::remove);
-//        repository.allInstances(JpaProduct.class).forEach(repository::remove);
-//        System.out.println("!!! CLEANUP DONE");
-//    }
-//
-//    void setUp() {
-//
-//        // setup sample Inventory
-//        Set<JpaProduct> products = new HashSet<>();
-//
-//        products.add(JpaBook.of("Sample Book", "A sample book for testing.", 99., "Sample Author", "Sample ISBN",
-//                "Sample Publisher"));
-//
-//        val inventory = JpaInventory.of("Sample Inventory", products);
-//        repository.persist(inventory);
-//
-//        System.out.println("!!! SETUP DONE");
-//    }
-//
-//    @Test @Order(1) @Rollback(false) 
-//    void sampleInventoryShouldBeSetUp() {
-//
-//        // given - expected pre condition: no inventories
-//
-//        cleanUp();
-//        assertEquals(0, repository.allInstances(JpaInventory.class).size());
-//        System.out.println("!!! VERIFY CLEANUP DONE");
-//
-//        // when
-//
-//        setUp();
-//
-//        // then - expected post condition: ONE inventory
-//
-//        val inventories = repository.allInstances(JpaInventory.class);
-//        assertEquals(1, inventories.size());
-//
-//        val inventory = inventories.get(0);
-//        assertNotNull(inventory);
-//        assertNotNull(inventory.getProducts());
-//        assertEquals(1, inventory.getProducts().size());
-//
-//        val product = inventory.getProducts().iterator().next();
-//        assertEquals("Sample Book", product.getName());
-//
-//    }
-//
-//    @Test @Order(2) @Rollback(false)
-//    void aSecondRunShouldWorkAsWell() {
-//        sampleInventoryShouldBeSetUp();
-//    }
+
 
 }
