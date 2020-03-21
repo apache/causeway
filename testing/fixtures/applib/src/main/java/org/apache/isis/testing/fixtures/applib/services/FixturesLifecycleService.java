@@ -39,7 +39,7 @@ import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.runtime.context.session.AppLifecycleEvent;
-import org.apache.isis.core.runtime.session.template.AbstractIsisSessionTemplate;
+import org.apache.isis.core.runtime.session.template.AbstractIsisInteractionTemplate;
 import org.apache.isis.core.security.authentication.standard.SimpleSession;
 import org.apache.isis.testing.fixtures.applib.clock.FixtureClock;
 import org.apache.isis.core.runtime.session.IsisInteractionFactory;

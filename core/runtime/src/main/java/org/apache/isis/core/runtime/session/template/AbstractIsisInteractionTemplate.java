@@ -26,7 +26,7 @@ import org.apache.isis.core.runtime.session.IsisInteraction;
 import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 
-public abstract class AbstractIsisSessionTemplate {
+public abstract class AbstractIsisInteractionTemplate {
     
     @Inject protected TransactionService transactionService;
     @Inject protected IsisInteractionFactory isisInteractionFactory;

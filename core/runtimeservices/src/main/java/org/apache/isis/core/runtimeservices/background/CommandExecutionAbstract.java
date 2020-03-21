@@ -23,11 +23,11 @@ import javax.inject.Inject;
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.command.CommandWithDto;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.core.runtime.session.template.AbstractIsisSessionTemplate;
+import org.apache.isis.core.runtime.session.template.AbstractIsisInteractionTemplate;
 
 /**
  */
-public abstract class CommandExecutionAbstract extends AbstractIsisSessionTemplate {
+public abstract class CommandExecutionAbstract extends AbstractIsisInteractionTemplate {
 
     @Inject protected CommandExecutorService commandExecutorService;
     
