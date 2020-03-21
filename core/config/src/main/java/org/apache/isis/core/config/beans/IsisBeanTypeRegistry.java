@@ -35,11 +35,11 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.ViewModel;
+import org.apache.isis.applib.services.metamodel.BeanSort;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Sets;
-import org.apache.isis.applib.services.metamodel.BeanSort;
-import org.apache.isis.core.commons.internal.reflection._Reflect;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
 import static org.apache.isis.core.commons.internal.reflection._Annotations.findNearestAnnotation;
@@ -61,6 +61,7 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
      * Inbox for introspection, as used by the SpecificationLoader
      */
     private final Map<Class<?>, BeanSort> introspectableTypes = new HashMap<>();
+    private final Can<IsisBeanTypeClassifier> classifierPlugins = IsisBeanTypeClassifier.get();
 
     // -- DISTINCT CATEGORIES OF BEAN SORTS
     
@@ -237,20 +238,14 @@ public final class IsisBeanTypeRegistry implements IsisComponentScanInterceptor,
                     .delegated(BeanSort.MANAGED_BEAN_CONTRIBUTING, objectType(aDomainService.get()));
         }
 
-        //TODO would require ServiceLoader plugin to delegate the responsibility for this categorization to the
-        //module, that provides these types
-        if(_Reflect.containsAnnotation(type, "javax.jdo.annotations.PersistenceCapable")) {
-            //XXX hotfix in support of the @EmbeddedOnly annotation, also requires @Value to be present
-            if(_Reflect.containsAnnotation(type, "javax.jdo.annotations.EmbeddedOnly")) {
-                //TODO does not honor @PersistenceCapable(embeddedOnly="true")
-                if(findNearestAnnotation(type, org.apache.isis.applib.annotation.Value.class).isPresent()) {
-                    
-                    return BeanClassification.selfManaged(BeanSort.VALUE);
-                }       
+        // allow ServiceLoader plugins to have a say, eg. when classifying entity types
+        for(val classifier : classifierPlugins) {
+            val classification = classifier.classify(type);
+            if(classification!=null) {
+                return classification;
             }
-            //this takes precedence over whatever @DomainObject has to say
-            return BeanClassification.selfManaged(BeanSort.ENTITY);
         }
+
 
         if(findNearestAnnotation(type, Mixin.class).isPresent()) {
             return BeanClassification.selfManaged(BeanSort.MIXIN);
