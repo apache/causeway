@@ -54,7 +54,7 @@ import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 import org.apache.isis.core.runtime.session.IsisSessionTracker;
 import org.apache.isis.core.runtime.session.init.IsisLocaleInitializer;
 import org.apache.isis.core.runtime.session.init.IsisTimeZoneInitializer;
-import org.apache.isis.core.runtime.session.scope.IsisSessionScopeBeanFactoryPostProcessor;
+import org.apache.isis.core.runtime.session.scope.IsisInteractionScopeBeanFactoryPostProcessor;
 import org.apache.isis.core.runtime.session.scope.IsisInteractionScopeCloseListener;
 import org.apache.isis.core.runtimeservices.user.UserServiceDefault;
 import org.apache.isis.core.runtimeservices.user.UserServiceDefault.UserAndRoleOverrides;
@@ -101,7 +101,7 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
 
     @PostConstruct
     public void initIsisSessionScopeSupport() {
-        this.isisSessionScopeCloseListener = IsisSessionScopeBeanFactoryPostProcessor.initIsisSessionScopeSupport(serviceInjector);        
+        this.isisSessionScopeCloseListener = IsisInteractionScopeBeanFactoryPostProcessor.initIsisSessionScopeSupport(serviceInjector);        
     }
     
     //@PostConstruct .. too early, needs services to be provisioned first

@@ -31,7 +31,7 @@ import org.apache.isis.core.runtime.persistence.session.events.PersistenceEventS
 import org.apache.isis.core.runtime.persistence.session.events.TimestampService;
 import org.apache.isis.core.runtime.persistence.transaction.AuditerDispatchService;
 import org.apache.isis.core.runtime.persistence.transaction.ChangedObjectsService;
-import org.apache.isis.core.runtime.session.scope.IsisSessionScopeBeanFactoryPostProcessor;
+import org.apache.isis.core.runtime.session.scope.IsisInteractionScopeBeanFactoryPostProcessor;
 
 @Configuration
 @Import({
@@ -54,7 +54,7 @@ public class IsisModuleCoreRuntime {
 
     @Bean
     public static BeanFactoryPostProcessor beanFactoryPostProcessor() {
-        return new IsisSessionScopeBeanFactoryPostProcessor();
+        return new IsisInteractionScopeBeanFactoryPostProcessor();
     }
     
 }

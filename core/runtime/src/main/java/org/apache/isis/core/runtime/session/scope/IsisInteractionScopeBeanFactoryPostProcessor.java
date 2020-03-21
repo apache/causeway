@@ -31,7 +31,7 @@ import lombok.val;
 /**
  * @since 2.0
  */
-public class IsisSessionScopeBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
+public class IsisInteractionScopeBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
