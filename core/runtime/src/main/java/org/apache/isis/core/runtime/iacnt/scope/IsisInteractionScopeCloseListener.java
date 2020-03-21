@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.session.scope;
+package org.apache.isis.core.runtime.iacnt.scope;
 
 /**
  * @since 2.0

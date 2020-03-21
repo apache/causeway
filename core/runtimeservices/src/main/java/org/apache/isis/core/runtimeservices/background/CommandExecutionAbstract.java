@@ -23,7 +23,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.command.CommandWithDto;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.core.runtime.session.template.AbstractIsisInteractionTemplate;
+import org.apache.isis.core.runtime.iacnt.template.AbstractIsisInteractionTemplate;
 
 /**
  */

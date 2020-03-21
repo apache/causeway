@@ -35,7 +35,7 @@ import org.apache.isis.applib.services.TransactionScopeListener;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.runtime.session.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iacnt.IsisInteractionFactory;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;

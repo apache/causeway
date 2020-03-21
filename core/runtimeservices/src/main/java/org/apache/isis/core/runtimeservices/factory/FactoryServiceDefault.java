@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.session.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iacnt.IsisInteractionFactory;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
 import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramAssignableFrom;

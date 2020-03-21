@@ -39,7 +39,7 @@ import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.runtime.session.IsisInteractionTracker;
+import org.apache.isis.core.runtime.iacnt.IsisInteractionTracker;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import lombok.Value;

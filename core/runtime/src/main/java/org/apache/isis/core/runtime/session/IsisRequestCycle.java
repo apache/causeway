@@ -21,6 +21,7 @@ package org.apache.isis.core.runtime.session;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import org.apache.isis.core.runtime.iacnt.IsisInteractionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import lombok.RequiredArgsConstructor;

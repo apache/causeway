@@ -29,8 +29,8 @@ import org.junit.Rule;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.session.SessionLoggingService;
-import org.apache.isis.core.runtime.session.IsisInteractionFactory;
-import org.apache.isis.core.runtime.session.IsisInteractionFactory.ThrowingRunnable;
+import org.apache.isis.core.runtime.iacnt.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iacnt.IsisInteractionFactory.ThrowingRunnable;
 import org.apache.isis.core.runtime.session.init.InitialisationSession;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;

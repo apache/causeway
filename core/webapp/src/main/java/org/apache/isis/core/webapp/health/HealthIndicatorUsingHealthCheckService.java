@@ -30,7 +30,7 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.health.HealthCheckService;
-import org.apache.isis.core.runtime.session.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iacnt.IsisInteractionFactory;
 import org.apache.isis.core.security.authentication.health.HealthAuthSession;
 
 import lombok.val;

@@ -33,7 +33,7 @@ import org.apache.isis.core.commons.internal.base._Bytes;
 import org.apache.isis.core.commons.internal.resources._Resources;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.runtime.session.IsisInteractionTracker;
+import org.apache.isis.core.runtime.iacnt.IsisInteractionTracker;
 
 @Component
 @Path("/image")

@@ -33,6 +33,8 @@ import org.springframework.transaction.support.DefaultTransactionStatus;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.runtime.iacnt.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iacnt.IsisInteractionTracker;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionAspectSupport;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionObject;
@@ -43,8 +45,6 @@ import org.apache.isis.core.runtime.persistence.transaction.events.TransactionAf
 import org.apache.isis.core.runtime.persistence.transaction.events.TransactionBeforeBeginEvent;
 import org.apache.isis.core.runtime.persistence.transaction.events.TransactionBeforeCommitEvent;
 import org.apache.isis.core.runtime.persistence.transaction.events.TransactionBeforeRollbackEvent;
-import org.apache.isis.core.runtime.session.IsisInteractionFactory;
-import org.apache.isis.core.runtime.session.IsisInteractionTracker;
 import org.apache.isis.core.runtime.session.init.InitialisationSession;
 
 import lombok.val;

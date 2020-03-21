@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.session;
+package org.apache.isis.core.runtime.iacnt;
 
 import java.util.concurrent.Callable;
 

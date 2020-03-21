@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.runtime.context.session;
 
-import org.apache.isis.core.runtime.session.IsisInteraction;
+import org.apache.isis.core.runtime.iacnt.IsisInteraction;
 
 import lombok.Getter;
 import lombok.ToString;

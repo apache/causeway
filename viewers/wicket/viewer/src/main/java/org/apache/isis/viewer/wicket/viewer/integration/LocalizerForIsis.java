@@ -35,8 +35,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.runtime.session.IsisInteractionFactory;
-import org.apache.isis.core.runtime.session.IsisInteractionTracker;
+import org.apache.isis.core.runtime.iacnt.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iacnt.IsisInteractionTracker;
 import org.apache.isis.core.runtime.session.init.InitialisationSession;
 import org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication;
 

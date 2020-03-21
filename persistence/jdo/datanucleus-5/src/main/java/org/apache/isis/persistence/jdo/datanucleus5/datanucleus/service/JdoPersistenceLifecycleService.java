@@ -37,7 +37,7 @@ import org.apache.isis.core.runtime.context.session.AppLifecycleEvent;
 import org.apache.isis.core.runtime.context.session.IsisInteractionLifecycleEvent;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSessionFactory;
-import org.apache.isis.core.runtime.session.IsisInteraction;
+import org.apache.isis.core.runtime.iacnt.IsisInteraction;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

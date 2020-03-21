@@ -24,9 +24,9 @@ import java.util.function.Supplier;
 
 import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
+import org.apache.isis.core.runtime.iacnt.IsisInteractionFactory;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
-import org.apache.isis.core.runtime.session.IsisInteraction;
-import org.apache.isis.core.runtime.session.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iacnt.IsisInteraction;
 
 /**
  * Provides static access to current context's singletons

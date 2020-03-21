@@ -32,8 +32,8 @@ import com.vaadin.flow.server.VaadinSession;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.core.runtime.session.IsisInteractionFactory;
-import org.apache.isis.core.runtime.session.IsisInteractionFactory.ThrowingRunnable;
+import org.apache.isis.core.runtime.iacnt.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iacnt.IsisInteractionFactory.ThrowingRunnable;
 import org.apache.isis.core.security.authentication.standard.SimpleSession;
 import org.apache.isis.incubator.viewer.vaadin.ui.pages.login.VaadinLoginView;
 
