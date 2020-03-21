@@ -252,56 +252,8 @@ A mixin object allows one class to contribute behaviour - actions, (derived) pro
 Or rather, the mixin _appears_ to contribute the behaviour/state in the UI; the underlying domain class being "decorated" does not know this is happening.
 
 This is therefore a key technique to allow the app to stay decoupled, so that it doesn't degrade into the proverbial link:http://www.laputan.org/mud/mud.html#BigBallOfMud["big ball of mud"].
-Mixins allow dependencies to be inverted, so that the dependencies between modules can be kept acyclic and under control.
+There's a lot more discussion on this topic in xref:building-blocks.adoc#modules[modules], below.
 
-For example, suppose that we send out ``Invoice``s to ``Customer``s.
-We want the invoices to know about customers, but not vice versa.
-We could surface the set of invoices for a customer using a `Customer_invoices` mixin:
-
-[plantuml]
-.`invoices` module contributes to `customers`
-----
-include::docs:resources:partial$plantuml-stereotypes.adoc[]
-
-package invoice {
-    class Customer_invoices <<mixin>>
-    class Invoice <<mi>>
-}
-Customer_invoices --> "0.*" Invoice: invoices
-
-package customers {
-    class Customer <<ppt>>
-}
-Customer_invoices -.r-> Customer: "contributes to"
-----
-
-In the UI, when rendering a `Customer`, we would also be presented with the associated set of ``Invoice``s.
-
-We can also use mixins for dependencies that are in the other direction.
-For example, suppose we have a mechanism to attach ``Document``s to arbitrary domain objects.
-The documents module does not depend on any other modules, but provides a `DocumentHolder` marker interface.
-We can therefore attach documents to a `Customer` by having `Customer` implement this marker interface:
-
-[plantuml]
-.`customers` depends upon contributions of `documents`
-----
-include::docs:resources:partial$plantuml-stereotypes.adoc[]
-
-package documents {
-    interface DocumentHolder <<role>>
-    class DocumentHolder_documents <<mixin>>
-    class DocumentHolder_attachDocument <<mixin>>
-    class Document <<ppt>>
-}
-DocumentHolder_documents -d-> "0..*" Document: documents
-DocumentHolder_documents -.l-> DocumentHolder: "contributes to"
-DocumentHolder_attachDocument -.l-> DocumentHolder: "contributes to"
-
-package customers {
-    class Customer <<ppt>>
-}
-Customer -u.-^ DocumentHolder
-----
 
 Mixins are also a convenient mechanism for grouping functionality even for a concrete type, helping to rationalize about the dependency between the data and the behaviour.
 Each mixin is in effect a single behavioural "responsibility" of the domain object.

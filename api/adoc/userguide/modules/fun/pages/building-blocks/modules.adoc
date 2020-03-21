@@ -10,30 +10,121 @@ Modules chunk up the overall application into smaller pieces, usually a pacakge 
 The smaller pieces can be either tiers (presentation / domain / persistence) or functional architectural layers (eg customer vs orders vs products vs invoice etc).
 Because Apache Isis takes care of the presentation and persistence tiers, modules for us focuses just on the important bit: considering how the functionality within the domain model should be broken up into modules, and determining the dependencies between those modules.
 
+== Rules of Thumb
+
 The two main rule of thumbs for dependencies are:
 
 . there should be no cyclic dependencies (the module dependencies should form an acyclic graph), and
 . unstable modules should depend upon stable modules, rather than the other way around.
 
 By "unstable" we don't mean buggy, rather this relates to its likelihood to change its structure or behaviour over time: in other words its stability as a core set of concepts upon which other stuff can depend.
-Reference data (calendars, tax rates, lookups etc) is generally stable, as are "golden" concept such as counterparties / legal entities or financial accounts.
+Reference data (calendars, tax rates, lookups etc) are generally stable, as are "golden" concept such as counterparties / legal entities or financial accounts.
 Transactional concepts such as invoices or agreements is perhaps more likely to change.
 But this stuff is domain specific.
 
-If we get the dependencies wrong (that is, our initial guess on stability is proven incorrect over time) then there are a few techniques we can use:
+== Decoupling
 
-. move functionality (eg by factoring it out into xref:building-blocks.adoc#mixins[mixins] into the other module
+Having broken up a domain into multiple modules, there is still a need for higher level modules to use lower level modules, and the application must still appear as a coherent whole to the end-user.
 
-. move the functionality into a third module which depends on the other modules that had a bidirectional relationship
+The key features that Apache Isis provides to support this are:
 
-. use the link:https://en.wikipedia.org/wiki/Dependency_inversion_principle[dependency inversion principle] to introduce an abstraction representing the dependency.
+* dependency injection of services
++
+Both xref:refguide:applib-svc:about.adoc[framework-defined] domain services and application-defined services (eg repositories and factories) are injected everywhere, using the regular xref:refguide:applib-ant:Inject.adoc[`@javax.inject.Inject`] annotation.
++
+By "everywhere", we mean not just into domain services, but _also_ injected into domain entities and view models.
+This enables us to implement behaviourally complete domain objects (if we so wish).
+
+* xref:building-blocks.adoc#mixins[mixins] that allow functionality defined in one module to appear (in the UI) to be provided by some other module.
++
+For example, a _Document_ module might allow `Document` objects to be attached to any arbitrary domain object (such as `Order` or `Customer`) in other modules.
+A mixin would allow the UI for a `Customer` to also display these attached ``Document``s, even though the _Customer_ module would have no knowledge of/dependency on the _Workflow_ module.
+(More on this example xref:building-blocks.adoc#inverting-dependencies[below]).
++
+Dependencies are also injected into mixins.
+A common technique is to factor out from domain objects into mixins and then generalise.
+
+* the internal xref:refguide:applib-svc:EventBusService.adoc[event bus] allows modules to influence other modules.
++
+A subscriber in one module can subscribe to events emitted by domain objects in another module.
+These events can affect both the UI (eg hiding or disabling xref:building-blocks.adoc#object-members[object members], or allowing or vetoing interactions).
+
+A good example of this last is supporting (what in an RDBMS we would call) referential integrity.
+Suppose the `customers` module has a `Customer` object and a `EmailAddress` object, with a customer having a collection of email addresses.
+A `communications` module might then use those email addresses to create ``EmailCommunication``s.
+
+If the `customers` module wants to delete an `EmailAddress` then the `communications` module will probably want to veto this because they are "in use" by those ``EmailCommunication``s.
+Or, it might conceivably perform a cascade delete of all associated communications.
+Either way, the `communications` module receives an internal event representing the intention to delete the `EmailAddress`.
+It can then act accordingly, either vetoing the interaction or performing the cascade delete.
+The `customers` module for its part does not know anything about this other module.
+
+
+== Inverting Dependencies
+
+If we get the dependencies wrong (that is, our initial guess on stability is proven incorrect over time) then there are a couple of techniques we can use:
+
+* use the link:https://en.wikipedia.org/wiki/Dependency_inversion_principle[dependency inversion principle] to introduce an abstraction representing the dependency.
+
+* move functionality, eg by factoring it out into xref:building-blocks.adoc#mixins[mixins] into the other module or into a third module which depends on the other modules that had a bidirectional relationship
+
+Mixins in particular allow dependencies to be inverted, so that the dependencies between modules can be kept acyclic and under control.
+
+For example, suppose that we send out ``Invoice``s to ``Customer``s.
+We want the invoices to know about customers, but not vice versa.
+We could surface the set of invoices for a customer using a `Customer_invoices` mixin:
+
+[plantuml]
+.`invoices` module contributes to `customers`
+----
+include::docs:resources:partial$plantuml-stereotypes.adoc[]
+
+package invoice {
+    class Customer_invoices <<mixin>>
+    class Invoice <<mi>>
+}
+Customer_invoices --> "0.*" Invoice: invoices
+
+package customers {
+    class Customer <<ppt>>
+}
+Customer_invoices -.r-> Customer: "contributes to"
+----
+
+In the UI, when rendering a `Customer`, we would also be presented with the associated set of ``Invoice``s.
+
+We can also use mixins for dependencies that are in the other direction.
+For example, suppose we have a mechanism to attach ``Document``s to arbitrary domain objects.
+The documents module does not depend on any other modules, but provides a `DocumentHolder` marker interface.
+We can therefore attach documents to a `Customer` by having `Customer` implement this marker interface:
+
+[plantuml]
+.`customers` depends upon contributions of `documents`
+----
+include::docs:resources:partial$plantuml-stereotypes.adoc[]
+
+package documents {
+    interface DocumentHolder <<role>>
+    class DocumentHolder_documents <<mixin>>
+    class DocumentHolder_attachDocument <<mixin>>
+    class Document <<ppt>>
+}
+DocumentHolder_documents -d-> "0..*" Document: documents
+DocumentHolder_documents -.l-> DocumentHolder: "contributes to"
+DocumentHolder_attachDocument -.l-> DocumentHolder: "contributes to"
+
+package customers {
+    class Customer <<ppt>>
+}
+Customer -u.-^ DocumentHolder
+----
+
+== Defining Modules
 
 In the context of Java applications, modularity is a rather overloaded term.
 We have Maven modules, Java 9 modules and we also have Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[`@Configuration`]s, which define a set of domain services.
 
 In the context of Apache Isis, a module is actually the last of these, a Spring module.
-
-TIP: See Spring documentation on link:https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-annotation-config[annotation-based container configuration], link:https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-classpath-scanning[classpath scanning] and link:https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-java[java-based configuration] for much more on this topic.
 
 The xref:docs:starters:simpleapp.adoc[simpleapp starter app] provide some structure and illustrates the idioms.
 To summarise:
@@ -58,41 +149,10 @@ Details on how to actually define modules can be found xref:userguide:fun:progra
 ====
 
 If the above convention is too officious,then you could choose to have multiple Spring modules per Maven module, but you will need to watch out for cycles.
+
 In such cases (proprietary) tools such as link:https://structure101.com/[Structure 101] can be used to help detect and visualize such cycles.
 Or, (open source) libraries such as link:https://www.archunit.org/[ArchUnit] or https://jqassistant.org/[jQAssistant] can help enforce architectural layering to prevent the issue arising in the first place.
 (These tools can enforce other conventions, too, so are well worth exploring).
 
 
-Having broken up a domain into multiple modules, there is still a need for higher level modules to use lower level modules, and the application must still appear as a coherent whole to the end-user.
-The key features that Apache Isis provides to support this are:
-
-* dependency injection of services
-+
-Both xref:refguide:applib-svc:about.adoc[framework-defined] domain services and application-defined services (eg repositories and factories) are injected everywhere, using the regular xref:refguide:applib-ant:Inject.adoc[`@javax.inject.Inject`] annotation.
-+
-By "everywhere", we mean not just into domain services, but _also_ injected into domain entities and view models.
-This enables us to implement behaviourally complete domain objects (if we so wish).
-
-* mixins allow functionality defined in one module to appear (in the UI) to be provided by some other module.
-+
-For example, a _Document_ module might allow `Document` objects to be attached to any arbitrary domain object (such as `Order` or `Customer`) in other modules.
-A mixin would allow the UI for a `Customer` to also display these attached ``Document``s, even though the _Customer_ module would have no knowledge of/dependency on the _Workflow_ module.
-+
-Dependencies are also injected into mixins.
-A common technique is to factor out from domain objects into mixins and then generalise.
-
-* the internal xref:refguide:applib-svc:EventBusService.adoc[event bus] allows modules to influence other modules.
-+
-A subscriber in one module can subscribe to events emitted by domain objects in another module.
-These events can affect both the UI (eg hiding or disabling xref:building-blocks.adoc#object-members[object members], or allowing or vetoing interactions).
-
-A good example of the latter is supporting (what in an RDBMS we would call) referential integrity.
-Suppose the _Customer_ module has a `Customer` object and a `EmailAddress` object, with a customer having a collection of email addresses.
-A _Communications_ module might then use those email addresses to create ``EmailCommunication``s.
-
-If the _Customer_ module wants to delete an `EmailAddress` then the _Communications_ module will probably want to veto this because they are "in use" by those ``EmailCommunication``s.
-Or, it might conceivably perform a cascade delete of all associated communications.
-Either way, the _Communications_ module receives an internal event representing the intention to delete the `EmailAddress`.
-It can then act accordingly, either vetoing the interaction or performing the cascade delete.
-The _Customer_ module for its part does not know anything about this other module.
 
