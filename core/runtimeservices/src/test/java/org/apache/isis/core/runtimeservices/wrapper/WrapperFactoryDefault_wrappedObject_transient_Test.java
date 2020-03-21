@@ -98,7 +98,7 @@ public class WrapperFactoryDefault_wrappedObject_transient_Test {
     @Mock private ObjectSpecification mockOnType;
     @Mock private SpecificationLoader mockSpecificationLoader;
     @Mock private IsisInteractionFactory mockIsisInteractionFactory;
-    @Mock private IsisInteractionTracker mockIsisSessionTracker;
+    @Mock private IsisInteractionTracker mockIsisInteractionTracker;
     @Mock private CommandExecutorService mockCommandExecutorService;
     private AsyncControlService asyncControlService = new AsyncControlService();
     @Mock private FactoryService mockFactoryService;
@@ -144,7 +144,7 @@ public class WrapperFactoryDefault_wrappedObject_transient_Test {
                 .singleton(wrapperFactory = createWrapperFactory(proxyFactoryService))
                 .singleton(mockFactoryService)
                 .singleton(mockIsisInteractionFactory)
-                .singleton(mockIsisSessionTracker)
+                .singleton(mockIsisInteractionTracker)
                 .singleton(mockTransactionService)
                 .singleton(mockCommandExecutorService)
                 .singleton(mockCommandDtoServiceInternal)

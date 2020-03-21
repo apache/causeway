@@ -64,7 +64,7 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
     @Mock protected Authenticator mockAuthenticator;
     @Mock protected IsisWebAppCommonContext mockCommonContext;
     @Mock protected IsisInteractionFactory mockIsisInteractionFactory;
-    @Mock protected IsisInteractionTracker mockIsisSessionTracker;
+    @Mock protected IsisInteractionTracker mockIsisInteractionTracker;
     @Mock protected ServiceRegistry mockServiceRegistry;
 
     protected AuthenticatedWebSessionForIsis webSession;
@@ -85,9 +85,9 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
                 will(returnValue(mockIsisInteractionFactory));
 
                 allowing(mockCommonContext).getIsisInteractionTracker();
-                will(returnValue(mockIsisSessionTracker));
+                will(returnValue(mockIsisInteractionTracker));
                 
-                allowing(mockIsisSessionTracker).currentAuthenticationSession();
+                allowing(mockIsisInteractionTracker).currentAuthenticationSession();
                 will(returnValue(Optional.of(new InitialisationSession())));
                 
                 allowing(mockIsisInteractionFactory)

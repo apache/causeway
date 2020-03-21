@@ -67,7 +67,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     @Mock AuthenticationSession mockAuthenticationSession;
     @Mock SpecificationLoader mockSpecificationLoader;
     @Mock WebApplicationContext webApplicationContext;
-    @Mock IsisInteractionTracker mockIsisSessionTracker;
+    @Mock IsisInteractionTracker mockIsisInteractionTracker;
     @Mock AuthenticationManager mockAuthenticationManager;
     
     MetaModelContext metaModelContext;
@@ -81,7 +81,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
                 .specificationLoader(mockSpecificationLoader)
                 .authenticationSession(mockAuthenticationSession)
                 .singleton(mockAuthenticationManager)
-                .singleton(mockIsisSessionTracker)
+                .singleton(mockIsisInteractionTracker)
                 .singleton(mockIsisInteractionFactory)
                 .build();
 

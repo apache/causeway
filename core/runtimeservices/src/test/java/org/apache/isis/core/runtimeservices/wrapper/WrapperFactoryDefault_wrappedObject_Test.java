@@ -101,7 +101,7 @@ public class WrapperFactoryDefault_wrappedObject_Test {
     @Mock private ObjectSpecification mockOnType;
     @Mock private SpecificationLoader mockSpecificationLoader;
     @Mock private IsisInteractionFactory mockIsisInteractionFactory;
-    @Mock private IsisInteractionTracker mockIsisSessionTracker;
+    @Mock private IsisInteractionTracker mockIsisInteractionTracker;
     @Mock private CommandExecutorService mockCommandExecutorService;
     private AsyncControlService asyncControlService = new AsyncControlService();
     @Mock private ObjectSpecificationDefault mockEmployeeSpec;
@@ -146,7 +146,7 @@ public class WrapperFactoryDefault_wrappedObject_Test {
                 .singleton(mockCommandDtoServiceInternal)
                 .singleton(mockFactoryService)
                 .singleton(mockIsisInteractionFactory)
-                .singleton(mockIsisSessionTracker)
+                .singleton(mockIsisInteractionTracker)
                 .singleton(mockTransactionService)
                 .singleton(mockCommandExecutorService)
                 .singleton(mockCommandDtoServiceInternal)

@@ -57,7 +57,7 @@ public class ResourceContext_getArg_Test {
     @Mock ServletContext mockServletContext;
     @Mock IsisInteraction mockIsisSession;
     @Mock IsisInteractionFactory mockIsisInteractionFactory;
-    @Mock IsisInteractionTracker mockIsisSessionTracker;
+    @Mock IsisInteractionTracker mockIsisInteractionTracker;
     @Mock AuthenticationManager mockAuthenticationManager;
     @Mock AuthenticationSession mockAuthenticationSession;
     @Mock PersistenceSession mockPersistenceSession;
@@ -76,7 +76,7 @@ public class ResourceContext_getArg_Test {
                 .specificationLoader(mockSpecificationLoader)
                 .singleton(mockIsisInteractionFactory)
                 .singleton(mockAuthenticationManager)
-                .singleton(mockIsisSessionTracker)
+                .singleton(mockIsisInteractionTracker)
                 //                .serviceInjector(mockServiceInjector)
                 //                .serviceRegistry(mockServiceRegistry)
                 //                .translationService(mockTranslationService)
