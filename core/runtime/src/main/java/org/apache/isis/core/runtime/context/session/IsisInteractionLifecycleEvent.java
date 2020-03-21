@@ -25,7 +25,7 @@ import lombok.ToString;
 import lombok.Value;
 
 @Value(staticConstructor="of") @ToString(of = "eventType")
-public class IsisSessionLifecycleEvent {
+public class IsisInteractionLifecycleEvent {
 
     public enum EventType {
         OPENED,

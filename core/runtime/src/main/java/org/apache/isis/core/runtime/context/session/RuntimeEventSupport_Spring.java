@@ -37,7 +37,7 @@ public class RuntimeEventSupport_Spring {
     }
 
     @Bean
-    public Event<IsisSessionLifecycleEvent> sessionLifecycleEvents(ApplicationEventPublisher publisher) {
+    public Event<IsisInteractionLifecycleEvent> sessionLifecycleEvents(ApplicationEventPublisher publisher) {
         return _Spring.event(publisher);
     }
 

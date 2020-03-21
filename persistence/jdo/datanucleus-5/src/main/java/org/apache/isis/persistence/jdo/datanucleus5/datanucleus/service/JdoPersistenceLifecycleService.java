@@ -34,7 +34,7 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.context.session.AppLifecycleEvent;
-import org.apache.isis.core.runtime.context.session.IsisSessionLifecycleEvent;
+import org.apache.isis.core.runtime.context.session.IsisInteractionLifecycleEvent;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.session.IsisInteraction;
@@ -83,8 +83,8 @@ public class JdoPersistenceLifecycleService {
 
     }
 
-    @EventListener(IsisSessionLifecycleEvent.class)
-    public void onSessionLifecycleEvent(IsisSessionLifecycleEvent event) {
+    @EventListener(IsisInteractionLifecycleEvent.class)
+    public void onSessionLifecycleEvent(IsisInteractionLifecycleEvent event) {
 
         val eventType = event.getEventType();
 
