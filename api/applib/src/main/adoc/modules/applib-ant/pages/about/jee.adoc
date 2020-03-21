@@ -31,11 +31,6 @@ The table below lists the JEE annotations currently recognized.  Expect to see m
 |Domain
 |
 
-|xref:refguide:applib-ant:Inject.adoc[`@javax.inject.` +
-`Inject`]
-|Inject domain service into a domain object (entity or view model) or another domain service.
-|Domain
-|
 
 |xref:refguide:applib-ant:Digits.adoc[`@javax.annotation.` +
 `Nullable`]
@@ -43,26 +38,6 @@ The table below lists the JEE annotations currently recognized.  Expect to see m
 |Domain
 |
 
-|xref:refguide:applib-ant:PostConstruct.adoc[`@javax.annotation.` +
-`PostConstruct`]
-|Callback for domain services (either singleton or xref:refguide:applib-ant:IsisSessionScope.adoc[request-scoped]) to initialize themselves once instantiated.
-
-|Domain
-|
-
-|xref:refguide:applib-ant:PreDestroy.adoc[`@javax.annotation.` +
-`PreDestroy`]
-|Callback for domain services (either singleton or xref:refguide:applib-ant:IsisSessionScope.adoc[request-scoped]) to clean up resources prior to destruction.
-
-|Domain
-|
-
-|xref:refguide:applib-ant:RequestScoped.adoc[`@javax.enterprise.` +
-`context.` +
-`RequestScoped`]
-|Specify that a domain service has request-scope (rather than a singleton).
-|Domain
-|
 
 |xref:refguide:applib-ant:XmlRootElement.adoc[`javax.xml.bind` +
 `.annotation` +

@@ -117,6 +117,7 @@ so that boilerplate-busting tools such as link:https://projectlombok.org/[Projec
 
 include::PropertyLayout/cssClass.adoc[leveloffset=+1]
 include::PropertyLayout/describedAs.adoc[leveloffset=+1]
+include::PropertyLayout/hidden.adoc[leveloffset=+1]
 include::PropertyLayout/labelPosition.adoc[leveloffset=+1]
 include::PropertyLayout/multiLine.adoc[leveloffset=+1]
 include::PropertyLayout/named.adoc[leveloffset=+1]

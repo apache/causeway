@@ -216,46 +216,109 @@ public class SomeClient {
 <.> Obtain an instance using `Provider#get()`
 
 
-== Registering
+== Configuration
 
-The easiest way to register domain services with the framework is to use Spring's link:http://localhost:5000[`@ComponentScan`] annotation on an owning link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[`@Configuration`].
+Spring provides numerous mechanisms to configure domain services, both in terms of binding or passing in the configuration property to the service, and in terms of setting the value within some sort of configuration file.
 
-The xref:docs:starters:simpleapp.adoc[simpleapp starter apps] illustrates the idiom:
+The mechanism prefered by Apache Isis itself, and which you are free to use for your own services, is the type-safe link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/context/properties/ConfigurationProperties.html[`ConfigurationProperties`], whereby the configuration properties are expressed in a series of nested static classes.
 
-* for each Maven module, we have
+The xref:docs:starters:simpleapp.adoc[simpleapp starter app] includes an example:
 
-
-[source,ini]
+[source,java]
 ----
-public class MyAppManifest implements AppManifest {
-    public List<Class<?>> getModules() {
-        return Arrays.asList(
-                TodoAppDomainModule.class,
-                TodoAppFixtureModule.class,
-                TodoAppAppModule.class,
-                org.isisaddons.module.audit.AuditModule.class);
+import org.springframework.validation.annotation.Validated;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+@ConfigurationProperties("app.simple-module")
+@lombok.Data
+@Validated
+public static class Configuration {
+    private final Types types = new Types();
+    @lombok.Data
+    public static class Types {
+        private final Name name = new Name();
+        @lombok.Data
+        public static class Name {
+            private final Validation validation = new Validation();
+            @lombok.Data
+            public static class Validation {
+                private char[] prohibitedCharacters =
+                    "!&%$".toCharArray();
+                private String message =
+                    "Character '{character}' is not allowed";
+            }
+        }
     }
-    ...
 }
 ----
 
-will load all services in the packages underneath the four modules listed.
+This configuration property can be injected, like any other component, and makes the configuration value available in a type-safe fashion:
 
-Examples of framework-provided services (as defined in the applib) include clock, auditing, publishing, exception handling, view model support, snapshots/mementos, and user/application settings management; see the xref:refguide:applib-svc:about.adoc[domain services] reference guide for further details.
+[source,java]
+----
+val prohibitedCharacters =
+  config.getTypes().getName().getValidation().getProhibitedCharacters();
+----
+
+For this configuration property service to be discovered and managed by Spring, we need to use the link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/context/properties/EnableConfigurationProperties.html[`EnableConfigurationProperties`] annotation.
+This normally would reside on the owning module (discussed in more detail xref:programming-model.adoc#modules[later]):
+
+[source,java]
+.SimpleModule.java
+----
+import org.springframework.context.annotation.Configuration
+
+@Configuration
+// ...
+@EnableConfigurationProperties({
+        SimpleModule.Configuration.class,
+})
+public class SimpleModule /* ... */ {
+    // ...
+}
+----
+
+
+These configuration properties can then be specified using either Spring's `application.yml` or `application.properties`.
+For example:
+
+[source,yml]
+.application.yml
+----
+app:
+  simple-module:
+    types:
+      name:
+        validation:
+          message: "'{character}' is invalid."
+          prohibited-characters: "&%$"
+----
+
+Moreover, Spring is able to configure the IDE so that these configuration values can be specified using code completion.
+All that is required is this dependency:
+
+[source,xml]
+.pom.xml
+----
+<!-- IDE support  -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-configuration-processor</artifactId>
+    <optional>true</optional>
+</dependency>
+----
 
 == Initialization
 
-WARNING: TODO: v2: support for init with a Map is no longer supported, I suspect...?
-Instead, can x-ref Spring's strongly typed configuration beans
+Sometimes a domain service needs to perform initialization logic before it is ready to be used.
 
-Services can optionally declare lifecycle callbacks to initialize them (when the app is deployed) and to shut them down (when the app is undeployed).
+In many cases, such initialization can be performed within the constructor.
+If the initialization has dependencies, then these can be injected using standard link:https://docs.spring.io/spring-boot/docs/current/reference/html/using-spring-boot.html#using-boot-spring-beans-and-dependency-injection[constructor injection].
 
-An Apache Isis session _is_ available when initialization occurs (so services can interact with the object store, for example).
+Alternatively, initialization can be moved into a `@PostConstruct` link:https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-postconstruct-and-predestroy-annotations[lifecycle callback].
+Shutdown is similar; the framework will call any method annotated with `javax.annotation.PreDestroy`.
 
-The framework will call any `public` method annotated with xref:refguide:applib-ant:PostConstruct.adoc[`@PostConstruct`] with either no arguments of an argument of type `Map<String,String>`.
-In the latter case, the framework passes in the configuration.
 
-Shutdown is similar; the framework will call any method annotated with xref:refguide:applib-ant:PreDestroy.adoc[`@PreDestroy`].
 
 
 

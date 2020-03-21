@@ -4,7 +4,7 @@
 :page-partial:
 
 
-A property is an instance variable of a domain object, of a scalar type, that holds some state about either a xref:userguide:fun:programming-model.adoc#view-models[view model].
+A property is an instance variable of a domain object, of a scalar type, that holds some state in either a xref:userguide:fun:programming-model.adoc#domain-entities[domain entity] or a xref:userguide:fun:programming-model.adoc#view-models[view model].
 
 For example, a ``Customer``'s `firstName` would be a property, as would their `accountCreationDate` that they created their account.
 All properties have at least a "getter" method, and most properties have also a "setter" method (meaning that they are mutable).
@@ -14,16 +14,18 @@ Formally speaking, a property is simply a regular JavaBean getter, returning a s
 Most properties (those that are editable/modifiable) will also have a setter and, if persisted, a backing instance field.
 And most properties will also have a number of annotations:
 
-* Apache Isis defines its own set own `@Property` annotation for capturing domain semantics.
-It also provides a `@PropertyLayout` for UI hints (though the information in this annotation may instead be provided by a supplementary xref:vw:ROOT:layout.adoc[`.layout.xml`] file)
+* Apache Isis defines its own xref:refguide:applib-ant:Property.adoc[`@Property`] annotation for capturing domain semantics.
+It also provides a xref:refguide:applib-ant:PropertyLayout.adoc[`@PropertyLayout`] for UI hints (though the information in this annotation may instead be provided by a supplementary xref:vw:ROOT:layout.adoc[`.layout.xml`] file)
 
-* the properties of domain entities are often annotated with the JDO/DataNucleus `@javax.jdo.annotations.Column` annotation.
+* the properties of domain entities are usually also annotated with an ORM annotation.
++
+In the case of xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] this would be the link:http://www.datanucleus.org/products/datanucleus/jdo/annotations.html#Column[`@javax.jdo.annotations.Column`] annotation.
 For property references, there may be other annotations to indicate whether the reference is bidirectional.
 It's also possible (using annotations) to define a link table to hold foreign key columns.
 
-* for the properties of view models, then JAXB annotations such as `@javax.xml.bind.annotation.XmlElement` may be present
+* for the properties of view models, then JAXB annotations such as  link:https://docs.oracle.com/javase/8/docs/api/javax/xml/bind/annotation/XmlElement.html[`@XmlElement`] may be present
 
-Apache Isis recognises some of these annotations for JDO/DataNucleus and JAXB and infers some domain semantics from them (for example, the maximum allowable length of a string property).
+Apache Isis recognises some of these annotations from the persistence layer and infers some domain semantics from them (for example, the maximum allowable length of a string property).
 
 Since writing getter and setter methods adds quite a bit of boilerplate, it's common to use link:https://projectlombok.org/[Project Lombok] to code generate these methods at compile time (using Java's annotation processor) simply by adding the `@lombok.Getter` and `@lombok.Setter` annotations to the field.
 The xref:docs:starters:simpleapp.adoc[SimpleApp] starter app uses this approach.
@@ -60,16 +62,17 @@ Or to map a reference type:
 private Customer customer;
 ----
 
-It's ok for a xref:userguide:fun:programming-model.adoc#view-models[view model] to reference both view model and domain entities.
-However, it isn't valid for a domain entity to hold a persisted reference to view model (DataNucleus will not know how to persist that view model).
+It's ok for a xref:userguide:fun:programming-model.adoc#view-models[view model] to reference other view models and also to reference domain entities.
+However, it _isn't_ valid for a domain entity to hold a reference to view model, because the ORM will not know how to persist the view model object.
 
-[NOTE]
+[TIP]
 ====
-For further details on mapping associations, see the JDO/DataNucleus documentation for link:http://www.datanucleus.org/products/accessplatform_4_1/jdo/orm/one_to_many.html[one-to-many] associations, link:http://www.datanucleus.org/products/accessplatform_4_1/jdo/orm/many_to_one.html[many-to-one] associations, link:http://www.datanucleus.org/products/accessplatform_4_1/jdo/orm/many_to_many.html[many-to-many] associations, and so on.
+For further details on mapping associations using xref:pjdo:ROOT:about.adoc[JDO/DataNucleus], see their link:http://www.datanucleus.org:15080/products/accessplatform_5_2/jdo/mapping.html[mapping guide].
 ====
 
-For domain entities, the annotations for mapping value types tend to be different for properties vs action parameters, because JDO annotations are only valid on properties.
-The table in the xref:userguide:fun:programming-model.adoc#properties-vs-parameters[Properties vs Parameters] section provides a handy reference of each.
+== Meta-annotations
+
+WARNING: TODO: v2
 
 == Optional Properties
 
@@ -101,7 +104,7 @@ rather than the more verbose:
 private LocalDate date;
 ----
 
-The framework will search for any incompatibilities in optionality (whether specified explicitly or defaulted implicitly) between Isis' defaults and DataNucleus, and refuse to boot if any are found (fail fast).
+The framework will search for any incompatibilities in optionality (whether specified explicitly or defaulted implicitly) between Apache Isis' defaults and DataNucleus, and will refuse to boot if any are found.
 
 == Editable Properties
 
@@ -117,27 +120,41 @@ For example:
 private String notes;
 ----
 
-If this is omitted then whether editing is enabled or disabled is defined globally, in the `isis.properties` configuration file; see xref:refguide:config:configuring-core.adoc#isis-objects-editing[reference configuration guide] for further details.
+If this is omitted then whether editing is enabled or disabled is inherited from the domain object level, xref:refguide:applib-ant:DomainObject.adoc#editing[`@DomainObject#editing()`].
+
+If that isn't specified (or is set to "AS_CONFIGURED"), then the configuration is taken from the `application.properties` configuration file:
+
+* xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.editing[`isis.applib.annotation.domain-object.editing`]
++
+for all properties in the domain object.
+
+And, finally, if there is no configuration property set at all, then the default is for editing to be DISABLED.
 
 == Ignoring Properties
 
 By default Apache Isis will automatically render all properties in the xref:vw:ROOT:about.adoc[Wicket UI] or in the xref:vro:ROOT:about.adoc[REST API].
-To get Apache Isis to ignore a property (exclude it from its metamodel), annotate the getter using `@Programmatic`.
+To get Apache Isis to ignore a property (exclude it from its metamodel), annotate the getter using xref:refguide:applib-ant:Programmatic.adoc[`@Programmatic`].
 
-Similarly, you can tell JDO/DataNucleus to ignore a property using the `@javax.jdo.annotations.NotPersistent` annotation.
+Similarly, for the JDO/DataNucleus ORM, ignore a property using the `@javax.jdo.annotations.NotPersistent` annotation.
 This is independent of Apache Isis; in other words that property will still be rendered in the UI (unless also annotated with `@Programmatic`).
 
 For view models, you can tell JAXB to ignore a property using the `@javax.xml.bind.annotation.XmlTransient` annotation.
 Again, this is independent of Apache Isis.
 
+You can also suppress a property from the UI using xref:refguide:applib-ant:Property.adoc#hidden[`@Property#hidden()`] or indeed xref:refguide:applib-ant:PropertyLayout.adoc#hidden[`@PropertyLayout#hidden()`].
+However, this doesn't exclude the property from the metamodel.
+
 == Derived Properties
 
 Derived properties are those with a getter but no setter.
-Provided that the property has not been annotated with `@Programmatic`, these will still be rendered in the UI, but they will be read-only (not editable) and their state will not be persisted.
+These will still be rendered in the UI, but they will be read-only (not editable).
 
-Subtly different, it is also possible to have non-persisted but still editable properties.
-In this case you will need a getter and a setter, but with the getter annotated using `@NotPersistent`.
-The implementation of these getters and setters will most likely persist state using other properties (which might be hidden from view using `@Programmatic`).
+For entities these may or may not be persisted; that depends on whether the ORM annotations are specified on the field or on the property.
+
+It's also possible to have non-persisted but still editable properties.
+The setter would not write to a field, but would mutate the object in some other way.
+In such a case you will need a getter and a setter, but with the field/property annotated for the ORM as non-persistent.
+If using JDO/DataNucleus, this is done using `@NotPersistent`.
 
 For example:
 
@@ -146,24 +163,24 @@ For example:
 @javax.jdo.annotations.NotPersistent
 @Property(editing=Editing.ENABLED)
 public String getAddress() {
-    return addressService.toAddress( getLatLong() );                // <1>
+    return addressService.toAddress( getLatLong() );                // <.>
 }
 public void setAddress(String address) {
     setLatLong(addressService.toLatLong(address));
 }
 
-@javax.jdo.annotations.Column
-private String latLong;
 @Programmatic
-public String getLatLong() { return latLong; }                      // <2>
-public void setLatLong(String latLong) { this.latLong = latLong; }
+@lombok.Getter @lombok.Setter
+@javax.jdo.annotations.Column
+private String latLong;                                             // <.>
 
 @javax.inject.Inject
-AddressService addressService;                                      // <3>
+AddressService addressService;                                      // <.>
 ----
-<1> the representation of the address, in human readable form, eg "10 Downing Street, London, UK"
-<2> the lat/long representation of the address, eg "51.503363;-0.127625"
-<3> an injected service that can convert to/from address and latLong.
+<.> the representation of the address, in human readable form, eg "10 Downing Street, London, UK"
+<.> the lat/long representation of the address, eg "51.503363;-0.127625".
+Excluded from the Apache Isis metamodel.
+<.> an injected service that can convert to/from address and latLong.
 
 == Data types
 

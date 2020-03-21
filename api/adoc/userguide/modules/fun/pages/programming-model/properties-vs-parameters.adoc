@@ -14,7 +14,7 @@ It is therefore necessary to use Apache Isis' equivalent annotations for action 
 The table below summarises the equivalence of some of the most common cases.
 
 .Comparing annotations of Properties vs Action Parameters
-[cols="2,3,3", options="header"]
+[cols="2,3,3",options="header"]
 |===
 |value type/semantic
 |(JDO) property
@@ -34,3 +34,6 @@ The table below summarises the equivalence of some of the most common cases.
 |===
 
 
+WARNING: TODO: v2 - Meta-annotations; can specify both, those that don't apply are just ignored.
+For domain entities, the annotations for mapping value types tend to be different for properties vs action parameters, because JDO annotations are only valid on properties.
+The table in the xref:userguide:fun:programming-model.adoc#properties-vs-parameters[Properties vs Parameters] below provides a handy reference of each.

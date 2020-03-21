@@ -30,7 +30,7 @@ The key features that Apache Isis provides to support this are:
 
 * dependency injection of services
 +
-Both xref:refguide:applib-svc:about.adoc[framework-defined] domain services and application-defined services (eg repositories and factories) are injected everywhere, using the regular xref:refguide:applib-ant:Inject.adoc[`@javax.inject.Inject`] annotation.
+Both xref:refguide:applib-svc:about.adoc[framework-defined] domain services and application-defined services (eg repositories and factories) are injected everywhere, using the `@javax.inject.Inject` annotation (Spring's `@Autowired` can also be used).
 +
 By "everywhere", we mean not just into domain services, but _also_ injected into domain entities and view models.
 This enables us to implement behaviourally complete domain objects (if we so wish).

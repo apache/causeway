@@ -32,10 +32,9 @@ This:
 public class IsisModuleSubdomainsExcelApplib {
 }
 ----
-<.> the link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/ComponentScan.html[@ComponentScan].
-This indicates that the classpath should be scanned for domain services, entities and xref:testing:fixtures:about.adoc[fixture scripts].
+<.> the link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/ComponentScan.html[@ComponentScan] indicates that the classpath should be scanned for domain services, entities and xref:testing:fixtures:about.adoc[fixture scripts].
 
-When there is a dependency, this is expressed in two ways: as a `<dependency` in Maven, and using link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html[@Import] in the "configuration" module.
+When there is a dependency, this is expressed in two ways: first, as a "physical" `<dependency` in Maven; and second, as a "logical" dependency using link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html[@Import] in the `@Configuration` module.
 
 We can see this for example in the `testing` module of the Excel library (artifactId of `isis-submodules-excel-testing`), where:
 
