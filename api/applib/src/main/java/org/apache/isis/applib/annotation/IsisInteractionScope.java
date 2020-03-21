@@ -27,13 +27,13 @@ import java.lang.annotation.Target;
 import org.springframework.context.annotation.Scope;
 
 /**
- * {@code @IsisSessionScope} is a specialization of {@link Scope @Scope} for a
+ * {@code @IsisInteractionScope} is a specialization of {@link Scope @Scope} for a
  * component whose lifecycle is bound to the current top-level IsisSession.
  *
- * <p>Specifically, {@code @IsisSessionScope} is a <em>composed annotation</em> that
+ * <p>Specifically, {@code @IsisInteractionScope} is a <em>composed annotation</em> that
  * acts as a shortcut for {@code @Scope("isis-session")}.
  *
- * <p>{@code @IsisSessionScope} may be used as a meta-annotation to create custom
+ * <p>{@code @IsisInteractionScope} may be used as a meta-annotation to create custom
  * composed annotations.
  *
  * @since 2.0
