@@ -7,3 +7,4 @@ This section describes some of the architectural patterns upon which Apache Isis
 
 include::architecture/hexagonal-architecture.adoc[leveloffset=+1]
 include::architecture/aop.adoc[leveloffset=+1]
+include::architecture/apache-isis-vs-cqrs-and-event-sourcing.adoc[leveloffset=+1]

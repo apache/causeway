@@ -8,6 +8,5 @@ This introductory chapter should give you a good about what Apache Isis actually
 
 include::core-concepts/philosophy.adoc[leveloffset=+1]
 include::core-concepts/architecture.adoc[leveloffset=+1]
-include::core-concepts/apache-isis-vs-cqrs-and-event-sourcing.adoc[leveloffset=+1]
 include::core-concepts/deployment-options.adoc[leveloffset=+1]
 include::core-concepts/metamodel.adoc[leveloffset=+1]
