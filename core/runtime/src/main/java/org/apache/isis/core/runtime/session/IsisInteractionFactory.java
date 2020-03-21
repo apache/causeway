@@ -30,7 +30,7 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
 import lombok.SneakyThrows;
 
 /**
- * Is the factory of {@link IsisSession}s, also holding a reference to the current session using
+ * Is the factory of {@link IsisInteraction}s, also holding a reference to the current session using
  * a thread-local.
  *
  * <p>
@@ -50,7 +50,7 @@ public interface IsisInteractionFactory {
         void run() throws Exception;
     }
 
-    public IsisSession openSession(AuthenticationSession authenticationSession);
+    public IsisInteraction openSession(AuthenticationSession authenticationSession);
 
     /**
      * @return whether the calling thread is within the context of an open IsisSession

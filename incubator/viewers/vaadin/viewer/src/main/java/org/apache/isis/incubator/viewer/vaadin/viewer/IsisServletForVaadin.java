@@ -28,7 +28,7 @@ import com.vaadin.flow.spring.SpringServlet;
 
 import org.springframework.context.ApplicationContext;
 
-import org.apache.isis.core.runtime.session.IsisSession;
+import org.apache.isis.core.runtime.session.IsisInteraction;
 import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 import org.apache.isis.incubator.viewer.vaadin.ui.auth.AuthSessionStoreUtil;
 
@@ -37,7 +37,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * An extension of {@link SpringServlet} to support {@link IsisSession} life-cycle management.
+ * An extension of {@link SpringServlet} to support {@link IsisInteraction} life-cycle management.
  * @since Mar 14, 2020
  *
  */

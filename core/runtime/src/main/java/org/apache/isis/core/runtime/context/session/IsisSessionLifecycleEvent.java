@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.runtime.context.session;
 
-import org.apache.isis.core.runtime.session.IsisSession;
+import org.apache.isis.core.runtime.session.IsisInteraction;
 
 import lombok.Getter;
 import lombok.ToString;
@@ -32,7 +32,7 @@ public class IsisSessionLifecycleEvent {
         CLOSING,
     }
 
-    @Getter IsisSession isisSession;
+    @Getter IsisInteraction isisSession;
     @Getter EventType eventType;
 
 }

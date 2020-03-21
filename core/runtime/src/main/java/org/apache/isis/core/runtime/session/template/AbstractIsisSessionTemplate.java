@@ -22,7 +22,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.core.runtime.session.IsisSession;
+import org.apache.isis.core.runtime.session.IsisInteraction;
 import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 
@@ -33,7 +33,7 @@ public abstract class AbstractIsisSessionTemplate {
     @Inject protected ServiceInjector serviceInjector;
 
     /**
-     * Sets up an {@link IsisSession} then passes along any calling framework's context.
+     * Sets up an {@link IsisInteraction} then passes along any calling framework's context.
      */
     public void execute(final AuthenticationSession authSession, final Object context) {
         
@@ -51,7 +51,7 @@ public abstract class AbstractIsisSessionTemplate {
      * {@link #doExecuteWithTransaction(Object)}.
      *
      * <p>
-     * This method is called within a current {@link IsisSession session},
+     * This method is called within a current {@link IsisInteraction session},
      * but with no current transaction.  The default implementation sets up a
      * {@link org.apache.isis.jdo.persistence.IsisTransactionJdo transaction}
      * and then calls {@link #doExecuteWithTransaction(Object)}.  Override if you require more sophisticated

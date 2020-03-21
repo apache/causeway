@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.core.runtime.session.IsisSession;
+import org.apache.isis.core.runtime.session.IsisInteraction;
 
 /**
  * 
@@ -57,11 +57,11 @@ public class RuntimeEventService {
 
     // -- SESSION
 
-    public void fireSessionOpened(IsisSession session) {
+    public void fireSessionOpened(IsisInteraction session) {
         eventBusService.post(IsisSessionLifecycleEvent.of(session, IsisSessionLifecycleEvent.EventType.OPENED));
     }
 
-    public void fireSessionClosing(IsisSession session) {
+    public void fireSessionClosing(IsisInteraction session) {
         eventBusService.post(IsisSessionLifecycleEvent.of(session, IsisSessionLifecycleEvent.EventType.CLOSING));
     }
 

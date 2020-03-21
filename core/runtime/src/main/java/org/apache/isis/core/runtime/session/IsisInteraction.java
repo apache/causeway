@@ -40,17 +40,17 @@ import lombok.NonNull;
  *
  * @see IsisInteractionFactory
  */
-public class IsisSession extends RuntimeContextBase {
+public class IsisInteraction extends RuntimeContextBase {
 
     @Getter private final AuthenticationSession authenticationSession;
 
     /**
      * Set to System.nanoTime() when session opens.
-     * @deprecated use command timestamp instead
+     * @deprecated use command timestamp instead?
      */
     @Getter private long openedAtSystemNanos = -1L;
 
-    public IsisSession(
+    public IsisInteraction(
             @NonNull final MetaModelContext mmc,
             @NonNull final AuthenticationSession authenticationSession) {
 

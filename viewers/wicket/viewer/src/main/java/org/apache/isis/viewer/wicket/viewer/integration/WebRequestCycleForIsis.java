@@ -52,7 +52,7 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.session.IsisRequestCycle;
-import org.apache.isis.core.runtime.session.IsisSession;
+import org.apache.isis.core.runtime.session.IsisInteraction;
 import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.MessageBroker;
@@ -71,7 +71,7 @@ import lombok.extern.log4j.Log4j2;
 
 /**
  * Isis-specific implementation of the Wicket's {@link RequestCycle},
- * automatically opening a {@link IsisSession} at the beginning of the request
+ * automatically opening a {@link IsisInteraction} at the beginning of the request
  * and committing the transaction and closing the session at the end.
  * 
  * @since 2.0

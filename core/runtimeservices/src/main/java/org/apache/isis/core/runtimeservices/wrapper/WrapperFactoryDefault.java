@@ -91,7 +91,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
-import org.apache.isis.core.runtime.session.IsisSession;
+import org.apache.isis.core.runtime.session.IsisInteraction;
 import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 import org.apache.isis.core.runtime.session.IsisSessionTracker;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcher;
@@ -500,7 +500,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
 
-    private IsisSession currentIsisSession() {
+    private IsisInteraction currentIsisSession() {
         return isisSessionTracker.currentSession().orElseThrow(() -> new RuntimeException("No IsisSession is open"));
     }
 

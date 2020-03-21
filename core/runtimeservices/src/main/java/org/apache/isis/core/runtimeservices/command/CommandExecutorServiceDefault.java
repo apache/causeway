@@ -63,7 +63,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
-import org.apache.isis.core.runtime.session.IsisSession;
+import org.apache.isis.core.runtime.session.IsisInteraction;
 import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 import org.apache.isis.core.runtime.session.IsisSessionTracker;
 import org.apache.isis.schema.cmd.v2.ActionDto;
@@ -370,7 +370,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         val objectSpec = specificationLoader.loadSpecification(oid.getObjectSpecId());
         val loadRequest = ObjectLoader.Request.of(objectSpec, oid.getIdentifier());
 
-        Optional<IsisSession> isisSession = isisSessionTracker.currentSession();
+        Optional<IsisInteraction> isisSession = isisSessionTracker.currentSession();
         return isisSession
                 .map(x -> x.getObjectManager().loadObject(loadRequest))
                 .orElse(null);

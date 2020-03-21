@@ -49,7 +49,7 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.session.RuntimeEventService;
-import org.apache.isis.core.runtime.session.IsisSession;
+import org.apache.isis.core.runtime.session.IsisInteraction;
 import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 import org.apache.isis.core.runtime.session.IsisSessionTracker;
 import org.apache.isis.core.runtime.session.init.IsisLocaleInitializer;
@@ -70,7 +70,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Is the factory of {@link IsisSession}s, also holding a reference to the current session using
+ * Is the factory of {@link IsisInteraction}s, also holding a reference to the current session using
  * a thread-local.
  *
  * <p>
@@ -148,14 +148,14 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
 
     }
 
-    private final ThreadLocal<Stack<IsisSession>> isisSessionStack = ThreadLocal.withInitial(Stack::new);
+    private final ThreadLocal<Stack<IsisInteraction>> isisSessionStack = ThreadLocal.withInitial(Stack::new);
     
     @Override
-    public IsisSession openSession(@NonNull final AuthenticationSession authenticationSession) {
+    public IsisInteraction openSession(@NonNull final AuthenticationSession authenticationSession) {
 
         val authSessionToUse = getAuthenticationSessionOverride()
                 .orElse(authenticationSession);
-        val newIsisSession = new IsisSession(metaModelContext, authSessionToUse);
+        val newIsisSession = new IsisInteraction(metaModelContext, authSessionToUse);
         
         isisSessionStack.get().push(newIsisSession);
         if(isisSessionStack.get().size()==1) {
@@ -182,7 +182,7 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
     }
     
     @Override
-    public Optional<IsisSession> currentSession() {
+    public Optional<IsisInteraction> currentSession() {
         val stack = isisSessionStack.get();
         return stack.isEmpty() ? Optional.empty() : Optional.of(stack.lastElement());
     }
@@ -234,11 +234,11 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
     
     // -- HELPER
     
-    private void postTopLevelOpen(IsisSession newIsisSession) {
+    private void postTopLevelOpen(IsisInteraction newIsisSession) {
         runtimeEventService.fireSessionOpened(newIsisSession); // only fire on top-level session 
     }
     
-    private void preTopLevelClose(IsisSession isisSession) {
+    private void preTopLevelClose(IsisInteraction isisSession) {
         runtimeEventService.fireSessionClosing(isisSession); // only fire on top-level session 
         isisSessionScopeCloseListener.preTopLevelIsisSessionClose(); // cleanup the isis-session scope
     }

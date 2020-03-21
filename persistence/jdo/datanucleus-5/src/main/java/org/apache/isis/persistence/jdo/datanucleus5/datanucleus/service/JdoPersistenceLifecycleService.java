@@ -37,7 +37,7 @@ import org.apache.isis.core.runtime.context.session.AppLifecycleEvent;
 import org.apache.isis.core.runtime.context.session.IsisSessionLifecycleEvent;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSessionFactory;
-import org.apache.isis.core.runtime.session.IsisSession;
+import org.apache.isis.core.runtime.session.IsisInteraction;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -111,7 +111,7 @@ public class JdoPersistenceLifecycleService {
 
     // -- HELPER
 
-    private void openSession(IsisSession isisSession) {
+    private void openSession(IsisInteraction isisSession) {
 
         val persistenceSession =
                 persistenceSessionFactory.createPersistenceSession();
@@ -129,7 +129,7 @@ public class JdoPersistenceLifecycleService {
         persistenceSession.open();
     }
 
-    private void closeSession(IsisSession isisSession) {
+    private void closeSession(IsisInteraction isisSession) {
         PersistenceSession.current(PersistenceSession.class)
         .getSingleton()
         .ifPresent(PersistenceSession::close);

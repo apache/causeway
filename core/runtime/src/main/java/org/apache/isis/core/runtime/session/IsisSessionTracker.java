@@ -34,11 +34,11 @@ public interface IsisSessionTracker extends AuthenticationSessionTracker {
     boolean isInSession();
     
     /** @return the current request- or test-scoped IsisSession*/
-    Optional<IsisSession> currentSession();
+    Optional<IsisInteraction> currentSession();
     
     @Override
     default Optional<AuthenticationSession> currentAuthenticationSession() {
-        return currentSession().map(IsisSession::getAuthenticationSession);
+        return currentSession().map(IsisInteraction::getAuthenticationSession);
     }
     
     @Override
