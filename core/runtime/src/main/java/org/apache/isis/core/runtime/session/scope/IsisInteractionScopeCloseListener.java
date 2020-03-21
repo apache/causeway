@@ -23,6 +23,6 @@ package org.apache.isis.core.runtime.session.scope;
  */
 public interface IsisInteractionScopeCloseListener {
 
-    void preTopLevelIsisSessionClose();
+    void preTopLevelIsisInteractionClose();
     
 }

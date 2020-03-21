@@ -28,7 +28,7 @@ import org.springframework.context.annotation.Scope;
 
 /**
  * {@code @IsisInteractionScope} is a specialization of {@link Scope @Scope} for a
- * component whose lifecycle is bound to the current top-level IsisSession.
+ * component whose lifecycle is bound to the current top-level IsisInteraction.
  *
  * <p>Specifically, {@code @IsisInteractionScope} is a <em>composed annotation</em> that
  * acts as a shortcut for {@code @Scope("isis-session")}.

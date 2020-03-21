@@ -67,7 +67,7 @@ public abstract class WebPageBase extends WebPage implements IsisWebAppCommonCon
         return pageClassRegistry = computeIfAbsent(PageClassRegistry.class, pageClassRegistry);
     }
 
-    public IsisInteractionFactory getIsisSessionFactory() {
+    public IsisInteractionFactory getIsisInteractionFactory() {
         return isisInteractionFactory = computeIfAbsent(IsisInteractionFactory.class, isisInteractionFactory);
     }
     

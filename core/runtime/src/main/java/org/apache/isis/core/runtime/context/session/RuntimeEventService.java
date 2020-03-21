@@ -65,7 +65,7 @@ public class RuntimeEventService {
         eventBusService.post(IsisInteractionLifecycleEvent.of(session, IsisInteractionLifecycleEvent.EventType.CLOSING));
     }
 
-    //	public void fireSessionFlushing(IsisSession session) {
+    //	public void fireSessionFlushing(IsisInteraction session) {
     //		sessionLifecycleEvent.fire(SessionLifecycleEvent.of(session, SessionLifecycleEvent.EventType.sessionClosing));
     //	}
 

@@ -72,7 +72,7 @@ extends SpringServlet {
                 super.service(request, response);                
             });
         } else {
-            // do not open an IsisSession, instead redirect to login page
+            // do not open an IsisInteraction, instead redirect to login page
             // this should happen afterwards by means of the VaadinAuthenticationHandler
             
             super.service(request, response);    

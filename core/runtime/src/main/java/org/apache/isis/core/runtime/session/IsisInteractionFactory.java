@@ -53,7 +53,7 @@ public interface IsisInteractionFactory {
     public IsisInteraction openSession(AuthenticationSession authenticationSession);
 
     /**
-     * @return whether the calling thread is within the context of an open IsisSession
+     * @return whether the calling thread is within the context of an open IsisInteraction
      */
     public boolean isInSession();
 
@@ -64,7 +64,7 @@ public interface IsisInteractionFactory {
 
     
     /**
-     * Executes a piece of code in a new (possibly nested) IsisSession.
+     * Executes a piece of code in a new (possibly nested) IsisInteraction.
      *
      * @param authenticationSession - the user to run under
      * @param callable - the piece of code to run
@@ -83,7 +83,7 @@ public interface IsisInteractionFactory {
     }
 
     /**
-     * Executes a piece of code in a (possibly reused) IsisSession.
+     * Executes a piece of code in a (possibly reused) IsisInteraction.
      * If there is already an open session stacked on the current thread then that one is used, 
      * otherwise an anonymous session is created.
      * @param <R>
@@ -111,7 +111,7 @@ public interface IsisInteractionFactory {
     }
 
     /**
-     * closes all open IsisSessions as stacked on the current thread
+     * closes all open IsisInteractions as stacked on the current thread
      */
     public void closeSessionStack();
 

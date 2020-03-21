@@ -33,15 +33,15 @@ import lombok.val;
 @ToString
 public class IsisTransactionObject implements SmartTransactionObject {
     
-    public static enum IsisSessionScopeType {
-        /** an IsisSession was already present when creating this txObj */  
+    public static enum IsisInteractionScopeType {
+        /** an IsisInteraction was already present when creating this txObj */  
         REQUEST_SCOPED,
-        /** an IsisSession was auto-created when creating this txObj, 
+        /** an IsisInteraction was auto-created when creating this txObj, 
          * so we need to take core of closing it; most likely in the context of testing */
         TEST_SCOPED
     }
 
-    public static IsisTransactionObject of(Transaction currentTransaction, IsisSessionScopeType isisInteractionScopeType) {
+    public static IsisTransactionObject of(Transaction currentTransaction, IsisInteractionScopeType isisInteractionScopeType) {
         val txObject = new IsisTransactionObject();
         txObject.setCurrentTransaction(currentTransaction);
         txObject.setIsisInteractionScopeType(isisInteractionScopeType);
@@ -49,7 +49,7 @@ public class IsisTransactionObject implements SmartTransactionObject {
     }
 
     @Getter @Setter Transaction currentTransaction;
-    @Getter @Setter IsisSessionScopeType isisInteractionScopeType;
+    @Getter @Setter IsisInteractionScopeType isisInteractionScopeType;
 
 
     @Override

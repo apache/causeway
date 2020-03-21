@@ -36,7 +36,7 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionAspectSupport;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionObject;
-import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionObject.IsisSessionScopeType;
+import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionObject.IsisInteractionScopeType;
 import org.apache.isis.core.runtime.persistence.transaction.events.TransactionAfterBeginEvent;
 import org.apache.isis.core.runtime.persistence.transaction.events.TransactionAfterCommitEvent;
 import org.apache.isis.core.runtime.persistence.transaction.events.TransactionAfterRollbackEvent;
@@ -97,19 +97,19 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
                 log.debug("open new session authenticationSession={}", authenticationSession);
                 isisInteractionFactory.openSession(authenticationSession);
                 
-                return IsisTransactionObject.of(transactionBeforeBegin, IsisSessionScopeType.TEST_SCOPED);
+                return IsisTransactionObject.of(transactionBeforeBegin, IsisInteractionScopeType.TEST_SCOPED);
                 
                 
             } else {
 
-                throw _Exceptions.illegalState("No IsisSession available. "
-                        + "Transactions are expected to be nested within the life-cycle of an IsisSession.");
+                throw _Exceptions.illegalState("No IsisInteraction available. "
+                        + "Transactions are expected to be nested within the life-cycle of an IsisInteraction.");
                 
             }
             
         }
 
-        return IsisTransactionObject.of(transactionBeforeBegin, IsisSessionScopeType.REQUEST_SCOPED);
+        return IsisTransactionObject.of(transactionBeforeBegin, IsisInteractionScopeType.REQUEST_SCOPED);
 
     }
 
@@ -160,7 +160,7 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
     private void cleanUp(IsisTransactionObject txObject) {
         txObject.getCountDownLatch().countDown();
         txObject.setCurrentTransaction(null);
-        if(txObject.getIsisInteractionScopeType() == IsisSessionScopeType.TEST_SCOPED) {
+        if(txObject.getIsisInteractionScopeType() == IsisInteractionScopeType.TEST_SCOPED) {
             isisInteractionFactory.closeSessionStack();
         }
         IsisTransactionAspectSupport.clearTransactionObject();

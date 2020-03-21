@@ -379,7 +379,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     // //////////////////////////////////////
 
-    protected IsisInteractionFactory getIsisSessionFactory() {
+    protected IsisInteractionFactory getIsisInteractionFactory() {
         return isisInteractionFactory;
     }
 

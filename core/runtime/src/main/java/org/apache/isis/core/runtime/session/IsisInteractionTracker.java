@@ -33,7 +33,7 @@ public interface IsisInteractionTracker extends AuthenticationSessionTracker {
 
     boolean isInSession();
     
-    /** @return the current request- or test-scoped IsisSession*/
+    /** @return the current request- or test-scoped IsisInteraction*/
     Optional<IsisInteraction> currentSession();
     
     @Override
@@ -46,7 +46,7 @@ public interface IsisInteractionTracker extends AuthenticationSessionTracker {
         return currentAuthenticationSession().map(AuthenticationSession::getMessageBroker);
     }
     
-    /** @return the unique id of the current top-level request- or test-scoped IsisSession*/
+    /** @return the unique id of the current top-level request- or test-scoped IsisInteraction*/
     public Optional<String> getConversationId();
     
 }

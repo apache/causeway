@@ -39,7 +39,7 @@ import lombok.val;
  * </p>
  * <p>EXAMPLE:<br/><pre>{@code 
  * _Probe probe = 
- *    _Probe.maxCallsThenExitWithStacktrace(1).label("IsisSessionFactoryDefault");
+ *    _Probe.maxCallsThenExitWithStacktrace(1).label("IsisInteractionFactoryDefault");
  * probe.println("Hallo World!");
  * }
  * </pre></p>

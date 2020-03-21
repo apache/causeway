@@ -31,10 +31,10 @@ public final class IsisTransactionAspectSupport {
 
     public static void putTransactionObject(IsisTransactionObject txStatus) {
         // TODO: review - rather than using a thread-local, and alternative might be to have
-        //  IsisSession provide a "userData" map to allow arbitrary session-scoped objects to be stored there...
+        //  IsisInteraction provide a "userData" map to allow arbitrary session-scoped objects to be stored there...
         //  ... of which IsisTransactionObject is one (the other is PersistenceSession).
-        //  Then, only IsisSessionFactory needs to maintain a thread-local (and if we change to some other way of
-        //  finding the current IsisSession, eg from HttpRequest, then there's no impact elsewhere).
+        //  Then, only IsisInteractionFactory needs to maintain a thread-local (and if we change to some other way of
+        //  finding the current IsisInteraction, eg from HttpRequest, then there's no impact elsewhere).
         _Context.threadLocalPut(IsisTransactionObject.class, txStatus);
     }
 

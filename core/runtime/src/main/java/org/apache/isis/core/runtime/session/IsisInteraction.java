@@ -60,22 +60,6 @@ public class IsisInteraction extends RuntimeContextBase {
         openedAtSystemNanos = System.nanoTime();
     }
 
-//    // -- CURRENT
-//
-//    public static IsisSession currentOrElseNull() {
-//        return current().orElse(null);
-//    }
-//
-//    public static Optional<IsisSession> current() {
-//        return _Context.threadLocalGet(IsisSession.class)
-//                .getSingleton();
-//    }
-//
-//    public static boolean isInSession() {
-//        return currentOrElseNull() != null;
-//    }
-
-
     // -- FLUSH
     //    void flush() {
     //    	runtimeEventService.fireSessionFlushing(this);

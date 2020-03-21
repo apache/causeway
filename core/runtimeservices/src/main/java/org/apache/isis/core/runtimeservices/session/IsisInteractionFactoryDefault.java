@@ -100,7 +100,7 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
     private IsisInteractionScopeCloseListener isisInteractionScopeCloseListener;
 
     @PostConstruct
-    public void initIsisSessionScopeSupport() {
+    public void initIsisInteractionScopeSupport() {
         this.isisInteractionScopeCloseListener = IsisInteractionScopeBeanFactoryPostProcessor.initIsisSessionScopeSupport(serviceInjector);        
     }
     
@@ -121,7 +121,7 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
 
         runtimeEventService.fireAppPreMetamodel();
 
-        val taskList = _ConcurrentTaskList.named("IsisSessionFactoryDefault Init")
+        val taskList = _ConcurrentTaskList.named("IsisInteractionFactoryDefault Init")
                 .addRunnable("SpecificationLoader::createMetaModel", specificationLoader::createMetaModel)
                 .addRunnable("ChangesDtoUtils::init", ChangesDtoUtils::init)
                 .addRunnable("InteractionDtoUtils::init", InteractionDtoUtils::init)
@@ -155,12 +155,12 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
 
         val authSessionToUse = getAuthenticationSessionOverride()
                 .orElse(authenticationSession);
-        val newIsisSession = new IsisInteraction(metaModelContext, authSessionToUse);
+        val newIsisInteraction = new IsisInteraction(metaModelContext, authSessionToUse);
         
-        isisInteractionStack.get().push(newIsisSession);
+        isisInteractionStack.get().push(newIsisInteraction);
         if(isisInteractionStack.get().size()==1) {
             conversationId.set(UUID.randomUUID());
-            postTopLevelOpen(newIsisSession);
+            postTopLevelOpen(newIsisInteraction);
         }
         
         log.debug("new IsisSession created (conversation-id={}, total-sessions-on-stack={}, {})", 
@@ -168,13 +168,13 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
                 isisInteractionStack.get().size(),
                 _Probe.currentThreadId());
         
-        return newIsisSession;
+        return newIsisInteraction;
         
     }
 
     @Override
     public void closeSessionStack() {
-        log.debug("about to close IsisSession stack (conversation-id={}, total-sessions-on-stack={}, {})", 
+        log.debug("about to close IsisInteraction stack (conversation-id={}, total-sessions-on-stack={}, {})", 
                 conversationId.get(), 
                 isisInteractionStack.get().size(),
                 _Probe.currentThreadId());
@@ -234,18 +234,18 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
     
     // -- HELPER
     
-    private void postTopLevelOpen(IsisInteraction newIsisSession) {
-        runtimeEventService.fireSessionOpened(newIsisSession); // only fire on top-level session 
+    private void postTopLevelOpen(IsisInteraction newIsisInteraction) {
+        runtimeEventService.fireSessionOpened(newIsisInteraction); // only fire on top-level session 
     }
     
     private void preTopLevelClose(IsisInteraction isisInteraction) {
         runtimeEventService.fireSessionClosing(isisInteraction); // only fire on top-level session 
-        isisInteractionScopeCloseListener.preTopLevelIsisSessionClose(); // cleanup the isis-session scope
+        isisInteractionScopeCloseListener.preTopLevelIsisInteractionClose(); // cleanup the isis-session scope
     }
     
     private void closeSessionStackDownToStackSize(int downToStackSize) {
         
-        log.debug("about to close IsisSession stack down to size {} (conversation-id={}, total-sessions-on-stack={}, {})",
+        log.debug("about to close IsisInteraction stack down to size {} (conversation-id={}, total-sessions-on-stack={}, {})",
                 downToStackSize,
                 conversationId.get(), 
                 isisInteractionStack.get().size(),

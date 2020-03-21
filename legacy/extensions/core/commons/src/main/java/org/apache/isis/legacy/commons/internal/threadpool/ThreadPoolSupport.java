@@ -119,7 +119,7 @@ final class ThreadPoolSupport implements AutoCloseable {
     /**
      * Non-blocking call. 
      * <p>
-     * If the computation requires an open IsisSession use {@code IsisContext.compute(Supplier)} instead,
+     * If the computation requires an open IsisInteraction use {@code IsisContext.compute(Supplier)} instead,
      * which utilizes a ForkJoinPool instead.
      * 
      * @param computation - async task 

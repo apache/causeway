@@ -121,7 +121,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, IsisWebAppComm
         //        org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard.closeSession(AuthenticationManagerStandard.java:141)
 
         getAuthenticationManager().closeSession(getAuthenticationSession());
-        getIsisSessionFactory().closeSessionStack();
+        getIsisInteractionFactory().closeSessionStack();
 
         super.invalidateNow();
     }
@@ -244,7 +244,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, IsisWebAppComm
             final SessionLoggingService.CausedBy causedBy) {
 
 
-        val isisInteractionFactory = getIsisSessionFactory();
+        val isisInteractionFactory = getIsisInteractionFactory();
         val sessionLoggingServices = getSessionLoggingServices();
 
         final Runnable loggingTask = ()->{
@@ -266,7 +266,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, IsisWebAppComm
         return commonContext.getServiceRegistry().select(SessionLoggingService.class);
     }
     
-    protected IsisInteractionFactory getIsisSessionFactory() {
+    protected IsisInteractionFactory getIsisInteractionFactory() {
         return commonContext.lookupServiceElseFail(IsisInteractionFactory.class);
     }
 

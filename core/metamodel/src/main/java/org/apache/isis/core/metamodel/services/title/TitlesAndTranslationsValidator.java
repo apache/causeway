@@ -138,7 +138,7 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
         val translationService = serviceRegistry.lookupServiceElseFail(TranslationService.class);
         
         // as used by the Wicket UI
-        final String context = "org.apache.isis.core.runtime.system.session.IsisSessionFactory";
+        final String context = "org.apache.isis.core.runtime.system.session.IsisInteractionFactory";
         final MessageRegistry messageRegistry = new MessageRegistry();
         for (String message : messageRegistry.listMessages()) {
 

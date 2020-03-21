@@ -301,7 +301,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
             final AsyncControl<R> asyncControl) {
 
         val executorService = asyncControl.getExecutorService();
-        val isisInteraction = currentIsisSession();
+        val isisInteraction = currentIsisInteraction();
         val asyncAuthSession = authSessionFrom(asyncControl, isisInteraction.getAuthenticationSession());
 
         val targetAdapter = memberAndTarget.getTarget();
@@ -500,12 +500,12 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
 
-    private IsisInteraction currentIsisSession() {
+    private IsisInteraction currentIsisInteraction() {
         return isisInteractionTracker.currentSession().orElseThrow(() -> new RuntimeException("No IsisSession is open"));
     }
 
     private ObjectManager currentObjectManager() {
-        return currentIsisSession().getObjectManager();
+        return currentIsisInteraction().getObjectManager();
     }
 
 }

@@ -56,7 +56,7 @@ public final class IsisPresets  {
     public static final String DebugMetaModel = "classpath:/org/apache/isis/core/config/presets/DebugMetaModel.properties";
     public static final String SilenceMetaModel = "classpath:/org/apache/isis/core/config/presets/SilenceMetaModel.properties";
 
-    public static final String DebugIsisSession = "classpath:/org/apache/isis/core/config/presets/DebugIsisSession.properties";
+    public static final String DebugIsisInteraction = "classpath:/org/apache/isis/core/config/presets/DebugIsisInteraction.properties";
     public static final String DebugVaadin = "classpath:/org/apache/isis/core/config/presets/DebugVaadin.properties";
     
     public static final String SilenceWicket = "classpath:/org/apache/isis/core/config/presets/SilenceWicket.properties";
@@ -94,7 +94,7 @@ public final class IsisPresets  {
                 "org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisTransactionJdo"                
                 )), 
         ISIS_SESSION(_Lists.of(
-                "org.apache.isis.core.runtimeservices.session.IsisSessionFactoryDefault"
+                "org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault"
                 )),
         VAADIN(_Lists.of(
                 "com.vaadin",
