@@ -38,14 +38,14 @@ public class IsisRestfulObjectsSessionFilter_lookupPassThru_Test {
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
-    IsisRestfulObjectsSessionFilter isisSessionFilter;
+    IsisRestfulObjectsSessionFilter isisInteractionFilter;
 
     @Mock
     FilterConfig mockFilterConfig;
 
     @Before
     public void setUp() throws Exception {
-        isisSessionFilter = new IsisRestfulObjectsSessionFilter();
+        isisInteractionFilter = new IsisRestfulObjectsSessionFilter();
     }
 
     @Test
@@ -55,7 +55,7 @@ public class IsisRestfulObjectsSessionFilter_lookupPassThru_Test {
             will(returnValue(null));
         }});
 
-        final List<String> x = isisSessionFilter.lookupAndParsePassThru(mockFilterConfig);
+        final List<String> x = isisInteractionFilter.lookupAndParsePassThru(mockFilterConfig);
         Assert.assertThat(x.size(), is(0));
     }
 
@@ -66,7 +66,7 @@ public class IsisRestfulObjectsSessionFilter_lookupPassThru_Test {
             will(returnValue(""));
         }});
 
-        final List<String> x = isisSessionFilter.lookupAndParsePassThru(mockFilterConfig);
+        final List<String> x = isisInteractionFilter.lookupAndParsePassThru(mockFilterConfig);
         Assert.assertThat(x.size(), is(0));
     }
 
@@ -77,7 +77,7 @@ public class IsisRestfulObjectsSessionFilter_lookupPassThru_Test {
             will(returnValue("/abc"));
         }});
 
-        final List<String> x = isisSessionFilter.lookupAndParsePassThru(mockFilterConfig);
+        final List<String> x = isisInteractionFilter.lookupAndParsePassThru(mockFilterConfig);
         Assert.assertThat(x.size(), is(1));
         Assert.assertThat(x.get(0), is("/abc"));
     }
@@ -89,7 +89,7 @@ public class IsisRestfulObjectsSessionFilter_lookupPassThru_Test {
             will(returnValue("/abc,/def"));
         }});
 
-        final List<String> x = isisSessionFilter.lookupAndParsePassThru(mockFilterConfig);
+        final List<String> x = isisInteractionFilter.lookupAndParsePassThru(mockFilterConfig);
         Assert.assertThat(x.size(), is(2));
         Assert.assertThat(x.get(0), is("/abc"));
         Assert.assertThat(x.get(1), is("/def"));

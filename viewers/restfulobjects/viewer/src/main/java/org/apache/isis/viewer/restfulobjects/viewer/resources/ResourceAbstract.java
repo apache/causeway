@@ -58,7 +58,7 @@ public abstract class ResourceAbstract {
 
     protected final MetaModelContext metaModelContext;
     protected final IsisConfiguration isisConfiguration;
-    protected final IsisInteractionTracker isisSessionTracker;
+    protected final IsisInteractionTracker isisInteractionTracker;
 
     @Context HttpHeaders httpHeaders;
     @Context UriInfo uriInfo;
@@ -72,11 +72,11 @@ public abstract class ResourceAbstract {
     protected ResourceAbstract(
             final MetaModelContext metaModelContext,
             final IsisConfiguration isisConfiguration,
-            final IsisInteractionTracker isisSessionTracker) {
+            final IsisInteractionTracker isisInteractionTracker) {
         
         this.metaModelContext = metaModelContext;
         this.isisConfiguration = isisConfiguration;
-        this.isisSessionTracker = isisSessionTracker;
+        this.isisInteractionTracker = isisInteractionTracker;
     }
     
     // -- FACTORIES
@@ -106,7 +106,7 @@ public abstract class ResourceAbstract {
             final ResourceDescriptor resourceDescriptor,
             final String urlUnencodedQueryString) {
         
-        if (!isisSessionTracker.isInSession()) {
+        if (!isisInteractionTracker.isInSession()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
 

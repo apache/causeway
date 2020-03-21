@@ -71,7 +71,7 @@ public class IsisWebAppCommonContext implements MetaModelContext.Delegating {
     private final MenuBarsService menuBarsService = lookupServiceElseFail(MenuBarsService.class);
     
     @Getter(lazy = true)
-    private final IsisInteractionTracker isisSessionTracker = lookupServiceElseFail(IsisInteractionTracker.class);
+    private final IsisInteractionTracker isisInteractionTracker = lookupServiceElseFail(IsisInteractionTracker.class);
     
     @Getter(lazy = true, value = AccessLevel.PRIVATE)
     private final ObjectMementoService mementoService = lookupServiceElseFail(ObjectMementoService.class);

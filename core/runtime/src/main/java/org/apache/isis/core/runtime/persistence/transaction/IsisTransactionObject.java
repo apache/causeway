@@ -41,15 +41,15 @@ public class IsisTransactionObject implements SmartTransactionObject {
         TEST_SCOPED
     }
 
-    public static IsisTransactionObject of(Transaction currentTransaction, IsisSessionScopeType isisSessionScopeType) {
+    public static IsisTransactionObject of(Transaction currentTransaction, IsisSessionScopeType isisInteractionScopeType) {
         val txObject = new IsisTransactionObject();
         txObject.setCurrentTransaction(currentTransaction);
-        txObject.setIsisSessionScopeType(isisSessionScopeType);
+        txObject.setIsisInteractionScopeType(isisInteractionScopeType);
         return txObject;
     }
 
     @Getter @Setter Transaction currentTransaction;
-    @Getter @Setter IsisSessionScopeType isisSessionScopeType;
+    @Getter @Setter IsisSessionScopeType isisInteractionScopeType;
 
 
     @Override

@@ -40,7 +40,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 class IsisInteractionScope implements Scope, IsisInteractionScopeCloseListener {
     
-    @Inject private IsisInteractionTracker isisSessionTracker;
+    @Inject private IsisInteractionTracker isisInteractionTracker;
 
     @Data(staticConstructor = "of")
     private static class ScopedObject {
@@ -60,12 +60,12 @@ class IsisInteractionScope implements Scope, IsisInteractionScopeCloseListener {
     @Override
     public Object get(String name, ObjectFactory<?> objectFactory) {
         
-        if(isisSessionTracker==null) {
+        if(isisInteractionTracker==null) {
             throw _Exceptions.illegalState("Creation of bean %s with @IsisSessionScope requires the "
                     + "IsisSessionScopeBeanFactoryPostProcessor registered and initialized.", name);
         }
         
-        if(!isisSessionTracker.isInSession()) {
+        if(!isisInteractionTracker.isInSession()) {
             throw _Exceptions.illegalState("Creation of bean %s with @IsisSessionScope requires the "
                     + "calling %s to have an open IsisSession on the thread-local stack. Running into "
                     + "this issue might be caused by use of ... @Inject MyScopedBean bean ..., instead of "
@@ -109,7 +109,7 @@ class IsisInteractionScope implements Scope, IsisInteractionScopeCloseListener {
     @Override
     public String getConversationId() {
         // null by convention if not supported
-        return isisSessionTracker.getConversationId().orElse(null);
+        return isisInteractionTracker.getConversationId().orElse(null);
     }
     
     @Override

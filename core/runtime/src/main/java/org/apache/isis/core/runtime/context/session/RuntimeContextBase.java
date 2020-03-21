@@ -50,7 +50,7 @@ public abstract class RuntimeContextBase implements RuntimeContext {
     @Getter(onMethod = @__(@Override)) protected final ServiceInjector serviceInjector;
     @Getter(onMethod = @__(@Override)) protected final ServiceRegistry serviceRegistry;
     @Getter(onMethod = @__(@Override)) protected final SpecificationLoader specificationLoader;
-    @Getter(onMethod = @__(@Override)) protected final IsisInteractionTracker isisSessionTracker;
+    @Getter(onMethod = @__(@Override)) protected final IsisInteractionTracker isisInteractionTracker;
     
     @Getter protected final IsisInteractionFactory isisInteractionFactory;
     @Getter protected final AuthenticationManager authenticationManager;
@@ -71,13 +71,13 @@ public abstract class RuntimeContextBase implements RuntimeContext {
         this.homePageSupplier = mmc::getHomePageAdapter;
         this.isisInteractionFactory = serviceRegistry.lookupServiceElseFail(IsisInteractionFactory.class);
         this.authenticationManager = serviceRegistry.lookupServiceElseFail(AuthenticationManager.class);
-        this.isisSessionTracker = serviceRegistry.lookupServiceElseFail(IsisInteractionTracker.class);
+        this.isisInteractionTracker = serviceRegistry.lookupServiceElseFail(IsisInteractionTracker.class);
     }
     
     // -- AUTH
     
     public AuthenticationSessionTracker getAuthenticationSessionTracker() {
-        return isisSessionTracker;
+        return isisInteractionTracker;
     }
 
     @Override
@@ -85,7 +85,7 @@ public abstract class RuntimeContextBase implements RuntimeContext {
         // we do the logout (removes this session from those valid)
         // similar code in wicket viewer (AuthenticatedWebSessionForIsis#onInvalidate())
         
-        isisSessionTracker
+        isisInteractionTracker
         .currentAuthenticationSession()
         .ifPresent(authenticationSession->{
         

@@ -48,7 +48,7 @@ import lombok.val;
  */
 public class LocalizerForIsis extends Localizer {
 
-    @Inject private IsisInteractionTracker isisSessionTracker;
+    @Inject private IsisInteractionTracker isisInteractionTracker;
     @Inject private IsisInteractionFactory isisInteractionFactory;
     @Inject private TranslationService translationService;
     
@@ -76,7 +76,7 @@ public class LocalizerForIsis extends Localizer {
     protected String translate(final String key, final Component component) {
         final Class<?> contextClass = determineContextClassElse(component, IsisWicketApplication.class);
         final String context = contextClass.getName();
-        if(isisSessionTracker.isInSession()) {
+        if(isisInteractionTracker.isInSession()) {
             return translate(key, context);
         } else {
             return isisInteractionFactory.callAuthenticated(new InitialisationSession(), ()->translate(key, context));

@@ -63,22 +63,22 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
 
     private final IsisInteractionFactory isisInteractionFactory;
     private final EventBusService eventBusService;
-    private final IsisInteractionTracker isisSessionTracker;
+    private final IsisInteractionTracker isisInteractionTracker;
 
     @Inject
     public IsisPlatformTransactionManagerForJdo(
             final IsisInteractionFactory isisInteractionFactory,
             final EventBusService eventBusService,
-            final IsisInteractionTracker isisSessionTracker) {
+            final IsisInteractionTracker isisInteractionTracker) {
         this.isisInteractionFactory = isisInteractionFactory;
         this.eventBusService = eventBusService;
-        this.isisSessionTracker = isisSessionTracker;
+        this.isisInteractionTracker = isisInteractionTracker;
     }
 
     @Override
     protected Object doGetTransaction() throws TransactionException {
 
-        val isInSession = isisSessionTracker.isInSession();
+        val isInSession = isisInteractionTracker.isInSession();
         log.debug("doGetTransaction isInSession={}", isInSession);
 
         val transactionBeforeBegin = 
@@ -91,7 +91,7 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
             
             if(Utils.isJUnitTest()) {
             
-                val authenticationSession = isisSessionTracker.currentAuthenticationSession()
+                val authenticationSession = isisInteractionTracker.currentAuthenticationSession()
                         .orElseGet(InitialisationSession::new);
 
                 log.debug("open new session authenticationSession={}", authenticationSession);
@@ -160,7 +160,7 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
     private void cleanUp(IsisTransactionObject txObject) {
         txObject.getCountDownLatch().countDown();
         txObject.setCurrentTransaction(null);
-        if(txObject.getIsisSessionScopeType() == IsisSessionScopeType.TEST_SCOPED) {
+        if(txObject.getIsisInteractionScopeType() == IsisSessionScopeType.TEST_SCOPED) {
             isisInteractionFactory.closeSessionStack();
         }
         IsisTransactionAspectSupport.clearTransactionObject();

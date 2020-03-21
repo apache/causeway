@@ -61,8 +61,8 @@ public class VersionResourceServerside extends ResourceAbstract implements Versi
     public VersionResourceServerside(
             final MetaModelContext metaModelContext,
             final IsisConfiguration isisConfiguration,
-            final IsisInteractionTracker isisSessionTracker) {
-        super(metaModelContext, isisConfiguration, isisSessionTracker);
+            final IsisInteractionTracker isisInteractionTracker) {
+        super(metaModelContext, isisConfiguration, isisInteractionTracker);
     }
 
     @Override

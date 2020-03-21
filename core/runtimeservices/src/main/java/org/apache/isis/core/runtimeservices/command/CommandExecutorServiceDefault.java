@@ -370,8 +370,8 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         val objectSpec = specificationLoader.loadSpecification(oid.getObjectSpecId());
         val loadRequest = ObjectLoader.Request.of(objectSpec, oid.getIdentifier());
 
-        Optional<IsisInteraction> isisSession = isisSessionTracker.currentSession();
-        return isisSession
+        Optional<IsisInteraction> isisInteraction = isisInteractionTracker.currentSession();
+        return isisInteraction
                 .map(x -> x.getObjectManager().loadObject(loadRequest))
                 .orElse(null);
     }
@@ -401,7 +401,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     @Inject TransactionService transactionService;
     @Inject SpecificationLoader specificationLoader;
     @Inject IsisInteractionFactory isisInteractionFactory;
-    @Inject IsisInteractionTracker isisSessionTracker;
+    @Inject IsisInteractionTracker isisInteractionTracker;
 
     @Inject private javax.inject.Provider<InteractionContext> interactionContextProvider;
 

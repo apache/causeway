@@ -94,10 +94,10 @@ public class JdoPersistenceLifecycleService {
 
         switch (eventType) {
         case OPENED:
-            openSession(event.getIsisSession());
+            openSession(event.getIsisInteraction());
             break;
         case CLOSING:
-            closeSession(event.getIsisSession());
+            closeSession(event.getIsisInteraction());
             break;
             //		case sessionFlushing:
             //			flushSession();
@@ -111,7 +111,7 @@ public class JdoPersistenceLifecycleService {
 
     // -- HELPER
 
-    private void openSession(IsisInteraction isisSession) {
+    private void openSession(IsisInteraction isisInteraction) {
 
         val persistenceSession =
                 persistenceSessionFactory.createPersistenceSession();
@@ -129,7 +129,7 @@ public class JdoPersistenceLifecycleService {
         persistenceSession.open();
     }
 
-    private void closeSession(IsisInteraction isisSession) {
+    private void closeSession(IsisInteraction isisInteraction) {
         PersistenceSession.current(PersistenceSession.class)
         .getSingleton()
         .ifPresent(PersistenceSession::close);

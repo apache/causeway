@@ -126,7 +126,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     @Inject private FactoryService factoryService;
     @Inject private MetaModelContext metaModelContext;
     @Inject private SpecificationLoader specificationLoader;
-    @Inject private IsisInteractionTracker isisSessionTracker;
+    @Inject private IsisInteractionTracker isisInteractionTracker;
     @Inject private IsisInteractionFactory isisInteractionFactory;
     @Inject private TransactionService transactionService;
     @Inject private CommandExecutorService commandExecutorService;
@@ -301,8 +301,8 @@ public class WrapperFactoryDefault implements WrapperFactory {
             final AsyncControl<R> asyncControl) {
 
         val executorService = asyncControl.getExecutorService();
-        val isisSession = currentIsisSession();
-        val asyncAuthSession = authSessionFrom(asyncControl, isisSession.getAuthenticationSession());
+        val isisInteraction = currentIsisSession();
+        val asyncAuthSession = authSessionFrom(asyncControl, isisInteraction.getAuthenticationSession());
 
         val targetAdapter = memberAndTarget.getTarget();
         val method = memberAndTarget.getMethod();
@@ -501,7 +501,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
 
     private IsisInteraction currentIsisSession() {
-        return isisSessionTracker.currentSession().orElseThrow(() -> new RuntimeException("No IsisSession is open"));
+        return isisInteractionTracker.currentSession().orElseThrow(() -> new RuntimeException("No IsisSession is open"));
     }
 
     private ObjectManager currentObjectManager() {

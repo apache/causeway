@@ -32,7 +32,7 @@ public class IsisSessionLifecycleEvent {
         CLOSING,
     }
 
-    @Getter IsisInteraction isisSession;
+    @Getter IsisInteraction isisInteraction;
     @Getter EventType eventType;
 
 }

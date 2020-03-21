@@ -51,8 +51,8 @@ public class HomePageResourceServerside extends ResourceAbstract implements Home
     public HomePageResourceServerside(
             final MetaModelContext metaModelContext,
             final IsisConfiguration isisConfiguration,
-            final IsisInteractionTracker isisSessionTracker) {
-        super(metaModelContext, isisConfiguration, isisSessionTracker);
+            final IsisInteractionTracker isisInteractionTracker) {
+        super(metaModelContext, isisConfiguration, isisInteractionTracker);
     }
 
     @Override

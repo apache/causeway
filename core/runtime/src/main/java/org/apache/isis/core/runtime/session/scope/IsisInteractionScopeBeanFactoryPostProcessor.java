@@ -35,17 +35,17 @@ public class IsisInteractionScopeBeanFactoryPostProcessor implements BeanFactory
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        val isisSessionScope = new IsisInteractionScope();
+        val isisInteractionScope = new IsisInteractionScope();
         // scope name as defined in annotation @IsisSessionScope
-        beanFactory.registerScope("isis-session", isisSessionScope);
-        _Context.put(IsisInteractionScope.class, isisSessionScope, true);
+        beanFactory.registerScope("isis-session", isisInteractionScope);
+        _Context.put(IsisInteractionScope.class, isisInteractionScope, true);
     }
 
     public static IsisInteractionScopeCloseListener initIsisSessionScopeSupport(
             @NonNull final ServiceInjector serviceInjector) {
-        val isisSessionScope = _Context.getElseFail(IsisInteractionScope.class);
-        serviceInjector.injectServicesInto(isisSessionScope);
+        val isisInteractionScope = _Context.getElseFail(IsisInteractionScope.class);
+        serviceInjector.injectServicesInto(isisInteractionScope);
         _Context.remove(IsisInteractionScope.class); // cleanup
-        return isisSessionScope;
+        return isisInteractionScope;
     }
 }

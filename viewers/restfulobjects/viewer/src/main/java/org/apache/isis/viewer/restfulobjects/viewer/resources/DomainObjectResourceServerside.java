@@ -86,8 +86,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     public DomainObjectResourceServerside(
             final MetaModelContext metaModelContext,
             final IsisConfiguration isisConfiguration,
-            final IsisInteractionTracker isisSessionTracker) {
-        super(metaModelContext, isisConfiguration, isisSessionTracker);
+            final IsisInteractionTracker isisInteractionTracker) {
+        super(metaModelContext, isisConfiguration, isisInteractionTracker);
         log.debug("<init>");
     }
 

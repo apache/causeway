@@ -84,7 +84,7 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
                 allowing(mockCommonContext).lookupServiceElseFail(IsisInteractionFactory.class);
                 will(returnValue(mockIsisSessionFactory));
 
-                allowing(mockCommonContext).getIsisSessionTracker();
+                allowing(mockCommonContext).getIsisInteractionTracker();
                 will(returnValue(mockIsisSessionTracker));
                 
                 allowing(mockIsisSessionTracker).currentAuthenticationSession();

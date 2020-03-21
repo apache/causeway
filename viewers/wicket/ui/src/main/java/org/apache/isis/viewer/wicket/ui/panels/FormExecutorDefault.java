@@ -51,8 +51,6 @@ import org.apache.isis.core.metamodel.facets.properties.renderunchanged.Unchangi
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
-import org.apache.isis.core.runtime.session.IsisRequestCycle;
-import org.apache.isis.core.runtime.session.IsisInteraction;
 import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.MessageBroker;
@@ -150,7 +148,7 @@ implements FormExecutor {
             // flush any queued changes; any concurrency or violation exceptions will actually be thrown here
             {
                 val commonContext = targetEntityModel.getCommonContext();
-                if(commonContext.getIsisSessionTracker().isInSession()) {
+                if(commonContext.getIsisInteractionTracker().isInSession()) {
                     PersistenceSession.current(PersistenceSession.class)
                     .stream()
                     .forEach(ps->ps.flush());    

@@ -392,7 +392,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
     }
 
     private boolean inIsisSession() {
-        return commonContext.getIsisSessionTracker().isInSession();
+        return commonContext.getIsisInteractionTracker().isInSession();
     }
 
     private Optional<AuthenticationSession> getAuthenticationSession() {

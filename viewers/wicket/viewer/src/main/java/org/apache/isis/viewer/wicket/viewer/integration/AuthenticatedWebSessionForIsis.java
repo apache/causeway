@@ -144,7 +144,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, IsisWebAppComm
 
     public synchronized AuthenticationSession getAuthenticationSession() {
         
-        commonContext.getIsisSessionTracker().currentAuthenticationSession()
+        commonContext.getIsisInteractionTracker().currentAuthenticationSession()
         .ifPresent(currentAuthenticationSession->{
             
             if (getAuthenticationManager().isSessionValid(currentAuthenticationSession)) {

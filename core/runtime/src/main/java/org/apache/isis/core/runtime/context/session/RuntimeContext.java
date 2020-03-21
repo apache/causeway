@@ -35,7 +35,7 @@ public interface RuntimeContext {
 
     MetaModelContext getMetaModelContext();
 
-    IsisInteractionTracker getIsisSessionTracker(); 
+    IsisInteractionTracker getIsisInteractionTracker(); 
     IsisConfiguration getConfiguration();
     SpecificationLoader getSpecificationLoader();
     ServiceInjector getServiceInjector();

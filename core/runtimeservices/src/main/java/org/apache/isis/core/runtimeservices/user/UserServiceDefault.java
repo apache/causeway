@@ -52,7 +52,7 @@ import lombok.val;
 @Qualifier("Default")
 public class UserServiceDefault implements UserService {
     
-    @Inject private IsisInteractionTracker isisSessionTracker;
+    @Inject private IsisInteractionTracker isisInteractionTracker;
     
     @Service
     @Named("isisMetaModel.UserServiceDefault.SudoServiceSpi")
@@ -96,7 +96,7 @@ public class UserServiceDefault implements UserService {
             return new UserMemento(username, asRoleMementos(roles));
 
         } else {
-            return isisSessionTracker.currentAuthenticationSession()
+            return isisInteractionTracker.currentAuthenticationSession()
             .map(AuthenticationSession::createUserMemento)
             .orElseThrow(()->_Exceptions.illegalState("need an AuthenticationSession to create a UserMemento"));
         }
@@ -123,7 +123,7 @@ public class UserServiceDefault implements UserService {
     // -- HELPER
     
     private Can<String> currentRoles() {
-        return isisSessionTracker.currentAuthenticationSession()
+        return isisInteractionTracker.currentAuthenticationSession()
                 .map(AuthenticationSession::getRoles)
                 .orElse(Can.empty());
     }
