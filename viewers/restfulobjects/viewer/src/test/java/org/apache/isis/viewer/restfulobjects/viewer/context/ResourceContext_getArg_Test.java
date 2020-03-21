@@ -55,7 +55,7 @@ public class ResourceContext_getArg_Test {
 
     @Mock HttpServletRequest mockHttpServletRequest;
     @Mock ServletContext mockServletContext;
-    @Mock IsisInteraction mockIsisSession;
+    @Mock IsisInteraction mockIsisInteraction;
     @Mock IsisInteractionFactory mockIsisInteractionFactory;
     @Mock IsisInteractionTracker mockIsisInteractionTracker;
     @Mock AuthenticationManager mockAuthenticationManager;
@@ -99,7 +99,7 @@ public class ResourceContext_getArg_Test {
                 allowing(mockHttpServletRequest).getQueryString();
                 will(returnValue(""));
                 
-//                allowing(mockIsisSession).getAuthenticationSession();
+//                allowing(mockIsisInteraction).getAuthenticationSession();
 //                will(returnValue(mockAuthenticationSession));
          
         }});

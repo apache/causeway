@@ -63,7 +63,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     @Mock HttpServletRequest mockHttpServletRequest;
     @Mock ServletContext mockServletContext;
     @Mock IsisInteractionFactory mockIsisInteractionFactory;
-    @Mock IsisInteraction mockIsisSession;
+    @Mock IsisInteraction mockIsisInteraction;
     @Mock AuthenticationSession mockAuthenticationSession;
     @Mock SpecificationLoader mockSpecificationLoader;
     @Mock WebApplicationContext webApplicationContext;
@@ -100,7 +100,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
                 allowing(mockHttpServletRequest).getQueryString();
                 will(returnValue(""));
                 
-//                allowing(mockIsisSession).getAuthenticationSession();
+//                allowing(mockIsisInteraction).getAuthenticationSession();
 //                will(returnValue(mockAuthenticationSession));
                 
             }
