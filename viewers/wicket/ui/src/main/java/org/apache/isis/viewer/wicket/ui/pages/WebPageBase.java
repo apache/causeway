@@ -40,7 +40,7 @@ public abstract class WebPageBase extends WebPage implements IsisWebAppCommonCon
     private transient WebAppContextPath webAppContextPath;
     private transient PageClassRegistry pageClassRegistry;
     private transient IsisWebAppCommonContext commonContext;
-    private transient IsisInteractionFactory isisSessionFactory;
+    private transient IsisInteractionFactory isisInteractionFactory;
     
     protected WebPageBase(PageParameters parameters) {
         super(parameters);
@@ -68,7 +68,7 @@ public abstract class WebPageBase extends WebPage implements IsisWebAppCommonCon
     }
 
     public IsisInteractionFactory getIsisSessionFactory() {
-        return isisSessionFactory = computeIfAbsent(IsisInteractionFactory.class, isisSessionFactory);
+        return isisInteractionFactory = computeIfAbsent(IsisInteractionFactory.class, isisInteractionFactory);
     }
     
     

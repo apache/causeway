@@ -42,7 +42,7 @@ import lombok.val;
 
 public class KeycloakFilter implements Filter {
     
-    @Autowired private IsisInteractionFactory isisSessionFactory;
+    @Autowired private IsisInteractionFactory isisInteractionFactory;
 
     @Override
     public void doFilter(
@@ -64,7 +64,7 @@ public class KeycloakFilter implements Filter {
         val authenticationSession = new SimpleSession(userid, roles, subjectHeader);
         authenticationSession.setType(AuthenticationSession.Type.EXTERNAL);
         
-        isisSessionFactory.runAuthenticated(
+        isisInteractionFactory.runAuthenticated(
                 authenticationSession,
                 ()->{
                         filterChain.doFilter(servletRequest, servletResponse);

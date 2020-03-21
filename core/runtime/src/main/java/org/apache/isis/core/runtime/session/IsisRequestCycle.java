@@ -34,7 +34,7 @@ public class IsisRequestCycle {
 
     // -- SUPPORTING ISIS TRANSACTION FILTER FOR RESTFUL OBJECTS ...
 
-    private final IsisInteractionFactory isisSessionFactory;
+    private final IsisInteractionFactory isisInteractionFactory;
     private final TransactionTemplate transactionTemplate;
     private TransactionStatus txStatus;
 
@@ -42,7 +42,7 @@ public class IsisRequestCycle {
 
     public void onBeginRequest(AuthenticationSession authenticationSession) {
 
-        isisSessionFactory.openSession(authenticationSession);
+        isisInteractionFactory.openSession(authenticationSession);
 
         txStatus = transactionTemplate.getTransactionManager().getTransaction(null);
 
@@ -68,7 +68,7 @@ public class IsisRequestCycle {
             transactionTemplate.getTransactionManager().commit(txStatus);
 
         } finally {
-            isisSessionFactory.closeSessionStack();
+            isisInteractionFactory.closeSessionStack();
         }
 
     }

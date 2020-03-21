@@ -83,7 +83,7 @@ public class FixtureScripts {
     @Inject private RepositoryService repositoryService;
     @Inject private TransactionService transactionService;
     @Inject private ExecutionParametersService executionParametersService;
-    @Inject private IsisInteractionFactory isisSessionFactory;
+    @Inject private IsisInteractionFactory isisInteractionFactory;
 
     @Inject private EventBusService eventBusService;
 
@@ -350,7 +350,7 @@ public class FixtureScripts {
     	val singleScript = toSingleScript(fixtureScriptList);
     	String parameters = null;
     	
-    	isisSessionFactory.runAnonymous(()->{
+    	isisInteractionFactory.runAnonymous(()->{
     	    transactionService.executeWithinTransaction(()->{
                 runScript(singleScript, parameters);
             });    
@@ -385,7 +385,7 @@ public class FixtureScripts {
     @Programmatic
     public <T> T runBuilder(final BuilderScriptAbstract<T> builderScript) {
         
-        return isisSessionFactory.callAnonymous(()->
+        return isisInteractionFactory.callAnonymous(()->
             transactionService.executeWithinTransaction(()->
                 runBuilderScriptNonTransactional(builderScript)
             )

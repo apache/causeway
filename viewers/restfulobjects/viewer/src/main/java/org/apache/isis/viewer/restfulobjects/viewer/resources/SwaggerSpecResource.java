@@ -44,7 +44,7 @@ import lombok.val;
 public class SwaggerSpecResource {
 
     private final SwaggerService swaggerService;
-    private final IsisInteractionFactory isisSessionFactory;
+    private final IsisInteractionFactory isisInteractionFactory;
 
     @Context HttpHeaders httpHeaders;
     @Context HttpServletRequest httpServletRequest;
@@ -52,9 +52,9 @@ public class SwaggerSpecResource {
     @Inject
     public SwaggerSpecResource(
             final SwaggerService swaggerService,
-            final IsisInteractionFactory isisSessionFactory) {
+            final IsisInteractionFactory isisInteractionFactory) {
         this.swaggerService = swaggerService;
-        this.isisSessionFactory = isisSessionFactory;
+        this.isisInteractionFactory = isisInteractionFactory;
     }
 
     @Path("/private")
@@ -92,7 +92,7 @@ public class SwaggerSpecResource {
         val format = deriveFrom(httpHeaders);
         val callable = new MyCallable(swaggerService, visibility, format);
         
-        val spec = isisSessionFactory.callAnonymous(callable);
+        val spec = isisInteractionFactory.callAnonymous(callable);
         return spec;
     }
 

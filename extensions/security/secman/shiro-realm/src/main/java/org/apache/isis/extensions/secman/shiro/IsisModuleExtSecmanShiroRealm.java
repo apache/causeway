@@ -57,7 +57,7 @@ import lombok.val;
 public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements SecurityRealm {
 
     @Inject protected ServiceInjector serviceInjector;
-    @Inject protected IsisInteractionFactory isisSessionFactory;
+    @Inject protected IsisInteractionFactory isisInteractionFactory;
     @Inject protected PlatformTransactionManager txMan;
     
     @Getter @Setter private AuthenticatingRealm delegateAuthenticationRealm;
@@ -268,7 +268,7 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements S
     }
 
     <V> V execute(final Supplier<V> closure) {
-        return isisSessionFactory.callAnonymous(
+        return isisInteractionFactory.callAnonymous(
                 new Callable<V>() {
                     @Override
                     public V call() {

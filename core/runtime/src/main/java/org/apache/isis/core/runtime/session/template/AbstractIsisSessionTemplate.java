@@ -29,7 +29,7 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
 public abstract class AbstractIsisSessionTemplate {
     
     @Inject protected TransactionService transactionService;
-    @Inject protected IsisInteractionFactory isisSessionFactory;
+    @Inject protected IsisInteractionFactory isisInteractionFactory;
     @Inject protected ServiceInjector serviceInjector;
 
     /**
@@ -37,7 +37,7 @@ public abstract class AbstractIsisSessionTemplate {
      */
     public void execute(final AuthenticationSession authSession, final Object context) {
         
-        isisSessionFactory.runAuthenticated(authSession, ()->{
+        isisInteractionFactory.runAuthenticated(authSession, ()->{
             serviceInjector.injectServicesInto(this);
             doExecute(context);
         });

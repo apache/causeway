@@ -51,7 +51,7 @@ public class VaadinAuthenticationHandler implements VaadinServiceInitListener {
 
     private static final long serialVersionUID = 1L;
     
-    @Inject private transient IsisInteractionFactory isisSessionFactory; 
+    @Inject private transient IsisInteractionFactory isisInteractionFactory; 
 
     @Override
     public void serviceInit(ServiceInitEvent event) {
@@ -92,7 +92,7 @@ public class VaadinAuthenticationHandler implements VaadinServiceInitListener {
             AuthSessionStoreUtil.clear();
         });
         VaadinSession.getCurrent().close();
-        isisSessionFactory.closeSessionStack();
+        isisInteractionFactory.closeSessionStack();
     } 
     
     /**
@@ -105,7 +105,7 @@ public class VaadinAuthenticationHandler implements VaadinServiceInitListener {
      */
     public <R> R callAuthenticated(Callable<R> callable) {
         return AuthSessionStoreUtil.get()
-                .map(authSession->isisSessionFactory.callAuthenticated(authSession, callable))
+                .map(authSession->isisInteractionFactory.callAuthenticated(authSession, callable))
                 .orElse(null); // TODO redirect to login
     }
     
@@ -127,7 +127,7 @@ public class VaadinAuthenticationHandler implements VaadinServiceInitListener {
         
         val authSession = AuthSessionStoreUtil.get().orElse(null);
         if(authSession!=null) {
-            isisSessionFactory.openSession(authSession);
+            isisInteractionFactory.openSession(authSession);
             return; // access granted
         }
         // otherwise redirect to login page
@@ -137,7 +137,7 @@ public class VaadinAuthenticationHandler implements VaadinServiceInitListener {
     }
     
     private void beforeLeave(BeforeLeaveEvent event) {
-        //isisSessionFactory.closeSessionStack();
+        //isisInteractionFactory.closeSessionStack();
     }
 
 

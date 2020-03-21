@@ -49,7 +49,7 @@ import lombok.val;
 public class LocalizerForIsis extends Localizer {
 
     @Inject private IsisInteractionTracker isisSessionTracker;
-    @Inject private IsisInteractionFactory isisSessionFactory;
+    @Inject private IsisInteractionFactory isisInteractionFactory;
     @Inject private TranslationService translationService;
     
     /**
@@ -79,7 +79,7 @@ public class LocalizerForIsis extends Localizer {
         if(isisSessionTracker.isInSession()) {
             return translate(key, context);
         } else {
-            return isisSessionFactory.callAuthenticated(new InitialisationSession(), ()->translate(key, context));
+            return isisInteractionFactory.callAuthenticated(new InitialisationSession(), ()->translate(key, context));
         }
     }
 

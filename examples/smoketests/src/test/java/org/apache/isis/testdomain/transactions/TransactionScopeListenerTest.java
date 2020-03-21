@@ -58,7 +58,7 @@ class TransactionScopeListenerTest {
     @Inject private FixtureScripts fixtureScripts;
     @Inject private TransactionService transactionService;
     @Inject private RepositoryService repository;
-    @Inject private IsisInteractionFactory isisSessionFactory;
+    @Inject private IsisInteractionFactory isisInteractionFactory;
     @Inject private KVStoreForTesting kvStoreForTesting;
     
     /* Expectations:
@@ -97,7 +97,7 @@ class TransactionScopeListenerTest {
     void setUp() {
         
         // new IsisSessionScope with a new transaction (#1)
-        isisSessionFactory.runAnonymous(()->{
+        isisInteractionFactory.runAnonymous(()->{
         
             // cleanup
             fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
@@ -111,7 +111,7 @@ class TransactionScopeListenerTest {
     void sessionScopedProbe_shouldBeReused_andBeAwareofTransactionBoundaries() {
         
         // new IsisSessionScope
-        isisSessionFactory.runAnonymous(()->{
+        isisInteractionFactory.runAnonymous(()->{
             
             // expected pre condition
             // new transaction (#2)

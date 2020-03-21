@@ -31,19 +31,19 @@ public class IsisSessionHandler implements BeforeEachCallback, AfterEachCallback
 
     @Override
     public void beforeEach(ExtensionContext extensionContext) throws Exception {
-        isisSessionFactory(extensionContext)
-        .ifPresent(isisSessionFactory->isisSessionFactory.openSession(new InitialisationSession()));
+        isisInteractionFactory(extensionContext)
+        .ifPresent(isisInteractionFactory->isisInteractionFactory.openSession(new InitialisationSession()));
     }
     
     @Override
     public void afterEach(ExtensionContext extensionContext) throws Exception {
-        isisSessionFactory(extensionContext)
+        isisInteractionFactory(extensionContext)
         .ifPresent(IsisInteractionFactory::closeSessionStack);
     }
 
     // -- HELPER
     
-    private Optional<IsisInteractionFactory> isisSessionFactory(ExtensionContext extensionContext) {
+    private Optional<IsisInteractionFactory> isisInteractionFactory(ExtensionContext extensionContext) {
         return extensionContext.getTestInstance()
         .filter(IsisIntegrationTestAbstract.class::isInstance)
         .map(IsisIntegrationTestAbstract.class::cast)

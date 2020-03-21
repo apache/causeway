@@ -115,7 +115,7 @@ public abstract class RegisterPanel extends PanelBase<UserDetails> {
         
         @Inject private transient UserRegistrationService userRegistrationService;
         @Inject private transient TransactionService transactionService;
-        @Inject private transient IsisInteractionFactory isisSessionFactory;
+        @Inject private transient IsisInteractionFactory isisInteractionFactory;
 
         private final String uuid;
 
@@ -141,7 +141,7 @@ public abstract class RegisterPanel extends PanelBase<UserDetails> {
         public final void onSubmit() {
             final UserDetails userDetails = getModelObject();
 
-            isisSessionFactory.runAnonymous(() -> {
+            isisInteractionFactory.runAnonymous(() -> {
                 transactionService.executeWithinTransaction(() -> {
                     userRegistrationService.registerUser(userDetails);
                     removeAccountConfirmation();

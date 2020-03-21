@@ -47,14 +47,14 @@ extends SpringServlet {
 
     private static final long serialVersionUID = 1L;
     
-    private final IsisInteractionFactory isisSessionFactory;
+    private final IsisInteractionFactory isisInteractionFactory;
 
     public IsisServletForVaadin(
-            @NonNull final IsisInteractionFactory isisSessionFactory, 
+            @NonNull final IsisInteractionFactory isisInteractionFactory, 
             @NonNull final ApplicationContext context, 
             final boolean forwardingEnforced) {
         super(context, forwardingEnforced);
-        this.isisSessionFactory = isisSessionFactory;
+        this.isisInteractionFactory = isisInteractionFactory;
     }
    
     
@@ -68,7 +68,7 @@ extends SpringServlet {
         log.debug("new request incoming (authentication={})", authSession);
         
         if(authSession!=null) {
-            isisSessionFactory.runAuthenticated(authSession, ()->{
+            isisInteractionFactory.runAuthenticated(authSession, ()->{
                 super.service(request, response);                
             });
         } else {

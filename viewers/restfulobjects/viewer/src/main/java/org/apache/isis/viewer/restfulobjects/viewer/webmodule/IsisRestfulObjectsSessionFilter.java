@@ -156,7 +156,7 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
         return Pattern.compile(".*\\." + input);
     };
 
-    @Autowired private IsisInteractionFactory isisSessionFactory;
+    @Autowired private IsisInteractionFactory isisInteractionFactory;
     @Autowired private SpecificationLoader specificationLoader;
     @Autowired private TransactionService transactionService;
     
@@ -343,7 +343,7 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
 
-        requires(isisSessionFactory, "isisSessionFactory");
+        requires(isisInteractionFactory, "isisInteractionFactory");
         requires(specificationLoader, "specificationLoader");
         
         ensureMetamodelIsValid(specificationLoader);
@@ -378,7 +378,7 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
                 
                 authSessionStrategy.bind(httpServletRequest, httpServletResponse, authenticationSession);
                 
-                isisSessionFactory.runAuthenticated(
+                isisInteractionFactory.runAuthenticated(
                         authenticationSession,
                         ()->{
                             
@@ -408,7 +408,7 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
             }
 
         } finally {
-            isisSessionFactory.closeSessionStack();
+            isisInteractionFactory.closeSessionStack();
         }
 
     }

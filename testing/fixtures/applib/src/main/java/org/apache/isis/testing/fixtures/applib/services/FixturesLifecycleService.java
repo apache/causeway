@@ -61,7 +61,7 @@ public class FixturesLifecycleService {
     @SuppressWarnings("unused")
 
     @Inject
-    private IsisInteractionFactory isisSessionFactory; // depends on relationship
+    private IsisInteractionFactory isisInteractionFactory; // depends on relationship
     @Inject
     private IsisSystemEnvironment isisSystemEnvironment;
     @Inject

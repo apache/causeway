@@ -50,10 +50,10 @@ public class UsernameAvailableValidator extends ValidatorBase<String> {
         val userRegistrationService = super.getCommonContext()
                 .lookupServiceElseFail(UserRegistrationService.class);
         
-        val isisSessionFactory = super.getCommonContext()
+        val isisInteractionFactory = super.getCommonContext()
                 .lookupServiceElseFail(IsisInteractionFactory.class);
         
-        isisSessionFactory.runAnonymous(() -> {
+        isisInteractionFactory.runAnonymous(() -> {
 
             final String username = validatable.getValue();
             boolean usernameExists = userRegistrationService.usernameExists(username);

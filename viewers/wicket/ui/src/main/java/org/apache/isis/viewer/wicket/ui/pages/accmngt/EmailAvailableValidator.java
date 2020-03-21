@@ -62,10 +62,10 @@ public class EmailAvailableValidator extends ValidatorBase<String> {
         val userRegistrationService = super.getCommonContext()
                 .lookupServiceElseFail(UserRegistrationService.class);
 
-        val isisSessionFactory = super.getCommonContext()
+        val isisInteractionFactory = super.getCommonContext()
                 .lookupServiceElseFail(IsisInteractionFactory.class);
         
-        isisSessionFactory.runAnonymous(() -> {
+        isisInteractionFactory.runAnonymous(() -> {
             String email = validatable.getValue();
             boolean emailExists1 = userRegistrationService.emailExists(email);
             if (emailExists1 != emailExists) {

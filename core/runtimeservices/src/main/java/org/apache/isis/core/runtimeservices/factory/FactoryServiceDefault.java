@@ -58,7 +58,7 @@ import lombok.val;
 @Qualifier("Default")
 public class FactoryServiceDefault implements FactoryService {
     
-    @Inject IsisInteractionFactory isisSessionFactory; // dependsOn
+    @Inject IsisInteractionFactory isisInteractionFactory; // dependsOn
     @Inject private SpecificationLoader specificationLoader;
     @Inject private ServiceInjector serviceInjector;
     @Inject private IsisSystemEnvironment isisSystemEnvironment; 

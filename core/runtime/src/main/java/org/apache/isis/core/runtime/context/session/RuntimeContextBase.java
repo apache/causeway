@@ -52,7 +52,7 @@ public abstract class RuntimeContextBase implements RuntimeContext {
     @Getter(onMethod = @__(@Override)) protected final SpecificationLoader specificationLoader;
     @Getter(onMethod = @__(@Override)) protected final IsisInteractionTracker isisSessionTracker;
     
-    @Getter protected final IsisInteractionFactory isisSessionFactory;
+    @Getter protected final IsisInteractionFactory isisInteractionFactory;
     @Getter protected final AuthenticationManager authenticationManager;
     @Getter protected final TransactionService transactionService;
     @Getter protected final Supplier<ManagedObject> homePageSupplier;
@@ -69,7 +69,7 @@ public abstract class RuntimeContextBase implements RuntimeContext {
         this.objectManager = mmc.getObjectManager();
         this.transactionService = mmc.getTransactionService();
         this.homePageSupplier = mmc::getHomePageAdapter;
-        this.isisSessionFactory = serviceRegistry.lookupServiceElseFail(IsisInteractionFactory.class);
+        this.isisInteractionFactory = serviceRegistry.lookupServiceElseFail(IsisInteractionFactory.class);
         this.authenticationManager = serviceRegistry.lookupServiceElseFail(AuthenticationManager.class);
         this.isisSessionTracker = serviceRegistry.lookupServiceElseFail(IsisInteractionTracker.class);
     }
@@ -92,7 +92,7 @@ public abstract class RuntimeContextBase implements RuntimeContext {
             val authenticationManager = getServiceRegistry().lookupServiceElseFail(AuthenticationManager.class);
             authenticationManager.closeSession(authenticationSession);
             
-            isisSessionFactory.closeSessionStack();
+            isisInteractionFactory.closeSessionStack();
             
         });
         

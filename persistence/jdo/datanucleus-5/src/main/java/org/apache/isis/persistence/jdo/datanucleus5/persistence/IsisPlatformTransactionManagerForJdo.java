@@ -61,16 +61,16 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
 
     private static final long serialVersionUID = 1L;
 
-    private final IsisInteractionFactory isisSessionFactory;
+    private final IsisInteractionFactory isisInteractionFactory;
     private final EventBusService eventBusService;
     private final IsisInteractionTracker isisSessionTracker;
 
     @Inject
     public IsisPlatformTransactionManagerForJdo(
-            final IsisInteractionFactory isisSessionFactory,
+            final IsisInteractionFactory isisInteractionFactory,
             final EventBusService eventBusService,
             final IsisInteractionTracker isisSessionTracker) {
-        this.isisSessionFactory = isisSessionFactory;
+        this.isisInteractionFactory = isisInteractionFactory;
         this.eventBusService = eventBusService;
         this.isisSessionTracker = isisSessionTracker;
     }
@@ -95,7 +95,7 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
                         .orElseGet(InitialisationSession::new);
 
                 log.debug("open new session authenticationSession={}", authenticationSession);
-                isisSessionFactory.openSession(authenticationSession);
+                isisInteractionFactory.openSession(authenticationSession);
                 
                 return IsisTransactionObject.of(transactionBeforeBegin, IsisSessionScopeType.TEST_SCOPED);
                 
@@ -161,7 +161,7 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
         txObject.getCountDownLatch().countDown();
         txObject.setCurrentTransaction(null);
         if(txObject.getIsisSessionScopeType() == IsisSessionScopeType.TEST_SCOPED) {
-            isisSessionFactory.closeSessionStack();
+            isisInteractionFactory.closeSessionStack();
         }
         IsisTransactionAspectSupport.clearTransactionObject();
     }

@@ -519,8 +519,8 @@ IsisWebAppCommonContext.Provider {
     @Override
     protected void onDestroy() {
         try {
-            //            if (isisSessionFactory != null) {
-            //                isisSessionFactory.destroyServicesAndShutdown();
+            //            if (isisInteractionFactory != null) {
+            //                isisInteractionFactory.destroyServicesAndShutdown();
             //            }
             super.onDestroy();
         } catch(final RuntimeException ex) {

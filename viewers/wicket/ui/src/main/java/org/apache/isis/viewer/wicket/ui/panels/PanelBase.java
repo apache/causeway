@@ -61,7 +61,7 @@ public class PanelBase<T> extends GenericPanel<T> implements IsisWebAppCommonCon
     private transient ImageResourceCache imageCache;
     private transient MetaModelContext metaModelContext;
     private transient IsisWebAppCommonContext commonContext;
-    private transient IsisInteractionFactory isisSessionFactory;
+    private transient IsisInteractionFactory isisInteractionFactory;
     private transient TranslationService translationService;
     private transient LocaleProvider localeProvider;
     private transient TreeThemeProvider treeThemeProvider;
@@ -107,7 +107,7 @@ public class PanelBase<T> extends GenericPanel<T> implements IsisWebAppCommonCon
     }
     
     public IsisInteractionFactory getIsisSessionFactory() {
-        return isisSessionFactory = computeIfAbsent(IsisInteractionFactory.class, isisSessionFactory);
+        return isisInteractionFactory = computeIfAbsent(IsisInteractionFactory.class, isisInteractionFactory);
     }
     
     public TranslationService getTranslationService() {

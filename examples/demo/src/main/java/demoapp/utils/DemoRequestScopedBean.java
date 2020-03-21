@@ -48,7 +48,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class DemoRequestScopedBean {
     
-    @Inject private IsisInteractionFactory isisSessionFactory;
+    @Inject private IsisInteractionFactory isisInteractionFactory;
 
     public DemoRequestScopedBean() {
         log.info("init " + this.hashCode());
@@ -65,7 +65,7 @@ public class DemoRequestScopedBean {
     }
     
     public void debug() {
-        log.info("fact " + isisSessionFactory);
+        log.info("fact " + isisInteractionFactory);
     }
     
 

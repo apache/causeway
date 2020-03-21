@@ -158,5 +158,5 @@ public class ThemeChooser extends Panel {
 
     @Inject @Getter private IsisWicketThemeSupport themeSupport;
     @Inject @Getter private IsisConfiguration configuration;
-    @Inject @Getter private IsisInteractionFactory isisSessionFactory;
+    @Inject @Getter private IsisInteractionFactory isisInteractionFactory;
 }

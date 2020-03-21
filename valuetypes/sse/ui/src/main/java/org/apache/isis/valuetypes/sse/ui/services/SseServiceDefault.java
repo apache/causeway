@@ -70,7 +70,7 @@ import lombok.extern.log4j.Log4j2;
 public class SseServiceDefault implements SseService {
 
     //@Inject private TransactionService transactionService;
-    @Inject private IsisInteractionFactory isisSessionFactory;
+    @Inject private IsisInteractionFactory isisInteractionFactory;
 
     private final EventStreamPool eventStreamPool = new EventStreamPool();
 
@@ -103,7 +103,7 @@ public class SseServiceDefault implements SseService {
             // wait for calling thread to commit its current transaction 
             callingThread_TransactionLatch.await();
 
-            isisSessionFactory.runAnonymous(()->run(task));
+            isisInteractionFactory.runAnonymous(()->run(task));
 
         }, executor);
 

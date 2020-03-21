@@ -380,7 +380,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     // //////////////////////////////////////
 
     protected IsisInteractionFactory getIsisSessionFactory() {
-        return isisSessionFactory;
+        return isisInteractionFactory;
     }
 
     protected PersistenceSession getPersistenceSession() {
@@ -400,7 +400,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     @Inject ClockService clockService;
     @Inject TransactionService transactionService;
     @Inject SpecificationLoader specificationLoader;
-    @Inject IsisInteractionFactory isisSessionFactory;
+    @Inject IsisInteractionFactory isisInteractionFactory;
     @Inject IsisInteractionTracker isisSessionTracker;
 
     @Inject private javax.inject.Provider<InteractionContext> interactionContextProvider;

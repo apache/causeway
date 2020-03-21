@@ -127,7 +127,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     @Inject private MetaModelContext metaModelContext;
     @Inject private SpecificationLoader specificationLoader;
     @Inject private IsisInteractionTracker isisSessionTracker;
-    @Inject private IsisInteractionFactory isisSessionFactory;
+    @Inject private IsisInteractionFactory isisInteractionFactory;
     @Inject private TransactionService transactionService;
     @Inject private CommandExecutorService commandExecutorService;
     @Inject protected ProxyFactoryService proxyFactoryService; // protected to allow JUnit test
@@ -329,7 +329,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         asyncControlService.init(asyncControl, method, Bookmark.from(oidDto));
 
         Future future = executorService.submit(() ->
-                isisSessionFactory.callAuthenticated(asyncAuthSession, () ->
+                isisInteractionFactory.callAuthenticated(asyncAuthSession, () ->
                     transactionService.executeWithinTransaction(() -> {
                         Bookmark bookmark = commandExecutorService.executeCommand(commandDto);
                         if (bookmark != null) {

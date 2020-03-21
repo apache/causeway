@@ -244,7 +244,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, IsisWebAppComm
             final SessionLoggingService.CausedBy causedBy) {
 
 
-        val isisSessionFactory = getIsisSessionFactory();
+        val isisInteractionFactory = getIsisSessionFactory();
         val sessionLoggingServices = getSessionLoggingServices();
 
         final Runnable loggingTask = ()->{
@@ -255,8 +255,8 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, IsisWebAppComm
             );
         };
 
-        if(isisSessionFactory!=null) {
-            isisSessionFactory.runAnonymous(loggingTask::run);
+        if(isisInteractionFactory!=null) {
+            isisInteractionFactory.runAnonymous(loggingTask::run);
         } else {
             loggingTask.run();
         }

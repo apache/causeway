@@ -50,7 +50,7 @@ public class IsisSignInPanel extends SignInPanel {
 
     private static final long serialVersionUID = 1L;
 
-    @Inject transient IsisInteractionFactory isisSessionFactory;
+    @Inject transient IsisInteractionFactory isisInteractionFactory;
     @Inject transient ServiceInjector serviceInjector;
     @Inject transient ServiceRegistry serviceRegistry;
     @Inject transient private PageClassRegistry pageClassRegistry;
