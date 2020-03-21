@@ -36,7 +36,7 @@ import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.config.RestEasyConfiguration;
 import org.apache.isis.core.webapp.modules.WebModuleAbstract;
 import org.apache.isis.core.webapp.modules.WebModuleContext;
-import org.apache.isis.viewer.restfulobjects.viewer.webmodule.IsisRestfulObjectsSessionFilter;
+import org.apache.isis.viewer.restfulobjects.viewer.webmodule.IsisRestfulObjectsInteractionFilter;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationSessionStrategyBasicAuth;
 
 import lombok.Getter;
@@ -60,7 +60,7 @@ import lombok.val;
 @Qualifier("JaxrsRestEasy4")
 public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
 
-    private static final String ISIS_SESSION_FILTER_FOR_RESTFUL_OBJECTS = "IsisSessionFilterForRestfulObjects";
+    private static final String INTERACTION_FILTER_NAME = "IsisRestfulObjectsInteractionFilter";
     //private static final String ISIS_TRANSACTION_FILTER = "IsisTransactionFilterForRestfulObjects";
 
     private final RestEasyConfiguration restEasyConfiguration;
@@ -103,10 +103,10 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
         val authenticationSessionStrategyClassName = restEasyConfiguration.getAuthentication().getStrategyClassName()
                 .orElse(AuthenticationSessionStrategyBasicAuth.class.getName());
         
-        registerFilter(ctx, ISIS_SESSION_FILTER_FOR_RESTFUL_OBJECTS, IsisRestfulObjectsSessionFilter.class)
+        registerFilter(ctx, INTERACTION_FILTER_NAME, IsisRestfulObjectsInteractionFilter.class)
         .ifPresent(filterReg -> {
             // this is mapped to the entire application;
-            // however the IsisSessionFilter will
+            // however the IsisRestfulObjectsInteractionFilter will
             // "notice" if the session filter has already been
             // executed for the request pipeline, and if so will do nothing
             filterReg.addMappingForUrlPatterns(

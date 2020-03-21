@@ -64,8 +64,8 @@ import lombok.val;
  */
 //@WebFilter(
 //        servletNames={"RestfulObjectsRestEasyDispatcher"}, // this is mapped to the entire application; 
-//            // however the IsisSessionFilter will 
-//            // "notice" if the session filter has already been
+//            // however the IsisRestfulObjectsInteractionFilter will 
+//            // "notice" if the interaction filter has already been
 //            // executed for the request pipeline, and if so will do nothing
 //        initParams={
 //        @WebInitParam(
@@ -76,7 +76,7 @@ import lombok.val;
 //                value="auto"), // ... 401 and a basic authentication challenge if request originates from web browser
 //        @WebInitParam(name="passThru", value="/restful/swagger,/restful/health") //TODO[ISIS-1895] the restful path is configured elsewhere
 //})
-public class IsisRestfulObjectsSessionFilter implements Filter {
+public class IsisRestfulObjectsInteractionFilter implements Filter {
 
     /**
      * Recommended standard init parameter key for filters and servlets to
@@ -169,20 +169,20 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
     public enum WhenNoSession {
         UNAUTHORIZED("unauthorized") {
             @Override
-            public void handle(final IsisRestfulObjectsSessionFilter filter, final HttpServletRequest httpRequest, final HttpServletResponse httpResponse, final FilterChain chain) throws IOException, ServletException {
+            public void handle(final IsisRestfulObjectsInteractionFilter filter, final HttpServletRequest httpRequest, final HttpServletResponse httpResponse, final FilterChain chain) throws IOException, ServletException {
                 httpResponse.sendError(401);
             }
         },
         BASIC_AUTH_CHALLENGE("basicAuthChallenge") {
             @Override
-            public void handle(final IsisRestfulObjectsSessionFilter filter, final HttpServletRequest httpRequest, final HttpServletResponse httpResponse, final FilterChain chain) throws IOException, ServletException {
+            public void handle(final IsisRestfulObjectsInteractionFilter filter, final HttpServletRequest httpRequest, final HttpServletResponse httpResponse, final FilterChain chain) throws IOException, ServletException {
                 httpResponse.setHeader("WWW-Authenticate", "Basic realm=\"Apache Isis\"");
                 httpResponse.sendError(401);
             }
         },
         AUTO("auto") {
             @Override
-            public void handle(final IsisRestfulObjectsSessionFilter filter, final HttpServletRequest httpRequest, final HttpServletResponse httpResponse, final FilterChain chain) throws IOException, ServletException {
+            public void handle(final IsisRestfulObjectsInteractionFilter filter, final HttpServletRequest httpRequest, final HttpServletResponse httpResponse, final FilterChain chain) throws IOException, ServletException {
                 if(fromWebBrowser(httpRequest)) {
                     httpResponse.setHeader("WWW-Authenticate", "Basic realm=\"Apache Isis\"");
                 }
@@ -199,7 +199,7 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
          */
         CONTINUE("continue") {
             @Override
-            public void handle(final IsisRestfulObjectsSessionFilter filter, final HttpServletRequest httpRequest, final HttpServletResponse httpResponse, final FilterChain chain) throws IOException, ServletException {
+            public void handle(final IsisRestfulObjectsInteractionFilter filter, final HttpServletRequest httpRequest, final HttpServletResponse httpResponse, final FilterChain chain) throws IOException, ServletException {
                 chain.doFilter(httpRequest, httpResponse);
             }
         },
@@ -208,7 +208,7 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
          */
         RESTRICTED("restricted") {
             @Override
-            public void handle(final IsisRestfulObjectsSessionFilter filter, final HttpServletRequest httpRequest, final HttpServletResponse httpResponse, final FilterChain chain) throws IOException, ServletException {
+            public void handle(final IsisRestfulObjectsInteractionFilter filter, final HttpServletRequest httpRequest, final HttpServletResponse httpResponse, final FilterChain chain) throws IOException, ServletException {
 
                 if (filter.restrictedPaths.contains(httpRequest.getServletPath())) {
                     chain.doFilter(httpRequest, httpResponse);
@@ -233,7 +233,7 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
             throw new IllegalStateException("require an init-param of '" + WHEN_NO_SESSION_KEY + "', taking a value of " + WhenNoSession.values());
         }
 
-        public abstract void handle(IsisRestfulObjectsSessionFilter filter, HttpServletRequest httpRequest, HttpServletResponse httpResponse, FilterChain chain) throws IOException, ServletException;
+        public abstract void handle(IsisRestfulObjectsInteractionFilter filter, HttpServletRequest httpRequest, HttpServletResponse httpResponse, FilterChain chain) throws IOException, ServletException;
     }
 
 
@@ -433,7 +433,7 @@ public class IsisRestfulObjectsSessionFilter implements Filter {
     }
 
     private boolean requestIsIgnoreExtension(
-            final IsisRestfulObjectsSessionFilter filter, 
+            final IsisRestfulObjectsInteractionFilter filter, 
             final HttpServletRequest httpRequest) {
         
         val servletPath = httpRequest.getServletPath();

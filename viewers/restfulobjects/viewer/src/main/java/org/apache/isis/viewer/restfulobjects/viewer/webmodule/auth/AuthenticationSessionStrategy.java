@@ -26,7 +26,7 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
 /**
- * Decouples the <code>IsisSessionFilter</code> from the mechanism of obtaining the
+ * Decouples the <code>IsisRestfulObjectsInteractionFilter</code> from the mechanism of obtaining the
  * {@link AuthenticationSession}.
  */
 public interface AuthenticationSessionStrategy {

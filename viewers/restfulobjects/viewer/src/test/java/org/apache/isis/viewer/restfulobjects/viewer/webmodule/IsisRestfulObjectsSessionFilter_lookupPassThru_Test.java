@@ -38,20 +38,20 @@ public class IsisRestfulObjectsSessionFilter_lookupPassThru_Test {
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
-    IsisRestfulObjectsSessionFilter isisInteractionFilter;
+    IsisRestfulObjectsInteractionFilter isisInteractionFilter;
 
     @Mock
     FilterConfig mockFilterConfig;
 
     @Before
     public void setUp() throws Exception {
-        isisInteractionFilter = new IsisRestfulObjectsSessionFilter();
+        isisInteractionFilter = new IsisRestfulObjectsInteractionFilter();
     }
 
     @Test
     public void when_null() throws Exception {
         context.checking(new Expectations() {{
-            allowing(mockFilterConfig).getInitParameter(IsisRestfulObjectsSessionFilter.PASS_THRU_KEY);
+            allowing(mockFilterConfig).getInitParameter(IsisRestfulObjectsInteractionFilter.PASS_THRU_KEY);
             will(returnValue(null));
         }});
 
@@ -62,7 +62,7 @@ public class IsisRestfulObjectsSessionFilter_lookupPassThru_Test {
     @Test
     public void when_none() throws Exception {
         context.checking(new Expectations() {{
-            allowing(mockFilterConfig).getInitParameter(IsisRestfulObjectsSessionFilter.PASS_THRU_KEY);
+            allowing(mockFilterConfig).getInitParameter(IsisRestfulObjectsInteractionFilter.PASS_THRU_KEY);
             will(returnValue(""));
         }});
 
@@ -73,7 +73,7 @@ public class IsisRestfulObjectsSessionFilter_lookupPassThru_Test {
     @Test
     public void when_one() throws Exception {
         context.checking(new Expectations() {{
-            allowing(mockFilterConfig).getInitParameter(IsisRestfulObjectsSessionFilter.PASS_THRU_KEY);
+            allowing(mockFilterConfig).getInitParameter(IsisRestfulObjectsInteractionFilter.PASS_THRU_KEY);
             will(returnValue("/abc"));
         }});
 
@@ -85,7 +85,7 @@ public class IsisRestfulObjectsSessionFilter_lookupPassThru_Test {
     @Test
     public void when_several() throws Exception {
         context.checking(new Expectations() {{
-            allowing(mockFilterConfig).getInitParameter(IsisRestfulObjectsSessionFilter.PASS_THRU_KEY);
+            allowing(mockFilterConfig).getInitParameter(IsisRestfulObjectsInteractionFilter.PASS_THRU_KEY);
             will(returnValue("/abc,/def"));
         }});
 
