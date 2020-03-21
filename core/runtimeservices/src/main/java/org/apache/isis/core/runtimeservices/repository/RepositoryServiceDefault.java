@@ -235,7 +235,7 @@ public class RepositoryServiceDefault implements RepositoryService {
     protected PersistenceSession getPersistenceSession() {
         return PersistenceSession.current(PersistenceSession.class)
                 .getFirst()
-                .orElseThrow(()->new NonRecoverableException("No IsisSession on current thread."));
+                .orElseThrow(()->new NonRecoverableException("No IsisInteraction on current thread."));
     }
 
 

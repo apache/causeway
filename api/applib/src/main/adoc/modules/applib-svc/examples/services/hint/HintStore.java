@@ -20,7 +20,6 @@ package org.apache.isis.applib.services.hint;
 
 import java.util.Set;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 
 // tag::refguide[]

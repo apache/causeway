@@ -501,7 +501,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
 
     private IsisInteraction currentIsisInteraction() {
-        return isisInteractionTracker.currentSession().orElseThrow(() -> new RuntimeException("No IsisSession is open"));
+        return isisInteractionTracker.currentSession().orElseThrow(() -> new RuntimeException("No IsisInteraction is open"));
     }
 
     private ObjectManager currentObjectManager() {

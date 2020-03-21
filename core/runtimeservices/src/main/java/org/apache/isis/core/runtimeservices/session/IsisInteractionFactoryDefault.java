@@ -101,7 +101,7 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
 
     @PostConstruct
     public void initIsisInteractionScopeSupport() {
-        this.isisInteractionScopeCloseListener = IsisInteractionScopeBeanFactoryPostProcessor.initIsisSessionScopeSupport(serviceInjector);        
+        this.isisInteractionScopeCloseListener = IsisInteractionScopeBeanFactoryPostProcessor.initIsisInteractionScopeSupport(serviceInjector);        
     }
     
     //@PostConstruct .. too early, needs services to be provisioned first
@@ -163,7 +163,7 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
             postTopLevelOpen(newIsisInteraction);
         }
         
-        log.debug("new IsisSession created (conversation-id={}, total-sessions-on-stack={}, {})", 
+        log.debug("new IsisInteraction created (conversation-id={}, total-sessions-on-stack={}, {})", 
                 conversationId.get(), 
                 isisInteractionStack.get().size(),
                 _Probe.currentThreadId());
