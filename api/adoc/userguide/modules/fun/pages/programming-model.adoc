@@ -76,6 +76,7 @@ Alternatively, these UI hints can be defined in a supplementary xref:vw:ROOT:lay
 
 include::programming-model/domain-entities.adoc[leveloffset=+1]
 include::programming-model/domain-services.adoc[leveloffset=+1]
+include::programming-model/modules.adoc[leveloffset=+1]
 include::programming-model/properties.adoc[leveloffset=+1]
 include::programming-model/collections.adoc[leveloffset=+1]
 include::programming-model/actions.adoc[leveloffset=+1]

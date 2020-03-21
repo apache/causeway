@@ -9,12 +9,10 @@ This section describes the core values that the the Apache Isis framework tries 
 
 Apache Isis is primarily aimed at custom-built "enterprise" applications, with a UI provided by the xref:vw:ROOT:about.adoc[Wicket viewer] is intended to be usable by domain experts, typically end-users within the organization.
 
-This section explores some of the considerations that organizations when deciding how to maintain their core business functions.
+But why should an organisation build software, when it could just buy it?
 
-=== Why Build instead of Buy?
-
-Buying packaged software makes sense for statutory requirements, such as payroll or general ledger, or document management/retrieval.
-But (we argue) it makes much less sense to buy packaged software for the systems that support the core business: the software should fit the business, not the other way around.
+To be clear, buying packaged software _does_ make sense in many cases: for statutory requirements, such as payroll or general ledger, or document management/retrieval.
+But (we argue) it makes much less sense to buy packaged software for the systems that support the core business: *the software should fit the business, not the other way around*.
 
 Packaged software suffers from the problem of both having doing "too much" and "not enough":
 
@@ -26,7 +24,7 @@ These extra unnecessary features make the system difficult to learn and use.;
 The diagram below illustrates the dichotomy:
 
 .build-vs-buy
-image::core-concepts/philosophy/build-vs-buy.png[width="800px",link="{imagesdir}/core-concepts/philosophy/build-vs-buy.png"]
+image::core-concepts/philosophy/build-vs-buy.png[width="550px",link="{imagesdir}/core-concepts/philosophy/build-vs-buy.png"]
 
 What happens in this case is that end-users -- needing some sort of solution for their particular business problem -- will end up using unused fields to store the information they need.
 We end up with no correlation between the fields definitions and the values stored therein, sometimes with the datatypes not even matching.
@@ -53,7 +51,8 @@ And if your competitor has well-crafted custom software, then your business will
 
 So, our philosophy is that custom software -- for your core business domain -- is the way to go.
 
-=== Maintainable
+
+== Modular
 
 Enterprise applications tend to stick around a long time; a business' core domains don't tend to change all that often.
 What this means in turn is that the application needs to be maintainable, so that it is as easy to modify and extend when it's 10 years old as when it was first written.
@@ -78,32 +77,7 @@ The framework encourages splitting this functionality into modules; each such mo
 This architecture means that it's impossible for business logic to leach out into the adjacent presentation layer because the developer doesn't (can't) write any code for presentation layer.
 We in effect have a "firewall" between the two layers.
 
-To support the business domain being split into separate modules, the framework provides various features, the most important of which are:
-
-* dependency injection of services +
-+ Both xref:refguide:applib-svc:about.adoc[framework-defined domain services] and application-defined services (eg repositories and factories) are injected everywhere, using the regular xref:refguide:applib-ant:Inject.adoc[`@javax.inject.Inject`] annotation.
-+
-Note that this means dependencies are _also_ injected into domain entities and view models, allowing for behaviourally complete functionality.
-
-* mixins allow functionality defined in one module to appear (in the UI) to be provided by some other module. +
-+ For example, a _Document_ module might allow `Document` objects to be attached to any arbitrary domain object (such as `Order` or `Customer`) in other modules.
-A mixin would allow the UI for a `Customer` to also display these attached ``Document``s, even though the _Customer_ module would have no knowledge of/dependency on the _Workflow_ module.
-+
-Dependencies are also injected into mixins.
-A common technique is to factor out from domain objects into mixins and then generalise.
-
-
-* the internal xref:refguide:applib-svc:EventBusService.adoc[event bus] allows modules to influence other modules.
-+
-A good example is supporting what (in an RDBMS we would call) referential integrity.
-Suppose the _Customer_ module has a `Customer` object and a `EmailAddress` object, with a customer having a collection of email addresses.
-A _Communications_ module might then use those email addresses to create ``EmailCommunication``s. +
- +
-If the _Customer_ module wants to delete an `EmailAddress` then the _Communications_ module will probably want to veto this because they are "in use" by those ``EmailCommunication``s.
-Or, it might conceivably perform a cascade delete of all associated communications.
-Either way, the _Communications_ module receives an internal event representing the intention to delete the `EmailAddress`.
-It can then act accordingly, either vetoing the interaction or performing the cascade delete.
-The _Customer_ module for its part does not know anything about this other module.
+To support the business domain being split into separate modules, the framework provides various features, the most important of which are the dependency injection of xref:building-blocks.adoc#domain-services[domain services], xref:building-blocks.adoc#mixins[mixins], and in-memory xref:building-blocks.adoc#events[events].
 
 For those cases where a module needs to interact with other modules but does not know about their implementations, the module can either define its own link:https://en.wikipedia.org/wiki/Service_provider_interface[SPI] domain services or it can define custom domain events and fire them.
 This technique is also used extensively by the framework itself.
@@ -111,9 +85,6 @@ For example, the xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`] 
 
 When building a modular application, it's important to consider the logical layering of the modules: we don't need every module to be completely decoupled from every other.
 The most important requirement is that there are no cyclic dependencies, because otherwise we run the risk of the application degrading into a link:https://en.wikipedia.org/wiki/Big_ball_of_mud["big ball of mud"].
-(Proprietary) tools such as link:https://structure101.com/[Structure 101] help detect and visualize such cycles.
-OO design techniques such as the link:https://en.wikipedia.org/wiki/Dependency_inversion_principle[dependency inversion principle] can be used to remove cycles.
-(Open source) libraries such as link:https://www.archunit.org/[ArchUnit] or https://jqassistant.org/[jQAssistant] can help enforce architectural layering to prevent the issue arising in the first place.
 
 [TIP]
 ====
