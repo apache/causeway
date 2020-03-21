@@ -43,7 +43,7 @@ import lombok.SneakyThrows;
  *     it can be {@link Inject}'d into other domain services.
  * </p>
  */
-public interface IsisSessionFactory {
+public interface IsisInteractionFactory {
 
     @FunctionalInterface
     public interface ThrowingRunnable {

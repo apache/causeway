@@ -53,7 +53,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.core.runtime.session.IsisRequestCycle;
 import org.apache.isis.core.runtime.session.IsisSession;
-import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.MessageBroker;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
@@ -484,8 +484,8 @@ implements FormExecutor {
         return getCommonContext().getSpecificationLoader();
     }
 
-    protected IsisSessionFactory getIsisSessionFactory() {
-        return getCommonContext().lookupServiceElseFail(IsisSessionFactory.class);
+    protected IsisInteractionFactory getIsisSessionFactory() {
+        return getCommonContext().lookupServiceElseFail(IsisInteractionFactory.class);
     }
 
     protected AuthenticationSession getAuthenticationSession() {

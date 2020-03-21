@@ -43,7 +43,7 @@ import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.session.IsisSession;
-import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 import org.apache.isis.core.runtime.session.IsisSessionTracker;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
@@ -62,7 +62,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     @Mock HttpHeaders mockHttpHeaders;
     @Mock HttpServletRequest mockHttpServletRequest;
     @Mock ServletContext mockServletContext;
-    @Mock IsisSessionFactory mockIsisSessionFactory;
+    @Mock IsisInteractionFactory mockIsisSessionFactory;
     @Mock IsisSession mockIsisSession;
     @Mock AuthenticationSession mockAuthenticationSession;
     @Mock SpecificationLoader mockSpecificationLoader;

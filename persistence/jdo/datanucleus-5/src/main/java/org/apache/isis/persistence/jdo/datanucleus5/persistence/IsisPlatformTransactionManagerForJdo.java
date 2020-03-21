@@ -43,7 +43,7 @@ import org.apache.isis.core.runtime.persistence.transaction.events.TransactionAf
 import org.apache.isis.core.runtime.persistence.transaction.events.TransactionBeforeBeginEvent;
 import org.apache.isis.core.runtime.persistence.transaction.events.TransactionBeforeCommitEvent;
 import org.apache.isis.core.runtime.persistence.transaction.events.TransactionBeforeRollbackEvent;
-import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 import org.apache.isis.core.runtime.session.IsisSessionTracker;
 import org.apache.isis.core.runtime.session.init.InitialisationSession;
 
@@ -61,13 +61,13 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
 
     private static final long serialVersionUID = 1L;
 
-    private final IsisSessionFactory isisSessionFactory;
+    private final IsisInteractionFactory isisSessionFactory;
     private final EventBusService eventBusService;
     private final IsisSessionTracker isisSessionTracker;
 
     @Inject
     public IsisPlatformTransactionManagerForJdo(
-            final IsisSessionFactory isisSessionFactory,
+            final IsisInteractionFactory isisSessionFactory,
             final EventBusService eventBusService,
             final IsisSessionTracker isisSessionTracker) {
         this.isisSessionFactory = isisSessionFactory;

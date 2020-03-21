@@ -34,7 +34,7 @@ public class IsisRequestCycle {
 
     // -- SUPPORTING ISIS TRANSACTION FILTER FOR RESTFUL OBJECTS ...
 
-    private final IsisSessionFactory isisSessionFactory;
+    private final IsisInteractionFactory isisSessionFactory;
     private final TransactionTemplate transactionTemplate;
     private TransactionStatus txStatus;
 

@@ -30,7 +30,7 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.health.HealthCheckService;
-import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 import org.apache.isis.core.security.authentication.health.HealthAuthSession;
 
 import lombok.val;
@@ -39,12 +39,12 @@ import lombok.val;
 @Named("isisWebapp.HealthCheckService") // this appears in the endpoint.
 public class HealthIndicatorUsingHealthCheckService extends AbstractHealthIndicator {
 
-    private final IsisSessionFactory isisSessionFactory;
+    private final IsisInteractionFactory isisSessionFactory;
     private final Optional<HealthCheckService> healthCheckServiceIfAny;
 
     @Inject
     public HealthIndicatorUsingHealthCheckService(
-            final IsisSessionFactory isisSessionFactory,
+            final IsisInteractionFactory isisSessionFactory,
             final Optional<HealthCheckService> healthCheckServiceIfAny) {
         this.isisSessionFactory = isisSessionFactory;
         this.healthCheckServiceIfAny = healthCheckServiceIfAny;

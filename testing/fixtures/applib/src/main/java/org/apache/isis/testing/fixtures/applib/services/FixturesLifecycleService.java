@@ -42,7 +42,7 @@ import org.apache.isis.core.runtime.context.session.AppLifecycleEvent;
 import org.apache.isis.core.runtime.session.template.AbstractIsisSessionTemplate;
 import org.apache.isis.core.security.authentication.standard.SimpleSession;
 import org.apache.isis.testing.fixtures.applib.clock.FixtureClock;
-import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
@@ -61,7 +61,7 @@ public class FixturesLifecycleService {
     @SuppressWarnings("unused")
 
     @Inject
-    private IsisSessionFactory isisSessionFactory; // depends on relationship
+    private IsisInteractionFactory isisSessionFactory; // depends on relationship
     @Inject
     private IsisSystemEnvironment isisSystemEnvironment;
     @Inject

@@ -38,7 +38,7 @@ import lombok.NonNull;
 /**
  * Holds the current set of components for a specific execution context (such as on a thread).
  *
- * @see IsisSessionFactory
+ * @see IsisInteractionFactory
  */
 public class IsisSession extends RuntimeContextBase {
 

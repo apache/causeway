@@ -22,7 +22,7 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.ValidationError;
 
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
-import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 import org.apache.isis.viewer.wicket.ui.validation.ValidatorBase;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
@@ -63,7 +63,7 @@ public class EmailAvailableValidator extends ValidatorBase<String> {
                 .lookupServiceElseFail(UserRegistrationService.class);
 
         val isisSessionFactory = super.getCommonContext()
-                .lookupServiceElseFail(IsisSessionFactory.class);
+                .lookupServiceElseFail(IsisInteractionFactory.class);
         
         isisSessionFactory.runAnonymous(() -> {
             String email = validatable.getValue();

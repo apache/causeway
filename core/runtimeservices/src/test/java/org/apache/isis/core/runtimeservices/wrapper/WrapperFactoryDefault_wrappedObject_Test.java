@@ -74,7 +74,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
-import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 import org.apache.isis.core.runtime.session.IsisSessionTracker;
 import org.apache.isis.core.runtimeservices.wrapper.dom.employees.Employee;
 import org.apache.isis.core.runtimeservices.wrapper.dom.employees.EmployeeRepository;
@@ -100,7 +100,7 @@ public class WrapperFactoryDefault_wrappedObject_Test {
     @Mock private CommandDtoServiceInternal mockCommandDtoServiceInternal;
     @Mock private ObjectSpecification mockOnType;
     @Mock private SpecificationLoader mockSpecificationLoader;
-    @Mock private IsisSessionFactory mockIsisSessionFactory;
+    @Mock private IsisInteractionFactory mockIsisSessionFactory;
     @Mock private IsisSessionTracker mockIsisSessionTracker;
     @Mock private CommandExecutorService mockCommandExecutorService;
     private AsyncControlService asyncControlService = new AsyncControlService();

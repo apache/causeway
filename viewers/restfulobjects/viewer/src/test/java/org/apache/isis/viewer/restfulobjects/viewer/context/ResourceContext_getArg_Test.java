@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.core.runtime.session.IsisSession;
-import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 import org.apache.isis.core.runtime.session.IsisSessionTracker;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
@@ -56,7 +56,7 @@ public class ResourceContext_getArg_Test {
     @Mock HttpServletRequest mockHttpServletRequest;
     @Mock ServletContext mockServletContext;
     @Mock IsisSession mockIsisSession;
-    @Mock IsisSessionFactory mockIsisSessionFactory;
+    @Mock IsisInteractionFactory mockIsisSessionFactory;
     @Mock IsisSessionTracker mockIsisSessionTracker;
     @Mock AuthenticationManager mockAuthenticationManager;
     @Mock AuthenticationSession mockAuthenticationSession;

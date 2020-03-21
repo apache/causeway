@@ -50,7 +50,7 @@ import org.apache.isis.core.runtimeservices.queryresultscache.QueryResultsCacheD
 import org.apache.isis.core.runtimeservices.repository.RepositoryServiceDefault;
 import org.apache.isis.core.runtimeservices.routing.RoutingServiceDefault;
 import org.apache.isis.core.runtimeservices.scratchpad.ScratchpadDefault;
-import org.apache.isis.core.runtimeservices.session.IsisSessionFactoryDefault;
+import org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault;
 import org.apache.isis.core.runtimeservices.sudo.SudoServiceDefault;
 import org.apache.isis.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression;
 import org.apache.isis.core.runtimeservices.user.UserServiceDefault;
@@ -80,7 +80,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         FactoryServiceDefault.class,
         HomePageResolverServiceDefault.class,
         InteractionDtoServiceInternalDefault.class,
-        IsisSessionFactoryDefault.class,
+        IsisInteractionFactoryDefault.class,
         TranslationServicePo.class,
         MenuBarsLoaderServiceDefault.class,
         MenuBarsServiceBS3.class,

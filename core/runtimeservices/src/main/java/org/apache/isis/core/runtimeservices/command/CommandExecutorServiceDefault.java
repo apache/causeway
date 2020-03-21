@@ -64,7 +64,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.core.runtime.session.IsisSession;
-import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 import org.apache.isis.core.runtime.session.IsisSessionTracker;
 import org.apache.isis.schema.cmd.v2.ActionDto;
 import org.apache.isis.schema.cmd.v2.CommandDto;
@@ -379,7 +379,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     // //////////////////////////////////////
 
-    protected IsisSessionFactory getIsisSessionFactory() {
+    protected IsisInteractionFactory getIsisSessionFactory() {
         return isisSessionFactory;
     }
 
@@ -400,7 +400,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     @Inject ClockService clockService;
     @Inject TransactionService transactionService;
     @Inject SpecificationLoader specificationLoader;
-    @Inject IsisSessionFactory isisSessionFactory;
+    @Inject IsisInteractionFactory isisSessionFactory;
     @Inject IsisSessionTracker isisSessionTracker;
 
     @Inject private javax.inject.Provider<InteractionContext> interactionContextProvider;

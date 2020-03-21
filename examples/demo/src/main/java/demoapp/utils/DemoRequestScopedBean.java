@@ -33,7 +33,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.annotation.RequestScope;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -48,7 +48,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class DemoRequestScopedBean {
     
-    @Inject private IsisSessionFactory isisSessionFactory;
+    @Inject private IsisInteractionFactory isisSessionFactory;
 
     public DemoRequestScopedBean() {
         log.info("init " + this.hashCode());

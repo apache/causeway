@@ -35,7 +35,7 @@ import org.apache.isis.applib.services.TransactionScopeListener;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
@@ -58,7 +58,7 @@ class TransactionScopeListenerTest {
     @Inject private FixtureScripts fixtureScripts;
     @Inject private TransactionService transactionService;
     @Inject private RepositoryService repository;
-    @Inject private IsisSessionFactory isisSessionFactory;
+    @Inject private IsisInteractionFactory isisSessionFactory;
     @Inject private KVStoreForTesting kvStoreForTesting;
     
     /* Expectations:

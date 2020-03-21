@@ -92,7 +92,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.runtime.session.IsisSession;
-import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 import org.apache.isis.core.runtime.session.IsisSessionTracker;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
@@ -127,7 +127,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
     @Inject private MetaModelContext metaModelContext;
     @Inject private SpecificationLoader specificationLoader;
     @Inject private IsisSessionTracker isisSessionTracker;
-    @Inject private IsisSessionFactory isisSessionFactory;
+    @Inject private IsisInteractionFactory isisSessionFactory;
     @Inject private TransactionService transactionService;
     @Inject private CommandExecutorService commandExecutorService;
     @Inject protected ProxyFactoryService proxyFactoryService; // protected to allow JUnit test

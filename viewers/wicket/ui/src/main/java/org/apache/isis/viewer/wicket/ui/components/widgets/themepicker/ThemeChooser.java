@@ -32,7 +32,7 @@ import org.apache.wicket.util.cookies.CookieUtils;
 import org.apache.wicket.util.string.Strings;
 
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 
 import lombok.Getter;
 import lombok.val;
@@ -158,5 +158,5 @@ public class ThemeChooser extends Panel {
 
     @Inject @Getter private IsisWicketThemeSupport themeSupport;
     @Inject @Getter private IsisConfiguration configuration;
-    @Inject @Getter private IsisSessionFactory isisSessionFactory;
+    @Inject @Getter private IsisInteractionFactory isisSessionFactory;
 }

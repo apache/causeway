@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 import org.apache.isis.core.runtime.session.IsisSessionTracker;
 import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
@@ -52,7 +52,7 @@ public abstract class RuntimeContextBase implements RuntimeContext {
     @Getter(onMethod = @__(@Override)) protected final SpecificationLoader specificationLoader;
     @Getter(onMethod = @__(@Override)) protected final IsisSessionTracker isisSessionTracker;
     
-    @Getter protected final IsisSessionFactory isisSessionFactory;
+    @Getter protected final IsisInteractionFactory isisSessionFactory;
     @Getter protected final AuthenticationManager authenticationManager;
     @Getter protected final TransactionService transactionService;
     @Getter protected final Supplier<ManagedObject> homePageSupplier;
@@ -69,7 +69,7 @@ public abstract class RuntimeContextBase implements RuntimeContext {
         this.objectManager = mmc.getObjectManager();
         this.transactionService = mmc.getTransactionService();
         this.homePageSupplier = mmc::getHomePageAdapter;
-        this.isisSessionFactory = serviceRegistry.lookupServiceElseFail(IsisSessionFactory.class);
+        this.isisSessionFactory = serviceRegistry.lookupServiceElseFail(IsisInteractionFactory.class);
         this.authenticationManager = serviceRegistry.lookupServiceElseFail(AuthenticationManager.class);
         this.isisSessionTracker = serviceRegistry.lookupServiceElseFail(IsisSessionTracker.class);
     }

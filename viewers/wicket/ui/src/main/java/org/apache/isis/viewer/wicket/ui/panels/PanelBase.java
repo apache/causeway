@@ -31,7 +31,7 @@ import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 import org.apache.isis.core.security.authentication.MessageBroker;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
@@ -61,7 +61,7 @@ public class PanelBase<T> extends GenericPanel<T> implements IsisWebAppCommonCon
     private transient ImageResourceCache imageCache;
     private transient MetaModelContext metaModelContext;
     private transient IsisWebAppCommonContext commonContext;
-    private transient IsisSessionFactory isisSessionFactory;
+    private transient IsisInteractionFactory isisSessionFactory;
     private transient TranslationService translationService;
     private transient LocaleProvider localeProvider;
     private transient TreeThemeProvider treeThemeProvider;
@@ -106,8 +106,8 @@ public class PanelBase<T> extends GenericPanel<T> implements IsisWebAppCommonCon
         return metaModelContext = computeIfAbsent(MetaModelContext.class, metaModelContext);
     }
     
-    public IsisSessionFactory getIsisSessionFactory() {
-        return isisSessionFactory = computeIfAbsent(IsisSessionFactory.class, isisSessionFactory);
+    public IsisInteractionFactory getIsisSessionFactory() {
+        return isisSessionFactory = computeIfAbsent(IsisInteractionFactory.class, isisSessionFactory);
     }
     
     public TranslationService getTranslationService() {

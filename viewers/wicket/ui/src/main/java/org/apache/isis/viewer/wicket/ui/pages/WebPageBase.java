@@ -24,7 +24,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
-import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 
@@ -40,7 +40,7 @@ public abstract class WebPageBase extends WebPage implements IsisWebAppCommonCon
     private transient WebAppContextPath webAppContextPath;
     private transient PageClassRegistry pageClassRegistry;
     private transient IsisWebAppCommonContext commonContext;
-    private transient IsisSessionFactory isisSessionFactory;
+    private transient IsisInteractionFactory isisSessionFactory;
     
     protected WebPageBase(PageParameters parameters) {
         super(parameters);
@@ -67,8 +67,8 @@ public abstract class WebPageBase extends WebPage implements IsisWebAppCommonCon
         return pageClassRegistry = computeIfAbsent(PageClassRegistry.class, pageClassRegistry);
     }
 
-    public IsisSessionFactory getIsisSessionFactory() {
-        return isisSessionFactory = computeIfAbsent(IsisSessionFactory.class, isisSessionFactory);
+    public IsisInteractionFactory getIsisSessionFactory() {
+        return isisSessionFactory = computeIfAbsent(IsisInteractionFactory.class, isisSessionFactory);
     }
     
     

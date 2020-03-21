@@ -26,11 +26,11 @@ import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.core.runtime.session.IsisSession;
-import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 
 /**
  * Provides static access to current context's singletons
- * {@link MetaModelInvalidException} and {@link IsisSessionFactory}.
+ * {@link MetaModelInvalidException} and {@link IsisInteractionFactory}.
  */
 public interface IsisContext {
 

@@ -32,7 +32,7 @@ import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.session.SessionLoggingService;
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
@@ -266,8 +266,8 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, IsisWebAppComm
         return commonContext.getServiceRegistry().select(SessionLoggingService.class);
     }
     
-    protected IsisSessionFactory getIsisSessionFactory() {
-        return commonContext.lookupServiceElseFail(IsisSessionFactory.class);
+    protected IsisInteractionFactory getIsisSessionFactory() {
+        return commonContext.lookupServiceElseFail(IsisInteractionFactory.class);
     }
 
 

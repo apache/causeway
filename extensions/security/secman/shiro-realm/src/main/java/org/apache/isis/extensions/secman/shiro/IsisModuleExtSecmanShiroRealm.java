@@ -40,7 +40,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.commons.internal.assertions._Assert;
-import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisInteractionFactory;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
 import org.apache.isis.extensions.secman.api.SecurityRealm;
 import org.apache.isis.extensions.secman.api.SecurityRealmCharacteristic;
@@ -57,7 +57,7 @@ import lombok.val;
 public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements SecurityRealm {
 
     @Inject protected ServiceInjector serviceInjector;
-    @Inject protected IsisSessionFactory isisSessionFactory;
+    @Inject protected IsisInteractionFactory isisSessionFactory;
     @Inject protected PlatformTransactionManager txMan;
     
     @Getter @Setter private AuthenticatingRealm delegateAuthenticationRealm;
