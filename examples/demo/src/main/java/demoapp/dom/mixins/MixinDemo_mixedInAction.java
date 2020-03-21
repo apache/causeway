@@ -18,26 +18,25 @@
  */
 package demoapp.dom.mixins;
 
-import javax.inject.Inject;
-
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.applib.annotation.ActionLayout;
 
 import lombok.RequiredArgsConstructor;
 
-@Action
+@Action(associateWith = "note")
+@ActionLayout(named = "Update Note")
 @RequiredArgsConstructor
 public class MixinDemo_mixedInAction {
     
-    @Inject private MessageService messageService;
-
     private final MixinDemo holder;
     
-    public MixinDemo act() {
-        
-        messageService.informUser("Greetings from the MixinDemo's mixed-in action!");
-        
+    public MixinDemo act(String newNote) {
+        holder.setNote(newNote);
         return holder;
+    }
+    
+    public String default0Act() {
+        return holder.getNote();
     }
     
 }

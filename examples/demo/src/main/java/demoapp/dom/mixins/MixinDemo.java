@@ -27,8 +27,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import demoapp.dom.actions.assoc.DemoItem;
 import demoapp.utils.DemoStub;
@@ -44,6 +50,10 @@ public class MixinDemo extends DemoStub {
         return "Mixin Demo";
     }
 
+    @Property(editing = Editing.DISABLED) // inline edit disabled, but allows updates via mixin
+    @PropertyLayout(multiLine = 3)
+    @Getter @Setter private String note;
+    
     // ---
 
     List<DemoItem> collection;
@@ -51,6 +61,8 @@ public class MixinDemo extends DemoStub {
     @Override @Programmatic
     public void initDefaults() {
 
+        note = "Update me! The button below is contributed by one of my mixins.";
+        
         collection = new ArrayList<>();
         collection.add(DemoItem.of("first"));
         collection.add(DemoItem.of("second"));

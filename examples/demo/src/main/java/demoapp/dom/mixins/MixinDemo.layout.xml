@@ -13,10 +13,10 @@
 		</bs3:col>
 	</bs3:row>
 	<bs3:row>
-		<bs3:col span="6">
+		<bs3:col span="4">
 
 			<cpt:fieldSet name="Actions" id="actions">
-				<cpt:action id="mixedInAction" />
+				<cpt:property id="note"/>
 			</cpt:fieldSet>
 
 			<cpt:fieldSet name="Properties" id="mixedInProperty">
@@ -26,7 +26,7 @@
 			<cpt:collection defaultView="table" id="mixedInCollection"/>
 			
 		</bs3:col>
-		<bs3:col span="6" unreferencedCollections="true">
+		<bs3:col span="8" unreferencedCollections="true">
 			<cpt:fieldSet name="Description" id="description"
 				unreferencedProperties="true">
 				<cpt:property id="description" labelPosition="NONE" />

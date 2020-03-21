@@ -1,7 +1,7 @@
 (since 1.x)
 
 The framework allows for tiny chunks of domain logic like `Update Name` or `Delete`, 
-to be contributed and encapsulated within separate classes: `Mixins`
+to be contributed by and encapsulated within separate classes: `Mixins`
 
 `Mixins` contribute their domain logic to a domain object via a single mixed in member, which is one of 
 
