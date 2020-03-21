@@ -1,0 +1,87 @@
+(since 1.x)
+
+The framework allows for tiny chunks of domain logic like `Update Name` or `Delete`, 
+to be contributed and encapsulated within separate classes: `Mixins`
+
+`Mixins` contribute their domain logic to a domain object via a single mixed in member, which is one of 
+
+* Action
+* Property
+* Collection
+
+See also link:https://apache-isis-committers.github.io/isis-nightly/refguide/latest/applib-ant/Mixin.html[Mixins (Preview)]
+
+*Action*
+
+[source,java]
+----
+@Action(...)              // presence of Action on class implies this is a mixin; 
+@ActionLayout(...)
+public class Contributee_someAction() {
+    private final Contributee contributee;
+    public ReturnValue act( ... ) { ... }   // no need for annotations here.   "act" assumed
+}
+
+// Legacy Mixin Declaration Style ...
+
+@Mixin(method="act")
+public class Contributee_someAction() {
+
+    private final Contributee contributee;  // constructor omitted
+    @Action(...)
+    @ActionLayout(...)
+    public ReturnValue act(.... ) { ... }
+}
+----
+
+*Property*
+
+[source,java]
+----
+@Property(...)     // implies this class is a mixin
+@PropertyLayout(...)
+public class Contributee_someProperty()
+    private final Contributee contributee;
+    public ReturnValue prop() { ... }                    // "prop" is assumed
+}
+
+// Legacy Mixin Declaration Style ...
+
+@Mixin(method="prop")
+public class Contributee_someProperty() {
+    private final Contributee contributee;  
+    @Action(semantics=SAFE)   // required
+    @ActionLayout(contributed=ASSOCIATION)  // required
+    @Property(...)
+    @PropertyLayout(...)
+    public ReturnValue prop( /* no args */ ) { ... }
+}
+----
+
+*Collection*
+
+[source,java]
+----
+
+@Collection(...)     // implies this class is a mixin
+@CollectionLayout(...)
+public class Contributee_someCollection()
+    private final Contributee contributee;
+    public List<ReturnValue> coll() { ... }                    // "coll" is assumed
+}
+// Legacy Mixin Declaration Style ...
+
+@Mixin(method="coll")
+public class Contributee_someCollection() {
+    private final Contributee contributee;  
+    @Action(semantics=SAFE)   // required
+    @ActionLayout(contributed=ASSOCIATION)  // required
+    @Collection(...)
+    @CollectionLayout(...)
+    public List<ReturnValue> coll( /* no args */ ) { ... }
+}
+----
+
+See the sources for this demo here:
+link:${SOURCES_DEMO}/demoapp/dom/mixins[sources]
+
