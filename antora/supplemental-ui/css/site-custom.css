@@ -7,6 +7,10 @@
     font-weight: 500;
 }
 
+.doc h4:not(.discrete) {
+    font-style: italic;
+}
+
 .doc .sidebarblock.float-left {
     min-width: 400px;
     margin-right: 30px;
