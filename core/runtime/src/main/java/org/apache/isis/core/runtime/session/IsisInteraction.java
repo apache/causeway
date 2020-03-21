@@ -101,7 +101,8 @@ public class IsisInteraction extends RuntimeContextBase {
         return asString.toString();
     }
 
-
+    // -- INCUBATING INTERACTION SCOPED USER DATA ... 
+    
     private final Map<Class, Can> map = new HashMap<>();
 
     public <T> Runnable put(Class<? super T> type, T variant) {
