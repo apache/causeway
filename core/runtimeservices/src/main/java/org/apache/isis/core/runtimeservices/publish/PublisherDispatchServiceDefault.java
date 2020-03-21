@@ -36,7 +36,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.IsisSessionScope;
+import org.apache.isis.applib.annotation.IsisInteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.services.clock.ClockService;
@@ -65,7 +65,7 @@ import lombok.extern.log4j.Log4j2;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@IsisSessionScope
+@IsisInteractionScope
 @Log4j2
 public class PublisherDispatchServiceDefault implements PublisherDispatchService {
 

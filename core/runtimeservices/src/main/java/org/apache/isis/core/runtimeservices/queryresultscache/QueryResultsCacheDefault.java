@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.IsisSessionScope;
+import org.apache.isis.applib.annotation.IsisInteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.TransactionScopeListener;
 import org.apache.isis.applib.services.queryresultscache.QueryResultCacheControl;
@@ -60,7 +60,7 @@ import lombok.extern.log4j.Log4j2;
 @Named("isisRuntime.QueryResultsCacheDefault")
 @Order(OrderPrecedence.EARLY)
 @Primary
-@IsisSessionScope
+@IsisInteractionScope
 @Qualifier("Default")
 @Log4j2
 public class QueryResultsCacheDefault implements QueryResultsCache, TransactionScopeListener {

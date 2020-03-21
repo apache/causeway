@@ -30,7 +30,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.isis.applib.annotation.IsisSessionScope;
+import org.apache.isis.applib.annotation.IsisInteractionScope;
 import org.apache.isis.applib.services.TransactionScopeListener;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
@@ -71,7 +71,7 @@ class TransactionScopeListenerTest {
      */
     
     @Service
-    @IsisSessionScope
+    @IsisInteractionScope
     public static class IsisSessionScopedProbe implements TransactionScopeListener {
 
         @Inject private KVStoreForTesting kvStoreForTesting;

@@ -34,7 +34,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
-import org.apache.isis.applib.annotation.IsisSessionScope;
+import org.apache.isis.applib.annotation.IsisInteractionScope;
 import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.applib.services.TransactionScopeListener;
 import org.apache.isis.core.commons.internal.collections._Maps;
@@ -53,7 +53,7 @@ import lombok.extern.log4j.Log4j2;
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
-@IsisSessionScope
+@IsisInteractionScope
 @Log4j2
 public class ChangedObjectsService implements TransactionScopeListener {
 

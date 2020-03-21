@@ -47,6 +47,6 @@ import org.springframework.context.annotation.Scope;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Scope("isis-session")
-public @interface IsisSessionScope {
+public @interface IsisInteractionScope {
 
 }

@@ -38,7 +38,7 @@ import org.springframework.stereotype.Repository;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.PersistFailedException;
 import org.apache.isis.applib.RepositoryException;
-import org.apache.isis.applib.annotation.IsisSessionScope;
+import org.apache.isis.applib.annotation.IsisInteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
