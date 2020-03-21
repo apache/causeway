@@ -5,7 +5,6 @@
 In this section we run through the main building blocks that make up an Apache Isis application.
 
 
-include::building-blocks/metamodel.adoc[leveloffset=+1]
 include::building-blocks/types-of-domain-objects.adoc[leveloffset=+1]
 include::building-blocks/identifiers.adoc[leveloffset=+1]
 include::building-blocks/object-members.adoc[leveloffset=+1]

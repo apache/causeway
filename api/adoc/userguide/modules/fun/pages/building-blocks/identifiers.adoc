@@ -38,7 +38,7 @@ Details on how to actually write titles, icons and CSS classes can be found xref
 [[oid]]
 == OIDs
 
-As well as defining a xref:userguide:fun:building-blocks.adoc#metamodel[metamodel] of the structure (domain classes) of its domain objects, Apache Isis also manages the runtime instances of said domain objects.
+As well as defining a xref:userguide:fun:core-concepts.adoc#metamodel[metamodel] of the structure (domain classes) of its domain objects, Apache Isis also manages the runtime instances of said domain objects.
 
 When a domain entity is recreated from the database, the framework keeps track of its identity through an "OID": an object identifier.
 Fundamentally this is a combination of its type (domain class), along with an identifier.

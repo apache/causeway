@@ -222,7 +222,7 @@ The easiest way to register domain services with the framework is to use Spring'
 
 The xref:docs:starters:simpleapp.adoc[simpleapp starter apps] illustrates the idiom:
 
-* for each Maven module, we have 
+* for each Maven module, we have
 
 
 [source,ini]
