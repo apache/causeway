@@ -106,7 +106,7 @@ public class PanelBase<T> extends GenericPanel<T> implements IsisWebAppCommonCon
         return metaModelContext = computeIfAbsent(MetaModelContext.class, metaModelContext);
     }
     
-    public IsisInteractionFactory getIsisSessionFactory() {
+    public IsisInteractionFactory getIsisInteractionFactory() {
         return isisInteractionFactory = computeIfAbsent(IsisInteractionFactory.class, isisInteractionFactory);
     }
     

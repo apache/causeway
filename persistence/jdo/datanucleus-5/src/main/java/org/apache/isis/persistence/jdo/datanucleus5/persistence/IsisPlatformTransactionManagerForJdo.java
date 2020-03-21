@@ -78,7 +78,7 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
     @Override
     protected Object doGetTransaction() throws TransactionException {
 
-        val isInSession = isisInteractionTracker.isInSession();
+        val isInSession = isisInteractionTracker.isInInteraction();
         log.debug("doGetTransaction isInSession={}", isInSession);
 
         val transactionBeforeBegin = 

@@ -303,7 +303,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
 
         final Optional<Recognition> recognition;
         
-        if(inIsisSession()) {
+        if(isInInteraction()) {
             val exceptionRecognizerService = getCommonContext().getServiceRegistry()
             .lookupServiceElseFail(ExceptionRecognizerService.class);
             
@@ -367,7 +367,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
      * Matters should improve once ISIS-299 gets implemented...
      */
     protected boolean isSignedIn() {
-        if(!inIsisSession()) {
+        if(!isInInteraction()) {
             return false;
         }
         if(!getAuthenticationSession().isPresent()) {
@@ -391,8 +391,8 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         return getCommonContext().getServiceRegistry().lookupServiceElseFail(ExceptionRecognizerService.class);
     }
 
-    private boolean inIsisSession() {
-        return commonContext.getIsisInteractionTracker().isInSession();
+    private boolean isInInteraction() {
+        return commonContext.getIsisInteractionTracker().isInInteraction();
     }
 
     private Optional<AuthenticationSession> getAuthenticationSession() {

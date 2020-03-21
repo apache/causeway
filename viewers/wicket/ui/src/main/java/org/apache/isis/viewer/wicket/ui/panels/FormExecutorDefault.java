@@ -148,7 +148,7 @@ implements FormExecutor {
             // flush any queued changes; any concurrency or violation exceptions will actually be thrown here
             {
                 val commonContext = targetEntityModel.getCommonContext();
-                if(commonContext.getIsisInteractionTracker().isInSession()) {
+                if(commonContext.getIsisInteractionTracker().isInInteraction()) {
                     PersistenceSession.current(PersistenceSession.class)
                     .stream()
                     .forEach(ps->ps.flush());    
@@ -482,7 +482,7 @@ implements FormExecutor {
         return getCommonContext().getSpecificationLoader();
     }
 
-    protected IsisInteractionFactory getIsisSessionFactory() {
+    protected IsisInteractionFactory getIsisInteractionFactory() {
         return getCommonContext().lookupServiceElseFail(IsisInteractionFactory.class);
     }
 

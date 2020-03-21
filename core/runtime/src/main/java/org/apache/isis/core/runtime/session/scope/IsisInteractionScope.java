@@ -65,7 +65,7 @@ class IsisInteractionScope implements Scope, IsisInteractionScopeCloseListener {
                     + "IsisInteractionScopeBeanFactoryPostProcessor registered and initialized.", name);
         }
         
-        if(!isisInteractionTracker.isInSession()) {
+        if(!isisInteractionTracker.isInInteraction()) {
             throw _Exceptions.illegalState("Creation of bean %s with @IsisInteractionScope requires the "
                     + "calling %s to have an open IsisInteraction on the thread-local stack. Running into "
                     + "this issue might be caused by use of ... @Inject MyScopedBean bean ..., instead of "

@@ -106,7 +106,7 @@ public abstract class ResourceAbstract {
             final ResourceDescriptor resourceDescriptor,
             final String urlUnencodedQueryString) {
         
-        if (!isisInteractionTracker.isInSession()) {
+        if (!isisInteractionTracker.isInInteraction()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
 

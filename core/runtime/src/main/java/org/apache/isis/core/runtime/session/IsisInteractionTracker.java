@@ -31,7 +31,7 @@ import org.apache.isis.core.security.authentication.MessageBroker;
  */
 public interface IsisInteractionTracker extends AuthenticationSessionTracker {
 
-    boolean isInSession();
+    boolean isInInteraction();
     
     /** @return the current request- or test-scoped IsisInteraction*/
     Optional<IsisInteraction> currentSession();

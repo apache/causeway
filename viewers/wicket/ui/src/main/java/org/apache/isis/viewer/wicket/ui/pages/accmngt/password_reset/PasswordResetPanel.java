@@ -86,7 +86,7 @@ public class PasswordResetPanel extends PanelBase<Void> {
                 val userRegistrationService = 
                         commonContext.lookupServiceElseFail(UserRegistrationService.class);
 
-                Boolean passwordUpdated = getIsisSessionFactory().callAnonymous(new Callable<Boolean>() {
+                Boolean passwordUpdated = getIsisInteractionFactory().callAnonymous(new Callable<Boolean>() {
                     @Override
                     public Boolean call() throws Exception {
                         String email = accountConfirmationMap.get(uuid);

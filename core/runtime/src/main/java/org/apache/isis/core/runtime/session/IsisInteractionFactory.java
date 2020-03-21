@@ -55,7 +55,7 @@ public interface IsisInteractionFactory {
     /**
      * @return whether the calling thread is within the context of an open IsisInteraction
      */
-    public boolean isInSession();
+    public boolean isInInteraction();
 
     /**
      * @return whether the calling thread is within the context of an open IsisTransaction
@@ -91,7 +91,7 @@ public interface IsisInteractionFactory {
      */
     @SneakyThrows
     public default <R> R callAnonymous(Callable<R> callable) {
-        if(isInSession()) {
+        if(isInInteraction()) {
             return callable.call(); // reuse existing session
         }
         return callAuthenticated(new InitialisationSession(), callable);
@@ -103,7 +103,7 @@ public interface IsisInteractionFactory {
      */
     @SneakyThrows
     public default void runAnonymous(ThrowingRunnable runnable) {
-        if(isInSession()) {
+        if(isInInteraction()) {
             runnable.run(); // reuse existing session
             return;
         }

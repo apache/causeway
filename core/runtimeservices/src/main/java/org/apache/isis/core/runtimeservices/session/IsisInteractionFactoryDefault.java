@@ -188,7 +188,7 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
     }
 
     @Override
-    public boolean isInSession() {
+    public boolean isInInteraction() {
         return !isisInteractionStack.get().isEmpty();
     }
 
