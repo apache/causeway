@@ -8,3 +8,4 @@ This section describes the philosophy upon which the Apache Isis framework is ba
 include::philosophy/domain-driven-design.adoc[leveloffset=+1]
 include::philosophy/naked-objects-pattern.adoc[leveloffset=+1]
 include::philosophy/how-eases-ddd.adoc[leveloffset=+1]
+include::philosophy/aligned-with-the-business.adoc[leveloffset=+1]
