@@ -63,7 +63,7 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
     private AuthenticationManager authMgr;
     @Mock protected Authenticator mockAuthenticator;
     @Mock protected IsisWebAppCommonContext mockCommonContext;
-    @Mock protected IsisInteractionFactory mockIsisSessionFactory;
+    @Mock protected IsisInteractionFactory mockIsisInteractionFactory;
     @Mock protected IsisInteractionTracker mockIsisSessionTracker;
     @Mock protected ServiceRegistry mockServiceRegistry;
 
@@ -82,7 +82,7 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
                 will(returnValue(Can.empty()));
 
                 allowing(mockCommonContext).lookupServiceElseFail(IsisInteractionFactory.class);
-                will(returnValue(mockIsisSessionFactory));
+                will(returnValue(mockIsisInteractionFactory));
 
                 allowing(mockCommonContext).getIsisInteractionTracker();
                 will(returnValue(mockIsisSessionTracker));
@@ -90,10 +90,10 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
                 allowing(mockIsisSessionTracker).currentAuthenticationSession();
                 will(returnValue(Optional.of(new InitialisationSession())));
                 
-                allowing(mockIsisSessionFactory)
+                allowing(mockIsisInteractionFactory)
                 .runAuthenticated(with(new InitialisationSession()), with(any(ThrowingRunnable.class)));
                 
-                allowing(mockIsisSessionFactory)
+                allowing(mockIsisInteractionFactory)
                 .runAnonymous(with(any(ThrowingRunnable.class)));
                 
                 // ignore

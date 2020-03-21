@@ -45,7 +45,7 @@ public abstract class AuthenticatedWebSessionForIsis_TestAbstract {
     @Mock protected Request mockRequest;
     @Mock protected AuthenticationManager mockAuthMgr;
     @Mock protected IsisWebAppCommonContext mockCommonContext;
-    @Mock protected IsisInteractionFactory mockIsisSessionFactory;
+    @Mock protected IsisInteractionFactory mockIsisInteractionFactory;
     @Mock protected ServiceRegistry mockServiceRegistry;
     
     protected AuthenticatedWebSessionForIsis webSession;
@@ -60,9 +60,9 @@ public abstract class AuthenticatedWebSessionForIsis_TestAbstract {
                 will(returnValue(Optional.empty()));
                 
                 allowing(mockCommonContext).lookupServiceElseFail(IsisInteractionFactory.class);
-                will(returnValue(mockIsisSessionFactory));
+                will(returnValue(mockIsisInteractionFactory));
                 
-                allowing(mockIsisSessionFactory).runAuthenticated(new InitialisationSession(), with(any(ThrowingRunnable.class)));
+                allowing(mockIsisInteractionFactory).runAuthenticated(new InitialisationSession(), with(any(ThrowingRunnable.class)));
                 // ignore
                 
                 // must provide explicit expectation, since Locale is final.

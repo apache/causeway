@@ -56,7 +56,7 @@ public class ResourceContext_getArg_Test {
     @Mock HttpServletRequest mockHttpServletRequest;
     @Mock ServletContext mockServletContext;
     @Mock IsisInteraction mockIsisSession;
-    @Mock IsisInteractionFactory mockIsisSessionFactory;
+    @Mock IsisInteractionFactory mockIsisInteractionFactory;
     @Mock IsisInteractionTracker mockIsisSessionTracker;
     @Mock AuthenticationManager mockAuthenticationManager;
     @Mock AuthenticationSession mockAuthenticationSession;
@@ -74,7 +74,7 @@ public class ResourceContext_getArg_Test {
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
-                .singleton(mockIsisSessionFactory)
+                .singleton(mockIsisInteractionFactory)
                 .singleton(mockAuthenticationManager)
                 .singleton(mockIsisSessionTracker)
                 //                .serviceInjector(mockServiceInjector)
