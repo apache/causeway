@@ -75,46 +75,14 @@ Alternatively, these UI hints can be defined in a supplementary xref:vw:ROOT:lay
 
 
 include::programming-model/domain-entities.adoc[leveloffset=+1]
-
-
 include::programming-model/domain-services.adoc[leveloffset=+1]
-include::programming-model/domain-services/organizing-services.adoc[leveloffset=+2]
-include::programming-model/domain-services/repository-and-factory.adoc[leveloffset=+2]
-include::programming-model/domain-services/menu.adoc[leveloffset=+2]
-include::programming-model/domain-services/event-subscribers.adoc[leveloffset=+2]
-include::programming-model/domain-services/scoped-services.adoc[leveloffset=+2]
-include::programming-model/domain-services/registering.adoc[leveloffset=+2]
-include::programming-model/domain-services/initialization.adoc[leveloffset=+2]
-
-
-
 include::programming-model/properties.adoc[leveloffset=+1]
 include::programming-model/collections.adoc[leveloffset=+1]
 include::programming-model/actions.adoc[leveloffset=+1]
 include::programming-model/properties-vs-parameters.adoc[leveloffset=+1]
 include::programming-model/inject-services.adoc[leveloffset=+1]
-
-
-
 include::programming-model/view-models.adoc[leveloffset=+1]
-include::programming-model/view-models/jaxb.adoc[leveloffset=+2]
-include::programming-model/view-models/jaxb/referencing-domain-entities.adoc[leveloffset=+3]
-include::programming-model/view-models/jaxb/joda-datatypes.adoc[leveloffset=+3]
-include::programming-model/view-models/dto.adoc[leveloffset=+2]
-include::programming-model/view-models/dto/versioning.adoc[leveloffset=+3]
-include::programming-model/view-models/dto/generating-xsds.adoc[leveloffset=+3]
-include::programming-model/view-models/dto/dto-consumers.adoc[leveloffset=+3]
-include::programming-model/view-models/non-jaxb.adoc[leveloffset=+2]
-
-
-
 include::programming-model/mixins.adoc[leveloffset=+1]
-include::programming-model/mixins/contributed-collection.adoc[leveloffset=+2]
-include::programming-model/mixins/contributed-property.adoc[leveloffset=+2]
-include::programming-model/mixins/contributed-action.adoc[leveloffset=+2]
-include::programming-model/mixins/inferred-name.adoc[leveloffset=+2]
-include::programming-model/mixins/nested-static-classes.adoc[leveloffset=+2]
-include::programming-model/mixins/programmatic-usage.adoc[leveloffset=+2]
 
 
 

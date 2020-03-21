@@ -3,6 +3,10 @@
     font-weight: 500;
 }
 
+.doc h3:not(.discrete) {
+    font-weight: 500;
+}
+
 .doc .sidebarblock.float-left {
     min-width: 400px;
     margin-right: 30px;

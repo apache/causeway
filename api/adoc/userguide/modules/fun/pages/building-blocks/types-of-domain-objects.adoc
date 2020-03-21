@@ -66,7 +66,7 @@ However, a service cannot have (persisted) properties, nor can it have (persiste
 A very common type of domain service is a repository, that is used to look up existing instances of a domain entity.
 For example, for the `Customer` entity there may be a `CustomerRepository`, while for `Order` entity there may be an `OrderRepository`.
 
-Similarly, entities might also have a corresponding factory service: a `CustomerFactory` or an `OrderFactory`; Evans' link:http://books.google.com/books/about/Domain_Driven_Design.html?id=hHBf4YxMnWMC[Domain Driven Design], draws a clear distinction between a factory (that creates object) and a repository (that is used to find existing objects).
+Similarly, entities might also have a corresponding factory service: a `CustomerFactory` or an `OrderFactory`; Evans' link:http://books.google.com/books/about/Domain_Driven_Design.html?id=hHBf4YxMnWMC[Domain Driven Design], draws a clear distinction between a factory (that creates object) and a repository (that is used to find existing objecpts).
 
 On the other hand, from an end-users' perspective the act of finding an existing object vs creating a new one are quite closely related.
 For this reason, in Apache Isis it's therefore quite common to have a single domain service that acts as both a factory and a repository (and is usually called just a "repository").
