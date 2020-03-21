@@ -21,7 +21,7 @@ package org.apache.isis.core.runtime.session.scope;
 /**
  * @since 2.0
  */
-public interface IsisSessionScopeCloseListener {
+public interface IsisInteractionScopeCloseListener {
 
     void preTopLevelIsisSessionClose();
     

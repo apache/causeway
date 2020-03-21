@@ -38,7 +38,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0
  */
 @Log4j2
-class IsisInteractionScope implements Scope, IsisSessionScopeCloseListener {
+class IsisInteractionScope implements Scope, IsisInteractionScopeCloseListener {
     
     @Inject private IsisSessionTracker isisSessionTracker;
 

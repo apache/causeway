@@ -41,7 +41,7 @@ public class IsisSessionScopeBeanFactoryPostProcessor implements BeanFactoryPost
         _Context.put(IsisInteractionScope.class, isisSessionScope, true);
     }
 
-    public static IsisSessionScopeCloseListener initIsisSessionScopeSupport(
+    public static IsisInteractionScopeCloseListener initIsisSessionScopeSupport(
             @NonNull final ServiceInjector serviceInjector) {
         val isisSessionScope = _Context.getElseFail(IsisInteractionScope.class);
         serviceInjector.injectServicesInto(isisSessionScope);

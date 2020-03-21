@@ -55,7 +55,7 @@ import org.apache.isis.core.runtime.session.IsisSessionTracker;
 import org.apache.isis.core.runtime.session.init.IsisLocaleInitializer;
 import org.apache.isis.core.runtime.session.init.IsisTimeZoneInitializer;
 import org.apache.isis.core.runtime.session.scope.IsisSessionScopeBeanFactoryPostProcessor;
-import org.apache.isis.core.runtime.session.scope.IsisSessionScopeCloseListener;
+import org.apache.isis.core.runtime.session.scope.IsisInteractionScopeCloseListener;
 import org.apache.isis.core.runtimeservices.user.UserServiceDefault;
 import org.apache.isis.core.runtimeservices.user.UserServiceDefault.UserAndRoleOverrides;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
@@ -97,7 +97,7 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
 
     private IsisLocaleInitializer localeInitializer;
     private IsisTimeZoneInitializer timeZoneInitializer;
-    private IsisSessionScopeCloseListener isisSessionScopeCloseListener;
+    private IsisInteractionScopeCloseListener isisSessionScopeCloseListener;
 
     @PostConstruct
     public void initIsisSessionScopeSupport() {
