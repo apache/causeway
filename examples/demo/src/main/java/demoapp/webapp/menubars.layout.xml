@@ -65,6 +65,9 @@
                 <mb3:serviceAction objectType="demo.MixinMenu" id="mixinDemo">
                     <cpt:named>Mixins</cpt:named>
                 </mb3:serviceAction>
+                <mb3:serviceAction objectType="demo.MixinLegacyMenu" id="mixinLegacyDemo">
+                    <cpt:named>Mixins (Legacy)</cpt:named>
+                </mb3:serviceAction>
             </mb3:section>
         </mb3:menu>
         

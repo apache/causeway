@@ -1,4 +1,4 @@
-(since 1.x)
+(since 2.0)
 
 The framework allows for tiny chunks of domain logic like `Update Name` or `Delete`, 
 to be contributed by and encapsulated within separate classes: `Mixins`
@@ -11,7 +11,7 @@ to be contributed by and encapsulated within separate classes: `Mixins`
 
 See also link:https://apache-isis-committers.github.io/isis-nightly/refguide/latest/applib-ant/Mixin.html[Mixins (Preview)]
 
-*Action*
+*Mixed-In Action*
 
 [source,java]
 ----
@@ -21,20 +21,9 @@ public class Contributee_someAction() {
     private final Contributee contributee;
     public ReturnValue act( ... ) { ... }   // no need for annotations here.   "act" assumed
 }
-
-// Legacy Mixin Declaration Style ...
-
-@Mixin(method="act")
-public class Contributee_someAction() {
-
-    private final Contributee contributee;  // constructor omitted
-    @Action(...)
-    @ActionLayout(...)
-    public ReturnValue act(.... ) { ... }
-}
 ----
 
-*Property*
+*Mixed-In Property*
 
 [source,java]
 ----
@@ -44,41 +33,17 @@ public class Contributee_someProperty()
     private final Contributee contributee;
     public ReturnValue prop() { ... }                    // "prop" is assumed
 }
-
-// Legacy Mixin Declaration Style ...
-
-@Mixin(method="prop")
-public class Contributee_someProperty() {
-    private final Contributee contributee;  
-    @Action(semantics=SAFE)   // required
-    @ActionLayout(contributed=ASSOCIATION)  // required
-    @Property(...)
-    @PropertyLayout(...)
-    public ReturnValue prop( /* no args */ ) { ... }
-}
 ----
 
-*Collection*
+*Mixed-In Collection*
 
 [source,java]
 ----
-
 @Collection(...)     // implies this class is a mixin
 @CollectionLayout(...)
 public class Contributee_someCollection()
     private final Contributee contributee;
     public List<ReturnValue> coll() { ... }                    // "coll" is assumed
-}
-// Legacy Mixin Declaration Style ...
-
-@Mixin(method="coll")
-public class Contributee_someCollection() {
-    private final Contributee contributee;  
-    @Action(semantics=SAFE)   // required
-    @ActionLayout(contributed=ASSOCIATION)  // required
-    @Collection(...)
-    @CollectionLayout(...)
-    public List<ReturnValue> coll( /* no args */ ) { ... }
 }
 ----
 
