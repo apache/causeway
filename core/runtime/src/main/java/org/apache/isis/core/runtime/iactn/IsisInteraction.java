@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.iacnt;
+package org.apache.isis.core.runtime.iactn;
 
 import java.util.HashMap;
 import java.util.Map;

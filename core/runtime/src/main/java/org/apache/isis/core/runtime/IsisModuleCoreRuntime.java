@@ -26,7 +26,7 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 import org.apache.isis.core.runtime.context.session.RuntimeEventService;
 import org.apache.isis.core.runtime.context.session.RuntimeEventSupport_Spring;
-import org.apache.isis.core.runtime.iacnt.scope.IsisInteractionScopeBeanFactoryPostProcessor;
+import org.apache.isis.core.runtime.iactn.scope.IsisInteractionScopeBeanFactoryPostProcessor;
 import org.apache.isis.core.runtime.persistence.session.events.PersistenceEventService;
 import org.apache.isis.core.runtime.persistence.session.events.PersistenceEventService_Spring;
 import org.apache.isis.core.runtime.persistence.session.events.TimestampService;

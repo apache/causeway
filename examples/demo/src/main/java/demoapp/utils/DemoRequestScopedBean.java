@@ -33,7 +33,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.annotation.RequestScope;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.core.runtime.iacnt.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 
 import lombok.extern.log4j.Log4j2;
 

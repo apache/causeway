@@ -16,14 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.iacnt.template;
+package org.apache.isis.core.runtime.iactn.template;
 
 import javax.inject.Inject;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.core.runtime.iacnt.IsisInteractionFactory;
-import org.apache.isis.core.runtime.iacnt.IsisInteraction;
+import org.apache.isis.core.runtime.iactn.IsisInteraction;
+import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 public abstract class AbstractIsisInteractionTemplate {

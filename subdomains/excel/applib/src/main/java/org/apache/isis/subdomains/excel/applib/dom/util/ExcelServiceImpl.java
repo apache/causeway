@@ -41,7 +41,7 @@ import org.apache.isis.subdomains.excel.applib.dom.WorksheetSpec;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.session.RuntimeContextBase;
-import org.apache.isis.core.runtime.iacnt.IsisInteraction;
+import org.apache.isis.core.runtime.iactn.IsisInteraction;
 
 import lombok.SneakyThrows;
 

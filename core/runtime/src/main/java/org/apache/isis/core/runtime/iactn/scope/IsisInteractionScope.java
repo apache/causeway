@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.iacnt.scope;
+package org.apache.isis.core.runtime.iactn.scope;
 
 import java.util.Map;
 
@@ -28,7 +28,7 @@ import org.springframework.beans.factory.config.Scope;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.debug._Probe;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.runtime.iacnt.IsisInteractionTracker;
+import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
 
 import lombok.Data;
 import lombok.val;
