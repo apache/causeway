@@ -207,6 +207,16 @@ under the License.
 			<timezone>+1</timezone>
 		</developer>
 		<developer>
+			<id>joergrade</id>
+			<name>Joerg Rade</name>
+			<email>joergrade@apache.org</email>
+			<roles>
+				<role>pmc</role>
+				<role>committer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
 			<id>kevin</id>
 			<name>Kevin Meyer</name>
 			<email>kevin@apache.org</email>
