@@ -1,5 +1,24 @@
 (since 2.0)
 
-Still work in progress, see eg. link:https://issues.apache.org/jira/browse/ISIS-1695[ISIS-1695] 
+Still work in progress, see eg. link:https://issues.apache.org/jira/browse/ISIS-1695[ISIS-1695]
 
-See the text demo link:${SOURCES_DEMO}/demoapp/dom/types/tuple[sources].
+
+----
+@PersistenceCapable
+public class NumberConstant {
+
+    ...     
+
+    @javax.jdo.annotations.Embedded(members={
+            @Persistent(name="re", columns=@Column(name="number-re")), // <1>
+            @Persistent(name="im", columns=@Column(name="number-im"))  // <2>
+    })
+    private ComplexNumber number;
+    
+}
+---- 
+
+<1> maps the 'ComplexNumber.re' property to column 'number-re' 
+<2> maps the 'ComplexNumber.im' property to column 'number-im'
+
+See the tuple demo link:${SOURCES_DEMO}/demoapp/dom/types/tuple[sources].
