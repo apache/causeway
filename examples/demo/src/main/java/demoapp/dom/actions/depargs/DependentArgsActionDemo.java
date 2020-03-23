@@ -73,7 +73,8 @@ public class DependentArgsActionDemo extends DemoStub {
     @Property
     @PropertyLayout(labelPosition=LabelPosition.NONE)
     public Markup getIndependentText() {
-        return new Markup("Click this action above to see independent arguments do not clear other on changing.");
+        return new Markup("Click this action above to see independent arguments do not clear "
+                + "each other when changing.");
     }
     
     @Collection
