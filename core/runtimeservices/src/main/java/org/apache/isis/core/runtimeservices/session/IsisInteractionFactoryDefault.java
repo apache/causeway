@@ -158,10 +158,7 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
         val newIsisInteraction = new IsisInteraction(metaModelContext, authSessionToUse);
         
         isisInteractionStack.get().push(newIsisInteraction);
-        if(isisInteractionStack.get().size()==1) {
-            conversationId.set(UUID.randomUUID());
-            postTopLevelOpen(newIsisInteraction);
-        }
+        postOpen(isisInteractionStack.get().size(), newIsisInteraction);
         
         log.debug("new IsisInteraction created (conversation-id={}, total-sessions-on-stack={}, {})", 
                 conversationId.get(), 
@@ -234,13 +231,21 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
     
     // -- HELPER
     
-    private void postTopLevelOpen(IsisInteraction newIsisInteraction) {
-        runtimeEventService.fireSessionOpened(newIsisInteraction); // only fire on top-level session 
+    private void postOpen(int stackSizeAfterOpen, IsisInteraction newIsisInteraction) {
+        final boolean isTopLevel = stackSizeAfterOpen==1;
+        if(isTopLevel) {
+            conversationId.set(UUID.randomUUID());
+            runtimeEventService.fireSessionOpened(newIsisInteraction); // only fire on top-level session
+        }
     }
     
-    private void preTopLevelClose(IsisInteraction isisInteraction) {
-        runtimeEventService.fireSessionClosing(isisInteraction); // only fire on top-level session 
-        isisInteractionScopeCloseListener.preTopLevelIsisInteractionClose(); // cleanup the isis-session scope
+    private void preClose(int stackSizeBeforeClose, IsisInteraction isisInteraction) {
+        final boolean isTopLevel = stackSizeBeforeClose==1;
+        if(isTopLevel) {
+            runtimeEventService.fireSessionClosing(isisInteraction); // only fire on top-level session 
+            isisInteractionScopeCloseListener.preTopLevelIsisInteractionClose(); // cleanup the isis-session scope
+        }
+        isisInteraction.close(); // do this last
     }
     
     private void closeSessionStackDownToStackSize(int downToStackSize) {
@@ -253,12 +258,11 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
         
         val stack = isisInteractionStack.get();
         while(stack.size()>downToStackSize) {
-            if(stack.size()==1) {       
-                preTopLevelClose(stack.peek());
-            } 
+            preClose(stack.size(), stack.peek()); // keep the stack unmodified yet, to allow for callbacks to properly operate
             stack.pop();    
         }
         if(downToStackSize == 0) {
+            // cleanup thread-local
             isisInteractionStack.remove();
             conversationId.remove();
         }

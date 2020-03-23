@@ -21,11 +21,12 @@ package org.apache.isis.core.runtime.iactn;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionState;
-import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.context.session.RuntimeContextBase;
@@ -44,20 +45,12 @@ public class IsisInteraction extends RuntimeContextBase {
 
     @Getter private final AuthenticationSession authenticationSession;
 
-    /**
-     * Set to System.nanoTime() when session opens.
-     * @deprecated use command timestamp instead?
-     */
-    @Getter private long openedAtSystemNanos = -1L;
-
     public IsisInteraction(
             @NonNull final MetaModelContext mmc,
             @NonNull final AuthenticationSession authenticationSession) {
 
         super(mmc);
         this.authenticationSession = authenticationSession; // binds this session to given authenticationSession
-        
-        openedAtSystemNanos = System.nanoTime();
     }
 
     // -- FLUSH
@@ -75,8 +68,53 @@ public class IsisInteraction extends RuntimeContextBase {
         return transactionService.currentTransactionState();
     }
 
+    // -- INTERACTION SCOPED USER DATA
+    
+    private Map<Class<?>, Object> userData = null;
+    private boolean closed = false;
 
-    // -- toString
+    /** add type specific user data */
+    public <T> T putUserData(Class<? super T> type, T value) {
+        return _Casts.uncheckedCast(userData().put(type, value));
+    }
+    
+    /** conditionally add type specific user data */
+    public <T> T computeUserDataIfAbsent(Class<? super T> type, Function<Class<?>, ? extends T> mappingFunction) {
+        return _Casts.uncheckedCast(userData().computeIfAbsent(type, mappingFunction));
+    }
+
+    /** get type specific user data */
+    public <T> T getUserData(Class<? super T> type) {
+        return (userData!=null)
+                ? _Casts.uncheckedCast(userData.get(type))
+                : null;
+    }
+    
+    /** remove type specific user data */
+    public void removeUserData(Class<?> type) {
+        if(userData!=null) {
+            userData.remove(type);
+        }
+    }
+    
+    /** Do not use, is called by the framework internally. */
+    public void close() {
+        userData = null;
+        closed = true;
+    }
+    
+    private Map<Class<?>, Object> userData() {
+        if(closed) {
+            throw _Exceptions.illegalState(
+                    "IsisInteraction was already closed, cannot access UserData any longer.");
+        }
+        return (userData==null) 
+                ? userData = new HashMap<>() 
+                : userData;
+    }
+    
+    // -- TO STRING
+    
     @Override
     public String toString() {
         final ToString asString = new ToString(this);
@@ -85,20 +123,5 @@ public class IsisInteraction extends RuntimeContextBase {
         return asString.toString();
     }
 
-    // -- INCUBATING INTERACTION SCOPED USER DATA ... 
-    
-    private final Map<Class, Can> map = new HashMap<>();
 
-    public <T> Runnable put(Class<? super T> type, T variant) {
-        map
-                .compute(type, (k, v) -> v == null
-                        ? Can.<T>ofSingleton(variant)
-                        : Can.<T>concat(_Casts.uncheckedCast(v), variant));
-
-        return () -> map.remove(type);
-    }
-
-    public <T> Can<T> get(Class<? super T> type) {
-        return map.get(type);
-    }
 }
