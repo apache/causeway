@@ -370,7 +370,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         val objectSpec = specificationLoader.loadSpecification(oid.getObjectSpecId());
         val loadRequest = ObjectLoader.Request.of(objectSpec, oid.getIdentifier());
 
-        Optional<IsisInteraction> isisInteraction = isisInteractionTracker.currentSession();
+        Optional<IsisInteraction> isisInteraction = isisInteractionTracker.currentInteraction();
         return isisInteraction
                 .map(x -> x.getObjectManager().loadObject(loadRequest))
                 .orElse(null);

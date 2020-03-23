@@ -182,7 +182,7 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
     }
     
     @Override
-    public Optional<IsisInteraction> currentSession() {
+    public Optional<IsisInteraction> currentInteraction() {
         val stack = isisInteractionStack.get();
         return stack.isEmpty() ? Optional.empty() : Optional.of(stack.lastElement());
     }
@@ -195,7 +195,7 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
     @Override
     public boolean isInTransaction() {
 
-        return currentSession().map(isisInteraction->{
+        return currentInteraction().map(isisInteraction->{
             if (isisInteraction.getCurrentTransactionId() != null) {
                 if (!isisInteraction.getCurrentTransactionState().isComplete()) {
                     return true;

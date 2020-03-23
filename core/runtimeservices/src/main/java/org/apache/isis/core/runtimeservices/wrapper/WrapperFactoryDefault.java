@@ -27,12 +27,9 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.function.BiConsumer;
-import java.util.function.Supplier;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -103,12 +100,11 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.standard.SimpleSession;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
-import static org.apache.isis.applib.services.metamodel.MetaModelService.Mode.*;
+import static org.apache.isis.applib.services.metamodel.MetaModelService.Mode.RELAXED;
 import static org.apache.isis.applib.services.wrapper.control.SyncControl.control;
 
 import lombok.Data;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * This service provides the ability to 'wrap' a domain object such that it can
@@ -120,7 +116,7 @@ import lombok.extern.log4j.Log4j2;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-@Log4j2
+//@Log4j2
 public class WrapperFactoryDefault implements WrapperFactory {
     
     @Inject private FactoryService factoryService;
@@ -501,7 +497,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
 
     private IsisInteraction currentIsisInteraction() {
-        return isisInteractionTracker.currentSession().orElseThrow(() -> new RuntimeException("No IsisInteraction is open"));
+        return isisInteractionTracker.currentInteraction().orElseThrow(() -> new RuntimeException("No IsisInteraction is open"));
     }
 
     private ObjectManager currentObjectManager() {
