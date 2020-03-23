@@ -19,18 +19,22 @@
 	
 		<bs3:col span="6">
 		
-			<cpt:fieldSet name="Actions" id="actions-dep">
+			<cpt:fieldSet name="Action Parameter Support" id="actions-dep1">
 				<cpt:action id="useChoices"/>
             	<cpt:action id="useAutoComplete"/>
             	<cpt:action id="useDefault"/>
+	            <cpt:property id="dependentText1"/>
+                <cpt:property id="dialogParityDefault" />
+			</cpt:fieldSet>
+
+			<cpt:fieldSet name="Action Parameter Support" id="actions-dep2">
             	<cpt:action id="useHide"/>
             	<cpt:action id="useDisable"/>
-	            <cpt:property id="dependentText"/>
-                <cpt:property id="dialogParityDefault" />
+	            <cpt:property id="dependentText2"/>
                 <cpt:property id="dialogCheckboxDefault" />
 			</cpt:fieldSet>
 			
-			<cpt:fieldSet name="Actions" id="actions-indep">
+			<cpt:fieldSet name="Action Parameter Support" id="actions-indep">
 				<cpt:action id="useIndependent"/>
 	            <cpt:property id="independentText"/>
 			</cpt:fieldSet>

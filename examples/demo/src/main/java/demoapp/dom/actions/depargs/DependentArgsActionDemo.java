@@ -58,9 +58,16 @@ public class DependentArgsActionDemo extends DemoStub {
     
     @Property
     @PropertyLayout(labelPosition=LabelPosition.NONE)
-    public Markup getDependentText() {
-        return new Markup("Click one of these 5 actions above to see how dependent arguments work. "
-                + "Set defaults for the first dialog parameter below ...");
+    public Markup getDependentText1() {
+        return new Markup("Click one of above actions to see how dependent arguments work. "
+                + "Set defaults for the first dialog parameter here:");
+    }
+    
+    @Property
+    @PropertyLayout(labelPosition=LabelPosition.NONE)
+    public Markup getDependentText2() {
+        return new Markup("Click one of above actions to see how dependent arguments work. "
+                + "Set defaults for the first dialog parameter here:");
     }
     
     @Property
