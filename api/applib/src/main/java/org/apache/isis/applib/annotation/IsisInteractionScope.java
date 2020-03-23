@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Scope;
  * component whose lifecycle is bound to the current top-level IsisInteraction.
  *
  * <p>Specifically, {@code @IsisInteractionScope} is a <em>composed annotation</em> that
- * acts as a shortcut for {@code @Scope("isis-session")}.
+ * acts as a shortcut for {@code @Scope("isis-interaction")}.
  *
  * <p>{@code @IsisInteractionScope} may be used as a meta-annotation to create custom
  * composed annotations.
@@ -46,7 +46,7 @@ import org.springframework.context.annotation.Scope;
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Scope("isis-session")
+@Scope("isis-interaction")
 public @interface IsisInteractionScope {
 
 }

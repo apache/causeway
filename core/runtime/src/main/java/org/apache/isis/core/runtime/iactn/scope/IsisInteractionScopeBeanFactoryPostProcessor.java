@@ -37,7 +37,7 @@ public class IsisInteractionScopeBeanFactoryPostProcessor implements BeanFactory
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         val isisInteractionScope = new IsisInteractionScope();
         // scope name as defined in annotation @IsisInteractionScope
-        beanFactory.registerScope("isis-session", isisInteractionScope);
+        beanFactory.registerScope("isis-interaction", isisInteractionScope);
         _Context.put(IsisInteractionScope.class, isisInteractionScope, true);
     }
 
