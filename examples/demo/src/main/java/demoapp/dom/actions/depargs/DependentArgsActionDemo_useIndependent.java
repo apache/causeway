@@ -63,6 +63,13 @@ public class DependentArgsActionDemo_useIndependent {
         messageService.informUser(message);
         return holder;
     }
+    
+    // -- PARAM 0 (Parity)
+
+    @Model
+    public Parity default0Act() {
+        return holder.getDialogParityDefault();
+    }
 
     // -- PARAM 1 (DemoItem item1)
 

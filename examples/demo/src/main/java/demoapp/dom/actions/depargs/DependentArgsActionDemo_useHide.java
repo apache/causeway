@@ -56,6 +56,13 @@ public class DependentArgsActionDemo_useHide {
         messageService.informUser(message);
         return holder;
     }
+    
+    // -- PARAM 0 (Parity)
+
+    @Model
+    public boolean default0Act() {
+        return holder.isDialogCheckboxDefault();
+    }
 
     // -- PARAM 1 (String message)
 

@@ -26,6 +26,8 @@
             	<cpt:action id="useHide"/>
             	<cpt:action id="useDisable"/>
 	            <cpt:property id="dependentText"/>
+                <cpt:property id="dialogParityDefault" />
+                <cpt:property id="dialogCheckboxDefault" />
 			</cpt:fieldSet>
 			
 			<cpt:fieldSet name="Actions" id="actions-indep">

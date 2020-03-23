@@ -57,6 +57,13 @@ public class DependentArgsActionDemo_useDisable {
         return holder;
     }
 
+    // -- PARAM 0 (Parity)
+
+    @Model
+    public boolean default0Act() {
+        return holder.isDialogCheckboxDefault();
+    }
+    
     // -- PARAM 1 (String message)
 
     @Model
