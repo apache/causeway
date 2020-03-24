@@ -28,6 +28,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.Confirmations;
 
 /**
  * Convenience adapter for {@link Panel}s built up using {@link ComponentType}s.
@@ -103,14 +104,5 @@ extends PanelBase/*<IModel<X>>*/ {
         }
         component.setVisible(visible);
     }
-    
-    protected void addConfirmationDialogIfAreYouSureSemantics(
-            Component component, 
-            SemanticsOf semanticsOf) {
-        
-        PanelUtil.addConfirmationDialogIfAreYouSureSemantics(
-                super.getTranslationService(), component, semanticsOf);
-    }
-
 
 }

@@ -29,7 +29,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
-import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -41,8 +40,8 @@ import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorStrategy;
-import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Confirmations;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import lombok.val;
@@ -151,11 +150,12 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
      * @param button The button which action should be confirmed
      */
     private void applyAreYouSure(AjaxButton button) {
-        ActionModel actionModel = getActionModel();
-        final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
-        SemanticsOf semanticsOf = action.getSemantics();
-
-        PanelUtil.addConfirmationDialogIfAreYouSureSemantics(super.getTranslationService(), button, semanticsOf);
+        val actionModel = getActionModel();
+        val action = actionModel.getActionMemento().getAction(getSpecificationLoader());
+        
+        if (action.getSemantics().isAreYouSure()) {
+            Confirmations.addConfirmationDialog(super.getTranslationService(), button);
+        }
     }
 
     @Override

@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
 
 import java.util.List;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -37,6 +38,7 @@ import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.Confirmations;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
@@ -111,7 +113,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
         container.setOutputMarkupId(true);
 
         setOutputMarkupId(true);
-
+        
         final ListView<LinkAndLabel> listView = new ListView<LinkAndLabel>(ID_ADDITIONAL_LINK_ITEM, linkAndLabels) {
 
             private static final long serialVersionUID = 1L;
@@ -144,13 +146,14 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 }
                 link.add(new CssClassAppender(linkAndLabel.getActionIdentifier()));
 
-                val semantics = linkAndLabel.getSemantics();
-                if (linkAndLabel.getParameters().isNoParameters()) {
+                if (linkAndLabel.getSemantics().isAreYouSure() 
+                        && linkAndLabel.getParameters().isNoParameters()) {
+                    
                     val hasDisabledReason = link instanceof ActionLink 
                             ? _Strings.isNotEmpty(((ActionLink)link).getReasonDisabledIfAny()) 
                             : false;
                     if (!hasDisabledReason) {
-                        addConfirmationDialogIfAreYouSureSemantics(link, semantics);
+                        addConfirmationDialog(link);
                     }
                 }
 
@@ -172,6 +175,10 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
         };
 
         container.addOrReplace(listView);
+    }
+    
+    private void addConfirmationDialog(final Component component) {
+        Confirmations.addConfirmationDialog(super.getTranslationService(), component);
     }
 
     private static String first(String... str) {
