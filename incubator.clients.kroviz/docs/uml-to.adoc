@@ -1,0 +1,106 @@
+.Transfer Objects Diagram
+[uml,file="uml-to.png"]
+--
+abstract class BaseTO {
+    fromObject(json)
+} 
+
+abstract class LinkedTO extends BaseTO {
+    links
+} 
+LinkedTO o-> inv.Link : links
+
+
+abstract class inv.Invokeable extends LinkedTO {
+    href:String
+    method:String
+    invoke()
+} 
+
+class inv.Link extends inv.Invokeable {
+    title:String
+    rel:String
+    type:String
+    args:Object
+    arguments
+}
+inv.Link o-> Argument : arguments
+
+abstract class inv.Member extends inv.Invokeable {
+    id:String
+    memberType:String
+    value:String
+    format:String
+    disabledReason:String
+    extension
+}
+inv.Member -> Extensions : extension
+
+class inv.Action extends inv.Member {
+    link
+    parameters
+} 
+inv.Action -> inv.Link : link 
+inv.Action o-> Parameter : parameters 
+
+class inv.Property extends inv.Member {
+    maxLength:uint
+} 
+
+
+class Argument extends BaseTO {
+    key:String
+    value:Object
+} 
+
+class Extensions extends BaseTO{
+    oid:String
+    isService:Boolean
+    isPersistent:Boolean
+    menuBar:String 
+    actionSemantics:String 
+    actionType:String
+    xIsisFormat:String
+}
+
+class List extends LinkedTO {
+    resulttype:String
+    result
+}
+List o-> Result : result
+
+class Parameter extends BaseTO {
+    num:uint
+    id:String
+    description:String
+    name:String
+    choices
+    defaultChoice
+} 
+Parameter -> inv.Link : choices
+Parameter -> inv.Link : defaultChoice
+
+class Result extends LinkedTO {
+    values
+}
+Result o-> inv.Link : values
+
+class TObject extends TitledTO {
+    domainType:String
+    instanceId:uint
+}
+
+class Service extends TitledTO {
+    serviceId:String
+    values
+} 
+Service o-> inv.Link : values
+
+abstract class TitledTO extends LinkedTO {
+    title:String
+    extension
+    members
+}
+TitledTO -> Extensions : extension
+TitledTO o-> inv.Member : members
+--

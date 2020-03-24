@@ -1,0 +1,34 @@
+.Architecture Overview Diagram
+[plantuml,file="arc-overview.png"]
+--
+@startuml
+node Desktop <<client>>{
+component Chrome <<browser>> {
+component V8 <<"<JS Runtime>">> {
+    component KotlinJS [[https://github.com/JetBrains/kotlin/tree/master/js]] #4BACC6 {
+        component kotlinx.serialization as KS #4F81BD
+        component kvision [[https://rjaros.github.io/kvision]] #4F81BD {
+            component Bootstrap [[https://getbootstrap.com/]] #8064A2
+            component "Font\nAwesome" [[https://fontawesome.com/]] #4BACC6
+            component Tabulator [[http://tabulator.info/]] #9BBB59 {
+                component jQuery [[https://jquery.com/]] #4F81BD
+            }
+            component Chart.js [[https://www.chartjs.org/]] #C0504D
+        }
+        component kroViz <<RO Viewer>> #F79646
+        kroViz --> kvision : implemented\nusing
+        kroViz --> KS : implemented\nusing
+    }
+}
+}
+}
+
+node server{
+    interface RestfulObjects as RO
+    component ApacheIsis<<NakedObjects>> [[https://isis.apache.org/]] #F79646
+}
+
+ApacheIsis -- RO
+kroViz --> RO : invoke\ \nuse
+@enduml
+--

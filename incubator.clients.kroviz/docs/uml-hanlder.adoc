@@ -1,0 +1,34 @@
+.Overview Handler
+[uml, file="uml-handler.png"]
+--
+interface IHandler {
+    handle()
+    canHandle()
+    doHandle()
+}
+abstract class AbstractHandler {
+    successor:IHandler
+    handle()
+    canHandle()
+    doHandle()
+}
+IHandler <|-- AbstractHandler
+AbstractHandler <|-- ListHandler
+AbstractHandler <|-- MemberHandler
+AbstractHandler <|-- ServiceHandler
+AbstractHandler <|-- DefaultHandler
+AbstractHandler <|-- LayoutHandler
+AbstractHandler <|-- ObjectListHandler
+AbstractHandler <|-- ActionHandler
+
+class core.Dispatcher {
+    delegate:IHandler 
+}
+core.Dispatcher --> ServiceHandler : delegate
+ServiceHandler --> ActionHandler : successor
+ActionHandler --> MemberHandler : successor
+MemberHandler -->  ListHandler : successor
+ListHandler -->  ObjectListHandler : successor
+ObjectListHandler -->  LayoutHandler : successor
+LayoutHandler -->  DefaultHandler : successor
+--

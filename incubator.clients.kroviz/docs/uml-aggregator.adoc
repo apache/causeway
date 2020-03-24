@@ -1,0 +1,63 @@
+.Aggregator Diagram
+[plantuml,file="uml-aggregator.png"]
+--
+@startuml
+
+class LogEntry {
+    url:Href
+    title:String
+    startedAt:Date
+    updatedAt:Date
+    request:String
+    response:String
+    object:TransferObject
+    aggregator:Aggregator
+    cacheHits:int
+}
+LogEntry --> TransferObject
+LogEntry "n" --> "1" BaseAggregator
+
+class ResponseHandler<<Facade,ChainOfResponsibility>>{
+    handle(LogEntry)
+    canHandle(json)
+    doHandle()
+    parse(json)
+}
+ResponseHandler .> TransferObject : converts JSON \n into TO (1)
+ResponseHandler .> IAggregator : create aggregator (2)
+ResponseHandler .> LogEntry  : assign aggregator (3)
+
+interface TransferObject
+
+interface IAggregator {
+    update(logEntry)
+}
+
+abstract class BaseAggregator {
+    data:BaseDisplayable
+}
+
+IAggregator <|.. BaseAggregator
+BaseAggregator <|-- ListAggregator
+BaseAggregator <|-- ObjectAggregator
+BaseAggregator --> BaseDisplayable : data
+
+
+abstract class BaseDisplayable {
+    isRendered:Boolean
+    +canBeDisplayed():Boolean
+    +title()
+}
+
+class ListDM {
+    list:List<Exposer>
+}
+
+BaseDisplayable -> Layout
+BaseDisplayable <|-- ListDM
+BaseDisplayable <|-- ObjectDM
+
+ObjectDM o-- ListDM
+
+@enduml
+--

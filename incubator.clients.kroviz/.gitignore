@@ -1,0 +1,12 @@
+.*/
+build/
+out/
+.idea/
+*.iml
+*.ipr
+*.iws
+/refresh.sh
+package-lock.json
+node_modules/
+/build.log
+/src/test/kotlin/BugTest.kt
