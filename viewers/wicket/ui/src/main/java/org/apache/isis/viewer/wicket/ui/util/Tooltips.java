@@ -25,6 +25,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.CssResourceReference;
 
+import org.apache.isis.core.commons.internal.base._Strings;
+
 import lombok.NonNull;
 import lombok.val;
 
@@ -43,11 +45,17 @@ public class Tooltips {
         response.render(CssHeaderItem.forReference(new CssResourceReference(Tooltips.class, "isis-tooltips.css"))); 
     }
     
+    /**
+     * Adds popover behavior to the {@code target}, if the bodyModel is not empty/blank.
+     * @param target
+     * @param labelModel
+     * @param bodyModel
+     */
     public static void addTooltip(
             @NonNull Component target, 
             IModel<String> labelModel,  
             IModel<String> bodyModel) {
-        if(bodyModel==null || bodyModel.getObject()==null) {
+        if(bodyModel==null || _Strings.isEmpty(bodyModel.getObject())) {
             return; // no body so don't render
         }
         if(labelModel==null) {

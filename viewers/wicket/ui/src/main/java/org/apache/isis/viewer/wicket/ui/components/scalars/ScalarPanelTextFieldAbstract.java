@@ -170,9 +170,7 @@ implements TextFieldValueModel.ScalarModelProvider {
         final Label scalarName = createScalarName(ID_SCALAR_NAME, labelCaption);
         final String describedAs = getModel().getDescribedAs();
 
-        if(describedAs != null) {
-            Tooltips.addTooltip(scalarName, describedAs);
-        }
+        Tooltips.addTooltip(scalarName, describedAs);
 
         formGroup.add(scalarName);
 
