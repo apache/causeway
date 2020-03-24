@@ -17,18 +17,19 @@
 	<bs3:row>
 		<bs3:col span="6">
 
-			<cpt:fieldSet name="Actions" id="a1">
+			<cpt:fieldSet name="Actions without Arguments" id="a1">
 				<cpt:action id="noArgAction" />
 				<cpt:action id="noArgActionWithConfirm" />
 				<cpt:property id="text1"/>
 			</cpt:fieldSet>
 
-			<cpt:fieldSet name="Actions" id="a2">
+			<cpt:fieldSet name="Actions with Arguments" id="a2">
 				<cpt:action id="biArgAction" />
+				<cpt:action id="biArgActionWithConfirm" />
 				<cpt:property id="text2"/>
 			</cpt:fieldSet>
 
-			<cpt:fieldSet name="Actions" id="a3">
+			<cpt:fieldSet name="Actions disabled" id="a3">
 				<cpt:action id="disabledAction" />
 				<cpt:action id="disabledActionWithConfirmation" />
 				<cpt:property id="text3"/>

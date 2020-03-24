@@ -29,7 +29,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -136,7 +135,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
 
                 Tooltips.addTooltip(link, tooltipModel);
 
-                final Label viewTitleLabel = new Label(ID_ADDITIONAL_LINK_TITLE, linkAndLabel.getLabel());
+                val viewTitleLabel = new Label(ID_ADDITIONAL_LINK_TITLE, linkAndLabel.getLabel());
                 if(linkAndLabel.isBlobOrClob()) {
                     link.add(new CssClassAppender("noVeil"));
                 }
@@ -145,19 +144,22 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 }
                 link.add(new CssClassAppender(linkAndLabel.getActionIdentifier()));
 
-                SemanticsOf semantics = linkAndLabel.getSemantics();
-                if (linkAndLabel.getParameters().isNoParameters() &&
-                        (link instanceof ActionLink ? ((ActionLink)link).getReasonDisabledIfAny() : null) == null
-                        ) {
-                    addConfirmationDialogIfAreYouSureSemantics(link, semantics);
+                val semantics = linkAndLabel.getSemantics();
+                if (linkAndLabel.getParameters().isNoParameters()) {
+                    val hasDisabledReason = link instanceof ActionLink 
+                            ? _Strings.isNotEmpty(((ActionLink)link).getReasonDisabledIfAny()) 
+                            : false;
+                    if (!hasDisabledReason) {
+                        addConfirmationDialogIfAreYouSureSemantics(link, semantics);
+                    }
                 }
 
-                final String cssClass = linkAndLabel.getCssClass();
+                val cssClass = linkAndLabel.getCssClass();
                 CssClassAppender.appendCssClassTo(link, cssClass);
 
                 link.addOrReplace(viewTitleLabel);
 
-                final String cssClassFa = linkAndLabel.getCssClassFa();
+                val cssClassFa = linkAndLabel.getCssClassFa();
                 if (_Strings.isNullOrEmpty(cssClassFa)) {
                     viewTitleLabel.add(new CssClassAppender("menuLinkSpacer"));
                 } else {

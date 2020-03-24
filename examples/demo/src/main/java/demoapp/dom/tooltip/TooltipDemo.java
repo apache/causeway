@@ -38,6 +38,7 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -72,8 +73,7 @@ public class TooltipDemo extends DemoStub {
     @Action(semantics=SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
     @ActionLayout(
             cssClass="btn-danger",
-            describedAs="This is a no-arg action with a tooltip and 'are you sure' "
-                    + "semantics.")
+            describedAs="This is a no-arg action with a tooltip and 'are you sure' semantics.")
     public TooltipDemo noArgActionWithConfirm(){
         return this;
     }
@@ -81,7 +81,9 @@ public class TooltipDemo extends DemoStub {
     // -- WITH ARG
 
     @Action
-    @ActionLayout(describedAs="This is an action with arguments and a tooltip.")
+    @ActionLayout(
+            describedAs="This is an action with arguments and a tooltip.",
+            promptStyle=PromptStyle.DIALOG_MODAL)
     public TooltipDemo biArgAction(
 
             @Parameter(optionality=Optionality.MANDATORY)
@@ -100,6 +102,30 @@ public class TooltipDemo extends DemoStub {
 
         return this;
     }
+    
+    @Action(semantics=SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
+    @ActionLayout(
+            describedAs="This is an action with arguments, a tooltip and 'are you sure' semantics.",
+            promptStyle=PromptStyle.DIALOG_MODAL)
+    public TooltipDemo biArgActionWithConfirm(
+
+            @Parameter(optionality=Optionality.MANDATORY)
+            @ParameterLayout(
+                    named="first",
+                    describedAs="This is a mandatory parameter with a tooltip.") 
+            String firstArg,
+
+            @Parameter(optionality=Optionality.OPTIONAL)
+            @ParameterLayout(
+                    named="second",
+                    describedAs="This is an optional parameter with a tooltip.") 
+            String secondArg
+
+            ){
+
+        return this;
+    }
+    
 
     // -- DISABLED
 
