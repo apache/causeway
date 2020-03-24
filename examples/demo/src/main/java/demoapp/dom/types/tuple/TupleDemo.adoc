@@ -2,7 +2,7 @@
 
 Still work in progress, see eg. link:https://issues.apache.org/jira/browse/ISIS-1695[ISIS-1695]
 
-
+[source,java]
 ----
 @PersistenceCapable
 public class NumberConstant {
