@@ -178,12 +178,12 @@
 		<vaadin.version>14.1.20</vaadin.version>
 
 		<wicket.version>8.7.0</wicket.version>
-		<wicket-bootstrap.version>2.0.11</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap-core -->
-		<wicket-bootstrap-core.version>2.0.11</wicket-bootstrap-core.version>
-		<wicket-bootstrap-datetimepicker.version>4.17.37-1</wicket-bootstrap-datetimepicker.version>
+		<wicket-bootstrap.version>2.0.12</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap-core -->
+		<wicket-bootstrap-core.version>2.0.12</wicket-bootstrap-core.version>
+		<wicket-bootstrap-datetimepicker.version>4.17.47</wicket-bootstrap-datetimepicker.version>
 		<wicket-fullcalendar.version>4.2</wicket-fullcalendar.version>
 		<wicket-source.version>7.0.0</wicket-source.version>
-		<wicket-webjars.version>2.0.15</wicket-webjars.version>
+		<wicket-webjars.version>2.0.17</wicket-webjars.version>
 
 		<wicketstuff.version>8.7.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
 		<wicketstuff-gmap3.version>${wicket.version}</wicketstuff-gmap3.version>
