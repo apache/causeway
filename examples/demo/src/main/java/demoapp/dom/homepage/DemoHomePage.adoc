@@ -11,7 +11,7 @@ public class DemoHomePage {
 }
 ----
 
-<.> declares this view-model class to be used as the viewers's homepage, there can be only one 
+<.> declares this view-model class to be used as the viewer's homepage, there can be only one 
 
 See the sources for this demo here:
 link:${SOURCES_DEMO}/demoapp/dom/homepage[sources]
