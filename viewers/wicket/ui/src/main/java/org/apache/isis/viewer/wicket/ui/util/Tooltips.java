@@ -21,13 +21,15 @@ import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.CssResourceReference;
 
-import org.apache.isis.core.commons.internal.base._Strings;
+import lombok.NonNull;
+import lombok.val;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipBehavior;
-import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.PopoverBehavior;
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.PopoverConfig;
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig.OpenTrigger;
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig.Placement;
 
@@ -40,45 +42,56 @@ public class Tooltips {
     public static void renderHead(IHeaderResponse response) {
         response.render(CssHeaderItem.forReference(new CssResourceReference(Tooltips.class, "isis-tooltips.css"))); 
     }
-
-    public static void addTooltip(Component target, Model<String> tooltipTextModel) {
-        if(tooltipTextModel==null) {
-            return;
+    
+    public static void addTooltip(
+            @NonNull Component target, 
+            IModel<String> labelModel,  
+            IModel<String> bodyModel) {
+        if(bodyModel==null || bodyModel.getObject()==null) {
+            return; // no body so don't render
         }
-        final String tooltipText = tooltipTextModel.getObject();
-        addTooltip(target, tooltipText);
-    }
-
-    public static void addTooltip(Component target, String tooltipText) {
-
-        if(_Strings.isNullOrEmpty(tooltipText)) {
-            return;
+        if(labelModel==null) {
+            labelModel = emptyModel();
         }
-
-        final TooltipBehavior tooltipBehavior = new TooltipBehavior(
-                Model.of(tooltipText), createTooltipConfig() );
-
+        val tooltipBehavior = createTooltipBehavior(labelModel, bodyModel);
         target.add(new AttributeAppender("class", " isis-component-with-tooltip"));    
         target.add(tooltipBehavior);
     }
 
     public static void clearTooltip(Component target) {
-        target.getBehaviors(TooltipBehavior.class)
+        target.getBehaviors(PopoverBehavior.class)
         .forEach(target::remove);
+    }
+    
+    // -- SHORTCUTS
+    
+    public static void addTooltip(@NonNull Component target, String body) {
+        addTooltip(target, emptyModel(), Model.of(body));
+    }
+    
+    public static void addTooltip(@NonNull Component target, IModel<String> bodyModel) {
+        addTooltip(target, emptyModel(), bodyModel);
+    }
+
+    public static void addTooltip(@NonNull Component target, String label, String body) {
+        addTooltip(target, Model.of(label), Model.of(body));
     }
 
     // -- HELPER
+    
+    private static IModel<String> emptyModel() {
+        return Model.of();
+    }
 
-    private static TooltipConfig createTooltipConfig() {
-        return new TooltipConfig()
+    private static PopoverBehavior createTooltipBehavior(IModel<String> label, IModel<String> body) {
+        return new PopoverBehavior(label, body, createTooltipConfig());
+    }
+    
+    private static PopoverConfig createTooltipConfig() {
+        return new PopoverConfig()
                 .withTrigger(OpenTrigger.hover)
                 .withPlacement(Placement.bottom)
                 .withAnimation(true);
-
-
     }
-
-
-
 
 }

@@ -426,7 +426,7 @@ class CssMenuItem implements Serializable {
             link.add(label);
 
             if (this.description != null) {
-                Tooltips.addTooltip(link, description);
+                Tooltips.addTooltip(link, Model.of(description));
             }
             if (this.blobOrClob) {
                 link.add(new CssClassAppender("noVeil"));

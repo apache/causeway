@@ -175,9 +175,11 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
 
                 item.addOrReplace(link);
             }
+            
         };
 
         container.addOrReplace(listView);
+        
     }
     
     private void addConfirmationDialog(final Component component) {
