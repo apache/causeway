@@ -146,15 +146,16 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 }
                 link.add(new CssClassAppender(linkAndLabel.getActionIdentifier()));
 
-                if (linkAndLabel.getSemantics().isAreYouSure() 
-                        && linkAndLabel.getParameters().isNoParameters()) {
-                    
-                    val hasDisabledReason = link instanceof ActionLink 
-                            ? _Strings.isNotEmpty(((ActionLink)link).getReasonDisabledIfAny()) 
-                            : false;
-                    if (!hasDisabledReason) {
-                        addConfirmationDialog(link);
-                    }
+                if (linkAndLabel.getSemantics().isAreYouSure()) { 
+                    if(linkAndLabel.getParameters().isNoParameters()) {
+                        val hasDisabledReason = link instanceof ActionLink 
+                                ? _Strings.isNotEmpty(((ActionLink)link).getReasonDisabledIfAny()) 
+                                : false;
+                        if (!hasDisabledReason) {
+                            addConfirmationDialog(link);
+                        }
+                    } 
+                    Confirmations.addConfirmationStyle(link);
                 }
 
                 val cssClass = linkAndLabel.getCssClass();

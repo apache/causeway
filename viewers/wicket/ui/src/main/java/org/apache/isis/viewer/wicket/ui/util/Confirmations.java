@@ -56,9 +56,13 @@ public class Confirmations {
         if(component instanceof Button) {
             // ensure dialog ok buttons receive the danger style as well
             // don't care if expressed twice
-            component.add(new CssClassAppender("btn-danger"));
+            addConfirmationStyle(component);
         }
         
+    }
+    
+    public static void addConfirmationStyle(final Component component) {
+        component.add(new CssClassAppender("btn-danger"));
     }
     
 }
