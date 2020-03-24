@@ -134,7 +134,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                     }
                 } 
                 : Model.of(linkAndLabel.getDescriptionIfAny());
-
+                
                 Tooltips.addTooltip(link, tooltipModel);
 
                 val viewTitleLabel = new Label(ID_ADDITIONAL_LINK_TITLE, linkAndLabel.getLabel());
@@ -154,7 +154,9 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                         if (!hasDisabledReason) {
                             addConfirmationDialog(link);
                         }
-                    } 
+                    }
+                    // ensure links receive the danger style
+                    // don't care if expressed twice
                     Confirmations.addConfirmationStyle(link);
                 }
 
