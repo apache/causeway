@@ -15,13 +15,16 @@ You should have installed:
 * <Moesif CORS Plugin (for Chrome)
 
 ### Build
-gradle is run under Windows with gitbash:
+gradle can be run under Windows with gitbash:
 
 * ./gradlew.bat tasks # list all gradle tasks
 * ./gradlew.bat webpack-bundle # create main.bundle.js
 * ./gradlew.bat test --exclude-task npm-install
  
 Internally gradle uses npm for the JS part.
+
+Alternatively you can eg. in IntelliJ a Run/Debug Configuration:
+![Preview](../images/kroviz_Run_Debug_Configuration.png)
 ```
  npm --verbose 
 ``` 
