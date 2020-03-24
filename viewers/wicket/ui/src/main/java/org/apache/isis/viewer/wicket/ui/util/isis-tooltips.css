@@ -35,7 +35,8 @@ span.isis-component-with-tooltip,
 label.isis-component-with-tooltip, 
 .isis-component-with-tooltip label, 
 strong.isis-component-with-tooltip  {
-	text-decoration: underline dashed;
+	text-decoration-line: underline;
+	text-decoration-style: dotted;
 }
 
 .ui-helper-hidden-accessible { display:none; }
