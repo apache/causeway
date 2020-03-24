@@ -29,7 +29,7 @@
 				<cpt:property id="text2"/>
 			</cpt:fieldSet>
 
-			<cpt:fieldSet name="Actions disabled" id="a3">
+			<cpt:fieldSet name="Disabled Actions" id="a3">
 				<cpt:action id="disabledAction" />
 				<cpt:action id="disabledActionWithConfirmation" />
 				<cpt:property id="text3"/>
