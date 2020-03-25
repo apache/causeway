@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.persistence.session;
+package org.apache.isis.persistence.jdo.datanucleus5.persistence;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 

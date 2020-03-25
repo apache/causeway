@@ -37,7 +37,6 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.core.runtime.persistence.transaction.AuditerDispatchService;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionFlushException;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionManagerException;

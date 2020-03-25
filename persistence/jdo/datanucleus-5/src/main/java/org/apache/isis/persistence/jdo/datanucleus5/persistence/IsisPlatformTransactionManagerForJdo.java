@@ -35,7 +35,6 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
-import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionAspectSupport;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionObject;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionObject.IsisInteractionScopeType;

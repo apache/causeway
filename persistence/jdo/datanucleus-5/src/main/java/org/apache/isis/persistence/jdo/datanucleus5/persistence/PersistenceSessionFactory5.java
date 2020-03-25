@@ -42,8 +42,6 @@ import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
-import org.apache.isis.core.runtime.persistence.session.PersistenceSessionFactory;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledState;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.DataNucleusContextUtil;

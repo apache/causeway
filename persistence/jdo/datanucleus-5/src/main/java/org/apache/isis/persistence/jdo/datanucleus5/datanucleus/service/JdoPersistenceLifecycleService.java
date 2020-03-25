@@ -36,8 +36,8 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.context.session.AppLifecycleEvent;
 import org.apache.isis.core.runtime.context.session.IsisInteractionLifecycleEvent;
 import org.apache.isis.core.runtime.iactn.IsisInteraction;
-import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
-import org.apache.isis.core.runtime.persistence.session.PersistenceSessionFactory;
+import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSession;
+import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSessionFactory;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
