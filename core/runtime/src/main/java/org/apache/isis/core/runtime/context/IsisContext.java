@@ -22,16 +22,15 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 import org.apache.isis.core.commons.internal.context._Context;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.iactn.IsisInteraction;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
+
+import lombok.experimental.UtilityClass;
 
 /**
- * Provides static access to current context's singletons
- * {@link MetaModelInvalidException} and {@link IsisInteractionFactory}.
+ * Context Utility
  */
-public interface IsisContext {
+@UtilityClass
+public final class IsisContext {
 
     /**
      *
@@ -54,15 +53,6 @@ public interface IsisContext {
      */
     public static <T> CompletableFuture<T> compute(Supplier<T> computation){
         return CompletableFuture.supplyAsync(computation);
-    }
-
-    // -- DEPRECATIONS
-
-    @Deprecated
-    public static void flush() {
-        PersistenceSession.current(PersistenceSession.class)
-        .stream()
-        .forEach(ps->ps.flush());
     }
 
 

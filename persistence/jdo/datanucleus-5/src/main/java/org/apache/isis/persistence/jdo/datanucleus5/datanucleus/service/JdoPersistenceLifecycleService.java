@@ -93,15 +93,15 @@ public class JdoPersistenceLifecycleService {
         }
 
         switch (eventType) {
-        case OPENED:
+        case HAS_STARTED:
             openSession(event.getIsisInteraction());
             break;
-        case CLOSING:
+        case IS_ENDING:
             closeSession(event.getIsisInteraction());
             break;
-            //		case sessionFlushing:
-            //			flushSession();
-            //			break;
+        case FLUSH_REQUEST:
+            flushSession();
+            break;
 
         default:
             throw _Exceptions.unmatchedCase(eventType);
@@ -136,13 +136,11 @@ public class JdoPersistenceLifecycleService {
         _Context.threadLocalClear(PersistenceSession.class);
     }
 
-    //	private void flushSession() {
-    //		val persistenceSession = PersistenceSessionJdo.current();
-    //		
-    //		if(persistenceSession != null) {
-    //			persistenceSession.flush();
-    //		}
-    //	}
+    private void flushSession() {
+        PersistenceSession.current(PersistenceSession.class)
+        .stream()
+        .forEach(ps->ps.flush());
+    }
 
     private void create() {
         persistenceSessionFactory.init(metaModelContext);

@@ -235,14 +235,14 @@ public class IsisInteractionFactoryDefault implements IsisInteractionFactory, Is
         final boolean isTopLevel = stackSizeAfterOpen==1;
         if(isTopLevel) {
             conversationId.set(UUID.randomUUID());
-            runtimeEventService.fireSessionOpened(newIsisInteraction); // only fire on top-level session
+            runtimeEventService.fireInteractionHasStarted(newIsisInteraction); // only fire on top-level session
         }
     }
     
     private void preClose(int stackSizeBeforeClose, IsisInteraction isisInteraction) {
         final boolean isTopLevel = stackSizeBeforeClose==1;
         if(isTopLevel) {
-            runtimeEventService.fireSessionClosing(isisInteraction); // only fire on top-level session 
+            runtimeEventService.fireInteractionIsEnding(isisInteraction); // only fire on top-level session 
             isisInteractionScopeCloseListener.preTopLevelIsisInteractionClose(); // cleanup the isis-session scope
         }
         isisInteraction.close(); // do this last

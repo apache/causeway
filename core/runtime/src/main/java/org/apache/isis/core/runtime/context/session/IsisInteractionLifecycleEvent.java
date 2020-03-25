@@ -28,8 +28,9 @@ import lombok.Value;
 public class IsisInteractionLifecycleEvent {
 
     public enum EventType {
-        OPENED,
-        CLOSING,
+        HAS_STARTED,
+        IS_ENDING,
+        FLUSH_REQUEST
     }
 
     @Getter IsisInteraction isisInteraction;

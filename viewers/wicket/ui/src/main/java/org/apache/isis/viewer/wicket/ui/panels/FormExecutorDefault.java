@@ -50,7 +50,7 @@ import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacet;
 import org.apache.isis.core.metamodel.facets.properties.renderunchanged.UnchangingFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.session.RuntimeEventService;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.MessageBroker;
@@ -148,12 +148,12 @@ implements FormExecutor {
             // flush any queued changes; any concurrency or violation exceptions will actually be thrown here
             {
                 val commonContext = targetEntityModel.getCommonContext();
-                if(commonContext.getIsisInteractionTracker().isInInteraction()) {
-                    IsisContext.flush();
-                }
+                commonContext.getIsisInteractionTracker().currentInteraction()
+                .ifPresent(interaction->{
+                    commonContext.lookupServiceElseFail(RuntimeEventService.class)
+                    .fireInteractionFlushRequest(interaction);
+                });
             }
-            
-
 
             // update target, since version updated (concurrency checks)
             targetAdapter = targetEntityModel.load();
