@@ -86,7 +86,7 @@ implements ObjectSpecIdFacetFactory {
             val jdoPersistenceCapableFacet = new JdoPersistenceCapableFacetAnnotation(
                     annotationSchemaAttribute,
                     annotationTableAttribute, annotationIdentityType, facetHolder, 
-                    isisInteractionTrackerLazy.get());
+                    isisInteractionTrackerLazy);
             FacetUtil.addFacet(jdoPersistenceCapableFacet);
             FacetUtil.addFacet(ObjectSpecIdFacetForJdoPersistenceCapableAnnotation.create(jdoPersistenceCapableFacet, facetHolder));
         }

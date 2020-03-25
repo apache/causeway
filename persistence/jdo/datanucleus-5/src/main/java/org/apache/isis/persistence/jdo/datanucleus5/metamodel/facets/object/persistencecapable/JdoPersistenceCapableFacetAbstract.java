@@ -19,6 +19,7 @@
 package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.persistencecapable;
 
 import java.util.Map;
+import java.util.function.Supplier;
 
 import javax.jdo.annotations.IdentityType;
 
@@ -42,14 +43,14 @@ implements JdoPersistenceCapableFacet {
     private final String schema;
     private final String table;
     private final IdentityType identityType;
-    private final IsisInteractionTracker isisInteractionTracker;
+    private final Supplier<IsisInteractionTracker> isisInteractionTracker;
 
     public JdoPersistenceCapableFacetAbstract(
             final String schemaName,
             final String tableOrTypeName,
             final IdentityType identityType,
             final FacetHolder holder,
-            final IsisInteractionTracker isisInteractionTracker) {
+            final Supplier<IsisInteractionTracker> isisInteractionTracker) {
         
         super(JdoPersistenceCapableFacetAbstract.type(), holder, Derivation.NOT_DERIVED);
         super.setFacetAliasType(EntityFacet.class);
@@ -83,7 +84,7 @@ implements JdoPersistenceCapableFacet {
     }
     
     protected IsisPersistenceSessionJdo getPersistenceSessionJdo() {
-        return isisInteractionTracker.currentInteraction()
+        return isisInteractionTracker.get().currentInteraction()
                 .map(interaction->interaction.getUserData(PersistenceSession.class))
                 .map(IsisPersistenceSessionJdo.class::cast)
                 .orElse(null);

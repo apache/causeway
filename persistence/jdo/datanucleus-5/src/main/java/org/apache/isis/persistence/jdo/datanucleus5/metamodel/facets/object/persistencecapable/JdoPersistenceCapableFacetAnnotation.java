@@ -18,6 +18,8 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.persistencecapable;
 
+import java.util.function.Supplier;
+
 import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -31,7 +33,7 @@ public class JdoPersistenceCapableFacetAnnotation extends JdoPersistenceCapableF
             final String tableOrTypeName,
             final IdentityType identityType,
             final FacetHolder holder, 
-            final IsisInteractionTracker isisInteractionTracker) {
+            final Supplier<IsisInteractionTracker> isisInteractionTracker) {
         super(schemaName, tableOrTypeName, identityType, holder, isisInteractionTracker);
     }
 
