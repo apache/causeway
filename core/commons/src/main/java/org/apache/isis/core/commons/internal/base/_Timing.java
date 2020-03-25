@@ -57,6 +57,11 @@ public final class _Timing {
     }
 
 
+    public static StopWatch atSystemMillis(long startedAtSystemMillis) {
+        return atSystemNanos(startedAtSystemMillis * 1_000_000L);
+    }
+    
+
     /**
      * Non thread safe start/stop watch utilizing the currently running
      * JVM's high-resolution time source.
