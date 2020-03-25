@@ -61,7 +61,7 @@ public interface MetaModelContext {
     ServiceInjector getServiceInjector();
 
     ServiceRegistry getServiceRegistry();
-
+    
     SpecificationLoader getSpecificationLoader();
     
     public default ObjectSpecification getSpecification(final Class<?> type) {

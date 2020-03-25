@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.jdo.Extent;
 import javax.jdo.JDOQLTypedQuery;
@@ -46,6 +47,7 @@ import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.ObjectPersistenceException;
+import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport_v3_2;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisPersistenceSessionJdo;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSession;
@@ -64,6 +66,8 @@ import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 @Qualifier("DN5")
 public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
 
+    @Inject private IsisInteractionTracker isisInteractionTracker;
+    
     @Override
     public <T> T refresh(final T domainObject) {
         final ObjectAdapter adapter = getPersistenceSession().adapterFor(domainObject);
@@ -213,8 +217,9 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
     // //////////////////////////////////////
 
     protected IsisPersistenceSessionJdo getPersistenceSession() {
-        return PersistenceSession.current(IsisPersistenceSessionJdo.class)
-                .getFirst()
+        return isisInteractionTracker.currentInteraction()
+                .map(interaction->interaction.getUserData(PersistenceSession.class))
+                .map(IsisPersistenceSessionJdo.class::cast)
                 .orElse(null);
     }
 

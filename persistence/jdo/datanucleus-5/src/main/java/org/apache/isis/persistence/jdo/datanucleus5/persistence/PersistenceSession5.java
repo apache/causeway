@@ -632,7 +632,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         if (getEntityState(pojo).isAttached()) {
             throw new IllegalArgumentException("Adapter is persistent; adapter: " + adapter);
         }
-        return new DataNucleusCreateObjectCommand(adapter, persistenceManager);
+        return new DataNucleusCreateObjectCommand(adapter, this);
     }
 
     private DestroyObjectCommand newDestroyObjectCommand(final ManagedObject adapter) {

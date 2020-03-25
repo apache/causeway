@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoMetamodelUtil;
 
 import lombok.val;
@@ -42,8 +43,9 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
             final String schemaName,
             final String tableOrTypeName,
             final IdentityType identityType,
-            final FacetHolder holder) {
-        super(schemaName, tableOrTypeName, identityType, holder);
+            final FacetHolder holder, 
+            final IsisInteractionTracker isisInteractionTracker) {
+        super(schemaName, tableOrTypeName, identityType, holder, isisInteractionTracker);
     }
 
     @Override

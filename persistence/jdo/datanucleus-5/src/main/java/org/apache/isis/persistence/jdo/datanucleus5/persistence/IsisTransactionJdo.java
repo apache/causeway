@@ -37,6 +37,7 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
 import org.apache.isis.core.runtime.persistence.transaction.AuditerDispatchService;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionFlushException;
 import org.apache.isis.core.runtime.persistence.transaction.IsisTransactionManagerException;
@@ -156,6 +157,7 @@ public class IsisTransactionJdo implements Transaction {
 
     private final PublisherDispatchService publisherDispatchService;
     private final AuditerDispatchService auditerDispatchService;
+    private final IsisInteractionTracker isisInteractionTracker;
 
     private final Can<TransactionScopeListener> transactionScopeListeners;
 
@@ -170,7 +172,8 @@ public class IsisTransactionJdo implements Transaction {
         
         this.publisherDispatchService = serviceRegistry.lookupServiceElseFail(PublisherDispatchService.class);
         this.auditerDispatchService = serviceRegistry.lookupServiceElseFail(AuditerDispatchService.class);
-
+        this.isisInteractionTracker = serviceRegistry.lookupServiceElseFail(IsisInteractionTracker.class);
+        
         this.transactionScopeListeners = serviceRegistry.select(TransactionScopeListener.class);
 
         this.state = State.IN_PROGRESS;
@@ -338,10 +341,7 @@ public class IsisTransactionJdo implements Transaction {
             if(!pc_snapshot.isEmpty()) {
                 try {
                     
-                    PersistenceSession.current(IsisPersistenceSessionJdo.class)
-                    .getFirst()
-                    .orElseThrow(()->_Exceptions.unrecoverable("no current IsisPersistenceSessionJdo available"))
-                    .execute(pc_snapshot);
+                    getPersistenceSession().execute(pc_snapshot);
                     
                 } catch (final RuntimeException ex) {
                     // if there's an exception, we want to make sure that
@@ -354,6 +354,12 @@ public class IsisTransactionJdo implements Transaction {
 
     }
 
+    protected IsisPersistenceSessionJdo getPersistenceSession() {
+        return isisInteractionTracker.currentInteraction()
+                .map(interaction->interaction.getUserData(PersistenceSession.class))
+                .map(IsisPersistenceSessionJdo.class::cast)
+                .orElseThrow(()->_Exceptions.unrecoverable("no current IsisPersistenceSessionJdo available"));
+    }
 
 
     // -- preCommit, commit

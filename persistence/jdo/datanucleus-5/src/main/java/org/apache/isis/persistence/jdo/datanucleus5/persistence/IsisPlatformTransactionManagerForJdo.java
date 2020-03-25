@@ -166,10 +166,11 @@ public class IsisPlatformTransactionManagerForJdo extends AbstractPlatformTransa
     }
     
     private IsisTransactionManagerJdo transactionManagerJdo() {
-        return PersistenceSession.current(IsisPersistenceSessionJdoBase.class)
-                    .getFirst()
-                    .orElseThrow(()->_Exceptions.unrecoverable("no current IsisPersistenceSessionJdoBase available"))
-                    .transactionManager;
+        return isisInteractionTracker.currentInteraction()
+                .map(interaction->interaction.getUserData(PersistenceSession.class))
+                .map(IsisPersistenceSessionJdoBase.class::cast)
+                .map(ps->ps.transactionManager)
+                .orElseThrow(()->_Exceptions.unrecoverable("no current IsisPersistenceSessionJdoBase available"));
     }
 
 }

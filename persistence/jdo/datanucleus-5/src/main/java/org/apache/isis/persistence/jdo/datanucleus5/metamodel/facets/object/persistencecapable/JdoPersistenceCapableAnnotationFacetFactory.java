@@ -23,6 +23,7 @@ import javax.jdo.annotations.EmbeddedOnly;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
+import org.apache.isis.core.commons.internal.base._Lazy;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -30,6 +31,7 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
+import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoMetamodelUtil;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForJdoPersistenceCapableAnnotation;
 
@@ -79,15 +81,26 @@ implements ObjectSpecIdFacetFactory {
         if(embeddedOnly) {
             // suppress
         } else {
+            
             final IdentityType annotationIdentityType = annotation.identityType();
             val jdoPersistenceCapableFacet = new JdoPersistenceCapableFacetAnnotation(
                     annotationSchemaAttribute,
-                    annotationTableAttribute, annotationIdentityType, facetHolder);
+                    annotationTableAttribute, annotationIdentityType, facetHolder, 
+                    isisInteractionTrackerLazy.get());
             FacetUtil.addFacet(jdoPersistenceCapableFacet);
             FacetUtil.addFacet(ObjectSpecIdFacetForJdoPersistenceCapableAnnotation.create(jdoPersistenceCapableFacet, facetHolder));
         }
 
         return;
     }
+    
+    // -- INTERACTION TRACKER LOOKUP
+    
+    private final _Lazy<IsisInteractionTracker> isisInteractionTrackerLazy = _Lazy.threadSafe(this::lookupIsisInteractionTracker); 
+    private IsisInteractionTracker lookupIsisInteractionTracker() {
+        return super.getMetaModelContext().getServiceRegistry().lookupServiceElseFail(IsisInteractionTracker.class);        
+    }
+    
+    
     
 }

@@ -18,11 +18,8 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus5.datanucleus.persistence.commands;
 
-import javax.jdo.PersistenceManager;
-
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSession;
+import org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisPersistenceSessionJdo;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.command.CreateObjectCommand;
 
 import lombok.val;
@@ -33,8 +30,11 @@ public class DataNucleusCreateObjectCommand
 extends AbstractDataNucleusObjectCommand 
 implements CreateObjectCommand {
 
-    public DataNucleusCreateObjectCommand(ManagedObject adapter, PersistenceManager persistenceManager) {
-        super(adapter, persistenceManager);
+    private final IsisPersistenceSessionJdo persistenceSession;
+
+    public DataNucleusCreateObjectCommand(ManagedObject adapter, IsisPersistenceSessionJdo persistenceSession) {
+        super(adapter, persistenceSession.getJdoPersistenceManager());
+        this.persistenceSession = persistenceSession;
     }
 
 
@@ -63,11 +63,7 @@ implements CreateObjectCommand {
     // -- HELPER
 
     private boolean isDetached(Object pojo) {
-        val ps = PersistenceSession.current(PersistenceSession.class)
-                .getFirst()
-                .orElseThrow(()->_Exceptions.unrecoverable("no current PersistenceSession available"));
-        
-        val state = ps.getEntityState(pojo);
+        val state = persistenceSession.getEntityState(pojo);
         return state.isDetached();
     }
 }

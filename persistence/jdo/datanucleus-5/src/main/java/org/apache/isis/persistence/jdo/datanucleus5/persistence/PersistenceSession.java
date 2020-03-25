@@ -26,7 +26,6 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal.context._Context;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
@@ -114,11 +113,5 @@ public interface PersistenceSession {
      * recursively calling this method.
      */
     void makePersistentInTransaction(ManagedObject adapter);
-
-    // -- LOOKUP
-
-    static <T extends PersistenceSession> Can<T> current(Class<T> requiredType) {
-        return _Context.threadLocalSelect(PersistenceSession.class, requiredType);
-    }
 
 }
