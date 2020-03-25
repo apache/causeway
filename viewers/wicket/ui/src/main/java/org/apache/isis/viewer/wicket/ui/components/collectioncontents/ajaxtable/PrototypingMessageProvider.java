@@ -21,8 +21,10 @@ package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable
 import java.util.Locale;
 
 import org.apache.isis.core.commons.internal.base._Timing;
-import org.apache.isis.core.commons.internal.base._Timing.StopWatch;
-import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
+
+import lombok.val;
 
 /**
  * Responsibility: produce additional info when in prototyping mode 
@@ -35,20 +37,31 @@ import org.apache.isis.core.runtime.context.IsisContext;
  */
 class PrototypingMessageProvider {
 
-    public static String getTookTimingMessageModel(boolean isPrototyping) {
-        return isPrototyping
+    private static IsisWebAppCommonContext commonContext = null;
+
+    public static String getTookTimingMessageModel() {
+        return isPrototyping()
                 ? getTookTimingMessage()
                         : "";
     }
 
     // -- HELPER
 
+    private static IsisWebAppCommonContext commonContext() {
+        return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
+    }
+    
+    private static boolean isPrototyping() {
+        return commonContext().getSystemEnvironment().isPrototyping();
+    }
+
     private static String getTookTimingMessage() {
 
         final StringBuilder tookTimingMessage = new StringBuilder();
 
-        IsisContext.getPersistenceSession().ifPresent(session->{
-            StopWatch stopWatch = _Timing.atSystemNanos(session.getLifecycleStartedAtSystemNanos());    
+        commonContext().getIsisInteractionTracker().currentInteraction()
+        .ifPresent(interaction->{
+            val stopWatch = _Timing.atSystemMillis(interaction.getLifecycleStartedAtSystemMillis());    
             tookTimingMessage.append(String.format(Locale.US, "... took %.2f seconds", stopWatch.getSeconds()));
         });
 

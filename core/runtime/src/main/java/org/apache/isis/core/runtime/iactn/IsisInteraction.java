@@ -30,7 +30,6 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.context.session.RuntimeContextBase;
-import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import lombok.Getter;
@@ -44,6 +43,7 @@ import lombok.NonNull;
 public class IsisInteraction extends RuntimeContextBase {
 
     @Getter private final AuthenticationSession authenticationSession;
+    @Getter private final long lifecycleStartedAtSystemMillis;
 
     public IsisInteraction(
             @NonNull final MetaModelContext mmc,
@@ -51,6 +51,7 @@ public class IsisInteraction extends RuntimeContextBase {
 
         super(mmc);
         this.authenticationSession = authenticationSession; // binds this session to given authenticationSession
+        this.lifecycleStartedAtSystemMillis = System.currentTimeMillis(); // used to measure time periods, so not using ClockService here
     }
 
     // -- FLUSH
@@ -118,7 +119,6 @@ public class IsisInteraction extends RuntimeContextBase {
     @Override
     public String toString() {
         final ToString asString = new ToString(this);
-        asString.append("persistenceSession", PersistenceSession.current(PersistenceSession.class));
         asString.append("transaction", getCurrentTransactionId());
         return asString.toString();
     }

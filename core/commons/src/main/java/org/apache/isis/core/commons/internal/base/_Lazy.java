@@ -57,6 +57,14 @@ public interface _Lazy<T> extends Supplier<T> {
      */
     @Override
     public T get();
+    
+    /**
+     * Sets the memoized value, if not already memoized. 
+     * @param value
+     * @throws IllegalStateException if already memoized
+     */
+    public void set(T value);
+    
 
     // -- FACTORIES
 

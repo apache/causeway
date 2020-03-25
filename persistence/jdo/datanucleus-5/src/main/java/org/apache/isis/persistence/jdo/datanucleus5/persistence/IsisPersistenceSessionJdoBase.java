@@ -75,11 +75,6 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
     protected final Supplier<MetricsService> metricsServiceProvider;
 
     /**
-     * Set to System.nanoTime() when session opens.
-     */
-    protected long openedAtSystemNanos = -1L;
-
-    /**
      * Used to create the {@link #persistenceManager} when {@link #open()}ed.
      */
     protected final PersistenceManagerFactory jdoPersistenceManagerFactory;
@@ -154,11 +149,6 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
     @Override
     public PersistenceManager getJdoPersistenceManager() {
         return persistenceManager;
-    }
-
-    @Override
-    public long getLifecycleStartedAtSystemNanos() {
-        return openedAtSystemNanos;
     }
 
     // -- ENUMS

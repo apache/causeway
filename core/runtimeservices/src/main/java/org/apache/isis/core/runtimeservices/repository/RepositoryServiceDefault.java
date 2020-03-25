@@ -35,10 +35,8 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Repository;
 
-import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.PersistFailedException;
 import org.apache.isis.applib.RepositoryException;
-import org.apache.isis.applib.annotation.IsisInteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
@@ -51,19 +49,17 @@ import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
+import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 @Repository
 @Named("isisRuntimeServices.RepositoryServiceDefault")
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
-@Log4j2
+//@Log4j2
 public class RepositoryServiceDefault implements RepositoryService {
 
     @Inject private FactoryService factoryService;
@@ -170,7 +166,12 @@ public class RepositoryServiceDefault implements RepositoryService {
     }
 
     <T> List<T> submitQuery(final Query<T> query) {
-        val allMatching = getPersistenceSession().allMatchingQuery(query);
+        val resultTypeSpec = objectManager.getMetaModelContext()
+                .getSpecificationLoader()
+                .loadSpecification(query.getResultType());
+        
+        val queryRequest = ObjectBulkLoader.Request.of(resultTypeSpec, query);
+        val allMatching = objectManager.queryObjects(queryRequest);
         return _Casts.uncheckedCast(ManagedObject.unwrapMultipleAsList(allMatching));
     }
 
@@ -210,14 +211,14 @@ public class RepositoryServiceDefault implements RepositoryService {
     public <T> T refresh(T pojo) {
         val managedObject = objectManager.adapt(pojo);
         objectManager.getObjectRefresher().refreshObject(managedObject);
-        return (T) managedObject.getPojo();
+        return _Casts.uncheckedCast(managedObject.getPojo());
     }
 
     @Override
     public <T> T detach(T entity) {
         val managedObject = objectManager.adapt(entity);
         val managedDetachedObject = objectManager.getObjectDetacher().detachObject(managedObject);
-        return (T)managedDetachedObject.getPojo();
+        return _Casts.uncheckedCast(managedDetachedObject.getPojo());
     }
 
     // -- HELPER
@@ -230,12 +231,6 @@ public class RepositoryServiceDefault implements RepositoryService {
 
     private Object unwrapped(Object domainObject) {
         return wrapperFactory != null ? wrapperFactory.unwrap(domainObject) : domainObject;
-    }
-    
-    protected PersistenceSession getPersistenceSession() {
-        return PersistenceSession.current(PersistenceSession.class)
-                .getFirst()
-                .orElseThrow(()->new NonRecoverableException("No IsisInteraction on current thread."));
     }
 
 

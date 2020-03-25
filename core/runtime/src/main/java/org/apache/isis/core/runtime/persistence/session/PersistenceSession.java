@@ -115,10 +115,6 @@ public interface PersistenceSession {
      */
     void makePersistentInTransaction(ManagedObject adapter);
 
-    // -- OTHERS
-
-    long getLifecycleStartedAtSystemNanos();
-
     // -- LOOKUP
 
     static <T extends PersistenceSession> Can<T> current(Class<T> requiredType) {

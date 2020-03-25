@@ -221,11 +221,12 @@ final class ObjectLoader_builtinHandlers {
             }
             
             val identifier = objectLoadRequest.getObjectIdentifier();
-            val entityPojo = entityFacet.fetchByIdentifier(spec, identifier);
+            val entity = entityFacet.fetchByIdentifier(spec, identifier);
             
-            metaModelContext.getServiceInjector().injectServicesInto(entityPojo);
+            //TODO injection should have already be done by DataNucleus
+            metaModelContext.getServiceInjector().injectServicesInto(entity.getPojo());
             
-            return ManagedObject.of(spec, entityPojo);
+            return entity;
         }
 
     }

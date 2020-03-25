@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
-import javax.inject.Inject;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
@@ -28,8 +26,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-
-import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 
 /**
  * Responsibility: Display 'Showing all of 123' at the bottom of data tables.
@@ -43,8 +39,6 @@ public class IsisTotalRecordsToolbar extends AbstractToolbar {
     private static final long serialVersionUID = 1L;
     private static final String navigatorContainerId = "navigatorContainer";
     
-    @Inject private transient IsisSystemEnvironment systemEnvironment;
-
     public IsisTotalRecordsToolbar(final DataTable<?, ?> table) {
 
         this(table, new Model<String>() {
@@ -84,7 +78,7 @@ public class IsisTotalRecordsToolbar extends AbstractToolbar {
             }
         }));
         container.add(new Label("navigatorLabel", messageModel));
-        container.add(new Label("prototypingLabel", PrototypingMessageProvider.getTookTimingMessageModel(systemEnvironment.isPrototyping())));
+        container.add(new Label("prototypingLabel", PrototypingMessageProvider.getTookTimingMessageModel()));
     }
 
     /**

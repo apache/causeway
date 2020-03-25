@@ -40,7 +40,6 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.iactn.IsisInteraction;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
-import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -53,16 +52,15 @@ public class ResourceContext_getArg_Test {
 
     @Rule public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    @Mock HttpServletRequest mockHttpServletRequest;
-    @Mock ServletContext mockServletContext;
-    @Mock IsisInteraction mockIsisInteraction;
-    @Mock IsisInteractionFactory mockIsisInteractionFactory;
-    @Mock IsisInteractionTracker mockIsisInteractionTracker;
-    @Mock AuthenticationManager mockAuthenticationManager;
-    @Mock AuthenticationSession mockAuthenticationSession;
-    @Mock PersistenceSession mockPersistenceSession;
-    @Mock SpecificationLoader mockSpecificationLoader;
-    @Mock WebApplicationContext webApplicationContext;
+    @Mock private HttpServletRequest mockHttpServletRequest;
+    @Mock private ServletContext mockServletContext;
+    @Mock private IsisInteraction mockIsisInteraction;
+    @Mock private IsisInteractionFactory mockIsisInteractionFactory;
+    @Mock private IsisInteractionTracker mockIsisInteractionTracker;
+    @Mock private AuthenticationManager mockAuthenticationManager;
+    @Mock private AuthenticationSession mockAuthenticationSession;
+    @Mock private SpecificationLoader mockSpecificationLoader;
+    @Mock private WebApplicationContext webApplicationContext;
 
     private ResourceContext resourceContext;
     private MetaModelContext metaModelContext;

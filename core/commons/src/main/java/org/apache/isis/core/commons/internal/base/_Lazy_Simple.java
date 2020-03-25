@@ -21,6 +21,8 @@ package org.apache.isis.core.commons.internal.base;
 
 import java.util.function.Supplier;
 
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+
 import static org.apache.isis.core.commons.internal.base._With.requires;
 
 /**
@@ -53,8 +55,17 @@ final class _Lazy_Simple<T> implements _Lazy<T> {
         if(memoized) {
             return value;
         }
-        memoized=true;
+        memoized = true;
         return value = supplier.get();
+    }
+
+    @Override
+    public void set(T value) {
+        if(memoized) {
+            throw _Exceptions.illegalState("cannot set value '%s' on Lazy that has already memoized a value", ""+value);
+        }
+        memoized = true;
+        this.value = value;
     }
 
 }

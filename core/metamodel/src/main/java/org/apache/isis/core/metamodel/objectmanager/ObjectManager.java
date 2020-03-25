@@ -20,12 +20,14 @@ package org.apache.isis.core.metamodel.objectmanager;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.objectmanager.detach.ObjectDetacher;
 import org.apache.isis.core.metamodel.objectmanager.identify.ObjectIdentifier;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
+import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
 import org.apache.isis.core.metamodel.objectmanager.refresh.ObjectRefresher;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -45,6 +47,7 @@ public interface ObjectManager {
     
     ObjectCreator getObjectCreator();
     ObjectLoader getObjectLoader();
+    ObjectBulkLoader getObjectBulkLoader();
     ObjectIdentifier getObjectIdentifier();
     ObjectRefresher getObjectRefresher();
     ObjectDetacher getObjectDetacher();
@@ -67,6 +70,10 @@ public interface ObjectManager {
      */
     public default ManagedObject loadObject(ObjectLoader.Request objectLoadRequest) {
         return getObjectLoader().loadObject(objectLoadRequest);
+    }
+    
+    public default Can<ManagedObject> queryObjects(ObjectBulkLoader.Request objectQuery) {
+        return getObjectBulkLoader().loadObject(objectQuery);
     }
     
     /**
@@ -105,5 +112,7 @@ public interface ObjectManager {
     default ObjectSpecification loadSpecification(@Nullable final Class<?> domainType) {
         return getMetaModelContext().getSpecificationLoader().loadSpecification(domainType);
     }
+
+    
     
 }

@@ -24,7 +24,9 @@ import javax.jdo.annotations.IdentityType;
 
 import org.datanucleus.enhancement.Persistable;
 
+import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.repository.EntityState;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -45,7 +47,7 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
     }
 
     @Override
-    public Object fetchByIdentifier(ObjectSpecification spec, String identifier) {
+    public ManagedObject fetchByIdentifier(ObjectSpecification spec, String identifier) {
         
         if(!spec.isEntity()) {
             throw _Exceptions.unexpectedCodeReach();
@@ -53,10 +55,18 @@ public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAb
         
         val persistenceSession = super.getPersistenceSessionJdo();
         val rootOid = Oid.Factory.root(spec.getSpecId(), identifier);
-        
         val pojo = persistenceSession.fetchPersistentPojo(rootOid);
         
-        return pojo;
+        return ManagedObject.identified(spec, pojo, rootOid);
+    }
+    
+    @Override
+    public Can<ManagedObject> fetchByQuery(ObjectSpecification spec, Query<?> query) {
+        if(!spec.isEntity()) {
+            throw _Exceptions.unexpectedCodeReach();
+        }
+        val persistenceSession = super.getPersistenceSessionJdo();
+        return persistenceSession.allMatchingQuery(query);
     }
     
     @Override

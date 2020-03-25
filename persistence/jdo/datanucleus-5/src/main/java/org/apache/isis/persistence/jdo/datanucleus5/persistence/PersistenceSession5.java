@@ -136,8 +136,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     public void open() {
         ensureNotOpened();
 
-        openedAtSystemNanos = System.nanoTime();
-
         if (log.isDebugEnabled()) {
             log.debug("opening {}", this);
         }

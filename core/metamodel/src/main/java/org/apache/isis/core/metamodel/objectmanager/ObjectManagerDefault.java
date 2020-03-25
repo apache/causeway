@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.objectmanager.detach.ObjectDetacher;
 import org.apache.isis.core.metamodel.objectmanager.identify.ObjectIdentifier;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
+import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
 import org.apache.isis.core.metamodel.objectmanager.refresh.ObjectRefresher;
 
 import lombok.Getter;
@@ -53,6 +54,7 @@ public class ObjectManagerDefault implements ObjectManager {
     @Inject @Getter(onMethod = @__(@Override)) private MetaModelContext metaModelContext;
     
     @Getter(onMethod = @__(@Override)) private ObjectLoader objectLoader;
+    @Getter(onMethod = @__(@Override)) private ObjectBulkLoader objectBulkLoader;
     @Getter(onMethod = @__(@Override)) private ObjectCreator objectCreator;
     @Getter(onMethod = @__(@Override)) private ObjectIdentifier objectIdentifier;
     @Getter(onMethod = @__(@Override)) private ObjectRefresher objectRefresher;
@@ -62,6 +64,7 @@ public class ObjectManagerDefault implements ObjectManager {
     public void init() {
         objectCreator = ObjectCreator.createDefault(metaModelContext);
         objectLoader = ObjectLoader.createDefault(metaModelContext);
+        objectBulkLoader = ObjectBulkLoader.createDefault(metaModelContext);
         objectIdentifier = ObjectIdentifier.createDefault();
         objectRefresher = ObjectRefresher.createDefault();
         objectDetacher = ObjectDetacher.createDefault(metaModelContext);
@@ -76,9 +79,5 @@ public class ObjectManagerDefault implements ObjectManager {
         objectManager.init();
         return objectManager;
     }
-
-    @Override
-    public ObjectDetacher getObjectDetacher() {
-        return objectDetacher;
-    }
+    
 }

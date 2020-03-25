@@ -65,7 +65,6 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.iactn.IsisInteraction;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
-import org.apache.isis.core.runtime.persistence.session.PersistenceSession;
 import org.apache.isis.schema.cmd.v2.ActionDto;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.MemberDto;
@@ -77,6 +76,7 @@ import org.apache.isis.schema.common.v2.OidDto;
 import org.apache.isis.schema.common.v2.OidsDto;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
+import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -91,6 +91,16 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     private static final Pattern ID_PARSER =
             Pattern.compile("(?<className>[^#]+)#?(?<localId>[^(]+)(?<args>[(][^)]*[)])?");
 
+    @Inject private BookmarkService bookmarkService;
+    @Inject private SudoService sudoService;
+    @Inject private ClockService clockService;
+    @Inject private TransactionService transactionService;
+    @Inject private IsisInteractionTracker isisInteractionTracker;
+    @Inject private javax.inject.Provider<InteractionContext> interactionContextProvider;
+    
+    @Inject @Getter private IsisInteractionFactory isisInteractionFactory;
+    @Inject @Getter private SpecificationLoader specificationLoader;
+    
     @Override
     public void executeCommand(
             final CommandExecutorService.SudoPolicy sudoPolicy,
@@ -376,33 +386,5 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 .orElse(null);
     }
 
-
-    // //////////////////////////////////////
-
-    protected IsisInteractionFactory getIsisInteractionFactory() {
-        return isisInteractionFactory;
-    }
-
-    protected PersistenceSession getPersistenceSession() {
-        return PersistenceSession.current(PersistenceSession.class)
-                .getFirst()
-                .orElse(null);
-    }
-
-    protected SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
-    }
-
-    // -- DEPENDENCIES
-
-    @Inject BookmarkService bookmarkService;
-    @Inject SudoService sudoService;
-    @Inject ClockService clockService;
-    @Inject TransactionService transactionService;
-    @Inject SpecificationLoader specificationLoader;
-    @Inject IsisInteractionFactory isisInteractionFactory;
-    @Inject IsisInteractionTracker isisInteractionTracker;
-
-    @Inject private javax.inject.Provider<InteractionContext> interactionContextProvider;
 
 }

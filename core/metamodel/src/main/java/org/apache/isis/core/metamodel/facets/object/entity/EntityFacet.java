@@ -21,8 +21,11 @@ package org.apache.isis.core.metamodel.facets.object.entity;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.repository.EntityState;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
@@ -33,7 +36,8 @@ public interface EntityFacet extends Facet {
 
     String identifierFor(ObjectSpecification spec, Object pojo);
 
-    Object fetchByIdentifier(ObjectSpecification spec, String identifier);
+    ManagedObject fetchByIdentifier(ObjectSpecification spec, String identifier);
+    Can<ManagedObject> fetchByQuery(ObjectSpecification spec, Query<?> query);
     
     void persist(ObjectSpecification spec, Object pojo);
     
@@ -51,4 +55,5 @@ public interface EntityFacet extends Facet {
     boolean isProxyEnhancement(Method method);
 
     <T> T detach(T pojo);
+    
 }

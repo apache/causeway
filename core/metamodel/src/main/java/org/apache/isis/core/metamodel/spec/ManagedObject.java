@@ -162,11 +162,30 @@ public interface ManagedObject {
     @EqualsAndHashCode(of = "pojo")
     @ToString(of = {"specification", "pojo"}) //ISIS-2317 make sure toString() is without side-effects
     static final class SimpleManagedObject implements ManagedObject {
+        
+        public static ManagedObject identified(
+                @NonNull final ObjectSpecification spec, 
+                final Object pojo, 
+                @NonNull final RootOid rootOid) {
+            val managedObject = SimpleManagedObject.of(spec, pojo);
+            managedObject.rootOidLazy.set(Optional.of(rootOid));
+            return managedObject;
+        }
+        
         @NonNull private final ObjectSpecification specification;
         @NonNull private final Object pojo;
+
+        public Optional<RootOid> getRootOid() {
+            return rootOidLazy.get();
+        }
         
-        @Getter(lazy=true, onMethod = @__(@Override)) 
-        private final Optional<RootOid> rootOid = Optional.ofNullable(ManagedObjectInternalUtil._identify(this));
+        // -- LAZY ID HANDLING
+        private final _Lazy<Optional<RootOid>> rootOidLazy = _Lazy.threadSafe(this::identify);  
+        private Optional<RootOid> identify() {
+            return Optional.ofNullable(ManagedObjectInternalUtil._identify(this));
+        }
+
+        
     }
 
     // -- LAZY
@@ -324,6 +343,21 @@ public interface ManagedObject {
                     specification.getCorrespondingClass(), pojo.getClass(), pojo.toString());
         }
         return new SimpleManagedObject(specification, pojo);
+    }
+    
+    /**
+     * Optimized for cases, when the pojo's specification and rootOid are already available.
+     */
+    public static ManagedObject identified(ObjectSpecification specification, Object pojo, RootOid rootOid) {
+        if(!specification.getCorrespondingClass().isAssignableFrom(pojo.getClass())) {
+            throw _Exceptions.illegalArgument(
+                    "Pojo not compatible with ObjectSpecification, " +
+                    "objectSpec.correspondingClass = %s, " +
+                    "pojo.getClass() = %s, " +
+                    "pojo.toString() = %s",
+                    specification.getCorrespondingClass(), pojo.getClass(), pojo.toString());
+        }
+        return SimpleManagedObject.identified(specification, pojo, rootOid);
     }
 
     /**
@@ -868,6 +902,8 @@ public interface ManagedObject {
         
         return adapter.getSpecification().getBeanSort().isCollection();
     }
+
+
 
 
 

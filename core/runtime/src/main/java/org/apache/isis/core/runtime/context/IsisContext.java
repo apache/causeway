@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.runtime.context;
 
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
@@ -57,19 +56,13 @@ public interface IsisContext {
         return CompletableFuture.supplyAsync(computation);
     }
 
-    
     // -- DEPRECATIONS
 
-    /**
-     * FIXME[2058] generally there might be multiple persistence contexts, 
-     * so entity management must be delegated to the ObjectManager, which 
-     * handles persistence of entities individually according to their object-spec
-     * @return framework's currently resolvable PersistenceSessions
-     */
     @Deprecated
-    public static Optional<PersistenceSession> getPersistenceSession() {
-        return PersistenceSession.current(PersistenceSession.class)
-                .getFirst();
+    public static void flush() {
+        PersistenceSession.current(PersistenceSession.class)
+        .stream()
+        .forEach(ps->ps.flush());
     }
 
 
