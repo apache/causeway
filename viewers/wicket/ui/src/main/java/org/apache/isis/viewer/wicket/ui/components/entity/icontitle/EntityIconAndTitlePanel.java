@@ -137,7 +137,7 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
             link.addOrReplace(this.label);
 
             String entityTypeName = adapterIfAny.getSpecification().getSingularName();
-            Tooltips.addTooltip(link, entityTypeName + ": " + title);
+            Tooltips.addTooltip(link, entityTypeName, title);
         }
 
         return link;
