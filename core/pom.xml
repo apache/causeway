@@ -875,6 +875,16 @@
 				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
+				<groupId>org.apache.isis.persistence</groupId>
+				<artifactId>isis-persistence-jpa-applib</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.persistence</groupId>
+				<artifactId>isis-persistence-jpa-model</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
+			</dependency>
+			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-restfulobjects-jaxrsresteasy4</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
@@ -1912,6 +1922,7 @@
 		<module>../viewers/wicket</module>
 
 		<module>../persistence/jdo</module>
+		<module>../persistence/jpa</module>
 	</modules>
 
 </project>
