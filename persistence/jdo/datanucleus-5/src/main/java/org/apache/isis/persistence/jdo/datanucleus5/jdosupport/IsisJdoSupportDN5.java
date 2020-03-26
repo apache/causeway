@@ -50,7 +50,6 @@ import org.apache.isis.core.metamodel.adapter.oid.ObjectPersistenceException;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
 import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport_v3_2;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisPersistenceSessionJdo;
-import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSession;
 
 import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
@@ -218,8 +217,7 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
 
     protected IsisPersistenceSessionJdo getPersistenceSession() {
         return isisInteractionTracker.currentInteraction()
-                .map(interaction->interaction.getUserData(PersistenceSession.class))
-                .map(IsisPersistenceSessionJdo.class::cast)
+                .map(interaction->interaction.getUserData(IsisPersistenceSessionJdo.class))
                 .orElse(null);
     }
 

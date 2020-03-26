@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.context.session.AppLifecycleEvent;
 import org.apache.isis.core.runtime.context.session.IsisInteractionLifecycleEvent;
 import org.apache.isis.core.runtime.iactn.IsisInteraction;
+import org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisPersistenceSessionJdo;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSession;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSessionFactory;
 
@@ -115,7 +116,7 @@ public class JdoPersistenceLifecycleService {
     private void openSession(IsisInteraction isisInteraction) {
         val persistenceSession =
                 persistenceSessionFactory.createPersistenceSession();
-        isisInteraction.putUserData(PersistenceSession.class, persistenceSession);
+        isisInteraction.putUserData(IsisPersistenceSessionJdo.class, persistenceSession);
         persistenceSession.open();
     }
 
@@ -129,9 +130,9 @@ public class JdoPersistenceLifecycleService {
         .ifPresent(PersistenceSession::flush);
     }
 
-    private Optional<PersistenceSession> currentSession(IsisInteraction isisInteraction) {
+    private Optional<IsisPersistenceSessionJdo> currentSession(IsisInteraction isisInteraction) {
         return Optional.ofNullable(isisInteraction)
-                .map(interaction->interaction.getUserData(PersistenceSession.class));
+                .map(interaction->interaction.getUserData(IsisPersistenceSessionJdo.class));
     }
     
     private void create() {

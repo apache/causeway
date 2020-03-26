@@ -85,7 +85,7 @@ public class IsisInteraction extends RuntimeContextBase {
     }
 
     /** get type specific user data */
-    public <T> T getUserData(Class<? super T> type) {
+    public <T> T getUserData(Class<T> type) {
         return (userData!=null)
                 ? _Casts.uncheckedCast(userData.get(type))
                 : null;

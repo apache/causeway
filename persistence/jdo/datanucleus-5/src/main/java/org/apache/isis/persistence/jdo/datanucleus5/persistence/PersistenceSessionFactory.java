@@ -22,7 +22,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 
 public interface PersistenceSessionFactory {
 
-    PersistenceSession createPersistenceSession();
+    IsisPersistenceSessionJdo createPersistenceSession();
 
     void init(MetaModelContext metaModelContext);
 

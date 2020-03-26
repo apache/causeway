@@ -356,8 +356,7 @@ public class IsisTransactionJdo implements Transaction {
 
     protected IsisPersistenceSessionJdo getPersistenceSession() {
         return isisInteractionTracker.currentInteraction()
-                .map(interaction->interaction.getUserData(PersistenceSession.class))
-                .map(IsisPersistenceSessionJdo.class::cast)
+                .map(interaction->interaction.getUserData(IsisPersistenceSessionJdo.class))
                 .orElseThrow(()->_Exceptions.unrecoverable("no current IsisPersistenceSessionJdo available"));
     }
 
