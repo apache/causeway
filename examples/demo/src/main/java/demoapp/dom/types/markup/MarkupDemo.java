@@ -58,7 +58,7 @@ public class MarkupDemo extends DemoStub {
         log.info("MarkupDemo::initDefaults");
 
         try {
-            val htmlSource = _Strings.read(_Resources.load(MarkupDemo.class, "markup.html"), StandardCharsets.UTF_8);
+            val htmlSource = _Strings.read(_Resources.load(MarkupDemo.class, "markup-embedded.html"), StandardCharsets.UTF_8);
             markup = new Markup(htmlSource);
         } catch (Exception e) {
             log.error("failed to create Markup from file resource", e);
