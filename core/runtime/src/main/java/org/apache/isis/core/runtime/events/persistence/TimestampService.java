@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.persistence.session.events;
+package org.apache.isis.core.runtime.events.persistence;
 
 import javax.inject.Inject;
 import javax.inject.Named;

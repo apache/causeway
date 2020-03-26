@@ -22,7 +22,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.context.session.RuntimeContext;
+import org.apache.isis.core.runtime.context.RuntimeContext;
 
 import lombok.val;
 

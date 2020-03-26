@@ -24,12 +24,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
-import org.apache.isis.core.runtime.context.session.RuntimeEventService;
-import org.apache.isis.core.runtime.context.session.RuntimeEventSupport_Spring;
+import org.apache.isis.core.runtime.events.RuntimeEventService;
+import org.apache.isis.core.runtime.events.persistence.TimestampService;
 import org.apache.isis.core.runtime.iactn.scope.IsisInteractionScopeBeanFactoryPostProcessor;
-import org.apache.isis.core.runtime.persistence.session.events.PersistenceEventService;
-import org.apache.isis.core.runtime.persistence.session.events.PersistenceEventService_Spring;
-import org.apache.isis.core.runtime.persistence.session.events.TimestampService;
 import org.apache.isis.core.runtime.persistence.transaction.AuditerDispatchService;
 import org.apache.isis.core.runtime.persistence.transaction.ChangedObjectsService;
 
@@ -40,14 +37,11 @@ import org.apache.isis.core.runtime.persistence.transaction.ChangedObjectsServic
 
         // @Service's
         RuntimeEventService.class,
-        PersistenceEventService.class,
         TimestampService.class,
         AuditerDispatchService.class,
         ChangedObjectsService.class,
 
         // @Configuration's
-        RuntimeEventSupport_Spring.class,
-        PersistenceEventService_Spring.class,
 
 })
 public class IsisModuleCoreRuntime {

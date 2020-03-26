@@ -21,10 +21,8 @@ package org.apache.isis.persistence.jdo.datanucleus5.lifecycles;
 import javax.inject.Inject;
 import javax.jdo.listener.InstanceLifecycleEvent;
 
+import org.apache.isis.core.runtime.events.RuntimeEventService;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoMetamodelUtil;
-import org.apache.isis.core.runtime.persistence.session.events.PersistenceEventService;
-import org.apache.isis.core.runtime.persistence.session.events.PostStoreEvent;
-import org.apache.isis.core.runtime.persistence.session.events.PreStoreEvent;
 
 import lombok.val;
 
@@ -38,7 +36,7 @@ import lombok.val;
 public class JdoStoreLifecycleListenerForIsis implements
 javax.jdo.listener.StoreLifecycleListener {
     
-    @Inject private PersistenceEventService persistenceEventService;
+    @Inject private RuntimeEventService runtimeEventService;
 
     @Override
     public void preStore(InstanceLifecycleEvent instanceEvent) {
@@ -48,8 +46,7 @@ javax.jdo.listener.StoreLifecycleListener {
         if(persistableObject!=null 
                 && JdoMetamodelUtil.isPersistenceEnhanced(persistableObject.getClass())) {
 
-            val event = PreStoreEvent.of(persistableObject);
-            persistenceEventService.firePreStoreEvent(event);
+            runtimeEventService.firePreStoreEvent(persistableObject);
         }
         
     }
@@ -62,8 +59,7 @@ javax.jdo.listener.StoreLifecycleListener {
         if(persistableObject!=null && 
                 JdoMetamodelUtil.isPersistenceEnhanced(persistableObject.getClass())) {
 
-            val event = PostStoreEvent.of(persistableObject);
-            persistenceEventService.firePostStoreEvent(event);
+            runtimeEventService.firePostStoreEvent(persistableObject);
         }
         
     }

@@ -20,8 +20,6 @@ package org.apache.isis.persistence.jdo.datanucleus5.metrics;
 
 import java.util.concurrent.atomic.LongAdder;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.jdo.listener.InstanceLifecycleEvent;
@@ -39,15 +37,13 @@ import org.apache.isis.applib.services.TransactionScopeListener;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.core.runtime.persistence.transaction.ChangedObjectsService;
 
-import lombok.extern.log4j.Log4j2;
-
 @Service
 @Named("isisJdoDn5.MetricsServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 @IsisInteractionScope
-@Log4j2
+//@Log4j2
 public class MetricsServiceDefault 
 implements MetricsService, InstanceLifecycleListener, LoadLifecycleListener, TransactionScopeListener {
 

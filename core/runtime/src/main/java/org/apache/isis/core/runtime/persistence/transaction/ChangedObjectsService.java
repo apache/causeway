@@ -23,8 +23,6 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,9 +30,9 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.IsisInteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
-import org.apache.isis.applib.annotation.IsisInteractionScope;
 import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.applib.services.TransactionScopeListener;
 import org.apache.isis.core.commons.internal.collections._Maps;
@@ -45,7 +43,6 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 // tag::refguide[]
 @Service
@@ -54,7 +51,7 @@ import lombok.extern.log4j.Log4j2;
 @Primary
 @Qualifier("Default")
 @IsisInteractionScope
-@Log4j2
+//@Log4j2
 public class ChangedObjectsService implements TransactionScopeListener {
 
     // end::refguide[]

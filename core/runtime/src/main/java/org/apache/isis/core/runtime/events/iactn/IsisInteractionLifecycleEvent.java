@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.context.session;
+package org.apache.isis.core.runtime.events.iactn;
 
 import org.apache.isis.core.runtime.iactn.IsisInteraction;
 

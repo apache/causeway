@@ -48,7 +48,7 @@ public class DataNucleusLifeCycleHelper {
             EnhancementHelper.getInstance().unregisterClasses(cl);
 
             // cleanup thread locals
-            JDOStateManagerForIsis.hint.remove();
+            //JDOStateManagerForIsis.hint.remove();
 
         } catch (Exception e) {
             // ignore, since it only affects re-deploy-ability, which is nice to have but not critical

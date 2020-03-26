@@ -28,8 +28,8 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
-import org.apache.isis.core.runtime.context.session.AppLifecycleEvent;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

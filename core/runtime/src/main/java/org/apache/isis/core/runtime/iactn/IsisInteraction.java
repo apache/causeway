@@ -29,7 +29,7 @@ import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.runtime.context.session.RuntimeContextBase;
+import org.apache.isis.core.runtime.context.RuntimeContextBase;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import lombok.Getter;

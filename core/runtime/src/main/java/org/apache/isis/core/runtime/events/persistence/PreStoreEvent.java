@@ -16,29 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.context.session;
+package org.apache.isis.core.runtime.events.persistence;
 
-import javax.enterprise.event.Event;
-import javax.inject.Named;
+import lombok.Value;
 
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-import org.apache.isis.core.commons.internal.ioc.spring._Spring;
-
-@Configuration
-@Named("isisRuntime.RuntimeEventSupport_Spring")
-public class RuntimeEventSupport_Spring {
-
-    @Bean
-    public Event<AppLifecycleEvent> appLifecycleEvents(ApplicationEventPublisher publisher) {
-        return _Spring.event(publisher);
-    }
-
-    @Bean
-    public Event<IsisInteractionLifecycleEvent> sessionLifecycleEvents(ApplicationEventPublisher publisher) {
-        return _Spring.event(publisher);
-    }
-
+/**
+ * 
+ * @since 2.0
+ *
+ */
+@Value(staticConstructor = "of")
+public class PreStoreEvent {
+    
+    private final Object persistableObject;
 }

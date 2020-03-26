@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.context.session;
+package org.apache.isis.core.runtime.events;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -28,6 +28,10 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
+import org.apache.isis.core.runtime.events.iactn.IsisInteractionLifecycleEvent;
+import org.apache.isis.core.runtime.events.persistence.PostStoreEvent;
+import org.apache.isis.core.runtime.events.persistence.PreStoreEvent;
 import org.apache.isis.core.runtime.iactn.IsisInteraction;
 
 /**
@@ -55,19 +59,35 @@ public class RuntimeEventService {
         eventBusService.post(AppLifecycleEvent.of(AppLifecycleEvent.EventType.appPostMetamodel));
     }
 
-    // -- SESSION
+    // -- INTERACTION
 
-    public void fireInteractionHasStarted(IsisInteraction session) {
-        eventBusService.post(IsisInteractionLifecycleEvent.of(session, IsisInteractionLifecycleEvent.EventType.HAS_STARTED));
+    public void fireInteractionHasStarted(IsisInteraction interaction) {
+        eventBusService.post(
+                IsisInteractionLifecycleEvent
+                .of(interaction, IsisInteractionLifecycleEvent.EventType.HAS_STARTED));
     }
 
-    public void fireInteractionIsEnding(IsisInteraction session) {
-        eventBusService.post(IsisInteractionLifecycleEvent.of(session, IsisInteractionLifecycleEvent.EventType.IS_ENDING));
+    public void fireInteractionIsEnding(IsisInteraction interaction) {
+        eventBusService.post(
+                IsisInteractionLifecycleEvent
+                .of(interaction, IsisInteractionLifecycleEvent.EventType.IS_ENDING));
     }
 
-	public void fireInteractionFlushRequest(IsisInteraction session) {
-	    eventBusService.post(IsisInteractionLifecycleEvent.of(session, IsisInteractionLifecycleEvent.EventType.FLUSH_REQUEST));
+	public void fireInteractionFlushRequest(IsisInteraction interaction) {
+	    eventBusService.post(
+	            IsisInteractionLifecycleEvent
+	            .of(interaction, IsisInteractionLifecycleEvent.EventType.FLUSH_REQUEST));
 	}
+	
+    // -- PERSISTENT OBJECT EVENTS
+
+    public void firePreStoreEvent(Object persistableObject) {
+        eventBusService.post(PreStoreEvent.of(persistableObject));
+    }
+    
+    public void firePostStoreEvent(Object persistableObject) {
+        eventBusService.post(PostStoreEvent.of(persistableObject));
+    }
 
 
 }
