@@ -26,7 +26,7 @@ import org.apache.isis.applib.mixins.dto.Dto_downloadXsd;
 import org.apache.isis.applib.mixins.layout.Object_downloadLayoutXml;
 import org.apache.isis.applib.mixins.layout.Object_openRestApi;
 import org.apache.isis.applib.mixins.layout.Object_rebuildMetamodel;
-import org.apache.isis.applib.mixins.metamodel.Object_downloadMetaModelXml;
+import org.apache.isis.applib.mixins.metamodel.Object_downloadMetamodelXml;
 import org.apache.isis.applib.mixins.metamodel.Object_objectIdentifier;
 import org.apache.isis.applib.mixins.metamodel.Object_objectType;
 import org.apache.isis.applib.services.audit.AuditerServiceLogging;
@@ -42,7 +42,6 @@ import org.apache.isis.applib.services.jaxb.JaxbServiceDefault;
 import org.apache.isis.applib.services.layout.LayoutServiceMenu;
 import org.apache.isis.applib.services.metamodel.MetaModelServiceMenu;
 import org.apache.isis.applib.services.publish.PublisherServiceLogging;
-import org.apache.isis.applib.services.scratchpad.Scratchpad;
 import org.apache.isis.applib.services.session.SessionLoggingServiceLogging;
 import org.apache.isis.applib.services.wrapper.control.AsyncControlService;
 import org.apache.isis.schema.IsisModuleSchema;
@@ -58,7 +57,7 @@ import org.apache.isis.schema.IsisModuleSchema;
         Dto_downloadXml.class,
         Dto_downloadXsd.class,
         Object_downloadLayoutXml.class,
-        Object_downloadMetaModelXml.class,
+        Object_downloadMetamodelXml.class,
         Object_objectIdentifier.class,
         Object_objectType.class,
         Object_openRestApi.class,
