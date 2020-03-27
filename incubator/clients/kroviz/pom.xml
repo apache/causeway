@@ -34,7 +34,7 @@
         <git-plugin.propertiesDir>org/apache/isis/incubator/clients/kroviz</git-plugin.propertiesDir>
     </properties>
 
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
     <build>
         <plugins>
@@ -43,16 +43,15 @@
                 <artifactId>gradle-maven-plugin</artifactId>
                 <version>1.0.8</version>
                 <configuration>
-                    <gradleVersion>4.9</gradleVersion>
+                    <gradleVersion>5.3.1</gradleVersion>
                     <tasks>
-                        <!-- this would effectively call "gradle doSomething" -->
                         <task>distZip</task>
                     </tasks>
                 </configuration>
                 <executions>
                     <execution>
                         <!-- You can bind this to any phase you like -->
-                        <phase>compile</phase>
+                        <phase>distZip</phase>
                         <goals>
                             <!-- goal must be "invoke" -->
                             <goal>invoke</goal>

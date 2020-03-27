@@ -110,7 +110,7 @@ task copyResourcesForDce() {
     doLast {
         copy {
             from "src/main/resources"
-            ext.modulesDir = new File("${buildDir.path}/node_modules_imported/")
+            ext.modulesDir = File("${buildDir.path}/node_modules_imported/")
             modulesDir.eachDir {
                 if (it.name.startsWith("kvision")) {
                     from(it) {
