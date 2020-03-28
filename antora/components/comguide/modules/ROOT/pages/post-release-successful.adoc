@@ -174,9 +174,11 @@ We therefore temporarily modify all of the `antora.yml` files and `site.yml` wit
 
 * If there have been any changes from other branches (eg fixes to documentation in non-release branches) then merge them into the release branch.
 
-* Update all `antora.yml` files:
+* Update all `antora.yml` files, eg using an IDE:
 +
 ** `version: latest` -> `version: {isisnext}`
++
+image::release-process-post/update-antora-latest.png[width="600px",link="{imagesdir}/release-process-post/update-antora-latest.png"]
 
 * Commit the change, and tag:
 +
