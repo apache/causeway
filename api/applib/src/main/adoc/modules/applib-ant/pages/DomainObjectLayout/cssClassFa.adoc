@@ -1,5 +1,6 @@
-= `cssClassFa`
-
+[#cssClassFa]
+= `cssClassFa()`
+r
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
@@ -7,9 +8,7 @@
 
 The `cssClassFa` attribute is used to specify the name of a link:http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icon] name, to be rendered as the domain object's icon.
 
-If necessary the icon specified can be overridden by a particular object instance using the xref:refguide:applib-cm:methods.adoc#iconName[`iconName()`] method.
-
-
+If necessary the icon specified can be overridden by a particular object instance using the xref:refguide:applib-methods:reserved.adoc#iconName[`iconName()`] method.
 
 For example:
 
@@ -18,22 +17,21 @@ For example:
 @DomainObjectLayout(
     cssClassFa="fa-check-circle"
 )
-public class ToDoItem { /* ... */ }
+public class ToDoItem {
+    // ...
+}
 ----
 
 There can be multiple "fa-" classes, eg to mirror or rotate the icon.
 There is no need to include the mandatory `fa` "marker" CSS class; it will be automatically added to the list.
 The `fa-` prefix can also be omitted from the class names; it will be prepended to each if required.
 
-
 The related `cssClassFaPosition` attribute is currently unused for domain objects; the icon is always rendered to the left.
-
 
 [TIP]
 ====
 The similar xref:refguide:applib-ant:DomainObjectLayout.adoc#cssClass[`@DomainObjectLayout#cssClass()`] annotation attribute is also used as a hint to apply CSS, but for wrapping the representation of an object or object member so that it can be styled in an application-specific way.
 ====
-
 
 == See also
 

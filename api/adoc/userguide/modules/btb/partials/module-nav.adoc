@@ -7,5 +7,3 @@
 ** xref:userguide:btb:headless-access.adoc[Headless Access]
 ** xref:userguide:btb:hints-and-tips.adoc[Hints-n-Tips]
 ** xref:userguide:btb:programming-model.adoc[Programming Model]
-** xref:userguide:btb:deployment.adoc[Deployment]
-** xref:userguide:btb:web-xml.adoc[web.xml]

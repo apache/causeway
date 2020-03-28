@@ -12,8 +12,7 @@ pairs of the properties of that object (a grid, again). +
 In addition, the representation defined by the RO spec is also included, as a special object with a single `$$ro`
 property.
 
-For example, using the http://github.com/apache/isis-app-todoapp[TodoApp], accessing
-this resource:
+For example, in a todo app, accessing this resource:
 
 [source]
 ----

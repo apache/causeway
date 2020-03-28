@@ -12,7 +12,7 @@ Another use case is to support "third party" REST clients over which you have no
 
 Instead you need to create some sort of stable facade over your domain entities, one which you will preserve even if the domain entities change.  There are three ways in which you can do this:
 
-* first is to solve the problem at the domain layer by defining a regular Apache Isis xref:userguide:fun:building-blocks.adoc#view-models[view model].  This is then surfaced over the RO viewer.  +
+* first is to solve the problem at the domain layer by defining a regular Apache Isis xref:userguide:fun:overview.adoc#view-models[view model].  This is then surfaced over the RO viewer.  +
 +
 If the underlying entities change, then care must be taken to ensure that structure of the view model nevertheless is unchanged.
 
@@ -137,9 +137,9 @@ which returns xref:vro:ROOT:simplified-representations.adoc[simplified represent
 
 == Usage
 
-You can find an example of all these services in the http://github.com/apache/isis-app-todoapp[TodoApp].  This defines a `ToDoItemDto` class that is JAXB annotated (it is in fact generated from an XSD).
+For example, consider a todo app that defines a  `ToDoItemDto` class, generated from an XSD and therefore JAXB annotated.
 
-The example app also includes an implementation of `ContentMappingService` that maps `todoapp.dom.module.todoitem.ToDoItem` entities to `todoapp.dto.module.todoitem.ToDoItemDto` classes.
+An implementation of `ContentMappingService` that maps the application's `todoapp.dom.module.todoitem.ToDoItem` entities into `todoapp.dto.module.todoitem.ToDoItemDto` classes.
 
 A REST client can therefore request a DTO representation of an entity by invoking
 

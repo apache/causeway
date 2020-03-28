@@ -7,7 +7,7 @@
 If all that is required is a very simple representations (of objects), you can configure the Restful Objects viewer
 to provide a simplified output, then this can be done with a number of (global) configuration properties.
 
-These configuration properties pre-date the support, introduced in `1.11.0`, for the Apache Isis profile, and
+These configuration properties pre-date the support for the Apache Isis profile, and
 are limited by the fact that they are global configuration settings, so cannot be influenced on a request-by-request
 basis (as is the case with the `Accept` header used for the Apache Isis profile). They have therefore been
 deprecated, and may be removed in the future.

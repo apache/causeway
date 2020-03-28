@@ -1,3 +1,4 @@
+[#ActionLayout]
 = `@ActionLayout`
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
@@ -13,11 +14,11 @@ include::refguide:applib-ant:example$annotation/ActionLayout.java[tags="refguide
 +
 Indicates if an action (with safe xref:refguide:applib-ant:Action.adoc#semantics[action semantics]) is automatically bookmarked.
 
-<.> xref:refguide:applib-ant:ActionLayout.adoc#cssclass[`cssClass()`]
+<.> xref:refguide:applib-ant:ActionLayout.adoc#cssClass[`cssClass()`]
 +
 An additional CSS class around the HTML that represents for the action, to allow targetted styling in xref:refguide:config:application-specific/application-css.adoc[`application.css`]. +
 
-<.> xref:refguide:applib-ant:ActionLayout.adoc#cssclassfa[`cssClassFa()`]
+<.> xref:refguide:applib-ant:ActionLayout.adoc#cssClassFa[`cssClassFa()`]
 +
 Specify a link:http://fortawesome.github.io/Font-Awesome/[Font awesome] icon name for the action's menu link or icon.
 
@@ -25,7 +26,7 @@ Specify a link:http://fortawesome.github.io/Font-Awesome/[Font awesome] icon nam
 +
 Positioning of the icon on the button/menu item.
 
-<.> xref:refguide:applib-ant:ActionLayout.adoc#describedas[`describedAs()`]
+<.> xref:refguide:applib-ant:ActionLayout.adoc#describedAs[`describedAs()`]
 +
 Provides a short description of the action, eg for rendering as a 'tool tip'.
 
@@ -79,7 +80,7 @@ public class ToDoItems {
 
 [TIP]
 ====
-As an alternative to using the `@ActionLayout` annotation, a xref:vw:ROOT:layout.adoc#file-based[file-based layout] can be used (and is generally to be preferred since it is more flexible/powerful).
+As an alternative to using the `@ActionLayout` annotation, a xref:userguide:fun:ui.adoc#object-layout[file-based layout] can be used (and is generally to be preferred since it is more flexible/powerful).
 ====
 
 

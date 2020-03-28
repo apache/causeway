@@ -768,7 +768,8 @@ under the License.
 									<goal>single</goal>
 								</goals>
 								<configuration>
-									<runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
+									<archiveBaseDirectory>..</archiveBaseDirectory>
+                                    <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
 									<descriptorRefs>
 										<descriptorRef>${sourceReleaseAssemblyDescriptor}</descriptorRef>
 									</descriptorRefs>
@@ -883,23 +884,42 @@ under the License.
 			</build>
 			<modules>
 				<module>../core</module>
-				<module>../mavendeps</module>
-				<module>../starters</module>
-				<module>../testing</module>
 				<module>../extensions</module>
 <!--
+				<module>../incubator</module>
 				<module>../legacy</module>
-				<module>../mappings</module>
-				<module>../subdomains</module>
-				<module>../valuetypes</module>
 -->
+				<module>../mappings</module>
+				<module>../mavendeps</module>
+				<module>../starters</module>
+				<module>../subdomains</module>
+				<module>../testing</module>
+				<module>../valuetypes</module>
 			</modules>
 		</profile>
 		<!-- END SNIPPET: release-profile -->
 
 		<!-- APACHE ISIS customisation 7/7: start -->
 		<profile>
-			<id>core-modules</id>
+			<id>released</id>
+			<modules>
+				<module>../core</module>
+				<module>../extensions</module>
+<!--
+				<module>../incubator</module>
+				<module>../legacy</module>
+-->
+				<module>../mappings</module>
+				<module>../mavendeps</module>
+				<module>../starters</module>
+				<module>../subdomains</module>
+				<module>../testing</module>
+				<module>../valuetypes</module>
+			</modules>
+		</profile>
+
+		<profile>
+			<id>all</id>
 			<activation>
 				<property>
 					<name>!apache-release</name>

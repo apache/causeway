@@ -3,8 +3,7 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-WARNING: TODO - to review for v2.
-
+WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
 The `PublisherService` API is intended for coarse-grained publish/subscribe for system-to-system interactions, from Apache Isis to some other system.
 Events that can be published are action invocations/property edits, and changed objects.
@@ -81,7 +80,7 @@ This logs serializations to a link:https://logging.apache.org/log4j/log4j-2.2/ma
 +
 See the `log4j2-spring.xml` file in xref:docs:starters:simpleapp.adoc[simpleapp] for the omitted detail.
 
-* the xref:mappings:publisher:about.adoc[PublisherServiceOutboxJdo] in the xref:mappings:ROOT:about.adoc[Mappings catalog] persists each interaction into a link:https://microservices.io/patterns/data/transactional-outbox.html[outbox table] for subsequent processing.
+* the xref:mappings:outbox-publisher:about.adoc[Outbox Publisher] in the xref:mappings:ROOT:about.adoc[Mappings catalog] persists each interaction into a link:https://microservices.io/patterns/data/transactional-outbox.html[outbox table] for subsequent processing.
 As its name implies, it uses xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] to do this.
 +
 WARNING: TODO: v2 - need to migrate this across.
@@ -130,7 +129,7 @@ To support these use cases several other services are involved:
 The services provided by this module combine very well with the xref:refguide:applib-svc:CommandService.adoc[`CommandService`] and with xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`].
 The `CommandService` captures the __cause__ of an interaction (an action was invoked, a property was edited), while the `PublisherService` captures the __effect__ of that interaction in terms of events, and the `AuditerService` captures the effect of the interaction in terms of changed state.
 You may also want to configure the xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`], which also captures the effect of the interaction but as an event.
-All three of these services collaborate implicitly by way of the xref:refguide:applib-cm:classes/mixins.adoc#HasUniqueId[`HasUniqueId`] interface.
+All three of these services collaborate implicitly by way of the xref:applib-classes:classes/mixins.adoc#HasUniqueId[`HasUniqueId`] interface.
 
 The xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] differs from the `PublisherService` in that it is intended for fine-grained publish/subscribe for object-to-object interactions within an Apache Isis domain object model.
 The event propagation is strictly in-memory, and there are no restrictions on the object acting as the event; it need not be serializable, for example.

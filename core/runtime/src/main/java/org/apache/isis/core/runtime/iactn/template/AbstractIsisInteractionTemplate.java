@@ -51,9 +51,8 @@ public abstract class AbstractIsisInteractionTemplate {
      * {@link #doExecuteWithTransaction(Object)}.
      *
      * <p>
-     * This method is called within a current {@link IsisInteraction session},
-     * but with no current transaction.  The default implementation sets up a
-     * {@link org.apache.isis.jdo.persistence.IsisTransactionJdo transaction}
+     * This method is called within a current {@link IsisInteraction interaction} request,
+     * but with no current transaction.  The default implementation sets up a transaction
      * and then calls {@link #doExecuteWithTransaction(Object)}.  Override if you require more sophisticated
      * transaction handling.
      */
@@ -68,8 +67,7 @@ public abstract class AbstractIsisInteractionTemplate {
      * {@link #doExecuteWithTransaction(Object)}.
      *
      * <p>
-     * This method is called within a current
-     * {@link org.apache.isis.jdo.persistence.IsisTransactionJdo transaction}, by the default
+     * This method is called within a current transaction, by the default
      * implementation of {@link #doExecute(Object)}.
      */
     protected void doExecuteWithTransaction(final Object context) {}

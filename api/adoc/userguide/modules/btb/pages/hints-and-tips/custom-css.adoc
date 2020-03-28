@@ -1,0 +1,58 @@
+= Custom CSS
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+Custom CSS styles can be associated with specific regions of the layout:
+
+[source,xml]
+----
+<grid ...>
+    <row>
+        <col span="2" unreferencedActions="true">
+            <ns2:domainObject/>
+            <row>
+                <col span="12"
+                     cssClass="custom-width-100">       <!--.-->
+                    <ns2:action id="exportToWordDoc"/>
+                </col>
+            </row>
+            ...
+        </col>
+        <col span="5" unreferencedCollections="true"
+             cssClass="custom-padding-top-20">          <!--.-->
+            ...
+        </col>
+        <col span="5"
+            cssClass="custom-padding-top-20">           <!--.-->
+            ...
+        </col>
+    </row>
+</grid>
+----
+<1> Render the column with the `custom-width-100` CSS class.
+<2> Render the column with the `custom-padding-top-20` CSS class.
+<3> Ditto
+
+For example the `custom-width-100` style is used to "stretch" the button for the `exportToWordDoc` action in the left-most column.
+For the xref:vw:ROOT:about.adoc[Wicket Viewer] this is accomplished with xref:refguide:config:application-specific/application-css.adoc[custom CSS], usually CSS in the `static/css/application.css` file:
+
+[source,css]
+----
+.custom-width-100 ul,
+.custom-width-100 ul li,
+.custom-width-100 ul li a.btn {
+    width: 100%;
+}
+----
+
+Similarly, the middle and right columns are rendered using the `custom-padding-top-20` CSS class.
+This shifts them down from the top of the page slightly, using the following CSS:
+
+[source,css]
+----
+.custom-padding-top-20 {
+    padding-top: 20px;
+}
+----

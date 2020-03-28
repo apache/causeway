@@ -16,23 +16,24 @@ Both the xref:docs:starters:helloworld.adoc[HelloWorld] and xref:docs:starters:s
 
 == Telling Apache Isis to use Shiro
 
-To tell Apache Isis to use Shiro when using an xref:refguide:applib-cm:rgcms.adoc#__rgcms_classes_AppManifest-bootstrapping_bootstrapping_AppManifestAbstract[`AppManifestAbstract.BUILDER`], simply specify the "authMechanism" as "shiro".
 
-For example, the xref:docs:starters:helloworld.adoc[HelloWorld]  starter app bootstraps using:
+To tell Apache Isis to use Shiro, include `IsisModuleSecurityShiro` module in the top-level "app manifest".
 
-// TODO: v2: this is out of date.
+For example, the xref:docs:starters:simpleapp.adoc[SimpleApp] starter app bootstraps using:
 
 [source,java]
 ----
-public class HelloWorldAppManifest extends AppManifestAbstract {
-
-    public static final Builder BUILDER = Builder
-            .forModules(HelloWorldModule.class)
-            .withAuthMechanism("shiro");                        // <1>
-            ...
+@Configuration
+@Import({
+        // ...
+        IsisModuleSecurityShiro.class,  // <.>
+        // ...
+})
+// ...
+public class AppManifest {
 }
 ----
-<1> configures Shiro.
+<.> configures Shiro.
 
 This installs the appropriate implementation (the `ShiroAuthenticatorOrAuthorizor` class) that use Shiro's APIs to perform authentication and authorization:
 
@@ -64,7 +65,7 @@ Setting it to `true` may cause a race condition resulting in exceptions being lo
 
 == Bootstrapping Shiro
 
-TODO: v2: this configuration is no longer required in `web.xml`, instead is configured programmatically by the framework (`WebModule_Shiro`).
+//TODO: v2: this configuration is no longer required in `web.xml`, instead is configured programmatically by the framework (`WebModule_Shiro`).
 
 
 The Shiro environment (in essence, thread-locals holding the security credentials) needs to be bootstrapped using the following settings in the `WEB-INF/web.xml` file:

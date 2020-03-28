@@ -1,16 +1,17 @@
+[#javax-xml-bind-annotation-adapters-XmlRootElement]
 = `@XmlRootElement` (`jaxb`)
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-The `@XmlRootElement` annotation provides an alternative way to define a xref:userguide:fun:building-blocks.adoc#view-models[view model], in particular one intended to act as a DTO for use within xref:vro:ROOT:about.adoc[RestfulObjects viewer], or which contains arbitrarily complex state.
+The `@XmlRootElement` annotation provides an alternative way to define a xref:userguide:fun:overview.adoc#view-models[view model], in particular one intended to act as a DTO for use within xref:vro:ROOT:about.adoc[RestfulObjects viewer], or which contains arbitrarily complex state.
 
 A view model is a non-persisted domain object whose state is converted to/from a string memento.
 In the case of a JAXB-annotated object this memento is its XML representation.
 JAXB generally requires that the root element of the XML representation is annotated with `@XmlRootElement`.
 Apache Isis makes this a mandatory requirement.
 
-In comparison to using either the xref:refguide:applib-cm:classes/super.adoc#ViewModel[`ViewModel`] interface or the xref:refguide:applib-ant:ViewModel.adoc[`@ViewModel`] annotation, using `@XmlRootElement` has a couple of significant advantages:
+In comparison to using either the xref:applib-classes:ViewModel.adoc[`ViewModel`] interface or the xref:refguide:applib-ant:ViewModel.adoc[`@ViewModel`] annotation, using `@XmlRootElement` has a couple of significant advantages:
 
 * the view model can be used as a "canonical" DTO, for example when accessing data using the xref:vro:ROOT:about.adoc[RestfulObjects viewer] in combination with the
 xref:refguide:applib-svc:ContentMappingService.adoc[`ContentMappingService`].
@@ -33,13 +34,13 @@ This is performed by the xref:refguide:applib-svc:UrlEncodingService.adoc[`UrlEn
 
 == Example
 
-This example is taken from the http://github.com/apache/isis-app-todoapp[TodoApp]:
+For example:
 
 [source,java]
 ----
-@XmlRootElement(name = "toDoItemDto")           // <1>
+@XmlRootElement(name = "toDoItemDto")           // <.>
 public class ToDoItemDto implements Dto {
-    @Getter @Setter                             // <2>
+    @Getter @Setter                             // <.>
     protected String description;
     @Getter @Setter
     protected String category;
@@ -49,14 +50,14 @@ public class ToDoItemDto implements Dto {
     protected BigDecimal cost;
 }
 ----
-<1> identifies this class as a view model and defines the root element for JAXB serialization
-<2> using Project Lombok for getters and setters
+<.> identifies this class as a view model and defines the root element for JAXB serialization
+<.> using Project Lombok for getters and setters
 
 == See also
 
 Although (like any other viewmodel) a JAXB-annotated can have behaviour (actions) and UI hints, you may wish to keep the DTO "clean", just focused on specifying the data contract.
 
-Behaviour can therefore be provided using xref:userguide:fun:building-blocks.adoc#mixins[mixins] (annotated with xref:refguide:applib-ant:Mixin.adoc[`@Mixin`]), while xref:refguide:applib-cm:classes/uievent.adoc[UI events] can be used to obtain title, icons and so on.
+Behaviour can therefore be provided using xref:userguide:fun:overview.adoc#mixins[mixins] (annotated with xref:refguide:applib-ant:Mixin.adoc[`@Mixin`]), while xref:applib-classes:classes/uievent.adoc[UI events] can be used to obtain title, icons and so on.
 
-For a more complete discussion of writing JAXB view models/DTOs, see xref:userguide:fun:building-blocks.adoc#view-models[this topic] in the user guide.
+For a more complete discussion of writing JAXB view models/DTOs, see xref:userguide:fun:overview.adoc#view-models[this topic] in the user guide.
 

@@ -100,7 +100,11 @@ For example, here's a fixture script called `RecreateSimpleObjects`.
 
 [source,java]
 ----
-@lombok.Accessors(chain = true)
+import lombok.Accessors;
+import lombok.Getter;
+import lombok.Setter;
+
+@Accessors(chain = true)
 public class RecreateSimpleObjects extends FixtureScript {                   // <1>
 
     public final List<String> NAMES = Collections.unmodifiableList(Arrays.asList(
@@ -110,10 +114,10 @@ public class RecreateSimpleObjects extends FixtureScript {                   // 
         withDiscoverability(Discoverability.DISCOVERABLE);                   // <3>
     }
 
-    @lombok.Getter @lombok.Setter
+    @Getter @Setter
     private Integer number;                                                  // <4>
 
-    @lombok.Getter
+    @Getter
     private final List<SimpleObject> simpleObjects = Lists.newArrayList();   // <5>
 
     @Override
@@ -138,7 +142,7 @@ public class RecreateSimpleObjects extends FixtureScript {                   // 
 ----
 <1> inherit from `org.apache.isis.applib.fixturescripts.FixtureScript`
 <2> a hard-coded list of values for the names.
-Note that the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s fakedata module could also have been used
+Note that the xref:testing:fakedata:about.adoc[Fakedata] testing module could also have been used
 <3> whether the script is "discoverable"; in other words whether it should be rendered in the drop-down by the `FixtureScripts` service
 <4> input property: the number of objects to create, up to 10; for the calling test to specify, but note this is optional and has a default (see below).
 It's important that a wrapper class is used (ie `java.lang.Integer`, not `int`)
@@ -146,7 +150,7 @@ It's important that a wrapper class is used (ie `java.lang.Integer`, not `int`)
 <6> the mandatory execute(...) API
 <7> the `defaultParam(...)` (inherited from `FixtureScript`) will default the `number` property (using Java's Reflection API) if none was specified
 <8> call another fixture script (`SimpleObjectsTearDown`) using the provided `ExecutionContext`.
-Note that although the fixture script is a view model, it's fine to simply instantiate it (rather than using `FactoryService#instantiate(...)`).
+Note that although the fixture script is a view model, it's fine to simply instantiate it (rather than using `FactoryService#create(...)`).
 <9> calling another fixture script (`SimpleObjectCreate`) using the provided `ExecutionContext`
 <10> adding the created object to the list, for the calling object to use.
 
@@ -283,24 +287,29 @@ where `SimpleObjectBuilder` in turn is:
 
 [source,java]
 ----
-@lombok.Accessors(chain = true)
+import javax.inject.Inject;
+import lombok.Accessors;
+import lombok.Getter;
+import lombok.Setter;
+
+@Accessors(chain = true)
 public class SimpleObjectBuilder
             extends BuilderScriptAbstract<SimpleObject, SimpleObjectBuilder> {
 
-    @lombok.Getter @lombok.Setter
+    @Getter @Setter
     private String name;                                    // <1>
 
     @Override
     protected void execute(final ExecutionContext ec) {
         checkParam("name", ec, String.class);               // <2>
-        object = wrap(simpleObjectMenu).create(name);
+        object = wrap(simpleObjects).create(name);
     }
 
-    @lombok.Getter
+    @Getter
     private SimpleObject object;                            // <3>
 
-    @javax.inject.Inject
-    SimpleObjectMenu simpleObjectMenu;
+    @Inject
+    SimpleObjects simpleObjects;
 }
 ----
 <1> The persona class should set this value (copied from its own state)
@@ -341,7 +350,7 @@ And for more complex entity -where there might be many potential values that nee
 - the builder script can automatically default some or even all of these values.
 
 For example, for a customer's date of birth, the buider could default to a date making the customer an adult, aged between 18 and 65, say.
-For an email address or postal address, or an image, or some "lorem ipsum" text, the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s fakedata module could provide randomised values.
+For an email address or postal address, or an image, or some "lorem ipsum" text, the xref:testing:fakedata:about.adoc[Fakedata] testing module could provide randomised values.
 
 The benefit of an intelligent builder is that it further simplifies the test.
 The developer reading the test then knows that everything that has been specified exactly is of significance.

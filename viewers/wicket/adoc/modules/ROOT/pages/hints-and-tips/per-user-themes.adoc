@@ -10,10 +10,7 @@ From link:http://isis.markmail.org/thread/kb4442niwwbnghey[this thread] on the A
 Would this also be possible for the login page, possibly depending on the used host name?_
 
 
-Yes, you can do this, by installing a custom implementation of the Wicket Bootstrap's `ActiveThemeProvider`.
-
-The http://github.com/apache/isis-app-todoapp[TodoApp] (non-ASF) actually link:https://github.com/apache/isis-app-todoapp/tree/61b8114a8e01dbb3c380b31cf09eaed456407570[does this], storing the info via the (non-ASF) http://platform.incode.org/modules/dom/settings/dom-settings.html[Incode Platform's settings module] :
-
+Yes, you can do this, by installing a custom implementation of the Wicket Bootstrap's `ActiveThemeProvider`:
 
 [source,java]
 .IActiveThemeProvider implementation

@@ -1,5 +1,5 @@
 [[visibility]]
-= Visibility ("see it")
+= Visibility
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
@@ -10,11 +10,19 @@ To hide a property or collection:
 
 [source,java]
 ----
-public String getStatus() { /* ... */ }
-public void setStatus(String status) { /* ... */ }
+import lombok.Getter;
+import lombok.Setter;
 
-public boolean hideStatus() { /* ... */ }
+@Getter @Setter
+private String status;
+
+public boolean hideStatus() {   // <.>
+    // ...
+}
 ----
+<.> "hide" prefix, suffix matches up with the property name, and returns a `boolean`.
+Returns `true` to hide the property, `false` means it is visible
+
 
 == Object Action
 
@@ -22,12 +30,16 @@ An object action can be hidden similarly:
 
 [source,java]
 ----
-public Customer placeOrder(Product p, int quantity) { /* ... */ }
-public boolean hidePlaceOrder() { /* ... */ }
+public Customer placeOrder(Product p, int quantity) {
+    // ...
+}
+public boolean hidePlaceOrder() {                         // <.>
+    // ...
+}
 ----
+<.> "hide" prefix, suffix matches up with the action's name, and takes no parameters.
+Returns `true` to hide the action, `false` means it is visible
 
-If the `hideXxx` method returns `true` then the action is hidden.
-Note that the supporting method takes no parameters.
 
 
 == Action Parameter
@@ -47,14 +59,28 @@ public class Order {
             String addressCity,
             String addressPostalCode,
             String addressCountry
-    ) { /* ... */ }
-    public boolean hide1ShipTo(boolean sameAsBillingAddress) { return sameAsBillingAddress; }
-    public boolean hide2ShipTo(boolean sameAsBillingAddress) { return sameAsBillingAddress; }
-    public boolean hide3ShipTo(boolean sameAsBillingAddress) { return sameAsBillingAddress; }
-    public boolean hide4ShipTo(boolean sameAsBillingAddress) { return sameAsBillingAddress; }
-    public boolean hide5ShipTo(boolean sameAsBillingAddress) { return sameAsBillingAddress; }
+    ) {
+        // ...
+    }
+    public boolean hide1ShipTo(boolean sameAsBillingAddress) {  // <.>
+        return sameAsBillingAddress;
+    }
+    public boolean hide2ShipTo(boolean sameAsBillingAddress) {
+        return sameAsBillingAddress;
+    }
+    public boolean hide3ShipTo(boolean sameAsBillingAddress) {
+        return sameAsBillingAddress;
+    }
+    public boolean hide4ShipTo(boolean sameAsBillingAddress) {
+        return sameAsBillingAddress;
+    }
+    public boolean hide5ShipTo(boolean sameAsBillingAddress) {
+        return sameAsBillingAddress;
+    }
 }
 ----
+<.> "hide" prefix, N-th param, suffix matches action's name, parameters are subset up to Nth, same type.
+Returns `true` to hide the action parameter, `false` means it is visible
 
 In this case, the user can use the `shipTo(...)` action to specify where to ship the `Order` to.
 However, if they check the first boolean parameter (ie, to ship the `Order` to the billing address already held on file), then the remaining parameters will all be hidden.

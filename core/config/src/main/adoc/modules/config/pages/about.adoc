@@ -13,6 +13,7 @@ This chapter describes the configuration properties available to configure an Ap
 
 
 
+[#deployment-types]
 == Deployment Types
 
 Apache Isis distinguishes between the application being run in prototyping mode vs running in production mode.
@@ -40,7 +41,7 @@ configuration
 |===
 
 By default Apache Isis runs in production mode.
-But if configured to run instead in prototyping mode, then any actions xref:refguide:applib-ant:Action.adoc#restrictto[restricted to] to prototype mode are visible.
+But if configured to run instead in prototyping mode, then any actions xref:refguide:applib-ant:Action.adoc#restrictTo[restricted to] to prototype mode are visible.
 In particular, the "Prototyping" menu will appear, containing a number of framework-provided menu services - all restricted to prototyping mode.
 For example, menu items to run in xref:testing:fixtures:about.adoc[fixture scripts] are on this menu.
 
@@ -144,7 +145,7 @@ public class AppManifest {
 <2> Enables the Shiro security mechanism.
 There are several security implementations, precisely one must be selected
 <3> Enables JDO/DataNucleus for persistence.
-Optional (though if omitted then only xref:userguide:fun:building-blocks.adoc#view-models[view models] may be used, with hand-rolled persistence).
+Optional (though if omitted then only xref:userguide:fun:overview.adoc#view-models[view models] may be used, with hand-rolled persistence).
 <4> Enables the xref:vro:ROOT:about.adoc[Restful Objects viewer] (ie REST API).
 <5> Enables the xref:vw:ROOT:about.adoc[Wicket viewer]
 <6> References the application's module(s), in this case just the one, `ApplicationModule`. +

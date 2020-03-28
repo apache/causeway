@@ -20,14 +20,14 @@ This section describes the steps to perform if the vote has been successful.
 
 Post the results to the `dev@isis.a.o` mailing list:
 
-[source,bash,subs="attributes+"]
+[source,subs="attributes+"]
 ----
-[RESULT] [VOTE] Apache Isis Core release {isisnext}
+[RESULT] [VOTE] Apache Isis Core release {isisrel}
 ----
 
 using the body (alter last line as appropriate):
 
-[source,bash]
+[source]
 ----
 The vote has completed with the following result :
 
@@ -42,6 +42,17 @@ The vote is SUCCESSFUL.
 I'll now go ahead and complete the post-release activities.
 ----
 
+== Release to Maven Central
+
+CAUTION: We release from Maven Central before anything else; we don't want to push the git tags (an irreversible action) until we know that this has worked ok.
+
+From the http://repository.apache.org[ASF Nexus repository], select the staging repository and select 'release' from the top menu.
+
+image::release-process/nexus-release-1.png[width="600px",link="{imagesdir}/release-process/nexus-release-1.png"]
+
+This moves the release artifacts into an Apache releases repository; from there they will be automatically moved to the Maven repository.
+
+
 == Set environment variables
 
 As we did for the cutting of the release, we set environment variables to parameterize the following steps:
@@ -50,7 +61,7 @@ As we did for the cutting of the release, we set environment variables to parame
 ----
 export ISISJIRA=ISIS-9999                           # <.>
 export ISISTMP=/c/tmp                               # <.>
-export ISISREL={isisnext}                           # <.>
+export ISISREL={isisrel}                           # <.>
 export ISISRC=RC1                                   # <.>
 export ISISBRANCH=release-$ISISREL-$ISISRC
 export ISISART=isis
@@ -63,6 +74,12 @@ env | grep ISIS | sort
 <.> adjust as required
 <.> adjust as necessary if there was more than one attempt to release
 
+Open up a terminal, and switch to the correct release branch:
+
+[source,bash,subs="attributes+"]
+----
+git checkout $ISISBRANCH
+----
 
 == Update tags
 
@@ -72,13 +89,19 @@ You can do this using the `scripts/promoterctag.sh` script; for example:
 
 [source,bash,subs="attributes+"]
 ----
-sh scripts/promoterctag.sh $ISISART-ISISREL $ISISRC
+sh scripts/promoterctag.sh $ISISART-$ISISREL $ISISRC
 ----
 This script pushes the tag under `refs/tags/rel`.
 As per Apache policy (communicated on 10th Jan 2016 to Apache PMCs), this path is 'protected' and is unmodifiable (guaranteeing the provenance that the ASF needs for releases).
 
 
 == Update JIRA
+
+=== Close tickets
+
+Close all JIRA tickets for the release, or moved to future releases if not yet addressed.
+Any tickets that were partially implemented should be closed, and new tickets created for the functionality on the ticket not yet implemented.
+
 
 === Generate Release Notes
 
@@ -95,17 +118,13 @@ This script uses 'jq' to parse JSON.
 See the script itself for details of how to install this utility.
 ====
 
-=== Close tickets
-
-Close all JIRA tickets for the release, or moved to future releases if not yet addressed.
-Any tickets that were partially implemented should be closed, and new tickets created for the functionality on the ticket not yet implemented.
-
 === Mark the version as released
 
 In JIRA, go to the link:https://issues.apache.org/jira/plugins/servlet/project-config/ISIS/versions[administration section] for the Apache Isis project and update the version as being released.
 
 In the link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[Kanban view] this will have the effect of marking all tickets as released (clearing the "done" column).
 
+[#create-new-jira]
 === Create new JIRA
 
 Create a new JIRA ticket as a catch-all for the _next_ release.
@@ -145,7 +164,139 @@ git add .
 git commit -m "$ISISJIRA: updates release notes, STATUS and doap_isis.rdf"
 ----
 
-== Genereate website
+== Release Source Zip
+
+As described in the link:http://www.apache.org/dev/release-publishing.html#distribution_dist[Apache documentation], each Apache TLP has a `release/TLP-name` directory in the distribution Subversion repository at link:https://dist.apache.org/repos/dist[https://dist.apache.org/repos/dist].
+Once a release vote passes, the release manager should `svn add` the artifacts (plus signature and hash files) into this location.
+The release is then automatically pushed to http://www.apache.org/dist/[http://www.apache.org/dist/] by `svnpubsub`.
+Only the most recent release of each supported release line should be contained here, old versions should be deleted.
+
+Each project is responsible for the structure of its directory.
+The directory structure of Apache Isis reflects the directory structure in our git source code repo:
+
+[source]
+----
+isis/
+  core/
+----
+
+If necessary, checkout this directory structure:
+
+[source,bash]
+----
+svn co https://dist.apache.org/repos/dist/release/isis isis-dist
+----
+
+Next, add the new release into the appropriate directory, and delete any previous release.
+The `upd.sh` script can be used to automate this:
+
+[source,bash]
+----
+old_ver=$1
+new_ver=$2
+
+
+# constants
+repo_root=https://repository.apache.org/content/repositories/releases/org/apache/isis
+
+zip="source-release.zip"
+asc="$zip.asc"
+md5="$zip.md5"
+
+
+#
+# isis-core
+#
+type="core"
+fullname="isis-parent"
+pushd isis-core
+
+curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$asc
+svn add $fullname-$new_ver-$asc
+curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$md5
+svn add $fullname-$new_ver-$md5
+curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$zip
+svn add $fullname-$new_ver-$zip
+
+svn delete $fullname-$old_ver-$asc
+svn delete $fullname-$old_ver-$md5
+svn delete $fullname-$old_ver-$zip
+
+popd
+
+----
+
+[source,bash,subs="attributes+"]
+----
+sh upd.sh [previous_release] {isisrel}
+----
+
+The script downloads the artifacts from the Nexus release repository, adds the artifacts to subversion and deletes the previous version.
+
+Double check that the files are correct; there is sometimes a small delay in the files becoming available in the release repository.
+It should be sufficient to check just the `md5` or `.asc` files that these look valid (aren't HTML 404 error pages):
+
+[source,bash,subs="attributes+"]
+----
+vi `find . -name *.md5`
+----
+
+Assuming all is good, commit the changes:
+
+[source,subs="attributes+"]
+----
+svn commit -m "publishing isis source releases to dist.apache.org"
+----
+
+If the files are invalid, then revert using `svn revert . --recursive` and try again in a little while.
+
+
+== Final website updates
+
+Before we xref:#generate-website[generate the website], we apply final updates:
+
+* If there have been updates to any of the schemas:
+
+** copy the new schema(s) from
++
+`api/schema/src/main/resources/o.a.i.s.xxx`
++
+to its versioned:
++
+`antora/supplemental-ui/schema/xxx/xxx-ver.xsd`
+
+** ensure the non-versioned is same as the highest versioned
++
+`antora/supplemental-ui/schema/xxx/xxx.xsd`
+
+* Update the version that appears on the home page of the website, in `antora/supplemental-ui/index.html`
++
+[source,html,subs="attributes+"]
+----
+curl https://codeload.github.com/apache/isis-app-helloworld/zip/{isisrel} | jar xv
+cd isis-app-helloworld-{isisrel}
+----
++
+and
++
+[source,html,subs="attributes+"]
+----
+curl https://codeload.github.com/apache/isis-app-simpleapp/zip/{isisrel} | jar xv
+cd isis-app-simpleapp-{isisrel}
+----
+
+* Commit the changes:
++
+[source,bash,subs="attributes+"]
+----
+git add .
+git commit -m "$ISISJIRA: bumps index.html version to $ISISREL, also schema updates"
+----
+
+
+
+[#generate-website]
+== Generate website
 
 We use Antora to generate the site, not only the latest version but also any previous versions listed in `site.yml`.
 The most recently version being released is built in effect twice, as both "latest" and with its formal tag name.
@@ -153,24 +304,33 @@ The most recently version being released is built in effect twice, as both "late
 As a slight complication, the tags created previously on the release branch (`refs/tags/rel/xxx`) can't be used for this purpose, because the `antora.yml` files specify a branch name of simply "latest".
 We therefore temporarily modify all of the `antora.yml` files and `site.yml` with a reference to a new tag, and then change them back afterwards:
 
-* Update all `antora.yml` files:
-+
-** `version: latest` -> `version: {isisnext}`
+* If there have been any changes from other branches (eg fixes to documentation in non-release branches) then merge them into the release branch.
 
-* Commit the change, and tag:
+* Update all `antora.yml` files, eg using an IDE:
++
+** `version: latest` -> `version: {isisrel}`
++
+image::release-process-post/update-antora-latest.png[width="800px",link="{imagesdir}/release-process-post/update-antora-latest.png"]
+
+* Commit the changes:
 +
 [source,bash,subs="attributes+"]
 ----
 git add .
-git commit -m "$ISISJIRA: bumps antora.yml version to $ISISREL"
+git commit -m "$ISISJIRA: bumps antora.yml to $ISISREL"
+----
 
+* Now tag
++
+[source,bash,subs="attributes+"]
+----
 git tag docs/$ISISART-$ISISREL
 git push origin refs/tags/docs/$ISISART-$ISISREL:refs/tags/docs/$ISISART-$ISISREL
 ----
 
 * Now, immediately the change to `antora.yml` files back again:
 
-** `version: {isisnext}` -> `version: latest`
+** `version: {isisrel}` -> `version: latest`
 
 * Commit these changes, and push the release branch:
 +
@@ -201,20 +361,24 @@ to:
 .site.yml
 [source,yml,subs="attributes+"]
 ----
-- url: https://github.com/apache/isis.git
+- url: .
   start_path: antora/components/docs # docs
-  tags: docs/isis-{isisnext}                    # <.>
-  branches: release-isis-{isisnext}             # <.>
+  tags: docs/isis-{isisrel}                    # <.>
+  branches: HEAD                                  # <.>
 ----
-<.> will generate the {isisnext} version
+<.> will generate the {isisrel} version
 <.> will generate the 'latest' version
++
+eg using the IDE:
++
+image::release-process-post/update-site-yml-tags.png[width="800px",link="{imagesdir}/release-process-post/update-site-yml-tags.png"]
 
 * commit this change, too (there's no need to push):
 +
 [source,bash,subs="attributes+"]
 ----
 git add .
-git commit -m "$ISISJIRA: reverts antora.yml version to latest"
+git commit -m "$ISISJIRA: adds tag to site.yml"
 ----
 
 * We are now in a position to actually generate the Antora website:
@@ -228,28 +392,42 @@ This will write to `antora/target/site`; we'll use the results in the xref:#publ
 
 * Finally, revert the changes to `site.yml` back into "author mode".
 +
-That is, so that each content source specifies a local URL and only the HEAD branch:
+That is, comment out the tags entries:
 +
 .site.yml
 [source,yml,subs="attributes+"]
 ----
 - url: .
   start_path: antora/components/docs # docs
+#  tags: docs/isis-{isisrel}
   branches: HEAD
 ----
++
+eg using the IDE:
++
+image::release-process-post/update-site-yml-no-tags.png[width="800px",link="{imagesdir}/release-process-post/update-site-yml-no-tags.png"]
 
+* commit this change, too (there's no need to push):
++
+[source,bash,subs="attributes+"]
+----
+git add .
+git commit -m "$ISISJIRA: site.yml back to author mode"
+----
+
+[#publish-website]
 == Publish website
 
 We now copy the results of the Antora website generation over to the `isis-site` repo:
 
-** in the `isis-site` repo, check out the `asf-site` branch:
+* in the `isis-site` repo, check out the `asf-site` branch:
 +
 [source,bash,subs="attributes+"]
 ----
 cd ../isis-site
 
 git checkout asf-site
-git pull origin/asf-site --ff-only
+git pull --ff-only
 ----
 
 * still in the `isis-site` repo, delete all the files in `content/` _except_ for the `schema` and `versions` directories:
@@ -299,112 +477,22 @@ cd ../isis
 
 Because we release from a branch, the changes made in the branch should be merged back from the release branch back into the `master` branch.
 
-In the `isis` repo:
+In the `isis` repo (adjust if not on RC1):
 
 [source,bash,subs="attributes+"]
 ----
-git checkout master                           # update master with latest
+git checkout master                              # update master with latest
 git pull
-git merge release-{isisnext}-RC1                  # merge branch onto master
-git push origin --delete release-{isisnext}-RC1   # remote branch no longer needed
-git branch -d release-{isisnext}-RC1              # branch no longer needed
+git merge release-{isisrel}-RC1                  # merge branch onto master
+git push origin --delete release-{isisrel}-RC1   # remote branch no longer needed
+git branch -d release-{isisrel}-RC1              # branch no longer needed
 ----
 
 
-== Release to Maven Central
+== Bump \{isisrel} in `site.yml`
 
-From the http://repository.apache.org[ASF Nexus repository], select the staging repository and select 'release' from the top menu.
+In `site.yml` file, bump the version of `\{isisrel}`, and commit.
 
-
-image::release-process/nexus-release-1.png[width="600px",link="{imagesdir}/release-process/nexus-release-1.png"]
-
-This moves the release artifacts into an Apache releases repository; from there they will be automatically moved to the Maven repository.
-
-== Release Source Zip
-
-As described in the link:http://www.apache.org/dev/release-publishing.html#distribution_dist[Apache documentation], each Apache TLP has a `release/TLP-name` directory in the distribution Subversion repository at link:https://dist.apache.org/repos/dist[https://dist.apache.org/repos/dist].
-Once a release vote passes, the release manager should `svn add` the artifacts (plus signature and hash files) into this location.
-The release is then automatically pushed to http://www.apache.org/dist/[http://www.apache.org/dist/] by `svnpubsub`.
-Only the most recent release of each supported release line should be contained here, old versions should be deleted.
-
-Each project is responsible for the structure of its directory.
-The directory structure of Apache Isis reflects the directory structure in our git source code repo:
-
-[source]
-----
-isis/
-  core/
-----
-
-If necessary, checkout this directory structure:
-
-[source,bash]
-----
-svn co https://dist.apache.org/repos/dist/release/isis isis-dist
-----
-
-Next, add the new release into the appropriate directory, and delete any previous release.
-The `upd.sh` script can be used to automate this:
-
-[source,bash]
-----
-old_ver=$1
-new_ver=$2
-
-
-# constants
-repo_root=https://repository.apache.org/content/repositories/releases/org/apache/isis
-
-zip="source-release.zip"
-asc="$zip.asc"
-md5="$zip.md5"
-
-
-#
-# isis-core
-#
-type="core"
-fullname="isis"
-pushd isis-core
-
-curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$asc
-svn add $fullname-$new_ver-$asc
-curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$md5
-svn add $fullname-$new_ver-$md5
-curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$zip
-svn add $fullname-$new_ver-$zip
-
-svn delete $fullname-$old_ver-$asc
-svn delete $fullname-$old_ver-$md5
-svn delete $fullname-$old_ver-$zip
-
-popd
-
-----
-
-[source,bash,subs="attributes+"]
-----
-sh upd.sh {isiscurr} {isisnext}
-----
-
-The script downloads the artifacts from the Nexus release repository, adds the artifacts to subversion and deletes the previous version.
-
-Double check that the files are correct; there is sometimes a small delay in the files becoming available in the release repository.
-It should be sufficient to check just the `md5` or `.asc` files that these look valid (aren't HTML 404 error pages):
-
-[source,bash,subs="attributes+"]
-----
-vi `find . -name *.md5`
-----
-
-Assuming all is good, commit the changes:
-
-[source,subs="attributes+"]
-----
-svn commit -m "publishing isis source releases to dist.apache.org"
-----
-
-If the files are invalid, then revert using `svn revert . --recursive` and try again in a little while.
 
 == Update the ASF Reporter website
 
@@ -419,32 +507,31 @@ For example, for a release of Apache Isis Core, use the following subject:
 
 [source,subs="attributes+"]
 ----
-[ANN] Apache Isis version {isisnext} Released
+[ANN] Apache Isis version {isisrel} Released
 ----
 
 And use the following body (summarizing the main points as required):
 
 [source,subs="attributes+"]
 ----
-The Apache Isis team is pleased to announce the release of Apache Isis {isisnext}.
+The Apache Isis team is pleased to announce the release of Apache Isis {isisrel}.
 
 New features in this release include:
+
 * ...
 
 Full release notes are available on the Apache Isis website at [1].
-Please also read the migration notes [2].
 
-You can access this release directly from the Maven central repo [3].
-Alternatively, download the release and build it from source [4].
+You can access this release directly from the Maven central repo [2].
+Alternatively, download the release and build it from source [3].
 
 Enjoy!
 
 --The Apache Isis team
 
-[1] http://isis.apache.org/downloads/rn/about.html#_release-notes_{isisnext}
-[2] http://isis.apache.org/downloads/mn/about.html#_migration-notes_{isiscurr}-to-{isisnext}
-[3] http://search.maven.org
-[4] http://isis.apache.org/downloads.html
+[1] http://isis.apache.org/relnotes/latest/about.html
+[2] http://search.maven.org
+[3] http://isis.apache.org/downloads.html
 ----
 
 == Blog post
@@ -512,13 +599,5 @@ For example, here is a report showing both of these cases:
 
 For these artifacts you will need to search http://search.maven.org[Maven central repo] directly yourself to confirm there are no newer dependencies not shown in this list.
 
-== Code formatting
 
-This is also a good time to make source code has been cleaned up and formatted according to the Apache Isis and ASF conventions.
-Use link:../dg/resources/eclipse/Apache-code-style-formatting.xml[this] Eclipse template and link:../dg/resources/eclipse/isis.importorder[this] import order.
-
-
-== Release (non-ASF) Modules
-
-The (non-ASF) link:https://platform.incode.org[Incode Platform^] should also be released, as per their link:https://platform.incode.org/pages/committers-guide/committers-guide.html#_release_to_maven_central[release guide].
 

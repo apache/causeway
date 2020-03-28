@@ -10,31 +10,46 @@ The `AbstractIsisSessionTemplate` class (whose name is inspired by the Spring fr
 The class itself is intended to be subclassed:
 
 [source,java]
+.AbstractIsisSessionTemplate.java
 ----
 public abstract class AbstractIsisSessionTemplate {
 
-    public void execute(final AuthenticationSession authSession, final Object context) { /* ... */ } //<1>
-    protected abstract void doExecute(Object context); // <2>
+    public void execute(                                              // <.>
+            final AuthenticationSession authSession,
+            final Object context) {
+        // ...
+    }
 
-    protected ObjectAdapter adapterFor(final Object targetObject) { /* ... */ }
-    protected ObjectAdapter adapterFor(final RootOid rootOid) { /* ... */ }
+    protected void doExecute(final Object context) {                  // <.>
+        transactionService.executeWithinTransaction(()->{
+            doExecuteWithTransaction(context);
+        });
+    }
 
-    protected PersistenceSession getPersistenceSession() { /* ... */ }
-    protected IsisTransactionManager getTransactionManager() { /* ... */ }
-    protected AdapterManager getAdapterManager() { /* ... */ }
+    protected void doExecuteWithTransaction(final Object context) {}  // <.>
 }
 ----
-<1> `execute(...)` sets up the `IsisSession` and delegates to ...
-<2> `doExecute(...)`, the mandatory hook method for subclasses to implement.
+<.> `execute(...)` sets up the `IsisSession` and delegates to ...
+<.> `doExecute(...)`, a hook method for subclasses to implement.
 The passed object represents passes a context from the caller (eg the scheduler, cron job, JMS etc) that instantiated and executed the class.
+<.> Alternatively, override the `doExecuteWithTransaction()`.
 
-The `protected` methods expose key internal APIs within Apache Isis, for the subclass to use as necessary.
+In fact, the initial `execute(...)` method implementation is simply:
 
+[source,java]
+----
+public void execute(final AuthenticationSession authSession, final Object context) {
+    isisSessionFactory.runAuthenticated(authSession, ()->{
+        serviceInjector.injectServicesInto(this);
+        doExecute(context);
+    });
+}
+----
 
-[TIP]
-====
-One notable feature of `AbstractIsisSessionTemplate` is that it will automatically inject any domain services into itself. Thus, it is relatively easy for the subclass to "reach into" the domain, through injected repository services.
-====
+So, as an alternative to using `AbstractIsisSessionTemplate`, you could instead just use `IsisSessionFactory`.
+
+If you _do_ use `AbstractIsisSessionTemplate`, note that it automatically inject any domain services into itself.
+Thus, it is relatively easy for the subclass to "reach into" the domain, through injected services.
 
 
 

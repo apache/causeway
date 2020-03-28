@@ -10,7 +10,7 @@ What that means is that there's no need to explicitly start or commit transactio
 Indeed, if you do try to manage transactions (eg by reaching into the JDO `PersistenceManager` exposed by the xref:pjdo:ROOT:services/IsisJdoSupport.adoc[IsisJdoSupport] domain service, then you are likely to confuse the framework and get a stack trace for your trouble.
 
 However, you can complete a given transaction and start a new one.
-This is sometimes useful if writing a fixture script which is going to perform some sort of bulk migration of data from an old system.
+This is sometimes useful if writing a xref:testing:fixtures:about.adoc#fixture-scripts[fixture script] which is going to perform some sort of bulk migration of data from an old system.
 For this use case, use the xref:refguide:applib-svc:TransactionService.adoc[`TransactionService`].
 
 For example:
@@ -32,7 +32,6 @@ public class SomeLongRunningFixtureScript extends FixtureScript
 }
 ----
 
-You get the idea.
 
 == Raise message in the UI
 

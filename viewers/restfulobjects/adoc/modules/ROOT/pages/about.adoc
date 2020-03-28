@@ -4,14 +4,13 @@
 
 :page-aliases: guides:ugvro:ugvro.adoc
 
-Apache Isis' Restful Objects viewer is an implementation of the link:http://restfulobjects.org[Restful Objects spec],
-which defines a generic way to expose a domain model through a REST (or more precisely, hypermedia) API.  Having a REST
-API opens up an Apache Isis domain model to a huge variety of applications, from bespoke single-page apps,
-through integration scenarios, through providing an API for bulk-upload/migration from an existing system.
+WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
-The Restful Objects viewer also provides a number of extensions specific to Apache Isis.  Most significant of these is
-enhanced content negotiation support, making it easier to use the returned representations within bespoke clients using
-standard third-party configurations.
+
+Apache Isis' Restful Objects viewer is an implementation of the link:http://restfulobjects.org[Restful Objects spec], which defines a generic way to expose a domain model through a REST (or more precisely, hypermedia) API. Having a REST API opens up an Apache Isis domain model to a huge variety of applications, from bespoke single-page apps, through integration scenarios, through providing an API for bulk-upload/migration from an existing system.
+
+The Restful Objects viewer also provides a number of extensions specific to Apache Isis.
+Most significant of these is enhanced content negotiation support, making it easier to use the returned representations within bespoke clients using standard third-party configurations.
 
 This user guide discuss features, configuration and also how to extend the Restful Objects viewer.
 

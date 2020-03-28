@@ -45,4 +45,4 @@ public WebRequest newWebRequest(HttpServletRequest servletRequest, String filter
 }
 ----
 
-Rather than using the static `DEMO_MODE_USING_CREDENTIALS_AS_QUERYARGS`, you might also explore using the feature toggle library provided by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s togglz module.
+//Rather than using the static `DEMO_MODE_USING_CREDENTIALS_AS_QUERYARGS`, you might also explore using the feature toggle library provided by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s togglz module.

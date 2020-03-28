@@ -25,7 +25,7 @@ under the License.
 	<!-- this must come before <parent> because the version is manually updated in build-core.sh -->
 	<groupId>org.apache.isis.app</groupId>
 	<artifactId>isis-app-starter-parent</artifactId>
-	<version>2.0.0-M3-SNAPSHOT</version>
+	<version>2.0.0-M3</version>
 	<packaging>pom</packaging>
 
 	<parent>
@@ -94,6 +94,7 @@ under the License.
 				<type>pom</type>
 			</dependency>
 
+<!--
 			<dependency>
 				<groupId>org.apache.isis.incubator</groupId>
 				<artifactId>isis-incubator</artifactId>
@@ -109,12 +110,20 @@ under the License.
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
+-->
 
 			<dependency>
 				<groupId>org.apache.isis.mappings</groupId>
 				<artifactId>isis-mappings</artifactId>
 				<version>2.0.0-M3-SNAPSHOT</version>
 				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.mavendeps</groupId>
+				<artifactId>isis-mavendeps-integtests</artifactId>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
 
@@ -134,13 +143,6 @@ under the License.
 				<type>pom</type>
 			</dependency>
 			
-			<dependency>
-				<groupId>org.apache.isis.mavendeps</groupId>
-				<artifactId>isis-mavendeps-integtests</artifactId>
-				<version>2.0.0-M3-SNAPSHOT</version>
-				<type>pom</type>
-			</dependency>
-
 			<dependency>
 				<groupId>org.apache.isis.valuetypes</groupId>
 				<artifactId>isis-valuetypes</artifactId>

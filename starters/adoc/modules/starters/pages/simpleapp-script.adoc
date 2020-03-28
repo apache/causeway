@@ -4,8 +4,8 @@
 
 [source,bash,subs="attributes+"]
 ----
-curl https://codeload.github.com/apache/isis-app-simpleapp/zip/master | jar xv
-cd isis-app-simpleapp-master
+curl https://codeload.github.com/apache/isis-app-simpleapp/zip/{isisrel} | jar xv
+cd isis-app-simpleapp-{isisrel}
 
 mvn clean install
 mvn -pl webapp spring-boot:run

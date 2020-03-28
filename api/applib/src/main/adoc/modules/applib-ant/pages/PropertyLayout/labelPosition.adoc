@@ -1,8 +1,8 @@
-= `labelPosition`
+[#labelPosition]
+= `labelPosition()`
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
-
 
 
 
@@ -19,18 +19,22 @@ For example:
 
 [source,java]
 ----
+import lombok.Getter;
+import lombok.Setter;
+
 public class ToDoItem {
+
     @PropertyLayout(
         labelPosition=LabelPosition.TOP
     )
-    public String getDescription() { /* ... */ }
-    public void setDescription(String description) { /* ... */ }
-    ...
+    @Getter @Setter
+    private String description;
+
+    // ...
 }
 ----
 
-
-To get an idea of how these are rendered (in the xref:vw:ROOT:about.adoc[Wicket viewer]), we can look at the http://github.com/apache/isis-app-todoapp[TodoApp] that happens to have examples of most of these various label positions.
+To get an idea of how these are rendered (in the xref:vw:ROOT:about.adoc[Wicket viewer]), we can look at some examples of most of these various label positions.
 
 The default `LEFT` label positioning is used by the `cost` property:
 
@@ -55,37 +59,33 @@ Moving the label to the `RIGHT` looks like:
 
 image::reference-annotations/PropertyLayout/labelPosition-boolean-RIGHT.png[width="720px",link="{imagesdir}/reference-annotations/PropertyLayout/labelPosition-boolean-RIGHT.png"]
 
+== Default settings
 
-
-
-[TIP]
-.Specifying a default setting for label positions
-====
 If you want a consistent look-n-feel throughout the app, eg all property labels to the top, then it'd be rather frustrating to have to annotate every property.
 
-Instead, a default can be specified using a xref:refguide:config:configuring-core.adoc[configuration property] in `isis.properties`:
+Instead, a default can be specified using the xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.property-layout.label-position[`isis.applib.annotation.property-layout.label-position`] configuration property:
 
 [source,ini]
+.application.properties
 ----
-isis.viewers.propertyLayout.labelPosition=TOP
+isis.applib.annotation.property-layout.label-position=TOP
 ----
 
 or
 
 [source,ini]
+.application.properties
 ----
-isis.viewers.propertyLayout.labelPosition=LEFT
+isis.applib.annotation.property-layout.label-position=LEFT
 ----
 
-If these are not present then Apache Isis will render according to internal defaults. At the time of writing, this means labels are to the left for all datatypes except multiline strings.
-====
+If these are not present then Apache Isis will render according to internal defaults.
+At the time of writing, this means labels are to the left for all datatypes except multiline strings.
 
 
 == Alternatives
 
-As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout.adoc#file-based[file-based layout] can be used instead.
-
-
+As an alternative to using the annotation, the dynamic xref:userguide:fun:ui.adoc#object-layout[file-based layout] can be used instead.
 
 == See also
 

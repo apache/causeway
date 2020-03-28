@@ -134,13 +134,13 @@ image::https://raw.githubusercontent.com/apache/isis/master/antora/components/do
 
 == Security, Auditing and other Services
 
-As well as providing extensions to the UI, the (non-ASF) Incode Platform provides a rich set of modules to support various cross-cutting concerns.
+As well as providing extensions to the UI, the framework has a rich set of extensions to support various cross-cutting concerns.
 
-Under the activity menu are four sets of services which provide support for link:https://platform.incode.org/modules/spi/sessionlogger/spi-sessionlogger.html[user session logging/auditing], link:https://platform.incode.org/modules/spi/command/spi-command[command profiling], link:https://platform.incode.org/modules/spi/audit/spi-audit.html[(object change) auditing] (shown) and (inter-system) link:https://platform.incode.org/modules/spi/publishmq/spi-publishmq[event publishing]:
+Under the activity menu are four sets of services which provide support for _user session logging/auditing_, _command profiling_, _(object change) auditing_ (shown) and (inter-system) _event publishing_:
 
 image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/120-auditing.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/120-auditing.png"]
 
-In the security menu is access to the rich set of functionality provided by the xref:security:ROOT:about.adoc[SecMan extension]:
+In the security menu is access to the rich set of functionality provided by the SecMan extension:
 
 image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/130-security.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/130-security.png"]
 
@@ -149,7 +149,7 @@ This file can then be translated into multiple languages so that your app can su
 
 image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/140-i18n.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/140-i18n.png"]
 
-The Incode Platform also provides a module for managing link:https://platform.incode.org/modules/dom/settings/dom-settings.html[application and user settings].
+The framework also provides an extension module for managing _application and user settings_.
 Most apps (the todoapp example included) won't expose these services directly, but will usually wrap them in their own app-specific settings service that trivially delegates to the settings module's services:
 
 image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/150-appsettings.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/150-appsettings.png"]

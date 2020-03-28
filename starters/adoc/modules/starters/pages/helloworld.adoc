@@ -330,7 +330,7 @@ public class AppManifest {
 <2> Enables the Shiro security mechanism.
 There are several security implementations, precisely one must be selected
 <3> Enables JDO/DataNucleus for persistence.
-Optional (though if omitted then only xref:userguide:fun:building-blocks.adoc#view-models[view models] may be used, with hand-rolled persistence).
+Optional (though if omitted then only xref:userguide:fun:overview.adoc#view-models[view models] may be used, with hand-rolled persistence).
 <4> Enables the xref:vro:ROOT:about.adoc[Restful Objects viewer] (ie REST API).
 <5> Enables the xref:vw:ROOT:about.adoc[Wicket viewer]
 <6> Enables the H2 Console (menu from the "Prototyping" menu), applicable only if running against h2 in-memory database.

@@ -11,9 +11,6 @@ For service also provides access to the underlying JDO `PersistenceManager` for 
 
 The following sections discuss the functionality provided by the service, broken out into categories.
 
-
-
-
 == Executing SQL
 
 You can use the `IsisJdoSupportService` to perform arbitrary SQL SELECTs or UPDATEs:
@@ -29,7 +26,6 @@ public interface IsisJdoSupport {
 }
 ----
 
-
 The `executeSql(...)` method allows arbitrary SQL `SELECT` queries to be submitted:
 
 [source,java]
@@ -38,7 +34,6 @@ List<Map<String, Object>> results = isisJdoSupport.executeSql("select * from cus
 ----
 
 The result set is automatically converted into a list of maps, where the map key is the column name.
-
 
 In a similar manner, the `executeUpdate(...)` allows arbitrary SQL ``UPDATE``s to be performed.
 
@@ -54,12 +49,10 @@ The returned value is the number of rows updated.
 As an alternative, consider using DataNucleus' link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[type-safe JDO query API], discussed xref:pjdo:ROOT:services/IsisJdoSupport.adoc#type-safe-query-api[below].
 ====
 
-
-
-
+[#type-safe-jdoql-queries]
 == Type-safe JDOQL Queries
 
-DataNucleus provides an link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[extension to JDO],  so that JDOQL queries can be built up and executed using a set of type-safe classes.
+DataNucleus provides an link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[extension to JDO], so that JDOQL queries can be built up and executed using a set of type-safe classes.
 
 The types in question for type safe queries are not the domain entities, but rather are companion "Q..." query classes.
 These classes are generated dynamically by an link:https://www.jcp.org/en/jsr/detail?id=269[annotation processor] as a side-effect of compilation, one "Q..." class for each of the xref:refguide:applib-ant:PersistenceCapable.adoc[`@PersistenceCapable`] domain entity in your application.
@@ -88,11 +81,10 @@ public interface IsisJdoSupport {
 }
 ----
 
-
 The `executeQuery(...)` method supports the common case of obtaining a set of objects that meet some criteria, filtered using the provided `BooleanExpression`.
 To avoid memory leaks, the returned list is cloned and the underlying query closed.
 
-For example, in the http://github.com/apache/isis-app-todoapp[TodoApp] there is an implementation of `ToDoItemRepository` using type-safe queries.
+For example, consider an implementation of `ToDoItemRepository` using type-safe queries.
 The following JDOQL:
 
 [source,sql]
@@ -120,12 +112,10 @@ public List<ToDoItem> findByAtPathAndCategory(final String atPath, final Categor
 You can find the full example of the JDOQL equivalent in the xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`]
 ====
 
-
-The `executeUniqueQuery(...)` method (introduced in `1.15.0`) is similar to `executeQuery(...)`, however expects the query to return at most a single object, which it returns (or `null` if none).
+The `executeUniqueQuery(...)` method is similar to `executeQuery(...)`, however expects the query to return at most a single object, which it returns (or `null` if none).
 
 The `newTypesafeQuery(...)` method is a lower-level API that allows a type safe query to be instantiated for most sophisticated querying, eg using group by or order by clauses.
-See the
-DataNucleus link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[documentation] for full details of using this.
+See the DataNucleus link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[documentation] for full details of using this.
 
 One thing to be aware of is that after the query has been executed, it should be closed, using `query.closeAll()`.
 If calling `query.executeList()` we also recommend cloning the resultant list first.
@@ -141,11 +131,10 @@ private static <T> List<T> executeListAndClose(final TypesafeQuery<T> query) {
 }
 ----
 
-
-
 == Fixture support
 
-When writing xref:testing:integtestsupport:about.adoc[integration tests] you'll usually need to tear down some/all mutable transactional data before each test.  One way to do that is to use the `executeUpdate(...)` method described xref:pjdo:ROOT:services/IsisJdoSupport.adoc#executing-sql[above].
+When writing xref:testing:integtestsupport:about.adoc[integration tests] you'll usually need to tear down some/all mutable transactional data before each test.
+One way to do that is to use the `executeUpdate(...)` method described xref:pjdo:ROOT:services/IsisJdoSupport.adoc#executing-sql[above].
 
 Alternatively, the `deleteAll(...)` method will let your test delete all instances of a class without resorting to SQL:
 
@@ -180,9 +169,6 @@ JDO/DataNucleus seems to bump up the version of the object prior to its deletion
 Therefore to prevent this from happening (ie to _force_ the deletion of all instances), concurrency checking is temporarily disabled while this method is performed.
 ====
 
-
-
-
 == Reloading entities
 
 An link:http://www.datanucleus.org:15080/products/accessplatform_5_0/jdo/mapping.html#one_many_relations[(intentional) limitation] of JDO/DataNucleus is that persisting a child entity (in a 1:n bidirectional relationship) does not cause the parent's collection to be updated.
@@ -190,57 +176,18 @@ An link:http://www.datanucleus.org:15080/products/accessplatform_5_0/jdo/mapping
 [source,java]
 ----
 public interface IsisJdoSupport {
-    @Programmatic
     <T> T refresh(T domainObject);
-    @Programmatic
     void ensureLoaded(Collection<?> collectionOfDomainObjects);
     ...
 }
 ----
 
-
-
-The `refresh(T domainObject)` method can be used to reload the parent object (or indeed any object).  Under the covers it uses the JDO `PersistenceManager#refresh(...)` API.
-
-
-For example:
-
-[source,java]
-----
-@DomainService(nature=NatureOfService.VIEW_CONTRIBUTIONS_ONLY)
-public class OrderContributions {
-    public Order newOrder(final Customer customer) {
-        Order order = new Order(customer);
-        repositoryService.persistAndFlush(customer);    // <1>
-        isisJdoSupport.refresh(customer);               // <2>
-        return order;
-    }
-    @Inject
-    RepositoryService repositoryService;
-    @Inject
-    IsisJdoSupport isisJdoSupport;
-}
-----
-<1> flush to database, ensuring that the database row corresponding to the `Order` exists in its `order` table.
-<2> reload the parent (customer) from the database, so that its collection of ``Order``s is accurate.
-
-
-[NOTE]
-====
-The particular example that led to this method being added was a 1:m bidirectional relationship, analogous to `Customer 1<-->* Order`.
-Persisting the child `Order` object did not cause the parent ``Customer``'s collection of orders to be updated.
-In fact, JDO does not make any such guarantee to do so.
-Options are therefore either to maintain the collection in code, or to refresh the parent.
-====
-
+The `refresh(T domainObject)` method can be used to reload the parent object (or indeed any object).
+Under the covers it uses the JDO `PersistenceManager#refresh(...)` API.
 
 The `ensureLoaded(...)` method allows a collection of domain objects to be loaded from the database in a single hit.
 This can be valuable as a performance optimization to avoid multiple roundtrips to the database.
 Under the covers it uses the `PersistenceManager#retrieveAll(...)` API.
-
-
-
-
 
 == JDO `PersistenceManager`
 
@@ -274,8 +221,5 @@ public class Orders {
     IsisJdoSupport isisJdoSupport;
 }
 ----
-
-
-
 
 TODO: v2: IsisJdoSupport_v3_2
