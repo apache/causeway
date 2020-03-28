@@ -241,7 +241,7 @@ image::release-process-post/update-site-yml-tags.png[width="600px",link="{images
 [source,bash,subs="attributes+"]
 ----
 git add .
-git commit -m "$ISISJIRA: reverts antora.yml version to latest"
+git commit -m "$ISISJIRA: adds tag to site.yml"
 ----
 
 * We are now in a position to actually generate the Antora website:
