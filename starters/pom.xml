@@ -81,7 +81,7 @@ under the License.
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>isis</artifactId>
-				<version>2.0.0-M3</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
@@ -89,7 +89,7 @@ under the License.
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions</artifactId>
-				<version>2.0.0-M3</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
@@ -115,7 +115,7 @@ under the License.
 			<dependency>
 				<groupId>org.apache.isis.mappings</groupId>
 				<artifactId>isis-mappings</artifactId>
-				<version>2.0.0-M3</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
@@ -123,14 +123,14 @@ under the License.
 			<dependency>
 				<groupId>org.apache.isis.mavendeps</groupId>
 				<artifactId>isis-mavendeps-integtests</artifactId>
-				<version>2.0.0-M3</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.isis.subdomains</groupId>
 				<artifactId>isis-subdomains</artifactId>
-				<version>2.0.0-M3</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
@@ -138,7 +138,7 @@ under the License.
 			<dependency>
 				<groupId>org.apache.isis.testing</groupId>
 				<artifactId>isis-testing</artifactId>
-				<version>2.0.0-M3</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
@@ -146,7 +146,7 @@ under the License.
 			<dependency>
 				<groupId>org.apache.isis.valuetypes</groupId>
 				<artifactId>isis-valuetypes</artifactId>
-				<version>2.0.0-M3</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>

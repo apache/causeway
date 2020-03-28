@@ -17,7 +17,7 @@
 	<parent>
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis</artifactId>
-		<version>2.0.0-M3</version>
+		<version>2.0.0-M3-SNAPSHOT</version>
 		<relativePath>../core/pom.xml</relativePath>
 	</parent>
 
@@ -65,19 +65,19 @@
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-exceldownload-ui</artifactId>
-				<version>2.0.0-M3</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-flyway-impl</artifactId>
-				<version>2.0.0-M3</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-pdfjs-applib</artifactId>
-				<version>2.0.0-M3</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
@@ -87,67 +87,67 @@
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-pdfjs-metamodel</artifactId>
-				<version>2.0.0-M3</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-pdfjs-ui</artifactId>
-				<version>2.0.0-M3</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-fullcalendar-applib</artifactId>
-				<version>2.0.0-M3</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-fullcalendar-ui</artifactId>
-				<version>2.0.0-M3</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-secman</artifactId>
-				<version>2.0.0-M3</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-secman-model</artifactId>
-				<version>2.0.0-M3</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-secman-encryption-jbcrypt</artifactId>
-				<version>2.0.0-M3</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-secman-persistence-jdo</artifactId>
-				<version>2.0.0-M3</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-secman-shiro-realm</artifactId>
-				<version>2.0.0-M3</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-shiro-realm-ldap-impl</artifactId>
-				<version>2.0.0-M3</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-cors-impl</artifactId>
-				<version>2.0.0-M3</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
 			<!-- testing -->
 			<dependency>
 				<groupId>org.apache.isis.testing</groupId>
 				<artifactId>isis-testing-fixtures-applib</artifactId>
-				<version>2.0.0-M3</version>
+				<version>2.0.0-M3-SNAPSHOT</version>
 			</dependency>
 
 

@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis</artifactId>
-        <version>2.0.0-M3</version>
+        <version>2.0.0-M3-SNAPSHOT</version>
     </parent>
 
     <artifactId>isis-core-config</artifactId>
