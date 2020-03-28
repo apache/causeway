@@ -23,7 +23,7 @@
 	<name>Metamodel Examples: JSR303 Validation</name>
     <groupId>org.apache.isis.examples.misc</groupId>
 	<artifactId>metamodel-jsr303</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>2.0.0-SNAPSHOT</version>
 
     <repositories>
         <repository>
@@ -48,7 +48,7 @@
 		<dependency>
       		<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-metamodel</artifactId>
-            <version>2.0.0-M3-SNAPSHOT</version>
+            <version>2.0.0-SNAPSHOT</version>
 	 	</dependency>
 
 		<dependency>
