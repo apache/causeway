@@ -3,8 +3,10 @@ package org.apache.isis.client.kroviz.core.model
 import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.layout.PropertyLt
 import org.apache.isis.client.kroviz.layout.RowLt
+import org.apache.isis.client.kroviz.to.Extensions
 import org.apache.isis.client.kroviz.to.Property
 import org.apache.isis.client.kroviz.to.TObject
+import org.apache.isis.client.kroviz.to.TransferObject
 import org.apache.isis.client.kroviz.to.bs3.Grid
 import pl.treksoft.kvision.state.observableListOf
 
@@ -57,14 +59,14 @@ class ListDM(override val title: String) : DisplayModel() {
         }
     }
 
-    override fun addData(obj: org.apache.isis.client.kroviz.to.TransferObject) {
-        val exo = org.apache.isis.client.kroviz.core.model.Exposer(obj as TObject)
+    override fun addData(obj: TransferObject) {
+        val exo = Exposer(obj as TObject)
         data.add(exo.dynamise())  //if exposer is not dynamised, data access in tables won't work
     }
 
     fun addPropertyDescription(p: Property) {
         val id = p.id
-        val e: org.apache.isis.client.kroviz.to.Extensions = p.extensions!!
+        val e: Extensions = p.extensions!!
         val friendlyName = e.friendlyName
         addPropertyDescription(id, friendlyName)
     }

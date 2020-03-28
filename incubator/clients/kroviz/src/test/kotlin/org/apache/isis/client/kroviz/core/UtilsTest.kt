@@ -1,5 +1,8 @@
 package org.apache.isis.client.kroviz.core
 
+import org.apache.isis.client.kroviz.to.Argument
+import org.apache.isis.client.kroviz.to.Link
+import org.apache.isis.client.kroviz.to.Method
 import org.apache.isis.client.kroviz.utils.DateHelper
 import org.apache.isis.client.kroviz.utils.Utils
 import kotlin.test.Test
@@ -59,12 +62,12 @@ class UtilsTest {
         val href = "http://localhost:8080/restful/services/isisApplib.FixtureScriptsDefault/actions/runFixtureScript/invoke"
         val rel = "urn:org.restfulobjects:rels/invoke;action='runFixtureScript'"
         val type = "application/json;profile='urn:org.restfulobjects:repr-types/object-action'"
-        val link = org.apache.isis.client.kroviz.to.Link(method = org.apache.isis.client.kroviz.to.Method.POST.operation, href = href, rel = rel, type = type)
+        val link = Link(method = Method.POST.operation, href = href, rel = rel, type = type)
 //        val arguments = LinkedHashMap<String, String>() //
         //       link.setArgument(arguments)
 
         // when
-        val body = Utils.argumentsAsBody(link)
+        //val body = Utils.argumentsAsBody(link)
 
         // then
 //        console.log("[UtilsTest.test_argumentsAsBody]")
@@ -77,7 +80,7 @@ class UtilsTest {
         //given
         val expected = """"script": {"value": {"href": "http://localhost:8080"}}"""
         val value = "http://localhost:8080"
-        val arg = org.apache.isis.client.kroviz.to.Argument("script", value)
+        val arg = Argument("script", value)
         // when
         val actual = Utils.asBody(arg)
         // then
@@ -89,7 +92,7 @@ class UtilsTest {
         //given
         val expected = """"parameters": {"value": ""}"""
         val value = ""
-        val arg = org.apache.isis.client.kroviz.to.Argument("parameters", value)
+        val arg = Argument("parameters", value)
         // when
         val actual = Utils.asBody(arg)
         // then

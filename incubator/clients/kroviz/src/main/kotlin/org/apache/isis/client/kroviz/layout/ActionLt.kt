@@ -7,7 +7,7 @@ import org.apache.isis.client.kroviz.to.Link
 data class ActionLt(var named: String? = "",
                     var describedAs: String? = "",
                     var metadataError: String? = "",
-                    var link:org.apache.isis.client.kroviz.to.Link? = null,
+                    var link: Link? = null,
                     var id: String? = "",
                     var bookmarking: String? = "",
                     var cssClass: String? = "",
