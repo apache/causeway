@@ -178,7 +178,7 @@ We therefore temporarily modify all of the `antora.yml` files and `site.yml` wit
 +
 ** `version: latest` -> `version: {isisnext}`
 +
-image::release-process-post/update-antora-latest.png[width="600px",link="{imagesdir}/release-process-post/update-antora-latest.png"]
+image::release-process-post/update-antora-latest.png[width="800px",link="{imagesdir}/release-process-post/update-antora-latest.png"]
 
 * Commit the change, and tag:
 +
@@ -224,17 +224,17 @@ to:
 .site.yml
 [source,yml,subs="attributes+"]
 ----
-- url: https://github.com/apache/isis.git
+- url: .
   start_path: antora/components/docs # docs
   tags: docs/isis-{isisnext}                    # <.>
-  branches: HEAD                                # <.>
+  branches: HEAD                                  # <.>
 ----
 <.> will generate the {isisnext} version
 <.> will generate the 'latest' version
 +
 eg using the IDE:
 +
-image::release-process-post/update-site-yml-tags.png[width="600px",link="{imagesdir}/release-process-post/update-site-yml-tags.png"]
+image::release-process-post/update-site-yml-tags.png[width="800px",link="{imagesdir}/release-process-post/update-site-yml-tags.png"]
 
 * commit this change, too (there's no need to push):
 +
@@ -255,14 +255,27 @@ This will write to `antora/target/site`; we'll use the results in the xref:#publ
 
 * Finally, revert the changes to `site.yml` back into "author mode".
 +
-That is, so that each content source specifies a local URL and only the HEAD branch:
+That is, comment out the tags entries:
 +
 .site.yml
 [source,yml,subs="attributes+"]
 ----
 - url: .
   start_path: antora/components/docs # docs
+#  tags: docs/isis-{isisnext}
   branches: HEAD
+----
++
+eg using the IDE:
++
+image::release-process-post/update-site-yml-no-tags.png[width="800px",link="{imagesdir}/release-process-post/update-site-yml-no-tags.png"]
+
+* commit this change, too (there's no need to push):
++
+[source,bash,subs="attributes+"]
+----
+git add .
+git commit -m "$ISISJIRA: site.yml back to author mode"
 ----
 
 [#publish-website]
