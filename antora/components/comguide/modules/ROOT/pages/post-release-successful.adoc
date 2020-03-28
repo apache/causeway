@@ -257,7 +257,9 @@ Before we xref:#generate-website[generate the website], we apply final updates:
 
 * If there have been updates to any of the schemas:
 
-** copy the new schema(s) from `api/schema/src/main/resources/o.a.i.s.xxx`
+** copy the new schema(s) from
++
+`api/schema/src/main/resources/o.a.i.s.xxx`
 +
 to its versioned:
 +
@@ -475,7 +477,7 @@ cd ../isis
 
 Because we release from a branch, the changes made in the branch should be merged back from the release branch back into the `master` branch.
 
-In the `isis` repo:
+In the `isis` repo (adjust if not on RC1):
 
 [source,bash,subs="attributes+"]
 ----
