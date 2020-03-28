@@ -1,6 +1,6 @@
 include::mappings:ROOT:partial$module-nav.adoc[]
 
-include::mappings:publisher:partial$module-nav.adoc[]
+include::outbox-publisher:partial$module-nav.adoc[]
 include::mappings:jaxrsclient:partial$module-nav.adoc[]
 include::mappings:minio:partial$module-nav.adoc[]
 include::mappings:restclient:partial$module-nav.adoc[]

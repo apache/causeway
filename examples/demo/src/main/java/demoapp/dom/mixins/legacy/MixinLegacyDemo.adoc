@@ -1,0 +1,63 @@
+(since 1.x)
+
+The framework allows for tiny chunks of domain logic like `Update Name` or `Delete`, 
+to be contributed by and encapsulated within separate classes: `Mixins`
+
+`Mixins` contribute their domain logic to a domain object via a single mixed in member, which is one of 
+
+* Action
+* Property
+* Collection
+
+See also link:https://apache-isis-committers.github.io/isis-nightly/refguide/latest/applib-ant/Mixin.html[Mixins (Preview)]
+
+*Mixed-In Action*
+
+[source,java]
+----
+// Legacy Mixin Declaration Style ...
+@Mixin(method="act")
+public class Contributee_someAction() {
+
+    private final Contributee contributee;  // constructor omitted
+    @Action(...)
+    @ActionLayout(...)
+    public ReturnValue act(.... ) { ... }
+}
+----
+
+*Mixed-In Property*
+
+[source,java]
+----
+// Legacy Mixin Declaration Style ...
+@Mixin(method="prop")
+public class Contributee_someProperty() {
+    private final Contributee contributee;  
+    @Action(semantics=SAFE)   // required
+    @ActionLayout(contributed=ASSOCIATION)  // required
+    @Property(...)
+    @PropertyLayout(...)
+    public ReturnValue prop( /* no args */ ) { ... }
+}
+----
+
+*Mixed-In Collection*
+
+[source,java]
+----
+// Legacy Mixin Declaration Style ...
+@Mixin(method="coll")
+public class Contributee_someCollection() {
+    private final Contributee contributee;  
+    @Action(semantics=SAFE)   // required
+    @ActionLayout(contributed=ASSOCIATION)  // required
+    @Collection(...)
+    @CollectionLayout(...)
+    public List<ReturnValue> coll( /* no args */ ) { ... }
+}
+----
+
+See the sources for this demo here:
+link:${SOURCES_DEMO}/demoapp/dom/mixins/legacy[sources]
+

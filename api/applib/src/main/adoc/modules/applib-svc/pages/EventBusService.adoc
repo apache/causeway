@@ -3,9 +3,7 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-
-WARNING: TODO - to review for v2.
-
+WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
 The `EventBusService` allows domain objects to emit events to subscribing domain services using an in-memory event bus.
 
@@ -25,7 +23,6 @@ For more on this topic, see xref:refguide:applib-ant:Action.adoc#domainEvent[`@A
 It is also possible for domain objects to programmatically generate domain events.
 However the events are published, the primary use case is to decoupling interactions from one module/package/namespace and another.
 
-Two implementations are available, using either link:https://code.google.com/p/guava-libraries/[Guava]'s https://code.google.com/p/guava-libraries/wiki/EventBusExplained[`EventBus`], or alternatively using the link:http://www.axonframework.org/[AxonFramework]'s link:http://www.axonframework.org/docs/2.4/single.html#d5e1489[SimpleEventBus].  It is also possible to plug in a custom implementation.
 
 
 

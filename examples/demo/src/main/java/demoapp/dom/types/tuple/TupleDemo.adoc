@@ -1,0 +1,5 @@
+(since 2.0)
+
+Still work in progress, see eg. link:https://issues.apache.org/jira/browse/ISIS-1695[ISIS-1695] 
+
+See the text demo link:${SOURCES_DEMO}/demoapp/dom/types/tuple[sources].

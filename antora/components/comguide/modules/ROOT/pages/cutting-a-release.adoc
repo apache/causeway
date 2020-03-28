@@ -166,11 +166,10 @@ For example:
 ----
 export ISISJIRA=ISIS-9999                           # <.>
 export ISISTMP=/c/tmp                               # <.>
-export ISISREL={isisnext}                           # <.>
+export ISISREL={isisnext}                             # <.>
 export ISISRC=RC1                                   # <.>
 export ISISBRANCH=release-$ISISREL-$ISISRC
 export ISISART=isis
-
 env | grep ISIS | sort
 ----
 <.> set to an "umbrella" ticket for all release activities.
@@ -182,26 +181,36 @@ env | grep ISIS | sort
 
 [IMPORTANT]
 ====
-Note that the branch name is intentionally *not* the same as the eventual tag names (eg `isis-{isisnext}`).
+The branch name is intentionally *not* the same as the eventual tag names (eg `isis-{isisnext}`).
 ====
 
 
-=== Create a release branch
+=== Create a release branch and worktree
 
 The release is performed on a branch; if we are successful, this branch will be merged back into master.
 
-The next step therefore is to create a release branch for the version number being released; eg:
+We also recommend performing this work in a separate git worktree.
+The original worktree can stay with the `master` branch and be used for documentation fixes, etc.
 
-
+* create (but don't checkout) a release branch for the version number being released; eg:
++
 [source,bash,subs="attributes+"]
 ----
-git checkout -b $ISISBRANCH
+git branch $ISISBRANCH
 ----
 
-If necessary, switch to the `core-parent` directory:
-
+* Create a worktree for this branch:
++
 [source,bash,subs="attributes+"]
 ----
+git worktree add ../isis-release $ISISBRANCH
+----
+
+* Switch to the `core-parent` directory in the new worktree:
++
+[source,bash,subs="attributes+"]
+----
+cd ../isis-release
 cd core-parent
 ----
 
@@ -212,6 +221,7 @@ We use `mvn versions:set` to manually bump the release version:
 [source,bash,subs="attributes+"]
 ----
 mvn versions:set -DnewVersion=$ISISREL
+mvn install -o -DskipTests
 
 pushd ../starters
 mvn versions:set -DnewVersion=$ISISREL
@@ -250,7 +260,17 @@ mvn clean install -o
 Since the `<version>` has already been updated, we just use `mvn deploy` to upload the artifacts.
 We activate the (inherited) `apache-release` profile to bring in the `gpg` plugin for code signing.
 
-To build and deploy and tag, we use:
+The build creates a zip of the directory, so before executing the release we remove any other files.
+Still in the `core-parent` directory:
+
+[source,bash]
+----
+pushd ..
+git clean -dfx
+popd
+----
+
+To deploy (upload the artifacts), we use:
 
 [source,bash,subs="attributes+"]
 ----
@@ -265,6 +285,8 @@ When prompted, enter your GPG passphrase.
 IMPORTANT: This requires `gpg` v2.1 or later.
 
 
+=== Tag the Release
+
 Finally, tag the release:
 
 [source,bash,subs="attributes+"]
@@ -274,7 +296,7 @@ git tag $ISISART-$ISISREL-$ISISRC
 ----
 
 
-== Check/Close Staging Repo
+=== Check/Close Staging Repo
 
 The `mvn deploy` commands will have uploaded all of the release artifacts into a newly created staging repository on the ASF Nexus repository server.
 
@@ -320,7 +342,7 @@ Unfortunately, Nexus does not seem to allow subkeys to be used for signing.
 See xref:comguide:ROOT:key-generation.adoc[Key Generation] for more details.
 ====
 
-== Reset `revision` property
+=== Reset `revision` property
 
 At the beginning of the release process we bumped the version to the release version, ie `$ISISREL`.
 With the release now deployed we now need to reset the revision back down to the base snapshot, ie `2.0.0-SNAPSHOT`.
@@ -346,7 +368,7 @@ git add ..
 git commit -m "$ISISJIRA: resetting version"
 ----
 
-== Push branches
+=== Push branch & tag
 
 Push the release branch to origin:
 
@@ -355,7 +377,7 @@ Push the release branch to origin:
 git push -u origin $ISISBRANCH
 ----
 
-and also push tags:
+and also push tag:
 
 [source,bash,subs="attributes+"]
 ----
@@ -462,7 +484,7 @@ done
 popd
 ----
 
-* Back in the `isis` repo, generate the Antora site (from the top-level directory):
+* Back in the `isis` repo's worktree for `master` (as opposed to the `release` worktree, that is), generate the Antora site (from the top-level directory):
 +
 [source,bash,subs="attributes+"]
 ----
@@ -507,6 +529,7 @@ Once the artifacts have been uploaded, you can call a vote.
 
 In all cases, votes last for 72 hours and require a +3 (binding) vote from members.
 
+
 === Start voting thread on dev mailing list
 
 That is, link:mailto:dev@apache.isis.org[]
@@ -523,35 +546,31 @@ Use the following subject, eg:
 
 And use the following body:
 
-[source,subs="attributes+",txt]
+[source,subs="attributes+"]
 ----
-I've just cut a new release for Apache Isis Framework.
+I've just cut a new release of the Apache Isis Framework.
 
-The source code artifacts have been uploaded to staging repositories on repository.apache.org.
-For each zip there is a corresponding signature file (append .asc to the zip's url).
+The source code zip artifact has been uploaded to a staging repository on
+https://repository.apache.org, along with its corresponding .asc signature.
 
-In the source code repo the code has been tagged as isis-{isisnext}-RC1; see https://github.com/apache/isis/tags
+In the source code repo the code has been tagged as isis-{isisnext}-RC1;
+see https://github.com/apache/isis/tags
 
-To verify the source code, you can use the following commands (in an empty directory):
+To verify the source code itself, you can use the following commands
+(in an empty directory):
 
+----------------------------------------------------------------
+include::partial$verify-process.adoc[]
+----------------------------------------------------------------
 
-VERSION={isisnext}
-NEXUSREPONUM=10xx
+You can then test the helloworld or simpleapp starter apps, see:
+https://isis.staged.apache.org/comguide/latest/verifying-releases.html.
 
-curl https://downloads.apache.org/isis/KEYS > /tmp/KEYS
-gpg --import /tmp/KEYS
+You can also inspect the website in general, available at:
+https://isis.staged.apache.org.
 
-rm -rf isis-$VERSION*
-
-curl -O -L https://raw.githubusercontent.com/apache/isis/master/scripts/verify-isis-release.sh
-
-chmod +x ./verify-isis-release.sh
-./verify-isis-release.sh $NEXUSREPONUM $VERSION
-
-
-For more details, see https://isis.apache.org/comguide/verifying-releases.html
-
-Please verify the release and cast your vote.  The vote will be open for a minimum of 72 hours.
+Please verify the release and cast your vote.
+The vote will be open for a minimum of 72 hours.
 
 [ ] +1
 [ ]  0
@@ -562,7 +581,7 @@ Remember to update:
 
 * the version number (`{isisnext}` or whatever)
 * the release candidate number (`RC1` or whatever)
-* the `NEXUSREPONUM` to the repository id as provided by Nexus earlier (`10xx` or whatever)
+* the `NEXUSREPONUM` to the repository id as provided by Nexus earlier (`11xx` or whatever)
 
 Note that the email also references the procedure for other committers to xref:comguide:ROOT:verifying-releases.adoc[verify the release].
 

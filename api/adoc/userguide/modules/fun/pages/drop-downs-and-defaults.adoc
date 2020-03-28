@@ -25,37 +25,42 @@ For example, _choices_ for a property are specified using:
 
 [source,java]
 ----
+import lombok.Getter;
+import lombok.Setter;
+
+@Property(editing = Editing.ENABLED)                    // <.>
 @Getter @Setter
 private String paymentMethod;
 
-public List<String> choicesPaymentMethod() {
+public List<String> choicesPaymentMethod() {            // <.>
     return Arrays.asList("Visa", "Mastercard", "Amex");
 }
 ----
+<.> If required; properties are by default disabled globally.
+<.> Note the "choices" prefix and the suffix matching up with the getter.
+The method must return a collection of the same type as the property.
 
-Note the "choices" prefix and the suffix matching up with the getter.
-
-Or, for an action the _choices_ and a suitable _default_ method would be:
+For an action the _choices_ and a suitable _default_ method would be:
 
 [source,java]
 ----
-public Order changePaymentMethod(
-                @ParameterLayout(named="Payment Method")
-                String paymentMethod) {
+public Order changePaymentMethod(String paymentMethod) {
     setPaymentMethod(paymentMethod);
     return this;
 }
 
-public List<String> choices0ChangePaymentMethod() {
+public List<String> choices0ChangePaymentMethod() {         // <.>
     return Arrays.asList("Visa", "Mastercard", "Amex");
 }
-
-public String default0ChangePaymentMethod() {
-    return getPaymentMethod();
+public String default0ChangePaymentMethod() {               // <.>
+    return getPaymentMethod();                              // <.>
 }
 ----
-
-Note the "choices" and "default" prefix, the digit is the 0-based argument number, while the suffix matches up with the action's name.
+<.> "choices" prefix, N-th param, suffix matches up with the action's name. +
+Returns a collection of the same type as the parameter.
+<.> "default" prefix, N-th param, the suffix matches up with the action's name. +
+Returns object of same type as parameter.
+<.> Common idiom to return the current value of an property of the object.
 
 
 == AutoComplete
@@ -65,16 +70,19 @@ A property for example might have:
 
 [source,java]
 ----
+@Property(editing = Editing.ENABLED)                        // <.>
 @Getter @Setter
 private Product product;
 
-public List<Product> autoCompleteProduct(@MinLength(2) String search) {
+public List<Product> autoCompleteProduct(                   // <.>
+                        @MinLength(2) String search) {      // <.>
     return productRepository.findByReferenceOrName(search);
 }
 ----
-
-Note the "autoComplete" prefix, while (again) the suffix matches up with the getter.
-The `@MinLength(...)` annotation indicates the minimum number of characters that must be entered before a search is initiated.
+<.> If required; properties are by default disabled globally.
+<.> "autoComplete" prefix, suffix matches property name. +
+Returns a collection of the property's type.
+<.> The `@MinLength(...)` annotation indicates the minimum number of characters that must be entered before a search is initiated.
 
 Actions are very similar:
 
@@ -85,10 +93,13 @@ public Order changeProduct(Product product) {
     return this;
 }
 
-public List<Product> autoComplete0Product(@MinLength(2) String search) {
+public List<Product> autoComplete0Product(                  // <.>
+                        @MinLength(2) String search) {
     return productRepository.findByReferenceOrName(search);
 }
 ----
+<.> "autoComplete" prefix, N-th param, suffix matches action name. +
+Returns a collection of the parameters type.
 
 An _autoComplete_ method can be used in conjunction with a _default_ method, but it doesn't make sense to provide both an _autoComplete_ and a _choices_ method.
 
@@ -140,7 +151,7 @@ with:
 
 [source,java]
 ----
-@DomainService(nature=NatureOfService.VIEW_MENU_ONLY)
+@DomainService(nature = NatureOfService.VIEW)
 public class Customers {
     @Action(semantics=SemanticsOf.SAFE)
     public List<Customer> findByReferenceOrName(@MinLength(3) String refOrName) {
@@ -176,6 +187,10 @@ public List<Tag> autoCompleteTag(@MinLength(1) search) {
 ----
 
 
+If the action has been associated with a collection, using xref:refguide:applib-ant:Action.adoc#associateWith[`@Action#associateWith()`], then the collection can be used to provide a list of candidate values.
+
+The xref:vw:ROOT:about.adoc[Wicket Viewer] handles this by rendering checkboxes against the associated collection; the user can select/deselect these checkboxes and the selected items are taken as the values for the multi-select action.
+
 
 
 == Dependent choices for action parameters
@@ -187,7 +202,9 @@ A good example is a category/sub-category:
 
 [source,java]
 ----
-public ToDoItem categorize(Category category, Subcategory subcategory) {
+public ToDoItem categorize(
+            Category category,
+            Subcategory subcategory) {
     setCategory(category);
     setSubcategory(subcategory);
 }
@@ -195,12 +212,12 @@ public ToDoItem categorize(Category category, Subcategory subcategory) {
 public List<Category> choices0Categorize() {
     return categoryRepository.allCategories();
 }
-public List<Subcategory> choices1Categorize(Category category) {
+public List<Subcategory> choices1Categorize(        // <.>
+                                Category category) {
     return subcategoryRepository.findBy(category);
 }
 ----
+<.> Returns a list of choices for the 2nd parameter based on the argument provided for the first.
 
-Note how the _choices_ method for the 2nd parameter also accepts the first parameter.
-
-
+p
 

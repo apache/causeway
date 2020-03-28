@@ -16,63 +16,55 @@ Here's how:
 
 [source,java]
 ----
+import org.springframework.stereotype.Service;
+import org.springframework.core.Ordered;
+
 @Service
-@Order(OrderPrecedence.HIGH)                                // <1>
+@Order(OrderPrecedence.HIGH)                                // <.>
 public class MyLocaleProvider implements LocaleProvider {
     @Override
-    public Locale getLocale() { /* ... */ }
+    public Locale getLocale() {
+        // ...
+    }
 }
 ----
-<1> `OrderPrecedence` (in the Apache Isis applib) provides some standard values.
-
-If multiple instances are injected, eg:
-
-[source,java]
-----
-@javax.inject.Inject
-private List<LocalProvider> localeProviders;
-----
-
-then all implementations will be present in the list, ordered by priority.
-
-
-
-
-
-
+<.> `OrderPrecedence` (in the Apache Isis applib) provides some standard values.
 
 
 == Decorating existing implementations
 
-It's also quite common to want to decorate the existing implementation (ie have your own implementation delegate to the default); this is also possible and quite easy:
+It's sometimes useful to decorate the existing implementation (ie have your own implementation delegate to the default); this is quite easy to imlpement:
 
 [source,java]
 ----
-@DomainService(
-        nature = NatureOfService.DOMAIN
-)
-@DomainServiceLayout(
-        menuOrder = "1"                                                                             // <1>
-)
+import org.springframework.stereotype.Service;
+import org.springframework.core.Ordered;
+
+@Service
+@Order(OrderPrecedence.HIGHEST)                             // <.>
 public class MyLocaleProvider implements LocaleProvider {
+
+    @Inject List<LocaleProvider> localeProviders;           // <.>
+
     @Override
     public Locale getLocale() {
-        return getDelegateLocaleProvider().getLocale();                                             // <2>
+        return localeProviders.stream()                     // <.>
+                .filter(x -> x != this)                     // <.>
+                .findFirst()                                // <.>
+                .map(LocaleProvider::getLocale)             // <.>
+                .orElseThrow(RuntimeException::new);        // <.>
     }
-    Optional<LocaleProvider> delegateLocaleProvider;                                                // <3>
-    private LocaleProvider getDelegateLocaleProvider() {
-        if(delegateLocaleProvider == null) {
-            delegateLocaleProvider = Iterables.tryFind(localeProviders, input -> input != this);    // <4>
-        }
-        return delegateLocaleProvider.orNull();
-    }
-    @Inject
-    List<LocaleProvider> localeProviders;                                                           // <5>
 }
 ----
-<1> takes precedence over the default implementation when injected elsewhere.
-<2> this implementation merely delegates to the default implementation
-<3> lazily populated
-<4> delegate to the first implementation that isn't _this_ implementation (else infinite loop!)
-<5> Injects all implementations, including this implemenation
+<.> takes precedence over the default implementation when injected elsewhere.
+<.> injects all implementations, including this implementation
+<.> streams over all implementations...
+<.> \...ignoring this one...
+<.> \...uses the next one...
+<.> \...and delegate to it.
+<.> Fails fast if no other implementations available (should not happen if framework provides a default implementation).
 
+[TIP]
+====
+None of the default implementations provided by the framework use `Ordered(OrderPrecedence.HIGHEST)`, so all can be overridden if required.
+====

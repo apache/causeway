@@ -66,5 +66,5 @@ As its name implies, it uses xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] to do th
 The services provided by this module combines very well with the xref:refguide:applib-svc:CommandService.adoc[`CommandService`].
 The `CommandService` captures the __cause__ of an interaction (an action was invoked, a property was edited), while the `AuditerService` captures the __effect__ of that interaction in terms of changed state.
 You may also want to configure the xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`], which also captures the effect of the interaction but as an event.
-All three of these services collaborate implicitly by way of the xref:refguide:applib-cm:classes/mixins.adoc#HasUniqueId[`HasUniqueId`] interface.
+All three of these services collaborate implicitly by way of the xref:applib-classes:classes/mixins.adoc#HasUniqueId[`HasUniqueId`] interface.
 

@@ -58,26 +58,20 @@ The cornerstone of Apache Isis' support for i18n is the `TranslationService` ser
 This is defined in the applib with the following API:
 
 [source,java]
+.TranslationService.java
 ----
-public interface TranslationService {
-    public String translate(      // <1>
-            final String context,
-            final String text);
-    public String translate(      // <2>
-            final String context,
-            final String singularText,
-            final String pluralText,
-            final int num);
-    public enum Mode {
-        READ,
-        WRITE;
-    }
-    Mode getMode();               // <3>
-}
+include::refguide:applib-svc:example$services/i18n/TranslationService.java[tags="refguide"]
 ----
-<1> is to translate the singular form of the text
-<2> is to translate the plural form of the text
-<3> indicates whether the translation service is in read or write mode.
+<.> is to translate the singular form of the text
+<.> is to translate the plural form of the text
+<.> indicates whether the translation service is in read or write mode.
+
+where `Mode` is:
+
+[source,java]
+----
+include::refguide:applib-svc:example$services/i18n/TranslationService.java[tags="refguide-1",indent=0]
+----
 
 The `translate(...)` methods are closely modelled on GNU's gettext API.
 The first version is used when no translation is required, the second is when both a singular and plural form will be required, with the `num` parameter being used to select which is returned.
@@ -99,14 +93,15 @@ All requested translations are written into the `.pot` file.
 
 To make the service as convenient as possible to use, the service configures itself as follows:
 
-* if running in prototype mode xref:refguide:config:deployment-types.adoc[deployment type] or during integration tests, then the service runs in *write* mode, in which case it records all translations into the `.pot` file.
+* if running in prototype mode xref:refguide:config:about.adoc#deployment-types[deployment type] or during integration tests, then the service runs in *write* mode, in which case it records all translations into the `.pot` file.
 The `.pot` file is written out when the system is shutdown.
-* if running in server (production) mode xref:refguide:config:deployment-types.adoc[deployment type], then the service runs in *read* mode.
-It is also possible to set a configuration setting in `isis.properties` to force read mode even if running in prototype mode (useful to manually test/demo the translations).
+* if running in server (production) mode axref:refguide:config:about.adoc#deployment-types[deployment type], then the service runs in *read* mode.
+It is also possible to set a configuration setting in `application.properties` to force read mode even if running in prototype mode (useful to manually test/demo the translations).
 
 When running in write mode the original text is returned to the caller untranslated.
 If in read mode, then the translated `.po` files are read and translations provided as required.
 
+[#imperative-messages]
 == Imperative messages
 
 The `TranslationService` is used internally by Apache Isis when building up the metamodel; the name and description of every class, property, collection, action and action parameter is automatically translated.
@@ -120,12 +115,14 @@ Moreover, these messages must be captured in the `.pot` file such that they can 
 The first part of the puzzle is tackled by an extension to Apache Isis' programming model.
 Whereas previously the `disableXxx()` / `validateXxx()` / `title()` methods could only return a `java.lang.String`, they may now optionally return a `TranslatableString` (defined in Isis applib) instead.
 
-Here's a (silly) example from the xref:docs:starters:simpleapp.adoc[SimpleApp] starter app:
+For example (based on similar code in the xref:docs:starters:simpleapp.adoc[SimpleApp] starter app):
 
 [source,java]
 ----
 public TranslatableString validateUpdateName(final String name) {
-    return name.contains("!")? TranslatableString.tr("Exclamation mark is not allowed"): null;
+    return name.contains("!")
+                ? TranslatableString.tr("Exclamation mark is not allowed")
+                : null;
 }
 ----
 
@@ -143,22 +140,28 @@ The full API of `TranslatableString` is modelled on the design of GNU gettext (i
 [source,java]
 ----
 public final class TranslatableString {
-    public static TranslatableString tr(       // <1>
+    public static TranslatableString tr(                    // <.>
             final String pattern,
-            final Object... paramArgs) { /* ... */ }
-    public static TranslatableString trn(      // <2>
+            final Object... paramArgs) {
+        // ...
+    }
+    public static TranslatableString trn(                   // <.>
             final String singularPattern,
             final String pluralPattern,
             final int number,
-            final Object... paramArgs) { /* ... */ }
-    public String translate(                   // <3>
+            final Object... paramArgs) {
+        // ...
+    }
+    public String translate(                                // <.>
             final TranslationService translationService,
-            final String context) { /* ... */ }
+            final String context) {
+        // ...
+    }
 }
 ----
-<1> returns a translatable string with a single pattern for both singular and plural forms.
-<2> returns a translatable string with different patterns for singular and plural forms; the one to use is determined by the 'number' argument
-<3> translates the string using the provided `TranslationService`, using the appropriate singular/regular or plural form, and interpolating any arguments.
+<.> returns a translatable string with a single pattern for both singular and plural forms.
+<.> returns a translatable string with different patterns for singular and plural forms; the one to use is determined by the 'number' argument
+<.> translates the string using the provided `TranslationService`, using the appropriate singular/regular or plural form, and interpolating any arguments.
 
 The interpolation uses the format `\{xxx}`, where the placeholder can occur multiple times.
 
@@ -194,11 +197,11 @@ public interface MessageService {
     void informUser(String message);
     void informUser(
         TranslatableMessage message,
-        final Class<?> contextClass, final String contextMethod); // <1>
+        final Class<?> contextClass, final String contextMethod); // <.>
     ...
 }
 ----
-<1> are concatenated together to form the context for the `.pot` file.
+<.> concatenated together to form the context for the `.pot` file.
 
 === `TranslatableException`
 
@@ -210,14 +213,14 @@ The `TranslatableException` itself takes the form:
 [source,java]
 ----
 public interface TranslatableException {
-    TranslatableString getTranslatableMessage(); // <1>
-    String getTranslationContext();              // <2>
+    TranslatableString getTranslatableMessage(); // <.>
+    String getTranslationContext();              // <.>
 }
 
 ----
-<1> the message to translate.
+<.> the message to translate. +
 If returns `null`, then the `Exception#getMessage()` is used as a fallback
-<2> the context to use when translating the message
+<.> the context to use when translating the message
 
 == Wicket Viewer
 
@@ -475,25 +478,24 @@ For example, here's the corresponding integration test for the "Exclamation mark
 
 [source,java]
 ----
-@Rule
-public ExpectedException expectedException = ExpectedException.none();
-
-@Inject
-FixtureScripts fixtureScripts;
+@BeforeEach
+public void setUp() {
+    // given
+    simpleObject = fixtureScripts.runPersona(SimpleObject_persona.FOO);
+}
 
 @Test
-public void failsValidation() throws Exception {
-    // given
-    RecreateSimpleObjects fs = new RecreateSimpleObjects().setNumber(1);
-    fixtureScripts.runFixtureScript(fs, null);
-    SimpleObject simpleObjectWrapped = wrap(fs.getSimpleObjects().get(0));
+public void fails_validation() {
 
     // expect
-    expectedExceptions.expect(InvalidException.class);
-    expectedExceptions.expectMessage("Exclamation mark is not allowed");
+    InvalidException cause = assertThrows(InvalidException.class, ()->{
 
-    // when
-    simpleObjectWrapped.updateName("new name!");
+        // when
+        wrap(simpleObject).updateName("new name!");
+    });
+
+    // then
+    assertThat(cause.getMessage(), containsString("Character '!' is not allowed"));
 }
 ----
 
@@ -526,19 +528,23 @@ msgid "<i>Quantity</i>"
 msgstr "<i>Quantité</i>"
 ----
 
-For this to work, the `namedEscaped` attribute must be specified using either the xref:vw:ROOT:layout.adoc#file-based[layout file], or using an annotation such as xref:refguide:applib-ant:PropertyLayout.adoc[`@PropertyLayout`] or xref:refguide:applib-ant:ParameterLayout.adoc[`@ParameterLayout`].
+For this to work, the `namedEscaped` attribute must be specified using either the xref:userguide:fun:ui.adoc#object-layout[layout file], or using an annotation such as xref:refguide:applib-ant:PropertyLayout.adoc[`@PropertyLayout`] or xref:refguide:applib-ant:ParameterLayout.adoc[`@ParameterLayout`].
 
 For example:
 
 [source,java]
 ----
-@ParameterLayout(
-    named="<i>Quantity</i>",      // <1>
+import lombok.Getter;
+import lombok.Setter;
+
+@PropertyLayout(
+    named="<i>Quantity</i>",      // <.>
     namedEscaped=false
 )
-public Integer getQuantity() { /* ... */ }
+@Getter @Setter
+private Integer quantity;
 ----
-<1> required (even though it won't be used when a translation is read; otherwise the escaped flag is ignored)
+<.> required (even though it won't be used when a translation is read; otherwise the escaped flag is ignored)
 
 == Configuration
 
@@ -546,23 +552,39 @@ There are several different aspects of the translation service that can be confi
 
 === Logging
 
-To configure the `TranslationServicePo` to write to out the `translations.pot` file, add the following to the _integtests_ `logging.properties` file:
+To configure the `TranslationServicePo` to write to out the `translations.pot` file, add the following to the _integtests_ `log4j-test.xml` file:
 
-[source,ini]
+[source,xml]
 ----
-log4j.appender.translations-po=org.apache.log4j.FileAppender
-log4j.appender.translations-po.File=./translations.pot
-log4j.appender.translations-po.Append=false
-log4j.appender.translations-po.layout=org.apache.log4j.PatternLayout
-log4j.appender.translations-po.layout.ConversionPattern=%m%n
-
-log4j.logger.org.apache.isis.core.runtime.services.i18n.po.PoWriter=INFO,translations-po
-log4j.additivity.org.apache.isis.core.runtime.services.i18n.po.PotWriter=false
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <!-- ... -->
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${sys:CONSOLE_LOG_PATTERN}" />
+        </Console>
+        <File name="TranslationsPoFile" fileName="translations.po"
+              append="false" immediateFlush="true">
+            <PatternLayout>
+                <Pattern>%m%n</Pattern>
+            </PatternLayout>
+        </File>
+    </Appenders>
+    <Loggers>
+        <!-- ... -->
+        <logger
+            name="org.apache.isis.core.runtimeservices.i18n.po.PoWriter"
+            level="info">
+            <AppenderRef ref="TranslationsPoFile"/>
+        </logger>
+    </Loggers>
+</Configuration>
 ----
 
-Just to repeat, this is _not_ the `WEB-INF/logging.properties` file, it should instead be added to the `integtests/logging.properties` file.
 
 === Location of the `.po` files
+
+WARNING: TODO - v2 - need to verify this.
 
 The default location of the translated `.po` files is in the `WEB-INF` directory.
 These are named and searched for similarly to regular Java resource bundles.
@@ -588,39 +610,27 @@ The basename for translation files is always `translations`; this cannot be alte
 
 === Externalized translation files
 
-Normally Apache Isis configuration files are read from the `WEB-INF` file.
-However, Apache Isis can be configured to read config files from an xref:userguide:btb:about.adoc#externalized-configuration[external directory]; this is also supported for translations.
+WARNING: TODO - v2 - need to figure out how to configure Spring Boot so that these resources can be read from an external location.
 
-Thus, if in `web.xml` the external configuration directory has been set:
-
-WARNING: TODO: v2: this almost certainly no longer works, because we now set up configuration very early on.
-
-[source,xml]
-----
-<context-param>
-    <param-name>isis.config.dir</param-name>
-    <param-value>location of external config directory</param-value>
-</context-param>
-----
-
-Then this directory will be used as the base for searching for translations (rather than the default 'WEB-INF/' directory).
 
 === Force read mode, or disable
 
 As noted above, if running in prototype mode then `TranslationServicePo` will be in write mode, if in production mode then will be in read mode.
-To force read mode (ie use translations) even if in prototype mode, add the following configuration property to `isis.properties`:
+To force read mode (ie use translations) even if in prototype mode, add the xref:refguide:config:sections/isis.core.runtime-services.adoc#isis.core.runtime-services.translation.po.mode[`isis.core.runtime-services.translation.po.mode`] configuration property:
 
 [source,ini]
+.application.properties
 ----
-isis.services.translation.po.mode=read
+isis.core.runtime-services.translation.po.mode=read
 ----
 
-It's also possible to disable the service completely (using values 'disable' or 'disabled').
+It's also possible to disable the service completely.
 This can sometimes be useful in integration tests.
 
 [source,ini]
+.application.properties
 ----
-isis.services.translation.po.mode=disable
+isis.core.runtime-services.translation.po.mode=disabled
 ----
 
 == Supporting services
@@ -629,14 +639,13 @@ The `TranslationServicePo` has a number of supporting/related services.
 
 === `LocaleProvider`
 
-The `LocaleProvider` API is used by the `TranslationServicePo` implementation to obtain the locale of the "current user".
+The xref:refguide:applib-svc:LocaleProvider.adoc[`LocaleProvider`] API is used by the `TranslationServicePo` implementation to obtain the locale of the "current user".
 
-A default implementation is provided by the Wicket viewer.
+An implementation is provided by the Wicket viewer.
 
-[NOTE]
+[CAUTION]
 ====
-Note that this default implementation does not support requests made through the Restful Objects viewer (there is no Wicket 'application' object available); the upshot is that requests through Restful Objects are never translated.
-Registering a different implementation of `LocaleProvider` that taps into appropriate REST (RestEasy?) APIs would be the way to address this.
+There is no equivalent implementation of `LocaleProvider` for Restful Objects viewer; requests through Restful Objects are not translated.
 ====
 
 === `TranslationsResolver`

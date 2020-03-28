@@ -1,3 +1,4 @@
+[#Property]
 = `@Property`
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
@@ -28,7 +29,7 @@ Whether to execute the command immediately, or to persist it (assuming that an a
 +
 If the `Command` also implements `CommandWithDto` (meaning that it can return a `CommandDto`, in other words be converted into an XML memento), then optionally specifies the implementation of a `CommandDtoProcessor` that can refine this XML.
 
-<.> xref:refguide:applib-ant:Property.adoc#domainevent[`domainEvent()`]
+<.> xref:refguide:applib-ant:Property.adoc#domainEvent[`domainEvent()`]
 +
 The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] to broadcast the property's business rule checking (hide, disable, validate) and its modification (before and after).
 
@@ -40,10 +41,10 @@ Whether a property can be modified or cleared from within the UI
 +
 The reason that this property cannot be modified.
 
-<.> xref:refguide:applib-ant:Property.adoc#fileaccept[`fileAccept()`]
+<.> xref:refguide:applib-ant:Property.adoc#fileAccept[`fileAccept()`]
 +
-Hints the file type (media type or file extension) to be uploaded to a xref:refguide:applib-cm:classes/value-types.adoc#Blob[`Blob`]
- or xref:refguide:applib-cm:classes/value-types.adoc#Clob[`Clob`]. +
+Hints the file type (media type or file extension) to be uploaded to a xref:applib-classes:classes/value-types.adoc#Blob[`Blob`]
+ or xref:applib-classes:classes/value-types.adoc#Clob[`Clob`]. +
 +
 Note that this does not prevent the user from uploading some other file type; rather it merely defaults the file type in the file open dialog.
 
@@ -51,17 +52,17 @@ Note that this does not prevent the user from uploading some other file type; ra
 +
 Indicates where (in the UI) the property should be hidden from the user.
 
-<.> xref:refguide:applib-ant:Property.adoc#maxlength[`maxLength()`]
+<.> xref:refguide:applib-ant:Property.adoc#maxLength[`maxLength()`]
 +
 Maximum number of characters for string parameters; ignored otherwise +
 +
 TIP: In many/most cases you should however use xref:refguide:applib-ant:Column.adoc[`@Column#length()`]
 
-<.> xref:refguide:applib-ant:Property.adoc#mementoserialization[`mementoSerialization()`]
+<.> xref:refguide:applib-ant:Property.adoc#mementoSerialization[`mementoSerialization()`]
 +
 Whether to exclude from snapshots. +
 
-<.> xref:refguide:applib-ant:Property.adoc#mustsatisfy[`mustSatisfy()`]
+<.> xref:refguide:applib-ant:Property.adoc#mustSatisfy[`mustSatisfy()`]
 +
 Implementation of `o.a.i.applib.spec.Specification` that allows arbitrary validation to be applied.
 
@@ -79,7 +80,7 @@ Indicates that owning object is a view model that is acting as a projection of t
 +
 Determines whether the editing of a property should be published.
 
-<.> xref:refguide:applib-ant:Property.adoc#regexpattern[`regexPattern()`]
+<.> xref:refguide:applib-ant:Property.adoc#regexPattern[`regexPattern()`]
 +
 Validates the contents of a string parameter against the regular expression pattern
 

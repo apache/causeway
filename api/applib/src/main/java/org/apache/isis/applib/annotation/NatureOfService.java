@@ -24,7 +24,6 @@ package org.apache.isis.applib.annotation;
  */
 // tag::refguide[]
 public enum NatureOfService {
-
     // end::refguide[]
     /**
      * The service's actions appear in the REST API and in 'viewers', eg. in the menu bar.
@@ -35,14 +34,12 @@ public enum NatureOfService {
      */
     // tag::refguide[]
     VIEW,
-
     // end::refguide[]
     /**
      * The service's actions should only be visible in the REST API exposed by the Restful Objects viewer.
      */
     // tag::refguide[]
     REST,
-
     // end::refguide[]
 
     //

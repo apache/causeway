@@ -7,11 +7,11 @@ Most Apache Isis viewers use icons to help identify domain objects in the user i
 It's a good idea to ensure that these are styled consistently.
 Here are some open source icon sets for both personal and commercial use (though some require a link back to the authors website):
 
-* http://icons8.com/[icons8] (both free and commercial)
-* http://tango.freedesktop.org/Tango_Icon_Library[tango desktop] icon set - as used in Linux GNOME and KDE desktops (free)
-* http://thenounproject.com/[the noun project] community of icon providers (both free and commercial)
-* http://www.flaticon.com/[flaticon] - free vector icons
-* http://google.github.io/material-design-icons/[Google material design] and http://www.google.com/design/spec/resources/sticker-sheets.html#[zip here]
+* http://icons8.com/[icons8] (free and commercial)
+* http://thenounproject.com/[the noun project] (free and commercial)
+* http://www.flaticon.com/[flaticon] (free)
+* https://material.io/resources/icons[Google material design] (free)
+* https://commons.wikimedia.org/wiki/GNOME_Desktop_icons[GNOME/Tango icons] (free)
 
 
 If you know of any others freely usable and easily accessible, let us know through the xref:docs:support:mailing-list.adoc[mailing list].

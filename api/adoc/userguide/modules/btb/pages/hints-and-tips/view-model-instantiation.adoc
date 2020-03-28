@@ -5,7 +5,10 @@
 :page-partial:
 
 
-Vith view models, some care must be taken in how they are instantiated.
+WARNING: TODO - v2 - don't know if this is still valid or not.
+If it is, then we should probably remove FactoryService#create(...) for view models completely.
+
+With view models, some care must be taken in how they are instantiated.
 Specifically, it's important that the framework doesn't "know" about the view model until its state is "sufficiently" populated to distinguish from other view models.
 
 In practical terms, this means that view models should be instantiated using a constructor, and then injecting services (if required) using the xref:refguide:applib-svc:ServiceRegistry.adoc[`ServiceRegistry`] service:
@@ -155,5 +158,5 @@ public class YearSummary {
 ----
 <1> "amountsPerOffice" is part of the state of the parent view model
 
-In this case the `amountsPerOffice` collection is part of the state of the parent view model and so in this particular case everything works with either `FactoryService#instantiate` or using `ServiceRegistry`.
+In this case the `amountsPerOffice` collection is part of the state of the parent view model and so in this particular case everything works with either `FactoryService#create(...)` or using `ServiceRegistry`.
 

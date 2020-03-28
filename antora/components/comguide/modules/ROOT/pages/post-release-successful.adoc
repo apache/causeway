@@ -20,14 +20,14 @@ This section describes the steps to perform if the vote has been successful.
 
 Post the results to the `dev@isis.a.o` mailing list:
 
-[source,bash,subs="attributes+"]
+[source,subs="attributes+"]
 ----
 [RESULT] [VOTE] Apache Isis Core release {isisnext}
 ----
 
 using the body (alter last line as appropriate):
 
-[source,bash]
+[source]
 ----
 The vote has completed with the following result :
 
@@ -41,6 +41,17 @@ The vote is SUCCESSFUL.
 
 I'll now go ahead and complete the post-release activities.
 ----
+
+== Release to Maven Central
+
+CAUTION: We release from Maven Central before anything else; we don't want to push the git tags (an irreversible action) until we know that this has worked ok.
+
+From the http://repository.apache.org[ASF Nexus repository], select the staging repository and select 'release' from the top menu.
+
+image::release-process/nexus-release-1.png[width="600px",link="{imagesdir}/release-process/nexus-release-1.png"]
+
+This moves the release artifacts into an Apache releases repository; from there they will be automatically moved to the Maven repository.
+
 
 == Set environment variables
 
@@ -63,6 +74,12 @@ env | grep ISIS | sort
 <.> adjust as required
 <.> adjust as necessary if there was more than one attempt to release
 
+Open up a terminal, and switch to the correct release branch:
+
+[source,bash,subs="attributes+"]
+----
+git checkout $ISISBRANCH
+----
 
 == Update tags
 
@@ -72,13 +89,19 @@ You can do this using the `scripts/promoterctag.sh` script; for example:
 
 [source,bash,subs="attributes+"]
 ----
-sh scripts/promoterctag.sh $ISISART-ISISREL $ISISRC
+sh scripts/promoterctag.sh $ISISART-$ISISREL $ISISRC
 ----
 This script pushes the tag under `refs/tags/rel`.
 As per Apache policy (communicated on 10th Jan 2016 to Apache PMCs), this path is 'protected' and is unmodifiable (guaranteeing the provenance that the ASF needs for releases).
 
 
 == Update JIRA
+
+=== Close tickets
+
+Close all JIRA tickets for the release, or moved to future releases if not yet addressed.
+Any tickets that were partially implemented should be closed, and new tickets created for the functionality on the ticket not yet implemented.
+
 
 === Generate Release Notes
 
@@ -95,17 +118,13 @@ This script uses 'jq' to parse JSON.
 See the script itself for details of how to install this utility.
 ====
 
-=== Close tickets
-
-Close all JIRA tickets for the release, or moved to future releases if not yet addressed.
-Any tickets that were partially implemented should be closed, and new tickets created for the functionality on the ticket not yet implemented.
-
 === Mark the version as released
 
 In JIRA, go to the link:https://issues.apache.org/jira/plugins/servlet/project-config/ISIS/versions[administration section] for the Apache Isis project and update the version as being released.
 
 In the link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[Kanban view] this will have the effect of marking all tickets as released (clearing the "done" column).
 
+[#create-new-jira]
 === Create new JIRA
 
 Create a new JIRA ticket as a catch-all for the _next_ release.
@@ -145,7 +164,7 @@ git add .
 git commit -m "$ISISJIRA: updates release notes, STATUS and doap_isis.rdf"
 ----
 
-== Genereate website
+== Generate website
 
 We use Antora to generate the site, not only the latest version but also any previous versions listed in `site.yml`.
 The most recently version being released is built in effect twice, as both "latest" and with its formal tag name.
@@ -311,14 +330,6 @@ git branch -d release-{isisnext}-RC1              # branch no longer needed
 ----
 
 
-== Release to Maven Central
-
-From the http://repository.apache.org[ASF Nexus repository], select the staging repository and select 'release' from the top menu.
-
-
-image::release-process/nexus-release-1.png[width="600px",link="{imagesdir}/release-process/nexus-release-1.png"]
-
-This moves the release artifacts into an Apache releases repository; from there they will be automatically moved to the Maven repository.
 
 == Release Source Zip
 
@@ -512,13 +523,5 @@ For example, here is a report showing both of these cases:
 
 For these artifacts you will need to search http://search.maven.org[Maven central repo] directly yourself to confirm there are no newer dependencies not shown in this list.
 
-== Code formatting
 
-This is also a good time to make source code has been cleaned up and formatted according to the Apache Isis and ASF conventions.
-Use link:../dg/resources/eclipse/Apache-code-style-formatting.xml[this] Eclipse template and link:../dg/resources/eclipse/isis.importorder[this] import order.
-
-
-== Release (non-ASF) Modules
-
-The (non-ASF) link:https://platform.incode.org[Incode Platform^] should also be released, as per their link:https://platform.incode.org/pages/committers-guide/committers-guide.html#_release_to_maven_central[release guide].
 

@@ -24,7 +24,7 @@ We therefore recommend that you disable persistence-by-reachability by adding th
 
 [source,ini]
 ----
-isis.persistor.datanucleus.impl.datanucleus.persistenceByReachabilityAtCommit=false
+isis.persistence.jdo-datanucleus.impl.datanucleus.persistenceByReachabilityAtCommit=false
 ----
 
 This change has been made to both the xref:docs:starters:helloworld.adoc[HelloWorld] and xref:docs:starters:simpleapp.adoc[SimpleApp] starter apps.

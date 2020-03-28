@@ -32,14 +32,13 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.mixins.MixinConstants;
 
+import lombok.RequiredArgsConstructor;
+
 @Mixin(method = "prop")
+@RequiredArgsConstructor
 public class Persistable_datanucleusVersionLong {
 
     private final Persistable persistable;
-
-    public Persistable_datanucleusVersionLong(final Persistable persistable) {
-        this.persistable = persistable;
-    }
 
     public static class ActionDomainEvent extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Persistable_datanucleusVersionLong> {}
 

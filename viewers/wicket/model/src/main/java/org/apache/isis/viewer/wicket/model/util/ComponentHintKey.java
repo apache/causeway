@@ -27,17 +27,17 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
-import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
+import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 
 import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 
 /**
  * Scoped by the {@link Component component's path}.
  */
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ComponentHintKey implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -54,7 +54,7 @@ public class ComponentHintKey implements Serializable {
         return new ComponentHintKey(hintStore, null, null, null, fullKey);
     }
 
-    @Getter private final transient HintStore hintStore;
+    private transient HintStore hintStore;
     private final Provider<Component> componentProvider;
     private final Component component;
     private final String keyName;
@@ -141,7 +141,16 @@ public class ComponentHintKey implements Serializable {
         };
     }
 
- 
-
+    public HintStore getHintStore() {
+        return hintStore = computeIfAbsent(HintStore.class, hintStore);
+    }
+    
+    // -- HELPER
+    
+    private <X> X computeIfAbsent(Class<X> type, X existingIfAny) {
+        return existingIfAny!=null
+                ? existingIfAny
+                        : CommonContextUtils.getCommonContext().lookupServiceElseFail(type);
+    }
 
 }

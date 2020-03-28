@@ -3,6 +3,8 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
+WARNING: TODO: this content has not yet been reviewed/updated for v2.0
+
 The `LayoutService` domain service provides the ability to obtain the XML layout for a single domain object or for all domain objects.
 This functionality is surfaced through the user interface through a related xref:refguide:applib-svc:LayoutService.adoc#related-mixins-and-menus[mixin and menu action].
 
@@ -70,11 +72,12 @@ The only annotation that can be safely removed from the source code with this st
 
 The framework provides a default implementation, `o.a.i.core.metamodel.services.layout.LayoutServiceDefault`.
 
+[#related-mixins-and-menus]
 == Related Mixins and Menus
 
 The service's functionality is exposed in the UI through a mixin (per object) and a menu action (for all objects):
 
-* the xref:refguide:applib-cm:classes/mixins.adoc#Object[`Object` mixin] provides the ability to download the XML layout for any domain object (entity or view model).
+* the xref:applib-classes:classes/mixins.adoc#Object[`Object` mixin] provides the ability to download the XML layout for any domain object (entity or view model).
 
 * the `LayoutServiceMenu` provides the ability to download all XML layouts as a single ZIP file (in any of the three styles).
 

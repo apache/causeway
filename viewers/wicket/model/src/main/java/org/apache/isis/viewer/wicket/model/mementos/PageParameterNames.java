@@ -114,11 +114,10 @@ public enum PageParameterNames {
         return _Lists.map(pageParameters.getValues(this.toString()), (StringValue input)->input.toString());
     }
 
-
     public void addStringTo(final PageParameters pageParameters, final String value) {
         pageParameters.add(this.toString(), value);
     }
-
+    
     public void addEnumTo(final PageParameters pageParameters, final Enum<?> someEnum) {
         addStringTo(pageParameters, someEnum.name());
     }

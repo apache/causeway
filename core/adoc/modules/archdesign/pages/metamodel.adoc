@@ -11,21 +11,7 @@ The diagram below shows a simplified version of Apache Isis' internal metamodel.
 
 [plantuml]
 ----
-hide empty members
-'hide methods
-
-skinparam class {
-	BackgroundColor<<desc>> Cyan
-	BackgroundColor<<ppt>> LightGreen
-	BackgroundColor<<mi>> LightPink
-	BackgroundColor<<role>> LightYellow
-	BackgroundColor<<strategy>> White
-	BackgroundColor<<api>> White
-	BackgroundColor<<spi>> White
-	BackgroundColor<<internal>> LightGrey
-	BackgroundColor<<value>> White
-}
-
+include::docs:resources:partial$plantuml-stereotypes.adoc[]
 
 package metamodel {
 

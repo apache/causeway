@@ -60,7 +60,7 @@ This could be exposed in the UI using a simple `RunAsService`, for example:
 
 [source,java]
 ----
-@DomainService(nature = NatureOfService.VIEW_MENU_ONLY)
+@DomainService(nature = NatureOfService.VIEW)
 @DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.TERTIARY)
 public class RunAsService {
 

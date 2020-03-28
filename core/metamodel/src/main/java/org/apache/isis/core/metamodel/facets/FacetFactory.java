@@ -186,6 +186,11 @@ public interface FacetFactory {
     implements ProcessContextWithMetadataProperties<FacetedMethod> {
         
         @Getter private final FeatureType featureType;
+        /**
+         * Whether we are currently processing a mixin type AND this context's method can be identified 
+         * as the main method of the processed mixin class. 
+         * @since 2.0
+         */
         @Getter private final boolean mixinMain;
 
         /**

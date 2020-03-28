@@ -1,0 +1,246 @@
+[#object-management-crud]
+= Object Management (CRUD)
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+This chapter shows the idioms for creating, reading, updating and deleting xref:userguide:fun:overview.adoc#domain-entities[domain entities].
+The main domain services used for this are xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`] and xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`].
+
+
+[[instantiating]]
+== Instantiating
+
+Domain entities can be instantiated using the xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`] provided by the framework.
+For example:
+
+[source,java]
+----
+Customer customer = factoryService.detachedEntity(Customer.class);
+----
+
+The returned domain entity is not persistent and is unknown to the ORM; hence "detached".
+
+When the framework instantiates the object, all services are injected into the framework, and an `ObjectCreatedEvent` xref:userguide:fun:overview.adoc#lifecycle-events[lifecycle event] will also be emitted.
+
+You may prefer however for your domain entities to have regular constructor defining their minimum set of mandatory properties.
+For example:
+
+[source,java]
+----
+public class Customer {
+
+    public Customer(String reference, String firstName, String lastName) {
+        // ...
+    }
+
+    // ...
+}
+----
+
+In such cases, the domain object cannot be instantiated using xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`].
+Instead the xref:refguide:applib-svc:ServiceRegistry.adoc[`ServiceRegistry`] service can be used to inject services:
+
+[source,java]
+----
+Customer customer = new Customer(reference, firstName, lastName);
+serviceRegister.injectServicesInto(customer);
+----
+
+If you prefer, this can be performed in one step:
+
+[source,java]
+----
+Customer customer = serviceRegister.injectServicesInto(
+                        new Customer(reference, firstName, lastName));
+----
+
+Note though that this does _not_ raise any lifecycle event.
+
+
+[[persisting]]
+== Persisting
+
+Once a domain entity has been instantiated and initialized, it can be persisted using the xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`].
+
+For example:
+
+[source,java]
+----
+Customer customer = ...
+
+repositoryService.persist(customer);
+----
+
+If using the no-arg form to instantiate the entity, then (to save having to inject the `FactoryService` as well), the `RepositoryService` can also be used to instantiate.
+This gives rise to this common idiom:
+
+[source,java]
+----
+Customer customer = repositoryService.instantiate(Customer.class);
+customer.setReference(reference);
+customer.setFirstName(firstName);
+customer.setLastName(lastName);
+...
+repositoryService.persist(customer);
+----
+
+On the other hand, there is often little need to inject services into the domain entity between its instantiation and persistence.
+If the domain entity has an N-arg constructor, then the code is often simpler:
+
+[source,java]
+----
+Customer customer = repositoryService.persist(new Customer(reference, name, lastname));
+----
+
+Note that the `persist()` returns the object passed to it.
+
+=== Eager Persistence
+
+It's worth being aware that the framework does _not_ eagerly persist the object.
+Rather, it queues up an internal command structure representing the object persistence request.
+This is then executed either at the end of the transaction, or if a xref:userguide:fun:domain-entities-and-services.adoc#finding[query is run], or if the internal queue is manually flushed using xref:refguide:applib-svc:TransactionService.adoc[`TransactionService`]'s `flush()` method.
+Flushing also happens when a repository query is executed, so that the pending persist operation is performed first.
+Generally therefore the lazy persistence approach works well enough.
+
+Nevertheless, if you want to ensure that the persist command is flushed immediately, you can use:
+
+[source,java]
+----
+repositoryService.persistAndFlush(customer);
+----
+
+When an object is persisted the framework will emit `ObjectPersistingEvent` and `ObjectPersistedEvent` xref:userguide:fun:overview.adoc#lifecycle-events[lifecycle events].
+
+=== Persistence by Reachability
+
+It is also possible to configure ORM to automatically persist domain entities if they are associated with other already-persistent entities.
+This avoid the need to explicitly call "persist".
+
+If using xref:pjdo:ROOT:about.adoc[JDO/DataNucleus], this is done using xref:refguide:config:sections/isis.persistence.jdo-datanucleus.impl.adoc#isis.persistence.jdo-datanucleus.impl.datanucleus.persistenceByReachabilityAtCommit[persistence-by-reachability] configuration property:
+
+[source,ini]
+.application.properties
+----
+isis.persistence.jdo-datanucleus.impl.datanucleus.persistenceByReachabilityAtCommit=true
+----
+
+One downside is that the code is arguably less easy to debug.
+
+
+[[finding]]
+== Finding Objects (JDO)
+
+Retrieving domain entities depends on the ORM.
+In the case of xref:pjdo:ROOT:about.adoc[JDO/DataNucleus], it typically requires a JDOQL query defined on the domain entity, and a corresponding repository service for that domain entity type.
+This repository calls the framework-provided xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`] to actually submit the query.
+
+For example:
+
+[source,java]
+----
+@javax.jdo.annotations.Queries({
+    @javax.jdo.annotations.Query(                       // <.>
+        name = "findByName",                            // <.>
+        value = "SELECT "                               // <.>
+                + "FROM com.mydomain.myapp.Customer "   // <.>
+                + "WHERE name.indexOf(:name) >= 0 ")    // <.>
+})
+...
+public class Customer {
+    // ...
+}
+----
+<.> There may be several `@Query` annotations, nested within a `@Queries` annotation) defines queries using JDOQL.
+<.> Defines the name of the query.
+<.> The definition of the query, using JDOQL syntax.
+<.> The fully-qualified class name.
+Must correspond to the class on which the annotation is defined (the framework checks this automatically on bootstrapping).
+<.> In this particular query, is an implementation of a LIKE "name%" query.
+
+and
+
+[source,java]
+----
+import org.springframework.stereotype.Repository;
+import lombok.RequiredArgsConstructor;
+
+@Repository
+@RequiredArgsConstructor(onConstructor_ = {@Inject} )
+public class CustomerRepository {
+
+    private final RepositoryService repositoryService;
+
+    public List<Customer> findByName(String name) {
+        return repositoryService.allMatches(            // <.>
+                new QueryDefault<>(Customer.class,      // <.>
+                            "findByName",               // <.>
+                            "name",                     // <.>
+                            name);
+    }
+
+}
+----
+<1>    The xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`] is a generic facade over the JDO/DataNucleus API.
+<2> Specifies the class that is annotated with @Query
+<3> Corresponds to the `@Query#name` attribute
+<4> Corresponds to the `:name` parameter in the query JDOQL string
+
+Whenever a query is submitted, the framework will automatically "flush" any pending changes.
+This ensures that the database query runs against an up-to-date table so that all matching instances (with respect to the current transaction) are correctly retrieved.
+
+When an object is loaded from the database the framework will emit `ObjectLoadedEvent` xref:userguide:fun:overview.adoc#lifecycle-events[lifecycle event].
+
+=== Type-safe queries
+
+DataNucleus also supports type-safe queries; these can be executed using the xref:pjdo:ROOT:services/IsisJdoSupport.adoc[`IsisJdoSupport`] (JDO-specific) domain service.
+
+See xref:pjdo:ROOT:services/IsisJdoSupport.adoc#type-safe-jdoql-queries[here] for further details.
+
+[[updating]]
+== Updating Objects
+
+There is no specific API to update a domain entity.
+Rather, the ORM (DataNucleus) automatically keeps track of the state of each object and will update the corresponding database rows when the transaction completes.
+
+That said, it is possible to "flush" pending changes:
+
+* xref:refguide:applib-svc:TransactionService.adoc[`TransactionService`] acts at the Apache Isis layer, and flushes any pending object persistence or object deletions
+
+* (if using xref:pjdo:ROOT:about.adoc[JDO/DataNucleus]), the xref:pjdo:ROOT:services/IsisJdoSupport.adoc[`IsisJdoSupport`] domain service can be used reach down to the underlying JDO API, and perform a flush of pending object updates also.
+
+When an object is updated the framework will emit `ObjectUpdatingEvent` and `ObjectUpdatedEvent` xref:userguide:fun:overview.adoc#lifecycle-events[lifecycle events].
+
+[[deleting]]
+== Deleting Objects
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+Domain entities can be deleted using xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`].
+For example:
+
+[source,java]
+----
+Customer customer = ...
+repositoryService.remove(customer);
+----
+
+It's worth being aware that (as for persisting new entities) the framework does _not_ eagerly delete the object.
+Rather, it queues up an internal command structure representing the object deletion request.
+This is then executed either at the end of the transaction, or if a xref:userguide:fun:domain-entities-and-services.adoc#finding[query is run], or if the internal queue is manually flushed using xref:refguide:applib-svc:TransactionService.adoc[`TransactionService`]'s `flush()` method.
+
+Alternatively, you can use:
+
+[source,java]
+----
+repositoryService.removeAndFlush(customer);
+----
+
+to eagerly perform the object deletion from the database.
+
+When an object is deleted the framework will emit `ObjectRemovingEvent` xref:userguide:fun:overview.adoc#lifecycle-events[lifecycle event].
+
+
+

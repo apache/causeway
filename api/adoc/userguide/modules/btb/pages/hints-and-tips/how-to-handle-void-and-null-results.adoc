@@ -29,42 +29,43 @@ The following custom implementation refines this to use the breadcrumbs (availab
 [source,java]
 ----
 import org.springframework.stereotype.Service;
+import lombok.val;
 
 @Service
-@DomainServiceLayout(menuOrder = "1")                                           // <.>
-public class RoutingServiceUsingBreadcrumbs extends RoutingServiceDefault {
+@Order(OrderPrecedence.HIGH)                                              // <.>
+public class RoutingServiceUsingBreadcrumbs
+                  extends RoutingServiceDefault {
     @Override
     public Object route(final Object original) {
-        if(original != null) {                                                  // <.>
+        if(original != null) {                                            // <.>
             return original;
         }
-        repositoryService.flush();                                              // <.>
+        repositoryService.flush();                                        // <.>
 
-        final BreadcrumbModelProvider wicketSession =                           // <.>
+        val breadcrumbModelProvider =                                     // <.>
             (BreadcrumbModelProvider) AuthenticatedWebSession.get();
-        final BreadcrumbModel breadcrumbModel =
-            wicketSession.getBreadcrumbModel();
+        val breadcrumbModel = breadcrumbModelProvider.getBreadcrumbModel();
         final List<EntityModel> breadcrumbs = breadcrumbModel.getList();
 
-        final Optional<Object> firstViewModelOrNonDeletedPojoIfAny =
-                breadcrumbs.stream()                                            // <.>
+        val firstViewModelOrNonDeletedPojoIfAny =
+                breadcrumbs.stream()                                      // <.>
                 .filter(entityModel -> entityModel != null)
-                .map(EntityModel::getObject)                                    // <.>
-                .filter(objectAdapter -> objectAdapter != null)
-                .map(ObjectAdapter::getObject)                                  // <.>
-                .filter(pojo -> !(pojo instanceof Persistable) ||
-                                !((Persistable)pojo).dnIsDeleted())             // <.>
+                .map(EntityModel::getObject)                              // <.>
+                .filter(Objects::nonNull)
+                .map(ManagedObject::getObject)                            // <.>
+                .filter(pojo ->
+                  metamodelService.sortOf(pojo, RELAXED) == VIEW_MODEL)   // <.>
                 .findFirst();
 
-        return firstViewModelOrNonDeletedPojoIfAny.orElse(homePage());          // <.>
+        return firstViewModelOrNonDeletedPojoIfAny.orElse(homePage());    // <.>
     }
     private Object homePage() {
         return homePageResolverService.homePage();
     }
-    @Inject
-    HomePageResolverService homePageResolverService;
-    @Inject
-    RepositoryService repositoryService;
+
+    @Inject HomePageResolverService homePageResolverService;
+    @Inject MetaModelService metaModelService;
+    @Inject RepositoryService repositoryService;
 }
 ----
 <.> override the default imlpementation
@@ -72,9 +73,8 @@ public class RoutingServiceUsingBreadcrumbs extends RoutingServiceDefault {
 <.> ensure that any persisted objects have been deleted.
 <.> reach inside the Wicket viewer's internals to obtain the list of breadcrumbs.
 <.> loop over all breadcrumbs
-<.> unwrap the Wicket viewer's serializable representation of each domain object (`EntityModel`) to the Isis runtime's representation (`ObjectAdapter`)
-<.> unwrap the Isis runtime's representation of each domain object (`ObjectAdapter`) to the domain object pojo itself
+<.> unwrap the Wicket viewer's serializable representation of each domain object (`EntityModel`) to the Isis runtime's representation (`ManagedObject`)
+<.> unwrap the Isis runtime's representation of each domain object (`ManagedObject`) to the domain object pojo itself
 <.> if object is persistable (not a view model) then make sure it is not deleted
 <.> return the first object if any, otherwise the home page object (if any).
 
-Note that the above implementation uses Java 8, so if you are using Java 7 then you'll need to backport accordingly.

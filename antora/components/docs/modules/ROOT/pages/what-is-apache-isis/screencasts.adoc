@@ -64,12 +64,12 @@ Importing the generated app into an xref:setupguide:ROOT:ide.adoc[IDE] +
 
 
 |link:https://www.youtube.com/watch?v=xVTjtiJM8XM[003^] +
-Walking through the main classes that make up the SimpleApp: `SimpleObject` persistent entity, `HomePageViewModel`xref:userguide:fun:programming-model/view-models.adoc[view model] and `SimpleObjects` domain service (repository).
+Walking through the main classes that make up the SimpleApp: `SimpleObject` persistent entity, `HomePageViewModel`xref:userguide:fun:view-models.adoc[view model] and `SimpleObjects` domain service (repository).
 ||||x|||||||
 
 
 |link:https://www.youtube.com/watch?v=KCJ1ZPPB3pA[004^] +
-Using the optional `Xxx.layout.xml` file to provide xref:vw:ROOT:layout.adoc#file-based[layout metadata] to dynamically render a domain object using the link:http://getbootstrap.com[Bootstrap 3] grid system.
+Using the optional `Xxx.layout.xml` file to provide xref:userguide:fun:ui.adoc#object-layout[layout metadata] to dynamically render a domain object using the link:http://getbootstrap.com[Bootstrap 3] grid system.
 ||x|||||||||
 
 
@@ -127,12 +127,6 @@ Using the Swagger UI to access the xref:vro:ROOT:about.adoc[REST API] automatica
 
 
 
-//12+| *App Manifest*
-//
-//
-//|link:https://www.youtube.com/watch?v=1sNiR3Y84c0[011^] +
-//How the framework uses the xref:refguide:applib-cm:classes/AppManifest-bootstrapping.adoc[`AppManifest`] is used to bootstrap the application
-//||||||||||x|
 
 
 
@@ -144,7 +138,7 @@ include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=dfRZeYqzMtI[012^] +
-Implementing business logic using a (no-arg) action, and associating with a property using either the xref:refguide:applib-ant:MemberOrder.adoc[`@MemberOrder`] annotations or using xref:vw:ROOT:layout.adoc#file-based[dynamic (XML) layouts].
+Implementing business logic using a (no-arg) action, and associating with a property using either the xref:refguide:applib-ant:MemberOrder.adoc[`@MemberOrder`] annotations or using xref:userguide:fun:ui.adoc#object-layout[dynamic (XML) layouts].
 |x||||||||x||
 
 
@@ -159,7 +153,7 @@ include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=CwM430UH5WE[014^] +
-Using the xref:refguide:applib-cm:methods.adoc#title[`title()`], xref:refguide:applib-cm:methods.adoc#iconName[`iconName()`] and xref:refguide:applib-cm:methods.adoc#cssClass[`cssClass()`] so that end-users can distinguish domain objects within the UI.
+Using the xref:refguide:applib-cm:methods.adoc#title[`title()`], xref:refguide:applib-cm:methods.adoc#iconName[`iconName()`] and xref:refguide:applib-cm:methods.adoc#cssclass[`cssClass()`] so that end-users can distinguish domain objects within the UI.
 |x||x||||||x||
 
 
@@ -198,7 +192,7 @@ Extending a xref:testing:fixtures:about.adoc[fixture script] to more easily demo
 
 
 |link:https://www.youtube.com/watch?v=39Hpd7C4Kvo[018^] +
-Using xref:vw:ROOT:layout.adoc#file-based[dynamic (XML) layouts] to specify the page size for a domain object's collection.
+Using xref:userguide:fun:ui.adoc#object-layout[dynamic (XML) layouts] to specify the page size for a domain object's collection.
 ||||x|||||||
 
 
@@ -213,7 +207,7 @@ include::screencasts/playlists.adoc[]
 
 |link:https://www.youtube.com/watch?v=0d713-V4vrg[019^] +
 Demonstrates how Apache Isis' xref:vw:ROOT:about.adoc[Wicket viewer] remembers the state of rendered domain objects, and how the end-user of the
- application can clear these UI hints using the (framework-provided) xref:refguide:applib-cm:rgcms.adoc#__rgcms_classes_mixins_Object_clearHints["clear hints"] action.
+ application can clear these UI hints using the (framework-provided) xref:refguide:applib-cm:classes.adoc#clearHints["clear hints"] action.
 |||x||||||||
 
 
@@ -240,26 +234,26 @@ include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=Wn5215K7_Jg[022^] +
-Shows how to refactor a domain object to move an action implementation out of the domain object itself, and instead implement as a xref:userguide:fun:building-blocks.adoc#mixins[mixin] (useful for decoupling).
+Shows how to refactor a domain object to move an action implementation out of the domain object itself, and instead implement as a xref:userguide:fun:overview.adoc#mixins[mixin] (useful for decoupling).
 |x|||||x|||||
 
 
 
 |link:https://www.youtube.com/watch?v=m633OEBpWqQ[023^] +
-Shows how to refactor a domain object to move (derived) collections out of the domain object and reimplement as a xref:userguide:fun:building-blocks.adoc#mixins[mixin].
+Shows how to refactor a domain object to move (derived) collections out of the domain object and reimplement as a xref:userguide:fun:overview.adoc#mixins[mixin].
 ||||||x|||||
 
 
 
 |link:https://www.youtube.com/watch?v=-AQJb9GtIqI[024^] +
-Using a domain event subscriber to xref:userguide:fun:building-blocks.adoc#domain-events[decouple] and abstract business rules (xref:refguide:applib-cm:methods.adoc#validate[validation]).
+Using a domain event subscriber to xref:userguide:fun:overview.adoc#domain-events[decouple] and abstract business rules (xref:refguide:applib-cm:methods.adoc#validate[validation]).
 ||||||x|||||
 
 
 
 |link:https://www.youtube.com/watch?v=6GjLW0hlrm4[025^] +
 Using a domain event subscriber to hide functionality, in this
-  case the xref:refguide:applib-cm:rgcms.adoc#__rgcms_classes_mixins_Object_clearHints["clear hints"] action automatically provided by the framework.
+  case the xref:refguide:applib-cm:classes.adoc#clearHints["clear hints"] action automatically provided by the framework.
 ||||||||||x|
 
 
@@ -306,9 +300,6 @@ Using link:https://projectlombok.org/[Project Lombok] to remove boilerplate from
 
 
 
-|link:https://www.youtube.com/watch?v=AXuxULuRtm0[029^] +
-Using the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s paraname8 metamodel extension to remove boilerplate from your domain object (xref:refguide:applib-ant:ParameterLayout.adoc#named[`@ParameterLayout#named()`] annotation attribute on action parameters).
-|||||x|||x|||
 
 
 
@@ -514,22 +505,22 @@ include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=puG-pzxRSd0[052^] +
-How to write a xref:userguide:fun:programming-model.adoc#jaxb[(JAXB) view model], holding references to two domain objects.
+How to write a xref:userguide:fun:view-models.adoc#jaxb[(JAXB) view model], holding references to two domain objects.
 |x||||||||x||
 
 
 |link:https://www.youtube.com/watch?v=tdBkmA2CCZY[053^] +
-Updating the title, icon and layout of a xref:userguide:fun:programming-model.adoc#jaxb[(JAXB) view model].
+Updating the title, icon and layout of a xref:userguide:fun:view-models.adoc#jaxb[(JAXB) view model].
 ||||x|||||||
 
 
 |link:https://www.youtube.com/watch?v=TKF0FB_od00[054^] +
-How to expose information from underlying domain entities referenced by a xref:userguide:fun:programming-model.adoc#jaxb[(JAXB) view model] using derived properties
+How to expose information from underlying domain entities referenced by a xref:userguide:fun:view-models.adoc#jaxb[(JAXB) view model] using derived properties
 ||||||||||x|
 
 
 |link:https://www.youtube.com/watch?v=TMMeVhRNi8A[055^] +
-Adding an action to a xref:userguide:fun:programming-model.adoc#jaxb[(JAXB) view model], and adjusting the layout using custom CSS.
+Adding an action to a xref:userguide:fun:view-models.adoc#jaxb[(JAXB) view model], and adjusting the layout using custom CSS.
 ||||x|||||||
 
 

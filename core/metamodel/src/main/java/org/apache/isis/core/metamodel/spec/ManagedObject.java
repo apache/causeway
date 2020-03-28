@@ -157,7 +157,10 @@ public interface ManagedObject {
 
     // -- SIMPLE
 
-    @Value @RequiredArgsConstructor(staticName="of") @EqualsAndHashCode(of = "pojo") 
+    @Value 
+    @RequiredArgsConstructor(staticName="of") 
+    @EqualsAndHashCode(of = "pojo")
+    @ToString(of = {"specification", "pojo"}) //ISIS-2317 make sure toString() is without side-effects
     static final class SimpleManagedObject implements ManagedObject {
         @NonNull private final ObjectSpecification specification;
         @NonNull private final Object pojo;
@@ -168,7 +171,7 @@ public interface ManagedObject {
 
     // -- LAZY
 
-    @ToString(of = {"specification", "pojo"}) @EqualsAndHashCode(of = "pojo")
+    @EqualsAndHashCode(of = "pojo")
     static final class LazyManagedObject implements ManagedObject {
 
         @NonNull private final Function<Class<?>, ObjectSpecification> specLoader;  
@@ -189,10 +192,17 @@ public interface ManagedObject {
         public ObjectSpecification getSpecification() {
             return specification.get();
         }
-        
-        // specifically for the LoggingUtil
-        private boolean isSpecificationMemoized() {
-            return specification.isMemoized();
+
+        @Override //ISIS-2317 make sure toString() is without side-effects
+        public String toString() {
+            if(specification.isMemoized()) {
+                return String.format("ManagedObject[spec=%s, pojo=%s]",
+                        ""+getSpecification(),
+                        ""+getPojo());
+            }
+            return String.format("ManagedObject[spec=%s, pojo=%s]",
+                    "[lazy not loaded]",
+                    ""+getPojo());
         }
         
         private ObjectSpecification loadSpec() {
@@ -209,32 +219,6 @@ public interface ManagedObject {
 
     default String titleString(@Nullable ManagedObject contextAdapterIfAny) {
         return TitleUtil.titleString(this, contextAdapterIfAny);
-    }
-
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    static final class LoggingUtil {
-        
-        public static String toStringWithoutSideEffects(ManagedObject managedObject) {
-            if (managedObject==null) {
-                return "ManagedObject[null]";
-            }
-            if (managedObject instanceof SimpleManagedObject) {
-                return String.format("ManagedObject[spec=%s, pojo=%s]",
-                        ""+managedObject.getSpecification(),
-                        ""+managedObject.getPojo());
-            }
-            if (managedObject instanceof LazyManagedObject) {
-                val lazyManagedObject = (LazyManagedObject) managedObject;
-                if(lazyManagedObject.isSpecificationMemoized()) {
-                    return String.format("ManagedObject[spec=%s, pojo=%s]",
-                            ""+managedObject.getSpecification(),
-                            ""+managedObject.getPojo());
-                }
-                // else fall through
-            }
-            // don't load the spec
-            return String.format("ManagedObject[pojo=%s]", ""+managedObject.getPojo());
-        }
     }
     
     @NoArgsConstructor(access = AccessLevel.PRIVATE)

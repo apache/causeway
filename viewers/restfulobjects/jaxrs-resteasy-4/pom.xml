@@ -120,9 +120,13 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- JDO API -->
 		<dependency>
-			<groupId>javax.jdo</groupId>
-			<artifactId>jdo-api</artifactId>
+			<!-- v3.2 not available yet, use datanucleus staging for now -->
+			<!-- <groupId>javax.jdo</groupId> -->
+			<!-- <artifactId>jdo-api</artifactId> -->
+			<groupId>org.datanucleus</groupId>
+			<artifactId>javax.jdo</artifactId>
 			<scope>test</scope>
 		</dependency>
 

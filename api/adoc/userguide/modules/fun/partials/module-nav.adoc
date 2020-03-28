@@ -1,15 +1,16 @@
 
+* xref:userguide:fun:concepts-patterns.adoc[Concepts & Patterns]
+* xref:userguide:fun:overview.adoc[Overview]
+* xref:userguide:fun:domain-entities-and-services.adoc[Domain Entities & Services]
+* xref:userguide:fun:object-members.adoc[Object Members]
+* xref:userguide:fun:ui.adoc[UI Layout & Hints]
+* xref:userguide:fun:business-rules.adoc[Business Rules]
+* xref:userguide:fun:drop-downs-and-defaults.adoc[Drop downs and Defaults]
+* xref:userguide:fun:meta-annotations.adoc[Meta-annotations]
+* xref:userguide:fun:view-models.adoc[View Models]
+* xref:userguide:fun:mixins.adoc[Mixins]
+* xref:userguide:fun:modules.adoc[Modules]
 
-
-* xref:userguide:fun:about.adoc[Fundamentals]
-** xref:userguide:fun:core-concepts.adoc[Core Concepts]
-** xref:userguide:fun:building-blocks.adoc[Building Blocks]
-** xref:userguide:fun:programming-model.adoc[Programming Model]
-** xref:userguide:fun:ui-hints.adoc[UI Hints]
-** xref:userguide:fun:crud.adoc[CRUD]
-** xref:userguide:fun:business-rules.adoc[Business Rules]
-** xref:userguide:fun:drop-downs-and-defaults.adoc[Drop downs and Defaults]
-** xref:userguide:fun:available-domain-services.adoc[Available Domain Services]
 
 
 

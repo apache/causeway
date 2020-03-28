@@ -104,7 +104,7 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ManagedOb
         final MarkupContainer row = cellItem.getParent().getParent();
         row.setOutputMarkupId(true);
 
-        final ContainedToggleboxPanel toggle = new ContainedToggleboxPanel(componentId) {
+        final ContainedToggleboxPanel rowToggle = new ContainedToggleboxPanel(componentId) {
             private static final long serialVersionUID = 1L;
             @Override
             public void onSubmit(AjaxRequestTarget target) {
@@ -115,9 +115,9 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ManagedOb
                 }
             }
         };
-        rowToggles.add(toggle);
-        toggle.setOutputMarkupId(true);
-        cellItem.add(toggle);
+        rowToggles.add(rowToggle);
+        rowToggle.setOutputMarkupId(true);
+        cellItem.add(rowToggle);
     }
 
     public void clearToggles() {

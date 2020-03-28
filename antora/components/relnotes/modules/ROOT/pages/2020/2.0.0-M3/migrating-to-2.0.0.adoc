@@ -1408,7 +1408,7 @@ isis.viewer.wicket.themes.provider=org.my.IsisWicketThemeSupport
 
 === Removed o.a.i.WebServer (ISIS-2067)
 
-might need to reinstate, or long-term will have SpringBoot etc do the bootstrapping.
+might need to reinstate, or long-term will have Spring Boot etc do the bootstrapping.
 
 
 == 1.x to 2.0.0-M1

@@ -1,0 +1,52 @@
+(since 2.0)
+
+The framework allows for tiny chunks of domain logic like `Update Name` or `Delete`, 
+to be contributed by and encapsulated within separate classes: `Mixins`
+
+`Mixins` contribute their domain logic to a domain object via a single mixed in member, which is one of 
+
+* Action
+* Property
+* Collection
+
+See also link:https://apache-isis-committers.github.io/isis-nightly/refguide/latest/applib-ant/Mixin.html[Mixins (Preview)]
+
+*Mixed-In Action*
+
+[source,java]
+----
+@Action(...)              // presence of Action on class implies this is a mixin; 
+@ActionLayout(...)
+public class Contributee_someAction() {
+    private final Contributee contributee;
+    public ReturnValue act( ... ) { ... }   // no need for annotations here.   "act" assumed
+}
+----
+
+*Mixed-In Property*
+
+[source,java]
+----
+@Property(...)     // implies this class is a mixin
+@PropertyLayout(...)
+public class Contributee_someProperty()
+    private final Contributee contributee;
+    public ReturnValue prop() { ... }                    // "prop" is assumed
+}
+----
+
+*Mixed-In Collection*
+
+[source,java]
+----
+@Collection(...)     // implies this class is a mixin
+@CollectionLayout(...)
+public class Contributee_someCollection()
+    private final Contributee contributee;
+    public List<ReturnValue> coll() { ... }                    // "coll" is assumed
+}
+----
+
+See the sources for this demo here:
+link:${SOURCES_DEMO}/demoapp/dom/mixins[sources]
+

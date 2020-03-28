@@ -39,6 +39,7 @@ import org.apache.isis.persistence.jdo.datanucleus5.jdosupport.mixins.Persistabl
 import org.apache.isis.persistence.jdo.datanucleus5.jdosupport.mixins.Persistable_datanucleusVersionLong;
 import org.apache.isis.persistence.jdo.datanucleus5.jdosupport.mixins.Persistable_datanucleusVersionTimestamp;
 import org.apache.isis.persistence.jdo.datanucleus5.jdosupport.mixins.Persistable_downloadJdoMetadata;
+import org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoMetamodelMenu;
 import org.apache.isis.persistence.jdo.datanucleus5.metamodel.JdoProgrammingModelPlugin;
 import org.apache.isis.persistence.jdo.datanucleus5.metrics.MetricsServiceDefault;
 import org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisPlatformTransactionManagerForJdo;
@@ -65,6 +66,7 @@ import org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSessi
         JdoPersistenceLifecycleService.class,
         MetricsServiceDefault.class,
         PersistenceSessionFactory5.class,
+        JdoMetamodelMenu.class,
 
         // @Mixin's
         Persistable_datanucleusIdLong.class,

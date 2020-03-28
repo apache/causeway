@@ -1,0 +1,13 @@
+VERSION={isisnext}
+RC=RC1
+NEXUSREPONUM=11xx
+
+curl https://downloads.apache.org/isis/KEYS > /tmp/KEYS
+gpg --import /tmp/KEYS
+
+rm -rf isis-$VERSION*
+
+curl -O -L https://raw.githubusercontent.com/apache/isis/release-$VERSION-$RC/scripts/verify-isis-release.sh
+
+chmod +x ./verify-isis-release.sh
+./verify-isis-release.sh $NEXUSREPONUM $VERSION $RC

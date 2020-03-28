@@ -1,22 +1,16 @@
-= iconUiEvent
+[#iconUiEvent]
+= `iconUiEvent()`
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
 
 Whenever a domain object is to be rendered, the framework fires off an icon UI event to obtain an icon (name) for the object (if possible).
-This is as an alternative to implementing xref:refguide:applib-cm:methods.adoc#iconName[`iconName()`] reserved method.
+This is as an alternative to implementing xref:refguide:applib-methods:reserved.adoc#iconName[`iconName()`] reserved method.
 (If `iconName()` is present, then it will take precedence).
 
 Subscribers subscribe through the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] and can use obtain a reference to the domain object from the event.
 From this they can, if they wish, specify an icon name for the domain object using the event's API.
-
-
-[NOTE]
-====
-The feature was originally introduced so that xref:refguide:applib-ant:XmlRootElement.adoc[`@XmlRootElement`]-annotated xref:userguide:fun:building-blocks.adoc#view-models[view model]s could be kept as minimal as possible, just defining the data.
-UI events allow subscribers to provide UI hints, while xref:userguide:fun:building-blocks.adoc#mixins[mixin]s can be used to provide the behaviour.
-====
 
 By default the event raised is `IconUiEvent.Default`.
 For example:
@@ -48,13 +42,9 @@ public class ToDoItemDto {
 
 The benefit is that subscribers can be more targeted as to the events that they subscribe to.
 
-
-
-
 == Subscribers
 
-Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.
-The examples below are compatible with both.
+Subscribers (which must be domain services) subscribe to events posted through the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`].
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
 
@@ -92,9 +82,6 @@ public class SomeSubscriber {
 
 The subscriber should then use `IconUiEvent#setIconName(...)` to actually specify the icon name to be used.
 
-
-
-
 == Default, Doop and Noop events
 
 If the `iconUiEvent` attribute is not explicitly specified (is left as its default value, `IconUiEvent.Default`), then the framework will, by default, post an event.
@@ -105,8 +92,6 @@ On the other hand, if the `iconUiEvent` has been explicitly specified to some su
 The framework provides `IconUiEvent.Doop` as such a subclass, so setting the `iconUiEvent` attribute to this class will ensure that the event to be posted, irrespective of the configuration property setting.
 
 And, conversely, the framework also provides `IconUiEvent.Noop`; if `iconUiEvent` attribute is set to this class, then no event will be posted.
-
-
 
 == Raising events programmatically
 

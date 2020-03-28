@@ -38,7 +38,4 @@ public interface MetaModelValidator {
         
         DeficiencyFacet.appendTo(facetHolder, deficiencyOrigin, deficiencyMessage);
     }
-
-
-
 }

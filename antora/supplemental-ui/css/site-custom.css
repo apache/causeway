@@ -3,6 +3,19 @@
     font-weight: 500;
 }
 
+.doc h3:not(.discrete) {
+    font-weight: 500;
+}
+
+.doc h4:not(.discrete) {
+    font-style: italic;
+}
+
+.doc .sidebarblock.float-left {
+    min-width: 400px;
+    margin-right: 30px;
+}
+
 .content .hljs-keyword,
 .content .hljs-selector-tag,
 .content .hljs-subst {
@@ -14,6 +27,7 @@ div.paragraph code {
     color: darkmagenta;
 }
 
+.doc p a code,
 .doc div.ulist a code,
 .doc div.paragraph a code {
     color: cornflowerblue;

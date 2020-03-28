@@ -1,8 +1,6 @@
 
 
 
-* xref:vw:ROOT:layout.adoc[Layout]
-* xref:vw:ROOT:menubars-layout.adoc[Menubars Layout]
 * xref:vw:ROOT:configuration-properties.adoc[Configuration Properties]
 * xref:vw:ROOT:features.adoc[End-user Features]
 * xref:vw:ROOT:security.adoc[Security]

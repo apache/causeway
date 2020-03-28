@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<bs3:grid
+        xmlns:bs3="http://isis.apache.org/applib/layout/grid/bootstrap3"
+        xmlns:cpt="http://isis.apache.org/applib/layout/component"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<bs3:row>
+		<bs3:col span="12" unreferencedActions="true">
+			<cpt:domainObject />
+			<cpt:action id="clearHints" />
+			<cpt:action id="downloadLayoutXml" />
+			<cpt:action id="openRestApi" />
+			<cpt:action id="rebuildMetamodel" />
+		</bs3:col>
+	</bs3:row>
+	<bs3:row>
+		<bs3:col span="4">
+
+			<cpt:fieldSet name="Actions" id="actions">
+				<cpt:property id="note"/>
+			</cpt:fieldSet>
+
+			<cpt:fieldSet name="Properties" id="mixedInProperty">
+				<cpt:property id="mixedInProperty"/>
+			</cpt:fieldSet>
+			
+			<cpt:collection defaultView="table" id="mixedInCollection"/>
+			
+		</bs3:col>
+		<bs3:col span="8" unreferencedCollections="true">
+			<cpt:fieldSet name="Description" id="description"
+				unreferencedProperties="true">
+				<cpt:property id="description" labelPosition="NONE" />
+			</cpt:fieldSet>
+		</bs3:col>
+	</bs3:row>
+</bs3:grid>

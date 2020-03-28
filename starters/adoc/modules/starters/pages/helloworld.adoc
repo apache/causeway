@@ -113,7 +113,7 @@ The above functionality is implemented by this code:
 [source,java]
 ----
 @Action(semantics = SemanticsOf.IDEMPOTENT,
-        publishing = Publishing.ENABLED,
+        publishing = Publishing.ENABLED,        // <.>
         associateWith = "name")
 public HelloWorldObject updateName(
         @Name final String name) {
@@ -124,12 +124,10 @@ public String default0UpdateName() {
     return getName();
 }
 ----
-
-The `updateName` action is annotated with publishing enabled.
-This means that the action invocation is converted into XML and dispatched to all configured implementations of the xref:refguide:applib-svc:PublisherService.adoc[PublisherService] SPI.
-
+<.> Publishing enabled means that the action invocation is converted into XML and dispatched to all configured implementations of the xref:refguide:applib-svc:PublisherService.adoc[PublisherService] SPI.
++
 The framework provides a default implementation that just logs the interaction:
-
++
 image::helloworld/using/075-logged-action.png[width="600px",link="{imagesdir}using/075-logged-action.png"]
 
 
@@ -158,13 +156,13 @@ The above functionality is implemented by this code:
 @Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)
 @ActionLayout(position = ActionLayout.Position.PANEL)
 public void delete() {
-    final String title = titleService.titleOf(this);
+    final String title = titleService.titleOf(this);                    // <.>
     messageService.informUser(String.format("'%s' deleted", title));
     repositoryService.removeAndFlush(this);
 }
 ----
+<.> Note that this method uses three services provided by the framework; these are injected into the domain object automatically.
 
-Note that this uses three services provided by the framework; these are injected into the domain object automatically.
 
 
 === Swagger (Restful Objects)
@@ -279,8 +277,8 @@ This will pick up the `HelloWorldObjects` repository because it is annotated wit
 
 * all domain services
 +
-These are classes that are annotated with the framework's xref:refguide:applib-ant:DomainService.adoc[@DomainService] annotation.
-Because `@DomainService` is meta-annotated as a `@Component`, these are found automatically and are managed by Spring (ie instantiated, injected etc).
+These are classes that are annotated with the framework's xref:refguide:applib-ant:DomainService.adoc[`@DomainService`] annotation.
+Because `@DomainService` is meta-annotated as a `@Component`, these are found automatically and are managed by Spring.
 +
 Depending on their nature, domain services are used to build up the menu, or are available to call programmatically, eg repositories, or sometimes both.
 +
@@ -289,8 +287,9 @@ This appears in the menu, and also acts as a repository for the `HelloWorldObjec
 
 * all entities.
 +
-These are entities that are annotated with `@javax.jdo.annotations.PersistenceCapable`.
-These are passed through to the JDO/DataNucleus object store, in order to create database mappings from the entities to relational tables.
+These are entities that are annotated with both xref:refguide:applib-ant:DomainObject.adoc[`@DomainObject`] annotation and with `@javax.jdo.annotations.PersistenceCapable`.
+Because `@DomainObject` is meta-annotated as a `@Component`, these are found automatically by Spring.
+They are passed through to the JDO/DataNucleus object store, in order to create database mappings from the entities to relational tables.
 It is also annotated with xref:refguide:applib-ant:DomainObject.adoc[`@DomainObject`]
 +
 In the helloworld starter app, the only entity is `HelloWorldObject`.
@@ -331,7 +330,7 @@ public class AppManifest {
 <2> Enables the Shiro security mechanism.
 There are several security implementations, precisely one must be selected
 <3> Enables JDO/DataNucleus for persistence.
-Optional (though if omitted then only xref:userguide:fun:building-blocks/types-of-domain-objects.adoc[view models] may be used, with hand-rolled persistence).
+Optional (though if omitted then only xref:userguide:fun:overview.adoc#view-models[view models] may be used, with hand-rolled persistence).
 <4> Enables the xref:vro:ROOT:about.adoc[Restful Objects viewer] (ie REST API).
 <5> Enables the xref:vw:ROOT:about.adoc[Wicket viewer]
 <6> Enables the H2 Console (menu from the "Prototyping" menu), applicable only if running against h2 in-memory database.

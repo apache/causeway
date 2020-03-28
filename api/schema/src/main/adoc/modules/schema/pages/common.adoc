@@ -14,7 +14,7 @@ This is basically a formal XML equivalent to the `Bookmark` object obtained from
 
 Although simple, this is an enormously powerful concept, in that it represents a URI to any domain object managed by a given Apache Isis application.
 With it, we have the ability to lookup any arbitrary object.
-Further discussion and examples can be found xref:userguide:fun:building-blocks.adoc#oid[here].
+Further discussion and examples can be found xref:userguide:fun:overview.adoc#oid[here].
 
 The `oidDto` complex type is defined as:
 
@@ -170,7 +170,7 @@ This is primarily to save storage space if the resultant XML is persisted as a m
 
 == Ancillary types
 
-The common schema also defines a number of ancillary types, used either by the common schema itself (see above) or by the xref:refguide:schema:cmd["cmd"] and xref:refguide:schema:about.adoc#ixn.adoc["ixn"] schemas.
+The common schema also defines a number of ancillary types, used either by the common schema itself (see above) or by the xref:refguide:schema:cmd["cmd"] and xref:refguide:schema:ixn.adoc["ixn"] schemas.
 
 [source,xml]
 ----
@@ -239,6 +239,6 @@ The common schema also defines a number of ancillary types, used either by the c
 <5> Captures a pair of numbers representing a difference.
 Used for example to capture metrics (number objects modified before and after).
 <6> Whether this command/interaction with a member is invoking an action, or editing a property.
-Used by both the xref:refguide:schema:cmd["cmd"] and xref:refguide:schema:about.adoc#ixn.adoc["ixn"] schemas.
+Used by both the xref:refguide:schema:cmd["cmd"] and xref:refguide:schema:ixn.adoc["ixn"] schemas.
 <7> Contains a list of OIDs, eg for use in "bulk" actions that apply to multiple targets.
 

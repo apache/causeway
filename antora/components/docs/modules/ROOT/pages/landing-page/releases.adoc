@@ -28,7 +28,7 @@ If you like to live on the bleeding edge, there are also nightly builds of the f
 
 * link:https://github.com/apache-isis-committers/isis-nightly[CI]
 * link:https://repo.incode.cloud/[Maven Repo]
-* link:https://apache-isis-committers.github.io/isis-nightly/toc/about.html[Website preview]
+* link:https://apache-isis-committers.github.io/isis-nightly[Website preview]
 
 Although these are maintained and used by the framework's committers, do be aware that *these are _not_ official ASF releases*; they are provided as a convenience only.
 

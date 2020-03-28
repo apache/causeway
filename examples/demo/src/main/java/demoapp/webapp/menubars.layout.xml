@@ -49,6 +49,7 @@
                 </mb3:serviceAction>
             </mb3:section>
         </mb3:menu>
+        
         <mb3:menu>
             <mb3:named>Actions</mb3:named>
             <mb3:section>
@@ -56,13 +57,20 @@
                     <cpt:named>Associated Actions</cpt:named>
                 </mb3:serviceAction>
                 <mb3:serviceAction objectType="demo.AsyncActionMenu" id="asyncActions">
-                    <cpt:named>Asynchronous Actions</cpt:named>
+                    <cpt:named>Background (Async) Actions</cpt:named>
                 </mb3:serviceAction>
                 <mb3:serviceAction objectType="demo.DependentArgsActionMenu" id="dependentArgsActions">
-                    <cpt:named>Actions w/ dependent Arguments</cpt:named>
+                    <cpt:named>Dependent Arguments</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="demo.MixinMenu" id="mixinDemo">
+                    <cpt:named>Mixins</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="demo.MixinLegacyMenu" id="mixinLegacyDemo">
+                    <cpt:named>Mixins (Legacy)</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
         </mb3:menu>
+        
         <mb3:menu>
             <mb3:named>Events</mb3:named>
             <mb3:section>
@@ -116,6 +124,11 @@
                 </mb3:serviceAction>
                 <mb3:serviceAction objectType="isisApplib.MetaModelServiceMenu" id="downloadMetaModelXml">
                     <cpt:named>Download Meta Model (XML)</cpt:named>
+                </mb3:serviceAction>
+            </mb3:section>
+            <mb3:section>
+                <mb3:serviceAction objectType="isisJdoDn5.JdoMetamodelMenu" id="downloadMetamodels">
+                    <cpt:named>Download JDO Metamodels (ZIP)</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
             <mb3:section>

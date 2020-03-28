@@ -3,9 +3,9 @@
 
 * xref:testing:fixtures:about.adoc[Fixture Scripts]
 
-* Domain Services
-** xref:testing:fixtures:services/ExecutionParametersService.adoc[ExecutionParametersService]
-** xref:testing:fixtures:services/FixtureScripts.adoc[FixtureScripts]
-** xref:testing:fixtures:services/FixtureScriptsSpecificationProvider.adoc[FixtureScriptsSpecificationProvider]
+** Domain Services
+*** xref:testing:fixtures:services/ExecutionParametersService.adoc[ExecutionParametersService]
+*** xref:testing:fixtures:services/FixtureScripts.adoc[FixtureScripts]
+*** xref:testing:fixtures:services/FixtureScriptsSpecificationProvider.adoc[FixtureScriptsSpecificationProvider]
 
 

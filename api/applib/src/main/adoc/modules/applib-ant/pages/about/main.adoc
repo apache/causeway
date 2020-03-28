@@ -10,7 +10,7 @@ For each of these domain types and members there are two annotations.  One cover
 
 [TIP]
 ====
-Most UI semantics can also be specified using xref:vw:ROOT:layout.adoc#file-based[dynamic object layout].
+Most UI semantics can also be specified using xref:userguide:fun:ui.adoc#object-layout[dynamic object layout].
 ====
 
 
@@ -23,7 +23,7 @@ The table below summarizes these most commonly used annotations in Apache Isis.
 |Annotation
 |Purpose
 |Layer
-|xref:vw:ROOT:layout.adoc#file-based[File-based layout]?
+|xref:userguide:fun:ui.adoc#object-layout[File-based layout]?
 
 |xref:refguide:applib-ant:Action.adoc[`@Action`]
 |Domain semantics for actions

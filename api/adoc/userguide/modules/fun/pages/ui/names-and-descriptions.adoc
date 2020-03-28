@@ -1,0 +1,52 @@
+= Names and Descriptions
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+The name of classes and class members are usually inferred from the Java source code directly.
+For example, an action method called `placeOrder` will be rendered as "Place Order", and a collection called `orderItems` is rendered as "Order Items".
+The same is true for action parameter names also, though note that the code must be compiled with the `--parameters` flag (to javac).
+
+Occasionally though the desired name is not possible; either the name is a Java reserved word (eg "class"), or might require characters that are not valid, for example abbreviations.
+
+In such cases the name can be specified declaratively.
+It is also possible to specify a description declaratively; this is used as a tooltip in the UI.
+
+The table below summarizes the annotations available:
+
+.Names and descriptions
+[cols="1a,1a,1a", options="header"]
+|===
+
+| Feature
+| Named
+| Description
+
+
+| Class
+| xref:refguide:applib-ant:DomainObjectLayout.adoc#named[`@DomainObjectLayout#named`]
+| xref:refguide:applib-ant:DomainObjectLayout.adoc#describedAs[`@DomainObjectLayout#describedAs`]
+
+
+| Property
+| xref:refguide:applib-ant:PropertyLayout.adoc#named[`@PropertyLayout#named`]
+| xref:refguide:applib-ant:PropertyLayout.adoc#describedAs[`@PropertyLayout#describedAs`]
+
+| Collection
+| xref:refguide:applib-ant:CollectionLayout.adoc#named[`@CollectionLayout#named`]
+| xref:refguide:applib-ant:CollectionLayout.adoc#describedAs[`@CollectionLayout#describedAs`]
+
+| Action
+| xref:refguide:applib-ant:ActionLayout.adoc#named[`@ActionLayout#named`]
+| xref:refguide:applib-ant:ActionLayout.adoc#describedAs[`@ActionLayout#describedAs`]
+
+| Action Parameters
+| xref:refguide:applib-ant:ParameterLayout.adoc#named[`@ParameterLayout#named`]
+| xref:refguide:applib-ant:ParameterLayout.adoc#describedAs[`@ParameterLayout#describedAs`]
+
+|===
+
+
+The framework also supports i18n: locale-specific names and descriptions.
+For more information, see the xref:userguide:btb:i18n.adoc[beyond-the-basics] guide.

@@ -11,8 +11,7 @@ When an action is invoked, it can return a domain object, a list, a scalar, or r
 
 If the action returned an object, then the xref:vro:ROOT:simplified-representations.adoc#domain-object[domain object representation] is returned.
 
-For example, using the http://github.com/apache/isis-app-todoapp[TodoApp], accessing
-this resource:
+For example, in a todo app, accessing this resource:
 
 [source]
 ----
@@ -61,8 +60,7 @@ Content-Type: application/json;profile="urn:org.apache.isis/v1";repr-type="objec
 On the other hand if the action returned a list (a "standalone" collection, then an array representation is returned.
 This is very similar to that returned by a xref:vro:ROOT:simplified-representations.adoc#object-collection[(parented) object collection], though with a slightly different `Content-Type` to distinguish.
 
-For example, using the http://github.com/apache/isis-app-todoapp[TodoApp], accessing
-this resource:
+For example, in a todo app, accessing this resource:
 
 [source]
 ----

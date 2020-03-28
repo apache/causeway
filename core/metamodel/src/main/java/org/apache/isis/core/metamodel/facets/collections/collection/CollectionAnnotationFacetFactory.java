@@ -25,6 +25,7 @@ import java.lang.reflect.TypeVariable;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.core.commons.internal.collections._Collections;
@@ -34,6 +35,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
+import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 import org.apache.isis.core.metamodel.facets.collections.collection.disabled.DisabledFacetForCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.hidden.HiddenFacetForCollectionAnnotation;
@@ -91,7 +93,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
         //@ActionLayout(contributed=ASSOCIATION) ... it seems, is already allowed for mixins
         val facetedMethod = processMethodContext.getFacetHolder();
         FacetUtil.addOrReplaceFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
-        //facetedMethod.addFacet(new NotContributedFacetForActionLayoutAnnotation(Contributed.AS_ASSOCIATION, facetedMethod));
+        FacetUtil.addFacet(new NotContributedFacetAbstract(Contributed.AS_ASSOCIATION, facetedMethod) {});
 
     }
 

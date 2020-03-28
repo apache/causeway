@@ -10,7 +10,7 @@ import javax.ejb.Singleton;
 
 @Singleton
 public class JeeDemoService {
-    
+
     public String getMessage() {
         return "Hello World from JEE";
     }
@@ -25,14 +25,14 @@ CDI managed beans:
 ----
 @DomainObject
 public class JeeDemo {
-    
+
     @Inject private JeeDemoService jeeDemoService;
 
     @Action
     public String getJeeMessage(){
         return jeeDemoService.getMessage();
     }
-    
+
     ...
 
 }
@@ -50,9 +50,9 @@ connection pool via `JNDI` lookup.
 === Setup JDO
 
 ....
-isis.persistor.datanucleus.impl.datanucleus.ConnectionFactoryName=jdbc/demo-domain
-isis.persistor.datanucleus.impl.datanucleus.ConnectionFactory2Name=jdbc/demo-domain-nontx
-isis.persistor.datanucleus.impl.javax.jdo.option.TransactionType=JTA
+isis.persistence.jdo-datanucleus.impl.datanucleus.ConnectionFactoryName=jdbc/demo-domain
+isis.persistence.jdo-datanucleus.impl.datanucleus.ConnectionFactory2Name=jdbc/demo-domain-nontx
+isis.persistence.jdo-datanucleus.impl.javax.jdo.option.TransactionType=JTA
 ....
 
 === Setup JNDI resource provider
@@ -67,7 +67,7 @@ import javax.ejb.*;
 @Singleton
 @Startup
 public class ConnectionResources {
-    
+
     @Resource(lookup="jdbc/demo-domain")
     private javax.sql.DataSource domainDS;
 

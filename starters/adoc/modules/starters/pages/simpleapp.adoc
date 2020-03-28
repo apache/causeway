@@ -93,13 +93,13 @@ public class HomePageViewModel {
 When prototyping against an in-memory database, it's useful to have a mechanism to create some initial state.
 This can be done using fixture scripts, accessible from the menu:Prototyping[Run Fixture Script]:
 
-image::simpleapp/using/032-run-fixture-script-prompt.png[width="px",link="{imagesdir}/simpleapp/using/032-run-fixture-script-prompt.png"]
+image::simpleapp/using/032-run-fixture-script-prompt.png[width="600px",link="{imagesdir}/simpleapp/using/032-run-fixture-script-prompt.png"]
 
 This brings up a dialog to select the fixture script:
 
-image::simpleapp/using/033-run-fixture-script-prompt.png[width="px",link="{imagesdir}/simpleapp/using/033-run-fixture-script-prompt.png"]
+image::simpleapp/using/033-run-fixture-script-prompt.png[width="600px",link="{imagesdir}/simpleapp/using/033-run-fixture-script-prompt.png"]
 
-This surfaces this code:
+The "Domain App Demo" in the drop-down refers to this code:
 
 [source,java]
 .DomainAppDemo.java
@@ -121,7 +121,7 @@ public class DomainAppDemo extends FixtureScript {
 
 When executed, all objects created by the fixture are listed:
 
-image::simpleapp/using/034-run-fixture-script-result.png[width="px",link="{imagesdir}/simpleapp/using/034-run-fixture-script-result.png"]
+image::simpleapp/using/034-run-fixture-script-result.png[width="600px",link="{imagesdir}/simpleapp/using/034-run-fixture-script-result.png"]
 
 Navigating back to the home page shows the newly created objects:
 
@@ -157,21 +157,19 @@ The above functionality is implemented by this code:
 [source,java]
 ----
 public static class CreateActionDomainEvent extends ActionDomainEvent {}
-@Action(semantics = SemanticsOf.NON_IDEMPOTENT, domainEvent = CreateActionDomainEvent.class)
-@ActionLayout(promptStyle = PromptStyle.DIALOG_SIDEBAR)
+@Action(semantics = SemanticsOf.NON_IDEMPOTENT,
+        domainEvent = CreateActionDomainEvent.class)                     // <.>
+@ActionLayout(promptStyle = PromptStyle.DIALOG_SIDEBAR)                  // <.>
 public SimpleObject create(
-        @Name final String name) {
+        @Name final String name) {                                       // <.>
     return repositoryService.persist(SimpleObject.ofName(name));
 }
 ----
-
-The `@Name` annotation on the action parameter is actually a meta-annotation, meaning that a number of additional semantics (length, layout, validation etc.) are inferred.
-
-TIP: Policies such as modal or sidebar can be specified per action, or globally in `application.yml` file.
+<.> Published on an in-memory event bus; this allows subscribers to veto or to react to the action invocation.
+<.> Policies such as modal or sidebar can be specified per action, or globally in `application.yml` file.
+<.> The `@Name` annotation is actually a meta-annotation, meaning that a number of additional semantics (length, layout, validation etc.) are inferred.
 
 ==== Invoke an action
-
-NOTE: The `CreatedActionDomainEvent` is published on an in-memory event bus; this allows subscribers to veto or to react to the action invocation.
 
 The `SimpleObject` contains a couple of properties, and a single action to update that property.
 
@@ -183,9 +181,10 @@ The above functionality is implemented by this code:
 
 [source,java]
 ----
-public static class UpdateNameActionDomainEvent extends SimpleObject.ActionDomainEvent {}
+public static class UpdateNameActionDomainEvent
+                      extends SimpleObject.ActionDomainEvent {}
 @Action(semantics = IDEMPOTENT,
-        publishing = Publishing.ENABLED,
+        publishing = Publishing.ENABLED,                    // <.>
         associateWith = "name",
         domainEvent = UpdateNameActionDomainEvent.class)
 public SimpleObject updateName(
@@ -197,16 +196,14 @@ public String default0UpdateName() {
     return getName();
 }
 ----
-
-The `updateName` action is annotated with publishing enabled.
-This means that the action invocation is converted into XML and dispatched to all configured implementations of the xref:refguide:applib-svc:PublisherService.adoc[PublisherService] SPI.
-
+<.> Publishing enabled means that the action invocation is converted into XML and dispatched to all configured implementations of the xref:refguide:applib-svc:PublisherService.adoc[PublisherService] SPI.
++
 The framework provides a default implementation that just logs the interaction:
-
++
 image::simpleapp/using/075-publish-logging-1.png[width="600px",link="{imagesdir}/simpleapp/using/075-publish-logging-1.png"]
-
-In fact, it also logs the fact that the object itself was modified:
-
++
+It also logs the fact that the object itself was modified:
++
 image::simpleapp/using/076-publish-logging-2.png[width="600px",link="{imagesdir}/simpleapp/using/076-publish-logging-2.png"]
 
 
@@ -233,16 +230,17 @@ The above functionality is implemented by this code:
 
 [source,java]
 ----
-public static class DeleteActionDomainEvent extends SimpleObject.ActionDomainEvent {}
-@Action(semantics = NON_IDEMPOTENT_ARE_YOU_SURE, domainEvent = DeleteActionDomainEvent.class)
+public static class DeleteActionDomainEvent
+                       extends SimpleObject.ActionDomainEvent {}
+@Action(semantics = NON_IDEMPOTENT_ARE_YOU_SURE,
+        domainEvent = DeleteActionDomainEvent.class)
 public void delete() {
-    final String title = titleService.titleOf(this);
+    final String title = titleService.titleOf(this);                 // <.>
     messageService.informUser(String.format("'%s' deleted", title));
     repositoryService.removeAndFlush(this);
 }
 ----
-
-Note that this uses three services provided by the framework; these are injected into the domain object automatically.
+<.> Note that this method uses three services provided by the framework; these are injected into the domain object automatically.
 
 
 === Swagger (Restful Objects)
@@ -319,7 +317,7 @@ For example, you might have a `module-customer` holding a `Customer` entity and 
 ----
 
 We can use Maven dependency management to ensure that there are no cyclic dependencies (order "knows about" product but product does not know about orders) and ensure that the codebase remains decoupled.
-When Java9 modules are commonplace, we'll also be able to restrict visibility of classes between modules.
+If Java9 modules become commonplace, we'll also be able to restrict visibility of classes between modules.
 
 === Bootstrapping & Framework Modules
 
@@ -351,39 +349,46 @@ Under `src/main/java` we have:
 [source]
 ----
 src/main/java/
-  domainapp/                            <!--1-->
-    modules/                            <!--2-->
-      simple/                           <!--2-->
-        dom/                            <!--3-->
-          sp/                           <!--4-->
+  domainapp/                            <!--.-->
+    modules/
+      simple/                           <!--.-->
+        dom/                            <!--.-->
+          so/                           <!--.-->
             SimpleObject.java
             SimpleObject.layout.xml
             SimpleObject.png
             SimpleObjects.java
-        fixture/                        <!--5-->
+        fixture/                        <!--.-->
           SimpleObject_persona.java
           SimpleObjectBuilder.java
-        types/                          <!--6-->
+        types/                          <!--.-->
           Name.java
           Notes.java
-      SimpleModule.java                 <!--7-->
+      SimpleModule.java                 <!--.-->
   META-INF/
-    persistence.xml                     <!--8-->
+    persistence.xml                     <!--.-->
 ----
-<1> For simplicity, all the Java source files reside in a `domainapp` top-level package.
+<.> For simplicity, all the Java source files reside in a `domainapp` top-level package.
 Change as required.
-<2> Defines the 'simple' module.
+
+<.> Defines the 'simple' module.
 Apache Isis can be used for both microservice and monolithic architectures, but for the latter it encourages "modular monoliths" from the start.
-<3> The `dom` package holds the "domain object model" for this module.
+
+<.> The `dom` package holds the "domain object model" for this module.
 Modules may have other packages, common ones include ``types`` and ``fixture``s (as below), also ``api``s, ``contribution``s, ``spi``s
-<4> Holds classes for the `so` ("simple object") entity/aggregate, consisting of the entity definition itself (`SimpleObject`) and a corresponding repository (`SimpleObjects`).
+
+<.> Holds classes for the `so` ("simple object") entity/aggregate, consisting of the entity definition itself (`SimpleObject`) and a corresponding repository (`SimpleObjects`).
 The associated `.layout.xml` and `.png` are optional but provide metadata/resources for rendering (Maven is configured to also treat `src/main/java` as a resource location).
-<5> The `fixture` package contains classes to set up the database to an initial state (as described xref:#fixtures[earlier].
+
+<.> The `fixture` package contains classes to set up the database to an initial state (as described xref:#fixtures[earlier].
 One of the classes is a `FixtureScript` (defines _how_ to set up the data) the other is a persona enum (defines _what_ data to set up).
-<6> The `types` package contains meta-annotations to describe the usage of common value types such as ``String``s.
-<7> `SimpleModule` is a Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] which allows the domain services and entities of the module to be located. +
+
+<.> The `types` package contains meta-annotations to describe the usage of common value types such as ``String``s.
+
+<.> `SimpleModule` is a Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] which allows the domain services and entities of the module to be located. +
 This is discussed in more detail below.
-<8> The `persistence.xml` file is required when using the JDO/DataNucleus object store (though it is basically boilerplate, an empty file).
+
+<.> The `persistence.xml` file is required when using the JDO/DataNucleus object store (though it is basically boilerplate, an empty file).
 
 
 ==== SimpleModule
@@ -474,8 +479,9 @@ This appears in the menu, and also acts as a repository for the `SimpleObject` e
 
 * all entities.
 +
-These are entities that are annotated with `@javax.jdo.annotations.PersistenceCapable`.
-These are passed through to the JDO/DataNucleus object store, in order to create database mappings from the entities to relational tables
+These are entities that are annotated with both xref:refguide:applib-ant:DomainObject.adoc[`@DomainObject`] annotation and with `@javax.jdo.annotations.PersistenceCapable`.
+Because `@DomainObject` is meta-annotated as a `@Component`, these are found automatically by Spring.
+They are passed through to the JDO/DataNucleus object store, in order to create database mappings from the entities to relational tables.
 +
 In the simpleapp starter app, the only entity is `SimpleObject`.
 
@@ -667,7 +673,7 @@ public class AppManifest {
 <2> Enables the Shiro security mechanism.
 There are several security implementations, precisely one must be selected
 <3> Enables JDO/DataNucleus for persistence.
-Optional (though if omitted then only xref:userguide:fun:building-blocks/types-of-domain-objects.adoc[view models] may be used, with hand-rolled persistence).
+Optional (though if omitted then only xref:userguide:fun:overview.adoc#view-models[view models] may be used, with hand-rolled persistence).
 <4> Enables the xref:vro:ROOT:about.adoc[Restful Objects viewer] (ie REST API).
 <5> Enables the xref:vw:ROOT:about.adoc[Wicket viewer]
 <6> Enables the H2 Console (menu from the "Prototyping" menu), applicable only if running against h2 in-memory database.
