@@ -283,7 +283,7 @@ git commit -m "$ISISJIRA: site.yml back to author mode"
 
 We now copy the results of the Antora website generation over to the `isis-site` repo:
 
-** in the `isis-site` repo, check out the `asf-site` branch:
+* in the `isis-site` repo, check out the `asf-site` branch:
 +
 [source,bash,subs="attributes+"]
 ----
