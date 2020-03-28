@@ -172,6 +172,8 @@ The most recently version being released is built in effect twice, as both "late
 As a slight complication, the tags created previously on the release branch (`refs/tags/rel/xxx`) can't be used for this purpose, because the `antora.yml` files specify a branch name of simply "latest".
 We therefore temporarily modify all of the `antora.yml` files and `site.yml` with a reference to a new tag, and then change them back afterwards:
 
+* If there have been any changes from other branches (eg fixes to documentation in non-release branches) then merge them into the release branch.
+
 * Update all `antora.yml` files:
 +
 ** `version: latest` -> `version: {isisnext}`
