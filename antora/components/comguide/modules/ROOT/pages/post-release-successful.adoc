@@ -208,7 +208,7 @@ md5="$zip.md5"
 # isis-core
 #
 type="core"
-fullname="isis"
+fullname="isis-parent"
 pushd isis-core
 
 curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$asc
