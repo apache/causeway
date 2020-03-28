@@ -479,13 +479,17 @@ In the `isis` repo:
 
 [source,bash,subs="attributes+"]
 ----
-git checkout master                           # update master with latest
+git checkout master                              # update master with latest
 git pull
 git merge release-{isisrel}-RC1                  # merge branch onto master
 git push origin --delete release-{isisrel}-RC1   # remote branch no longer needed
 git branch -d release-{isisrel}-RC1              # branch no longer needed
 ----
 
+
+== Bump \{isisrel} in `site.yml`
+
+In `site.yml` file, bump the version of `\{isisrel}`, and commit.
 
 
 == Update the ASF Reporter website
