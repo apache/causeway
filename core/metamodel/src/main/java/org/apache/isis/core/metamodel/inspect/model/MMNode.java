@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import org.apache.isis.applib.annotation.Navigable;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.schema.metamodel.v2.DomainClassDto;
 
 import lombok.Setter;
@@ -37,6 +38,7 @@ import lombok.Setter;
     ActionNode.class,
     CollectionNode.class,
     FacetAttrNode.class,
+    FacetGroupNode.class,
     FacetNode.class,
     ParameterNode.class,
     PropertyNode.class,
@@ -82,7 +84,7 @@ public abstract class MMNode {
                 : "void";
     }
 
-    public String abbreviate(String input) {
+    protected String abbreviate(String input) {
         return (""+input)
                 .replace("org.apache.isis.core.metamodel.facets.", "».c.m.f.")
                 .replace("org.apache.isis.core.metamodel.", "».c.m.")
@@ -90,6 +92,12 @@ public abstract class MMNode {
                 .replace("org.apache.isis.applib.", "».a.")
                 .replace("org.apache.isis.", "».")
                 .replace("java.lang.", "");
+    }
+    
+    protected String simpleName(String name) {
+        return _Strings.splitThenStream(""+name, ".")
+        .reduce((first, second) -> second) // get the last
+        .orElse("null");
     }
     
 }

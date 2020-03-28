@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.core.metamodel.inspect.model.ActionNode;
 import org.apache.isis.core.metamodel.inspect.model.CollectionNode;
 import org.apache.isis.core.metamodel.inspect.model.FacetAttrNode;
+import org.apache.isis.core.metamodel.inspect.model.FacetGroupNode;
 import org.apache.isis.core.metamodel.inspect.model.FacetNode;
 import org.apache.isis.core.metamodel.inspect.model.ParameterNode;
 import org.apache.isis.core.metamodel.inspect.model.PropertyNode;
@@ -35,6 +36,7 @@ import org.apache.isis.core.metamodel.inspect.model.TypeNode;
         ActionNode.class,
         CollectionNode.class,
         FacetAttrNode.class,
+        FacetGroupNode.class,
         FacetNode.class,
         ParameterNode.class,
         PropertyNode.class,

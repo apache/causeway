@@ -46,7 +46,7 @@ public class ParameterNode extends MMNode {
     
     @Override
     public String createTitle() {
-        return String.format("%s : %s", parameter.getId(), typeToString(parameter.getType()));  
+        return String.format("%s: %s", parameter.getId(), typeToString(parameter.getType()));  
     }
     
     @Override
@@ -61,9 +61,8 @@ public class ParameterNode extends MMNode {
 
     @Override
     public Stream<MMNode> streamChildNodes() {
-        return parameter.getFacets().getFacet()
-                .stream()
-                .map(facet->MMNodeFactory.facet(facet, this));
+        return Stream.of(
+                MMNodeFactory.facetGroup(parameter.getFacets(), this));
     }
 
 }

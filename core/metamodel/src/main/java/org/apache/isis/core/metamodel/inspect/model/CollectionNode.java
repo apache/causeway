@@ -46,7 +46,7 @@ public class CollectionNode extends MMNode {
     
     @Override
     public String createTitle() {
-        return String.format("%s : %s", collection.getId(), typeToString(collection.getType()));  
+        return String.format("%s: %s", collection.getId(), typeToString(collection.getType()));  
     }
     
     @Override
@@ -61,9 +61,8 @@ public class CollectionNode extends MMNode {
 
     @Override
     public Stream<MMNode> streamChildNodes() {
-        return collection.getFacets().getFacet()
-                .stream()
-                .map(facet->MMNodeFactory.facet(facet, this));
+        return Stream.of(
+                MMNodeFactory.facetGroup(collection.getFacets(), this));
     }
    
     

@@ -15,7 +15,7 @@
    version="1.1"
    id="svg4563"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
-   sodipodi:docname="ParameterNode.svg">
+   sodipodi:docname="FacetGroupNode.svg">
   <defs
      id="defs4557" />
   <sodipodi:namedview
@@ -26,15 +26,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.62"
-     inkscape:cx="-394.58343"
+     inkscape:cx="116.06452"
      inkscape:cy="172.90323"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1602"
      inkscape:window-height="1005"
-     inkscape:window-x="899"
-     inkscape:window-y="198"
+     inkscape:window-x="1031"
+     inkscape:window-y="231"
      inkscape:window-maximized="0"
      units="mm" />
   <metadata
@@ -66,7 +66,7 @@
          y="155.22585"
          style="font-size:50.79999924px;stroke-width:0.26458332" /></text>
     <rect
-       style="opacity:0.98000004;fill:#f47d57;fill-opacity:1;stroke:#7b7b7b;stroke-width:6.82075405;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="opacity:0.98000004;fill:#c0d4b3;fill-opacity:1;stroke:#7b7b7b;stroke-width:6.82075405;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect5116"
        width="148.51277"
        height="148.95171"
@@ -82,6 +82,6 @@
          id="tspan5112-5"
          x="15.365664"
          y="206.60106"
-         style="font-size:50.79999924px;stroke-width:0.26458332">param</tspan></text>
+         style="font-size:50.79999924px;stroke-width:0.26458332">facets</tspan></text>
   </g>
 </svg>

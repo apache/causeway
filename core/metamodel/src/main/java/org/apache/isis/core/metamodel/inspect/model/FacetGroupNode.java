@@ -29,23 +29,26 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.schema.metamodel.v2.FacetHolder.Facets;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "isis.metamodel.PropertyNode")
+@DomainObject(nature=Nature.VIEW_MODEL, objectType = "isis.metamodel.FacetGroupNode")
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @ToString
-public class PropertyNode extends MMNode {
+public class FacetGroupNode extends MMNode {
 
     @Property(hidden = Where.EVERYWHERE)
-    @Getter @Setter private org.apache.isis.schema.metamodel.v2.Property property;
+    @Getter @Setter private Facets facets;
     
     @Override
     public String createTitle() {
-        return String.format("%s: %s", property.getId(), typeToString(property.getType()));  
+        return "Facets";
+        //return super.abbreviate(facet.getFqcn());
     }
     
     @Override
@@ -56,12 +59,13 @@ public class PropertyNode extends MMNode {
     // -- TREE NODE STUFF
     
     @Getter @Setter @XmlTransient 
-    private TypeNode parentNode;
+    private MMNode parentNode;
 
     @Override
     public Stream<MMNode> streamChildNodes() {
-        return Stream.of(
-                MMNodeFactory.facetGroup(property.getFacets(), this));
+        
+        return _NullSafe.stream(facets.getFacet())
+                .map(facet->MMNodeFactory.facet(facet, this));
     }
    
     

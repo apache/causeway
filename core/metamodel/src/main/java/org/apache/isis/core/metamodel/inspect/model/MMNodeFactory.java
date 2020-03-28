@@ -23,6 +23,7 @@ import org.apache.isis.schema.metamodel.v2.Collection;
 import org.apache.isis.schema.metamodel.v2.DomainClassDto;
 import org.apache.isis.schema.metamodel.v2.Facet;
 import org.apache.isis.schema.metamodel.v2.FacetAttr;
+import org.apache.isis.schema.metamodel.v2.FacetHolder.Facets;
 import org.apache.isis.schema.metamodel.v2.Param;
 import org.apache.isis.schema.metamodel.v2.Property;
 
@@ -37,7 +38,7 @@ public class MMNodeFactory {
         return node;
     }
     
-    public static MMNode facet(Facet facet, MMNode parentNode) {
+    public static MMNode facet(Facet facet, FacetGroupNode parentNode) {
         val node = new FacetNode();
         node.setFacet(facet);
         node.setParentNode(parentNode);
@@ -75,6 +76,13 @@ public class MMNodeFactory {
     public static MMNode param(Param param, ActionNode parentNode) {
         val node = new ParameterNode();
         node.setParameter(param);
+        node.setParentNode(parentNode);
+        return node;
+    }
+
+    public static MMNode facetGroup(Facets facets, MMNode parentNode) {
+        val node = new FacetGroupNode();
+        node.setFacets(facets);
         node.setParentNode(parentNode);
         return node;
     }

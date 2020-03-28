@@ -47,10 +47,9 @@ public class FacetNode extends MMNode {
     
     @Override
     public String createTitle() {
-        return super.abbreviate(facet.getFqcn());
-                
+        return String.format("%s: %s", simpleName(facet.getId()), abbreviate(facet.getFqcn()));
     }
-    
+
     @Override
     public String iconName() {
         return "";

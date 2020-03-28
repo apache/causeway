@@ -64,9 +64,8 @@ public class TypeNode extends MMNode {
     public Stream<MMNode> streamChildNodes() {
         return _Streams.<MMNode>concat(
                 
-                domainClassDto.getFacets().getFacet()
-                .stream()
-                .map(facet->MMNodeFactory.facet(facet, this)),
+                Stream.of(
+                        MMNodeFactory.facetGroup(domainClassDto.getFacets(), this)),
                 
                 domainClassDto.getActions().getAct()
                 .stream()

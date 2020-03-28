@@ -46,7 +46,7 @@ public class ActionNode extends MMNode {
     
     @Override
     public String createTitle() {
-        return String.format("%s(...) : %s", action.getId(), typeToString(action.getReturnType())); 
+        return String.format("%s(...): %s", action.getId(), typeToString(action.getReturnType())); 
     }
     
     @Override
@@ -64,9 +64,8 @@ public class ActionNode extends MMNode {
         
         return Stream.<MMNode>concat(
                 
-                action.getFacets().getFacet()
-                .stream()
-                .map(facet->MMNodeFactory.facet(facet, this)),
+                Stream.of(
+                        MMNodeFactory.facetGroup(action.getFacets(), this)),
                 
                 action.getParams().getParam()
                 .stream()
