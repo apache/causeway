@@ -290,7 +290,7 @@ We now copy the results of the Antora website generation over to the `isis-site`
 cd ../isis-site
 
 git checkout asf-site
-git pull origin/asf-site --ff-only
+git pull --ff-only
 ----
 
 * still in the `isis-site` repo, delete all the files in `content/` _except_ for the `schema` and `versions` directories:
