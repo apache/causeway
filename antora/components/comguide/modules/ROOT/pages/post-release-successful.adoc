@@ -227,10 +227,14 @@ to:
 - url: https://github.com/apache/isis.git
   start_path: antora/components/docs # docs
   tags: docs/isis-{isisnext}                    # <.>
-  branches: release-isis-{isisnext}             # <.>
+  branches: HEAD                                # <.>
 ----
 <.> will generate the {isisnext} version
 <.> will generate the 'latest' version
++
+eg using the IDE:
++
+image::release-process-post/update-site-yml-tags.png[width="600px",link="{imagesdir}/release-process-post/update-site-yml-tags.png"]
 
 * commit this change, too (there's no need to push):
 +
@@ -261,6 +265,7 @@ That is, so that each content source specifies a local URL and only the HEAD bra
   branches: HEAD
 ----
 
+[#publish-website]
 == Publish website
 
 We now copy the results of the Antora website generation over to the `isis-site` repo:
