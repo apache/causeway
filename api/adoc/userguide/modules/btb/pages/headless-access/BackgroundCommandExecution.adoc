@@ -37,7 +37,9 @@ image::headless-access/BackgroundCommandExecution.png[width="400px",link="{image
 
 The `BackgroundCommandExecutionFromBackgroundCommandServiceJdo` is a concrete subclass of `BackgroundCommandExecution` (see the xref:refguide:applib-svc:BackgroundService.adoc[`BackgroundCommandService`]), the intended use being for the class to be instantiated regularly (eg every 10 seconds) by a scheduler such as http://quartz-scheduler.org[Quartz]) to poll for ``Command``s to be executed, and then execute them.
 
-This implementation queries for ``Command``s persisted by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s command module's  implementations of xref:refguide:applib-svc:CommandService.adoc[`CommandService`] and xref:refguide:applib-svc:BackgroundCommandService.adoc[`BackgroundCommandService`] using the `BackgroundCommandServiceJdoRepository`.
+This implementation queries for ``Command``s persisted by thexref:extensions:command-log:about.adoc[Command Log] extension's implementations of xref:refguide:applib-svc:CommandService.adoc[`CommandService`].
+
+//and xref:refguide:applib-svc:BackgroundCommandService.adoc[`BackgroundCommandService`] using the `BackgroundCommandServiceJdoRepository`.
 
 The diagram below (link:http://yuml.me/edit/25343da1[yuml.me/25343da1]) shows the inheritance hierarchy for this class:
 

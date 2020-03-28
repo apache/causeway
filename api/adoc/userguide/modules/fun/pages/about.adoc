@@ -2,12 +2,6 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-This guide introduces the xref:userguide:fun:core-concepts.adoc[core concepts] and the building blocks of Apache Isis applications, and describes the conventions of Apache Isis' xref:userguide:fun:programming-model.adoc[programming model].
-
-It goes on to explain the ideas of providing xref:userguide:fun:ui-hints.adoc[UI hints] such as titles and icons (though note that this is covered in more detail in the xref:vw:ROOT:layout.adoc[layout] chapter of the xref:vw:ROOT:about.adoc[Wicket Viewer] guide).
-
-There is also a chapter on xref:userguide:fun:crud.adoc[CRUD] operations, and a more interesting chapter on implementing xref:userguide:fun:business-rules.adoc[business rules].
-It finishes with a short chapter on implementing xref:userguide:fun:drop-downs-and-defaults.adoc[drop downs and defaults], important for actions that involve the interaction between several objects (in other words, most of them).
 
 
 

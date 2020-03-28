@@ -1,0 +1,186 @@
+= Core Values
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+This section describes the core values that the the Apache Isis framework tries to uphold.
+
+== Aligned with the Business
+
+Apache Isis is primarily aimed at custom-built "enterprise" applications, with a UI provided by the xref:vw:ROOT:about.adoc[Wicket viewer] is intended to be usable by domain experts, typically end-users within the organization.
+
+But why should an organisation build software, when it could just buy it?
+
+To be clear, buying packaged software _does_ make sense in many cases: for statutory requirements, such as payroll or general ledger, or document management/retrieval.
+But (we argue) it makes much less sense to buy packaged software for the systems that support the core business: *the software should fit the business, not the other way around*.
+
+Packaged software suffers from the problem of both having doing "too much" and "not enough":
+
+* it does "too much" because it will have features that are not required by your business.
+These extra unnecessary features make the system difficult to learn and use.;
+
+* but it may also do "too little" because there may be crucial functionality not supported by the software.
+
+The diagram below illustrates the dichotomy:
+
+.build-vs-buy
+image::core-concepts/philosophy/build-vs-buy.png[width="550px",link="{imagesdir}/core-concepts/philosophy/build-vs-buy.png"]
+
+What happens in this case is that end-users -- needing some sort of solution for their particular business problem -- will end up using unused fields to store the information they need.
+We end up with no correlation between the fields definitions and the values stored therein, sometimes with the datatypes not even matching.
+Any business rules pertaining to this extra data have to be enforced manually by the users, rather than by the system.
+The end result is a system even more complicated to learn and use, with the quality of the data held within it degrading as end users inevitably make mistakes in using it.
+
+There are other benefits too for building rather than buying.
+Packaged software is almost always sold with a support package, the cover of which can vary enormously.
+At one end of the spectrum the support package ("bronze", say) will amount to little more than the ability to raise bug reports and to receive maintenance patches.
+At the other end (let's call it "platinum"), the support package might provide the ability to influence the direction of the development of the product, perhaps specific features missing by the business.
+
+Even so, the more widely used is the software package, the less chance of getting it changed.
+Does anyone reading this think they could get a new feature added (or removed) from Microsoft Word, for example?
+
+Here's another reason why you should build, and not buy, the software supporting your core business domain.
+Although most packaged software is customisable to a degree, there is always a limit to what can be customised.
+The consequence is that the business is forced to operate according to the way in which the software requires.
+
+This might be something as relatively innocuous as imposing its own terminology onto the business, meaning that the end-users must mentally translate concepts in order to use the software.
+But it might impose larger constraints on the business; some packaged software (we carefully mention no names) is quite notorious for this
+
+If your business is using the same software as your competitor, then obviously there's no competitive advantage to be gained.
+And if your competitor has well-crafted custom software, then your business will be at a competitive __dis__advantage.
+
+So, our philosophy is that custom software -- for your core business domain -- is the way to go.
+
+
+[#modular]
+== Modular
+
+Enterprise applications tend to stick around a long time; a business' core domains don't tend to change all that often.
+What this means in turn is that the application needs to be maintainable, so that it is as easy to modify and extend when it's 10 years old as when it was first written.
+
+That's a tall order for any application to meet, and realistically it _can_ only be met if the application is modular.
+Any application that lacks a coherent internal structure will ultimately degrade into an unmaintable "big ball of mud", and the development team's velocity/capacity to make changes will reduce accordingly.
+
+Apache Isis' architecture allows the internal structure to be maintained in two distinct ways.
+
+* first, the naked objects pattern acts as a "firewall", ensuring that any business logic in the domain layer doesn't leak out into the presentation layer (it can't, because the developer doesn't write any controllers/views).
+
+* second, the framework's provides various features (discussed in more detail below) to allow the different modules _within_ the domain layer to interact with each in a decoupled fashion.
+
+The diagram below illustrates this:
+
+.decoupled applications
+image::core-concepts/philosophy/decoupled-applications.png[width="800px",link="{imagesdir}/core-concepts/philosophy/decoupled-applications.png"]
+
+Here, the presentation layer (xref:vw:ROOT:about.adoc[Wicket UI] or xref:vro:ROOT:about.adoc[REST API]) is handled by the framework, while the developer focusses on just the domain layer.
+The framework encourages splitting this functionality into modules; each such module has its counterpart (typically tables within a given RDBMS database schema) within the persistence layer.
+
+This architecture means that it's impossible for business logic to leach out into the adjacent presentation layer because the developer doesn't (can't) write any code for presentation layer.
+We in effect have a "firewall" between the two layers.
+
+To support the business domain being split into separate modules, the framework provides various features, the most important of which are the dependency injection of xref:overview.adoc#domain-services[domain services], xref:overview.adoc#mixins[mixins], and in-memory xref:overview.adoc#events[events].
+
+For those cases where a module needs to interact with other modules but does not know about their implementations, the module can either define its own link:https://en.wikipedia.org/wiki/Service_provider_interface[SPI] domain services or it can define custom domain events and fire them.
+This technique is also used extensively by the framework itself.
+For example, the xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`] SPI enables custom auditing, and the xref:refguide:applib-svc:PublisherService.adoc[`PublisherService`] SPI enables custom publishing.
+
+When building a modular application, it's important to consider the logical layering of the modules: we don't need every module to be completely decoupled from every other.
+The most important requirement is that there are no cyclic dependencies, because otherwise we run the risk of the application degrading into a link:https://en.wikipedia.org/wiki/Big_ball_of_mud["big ball of mud"].
+
+[TIP]
+====
+For further discussion on modular monoliths, check out Dan Haywood's article on InfoQ, "In Defence of the Monolith" (link:https://www.infoq.com/articles/monolith-defense-part-1[part 1], link:https://www.infoq.com/articles/monolith-defense-part-2[part 2]).
+====
+
+== Easing the road to DDD
+
+The case for xref:concepts-patterns.adoc#domain-driven-design[domain driven design]  might be compelling, but that doesn't necessarily make it easy to do.
+Let's take a look at some of the challenges that _DDD_ throws up and see how Apache Isis (and its implementation of the naked objects pattern) helps address them.
+
+=== DDD takes a conscious effort
+
+Here's what Eric Evans says about ubiquitous language:
+
+____
+With a conscious effort by the [development] team the domain model can provide the backbone for [the] common [ubiquitous] language...connecting team communication to the software implementation.
+____
+
+The word to pick up on here is *conscious*.
+It takes a _conscious_ effort by the entire team to develop the ubiquitous language.
+Everyone in the team must challenge the use of new or unfamiliar terms, must clarify concepts when used in a new context, and in general must be on the lookout for sloppy thinking.
+This takes willingness on the part of all involved, not to mention some practice.
+
+With Apache Isis, though, the ubiquitous language evolves with scarcely any effort at all.
+For the business experts, the Apache Isis viewers show the domain concepts they identify and the relationships between those concepts in a straightforward fashion.
+Meanwhile, the developers can devote themselves to encoding those domain concepts directly as domain classes.
+There's no technology to get distracted by; there is literally nothing else for the developers to be working on.
+
+=== DDD must be grounded
+
+Employing a model-driven design isn't necessarily straightforward, and the development processes used by some organizations positively hinder it.
+It's not sufficient for the business analysts or architects to come up with some idealized representation of the business domain and then chuck it over the wall for the programmers to do their best with.
+
+Instead, the concepts in the model must have a very literal representation in code.
+If we fail to do this, then we open up the communication divide, and our ubiquitous language is lost.
+There is literally no point having a domain model that cannot be represented in code.
+We cannot invent our ubiquitous language in a vacuum, and the developers must ensure that the model remains grounded in the doable.
+
+In Apache Isis, we have a very pure one-to-one correspondence between the domain concepts and its implementation.
+Domain concepts are represented as classes and interfaces, easily demonstrated back to the business.
+If the model is clumsy, then the application will be clumsy too, and so the team can work together to find a better implementable model.
+
+=== Model must be understandable
+
+If we are using code as the primary means of expressing the model, then we need to find a way to make this model understandable to the business.
+
+We could generate UML diagrams and the like from code.
+That will work for some members of the business community, but not for everyone.
+Or we could generate a PDF document from Javadoc comments, but comments aren't code and so the document may be inaccurate.
+Anyway, even if we do create such a document, not everyone will read it.
+
+A better way to represent the model is to show it in action as a working prototype.
+As we show with the xref:docs:starters:helloworld.adoc[starter apps], Apache Isis enables this with ease.
+Such prototypes bring the domain model to life, engaging the audience in a way that a piece of paper never can.
+
+Moreover, with Apache Isis prototypes, the domain model will come shining through.
+If there are mistakes or misunderstandings in the domain model (inevitable when building any complex system), they will be obvious to all.
+
+=== Architecture must be robust
+
+_DDD_ rightly requires that the domain model lives in its own layer within the architecture.
+The other layers of the application (usually presentation, application, and persistence) have their own responsibilities, and are completely separate.
+
+However, there are two immediate issues.
+The first is rather obvious: custom coding each of those other layers is an expensive proposition.
+Picking up on the previous point, this in itself can put the kibosh on using prototyping to represent the model, even if we wanted to do so.
+
+The second issue is more subtle.
+It takes real skill to ensure the correct separation of concerns between these layers, if indeed you can get an agreement as to what those concerns actually are.
+Even with the best intentions, it's all too easy for custom-written layers to blur the boundaries and put (for example) validation in the user interface layer when it should belong to the domain layer.
+At the other extreme, it's quite possible for custom layers to distort or completely subvert the underlying domain model.
+
+Because of Apache Isis' generic __OOUI__s, there's no need to write the other layers of the architecture.
+Of course, this reduces the development cost.
+But more than that, there will be no leakage of concerns outside the domain model.
+All the validation logic *must* be in the domain model because there is nowhere else to put it.
+
+Moreover, although Apache Isis does provide a complete runtime framework, there is no direct coupling of your domain model to the framework.
+That means it is very possible to take your domain model prototyped in Apache Isis and then deploy it on some other _J(2)EE_ architecture, with a custom _UI_ if you want.
+This is discussed later on, in xref:concepts-patterns.adoc#deployment-options[deployment options].
+
+=== Extending the reach of DDD
+
+Domain-driven design is often positioned as being applicable only to complex domains; indeed, the subtitle of Evans book is "Tackling Complexity in the Heart of Software".
+The corollary is that DDD is overkill for simpler domains.
+The trouble is that we immediately have to make a choice: is the domain complex enough to warrant a domain-driven approach?
+
+This goes back to the previous point, building and maintaining a layered architecture.
+It doesn't seem cost effective to go to all the effort of a DDD approach if the underlying domain model is simple.
+
+However, with Apache Isis, we don't write these other layers, so we don't have to make a call on how complex our domain is.
+We can start working solely on our domain, even if we suspect it will be simple.
+If it is indeed a simple domain, then there's no hardship, but if unexpected subtleties arise, then we're in a good position to handle them.
+
+If you're just starting out writing domain-driven applications, then Apache Isis should significantly ease your journey into applying _DDD_.
+And if you _have_ used _DDD_ for a while, then you should find the framework a very useful new tool in your arsenal.
+

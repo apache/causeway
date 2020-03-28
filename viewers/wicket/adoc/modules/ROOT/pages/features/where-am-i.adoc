@@ -87,20 +87,22 @@ Horizontally arranged text links separated by the 'greater than' symbol (>) are 
 The navigable tree-structure, as provided by the 'Where am I' feature, is declared at compile-time (predefined by the programmer), whereas related features (xref:vw:ROOT:features.adoc#recent-pages[Recent Pages] and xref:vw:ROOT:features.adoc#bookmarked-pages[Bookmarked Pages]) are populated at runtime only after user interaction.
 
 
-== Configuration
-
-By default, the 'Where am I' feature will show a maximum of 64 links.
-This can be overridden using a property (in `isis.properties`), for example:
-
-[source,ini]
-----
-isis.viewer.wicket.whereAmI.maxParentChainLength=20
-----
-
-To disable the 'Where am I' feature, override the default (=enabled) by using a property (in `isis.properties`):
-
-[source,ini]
-----
-isis.viewer.wicket.whereAmI.enabled=false
-----
-
+//== Configuration
+//
+//By default, the 'Where am I' feature will show a maximum of 64 links.
+//This can be overridden using the
+//xref:refguide:config:sections/isis.viewer.wicket.adoc
+//configuration property, for example:
+//
+//[source,ini]
+//----
+//isis.viewer.wicket.whereAmI.maxParentChainLength=20
+//----
+//
+//To disable the 'Where am I' feature, override the default (=enabled) by using a property (in `isis.properties`):
+//
+//[source,ini]
+//----
+//isis.viewer.wicket.whereAmI.enabled=false
+//----
+//

@@ -1,10 +1,8 @@
-= `optionality`
+[#optionality]
+= `optionality()`
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
-
-
-
 
 
 By default, Apache Isis assumes that all properties of an domain object or view model are required (mandatory).
@@ -21,16 +19,20 @@ For example:
 
 [source,java]
 ----
+import lombok.Getter;
+import lombok.Setter;
+
 public class Customer {
+
     @javax.jdo.annotations.Column(allowsNull="true")
-    public String getMiddleInitial() { /* ... */ }
-    public void setMiddleInitial(String middleInitial) { /* ... */ }
-    ...
+    @Getter @Setter
+    private String middleInitial;
+
+    // ...
 }
 ----
 
 In this case there is no need for the `@Property#optionality` attribute.
-
 
 == Mismatched defaults
 
@@ -39,7 +41,6 @@ Specifically, Isis always assumes properties are mandatory, whereas JDO specifie
 
 When Apache Isis initializes it checks for these mismatches during its metamodel validation phase, and will fail to boot ("fail-fast") if there is a mismatch.
 The fix is usually to add the `@Column#allowsNull()` annotation/attribute.
-
 
 == Superclass inheritance type
 
@@ -58,6 +59,7 @@ public abstract class PaymentMethod {
 @javax.jdo.annotations.PersistenceCapable
 @javax.jdo.annotations.Inheritance(strategy = InheritanceStrategy.SUPERCLASS_TABLE)
 public class CreditCardPaymentMethod extends PaymentMethod {
+
     private String cardNumber;
     @javax.jdo.annotations.Column(allowsNull="true")
     @Property(optionality=Optionality.MANDATORY)
@@ -74,18 +76,18 @@ Alternatively, you could rely on the fact that Apache Isis never looks at fields
 @javax.jdo.annotations.PersistenceCapable
 @javax.jdo.annotations.Inheritance(strategy = InheritanceStrategy.SUPERCLASS_TABLE)
 public class CreditCardPaymentMethod extends PaymentMethod {
+
     @javax.jdo.annotations.Column(allowsNull="true")
     private String cardNumber;
+
     public String getCardNumber() { return this.cardNumber; }
     public void setCardNumber(String cardNumber) { this.cardNumber = cardNumber; }
-    ...
+
+    // ...
 }
 ----
 
-However this at first glance this might be read as eing that the property is optional whereas Isis' default (required) applies.
-Also, in the future Apache Isis may be extended to support reading annotations from fields.
-
-
+However this at first glance this might be read as meaning that the property is optional whereas Apache Isis' default (required) applies.
 
 == Non-persistent properties
 
@@ -97,17 +99,22 @@ For example:
 [source,java]
 ----
 public class Customer {
-    @javax.jdo.annotation.NotPersistent                    // <1>
+
+    @javax.jdo.annotation.NotPersistent             // <.>
     @Property(optionality=Optionality.OPTIONAL)
-    public String getFullName() { /* ... */ }                    // <2>
-    public void setFullName(String fullName) { /* ... */ }       // <3>
-    ...
+    public String getFullName() {                   // <.>
+        // ...
+    }
+    public void setFullName(String fullName) {      // <.>
+        // ...
+    }
+
+    // ...
 }
 ----
-<1> a non persisted (derived) property
-<2> implementation would most likely derive full name from constituent parts (eg first name, middle initial, last name)
-<3> implementation would most likely parse the input and update the constituent parts
-
+<.> a non persisted (derived) property
+<.> implementation would most likely derive full name from constituent parts (eg first name, middle initial, last name)
+<.> implementation would most likely parse the input and update the constituent parts
 
 [TIP]
 ====
@@ -116,24 +123,6 @@ If optionality is required, then use the corresponding wrapper class (e.g. `java
 ====
 
 The values for the attribute are simply `OPTIONAL` or `MANDATORY`.
-
-For example:
-
-[source,java]
-----
-public class Customer {
-    public Order placeOrder(
-            final Product product,
-            @ParameterLayout(named = "Quantity")
-            final int quantity,
-            @Parameter(optionality = Optionality.OPTIONAL)
-            @ParameterLayout(named = "Special Instructions")
-            final String instr) {
-        ...
-    }
-    ...
-}
-----
 
 
 [NOTE]

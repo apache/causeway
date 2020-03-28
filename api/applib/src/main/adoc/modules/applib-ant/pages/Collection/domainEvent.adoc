@@ -1,4 +1,5 @@
-= `domainEvent`
+[#domainEvent]
+= `domainEvent()`
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
@@ -13,8 +14,7 @@ In the cases of the domain object's collections, the events that are fired are:
 * pre-execute phase: before the modification of the collection
 * post-execute: after the modification of the collection
 
-Subscribers subscribe through the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] using either link:https://github.com/google/guava[Guava] or link:http://www.axonframework.org/[Axon Framework] annotations and can influence each of these phases.
-
+Subscribers (which must be domain services) subscribe to events posted through the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`], and can influence each of these phases.
 
 [WARNING]
 ====
@@ -24,39 +24,48 @@ However, domain events are still relevant to determine if such collections shoul
 The workaround is to create add/remove actions and use xref:refguide:applib-ant:MemberOrder.adoc[UI hints] to render them close to the collection.
 ====
 
-By default the event raised is `CollectionDomainEvent.Default`. For example:
+By default the event raised is `CollectionDomainEvent.Default`.
+For example:
 
 [source,java]
 ----
+import lombok.Getter;
+import lombok.Setter;
+
 public class ToDoItem {
+
     @Collection()
-    public SortedSet<ToDoItem> getDependencies() { /* ... */ }
-    ...
+    @Getter @Setter
+    private SortedSet<ToDoItem> dependencies = ...
+
+    // ...
 }
 ----
 
 The `domainEvent` attribute allows a custom subclass to be emitted allowing more precise subscriptions (to those subclasses) to be defined instead.
-
 
 For example:
 
 [source,java]
 ----
 public class ToDoItem {
+
     public static class DependenciesChangedEvent
-            extends CollectionDomainEvent<ToDoItem, ToDoItem> { } // <1>
+            extends CollectionDomainEvent<ToDoItem, ToDoItem> { } // <.>
     @Collection(
         domainEvent=DependenciesChangedEvent.class
     )
-    public SortedSet<ToDoItem> getDependencies() { /* ... */ }
-    ...
+    @Getter @Setter
+    private SortedSet<ToDoItem> dependencies = ...
+
+    // ...
 }
 ----
-<1> inherit from `CollectionDomainEvent<T,E>` where `T` is the type of the domain object being interacted with, and `E` is the type of the element in the collection (both `ToDoItem` in this example)
+
+<.> inherit from `CollectionDomainEvent<T,E>` where `T` is the type of the domain object being interacted with, and `E` is the type of the element in the collection (both `ToDoItem` in this example)
 
 
 The benefit is that subscribers can be more targetted as to the events that they subscribe to.
-
 
 [NOTE]
 ====
@@ -64,27 +73,22 @@ The framework provides a no-arg constructor and will initialize the domain event
 This substantially reduces the boilerplate in the subclasses because no explicit constructor is required..
 ====
 
-
-
-
-
-
 == Subscribers
 
-Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.
-The examples below use the Guava API.
+Subscribers (which must be domain services) subscribe to events posted through the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`].
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
 
 [source,java]
 ----
 import org.springframework.stereotype.Service;
+import org.springframework.context.event.EventListener;
 
 @Service
 public class SomeSubscriber {
-    @com.google.common.eventbus.Subscribe
+    @EventListener(CollectionDomainEvent.class)
     public void on(CollectionDomainEvent ev) {
-        ...
+        // ...
     }
 }
 ----
@@ -100,11 +104,10 @@ import org.springframework.stereotype.Service;
 public class SomeSubscriber {
     @EventListener(ToDoItem.DependenciesChangedEvent.class)
     public void on(ToDoItem.DependenciesChangedEvent ev) {
-        ...
+        // ...
     }
 }
 ----
-
 
 The subscriber's method is called (up to) 5 times:
 
@@ -119,33 +122,40 @@ Thus the general form is:
 
 [source,java]
 ----
-@Programmatic
-@com.google.common.eventbus.Subscribe
-public void on(CollectionDomainEvent ev) {
-    switch(ev.getEventPhase()) {
-        case HIDE:
-            // call ev.hide() or ev.veto("") to hide the collection
-            break;
-        case DISABLE:
-            // call ev.disable("...") or ev.veto("...") to disable the collection
-            break;
-        case VALIDATE:
-            // call ev.invalidate("...") or ev.veto("...")
-            // if object being added/removed to collection is invalid
-            break;
-        case EXECUTING:
-            break;
-        case EXECUTED:
-            break;
+ import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
+
+@Service
+public class SomeSubscriber {
+
+    @EventListener(CollectionDomainEvent.class)
+    public void on(CollectionDomainEvent ev) {
+        switch(ev.getEventPhase()) {
+
+            case HIDE:                      // <.>
+                break;
+            case DISABLE:                   // <.>
+                break;
+            case VALIDATE:                  // <.>
+                break;
+
+            case EXECUTING:
+                break;
+            case EXECUTED:
+                break;
+        }
     }
 }
 ----
 
+<.> call `ev.hide()` or `ev.veto("")` to hide the collection
+
+<.> call `ev.disable("...")` or `ev.veto("...")` to disable the collection
+
+<.> call ev.invalidate("...") or ev.veto("...") if object being added/removed to collection is invalid
+
 It is also possible to abort the transaction during the executing or executed phases by throwing an exception.
 If the exception is a subtype of `RecoverableException` then the exception will be rendered as a user-friendly warning (eg Growl/toast) rather than an error.
-
-
-
 
 == Default, Doop and Noop events
 
@@ -158,15 +168,10 @@ The framework provides `CollectionDomainEvent.Doop` as such a subclass, so setti
 
 And, conversely, the framework also provides `CollectionDomainEvent.Noop`; if `domainEvent` attribute is set to this class, then no event will be posted.
 
-
-
-
-
 == Raising events programmatically
 
 Normally events are only raised for interactions through the UI.
 However, events can be raised programmatically either by calling the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] API directly, or by emulating the UI by wrapping the target object using the xref:refguide:applib-svc:WrapperFactory.adoc[`WrapperFactory`] domain service.
-
 
 == See also
 

@@ -16,8 +16,7 @@ object) and a `$$title` property (to use as a label, eg the hyperlink text).
 
 In addition, the representation defined by the RO spec is also included, under a special `$$ro` property.
 
-For example, using the http://github.com/apache/isis-app-todoapp[TodoApp], accessing
-this resource:
+For example, in a todo app, accessing this resource:
 
 [source]
 ----

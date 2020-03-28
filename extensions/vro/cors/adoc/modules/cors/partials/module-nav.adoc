@@ -1,5 +1,2 @@
-
-
-
-** xref:vw:vro:about.adoc[CORS]
+** xref:vro:cors:about.adoc[CORS]
 

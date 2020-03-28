@@ -4,14 +4,8 @@
 :page-partial:
 
 
-Apache Isis uses JDO/DataNucleus as its ORM, and infers some of its own metadata from the JDO annotations.
-
-[WARNING]
-====
-Isis (currently) builds up metadata by parsing the JDO annotations from source, _not_ by querying the JDO metamodel.  The upshot is that, for the annotations documented here at least, your domain entities must use JDO annotations rather than XML.
-
-Furthermore, note that although JDO (the property-related) annotations to be placed on either the field or on the getter, Apache Isis requires that annotations are placed on the getter.
-====
+Apache Isis uses an ORM for persistence, specifically xref:pjdo:ROOT:about.adoc[JDO/DataNucleus].
+It infers some of its own metadata from the ORM annotations.
 
 The table below lists the JDO annotations currently recognized by Apache Isis.
 
@@ -93,7 +87,7 @@ Isis also parses the following JDO annotations, but the metadata is currently un
 
 
 |`@javax.jdo.annotations.` +
-`EmbeddedOnly`
+`Queries`
 |Unused
 |Persistence
 |Class
@@ -101,6 +95,13 @@ Isis also parses the following JDO annotations, but the metadata is currently un
 
 |`@javax.jdo.annotations.` +
 `Query`
+|Unused
+|Persistence
+|Class
+
+
+|`@javax.jdo.annotations.` +
+`Version`
 |Unused
 |Persistence
 |Class

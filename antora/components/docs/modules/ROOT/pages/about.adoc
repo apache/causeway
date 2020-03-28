@@ -119,7 +119,7 @@ _Nightly Builds (not ASF)_
 
 * link:https://github.com/apache-isis-committers/isis-nightly[CI]
 * link:https://repo.incode.cloud/[Maven Repo]
-* link:https://apache-isis-committers.github.io/isis-nightly/toc/about.html[Website preview]
+* link:https://apache-isis-committers.github.io/isis-nightly[Website preview]
 
 
 |

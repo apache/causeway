@@ -4,7 +4,7 @@
 :page-partial:
 
 
-While Apache Isis does, as of today, define a good number of its own annotations, the policy is to reuse standard Java/JEE annotations wherever they exist or are added to the Java platform.
+While Apache Isis does define many of its own annotations, the policy is to reuse standard Java/JEE annotations wherever they exist or are added to the Java platform.
 
 The table below lists the JEE annotations currently recognized.  Expect to see more added in future releases of Apache Isis.
 
@@ -15,7 +15,7 @@ The table below lists the JEE annotations currently recognized.  Expect to see m
 |Annotation
 |Purpose
 |Layer
-|xref:vw:ROOT:layout.adoc#file-based[File-based layout]?
+|xref:userguide:fun:ui.adoc#object-layout[File-based layout]?
 
 |xref:refguide:applib-ant:Digits.adoc[`@javax.validation.` +
 `constraints.` +

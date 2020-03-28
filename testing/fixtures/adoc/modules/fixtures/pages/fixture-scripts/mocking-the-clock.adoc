@@ -13,11 +13,11 @@ This page describes how to change the current time, and how to set up tests usin
 The default xref:refguide:applib-svc:ClockService.adoc[`ClockService`] implementation in fact simply delegates to another class defined in the API, namely the `o.a.i.applib.clock.Clock`, an abstract singleton class.
 It is not recommended that your code use the `Clock` directly, but it's worth understanding how this all works.
 
-* If running in xref:refguide:config:deployment-types.adoc[production] (server) mode, then the framework will (lazily) instantiate the ``SystemClock` when first required.
+* If running in xref:refguide:config:about.adoc#deployment-types[production] (server) mode, then the framework will (lazily) instantiate the ``SystemClock` when first required.
 This is a read-only clock that reads from the system time.
 The instance registers itself as the singleton and cannot be replaced.
 
-* If running in xref:refguide:config:deployment-types.adoc[prototype] mode, though, then the framework (using `FixturesLifecycleService`) will instead instantiate `FixtureClock`.
+* If running in xref:refguide:config:about.adoc#deployment-types[prototype] mode, though, then the framework (using `FixturesLifecycleService`) will instead instantiate `FixtureClock`.
 This is a read-write clock that will behave as the system clock, unless it is explicitly set using eg, `FixtureClock#setDate(...)` or `FixtureClock#setTime(...)` etc.
 +
 WARNING: TODO: v2 - looking now to remove Clock singleton, so refactor FixtureClock and TickingFixtureClock with alternative implementations of ClockService.

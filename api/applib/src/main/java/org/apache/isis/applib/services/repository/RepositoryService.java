@@ -259,8 +259,7 @@ public interface RepositoryService {
     <T> Optional<T> firstMatch(Query<T> query);             // <.>
     // end::refguide[]
     /**
-     * As {@link #allInstances(Class, long, long)}, but but returning all instances rather than just those
-     *      * within the specified range..
+     * Reloads the pojo.
      */
     // tag::refguide[]
     <T> T refresh(T pojo);                                // <.>

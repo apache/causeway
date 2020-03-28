@@ -3,7 +3,6 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-WARNING: Document `WrappingObject`, document `AsyncControl`
 
 
 The `WrapperFactory` provides the ability to enforce business rules for programmatic interactions between domain objects.
@@ -58,12 +57,12 @@ For domain objects (not mixins), the wrapper can be interacted with as follows:
 
 Calling any of the above methods may result in a (subclass of) `InteractionException` if the object disallows it.
 For example, if a property is annotated with xref:refguide:applib-ant:ActionLayout.adoc#hidden[`@ActionLayout#hidden`] then a `HiddenException` will be thrown.
-Similarly if an action has a xref:refguide:applib-cm:methods/prefixes/validate.adoc[`validateXxx()`] method and the supplied arguments are invalid then an `InvalidException` will be thrown.
+Similarly if an action has a xref:refguide:applib-methods:prefixes.adoc#validate[`validateXxx()`] method and the supplied arguments are invalid then an `InvalidException` will be thrown.
 
 In addition, the following methods may also be called:
 
-* the xref:refguide:applib-cm:methods.adoc#title[`title()`] and `toString()` methods
-* any xref:refguide:applib-cm:methods.adoc#default[`default...()`], xref:refguide:applib-cm:methods.adoc#choices[`choices...()`] or xref:refguide:applib-cm:methods.adoc#autoComplete[`autoComplete...()`] methods
+* the xref:refguide:applib-methods:reserved.adoc#title[`title()`] and `toString()` methods
+* any xref:refguide:applib-methods:prefixes.adoc#default[`default...()`], xref:refguide:applib-methods:prefixes.adoc#choices[`choices...()`] or xref:refguide:applib-methods:prefixes.adoc#autoComplete[`autoComplete...()`] methods
 
 An exception will be thrown if any other methods are thrown.
 
@@ -73,8 +72,9 @@ If the interface is performed (action invoked or property set), then - irrespect
 
 For mixins, the behaviour of the wrapper is similar but simpler.
 Mixin wrappers only apply to actions, and so the wrapper will enforce the hidden/disable/validate rules before executing.
-In addition, any xref:refguide:applib-cm:methods.adoc#default[`default...()`], xref:refguide:applib-cm:methods.adoc#choices[`choices...()`] or xref:refguide:applib-cm:methods.adoc#autoComplete[`autoComplete...()`] methods can be called.
+In addition, any xref:refguide:applib-methods:prefixes.adoc#default[`default...()`], xref:refguide:applib-methods:prefixes.adoc#choices[`choices...()`] or xref:refguide:applib-methods:prefixes.adoc#autoComplete[`autoComplete...()`] methods can be called.
 
+[#synccontrol]
 ==== `SyncControl`
 
 The `SyncControl` class controls the way that a (synchronous) wrapper works.
@@ -127,6 +127,7 @@ Executing in a separate thread means that the target and arguments are used in a
 If any of these are entities, they are retrieved from the database afresh; it isn't possible to pass domain entity references from the foreground calling thread to the background threads.
 
 
+[#asynccontrol]
 ==== `AsyncControl`
 
 The `AsyncControl` class controls the way that an asynchronous wrapper -- as obtained by `asyncWrapXxx(...)` -- works.
@@ -220,8 +221,4 @@ public class CustomerAgent {
 ----
 <1> if any constraints on the `Order`'s `refund()` action would be violated, then ...
 <2> ... these will be trapped and raised to the user as a warning.
-
-
-
-
 

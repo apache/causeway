@@ -1,0 +1,213 @@
+[[r2.0.0-M3]]
+= 2.0.0-M3
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+This is a major milestone release that "re-platforms" Apache Isis so that it now runs on top of link:https://spring.io/projects/spring-boot[Spring Boot].
+
+* A new convenience xref:docs:parent-pom:about.adoc[parent pom] builds on top of Spring Boot's similar parent pom, to make it easy to develop new apps, along with simplified xref:docs:mavendeps:about.adoc["mavendeps"] pom's.
+* The Maven archetypes have been replaced with xref:docs:starters:about.adoc[Starter Apps] in github repos.
+* xref:refguide:config:about.adoc[Configuration properties] have been refactored, and can now be specified (with intellisense hints) using Spring's `application.properties` or `application.yml`
+
+The core framework has been trimmed down, with testing functionality (eg fixture scripts) moving to a new top level "testing" group.
+Other new groups have been introduced: "value-types", "subdomains", (bounded context) "mapping", "extensions", "incubator", "legacy".
+
+This milestone also introduces a number of new features:
+
+* new xref:refguide:applib-ant:Property.adoc#projecting[`@Property#projecting`] allows view model summaries to be returned as "projections" of underlying entities.
+* new xref:refguide:applib-methods:reserved.adoc#layout[`layout()`] method (or xref:refguide:applib-classes:events.adoc#ui-event-classes[UI event]) allows a domain object to specify which layout file should be used to render it.
+* no longer any need to specify xref:refguide:applib-ant:ParameterLayout.adoc#named[`@ParameterLayout#named()`]
+* security integration with xref:security:keycloak:about.adoc[Keycloak]
+
+* New value types:
+** text-based value type with simple xref:valuetypes:sse:about.adoc[SSE support]
+** xref:valuetypes:asciidoc:about.adoc[Asciidoc] value type
+** xref:valuetypes:markdown:about.adoc[Markdown] value type
+
+* New extensions:
+** xref:userguide:flyway:about.adoc[Flyway] (integrating with Spring Boot's support)
+** xref:vro:cors:[CORS] for the REST API (xref:vro:ROOT:about.adoc[Restful Objects viewer])
+** xref:vw:pdfjs:about.adoc[pdf.js] (for xref:vw:ROOT:about.adoc[Wicket viewer])
+** xref:vw:fullcalendar:about.adoc[fullcalendar] (for xref:vw:ROOT:about.adoc[Wicket viewer])
+** xref:vw:exceldownload:about.adoc[excel download] (for xref:vw:ROOT:about.adoc[Wicket viewer])
+
+Improvements:
+
+* xref:testing:integtestsupport:about.adoc[Integration test support], and xref:testing:specsupport:about.adoc[BDD (Cucumber) "spec" support] have been refactored to run on Spring Boot with Junit 5.
+* New xref:docs:demo:about.adoc[demo app] to demonstrate new features.
+* New smoketest app to catch regressions
+* The maven plugin has been retired, replaced by utility classes that can be used within integration tests.
+* There are no longer any split packages, and Maven groupId/artifactIds have been rationalized.
+
+
+The website has been updated to use https://antora.org[Antora].
+
+
+
+== New Feature
+
+* link:https://issues.apache.org/jira/browse/ISIS-2298[ISIS-2298] - Initial project structure for the Vaadin viewer
+* link:https://issues.apache.org/jira/browse/ISIS-2267[ISIS-2267] - Integrate Spring Boot flyway as an extension.
+* link:https://issues.apache.org/jira/browse/ISIS-2260[ISIS-2260] - Port pdfjs from incode platform as an extension
+* link:https://issues.apache.org/jira/browse/ISIS-2236[ISIS-2236] - Add WebModule to support CORS
+* link:https://issues.apache.org/jira/browse/ISIS-2181[ISIS-2181] - Rationalize pom hierarchy with respect to Spring Boot starter-parent.
+* link:https://issues.apache.org/jira/browse/ISIS-2180[ISIS-2180] - Resurrect mvn plugin functionality as integ test extensions.
+* link:https://issues.apache.org/jira/browse/ISIS-2174[ISIS-2174] - Resurrect Module with fixture support.
+* link:https://issues.apache.org/jira/browse/ISIS-2102[ISIS-2102] - Support for Server Sent Events (SSE)
+* link:https://issues.apache.org/jira/browse/ISIS-2095[ISIS-2095] - Allow event subscribers to change the returned value of an action in the EXECUTED phase.
+* link:https://issues.apache.org/jira/browse/ISIS-2084[ISIS-2084] - Allow upload of interim builds to repo.incode.work (also fixed in "v1 maintenance")
+* link:https://issues.apache.org/jira/browse/ISIS-2083[ISIS-2083] - Allow the dialogMode default for object actions vs service actions be specified separately.
+* link:https://issues.apache.org/jira/browse/ISIS-2081[ISIS-2081] - Provide "redirect even when same" control on action-by-action basis (also fixed in "v1 maintenance")
+* link:https://issues.apache.org/jira/browse/ISIS-2080[ISIS-2080] - Support multiple layouts for a domain object, switchable using layout() (similar to iconName() or cssClass()) (also fixed in "v1 maintenance")
+* link:https://issues.apache.org/jira/browse/ISIS-2079[ISIS-2079] - Improve rebuildMetaModel to return the target object rather than void (also fixed in "v1 maintenance")
+* link:https://issues.apache.org/jira/browse/ISIS-2078[ISIS-2078] - Allow sidebar vs modal to be specified on action-by-action basis using @ActionLayout or XML (also fixed in "v1 maintenance")
+* link:https://issues.apache.org/jira/browse/ISIS-2075[ISIS-2075] - Allow multiple layouts to be defined, and a helper method such as "layout()" that returns which to use, similar to iconName() and cssClass().
+* link:https://issues.apache.org/jira/browse/ISIS-2020[ISIS-2020] - Experimental Support for DataNucleus Federated Datastore
+* link:https://issues.apache.org/jira/browse/ISIS-2001[ISIS-2001] - Dynamically hide/disable/default action parameters (based on other parameter arguments) (also fixed in "v1 maintenance")
+* link:https://issues.apache.org/jira/browse/ISIS-1998[ISIS-1998] - Simplify syntax way for mixins, to better express intent using @Action, @Collection and @Property
+* link:https://issues.apache.org/jira/browse/ISIS-1634[ISIS-1634] - Move paraname8 into core.
+* link:https://issues.apache.org/jira/browse/ISIS-1297[ISIS-1297] - Integrate with Keycloak
+* link:https://issues.apache.org/jira/browse/ISIS-1280[ISIS-1280] - Property#projecting attribute: provide redirect hints so that when the user clicks on a rendered link, the viewer instead navigates to some other entity. (also fixed in "v1 maintenance")
+* link:https://issues.apache.org/jira/browse/ISIS-1263[ISIS-1263] - Support editing/preview using Asciidoctor (perhaps as an Isis addon)
+* link:https://issues.apache.org/jira/browse/ISIS-1176[ISIS-1176] - Provide the capability to push notification messages to end-users without refreshing (using web sockets or Atmosphere etc).
+
+
+== Improvement
+
+* link:https://issues.apache.org/jira/browse/ISIS-2307[ISIS-2307] - Vaadin Viewer: Isis Preset Debug Logging not honored
+* link:https://issues.apache.org/jira/browse/ISIS-2306[ISIS-2306] - Vaadin Viewer: Action calls need an IsisSession
+* link:https://issues.apache.org/jira/browse/ISIS-2305[ISIS-2305] - Demo App: add more scalar types not covered yet
+* link:https://issues.apache.org/jira/browse/ISIS-2303[ISIS-2303] - Vaadin Viewer: Login Page
+* link:https://issues.apache.org/jira/browse/ISIS-2302[ISIS-2302] - Rename WithTransactionScope interface to eg. TransactionScopeListener
+* link:https://issues.apache.org/jira/browse/ISIS-2299[ISIS-2299] - Convert BDD Cucumber to use JUnit5 test platform engine (rather than legacy JUnit4)
+* link:https://issues.apache.org/jira/browse/ISIS-2291[ISIS-2291] - SecMan: convert any actions in 'jdo' to mixins and move to 'model'
+* link:https://issues.apache.org/jira/browse/ISIS-2285[ISIS-2285] - Reinstate mechanism to run a specified fixture class on startup.
+* link:https://issues.apache.org/jira/browse/ISIS-2284[ISIS-2284] - RO viewer incorrectly throws 500 instead of 404 for ObjectNotFound.
+* link:https://issues.apache.org/jira/browse/ISIS-2274[ISIS-2274] - Properties should be disabled by default.
+* link:https://issues.apache.org/jira/browse/ISIS-2273[ISIS-2273] - Move most of core-unittestsupport into testing. Perhaps all of it.
+* link:https://issues.apache.org/jira/browse/ISIS-2272[ISIS-2272] - Simplify @HomePage support - just use as annotation on type, not for an action.
+* link:https://issues.apache.org/jira/browse/ISIS-2271[ISIS-2271] - Port fullcalendar over from incode-platform as an extension.
+* link:https://issues.apache.org/jira/browse/ISIS-2268[ISIS-2268] - Rename OrderPrecedence literals
+* link:https://issues.apache.org/jira/browse/ISIS-2264[ISIS-2264] - Rationalize configuration properties hierarchy, in line with groupId / artifactId
+* link:https://issues.apache.org/jira/browse/ISIS-2263[ISIS-2263] - Update RO spec in support of java.time
+* link:https://issues.apache.org/jira/browse/ISIS-2262[ISIS-2262] - Remove ExceptionRecognizer.recognize(Throwable) in favor of recognize2(Throwable)
+* link:https://issues.apache.org/jira/browse/ISIS-2261[ISIS-2261] - Allow the baseUri of the RO viewer to be overridden
+* link:https://issues.apache.org/jira/browse/ISIS-2259[ISIS-2259] - Reorganize extensions into several smaller groupings.
+* link:https://issues.apache.org/jira/browse/ISIS-2258[ISIS-2258] - Documentation Typos and AsciiDoc improvements
+* link:https://issues.apache.org/jira/browse/ISIS-2255[ISIS-2255] - In WrapperFactory, lookup mixin properties and collections (as well as actions).
+* link:https://issues.apache.org/jira/browse/ISIS-2250[ISIS-2250] - Optionally prevent new ObjectSpec's once metamodel fully created; and revalidate new ObjectSpec's otherwise.
+* link:https://issues.apache.org/jira/browse/ISIS-2249[ISIS-2249] - Deprecate Magnitude<T> and implementing Value Types
+* link:https://issues.apache.org/jira/browse/ISIS-2248[ISIS-2248] - Store the MetaModelContext in DN's NucleusContext
+* link:https://issues.apache.org/jira/browse/ISIS-2247[ISIS-2247] - provide an IsisPreset for specifying the log4j2-test.xml file when running integ tests.
+* link:https://issues.apache.org/jira/browse/ISIS-2244[ISIS-2244] - Remove IsisJaxrsServerPlugin
+* link:https://issues.apache.org/jira/browse/ISIS-2243[ISIS-2243] - Use resteasy-spring-boot-starter to configure jaxrs-resteasy
+* link:https://issues.apache.org/jira/browse/ISIS-2242[ISIS-2242] - Use IsisSystemEnvironment to store the context path, rather than _Resources static method.
+* link:https://issues.apache.org/jira/browse/ISIS-2241[ISIS-2241] - Remove _Resources_RestfulPath
+* link:https://issues.apache.org/jira/browse/ISIS-2240[ISIS-2240] - Use WebModule infra to inject into all servlets, filters etc.
+* link:https://issues.apache.org/jira/browse/ISIS-2239[ISIS-2239] - Use @Validated for base-path config properties
+* link:https://issues.apache.org/jira/browse/ISIS-2238[ISIS-2238] - Move WebModuleRestfulObjects into the resteasy plugin module.
+* link:https://issues.apache.org/jira/browse/ISIS-2237[ISIS-2237] - Sequence WebModules correctly.
+* link:https://issues.apache.org/jira/browse/ISIS-2229[ISIS-2229] - Let TitleService fallback to Enum.name() as the Title Provider
+* link:https://issues.apache.org/jira/browse/ISIS-2225[ISIS-2225] - Simplify config metadata for wicket footer credits.
+* link:https://issues.apache.org/jira/browse/ISIS-2224[ISIS-2224] - Integrate Smoketests with the CI Build
+* link:https://issues.apache.org/jira/browse/ISIS-2219[ISIS-2219] - Move LDAP Realm implementation into an extension.
+* link:https://issues.apache.org/jira/browse/ISIS-2218[ISIS-2218] - Remove AuthenticationManager interface, just use AuthenticationManagerStandard as default impl.
+* link:https://issues.apache.org/jira/browse/ISIS-2217[ISIS-2217] - Rename ext fixture's Module interface to ModuleWithFixtures
+* link:https://issues.apache.org/jira/browse/ISIS-2216[ISIS-2216] - Standardize service @Ordered, @Named, @Primary
+* link:https://issues.apache.org/jira/browse/ISIS-2215[ISIS-2215] - Remove usage of @ComponentScan, instead explicitly @Import all services etc.
+* link:https://issues.apache.org/jira/browse/ISIS-2214[ISIS-2214] - Introduce @Module as a meta-annotation for @ComponentScan and @Configuration.
+* link:https://issues.apache.org/jira/browse/ISIS-2213[ISIS-2213] - Avoid package splitting, in prep for possible JPMS support in future.
+* link:https://issues.apache.org/jira/browse/ISIS-2212[ISIS-2212] - Rename runtime-web to webapp, and tidy up
+* link:https://issues.apache.org/jira/browse/ISIS-2208[ISIS-2208] - Move h2console/h2managermenu and hsqldbmanager out into isis-extensions.
+* link:https://issues.apache.org/jira/browse/ISIS-2207[ISIS-2207] - Move schema.utils package in applib under o.a.i.applib package
+* link:https://issues.apache.org/jira/browse/ISIS-2206[ISIS-2206] - Create an incubator catalog and a legacy catalog, similar to extensions.
+* link:https://issues.apache.org/jira/browse/ISIS-2205[ISIS-2205] - Break runtime-extensions module into separate responsibilities
+* link:https://issues.apache.org/jira/browse/ISIS-2202[ISIS-2202] - Exclude org.springframework from the metamodel
+
+
+== Bug
+
+* link:https://issues.apache.org/jira/browse/ISIS-2310[ISIS-2310] - Values of @EmbeddedOnly type should not render logo or title if absent
+* link:https://issues.apache.org/jira/browse/ISIS-2308[ISIS-2308] - Regression: Markup rendering is broken
+* link:https://issues.apache.org/jira/browse/ISIS-2296[ISIS-2296] - @RequestScoped isn't honoured
+* link:https://issues.apache.org/jira/browse/ISIS-2295[ISIS-2295] - ChangedObjectsService doesn't reset enlisted pojos at end of xactn -> memory leak.
+* link:https://issues.apache.org/jira/browse/ISIS-2293[ISIS-2293] - Fix the ability to inject into Specifications
+* link:https://issues.apache.org/jira/browse/ISIS-2292[ISIS-2292] - HTTP 400 when rendering Object w/ ObjectId containing slashes
+* link:https://issues.apache.org/jira/browse/ISIS-2288[ISIS-2288] - (possible regression): if sidebar is activated, then cannot access menu items (z-order)
+* link:https://issues.apache.org/jira/browse/ISIS-2286[ISIS-2286] - SecMan listAll Classes: types of @DomainService(nature=NatureOfService.VIEW) are missing
+* link:https://issues.apache.org/jira/browse/ISIS-2283[ISIS-2283] - Demo/RO: restful/menuBars Contains Unexpected Element
+* link:https://issues.apache.org/jira/browse/ISIS-2282[ISIS-2282] - Demo: action 'runFixtureScript' either does not exist or is not visible
+* link:https://issues.apache.org/jira/browse/ISIS-2281[ISIS-2281] - objectSpec expected to have EncodableFacet
+* link:https://issues.apache.org/jira/browse/ISIS-2275[ISIS-2275] - Rest Response Doesn't Contain Number With "multiLine"
+* link:https://issues.apache.org/jira/browse/ISIS-2266[ISIS-2266] - Revert a little bit of the joda to j8 stuff.
+* link:https://issues.apache.org/jira/browse/ISIS-2265[ISIS-2265] - on-the-fly-introspection may occur even though MM was eagerly loaded
+* link:https://issues.apache.org/jira/browse/ISIS-2257[ISIS-2257] - Actions fail MM Validation when associated (Hotfix)
+* link:https://issues.apache.org/jira/browse/ISIS-2256[ISIS-2256] - ToggledMementosList can exceed Size of underlying Collection
+* link:https://issues.apache.org/jira/browse/ISIS-2254[ISIS-2254] - Ensure Command executor is set to USER when running integ tests.
+* link:https://issues.apache.org/jira/browse/ISIS-2246[ISIS-2246] - CSS fix for drop down panel (eg vertical '...' on metadata tab)
+* link:https://issues.apache.org/jira/browse/ISIS-2228[ISIS-2228] - autoComplete, default, choices don't get added to the MM
+* link:https://issues.apache.org/jira/browse/ISIS-2227[ISIS-2227] - Toggle View is hiding DOM elements which should be visible
+* link:https://issues.apache.org/jira/browse/ISIS-2226[ISIS-2226] - Dependend Args within Dialogs do not work for AutoComplet, Disable and Hide
+* link:https://issues.apache.org/jira/browse/ISIS-2221[ISIS-2221] - RestClient smoketest is broken
+* link:https://issues.apache.org/jira/browse/ISIS-2220[ISIS-2220] - Selecting request header options (profiles) in swagger-ui does not work.
+* link:https://issues.apache.org/jira/browse/ISIS-2210[ISIS-2210] - When web browser is narrow, sidebar always shown.
+* link:https://issues.apache.org/jira/browse/ISIS-2209[ISIS-2209] - Orphaned validation (when @Action is NOT mandatory) isn't working.
+* link:https://issues.apache.org/jira/browse/ISIS-2204[ISIS-2204] - Fixes algorithm for determining if a domain action is "public" visible (ie no entities)
+* link:https://issues.apache.org/jira/browse/ISIS-2203[ISIS-2203] - Fix NPE when rendering a domain object with null property in RO viewer.
+* link:https://issues.apache.org/jira/browse/ISIS-2193[ISIS-2193] - BookmarkService doesn't seem to lookup correctly
+* link:https://issues.apache.org/jira/browse/ISIS-2179[ISIS-2179] - Fallback to home page (in event of action returning null) throws an IllegalArg
+* link:https://issues.apache.org/jira/browse/ISIS-2170[ISIS-2170] - @PersistenceCapable(schema=...) is no longer being used to derive objectType
+* link:https://issues.apache.org/jira/browse/ISIS-2157[ISIS-2157] - Secman: Non-existing User gets created in DB even though not authenticated via LDAP
+* link:https://issues.apache.org/jira/browse/ISIS-2153[ISIS-2153] - Internal API: _Tasks with ThreadPoolSupport must not suppress nested Exceptions
+* link:https://issues.apache.org/jira/browse/ISIS-2144[ISIS-2144] - Persistable mixins not showing in the demo apps.
+* link:https://issues.apache.org/jira/browse/ISIS-2139[ISIS-2139] - WepApp's main() should just work out of the box
+* link:https://issues.apache.org/jira/browse/ISIS-2130[ISIS-2130] - Mixins are broken. Don't seem to be recognized, thus ignored.
+* link:https://issues.apache.org/jira/browse/ISIS-2129[ISIS-2129] - Blob/Clob-Panel's Download Button might reference invalid content.
+* link:https://issues.apache.org/jira/browse/ISIS-2128[ISIS-2128] - TimestampService is broken
+* link:https://issues.apache.org/jira/browse/ISIS-2124[ISIS-2124] - Common actions not shown, even when explicitly listed in layout.xml
+* link:https://issues.apache.org/jira/browse/ISIS-2123[ISIS-2123] - SimpleApp build/validate/test needs fixing for v2
+* link:https://issues.apache.org/jira/browse/ISIS-2119[ISIS-2119] - Increase timeout to avoid occasional exceptions when download Blobs (also fixed in "v1 maintenance")
+* link:https://issues.apache.org/jira/browse/ISIS-2118[ISIS-2118] - Don't redundantly add additional DisabledFacet when disabled at class-level (also fixed in "v1 maintenance")
+* link:https://issues.apache.org/jira/browse/ISIS-2116[ISIS-2116] - Avoid error in downloadMetaModelXml, CommandPersistence.NOT_PERSISTED facet not decoded correctly (also fixed in "v1 maintenance")
+* link:https://issues.apache.org/jira/browse/ISIS-2115[ISIS-2115] - Prevent ajax js error for inlinePromptLink on scalar panel (also fixed in "v1 maintenance")
+* link:https://issues.apache.org/jira/browse/ISIS-2107[ISIS-2107] - Allow enums to implement interfaces for choices (also fixed in "v1 maintenance")
+* link:https://issues.apache.org/jira/browse/ISIS-2104[ISIS-2104] - AuditerService not being called
+* link:https://issues.apache.org/jira/browse/ISIS-2089[ISIS-2089] - JDODataStoreException not handled properly by the framework
+
+
+== Dependency upgrade
+
+* link:https://issues.apache.org/jira/browse/ISIS-2300[ISIS-2300] - Some CVEs in dependencies are threatening your project!
+
+
+== Duplicate
+
+* link:https://issues.apache.org/jira/browse/ISIS-674[ISIS-674] - [DUPLICATE] Allow action parameters to be defaulted based on the (change of) value of other parameters.
+* link:https://issues.apache.org/jira/browse/ISIS-892[ISIS-892] - [DUPLICATE] Allow action parameters to be dynamically disabled or even hidden based on either object state or on the values for other objects.
+* link:https://issues.apache.org/jira/browse/ISIS-1294[ISIS-1294] - [WON'T FIX] Support Spring.Data like repositories with automatic implemenation of methods such as findByName or findByStartDateAndStatus
+* link:https://issues.apache.org/jira/browse/ISIS-1334[ISIS-1334] - [DUPLICATE] Create standalone JAR of an Isis app
+
+== Won't Fix
+
+* link:https://issues.apache.org/jira/browse/ISIS-1645[ISIS-1645] - [WON'T FIX] Integrate Kryo as an alternative technology for view models
+* link:https://issues.apache.org/jira/browse/ISIS-1568[ISIS-1568] - [WON'T FIX] Automated testing tool to act as a webcrawler, clicking on all links and assert that the page is rendered correctly.
+* link:https://issues.apache.org/jira/browse/ISIS-1487[ISIS-1487] - [WON'T FIX] Extend the framework's metamodel to be able to render List<Map<String,Object>>
+* link:https://issues.apache.org/jira/browse/ISIS-1267[ISIS-1267] - [WON'T FIX] Enhance isis-maven-plugin to generate UML class diagrams from metamodel
+* link:https://issues.apache.org/jira/browse/ISIS-992[ISIS-992] - [WON'T FIX] Extend Isis metamodel and Wicket viewer so that a "delete" action can be automatically provided for deleteable objects.
+* link:https://issues.apache.org/jira/browse/ISIS-958[ISIS-958] - [WON'T FIX] [DUPLICATE] Create a custom distribution of TomEE containing the Isis jars
+* link:https://issues.apache.org/jira/browse/ISIS-924[ISIS-924] - [WON'T FIX] Use @DomainService(repositoryFor=...) as the basis for an implementation of the PluralNameFacet
+* link:https://issues.apache.org/jira/browse/ISIS-923[ISIS-923] - [WON'T FIX] Use @DomainService(repositoryFor=...) as the basis for an implementation of the AutoCompleteFacet.
+* link:https://issues.apache.org/jira/browse/ISIS-857[ISIS-857] - [WON'T FIX] JDO/Wicket/RO: provide support for a number of built-in value types (eg BaseNumber, BaseString, BaseDate... to support Money, Reference, Note, Description); annotated with @Mask annotation
+* link:https://issues.apache.org/jira/browse/ISIS-572[ISIS-572] - [WON'T FIX] To improve performance, support the use of data pinned to caches for entities that are intended to be reference data. For these, infer the ImmutableFacet.
+* link:https://issues.apache.org/jira/browse/ISIS-563[ISIS-563] - [WON'T FIX] Implement generic Spec Transformers for BDD tests
+* link:https://issues.apache.org/jira/browse/ISIS-515[ISIS-515] - [WON'T FIX] Pinnable (and persistable) bookmarks
+* link:https://issues.apache.org/jira/browse/ISIS-2211[ISIS-2211] - [WON'T FIX] Factor out Swagger UI as a separate "viewer" module
+* link:https://issues.apache.org/jira/browse/ISIS-2114[ISIS-2114] - [WONT-FIX] Tables: Object Columns should be sortable by displayed Object Titles
+* link:https://issues.apache.org/jira/browse/ISIS-1971[ISIS-1971] - [WON'T FIX] JAXB view model: setting view's properties via PostConstruct method not honored
+
+
+== Not an Issue
+
+* link:https://issues.apache.org/jira/browse/ISIS-2280[ISIS-2280] - [NOT-AN-ISSUE] demoapp.dom.types.blob.BlobDemo: menuBars suggest GET, implementation requires POST?
+* link:https://issues.apache.org/jira/browse/ISIS-2113[ISIS-2113] - [NOT AN ISSUE] Blob/Clob Properties throw when Inline Editing (Ajax)

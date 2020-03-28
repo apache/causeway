@@ -35,8 +35,7 @@ One use case is to replay commands on master/slave; another is in support of bac
 |Publish any action invocations/property edits and changed objects, typically for interchange with an external system in a different bounded context.
 |
 * `PublisherServiceLogging` (in applib)
-* xref:mappings:publisher:about.adoc[Publish Outbox +
-(in Mappings catalogue)]
+* xref:mappings:outbox-publisher:about.adoc[Outbox Publisher] (in Mappings catalogue)
 
 
 

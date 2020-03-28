@@ -1,4 +1,5 @@
-= `bookmarking`
+[#bookmarking]
+= `bookmarking()`
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
@@ -6,8 +7,6 @@
 
 
 The `bookmarking` attribute indicates if an action (with safe xref:refguide:applib-ant:Action.adoc#semantics[action semantics]) is automatically bookmarked.
-
-
 
 
 In the xref:vw:ROOT:about.adoc[Wicket viewer], a link to a bookmarked object is shown in the bookmarks panel:
@@ -45,13 +44,13 @@ indicates that the `notYetComplete()` action is bookmarkable.
 
 [NOTE]
 ====
-The enum value `AS_CHILD` has no meaning for actions; it relates only to bookmarked xref:refguide:applib-ant:DomainObject.adoc#bookmarking[domain object]s.
+The enum value `AS_CHILD` has no meaning for actions; it relates only to bookmarked xref:refguide:applib-ant:DomainObjectLayout.adoc#bookmarking[domain object]s.
 ====
 
 
 == Alternatives
 
-As an alternative to using the annotation, the dynamic xref:vw:ROOT:layout.adoc#file-based[file-based layout] can be used instead.
+As an alternative to using the annotation, the dynamic xref:userguide:fun:ui.adoc#object-layout[file-based layout] can be used instead.
 
 
 == See also

@@ -3,8 +3,7 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-WARNING: TODO - to review for v2.
-
+WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
 The `SwaggerService` generates link:http://swagger.io/[Swagger] spec files to describe the public and/or private RESTful APIs exposed by the xref:vro:ROOT:about.adoc[RestfulObjects viewer].
 
@@ -30,7 +29,7 @@ include::refguide:applib-svc:example$services/swagger/SwaggerService.java[tags="
 
 <.> Produces a limited spec for use by third-party clients, ie public use.
 This specification is restricted only to
-xref:userguide:fun:building-blocks.adoc#view-models[view model]s and to domain services with a xref:refguide:applib-ant:DomainService.adoc#nature[nature] of `VIEW_REST_ONLY`.
+xref:userguide:fun:overview.adoc#view-models[view model]s and to domain services with a xref:refguide:applib-ant:DomainService.adoc#nature[nature] of `VIEW_REST_ONLY`.
 <.> Produces a more complete spec, for internally-managed clients, ie private internal use.
 This specification includes domain entities and all menu domain services (as well as any view models).
 <.> Ditto, but also including any xref:refguide:applib-ant:Action.adoc#restrictTo[prototype] actions.

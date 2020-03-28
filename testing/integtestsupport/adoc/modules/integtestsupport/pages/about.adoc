@@ -133,10 +133,13 @@ For example, let's test the `SimpleObject#name` property:
 [source,java]
 .SimpleObject.java
 ----
+import lombok.Getter;
+import lombok.Setter;
+
 @DomainObject()
 public class SimpleObject
     ...
-    @lombok.Getter @lombok.Setter
+    @Getter @Setter
     @Name private String name;
     ...
 }

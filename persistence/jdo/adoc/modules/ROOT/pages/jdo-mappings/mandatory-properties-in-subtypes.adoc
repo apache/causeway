@@ -27,11 +27,17 @@ For example:
 
 [source,java]
 ----
-@javax.jdo.annotations.Inheritance(strategy = InheritanceStrategy.SUPER_TABLE)
+import javax.jdo.annotations.Column;
+import javax.jdo.annotations.Inheritance;
+import javax.jdo.annotations.InheritanceStrategy;
+import lombok.Getter;
+import lombok.Setter;
+
+@Inheritance(strategy = InheritanceStrategy.SUPER_TABLE)
 public class SomeSubtype extends SomeSuperType {
-    @javax.jdo.annotations.Column(allowsNull="true")
+    @Column(allowsNull="true")
     @Property(optionality=Optionality.MANDATORY)
-    @lombok.Getter @lombok.Setter
+    @Getter @Setter
     private LocalDate date;
 }
 ----

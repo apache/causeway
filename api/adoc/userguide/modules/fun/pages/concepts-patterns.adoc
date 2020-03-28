@@ -1,0 +1,15 @@
+= Core Concepts
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+This introductory chapter should give you a good about what Apache Isis actually *is*: the ideas and principles that it builds upon, what its core values are, its architecture, how it compares to other architectural approaches other frameworks, and how it can be deployed.
+
+
+include::concepts-patterns/domain-driven-design.adoc[leveloffset=+1]
+include::concepts-patterns/naked-objects-pattern.adoc[leveloffset=+1]
+include::concepts-patterns/core-values.adoc[leveloffset=+1]
+include::concepts-patterns/architecture.adoc[leveloffset=+1]
+include::concepts-patterns/metamodel.adoc[leveloffset=+1]
+include::concepts-patterns/apache-isis-vs-cqrs-and-event-sourcing.adoc[leveloffset=+1]
+include::concepts-patterns/deployment-options.adoc[leveloffset=+1]

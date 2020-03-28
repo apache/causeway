@@ -27,6 +27,7 @@ div.paragraph code {
     color: darkmagenta;
 }
 
+.doc p a code,
 .doc div.ulist a code,
 .doc div.paragraph a code {
     color: cornflowerblue;

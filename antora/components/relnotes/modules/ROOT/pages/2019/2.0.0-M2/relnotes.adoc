@@ -10,7 +10,7 @@
 This milestone introduces one new feature, namely support for a table tree view in the Wicket viewer.
 It also includes all the features as of Apache Isis 1.17.0.
 
-The long-term goal (for v2.0.0) is to allow the framework to be run on top of either SpringBoot or JEE MicroProfile, with either of those lower-level frameworks taking responsibility for configuration and injection.
+The long-term goal (for v2.0.0) is to allow the framework to be run on top of either Spring Boot or JEE MicroProfile, with either of those lower-level frameworks taking responsibility for configuration and injection.
 In this milestone, some significant initial work has been done in this area.
 Notably, the IsisConfiguration is now immutable once instantiated, and its creating vis-a-vis the AppManifest has been figured out.
 

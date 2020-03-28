@@ -1,0 +1,109 @@
+[[hide]]
+= `hide...()`
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+
+The `hide...()` supporting method is called for properties, collections, actions and action parameters.
+It allows the property/collection to be completely hidden from view.
+
+It's comparatively rare for properties or collections to be imperatively hidden from view, but actions are sometimes hidden or shown visible (as opposed to being just xref:refguide:applib-methods:prefixes.adoc#disable[disabled], ie greyed out).
+
+The signature of the supporting method is simply:
+
+[source,java]
+----
+public boolean hideXxx() {
+    // ...
+}
+----
+
+Returning `true` will hide the property, collection or action, returning `false` leaves it visible.
+
+For example, to hide a property:
+
+[source,java]
+----
+import lombok.Getter;
+import lombok.Setter;
+
+public class Customer {
+
+    @Getter @Setter
+    private boolean blacklisted;
+
+    @Getter @Setter
+    private BigDecimal creditLimit;
+    public boolean hideCreditLimit() {
+        return isBlacklisted();
+    }
+
+    // ...
+}
+----
+
+Or, to hide an action:
+
+[source,java]
+----
+import lombok.Getter;
+import lombok.Setter;
+
+public class Customer {
+
+    @Getter @Setter
+    private boolean blacklisted;
+
+    public Order placeOrder(
+            final Product product,
+            final int quantity) {
+        // ...
+    }
+    public boolean hidePlaceOrder() {
+        return isBlacklisted();
+    }
+
+    // ...
+}
+----
+
+It is also possible to hide an action parameter, based on the value of some other earlier parameter:
+Each `hideNXxx()` method can declare parameters for the previous N-1 parameters, though it need not declare them all.
+
+For example:
+
+[source,java]
+----
+public class Order {
+    public Order shipTo(
+            boolean sameAsBillingAddress,
+            String addressLine1,
+            String addressLine2,
+            String addressCity,
+            String addressPostalCode,
+            String addressCountry ) {
+        // ...
+    }
+    public boolean hide1ShipTo(boolean same) {
+        return same;
+    }
+    public boolean hide2ShipTo(boolean same) {
+        return same;
+    }
+    public boolean hide3ShipTo(boolean same) {
+        return same;
+    }
+    public boolean hide4ShipTo(boolean same) {
+        return same;
+    }
+    public boolean hide5ShipTo(boolean same) {
+        return same;
+    }
+}
+----
+
+In this case, the user can use the `shipTo(...)` action to specify where to ship the `Order` to.
+However, if they check the first boolean parameter (ie, to ship the `Order` to the billing address already held on file), then the remaining parameters will all be hidden.
+
+

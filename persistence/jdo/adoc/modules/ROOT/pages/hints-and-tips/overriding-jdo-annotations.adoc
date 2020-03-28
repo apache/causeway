@@ -19,7 +19,7 @@ The idea here is simply to use XML as the means by which metadata is specified.
 The idea here is to accommodate for subtle differences in support for SQL between vendors.
 A good example is the default schema for a table: `dbo` for SQL Server, `public` for HSQLDB, `sys` for Oracle, and so on.
 
-If you want to use the first approach (the `.jdo` file), you'll find that you can download the effective XML representation of domain entities using the xref:refguide:applib-cm:rgcms.adoc#__rgcms_classes_mixins_Persistable_downloadJdoMetadata[downloadJdoMetadata] mixin action available in prototyping mode.
+If you want to use the first approach (the `.jdo` file), you'll find that you can download the effective XML representation of domain entities using the xref:refguide:applib-cm:classes.adoc#downloadJdoMetadata[`downloadJdoMetadata()`] mixin action available in prototyping mode.
 This then needs to be renamed and placed in the appropriate location on the classpath; see the link:http://www.datanucleus.org[DataNucleus documentation] for details.
 
 However, using this first approach does create a maintenance effort; if the domain entity's class structure changes over time, then the XML metadata file will need to be updated.
@@ -27,7 +27,8 @@ However, using this first approach does create a maintenance effort; if the doma
 The second approach (using an `.orm` file) is therefore often more useful than the first, because the metadata provided overrides rather than replaces the annotations (and annotations not overridden continue to be honoured).
 
 A typical use case is to change the database schema for an entity.
-For example, the various (non-ASF) link:https://platform.incode.org[Incode Platform^] modules use schemas for each entity. For example, the `AuditEntry` entity in the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s audit module is annotated as:
+For example, various extension modules use schemas for each entity.
+For example, the `AuditEntry` entity in the xref:security:audit-trail:about.adoc[audit trail] security module is annotated as:
 
 [source,java]
 ----
@@ -68,13 +69,13 @@ For example:
 ----
 
 It's also necessary to tell JDO/DataNucleus about which vendor is being used (`sqlserver` in the example above).
-This is done using a configuration property:
+This is done using the pass-thru `datanucleus.Mapping` configuration property:
 
 
-.isis.properties
 [source,ini]
+.application.properties
 ----
-isis.persistor.datanucleus.impl.datanucleus.Mapping=sqlserver
+isis.persistence.jdo-datanucleus.impl.datanucleus.Mapping=sqlserver
 ----
 
 

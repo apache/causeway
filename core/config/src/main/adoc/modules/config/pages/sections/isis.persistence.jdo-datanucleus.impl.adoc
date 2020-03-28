@@ -61,87 +61,12 @@ impl.datanucleus.cache.level2.mode
 
 
 |
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.cache.level2.type]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus.cache.level2.type
-
-|  none
-| Name of the type of Level 2 Cache to use.
-
-Can be used to interface with external caching products. Use "none" to turn off L2 caching.
-
-See also Cache docs for JDO, and for JPA
-
-NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
-
-
-|
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.connection-factory-name]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus. +
-connection-factory-name
-
-| 
-| The JNDI name for a connection factory for transactional connections.
-
-For RBDMS, it must be a JNDI name that points to a javax.sql.DataSource object.
-
-See also ``json`` (PascalCasing instead of kebab-casing).
-
-NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
-
-
-|
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.connection-factory2-name]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus. +
-connection-factory2-name
-
-| 
-| The JNDI name for a connection factory for non-transactional connections.
-
-For RBDMS, it must be a JNDI name that points to a javax.sql.DataSource object.
-
-See also ``json`` (PascalCasing instead of kebab-casing).
-
-NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
-
-
-|
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.connection-password-decrypter]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus. +
-connection-password-decrypter
-
-| 
-| Name of a class that implements ``DecryptionProvider`` and should only be specified if the password is encrypted in the persistence properties.
-
-See also ``json`` (camelCasing instead of kebab-casing).
-
-NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
-
-
-|
 [[isis.persistence.jdo-datanucleus.impl.datanucleus.identifier.case]]
 isis.persistence.jdo-datanucleus. +
 impl.datanucleus.identifier.case
 
 | 
 | null
-
-
-|
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.object-provider.class-name]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus.object-provider. +
-class-name
-
-|  org.apache.isis.persistence.jdo. +
-datanucleus5.datanucleus. +
-JDOStateManagerForIsis
-| Enables dependency injection into entities
-
-See also ``json`` (camelCasing instead of kebab-casing).
 
 
 |
@@ -155,22 +80,6 @@ className
 
 
 |
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.persistence-unit-load-classes]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus. +
-persistence-unit-load-classes
-
-|  true
-| Used when we have specified the persistence-unit name for a PMF/EMF and where we want the datastore "tables" for all classes of that persistence-unit loading up into the StoreManager.
-
-Defaults to true, which is the opposite of DataNucleus' own default. (The reason that DN defaults to false is because some databases are slow so such an operation would slow down the startup process).
-
-See also ``json`` (camelCasing instead of kebab-casing).
-
-NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
-
-
-|
 [[isis.persistence.jdo-datanucleus.impl.datanucleus.persistenceByReachabilityAtCommit]]
 isis.persistence.jdo-datanucleus. +
 impl.datanucleus. +
@@ -178,36 +87,6 @@ persistenceByReachabilityAtCommit
 
 | 
 | null
-
-
-|
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.schema.auto-create-all]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus.schema. +
-auto-create-all
-
-| 
-| Whether DN should automatically create the database schema on bootstrapping.
-
-This should be set to ``true`` when running against an in-memory database, but set to ``false`` when running against a persistent database (use something like flyway instead to manage schema evolution).
-
-See also ``json`` (camelCasing instead of kebab-casing).
-
-NOTE: this config property isn't used by the core framework, but is used by one the flyway extension.
-
-
-|
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.schema.auto-create-database]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus.schema. +
-auto-create-database
-
-| 
-| Previously we defaulted this property to "true", but that could cause the target database to be modified
-
-See also ``json`` (camelCasing instead of kebab-casing).
-
-NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
 
 
 |
@@ -228,18 +107,6 @@ autoCreateDatabase
 
 | 
 | null
-
-
-|
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.schema.validate-all]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus.schema. +
-validate-all
-
-|  true
-| See also ``json`` (camelCasing instead of kebab-casing).
-
-NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
 
 
 |
@@ -270,21 +137,6 @@ validateTables
 
 | 
 | null
-
-
-|
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.transaction-type]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus.transaction-type
-
-| 
-| Type of transaction to use.
-
-If running under JavaSE the default is RESOURCE_LOCAL, and if running under JavaEE the default is JTA.
-
-See also ``json`` (camelCasing instead of kebab-casing).
-
-NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
 
 
 |
@@ -335,75 +187,6 @@ ConnectionUserName
 
 | 
 | null
-
-
-|
-[[isis.persistence.jdo-datanucleus.impl.javax.jdo.option.connection-driver-name]]
-isis.persistence.jdo-datanucleus. +
-impl.javax.jdo.option. +
-connection-driver-name
-
-| 
-| JDBC driver used by JDO/DataNucleus object store to connect.
-
-See also ``json`` (PascalCasing instead of kebab-casing).
-
-NOTE: this config property isn't used by the framework, but provided as a convenience for IDE autocomplete (and is mandatory if using JDO Datanucleus).
-
-
-|
-[[isis.persistence.jdo-datanucleus.impl.javax.jdo.option.connection-password]]
-isis.persistence.jdo-datanucleus. +
-impl.javax.jdo.option. +
-connection-password
-
-| 
-| Password for the user account used by JDO/DataNucleus object store to connect.
-
-See also ``json`` (PascalCasing instead of kebab-casing).
-
-NOTE: this config property isn't used by the framework, but provided as a convenience for IDE autocomplete. It is not necessarily mandatory, some databases accept an empty password.
-
-
-|
-[[isis.persistence.jdo-datanucleus.impl.javax.jdo.option.connection-url]]
-isis.persistence.jdo-datanucleus. +
-impl.javax.jdo.option. +
-connection-url
-
-| 
-| URL used by JDO/DataNucleus object store to connect.
-
-See also ``json`` (PascalCasing instead of kebab-casing).
-
-NOTE: some extensions (H2Console, MsqlDbManager) peek at this URL to determine if they should be enabled. Note that it is also mandatory if using JDO Datanucleus.
-
-
-|
-[[isis.persistence.jdo-datanucleus.impl.javax.jdo.option.connection-user-name]]
-isis.persistence.jdo-datanucleus. +
-impl.javax.jdo.option. +
-connection-user-name
-
-| 
-| User account used by JDO/DataNucleus object store to connect.
-
-See also ``json`` (PascalCasing instead of kebab-casing).
-
-NOTE: this config property isn't used by the framework, but provided as a convenience for IDE autocomplete (and is mandatory if using JDO Datanucleus).
-
-
-|
-[[isis.persistence.jdo-datanucleus.impl.javax.jdo.persistence-manager-factory-class]]
-isis.persistence.jdo-datanucleus. +
-impl.javax.jdo. +
-persistence-manager-factory-class
-
-|  org.datanucleus.api.jdo. +
-JDOPersistenceManagerFactory
-| See also ``json`` (camelCasing instead of kebab-casing).
-
-NOTE: changing this property from its default is used to enable the flyway extension (in combination with ``Schema#isAutoCreateAll()``
 
 
 

@@ -1,4 +1,5 @@
-= `domainEvent`
+[#domainEvent]
+= `domainEvent()`
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
@@ -13,32 +14,45 @@ In the cases of the domain object's properties, the events that are fired are:
 * pre-execute phase: before the modification of the property
 * post-execute: after the modification of the property
 
-Subscribers subscribe through the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] using either link:https://github.com/google/guava[Guava] or link:http://www.axonframework.org/[Axon Framework] annotations and can influence each of these phases.
+Subscribers (which must be domain services) subscribe to events posted through the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`], and can influence each of these phases.
 
 By default the event raised is `PropertyDomainEvent.Default`.
 For example:
 
 [source,java]
 ----
+import lombok.Getter;
+import lombok.Setter;
+
 public class ToDoItem {
-    @Property()
-    public LocalDate getDueBy() { /* ... */ }
-    ...
+
+    @Property
+    @Getter @Setter
+    private LocalDate dueBy;
+
+    // ...
 }
 ----
 
 The `domainEvent` attribute allows a custom subclass to be emitted allowing more precise subscriptions (to those subclasses) to be defined instead.
 
-
 For example:
 
 [source,java]
 ----
+import lombok.Getter;
+import lombok.Setter;
+
 public class ToDoItem {
-    public static class DueByChangedEvent extends PropertyDomainEvent<ToDoItem, LocalDate> { }  // <1>
+
+    public static class DueByChangedEvent
+        extends PropertyDomainEvent<ToDoItem, LocalDate> { }  // <.>
+
     @Property(domainEvent=ToDoItem.DueByChangedEvent)
-    public LocalDate getDueBy() { /* ... */ }
-    ...
+    @Getter @Setter
+    private LocalDate dueBy;
+
+    // ...
 }
 ----
 <1> inherit from `PropertyDomainEvent<T,P>` where `T` is the type of the domain object being interacted with, and `P` is the type of the property (`LocalDate` in this example)
@@ -51,23 +65,23 @@ The framework provides a no-arg constructor and will initialize the domain event
 This substantially reduces the boilerplate in the subclasses because no explicit constructor is required..
 ====
 
-
 == Subscribers
 
-Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.
-The examples below use the Guava API.
+Subscribers (which must be domain services) subscribe to events posted through the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`].
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
 
 [source,java]
 ----
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SomeSubscriber {
-    @com.google.common.eventbus.Subscribe
+
+    @EventListener(PropertyDomainEvent.class)
     public void on(PropertyDomainEvent ev) {
-        ...
+        // ...
     }
 }
 ----
@@ -81,9 +95,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SomeSubscriber {
+
     @EventListener(ToDoItem.DueByChangedEvent.class)
     public void on(ToDoItem.DueByChangedEvent ev) {
-        ...
+        // ...
     }
 }
 ----
@@ -109,16 +124,14 @@ public class SomeSubscriber {
 
     public void on(PropertyDomainEvent ev) {
         switch(ev.getEventPhase()) {
-            case HIDE:
-                // call ev.hide() or ev.veto("") to hide the property
+
+            case HIDE:                      // <.>
                 break;
-            case DISABLE:
-                // call ev.disable("...") or ev.veto("...") to disable the property
+            case DISABLE:                   // <.>
                 break;
-            case VALIDATE:
-                // call ev.invalidate("...") or ev.veto("...")
-                // if proposed property value is invalid
+            case VALIDATE:                  // <.>
                 break;
+
             case EXECUTING:
                 break;
             case EXECUTED:
@@ -127,12 +140,13 @@ public class SomeSubscriber {
     }
 }
 ----
+<.> call `ev.hide()` or `ev.veto("")` to hide the property
+<.> call `ev.disable("...")` or `ev.veto("...")` to disable the property
+<.> call ev.invalidate("...") or ev.veto("...") if proposed new value for property is invalid
+
 
 It is also possible to abort the transaction during the executing or executed phases by throwing an exception.
 If the exception is a subtype of `RecoverableException` then the exception will be rendered as a user-friendly warning (eg Growl/toast) rather than an error.
-
-
-
 
 == Default, Doop and Noop events
 
@@ -145,15 +159,10 @@ The framework provides `PropertyDomainEvent.Doop` as such a subclass, so setting
 
 And, conversely, the framework also provides `PropertyDomainEvent.Noop`; if `domainEvent` attribute is set to this class, then no event will be posted.
 
-
-
-
-
 == Raising events programmatically
 
 Normally events are only raised for interactions through the UI.
 However, events can be raised programmatically by wrapping the target object using the xref:refguide:applib-svc:WrapperFactory.adoc[`WrapperFactory`] service.
-
 
 == See also
 

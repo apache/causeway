@@ -1,3 +1,4 @@
+[#DomainObject]
 = `@DomainObject`
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
@@ -17,11 +18,11 @@ include::refguide:applib-ant:example$annotation/DomainObject.java[tags="refguide
 Indicates whether each of the changed properties of an object should be submitted to the registered
 xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`](s)
 
-<.> xref:refguide:applib-ant:DomainObject.adoc#autocompleterepository[`autoCompleteRepository()`]
+<.> xref:refguide:applib-ant:DomainObject.adoc#autoCompleteRepository[`autoCompleteRepository()`]
 +
 Nominate a method on a domain service to be used for looking up instances of the domain object
 
-<.> xref:refguide:applib-ant:DomainObject.adoc#autocompleteaction[`autoCompleteAction()`]
+<.> xref:refguide:applib-ant:DomainObject.adoc#autoCompleteAction[`autoCompleteAction()`]
 +
 Override the method name to use on the auto-complete repository
 
@@ -37,7 +38,7 @@ Whether the object's properties and collections can be edited or not (ie whether
 +
 The default reason why the object's properties and collections cannot be edited.
 
-<.> xref:refguide:applib-ant:DomainObject.adoc#mixinmethod[`mixinMethod()`]
+<.> xref:refguide:applib-ant:DomainObject.adoc#mixinMethod[`mixinMethod()`]
 +
 How to recognize the "reserved" method name, meaning that the mixin's own name will be inferred from the mixin type.
 Typical examples are "exec", "execute", "invoke", "apply" and so on.
@@ -48,7 +49,7 @@ The default "reserved" method name is `$$`.
 Whether the domain object logically is an entity (part of the domain layer) or is a view model (part of the application layer); or is a mixin.
 If an entity, indicates how its persistence is managed.
 
-<.> xref:refguide:applib-ant:DomainObject.adoc#objecttype[`objectType()`]
+<.> xref:refguide:applib-ant:DomainObject.adoc#objectType[`objectType()`]
 +
 Specify an alias for the domain class used to uniquely identify the object both within the Apache Isis runtime and externally
 
@@ -70,19 +71,19 @@ include::refguide:applib-ant:example$annotation/DomainObject.java[tags="refguide
 +
 The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] whenever an instance is created
 
-<.> xref:refguide:applib-ant:DomainObject.adoc#persistinglifecycleevent[`persistingLifecycleEvent()`]
+<.> xref:refguide:applib-ant:DomainObject.adoc#persistingLifecycleEvent[`persistingLifecycleEvent()`]
 +
 The event type to be posted to whenever an instance is about to be persisted
 
-<.> xref:refguide:applib-ant:DomainObject.adoc#persistedlifecycleevent[`persistedLifecycleEvent()`]
+<.> xref:refguide:applib-ant:DomainObject.adoc#persistedLifecycleEvent[`persistedLifecycleEvent()`]
 +
 The event type to be posted whenever an instance has just been persisted
 
-<.> xref:refguide:applib-ant:DomainObject.adoc#loadedlifecycleevent[`loadedLifecycleEvent()`]
+<.> xref:refguide:applib-ant:DomainObject.adoc#loadedLifecycleEvent[`loadedLifecycleEvent()`]
 +
 The event type to be posted whenever an instance has just been loaded from the datastore
 
-<.> xref:refguide:applib-ant:DomainObject.adoc#removinglifecycleevent[`removingLifecycleEvent()`]
+<.> xref:refguide:applib-ant:DomainObject.adoc#removingLifecycleEvent[`removingLifecycleEvent()`]
 +
 The event type to be posted whenever an instance is about to be deleted
 
@@ -90,7 +91,7 @@ The event type to be posted whenever an instance is about to be deleted
 +
 The event type to be posted whenever an instance has just been updated
 
-<.> xref:refguide:applib-ant:DomainObject.adoc#updatinglifecycleevent[`updatingLifecycleEvent()`]
+<.> xref:refguide:applib-ant:DomainObject.adoc#updatingLifecycleEvent[`updatingLifecycleEvent()`]
 +
 The event type to be posted whenever an instance is about to be updated
 
@@ -106,15 +107,15 @@ include::refguide:applib-ant:example$annotation/DomainObject.java[tags="refguide
 ----
 <.> `actionDomainEvent()`
 +
-The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] whenever an action of the domain object is interacted with (if not overridden using xref:refguide:applib-ant:Action.adoc#domainevent[`@Action#domainEvent()]`).
+The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] whenever an action of the domain object is interacted with (if not overridden using xref:refguide:applib-ant:Action.adoc#domainEvent[`@Action#domainEvent()]`).
 
 <.> `propertyDomainEvent()`
 +
-The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] whenever a property of the domain object is interacted with (if not overridden using xref:refguide:applib-ant:Property.adoc#domainevent[`@Property#domainEvent()]`).
+The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] whenever a property of the domain object is interacted with (if not overridden using xref:refguide:applib-ant:Property.adoc#domainEvent[`@Property#domainEvent()]`).
 
 <.> `collectionDomainEvent()`
 +
-The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] whenever a collection of the domain object is interacted with (if not overridden using xref:refguide:applib-ant:Collection.adoc#domainevent[`@Collection#domainEvent()]`).
+The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] whenever a collection of the domain object is interacted with (if not overridden using xref:refguide:applib-ant:Collection.adoc#domainEvent[`@Collection#domainEvent()]`).
 
 
 // TODO: v2: currently missing subpages for these attributes.

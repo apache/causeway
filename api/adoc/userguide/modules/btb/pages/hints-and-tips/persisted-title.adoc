@@ -6,19 +6,22 @@
 
 
 
-Normally the title of an object is not persisted to the database, rather it is recomputed automatically from underlying properties.  On occasion though you might want the title to also be persisted; either to make things easier for the DBA, or for an integration scenario, or some other purpose.
+Normally the title of an object is not persisted to the database, rather it is recomputed automatically from underlying properties.
+On occasion though you might want the title to also be persisted; either to make things easier for the DBA, or for an integration scenario, or to support full-text search.
 
-We can implement this feature by leveraging the xref:refguide:applib-cm:methods.adoc#jdo-api[JDO lifecycle].  In the design we discuss here we make it a responsibility of the entities to persist the title as a property, by implementing a `ObjectWithPersistedTitle` interface:
+We can implement this feature by either overriding the  xref:refguide:applib-cm:methods/lifecycle.adoc[lifecycle methods] or (probably better) subscribing to the xref:refguide:applib-cm:classes/lifecycleevent.adoc[lifecycle events].
+
+In the design we discuss here we make it a responsibility of the entities to persist the title as a property, by implementing a `ObjectWithPersistedTitle` interface:
 
 [source,java]
 ----
 public interface ObjectWithPersistedTitle {
-    @PropertyLayout(hidden = Where.EVERYWHERE)  // <1>
-    String getTitle();
-    void setTitle(final String title);
+    @Programmatic                                   // <.>
+    String getPersistedTitle();
+    void setPersistedTitle(final String title);
 }
 ----
-<1> we don't want to expose this in the UI because the title is already prominently displayed.
+<.> we don't want to expose this in the UI.
 
 We can then define a subscribing domain service that leverage this.
 
@@ -26,6 +29,9 @@ We can then define a subscribing domain service that leverage this.
 ----
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
+import org.apache.isis.applib.events.lifecycle.ObjectPersistingEvent;
+import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
+import lombok.val;
 
 @Service
 public class TitlingService {
@@ -42,9 +48,9 @@ public class TitlingService {
 
     private void handle(final Object persistentInstance) {
         if(persistentInstance instanceof ObjectWithPersistedTitle) {
-            final ObjectWithPersistedTitle objectWithPersistedTitle =
+            val objectWithPersistedTitle =
                 (ObjectWithPersistedTitle) persistentInstance;
-            objectWithPersistedTitle.setTitle(titleService.titleOf(objectWithPersistedTitle));
+            objectWithPersistedTitle.setPersistedTitle(titleService.titleOf(objectWithPersistedTitle));
         }
     }
 
@@ -53,39 +59,7 @@ public class TitlingService {
 }
 ----
 
-It is also possible to accomplish this by accessing the JDO API directly:
 
-[source,java]
-----
-import org.springframework.stereotype.Service;
-
-@IsisSessionScope
-@Service
-public class TitlingService {
-    @PostConstruct
-    public void init() {
-        isisJdoSupport.getJdoPersistenceManager().addInstanceLifecycleListener(
-            new StoreLifecycleListener() {
-                @Override
-                public void preStore(final InstanceLifecycleEvent event) {
-                    final Object persistentInstance = event.getPersistentInstance();
-                    if(persistentInstance instanceof ObjectWithPersistedTitle) {
-                        final ObjectWithPersistedTitle objectWithPersistedTitle =
-                            (ObjectWithPersistedTitle) persistentInstance;
-                        objectWithPersistedTitle.setTitle(titleService.titleOf(objectWithPersistedTitle));
-                    }
-                }
-                @Override
-                public void postStore(final InstanceLifecycleEvent event) {
-                }
-            }, null);
-    }
-    @Inject
-    IsisJdoSupport isisJdoSupport;
-    @Inject
-    TitleService titleService;
-}
-----
-
-The above is probably the easiest and most straightforward design. One could imagine other designs where the persisted title is stored elsewhere.  It could even be stored off into an link:http://lucene.apache.org/[Apache Lucene] (or similar) database to allow for free-text searches.
+The above is probably the easiest and most straightforward design.
+One could imagine other designs where the persisted title is stored elsewhere, such as a link:http://lucene.apache.org/[Apache Lucene] (or similar) database to allow for full-text searches.
 

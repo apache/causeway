@@ -1,4 +1,5 @@
-= updatingLifecycleEvent
+[#updatingLifecycleEvent]
+= `updatingLifecycleEvent()`
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
@@ -14,7 +15,7 @@ One possible application is to maintain a full-text search database using link:h
 ====
 Another use case is to maintain "last updated by"/"last updated at" properties.
 While you can roll your own, note that the framework provides built-in support for this use case through the
-xref:refguide:applib-cm:classes/roles.adoc#Timestampable[`Timestampable`] role interface.
+xref:applib-classes:classes/roles.adoc#Timestampable[`Timestampable`] role interface.
 ====
 
 By default the event raised is `ObjectUpdatingEvent.Default`.
@@ -39,21 +40,19 @@ For example:
     updatingLifecycleEvent=ToDoItem.UpdatingEvent.class
 )
 public class ToDoItem {
-    public static class UpdatingEvent
-        extends org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent<ToDoItem> { }
-    ...
+
+    public static class UpdatingEvent extends
+        org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent<ToDoItem> { }
+
+    // ...
 }
 ----
 
 The benefit is that subscribers can be more targeted as to the events that they subscribe to.
 
-
-
-
 == Subscribers
 
-Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.
-The examples below are compatible with both.
+Subscribers (which must be domain services) subscribe to events posted through the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`].
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
 
@@ -89,14 +88,9 @@ public class SomeSubscriber {
 }
 ----
 
-
-
-
-
 == Default, Doop and Noop events
 
-If the `updatingLifecycleEvent` attribute is not explicitly specified (is left as its default value, `ObjectUpdatingEvent.Default`),
-then the framework will, by default, post an event.
+If the `updatingLifecycleEvent` attribute is not explicitly specified (is left as its default value, `ObjectUpdatingEvent.Default`), then the framework will, by default, post an event.
 
 If this is not required, then the `isis.reflector.facet.domainObjectAnnotation.updatingLifecycleEvent.postForDefault` configuration property can be set to "false"; this will disable posting.
 

@@ -1,0 +1,29 @@
+= Programming Model
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+Apache Isis works by building a xref:concepts-patterns.adoc#metamodel[metamodel] of the domain objects: entities, domain services, view models and mixins.
+Dependent on the xref:overview.adoc#type-of-domain-objects[sort of domain object], the class methods represent both state -- (single-valued) xref:overview.adoc#properties[properties] and (multi-valued) xref:overview.adoc#collections[collections] -- and behaviour -- xref:overview.adoc#actions[actions].
+
+More specifically, both xref:overview.adoc#domain-entities[entities] and xref:overview.adoc#view-models[view models] can have properties, collections and actions, while xref:overview.adoc#domain-services[domain services] have just actions.
+xref:overview.adoc#mixins[Mixins] also define only actions, though depending on their semantics they may be rendered as derived properties or collections on the domain object to which they contribute.
+
+In the automatically generated UI a property is rendered as a field.
+This can be either of a value type (a string, number, date, boolean etc) or can be a reference to another entity.
+A collection is generally rendered as a table.
+
+Additional xref:business-rules.adoc[business rules] semantics are inferred both imperatively from _supporting methods_ (such as `disableXxx()`) and declaratively from xref:refguide:applib-ant:about.adoc[annotations].
+
+Taken together this set of conventions are what we call the _**Apache Isis Programming Model**_.
+In essence, these conventions are just an extension of the pojo / JavaBean standard of yesteryear: properties and collections are getters/setters, while actions are simply any remaining `public` methods.
+
+
+[TIP]
+====
+In fact, the Apache Isis programming model is extensible; you can teach Apache Isis new programming conventions and you can remove existing ones; ultimately they amount to syntax.
+The only real fundamental that can't be changed is the notion that objects consist of properties, collections and actions.
+
+You can learn more about extending Apache Isis programming model xref:userguide:btb:programming-model.adoc[here].
+====
+
