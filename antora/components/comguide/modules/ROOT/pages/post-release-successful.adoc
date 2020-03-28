@@ -22,7 +22,7 @@ Post the results to the `dev@isis.a.o` mailing list:
 
 [source,subs="attributes+"]
 ----
-[RESULT] [VOTE] Apache Isis Core release {isisnext}
+[RESULT] [VOTE] Apache Isis Core release {isisrel}
 ----
 
 using the body (alter last line as appropriate):
@@ -61,7 +61,7 @@ As we did for the cutting of the release, we set environment variables to parame
 ----
 export ISISJIRA=ISIS-9999                           # <.>
 export ISISTMP=/c/tmp                               # <.>
-export ISISREL={isisnext}                           # <.>
+export ISISREL={isisrel}                           # <.>
 export ISISRC=RC1                                   # <.>
 export ISISBRANCH=release-$ISISREL-$ISISRC
 export ISISART=isis
@@ -228,7 +228,7 @@ popd
 
 [source,bash,subs="attributes+"]
 ----
-sh upd.sh [previous_release] {isisnext}
+sh upd.sh [previous_release] {isisrel}
 ----
 
 The script downloads the artifacts from the Nexus release repository, adds the artifacts to subversion and deletes the previous version.
@@ -271,16 +271,16 @@ to its versioned:
 +
 [source,html,subs="attributes+"]
 ----
-curl https://codeload.github.com/apache/isis-app-helloworld/zip/{isisnext} | jar xv
-cd isis-app-helloworld-{isisnext}
+curl https://codeload.github.com/apache/isis-app-helloworld/zip/{isisrel} | jar xv
+cd isis-app-helloworld-{isisrel}
 ----
 +
 and
 +
 [source,html,subs="attributes+"]
 ----
-curl https://codeload.github.com/apache/isis-app-simpleapp/zip/{isisnext} | jar xv
-cd isis-app-simpleapp-{isisnext}
+curl https://codeload.github.com/apache/isis-app-simpleapp/zip/{isisrel} | jar xv
+cd isis-app-simpleapp-{isisrel}
 ----
 
 * Commit the changes:
@@ -306,7 +306,7 @@ We therefore temporarily modify all of the `antora.yml` files and `site.yml` wit
 
 * Update all `antora.yml` files, eg using an IDE:
 +
-** `version: latest` -> `version: {isisnext}`
+** `version: latest` -> `version: {isisrel}`
 +
 image::release-process-post/update-antora-latest.png[width="800px",link="{imagesdir}/release-process-post/update-antora-latest.png"]
 
@@ -328,7 +328,7 @@ git push origin refs/tags/docs/$ISISART-$ISISREL:refs/tags/docs/$ISISART-$ISISRE
 
 * Now, immediately the change to `antora.yml` files back again:
 
-** `version: {isisnext}` -> `version: latest`
+** `version: {isisrel}` -> `version: latest`
 
 * Commit these changes, and push the release branch:
 +
@@ -361,10 +361,10 @@ to:
 ----
 - url: .
   start_path: antora/components/docs # docs
-  tags: docs/isis-{isisnext}                    # <.>
+  tags: docs/isis-{isisrel}                    # <.>
   branches: HEAD                                  # <.>
 ----
-<.> will generate the {isisnext} version
+<.> will generate the {isisrel} version
 <.> will generate the 'latest' version
 +
 eg using the IDE:
@@ -397,7 +397,7 @@ That is, comment out the tags entries:
 ----
 - url: .
   start_path: antora/components/docs # docs
-#  tags: docs/isis-{isisnext}
+#  tags: docs/isis-{isisrel}
   branches: HEAD
 ----
 +
@@ -481,9 +481,9 @@ In the `isis` repo:
 ----
 git checkout master                           # update master with latest
 git pull
-git merge release-{isisnext}-RC1                  # merge branch onto master
-git push origin --delete release-{isisnext}-RC1   # remote branch no longer needed
-git branch -d release-{isisnext}-RC1              # branch no longer needed
+git merge release-{isisrel}-RC1                  # merge branch onto master
+git push origin --delete release-{isisrel}-RC1   # remote branch no longer needed
+git branch -d release-{isisrel}-RC1              # branch no longer needed
 ----
 
 
@@ -501,14 +501,14 @@ For example, for a release of Apache Isis Core, use the following subject:
 
 [source,subs="attributes+"]
 ----
-[ANN] Apache Isis version {isisnext} Released
+[ANN] Apache Isis version {isisrel} Released
 ----
 
 And use the following body (summarizing the main points as required):
 
 [source,subs="attributes+"]
 ----
-The Apache Isis team is pleased to announce the release of Apache Isis {isisnext}.
+The Apache Isis team is pleased to announce the release of Apache Isis {isisrel}.
 
 New features in this release include:
 

@@ -1,4 +1,4 @@
-VERSION={isisnext}
+VERSION={isisrel}
 RC=RC1
 NEXUSREPONUM=11xx
 

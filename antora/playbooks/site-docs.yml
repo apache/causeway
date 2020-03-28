@@ -60,7 +60,7 @@ asciidoc:
     idprefix: ""
     idseparator: "-"
     plantuml-server-url: "http://www.plantuml.com/plantuml"
-    isisnext: "2.0.0-M3"
+    isisrel: "2.0.0-M3"
 
 output:
   dir: antora/target/site
