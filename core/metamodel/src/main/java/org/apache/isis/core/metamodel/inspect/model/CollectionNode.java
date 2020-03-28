@@ -45,7 +45,7 @@ public class CollectionNode extends MMNode {
     @Getter @Setter private Collection collection;
     
     @Override
-    public String title() {
+    public String createTitle() {
         return String.format("%s : %s", collection.getId(), typeToString(collection.getType()));  
     }
     
@@ -58,11 +58,6 @@ public class CollectionNode extends MMNode {
     
     @Getter @Setter @XmlTransient 
     private TypeNode parentNode;
-
-    @Override
-    public int getChildNodeCount() {
-        return collection.getFacets().getFacet().size();
-    }
 
     @Override
     public Stream<MMNode> streamChildNodes() {

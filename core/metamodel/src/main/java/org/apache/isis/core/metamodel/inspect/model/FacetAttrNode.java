@@ -45,7 +45,7 @@ public class FacetAttrNode extends MMNode {
     @Getter @Setter private FacetAttr facetAttr;
     
     @Override
-    public String title() {
+    public String createTitle() {
         return String.format("%s: %s", facetAttr.getName(), facetAttr.getValue());  
     }
     
@@ -58,11 +58,6 @@ public class FacetAttrNode extends MMNode {
     
     @Getter @Setter @XmlTransient 
     private FacetNode parentNode;
-
-    @Override
-    public int getChildNodeCount() {
-        return 0;
-    }
 
     @Override
     public Stream<MMNode> streamChildNodes() {

@@ -46,7 +46,7 @@ public class TypeNode extends MMNode {
     @Getter @Setter private DomainClassDto domainClassDto;
 
     @Override
-    public String title() {
+    public String createTitle() {
         return domainClassDto.getId();
     }
 
@@ -54,21 +54,11 @@ public class TypeNode extends MMNode {
     public String iconName() {
         return "";
     }
-
     
     // -- TREE NODE STUFF
     
     @Getter @Setter @XmlTransient 
     private MMNode parentNode;
-
-    @Override
-    public int getChildNodeCount() {
-        return domainClassDto.getFacets().getFacet().size()
-                + domainClassDto.getActions().getAct().size()
-                + domainClassDto.getProperties().getProp().size()
-                + domainClassDto.getCollections().getColl().size()
-                ;
-    }
 
     @Override
     public Stream<MMNode> streamChildNodes() {

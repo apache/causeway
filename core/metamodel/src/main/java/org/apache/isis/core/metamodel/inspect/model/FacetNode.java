@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.schema.metamodel.v2.Facet;
 
 import lombok.Getter;
@@ -45,10 +46,9 @@ public class FacetNode extends MMNode {
     @Getter @Setter private Facet facet;
     
     @Override
-    public String title() {
-        return facet.getFqcn()
-                .replace("org.apache.isis.core.metamodel.facets.", "»")
-                .replace("org.apache.isis.core.metamodel.", "»");
+    public String createTitle() {
+        return super.abbreviate(facet.getFqcn());
+                
     }
     
     @Override
@@ -62,13 +62,8 @@ public class FacetNode extends MMNode {
     private MMNode parentNode;
 
     @Override
-    public int getChildNodeCount() {
-        return facet.getAttr().size();
-    }
-
-    @Override
     public Stream<MMNode> streamChildNodes() {
-        return facet.getAttr().stream()
+        return _NullSafe.stream(facet.getAttr())
                 .map(facetAttr->MMNodeFactory.facetAttr(facetAttr, this));
     }
    

@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.graph.tree.TreeAdapter;
+import org.apache.isis.core.commons.internal.base._NullSafe;
 
 public class MMTreeAdapter implements TreeAdapter<MMNode> {
 
@@ -32,12 +33,12 @@ public class MMTreeAdapter implements TreeAdapter<MMNode> {
 
     @Override
     public int childCountOf(MMNode node) {
-        return node.getChildNodeCount();
+        return _NullSafe.size(node.getChildNodes());
     }
 
     @Override
     public Stream<MMNode> childrenOf(MMNode node) {
-        return node.streamChildNodes();
+        return _NullSafe.stream(node.getChildNodes());
     }
 
 }

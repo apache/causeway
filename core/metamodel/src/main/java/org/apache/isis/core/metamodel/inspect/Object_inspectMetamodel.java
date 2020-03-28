@@ -52,6 +52,9 @@ import lombok.val;
 @RequiredArgsConstructor
 public class Object_inspectMetamodel {
 
+    @Inject private MetaModelService metaModelService;
+    //@Inject private SpecificationLoader specificationLoader;
+    
     private final Object holder;
 
     public static class ActionDomainEvent 
@@ -82,13 +85,17 @@ public class Object_inspectMetamodel {
         
         val root = MMNodeFactory.type(domainClassDto, null);
         val tree = TreeNode.lazy(root, MMTreeAdapter.class);
+        
+        // Initialize view-model nodes of the entire tree,
+        // because as it stands, all the type information gets cleared,
+        // after the jax-b model got de-serialized.
+        tree.streamDepthFirst()
+        .map(TreeNode::getValue)
+        .forEach(node->node.title()); 
+        
         tree.expand(TreePath.of(0)); // expand the root node
         return tree;
     }
-
-    // -- DEPENDENCIES
-
-    @Inject private MetaModelService metaModelService;
-    //@Inject private SpecificationLoader specificationLoader;
+    
 
 }

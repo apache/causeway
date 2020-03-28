@@ -44,7 +44,7 @@ public class PropertyNode extends MMNode {
     @Getter @Setter private org.apache.isis.schema.metamodel.v2.Property property;
     
     @Override
-    public String title() {
+    public String createTitle() {
         return String.format("%s : %s", property.getId(), typeToString(property.getType()));  
     }
     
@@ -57,11 +57,6 @@ public class PropertyNode extends MMNode {
     
     @Getter @Setter @XmlTransient 
     private TypeNode parentNode;
-
-    @Override
-    public int getChildNodeCount() {
-        return property.getFacets().getFacet().size();
-    }
 
     @Override
     public Stream<MMNode> streamChildNodes() {

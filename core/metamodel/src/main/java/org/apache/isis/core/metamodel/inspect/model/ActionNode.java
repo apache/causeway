@@ -45,7 +45,7 @@ public class ActionNode extends MMNode {
     @Getter @Setter private Action action;
     
     @Override
-    public String title() {
+    public String createTitle() {
         return String.format("%s(...) : %s", action.getId(), typeToString(action.getReturnType())); 
     }
     
@@ -58,12 +58,6 @@ public class ActionNode extends MMNode {
     
     @Getter @Setter @XmlTransient 
     private TypeNode parentNode;
-
-    @Override
-    public int getChildNodeCount() {
-        return action.getFacets().getFacet().size()
-                + action.getParams().getParam().size();
-    }
 
     @Override
     public Stream<MMNode> streamChildNodes() {

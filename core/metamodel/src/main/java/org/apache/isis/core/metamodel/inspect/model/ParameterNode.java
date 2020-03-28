@@ -45,7 +45,7 @@ public class ParameterNode extends MMNode {
     @Getter @Setter private Param parameter;
     
     @Override
-    public String title() {
+    public String createTitle() {
         return String.format("%s : %s", parameter.getId(), typeToString(parameter.getType()));  
     }
     
@@ -58,11 +58,6 @@ public class ParameterNode extends MMNode {
     
     @Getter @Setter @XmlTransient 
     private ActionNode parentNode;
-
-    @Override
-    public int getChildNodeCount() {
-        return parameter.getFacets().getFacet().size();
-    }
 
     @Override
     public Stream<MMNode> streamChildNodes() {
