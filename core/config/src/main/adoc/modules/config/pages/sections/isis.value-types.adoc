@@ -12,21 +12,201 @@ include::../section-hooks/isis.value-types~pre.adoc[]
 |Default
 |Description
 |
-[[isis.value-types.java-lang.byte.format]]
-isis.value-types.java-lang.byte. +
-format
-
-| 
-| null
-
-
-|
 [[isis.value-types.primitives.integer.format]]
 isis.value-types.primitives. +
 integer.format
 
 | 
 | null
+
+
+|
+[[isis.value-types.java-lang.byte.format]]
+isis.value-types.java-lang.byte. +
+format
+
+| 
+| Configures the number format understood by ``ByteValueSemanticsProviderAbstract``. @deprecated
+
+
+|
+[[isis.value-types.java-lang.double.format]]
+isis.value-types.java-lang.double. +
+format
+
+| 
+| Configures the number format understood by ``DoubleValueSemanticsProviderAbstract``. @deprecated
+
+
+|
+[[isis.value-types.java-lang.float.format]]
+isis.value-types.java-lang.float. +
+format
+
+| 
+| Configures the number format understood by ``FloatValueSemanticsProviderAbstract``. @deprecated
+
+
+|
+[[isis.value-types.java-lang.long.format]]
+isis.value-types.java-lang.long. +
+format
+
+| 
+| Configures the number format understood by ``LongValueSemanticsProviderAbstract``. @deprecated
+
+
+|
+[[isis.value-types.java-lang.short.format]]
+isis.value-types.java-lang.short. +
+format
+
+| 
+| Configures the number format understood by ``ShortValueSemanticsProviderAbstract``. @deprecated
+
+
+|
+[[isis.value-types.java-math.big-decimal.format]]
+isis.value-types.java-math. +
+big-decimal.format
+
+| 
+| Configures the number format understood by ``BigDecimalValueSemanticsProvider``. @deprecated
+
+
+|
+[[isis.value-types.java-math.big-integer.format]]
+isis.value-types.java-math. +
+big-integer.format
+
+| 
+| Configures the number format understood by ``BigIntegerValueSemanticsProvider``. @deprecated
+
+
+|
+[[isis.value-types.java-sql.date.format]]
+isis.value-types.java-sql.date. +
+format
+
+|  medium
+| Configures the formats understood by ``JavaSqlDateValueSemanticsProvider``. @deprecated
+
+
+|
+[[isis.value-types.java-sql.time.format]]
+isis.value-types.java-sql.time. +
+format
+
+|  short
+| Configures the formats understood by ``JavaSqlTimeValueSemanticsProvider``. @deprecated
+
+
+|
+[[isis.value-types.java-sql.timestamp.format]]
+isis.value-types.java-sql. +
+timestamp.format
+
+|  short
+| Configures the formats understood by ``JavaSqlTimeStampValueSemanticsProvider``. @deprecated
+
+
+|
+[[isis.value-types.java-time.local-date-time.format]]
+isis.value-types.java-time. +
+local-date-time.format
+
+|  medium
+| Configures the formats understood by ``LocalDateTimeValueSemanticsProvider``. @deprecated
+
+
+|
+[[isis.value-types.java-time.local-date.format]]
+isis.value-types.java-time. +
+local-date.format
+
+|  medium
+| Configures the formats understood by ``LocalDateValueSemanticsProvider``. @deprecated
+
+
+|
+[[isis.value-types.java-time.local-time.format]]
+isis.value-types.java-time. +
+local-time.format
+
+|  medium
+| Configures the formats understood by ``LocalTimeValueSemanticsProvider``. @deprecated
+
+
+|
+[[isis.value-types.java-time.offset-date-time.format]]
+isis.value-types.java-time. +
+offset-date-time.format
+
+|  medium
+| Configures the formats understood by ``OffsetDateTimeValueSemanticsProvider``. @deprecated
+
+
+|
+[[isis.value-types.java-time.offset-time.format]]
+isis.value-types.java-time. +
+offset-time.format
+
+|  medium
+| Configures the formats understood by ``OffsetTimeValueSemanticsProvider``. @deprecated
+
+
+|
+[[isis.value-types.java-time.zoned-date-time.format]]
+isis.value-types.java-time. +
+zoned-date-time.format
+
+|  medium
+| Configures the formats understood by ``ZonedDateTimeValueSemanticsProvider``. @deprecated
+
+
+|
+[[isis.value-types.java-util.date.format]]
+isis.value-types.java-util.date. +
+format
+
+|  medium
+| Configures the formats understood by ``JavaUtilDateValueSemanticsProvider``. @deprecated
+
+
+|
+[[isis.value-types.joda.date-time.format]]
+isis.value-types.joda.date-time. +
+format
+
+|  medium
+| Configures the formats understood by ``JodaDateTimeValueSemanticsProvider``. @deprecated
+
+
+|
+[[isis.value-types.joda.local-date-time.format]]
+isis.value-types.joda. +
+local-date-time.format
+
+|  medium
+| Configures the formats understood by ``JodaLocalDateTimeValueSemanticsProvider``. @deprecated
+
+
+|
+[[isis.value-types.joda.local-date.format]]
+isis.value-types.joda.local-date. +
+format
+
+|  medium
+| Configures the formats understood by ``JodaLocalDateValueSemanticsProvider``. @deprecated
+
+
+|
+[[isis.value-types.primitives.int.format]]
+isis.value-types.primitives.int. +
+format
+
+| 
+| Configures the number format understood by ``IntValueSemanticsProviderAbstract``. @deprecated
 
 
 
