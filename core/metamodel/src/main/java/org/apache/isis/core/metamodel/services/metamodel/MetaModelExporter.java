@@ -386,7 +386,7 @@ class MetaModelExporter {
         final org.apache.isis.schema.metamodel.v2.Facet facetType = new org.apache.isis.schema.metamodel.v2.Facet();
         facetType.setId(facet.facetType().getCanonicalName());
         facetType.setFqcn(facet.getClass().getCanonicalName());
-
+        facetType.setType(facet.facetType().getCanonicalName());
         addFacetAttributes(facet, facetType, config);
 
         return facetType;

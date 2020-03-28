@@ -121,7 +121,7 @@
 										<schemaInclude>cmd/cmd-2.0.xsd</schemaInclude>
 										<schemaInclude>ixn/ixn-2.0.xsd</schemaInclude>
 										<schemaInclude>chg/chg-2.0.xsd</schemaInclude>
-										<schemaInclude>metamodel/metamodel-2.0.xsd</schemaInclude>
+										<schemaInclude>metamodel/metamodel-2.1.xsd</schemaInclude>
 									</schemaIncludes>
 									<bindingDirectory>src/main/resources/org/apache/isis/schema</bindingDirectory>
 									<bindingIncludes>

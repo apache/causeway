@@ -76,7 +76,7 @@
         </jaxb:bindings>
     </jaxb:bindings>
 
-    <jaxb:bindings schemaLocation="metamodel/metamodel-2.0.xsd">
+    <jaxb:bindings schemaLocation="metamodel/metamodel-2.1.xsd">
         <jaxb:schemaBindings>
             <!--
             we don't include the minor version, because the
