@@ -164,15 +164,21 @@ git add .
 git commit -m "$ISISJIRA: updates release notes, STATUS and doap_isis.rdf"
 ----
 
-== Generate website
+== Final website updates
 
-We use Antora to generate the site, not only the latest version but also any previous versions listed in `site.yml`.
-The most recently version being released is built in effect twice, as both "latest" and with its formal tag name.
+Before we xref:#generate-website[generate the website], we apply final updates:
 
-As a slight complication, the tags created previously on the release branch (`refs/tags/rel/xxx`) can't be used for this purpose, because the `antora.yml` files specify a branch name of simply "latest".
-We therefore temporarily modify all of the `antora.yml` files and `site.yml` with a reference to a new tag, and then change them back afterwards:
+* If there have been updates to any of the schemas:
 
-* If there have been any changes from other branches (eg fixes to documentation in non-release branches) then merge them into the release branch.
+** copy the new schema(s) from `api/schema/src/main/resources/o.a.i.s.xxx`
++
+to its versioned:
++
+`antora/supplemental-ui/schema/xxx/xxx-ver.xsd`
+
+** ensure the non-versioned is same as the highest versioned
++
+`antora/supplemental-ui/schema/xxx/xxx.xsd`
 
 * Update the version that appears on the home page of the website, in `antora/supplemental-ui/index.html`
 +
@@ -195,8 +201,21 @@ cd isis-app-simpleapp-{isisnext}
 [source,bash,subs="attributes+"]
 ----
 git add .
-git commit -m "$ISISJIRA: bumps index.html version to $ISISREL"
+git commit -m "$ISISJIRA: bumps index.html version to $ISISREL, also schema updates"
 ----
+
+
+
+[#generate-website]
+== Generate website
+
+We use Antora to generate the site, not only the latest version but also any previous versions listed in `site.yml`.
+The most recently version being released is built in effect twice, as both "latest" and with its formal tag name.
+
+As a slight complication, the tags created previously on the release branch (`refs/tags/rel/xxx`) can't be used for this purpose, because the `antora.yml` files specify a branch name of simply "latest".
+We therefore temporarily modify all of the `antora.yml` files and `site.yml` with a reference to a new tag, and then change them back afterwards:
+
+* If there have been any changes from other branches (eg fixes to documentation in non-release branches) then merge them into the release branch.
 
 * Update all `antora.yml` files, eg using an IDE:
 +
