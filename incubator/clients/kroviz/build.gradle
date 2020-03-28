@@ -3,10 +3,20 @@ buildscript {
     ext.production = (findProperty('prod') ?: 'false') == 'true'
 
     repositories {
-        maven { url = 'https://dl.bintray.com/kotlin/kotlin-eap' }
-        maven { url = 'https://plugins.gradle.org/m2/' }
-        maven { url = 'https://kotlin.bintray.com/kotlinx' }
         mavenCentral()
+        jcenter()
+        maven { url = 'https://dl.bintray.com/kotlin/kotlin-eap' }
+        maven { url = 'https://kotlin.bintray.com/kotlinx' }
+        maven { url = 'https://dl.bintray.com/kotlin/kotlin-js-wrappers' }
+        maven {
+            url = uri("https://dl.bintray.com/gbaldeck/kotlin")
+            metadataSources {
+                mavenPom()
+                artifact()
+            }
+        }
+        maven { url = 'https://dl.bintray.com/rjaros/kotlin' }
+        mavenLocal()
     }
 
     dependencies {
@@ -117,6 +127,11 @@ task copyResourcesForDce() {
                         include "css/**"
                         include "img/**"
                         include "js/**"
+                        if (kvmodule == "kvision") {
+                            into("kvision/$kvisionVersion")
+                        } else {
+                            into("kvision-$kvmodule/$kvisionVersion")
+                        }
                     }
                 }
             }
