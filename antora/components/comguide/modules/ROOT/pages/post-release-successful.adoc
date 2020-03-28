@@ -164,6 +164,93 @@ git add .
 git commit -m "$ISISJIRA: updates release notes, STATUS and doap_isis.rdf"
 ----
 
+== Release Source Zip
+
+As described in the link:http://www.apache.org/dev/release-publishing.html#distribution_dist[Apache documentation], each Apache TLP has a `release/TLP-name` directory in the distribution Subversion repository at link:https://dist.apache.org/repos/dist[https://dist.apache.org/repos/dist].
+Once a release vote passes, the release manager should `svn add` the artifacts (plus signature and hash files) into this location.
+The release is then automatically pushed to http://www.apache.org/dist/[http://www.apache.org/dist/] by `svnpubsub`.
+Only the most recent release of each supported release line should be contained here, old versions should be deleted.
+
+Each project is responsible for the structure of its directory.
+The directory structure of Apache Isis reflects the directory structure in our git source code repo:
+
+[source]
+----
+isis/
+  core/
+----
+
+If necessary, checkout this directory structure:
+
+[source,bash]
+----
+svn co https://dist.apache.org/repos/dist/release/isis isis-dist
+----
+
+Next, add the new release into the appropriate directory, and delete any previous release.
+The `upd.sh` script can be used to automate this:
+
+[source,bash]
+----
+old_ver=$1
+new_ver=$2
+
+
+# constants
+repo_root=https://repository.apache.org/content/repositories/releases/org/apache/isis
+
+zip="source-release.zip"
+asc="$zip.asc"
+md5="$zip.md5"
+
+
+#
+# isis-core
+#
+type="core"
+fullname="isis"
+pushd isis-core
+
+curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$asc
+svn add $fullname-$new_ver-$asc
+curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$md5
+svn add $fullname-$new_ver-$md5
+curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$zip
+svn add $fullname-$new_ver-$zip
+
+svn delete $fullname-$old_ver-$asc
+svn delete $fullname-$old_ver-$md5
+svn delete $fullname-$old_ver-$zip
+
+popd
+
+----
+
+[source,bash,subs="attributes+"]
+----
+sh upd.sh [previous_release] {isisnext}
+----
+
+The script downloads the artifacts from the Nexus release repository, adds the artifacts to subversion and deletes the previous version.
+
+Double check that the files are correct; there is sometimes a small delay in the files becoming available in the release repository.
+It should be sufficient to check just the `md5` or `.asc` files that these look valid (aren't HTML 404 error pages):
+
+[source,bash,subs="attributes+"]
+----
+vi `find . -name *.md5`
+----
+
+Assuming all is good, commit the changes:
+
+[source,subs="attributes+"]
+----
+svn commit -m "publishing isis source releases to dist.apache.org"
+----
+
+If the files are invalid, then revert using `svn revert . --recursive` and try again in a little while.
+
+
 == Final website updates
 
 Before we xref:#generate-website[generate the website], we apply final updates:
@@ -401,92 +488,6 @@ git branch -d release-{isisnext}-RC1              # branch no longer needed
 
 
 
-== Release Source Zip
-
-As described in the link:http://www.apache.org/dev/release-publishing.html#distribution_dist[Apache documentation], each Apache TLP has a `release/TLP-name` directory in the distribution Subversion repository at link:https://dist.apache.org/repos/dist[https://dist.apache.org/repos/dist].
-Once a release vote passes, the release manager should `svn add` the artifacts (plus signature and hash files) into this location.
-The release is then automatically pushed to http://www.apache.org/dist/[http://www.apache.org/dist/] by `svnpubsub`.
-Only the most recent release of each supported release line should be contained here, old versions should be deleted.
-
-Each project is responsible for the structure of its directory.
-The directory structure of Apache Isis reflects the directory structure in our git source code repo:
-
-[source]
-----
-isis/
-  core/
-----
-
-If necessary, checkout this directory structure:
-
-[source,bash]
-----
-svn co https://dist.apache.org/repos/dist/release/isis isis-dist
-----
-
-Next, add the new release into the appropriate directory, and delete any previous release.
-The `upd.sh` script can be used to automate this:
-
-[source,bash]
-----
-old_ver=$1
-new_ver=$2
-
-
-# constants
-repo_root=https://repository.apache.org/content/repositories/releases/org/apache/isis
-
-zip="source-release.zip"
-asc="$zip.asc"
-md5="$zip.md5"
-
-
-#
-# isis-core
-#
-type="core"
-fullname="isis"
-pushd isis-core
-
-curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$asc
-svn add $fullname-$new_ver-$asc
-curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$md5
-svn add $fullname-$new_ver-$md5
-curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$zip
-svn add $fullname-$new_ver-$zip
-
-svn delete $fullname-$old_ver-$asc
-svn delete $fullname-$old_ver-$md5
-svn delete $fullname-$old_ver-$zip
-
-popd
-
-----
-
-[source,bash,subs="attributes+"]
-----
-sh upd.sh {isiscurr} {isisnext}
-----
-
-The script downloads the artifacts from the Nexus release repository, adds the artifacts to subversion and deletes the previous version.
-
-Double check that the files are correct; there is sometimes a small delay in the files becoming available in the release repository.
-It should be sufficient to check just the `md5` or `.asc` files that these look valid (aren't HTML 404 error pages):
-
-[source,bash,subs="attributes+"]
-----
-vi `find . -name *.md5`
-----
-
-Assuming all is good, commit the changes:
-
-[source,subs="attributes+"]
-----
-svn commit -m "publishing isis source releases to dist.apache.org"
-----
-
-If the files are invalid, then revert using `svn revert . --recursive` and try again in a little while.
-
 == Update the ASF Reporter website
 
 Log the new release in the link:https://reporter.apache.org/addrelease.html?isis[ASF Reporter website].
@@ -510,22 +511,21 @@ And use the following body (summarizing the main points as required):
 The Apache Isis team is pleased to announce the release of Apache Isis {isisnext}.
 
 New features in this release include:
+
 * ...
 
 Full release notes are available on the Apache Isis website at [1].
-Please also read the migration notes [2].
 
-You can access this release directly from the Maven central repo [3].
-Alternatively, download the release and build it from source [4].
+You can access this release directly from the Maven central repo [2].
+Alternatively, download the release and build it from source [3].
 
 Enjoy!
 
 --The Apache Isis team
 
-[1] http://isis.apache.org/downloads/rn/about.html#_release-notes_{isisnext}
-[2] http://isis.apache.org/downloads/mn/about.html#_migration-notes_{isiscurr}-to-{isisnext}
-[3] http://search.maven.org
-[4] http://isis.apache.org/downloads.html
+[1] http://isis.apache.org/relnotes/latest/about.html
+[2] http://search.maven.org
+[3] http://isis.apache.org/downloads.html
 ----
 
 == Blog post

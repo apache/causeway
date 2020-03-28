@@ -21,7 +21,7 @@ If you just want to get going quickly, we suggest using our xref:docs:starters:h
 
 If you want to build Apache Isis from formally released source tarballs, you can download from here:
 
-* https://www.apache.org/dyn/closer.cgi/isis/isis-core/isis-{isiscurr}-source-release.zip[isis-{isiscurr}] (https://www.apache.org/dist/isis/isis-core/isis-{isiscurr}-source-release.zip.asc[asc], https://www.apache.org/dist/isis/isis-core/isis-{isiscurr}-source-release.zip.md5[md5])
+* https://www.apache.org/dyn/closer.cgi/isis/isis-core/isis-{isisnext}-source-release.zip[isis-{isisnext}] (https://www.apache.org/dist/isis/isis-core/isis-{isisnext}-source-release.zip.asc[asc], https://www.apache.org/dist/isis/isis-core/isis-{isisnext}-source-release.zip.md5[md5])
 
 
 
@@ -39,7 +39,7 @@ Then verify the signatures using a command such as:
 [source,bash,subs="attributes+"]
 ----
 pgpk -a KEYS
-pgpv isis-{isiscurr}-source-release.zip.asc isis-{isiscurr}-source-release.zip
+pgpv isis-{isisnext}-source-release.zip.asc isis-{isisnext}-source-release.zip
 ----
 
 or
@@ -47,7 +47,7 @@ or
 [source,bash,subs="attributes+"]
 ----
 pgp -ka KEYS
-pgp isis-{isiscurr}-source-release.zip.asc isis-{isiscurr}-source-release.zip
+pgp isis-{isisnext}-source-release.zip.asc isis-{isisnext}-source-release.zip
 ----
 
 or
@@ -55,7 +55,7 @@ or
 [source,bash,subs="attributes+"]
 ----
 gpg --import KEYS
-gpg -verify isis-{isiscurr}-source-release.zip.asc isis-{isiscurr}-source-release.zip
+gpg -verify isis-{isisnext}-source-release.zip.asc isis-{isisnext}-source-release.zip
 ----
 
 
