@@ -174,19 +174,48 @@ We therefore temporarily modify all of the `antora.yml` files and `site.yml` wit
 
 * If there have been any changes from other branches (eg fixes to documentation in non-release branches) then merge them into the release branch.
 
+* Update the version that appears on the home page of the website, in `antora/supplemental-ui/index.html`
++
+[source,html,subs="attributes+"]
+----
+curl https://codeload.github.com/apache/isis-app-helloworld/zip/{isisnext} | jar xv
+cd isis-app-helloworld-{isisnext}
+----
++
+and
++
+[source,html,subs="attributes+"]
+----
+curl https://codeload.github.com/apache/isis-app-simpleapp/zip/{isisnext} | jar xv
+cd isis-app-simpleapp-{isisnext}
+----
+
+* Commit the changes:
++
+[source,bash,subs="attributes+"]
+----
+git add .
+git commit -m "$ISISJIRA: bumps index.html version to $ISISREL"
+----
+
 * Update all `antora.yml` files, eg using an IDE:
 +
 ** `version: latest` -> `version: {isisnext}`
 +
 image::release-process-post/update-antora-latest.png[width="800px",link="{imagesdir}/release-process-post/update-antora-latest.png"]
 
-* Commit the change, and tag:
+* Commit the changes:
 +
 [source,bash,subs="attributes+"]
 ----
 git add .
-git commit -m "$ISISJIRA: bumps antora.yml version to $ISISREL"
+git commit -m "$ISISJIRA: bumps antora.yml to $ISISREL"
+----
 
+* Now tag
++
+[source,bash,subs="attributes+"]
+----
 git tag docs/$ISISART-$ISISREL
 git push origin refs/tags/docs/$ISISART-$ISISREL:refs/tags/docs/$ISISART-$ISISREL
 ----
