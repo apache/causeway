@@ -315,7 +315,7 @@ git branch {isisrel}
 git push origin {isisrel}
 ----
 
-Finally, revert the last commit (backing changes to `antora.yml` files and `index.html`):
+Finally, revert the last commit (backing out changes to `antora.yml` files):
 
 [source,bash,subs="attributes+"]
 ----
