@@ -280,38 +280,20 @@ We are now ready to xref:#generate-website[generate the website].
 == Generate website
 
 We use Antora to generate the site, not only the version being release but also any previous versions listed in `site.yml`.
-This is done using the `content.sources.url[].tags` and `content.sources.url[].branches` properties.
-We use tags for all cases - note that the tag appears in the generated UI.
-If there are patches to the documentation, we move the tag.
+This is done using the `content.sources.url[].branches` properties.
+We use branches for all cases - note that the branch name appears in the generated UI.
+If there are patches to the documentation, we move the branches.
 
-We therefore temporarily modify all of the `antora.yml` files and `site.yml` with a reference to a new tag, and then change them back afterwards.
-We also have to modify the home page `index.html`:
+We therefore temporarily modify all of the `antora.yml` files (and update `index.html`) file and create a branch for this change; then we update `site.yml` with a reference to that new branch.
+All of this is changed afterwards.
 
-* Update the home page of the website, `antora/supplemental-ui/index.html`
+=== Create doc branch
 
-** starter app instructions for the helloworld app:
-+
-[source,html,subs="attributes+"]
-----
-curl https://codeload.github.com/apache/isis-app-helloworld/zip/{isisrel} | jar xv
-cd isis-app-helloworld-{isisrel}
-----
-
-** starter app instructions for the simpleapp:
-+
-[source,html,subs="attributes+"]
-----
-curl https://codeload.github.com/apache/isis-app-simpleapp/zip/{isisrel} | jar xv
-cd isis-app-simpleapp-{isisrel}
-----
-
-** any mention of `docs/latest` -> `docs/{isisrel}`
+First, we prepare a doc branch to reference:
 
 * Update all `antora.yml` files, eg using an IDE:
 +
 ** `version: latest` -> `version: {isisrel}`
-+
-image::release-process-post/update-antora-latest.png[width="800px",link="{imagesdir}/release-process-post/update-antora-latest.png"]
 
 * Commit all these changes:
 +
@@ -321,47 +303,48 @@ git add .
 git commit -m "$ISISJIRA: bumps antora.yml and index.html to $ISISREL"
 ----
 
-* Now tag.
+We now create a branch to reference in the `site.yml`, later on.
+
+* We create the `{isisrel}` branch.
 +
-We use "docs/isis-{isisrel}" as the tag name.
-This mirrors the "rel/isis-{isisrel}" used for the formal (immutable) release tag, but allows us to move it if necessary.
+This mirrors the "rel/isis-{isisrel}" used for the formal (immutable) release tag, but is a branch because it allows us to move it, and must have this simplified name as it is used in the "edit page" link of the site template.
 +
 [source,bash,subs="attributes+"]
 ----
-git tag docs/$ISISART-$ISISREL
-git push origin refs/tags/$ISISREL:refs/tags/$ISISREL
+git branch {isisrel}
+git push origin {isisrel}
 ----
 
-* Now, immediately revert the last commit.
-+
+Finally, revert the last commit (backing changes to `antora.yml` files and `index.html`):
+
 [source,bash,subs="attributes+"]
 ----
 git revert HEAD
 ----
 
-* Now we update `site.yml` (in `antora/playbooks`).
-This will reference the tag and also the current branch (for "latest").
+=== Update `index.html` & site.yml` & generate
+
+Lastly, we update `index.html` and then `site.yml`
+
+* Update the home page of the website, `antora/supplemental-ui/index.html`
++
+Note that this isn't performed in the docs branch (xref:#create-doc-branch[previous section]) because the supplemental files are _not_ versioned as a doc component:
+
+** update any mention of `master` -> `{isisrel}`
++
+This should be the two sets of starter app instructions for helloworld and simpleapp.
+
+** update any mention of `latest` -> `{isisrel}`
++
+This should be in hyperlinks, `<a href="docs/...">`
+
+* Now update `site.yml`
++
+This will reference the new branch (and any previous branches).
 Every content source needs to be updated:
 +
-For example, we change:
-+
-.site.yml
-[source,yml,subs="attributes+"]
-----
-- url: .
-  start_path: antora/components/docs # docs
-  branches: HEAD
-----
-+
-to:
-+
-.site.yml
-[source,yml,subs="attributes+"]
-----
-- url: .
-  start_path: antora/components/docs # docs
-  tags: docs/isis-{isisrel}
-----
+//** `url: .` -> `url: https://github.com/apache/isis.git`
+** `branches: HEAD` -> `branches: {isisrel}`
 
 * commit this change, too (there's no need to push):
 +
@@ -371,7 +354,9 @@ git add .
 git commit -m "$ISISJIRA: adds tag to site.yml"
 ----
 
-* We are now in a position to actually generate the Antora website:
+We are now in a position to actually generate the Antora website:
+
+* generate the website:
 +
 [source,bash,subs="attributes+"]
 ----
@@ -380,8 +365,8 @@ sh preview.sh
 +
 This will write to `antora/target/site`; we'll use the results in the xref:#publish-website[next section].
 
-* Finally, revert the changes to `site.yml`:
-+
+Finally, revert the last commit (backing out changes to `site.yml`):
+
 [source,bash,subs="attributes+"]
 ----
 git revert HEAD
