@@ -52,7 +52,6 @@ image::release-process/nexus-release-1.png[width="600px",link="{imagesdir}/relea
 
 This moves the release artifacts into an Apache releases repository; from there they will be automatically moved to the Maven repository.
 
-
 == Set environment variables
 
 As we did for the cutting of the release, we set environment variables to parameterize the following steps:
@@ -91,9 +90,9 @@ You can do this using the `scripts/promoterctag.sh` script; for example:
 ----
 sh scripts/promoterctag.sh $ISISART-$ISISREL $ISISRC
 ----
+
 This script pushes the tag under `refs/tags/rel`.
 As per Apache policy (communicated on 10th Jan 2016 to Apache PMCs), this path is 'protected' and is unmodifiable (guaranteeing the provenance that the ASF needs for releases).
-
 
 == Update JIRA
 
@@ -101,7 +100,6 @@ As per Apache policy (communicated on 10th Jan 2016 to Apache PMCs), this path i
 
 Close all JIRA tickets for the release, or moved to future releases if not yet addressed.
 Any tickets that were partially implemented should be closed, and new tickets created for the functionality on the ticket not yet implemented.
-
 
 === Generate Release Notes
 
@@ -250,12 +248,13 @@ svn commit -m "publishing isis source releases to dist.apache.org"
 
 If the files are invalid, then revert using `svn revert . --recursive` and try again in a little while.
 
-
 == Final website updates
 
-Before we xref:#generate-website[generate the website], we apply final updates:
+Apply any remaining documentation updates:
 
-* If there have been updates to any of the schemas:
+* If there have been documentation changes made in other branches since the release branch was created, then merge these in.
+
+* If there have been updates to any of the schemas, copy them over:
 
 ** copy the new schema(s) from `api/schema/src/main/resources/o.a.i.s.xxx`
 +
@@ -267,15 +266,38 @@ to its versioned:
 +
 `antora/supplemental-ui/schema/xxx/xxx.xsd`
 
-* Update the version that appears on the home page of the website, in `antora/supplemental-ui/index.html`
+* Commit the changes:
++
+[source,bash,subs="attributes+"]
+----
+git add .
+git commit -m "$ISISJIRA: merging in final changes to docs"
+----
+
+We are now ready to xref:#generate-website[generate the website].
+
+[#generate-website]
+== Generate website
+
+We use Antora to generate the site, not only the version being release but also any previous versions listed in `site.yml`.
+This is done using the `content.sources.url[].tags` and `content.sources.url[].branches` properties.
+We use tags for all cases - note that the tag appears in the generated UI.
+If there are patches to the documentation, we move the tag.
+
+We therefore temporarily modify all of the `antora.yml` files and `site.yml` with a reference to a new tag, and then change them back afterwards.
+We also have to modify the home page `index.html`:
+
+* Update the home page of the website, `antora/supplemental-ui/index.html`
+
+** starter app instructions for the helloworld app:
 +
 [source,html,subs="attributes+"]
 ----
 curl https://codeload.github.com/apache/isis-app-helloworld/zip/{isisrel} | jar xv
 cd isis-app-helloworld-{isisrel}
 ----
-+
-and
+
+** starter app instructions for the simpleapp:
 +
 [source,html,subs="attributes+"]
 ----
@@ -283,26 +305,7 @@ curl https://codeload.github.com/apache/isis-app-simpleapp/zip/{isisrel} | jar x
 cd isis-app-simpleapp-{isisrel}
 ----
 
-* Commit the changes:
-+
-[source,bash,subs="attributes+"]
-----
-git add .
-git commit -m "$ISISJIRA: bumps index.html version to $ISISREL, also schema updates"
-----
-
-
-
-[#generate-website]
-== Generate website
-
-We use Antora to generate the site, not only the latest version but also any previous versions listed in `site.yml`.
-The most recently version being released is built in effect twice, as both "latest" and with its formal tag name.
-
-As a slight complication, the tags created previously on the release branch (`refs/tags/rel/xxx`) can't be used for this purpose, because the `antora.yml` files specify a branch name of simply "latest".
-We therefore temporarily modify all of the `antora.yml` files and `site.yml` with a reference to a new tag, and then change them back afterwards:
-
-* If there have been any changes from other branches (eg fixes to documentation in non-release branches) then merge them into the release branch.
+** any mention of `docs/latest` -> `docs/{isisrel}`
 
 * Update all `antora.yml` files, eg using an IDE:
 +
@@ -310,34 +313,30 @@ We therefore temporarily modify all of the `antora.yml` files and `site.yml` wit
 +
 image::release-process-post/update-antora-latest.png[width="800px",link="{imagesdir}/release-process-post/update-antora-latest.png"]
 
-* Commit the changes:
+* Commit all these changes:
 +
 [source,bash,subs="attributes+"]
 ----
 git add .
-git commit -m "$ISISJIRA: bumps antora.yml to $ISISREL"
+git commit -m "$ISISJIRA: bumps antora.yml and index.html to $ISISREL"
 ----
 
-* Now tag
+* Now tag.
++
+We use "docs/isis-{isisrel}" as the tag name.
+This mirrors the "rel/isis-{isisrel}" used for the formal (immutable) release tag, but allows us to move it if necessary.
 +
 [source,bash,subs="attributes+"]
 ----
 git tag docs/$ISISART-$ISISREL
-git push origin refs/tags/docs/$ISISART-$ISISREL:refs/tags/docs/$ISISART-$ISISREL
+git push origin refs/tags/$ISISREL:refs/tags/$ISISREL
 ----
 
-* Now, immediately the change to `antora.yml` files back again:
-
-** `version: {isisrel}` -> `version: latest`
-
-* Commit these changes, and push the release branch:
+* Now, immediately revert the last commit.
 +
 [source,bash,subs="attributes+"]
 ----
-git add .
-git commit -m "$ISISJIRA: reverts antora.yml version to latest"
-
-git push
+git revert HEAD
 ----
 
 * Now we update `site.yml` (in `antora/playbooks`).
@@ -361,15 +360,8 @@ to:
 ----
 - url: .
   start_path: antora/components/docs # docs
-  tags: docs/isis-{isisrel}                    # <.>
-  branches: HEAD                                  # <.>
+  tags: docs/isis-{isisrel}
 ----
-<.> will generate the {isisrel} version
-<.> will generate the 'latest' version
-+
-eg using the IDE:
-+
-image::release-process-post/update-site-yml-tags.png[width="800px",link="{imagesdir}/release-process-post/update-site-yml-tags.png"]
 
 * commit this change, too (there's no need to push):
 +
@@ -388,29 +380,11 @@ sh preview.sh
 +
 This will write to `antora/target/site`; we'll use the results in the xref:#publish-website[next section].
 
-* Finally, revert the changes to `site.yml` back into "author mode".
-+
-That is, comment out the tags entries:
-+
-.site.yml
-[source,yml,subs="attributes+"]
-----
-- url: .
-  start_path: antora/components/docs # docs
-#  tags: docs/isis-{isisrel}
-  branches: HEAD
-----
-+
-eg using the IDE:
-+
-image::release-process-post/update-site-yml-no-tags.png[width="800px",link="{imagesdir}/release-process-post/update-site-yml-no-tags.png"]
-
-* commit this change, too (there's no need to push):
+* Finally, revert the changes to `site.yml`:
 +
 [source,bash,subs="attributes+"]
 ----
-git add .
-git commit -m "$ISISJIRA: site.yml back to author mode"
+git revert HEAD
 ----
 
 [#publish-website]
@@ -470,7 +444,6 @@ git push origin asf-site
 cd ../isis
 ----
 
-
 == Merge in release branch
 
 Because we release from a branch, the changes made in the branch should be merged back from the release branch back into the `master` branch.
@@ -486,16 +459,13 @@ git push origin --delete release-{isisrel}-RC1   # remote branch no longer neede
 git branch -d release-{isisrel}-RC1              # branch no longer needed
 ----
 
-
 == Bump \{isisrel} in `site.yml`
 
 In `site.yml` file, bump the version of `\{isisrel}`, and commit.
 
-
 == Update the ASF Reporter website
 
 Log the new release in the link:https://reporter.apache.org/addrelease.html?isis[ASF Reporter website].
-
 
 == Announce the release
 
@@ -536,7 +506,6 @@ Enjoy!
 
 link:https://blogs.apache.org/roller-ui/login.rol[Log onto] the http://blogs.apache.org/isis/[Apache blog] and create a new post.
 Copy-n-paste the above mailing list announcement should suffice.
-
 
 == Update dependencies
 
