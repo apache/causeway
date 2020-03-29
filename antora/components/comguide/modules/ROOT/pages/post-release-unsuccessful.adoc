@@ -22,7 +22,7 @@ For example, use the following subject for a vote on Apache Isis Core:
 
 [source,bash,subs="attributes+"]
 ----
-[RESULT] [VOTE] Apache Isis Core release {isisrel}
+[RESULT] [VOTE] Apache Isis Core release {page-isisrel}
 ----
 
 using the body (alter last line as appropriate):
@@ -49,10 +49,10 @@ Branches and tags need to be removed for three repos:
 +
 [source,bash,subs="attributes+"]
 ----
-git push --delete origin release-{isisrel}-RC1     # <.>
-git push --delete origin isis-{isisrel}-RC1        # <.>
-git tag -d isis-{isisrel}                          # <.>
-git tag -d isis-{isisrel}-RC1
+git push --delete origin release-{page-isisrel}-RC1     # <.>
+git push --delete origin isis-{page-isisrel}-RC1        # <.>
+git tag -d isis-{page-isisrel}                          # <.>
+git tag -d isis-{page-isisrel}-RC1
 ----
 <.> deletes the remote branch (update `RCn` as necessary)
 <.> deletes the remote origin server's tag (update `RCn` as necessary)
@@ -63,14 +63,14 @@ These steps:
 +
 [source,bash,subs="attributes+"]
 ----
-git push --delete origin release-{isisrel}-RC1     # <.>
+git push --delete origin release-{page-isisrel}-RC1     # <.>
 ----
 
 * For simpleapp starter app, similarly:
 +
 [source,bash,subs="attributes+"]
 ----
-git push --delete origin release-{isisrel}-RC1     # <.>
+git push --delete origin release-{page-isisrel}-RC1     # <.>
 ----
 
 

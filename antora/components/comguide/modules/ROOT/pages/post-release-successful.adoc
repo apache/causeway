@@ -22,7 +22,7 @@ Post the results to the `dev@isis.a.o` mailing list:
 
 [source,subs="attributes+"]
 ----
-[RESULT] [VOTE] Apache Isis Core release {isisrel}
+[RESULT] [VOTE] Apache Isis Core release {page-isisrel}
 ----
 
 using the body (alter last line as appropriate):
@@ -60,7 +60,7 @@ As we did for the cutting of the release, we set environment variables to parame
 ----
 export ISISJIRA=ISIS-9999                           # <.>
 export ISISTMP=/c/tmp                               # <.>
-export ISISREL={isisrel}                           # <.>
+export ISISREL={page-isisrel}                           # <.>
 export ISISRC=RC1                                   # <.>
 export ISISBRANCH=release-$ISISREL-$ISISRC
 export ISISART=isis
@@ -226,7 +226,7 @@ popd
 
 [source,bash,subs="attributes+"]
 ----
-sh upd.sh [previous_release] {isisrel}
+sh upd.sh [previous_release] {page-isisrel}
 ----
 
 The script downloads the artifacts from the Nexus release repository, adds the artifacts to subversion and deletes the previous version.
@@ -293,7 +293,7 @@ First, we prepare a doc branch to reference:
 
 * Update all `antora.yml` files, eg using an IDE:
 +
-** `version: latest` -> `version: {isisrel}`
+** `version: latest` -> `version: {page-isisrel}`
 
 * Commit all these changes:
 +
@@ -305,14 +305,14 @@ git commit -m "$ISISJIRA: bumps antora.yml and index.html to $ISISREL"
 
 We now create a branch to reference in the `site.yml`, later on.
 
-* We create the `{isisrel}` branch.
+* We create the `{page-isisrel}` branch.
 +
-This mirrors the "rel/isis-{isisrel}" used for the formal (immutable) release tag, but is a branch because it allows us to move it, and must have this simplified name as it is used in the "edit page" link of the site template.
+This mirrors the "rel/isis-{page-isisrel}" used for the formal (immutable) release tag, but is a branch because it allows us to move it, and must have this simplified name as it is used in the "edit page" link of the site template.
 +
 [source,bash,subs="attributes+"]
 ----
-git branch {isisrel}
-git push origin {isisrel}
+git branch {page-isisrel}
+git push origin {page-isisrel}
 ----
 
 Finally, revert the last commit (backing out changes to `antora.yml` files):
@@ -330,11 +330,11 @@ Lastly, we update `index.html` and then `site.yml`
 +
 Note that this isn't performed in the docs branch (xref:#create-doc-branch[previous section]) because the supplemental files are _not_ versioned as a doc component:
 
-** update any mention of `master` -> `{isisrel}`
+** update any mention of `master` -> `{page-isisrel}`
 +
 This should be the two sets of starter app instructions for helloworld and simpleapp.
 
-** update any mention of `latest` -> `{isisrel}`
+** update any mention of `latest` -> `{page-isisrel}`
 +
 This should be in hyperlinks, `<a href="docs/...">`
 
@@ -343,7 +343,7 @@ This should be in hyperlinks, `<a href="docs/...">`
 This will reference the new branch (and any previous branches).
 Every content source needs to be updated:
 +
-** `branches: HEAD` -> `branches: {isisrel}`
+** `branches: HEAD` -> `branches: {page-isisrel}`
 
 * commit this change, too (there's no need to push):
 +
@@ -438,14 +438,14 @@ In the `isis` repo:
 ----
 git checkout master                              # update master with latest
 git pull
-git merge release-{isisrel}-RC1                  # merge branch onto master
-git push origin --delete release-{isisrel}-RC1   # remote branch no longer needed
-git branch -d release-{isisrel}-RC1              # branch no longer needed
+git merge release-{page-isisrel}-RC1                  # merge branch onto master
+git push origin --delete release-{page-isisrel}-RC1   # remote branch no longer needed
+git branch -d release-{page-isisrel}-RC1              # branch no longer needed
 ----
 
-== Bump \{isisrel} in `site.yml`
+== Bump \{page-isisrel} in `site.yml`
 
-In `site.yml` file, bump the version of `\{isisrel}`, and commit.
+In `site.yml` file, bump the version of `\{page-isisrel}`, and commit.
 
 == Update the ASF Reporter website
 
@@ -459,14 +459,14 @@ For example, for a release of Apache Isis Core, use the following subject:
 
 [source,subs="attributes+"]
 ----
-[ANN] Apache Isis version {isisrel} Released
+[ANN] Apache Isis version {page-isisrel} Released
 ----
 
 And use the following body (summarizing the main points as required):
 
 [source,subs="attributes+"]
 ----
-The Apache Isis team is pleased to announce the release of Apache Isis {isisrel}.
+The Apache Isis team is pleased to announce the release of Apache Isis {page-isisrel}.
 
 New features in this release include:
 
@@ -481,9 +481,9 @@ Enjoy!
 
 --The Apache Isis team
 
-[1] http://isis.apache.org/relnotes/latest/about.html
-[2] http://search.maven.org
-[3] http://isis.apache.org/downloads.html
+[1] http://isis.apache.org/relnotes/{page-isisrel}/about.html
+[2] https://search.maven.org
+[3] https://isis.apache.org/docs/{page-isisrel}/downloads/how-to.html
 ----
 
 == Blog post

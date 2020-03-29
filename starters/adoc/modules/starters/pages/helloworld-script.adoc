@@ -3,8 +3,8 @@
 
 [source,bash,subs="attributes+"]
 ----
-curl https://codeload.github.com/apache/isis-app-helloworld/zip/{isisrel} | jar xv
-cd isis-app-helloworld-{isisrel}
+curl https://codeload.github.com/apache/isis-app-helloworld/zip/{page-isisrel} | jar xv
+cd isis-app-helloworld-{page-isisrel}
 
 mvn clean install
 mvn spring-boot:run
