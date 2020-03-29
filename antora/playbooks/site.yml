@@ -26,361 +26,280 @@ content:
 # antora
     - url: .
       start_path: antora/components/docs # docs
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: antora/components/comguide # comguide
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: antora/components/conguide # conguide
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: antora/components/relnotes # relnotes
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: antora/components/setupguide # setupguide
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
 
 
 # api
     - url: .
       start_path: api/adoc/refguide # refguide
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: api/adoc/userguide # userguide
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: api/applib/src/main/adoc # refguide
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: api/schema/src/main/adoc # refguide
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
 
 # core
     - url: .
       start_path: core/adoc # core
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: core/codegen-bytebuddy/src/main/adoc # core
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: core/commons/src/main/adoc # core
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: core/config/src/main/adoc # refguide
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: core/internaltestsupport/src/main/adoc # core
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: core/metamodel/src/main/adoc # core
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: core/runtime/src/main/adoc # core
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: core/runtimeservices/src/main/adoc # core
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: core/webapp/src/main/adoc # core
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: core/security/src/main/adoc # security
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
 
 # examples
     - url: .
       start_path: examples/demo/src/main/adoc # docs
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: examples/smoketests/src/main/adoc # core
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
 
 # extensions
     - url: .
       start_path: extensions/adoc # extensions
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
 
     - url: .
       start_path: extensions/core/command-log/adoc # extensions
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: extensions/core/flyway/adoc # userguide
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
 
     - url: .
       start_path: extensions/security/audit-trail/adoc # security
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: extensions/security/secman/adoc # security
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: extensions/security/session-log/adoc # security
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: extensions/security/shiro-realm-ldap/adoc # security
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
 
     - url: .
       start_path: extensions/vro/cors/adoc # vro
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: extensions/vw/exceldownload/adoc # vw
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: extensions/vw/fullcalendar/adoc # vw
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: extensions/vw/gmap3/adoc # vw
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: extensions/vw/pdfjs/adoc # vw
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
 
 # incubator
     - url: .
       start_path: incubator/adoc # incubator
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: incubator/core/model/src/main/adoc # incubator
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: incubator/mappings/microprofile/src/main/adoc # incubator
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
 
 # legacy
     - url: .
       start_path: legacy/adoc # legacy
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: legacy/extensions/core/applib/src/main/adoc # legacy
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: legacy/extensions/core/commons/src/main/adoc # legacy
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: legacy/extensions/core/metamodel/src/main/adoc # legacy
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: legacy/extensions/core/runtime/src/main/adoc # legacy
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: legacy/mappings/restclient/src/main/adoc # legacy
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: legacy/subdomains/servletapi/src/main/adoc # legacy
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
 
 # mappings
     - url: .
       start_path: mappings/adoc # mappings
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: mappings/jaxrsclient/adoc # mappings
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: mappings/minio/adoc # mappings
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: mappings/publisher/adoc # mappings
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: mappings/restclient/adoc # mappings
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: mappings/slack/adoc # mappings
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
 
 # mavendeps
     - url: .
       start_path: mavendeps/adoc # starters
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
 
 # persistence
     - url: .
       start_path: persistence/jdo/adoc # pjdo
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
 
 # security
     - url: .
       start_path: security/adoc # security
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: security/bypass/src/main/adoc # security
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: security/shiro/src/main/adoc # security
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: security/keycloak/src/main/adoc # security
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
 
 # starters
     - url: .
       start_path: starters/adoc # toc
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
 
 # subdomains
     - url: .
       start_path: subdomains/adoc # subdomains
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: subdomains/base/adoc # subdomains
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: subdomains/docx/adoc # subdomains
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: subdomains/excel/adoc # subdomains
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: subdomains/freemarker/adoc # subdomains
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: subdomains/ognl/adoc # subdomains
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: subdomains/pdfbox/adoc # subdomains
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: subdomains/settings/adoc # subdomains
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: subdomains/spring/adoc # subdomains
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: subdomains/xdocreport/adoc # subdomains
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: subdomains/zip/adoc # subdomains
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
 
 # testing
     - url: .
       start_path: testing/adoc # testing
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: testing/fakedata/adoc # testing
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: testing/fixtures/adoc # testing
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: testing/h2console/adoc # testing
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: testing/hsqldbmgr/adoc # testing
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: testing/integtestsupport/adoc # testing
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: testing/specsupport/adoc # testing
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: testing/unittestsupport/adoc # testing
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
 
 # valuetypes
     - url: .
       start_path: valuetypes/adoc # valuetypes
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: valuetypes/asciidoc/adoc # valuetypes
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: valuetypes/markdown/adoc # valuetypes
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: valuetypes/sse/adoc # valuetypes
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
 
 # viewers
     - url: .
       start_path: viewers/restfulobjects/adoc # vro
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
     - url: .
       start_path: viewers/wicket/adoc # vw
-      tags: docs/isis-2.0.0-M3
       branches: HEAD
 
 ui:
