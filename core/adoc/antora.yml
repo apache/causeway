@@ -16,7 +16,7 @@
 #  under the License.
 
 name: core
-title: "Core Framework"
+title: "Design Docs"
 version: latest
 start_page: ROOT:about.adoc
 nav:

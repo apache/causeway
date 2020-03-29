@@ -6,6 +6,6 @@
 
 ** xref:conguide:ROOT:about.adoc[Contributors' Guide]
 ** xref:comguide:ROOT:about.adoc[Committers' Guide]
-** xref:core:ROOT:about.adoc[Core Design]
+** xref:core:ROOT:about.adoc[Design Docs]
 ** xref:more-thanks/more-thanks.adoc[Acknowledgements]
 

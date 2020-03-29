@@ -39,7 +39,7 @@ The vote has completed with the following result :
 
 The vote is SUCCESSFUL.
 
-I'll now go ahead and complete the post-release activities.
+I\'ll now go ahead and complete the post-release activities.
 ----
 
 == Release to Maven Central
@@ -343,7 +343,6 @@ This should be in hyperlinks, `<a href="docs/...">`
 This will reference the new branch (and any previous branches).
 Every content source needs to be updated:
 +
-//** `url: .` -> `url: https://github.com/apache/isis.git`
 ** `branches: HEAD` -> `branches: {isisrel}`
 
 * commit this change, too (there's no need to push):

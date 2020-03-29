@@ -1,8 +1,4 @@
-
-
-
 * xref:core:runtime-services:about.adoc[Runtime Services]
-
 ** xref:core:runtime-services:ApplicationFeatureFactory.adoc[ApplicationFeatureFactory]
 ** xref:core:runtime-services:AuditerDispatchService.adoc[AuditerDispatchService]
 ** xref:core:runtime-services:AuthenticationSessionProvider.adoc[AuthenticationSessionProvider]
@@ -13,7 +9,3 @@
 ** xref:core:runtime-services:RepresentationService.adoc[RepresentationService]
 ** xref:core:runtime-services:PersistenceSessionServiceInternal.adoc[PersistenceSessionServiceInternal]
 ** xref:core:runtime-services:PublisherDispatchService.adoc[PublisherDispatchService]
-
-
-
-
