@@ -155,6 +155,13 @@
                 <dependency>
                     <groupId>com.sun.xml.ws</groupId>
                     <artifactId>jaxws-ri</artifactId>
+             		<exclusions>
+						<exclusion>
+							<!-- version clash jakarta.jws:jakarta.jws-api: 1.1.1 vs 2.1.0 -->
+							<groupId>jakarta.jws</groupId>
+							<artifactId>jakarta.jws-api</artifactId>
+						</exclusion>
+					</exclusions>
                     <type>pom</type>
                 </dependency>
                 <dependency>
