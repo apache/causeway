@@ -167,35 +167,35 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
     }
 
     void processHidden(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
-        val holder = processMethodContext.getFacetHolder();
+        val facetedMethod = processMethodContext.getFacetHolder();
 
         // search for @Action(hidden=...)
-        val facet = HiddenFacetForActionAnnotation.create(actionIfAny, holder);
+        val facet = HiddenFacetForActionAnnotation.create(actionIfAny, facetedMethod);
         super.addFacet(facet);
     }
 
     void processRestrictTo(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
-        val holder = processMethodContext.getFacetHolder();
+        val facetedMethod = processMethodContext.getFacetHolder();
 
         // search for @Action(restrictTo=...)
-        val facet = PrototypeFacetForActionAnnotation.create(actionIfAny, holder,
+        val facet = PrototypeFacetForActionAnnotation.create(actionIfAny, facetedMethod,
                 ()->super.getSystemEnvironment().getDeploymentType());
         
         super.addFacet(facet);
     }
 
     void processSemantics(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
-        val holder = processMethodContext.getFacetHolder();
+        val facetedMethod = processMethodContext.getFacetHolder();
 
         // check for @Action(semantics=...)
-        val facet = ActionSemanticsFacetForActionAnnotation.create(actionIfAny, holder);
+        val facet = ActionSemanticsFacetForActionAnnotation.create(actionIfAny, facetedMethod);
 
         super.addFacet(facet);
     }
 
     void processCommand(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
 
-        val facetHolder = processMethodContext.getFacetHolder();
+        val facetedMethod = processMethodContext.getFacetHolder();
 
         //
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
@@ -207,15 +207,15 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         }
 
         // check for @Action(command=...)
-        val commandFacet = CommandFacetForActionAnnotation.create(actionIfAny, getConfiguration(), getServiceInjector(), facetHolder);
+        val commandFacet = CommandFacetForActionAnnotation.create(actionIfAny, getConfiguration(), getServiceInjector(), facetedMethod);
 
         super.addFacet(commandFacet);
     }
 
     void processPublishing(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
 
-        val holder = processMethodContext.getFacetHolder();
-
+        val facetedMethod = processMethodContext.getFacetHolder();
+        
         //
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
         // and for commands, see above
@@ -227,15 +227,14 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         }
 
         // check for @Action(publishing=...)
-        val facet = PublishedActionFacetForActionAnnotation.create(actionIfAny, getConfiguration(), holder);
-
+        val facet = PublishedActionFacetForActionAnnotation.create(actionIfAny, getConfiguration(), facetedMethod);
         super.addFacet(facet);
     }
 
     void processTypeOf(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
 
         val method = processMethodContext.getMethod();
-        val holder = processMethodContext.getFacetHolder();
+        val facetedMethod = processMethodContext.getFacetHolder();
 
         val methodReturnType = method.getReturnType();
         if (!_Collections.isCollectionOrArrayType(methodReturnType)) {
@@ -246,19 +245,19 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         TypeOfFacet typeOfFacet = actionIfAny
                 .map(Action::typeOf)
                 .filter(typeOf -> typeOf != null && typeOf != Object.class)
-                .map(typeOf -> new TypeOfFacetForActionAnnotation(typeOf, holder))
+                .map(typeOf -> new TypeOfFacetForActionAnnotation(typeOf, facetedMethod))
                 .orElse(null);
 
         // infer from return type
         if(typeOfFacet == null) {
             val returnType = method.getReturnType();
-            typeOfFacet = TypeOfFacet.Util.inferFromArrayType(holder, returnType);
+            typeOfFacet = TypeOfFacet.Util.inferFromArrayType(facetedMethod, returnType);
         }
 
         // infer from generic return type
         if(typeOfFacet == null) {
             val cls = processMethodContext.getCls();
-            typeOfFacet = TypeOfFacet.Util.inferFromGenericReturnType(cls, method, holder);
+            typeOfFacet = TypeOfFacet.Util.inferFromGenericReturnType(cls, method, facetedMethod);
         }
 
         super.addFacet(typeOfFacet);
@@ -266,7 +265,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
 
     void processAssociateWith(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
 
-        val holder = processMethodContext.getFacetHolder();
+        val facetedMethod = processMethodContext.getFacetHolder();
 
         // check for @Action(associateWith=...)
 
@@ -275,9 +274,9 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
             if(!_Strings.isNullOrEmpty(associateWith)) {
                 val associateWithSequence = action.associateWithSequence();
                 super.addFacet(
-                        new MemberOrderFacetForActionAnnotation(associateWith, associateWithSequence, holder));
+                        new MemberOrderFacetForActionAnnotation(associateWith, associateWithSequence, facetedMethod));
                 super.addFacet(
-                        new AssociatedWithFacetForActionAnnotation(associateWith, holder));
+                        new AssociatedWithFacetForActionAnnotation(associateWith, facetedMethod));
             }
         });
         

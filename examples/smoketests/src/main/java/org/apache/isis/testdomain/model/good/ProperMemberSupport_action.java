@@ -23,11 +23,12 @@ import java.util.Set;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MinLength;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.incubator.model.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
 
-@Action 
+@Action(publishing = Publishing.ENABLED) 
 @ActionLayout(named = "foo", describedAs = "bar")  
 @RequiredArgsConstructor
 public class ProperMemberSupport_action {

@@ -34,10 +34,11 @@ import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.schema.metamodel.v2.DomainClassDto;
-import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
@@ -112,14 +113,16 @@ class DomainModelTest_usingGoodDomain {
         val holderSpec = specificationLoader.loadSpecification(ProperMemberSupport.class, 
                         IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         
-        val mx_mixin = holderSpec.getObjectActionElseFail("action2"); // proper mixed-in action support
-        assertNotNull(mx_mixin);
-        
         val mx_action = holderSpec.getObjectActionElseFail("action"); // when @Action at type level
         assertNotNull(mx_action);
         assertEquals("action", mx_action.getId());
         assertEquals("foo", mx_action.getName());
         assertEquals("bar", mx_action.getDescription());
+        assertHasPublishedActionFacet(mx_action);
+        
+        val mx_action2 = holderSpec.getObjectActionElseFail("action2"); // proper mixed-in action support
+        assertNotNull(mx_action2);
+        assertHasPublishedActionFacet(mx_action2);
         
         val mx_property = holderSpec.getAssociationElseFail("property"); // when @Property at type level
         assertNotNull(mx_property);
@@ -146,7 +149,7 @@ class DomainModelTest_usingGoodDomain {
         assertEquals("bar", mx_collection2.getDescription());
         
     }
-    
+
     @Test
     void memberLevelAnnotations_shouldResolveUnambiguous_onMixins() {
         
@@ -167,6 +170,13 @@ class DomainModelTest_usingGoodDomain {
         val mx_datanucleusIdLong = holderSpec.getAssociationElseFail("datanucleusIdLong"); // plugged in mixin
         assertNotNull(mx_datanucleusIdLong);
         
+    }
+    
+    // -- HELPER
+    
+    private void assertHasPublishedActionFacet(FacetHolder facetHolder) {
+        val facet = facetHolder.getFacet(PublishedActionFacet.class);
+        assertNotNull(facet);
     }
     
 
