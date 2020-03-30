@@ -112,6 +112,8 @@
 		<dependency>
 			<groupId>org.apache.isis.incubator.viewer</groupId>
 			<artifactId>isis-viewer-vaadin-viewer</artifactId>
+			<!-- incubator version is not managed by app starter bundles -->
+			<version>2.0.0-SNAPSHOT</version>
 		</dependency>
 
 		<!-- EXTENSIONS -->
