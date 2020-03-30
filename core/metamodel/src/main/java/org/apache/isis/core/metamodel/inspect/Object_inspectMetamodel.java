@@ -24,7 +24,6 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -42,13 +41,10 @@ import lombok.val;
 @Action(
         domainEvent = Object_inspectMetamodel.ActionDomainEvent.class,
         semantics = SemanticsOf.SAFE,
-        restrictTo = RestrictTo.PROTOTYPING
-        )
+        restrictTo = RestrictTo.PROTOTYPING)
 @ActionLayout(
         cssClassFa = "fa-sitemap",
-        position = ActionLayout.Position.PANEL_DROPDOWN,
-        contributed = Contributed.AS_ACTION
-        )
+        position = ActionLayout.Position.PANEL_DROPDOWN)
 @RequiredArgsConstructor
 public class Object_inspectMetamodel {
 

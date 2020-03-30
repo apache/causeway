@@ -19,14 +19,16 @@
 
 package org.apache.isis.core.metamodel.facets.actions.notcontributed.derived;
 
-import java.lang.reflect.Method;
-
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+
+import lombok.val;
 
 public class NotContributedFacetDerivedFromMixinFacetFactory extends FacetFactoryAbstract {
 
@@ -36,17 +38,36 @@ public class NotContributedFacetDerivedFromMixinFacetFactory extends FacetFactor
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final Method method = processMethodContext.getMethod();
-        final Class<?> declaringClass = method.getDeclaringClass();
-        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(declaringClass);
+        
+        if(!processMethodContext.isMixinMain()) {
+            // skip processing if not mixin main 
+            return;
+        }
+        
+        val method = processMethodContext.getMethod();
+        val declaringClass = method.getDeclaringClass();
+        val spec = getSpecificationLoader().loadSpecification(declaringClass);
 
-        final MixinFacet mixinFacet = spec.getFacet(MixinFacet.class);
+        val mixinFacet = spec.getFacet(MixinFacet.class);
         if(mixinFacet == null || mixinFacet.isFallback()) {
             return;
         }
+        
+        val facetedMethod = processMethodContext.getFacetHolder();
+        
+        //[1998] if @Action or @ActionLayout detected on type level infer:    
+        //@ActionLayout(contributed=ACTION)
+        val isForceContributedAsAction = 
+                processMethodContext.synthesizeOnType(Action.class).isPresent()
+                || processMethodContext.synthesizeOnType(ActionLayout.class).isPresent();
 
-        final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new NotContributedFacetDerivedFromMixinFacet(facetHolder));
+        if(isForceContributedAsAction) {
+            FacetUtil.addFacet(new NotContributedFacetAbstract(Contributed.AS_ACTION, facetedMethod) {});
+        } else {
+            // fallback to legacy default
+            FacetUtil.addFacet(new NotContributedFacetDerivedFromMixinFacet(facetedMethod));    
+        }
+        
     }
-
+    
 }
