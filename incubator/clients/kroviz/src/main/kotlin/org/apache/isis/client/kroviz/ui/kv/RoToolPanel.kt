@@ -2,6 +2,7 @@ package org.apache.isis.client.kroviz.ui.kv
 
 import pl.treksoft.kvision.core.Background
 import pl.treksoft.kvision.core.Col
+import pl.treksoft.kvision.core.Color
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.html.Button
@@ -15,7 +16,7 @@ class RoToolPanel : SimplePanel() {
 
     init {
         panel.width = CssSize(40, UNIT.px)
-        panel.background = Background(Col.GREEN)
+        panel.background = Background(Color.name(Col.GREEN))
         val wButton: Button = Button(text = "Wikipedia", style = ButtonStyle.SUCCESS).apply {
             padding = CssSize(-16, UNIT.px)
             margin = CssSize(0, UNIT.px)

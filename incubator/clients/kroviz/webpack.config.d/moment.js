@@ -1,9 +1,12 @@
-try {
-    const moment = require("moment");
+;(function() {
+    const webpack = require('webpack')
+    try {
+    	const moment = require("moment");
 
-    config.plugins.push(new webpack.ProvidePlugin({
-	moment: "moment",
-	"window.moment": "moment"
-    }));
-} catch (e) {
-}
+        config.plugins.push(new webpack.ProvidePlugin({
+            moment: "moment",
+            "window.moment": "moment"
+        }));
+    } catch (e) {
+    }
+})();

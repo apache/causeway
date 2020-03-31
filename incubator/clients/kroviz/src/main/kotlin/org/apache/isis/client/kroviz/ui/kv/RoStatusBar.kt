@@ -8,6 +8,7 @@ import org.apache.isis.client.kroviz.ui.IconManager
 import org.apache.isis.client.kroviz.ui.ImageAlert
 import pl.treksoft.kvision.core.Background
 import pl.treksoft.kvision.core.Col
+import pl.treksoft.kvision.core.Color
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.html.Button
@@ -74,7 +75,7 @@ object RoStatusBar {
         panel.removeCssClass(IconManager.DANGER)
         panel.removeCssClass(IconManager.WARN)
         panel.addCssClass(IconManager.OK)
-        navbar.background = Background(color = Col.LIGHTGRAY)
+        navbar.background = Background(color = Color.name(Col.LIGHTGRAY))
     }
 
     private fun turnRed(logEntry: LogEntry) {

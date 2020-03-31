@@ -1,8 +1,7 @@
 package org.apache.isis.client.kroviz.to
 
 import kotlinx.serialization.*
-import kotlinx.serialization.internal.StringDescriptor
-import kotlinx.serialization.internal.nullable
+import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonException
@@ -29,8 +28,7 @@ data class Value(
             // Not required yet
         }
 
-        override val descriptor: SerialDescriptor =
-                StringDescriptor.withName("Value")
+        override val descriptor: SerialDescriptor = SerialDescriptor("Value")
 
         @UnstableDefault
         override fun deserialize(decoder: Decoder): Value {
