@@ -36,7 +36,11 @@ class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
 
     fun handleObject(obj: TObject) {
         dsp.addData(obj)
-        obj.getLayoutLink()?.invokeWith(this)
+        val l = obj.getLayoutLink()!!
+        // Json.Layout is invoked first
+        l.invokeWith(this)
+        // then Xml.Layout is to be invoked as well
+        l.invokeWith(this, "xml")
     }
 
     fun handleResultObject(obj: ResultObject) {
