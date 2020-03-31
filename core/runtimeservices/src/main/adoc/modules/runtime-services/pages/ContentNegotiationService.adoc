@@ -4,6 +4,7 @@
 
 WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
+// TODO: this is an SPI, so maybe restfulobjects should define an "spi" module for this.  (Current "applib" is also for clients to use).
 
 The `ContentNegotiationService` is a plug-in point for the xref:vro:ROOT:about.adoc[RestfulObjects viewer] so that it can generate representations according to HTTP `Accept` header of the request.  This idea is discussed in section 34.1 of the link:http://restfulobjects.org[Restful Objects spec] v1.0.
 

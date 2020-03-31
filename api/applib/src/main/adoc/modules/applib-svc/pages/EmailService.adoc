@@ -3,13 +3,9 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-WARNING: TODO: this content has not yet been reviewed/updated for v2.0
-
 The `EmailService` provides the ability to send HTML emails, with attachments, to one or more recipients.
 
-Apache Isis provides a default implementation to send emails using an external SMTP provider.
-Note that this must be configured (using a number of configuration properties) before it can be used.
-The that sends email as an HTML message, using an external SMTP provider.
+Apache Isis provides a default implementation to send emails (as an HTML message) using an external SMTP provider.
 
 == API
 
@@ -40,8 +36,7 @@ This sends email as an HTML message, using an external SMTP provider.
 
 === Configuration Properties
 
-The default implementation defines the a number of configuration properties, under the `isis.core.runtime-services.email` key.
-See the xref:refguide:config:about.adoc[configuration guide] for further details.
+The default implementation defines a number of xref:refguide:config:sections/isis.core.runtime-services.adoc[configuration properties], under the `isis.core.runtime-services.email` key.
 
 
 === Alternatives
