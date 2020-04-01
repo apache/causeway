@@ -18,12 +18,15 @@
  */
 package org.apache.isis.viewer.wicket.ui.util;
 
+import javax.annotation.Nullable;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.Button;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.config.messages.MessageRegistry;
 
+import lombok.NonNull;
 import lombok.val;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
@@ -33,15 +36,30 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.Confi
 public class Confirmations {
 
     public static void addConfirmationDialog(
-            final TranslationService translationService,
-            final Component component) {
+            @Nullable final TranslationService translationService,
+            @NonNull  final Component component) {
 
+        if(component instanceof Button) {
+            // ensure dialog ok buttons receive the danger style as well
+            // don't care if expressed twice
+            addConfirmationStyle(component);
+        }
+        
+        val confirmationConfig = getConfirmationConfig(translationService);
+        component.add(new ConfirmationBehavior(confirmationConfig));
+    }
+    
+    public static void addConfirmationStyle(final Component component) {
+        component.add(new CssClassAppender("btn-danger"));
+    }
+    
+    private static ConfirmationConfig getConfirmationConfig(
+            @Nullable final TranslationService translationService) {
+        
         val confirmationConfig = new ConfirmationConfig();
-
-        final String context = MessageRegistry.class.getName();
-        final String areYouSure = translationService.translate(context, MessageRegistry.MSG_ARE_YOU_SURE);
-        final String confirm = translationService.translate(context, MessageRegistry.MSG_CONFIRM);
-        final String cancel = translationService.translate(context, MessageRegistry.MSG_CANCEL);
+        final String areYouSure = translate(translationService, MessageRegistry.MSG_ARE_YOU_SURE); 
+        final String confirm = translate(translationService, MessageRegistry.MSG_CONFIRM);
+        final String cancel = translate(translationService, MessageRegistry.MSG_CANCEL);
 
         confirmationConfig
         .withTitle(areYouSure)
@@ -50,19 +68,15 @@ public class Confirmations {
         .withPlacement(TooltipConfig.Placement.right)
         .withBtnOkClass("btn btn-danger")
         .withBtnCancelClass("btn btn-default");
-
-        component.add(new ConfirmationBehavior(confirmationConfig));
         
-        if(component instanceof Button) {
-            // ensure dialog ok buttons receive the danger style as well
-            // don't care if expressed twice
-            addConfirmationStyle(component);
-        }
-        
+        return confirmationConfig;
     }
-    
-    public static void addConfirmationStyle(final Component component) {
-        component.add(new CssClassAppender("btn-danger"));
+
+    private static String translate(TranslationService translationService, String msg) {
+        if(translationService!=null) {
+            return translationService.translate(MessageRegistry.class.getName(), msg);
+        }
+        return msg;
     }
     
 }
