@@ -173,12 +173,12 @@
 
 		<togglz.version>2.1.0.Final</togglz.version>
 
-		<vaadin.version>14.1.20</vaadin.version>
+		<vaadin.version>14.1.22</vaadin.version>
 
 		<wicket.version>8.7.0</wicket.version>
-		<wicket-bootstrap.version>2.0.11</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap-core -->
-		<wicket-bootstrap-core.version>2.0.11</wicket-bootstrap-core.version>
-		<wicket-bootstrap-datetimepicker.version>4.17.37-1</wicket-bootstrap-datetimepicker.version>
+		<wicket-bootstrap.version>2.0.13</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap-core -->
+		<wicket-bootstrap-core.version>2.0.13</wicket-bootstrap-core.version>
+		<wicket-bootstrap-datetimepicker.version>4.17.47</wicket-bootstrap-datetimepicker.version>
 		<wicket-fullcalendar.version>4.2</wicket-fullcalendar.version>
 		<wicket-source.version>7.0.0</wicket-source.version>
 		<wicket-webjars.version>2.0.15</wicket-webjars.version>
