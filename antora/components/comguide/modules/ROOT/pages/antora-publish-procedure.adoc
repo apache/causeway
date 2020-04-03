@@ -5,6 +5,10 @@
 :page-partial:
 
 
+WARNING: TODO: v2 - not yet updated.
+There is relevant material in xref:post-release-successful.adoc[Post Release (Successful)], specifically:
+ xref:post-release-successful.adoc#generate-website[Generate website] and
+ xref:post-release-successful.adoc#publish-website[Publish website].
 
 
 
@@ -52,9 +56,6 @@ git checkout asf-site
 
 == Preview
 
-WARNING: TODO: v2 - not yet updated.
-Need to figure out how to merge the v1 docs (as an archive) with Antora.
-Also, need to use Antora versioning rather than just 'master'
 
 To preview changes (ignoring PDFs), run:
 

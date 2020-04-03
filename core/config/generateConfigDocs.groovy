@@ -79,7 +79,7 @@ groups+= new PropertyGroup() {{
 
 groups+= new PropertyGroup() {{
     prefix = "isis.core.runtime"
-    name = "Core Runtime Services configurations"
+    name = "Core Runtime configurations"
     properties: []
     searchOrder = 501
 }}
@@ -221,7 +221,7 @@ for (PropertyGroup group in groups) {
         bufNav << "** xref:refguide:config:sections/${group.fileName()}.adoc[${group.name}]\n"
 
         buf << """= ${group.name}
-:page-role: -toc
+:page-role: -toc -narrow
 
 ${license}
 

@@ -1,0 +1,87 @@
+[#algolia-search]
+= Appendix: Algolia Search
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+https://algolia.com[Algolia] is a commercial index-as-a-service offering, with a free plan for open source projects.
+It is used by many websites built with link:https://antora.org[Antora], including Antora's own https://docs.antora.org[website].
+
+This page describes how we have incorporated Algolia to provide a searchable index for link:https://isis.apache.org[isis.apache.org] website.
+They are based on/adapt Dan Allen's link:https://gitlab.com/antora/antora-ui-default/issues/44#note_68053321[notes] for setting up search on the Antora website.
+
+[NOTE]
+====
+An alternative and perhaps slightly simpler approach would be to use link:https://docsearch.algolia.com[Algolia's DocSearch], which performs the scanning automatically.
+
+The benefit of the approach described here is that it could be scripted easily into CI.
+====
+
+
+== Clone the isis-site
+
+If necessary, clone out the current version of the isis website:
+
+[source,bash]
+----
+git clone https://github.com/apache/isis-site .
+git checkout asf-site
+----
+
+The "asf-site" branch is what is published, and the content of the site resides in `content` directory.
+
+
+== Create Algolia Application and Empty Index
+
+* Registered on https://algolia.com[]
+
+* Applied for open source license
+
+* On website:
+** Created app: "5ISP5TFAEN"
+** Created empty index "isis-apache-org"
+** Made note of the search API key: "0fc51c28b4ad46e7318e96d4e97fab7c"
+** Made note of the Admin API key: "xxx"
++
+CAUTION: the "admin API" should not be made public, as it allows the index to be modified or deleted.
+
+== Create the Crawler config
+
+We use Algolia's link:https://docsearch.algolia.com/docs/scraper/[DocSearch crawler] tool (also called the scraper) to index over the static html files to populate the index records.
+A config file describes how to process the files
+
+[source,json]
+.algolia-config.json
+----
+include::attachment$algolia-search/config.json[]
+----
+
+The config file reference can be found link:https://docsearch.algolia.com/docs/config-file[here].
+
+This has been checked into isis-site as `./algolia-config.json`.
+
+
+== Update the Antora UI bundle
+
+The link:https://github.com/apache/isis-antora[Antora UI bundle] (which defines the skin of the website) was updated.
+There are four steps:
+
+* reference the CSS
+* reference the Javascript
+* set up an input field for the `docsearch` Javascript function to hook into
+* run the `docsearch` Javascript function on page load
+
+These are fully described in the link:https://docsearch.algolia.com/docs/dropdown[Algolia docs].
+There are other options for styling, see link:https://docsearch.algolia.com/docs/styling/[here].
+
+
+
+== Generate and Publish the site
+
+The remaining steps are routine and performed each time there is a change to the site:
+
+* xref:post-release-successful.adoc#generate-website[Generate website] and then
+* xref:post-release-successful.adoc#index-the-site[Index the site], and then
+* xref:post-release-successful.adoc#publish-website[Publish website].
+
+And you're done.
