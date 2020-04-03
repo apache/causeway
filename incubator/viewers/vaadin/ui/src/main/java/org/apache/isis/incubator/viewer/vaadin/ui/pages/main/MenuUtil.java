@@ -16,8 +16,8 @@ import org.apache.isis.applib.services.menu.MenuBarsService.Type;
 import org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.entity.EntityUiModel;
+import org.apache.isis.incubator.viewer.vaadin.model.menu.ActionUiModel;
 import org.apache.isis.incubator.viewer.vaadin.model.menu.MenuSectionUiModel;
-import org.apache.isis.incubator.viewer.vaadin.model.menu.ServiceAndActionUiModel;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -30,7 +30,7 @@ final class MenuUtil {
     static Component createMenu(
             final IsisWebAppCommonContext commonContext, 
             final MenuBarsServiceBS3 menuBarsService,
-            final Consumer<ServiceAndActionUiModel> subMenuEventHandler) {
+            final Consumer<ActionUiModel> subMenuEventHandler) {
         
         val titleOrLogo = createTitleOrLogo(commonContext);
         val leftMenuBar = new MenuBar();
@@ -59,7 +59,7 @@ final class MenuUtil {
         final BiConsumer<MenuBar, MenuSectionUiModel> menuSectionBuilder = (parentMenu, menuSectionUiModel) -> {
             val menuItem = parentMenu.addItem(menuSectionUiModel.getName());
             val subMenu = menuItem.getSubMenu();
-            menuSectionUiModel.getServiceAndActionUiModels().forEach(saModel -> {
+            menuSectionUiModel.getActionUiModels().forEach(saModel -> {
                 val objectAction = saModel.getObjectAction();
                 subMenu.addItem(objectAction.getName(), e->subMenuEventHandler.accept(saModel));
             });
@@ -120,8 +120,8 @@ final class MenuUtil {
 
                 boolean isFirstSection = true;
 
-                for (val serviceActionLayoutData : menuSection.getServiceActions()) {
-                    val serviceSpecId = serviceActionLayoutData.getObjectType();
+                for (val actionLayoutData : menuSection.getServiceActions()) {
+                    val serviceSpecId = actionLayoutData.getObjectType();
 
                     val serviceAdapter = commonContext.lookupServiceAdapterById(serviceSpecId);
                     if (serviceAdapter == null) {
@@ -136,20 +136,20 @@ final class MenuUtil {
                     val objectAction =
                             serviceAdapter
                                     .getSpecification()
-                                    .getObjectAction(serviceActionLayoutData.getId())
+                                    .getObjectAction(actionLayoutData.getId())
                                     .orElse(null);
                     if (objectAction == null) {
-                        log.warn("No such action {}", serviceActionLayoutData.getId());
+                        log.warn("No such action {}", actionLayoutData.getId());
                         continue;
                     }
-                    val serviceAndActionUiModel =
-                            new ServiceAndActionUiModel(
+                    val actionUiModel =
+                            new ActionUiModel(
                                     entityUiModel,
-                                    serviceActionLayoutData.getNamed(),
+                                    actionLayoutData.getNamed(),
                                     objectAction,
                                     isFirstSection);
 
-                    menuSectionUiModel.addAction(serviceAndActionUiModel);
+                    menuSectionUiModel.addAction(actionUiModel);
                     isFirstSection = false;
 
                     // TODO Wicket

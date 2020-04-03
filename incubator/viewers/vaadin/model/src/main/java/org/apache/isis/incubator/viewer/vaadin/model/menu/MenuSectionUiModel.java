@@ -29,12 +29,12 @@ public class MenuSectionUiModel {
     final String name;
 
     public boolean hasSubMenuItems() {
-        return !serviceAndActionUiModels.isEmpty();
+        return !actionUiModels.isEmpty();
     }
 
-    final List<ServiceAndActionUiModel> serviceAndActionUiModels = new ArrayList<>();
+    final List<ActionUiModel> actionUiModels = new ArrayList<>();
 
-    public void addAction(final ServiceAndActionUiModel serviceAndActionUiModel) {
-        serviceAndActionUiModels.add(serviceAndActionUiModel);
+    public void addAction(final ActionUiModel serviceAndActionUiModel) {
+        actionUiModels.add(serviceAndActionUiModel);
     }
 }

@@ -20,24 +20,35 @@ package org.apache.isis.incubator.viewer.vaadin.model.menu;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.incubator.viewer.vaadin.model.entity.EntityUiModel;
+import org.apache.isis.incubator.viewer.vaadin.model.link.ActionLinkFactoryForVaadin;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
-public class ServiceAndActionUiModel {
-
+@Getter
+public class ActionUiModel {
+    
     final EntityUiModel entityUiModel;
     final String serviceName;
-    // TODO final ServiceActionLinkFactory linkAndLabelFactory;
-    // TODO final EntityModel serviceEntityModel;
     final ObjectAction objectAction;
     final boolean isFirstSection;
+    final ActionLinkFactoryForVaadin linkAndLabelFactory;
+    
+    public ActionUiModel(
+            EntityUiModel entityUiModel, 
+            String serviceName, 
+            ObjectAction objectAction,
+            boolean isFirstSection) {
+        
+        this.entityUiModel = entityUiModel;
+        this.serviceName = serviceName;
+        this.objectAction = objectAction;
+        this.isFirstSection = isFirstSection;
+        this.linkAndLabelFactory = ActionLinkFactoryForVaadin.of(entityUiModel);
+    }
+    
 
-//    Optional<String> cssClassFa() {
-//        return Optional.ofNullable(Util.cssClassFaFor(objectAction));
-//    }
-//
-//    Optional<String> cssClass(final ManagedObject managedObject) {
-//        return Optional.ofNullable(Util.cssClassFor(objectAction, managedObject));
-//    }
+    @Override
+    public String toString() {
+        return serviceName + " ~ " + objectAction.getIdentifier().toFullIdentityString();
+    }
 }

@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.incubator.viewer.vaadin.model.menu.ServiceAndActionUiModel;
+import org.apache.isis.incubator.viewer.vaadin.model.menu.ActionUiModel;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableView;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.object.ObjectFormView;
 
@@ -77,7 +77,7 @@ public class MainView extends AppLayout {
         setDrawerOpened(false);
     }
 
-    private void onMenuAction(ServiceAndActionUiModel saModel) {
+    private void onMenuAction(ActionUiModel saModel) {
         
         pageContent.removeAll();
 
