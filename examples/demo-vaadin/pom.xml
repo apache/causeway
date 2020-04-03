@@ -42,7 +42,7 @@
 			-->
 		<node.version>v12.14.0</node.version>
 		<npm.version>6.13.1</npm.version>
-		<vaadin.version>14.1.19</vaadin.version>
+		<vaadin.version>14.1.23</vaadin.version>
 
 	</properties>
 
