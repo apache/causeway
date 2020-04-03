@@ -9,6 +9,7 @@
 * xref:post-release-unsuccessful.adoc[Post Release (Unsuccessful)]
 * xref:release-process-for-interim-releases.adoc[Interim Releases]
 * xref:key-generation.adoc[Key Generation]
+* xref:algolia-search.adoc[Appendix: Algolia Search]
 * xref:release-process-prereqs.adoc[Appendix: Release Process Prereqs]
 * xref:policies.adoc[Appendix: Policies]
 * xref:pmc-notes.adoc[Appendix: PMC Notes]
