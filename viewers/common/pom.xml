@@ -22,55 +22,27 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.viewer</groupId>
-        <artifactId>isis-viewer-wicket</artifactId>
+        <groupId>org.apache.isis.core</groupId>
+        <artifactId>isis</artifactId>
         <version>2.0.0-SNAPSHOT</version>
+        <relativePath>../../core/pom.xml</relativePath>
     </parent>
 
-    <artifactId>isis-viewer-wicket-model</artifactId>
-    <name>Apache Isis Viewer - Wicket (Model)</name>
+    <groupId>org.apache.isis.viewer</groupId>
+    <artifactId>isis-viewer-common</artifactId>
+    <name>Apache Isis Viewer - Common Model</name>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.viewer.wicket.model</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/viewer/wicket/model</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.viewer.common</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/viewer/common</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>
 
         <dependency>
-            <groupId>org.apache.wicket</groupId>
-            <artifactId>wicket-core</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>commons-io</groupId>
-                    <artifactId>commons-io</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.wicket</groupId>
-            <artifactId>wicket-extensions</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-webapp</artifactId>
         </dependency>
-        
-        <dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-viewer-common</artifactId>
-		</dependency>
 	
 	<!-- TEST DEPENDENCIES -->
         <dependency>
