@@ -43,13 +43,12 @@ import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableVie
 import org.apache.isis.incubator.viewer.vaadin.ui.components.object.ObjectFormView;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 @Route("simple")
 @JsModule("@vaadin/vaadin-lumo-styles/presets/compact.js")
 //@Theme(value = Material.class, variant = Material.DARK)
 @Theme(value = Lumo.class)
-@Log4j2
+//@Log4j2
 public class SimpleMainView extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;

@@ -44,6 +44,8 @@ import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
 import lombok.val;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
+
 public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
 
     private static final long serialVersionUID = 1L;
@@ -183,7 +185,8 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
     }
     
     private void addConfirmationDialog(final Component component) {
-        Confirmations.addConfirmationDialog(super.getTranslationService(), component);
+        Confirmations
+        .addConfirmationDialog(super.getTranslationService(), component, TooltipConfig.Placement.right);
     }
 
     private static String first(String... str) {

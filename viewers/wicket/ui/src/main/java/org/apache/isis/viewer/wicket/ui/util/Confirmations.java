@@ -37,7 +37,8 @@ public class Confirmations {
 
     public static void addConfirmationDialog(
             @Nullable final TranslationService translationService,
-            @NonNull  final Component component) {
+            @NonNull  final Component component,
+            @NonNull  final TooltipConfig.Placement placement) {
 
         if(component instanceof Button) {
             // ensure dialog ok buttons receive the danger style as well
@@ -45,7 +46,7 @@ public class Confirmations {
             addConfirmationStyle(component);
         }
         
-        val confirmationConfig = getConfirmationConfig(translationService);
+        val confirmationConfig = getConfirmationConfig(translationService).withPlacement(placement);
         component.add(new ConfirmationBehavior(confirmationConfig));
     }
     
@@ -65,7 +66,6 @@ public class Confirmations {
         .withTitle(areYouSure)
         .withBtnOkLabel(confirm)
         .withBtnCancelLabel(cancel)
-        .withPlacement(TooltipConfig.Placement.right)
         .withBtnOkClass("btn btn-danger")
         .withBtnCancelClass("btn btn-default");
         

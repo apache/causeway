@@ -8,9 +8,8 @@ import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.menubar.MenuBar;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
 
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
 import org.apache.isis.applib.services.menu.MenuBarsService.Type;
@@ -48,12 +47,10 @@ final class MenuUtil {
         menuBarContainer.setWrapMode(FlexLayout.WrapMode.WRAP);
         menuBarContainer.setAlignSelf(Alignment.CENTER, leftMenuBar);
         menuBarContainer.setAlignSelf(Alignment.CENTER, rightMenuBar);
-        
+
+        // right align using css
         rightMenuBar.getStyle().set("margin-left", "auto");
         
-        //menuBarContainer.setJustifyContentMode(JustifyContentMode.BETWEEN);
-//        menuBarContainer.setFlexGrow(0, titleOrLogo, leftMenuBar, rightMenuBar);
-//        menuBarContainer.setFlexGrow(1, horizontalSpacer);
         menuBarContainer.setWidthFull();
         
         val bs3MenuBars = menuBarsService.menuBars(Type.DEFAULT);

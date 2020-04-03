@@ -54,7 +54,7 @@ public class MainView extends AppLayout {
 
     private static final long serialVersionUID = 1L;
     
-    private Div actionResult = new Div();
+    private Div pageContent = new Div();
     
     /**
      * Constructs the main view of the web-application, with the menu-bar and page content. 
@@ -72,14 +72,14 @@ public class MainView extends AppLayout {
         
         addToNavbar(menuBarContainer);
         
-        setContent(actionResult = new Div());
+        setContent(pageContent = new Div());
         
         setDrawerOpened(false);
     }
 
     private void onMenuAction(ServiceAndActionUiModel saModel) {
         
-        actionResult.removeAll();
+        pageContent.removeAll();
 
         val objectAction = saModel.getObjectAction();
         val actionOwner = saModel.getEntityUiModel().getManagedObject();
@@ -93,9 +93,9 @@ public class MainView extends AppLayout {
                         );
 
         if (result.getSpecification().isParentedOrFreeCollection()) {
-            actionResult.add(TableView.fromCollection(result));
+            pageContent.add(TableView.fromCollection(result));
         } else {
-            actionResult.add(new ObjectFormView(result));
+            pageContent.add(new ObjectFormView(result));
         };
     }
 

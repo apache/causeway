@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
 import java.util.List;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
@@ -37,21 +36,19 @@ import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.config.messages.MessageRegistry;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
+import org.apache.isis.viewer.wicket.ui.util.Confirmations;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
 
 @Log4j2
 public final class ServiceActionUtil {
@@ -89,7 +86,11 @@ public final class ServiceActionUtil {
 
                 //XXX ISIS-1626, confirmation dialog for no-parameter menu actions
                 if (menuItem.requiresImmediateConfirmation()) {
-                    addConfirmationDialog(commonContext, subMenuItemLink);
+                    
+                    val translationService =
+                            commonContext.lookupServiceElseFail(TranslationService.class);
+                    Confirmations
+                        .addConfirmationDialog(translationService, subMenuItemLink, TooltipConfig.Placement.bottom);
                 }
 
             }
@@ -247,30 +248,6 @@ public final class ServiceActionUtil {
             }
         }
         return menuItems;
-    }
-
-
-    private static void addConfirmationDialog(IsisWebAppCommonContext commonContext, Component component) {
-
-        val translationService =
-                commonContext.lookupServiceElseFail(TranslationService.class);
-
-        ConfirmationConfig confirmationConfig = new ConfirmationConfig();
-
-        final String context = MessageRegistry.class.getName();
-        final String areYouSure = translationService.translate(context, MessageRegistry.MSG_ARE_YOU_SURE);
-        final String confirm = translationService.translate(context, MessageRegistry.MSG_CONFIRM);
-        final String cancel = translationService.translate(context, MessageRegistry.MSG_CANCEL);
-
-        confirmationConfig
-        .withTitle(areYouSure)
-        .withBtnOkLabel(confirm)
-        .withBtnCancelLabel(cancel)
-        .withPlacement(TooltipConfig.Placement.bottom)
-        .withBtnOkClass("btn btn-danger")
-        .withBtnCancelClass("btn btn-default");
-
-        component.add(new ConfirmationBehavior(null, confirmationConfig));
     }
 
 }

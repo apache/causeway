@@ -46,6 +46,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import lombok.val;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
 
 class ActionParametersForm extends PromptFormAbstract<ActionModel> {
@@ -154,7 +155,8 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
         val action = actionModel.getActionMemento().getAction(getSpecificationLoader());
         
         if (action.getSemantics().isAreYouSure()) {
-            Confirmations.addConfirmationDialog(super.getTranslationService(), button);
+            Confirmations
+            .addConfirmationDialog(super.getTranslationService(), button, TooltipConfig.Placement.right);
         }
     }
 
