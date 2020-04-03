@@ -18,11 +18,7 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.model.menu;
 
-import java.util.Optional;
-
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction.Util;
 import org.apache.isis.incubator.viewer.vaadin.model.entity.EntityUiModel;
 
 import lombok.Data;
@@ -37,11 +33,11 @@ public class ServiceAndActionUiModel {
     final ObjectAction objectAction;
     final boolean isFirstSection;
 
-    Optional<String> cssClassFa() {
-        return Optional.ofNullable(Util.cssClassFaFor(objectAction));
-    }
-
-    Optional<String> cssClass(final ManagedObject managedObject) {
-        return Optional.ofNullable(Util.cssClassFor(objectAction, managedObject));
-    }
+//    Optional<String> cssClassFa() {
+//        return Optional.ofNullable(Util.cssClassFaFor(objectAction));
+//    }
+//
+//    Optional<String> cssClass(final ManagedObject managedObject) {
+//        return Optional.ofNullable(Util.cssClassFor(objectAction, managedObject));
+//    }
 }
