@@ -13,8 +13,8 @@ plugins {
     kotlin("js") version kotlinVersion
 }
 
-version = "1.0.0-SNAPSHOT"
-group = "com.example"
+version = "2.0.0-SNAPSHOT"
+group = "org.apache.isis.client"
 
 repositories {
     mavenCentral()
@@ -66,8 +66,11 @@ kotlin {
                 )
             }
             testTask {
+//                enabled = true
                 useKarma {
                     useChromeHeadless()
+//                    useCoverage(true, true, true, true, true, true, true, true) // works
+//                    useConfigDirectory("$projectDir/karma.config.d")
                 }
             }
         }
@@ -98,6 +101,7 @@ kotlin {
     }
     sourceSets["test"].dependencies {
         implementation(kotlin("test-js"))
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.3.3")
         implementation("pl.treksoft:kvision-testutils:$kvisionVersion:tests")
     }
     sourceSets["main"].resources.srcDir(webDir)

@@ -16,7 +16,7 @@ class RoToolPanel : SimplePanel() {
 
     init {
         panel.width = CssSize(40, UNIT.px)
-        panel.background = Background(Color.name(Col.GREEN))
+//        panel.background = Background(Color.name(Col.GREEN))
         val wButton: Button = Button(text = "Wikipedia", style = ButtonStyle.SUCCESS).apply {
             padding = CssSize(-16, UNIT.px)
             margin = CssSize(0, UNIT.px)

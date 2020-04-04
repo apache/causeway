@@ -75,7 +75,7 @@ object RoStatusBar {
         panel.removeCssClass(IconManager.DANGER)
         panel.removeCssClass(IconManager.WARN)
         panel.addCssClass(IconManager.OK)
-        navbar.background = Background(color = Color.name(Col.LIGHTGRAY))
+//        navbar.background = Background(color = Color.name(Col.LIGHTGRAY))
     }
 
     private fun turnRed(logEntry: LogEntry) {

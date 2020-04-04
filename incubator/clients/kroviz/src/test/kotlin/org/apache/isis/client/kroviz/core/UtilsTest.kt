@@ -63,15 +63,15 @@ class UtilsTest {
         val rel = "urn:org.restfulobjects:rels/invoke;action='runFixtureScript'"
         val type = "application/json;profile='urn:org.restfulobjects:repr-types/object-action'"
         val link = Link(method = Method.POST.operation, href = href, rel = rel, type = type)
-//        val arguments = LinkedHashMap<String, String>() //
-        //       link.setArgument(arguments)
+        //val arguments = LinkedHashMap<String, String>() //
+        //link.setArgument(arguments)
 
         // when
-        //val body = Utils.argumentsAsBody(link)
+        val body = Utils.argumentsAsBody(link)
 
         // then
 //        console.log("[UtilsTest.test_argumentsAsBody]")
-//        console.log(body)
+        console.log(body)
         //TODO add assert
     }
 
