@@ -1,13 +1,10 @@
 package org.apache.isis.client.kroviz.core.model
 
-import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.to.DomainType
 import org.apache.isis.client.kroviz.to.Property
 import org.apache.isis.client.kroviz.to.TransferObject
 
 class DiagramDM(override val title: String) : DisplayModel() {
-
-    override var layout: Layout? = null
 
     val classes = mutableSetOf<DomainType>()
     val properties = mutableSetOf<Property>()

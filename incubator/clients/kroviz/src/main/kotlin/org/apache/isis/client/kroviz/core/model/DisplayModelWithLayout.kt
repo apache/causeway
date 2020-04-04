@@ -9,7 +9,7 @@ import org.apache.isis.client.kroviz.to.bs3.Grid
 
 abstract class DisplayModelWithLayout : DisplayModel() {
 
-    override var layout: Layout? = null
+    var layout: Layout? = null
     var grid: Grid? = null
     var propertyDescriptionList = mutableMapOf<String, String>()
     var propertyList = mutableListOf<Property>()
@@ -70,6 +70,5 @@ abstract class DisplayModelWithLayout : DisplayModel() {
     fun addProperty(property:Property) {
         propertyList.add(property)
     }
-
 
 }

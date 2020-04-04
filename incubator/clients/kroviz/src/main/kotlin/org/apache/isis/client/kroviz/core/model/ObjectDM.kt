@@ -2,23 +2,36 @@ package org.apache.isis.client.kroviz.core.model
 
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
+import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Method
+import org.apache.isis.client.kroviz.to.TObject
+import org.apache.isis.client.kroviz.to.TransferObject
 
 class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     var data: Exposer? = null
     private var dirty: Boolean = false
 
+    override fun canBeDisplayed(): Boolean {
+        when {
+            isRendered -> return false
+            layout == null -> return false
+            grid == null -> return false
+            else -> {
+                return true
+            }
+        }
+    }
     fun setDirty(value: Boolean) {
         console.log("[ObjectDM.setDirty] $value")
         dirty = value
     }
 
-    override fun addData(obj:org.apache.isis.client.kroviz.to.TransferObject) {
-        val exo = Exposer(obj as org.apache.isis.client.kroviz.to.TObject)
+    override fun addData(obj: TransferObject) {
+        val exo = Exposer(obj as TObject)
         data = exo.dynamise() as? Exposer
     }
 
-    override fun getObject():org.apache.isis.client.kroviz.to.TObject? {
+    override fun getObject(): TObject? {
         return (data as Exposer).delegate
     }
 
@@ -33,7 +46,7 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
             val getLogEntry = EventStore.find(reSpec)!!
             getLogEntry.setReload()
 
-            val putLink =org.apache.isis.client.kroviz.to.Link(method = Method.PUT.operation, href = href)
+            val putLink = Link(method = Method.PUT.operation, href = href)
             val logEntry = EventStore.find(reSpec)
             val aggregator = logEntry?.getAggregator()!!
             aggregator.invokeWith(putLink)

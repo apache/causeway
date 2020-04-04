@@ -9,8 +9,6 @@ abstract class DisplayModel {
 
     abstract val title: String
 
-    abstract var layout:org.apache.isis.client.kroviz.layout.Layout?
-
     abstract fun canBeDisplayed(): Boolean
 
     abstract fun addData(obj: TransferObject)
