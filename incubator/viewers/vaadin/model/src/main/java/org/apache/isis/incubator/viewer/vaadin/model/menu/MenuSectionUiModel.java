@@ -21,6 +21,8 @@ package org.apache.isis.incubator.viewer.vaadin.model.menu;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.isis.incubator.viewer.vaadin.model.action.ActionUiModel;
+
 import lombok.Data;
 
 @Data
@@ -34,7 +36,12 @@ public class MenuSectionUiModel {
 
     final List<ActionUiModel> actionUiModels = new ArrayList<>();
 
-    public void addAction(final ActionUiModel serviceAndActionUiModel) {
-        actionUiModels.add(serviceAndActionUiModel);
+    /**
+     * Optionally creates a sub-menu item invoking an action on the provided 
+     * {@link ServiceAndAction action model}, based on visibility and usability.
+     */
+    public void addMenuItemFor(ActionUiModel actionUiModel) {
+        // TODO Wicket org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions.CssMenuItem.subMenuItemFor(ServiceAndAction)
+        actionUiModels.add(actionUiModel);
     }
 }

@@ -18,8 +18,8 @@
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -30,15 +30,13 @@ import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
+import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModelAbstract;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -48,15 +46,21 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.val;
 
-class CssMenuItem implements Serializable {
+class CssMenuItem 
+extends MenuItemUiModelAbstract<CssMenuItem> 
+implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    private static final String ID_MENU_LINK = "menuLink";
+    private static final String ID_MENU_LABEL = "menuLabel";
+    private static final String ID_SUB_MENU_ITEMS = "subMenuItems";
 
-    public static final String ID_MENU_LINK = "menuLink";
-
-    public static class Builder {
+    private static class Builder {
         private final CssMenuItem cssMenuItem;
 
         private Builder(final String name) {
@@ -75,7 +79,6 @@ class CssMenuItem implements Serializable {
 
         public <T extends Page> Builder link(final AbstractLink link) {
             assert link.getId().equals(ID_MENU_LINK);
-
             cssMenuItem.setLink(link);
             return this;
         }
@@ -86,265 +89,45 @@ class CssMenuItem implements Serializable {
             return this;
         }
 
-        public Builder describedAs(String descriptionIfAny) {
-            cssMenuItem.setDescription(descriptionIfAny);
-            return this;
-        }
-
-        /**
-         * @see CssMenuItem#requiresImmediateConfirmation
-         * @param requiresImmediateConfirmation
-         * @return
-         */
-        public Builder requiresImmediateConfirmation(boolean requiresImmediateConfirmation) {
-            cssMenuItem.setRequiresImmediateConfirmation(requiresImmediateConfirmation);
-            return this;
-        }
-
-        public Builder returnsBlobOrClob(boolean blobOrClob) {
-            cssMenuItem.setReturnsBlobOrClob(blobOrClob);
-            return this;
-        }
-
-        public Builder prototyping(boolean prototype) {
-            cssMenuItem.setPrototyping(prototype);
-            return this;
-        }
-
-        public Builder requiresSeparator(boolean separator) {
-            cssMenuItem.setRequiresSeparator(separator);
-            return this;
-        }
-
-        public Builder withActionIdentifier(String actionIdentifier) {
-            cssMenuItem.setActionIdentifier(actionIdentifier);
-            return this;
-        }
-
-        public Builder withCssClass(String cssClass) {
-            cssMenuItem.setCssClass(cssClass);
-            return this;
-        }
-
-        public Builder withCssClassFa(String cssClassFa) {
-            cssMenuItem.setCssClassFa(cssClassFa);
-            return this;
-        }
-
-        public Builder withCssClassFaPosition(final CssClassFaPosition position) {
-            cssMenuItem.setCssClassFaPosition(position);
-            return this;
-        }
-
         /**
          * Returns the built {@link CssMenuItem}, associating with {@link #parent(CssMenuItem) parent} (if specified).
          */
         public CssMenuItem build() {
-            if (cssMenuItem.parent != null) {
-                cssMenuItem.parent.addSubMenuItem(cssMenuItem);
+            if (cssMenuItem.hasParent()) {
+                cssMenuItem.getParent().addSubMenuItem(cssMenuItem);
             }
             return cssMenuItem;
         }
 
     }
 
-    private void addSubMenuItem(final CssMenuItem cssMenuItem) {
-        subMenuItems.add(cssMenuItem);
-    }
-
-    private final String name;
-    private final List<CssMenuItem> subMenuItems = _Lists.newArrayList();
-    private CssMenuItem parent;
-
-    private AbstractLink link;
-    private boolean enabled = true; // unless disabled
-    private String disabledReason;
-    private boolean requiresImmediateConfirmation = false; // unless set otherwise
-    private boolean blobOrClob = false; // unless set otherwise
-    private boolean prototype = false; // unless set otherwise
-    private boolean requiresSeparator = false; // unless set otherwise
-
-    static final String ID_MENU_LABEL = "menuLabel";
-
-    static final String ID_SUB_MENU_ITEMS = "subMenuItems";
-
-    private String actionIdentifier;
-    private String cssClass;
-    private String cssClassFa;
-    private CssClassFaPosition cssClassFaPosition;
-
-    private String description;
-
+    @Getter @Setter(AccessLevel.PRIVATE) private AbstractLink link;
+    
     /**
      * Factory method returning {@link Builder builder}.
      */
-    public static Builder newMenuItem(final String name) {
-        return new Builder(name);
-    }
-
-    public String getActionIdentifier() {
-        return actionIdentifier;
-    }
-
-    public void setActionIdentifier(String actionIdentifier) {
-        this.actionIdentifier = actionIdentifier;
-    }
-
-    public void setPrototyping(boolean prototype) {
-        this.prototype = prototype;
-    }
-
-    public boolean isPrototyping() {
-        return prototype;
-    }
-
-    private boolean separator;
-
-    public boolean isSeparator() {
-        return separator;
-    }
-    public void setSeparator(final boolean separator) {
-        this.separator = separator;
-    }
-
-    public void setRequiresSeparator(boolean requiresSeparator) {
-        this.requiresSeparator = requiresSeparator;
-    }
-
-    /**
-     * Requires a separator before it
-     */
-    public boolean requiresSeparator() {
-        return requiresSeparator;
+    public static CssMenuItem newMenuItem(final String name) {
+        return new Builder(name).build();
     }
 
     private CssMenuItem(final String name) {
-        this.name = name;
+        super(name);
     }
 
-    public String getName() {
-        return name;
+    private Builder newSubMenuItemBuilder(final String name) {
+        return new Builder(name).parent(this);
     }
 
-    public boolean hasParent() {
-        return parent != null;
-    }
-
-    private void setParent(final CssMenuItem parent) {
-        this.parent = parent;
-    }
-
-    public Builder newSubMenuItem(final String name) {
-        return CssMenuItem.newMenuItem(name).parent(this);
-    }
-
-    public List<CssMenuItem> getSubMenuItems() {
-        return Collections.unmodifiableList(subMenuItems);
-    }
-
-    public void replaceSubMenuItems(List<CssMenuItem> menuItems) {
-        subMenuItems.clear();
-        subMenuItems.addAll(menuItems);
-    }
-
-    public boolean hasSubMenuItems() {
-        return subMenuItems.size() > 0;
-    }
-
-    public AbstractLink getLink() {
-        return link;
-    }
-
-    private void setLink(final AbstractLink link) {
-        this.link = link;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    private void setEnabled(final boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    /**
-     * A menu action with no parameters AND an are-you-sure semantics
-     * does require an immediate confirmation dialog.
-     * <br/>
-     * Others don't.
-     * @return
-     */
-    public boolean requiresImmediateConfirmation() {
-        return requiresImmediateConfirmation;
-    }
-
-    /**
-     * A menu action with no parameters AND an are-you-sure semantics
-     * does require an immediate confirmation dialog.
-     * <br/>
-     * Others don't.
-     * @param requiresImmediateConfirmation
-     */
-    public void setRequiresImmediateConfirmation(boolean requiresImmediateConfirmation) {
-        this.requiresImmediateConfirmation = requiresImmediateConfirmation;
-    }
-
-    public void setReturnsBlobOrClob(boolean blobOrClob) {
-        this.blobOrClob = blobOrClob;
-    }
-
-    public void setCssClass(String cssClass) {
-        this.cssClass = cssClass;
-    }
-
-    public String getCssClass() {
-        return cssClass;
-    }
-
-    public void setCssClassFa(String cssClassFa) {
-        this.cssClassFa = cssClassFa;
-    }
-
-    public String getCssClassFa() {
-        return cssClassFa;
-    }
-
-    public void setCssClassFaPosition(final CssClassFaPosition position) {
-        this.cssClassFaPosition = position;
-    }
-
-    public CssClassFaPosition getCssClassFaPosition() {
-        return cssClassFaPosition;
-    }
-
-    /**
-     * Only populated if not {@link #isEnabled() enabled}.
-     */
-    public String getDisabledReason() {
-        return disabledReason;
-    }
-
-    public void setDisabledReason(final String disabledReason) {
-        this.disabledReason = disabledReason;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     // //////////////////////////////////////////////////////////////
     // To add submenu items
     // //////////////////////////////////////////////////////////////
 
     /**
-     * Creates a {@link Builder} for a submenu item invoking an action on the provided {@link ObjectMemento
-     * target adapter}.
+     * Optionally creates a sub-menu item invoking an action on the provided 
+     * {@link ServiceAndAction action model}, based on visibility and usability.
      */
-    Builder newSubMenuItem(ServiceAndAction serviceAndAction) {
+    Optional<CssMenuItem> addMenuItemFor(ServiceAndAction serviceAndAction) {
 
         final EntityModel targetEntityModel = serviceAndAction.serviceEntityModel;
         final ObjectAction objectAction = serviceAndAction.objectAction;
@@ -354,7 +137,7 @@ class CssMenuItem implements Serializable {
         val serviceAdapter = targetEntityModel.load();
         final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
         if (serviceSpec.isHidden()) {
-            return null;
+            return Optional.empty();
         }
 
         // check visibility
@@ -363,7 +146,7 @@ class CssMenuItem implements Serializable {
                 InteractionInitiatedBy.USER,
                 ActionModel.WHERE_FOR_ACTION_INVOCATION);
         if (visibility.isVetoed()) {
-            return null;
+            return Optional.empty();
         }
 
         // check usability
@@ -381,26 +164,28 @@ class CssMenuItem implements Serializable {
         final LinkAndLabel linkAndLabel = actionLinkFactory.newLink(objectAction, PageAbstract.ID_MENU_LINK, null);
         if (linkAndLabel == null) {
             // can only get a null if invisible, so this should not happen given the visibility guard above
-            return null;
+            return Optional.empty();
         }
 
         final AbstractLink link = linkAndLabel.getLink();
         final String actionLabel = serviceAndAction.serviceName != null ? serviceAndAction.serviceName : linkAndLabel.getLabel();
 
-        return newSubMenuItem(actionLabel)
+        val menutIem = (CssMenuItem) newSubMenuItemBuilder(actionLabel)
                 .link(link)
-                .describedAs(descriptionIfAny)
                 .enabled(reasonDisabledIfAny)
-                .requiresImmediateConfirmation(
+                .build()
+                .setPrototyping(objectAction.isPrototype())
+                .setRequiresSeparator(requiresSeparator)
+                .setRequiresImmediateConfirmation(
                         ObjectAction.Util.isAreYouSureSemantics(objectAction) &&
                         ObjectAction.Util.isNoParameters(objectAction))
-                .returnsBlobOrClob(ObjectAction.Util.returnsBlobOrClob(objectAction))
-                .prototyping(objectAction.isPrototype())
-                .requiresSeparator(requiresSeparator)
-                .withActionIdentifier(ObjectAction.Util.actionIdentifierFor(objectAction))
-                .withCssClass(ObjectAction.Util.cssClassFor(objectAction, serviceAdapter))
-                .withCssClassFa(ObjectAction.Util.cssClassFaFor(objectAction))
-                .withCssClassFaPosition(ObjectAction.Util.cssClassFaPositionFor(objectAction));
+                .setBlobOrClob(ObjectAction.Util.returnsBlobOrClob(objectAction))
+                .setDescription(descriptionIfAny)
+                .setActionIdentifier(ObjectAction.Util.actionIdentifierFor(objectAction))
+                .setCssClass(ObjectAction.Util.cssClassFor(objectAction, serviceAdapter))
+                .setCssClassFa(ObjectAction.Util.cssClassFaFor(objectAction))
+                .setCssClassFaPosition(ObjectAction.Util.cssClassFaPositionFor(objectAction));
+        return Optional.of(menutIem);
     }
 
     // //////////////////////////////////////////////////////////////
@@ -425,20 +210,20 @@ class CssMenuItem implements Serializable {
             markupContainer.add(link);
             link.add(label);
 
-            if (this.description != null) {
-                Tooltips.addTooltip(link, Model.of(description));
+            if (getDescription() != null) {
+                Tooltips.addTooltip(link, Model.of(getDescription()));
             }
-            if (this.blobOrClob) {
+            if (isBlobOrClob()) {
                 link.add(new CssClassAppender("noVeil"));
             }
-            if (this.prototype) {
+            if (isPrototyping()) {
                 link.add(new CssClassAppender("prototype"));
             }
 
-            if (this.cssClass != null) {
-                link.add(new CssClassAppender(this.cssClass));
+            if (getCssClass() != null) {
+                link.add(new CssClassAppender(getCssClass()));
             }
-            link.add(new CssClassAppender(this.actionIdentifier));
+            link.add(new CssClassAppender(getActionIdentifier()));
 
             String cssClassFa = getCssClassFa();
             if (!_Strings.isNullOrEmpty(cssClassFa)) {

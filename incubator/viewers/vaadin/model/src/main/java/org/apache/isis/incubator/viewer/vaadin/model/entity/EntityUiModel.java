@@ -24,6 +24,7 @@ import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import lombok.Data;
 
+// TODO Wicket final EntityModel entityModel = EntityModel.ofAdapter(commonContext, serviceAdapter);
 @Data
 public class EntityUiModel {
 

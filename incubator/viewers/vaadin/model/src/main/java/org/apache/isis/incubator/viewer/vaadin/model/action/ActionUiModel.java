@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.vaadin.model.menu;
+package org.apache.isis.incubator.viewer.vaadin.model.action;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.incubator.viewer.vaadin.model.entity.EntityUiModel;

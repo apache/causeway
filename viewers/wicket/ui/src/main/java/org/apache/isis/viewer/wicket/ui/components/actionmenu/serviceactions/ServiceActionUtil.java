@@ -85,7 +85,7 @@ public final class ServiceActionUtil {
                 }
 
                 //XXX ISIS-1626, confirmation dialog for no-parameter menu actions
-                if (menuItem.requiresImmediateConfirmation()) {
+                if (menuItem.isRequiresImmediateConfirmation()) {
                     
                     val translationService =
                             commonContext.lookupServiceElseFail(TranslationService.class);
@@ -147,12 +147,12 @@ public final class ServiceActionUtil {
     static List<CssMenuItem> withSeparators(List<CssMenuItem> subMenuItems) {
         final List<CssMenuItem> itemsWithSeparators = _Lists.newArrayList();
         for (CssMenuItem menuItem : subMenuItems) {
-            if(menuItem.requiresSeparator()) {
+            if(menuItem.isRequiresSeparator()) {
                 if(!itemsWithSeparators.isEmpty()) {
                     // bit nasty... we add a new separator item
-                    final CssMenuItem separatorItem = CssMenuItem.newMenuItem(menuItem.getName() + "-separator")
-                            .prototyping(menuItem.isPrototyping())
-                            .build();
+                    val separatorItem = CssMenuItem
+                            .newMenuItem(menuItem.getName() + "-separator");
+                    separatorItem.setPrototyping(menuItem.isPrototyping());
                     separatorItem.setSeparator(true);
                     itemsWithSeparators.add(separatorItem);
                 }
@@ -209,7 +209,7 @@ public final class ServiceActionUtil {
         final List<CssMenuItem> menuItems = _Lists.newArrayList();
         for (final BS3Menu menu : menuBar.getMenus()) {
 
-            final CssMenuItem serviceMenu = CssMenuItem.newMenuItem(menu.getNamed()).build();
+            final CssMenuItem serviceMenu = CssMenuItem.newMenuItem(menu.getNamed());
 
             for (final MenuSection menuSection : menu.getSections()) {
 
@@ -235,12 +235,8 @@ public final class ServiceActionUtil {
 
                     isFirstSection = false;
 
-                    final CssMenuItem.Builder subMenuItemBuilder = serviceMenu.newSubMenuItem(serviceAndAction);
-                    if (subMenuItemBuilder == null) {
-                        // either service or this action is not visible
-                        continue;
-                    }
-                    subMenuItemBuilder.build();
+                    // Optionally creates a submenu item based on visibility and usability
+                    serviceMenu.addMenuItemFor(serviceAndAction);
                 }
             }
             if (serviceMenu.hasSubMenuItems()) {

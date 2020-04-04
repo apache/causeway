@@ -16,7 +16,7 @@ import org.apache.isis.applib.services.menu.MenuBarsService.Type;
 import org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.entity.EntityUiModel;
-import org.apache.isis.incubator.viewer.vaadin.model.menu.ActionUiModel;
+import org.apache.isis.incubator.viewer.vaadin.model.action.ActionUiModel;
 import org.apache.isis.incubator.viewer.vaadin.model.menu.MenuSectionUiModel;
 
 import lombok.val;
@@ -129,9 +129,6 @@ final class MenuUtil {
                         // with actual configured modules
                         continue;
                     }
-                    // TODO Wicket final EntityModel entityModel = EntityModel.ofAdapter(commonContext, serviceAdapter);
-                    val entityUiModel =
-                            new EntityUiModel(commonContext, serviceAdapter);
 
                     val objectAction =
                             serviceAdapter
@@ -144,21 +141,15 @@ final class MenuUtil {
                     }
                     val actionUiModel =
                             new ActionUiModel(
-                                    entityUiModel,
+                                    new EntityUiModel(commonContext, serviceAdapter),
                                     actionLayoutData.getNamed(),
                                     objectAction,
                                     isFirstSection);
 
-                    menuSectionUiModel.addAction(actionUiModel);
+                    // Optionally creates a sub-menu item based on visibility and usability
+                    menuSectionUiModel.addMenuItemFor(actionUiModel);
+                    
                     isFirstSection = false;
-
-                    // TODO Wicket
-                    //                    final CssMenuItem.Builder subMenuItemBuilder = menuSectionModel.newSubMenuItem(serviceAndAction);
-                    //                    if (subMenuItemBuilder == null) {
-                    //                        // either service or this action is not visible
-                    //                        continue;
-                    //                    }
-                    //                    subMenuItemBuilder.build();
                 }
             }
             if (menuSectionUiModel.hasSubMenuItems()) {
