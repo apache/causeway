@@ -22,9 +22,9 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
+import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.collections._Lists;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -35,7 +35,11 @@ import lombok.experimental.Accessors;
 public abstract class MenuItemUiModelAbstract<T extends MenuItemUiModelAbstract<T>> {
     
     @Getter private final String name;
-    @Getter @Setter private boolean enabled = true; // unless disabled
+    @Setter private boolean enabled = true; // unless disabled
+    public boolean isEnabled() {
+        return enabled && disabledReason == null;
+    }
+    
     @Getter @Setter private String actionIdentifier;
     @Getter @Setter private String cssClass;
     @Getter @Setter private String cssClassFa;
@@ -47,9 +51,6 @@ public abstract class MenuItemUiModelAbstract<T extends MenuItemUiModelAbstract<
     @Getter @Setter private boolean requiresSeparator = false; // unless set otherwise
     @Getter @Setter private boolean separator;
 
-    /**
-     * Only populated if not {@link #isEnabled() enabled}.
-     */
     @Getter @Setter private String disabledReason;
     
     /**
@@ -72,6 +73,9 @@ public abstract class MenuItemUiModelAbstract<T extends MenuItemUiModelAbstract<
     public List<T> getSubMenuItems() {
         return Collections.unmodifiableList(subMenuItems);
     }
+    /**
+     * @param menuItems we assume these have the correct parent already set
+     */
     public void replaceSubMenuItems(List<T> menuItems) {
         subMenuItems.clear();
         subMenuItems.addAll(menuItems);
@@ -81,8 +85,14 @@ public abstract class MenuItemUiModelAbstract<T extends MenuItemUiModelAbstract<
     }
     
     
-    @Getter @Setter(AccessLevel.PROTECTED) private T parent;
+    @Getter private T parent;
+    protected void setParent(T parent) {
+        this.parent = parent;
+        parent.addSubMenuItem(_Casts.uncheckedCast(this));        
+    }
     public boolean hasParent() {
         return parent != null;
     }
+
+    
 }

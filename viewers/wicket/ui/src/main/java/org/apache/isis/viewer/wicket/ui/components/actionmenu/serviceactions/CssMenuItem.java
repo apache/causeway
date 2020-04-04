@@ -14,7 +14,6 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License. */
-
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
 import java.io.Serializable;
@@ -24,9 +23,7 @@ import java.util.Optional;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.Model;
 
@@ -60,62 +57,20 @@ implements Serializable {
     private static final String ID_MENU_LABEL = "menuLabel";
     private static final String ID_SUB_MENU_ITEMS = "subMenuItems";
 
-    private static class Builder {
-        private final CssMenuItem cssMenuItem;
-
-        private Builder(final String name) {
-            cssMenuItem = new CssMenuItem(name);
-        }
-
-        public Builder parent(final CssMenuItem parent) {
-            cssMenuItem.setParent(parent);
-            return this;
-        }
-
-        public <T extends Page> Builder link() {
-            final AbstractLink link = new SubmitLink(ID_MENU_LINK);
-            return link(link);
-        }
-
-        public <T extends Page> Builder link(final AbstractLink link) {
-            assert link.getId().equals(ID_MENU_LINK);
-            cssMenuItem.setLink(link);
-            return this;
-        }
-
-        public <T extends Page> Builder enabled(final String disabledReasonIfAny) {
-            cssMenuItem.setEnabled(disabledReasonIfAny == null);
-            cssMenuItem.setDisabledReason(disabledReasonIfAny);
-            return this;
-        }
-
-        /**
-         * Returns the built {@link CssMenuItem}, associating with {@link #parent(CssMenuItem) parent} (if specified).
-         */
-        public CssMenuItem build() {
-            if (cssMenuItem.hasParent()) {
-                cssMenuItem.getParent().addSubMenuItem(cssMenuItem);
-            }
-            return cssMenuItem;
-        }
-
-    }
-
     @Getter @Setter(AccessLevel.PRIVATE) private AbstractLink link;
     
-    /**
-     * Factory method returning {@link Builder builder}.
-     */
     public static CssMenuItem newMenuItem(final String name) {
-        return new Builder(name).build();
+        return new CssMenuItem(name);
     }
 
     private CssMenuItem(final String name) {
         super(name);
     }
-
-    private Builder newSubMenuItemBuilder(final String name) {
-        return new Builder(name).parent(this);
+    
+    private CssMenuItem newSubMenuItem(final String name) {
+        val subMenuItem = newMenuItem(name);
+        subMenuItem.setParent(this);
+        return subMenuItem;
     }
 
 
@@ -170,10 +125,8 @@ implements Serializable {
         final AbstractLink link = linkAndLabel.getLink();
         final String actionLabel = serviceAndAction.serviceName != null ? serviceAndAction.serviceName : linkAndLabel.getLabel();
 
-        val menutIem = (CssMenuItem) newSubMenuItemBuilder(actionLabel)
-                .link(link)
-                .enabled(reasonDisabledIfAny)
-                .build()
+        val menutIem = (CssMenuItem) newSubMenuItem(actionLabel)
+                .setDisabledReason(reasonDisabledIfAny)
                 .setPrototyping(objectAction.isPrototype())
                 .setRequiresSeparator(requiresSeparator)
                 .setRequiresImmediateConfirmation(
@@ -185,6 +138,8 @@ implements Serializable {
                 .setCssClass(ObjectAction.Util.cssClassFor(objectAction, serviceAdapter))
                 .setCssClassFa(ObjectAction.Util.cssClassFaFor(objectAction))
                 .setCssClassFaPosition(ObjectAction.Util.cssClassFaPositionFor(objectAction));
+        
+        menutIem.setLink(link);
         return Optional.of(menutIem);
     }
 
