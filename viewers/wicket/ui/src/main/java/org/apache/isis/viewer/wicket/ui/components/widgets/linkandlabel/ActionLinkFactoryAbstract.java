@@ -278,7 +278,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
         final boolean whetherReturnsBlobOrClob = ObjectAction.Util.returnsBlobOrClob(objectAction);
 
-        return LinkAndLabel.newLinkAndLabel(objectAdapter, objectAction, link, whetherReturnsBlobOrClob);
+        return LinkAndLabel.newLinkAndLabel(link, objectAdapter, objectAction, whetherReturnsBlobOrClob);
     }
 
     private InlinePromptContext determineInlinePromptContext() {

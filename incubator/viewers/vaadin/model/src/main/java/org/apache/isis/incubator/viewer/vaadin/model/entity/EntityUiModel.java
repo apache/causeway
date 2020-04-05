@@ -22,18 +22,18 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 // TODO Wicket final EntityModel entityModel = EntityModel.ofAdapter(commonContext, serviceAdapter);
-@Data
+@RequiredArgsConstructor
 public class EntityUiModel {
 
     private final IsisWebAppCommonContext commonContext;
+    
+    @NonNull @Getter 
     private final ManagedObject managedObject;
-
-    ManagedObject load() {
-        return null;
-    }
 
     public enum Mode {
         VIEW, EDIT

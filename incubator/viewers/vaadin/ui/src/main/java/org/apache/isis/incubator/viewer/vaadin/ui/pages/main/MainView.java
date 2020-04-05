@@ -25,6 +25,8 @@ import javax.inject.Inject;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.PWA;
@@ -50,10 +52,13 @@ import lombok.val;
 @PWA(name = "Example Project", shortName = "Example Project")
 //@Theme(value = Material.class, variant = Material.DARK)
 @Theme(value = Lumo.class, variant = Lumo.LIGHT)
-public class MainView extends AppLayout {
+public class MainView extends AppLayout 
+implements BeforeEnterObserver {
 
     private static final long serialVersionUID = 1L;
     
+    private final transient IsisWebAppCommonContext commonContext;
+    private final transient MenuBarsServiceBS3 menuBarsService;
     private Div pageContent = new Div();
     
     /**
@@ -64,16 +69,18 @@ public class MainView extends AppLayout {
             final MetaModelContext metaModelContext,
             final MenuBarsServiceBS3 menuBarsService) {
 
-        val commonContext = IsisWebAppCommonContext.of(metaModelContext);
+        this.commonContext = IsisWebAppCommonContext.of(metaModelContext);
+        this.menuBarsService = menuBarsService;
+    }
+    
+    @Override
+    public void beforeEnter(BeforeEnterEvent event) {
         
         setPrimarySection(Section.NAVBAR);
-        
+
         val menuBarContainer = MenuUtil.createMenu(commonContext, menuBarsService, this::onMenuAction);
-        
         addToNavbar(menuBarContainer);
-        
         setContent(pageContent = new Div());
-        
         setDrawerOpened(false);
     }
 
@@ -98,6 +105,8 @@ public class MainView extends AppLayout {
             pageContent.add(new ObjectFormView(result));
         };
     }
+
+
 
     
 }

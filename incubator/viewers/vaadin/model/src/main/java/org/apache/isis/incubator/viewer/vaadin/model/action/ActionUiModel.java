@@ -18,37 +18,33 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.model.action;
 
+import java.util.function.Function;
+
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.incubator.viewer.vaadin.model.entity.EntityUiModel;
-import org.apache.isis.incubator.viewer.vaadin.model.link.ActionLinkFactoryForVaadin;
+import org.apache.isis.viewer.common.model.links.LinkAndLabelUiModel;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@Getter
+/**
+ * 
+ * @since Apr 5, 2020
+ * @implNote corresponds to Wicket
+ * org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions.ServiceAndAction
+ *
+ */
+@Getter @RequiredArgsConstructor
 public class ActionUiModel {
-    
-    final EntityUiModel entityUiModel;
-    final String serviceName;
-    final ObjectAction objectAction;
-    final boolean isFirstSection;
-    final ActionLinkFactoryForVaadin linkAndLabelFactory;
-    
-    public ActionUiModel(
-            EntityUiModel entityUiModel, 
-            String serviceName, 
-            ObjectAction objectAction,
-            boolean isFirstSection) {
-        
-        this.entityUiModel = entityUiModel;
-        this.serviceName = serviceName;
-        this.objectAction = objectAction;
-        this.isFirstSection = isFirstSection;
-        this.linkAndLabelFactory = ActionLinkFactoryForVaadin.of(entityUiModel);
-    }
-    
+
+    private final Function<ObjectAction, LinkAndLabelUiModel<?>> linkAndLabelFactory;
+    private final EntityUiModel entityUiModel;
+    private final String actionName;
+    private final ObjectAction objectAction;
+    private final boolean isFirstSection;
 
     @Override
     public String toString() {
-        return serviceName + " ~ " + objectAction.getIdentifier().toFullIdentityString();
+        return actionName + " ~ " + objectAction.getIdentifier().toFullIdentityString();
     }
 }

@@ -29,7 +29,7 @@ import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
-public abstract class LinkAndLabelAbstract implements Serializable {
+public abstract class LinkAndLabelUiModelAbstract implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -59,7 +59,7 @@ public abstract class LinkAndLabelAbstract implements Serializable {
     private final PromptStyle promptStyle;
     private Parameters parameters;
     
-    protected LinkAndLabelAbstract(
+    protected LinkAndLabelUiModelAbstract(
             final ManagedObject objectAdapter,
             final ObjectAction objectAction,
             final boolean blobOrClob) {
@@ -77,7 +77,7 @@ public abstract class LinkAndLabelAbstract implements Serializable {
                 Parameters.fromParameterCount(objectAction.getParameterCount()));
     }
     
-    private LinkAndLabelAbstract(
+    private LinkAndLabelUiModelAbstract(
             final String label,
             final String descriptionIfAny,
             final boolean blobOrClob,
@@ -152,7 +152,7 @@ public abstract class LinkAndLabelAbstract implements Serializable {
         return parameters;
     }
     
-    public static <T extends LinkAndLabelAbstract> List<T> positioned(
+    public static <T extends LinkAndLabelUiModelAbstract> List<T> positioned(
             final List<T> entityActionLinks,
             final ActionLayout.Position position) {
         

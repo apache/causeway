@@ -410,7 +410,7 @@ implements ScalarModelSubscriber2 {
                 if(inlineActionIfAny != null) {
 
                     final LinkAndLabel linkAndLabelAsIfEdit = LinkAndLabelUtil.asActionLink(this.scalarModel, inlineActionIfAny);
-                    final ActionLink actionLinkInlineAsIfEdit = (ActionLink) linkAndLabelAsIfEdit.getLink();
+                    final ActionLink actionLinkInlineAsIfEdit = (ActionLink) linkAndLabelAsIfEdit.getLinkComponent();
 
                     if(actionLinkInlineAsIfEdit.isVisible() && actionLinkInlineAsIfEdit.isEnabled()) {
                         configureInlinePromptLinkCallback(inlinePromptLink, actionLinkInlineAsIfEdit);

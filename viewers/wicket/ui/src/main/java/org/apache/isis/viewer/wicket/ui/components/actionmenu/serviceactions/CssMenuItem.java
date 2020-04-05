@@ -18,7 +18,6 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -28,14 +27,8 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModelAbstract;
-import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
@@ -82,65 +75,44 @@ implements Serializable {
      * Optionally creates a sub-menu item invoking an action on the provided 
      * {@link ServiceAndAction action model}, based on visibility and usability.
      */
-    Optional<CssMenuItem> addMenuItemFor(ServiceAndAction serviceAndAction) {
+    void addMenuItemFor(ServiceAndAction serviceAndAction) {
 
         final EntityModel targetEntityModel = serviceAndAction.serviceEntityModel;
         final ObjectAction objectAction = serviceAndAction.objectAction;
         final boolean requiresSeparator = serviceAndAction.isFirstSection;
         final ServiceActionLinkFactory actionLinkFactory = serviceAndAction.linkAndLabelFactory;
 
-        val serviceAdapter = targetEntityModel.load();
-        final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
-        if (serviceSpec.isHidden()) {
-            return Optional.empty();
+        val actionHolder = targetEntityModel.load();
+        if(!super.isVisible(actionHolder, objectAction)) {
+            return;
         }
-
-        // check visibility
-        final Consent visibility = objectAction.isVisible(
-                serviceAdapter,
-                InteractionInitiatedBy.USER,
-                ActionModel.WHERE_FOR_ACTION_INVOCATION);
-        if (visibility.isVetoed()) {
-            return Optional.empty();
-        }
-
-        // check usability
-        final Consent usability = objectAction.isUsable(
-                serviceAdapter,
-                InteractionInitiatedBy.USER,
-                ActionModel.WHERE_FOR_ACTION_INVOCATION
-                );
-        final String reasonDisabledIfAny = usability.getReason();
-
-        final DescribedAsFacet describedAsFacet = objectAction.getFacet(DescribedAsFacet.class);
-        final String descriptionIfAny = describedAsFacet != null ? describedAsFacet.value() : null;
 
         // build the link
-        final LinkAndLabel linkAndLabel = actionLinkFactory.newLink(objectAction, PageAbstract.ID_MENU_LINK, null);
+        val linkAndLabel = actionLinkFactory.newLink(objectAction, PageAbstract.ID_MENU_LINK, null);
         if (linkAndLabel == null) {
             // can only get a null if invisible, so this should not happen given the visibility guard above
-            return Optional.empty();
+            return;
         }
 
-        final AbstractLink link = linkAndLabel.getLink();
-        final String actionLabel = serviceAndAction.serviceName != null ? serviceAndAction.serviceName : linkAndLabel.getLabel();
+        final AbstractLink link = linkAndLabel.getLinkComponent();
+        final String actionLabel = serviceAndAction.actionName != null ? serviceAndAction.actionName : linkAndLabel.getLabel();
 
         val menutIem = (CssMenuItem) newSubMenuItem(actionLabel)
-                .setDisabledReason(reasonDisabledIfAny)
+                .setDisabledReason(super.getReasonWhyDisabled(actionHolder, objectAction).orElse(null))
                 .setPrototyping(objectAction.isPrototype())
                 .setRequiresSeparator(requiresSeparator)
                 .setRequiresImmediateConfirmation(
                         ObjectAction.Util.isAreYouSureSemantics(objectAction) &&
                         ObjectAction.Util.isNoParameters(objectAction))
                 .setBlobOrClob(ObjectAction.Util.returnsBlobOrClob(objectAction))
-                .setDescription(descriptionIfAny)
+                .setDescription(super.getDescription(objectAction).orElse(null))
                 .setActionIdentifier(ObjectAction.Util.actionIdentifierFor(objectAction))
-                .setCssClass(ObjectAction.Util.cssClassFor(objectAction, serviceAdapter))
+                .setCssClass(ObjectAction.Util.cssClassFor(objectAction, actionHolder))
                 .setCssClassFa(ObjectAction.Util.cssClassFaFor(objectAction))
                 .setCssClassFaPosition(ObjectAction.Util.cssClassFaPositionFor(objectAction));
         
         menutIem.setLink(link);
-        return Optional.of(menutIem);
+
     }
 
     // //////////////////////////////////////////////////////////////

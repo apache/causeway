@@ -20,14 +20,23 @@ package org.apache.isis.viewer.common.model.menuitem;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.val;
 import lombok.experimental.Accessors;
 
 @Accessors(chain = true)
@@ -92,6 +101,52 @@ public abstract class MenuItemUiModelAbstract<T extends MenuItemUiModelAbstract<
     }
     public boolean hasParent() {
         return parent != null;
+    }
+    
+    // -- VISIBILITY
+    
+    public boolean isVisible(
+            @NonNull final ManagedObject actionHolder, 
+            @NonNull final ObjectAction objectAction) {
+        
+        // check hidden
+        if (actionHolder.getSpecification().isHidden()) {
+            return false;
+        }
+        // check visibility
+        final Consent visibility = objectAction.isVisible(
+                actionHolder,
+                InteractionInitiatedBy.USER,
+                Where.ANYWHERE);
+        if (visibility.isVetoed()) {
+            return false;
+        }
+        return true;
+    }
+    
+    // -- USABILITY
+    
+    public Optional<String> getReasonWhyDisabled(
+            @NonNull final ManagedObject actionHolder, 
+            @NonNull final ObjectAction objectAction) {
+            
+        // check usability
+        final Consent usability = objectAction.isUsable(
+                actionHolder,
+                InteractionInitiatedBy.USER,
+                Where.ANYWHERE
+                );
+        return Optional.ofNullable(usability.getReason());
+    }
+    
+    // -- DESCRIBED AS
+    
+    public Optional<String> getDescription(
+            @NonNull final ObjectAction objectAction) {
+        
+        val describedAsFacet = objectAction.getFacet(DescribedAsFacet.class);
+        return Optional.ofNullable(describedAsFacet)
+                .map(DescribedAsFacet::value);
     }
 
     

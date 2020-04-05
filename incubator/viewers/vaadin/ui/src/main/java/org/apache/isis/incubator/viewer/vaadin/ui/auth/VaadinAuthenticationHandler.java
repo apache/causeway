@@ -18,8 +18,6 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.ui.auth;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
@@ -32,9 +30,10 @@ import com.vaadin.flow.server.VaadinSession;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory.ThrowingRunnable;
-import org.apache.isis.core.security.authentication.standard.SimpleSession;
+import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.incubator.viewer.vaadin.ui.pages.login.VaadinLoginView;
 
 import lombok.val;
@@ -52,6 +51,7 @@ public class VaadinAuthenticationHandler implements VaadinServiceInitListener {
     private static final long serialVersionUID = 1L;
     
     @Inject private transient IsisInteractionFactory isisInteractionFactory; 
+    @Inject private transient MetaModelContext metaModelContext;
 
     @Override
     public void serviceInit(ServiceInitEvent event) {
@@ -82,6 +82,9 @@ public class VaadinAuthenticationHandler implements VaadinServiceInitListener {
     public boolean loginToSessionAsSven() {
         log.debug("logging in as Sven");
         AuthSessionStoreUtil.putSven();
+        val authenticationRequest = new AuthenticationRequestPassword("sven", "pass");
+        //authenticationRequest.addRole(USER_ROLE);
+        metaModelContext.getAuthenticationManager().authenticate(authenticationRequest);
         return true;
     }
     
@@ -90,6 +93,7 @@ public class VaadinAuthenticationHandler implements VaadinServiceInitListener {
         .ifPresent(authSession->{
             log.debug("logging out {}", authSession.getUserName());
             AuthSessionStoreUtil.clear();
+            //TODO also logout AuthenticationManager
         });
         VaadinSession.getCurrent().close();
         isisInteractionFactory.closeSessionStack();

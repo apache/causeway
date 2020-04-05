@@ -53,9 +53,11 @@ public abstract class AuthorizationFacetAbstract extends FacetAbstract implement
     public String hides(VisibilityContext<? extends VisibilityEvent> ic) {
         
         val hides = authorizationManager
-                .isVisible(authenticationSessionTracker.getAuthenticationSessionElseFail(), ic.getIdentifier()) 
+                .isVisible(
+                        authenticationSessionTracker.getAuthenticationSessionElseFail(), 
+                        ic.getIdentifier()) 
                 ? null 
-                        : "Not authorized to view";
+                : "Not authorized to view";
         
         if(hides!=null && log.isDebugEnabled()) {
             log.debug("hides[{}] -> {}", ic.getIdentifier(), hides);
@@ -68,9 +70,11 @@ public abstract class AuthorizationFacetAbstract extends FacetAbstract implement
     public String disables(UsabilityContext<? extends UsabilityEvent> ic) {
         
         val disables = authorizationManager
-                .isUsable(authenticationSessionTracker.getAuthenticationSessionElseFail(), ic.getIdentifier()) 
+                .isUsable(
+                        authenticationSessionTracker.getAuthenticationSessionElseFail(), 
+                        ic.getIdentifier()) 
                 ? null 
-                        : "Not authorized to edit";
+                : "Not authorized to edit";
         
         if(disables!=null && log.isDebugEnabled()) {
             log.debug("disables[{}] -> {}", ic.getIdentifier(), disables);

@@ -7,17 +7,20 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
 import org.apache.isis.applib.services.menu.MenuBarsService.Type;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.incubator.viewer.vaadin.model.entity.EntityUiModel;
 import org.apache.isis.incubator.viewer.vaadin.model.action.ActionUiModel;
-import org.apache.isis.incubator.viewer.vaadin.model.menu.MenuSectionUiModel;
+import org.apache.isis.incubator.viewer.vaadin.model.entity.EntityUiModel;
+import org.apache.isis.incubator.viewer.vaadin.model.menu.MenuItemUiModel;
+import org.apache.isis.viewer.common.model.links.LinkAndLabelUiModel;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -56,12 +59,14 @@ final class MenuUtil {
         val bs3MenuBars = menuBarsService.menuBars(Type.DEFAULT);
         
         // menu section handler, that creates and adds sub-menus to their parent top level menu   
-        final BiConsumer<MenuBar, MenuSectionUiModel> menuSectionBuilder = (parentMenu, menuSectionUiModel) -> {
+        final BiConsumer<MenuBar, MenuItemUiModel> menuSectionBuilder = (parentMenu, menuSectionUiModel) -> {
             val menuItem = parentMenu.addItem(menuSectionUiModel.getName());
             val subMenu = menuItem.getSubMenu();
-            menuSectionUiModel.getActionUiModels().forEach(saModel -> {
-                val objectAction = saModel.getObjectAction();
-                subMenu.addItem(objectAction.getName(), e->subMenuEventHandler.accept(saModel));
+            menuSectionUiModel.getSubMenuItems().forEach(menuItemModel -> {
+                val actionModel = menuItemModel.getActionUiModel();
+                subMenu.addItem(
+                        (Component)menuItemModel.getActionLinkComponent(), 
+                        e->subMenuEventHandler.accept(actionModel));
             });
                     
         };
@@ -107,14 +112,14 @@ final class MenuUtil {
     private static void buildMenuModel(
             final IsisWebAppCommonContext commonContext,
             final BS3MenuBar menuBar,
-            final Consumer<MenuSectionUiModel> onMenuSection) {
+            final Consumer<MenuItemUiModel> onMenuSection) {
 
         // we no longer use ServiceActionsModel#getObject() because the model only holds the services for the
         // menuBar in question, whereas the "Other" menu may reference a service which is defined for some other menubar
 
         for (val menu : menuBar.getMenus()) {
 
-            val menuSectionUiModel = new MenuSectionUiModel(menu.getNamed());
+            val menuSectionUiModel = MenuItemUiModel.newMenuItem(menu.getNamed());
 
             for (val menuSection : menu.getSections()) {
 
@@ -139,9 +144,13 @@ final class MenuUtil {
                         log.warn("No such action {}", actionLayoutData.getId());
                         continue;
                     }
+                    
+                    val entityModel = new EntityUiModel(commonContext, serviceAdapter);
+                    
                     val actionUiModel =
                             new ActionUiModel(
-                                    new EntityUiModel(commonContext, serviceAdapter),
+                                    oAction->newLinkAndLabel(oAction, entityModel),
+                                    entityModel,
                                     actionLayoutData.getNamed(),
                                     objectAction,
                                     isFirstSection);
@@ -157,5 +166,19 @@ final class MenuUtil {
             }
         }
     }
+    
+    private static LinkAndLabelUiModel<?> newLinkAndLabel(
+            ObjectAction objectAction, 
+            EntityUiModel entityModel) {
+        
+        val objectAdapter = entityModel.getManagedObject();
+        val linkComponent = new Label(objectAction.getName());
+        val whetherReturnsBlobOrClob = ObjectAction.Util.returnsBlobOrClob(objectAction);
+        
+        //linkComponent.addClassName(className);
+        
+        return LinkAndLabelUiModel.newLinkAndLabel(linkComponent, objectAdapter, objectAction, whetherReturnsBlobOrClob);
+    }
+    
     
 }

@@ -16,34 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
+package org.apache.isis.viewer.common.model.links;
 
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
-class ServiceAndAction {
-    final String actionName;
-    final EntityModel serviceEntityModel;
-    final ObjectAction objectAction;
-    final ServiceActionLinkFactory linkAndLabelFactory;
-    final boolean isFirstSection;
+import lombok.Getter;
 
-    ServiceAndAction(
-            final String actionName,
-            final EntityModel serviceEntityModel,
+public class LinkAndLabelUiModel<T> extends LinkAndLabelUiModelAbstract {
+
+    private static final long serialVersionUID = 1L;
+
+    public static <X> LinkAndLabelUiModel<X> newLinkAndLabel(
+            final X linkComponent,
+            final ManagedObject objectAdapter,
             final ObjectAction objectAction,
-            final boolean isFirstSection) {
-        
-        this.actionName = actionName;
-        this.serviceEntityModel = serviceEntityModel;
-        this.objectAction = objectAction;
-        this.linkAndLabelFactory = new ServiceActionLinkFactory(serviceEntityModel);
-        this.isFirstSection = isFirstSection; 
+            final boolean blobOrClob) {
+        return new LinkAndLabelUiModel<>(linkComponent, objectAdapter, objectAction, blobOrClob);
     }
 
-    @Override
-    public String toString() {
-        return actionName + " ~ " + objectAction.getIdentifier().toFullIdentityString();
-    }
+    @Getter private final T linkComponent;
 
+    protected LinkAndLabelUiModel(
+            final T linkComponent,
+            final ManagedObject objectAdapter,
+            final ObjectAction objectAction,
+            final boolean blobOrClob) {
+        super(objectAdapter, objectAction, blobOrClob);
+        this.linkComponent = linkComponent;
+    }
+    
 }

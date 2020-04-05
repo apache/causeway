@@ -22,31 +22,26 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.links.LinkAndLabelAbstract;
+import org.apache.isis.viewer.common.model.links.LinkAndLabelUiModel;
 
-import lombok.Getter;
-
-public class LinkAndLabel extends LinkAndLabelAbstract {
+public class LinkAndLabel extends LinkAndLabelUiModel<AbstractLink>  {
 
     private static final long serialVersionUID = 1L;
-
+    
     public static LinkAndLabel newLinkAndLabel(
+            AbstractLink link,
             final ManagedObject objectAdapter,
             final ObjectAction objectAction,
-            final AbstractLink link,
             final boolean blobOrClob) {
         return new LinkAndLabel(link, objectAdapter, objectAction, blobOrClob);
     }
-
-    @Getter private final AbstractLink link;
-
-    private LinkAndLabel(
-            final AbstractLink link,
-            final ManagedObject objectAdapter,
-            final ObjectAction objectAction,
-            final boolean blobOrClob) {
-        super(objectAdapter, objectAction, blobOrClob);
-        this.link = link;
+    
+    protected LinkAndLabel(
+            AbstractLink link, 
+            ManagedObject objectAdapter,
+            ObjectAction objectAction,
+            boolean blobOrClob) {
+        super(link, objectAdapter, objectAction, blobOrClob);
     }
     
 
