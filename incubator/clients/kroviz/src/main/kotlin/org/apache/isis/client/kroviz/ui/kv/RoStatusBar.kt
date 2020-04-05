@@ -6,11 +6,7 @@ import org.apache.isis.client.kroviz.core.model.DiagramDM
 import org.apache.isis.client.kroviz.ui.ClassDiagram
 import org.apache.isis.client.kroviz.ui.IconManager
 import org.apache.isis.client.kroviz.ui.ImageAlert
-import pl.treksoft.kvision.core.Background
-import pl.treksoft.kvision.core.Col
-import pl.treksoft.kvision.core.Color
-import pl.treksoft.kvision.core.CssSize
-import pl.treksoft.kvision.core.UNIT
+import pl.treksoft.kvision.core.*
 import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.ButtonStyle
 import pl.treksoft.kvision.navbar.Nav
@@ -75,11 +71,13 @@ object RoStatusBar {
         panel.removeCssClass(IconManager.DANGER)
         panel.removeCssClass(IconManager.WARN)
         panel.addCssClass(IconManager.OK)
-//        navbar.background = Background(color = Color.name(Col.LIGHTGRAY))
+        navbar.background = Background(color = Color.name(Col.LIGHTGRAY))
     }
 
     private fun turnRed(logEntry: LogEntry) {
-        lastError.text = logEntry.url
+        var text = logEntry.url
+        if (text.length > 50) text = text.substring(0, 49)
+        lastError.text = text
         lastError.style = ButtonStyle.OUTLINEDANGER
         lastError.icon = IconManager.find("Error")
     }
