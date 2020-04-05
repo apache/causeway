@@ -16,15 +16,15 @@ abstract class DisplayModelWithLayout : DisplayModel() {
     var propertyLayoutList = mutableListOf<PropertyLt>()
 
     override fun canBeDisplayed(): Boolean {
-        when {
-            isRendered -> return false
-            layout == null -> return false
-            grid == null -> return false
+        return when {
+            isRendered -> false
+            layout == null -> false
+            grid == null -> false
             else -> {
                 val pls = propertyLayoutList.size
                 val pds = propertyDescriptionList.size
                 val descriptionsComplete = pds >= pls
-                return descriptionsComplete
+                descriptionsComplete
             }
         }
     }

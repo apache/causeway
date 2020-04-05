@@ -12,15 +12,16 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     private var dirty: Boolean = false
 
     override fun canBeDisplayed(): Boolean {
-        when {
-            isRendered -> return false
-            layout == null -> return false
-            grid == null -> return false
+        return when {
+            isRendered -> false
+            layout == null -> false
+            grid == null -> false
             else -> {
-                return true
+                true
             }
         }
     }
+
     fun setDirty(value: Boolean) {
         console.log("[ObjectDM.setDirty] $value")
         dirty = value

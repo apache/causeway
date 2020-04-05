@@ -88,12 +88,12 @@ object UiManager {
     }
 
     fun openObjectView(aggregator: ObjectAggregator) {
-        val dm = aggregator.dsp
+        val dm = aggregator.dsp as ObjectDM
         var title: String = dm.extractTitle()
         if (title.isEmpty()) {
             title = aggregator.actionTitle
         }
-        val panel = RoDisplay(dm as ObjectDM)
+        val panel = RoDisplay(dm)
         add(title, panel, aggregator)
         dm.isRendered = true
     }
@@ -148,7 +148,7 @@ object UiManager {
     }
 
     private fun pop() {
-        val len = UiManager.popups.size
+        val len = popups.size
         if (len > 0) {
             when (val widget = popups[len - 1]) {
                 is RoDialog -> widget.close()
