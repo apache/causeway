@@ -98,9 +98,6 @@ public class AuthorizationManager {
         if (authorizor.isVisibleInAnyRole(identifier)) {
             return true;
         }
-        if(session==null) {
-            return false;
-        }
         return anyMatchOnRoles(session, roleName->authorizor.isVisibleInRole(roleName, identifier));
     }
 
