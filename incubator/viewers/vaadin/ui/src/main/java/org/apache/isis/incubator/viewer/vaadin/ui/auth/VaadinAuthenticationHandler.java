@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory.ThrowingRunnable;
-import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
+import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.incubator.viewer.vaadin.ui.pages.login.VaadinLoginView;
 
 import lombok.val;
@@ -65,35 +65,28 @@ public class VaadinAuthenticationHandler implements VaadinServiceInitListener {
     }
 
     /**
-     * @param userName
-     * @param secret
+     * @param authenticationRequest
      * @return whether login was successful
      */
-    public boolean loginToSession(String userName, String secret) {
-        log.warn("logging in {} not implemented yet", userName);
+    public boolean loginToSession(AuthenticationRequest authenticationRequest) {
+        val authSession = metaModelContext.getAuthenticationManager()
+                .authenticate(authenticationRequest);
+        
+        if(authSession!=null) {
+            log.debug("logging in {}", authSession.getUserName());
+            AuthSessionStoreUtil.put(authSession);
+            return true;
+        }
         return false;
-
-     // TODO actual authentication to be done here ...        
-//        AuthSessionStoreUtil.put(new SimpleSession(userName, Collections.emptyList()));
-//        return true;
-    }
-    
-    /** @deprecated early development only */
-    public boolean loginToSessionAsSven() {
-        log.debug("logging in as Sven");
-        AuthSessionStoreUtil.putSven();
-        val authenticationRequest = new AuthenticationRequestPassword("sven", "pass");
-        //authenticationRequest.addRole(USER_ROLE);
-        metaModelContext.getAuthenticationManager().authenticate(authenticationRequest);
-        return true;
     }
     
     public void logoutFromSession() {
         AuthSessionStoreUtil.get()
         .ifPresent(authSession->{
             log.debug("logging out {}", authSession.getUserName());
+            // logout AuthenticationManager
+            metaModelContext.getAuthenticationManager().closeSession(authSession);
             AuthSessionStoreUtil.clear();
-            //TODO also logout AuthenticationManager
         });
         VaadinSession.getCurrent().close();
         isisInteractionFactory.closeSessionStack();

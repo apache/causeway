@@ -25,9 +25,7 @@ import javax.servlet.http.HttpSession;
 
 import com.vaadin.flow.server.VaadinSession;
 
-import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.standard.SimpleSession;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -72,11 +70,6 @@ public class AuthSessionStoreUtil {
     /** when within a VaadinSession */
     public static void clear() {
         put(null);
-    }
-    
-    /** when within a VaadinSession */
-    public static void putSven() {
-        put(new SimpleSession("sven", _Lists.of("isis-module-security-admin")));        
     }
 
 }

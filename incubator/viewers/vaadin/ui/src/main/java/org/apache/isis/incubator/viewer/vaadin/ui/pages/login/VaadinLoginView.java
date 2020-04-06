@@ -34,6 +34,7 @@ import com.vaadin.flow.router.Route;
 
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
+import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.incubator.viewer.vaadin.ui.auth.VaadinAuthenticationHandler;
 import org.apache.isis.incubator.viewer.vaadin.ui.pages.main.MainView;
 
@@ -88,18 +89,17 @@ public class VaadinLoginView extends VerticalLayout {
     // -- HELPER
     
     private void doLogin(String userName, String secret) {
-        if(vaadinAuthenticationHandler.loginToSession(userName, secret)) {
+        val authenticationRequest = new AuthenticationRequestPassword(userName, secret);
+        if(vaadinAuthenticationHandler.loginToSession(authenticationRequest)) {
             getUI().ifPresent(ui->ui.navigate(MainView.class));    
         } else {
             // TODO indicate to the user: login failed
         }
-        
     }
 
     /** @deprecated early development only */
     private void doLoginAsSven() {
-        vaadinAuthenticationHandler.loginToSessionAsSven();
-        getUI().ifPresent(ui->ui.navigate(MainView.class));    
+        doLogin("sven", "pass");
     }
     
     private void addTitleAndLogo(IsisConfiguration isisConfiguration, WebAppContextPath webAppContextPath) {
