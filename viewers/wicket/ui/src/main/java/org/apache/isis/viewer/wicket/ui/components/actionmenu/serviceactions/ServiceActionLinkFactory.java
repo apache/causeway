@@ -24,7 +24,6 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.models.ToggledMementosProvider;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLinkFactoryForWicket;
 
 import lombok.val;
@@ -36,13 +35,12 @@ class ServiceActionLinkFactory extends ActionLinkFactoryForWicket {
     ServiceActionLinkFactory(
             final String linkId,
             final EntityModel serviceEntityModel) {
-        super(linkId, serviceEntityModel, null);
+        super(linkId, serviceEntityModel, null, null);
     }
 
     @Override
     public LinkAndLabel newLink(
-            final ObjectAction objectAction,
-            final ToggledMementosProvider toggledMementosProviderIfAny) {
+            final ObjectAction objectAction) {
 
         val objectAdapter = this.targetEntityModel.load();
 

@@ -23,6 +23,12 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
 
+/**
+ * 
+ * @since Apr 6, 2020
+ *
+ * @param <T> - link component type, native to the viewer
+ */
 public class LinkAndLabelUiModel<T> extends LinkAndLabelUiModelAbstract {
 
     private static final long serialVersionUID = 1L;

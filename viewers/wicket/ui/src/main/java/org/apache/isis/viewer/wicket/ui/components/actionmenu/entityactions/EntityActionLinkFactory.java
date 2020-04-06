@@ -38,14 +38,14 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryForWicket {
     public EntityActionLinkFactory(
             final String linkId,
             final EntityModel entityModel,
-            final ScalarModel scalarModelForAssociationIfAny) {
-        super(linkId, entityModel, scalarModelForAssociationIfAny);
+            final ScalarModel scalarModelForAssociationIfAny,
+            final ToggledMementosProvider toggledMementosProviderIfAny) {
+        super(linkId, entityModel, scalarModelForAssociationIfAny, toggledMementosProviderIfAny);
     }
 
     @Override
     public LinkAndLabel newLink(
-            final ObjectAction objectAction,
-            final ToggledMementosProvider toggledMementosProviderIfAny) {
+            final ObjectAction objectAction) {
 
         val objectAdapter = this.targetEntityModel.load();
 
@@ -62,8 +62,6 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryForWicket {
 
         return newLinkAndLabel(objectAdapter, objectAction, link);
     }
-
-
 
 
 }

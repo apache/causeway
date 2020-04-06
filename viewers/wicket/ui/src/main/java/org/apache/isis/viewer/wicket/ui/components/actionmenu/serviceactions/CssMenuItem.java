@@ -87,7 +87,7 @@ implements Serializable {
         }
 
         // build the link
-        val linkAndLabel = actionLinkFactory.newLink(objectAction, null);
+        val linkAndLabel = actionLinkFactory.newLink(objectAction);
         if (linkAndLabel == null) {
             // can only get a null if invisible, so this should not happen given the visibility guard above
             return;
