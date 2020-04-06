@@ -68,6 +68,7 @@ Various aggregators are responsible to collect or assemble displayable objects.
 Once all layout information is there, the UI will be rendered, even if not all elements of a list 
 have arrived. Those elements will be added as they arrive. This is done with the help of
 mutable lists. 
+![Preview](./seq-aggregator.png)
 ### Chain of Responsibility (GOF)
 A chain of handlers is used to identify what kind of TO is to be generated from the 
 JSON response. Handlers are responsible for initial assignment of aggregators.

@@ -1,18 +1,56 @@
-.Aggregator Sequence Diagram
+.ListAggregator Sequence Diagram
 [plantuml,file="seq-aggregator.png"]
 --
 @startuml
 
-RoXHR -> RH as "Response\nHandler" : handle()
-RH -> Aggregator : create
-RH -> LogEntry : setAggegator()
+actor User
+participant "<<>>\nUI Manager" as UI
+participant "(Xml)HttpRequest" as XHR
+participant "<<ChainOfResponsibility>>\nResponseHandler" as RH
+participant "<<description>>\n<<EventStore>>\nLogEntry" as LE #LightBlue
+participant "<<description>>\nTransferObject" as TO #LightBlue
+participant "<<moment-interval>>\nListAggregator" as AGGT  #Pink
+participant "<<description>>\nLink" as LNK #LightBlue
+participant "<<thing>>\n<<DisplayModel>>\nListDM" as DM #LightGreen
 
-Aggregator -> Displayable : handleList()
-Aggregator -> Displayable : handleObject()
-Aggregator -> Displayable : handleLayout()
-Aggregator -> Displayable : canBeDisplayed()
+User -> UI : listAll()
+UI -> XHR : listAll()
+XHR -> RH : handle()
+RH -> AGGT : update(logEntry)
+activate AGGT
+RH -> LE : setAggegator()
 
-Aggregator -> UiManager : openView()
+AGGT -> AGGT : handleList()
+activate AGGT
+AGGT -> LNK : invokeWith(this)
+LNK -> XHR: invoke(this, aggt)
+deactivate AGGT
+
+AGGT -> AGGT : handleObject()
+activate AGGT
+AGGT -> DM : addData(to)
+AGGT -> LNK : invokeWith(this, "json")
+LNK -> XHR: invoke(this, aggt, "json")
+AGGT -> LNK : invokeWith(this, "xml")
+LNK -> XHR: invoke(this, aggt, "xml")
+deactivate AGGT
+
+AGGT -> AGGT : handleLayout()
+activate AGGT
+AGGT -> DM : addLayout(to)
+AGGT -> DM : addPropertyDescription(to)
+AGGT -> LNK : invokeWith(this)
+LNK -> XHR: invoke(this, aggt)
+deactivate AGGT
+
+AGGT -> DM : canBeDisplayed()
+activate DM
+deactivate DM
+AGGT -> UI : openView()
+deactivate AGGT
+
+
+UI -> User : present
 
 @enduml
 --
