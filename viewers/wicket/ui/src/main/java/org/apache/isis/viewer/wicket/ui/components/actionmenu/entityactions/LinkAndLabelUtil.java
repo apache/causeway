@@ -28,7 +28,8 @@ import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ToggledMementosProvider;
-import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLinkFactory;
+
+import lombok.val;
 
 public final class LinkAndLabelUtil {
 
@@ -73,7 +74,7 @@ public final class LinkAndLabelUtil {
             final ScalarModel scalarModelIfAny,
             final ToggledMementosProvider toggledMementosProviderIfAny) {
 
-        final ActionLinkFactory linkFactory = new EntityActionLinkFactory(parentEntityModel, scalarModelIfAny);
+        val linkFactory = new EntityActionLinkFactory(parentEntityModel, scalarModelIfAny);
 
         return _NullSafe.stream(objectActions)
                 .map((ObjectAction objectAction) ->

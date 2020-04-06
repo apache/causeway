@@ -17,6 +17,8 @@
 
 package org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel;
 
+import java.io.Serializable;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -36,6 +38,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.viewer.common.model.link.ActionLinkFactory;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -60,11 +64,11 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;
 
-public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
+public abstract class ActionLinkFactoryAbstract 
+implements ActionLinkFactory<LinkAndLabel>, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -78,6 +82,11 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
         this.targetEntityModel = targetEntityModel;
         this.scalarModelForAssociationIfAny = scalarModelForAssociationIfAny;
     }
+    
+    public abstract LinkAndLabel newLink(
+            ObjectAction objectAction,
+            String linkId,
+            ToggledMementosProvider toggledMementosProviderIfAny);
 
     protected ActionLink newLink(
             final String linkId,
