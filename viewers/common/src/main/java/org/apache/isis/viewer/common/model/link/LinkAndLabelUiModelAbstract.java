@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.common.model.links;
+package org.apache.isis.viewer.common.model.link;
 
 import java.io.Serializable;
 import java.util.List;

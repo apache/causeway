@@ -21,7 +21,7 @@ import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.action.ServiceActionUiModel;
 import org.apache.isis.incubator.viewer.vaadin.model.entity.EntityUiModel;
 import org.apache.isis.incubator.viewer.vaadin.model.menu.MenuItemUiModel;
-import org.apache.isis.viewer.common.model.links.LinkAndLabelUiModel;
+import org.apache.isis.viewer.common.model.link.LinkAndLabelUiModel;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;

@@ -2,7 +2,7 @@ package org.apache.isis.incubator.viewer.vaadin.ui.components.links;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.incubator.viewer.vaadin.model.entity.EntityUiModel;
-import org.apache.isis.viewer.common.model.links.LinkAndLabelUiModel;
+import org.apache.isis.viewer.common.model.link.LinkAndLabelUiModel;
 
 import lombok.RequiredArgsConstructor;
 

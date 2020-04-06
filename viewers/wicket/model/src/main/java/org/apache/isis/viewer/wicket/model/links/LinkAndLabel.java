@@ -22,7 +22,7 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.links.LinkAndLabelUiModel;
+import org.apache.isis.viewer.common.model.link.LinkAndLabelUiModel;
 
 public class LinkAndLabel extends LinkAndLabelUiModel<AbstractLink>  {
 
