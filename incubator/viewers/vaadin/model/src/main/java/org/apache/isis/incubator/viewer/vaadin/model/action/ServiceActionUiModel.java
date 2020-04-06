@@ -21,27 +21,27 @@ package org.apache.isis.incubator.viewer.vaadin.model.action;
 import java.util.function.Function;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.incubator.viewer.vaadin.model.entity.EntityUiModel;
 import org.apache.isis.viewer.common.model.links.LinkAndLabelUiModel;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
-/**
- * 
- * @since Apr 5, 2020
- * @implNote corresponds to Wicket
- * org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions.ServiceAndAction
- *
- */
-@Getter @RequiredArgsConstructor
-public class ActionUiModel {
+@Getter
+public class ServiceActionUiModel extends ActionUiModel {
 
-    private final Function<ObjectAction, LinkAndLabelUiModel<?>> linkAndLabelFactory;
-    private final String actionName;
-    private final ObjectAction objectAction;
-
-    @Override
-    public String toString() {
-        return actionName + " ~ " + objectAction.getIdentifier().toFullIdentityString();
+    private final EntityUiModel serviceEntityUiModel;
+    private final boolean isFirstSection;
+    
+    public ServiceActionUiModel(
+            Function<ObjectAction, LinkAndLabelUiModel<?>> linkAndLabelFactory,
+            EntityUiModel serviceEntityUiModel, 
+            String actionName, 
+            ObjectAction objectAction, 
+            boolean isFirstSection) {
+        super(linkAndLabelFactory, actionName, objectAction);
+        this.serviceEntityUiModel = serviceEntityUiModel;
+        this.isFirstSection = isFirstSection;
+        
     }
+    
 }

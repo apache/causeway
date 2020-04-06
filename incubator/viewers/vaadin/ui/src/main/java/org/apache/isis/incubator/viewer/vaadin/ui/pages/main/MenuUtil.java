@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.menubar.MenuBar;
@@ -17,7 +18,7 @@ import org.apache.isis.applib.services.menu.MenuBarsService.Type;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.incubator.viewer.vaadin.model.action.ActionUiModel;
+import org.apache.isis.incubator.viewer.vaadin.model.action.ServiceActionUiModel;
 import org.apache.isis.incubator.viewer.vaadin.model.entity.EntityUiModel;
 import org.apache.isis.incubator.viewer.vaadin.model.menu.MenuItemUiModel;
 import org.apache.isis.viewer.common.model.links.LinkAndLabelUiModel;
@@ -33,7 +34,7 @@ final class MenuUtil {
     static Component createMenu(
             final IsisWebAppCommonContext commonContext, 
             final MenuBarsServiceBS3 menuBarsService,
-            final Consumer<ActionUiModel> subMenuEventHandler) {
+            final Consumer<ServiceActionUiModel> subMenuEventHandler) {
         
         val titleOrLogo = createTitleOrLogo(commonContext);
         val leftMenuBar = new MenuBar();
@@ -63,10 +64,15 @@ final class MenuUtil {
             val menuItem = parentMenu.addItem(menuSectionUiModel.getName());
             val subMenu = menuItem.getSubMenu();
             menuSectionUiModel.getSubMenuItems().forEach(menuItemModel -> {
-                val actionModel = menuItemModel.getActionUiModel();
+                val saModel = menuItemModel.getServiceActionUiModel();
+                
+                if(saModel.isFirstSection() && subMenu.getItems().size()>0) {
+                    subMenu.addItem(new Hr());
+                }
+                
                 subMenu.addItem(
                         (Component)menuItemModel.getActionLinkComponent(), 
-                        e->subMenuEventHandler.accept(actionModel));
+                        e->subMenuEventHandler.accept(saModel));
             });
                     
         };
@@ -147,8 +153,8 @@ final class MenuUtil {
                     
                     val entityModel = new EntityUiModel(commonContext, serviceAdapter);
                     
-                    val actionUiModel =
-                            new ActionUiModel(
+                    val saModel =
+                            new ServiceActionUiModel(
                                     oAction->newLinkAndLabel(oAction, entityModel),
                                     entityModel,
                                     actionLayoutData.getNamed(),
@@ -156,7 +162,7 @@ final class MenuUtil {
                                     isFirstSection);
 
                     // Optionally creates a sub-menu item based on visibility and usability
-                    menuSectionUiModel.addMenuItemFor(actionUiModel);
+                    menuSectionUiModel.addMenuItemFor(saModel);
                     
                     isFirstSection = false;
                 }

@@ -105,7 +105,7 @@ public abstract class MenuItemUiModelAbstract<T extends MenuItemUiModelAbstract<
     
     // -- VISIBILITY
     
-    public boolean isVisible(
+    protected boolean isVisible(
             @NonNull final ManagedObject actionHolder, 
             @NonNull final ObjectAction objectAction) {
         
@@ -126,7 +126,7 @@ public abstract class MenuItemUiModelAbstract<T extends MenuItemUiModelAbstract<
     
     // -- USABILITY
     
-    public Optional<String> getReasonWhyDisabled(
+    protected Optional<String> getReasonWhyDisabled(
             @NonNull final ManagedObject actionHolder, 
             @NonNull final ObjectAction objectAction) {
             
@@ -141,7 +141,7 @@ public abstract class MenuItemUiModelAbstract<T extends MenuItemUiModelAbstract<
     
     // -- DESCRIBED AS
     
-    public Optional<String> getDescription(
+    protected Optional<String> getDescription(
             @NonNull final ObjectAction objectAction) {
         
         val describedAsFacet = objectAction.getFacet(DescribedAsFacet.class);

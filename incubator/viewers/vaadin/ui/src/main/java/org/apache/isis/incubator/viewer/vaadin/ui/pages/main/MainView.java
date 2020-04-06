@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.incubator.viewer.vaadin.model.action.ActionUiModel;
+import org.apache.isis.incubator.viewer.vaadin.model.action.ServiceActionUiModel;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableView;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.object.ObjectFormView;
 
@@ -84,12 +84,12 @@ implements BeforeEnterObserver {
         setDrawerOpened(false);
     }
 
-    private void onMenuAction(ActionUiModel saModel) {
+    private void onMenuAction(ServiceActionUiModel saModel) {
         
         pageContent.removeAll();
 
         val objectAction = saModel.getObjectAction();
-        val actionOwner = saModel.getEntityUiModel().getManagedObject();
+        val actionOwner = saModel.getServiceEntityUiModel().getManagedObject();
 
         val result = objectAction
                 .execute(

@@ -235,7 +235,7 @@ public final class ServiceActionUtil {
 
                     isFirstSection = false;
 
-                    // Optionally creates a submenu item based on visibility and usability
+                    // Optionally creates a sub-menu item based on visibility and usability
                     serviceMenu.addMenuItemFor(serviceAndAction);
                 }
             }

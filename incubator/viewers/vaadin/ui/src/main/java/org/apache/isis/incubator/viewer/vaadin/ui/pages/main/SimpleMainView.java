@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.incubator.viewer.vaadin.model.action.ActionUiModel;
+import org.apache.isis.incubator.viewer.vaadin.model.action.ServiceActionUiModel;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableView;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.object.ObjectFormView;
 
@@ -79,7 +79,7 @@ public class SimpleMainView extends VerticalLayout {
 
 
     private void onMenuAction(
-            final ActionUiModel saModel,
+            final ServiceActionUiModel saModel,
             final Text selected,
             final VerticalLayout actionResultDiv) {
 
@@ -104,7 +104,7 @@ public class SimpleMainView extends VerticalLayout {
     }
 
     private ComponentEventListener<ClickEvent<Button>> executeAndHandleResultAction(
-            final ActionUiModel saModel,
+            final ServiceActionUiModel saModel,
             final ObjectAction objectAction,
             final Div actionResult) {
 
@@ -112,7 +112,7 @@ public class SimpleMainView extends VerticalLayout {
 
             actionResult.removeAll();
 
-            val actionOwner = saModel.getEntityUiModel().getManagedObject();
+            val actionOwner = saModel.getServiceEntityUiModel().getManagedObject();
 
             val result = objectAction
                     .execute(
