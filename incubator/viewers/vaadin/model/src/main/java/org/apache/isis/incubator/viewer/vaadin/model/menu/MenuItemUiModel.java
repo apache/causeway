@@ -19,8 +19,8 @@
 package org.apache.isis.incubator.viewer.vaadin.model.menu;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.incubator.viewer.vaadin.model.action.ActionUiModel;
 import org.apache.isis.incubator.viewer.vaadin.model.action.ServiceActionUiModel;
+import org.apache.isis.viewer.common.model.action.ActionUiModel;
 import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModelAbstract;
 
 import lombok.AccessLevel;

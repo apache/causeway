@@ -22,6 +22,7 @@ import java.util.function.Function;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.incubator.viewer.vaadin.model.entity.EntityUiModel;
+import org.apache.isis.viewer.common.model.action.ActionUiModel;
 import org.apache.isis.viewer.common.model.links.LinkAndLabelUiModel;
 
 import lombok.Getter;
