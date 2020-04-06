@@ -27,40 +27,38 @@ import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ToggledMementosProvider;
-import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLinkFactoryAbstract;
+import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLinkFactoryForWicket;
 
 import lombok.val;
 
-public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
+public final class EntityActionLinkFactory extends ActionLinkFactoryForWicket {
 
     private static final long serialVersionUID = 1L;
 
     public EntityActionLinkFactory(
+            final String linkId,
             final EntityModel entityModel,
             final ScalarModel scalarModelForAssociationIfAny) {
-        super(entityModel, scalarModelForAssociationIfAny);
+        super(linkId, entityModel, scalarModelForAssociationIfAny);
     }
 
     @Override
     public LinkAndLabel newLink(
             final ObjectAction objectAction,
-            final String linkId,
             final ToggledMementosProvider toggledMementosProviderIfAny) {
 
         val objectAdapter = this.targetEntityModel.load();
 
-
-        
         val isBookmarkable = ManagedObject.isIdentifiable(objectAdapter);
         if (!isBookmarkable) {
             throw new IllegalArgumentException(String.format(
                     "Object '%s' is not persistent/bookmarkable.", objectAdapter.titleString(null)));
         }
 
-        // previously we computed visibility and enablement here, but
-        // this is now done at the point of rendereing
+        // previously we computed visibility and usability here, but
+        // this is now done at the point of rendering
 
-        final AbstractLink link = super.newLink(linkId, objectAction, toggledMementosProviderIfAny);
+        final AbstractLink link = super.newLinkComponent(objectAction, toggledMementosProviderIfAny);
 
         return newLinkAndLabel(objectAdapter, objectAction, link);
     }

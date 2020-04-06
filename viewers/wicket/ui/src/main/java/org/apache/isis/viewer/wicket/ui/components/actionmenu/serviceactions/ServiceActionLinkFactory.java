@@ -25,27 +25,28 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ToggledMementosProvider;
-import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLinkFactoryAbstract;
+import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLinkFactoryForWicket;
 
 import lombok.val;
 
-class ServiceActionLinkFactory extends ActionLinkFactoryAbstract {
+class ServiceActionLinkFactory extends ActionLinkFactoryForWicket {
 
     private static final long serialVersionUID = 1L;
 
-    ServiceActionLinkFactory(final EntityModel serviceEntityModel) {
-        super(serviceEntityModel, null);
+    ServiceActionLinkFactory(
+            final String linkId,
+            final EntityModel serviceEntityModel) {
+        super(linkId, serviceEntityModel, null);
     }
 
     @Override
     public LinkAndLabel newLink(
             final ObjectAction objectAction,
-            final String linkId,
             final ToggledMementosProvider toggledMementosProviderIfAny) {
 
         val objectAdapter = this.targetEntityModel.load();
 
-        final AbstractLink link = super.newLink(linkId, objectAction, toggledMementosProviderIfAny);
+        final AbstractLink link = super.newLinkComponent(objectAction, toggledMementosProviderIfAny);
 
         return newLinkAndLabel(objectAdapter, objectAction, link);
     }

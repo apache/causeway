@@ -31,7 +31,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModelAbstract;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
-import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
@@ -88,7 +87,7 @@ implements Serializable {
         }
 
         // build the link
-        val linkAndLabel = actionLinkFactory.newLink(objectAction, PageAbstract.ID_MENU_LINK, null);
+        val linkAndLabel = actionLinkFactory.newLink(objectAction, null);
         if (linkAndLabel == null) {
             // can only get a null if invisible, so this should not happen given the visibility guard above
             return;

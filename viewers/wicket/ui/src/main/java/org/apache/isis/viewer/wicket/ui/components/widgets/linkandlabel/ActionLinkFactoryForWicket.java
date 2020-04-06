@@ -67,29 +67,30 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import lombok.val;
 
-public abstract class ActionLinkFactoryAbstract 
+public abstract class ActionLinkFactoryForWicket 
 implements ActionLinkFactory<LinkAndLabel>, Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    protected final String linkId;
     protected final EntityModel targetEntityModel;
     private final ScalarModel scalarModelForAssociationIfAny;
 
-    protected ActionLinkFactoryAbstract(
+    protected ActionLinkFactoryForWicket(
+            final String linkId,
             final EntityModel targetEntityModel,
             final ScalarModel scalarModelForAssociationIfAny) {
         
+        this.linkId = linkId;
         this.targetEntityModel = targetEntityModel;
         this.scalarModelForAssociationIfAny = scalarModelForAssociationIfAny;
     }
     
     public abstract LinkAndLabel newLink(
             ObjectAction objectAction,
-            String linkId,
             ToggledMementosProvider toggledMementosProviderIfAny);
 
-    protected ActionLink newLink(
-            final String linkId,
+    protected ActionLink newLinkComponent(
             final ObjectAction action,
             final ToggledMementosProvider toggledMementosProviderIfAny) {
 
@@ -135,7 +136,7 @@ implements ActionLinkFactory<LinkAndLabel>, Serializable {
             }
 
             private ActionPrompt performOnClick(final AjaxRequestTarget target) {
-                return ActionLinkFactoryAbstract.this.onClick(this, target);
+                return ActionLinkFactoryForWicket.this.onClick(this, target);
             }
 
         };

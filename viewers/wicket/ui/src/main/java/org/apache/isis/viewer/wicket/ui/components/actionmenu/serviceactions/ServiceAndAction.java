@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 
 class ServiceAndAction {
     final String actionName;
@@ -37,7 +38,7 @@ class ServiceAndAction {
         this.actionName = actionName;
         this.serviceEntityModel = serviceEntityModel;
         this.objectAction = objectAction;
-        this.linkAndLabelFactory = new ServiceActionLinkFactory(serviceEntityModel);
+        this.linkAndLabelFactory = new ServiceActionLinkFactory(PageAbstract.ID_MENU_LINK, serviceEntityModel);
         this.isFirstSection = isFirstSection; 
     }
 
