@@ -13,7 +13,6 @@ class ActionDispatcher(private val at: Point = Point(100, 100)) : BaseAggregator
     override fun update(logEntry: LogEntry, subType: String) {
         val action = logEntry.getTransferObject() as Action
         action.links.forEach { link ->
-            // it.rel should be neither: (self | up | describedBy )
             if (link.isInvokeAction()) {
                 when (link.method) {
                     Method.GET.name -> processGet(action, link)
@@ -40,8 +39,6 @@ class ActionDispatcher(private val at: Point = Point(100, 100)) : BaseAggregator
     }
 
     private fun processPost(action: Action, link: Link) {
-        console.log("[ActionDispatcher.processPost] link.hasArguments: ${link.hasArguments()}")
-        console.log(link)
         val title = Utils.deCamel(action.id)
         if (link.hasArguments()) {
             ActionPrompt(action).open(at)

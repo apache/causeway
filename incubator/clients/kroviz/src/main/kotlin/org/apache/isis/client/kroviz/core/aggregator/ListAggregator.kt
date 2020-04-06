@@ -57,7 +57,7 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
         l.invokeWith(this, "xml")
     }
 
-    //TODO same code in ObjectDM -> pullup refactoring to be applied
+    //TODO same code in ObjectAggregator? -> pullup refactoring to be applied
     private fun handleLayout(layout: Layout) {
         val dm = dsp as ListDM
         // TODO layout is passed in at least twice.
