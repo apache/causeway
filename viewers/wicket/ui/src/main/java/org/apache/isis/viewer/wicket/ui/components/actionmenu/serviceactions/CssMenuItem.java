@@ -57,10 +57,6 @@ implements Serializable {
         subMenuItem.setParent(this);
         return subMenuItem;
     }
-
-    protected void addMenuItemFor(MenuActionWkt menuActionModel) {
-        super.addMenuItemFor(menuActionModel, null);
-    }
     
     // //////////////////////////////////////////////////////////////
     // Build wicket components from the menu item.

@@ -19,17 +19,17 @@
 
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
-import java.util.List;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.layout.menubars.MenuBars;
+import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+
+import lombok.val;
 
 /**
  * {@link ComponentFactory} for a {@link ServiceActionsPanel} to represent the
@@ -60,10 +60,9 @@ public class ServiceActionsPanelFactory extends ComponentFactoryAbstract {
     public Component createComponent(final String id, final IModel<?> model) {
         final ServiceActionsModel serviceActionsModel = (ServiceActionsModel) model;
 
-        final MenuBars menuBars = super.getCommonContext().getMenuBarsService().menuBars();
-
-        final List<CssMenuItem> menuItems = ServiceActionUtil.buildMenu(
-                super.getCommonContext(), menuBars, serviceActionsModel);
+        val menuItems = _Lists.<CssMenuItem>newArrayList();
+        ServiceActionUtil.buildMenu(
+                super.getCommonContext(), serviceActionsModel, menuItems::add);
 
         return new ServiceActionsPanel(id, menuItems);
     }

@@ -16,17 +16,16 @@ import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
 import org.apache.isis.applib.services.menu.MenuBarsService.Type;
 import org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.incubator.viewer.vaadin.model.action.MenuActionFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.model.action.MenuActionVaa;
-import org.apache.isis.incubator.viewer.vaadin.model.entity.ObjectVaa;
 import org.apache.isis.incubator.viewer.vaadin.model.menu.MenuItemVaa;
-import org.apache.isis.incubator.viewer.vaadin.ui.components.actionlink.MenuActionLinkFactory;
+import org.apache.isis.viewer.common.model.menu.MenuModelFactory;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
-import lombok.extern.log4j.Log4j2;
 
 @UtilityClass
-@Log4j2
+//@Log4j2
 final class MenuUtil {
 
     static Component createMenu(
@@ -62,9 +61,10 @@ final class MenuUtil {
             val menuItem = parentMenu.addItem(menuSectionUiModel.getName());
             val subMenu = menuItem.getSubMenu();
             menuSectionUiModel.getSubMenuItems().forEach(menuItemModel -> {
-                val menuActionModel = menuItemModel.getMenuActionUiModel();
+                val menuActionModel = (MenuActionVaa)menuItemModel.getMenuActionUiModel();
                 
-                if(menuActionModel.isFirstInSection() && subMenu.getItems().size()>0) {
+                if(menuActionModel.isFirstInSection() 
+                        && subMenu.getItems().size()>0) {
                     subMenu.addItem(new Hr());
                 }
                 
@@ -76,15 +76,15 @@ final class MenuUtil {
         };
         
         // top level left aligned ...
-        buildMenuModel(commonContext, bs3MenuBars.getPrimary(), menuSectionUiModel->
-            menuSectionBuilder.accept(leftMenuBar, menuSectionUiModel));
+        buildMenuModel(commonContext, bs3MenuBars.getPrimary(), newMenuItem->
+            menuSectionBuilder.accept(leftMenuBar, newMenuItem));
         
         // top level right aligned ...
-        buildMenuModel(commonContext, bs3MenuBars.getSecondary(), menuSectionUiModel->
-            menuSectionBuilder.accept(rightMenuBar, menuSectionUiModel));
+        buildMenuModel(commonContext, bs3MenuBars.getSecondary(), newMenuItem->
+            menuSectionBuilder.accept(rightMenuBar, newMenuItem));
         // TODO tertiary menu items should get collected under a top level menu labeled with the current user's name 
-        buildMenuModel(commonContext, bs3MenuBars.getTertiary(), menuSectionUiModel->
-            menuSectionBuilder.accept(rightMenuBar, menuSectionUiModel));
+        buildMenuModel(commonContext, bs3MenuBars.getTertiary(), newMenuItem->
+            menuSectionBuilder.accept(rightMenuBar, newMenuItem));
         
         return menuBarContainer;
         
@@ -112,63 +112,17 @@ final class MenuUtil {
         
     }
     
-    // initially copied from org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions.ServiceActionUtil.buildMenu
     private static void buildMenuModel(
             final IsisWebAppCommonContext commonContext,
             final BS3MenuBar menuBar,
-            final Consumer<MenuItemVaa> onMenuSection) {
-
-        // we no longer use ServiceActionsModel#getObject() because the model only holds the services for the
-        // menuBar in question, whereas the "Other" menu may reference a service which is defined for some other menubar
-
-        for (val menu : menuBar.getMenus()) {
-
-            val menuSectionUiModel = MenuItemVaa.newMenuItem(menu.getNamed());
-
-            for (val menuSection : menu.getSections()) {
-
-                boolean isFirstSection = true;
-
-                for (val actionLayoutData : menuSection.getServiceActions()) {
-                    val serviceSpecId = actionLayoutData.getObjectType();
-
-                    val serviceAdapter = commonContext.lookupServiceAdapterById(serviceSpecId);
-                    if (serviceAdapter == null) {
-                        // service not recognized, presumably the menu layout is out of sync
-                        // with actual configured modules
-                        continue;
-                    }
-
-                    val objectAction =
-                            serviceAdapter
-                                    .getSpecification()
-                                    .getObjectAction(actionLayoutData.getId())
-                                    .orElse(null);
-                    if (objectAction == null) {
-                        log.warn("No such action {}", actionLayoutData.getId());
-                        continue;
-                    }
-                    
-                    val objectModel = new ObjectVaa(commonContext, serviceAdapter);
-                    
-                    val saModel =
-                            new MenuActionVaa(
-                                    new MenuActionLinkFactory(objectModel),
-                                    actionLayoutData.getNamed(),
-                                    objectModel,
-                                    objectAction,
-                                    isFirstSection);
-
-                    // Optionally creates a sub-menu item based on visibility and usability
-                    menuSectionUiModel.addMenuItemFor(saModel);
-                    
-                    isFirstSection = false;
-                }
-            }
-            if (menuSectionUiModel.hasSubMenuItems()) {
-                onMenuSection.accept(menuSectionUiModel);
-            }
-        }
+            final Consumer<MenuItemVaa> onNewMenuItem) {
+        
+        MenuModelFactory.buildMenuItems(
+                commonContext, 
+                menuBar,
+                new MenuActionFactoryVaa(),
+                MenuItemVaa::newMenuItem,
+                onNewMenuItem);
     }
     
     

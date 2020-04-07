@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.vaadin.ui.components.actionlink;
+package org.apache.isis.incubator.viewer.vaadin.model.action;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Label;
@@ -30,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @RequiredArgsConstructor
-public class MenuActionLinkFactory implements ActionLinkFactory<Component> {
+public class MenuActionLinkFactoryVaa implements ActionLinkFactory<Component> {
 
     /** model of the service that holds the menu item's action */
     private final ObjectVaa serviceModel; 

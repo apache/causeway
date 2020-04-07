@@ -20,23 +20,24 @@
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 
-import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
-import org.apache.isis.applib.layout.menubars.MenuBars;
-import org.apache.isis.applib.layout.menubars.MenuSection;
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3Menu;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.viewer.common.model.action.MenuActionFactory;
+import org.apache.isis.viewer.common.model.menu.MenuModelFactory;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
@@ -195,61 +196,46 @@ public final class ServiceActionUtil {
         folderItem.add(subMenuItemsView);
     }
 
-    public static List<CssMenuItem> buildMenu(
-            IsisWebAppCommonContext commonContext,
-            MenuBars menuBars,
-            ServiceActionsModel serviceActionsModel) {
+    
+    private static class MenuActionFactoryWkt implements MenuActionFactory<AbstractLink> {
+
+        @Override
+        public MenuActionWkt newMenuAction(
+                IsisWebAppCommonContext commonContext, 
+                ManagedObject serviceAction,
+                String named, 
+                ObjectAction objectAction, 
+                boolean isFirstInSection) {
+            
+            val objectModel = EntityModel.ofAdapter(commonContext, serviceAction);
+            
+            return new MenuActionWkt(
+                    new MenuActionLinkFactory(PageAbstract.ID_MENU_LINK, objectModel), 
+                    named, 
+                    objectModel, 
+                    objectAction, 
+                    isFirstInSection);
+        }
+        
+    }
+    
+    public static void buildMenu(
+            final IsisWebAppCommonContext commonContext,
+            final ServiceActionsModel serviceActionsModel,
+            final Consumer<CssMenuItem> onNewMenuItem) {
+        
+        val menuBars = commonContext.getMenuBarsService().menuBars();
 
         // TODO: remove hard-coded dependency on BS3
         final BS3MenuBar menuBar = (BS3MenuBar) menuBars.menuBarFor(serviceActionsModel.getMenuBar());
-
-        // we no longer use ServiceActionsModel#getObject() because the model only holds the services for the
-        // menuBar in question, whereas the "Other" menu may reference a service which is defined for some other menubar
-
-        final List<CssMenuItem> menuItems = _Lists.newArrayList();
-        for (final BS3Menu menu : menuBar.getMenus()) {
-
-            final CssMenuItem menuItemModel = CssMenuItem.newMenuItem(menu.getNamed());
-
-            for (final MenuSection menuSection : menu.getSections()) {
-
-                boolean isFirstInSection = true;
-
-                for (final ServiceActionLayoutData actionLayoutData : menuSection.getServiceActions()) {
-                    val serviceSpecId = actionLayoutData.getObjectType();
-
-                    val serviceAdapter = commonContext.lookupServiceAdapterById(serviceSpecId);
-                    if(serviceAdapter == null) {
-                        // service not recognized, presumably the menu layout is out of sync with actual configured modules
-                        continue;
-                    }
-                    final EntityModel serviceEntityModel = EntityModel.ofAdapter(commonContext, serviceAdapter);
-                    final ObjectAction objectAction = serviceAdapter.getSpecification()
-                            .getObjectAction(actionLayoutData.getId()).orElse(null);
-                    if(objectAction == null) {
-                        log.warn("No such action {}", actionLayoutData.getId());
-                        continue;
-                    }
-                    
-                    val menuActionModel =
-                            new MenuActionWkt(
-                                    new MenuActionLinkFactory(PageAbstract.ID_MENU_LINK, serviceEntityModel)::newLink, 
-                                    actionLayoutData.getNamed(), 
-                                    serviceEntityModel, 
-                                    objectAction, 
-                                    isFirstInSection);
-
-                    isFirstInSection = false;
-
-                    // Optionally creates a sub-menu item based on visibility and usability
-                    menuItemModel.addMenuItemFor(menuActionModel);
-                }
-            }
-            if (menuItemModel.hasSubMenuItems()) {
-                menuItems.add(menuItemModel);
-            }
-        }
-        return menuItems;
+        
+        MenuModelFactory.buildMenuItems(
+                commonContext, 
+                menuBar,
+                new MenuActionFactoryWkt(),
+                CssMenuItem::newMenuItem,
+                onNewMenuItem);
+        
     }
 
 }

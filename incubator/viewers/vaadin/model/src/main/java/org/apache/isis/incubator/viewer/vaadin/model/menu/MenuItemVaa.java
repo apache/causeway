@@ -20,13 +20,8 @@ package org.apache.isis.incubator.viewer.vaadin.model.menu;
 
 import com.vaadin.flow.component.Component;
 
-import org.apache.isis.incubator.viewer.vaadin.model.action.MenuActionVaa;
-import org.apache.isis.viewer.common.model.action.ActionUiModel;
 import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModel;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.val;
 
 /**
@@ -36,8 +31,6 @@ import lombok.val;
 public class MenuItemVaa 
 extends MenuItemUiModel<Component, MenuItemVaa> {
 
-    @Getter @Setter(AccessLevel.PRIVATE) private MenuActionVaa menuActionUiModel;
-    
     public static MenuItemVaa newMenuItem(final String name) {
         return new MenuItemVaa(name);
     }
@@ -52,15 +45,5 @@ extends MenuItemUiModel<Component, MenuItemVaa> {
         subMenuItem.setParent(this);
         return subMenuItem;
     }
-    
-    /**
-     * Optionally creates a sub-menu item invoking an action on the provided 
-     * {@link ActionUiModel}, based on visibility and usability.
-     */
-    public void addMenuItemFor(final MenuActionVaa menuActionModel) {
-        
-        super.addMenuItemFor(menuActionModel, 
-                subMenuItem->((MenuItemVaa)subMenuItem).setMenuActionUiModel(menuActionModel));
-        
-    }
+
 }

@@ -89,6 +89,7 @@ public abstract class MenuItemUiModel<T, U extends MenuItemUiModel<T, U>> {
     @Getter @Setter private boolean blobOrClob = false; // unless set otherwise
     
     @Getter @Setter(AccessLevel.PRIVATE) private T actionLinkComponent;
+    @Getter @Setter private MenuActionUiModel<T> menuActionUiModel;
     
     private final List<U> subMenuItems = _Lists.newArrayList();
     protected void addSubMenuItem(final U cssMenuItem) {
@@ -170,9 +171,9 @@ public abstract class MenuItemUiModel<T, U extends MenuItemUiModel<T, U>> {
      * Optionally creates a sub-menu item invoking an action on the provided 
      * {@link MenuActionWkt action model}, based on visibility and usability.
      */
-    protected void addMenuItemFor(
+    public void addSubMenuItemFor(
             @NonNull final MenuActionUiModel<T> menuActionModel, 
-            @Nullable final Consumer<U> onNewMenuItem) {
+            @Nullable final Consumer<U> onNewSubMenuItem) {
 
         val serviceModel = menuActionModel.getServiceModel();
         val objectAction = menuActionModel.getObjectAction();
@@ -212,8 +213,8 @@ public abstract class MenuItemUiModel<T, U extends MenuItemUiModel<T, U>> {
         
         menutIem.setActionLinkComponent(linkAndLabel.getLinkComponent());
         
-        if(onNewMenuItem!=null) {
-            onNewMenuItem.accept(_Casts.uncheckedCast(menutIem));
+        if(onNewSubMenuItem!=null) {
+            onNewSubMenuItem.accept(_Casts.uncheckedCast(menutIem));
         }
     }
     
