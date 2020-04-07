@@ -21,6 +21,9 @@ package org.apache.isis.viewer.common.model.menuitem;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
+
+import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
@@ -31,17 +34,27 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.viewer.common.model.action.MenuActionUiModel;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.val;
 import lombok.experimental.Accessors;
+import lombok.extern.log4j.Log4j2;
 
+/**
+ * 
+ * @since 2.0.0
+ * @param <T> - link component type, native to the viewer
+ * @param <U> - concrete type implementing this class
+ */
+@Log4j2
 @Accessors(chain = true)
 @RequiredArgsConstructor
-public abstract class MenuItemUiModel<T extends MenuItemUiModel<T>> {
+public abstract class MenuItemUiModel<T, U extends MenuItemUiModel<T, U>> {
     
     @Getter private final String name;
     @Setter private boolean enabled = true; // unless disabled
@@ -75,17 +88,19 @@ public abstract class MenuItemUiModel<T extends MenuItemUiModel<T>> {
      */
     @Getter @Setter private boolean blobOrClob = false; // unless set otherwise
     
-    private final List<T> subMenuItems = _Lists.newArrayList();
-    protected void addSubMenuItem(final T cssMenuItem) {
+    @Getter @Setter(AccessLevel.PRIVATE) private T actionLinkComponent;
+    
+    private final List<U> subMenuItems = _Lists.newArrayList();
+    protected void addSubMenuItem(final U cssMenuItem) {
         subMenuItems.add(cssMenuItem);
     }
-    public List<T> getSubMenuItems() {
+    public List<U> getSubMenuItems() {
         return Collections.unmodifiableList(subMenuItems);
     }
     /**
      * @param menuItems we assume these have the correct parent already set
      */
-    public void replaceSubMenuItems(List<T> menuItems) {
+    public void replaceSubMenuItems(List<U> menuItems) {
         subMenuItems.clear();
         subMenuItems.addAll(menuItems);
     }
@@ -94,8 +109,8 @@ public abstract class MenuItemUiModel<T extends MenuItemUiModel<T>> {
     }
     
     
-    @Getter private T parent;
-    protected void setParent(T parent) {
+    @Getter private U parent;
+    protected void setParent(U parent) {
         this.parent = parent;
         parent.addSubMenuItem(_Casts.uncheckedCast(this));        
     }
@@ -148,6 +163,61 @@ public abstract class MenuItemUiModel<T extends MenuItemUiModel<T>> {
         return Optional.ofNullable(describedAsFacet)
                 .map(DescribedAsFacet::value);
     }
+    
+    // -- CONSTRUCTION
+    
+    /**
+     * Optionally creates a sub-menu item invoking an action on the provided 
+     * {@link MenuActionWkt action model}, based on visibility and usability.
+     */
+    protected void addMenuItemFor(
+            @NonNull final MenuActionUiModel<T> menuActionModel, 
+            @Nullable final Consumer<U> onNewMenuItem) {
+
+        val serviceModel = menuActionModel.getServiceModel();
+        val objectAction = menuActionModel.getObjectAction();
+        val requiresSeparator = menuActionModel.isFirstInSection();
+        val actionLinkFactory = menuActionModel.getActionLinkFactory();
+
+        val actionHolder = serviceModel.getManagedObject();
+        if(!isVisible(actionHolder, objectAction)) {
+            log.debug("not visible {}", objectAction.getName());
+            return;
+        }
+
+        // build the link
+        val linkAndLabel = actionLinkFactory.newLink(objectAction);
+        if (linkAndLabel == null) {
+            // can only get a null if invisible, so this should not happen given the visibility guard above
+            return;
+        }
+
+        val actionLabel = menuActionModel.getActionName() != null 
+                ? menuActionModel.getActionName() 
+                : linkAndLabel.getLabel();
+
+        val menutIem = newSubMenuItem(actionLabel)
+                .setDisabledReason(getReasonWhyDisabled(actionHolder, objectAction).orElse(null))
+                .setPrototyping(objectAction.isPrototype())
+                .setRequiresSeparator(requiresSeparator)
+                .setRequiresImmediateConfirmation(
+                        ObjectAction.Util.isAreYouSureSemantics(objectAction) &&
+                        ObjectAction.Util.isNoParameters(objectAction))
+                .setBlobOrClob(ObjectAction.Util.returnsBlobOrClob(objectAction))
+                .setDescription(getDescription(objectAction).orElse(null))
+                .setActionIdentifier(ObjectAction.Util.actionIdentifierFor(objectAction))
+                .setCssClass(ObjectAction.Util.cssClassFor(objectAction, actionHolder))
+                .setCssClassFa(ObjectAction.Util.cssClassFaFor(objectAction))
+                .setCssClassFaPosition(ObjectAction.Util.cssClassFaPositionFor(objectAction));
+        
+        menutIem.setActionLinkComponent(linkAndLabel.getLinkComponent());
+        
+        if(onNewMenuItem!=null) {
+            onNewMenuItem.accept(_Casts.uncheckedCast(menutIem));
+        }
+    }
+    
+    protected abstract U newSubMenuItem(final String name);
 
     
 }

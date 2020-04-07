@@ -66,15 +66,15 @@ final class MenuUtil {
             val menuItem = parentMenu.addItem(menuSectionUiModel.getName());
             val subMenu = menuItem.getSubMenu();
             menuSectionUiModel.getSubMenuItems().forEach(menuItemModel -> {
-                val saModel = menuItemModel.getServiceActionUiModel();
+                val menuActionModel = menuItemModel.getMenuActionUiModel();
                 
-                if(saModel.isFirstInSection() && subMenu.getItems().size()>0) {
+                if(menuActionModel.isFirstInSection() && subMenu.getItems().size()>0) {
                     subMenu.addItem(new Hr());
                 }
                 
                 subMenu.addItem(
                         (Component)menuItemModel.getActionLinkComponent(), 
-                        e->subMenuEventHandler.accept(saModel));
+                        e->subMenuEventHandler.accept(menuActionModel));
             });
                     
         };

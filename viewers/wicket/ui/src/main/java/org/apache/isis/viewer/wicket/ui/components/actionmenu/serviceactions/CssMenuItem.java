@@ -17,7 +17,6 @@
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
 import java.io.Serializable;
-import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -27,20 +26,16 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.val;
 
 class CssMenuItem 
-extends MenuItemUiModel<CssMenuItem> 
+extends MenuItemUiModel<AbstractLink, CssMenuItem> 
 implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -48,8 +43,6 @@ implements Serializable {
     private static final String ID_MENU_LABEL = "menuLabel";
     private static final String ID_SUB_MENU_ITEMS = "subMenuItems";
 
-    @Getter @Setter(AccessLevel.PRIVATE) private AbstractLink link;
-    
     public static CssMenuItem newMenuItem(final String name) {
         return new CssMenuItem(name);
     }
@@ -58,61 +51,17 @@ implements Serializable {
         super(name);
     }
     
-    private CssMenuItem newSubMenuItem(final String name) {
+    @Override
+    protected CssMenuItem newSubMenuItem(final String name) {
         val subMenuItem = newMenuItem(name);
         subMenuItem.setParent(this);
         return subMenuItem;
     }
 
-
-    // //////////////////////////////////////////////////////////////
-    // To add submenu items
-    // //////////////////////////////////////////////////////////////
-
-    /**
-     * Optionally creates a sub-menu item invoking an action on the provided 
-     * {@link MenuActionWkt action model}, based on visibility and usability.
-     */
-    void addMenuItemFor(final MenuActionWkt serviceAndAction) {
-
-        val serviceModel = serviceAndAction.getServiceModel();
-        val objectAction = serviceAndAction.getObjectAction();
-        val requiresSeparator = serviceAndAction.isFirstInSection();
-        val actionLinkFactory = serviceAndAction.getActionLinkFactory();
-
-        val actionHolder = serviceModel.getManagedObject();
-        if(!super.isVisible(actionHolder, objectAction)) {
-            return;
-        }
-
-        // build the link
-        val linkAndLabel = actionLinkFactory.newLink(objectAction);
-        if (linkAndLabel == null) {
-            // can only get a null if invisible, so this should not happen given the visibility guard above
-            return;
-        }
-
-        final AbstractLink link = linkAndLabel.getLinkComponent();
-        final String actionLabel = serviceAndAction.getActionName() != null ? serviceAndAction.getActionName() : linkAndLabel.getLabel();
-
-        val menutIem = (CssMenuItem) newSubMenuItem(actionLabel)
-                .setDisabledReason(super.getReasonWhyDisabled(actionHolder, objectAction).orElse(null))
-                .setPrototyping(objectAction.isPrototype())
-                .setRequiresSeparator(requiresSeparator)
-                .setRequiresImmediateConfirmation(
-                        ObjectAction.Util.isAreYouSureSemantics(objectAction) &&
-                        ObjectAction.Util.isNoParameters(objectAction))
-                .setBlobOrClob(ObjectAction.Util.returnsBlobOrClob(objectAction))
-                .setDescription(super.getDescription(objectAction).orElse(null))
-                .setActionIdentifier(ObjectAction.Util.actionIdentifierFor(objectAction))
-                .setCssClass(ObjectAction.Util.cssClassFor(objectAction, actionHolder))
-                .setCssClassFa(ObjectAction.Util.cssClassFaFor(objectAction))
-                .setCssClassFaPosition(ObjectAction.Util.cssClassFaPositionFor(objectAction));
-        
-        menutIem.setLink(link);
-
+    protected void addMenuItemFor(MenuActionWkt menuActionModel) {
+        super.addMenuItemFor(menuActionModel, null);
     }
-
+    
     // //////////////////////////////////////////////////////////////
     // Build wicket components from the menu item.
     // //////////////////////////////////////////////////////////////
@@ -126,7 +75,7 @@ implements Serializable {
     }
 
     private Component addMenuItemComponentTo(final MarkupContainer markupContainer) {
-        final AbstractLink link = getLink();
+        final AbstractLink link = super.getActionLinkComponent();
         final Label label = new Label(CssMenuItem.ID_MENU_LABEL, Model.of(this.getName()));
 
         if (link != null) {
@@ -180,12 +129,12 @@ implements Serializable {
     }
 
     private void addSubMenuItemComponentsIfAnyTo(final MarkupContainer menuItemMarkup) {
-        final List<CssMenuItem> subMenuItems = getSubMenuItems();
+        val subMenuItems = getSubMenuItems();
         if (subMenuItems.isEmpty()) {
             Components.permanentlyHide(menuItemMarkup, CssMenuItem.ID_SUB_MENU_ITEMS);
-        }
-        else {
-            menuItemMarkup.add(new CssSubMenuItemsPanel(CssMenuItem.ID_SUB_MENU_ITEMS, subMenuItems));
+        } else {
+            menuItemMarkup.add(
+                    new CssSubMenuItemsPanel(CssMenuItem.ID_SUB_MENU_ITEMS, subMenuItems));
         }
     }
 
@@ -200,5 +149,7 @@ implements Serializable {
             linkComponent.add(new CssClassAppender("top-parent"));
         }
     }
+
+
 
 }

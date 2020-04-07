@@ -23,7 +23,6 @@ import java.util.List;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -66,15 +65,15 @@ public final class ServiceActionUtil {
         if (!menuItem.isSeparator()) {
             leafItem = new Fragment("content", "leafItem", parent);
 
-            AbstractLink subMenuItemLink = menuItem.getLink();
+            val menuItemActionLink = menuItem.getActionLinkComponent();
 
             Label menuItemLabel = new Label("menuLinkLabel", menuItem.getName());
-            subMenuItemLink.addOrReplace(menuItemLabel);
+            menuItemActionLink.addOrReplace(menuItemLabel);
 
             listItem.add(new CssClassAppender("isis-" + CssClassAppender.asCssStyle(menuItem.getActionIdentifier())));
             if (!menuItem.isEnabled()) {
                 listItem.add(new CssClassAppender("disabled"));
-                subMenuItemLink.setEnabled(false);
+                menuItemActionLink.setEnabled(false);
 
                 Tooltips.addTooltip(listItem, menuItem.getDisabledReason());
 
@@ -91,25 +90,25 @@ public final class ServiceActionUtil {
                     val translationService =
                             commonContext.lookupServiceElseFail(TranslationService.class);
                     Confirmations
-                        .addConfirmationDialog(translationService, subMenuItemLink, TooltipConfig.Placement.bottom);
+                        .addConfirmationDialog(translationService, menuItemActionLink, TooltipConfig.Placement.bottom);
                 }
 
             }
             if (menuItem.isPrototyping()) {
-                subMenuItemLink.add(new CssClassAppender("prototype"));
+                menuItemActionLink.add(new CssClassAppender("prototype"));
             }
-            leafItem.add(subMenuItemLink);
+            leafItem.add(menuItemActionLink);
 
             String cssClassFa = menuItem.getCssClassFa();
             if (_Strings.isNullOrEmpty(cssClassFa)) {
-                subMenuItemLink.add(new CssClassAppender("menuLinkSpacer"));
+                menuItemActionLink.add(new CssClassAppender("menuLinkSpacer"));
             } else {
                 menuItemLabel.add(new CssClassFaBehavior(cssClassFa, menuItem.getCssClassFaPosition()));
             }
 
             String cssClass = menuItem.getCssClass();
             if (!_Strings.isNullOrEmpty(cssClass)) {
-                subMenuItemLink.add(new CssClassAppender(cssClass));
+                menuItemActionLink.add(new CssClassAppender(cssClass));
             }
         } else {
             leafItem = new Fragment("content", "empty", parent);
@@ -210,7 +209,7 @@ public final class ServiceActionUtil {
         final List<CssMenuItem> menuItems = _Lists.newArrayList();
         for (final BS3Menu menu : menuBar.getMenus()) {
 
-            final CssMenuItem serviceMenu = CssMenuItem.newMenuItem(menu.getNamed());
+            final CssMenuItem menuItemModel = CssMenuItem.newMenuItem(menu.getNamed());
 
             for (final MenuSection menuSection : menu.getSections()) {
 
@@ -232,7 +231,7 @@ public final class ServiceActionUtil {
                         continue;
                     }
                     
-                    val serviceAndAction =
+                    val menuActionModel =
                             new MenuActionWkt(
                                     new MenuActionLinkFactory(PageAbstract.ID_MENU_LINK, serviceEntityModel)::newLink, 
                                     actionLayoutData.getNamed(), 
@@ -243,11 +242,11 @@ public final class ServiceActionUtil {
                     isFirstInSection = false;
 
                     // Optionally creates a sub-menu item based on visibility and usability
-                    serviceMenu.addMenuItemFor(serviceAndAction);
+                    menuItemModel.addMenuItemFor(menuActionModel);
                 }
             }
-            if (serviceMenu.hasSubMenuItems()) {
-                menuItems.add(serviceMenu);
+            if (menuItemModel.hasSubMenuItems()) {
+                menuItems.add(menuItemModel);
             }
         }
         return menuItems;

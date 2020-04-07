@@ -18,7 +18,8 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.model.menu;
 
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import com.vaadin.flow.component.Component;
+
 import org.apache.isis.incubator.viewer.vaadin.model.action.MenuActionVaa;
 import org.apache.isis.viewer.common.model.action.ActionUiModel;
 import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModel;
@@ -27,17 +28,15 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
- * @since Apr 5, 2020
+ * @since 2.0.0
  */
-@Log4j2
+//@Log4j2
 public class MenuItemVaa 
-extends MenuItemUiModel<MenuItemVaa> {
+extends MenuItemUiModel<Component, MenuItemVaa> {
 
-    @Getter @Setter(AccessLevel.PRIVATE) private Object actionLinkComponent;
-    @Getter @Setter(AccessLevel.PRIVATE) private MenuActionVaa serviceActionUiModel;
+    @Getter @Setter(AccessLevel.PRIVATE) private MenuActionVaa menuActionUiModel;
     
     public static MenuItemVaa newMenuItem(final String name) {
         return new MenuItemVaa(name);
@@ -47,57 +46,21 @@ extends MenuItemUiModel<MenuItemVaa> {
         super(name);
     }
     
-    private MenuItemVaa newSubMenuItem(final String name) {
+    @Override
+    protected MenuItemVaa newSubMenuItem(final String name) {
         val subMenuItem = newMenuItem(name);
         subMenuItem.setParent(this);
         return subMenuItem;
     }
     
-
     /**
      * Optionally creates a sub-menu item invoking an action on the provided 
      * {@link ActionUiModel}, based on visibility and usability.
      */
-    public void addMenuItemFor(final MenuActionVaa saModel) {
+    public void addMenuItemFor(final MenuActionVaa menuActionModel) {
         
-        val serviceEntityModel = saModel.getServiceModel();
-        val objectAction = saModel.getObjectAction();
-        final boolean requiresSeparator = saModel.isFirstInSection();
-        val actionLinkFactory = saModel.getActionLinkFactory();
-
-        val actionHolder = serviceEntityModel.getManagedObject();
-        if(!super.isVisible(actionHolder, objectAction)) {
-            log.info("not visible {}", objectAction.getName());
-            return;
-        }
-
-        // build the link
-        val linkAndLabel = actionLinkFactory.newLink(objectAction);
-        if (linkAndLabel == null) {
-            // can only get a null if invisible, so this should not happen given the visibility guard above
-            return;
-        }
-
-        val actionLabel = saModel.getActionName() != null 
-                ? saModel.getActionName() 
-                : linkAndLabel.getLabel();
-
-        val menutIem = (MenuItemVaa) newSubMenuItem(actionLabel)
-                .setDisabledReason(super.getReasonWhyDisabled(actionHolder, objectAction).orElse(null))
-                .setPrototyping(objectAction.isPrototype())
-                .setRequiresSeparator(requiresSeparator)
-                .setRequiresImmediateConfirmation(
-                        ObjectAction.Util.isAreYouSureSemantics(objectAction) &&
-                        ObjectAction.Util.isNoParameters(objectAction))
-                .setBlobOrClob(ObjectAction.Util.returnsBlobOrClob(objectAction))
-                .setDescription(super.getDescription(objectAction).orElse(null))
-                .setActionIdentifier(ObjectAction.Util.actionIdentifierFor(objectAction))
-                .setCssClass(ObjectAction.Util.cssClassFor(objectAction, actionHolder))
-                .setCssClassFa(ObjectAction.Util.cssClassFaFor(objectAction))
-                .setCssClassFaPosition(ObjectAction.Util.cssClassFaPositionFor(objectAction));
-        
-        menutIem.setActionLinkComponent(linkAndLabel.getLinkComponent());
-        menutIem.setServiceActionUiModel(saModel);
+        super.addMenuItemFor(menuActionModel, 
+                subMenuItem->((MenuItemVaa)subMenuItem).setMenuActionUiModel(menuActionModel));
         
     }
 }
