@@ -11,11 +11,14 @@ import pl.treksoft.kvision.panel.*
 class RowBuilder {
 
     fun create(row: Row, tObject: TObject, dsp: RoDisplay): SimplePanel {
-        val result = HPanel()
-        result.width = CssSize(100, UNIT.perc)
-        result.height = CssSize(100, UNIT.perc)
+        val result = FlexPanel(
+                FlexDir.ROW,
+                FlexWrap.NOWRAP,
+                FlexJustify.FLEXSTART,
+                FlexAlignItems.FLEXSTART,
+                FlexAlignContent.STRETCH,
+                spacing = 10 )
 
-        // each col has to be an element in a HPanel
         for (c in row.colList) {
             val cpt = ColBuilder().create(c, tObject, dsp)
             result.add(cpt)

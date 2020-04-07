@@ -18,8 +18,6 @@ import pl.treksoft.kvision.form.text.TextArea
 import pl.treksoft.kvision.form.time.DateTime
 import pl.treksoft.kvision.form.time.dateTime
 import pl.treksoft.kvision.html.Div
-import pl.treksoft.kvision.html.header
-import pl.treksoft.kvision.panel.SimplePanel
 import pl.treksoft.kvision.panel.VPanel
 import pl.treksoft.kvision.panel.vPanel
 import pl.treksoft.kvision.utils.perc
@@ -62,34 +60,24 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
 
     private fun createTime(fi: FormItem): DateTime {
         val date = DateHelper.toDate(fi.content)
-        val item = dateTime(format = "YYYY-MM-DD HH:mm", label = fi.label, value = date)
-        return item
+        return dateTime(format = "YYYY-MM-DD HH:mm", label = fi.label, value = date)
     }
 
     private fun createDate(fi: FormItem): DateTime {
         val date = DateHelper.toDate(fi.content)
-        val item = dateTime(
+        return dateTime(
                 format = "YYYY-MM-DD",
                 label = fi.label,
                 value = date
         )
-        return item
     }
 
     private fun createNumeric(fi: FormItem): Spinner {
-        val item = Spinner(label = fi.label, value = fi.content as Long)
-        return item
+        return Spinner(label = fi.label, value = fi.content as Long)
     }
 
-    //TODO move outer frame to the builder or use FieldSet Widget from KV
     private fun createHtml(fi: FormItem): Component {
-        val cpt = SimplePanel()
-        cpt.header(fi.label).addCssClass("panel-heading")
-        cpt.title = fi.label
-        val div = Div(rich = true, content = fi.content.toString())
-        div.addCssClass("panel-body")
-        cpt.add(div)
-        return cpt
+        return Div(rich = true, content = fi.content.toString())
     }
 
     private fun createText(fi: FormItem): Text {
@@ -145,7 +133,6 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
         }
         item.height = 100.perc
         item.width = 100.perc
-        console.log(item)
         return item
     }
 
