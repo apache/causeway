@@ -14,18 +14,15 @@ import pl.treksoft.kvision.panel.VPanel
 class RoDisplay(val displayModel: ObjectDM) : Displayable, VPanel() {
 
     var menu: DropDown? = null
-    private lateinit var objectPanel: VPanel
+    private var objectPanel: VPanel
 
     init {
-        val ol = displayModel.layout
-        if (ol != null) {
-            val model = displayModel.data!!
-            val tObject: TObject = model.delegate
-            val grid = displayModel.grid!!
-            objectPanel = LayoutBuilder().create(ol, grid, tObject, this)
-            objectPanel.width = CssSize(100, UNIT.perc)
-            add(objectPanel)
-        }
+        val model = displayModel.data!!
+        val tObject: TObject = model.delegate
+        val grid = displayModel.grid!!
+        objectPanel = LayoutBuilder().create(grid, tObject, this)
+        objectPanel.width = CssSize(100, UNIT.perc)
+        add(objectPanel)
     }
 
     override fun setDirty(value: Boolean) {

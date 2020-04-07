@@ -6,16 +6,16 @@ import org.apache.isis.client.kroviz.ui.kv.MenuFactory
 import org.apache.isis.client.kroviz.ui.kv.RoDisplay
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
-import pl.treksoft.kvision.panel.HPanel
-import pl.treksoft.kvision.panel.VPanel
+import pl.treksoft.kvision.panel.*
 
 class RowBuilder {
 
-    fun create(row: Row, tObject: TObject, dsp: RoDisplay): VPanel {
-        val result = VPanel()
+    fun create(row: Row, tObject: TObject, dsp: RoDisplay): SimplePanel {
+        val result = HPanel()
         result.width = CssSize(100, UNIT.perc)
         result.height = CssSize(100, UNIT.perc)
 
+        // each col has to be an element in a HPanel
         for (c in row.colList) {
             val cpt = ColBuilder().create(c, tObject, dsp)
             result.add(cpt)
