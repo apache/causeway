@@ -234,7 +234,7 @@ public final class ServiceActionUtil {
                     
                     val serviceAndAction =
                             new MenuActionWkt(
-                                    new ServiceActionLinkFactory(PageAbstract.ID_MENU_LINK, serviceEntityModel)::newLink, 
+                                    new MenuActionLinkFactory(PageAbstract.ID_MENU_LINK, serviceEntityModel)::newLink, 
                                     actionLayoutData.getNamed(), 
                                     serviceEntityModel, 
                                     objectAction, 

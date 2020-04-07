@@ -65,6 +65,11 @@
 			<groupId>org.apache.isis.viewer</groupId>
 			<artifactId>isis-viewer-common</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin</artifactId>
+		</dependency>
 
 		<!-- TEST DEPENDENCIES -->
 		<dependency>

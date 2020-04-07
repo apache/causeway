@@ -30,10 +30,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * 
  * @since Apr 5, 2020
- * @implNote corresponds to Wicket
- * org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions.CssMenuItem
  */
 @Log4j2
 public class MenuItemVaa 
@@ -66,7 +63,7 @@ extends MenuItemUiModel<MenuItemVaa> {
         val serviceEntityModel = saModel.getServiceModel();
         val objectAction = saModel.getObjectAction();
         final boolean requiresSeparator = saModel.isFirstInSection();
-        val actionLinkFactory = saModel.getLinkAndLabelFactory();
+        val actionLinkFactory = saModel.getActionLinkFactory();
 
         val actionHolder = serviceEntityModel.getManagedObject();
         if(!super.isVisible(actionHolder, objectAction)) {
@@ -75,7 +72,7 @@ extends MenuItemUiModel<MenuItemVaa> {
         }
 
         // build the link
-        val linkAndLabel = actionLinkFactory.apply(objectAction);
+        val linkAndLabel = actionLinkFactory.newLink(objectAction);
         if (linkAndLabel == null) {
             // can only get a null if invisible, so this should not happen given the visibility guard above
             return;

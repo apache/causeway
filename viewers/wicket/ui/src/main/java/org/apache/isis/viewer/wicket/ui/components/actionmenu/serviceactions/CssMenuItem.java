@@ -78,7 +78,7 @@ implements Serializable {
         val serviceModel = serviceAndAction.getServiceModel();
         val objectAction = serviceAndAction.getObjectAction();
         val requiresSeparator = serviceAndAction.isFirstInSection();
-        val actionLinkFactory = serviceAndAction.getLinkAndLabelFactory();
+        val actionLinkFactory = serviceAndAction.getActionLinkFactory();
 
         val actionHolder = serviceModel.getManagedObject();
         if(!super.isVisible(actionHolder, objectAction)) {
@@ -86,14 +86,13 @@ implements Serializable {
         }
 
         // build the link
-        val linkAndLabel = actionLinkFactory.apply(objectAction);
+        val linkAndLabel = actionLinkFactory.newLink(objectAction);
         if (linkAndLabel == null) {
             // can only get a null if invisible, so this should not happen given the visibility guard above
             return;
         }
 
-        //TODO remove need for cast (type-safe)
-        final AbstractLink link = (AbstractLink) linkAndLabel.getLinkComponent();
+        final AbstractLink link = linkAndLabel.getLinkComponent();
         final String actionLabel = serviceAndAction.getActionName() != null ? serviceAndAction.getActionName() : linkAndLabel.getLabel();
 
         val menutIem = (CssMenuItem) newSubMenuItem(actionLabel)

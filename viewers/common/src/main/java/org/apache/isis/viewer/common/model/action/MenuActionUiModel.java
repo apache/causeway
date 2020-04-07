@@ -18,28 +18,31 @@
  */
 package org.apache.isis.viewer.common.model.action;
 
-import java.util.function.Function;
-
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.link.LinkAndLabelUiModel;
+import org.apache.isis.viewer.common.model.link.ActionLinkFactory;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 
 import lombok.Getter;
 
+/**
+ * 
+ * @since 2.0.0
+ * @param <T> - link component type, native to the viewer
+ */
 @Getter
-public class MenuActionUiModel extends ActionUiModel {
+public class MenuActionUiModel<T> extends ActionUiModel<T> {
 
     private final ObjectUiModel serviceModel;
     private final boolean isFirstInSection;
     
     public MenuActionUiModel(
-            Function<ObjectAction, LinkAndLabelUiModel<?>> linkAndLabelFactory,
-            String actionName, 
-            ObjectUiModel serviceModel, 
-            ObjectAction objectAction, 
-            boolean isFirstInSection) {
+            final ActionLinkFactory<T> actionLinkFactory,
+            final String actionName, 
+            final ObjectUiModel serviceModel, 
+            final ObjectAction objectAction, 
+            final boolean isFirstInSection) {
         
-        super(linkAndLabelFactory, actionName, objectAction);
+        super(actionLinkFactory, actionName, objectAction);
         this.serviceModel = serviceModel;
         this.isFirstInSection = isFirstInSection;
         

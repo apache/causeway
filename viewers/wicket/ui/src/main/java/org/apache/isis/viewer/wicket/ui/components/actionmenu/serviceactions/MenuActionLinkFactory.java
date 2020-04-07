@@ -28,14 +28,14 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLi
 
 import lombok.val;
 
-class ServiceActionLinkFactory extends ActionLinkFactoryForWicket {
+class MenuActionLinkFactory extends ActionLinkFactoryForWicket {
 
     private static final long serialVersionUID = 1L;
 
-    ServiceActionLinkFactory(
+    MenuActionLinkFactory(
             final String linkId,
-            final EntityModel serviceEntityModel) {
-        super(linkId, serviceEntityModel, null, null);
+            final EntityModel serviceModel) {
+        super(linkId, serviceModel, null, null);
     }
 
     @Override

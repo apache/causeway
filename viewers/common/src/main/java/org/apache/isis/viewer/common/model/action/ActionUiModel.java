@@ -18,23 +18,21 @@
  */
 package org.apache.isis.viewer.common.model.action;
 
-import java.util.function.Function;
-
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.link.LinkAndLabelUiModel;
+import org.apache.isis.viewer.common.model.link.ActionLinkFactory;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
  * 
- * @since Apr 6, 2020
- *
+ * @since 2.0.0
+ * @param <T> - link component type, native to the viewer
  */
 @Getter @RequiredArgsConstructor
-public class ActionUiModel {
+public class ActionUiModel<T> {
 
-    private final Function<ObjectAction, LinkAndLabelUiModel<?>> linkAndLabelFactory;
+    private final ActionLinkFactory<T> actionLinkFactory;
     private final String actionName;
     private final ObjectAction objectAction;
 
