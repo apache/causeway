@@ -20,6 +20,7 @@ package org.apache.isis.viewer.common.model.action;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.link.ActionLinkFactory;
+import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,7 @@ public class ActionUiModel<T> {
     private final ActionLinkFactory<T> actionLinkFactory;
     private final String actionName;
     private final ObjectAction objectAction;
+    private final ObjectUiModel actionHolder;
 
     @Override
     public String toString() {

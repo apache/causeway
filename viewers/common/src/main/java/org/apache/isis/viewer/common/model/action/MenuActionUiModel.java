@@ -32,20 +32,13 @@ import lombok.Getter;
 @Getter
 public class MenuActionUiModel<T> extends ActionUiModel<T> {
 
-    private final ObjectUiModel serviceModel;
-    private final boolean isFirstInSection;
-    
     public MenuActionUiModel(
             final ActionLinkFactory<T> actionLinkFactory,
             final String actionName, 
-            final ObjectUiModel serviceModel, 
-            final ObjectAction objectAction, 
-            final boolean isFirstInSection) {
+            final ObjectAction objectAction,
+            final ObjectUiModel serviceModel) {
         
-        super(actionLinkFactory, actionName, objectAction);
-        this.serviceModel = serviceModel;
-        this.isFirstInSection = isFirstInSection;
-        
+        super(actionLinkFactory, actionName, objectAction, serviceModel);
     }
     
 }

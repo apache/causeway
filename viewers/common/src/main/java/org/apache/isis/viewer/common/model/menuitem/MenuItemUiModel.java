@@ -68,9 +68,9 @@ public abstract class MenuItemUiModel<T, U extends MenuItemUiModel<T, U>> {
     @Getter @Setter private CssClassFaPosition cssClassFaPosition;
     @Getter @Setter private String description;
     /**
-     * Requires a separator before it
+     * To determine whether requires a separator before it.
      */
-    @Getter @Setter private boolean requiresSeparator = false; // unless set otherwise
+    @Getter @Setter private boolean isFirstInSection = false; // unless set otherwise
     @Getter @Setter private boolean separator;
 
     @Getter @Setter private String disabledReason;
@@ -172,12 +172,12 @@ public abstract class MenuItemUiModel<T, U extends MenuItemUiModel<T, U>> {
      * {@link MenuActionWkt action model}, based on visibility and usability.
      */
     public void addSubMenuItemFor(
-            @NonNull final MenuActionUiModel<T> menuActionModel, 
+            @NonNull final MenuActionUiModel<T> menuActionModel,
+            final boolean isFirstInSection,
             @Nullable final Consumer<U> onNewSubMenuItem) {
 
-        val serviceModel = menuActionModel.getServiceModel();
+        val serviceModel = menuActionModel.getActionHolder();
         val objectAction = menuActionModel.getObjectAction();
-        val requiresSeparator = menuActionModel.isFirstInSection();
         val actionLinkFactory = menuActionModel.getActionLinkFactory();
 
         val actionHolder = serviceModel.getManagedObject();
@@ -198,9 +198,9 @@ public abstract class MenuItemUiModel<T, U extends MenuItemUiModel<T, U>> {
                 : linkAndLabel.getLabel();
 
         val menutIem = newSubMenuItem(actionLabel)
+                .setFirstInSection(isFirstInSection)
                 .setDisabledReason(getReasonWhyDisabled(actionHolder, objectAction).orElse(null))
                 .setPrototyping(objectAction.isPrototype())
-                .setRequiresSeparator(requiresSeparator)
                 .setRequiresImmediateConfirmation(
                         ObjectAction.Util.isAreYouSureSemantics(objectAction) &&
                         ObjectAction.Util.isNoParameters(objectAction))

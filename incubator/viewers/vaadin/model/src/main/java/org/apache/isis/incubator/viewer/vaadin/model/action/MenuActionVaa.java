@@ -30,11 +30,10 @@ public class MenuActionVaa extends MenuActionUiModel<Component> {
     public MenuActionVaa(
             final ActionLinkFactory<Component> actionLinkFactory,
             final String actionName, 
-            final ObjectUiModel serviceModel,
-            final ObjectAction objectAction, 
-            final boolean isFirstInSection) {
+            final ObjectAction objectAction,
+            final ObjectUiModel actionHolder) {
         
-        super(actionLinkFactory, actionName, serviceModel, objectAction, isFirstInSection);
+        super(actionLinkFactory, actionName, objectAction, actionHolder);
     }
     
 }

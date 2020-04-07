@@ -47,11 +47,10 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
 
-@Log4j2
+//@Log4j2
 public final class ServiceActionUtil {
 
     private ServiceActionUtil(){}
@@ -148,7 +147,7 @@ public final class ServiceActionUtil {
     static List<CssMenuItem> withSeparators(List<CssMenuItem> subMenuItems) {
         final List<CssMenuItem> itemsWithSeparators = _Lists.newArrayList();
         for (CssMenuItem menuItem : subMenuItems) {
-            if(menuItem.isRequiresSeparator()) {
+            if(menuItem.isFirstInSection()) {
                 if(!itemsWithSeparators.isEmpty()) {
                     // bit nasty... we add a new separator item
                     val separatorItem = CssMenuItem
@@ -157,7 +156,7 @@ public final class ServiceActionUtil {
                     separatorItem.setSeparator(true);
                     itemsWithSeparators.add(separatorItem);
                 }
-                menuItem.setRequiresSeparator(false);
+                menuItem.setFirstInSection(false); // why is that?
             }
             itemsWithSeparators.add(menuItem);
         }
@@ -202,19 +201,17 @@ public final class ServiceActionUtil {
         @Override
         public MenuActionWkt newMenuAction(
                 IsisWebAppCommonContext commonContext, 
-                ManagedObject serviceAction,
                 String named, 
-                ObjectAction objectAction, 
-                boolean isFirstInSection) {
+                ObjectAction objectAction,
+                ManagedObject serviceAction) {
             
             val objectModel = EntityModel.ofAdapter(commonContext, serviceAction);
             
             return new MenuActionWkt(
                     new MenuActionLinkFactory(PageAbstract.ID_MENU_LINK, objectModel), 
                     named, 
-                    objectModel, 
-                    objectAction, 
-                    isFirstInSection);
+                    objectAction,
+                    objectModel);
         }
         
     }

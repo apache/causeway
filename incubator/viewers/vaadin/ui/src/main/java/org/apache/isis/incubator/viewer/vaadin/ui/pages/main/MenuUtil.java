@@ -63,7 +63,7 @@ final class MenuUtil {
             menuSectionUiModel.getSubMenuItems().forEach(menuItemModel -> {
                 val menuActionModel = (MenuActionVaa)menuItemModel.getMenuActionUiModel();
                 
-                if(menuActionModel.isFirstInSection() 
+                if(menuItemModel.isFirstInSection() 
                         && subMenu.getItems().size()>0) {
                     subMenu.addItem(new Hr());
                 }

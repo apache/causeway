@@ -30,11 +30,10 @@ class MenuActionWkt extends MenuActionUiModel<AbstractLink> {
     MenuActionWkt(
             final ActionLinkFactory<AbstractLink> actionLinkFactory,
             final String actionName,
-            final ObjectUiModel serviceModel,
             final ObjectAction objectAction,
-            final boolean isFirstInSection) {
+            final ObjectUiModel serviceModel) {
 
-        super(actionLinkFactory, actionName, serviceModel, objectAction, isFirstInSection); 
+        super(actionLinkFactory, actionName, objectAction, serviceModel); 
     }
 
 }

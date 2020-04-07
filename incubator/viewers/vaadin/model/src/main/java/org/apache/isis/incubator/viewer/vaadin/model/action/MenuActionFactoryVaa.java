@@ -33,19 +33,17 @@ public class MenuActionFactoryVaa implements MenuActionFactory<Component> {
     @Override
     public MenuActionVaa newMenuAction(
             IsisWebAppCommonContext commonContext, 
-            ManagedObject serviceAction,
             String named, 
-            ObjectAction objectAction, 
-            boolean isFirstInSection) {
+            ObjectAction objectAction,
+            ManagedObject actionHolder) {
         
-        val objectModel = new ObjectVaa(commonContext, serviceAction);
+        val objectModel = new ObjectVaa(commonContext, actionHolder);
         
         return new MenuActionVaa(
                         new MenuActionLinkFactoryVaa(objectModel),
                         named,
-                        objectModel,
                         objectAction,
-                        isFirstInSection);
+                        objectModel);
     }
 
 }

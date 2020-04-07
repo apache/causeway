@@ -104,7 +104,7 @@ public class SimpleMainView extends VerticalLayout {
     }
 
     private ComponentEventListener<ClickEvent<Button>> executeAndHandleResultAction(
-            final MenuActionVaa saModel,
+            final MenuActionVaa menuActionModel,
             final ObjectAction objectAction,
             final Div actionResult) {
 
@@ -112,7 +112,7 @@ public class SimpleMainView extends VerticalLayout {
 
             actionResult.removeAll();
 
-            val actionOwner = saModel.getServiceModel().getManagedObject();
+            val actionOwner = menuActionModel.getActionHolder().getManagedObject();
 
             val result = objectAction
                     .execute(

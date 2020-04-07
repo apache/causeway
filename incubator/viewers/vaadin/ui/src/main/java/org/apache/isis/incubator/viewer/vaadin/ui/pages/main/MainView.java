@@ -84,12 +84,12 @@ implements BeforeEnterObserver {
         setDrawerOpened(false);
     }
 
-    private void onMenuAction(MenuActionVaa saModel) {
+    private void onMenuAction(MenuActionVaa menuActionModel) {
         
         pageContent.removeAll();
 
-        val objectAction = saModel.getObjectAction();
-        val actionOwner = saModel.getServiceModel().getManagedObject();
+        val objectAction = menuActionModel.getObjectAction();
+        val actionOwner = menuActionModel.getActionHolder().getManagedObject();
 
         val result = objectAction
                 .execute(

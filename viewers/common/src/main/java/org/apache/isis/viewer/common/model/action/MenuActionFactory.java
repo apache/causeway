@@ -8,9 +8,8 @@ public interface MenuActionFactory<T> {
 
     MenuActionUiModel<T> newMenuAction(
             IsisWebAppCommonContext commonContext, 
-            ManagedObject serviceAction, 
             String named,
-            ObjectAction objectAction, 
-            boolean isFirstInSection);
+            ObjectAction objectAction,
+            ManagedObject actionHolder);
 
 }

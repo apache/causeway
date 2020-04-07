@@ -60,16 +60,19 @@ public class MenuModelFactory {
                     
                     val menuActionUiModel = menuActionFactory.newMenuAction(
                             commonContext,
-                            serviceAdapter,
                             actionLayoutData.getNamed(),
-                            objectAction, 
-                            isFirstInSection);
+                            objectAction,
+                            serviceAdapter);
 
                     // Optionally creates a sub-menu item based on visibility and usability
-                    menuItemModel.addSubMenuItemFor(menuActionUiModel, newSubMenuItem->{
-                        // increment counter only when a sub item was actually added
-                        itemsPerSectionCounter.increment();
-                        newSubMenuItem.setMenuActionUiModel(menuActionUiModel);
+                    menuItemModel
+                    .addSubMenuItemFor(
+                        menuActionUiModel, 
+                        isFirstInSection,
+                        newSubMenuItem->{
+                            // increment counter only when a sub item was actually added
+                            itemsPerSectionCounter.increment();
+                            newSubMenuItem.setMenuActionUiModel(menuActionUiModel);
                     });
                     
                 }
