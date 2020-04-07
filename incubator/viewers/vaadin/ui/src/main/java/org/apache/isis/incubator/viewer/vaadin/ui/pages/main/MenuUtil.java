@@ -66,7 +66,7 @@ final class MenuUtil {
             menuSectionUiModel.getSubMenuItems().forEach(menuItemModel -> {
                 val saModel = menuItemModel.getServiceActionUiModel();
                 
-                if(saModel.isFirstSection() && subMenu.getItems().size()>0) {
+                if(saModel.isFirstInSection() && subMenu.getItems().size()>0) {
                     subMenu.addItem(new Hr());
                 }
                 

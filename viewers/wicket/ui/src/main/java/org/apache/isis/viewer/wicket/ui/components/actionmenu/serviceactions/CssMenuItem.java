@@ -29,7 +29,6 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModelAbstract;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -74,12 +73,12 @@ implements Serializable {
      * Optionally creates a sub-menu item invoking an action on the provided 
      * {@link ServiceAndAction action model}, based on visibility and usability.
      */
-    void addMenuItemFor(ServiceAndAction serviceAndAction) {
+    void addMenuItemFor(final ServiceAndAction serviceAndAction) {
 
-        final EntityModel targetEntityModel = serviceAndAction.serviceEntityModel;
-        final ObjectAction objectAction = serviceAndAction.objectAction;
-        final boolean requiresSeparator = serviceAndAction.isFirstSection;
-        final ServiceActionLinkFactory actionLinkFactory = serviceAndAction.linkAndLabelFactory;
+        val targetEntityModel = serviceAndAction.getServiceEntityModel();
+        val objectAction = serviceAndAction.getObjectAction();
+        val requiresSeparator = serviceAndAction.isFirstInSection();
+        val actionLinkFactory = serviceAndAction.getLinkAndLabelFactory();
 
         val actionHolder = targetEntityModel.load();
         if(!super.isVisible(actionHolder, objectAction)) {
@@ -87,14 +86,15 @@ implements Serializable {
         }
 
         // build the link
-        val linkAndLabel = actionLinkFactory.newLink(objectAction);
+        val linkAndLabel = actionLinkFactory.apply(objectAction);
         if (linkAndLabel == null) {
             // can only get a null if invisible, so this should not happen given the visibility guard above
             return;
         }
 
-        final AbstractLink link = linkAndLabel.getLinkComponent();
-        final String actionLabel = serviceAndAction.actionName != null ? serviceAndAction.actionName : linkAndLabel.getLabel();
+        //TODO remove need for cast (type-safe)
+        final AbstractLink link = (AbstractLink) linkAndLabel.getLinkComponent();
+        final String actionLabel = serviceAndAction.getActionName() != null ? serviceAndAction.getActionName() : linkAndLabel.getLabel();
 
         val menutIem = (CssMenuItem) newSubMenuItem(actionLabel)
                 .setDisabledReason(super.getReasonWhyDisabled(actionHolder, objectAction).orElse(null))

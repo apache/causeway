@@ -31,17 +31,18 @@ import lombok.Getter;
 public class ServiceActionUiModel extends ActionUiModel {
 
     private final EntityUiModel serviceEntityUiModel;
-    private final boolean isFirstSection;
+    private final boolean isFirstInSection;
     
     public ServiceActionUiModel(
             Function<ObjectAction, LinkAndLabelUiModel<?>> linkAndLabelFactory,
             EntityUiModel serviceEntityUiModel, 
             String actionName, 
             ObjectAction objectAction, 
-            boolean isFirstSection) {
+            boolean isFirstInSection) {
+        
         super(linkAndLabelFactory, actionName, objectAction);
         this.serviceEntityUiModel = serviceEntityUiModel;
-        this.isFirstSection = isFirstSection;
+        this.isFirstInSection = isFirstInSection;
         
     }
     

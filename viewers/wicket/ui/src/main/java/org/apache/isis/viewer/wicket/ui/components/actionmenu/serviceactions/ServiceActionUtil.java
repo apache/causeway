@@ -41,6 +41,7 @@ import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
+import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Confirmations;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
@@ -213,7 +214,7 @@ public final class ServiceActionUtil {
 
             for (final MenuSection menuSection : menu.getSections()) {
 
-                boolean isFirstSection = true;
+                boolean isFirstInSection = true;
 
                 for (final ServiceActionLayoutData actionLayoutData : menuSection.getServiceActions()) {
                     val serviceSpecId = actionLayoutData.getObjectType();
@@ -223,17 +224,23 @@ public final class ServiceActionUtil {
                         // service not recognized, presumably the menu layout is out of sync with actual configured modules
                         continue;
                     }
-                    final EntityModel entityModel = EntityModel.ofAdapter(commonContext, serviceAdapter);
+                    final EntityModel serviceEntityModel = EntityModel.ofAdapter(commonContext, serviceAdapter);
                     final ObjectAction objectAction = serviceAdapter.getSpecification()
                             .getObjectAction(actionLayoutData.getId()).orElse(null);
                     if(objectAction == null) {
                         log.warn("No such action {}", actionLayoutData.getId());
                         continue;
                     }
-                    final ServiceAndAction serviceAndAction =
-                            new ServiceAndAction(actionLayoutData.getNamed(), entityModel, objectAction, isFirstSection);
+                    
+                    val serviceAndAction =
+                            new ServiceAndAction(
+                                    new ServiceActionLinkFactory(PageAbstract.ID_MENU_LINK, serviceEntityModel)::newLink, 
+                                    actionLayoutData.getNamed(), 
+                                    serviceEntityModel, 
+                                    objectAction, 
+                                    isFirstInSection);
 
-                    isFirstSection = false;
+                    isFirstInSection = false;
 
                     // Optionally creates a sub-menu item based on visibility and usability
                     serviceMenu.addMenuItemFor(serviceAndAction);

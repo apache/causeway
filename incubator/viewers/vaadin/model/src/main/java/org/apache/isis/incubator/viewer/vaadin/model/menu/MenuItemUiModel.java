@@ -65,7 +65,7 @@ extends MenuItemUiModelAbstract<MenuItemUiModel> {
         
         val serviceEntityModel = saModel.getServiceEntityUiModel();
         val objectAction = saModel.getObjectAction();
-        final boolean requiresSeparator = saModel.isFirstSection();
+        final boolean requiresSeparator = saModel.isFirstInSection();
         val actionLinkFactory = saModel.getLinkAndLabelFactory();
 
         val actionHolder = serviceEntityModel.getManagedObject();

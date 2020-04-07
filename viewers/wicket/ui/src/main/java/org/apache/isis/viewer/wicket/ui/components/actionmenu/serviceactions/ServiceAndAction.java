@@ -18,33 +18,32 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
+import java.util.function.Function;
 
-class ServiceAndAction {
-    final String actionName;
-    final EntityModel serviceEntityModel;
-    final ObjectAction objectAction;
-    final ServiceActionLinkFactory linkAndLabelFactory;
-    final boolean isFirstSection;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.viewer.common.model.action.ActionUiModel;
+import org.apache.isis.viewer.common.model.link.LinkAndLabelUiModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
+
+import lombok.Getter;
+
+@Getter
+class ServiceAndAction extends ActionUiModel {
+
+    private final EntityModel serviceEntityModel;
+    private final boolean isFirstInSection;
 
     ServiceAndAction(
+            final Function<ObjectAction, LinkAndLabelUiModel<?>> linkAndLabelFactory,
             final String actionName,
             final EntityModel serviceEntityModel,
             final ObjectAction objectAction,
-            final boolean isFirstSection) {
-        
-        this.actionName = actionName;
+            final boolean isFirstInSection) {
+
+        super(linkAndLabelFactory, actionName, objectAction);
         this.serviceEntityModel = serviceEntityModel;
-        this.objectAction = objectAction;
-        this.linkAndLabelFactory = new ServiceActionLinkFactory(PageAbstract.ID_MENU_LINK, serviceEntityModel);
-        this.isFirstSection = isFirstSection; 
+        this.isFirstInSection = isFirstInSection; 
     }
 
-    @Override
-    public String toString() {
-        return actionName + " ~ " + objectAction.getIdentifier().toFullIdentityString();
-    }
 
 }
