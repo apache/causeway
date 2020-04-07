@@ -29,12 +29,12 @@ public class MenuActionVaa extends MenuActionUiModel {
 
     public MenuActionVaa(
             Function<ObjectAction, LinkAndLabelUiModel<?>> linkAndLabelFactory, 
-            ObjectUiModel serviceModel,
             String actionName, 
+            ObjectUiModel serviceModel,
             ObjectAction objectAction, 
             boolean isFirstInSection) {
         
-        super(linkAndLabelFactory, serviceModel, actionName, objectAction, isFirstInSection);
+        super(linkAndLabelFactory, actionName, serviceModel, objectAction, isFirstInSection);
     }
     
 }

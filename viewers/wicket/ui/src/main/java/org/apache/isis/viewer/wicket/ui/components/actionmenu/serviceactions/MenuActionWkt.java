@@ -21,28 +21,23 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 import java.util.function.Function;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.action.ActionUiModel;
+import org.apache.isis.viewer.common.model.action.MenuActionUiModel;
 import org.apache.isis.viewer.common.model.link.LinkAndLabelUiModel;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 
 import lombok.Getter;
 
 @Getter
-class ServiceAndAction extends ActionUiModel {
+class MenuActionWkt extends MenuActionUiModel {
 
-    private final ObjectUiModel serviceModel;
-    private final boolean isFirstInSection;
-
-    ServiceAndAction(
+    MenuActionWkt(
             final Function<ObjectAction, LinkAndLabelUiModel<?>> linkAndLabelFactory,
             final String actionName,
             final ObjectUiModel serviceModel,
             final ObjectAction objectAction,
             final boolean isFirstInSection) {
 
-        super(linkAndLabelFactory, actionName, objectAction);
-        this.serviceModel = serviceModel;
-        this.isFirstInSection = isFirstInSection; 
+        super(linkAndLabelFactory, actionName, serviceModel, objectAction, isFirstInSection); 
     }
 
 

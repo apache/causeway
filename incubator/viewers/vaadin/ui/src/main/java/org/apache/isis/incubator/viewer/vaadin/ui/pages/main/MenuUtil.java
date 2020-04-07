@@ -156,8 +156,8 @@ final class MenuUtil {
                     val saModel =
                             new MenuActionVaa(
                                     oAction->newLinkAndLabel(oAction, entityModel),
-                                    entityModel,
                                     actionLayoutData.getNamed(),
+                                    entityModel,
                                     objectAction,
                                     isFirstSection);
 

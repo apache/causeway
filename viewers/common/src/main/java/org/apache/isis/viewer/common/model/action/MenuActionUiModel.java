@@ -34,8 +34,8 @@ public class MenuActionUiModel extends ActionUiModel {
     
     public MenuActionUiModel(
             Function<ObjectAction, LinkAndLabelUiModel<?>> linkAndLabelFactory,
-            ObjectUiModel serviceModel, 
             String actionName, 
+            ObjectUiModel serviceModel, 
             ObjectAction objectAction, 
             boolean isFirstInSection) {
         

@@ -71,9 +71,9 @@ implements Serializable {
 
     /**
      * Optionally creates a sub-menu item invoking an action on the provided 
-     * {@link ServiceAndAction action model}, based on visibility and usability.
+     * {@link MenuActionWkt action model}, based on visibility and usability.
      */
-    void addMenuItemFor(final ServiceAndAction serviceAndAction) {
+    void addMenuItemFor(final MenuActionWkt serviceAndAction) {
 
         val serviceModel = serviceAndAction.getServiceModel();
         val objectAction = serviceAndAction.getObjectAction();
