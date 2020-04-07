@@ -21,7 +21,7 @@ package org.apache.isis.incubator.viewer.vaadin.model.menu;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.incubator.viewer.vaadin.model.action.ServiceActionUiModel;
 import org.apache.isis.viewer.common.model.action.ActionUiModel;
-import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModelAbstract;
+import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModel;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -36,21 +36,21 @@ import lombok.extern.log4j.Log4j2;
  * org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions.CssMenuItem
  */
 @Log4j2
-public class MenuItemUiModel 
-extends MenuItemUiModelAbstract<MenuItemUiModel> {
+public class MenuItemVaa 
+extends MenuItemUiModel<MenuItemVaa> {
 
     @Getter @Setter(AccessLevel.PRIVATE) private Object actionLinkComponent;
     @Getter @Setter(AccessLevel.PRIVATE) private ServiceActionUiModel serviceActionUiModel;
     
-    public static MenuItemUiModel newMenuItem(final String name) {
-        return new MenuItemUiModel(name);
+    public static MenuItemVaa newMenuItem(final String name) {
+        return new MenuItemVaa(name);
     }
 
-    private MenuItemUiModel(final String name) {
+    private MenuItemVaa(final String name) {
         super(name);
     }
     
-    private MenuItemUiModel newSubMenuItem(final String name) {
+    private MenuItemVaa newSubMenuItem(final String name) {
         val subMenuItem = newMenuItem(name);
         subMenuItem.setParent(this);
         return subMenuItem;
@@ -85,7 +85,7 @@ extends MenuItemUiModelAbstract<MenuItemUiModel> {
                 ? saModel.getActionName() 
                 : linkAndLabel.getLabel();
 
-        val menutIem = (MenuItemUiModel) newSubMenuItem(actionLabel)
+        val menutIem = (MenuItemVaa) newSubMenuItem(actionLabel)
                 .setDisabledReason(super.getReasonWhyDisabled(actionHolder, objectAction).orElse(null))
                 .setPrototyping(objectAction.isPrototype())
                 .setRequiresSeparator(requiresSeparator)

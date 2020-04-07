@@ -28,7 +28,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModelAbstract;
+import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -40,7 +40,7 @@ import lombok.Setter;
 import lombok.val;
 
 class CssMenuItem 
-extends MenuItemUiModelAbstract<CssMenuItem> 
+extends MenuItemUiModel<CssMenuItem> 
 implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -75,12 +75,12 @@ implements Serializable {
      */
     void addMenuItemFor(final ServiceAndAction serviceAndAction) {
 
-        val targetEntityModel = serviceAndAction.getServiceEntityModel();
+        val serviceEntityModel = serviceAndAction.getServiceEntityModel();
         val objectAction = serviceAndAction.getObjectAction();
         val requiresSeparator = serviceAndAction.isFirstInSection();
         val actionLinkFactory = serviceAndAction.getLinkAndLabelFactory();
 
-        val actionHolder = targetEntityModel.load();
+        val actionHolder = serviceEntityModel.load();
         if(!super.isVisible(actionHolder, objectAction)) {
             return;
         }

@@ -41,7 +41,7 @@ import lombok.experimental.Accessors;
 
 @Accessors(chain = true)
 @RequiredArgsConstructor
-public abstract class MenuItemUiModelAbstract<T extends MenuItemUiModelAbstract<T>> {
+public abstract class MenuItemUiModel<T extends MenuItemUiModel<T>> {
     
     @Getter private final String name;
     @Setter private boolean enabled = true; // unless disabled

@@ -21,6 +21,7 @@ package org.apache.isis.incubator.viewer.vaadin.model.entity;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -28,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 
 // TODO Wicket final EntityModel entityModel = EntityModel.ofAdapter(commonContext, serviceAdapter);
 @RequiredArgsConstructor
-public class EntityUiModel {
+public class ObjectVaa implements ObjectUiModel {
 
     private final IsisWebAppCommonContext commonContext;
     

@@ -21,7 +21,7 @@ package org.apache.isis.incubator.viewer.vaadin.model.action;
 import java.util.function.Function;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.incubator.viewer.vaadin.model.entity.EntityUiModel;
+import org.apache.isis.incubator.viewer.vaadin.model.entity.ObjectVaa;
 import org.apache.isis.viewer.common.model.action.ActionUiModel;
 import org.apache.isis.viewer.common.model.link.LinkAndLabelUiModel;
 
@@ -30,12 +30,12 @@ import lombok.Getter;
 @Getter
 public class ServiceActionUiModel extends ActionUiModel {
 
-    private final EntityUiModel serviceEntityUiModel;
+    private final ObjectVaa serviceEntityUiModel;
     private final boolean isFirstInSection;
     
     public ServiceActionUiModel(
             Function<ObjectAction, LinkAndLabelUiModel<?>> linkAndLabelFactory,
-            EntityUiModel serviceEntityUiModel, 
+            ObjectVaa serviceEntityUiModel, 
             String actionName, 
             ObjectAction objectAction, 
             boolean isFirstInSection) {

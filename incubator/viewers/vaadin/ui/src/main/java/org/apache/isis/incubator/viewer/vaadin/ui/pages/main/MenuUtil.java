@@ -19,8 +19,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.action.ServiceActionUiModel;
-import org.apache.isis.incubator.viewer.vaadin.model.entity.EntityUiModel;
-import org.apache.isis.incubator.viewer.vaadin.model.menu.MenuItemUiModel;
+import org.apache.isis.incubator.viewer.vaadin.model.entity.ObjectVaa;
+import org.apache.isis.incubator.viewer.vaadin.model.menu.MenuItemVaa;
 import org.apache.isis.viewer.common.model.link.LinkAndLabelUiModel;
 
 import lombok.val;
@@ -60,7 +60,7 @@ final class MenuUtil {
         val bs3MenuBars = menuBarsService.menuBars(Type.DEFAULT);
         
         // menu section handler, that creates and adds sub-menus to their parent top level menu   
-        final BiConsumer<MenuBar, MenuItemUiModel> menuSectionBuilder = (parentMenu, menuSectionUiModel) -> {
+        final BiConsumer<MenuBar, MenuItemVaa> menuSectionBuilder = (parentMenu, menuSectionUiModel) -> {
             val menuItem = parentMenu.addItem(menuSectionUiModel.getName());
             val subMenu = menuItem.getSubMenu();
             menuSectionUiModel.getSubMenuItems().forEach(menuItemModel -> {
@@ -118,14 +118,14 @@ final class MenuUtil {
     private static void buildMenuModel(
             final IsisWebAppCommonContext commonContext,
             final BS3MenuBar menuBar,
-            final Consumer<MenuItemUiModel> onMenuSection) {
+            final Consumer<MenuItemVaa> onMenuSection) {
 
         // we no longer use ServiceActionsModel#getObject() because the model only holds the services for the
         // menuBar in question, whereas the "Other" menu may reference a service which is defined for some other menubar
 
         for (val menu : menuBar.getMenus()) {
 
-            val menuSectionUiModel = MenuItemUiModel.newMenuItem(menu.getNamed());
+            val menuSectionUiModel = MenuItemVaa.newMenuItem(menu.getNamed());
 
             for (val menuSection : menu.getSections()) {
 
@@ -151,7 +151,7 @@ final class MenuUtil {
                         continue;
                     }
                     
-                    val entityModel = new EntityUiModel(commonContext, serviceAdapter);
+                    val entityModel = new ObjectVaa(commonContext, serviceAdapter);
                     
                     val saModel =
                             new ServiceActionUiModel(
@@ -175,7 +175,7 @@ final class MenuUtil {
     
     private static LinkAndLabelUiModel<?> newLinkAndLabel(
             ObjectAction objectAction, 
-            EntityUiModel entityModel) {
+            ObjectVaa entityModel) {
         
         val objectAdapter = entityModel.getManagedObject();
         val linkComponent = new Label(objectAction.getName());

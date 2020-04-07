@@ -1,7 +1,7 @@
 package org.apache.isis.incubator.viewer.vaadin.ui.components.links;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.incubator.viewer.vaadin.model.entity.EntityUiModel;
+import org.apache.isis.incubator.viewer.vaadin.model.entity.ObjectVaa;
 import org.apache.isis.viewer.common.model.link.LinkAndLabelUiModel;
 
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(staticName = "of")
 public class ActionLinkFactoryForVaadin {
 
-    final EntityUiModel entityUiModel;
+    final ObjectVaa entityUiModel;
 
     public LinkAndLabelUiModel<ActionLink> newLink(ObjectAction objectAction) {
         // TODO Auto-generated method stub
