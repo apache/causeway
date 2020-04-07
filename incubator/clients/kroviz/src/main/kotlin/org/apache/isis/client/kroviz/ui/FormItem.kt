@@ -1,7 +1,6 @@
 package org.apache.isis.client.kroviz.ui
 
 import org.apache.isis.client.kroviz.to.Member
-import org.apache.isis.client.kroviz.to.ValueType
 import pl.treksoft.kvision.window.Window
 
 class FormItem(
@@ -10,8 +9,8 @@ class FormItem(
         var content: Any? = null,
         val size: Int? = null,
         val description: String? = "not set",
-        val member:org.apache.isis.client.kroviz.to.Member? = null,
-        var dspl:org.apache.isis.client.kroviz.ui.Displayable? = null,
+        val member: Member? = null,
+        var dspl: Displayable? = null,
         val callBackId: String? = null) {
 
     private var originalContent: Any?
@@ -30,7 +29,7 @@ class FormItem(
             member.value?.content = value
         }
         //IMPROVE this is special logic in a generic place
-        if (type ==org.apache.isis.client.kroviz.to.ValueType.SLIDER.type) {
+        if (type == org.apache.isis.client.kroviz.to.ValueType.SLIDER.type) {
             setOpacity(value!!)
         }
     }
@@ -42,7 +41,7 @@ class FormItem(
         }
     }
 
-    fun setDisplay(displayable:org.apache.isis.client.kroviz.ui.Displayable) {
+    fun setDisplay(displayable: org.apache.isis.client.kroviz.ui.Displayable) {
         dspl = displayable
     }
 
