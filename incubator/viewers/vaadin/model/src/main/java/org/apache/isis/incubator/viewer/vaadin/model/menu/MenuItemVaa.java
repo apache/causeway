@@ -19,7 +19,7 @@
 package org.apache.isis.incubator.viewer.vaadin.model.menu;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.incubator.viewer.vaadin.model.action.ServiceActionUiModel;
+import org.apache.isis.incubator.viewer.vaadin.model.action.MenuActionVaa;
 import org.apache.isis.viewer.common.model.action.ActionUiModel;
 import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModel;
 
@@ -40,7 +40,7 @@ public class MenuItemVaa
 extends MenuItemUiModel<MenuItemVaa> {
 
     @Getter @Setter(AccessLevel.PRIVATE) private Object actionLinkComponent;
-    @Getter @Setter(AccessLevel.PRIVATE) private ServiceActionUiModel serviceActionUiModel;
+    @Getter @Setter(AccessLevel.PRIVATE) private MenuActionVaa serviceActionUiModel;
     
     public static MenuItemVaa newMenuItem(final String name) {
         return new MenuItemVaa(name);
@@ -61,9 +61,9 @@ extends MenuItemUiModel<MenuItemVaa> {
      * Optionally creates a sub-menu item invoking an action on the provided 
      * {@link ActionUiModel}, based on visibility and usability.
      */
-    public void addMenuItemFor(final ServiceActionUiModel saModel) {
+    public void addMenuItemFor(final MenuActionVaa saModel) {
         
-        val serviceEntityModel = saModel.getServiceEntityUiModel();
+        val serviceEntityModel = saModel.getServiceModel();
         val objectAction = saModel.getObjectAction();
         final boolean requiresSeparator = saModel.isFirstInSection();
         val actionLinkFactory = saModel.getLinkAndLabelFactory();

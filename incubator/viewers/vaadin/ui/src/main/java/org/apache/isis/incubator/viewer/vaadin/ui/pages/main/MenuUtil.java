@@ -18,7 +18,7 @@ import org.apache.isis.applib.services.menu.MenuBarsService.Type;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.incubator.viewer.vaadin.model.action.ServiceActionUiModel;
+import org.apache.isis.incubator.viewer.vaadin.model.action.MenuActionVaa;
 import org.apache.isis.incubator.viewer.vaadin.model.entity.ObjectVaa;
 import org.apache.isis.incubator.viewer.vaadin.model.menu.MenuItemVaa;
 import org.apache.isis.viewer.common.model.link.LinkAndLabelUiModel;
@@ -34,7 +34,7 @@ final class MenuUtil {
     static Component createMenu(
             final IsisWebAppCommonContext commonContext, 
             final MenuBarsServiceBS3 menuBarsService,
-            final Consumer<ServiceActionUiModel> subMenuEventHandler) {
+            final Consumer<MenuActionVaa> subMenuEventHandler) {
         
         val titleOrLogo = createTitleOrLogo(commonContext);
         val leftMenuBar = new MenuBar();
@@ -154,7 +154,7 @@ final class MenuUtil {
                     val entityModel = new ObjectVaa(commonContext, serviceAdapter);
                     
                     val saModel =
-                            new ServiceActionUiModel(
+                            new MenuActionVaa(
                                     oAction->newLinkAndLabel(oAction, entityModel),
                                     entityModel,
                                     actionLayoutData.getNamed(),

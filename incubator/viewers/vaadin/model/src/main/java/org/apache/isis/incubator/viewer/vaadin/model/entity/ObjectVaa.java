@@ -18,7 +18,6 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.model.entity;
 
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
@@ -27,67 +26,12 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-// TODO Wicket final EntityModel entityModel = EntityModel.ofAdapter(commonContext, serviceAdapter);
 @RequiredArgsConstructor
 public class ObjectVaa implements ObjectUiModel {
 
     private final IsisWebAppCommonContext commonContext;
     
-    @NonNull @Getter 
+    @NonNull @Getter(onMethod = @__(@Override))
     private final ManagedObject managedObject;
 
-    public enum Mode {
-        VIEW, EDIT
-    }
-
-    public enum RenderingHint {
-        // normal form
-        REGULAR(Where.OBJECT_FORMS),
-
-        // inside parent table
-        PARENTED_PROPERTY_COLUMN(Where.PARENTED_TABLES),
-        PARENTED_TITLE_COLUMN(Where.PARENTED_TABLES),
-
-        // stand alone table
-        STANDALONE_PROPERTY_COLUMN(Where.STANDALONE_TABLES),
-        STANDALONE_TITLE_COLUMN(Where.STANDALONE_TABLES);
-
-        private final Where where;
-
-        RenderingHint(final Where where) {
-            this.where = where;
-        }
-
-        public boolean isRegular() {
-            return this == REGULAR;
-        }
-
-        public boolean isInParentedTable() {
-            return this == PARENTED_PROPERTY_COLUMN;
-        }
-
-        public boolean isInStandaloneTable() {
-            return this == STANDALONE_PROPERTY_COLUMN;
-        }
-
-        public boolean isInTable() {
-            return isInParentedTable() || isInStandaloneTable() || isInTableTitleColumn();
-        }
-
-        public boolean isInTableTitleColumn() {
-            return isInParentedTableTitleColumn() || isInStandaloneTableTitleColumn();
-        }
-
-        public boolean isInParentedTableTitleColumn() {
-            return this == PARENTED_TITLE_COLUMN;
-        }
-
-        public boolean isInStandaloneTableTitleColumn() {
-            return this == STANDALONE_TITLE_COLUMN;
-        }
-
-        public Where asWhere() {
-            return this.where;
-        }
-    }
 }

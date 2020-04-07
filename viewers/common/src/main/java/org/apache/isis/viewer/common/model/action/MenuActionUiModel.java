@@ -16,32 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.vaadin.model.action;
+package org.apache.isis.viewer.common.model.action;
 
 import java.util.function.Function;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.incubator.viewer.vaadin.model.entity.ObjectVaa;
-import org.apache.isis.viewer.common.model.action.ActionUiModel;
 import org.apache.isis.viewer.common.model.link.LinkAndLabelUiModel;
+import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 
 import lombok.Getter;
 
 @Getter
-public class ServiceActionUiModel extends ActionUiModel {
+public class MenuActionUiModel extends ActionUiModel {
 
-    private final ObjectVaa serviceEntityUiModel;
+    private final ObjectUiModel serviceModel;
     private final boolean isFirstInSection;
     
-    public ServiceActionUiModel(
+    public MenuActionUiModel(
             Function<ObjectAction, LinkAndLabelUiModel<?>> linkAndLabelFactory,
-            ObjectVaa serviceEntityUiModel, 
+            ObjectUiModel serviceModel, 
             String actionName, 
             ObjectAction objectAction, 
             boolean isFirstInSection) {
         
         super(linkAndLabelFactory, actionName, objectAction);
-        this.serviceEntityUiModel = serviceEntityUiModel;
+        this.serviceModel = serviceModel;
         this.isFirstInSection = isFirstInSection;
         
     }

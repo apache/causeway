@@ -75,12 +75,12 @@ implements Serializable {
      */
     void addMenuItemFor(final ServiceAndAction serviceAndAction) {
 
-        val serviceEntityModel = serviceAndAction.getServiceEntityModel();
+        val serviceModel = serviceAndAction.getServiceModel();
         val objectAction = serviceAndAction.getObjectAction();
         val requiresSeparator = serviceAndAction.isFirstInSection();
         val actionLinkFactory = serviceAndAction.getLinkAndLabelFactory();
 
-        val actionHolder = serviceEntityModel.load();
+        val actionHolder = serviceModel.getManagedObject();
         if(!super.isVisible(actionHolder, objectAction)) {
             return;
         }

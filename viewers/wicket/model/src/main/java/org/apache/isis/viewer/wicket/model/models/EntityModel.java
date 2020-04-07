@@ -29,7 +29,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -42,6 +41,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
+import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
@@ -63,7 +63,7 @@ import lombok.val;
  */
 public class EntityModel 
 extends BookmarkableModel<ManagedObject> 
-implements ObjectAdapterModel, UiHintContainer {
+implements ObjectAdapterModel, UiHintContainer, ObjectUiModel {
 
     private static final long serialVersionUID = 1L;
 
@@ -87,55 +87,6 @@ implements ObjectAdapterModel, UiHintContainer {
             // the memento for the transient ObjectAdapter can be accessed.
         }
         return pageParameters;
-    }
-
-     public enum RenderingHint {
-        REGULAR(Where.OBJECT_FORMS),
-        PARENTED_PROPERTY_COLUMN(Where.PARENTED_TABLES),
-        PARENTED_TITLE_COLUMN(Where.PARENTED_TABLES),
-        STANDALONE_PROPERTY_COLUMN(Where.STANDALONE_TABLES),
-        STANDALONE_TITLE_COLUMN(Where.STANDALONE_TABLES);
-
-        private final Where where;
-
-        RenderingHint(final Where where) {
-            this.where = where;
-        }
-
-        public boolean isRegular() {
-            return this == REGULAR;
-        }
-
-        public boolean isInParentedTable() {
-            return this == PARENTED_PROPERTY_COLUMN;
-        }
-        public boolean isInStandaloneTable() {
-            return this == STANDALONE_PROPERTY_COLUMN;
-        }
-
-        public boolean isInTable() {
-            return isInParentedTable() || isInStandaloneTable() || isInTableTitleColumn();
-        }
-
-        public boolean isInTableTitleColumn() {
-            return isInParentedTableTitleColumn() || isInStandaloneTableTitleColumn();
-        }
-
-        public boolean isInParentedTableTitleColumn() {
-            return this == PARENTED_TITLE_COLUMN;
-        }
-
-        public boolean isInStandaloneTableTitleColumn() {
-            return this == STANDALONE_TITLE_COLUMN;
-        }
-
-        public Where asWhere() {
-            return this.where;
-        }
-    }
-
-    public enum Mode {
-        VIEW,EDIT
     }
 
     private final Map<PropertyMemento, ScalarModel> propertyScalarModels;
@@ -597,6 +548,11 @@ implements ObjectAdapterModel, UiHintContainer {
             return false;
         return true;
 
+    }
+
+    @Override
+    public ManagedObject getManagedObject() {
+        return load();
     }
 
 
