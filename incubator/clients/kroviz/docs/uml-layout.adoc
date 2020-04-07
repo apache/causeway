@@ -1,130 +1,25 @@
-.Layout Transfer Objects
-[uml,file="uml-layout.png"]
+.Layout Composition
+[plantuml,file="uml-layout.png"]
 --
-abstract class AbstractLayout {
-    cssClass
-    fromObject()
-    build()
-} 
+@startuml
+
+object root
+object row
+object col
+object fieldSet
+object action
+object tabGroup
+object tab 
+
+root *- row
+row *- col
 together {
-  class DomainObjectLayout
-  class ColLayout
-  class Layout
-  class MemberLayout
-  class RowLayout
-  class TabLayout
+  col *- fieldSet
+  col *-down- action
+  col *-down- tabGroup
 }
-AbstractLayout <|-- DomainObjectLayout 
-AbstractLayout <|-- ColLayout
-AbstractLayout <|-- FieldSetLayout
-AbstractLayout <|-- Layout
-AbstractLayout <|-- MemberLayout
-AbstractLayout <|-- RowLayout
-AbstractLayout <|-- TabLayout
+tabGroup *-down- tab
+tab *- row
 
-abstract class MemberLayout {
-    metadataError
-    link
-    hidden
-    promptStyle
-}
-
-class Layout {
-    row
-}
-
-class RowLayout {
-    cols
-    metadataError
-}
-
-class ColLayout {
-    metadataError
-    size
-    span
-    unreferencedActions
-    unreferencedCollections
-    tabGroup
-    fieldSet
-}
-
-class DomainObjectLayout {
-    plural
-    metadataError
-    link
-    bookmarking
-}
-ColLayout -> DomainObjectLayout : domainObject
-
-class FieldSetLayout {
-    name
-    action
-    property
-    metadataError
-    unreferencedActions
-    unreferencedCollections
-}
-
-class TabLayout {
-    name
-    row
-}
-
-class PropertyLayout {
-    action
-    labelPosition
-    multiline
-    renderAsDayBefore
-    typicalLength
-    unchanging
-}
-
-class ActionLayout {
-    bookmarking
-    position
-}
-
-MemberLayout <|-- ActionLayout
-MemberLayout <|-- PropertyLayout
-
-Layout -> RowLayout
-TabLayout -> RowLayout
-RowLayout -> ColLayout
-ColLayout -> FieldSetLayout
-ColLayout -> TabLayout
-
-FieldSetLayout -> ActionLayout
-FieldSetLayout -> PropertyLayout
-
-interface Named {
-    named
-    namedEscaped
-    describedAs
-}
-MemberLayout -up-|> Named
-DomainObjectLayout -up-|> Named
-
-interface Identifyable {
-    id
-}
-MemberLayout -up-|> Identifyable
-FieldSetLayout -up-|> Identifyable
-ColLayout -up-|> Identifyable
-RowLayout -up-|> Identifyable
- 
-
-interface Styleable {
-    cssClassFa
-    cssClassFaPosition
-}
-Styleable <|-- ActionLayout
-Styleable <|-- DomainObjectLayout
-
-interface Errorprone {
-    metadataError
-}
-Errorprone <|-- ColLayout
-Errorprone <|-- FieldSetLayout
-Errorprone <|-- MemberLayout
-Errorprone <|-- RowLayout
+@enduml
 --

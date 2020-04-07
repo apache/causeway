@@ -1,0 +1,61 @@
+.Renderer Diagram
+[plantuml,file="uml-renderer.png"]
+--
+@startuml
+
+abstract class Renderer {
+    iconName:String
+    title:String
+    view:RoView
+    protocol:Protocol
+}
+Renderer -right-> Protocol
+
+abstract class Protocol {
+    includes(propertyName:String)
+}
+
+Renderer <|-down- ObjectRdr
+Renderer <|-down- ListRdr
+ListRdr <|-down- GeoLocationRdr
+ListRdr <|-down- EventRdr
+
+abstract class RoView {
+}
+
+RoView <|-down- ObjectVw
+RoView <|-down- ListVw
+ListVw <|-down- GeoLocationVw
+ListVw <|-down- TimeLineView
+
+Renderer -left-> RoView
+
+class Exposer {
+    delegate:TransferObject
+}
+
+abstract class TransferObject #LightGreen {
+    properties:List<Property>
+}
+Exposer -left-> TransferObject
+class Property #LightBlue {
+    name: String
+    type: Class
+}
+TransferObject *-left- Property : has
+Exposer -down-> Protocol : delegate.conformsTo()
+
+class TimeLinePtc #LightBlue {
+start:DateTime
+end:DateTime
+duration:Double
+}
+class GeoLocationPtc #LightBlue {
+latitude:Double
+longitude:Double
+}
+Protocol <|-down- GeoLocationPtc
+Protocol <|-down- TimeLinePtc
+
+@enduml
+--

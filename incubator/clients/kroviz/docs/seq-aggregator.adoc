@@ -4,21 +4,26 @@
 @startuml
 
 actor User
-participant "<<>>\nUI Manager" as UI
+participant "<<Singleton>>\nUI Manager" as UI
+participant "<<description>>\nLink" as LNK #LightBlue
 participant "(Xml)HttpRequest" as XHR
 participant "<<ChainOfResponsibility>>\nResponseHandler" as RH
 participant "<<description>>\n<<EventStore>>\nLogEntry" as LE #LightBlue
-participant "<<description>>\nTransferObject" as TO #LightBlue
 participant "<<moment-interval>>\nListAggregator" as AGGT  #Pink
-participant "<<description>>\nLink" as LNK #LightBlue
 participant "<<thing>>\n<<DisplayModel>>\nListDM" as DM #LightGreen
+participant "<<description>>\nTransferObject" as TO #LightBlue
 
 User -> UI : listAll()
-UI -> XHR : listAll()
+UI -> LNK : invoke()
+LNK -> XHR : Invoke()
 XHR -> RH : handle()
+activate RH
+RH -> RH : successor.handle()
+RH -> TO : parse()
 RH -> AGGT : update(logEntry)
 activate AGGT
 RH -> LE : setAggegator()
+deactivate RH
 
 AGGT -> AGGT : handleList()
 activate AGGT

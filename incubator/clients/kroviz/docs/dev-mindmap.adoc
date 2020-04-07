@@ -24,6 +24,10 @@
 ++++ npm
 ++++ git
 ++++ gradle
+++++ ssh
+++++ curl
+++++ yarn
+++++ mvn
 ++_ build
 +++ Node.js
 +++ gradle
