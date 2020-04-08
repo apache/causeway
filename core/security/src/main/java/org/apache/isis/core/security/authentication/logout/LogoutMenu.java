@@ -66,6 +66,7 @@ public class LogoutMenu {
     @MemberOrder(sequence = "999")
     public LoginRedirect logout(){
         _NullSafe.stream(logoutHandler)
+            .filter(LogoutHandler::isHandlingCurrentThread)
             .forEach(LogoutHandler::logout);
         return new LoginRedirect();
     }

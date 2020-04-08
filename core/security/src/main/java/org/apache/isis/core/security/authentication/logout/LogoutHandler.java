@@ -21,6 +21,13 @@ package org.apache.isis.core.security.authentication.logout;
 
 public interface LogoutHandler {
 
+    /**
+     * @implNote currently the Wicket logout also triggers a Vaadin logout and vice versa;
+     * hence implementations should check whether they are called within a thread
+     * that belongs to a request cycle originating from the appropriate viewer/servlet
+     */
     void logout();
+    
+    boolean isHandlingCurrentThread();
 
 }

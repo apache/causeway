@@ -18,6 +18,9 @@
  */
 package org.apache.isis.viewer.wicket.model.common;
 
+import java.util.Optional;
+
+import org.apache.wicket.core.request.handler.IPageRequestHandler;
 import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -53,9 +56,9 @@ public class PageParametersUtils {
         val requestCycle = RequestCycle.get();
 
         if (requestCycle != null) {
-            val pageRequestHandler = PageRequestHandlerTracker.getFirstHandler(requestCycle);
-            val currentPageParameters = pageRequestHandler.getPageParameters();
-            if (currentPageParameters != null) {
+            Optional.ofNullable(PageRequestHandlerTracker.getFirstHandler(requestCycle))
+            .map(IPageRequestHandler::getPageParameters)
+            .ifPresent(currentPageParameters->{
                 final StringValue noHeader = currentPageParameters.get(ISIS_NO_HEADER_PARAMETER_NAME);
                 if (!noHeader.isNull()) {
                     newPageParameters.set(ISIS_NO_HEADER_PARAMETER_NAME, noHeader.toString());
@@ -64,7 +67,9 @@ public class PageParametersUtils {
                 if (!noFooter.isNull()) {
                     newPageParameters.set(ISIS_NO_FOOTER_PARAMETER_NAME, noFooter.toString());
                 }
-            }
+                
+            });
+            
         }
         return newPageParameters;
     }

@@ -20,6 +20,7 @@ package org.apache.isis.incubator.viewer.vaadin.ui.auth;
 
 import javax.inject.Inject;
 
+import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinSession;
 
 import org.springframework.stereotype.Service;
@@ -34,8 +35,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class LogoutHandlerVaa implements LogoutHandler {
 
-//    @Inject private IsisInteractionTracker isisInteractionTracker;
-    //@Inject private IsisInteractionFactory isisInteractionFactory;
     @Inject private MetaModelContext metaModelContext;
 
     @Override
@@ -43,7 +42,7 @@ public class LogoutHandlerVaa implements LogoutHandler {
         
         val sessionVaa = VaadinSession.getCurrent();
         if(sessionVaa==null) {
-            return;
+            return; // ignore if there is no current session
         }
         
         AuthSessionStoreUtil.get()
@@ -56,6 +55,11 @@ public class LogoutHandlerVaa implements LogoutHandler {
         
         sessionVaa.close();
         
+    }
+
+    @Override
+    public boolean isHandlingCurrentThread() {
+        return VaadinRequest.getCurrent()!=null;
     }
     
 

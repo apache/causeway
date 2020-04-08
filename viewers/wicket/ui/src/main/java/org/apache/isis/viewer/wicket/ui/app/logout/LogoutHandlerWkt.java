@@ -37,10 +37,6 @@ public class LogoutHandlerWkt implements LogoutHandler {
     @Override
     public void logout() {
         
-        if(RequestCycle.get()==null) {
-            return;
-        }
-        
         val currentWktSession = AuthenticatedWebSession.get();
         if(currentWktSession==null) {
             return;
@@ -56,6 +52,11 @@ public class LogoutHandlerWkt implements LogoutHandler {
         } else {
             currentWktSession.invalidateNow();
         }
+    }
+
+    @Override
+    public boolean isHandlingCurrentThread() {
+        return RequestCycle.get()!=null;
     }
 
 
