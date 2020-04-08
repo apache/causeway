@@ -27,17 +27,15 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Controller;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.routing.RoutingService;
 import org.apache.isis.applib.services.homepage.HomePageResolverService;
-
-import lombok.extern.log4j.Log4j2;
+import org.apache.isis.applib.services.routing.RoutingService;
 
 @Controller
 @Named("isisRuntimeServices.RoutingServiceDefault")
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
-@Log4j2
+//@Log4j2
 public class RoutingServiceDefault implements RoutingService {
     
     private final HomePageResolverService homePageResolverService;

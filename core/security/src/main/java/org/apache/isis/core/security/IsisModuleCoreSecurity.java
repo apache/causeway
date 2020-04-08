@@ -21,6 +21,7 @@ package org.apache.isis.core.security;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.core.security.authentication.logout.LogoutMenu;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
@@ -30,9 +31,11 @@ import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
         // @Service's
         AuthenticationManager.class,
         AuthorizationManager.class,
+        LogoutMenu.class,
 
         // @Component's
         RandomCodeGeneratorDefault.class,
+        
 })
 public class IsisModuleCoreSecurity {
 }

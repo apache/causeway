@@ -21,8 +21,6 @@ package org.apache.isis.applib.services.confview;
 
 import java.util.Set;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
 // tag::refguide[]
 public interface ConfigurationViewService {
 

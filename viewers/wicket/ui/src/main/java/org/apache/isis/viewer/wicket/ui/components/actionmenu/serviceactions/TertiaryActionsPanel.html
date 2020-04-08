@@ -25,17 +25,6 @@
                 <wicket:container wicket:id="content"></wicket:container>
             </li>
 
-            <li class="divider" wicket:id="divider"></li>
-
-            <li>
-                <a class="menuLink logout" wicket:id="logoutLink" >
-                    <span class="fontAwesomeIcon fa fa-fw fa-sign-out"></span>
-                    <span class="menuLinkLabel">
-                        <wicket:message key="logoutLabel"></wicket:message>
-                    </span>
-                </a>
-            </li>
-
             <wicket:fragment wicket:id="leafItem">
                 <a class="menuLink" wicket:id="menuLink">
                     <span class="menuLinkLabel" wicket:id="menuLinkLabel"></span>
@@ -50,10 +39,6 @@
                     </li>
                 </ul>
             </wicket:fragment>
-
-            <wicket:fragment wicket:id="empty">
-            </wicket:fragment>
-
 
         </wicket:panel>
     </body>

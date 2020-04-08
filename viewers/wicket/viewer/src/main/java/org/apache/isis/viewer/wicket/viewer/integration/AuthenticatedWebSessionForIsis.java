@@ -33,15 +33,16 @@ import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.session.SessionLoggingService;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import lombok.Getter;
 import lombok.val;
@@ -121,18 +122,19 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, IsisWebAppComm
         //        org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard.closeSession(AuthenticationManagerStandard.java:141)
 
         getAuthenticationManager().closeSession(getAuthenticationSession());
-        getIsisInteractionFactory().closeSessionStack();
-
+        //getIsisInteractionFactory().closeSessionStack();
+        
         super.invalidateNow();
+        
     }
 
     @Override
     public synchronized void onInvalidate() {
         super.onInvalidate();
 
-        SessionLoggingService.CausedBy causedBy = RequestCycle.get() != null
+        val causedBy = RequestCycle.get() != null
                 ? SessionLoggingService.CausedBy.USER
-                        : SessionLoggingService.CausedBy.SESSION_EXPIRATION;
+                : SessionLoggingService.CausedBy.SESSION_EXPIRATION;
 
         String userName = null;
         if (getAuthenticationSession() != null) {
@@ -270,6 +272,9 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, IsisWebAppComm
         return commonContext.lookupServiceElseFail(IsisInteractionFactory.class);
     }
 
+    protected IsisInteractionTracker getIsisInteractionTracker() {
+        return commonContext.getIsisInteractionTracker();
+    }
 
     private Date now() {
         try {

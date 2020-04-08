@@ -20,7 +20,6 @@
 package org.apache.isis.viewer.wicket.viewer.wicketapp;
 
 import java.util.Collections;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
@@ -71,6 +70,8 @@ import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.models.PageType;
@@ -92,8 +93,6 @@ import org.apache.isis.viewer.wicket.viewer.integration.ConverterForObjectAdapte
 import org.apache.isis.viewer.wicket.viewer.integration.ConverterForObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.viewer.integration.IsisResourceSettings;
 import org.apache.isis.viewer.wicket.viewer.integration.WebRequestCycleForIsis;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
 

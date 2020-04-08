@@ -14,10 +14,10 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License. */
-
 package org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
+import org.apache.isis.core.security.authentication.logout.LogoutMenu.LoginRedirect;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.common.model.link.ActionLinkFactory;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -50,6 +51,7 @@ import org.apache.isis.viewer.wicket.model.models.ActionPromptWithExtraContent;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
+import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ToggledMementosProvider;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -235,7 +237,19 @@ implements ActionLinkFactory<AbstractLink>, Serializable {
 
                 if(succeeded) {
 
-                    // nothing to do
+                    // intercept redirect request to sign-in page
+                    Optional.ofNullable(actionModel.getObject())
+                    .ifPresent(actionResultAdapter->{
+                        val actionResultSpec = actionResultAdapter.getSpecification();
+                        if(LoginRedirect.OBJECT_TYPE.equals(actionResultSpec.getSpecId().asString())) {
+                            val commonContext = targetEntityModel.getCommonContext();
+                            val pageClassRegistry = commonContext.lookupServiceElseFail(PageClassRegistry.class);
+                            val signInPage = pageClassRegistry.getPageClass(PageType.SIGN_IN);
+                            RequestCycle.get().setResponsePage(signInPage);
+                        }    
+                    });
+                    
+                    // else nothing to do
 
                     //
                     // the formExecutor will have either redirected, or scheduled a response,
@@ -256,8 +270,7 @@ implements ActionLinkFactory<AbstractLink>, Serializable {
                     getCommonContext().getTransactionService().flushTransaction();
 
                     // "redirect-after-post"
-                    final RequestCycle requestCycle = RequestCycle.get();
-                    requestCycle.setResponsePage(entityPage);
+                    RequestCycle.get().setResponsePage(entityPage);
 
                 }
             }

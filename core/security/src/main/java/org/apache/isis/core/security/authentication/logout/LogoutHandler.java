@@ -16,23 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+package org.apache.isis.core.security.authentication.logout;
 
-import org.apache.isis.viewer.wicket.model.IsisModuleViewerWicketModel;
-import org.apache.isis.viewer.wicket.ui.app.logout.LogoutHandlerWkt;
-import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.IsisWicketThemeSupportDefault;
+public interface LogoutHandler {
 
-@Configuration
-@Import({
-        // modules
-        IsisModuleViewerWicketModel.class,
+    void logout();
 
-        // @Service's
-        IsisWicketThemeSupportDefault.class,
-        LogoutHandlerWkt.class,
-})
-public class IsisModuleViewerWicketUi {
 }

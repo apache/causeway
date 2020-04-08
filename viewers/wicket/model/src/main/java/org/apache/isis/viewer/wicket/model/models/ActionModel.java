@@ -29,7 +29,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
@@ -449,13 +448,11 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
                         InteractionInitiatedBy.USER,
                         WHERE_FOR_ACTION_INVOCATION);
 
-        final Stream<RoutingService> routingServices = super.getServiceRegistry()
-                .select(RoutingService.class)
-                .stream();
-
         val resultPojo = resultAdapter != null ? resultAdapter.getPojo() : null;
 
-        return routingServices
+        return getServiceRegistry()
+                .select(RoutingService.class)
+                .stream()
                 .filter(routingService->routingService.canRoute(resultPojo))
                 .map(routingService->routingService.route(resultPojo))
                 .filter(_NullSafe::isPresent)

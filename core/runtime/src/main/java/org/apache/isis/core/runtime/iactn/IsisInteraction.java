@@ -34,6 +34,7 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 
 /**
  * Holds the current set of components for a specific execution context (such as on a thread).
@@ -69,6 +70,10 @@ public class IsisInteraction extends RuntimeContextBase {
         return transactionService.currentTransactionState();
     }
 
+    // -- INTERACTION ON CLOSE HANDLER
+    
+    @Setter private Runnable onClose;
+    
     // -- INTERACTION SCOPED USER DATA
     
     private Map<Class<?>, Object> userData = null;
@@ -100,6 +105,10 @@ public class IsisInteraction extends RuntimeContextBase {
     
     /** Do not use, is called by the framework internally. */
     public void close() {
+        if(onClose!=null) {
+            onClose.run();
+            onClose = null;
+        }
         userData = null;
         closed = true;
     }

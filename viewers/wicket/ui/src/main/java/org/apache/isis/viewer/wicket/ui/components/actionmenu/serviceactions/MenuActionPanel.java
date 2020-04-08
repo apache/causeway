@@ -19,10 +19,8 @@
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
 import java.util.List;
-import java.util.function.BooleanSupplier;
 
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 
@@ -66,19 +64,6 @@ public abstract class MenuActionPanel extends PanelBase {
             }
         };
     }
-
-    protected WebComponent divider(final BooleanSupplier visibilityCheck) {
-        return new WebComponent("divider") {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                setVisible(visibilityCheck.getAsBoolean());
-            }
-        };
-    }
-    
     
     //TODO candidate to be supported by the model itself (recursive)
     protected List<CssMenuItem> flatten(final List<CssMenuItem> menuItems) {

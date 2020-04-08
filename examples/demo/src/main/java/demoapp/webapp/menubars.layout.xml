@@ -231,20 +231,19 @@
     </mb3:secondary>
     <mb3:tertiary>
         <mb3:menu>
-            <mb3:named>Security</mb3:named>
             <mb3:section>
                 <mb3:serviceAction objectType="isissecurity.MeService" id="me">
                     <cpt:named>Me</cpt:named>
                 </mb3:serviceAction>
-            </mb3:section>
-        </mb3:menu>
-        <mb3:menu>
-            <mb3:named>Configuration Menu</mb3:named>
-            <mb3:section>
                 <mb3:serviceAction objectType="isisApplib.ConfigurationMenu" id="configuration">
                     <cpt:named>Configuration</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
+	        <mb3:section>
+	            <mb3:serviceAction objectType="isisSecurityApi.LogoutMenu" id="logout">
+	                <cpt:named>Logout</cpt:named>
+	            </mb3:serviceAction>
+	        </mb3:section>
         </mb3:menu>
     </mb3:tertiary>
 </mb3:menuBars>
