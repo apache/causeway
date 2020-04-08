@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.security.authentication.logout;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -31,6 +33,7 @@ import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 
@@ -39,12 +42,12 @@ import org.apache.isis.core.security.authentication.AuthenticationSessionTracker
 @DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.TERTIARY)
 public class LogoutMenu {
 
-    private final LogoutHandler logoutHandler;
+    private final List<LogoutHandler> logoutHandler;
     private final AuthenticationSessionTracker authenticationSessionTracker;
 
     @Inject
     public LogoutMenu(
-            final LogoutHandler logoutHandler,
+            final List<LogoutHandler> logoutHandler,
             final AuthenticationSessionTracker authenticationSessionTracker) {
         this.logoutHandler = logoutHandler;
         this.authenticationSessionTracker = authenticationSessionTracker;
@@ -62,7 +65,8 @@ public class LogoutMenu {
             )
     @MemberOrder(sequence = "999")
     public LoginRedirect logout(){
-        logoutHandler.logout();
+        _NullSafe.stream(logoutHandler)
+            .forEach(LogoutHandler::logout);
         return new LoginRedirect();
     }
 

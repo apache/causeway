@@ -26,7 +26,6 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeLeaveEvent;
 import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.flow.server.VaadinServiceInitListener;
-import com.vaadin.flow.server.VaadinSession;
 
 import org.springframework.stereotype.Component;
 
@@ -79,18 +78,6 @@ public class VaadinAuthenticationHandler implements VaadinServiceInitListener {
         }
         return false;
     }
-    
-    public void logoutFromSession() {
-        AuthSessionStoreUtil.get()
-        .ifPresent(authSession->{
-            log.debug("logging out {}", authSession.getUserName());
-            // logout AuthenticationManager
-            metaModelContext.getAuthenticationManager().closeSession(authSession);
-            AuthSessionStoreUtil.clear();
-        });
-        VaadinSession.getCurrent().close();
-        isisInteractionFactory.closeSessionStack();
-    } 
     
     /**
      * Executes a piece of code in a new (possibly nested) IsisInteraction, using the 

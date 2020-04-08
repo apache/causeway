@@ -16,47 +16,48 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.app.logout;
+package org.apache.isis.incubator.viewer.vaadin.ui.auth;
 
 import javax.inject.Inject;
 
-import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.request.cycle.RequestCycle;
+import com.vaadin.flow.server.VaadinSession;
+
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.security.authentication.logout.LogoutHandler;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Service
-public class LogoutHandlerWkt implements LogoutHandler {
+@Log4j2
+public class LogoutHandlerVaa implements LogoutHandler {
 
-    @Inject private IsisInteractionTracker isisInteractionTracker;
+//    @Inject private IsisInteractionTracker isisInteractionTracker;
+    //@Inject private IsisInteractionFactory isisInteractionFactory;
+    @Inject private MetaModelContext metaModelContext;
 
     @Override
     public void logout() {
         
-        if(RequestCycle.get()==null) {
+        val sessionVaa = VaadinSession.getCurrent();
+        if(sessionVaa==null) {
             return;
         }
         
-        val currentWktSession = AuthenticatedWebSession.get();
-        if(currentWktSession==null) {
-            return;
-        }
+        AuthSessionStoreUtil.get()
+        .ifPresent(authSession->{
+            log.info("logging out {}", authSession.getUserName());
+            // logout AuthenticationManager
+            metaModelContext.getAuthenticationManager().closeSession(authSession);
+            AuthSessionStoreUtil.clear();
+        });
         
-        if(isisInteractionTracker.isInInteraction()) {
-            isisInteractionTracker.currentInteraction()
-            .ifPresent(interaction->
-                interaction.setOnClose(()->{
-                    currentWktSession.invalidateNow();
-                }));
-            
-        } else {
-            currentWktSession.invalidateNow();
-        }
+        sessionVaa.close();
+        
     }
+    
 
-
+    
 }

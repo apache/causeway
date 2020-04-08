@@ -56,8 +56,11 @@ public class AuthSessionStoreUtil {
     /** when within a VaadinSession */
     public static void put(
             @Nullable final AuthenticationSession authSession) {
-        VaadinSession.getCurrent().getSession()
-        .setAttribute(AuthenticationSession.class.getName(), authSession);
+        Optional.ofNullable(VaadinSession.getCurrent())
+        .map(VaadinSession::getSession)
+        .ifPresent(sessionVaa->{
+            sessionVaa.setAttribute(AuthenticationSession.class.getName(), authSession);    
+        });
     }
     
     /** when within a VaadinSession */

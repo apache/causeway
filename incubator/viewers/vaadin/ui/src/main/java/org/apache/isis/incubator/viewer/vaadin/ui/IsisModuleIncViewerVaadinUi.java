@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.incubator.viewer.vaadin.model.IsisModuleIncViewerVaadinModel;
+import org.apache.isis.incubator.viewer.vaadin.ui.auth.LogoutHandlerVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.auth.VaadinAuthenticationHandler;
 
 
@@ -33,7 +34,8 @@ import org.apache.isis.incubator.viewer.vaadin.ui.auth.VaadinAuthenticationHandl
         IsisModuleIncViewerVaadinModel.class,
 
         // @Service's
-        VaadinAuthenticationHandler.class
+        VaadinAuthenticationHandler.class,
+        LogoutHandlerVaa.class
         
 })
 @EnableVaadin("org.apache.isis.incubator.viewer.vaadin.ui") // scan for vaadin annotations
