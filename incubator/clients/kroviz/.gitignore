@@ -1,7 +1,7 @@
 ./build
 ./out
 ./target
-./.gradle
+.gradle
 .idea/
 *.iml
 *.ipr
