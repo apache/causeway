@@ -4,15 +4,16 @@ import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3Menu;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.common.model.action.MenuActionFactory;
 import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModel;
 
 import lombok.val;
+import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 
+@UtilityClass
 @Log4j2
 public class MenuModelFactory {
 
@@ -29,7 +30,7 @@ public class MenuModelFactory {
 
         val itemsPerSectionCounter = new LongAdder();
         
-        for (final BS3Menu menu : menuBar.getMenus()) {
+        for (val menu : menuBar.getMenus()) {
 
             val menuItemModel = menuItemFactory.apply(menu.getNamed()); 
 
@@ -65,14 +66,13 @@ public class MenuModelFactory {
                             serviceAdapter);
 
                     // Optionally creates a sub-menu item based on visibility and usability
-                    menuItemModel
-                    .addSubMenuItemFor(
-                        menuActionUiModel, 
-                        isFirstInSection,
-                        newSubMenuItem->{
-                            // increment counter only when a sub item was actually added
-                            itemsPerSectionCounter.increment();
-                            newSubMenuItem.setMenuActionUiModel(menuActionUiModel);
+                    menuItemModel.addSubMenuItemFor(
+                            menuActionUiModel, 
+                            isFirstInSection,
+                            newSubMenuItem->{
+                                // increment counter only when a sub item was actually added
+                                itemsPerSectionCounter.increment();
+                                newSubMenuItem.setMenuActionUiModel(menuActionUiModel);
                     });
                     
                 }

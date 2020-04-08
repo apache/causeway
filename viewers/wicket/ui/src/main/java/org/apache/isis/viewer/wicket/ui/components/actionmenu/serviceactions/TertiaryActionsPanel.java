@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
 import java.util.List;
+import java.util.function.BooleanSupplier;
 
 import javax.inject.Inject;
 
@@ -26,19 +27,16 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.resource.CssResourceReference;
 
-import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.isis.viewer.wicket.ui.panels.PanelBase;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+
+import lombok.val;
 
 /**
  * A panel responsible to render the application actions as menu in a navigation bar.
@@ -48,7 +46,7 @@ import org.apache.isis.viewer.wicket.ui.util.Tooltips;
  *     <a href="http://bootsnipp.com/snippets/featured/multi-level-dropdown-menu-bs3">Bootsnip</a>
  * </p>
  */
-public class TertiaryActionsPanel extends PanelBase {
+public class TertiaryActionsPanel extends MenuActionPanel {
 
     private static final long serialVersionUID = 1L;
     
@@ -57,43 +55,17 @@ public class TertiaryActionsPanel extends PanelBase {
     public TertiaryActionsPanel(String id, List<CssMenuItem> menuItems) {
         super(id);
         addLogoutLink(this);
-        final List<CssMenuItem> subMenuItems = flatten(menuItems);
-        final ListView<CssMenuItem> subMenuItemsView = new ListView<CssMenuItem>("subMenuItems", subMenuItems) {
-            private static final long serialVersionUID = 1L;
+        val subMenuItems = flatten(menuItems);
+        val subMenuItemsView = subMenuItemsView(subMenuItems);
 
-            @Override
-            protected void populateItem(ListItem<CssMenuItem> listItem) {
-                CssMenuItem subMenuItem = listItem.getModelObject();
-                if (subMenuItem.hasSubMenuItems()) {
-                    addFolderItem(subMenuItem, listItem);
-                } else {
-                    ServiceActionUtil.addLeafItem(
-                            TertiaryActionsPanel.super.getCommonContext(), subMenuItem, listItem, TertiaryActionsPanel.this);
-                }
-            }
+        final BooleanSupplier dividerVisibility = ()->{
+            subMenuItemsView.configure();
+            return !subMenuItems.isEmpty();
         };
-
-        WebComponent divider = new WebComponent("divider") {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-
-                subMenuItemsView.configure();
-                setVisible(!subMenuItems.isEmpty());
-            }
-        };
+        
+        val divider = divider(dividerVisibility); 
 
         add(subMenuItemsView, divider);
-    }
-
-    protected List<CssMenuItem> flatten(List<CssMenuItem> menuItems) {
-        List<CssMenuItem> subMenuItems = _Lists.newArrayList();
-        for (CssMenuItem menuItem : menuItems) {
-            subMenuItems.addAll(menuItem.getSubMenuItems());
-        }
-        return subMenuItems;
     }
 
     private void addLogoutLink(MarkupContainer themeDiv) {
@@ -128,12 +100,6 @@ public class TertiaryActionsPanel extends PanelBase {
 
     private Class<? extends Page> getSignInPage() {
         return pageClassRegistry.getPageClass(PageType.SIGN_IN);
-    }
-
-
-    private void addFolderItem(CssMenuItem subMenuItem, ListItem<CssMenuItem> listItem) {
-        final MarkupContainer parent = TertiaryActionsPanel.this;
-        ServiceActionUtil.addFolderItem(super.getCommonContext(), subMenuItem, listItem, parent, ServiceActionUtil.SeparatorStrategy.WITHOUT_SEPARATORS);
     }
 
     @Override

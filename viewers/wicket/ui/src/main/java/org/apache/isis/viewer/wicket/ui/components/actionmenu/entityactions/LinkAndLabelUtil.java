@@ -30,10 +30,10 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ToggledMementosProvider;
 
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public final class LinkAndLabelUtil {
-
-    private LinkAndLabelUtil(){}
 
     public static List<LinkAndLabel> asActionLinks(
             final ScalarModel scalarModel,

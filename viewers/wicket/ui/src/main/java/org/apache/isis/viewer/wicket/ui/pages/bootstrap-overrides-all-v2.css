@@ -1081,6 +1081,11 @@ h4.iconAndTitle a:focus {
     text-decoration: none;
 }
 
+li.list-separator { 
+	border-top: 1px solid #e5e5e5;
+	padding-top: .4em;
+	margin-top: .4em;
+}
 
 .list-inline > li {
     padding-left: 0px;
@@ -1105,4 +1110,6 @@ div.sidebar-panel div.extra-content {
 .cbx .fa-check {
     color: green;
 }
+
+
 
