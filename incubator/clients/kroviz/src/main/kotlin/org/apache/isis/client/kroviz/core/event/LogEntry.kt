@@ -169,16 +169,11 @@ data class LogEntry(
     }
 
     fun addAggregator(aggregator: BaseAggregator) {
-        if (aggregators.size > 0) {
-            /*           console.log("[LogEntry.addAggregator()]")
-                       console.log(aggregators)
-                       console.log(aggregator)*/
-        }
         aggregators.add(aggregator)
     }
 
     fun matches(reSpec: ResourceSpecification): Boolean {
-        return url.equals(reSpec.url) && subType.equals(reSpec.subType)
+        return url == reSpec.url && subType.equals(reSpec.subType)
     }
 
 }

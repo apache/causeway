@@ -4,8 +4,8 @@ import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.to.TransferObject
 
 /**
- * Superclass of Response Handlers which have to handle asynchronous XHR responses.
- * Due to the fact that XMLHttpRequests are called asynchronously, responses may arrive in random order.
+ * Handle responses to XmlHttpRequests asynchronously,
+ * since they may arrive in arbitrary order.
  * @see: https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern
  * COR simplifies implementation of Dispatcher.
  *
