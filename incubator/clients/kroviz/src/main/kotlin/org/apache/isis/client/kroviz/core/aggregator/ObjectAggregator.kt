@@ -44,9 +44,7 @@ class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
     }
 
     fun handleResultObject(obj: ResultObject) {
-        console.log("[OA.handleResultObject]")
-        console.log(obj)
-        // dsp.addData(obj)
+        // TODO dsp.addData(obj)
     }
 
     override fun getObject(): TObject? {
@@ -54,8 +52,7 @@ class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
     }
 
     private fun handleProperty(property: Property) {
-        console.log("[ObjectAggregator.handleProperty] yet to be implemented")
-        console.log(property)
+        //TODO  yet to be implemented
     }
 
     private fun handleLayout(layout: Layout) {

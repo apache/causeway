@@ -2,6 +2,7 @@ package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
+import org.apache.isis.client.kroviz.core.model.DisplayModel
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.TObject
 
@@ -20,7 +21,7 @@ import org.apache.isis.client.kroviz.to.TObject
  */
 abstract class BaseAggregator {
 
-    open lateinit var dsp: org.apache.isis.client.kroviz.core.model.DisplayModel
+    open lateinit var dsp: DisplayModel
 
     open fun update(logEntry: LogEntry, subType: String) {}
 
@@ -34,8 +35,7 @@ abstract class BaseAggregator {
 
     protected fun log(logEntry: LogEntry) {
         logEntry.setUndefined("no handler found")
-        console.log("[BaseAggregator.log] no handler found: ${this::class.simpleName}")
-        console.log(logEntry.response)
+        throw Throwable("[BaseAggregator.log] no handler found: ${this::class.simpleName}")
     }
 
     @Deprecated("use extension function")
@@ -44,18 +44,13 @@ abstract class BaseAggregator {
     }
 
     fun TObject.getLayoutLink(): Link? {
-        var href: String?
-        for (l in links) {
-            href = l.href
-            if (href.isNotEmpty() && href.contains("layout")) {
-                return l
-            }
+        return links.firstOrNull { l ->
+            l.isLayout()
         }
-        return null
     }
 
-    fun noop() {
-        // save a line break in when formatting
+    private fun Link.isLayout(): Boolean {
+        return href.isNotEmpty() && href.contains("layout")
     }
 
     fun Link.invokeWith(aggregator: BaseAggregator, subType: String = "json") {

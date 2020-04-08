@@ -86,8 +86,7 @@ class ColumnFactory {
                 headerFilter = Editor.INPUT,
                 formatterComponentFunction = { _, _, data ->
                     Button(text = data["object"].title as String, icon = "fas fa-star-o", style = ButtonStyle.LINK).onClick {
-                        console.log("[ColumnFactory.buildLink]")
-                        console.log(data)
+                       console.log(data)
                     }
                 })
     }

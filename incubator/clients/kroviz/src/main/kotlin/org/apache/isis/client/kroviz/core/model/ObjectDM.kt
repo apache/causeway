@@ -23,7 +23,6 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     }
 
     fun setDirty(value: Boolean) {
-        console.log("[ObjectDM.setDirty] $value")
         dirty = value
     }
 
@@ -37,7 +36,6 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     }
 
     fun save() {
-        console.log("[ObjectDM.save]")
         if (dirty) {
             val tObject = data!!.delegate
             val getLink = tObject.links.first()
@@ -59,7 +57,6 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     }
 
     fun undo() {
-        console.log("[displayModel.undo]")
         if (dirty) {
             //TODO reset()
         }

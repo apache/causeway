@@ -22,7 +22,6 @@ object DomHelper {
         element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(text))
         element.setAttribute("download", filename)
         document.body?.appendChild(element)
-        console.log(document)
         element.asDynamic().click()
         document.body?.removeChild(element)
     }

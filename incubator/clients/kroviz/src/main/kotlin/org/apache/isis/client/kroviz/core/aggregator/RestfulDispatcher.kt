@@ -12,8 +12,8 @@ class RestfulDispatcher() : BaseAggregator() {
         restful.links.forEach {
             when {
                 it.rel.endsWith("/menuBars") -> invokeNavigation(it)
-                it.rel == "self" -> noop()
-                it.rel.endsWith("/services") -> noop()
+                it.rel == "self" -> {}
+                it.rel.endsWith("/services") -> {}
                 else -> invokeSystem(it)
             }
         }

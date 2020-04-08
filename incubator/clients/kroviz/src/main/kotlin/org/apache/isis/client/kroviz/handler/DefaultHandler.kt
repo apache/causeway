@@ -7,8 +7,6 @@ class DefaultHandler : BaseHandler() {
     }
 
     override fun doHandle() {
-        console.log("[DefaultHandler.doHandle]")
-        console.log(logEntry)
         update()
     }
 

@@ -51,15 +51,15 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
         val domainTypeLinkList = mutableListOf<Link>()
         obj.values.forEach { link ->
             when {
-                link.href.contains("/org.apache.isis") -> noop()
-                link.href.contains("/isisApplib") -> noop()
-                link.href.contains("/java") -> noop()
-                link.href.contains("/void") -> noop()
-                link.href.contains("/boolean") -> noop()
-                link.href.contains("fixture") -> noop()
-                link.href.contains("service") -> noop()
-                link.href.contains("/homepage") -> noop()
-                link.href.endsWith("Menu") -> noop()
+                link.href.contains("/org.apache.isis") -> {}
+                link.href.contains("/isisApplib") -> {}
+                link.href.contains("/java") -> {}
+                link.href.contains("/void") -> {}
+                link.href.contains("/boolean") -> {}
+                link.href.contains("fixture") -> {}
+                link.href.contains("service") -> {}
+                link.href.contains("/homepage") -> {}
+                link.href.endsWith("Menu") -> {}
                 else -> {
                     domainTypeLinkList.add(link)
                 }
