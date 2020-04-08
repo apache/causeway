@@ -20,10 +20,11 @@ XHR -> RH : handle()
 activate RH
 RH -> RH : successor.handle()
 RH -> TO : parse()
+RH -> LE : setTransferObject()
+RH -> LE : addAggegator()
 RH -> AGGT : update(logEntry)
-activate AGGT
-RH -> LE : setAggegator()
 deactivate RH
+activate AGGT
 
 AGGT -> AGGT : handleList()
 activate AGGT
@@ -49,8 +50,6 @@ LNK -> XHR: invoke(this, aggt)
 deactivate AGGT
 
 AGGT -> DM : canBeDisplayed()
-activate DM
-deactivate DM
 AGGT -> UI : openView()
 deactivate AGGT
 
