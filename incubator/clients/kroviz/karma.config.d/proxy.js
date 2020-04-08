@@ -1,0 +1,1 @@
+config.singleRun = true;

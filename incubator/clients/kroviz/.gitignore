@@ -2,3 +2,10 @@
 ./out
 ./target
 ./.gradle
+.idea/
+*.iml
+*.ipr
+*.iws
+/refresh.sh
+package-lock.json
+node_modules/

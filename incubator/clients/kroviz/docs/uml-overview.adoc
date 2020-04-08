@@ -1,0 +1,115 @@
+.Overview Diagram
+[plantuml,file="uml-overview.png"]
+--
+@startuml
+
+class XHR {
+    invoke()
+}
+
+class EventStore<<(S,#FF7700) Singleton>> {
+    log:LogEntry[]
+    start()
+    end()
+    fault()
+    find(href)
+}
+
+class LogEntry {
+    url:Href
+    title:String
+    startedAt:Date
+    updatedAt:Date
+    request:String
+    response:String
+    object:TransferObject
+    aggregator:Aggregator
+    cacheHits:int
+}
+EventStore o-- LogEntry
+LogEntry o-- TransferObject
+LogEntry o-- Aggregator
+
+class ResponseHandler<<Facade,ChainOfResponsibility>>{
+    handle(LogEntry)
+    canHandle(json)
+    doHandle()
+    parse(json)
+}
+ResponseHandler -> XHR : json <
+ResponseHandler .> TransferObject : converts JSON into TO
+
+XHR -> EventStore
+
+
+package remote <<Node>> {
+interface RestfulObjects
+    class ApacheIsis<<(A, #FF7700)Application>>
+    class NakedObjects<<(A, #FF7700)Application>>
+}
+RestfulObjects <|-- ApacheIsis
+RestfulObjects <|-- NakedObjects
+XHR -> RestfulObjects : invoke
+XHR <- RestfulObjects : json
+
+
+interface TransferObject
+TransferObject <|.. to.Link
+TransferObject <|.. to.Extensions
+TransferObject <|.. to.layout.Layout
+interface to.Linked{
+    links:Link[]
+}
+TransferObject <|.. to.Linked
+to.Linked <|.. to.Result
+to.Linked <|.. to.ResultList
+to.Linked <|.. to.Extended
+
+interface to.Extended{
+    extensions:Extensions
+}
+to.Linked o-- to.Link
+to.Extended o-- to.Extensions
+to.Extended <|.. to.Property
+to.Extended <|.. to.TObject
+to.Extended <|.. to.Service
+to.Extended <|.. to.Member
+to.Service o-- to.Member
+
+interface Aggregator {
+    update(logEntry)
+}
+class ListAggregator {
+    -list:ObjectList
+}
+ListAggregator *-- ObjectList
+Aggregator <|.. ListAggregator
+
+class NavigationAggregator
+Aggregator <|.. NavigationAggregator
+
+class ObjectList {
+    list:ObjectAdapter
+    -limit:int
+    -layout:Layout
+}
+ObjectList *-- to.layout.Layout
+
+note "<<Pattern>>\nEventSourcing" as PES
+EventStore .. PES
+PES .. LogEntry
+
+note "<<Pattern>>\nRedux" as PR
+PR .. PES
+PR .. Aggregator
+
+note "<<Pattern>>\nRemoteFacade" as PRF
+PRF .. RestfulObjects
+
+note "<<Pattern>>\nTransferObject" as PTO
+PTO .. TransferObject
+
+note "<<Pattern>>\nAggregator" as PA
+PA .. Aggregator
+@enduml
+--

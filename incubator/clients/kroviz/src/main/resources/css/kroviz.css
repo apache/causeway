@@ -1,0 +1,146 @@
+.navbar {
+    min-height: 24px;
+    height: 24px;
+}
+
+.navbar-brand {
+    height: 24px;
+    line-height: 24px;
+}
+
+.navbar-toggle {
+    /* (80px - button height 34px) / 2 = 23px */
+    margin-top: 23px;
+    padding: 9px 10px !important;
+}
+
+@media (min-width: 768px) {
+    .navbar-nav > li > a {
+        /* (80px - line-height of 27px) / 2 = 26.5px */
+        padding-top: 26.5px;
+        padding-bottom: 26.5px;
+        line-height: 27px;
+    }
+}
+
+.btn-link {
+    height: 35px;
+    margin-top: -8px;
+}
+
+.tabulator-col-content {
+    padding: 2px 2px !important;
+}
+
+div.tabulator-cell {
+    height: 35px;
+}
+
+div.tabulator-header {
+    font-weight: lighter !important;
+    font-size: small !important;
+}
+
+.text-danger {
+    color: red !important;
+}
+
+.text-warn {
+    color: orange !important;
+}
+
+.text-ok {
+    color: green !important;
+}
+
+.text-normal {
+    color: black;
+}
+
+.text-disabled {
+    color: lightgrey !important;
+}
+
+.nav-link {
+    padding: 4px 12px !important;
+}
+
+label.control-label {
+    font-weight: lighter !important;
+    font-size: small !important;
+}
+
+pre.highlight {
+    margin: 7px 0px;
+    padding: 14px;
+    background: #FDF6E3;
+}
+
+.language-java {
+    color: #657B83 !important;
+}
+
+.panel-heading {
+    padding: 3px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 3em;
+    background-color: #ecf0f1;
+    border-color: #ecf0f1;
+    border-bottom: 1px solid transparent;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    box-sizing: border-box;
+}
+
+.panel-body {
+    padding: 15px;
+    box-sizing: border-box;
+    font-size: 15px;
+    border-left: 1px solid #ecf0f1;
+    border-bottom: 1px solid #ecf0f1;
+    border-right: 1px solid #ecf0f1;
+}
+
+textarea {
+    height: calc(100% - 30px) !important;
+}
+
+.button-bar {
+    display: flex;
+    align-self: baseline !important;
+}
+
+@font-face {
+    font-family: Chicago;
+    src: url('/fonts/ChicagoFLF.ttf');
+}
+
+div {
+   /* font-family: Chicago, sans-serif;*/
+}
+
+.logo-button-image:before {
+    content: "";
+    width: 75px;
+    height: 40px;
+    display: inline-block;
+    vertical-align: text-top;
+    background-color: transparent;
+    background-position : center center;
+    background-repeat:no-repeat;
+    background-size: contain, cover;
+    background-image : url("https://svn.apache.org/repos/asf/comdev/project-logos/originals/isis.svg");
+}
+
+/*background-image: url("https://www.apache.org/img/ASF20thAnniversary.jpg");*/
+/*background-image: url(https://www.apache.org/logos/res/isis/isis.png);*/
+/*background-image: url(/img/kroviz-logo.svg);*/
+/*background-image: url(https://upload.wikimedia.org/wikipedia/commons/b/b9/SVG_animation_using_SMIL.svg)
+https://svn.apache.org/repos/asf/comdev/project-logos/originals/isis.svg
+*/
+
+.kv-window {
+  /* background-color: rgba(255,255,255, 0) !important;*/
+}

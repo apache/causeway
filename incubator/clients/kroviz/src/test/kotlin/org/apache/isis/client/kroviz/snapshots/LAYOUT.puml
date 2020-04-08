@@ -1,0 +1,376 @@
+
+@startuml
+class "root" as root {
+    .. Properties ..
+    cssClass: null
+    .. Objects ..
+    row: [Array]
+}
+class "row" as root.row {
+    .. Properties ..
+    .. Objects ..
+    0: [object Object]
+    1: [object Object]
+}
+class "0" as root.row.0 {
+    .. Properties ..
+    metadataError: null
+    cssClass: null
+    id: null
+    .. Objects ..
+    cols: [Array]
+}
+class "cols" as root.row.0.cols {
+    .. Properties ..
+    .. Objects ..
+    0: [object Object]
+}
+class "0" as root.row.0.cols.0 {
+    .. Properties ..
+    .. Objects ..
+    col: [object Object]
+}
+class "col" as root.row.0.cols.0.col {
+    .. Properties ..
+    metadataError: null
+    cssClass: null
+    size: null
+    id: null
+    span: 12
+    unreferencedActions: true
+    unreferencedCollections: null
+    .. Objects ..
+    domainObject: [object Object]
+    action: [Array]
+}
+class "domainObject" as root.row.0.cols.0.col.domainObject {
+    .. Properties ..
+    named: null
+    describedAs: null
+    plural: null
+    metadataError: null
+    bookmarking: null
+    cssClass: null
+    cssClassFa: null
+    cssClassFaPosition: null
+    namedEscaped: null
+    .. Objects ..
+    link: [object Object]
+}
+class "link" as root.row.0.cols.0.col.domainObject.link {
+    .. Properties ..
+    rel: urn:org.restfulobjects:rels/element
+    method: GET
+    href: http://localhost:8080/restful/objects/isisApplib.FixtureResult/;
+    type: application/jsonprofile&#x3D;&quot;urn:org.restfulobjects:repr-types/object&quot;
+}
+class "action" as root.row.0.cols.0.col.action {
+    .. Properties ..
+    .. Objects ..
+    0: [object Object]
+    1: [object Object]
+    2: [object Object]
+    3: [object Object]
+}
+class "0" as root.row.0.cols.0.col.action.0 {
+    .. Properties ..
+    named: null
+    describedAs: null
+    metadataError: null
+    id: clearHints
+    bookmarking: null
+    cssClass: null
+    cssClassFa: null
+    cssClassFaPosition: null
+    hidden: null
+    namedEscaped: null
+    position: null
+    promptStyle: null
+    .. Objects ..
+    link: [object Object]
+}
+class "link" as root.row.0.cols.0.col.action.0.link {
+    .. Properties ..
+    rel: urn:org.restfulobjects:rels/action
+    method: GET
+    href: http://localhost:8080/restful/objects/isisApplib.FixtureResult/;/actions/clearHints
+    type: application/jsonprofile&#x3D;&quot;urn:org.restfulobjects:repr-types/object-action&quot;
+}
+class "1" as root.row.0.cols.0.col.action.1 {
+    .. Properties ..
+    named: null
+    describedAs: null
+    metadataError: null
+    id: downloadLayoutXml
+    bookmarking: null
+    cssClass: null
+    cssClassFa: null
+    cssClassFaPosition: null
+    hidden: null
+    namedEscaped: null
+    position: null
+    promptStyle: null
+    .. Objects ..
+    link: [object Object]
+}
+class "link" as root.row.0.cols.0.col.action.1.link {
+    .. Properties ..
+    rel: urn:org.restfulobjects:rels/action
+    method: GET
+    href: http://localhost:8080/restful/objects/isisApplib.FixtureResult/;/actions/downloadLayoutXml
+    type: application/jsonprofile&#x3D;&quot;urn:org.restfulobjects:repr-types/object-action&quot;
+}
+class "2" as root.row.0.cols.0.col.action.2 {
+    .. Properties ..
+    named: null
+    describedAs: null
+    metadataError: null
+    id: rebuildMetamodel
+    bookmarking: null
+    cssClass: null
+    cssClassFa: null
+    cssClassFaPosition: null
+    hidden: null
+    namedEscaped: null
+    position: null
+    promptStyle: null
+    .. Objects ..
+    link: [object Object]
+}
+class "link" as root.row.0.cols.0.col.action.2.link {
+    .. Properties ..
+    rel: urn:org.restfulobjects:rels/action
+    method: GET
+    href: http://localhost:8080/restful/objects/isisApplib.FixtureResult/;/actions/rebuildMetamodel
+    type: application/jsonprofile&#x3D;&quot;urn:org.restfulobjects:repr-types/object-action&quot;
+}
+class "3" as root.row.0.cols.0.col.action.3 {
+    .. Properties ..
+    named: null
+    describedAs: null
+    metadataError: null
+    id: openRestApi
+    bookmarking: null
+    cssClass: null
+    cssClassFa: null
+    cssClassFaPosition: null
+    hidden: null
+    namedEscaped: null
+    position: null
+    promptStyle: null
+    .. Objects ..
+    link: [object Object]
+}
+class "link" as root.row.0.cols.0.col.action.3.link {
+    .. Properties ..
+    rel: urn:org.restfulobjects:rels/action
+    method: GET
+    href: http://localhost:8080/restful/objects/isisApplib.FixtureResult/;/actions/openRestApi
+    type: application/jsonprofile&#x3D;&quot;urn:org.restfulobjects:repr-types/object-action&quot;
+}
+class "1" as root.row.1 {
+    .. Properties ..
+    metadataError: null
+    cssClass: null
+    id: null
+    .. Objects ..
+    cols: [Array]
+}
+class "cols" as root.row.1.cols {
+    .. Properties ..
+    .. Objects ..
+    0: [object Object]
+    1: [object Object]
+}
+class "0" as root.row.1.cols.0 {
+    .. Properties ..
+    .. Objects ..
+    col: [object Object]
+}
+class "col" as root.row.1.cols.0.col {
+    .. Properties ..
+    domainObject: null
+    metadataError: null
+    cssClass: null
+    size: null
+    id: null
+    span: 4
+    unreferencedActions: null
+    unreferencedCollections: null
+    .. Objects ..
+    fieldSet: [Array]
+}
+class "fieldSet" as root.row.1.cols.0.col.fieldSet {
+    .. Properties ..
+    .. Objects ..
+    0: [object Object]
+}
+class "0" as root.row.1.cols.0.col.fieldSet.0 {
+    .. Properties ..
+    name: General
+    metadataError: null
+    id: general
+    unreferencedActions: null
+    unreferencedProperties: true
+    .. Objects ..
+    property: [Array]
+}
+class "property" as root.row.1.cols.0.col.fieldSet.0.property {
+    .. Properties ..
+    .. Objects ..
+    0: [object Object]
+    1: [object Object]
+    2: [object Object]
+    3: [object Object]
+}
+class "0" as root.row.1.cols.0.col.fieldSet.0.property.0 {
+    .. Properties ..
+    named: null
+    describedAs: null
+    metadataError: null
+    id: className
+    cssClass: null
+    hidden: null
+    labelPosition: null
+    multiLine: null
+    namedEscaped: null
+    promptStyle: null
+    renderedAsDayBefore: null
+    typicalLength: null
+    unchanging: null
+    .. Objects ..
+    link: [object Object]
+}
+class "link" as root.row.1.cols.0.col.fieldSet.0.property.0.link {
+    .. Properties ..
+    rel: urn:org.restfulobjects:rels/property
+    method: GET
+    href: http://localhost:8080/restful/objects/isisApplib.FixtureResult/;/properties/className
+    type: application/jsonprofile&#x3D;&quot;urn:org.restfulobjects:repr-types/object-property&quot;
+}
+class "1" as root.row.1.cols.0.col.fieldSet.0.property.1 {
+    .. Properties ..
+    named: null
+    describedAs: null
+    metadataError: null
+    id: fixtureScriptClassName
+    cssClass: null
+    hidden: null
+    labelPosition: null
+    multiLine: null
+    namedEscaped: null
+    promptStyle: null
+    renderedAsDayBefore: null
+    typicalLength: null
+    unchanging: null
+    .. Objects ..
+    link: [object Object]
+}
+class "link" as root.row.1.cols.0.col.fieldSet.0.property.1.link {
+    .. Properties ..
+    rel: urn:org.restfulobjects:rels/property
+    method: GET
+    href: http://localhost:8080/restful/objects/isisApplib.FixtureResult/;/properties/fixtureScriptClassName
+    type: application/jsonprofile&#x3D;&quot;urn:org.restfulobjects:repr-types/object-property&quot;
+}
+class "2" as root.row.1.cols.0.col.fieldSet.0.property.2 {
+    .. Properties ..
+    named: null
+    describedAs: null
+    metadataError: null
+    id: key
+    cssClass: null
+    hidden: null
+    labelPosition: null
+    multiLine: null
+    namedEscaped: null
+    promptStyle: null
+    renderedAsDayBefore: null
+    typicalLength: null
+    unchanging: null
+    .. Objects ..
+    link: [object Object]
+}
+class "link" as root.row.1.cols.0.col.fieldSet.0.property.2.link {
+    .. Properties ..
+    rel: urn:org.restfulobjects:rels/property
+    method: GET
+    href: http://localhost:8080/restful/objects/isisApplib.FixtureResult/;/properties/key
+    type: application/jsonprofile&#x3D;&quot;urn:org.restfulobjects:repr-types/object-property&quot;
+}
+class "3" as root.row.1.cols.0.col.fieldSet.0.property.3 {
+    .. Properties ..
+    named: null
+    describedAs: null
+    metadataError: null
+    id: object
+    cssClass: null
+    hidden: null
+    labelPosition: null
+    multiLine: null
+    namedEscaped: null
+    promptStyle: null
+    renderedAsDayBefore: null
+    typicalLength: null
+    unchanging: null
+    .. Objects ..
+    link: [object Object]
+}
+class "link" as root.row.1.cols.0.col.fieldSet.0.property.3.link {
+    .. Properties ..
+    rel: urn:org.restfulobjects:rels/property
+    method: GET
+    href: http://localhost:8080/restful/objects/isisApplib.FixtureResult/;/properties/object
+    type: application/jsonprofile&#x3D;&quot;urn:org.restfulobjects:repr-types/object-property&quot;
+}
+class "1" as root.row.1.cols.1 {
+    .. Properties ..
+    .. Objects ..
+    col: [object Object]
+}
+class "col" as root.row.1.cols.1.col {
+    .. Properties ..
+    domainObject: null
+    metadataError: null
+    cssClass: null
+    size: null
+    id: null
+    span: 8
+    unreferencedActions: null
+    unreferencedCollections: true
+}
+root.row.0.cols.0.col.domainObject -- root.row.0.cols.0.col.domainObject.link
+root.row.0.cols.0.col.action.0 -- root.row.0.cols.0.col.action.0.link
+root.row.0.cols.0.col.action.1 -- root.row.0.cols.0.col.action.1.link
+root.row.0.cols.0.col.action.2 -- root.row.0.cols.0.col.action.2.link
+root.row.0.cols.0.col.action.3 -- root.row.0.cols.0.col.action.3.link
+root.row.0.cols.0.col.action -- root.row.0.cols.0.col.action.0
+root.row.0.cols.0.col.action -- root.row.0.cols.0.col.action.1
+root.row.0.cols.0.col.action -- root.row.0.cols.0.col.action.2
+root.row.0.cols.0.col.action -- root.row.0.cols.0.col.action.3
+root.row.0.cols.0.col -- root.row.0.cols.0.col.domainObject
+root.row.0.cols.0.col -- root.row.0.cols.0.col.action
+root.row.0.cols.0 -- root.row.0.cols.0.col
+root.row.0.cols -- root.row.0.cols.0
+root.row.0 -- root.row.0.cols
+root.row.1.cols.0.col.fieldSet.0.property.0 -- root.row.1.cols.0.col.fieldSet.0.property.0.link
+root.row.1.cols.0.col.fieldSet.0.property.1 -- root.row.1.cols.0.col.fieldSet.0.property.1.link
+root.row.1.cols.0.col.fieldSet.0.property.2 -- root.row.1.cols.0.col.fieldSet.0.property.2.link
+root.row.1.cols.0.col.fieldSet.0.property.3 -- root.row.1.cols.0.col.fieldSet.0.property.3.link
+root.row.1.cols.0.col.fieldSet.0.property -- root.row.1.cols.0.col.fieldSet.0.property.0
+root.row.1.cols.0.col.fieldSet.0.property -- root.row.1.cols.0.col.fieldSet.0.property.1
+root.row.1.cols.0.col.fieldSet.0.property -- root.row.1.cols.0.col.fieldSet.0.property.2
+root.row.1.cols.0.col.fieldSet.0.property -- root.row.1.cols.0.col.fieldSet.0.property.3
+root.row.1.cols.0.col.fieldSet.0 -- root.row.1.cols.0.col.fieldSet.0.property
+root.row.1.cols.0.col.fieldSet -- root.row.1.cols.0.col.fieldSet.0
+root.row.1.cols.0.col -- root.row.1.cols.0.col.fieldSet
+root.row.1.cols.0 -- root.row.1.cols.0.col
+root.row.1.cols.1 -- root.row.1.cols.1.col
+root.row.1.cols -- root.row.1.cols.0
+root.row.1.cols -- root.row.1.cols.1
+root.row.1 -- root.row.1.cols
+root.row -- root.row.0
+root.row -- root.row.1
+root -- root.row
+@enduml
+
