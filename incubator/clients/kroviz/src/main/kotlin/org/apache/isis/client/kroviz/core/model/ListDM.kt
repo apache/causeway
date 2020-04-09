@@ -18,7 +18,8 @@ class ListDM(override val title: String) : DisplayModelWithLayout() {
 
     override fun reset() {
         isRendered = false
-        data = observableListOf<Exposer>()
+        data = observableListOf()
+        rawData = observableListOf()
     }
 
 }
