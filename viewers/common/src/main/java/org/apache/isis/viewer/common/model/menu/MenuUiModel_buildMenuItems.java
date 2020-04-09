@@ -48,7 +48,7 @@ final class MenuUiModel_buildMenuItems {
         
         for (val menu : menuBar.getMenus()) {
 
-            val menuItemModel = menuItemFactory.apply(menu.getNamed()); 
+            val menuItemModel = menuItemFactory.apply(menu.getNamed()); // top level menu item name
 
             for (val menuSection : menu.getSections()) {
 

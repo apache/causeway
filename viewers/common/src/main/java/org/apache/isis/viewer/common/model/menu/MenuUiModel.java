@@ -23,16 +23,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
-import org.apache.isis.core.commons.internal.base._NullSafe;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.common.model.action.MenuActionFactory;
 import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModel;
+import org.apache.isis.viewer.common.model.userprofile.UserProfileUiModelProvider;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -52,14 +49,6 @@ public class MenuUiModel implements Serializable {
         return menuBarSelect.name().toLowerCase(Locale.ENGLISH);
     }
     
-    public Stream<ManagedObject> streamAdapters(
-            final MetaModelContext metaModelContext) {
-        
-        return _NullSafe.stream(getMenuContributingServiceIds())
-        .map(metaModelContext::lookupServiceAdapterById)
-        .filter(_NullSafe::isPresent);
-    }
-
     public <T, M extends MenuItemUiModel<T, M>> 
     void buildMenuItems(
             final IsisWebAppCommonContext commonContext,
@@ -76,10 +65,32 @@ public class MenuUiModel implements Serializable {
                 commonContext, 
                 menuBar,
                 menuActionFactory,
-                menuItemFactory,
+                menuItemFactoryHonoringUserProfile(commonContext, menuItemFactory),
                 onNewMenuItem);
         
     }
+    
+    // -- HELPER IN SUPPORT OF THE CURRENT USER PROFILE
 
+    private <M> Function<String, M> menuItemFactoryHonoringUserProfile(
+            final IsisWebAppCommonContext commonContext,
+            final Function<String, M> menuItemFactory) {
+        return (String topLevelMenuItemName)->
+            menuItemFactory.apply(
+                replaceNullWithUserProfileName(commonContext, topLevelMenuItemName));
+    }
+    
+    private String replaceNullWithUserProfileName(
+            final IsisWebAppCommonContext commonContext, 
+            final String x) {
+        if(x==null) {
+            val userProfile = commonContext
+                    .lookupServiceElseFail(UserProfileUiModelProvider.class)
+                    .getUserProfile();
+            return userProfile.getUserProfileName();
+        }
+        return x; 
+    }
+    
 
 }
