@@ -36,25 +36,54 @@
 
     <packaging>jar</packaging>
 
+    <!-- see: http://andresalmiray.com/running-gradle-inside-maven/ -->
+    <profiles>
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>Windows</family>
+                </os>
+            </activation>
+            <properties>
+                <gradle.executable>gradlew.bat</gradle.executable>
+            </properties>
+        </profile>
+        <profile>
+            <id>*x</id>
+            <activation>
+                <os>
+                    <family>Unix</family>
+                </os>
+            </activation>
+            <properties>
+                <gradle.executable>gradlew</gradle.executable>
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
+            <!-- execute Gradle command -->
             <plugin>
-                <groupId>org.fortasoft</groupId>
-                <artifactId>gradle-maven-plugin</artifactId>
-                <version>1.0.8</version>
-                <configuration>
-                    <gradleVersion>6.3</gradleVersion>
-                    <tasks>
-                        <task>zip</task>
-                    </tasks>
-                </configuration>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <!-- You can bind this to any phase you like -->
-                        <phase>package</phase>
+                        <id>gradle</id>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <executable>${gradle.executable}</executable>
+                            <arguments>
+                                <argument>clean</argument>
+                                <argument>build</argument>
+                                <argument>-Pgroup=${project.groupId}</argument>
+                                <argument>-Pversion=${project.version}</argument>
+                                <argument>-S</argument>
+                            </arguments>
+                        </configuration>
                         <goals>
-                            <!-- goal must be "invoke" -->
-                            <goal>invoke</goal>
+                            <goal>exec</goal>
                         </goals>
                     </execution>
                 </executions>
