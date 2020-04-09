@@ -58,13 +58,11 @@ class LayoutXmlTest {
         val theCol = theRow.colList.first()
 
         val fieldSet = theCol.fieldSetList.first()
-        assertEquals("Name", fieldSet.name)               // 13
-        assertEquals("name", fieldSet.id)
-        assertEquals(1, fieldSet.actionList.size)
-        assertEquals(2, fieldSet.propertyList.size)
+        assertEquals(1, fieldSet.actionList.size)         // 13
+        assertEquals(2, fieldSet.propertyList.size)       // 14
 
         val col22 = cols2.last()
-        assertEquals("6", col22.span.toString().trim())
+        assertEquals("6", col22.span.toString().trim())   // 15
     }
 
 }
