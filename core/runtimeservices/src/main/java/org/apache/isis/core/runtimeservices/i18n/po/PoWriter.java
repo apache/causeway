@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.runtimeservices.i18n.po;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.SortedMap;
@@ -89,7 +89,7 @@ class PoWriter extends PoAbstract {
      */
     protected void header(final StringBuilder buf) {
         
-        final String createdAt = LocalDateTime.now().format(timestampFormat);
+        final String createdAt = ZonedDateTime.now().format(timestampFormat);
         buf.append("#, fuzzy").append("\n");
         buf.append("msgid \"\"").append("\n");
         buf.append("msgstr \"\"").append("\n");
