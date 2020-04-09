@@ -20,7 +20,8 @@ class MetaClass(val domainType: DomainType) {
                 m.isProperty() -> properties.add(MetaProperty(memberName))
                 m.isAction() -> actions.add(MetaAction(memberName))
                 else -> {
-                    throw Throwable("tertium non datur")
+                    console.log("[MetaClass.init] unexpected member type")
+                    console.log(memberName)
                 }
             }
         }

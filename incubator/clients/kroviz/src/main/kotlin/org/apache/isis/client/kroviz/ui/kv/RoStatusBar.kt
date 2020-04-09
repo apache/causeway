@@ -12,7 +12,6 @@ import pl.treksoft.kvision.html.ButtonStyle
 import pl.treksoft.kvision.navbar.Nav
 import pl.treksoft.kvision.navbar.Navbar
 import pl.treksoft.kvision.navbar.NavbarType
-import pl.treksoft.kvision.navbar.navLink
 import pl.treksoft.kvision.panel.SimplePanel
 
 object RoStatusBar {
@@ -22,27 +21,25 @@ object RoStatusBar {
         width = CssSize(100, UNIT.perc)
     }
     private val nav = Nav(rightAlign = true)
-    private val userLink = nav.navLink("", icon = "far fa-user")
-    private val umlDiagram: Button = Button(
-            text = "",
-            icon = IconManager.find("Diagram"),
-            style = ButtonStyle.OUTLINEWARNING).apply {
-        padding = CssSize(-16, UNIT.px)
-        margin = CssSize(0, UNIT.px)
-    }
-    private val lastError: Button = Button(
-            text = "OK",
-            icon = IconManager.find("OK"),
-            style = ButtonStyle.OUTLINESUCCESS).apply {
-        padding = CssSize(-16, UNIT.px)
-        margin = CssSize(0, UNIT.px)
+    private val userBtn: Button = buildButton("", "Me", ButtonStyle.OUTLINEWARNING)
+    private val umlDiagram = buildButton("", "Diagram", ButtonStyle.OUTLINEWARNING)
+    private val lastError = buildButton("OK", "OK", ButtonStyle.OUTLINESUCCESS)
+
+    private fun buildButton(text: String, iconName: String, style: ButtonStyle): Button {
+        return Button(
+                text = text,
+                icon = IconManager.find(iconName),
+                style = style).apply {
+            padding = CssSize(-16, UNIT.px)
+            margin = CssSize(0, UNIT.px)
+        }
     }
 
     init {
         navbar.add(nav)
         nav.add(lastError)
         nav.add(umlDiagram)
-        nav.add(userLink)
+        nav.add(userBtn)
     }
 
     fun updateDiagram(dd: DiagramDM) {
@@ -55,8 +52,8 @@ object RoStatusBar {
     }
 
     fun updateUser(user: String) {
-        userLink.setAttribute(name = "title", value = user)
-        turnGreen(userLink)
+        userBtn.setAttribute(name = "title", value = user)
+        userBtn.style = ButtonStyle.OUTLINESUCCESS
     }
 
     fun update(le: LogEntry?) {
