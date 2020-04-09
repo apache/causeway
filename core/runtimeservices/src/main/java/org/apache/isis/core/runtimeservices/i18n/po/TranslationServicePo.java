@@ -46,6 +46,7 @@ import org.apache.isis.core.config.IsisConfiguration;
 public class TranslationServicePo implements TranslationService {
 
     private PoAbstract po;
+    private Runnable onShutdown;
 
     /**
      * Defaults to writer mode because the service won't have been init'd while the metamodel is bring instantiated,
@@ -82,12 +83,19 @@ public class TranslationServicePo implements TranslationService {
         final PoReader poReader = new PoReader(this);
         poReader.init();
         po = poReader;
+
+        if(!systemEnvironment.isUnitTesting()) {
+            onShutdown = po::logTranslations;
+        }
     }
 
 
     @PreDestroy
     public void shutdown() {
-        po.logTranslations();
+        if(onShutdown!=null) {
+            onShutdown.run();
+            onShutdown = null;
+        }
     }
 
     @Override
