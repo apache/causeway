@@ -51,18 +51,20 @@ public class ServiceActionsPanelFactory extends ComponentFactoryAbstract {
         if(!(model instanceof ServiceActionsModel)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
-        final ServiceActionsModel serviceActionsModel = (ServiceActionsModel) model;
-        final DomainServiceLayout.MenuBar menuBar = serviceActionsModel.getMenuBar();
-        return appliesIf(menuBar != DomainServiceLayout.MenuBar.TERTIARY && menuBar != null);
+        val menuUiModel = ((ServiceActionsModel) model).getObject();
+        val menuBarSelect = menuUiModel.getMenuBarSelect();
+        return appliesIf(
+                menuBarSelect != DomainServiceLayout.MenuBar.TERTIARY 
+                && menuBarSelect != null);
     }
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        final ServiceActionsModel serviceActionsModel = (ServiceActionsModel) model;
+        val menuUiModel = ((ServiceActionsModel) model).getObject();
 
         val menuItems = _Lists.<CssMenuItem>newArrayList();
         ServiceActionUtil.buildMenu(
-                super.getCommonContext(), serviceActionsModel, menuItems::add);
+                super.getCommonContext(), menuUiModel, menuItems::add);
 
         return new ServiceActionsPanel(id, menuItems);
     }

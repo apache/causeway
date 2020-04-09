@@ -35,11 +35,11 @@ import com.vaadin.flow.theme.lumo.Lumo;
 
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.action.MenuActionVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableView;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.object.ObjectFormView;
+import org.apache.isis.viewer.common.model.header.HeaderUiModelProvider;
 
 import lombok.val;
 
@@ -58,7 +58,7 @@ implements BeforeEnterObserver {
     private static final long serialVersionUID = 1L;
     
     private final transient IsisWebAppCommonContext commonContext;
-    private final transient MenuBarsServiceBS3 menuBarsService;
+    private final transient HeaderUiModelProvider headerUiModelProvider;
     private Div pageContent = new Div();
     
     /**
@@ -67,10 +67,10 @@ implements BeforeEnterObserver {
     @Inject
     public MainView(
             final MetaModelContext metaModelContext,
-            final MenuBarsServiceBS3 menuBarsService) {
+            final HeaderUiModelProvider headerUiModelProvider) {
 
         this.commonContext = IsisWebAppCommonContext.of(metaModelContext);
-        this.menuBarsService = menuBarsService;
+        this.headerUiModelProvider = headerUiModelProvider;
     }
     
     @Override
@@ -78,7 +78,11 @@ implements BeforeEnterObserver {
         
         setPrimarySection(Section.NAVBAR);
 
-        val menuBarContainer = MenuUtil.createMenu(commonContext, menuBarsService, this::onMenuAction);
+        val menuBarContainer = MainView_createHeader.createHeader(
+                commonContext, 
+                headerUiModelProvider.getHeader(), 
+                this::onMenuAction);
+        
         addToNavbar(menuBarContainer);
         setContent(pageContent = new Div());
         setDrawerOpened(false);

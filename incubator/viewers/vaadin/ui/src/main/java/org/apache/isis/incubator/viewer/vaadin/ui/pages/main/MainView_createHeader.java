@@ -12,28 +12,25 @@ import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
-import org.apache.isis.applib.services.menu.MenuBarsService.Type;
-import org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.action.MenuActionFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.model.action.MenuActionVaa;
 import org.apache.isis.incubator.viewer.vaadin.model.menu.MenuItemVaa;
-import org.apache.isis.viewer.common.model.menu.MenuModelFactory;
+import org.apache.isis.viewer.common.model.branding.BrandingUiModel;
+import org.apache.isis.viewer.common.model.header.HeaderUiModel;
+import org.apache.isis.viewer.common.model.menu.MenuUiModel;
 
 import lombok.val;
-import lombok.experimental.UtilityClass;
 
-@UtilityClass
 //@Log4j2
-final class MenuUtil {
+final class MainView_createHeader {
 
-    static Component createMenu(
+    static Component createHeader(
             final IsisWebAppCommonContext commonContext, 
-            final MenuBarsServiceBS3 menuBarsService,
+            final HeaderUiModel headerUiModel,
             final Consumer<MenuActionVaa> subMenuEventHandler) {
         
-        val titleOrLogo = createTitleOrLogo(commonContext);
+        val titleOrLogo = createTitleOrLogo(commonContext, headerUiModel.getBranding());
         val leftMenuBar = new MenuBar();
         val horizontalSpacer = new Div();
 //        horizontalSpacer.setWidthFull();
@@ -54,8 +51,6 @@ final class MenuUtil {
         
         menuBarContainer.setWidthFull();
         
-        val bs3MenuBars = menuBarsService.menuBars(Type.DEFAULT);
-        
         // menu section handler, that creates and adds sub-menus to their parent top level menu   
         final BiConsumer<MenuBar, MenuItemVaa> menuSectionBuilder = (parentMenu, menuSectionUiModel) -> {
             val menuItem = parentMenu.addItem(menuSectionUiModel.getName());
@@ -65,7 +60,9 @@ final class MenuUtil {
                 
                 if(menuItemModel.isFirstInSection() 
                         && subMenu.getItems().size()>0) {
-                    subMenu.addItem(new Hr());
+                    val spacer = new Hr();
+                    //spacer.addClassName("spacer"); TODO vertical margin or padding is currently a bit too large 
+                    subMenu.addItem(spacer);
                 }
                 
                 subMenu.addItem(
@@ -76,14 +73,15 @@ final class MenuUtil {
         };
         
         // top level left aligned ...
-        buildMenuModel(commonContext, bs3MenuBars.getPrimary(), newMenuItem->
+        buildMenuModel(commonContext, headerUiModel.getPrimary(), newMenuItem->
             menuSectionBuilder.accept(leftMenuBar, newMenuItem));
         
         // top level right aligned ...
-        buildMenuModel(commonContext, bs3MenuBars.getSecondary(), newMenuItem->
+        buildMenuModel(commonContext, headerUiModel.getSecondary(), newMenuItem->
             menuSectionBuilder.accept(rightMenuBar, newMenuItem));
-        // TODO tertiary menu items should get collected under a top level menu labeled with the current user's name 
-        buildMenuModel(commonContext, bs3MenuBars.getTertiary(), newMenuItem->
+        
+        // tertiary menu items get collected under a top level menu labeled with the current user's name 
+        buildMenuModel(commonContext, headerUiModel.getTertiary(), newMenuItem->
             menuSectionBuilder.accept(rightMenuBar, newMenuItem));
         
         return menuBarContainer;
@@ -92,34 +90,34 @@ final class MenuUtil {
     
     // -- HELPER
 
-    private static Component createTitleOrLogo(IsisWebAppCommonContext commonContext) {
+    private static Component createTitleOrLogo(
+            final IsisWebAppCommonContext commonContext, 
+            final BrandingUiModel brandingUiModel) {
         
-        val isisConfiguration = commonContext.getConfiguration(); 
-        val webAppContextPath = commonContext.getWebAppContextPath();
         
-        //TODO application name/logo borrowed from Wicket's configuration, we might generalize this config option to all viewers
-        val applicationName = isisConfiguration.getViewer().getWicket().getApplication().getName();
-        val applicationLogo = isisConfiguration.getViewer().getWicket().getApplication().getBrandLogoHeader();
+        val brandingName = brandingUiModel.getName();
+        val brandingLogo = brandingUiModel.getLogoHref();
         
-        if(applicationLogo.isPresent()) {
-            val logo = new Image(webAppContextPath.prependContextPathIfLocal(applicationLogo.get()), "logo");
+        if(brandingLogo.isPresent()) {
+            val webAppContextPath = commonContext.getWebAppContextPath();
+            val logo = new Image(
+                    webAppContextPath.prependContextPathIfLocal(brandingLogo.get()), 
+                    "brandingLogo");
             logo.setWidth("48px");
             logo.setHeight("48px");
             return logo;
         }
-        
-        return new Text(applicationName);
+        return new Text(brandingName.orElse("App"));
         
     }
     
     private static void buildMenuModel(
             final IsisWebAppCommonContext commonContext,
-            final BS3MenuBar menuBar,
+            final MenuUiModel menuUiModel,
             final Consumer<MenuItemVaa> onNewMenuItem) {
         
-        MenuModelFactory.buildMenuItems(
+        menuUiModel.buildMenuItems(
                 commonContext, 
-                menuBar,
                 new MenuActionFactoryVaa(),
                 MenuItemVaa::newMenuItem,
                 onNewMenuItem);

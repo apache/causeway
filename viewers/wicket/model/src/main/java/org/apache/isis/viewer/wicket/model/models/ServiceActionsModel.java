@@ -19,55 +19,33 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
-import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
-import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-
-import lombok.val;
+import org.apache.isis.viewer.common.model.menu.MenuUiModel;
 /**
  * Backing model for actions of application services menu bar (typically, as
  * displayed along the top or side of the page).
  */
-public class ServiceActionsModel extends ModelAbstract<List<ManagedObject>> {
+public class ServiceActionsModel extends ModelAbstract<MenuUiModel> {
 
     private static final long serialVersionUID = 1L;
 
-    private final DomainServiceLayout.MenuBar menuBar;
+    private final MenuUiModel menuUiModel;
 
     /**
-     * @param menuBar - may be null in special case of rendering the tertiary menu on the error page.
+     * @param menuUiModel 
+     * @param menuBarSelect - may be null in special case of rendering the tertiary menu on the error page.
      */
-    public ServiceActionsModel(IsisWebAppCommonContext commonContext, DomainServiceLayout.MenuBar menuBar) {
+    public ServiceActionsModel(
+            final IsisWebAppCommonContext commonContext, 
+            final MenuUiModel menuUiModel) {
+        
         super(commonContext);
-        this.menuBar = menuBar;
-    }
-
-    /**
-     * The menu bar being rendered; may be null in special case of rendering the tertiary menu on the error page.
-     */
-    public DomainServiceLayout.MenuBar getMenuBar() {
-        return menuBar;
+        this.menuUiModel = menuUiModel;
     }
 
     @Override
-    protected List<ManagedObject> load() {
-        return super.getCommonContext().streamServiceAdapters()
-                .filter(with(menuBar))
-                .collect(Collectors.toList());
-    }
-
-    private static Predicate<ManagedObject> with(final DomainServiceLayout.MenuBar menuBar) {
-        return (ManagedObject adapter) -> {
-            val domainServiceLayoutFacet = adapter.getSpecification()
-                    .getFacet(DomainServiceLayoutFacet.class);
-            return (domainServiceLayoutFacet != null && domainServiceLayoutFacet.getMenuBar() == menuBar) ||
-                    (domainServiceLayoutFacet == null && menuBar == DomainServiceLayout.MenuBar.PRIMARY);
-        };
+    protected MenuUiModel load() {
+        return menuUiModel;
     }
 
 }

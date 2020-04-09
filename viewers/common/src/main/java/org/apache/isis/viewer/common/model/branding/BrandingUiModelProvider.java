@@ -32,6 +32,7 @@ public class BrandingUiModelProvider {
 
     @Inject 
     public BrandingUiModelProvider(IsisConfiguration isisConfiguration) {
+        //TODO application name/logo borrowed from Wicket's configuration, we might generalize this config option to all viewers
         this.appConfig = isisConfiguration.getViewer().getWicket().getApplication();
     }
     

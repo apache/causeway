@@ -19,18 +19,20 @@
 package org.apache.isis.viewer.common.model.header;
 
 import org.apache.isis.viewer.common.model.branding.BrandingUiModel;
+import org.apache.isis.viewer.common.model.menu.MenuUiModel;
 import org.apache.isis.viewer.common.model.userprofile.UserProfileUiModel;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
-@Data
+@Getter
 @AllArgsConstructor(staticName = "of")
-@NoArgsConstructor
 public class HeaderUiModel {
 
-    private BrandingUiModel branding;
-    private UserProfileUiModel userProfile;
+    private final BrandingUiModel branding;
+    private final UserProfileUiModel userProfile;
+    private final MenuUiModel primary;
+    private final MenuUiModel secondary;
+    private final MenuUiModel tertiary;
     
 }

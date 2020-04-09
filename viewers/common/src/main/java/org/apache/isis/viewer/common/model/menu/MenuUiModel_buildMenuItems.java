@@ -1,3 +1,21 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
 package org.apache.isis.viewer.common.model.menu;
 
 import java.util.concurrent.atomic.LongAdder;
@@ -10,12 +28,10 @@ import org.apache.isis.viewer.common.model.action.MenuActionFactory;
 import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModel;
 
 import lombok.val;
-import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 
-@UtilityClass
 @Log4j2
-public class MenuModelFactory {
+final class MenuUiModel_buildMenuItems {
 
     public static <T, M extends MenuItemUiModel<T, M>> 
     void buildMenuItems(
@@ -32,7 +48,7 @@ public class MenuModelFactory {
         
         for (val menu : menuBar.getMenus()) {
 
-            val menuItemModel = menuItemFactory.apply(menu.getNamed()); 
+            val menuItemModel = menuItemFactory.apply(menu.getNamed()); // top level menu item name
 
             for (val menuSection : menu.getSections()) {
 
