@@ -57,7 +57,7 @@
                 </os>
             </activation>
             <properties>
-                <gradle.executable>gradlew</gradle.executable>
+                <gradle.executable>./gradlew</gradle.executable>
             </properties>
         </profile>
     </profiles>
