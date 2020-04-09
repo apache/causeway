@@ -16,30 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.userprof;
+package org.apache.isis.viewer.common.model;
 
-/**
- * Optional API providing details about the user.
- *
- * <p>
- *     Used by the Wicket viewer in its {@link org.apache.isis.applib.annotation.DomainServiceLayout.MenuBar#TERTIARY tertiary}
- *     &quot;Me&quot; menu bar.
- * </p>
- */
-// tag::refguide[]
-public interface UserProfileService {
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-    // end::refguide[]
-    /**
-     * Used as the menu name of the {@link org.apache.isis.applib.annotation.DomainServiceLayout.MenuBar#TERTIARY tertiary}
-     * &quot;Me&quot; menu bar.
-     *
-     * <p>
-     *     If returns <tt>null</tt>, then the current user name is used instead.
-     * </p>
-     */
-    // tag::refguide[]
-    String userProfileName();   // <.>
+import org.apache.isis.viewer.common.model.branding.BrandingUiModelProvider;
+import org.apache.isis.viewer.common.model.header.HeaderUiModelProvider;
+import org.apache.isis.viewer.common.model.userprofile.UserProfileUiModelProvider;
 
+@Configuration
+@Import({
+
+    // @Service's
+    BrandingUiModelProvider.class,
+    UserProfileUiModelProvider.class,
+    HeaderUiModelProvider.class,
+    
+})
+public class IsisModuleViewerCommon {
 }
-// end::refguide[]

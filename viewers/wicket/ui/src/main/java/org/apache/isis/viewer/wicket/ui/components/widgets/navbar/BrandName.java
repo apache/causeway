@@ -18,10 +18,9 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.navbar;
 
-import java.util.Optional;
-
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.viewer.common.model.branding.BrandingUiModel;
 import org.apache.isis.viewer.wicket.ui.components.LabelBase;
 
 /**
@@ -31,8 +30,7 @@ public class BrandName extends LabelBase {
 
     private static final long serialVersionUID = 1L;
 
-    private final Placement placement;
-    private final String applicationName;
+    private final BrandingUiModel branding;
     
     /**
      * Constructor.
@@ -40,20 +38,16 @@ public class BrandName extends LabelBase {
      * @param id The component id
      * @param placement
      */
-    public BrandName(final String id, final Placement placement) {
+    public BrandName(final String id, final BrandingUiModel branding) {
         super(id);
-        this.placement = placement;
-
-        applicationName = getIsisConfiguration().getViewer().getWicket().getApplication().getName();
-
-        setDefaultModel(Model.of(applicationName));
+        this.branding = branding;
+        setDefaultModel(Model.of(branding.getName().orElse("")));
     }
 
     @Override
     protected void onConfigure() {
         super.onConfigure();
-
-        setVisible(! placement.configFrom(getIsisConfiguration()).isPresent());
+        setVisible(branding.getName().isPresent());
     }
 
 }
