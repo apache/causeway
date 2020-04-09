@@ -33,14 +33,16 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.viewer.common.model.branding.BrandingUiModelProvider;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandLogo;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandName;
-import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.Placement;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionStackTracePanel;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.WebPageBase;
+
+import lombok.val;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapJavascriptBehavior;
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
@@ -103,9 +105,11 @@ public class AccountManagementPageAbstract extends WebPageBase {
     }
 
     private void addApplicationName(MarkupContainer parent) {
-        final Placement placement = Placement.SIGNIN;
-        final BrandLogo brandLogo = new BrandLogo("brandLogo", placement);
-        final BrandName brandName = new BrandName(ID_APPLICATION_NAME, placement);
+        val branding = super.getCommonContext()
+                .lookupServiceElseFail(BrandingUiModelProvider.class)
+                .getSignInBranding();
+        val brandLogo = new BrandLogo("brandLogo", branding);
+        val brandName = new BrandName(ID_APPLICATION_NAME, branding);
         parent.add(brandName, brandLogo);
     }
 

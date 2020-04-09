@@ -16,24 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.widgets.navbar;
+package org.apache.isis.viewer.common.model.branding;
 
+import java.io.Serializable;
 import java.util.Optional;
 
-import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.commons.internal.base._Strings;
 
-import lombok.val;
+import lombok.RequiredArgsConstructor;
 
-public enum Placement {
-    HEADER,
-    SIGNIN;
+@RequiredArgsConstructor(staticName = "of")
+public class BrandingUiModel implements Serializable {
 
-    String urlFor(final String logoHeaderUrl, final String logoSigninUrl) {
-        return this == Placement.HEADER ? logoHeaderUrl : logoSigninUrl;
+    private static final long serialVersionUID = 1L;
+    
+    private final String name;
+    private final String logoHref;
+    
+    public Optional<String> getName() {
+        return _Strings.isNotEmpty(logoHref)
+                ? Optional.empty()
+                : Optional.ofNullable(name);
     }
-
-    Optional<String> configFrom(IsisConfiguration isisConfiguration) {
-        val appConfig = isisConfiguration.getViewer().getWicket().getApplication();
-        return this == Placement.HEADER ? appConfig.getBrandLogoHeader() : appConfig.getBrandLogoSignin();
+    
+    public Optional<String> getLogoHref() {
+        return Optional.ofNullable(logoHref);
     }
+    
 }

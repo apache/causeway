@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.navbar;
 
 import org.apache.wicket.markup.ComponentTag;
 
+import org.apache.isis.viewer.common.model.branding.BrandingUiModel;
 import org.apache.isis.viewer.wicket.ui.components.WebComponentBase;
 
 /**
@@ -29,7 +30,7 @@ public class BrandLogo extends WebComponentBase {
 
     private static final long serialVersionUID = 1L;
 
-    private final Placement placement;
+    private final BrandingUiModel branding;
 
     /**
      * Constructor.
@@ -37,16 +38,16 @@ public class BrandLogo extends WebComponentBase {
      * @param id The component id
      * @param placement
      */
-    public BrandLogo(final String id, final Placement placement) {
+    public BrandLogo(final String id, final BrandingUiModel branding) {
         super(id);
-        this.placement = placement;
+        this.branding = branding;
     }
 
     @Override
     protected void onComponentTag(final ComponentTag tag) {
         super.onComponentTag(tag);
 
-        placement.configFrom(getIsisConfiguration())
+        branding.getLogoHref()
             .map(super.getWebAppContextPath()::prependContextPathIfLocal)
             .ifPresent(url -> tag.put("src", url));
     }
@@ -54,7 +55,7 @@ public class BrandLogo extends WebComponentBase {
     @Override
     protected void onConfigure() {
         super.onConfigure();
-        setVisible(placement.configFrom(getIsisConfiguration()).isPresent());
+        setVisible(branding.getLogoHref().isPresent());
     }
 
 

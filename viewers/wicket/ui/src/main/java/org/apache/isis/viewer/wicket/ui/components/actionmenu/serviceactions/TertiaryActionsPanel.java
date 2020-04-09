@@ -41,7 +41,7 @@ public class TertiaryActionsPanel extends MenuActionPanel {
     public TertiaryActionsPanel(String id, List<CssMenuItem> menuItems) {
         super(id);
         val subMenuItems = flatten(menuItems);
-        add(subMenuItemsView(subMenuItems));
+        add(super.subMenuItemsView(subMenuItems));
     }
 
     @Override

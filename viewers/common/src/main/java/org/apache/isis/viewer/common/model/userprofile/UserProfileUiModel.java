@@ -16,30 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.userprof;
+package org.apache.isis.viewer.common.model.userprofile;
 
-/**
- * Optional API providing details about the user.
- *
- * <p>
- *     Used by the Wicket viewer in its {@link org.apache.isis.applib.annotation.DomainServiceLayout.MenuBar#TERTIARY tertiary}
- *     &quot;Me&quot; menu bar.
- * </p>
- */
-// tag::refguide[]
-public interface UserProfileService {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-    // end::refguide[]
-    /**
-     * Used as the menu name of the {@link org.apache.isis.applib.annotation.DomainServiceLayout.MenuBar#TERTIARY tertiary}
-     * &quot;Me&quot; menu bar.
-     *
-     * <p>
-     *     If returns <tt>null</tt>, then the current user name is used instead.
-     * </p>
-     */
-    // tag::refguide[]
-    String userProfileName();   // <.>
+@Data
+@AllArgsConstructor(staticName = "of")
+@NoArgsConstructor
+public class UserProfileUiModel {
 
+    private String userProfileName;
 }
-// end::refguide[]

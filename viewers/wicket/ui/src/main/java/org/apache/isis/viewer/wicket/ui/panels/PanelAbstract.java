@@ -25,10 +25,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.Confirmations;
 
 /**
  * Convenience adapter for {@link Panel}s built up using {@link ComponentType}s.
