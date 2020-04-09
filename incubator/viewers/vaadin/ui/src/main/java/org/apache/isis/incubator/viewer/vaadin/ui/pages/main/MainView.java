@@ -78,7 +78,7 @@ implements BeforeEnterObserver {
         
         setPrimarySection(Section.NAVBAR);
 
-        val menuBarContainer = MenuUtil.createMenu(
+        val menuBarContainer = MainView_createHeader.createHeader(
                 commonContext, 
                 headerUiModelProvider.getHeader(), 
                 this::onMenuAction);

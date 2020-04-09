@@ -32,6 +32,7 @@ import org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceB
 
 import lombok.experimental.UtilityClass;
 
+//XXX not used
 @UtilityClass
 final class TabUtil {
 

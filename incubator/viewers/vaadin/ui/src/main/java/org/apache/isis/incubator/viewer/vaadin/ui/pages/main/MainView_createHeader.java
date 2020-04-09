@@ -21,13 +21,11 @@ import org.apache.isis.viewer.common.model.header.HeaderUiModel;
 import org.apache.isis.viewer.common.model.menu.MenuUiModel;
 
 import lombok.val;
-import lombok.experimental.UtilityClass;
 
-@UtilityClass
 //@Log4j2
-final class MenuUtil {
+final class MainView_createHeader {
 
-    static Component createMenu(
+    static Component createHeader(
             final IsisWebAppCommonContext commonContext, 
             final HeaderUiModel headerUiModel,
             final Consumer<MenuActionVaa> subMenuEventHandler) {
@@ -62,7 +60,9 @@ final class MenuUtil {
                 
                 if(menuItemModel.isFirstInSection() 
                         && subMenu.getItems().size()>0) {
-                    subMenu.addItem(new Hr());
+                    val spacer = new Hr();
+                    //spacer.addClassName("spacer"); TODO vertical margin or padding is currently a bit too large 
+                    subMenu.addItem(spacer);
                 }
                 
                 subMenu.addItem(
@@ -79,7 +79,8 @@ final class MenuUtil {
         // top level right aligned ...
         buildMenuModel(commonContext, headerUiModel.getSecondary(), newMenuItem->
             menuSectionBuilder.accept(rightMenuBar, newMenuItem));
-        // TODO tertiary menu items should get collected under a top level menu labeled with the current user's name 
+        
+        // tertiary menu items get collected under a top level menu labeled with the current user's name 
         buildMenuModel(commonContext, headerUiModel.getTertiary(), newMenuItem->
             menuSectionBuilder.accept(rightMenuBar, newMenuItem));
         

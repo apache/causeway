@@ -72,6 +72,11 @@ public class MenuUiModel implements Serializable {
     
     // -- HELPER IN SUPPORT OF THE CURRENT USER PROFILE
 
+    /**
+     * Wraps a (simple) menu item factory.
+     * @implNote when ever the top level MenuItem name is {@code null} we set the name
+     * to the current user's profile name 
+     */
     private <M> Function<String, M> menuItemFactoryHonoringUserProfile(
             final IsisWebAppCommonContext commonContext,
             final Function<String, M> menuItemFactory) {
