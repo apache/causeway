@@ -2,7 +2,7 @@ package org.apache.isis.client.kroviz.ui.kv
 
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.to.mb.Menubars
-import org.apache.isis.client.kroviz.ui.ExportAlert
+import org.apache.isis.client.kroviz.ui.ExportDialog
 import org.apache.isis.client.kroviz.ui.IconManager
 import org.apache.isis.client.kroviz.ui.Point
 import pl.treksoft.kvision.core.CssSize
@@ -62,7 +62,7 @@ object RoMenuBar : SimplePanel() {
             ddLink(exportTitle,
                     icon = IconManager.find("Export")
             ).onClick {
-                ExportAlert().open()
+                ExportDialog().open()
             }
         }
     }

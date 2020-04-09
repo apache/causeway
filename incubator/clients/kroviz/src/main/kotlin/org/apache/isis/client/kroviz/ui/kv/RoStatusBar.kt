@@ -5,7 +5,7 @@ import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.model.DiagramDM
 import org.apache.isis.client.kroviz.ui.ClassDiagram
 import org.apache.isis.client.kroviz.ui.IconManager
-import org.apache.isis.client.kroviz.ui.ImageAlert
+import org.apache.isis.client.kroviz.ui.ImageDialog
 import pl.treksoft.kvision.core.*
 import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.ButtonStyle
@@ -47,7 +47,7 @@ object RoStatusBar {
         umlDiagram.onClick {
             val title = dd.title
             val code = ClassDiagram.buildDiagramCode(dd)
-            ImageAlert(title, code).open()
+            ImageDialog(title, code).open()
         }
     }
 

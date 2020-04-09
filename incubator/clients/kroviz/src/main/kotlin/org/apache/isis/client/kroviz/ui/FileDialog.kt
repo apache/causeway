@@ -4,7 +4,7 @@ import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.to.ResultValue
 import org.apache.isis.client.kroviz.ui.kv.RoDialog
 
-class FileAlert(val logEntry: LogEntry) : Command {
+class FileDialog(val logEntry: LogEntry) : Command {
 
     fun open() {
         val rv = logEntry.getTransferObject() as ResultValue

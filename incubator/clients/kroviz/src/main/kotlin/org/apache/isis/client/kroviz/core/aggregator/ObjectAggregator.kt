@@ -8,7 +8,7 @@ import org.apache.isis.client.kroviz.to.Property
 import org.apache.isis.client.kroviz.to.ResultObject
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.bs3.Grid
-import org.apache.isis.client.kroviz.ui.ErrorAlert
+import org.apache.isis.client.kroviz.ui.ErrorDialog
 import org.apache.isis.client.kroviz.ui.kv.UiManager
 
 class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
@@ -25,7 +25,7 @@ class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
             is Property -> handleProperty(obj)
             is Layout -> handleLayout(obj)
             is Grid -> handleGrid(obj)
-            is HttpError -> ErrorAlert(logEntry).open()
+            is HttpError -> ErrorDialog(logEntry).open()
             else -> log(logEntry)
         }
 

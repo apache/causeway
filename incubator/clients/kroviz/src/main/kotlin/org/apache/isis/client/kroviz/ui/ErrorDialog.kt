@@ -4,7 +4,7 @@ import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.to.HttpError
 import org.apache.isis.client.kroviz.ui.kv.RoDialog
 
-class ErrorAlert(val logEntry: LogEntry) : Command {
+class ErrorDialog(val logEntry: LogEntry) : Command {
 
     fun open() {
         val error = logEntry.getTransferObject() as HttpError

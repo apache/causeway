@@ -5,7 +5,7 @@ import org.apache.isis.client.kroviz.ui.Command
 import org.apache.isis.client.kroviz.ui.FormItem
 import org.apache.isis.client.kroviz.ui.kv.RoDialog
 
-class UndefinedAlert(val logEntry: LogEntry) :Command {
+class UndefinedDialog(val logEntry: LogEntry) :Command {
 
     val instruction = """1. Create a ResponseClass under test/kotlin/org.ro.urls with
     - url 

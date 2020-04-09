@@ -20,7 +20,7 @@ class EventLogDetail(val logEntry: LogEntry) : Command {
     }
 
     override fun execute() {
-        ImageAlert().open()
+        ImageDialog().open()
     }
 
 }

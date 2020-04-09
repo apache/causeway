@@ -1,12 +1,12 @@
 package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.ro.view.UndefinedAlert
+import org.ro.view.UndefinedDialog
 
 class UndefinedDispatcher : BaseAggregator() {
 
     override fun update(logEntry: LogEntry, subType: String) {
-        UndefinedAlert(logEntry).open()
+        UndefinedDialog(logEntry).open()
     }
 
 }

@@ -5,7 +5,7 @@ import org.apache.isis.client.kroviz.ui.kv.RoDialog
 import org.apache.isis.client.kroviz.utils.UmlUtils
 import kotlin.js.Date
 
-class ImageAlert(var label: String = defaultLabel, var pumlCode: String = defaultPumlCode) : Command {
+class ImageDialog(var label: String = defaultLabel, var pumlCode: String = defaultPumlCode) : Command {
 
     companion object {
         val defaultLabel = "UML Diagram Sample"
