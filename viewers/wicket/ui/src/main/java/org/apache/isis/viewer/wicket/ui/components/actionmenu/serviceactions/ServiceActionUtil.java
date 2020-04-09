@@ -171,7 +171,7 @@ public final class ServiceActionUtil {
         val menuBars = commonContext.getMenuBarsService().menuBars();
 
         // TODO: remove hard-coded dependency on BS3
-        final BS3MenuBar menuBar = (BS3MenuBar) menuBars.menuBarFor(serviceActionsModel.getMenuBar());
+        final BS3MenuBar menuBar = (BS3MenuBar) menuBars.menuBarFor(serviceActionsModel.getObject().getMenuBarSelect());
 
         MenuModelFactory.buildMenuItems(
                 commonContext, 

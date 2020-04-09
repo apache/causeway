@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.viewer.common.model.branding.BrandingUiModelProvider;
 import org.apache.isis.viewer.common.model.header.HeaderUiModelProvider;
+import org.apache.isis.viewer.common.model.menu.MenuUiModelProvider;
 import org.apache.isis.viewer.common.model.userprofile.UserProfileUiModelProvider;
 
 @Configuration
@@ -31,7 +32,9 @@ import org.apache.isis.viewer.common.model.userprofile.UserProfileUiModelProvide
     // @Service's
     BrandingUiModelProvider.class,
     UserProfileUiModelProvider.class,
+    MenuUiModelProvider.class,
     HeaderUiModelProvider.class,
+    
     
 })
 public class IsisModuleViewerCommon {

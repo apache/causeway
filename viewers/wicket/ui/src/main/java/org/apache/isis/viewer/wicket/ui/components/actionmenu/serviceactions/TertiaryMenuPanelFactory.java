@@ -51,7 +51,7 @@ public class TertiaryMenuPanelFactory extends ComponentFactoryAbstract {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
         val serviceActionsModel = (ServiceActionsModel) model;
-        final DomainServiceLayout.MenuBar menuBar = serviceActionsModel.getMenuBar();
+        final DomainServiceLayout.MenuBar menuBar = serviceActionsModel.getObject().getMenuBarSelect();
         final boolean applicability = menuBar == DomainServiceLayout.MenuBar.TERTIARY || menuBar == null;
         return appliesIf(applicability);
     }

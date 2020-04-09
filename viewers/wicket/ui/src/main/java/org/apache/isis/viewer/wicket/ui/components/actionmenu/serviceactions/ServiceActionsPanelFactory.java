@@ -52,7 +52,7 @@ public class ServiceActionsPanelFactory extends ComponentFactoryAbstract {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
         final ServiceActionsModel serviceActionsModel = (ServiceActionsModel) model;
-        final DomainServiceLayout.MenuBar menuBar = serviceActionsModel.getMenuBar();
+        final DomainServiceLayout.MenuBar menuBar = serviceActionsModel.getObject().getMenuBarSelect();
         return appliesIf(menuBar != DomainServiceLayout.MenuBar.TERTIARY && menuBar != null);
     }
 
