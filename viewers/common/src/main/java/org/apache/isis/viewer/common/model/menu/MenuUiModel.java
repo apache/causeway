@@ -21,16 +21,23 @@ package org.apache.isis.viewer.common.model.menu;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.viewer.common.model.action.MenuActionFactory;
+import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModel;
 
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Getter
 @RequiredArgsConstructor(staticName = "of")
@@ -51,6 +58,27 @@ public class MenuUiModel implements Serializable {
         return _NullSafe.stream(getMenuContributingServiceIds())
         .map(metaModelContext::lookupServiceAdapterById)
         .filter(_NullSafe::isPresent);
+    }
+
+    public <T, M extends MenuItemUiModel<T, M>> 
+    void buildMenuItems(
+            final IsisWebAppCommonContext commonContext,
+            final MenuActionFactory<T> menuActionFactory,
+            final Function<String, M> menuItemFactory,
+            final Consumer<M> onNewMenuItem) {
+        
+        val menuBars = commonContext.getMenuBarsService().menuBars();
+
+        // TODO: remove hard-coded dependency on BS3
+        final BS3MenuBar menuBar = (BS3MenuBar) menuBars.menuBarFor(getMenuBarSelect());
+        
+        MenuUiModel_buildMenuItems.buildMenuItems(
+                commonContext, 
+                menuBar,
+                menuActionFactory,
+                menuItemFactory,
+                onNewMenuItem);
+        
     }
 
 

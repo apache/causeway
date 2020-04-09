@@ -29,16 +29,14 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.common.model.action.MenuActionFactory;
-import org.apache.isis.viewer.common.model.menu.MenuModelFactory;
+import org.apache.isis.viewer.common.model.menu.MenuUiModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Confirmations;
@@ -165,21 +163,14 @@ public final class ServiceActionUtil {
 
     public static void buildMenu(
             final IsisWebAppCommonContext commonContext,
-            final ServiceActionsModel serviceActionsModel,
+            final MenuUiModel menuUiModel,
             final Consumer<CssMenuItem> onNewMenuItem) {
 
-        val menuBars = commonContext.getMenuBarsService().menuBars();
-
-        // TODO: remove hard-coded dependency on BS3
-        final BS3MenuBar menuBar = (BS3MenuBar) menuBars.menuBarFor(serviceActionsModel.getObject().getMenuBarSelect());
-
-        MenuModelFactory.buildMenuItems(
+        menuUiModel.buildMenuItems(
                 commonContext, 
-                menuBar,
                 new MenuActionFactoryWkt(),
                 CssMenuItem::newMenuItem,
                 onNewMenuItem);
-
     }
 
 }

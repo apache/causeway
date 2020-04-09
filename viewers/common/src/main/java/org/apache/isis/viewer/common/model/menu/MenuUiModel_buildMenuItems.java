@@ -28,12 +28,10 @@ import org.apache.isis.viewer.common.model.action.MenuActionFactory;
 import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModel;
 
 import lombok.val;
-import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 
-@UtilityClass
 @Log4j2
-public class MenuModelFactory {
+final class MenuUiModel_buildMenuItems {
 
     public static <T, M extends MenuItemUiModel<T, M>> 
     void buildMenuItems(

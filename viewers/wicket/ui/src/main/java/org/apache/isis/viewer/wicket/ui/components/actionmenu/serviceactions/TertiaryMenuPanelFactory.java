@@ -50,19 +50,20 @@ public class TertiaryMenuPanelFactory extends ComponentFactoryAbstract {
         if(!(model instanceof ServiceActionsModel)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
-        val serviceActionsModel = (ServiceActionsModel) model;
-        final DomainServiceLayout.MenuBar menuBar = serviceActionsModel.getObject().getMenuBarSelect();
-        final boolean applicability = menuBar == DomainServiceLayout.MenuBar.TERTIARY || menuBar == null;
-        return appliesIf(applicability);
+        val menuUiModel = ((ServiceActionsModel) model).getObject();
+        val menuBarSelect = menuUiModel.getMenuBarSelect();
+        return appliesIf(
+                menuBarSelect == DomainServiceLayout.MenuBar.TERTIARY 
+                || menuBarSelect == null);
     }
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        val serviceActionsModel = (ServiceActionsModel) model;
+        val menuUiModel = ((ServiceActionsModel) model).getObject();
 
         val menuItems = _Lists.<CssMenuItem>newArrayList();
         ServiceActionUtil.buildMenu(
-                super.getCommonContext(), serviceActionsModel, menuItems::add);
+                super.getCommonContext(), menuUiModel, menuItems::add);
         
         return new TertiaryActionsPanel(id, menuItems);
     }
