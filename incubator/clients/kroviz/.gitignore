@@ -1,7 +1,6 @@
 ./build
 ./out
 ./target
-.gradle
 .idea/
 *.iml
 *.ipr
@@ -9,3 +8,5 @@
 /refresh.sh
 package-lock.json
 node_modules/
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
