@@ -22,7 +22,7 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.action.MenuActionUiModel;
-import org.apache.isis.viewer.common.model.link.ActionLinkFactory;
+import org.apache.isis.viewer.common.model.actionlink.ActionLinkFactory;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 
 class MenuActionWkt extends MenuActionUiModel<AbstractLink> {

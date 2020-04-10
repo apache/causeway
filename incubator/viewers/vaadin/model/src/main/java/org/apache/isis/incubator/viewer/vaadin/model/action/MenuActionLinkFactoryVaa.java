@@ -28,8 +28,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.incubator.viewer.vaadin.model.entity.ObjectVaa;
-import org.apache.isis.viewer.common.model.link.ActionLinkFactory;
-import org.apache.isis.viewer.common.model.link.ActionLinkUiModel;
+import org.apache.isis.viewer.common.model.actionlink.ActionLinkFactory;
+import org.apache.isis.viewer.common.model.actionlink.ActionLinkUiModel;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -44,13 +44,11 @@ public class MenuActionLinkFactoryVaa implements ActionLinkFactory<Component> {
     public ActionLinkUiModel<Component> newActionLink(final ObjectAction objectAction) {
 
         val objectAdapter = serviceModel.getManagedObject();
-        val whetherReturnsBlobOrClob = ObjectAction.Util.returnsBlobOrClob(objectAction);
         
         val model = ActionLinkUiModel.of(
                 Component.class,
                 objectAdapter, 
-                objectAction, 
-                whetherReturnsBlobOrClob);
+                objectAction);
         
         addUiComponentTo(model);
         

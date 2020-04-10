@@ -19,7 +19,7 @@
 package org.apache.isis.viewer.common.model.action;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.link.ActionLinkFactory;
+import org.apache.isis.viewer.common.model.actionlink.ActionLinkFactory;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 
 import lombok.Getter;

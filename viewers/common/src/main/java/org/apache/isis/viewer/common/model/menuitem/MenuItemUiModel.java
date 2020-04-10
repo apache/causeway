@@ -51,9 +51,9 @@ import lombok.extern.log4j.Log4j2;
  * @param <T> - link component type, native to the viewer
  * @param <U> - concrete type implementing this class
  */
-@Log4j2
 @Accessors(chain = true)
 @RequiredArgsConstructor
+@Log4j2
 public abstract class MenuItemUiModel<T, U extends MenuItemUiModel<T, U>> {
     
     @Getter private final String name;

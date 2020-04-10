@@ -40,7 +40,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.security.authentication.logout.LogoutMenu.LoginRedirect;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.viewer.common.model.link.ActionLinkFactory;
+import org.apache.isis.viewer.common.model.actionlink.ActionLinkFactory;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -298,9 +298,7 @@ implements ActionLinkFactory<AbstractLink>, Serializable {
             final ObjectAction objectAction,
             final AbstractLink link) {
 
-        final boolean whetherReturnsBlobOrClob = ObjectAction.Util.returnsBlobOrClob(objectAction);
-
-        return LinkAndLabel.newLinkAndLabel(link, objectAdapter, objectAction, whetherReturnsBlobOrClob);
+        return LinkAndLabel.newLinkAndLabel(link, objectAdapter, objectAction);
     }
 
     private InlinePromptContext determineInlinePromptContext() {

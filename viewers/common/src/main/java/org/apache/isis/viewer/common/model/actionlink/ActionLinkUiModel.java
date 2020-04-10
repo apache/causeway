@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.common.model.link;
+package org.apache.isis.viewer.common.model.actionlink;
 
 import java.util.List;
 
@@ -68,18 +68,16 @@ public class ActionLinkUiModel<T> implements HasUiComponent<T> {
     public static <T> ActionLinkUiModel<T> of(
             final Class<T> uiComponentType,
             final ManagedObject actionHolder,
-            final ObjectAction objectAction,
-            final boolean blobOrClob) {
-        return new ActionLinkUiModel<T>(actionHolder, objectAction, blobOrClob);
+            final ObjectAction objectAction) {
+        return new ActionLinkUiModel<T>(actionHolder, objectAction);
     };
     
     protected ActionLinkUiModel(
             final ManagedObject actionHolder,
-            final ObjectAction objectAction,
-            final boolean blobOrClob) {
+            final ObjectAction objectAction) {
         this(   ObjectAction.Util.nameFor(objectAction),
                 ObjectAction.Util.descriptionOf(objectAction),
-                blobOrClob, 
+                ObjectAction.Util.returnsBlobOrClob(objectAction),
                 objectAction.isPrototype(),
                 ObjectAction.Util.actionIdentifierFor(objectAction),
                 ObjectAction.Util.cssClassFor(objectAction, actionHolder), 

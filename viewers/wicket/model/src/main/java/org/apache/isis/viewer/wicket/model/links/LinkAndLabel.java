@@ -24,32 +24,25 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.link.ActionLinkUiModel;
-
-import lombok.Getter;
+import org.apache.isis.viewer.common.model.actionlink.ActionLinkUiModel;
 
 public class LinkAndLabel extends ActionLinkUiModel<AbstractLink> implements Serializable  {
 
     private static final long serialVersionUID = 1L;
     
-    @Getter(onMethod = @__(@Override)) private AbstractLink uiComponent;
-    
     public static LinkAndLabel newLinkAndLabel(
             AbstractLink link,
             final ManagedObject objectAdapter,
-            final ObjectAction objectAction,
-            final boolean blobOrClob) {
-        return new LinkAndLabel(link, objectAdapter, objectAction, blobOrClob);
+            final ObjectAction objectAction) {
+        return new LinkAndLabel(link, objectAdapter, objectAction);
     }
     
     protected LinkAndLabel(
             AbstractLink link, 
             ManagedObject objectAdapter,
-            ObjectAction objectAction,
-            boolean blobOrClob) {
-        super(objectAdapter, objectAction, blobOrClob);
-        
+            ObjectAction objectAction) {
+        super(objectAdapter, objectAction);
+        super.setUiComponent(link);
     }
-    
 
 }
