@@ -5,7 +5,7 @@ import org.apache.isis.client.kroviz.ui.Command
 import org.apache.isis.client.kroviz.ui.FormItem
 import org.apache.isis.client.kroviz.ui.kv.RoDialog
 
-class UndefinedDialog(val logEntry: LogEntry) :Command {
+class UndefinedDialog(val logEntry: LogEntry) : Command {
 
     val instruction = """1. Create a ResponseClass under test/kotlin/org.ro.urls with
     - url 
@@ -21,7 +21,12 @@ class UndefinedDialog(val logEntry: LogEntry) :Command {
         formItems.add(FormItem("URL", "Text", logEntry.url))
         formItems.add(FormItem("JSON", "TextArea", logEntry.response, 10))
         val label = "TransferObject has no Handler"
-       RoDialog(caption = label, items = formItems, command = this).open()
+        RoDialog(
+                caption = label,
+                items = formItems,
+                command = this,
+                widthPerc = 80,
+                heightPerc = 80).open()
     }
 
     override fun execute() {

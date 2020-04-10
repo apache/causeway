@@ -17,7 +17,12 @@ class ErrorDialog(val logEntry: LogEntry) : Command {
             formItems.add(FormItem("Caused by", "Text", detail.causedBy))
         }
         val label = "HttpError " + error.httpStatusCode.toString()
-        RoDialog(caption = label, items = formItems, command = this).open()
+        RoDialog(
+                caption = label,
+                items = formItems,
+                command = this,
+                widthPerc = 80,
+                heightPerc = 80).open()
     }
 
     override fun execute() {
