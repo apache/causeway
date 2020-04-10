@@ -22,6 +22,7 @@ import java.util.Collections;
 
 import javax.inject.Inject;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Div;
@@ -75,6 +76,9 @@ implements BeforeEnterObserver {
     
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
+
+        UI.getCurrent().getPage().addStyleSheet("context://"
+                + "webjars/font-awesome/4.7.0/css/font-awesome.min.css");
         
         setPrimarySection(Section.NAVBAR);
 
