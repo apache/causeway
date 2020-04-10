@@ -77,6 +77,14 @@ extends SpringServlet {
             
             super.service(request, response);    
         }
+        
+        log.debug("request was successfully serviced (authentication={})", authSession);
+        
+        if(isisInteractionFactory.isInInteraction()) {
+            log.warn("current request did not close all interactions (authentication={})", authSession);
+            isisInteractionFactory.closeSessionStack();    
+        }
+        
     }
   
 
