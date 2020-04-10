@@ -60,27 +60,28 @@ public final class ServiceActionUtil {
 
         Fragment leafItem = new Fragment("content", "leafItem", parent);
 
-        val menuItemActionLink = menuItem.getActionLinkComponent();
+        val actionUiModel = menuItem.getMenuActionUiModel().getActionLinkUiModel();
+        val menuItemActionLink = menuItem.getMenuActionUiModel().getActionLinkUiModel().getUiComponent();
 
         Label menuItemLabel = new Label("menuLinkLabel", menuItem.getName());
         menuItemActionLink.addOrReplace(menuItemLabel);
 
-        listItem.add(new CssClassAppender("isis-" + CssClassAppender.asCssStyle(menuItem.getActionIdentifier())));
-        if (!menuItem.isEnabled()) {
+        listItem.add(new CssClassAppender("isis-" + CssClassAppender.asCssStyle(actionUiModel.getActionIdentifier())));
+        if (!actionUiModel.isEnabled()) {
             listItem.add(new CssClassAppender("disabled"));
             menuItemActionLink.setEnabled(false);
 
-            Tooltips.addTooltip(listItem, menuItem.getDisabledReason());
+            Tooltips.addTooltip(listItem, actionUiModel.getDisabledReason());
 
 
         } else {
 
-            if(!_Strings.isNullOrEmpty(menuItem.getDescription())) {
-                Tooltips.addTooltip(listItem, menuItem.getDescription());
+            if(!_Strings.isNullOrEmpty(actionUiModel.getDescription())) {
+                Tooltips.addTooltip(listItem, actionUiModel.getDescription());
             }
 
             //XXX ISIS-1626, confirmation dialog for no-parameter menu actions
-            if (menuItem.isRequiresImmediateConfirmation()) {
+            if (actionUiModel.isRequiresImmediateConfirmation()) {
 
                 val translationService =
                         commonContext.lookupServiceElseFail(TranslationService.class);
@@ -89,19 +90,19 @@ public final class ServiceActionUtil {
             }
 
         }
-        if (menuItem.isPrototyping()) {
+        if (actionUiModel.isPrototyping()) {
             menuItemActionLink.add(new CssClassAppender("prototype"));
         }
         leafItem.add(menuItemActionLink);
 
-        String cssClassFa = menuItem.getCssClassFa();
+        String cssClassFa = actionUiModel.getCssClassFa();
         if (_Strings.isNullOrEmpty(cssClassFa)) {
             menuItemActionLink.add(new CssClassAppender("menuLinkSpacer"));
         } else {
-            menuItemLabel.add(new CssClassFaBehavior(cssClassFa, menuItem.getCssClassFaPosition()));
+            menuItemLabel.add(new CssClassFaBehavior(cssClassFa, actionUiModel.getCssClassFaPosition()));
         }
 
-        String cssClass = menuItem.getCssClass();
+        String cssClass = actionUiModel.getCssClass();
         if (!_Strings.isNullOrEmpty(cssClass)) {
             menuItemActionLink.add(new CssClassAppender(cssClass));
         }

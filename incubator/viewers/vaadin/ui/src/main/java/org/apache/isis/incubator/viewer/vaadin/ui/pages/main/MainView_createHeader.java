@@ -66,7 +66,7 @@ final class MainView_createHeader {
                 }
                 
                 subMenu.addItem(
-                        (Component)menuItemModel.getActionLinkComponent(), 
+                        (Component)menuActionModel.getActionLinkUiModel().getUiComponent(), 
                         e->subMenuEventHandler.accept(menuActionModel));
             });
                     

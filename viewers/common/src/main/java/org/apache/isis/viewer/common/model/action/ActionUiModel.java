@@ -18,11 +18,20 @@
  */
 package org.apache.isis.viewer.common.model.action;
 
+import java.util.Optional;
+
+import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.commons.internal.base._Lazy;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.actionlink.ActionLinkFactory;
+import org.apache.isis.viewer.common.model.actionlink.ActionLinkUiModel;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -30,16 +39,57 @@ import lombok.RequiredArgsConstructor;
  * @since 2.0.0
  * @param <T> - link component type, native to the viewer
  */
-@Getter @RequiredArgsConstructor
+@RequiredArgsConstructor
 public class ActionUiModel<T> {
 
     private final ActionLinkFactory<T> actionLinkFactory;
-    private final String actionName;
-    private final ObjectAction objectAction;
-    private final ObjectUiModel actionHolder;
 
+    @Getter private final String actionName;
+    @Getter private final ObjectAction objectAction;
+    @Getter private final ObjectUiModel actionHolder;
+    
+    public ActionLinkUiModel<T> getActionLinkUiModel() {
+        return actionLinkUiModel.get();
+    }
+    
     @Override
     public String toString() {
-        return actionName + " ~ " + objectAction.getIdentifier().toFullIdentityString();
+        return Optional.ofNullable(actionName)
+                .orElse("") + " ~ " + objectAction.getIdentifier().toFullIdentityString();
     }
+    
+    // -- VISIBILITY
+    
+    public boolean isVisible() {
+        return isVisible(actionHolder.getManagedObject(), objectAction);
+    }
+    
+    private static boolean isVisible(
+            @NonNull final ManagedObject actionHolder, 
+            @NonNull final ObjectAction objectAction) {
+        
+        // check hidden
+        if (actionHolder.getSpecification().isHidden()) {
+            return false;
+        }
+        // check visibility
+        final Consent visibility = objectAction.isVisible(
+                actionHolder,
+                InteractionInitiatedBy.USER,
+                Where.ANYWHERE);
+        if (visibility.isVetoed()) {
+            return false;
+        }
+        return true;
+    }
+    
+    
+    // -- HELPER
+    
+    private final _Lazy<ActionLinkUiModel<T>> actionLinkUiModel = _Lazy.threadSafe(this::createActionLinkUiModel);
+    
+    private ActionLinkUiModel<T> createActionLinkUiModel() {
+        return actionLinkFactory.newActionLink(objectAction);
+    }
+    
 }

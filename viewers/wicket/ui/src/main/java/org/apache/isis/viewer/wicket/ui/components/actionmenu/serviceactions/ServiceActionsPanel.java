@@ -99,7 +99,7 @@ public class ServiceActionsPanel extends MenuActionPanel {
         final List<CssMenuItem> childItems = menuItem.getSubMenuItems();
         return _NullSafe.stream(childItems) 
                 .map((final CssMenuItem input) -> {
-                    final String actionIdentifier = input.getActionIdentifier();
+                    final String actionIdentifier = input.getMenuActionUiModel().getActionLinkUiModel().getActionIdentifier();
                     if (actionIdentifier != null) {
                         // busrules-busrulesobjects-findbyname
                         final String actionId = CssClassAppender.asCssStyle(actionIdentifier);

@@ -132,10 +132,10 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                     public String getObject() {
                         final ActionLink actionLink = (ActionLink) link;
                         final String reasonDisabledIfAny = actionLink.getReasonDisabledIfAny();
-                        return first(reasonDisabledIfAny, linkAndLabel.getDescriptionIfAny());
+                        return first(reasonDisabledIfAny, linkAndLabel.getDescription());
                     }
                 } 
-                : Model.of(linkAndLabel.getDescriptionIfAny());
+                : Model.of(linkAndLabel.getDescription());
                 
                 Tooltips.addTooltip(link, tooltipModel);
 
@@ -143,7 +143,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 if(linkAndLabel.isBlobOrClob()) {
                     link.add(new CssClassAppender("noVeil"));
                 }
-                if(linkAndLabel.isPrototype()) {
+                if(linkAndLabel.isPrototyping()) {
                     link.add(new CssClassAppender("prototype"));
                 }
                 link.add(new CssClassAppender(linkAndLabel.getActionIdentifier()));

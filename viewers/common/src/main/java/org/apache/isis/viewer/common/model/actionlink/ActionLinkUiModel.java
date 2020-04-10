@@ -19,20 +19,27 @@
 package org.apache.isis.viewer.common.model.actionlink;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.HasUiComponent;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.val;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class ActionLinkUiModel<T> implements HasUiComponent<T> {
@@ -51,9 +58,9 @@ public class ActionLinkUiModel<T> implements HasUiComponent<T> {
     }
     
     @Getter private final String label;
-    @Getter private final String descriptionIfAny;
+    @Getter private final String description;
     @Getter private final boolean blobOrClob;
-    @Getter private final boolean prototype;
+    @Getter private final boolean prototyping;
     @Getter private final String actionIdentifier;
     @Getter private final String cssClass;
     @Getter private final String cssClassFa;
@@ -62,6 +69,20 @@ public class ActionLinkUiModel<T> implements HasUiComponent<T> {
     @Getter private final SemanticsOf semantics;
     @Getter private final PromptStyle promptStyle;
     @Getter private final Parameters parameters;
+    @Getter private final String disabledReason;
+    
+    /**
+     * A menu action with no parameters AND an are-you-sure semantics
+     * does require an immediate confirmation dialog.
+     * <br/>
+     * Others don't.
+     */
+    @Getter private final boolean requiresImmediateConfirmation;
+    
+    @Setter private boolean enabled = true; // unless disabled
+    public boolean isEnabled() {
+        return enabled && disabledReason == null;
+    }
     
     @Getter(onMethod = @__(@Override)) @Setter private T uiComponent;
     
@@ -76,7 +97,7 @@ public class ActionLinkUiModel<T> implements HasUiComponent<T> {
             final ManagedObject actionHolder,
             final ObjectAction objectAction) {
         this(   ObjectAction.Util.nameFor(objectAction),
-                ObjectAction.Util.descriptionOf(objectAction),
+                getDescription(objectAction).orElse(ObjectAction.Util.descriptionOf(objectAction)),
                 ObjectAction.Util.returnsBlobOrClob(objectAction),
                 objectAction.isPrototype(),
                 ObjectAction.Util.actionIdentifierFor(objectAction),
@@ -86,7 +107,11 @@ public class ActionLinkUiModel<T> implements HasUiComponent<T> {
                 ObjectAction.Util.actionLayoutPositionOf(objectAction),
                 objectAction.getSemantics(),
                 ObjectAction.Util.promptStyleFor(objectAction),
-                Parameters.fromParameterCount(objectAction.getParameterCount()));
+                Parameters.fromParameterCount(objectAction.getParameterCount()),
+                getReasonWhyDisabled(actionHolder, objectAction).orElse(null),
+                ObjectAction.Util.isAreYouSureSemantics(objectAction) 
+                && ObjectAction.Util.isNoParameters(objectAction)
+                );
     }
     
     public static <T extends ActionLinkUiModel<?>> List<T> positioned(
@@ -94,6 +119,31 @@ public class ActionLinkUiModel<T> implements HasUiComponent<T> {
             final ActionLayout.Position position) {
         
         return _Lists.filter(entityActionLinks, linkAndLabel -> linkAndLabel.getPosition() == position);
+    }
+    
+    // -- USABILITY
+    
+    private static Optional<String> getReasonWhyDisabled(
+            @NonNull final ManagedObject actionHolder, 
+            @NonNull final ObjectAction objectAction) {
+            
+        // check usability
+        final Consent usability = objectAction.isUsable(
+                actionHolder,
+                InteractionInitiatedBy.USER,
+                Where.ANYWHERE
+                );
+        return Optional.ofNullable(usability.getReason());
+    }
+    
+    // -- DESCRIBED AS
+    
+    private static Optional<String> getDescription(
+            @NonNull final ObjectAction objectAction) {
+        
+        val describedAsFacet = objectAction.getFacet(DescribedAsFacet.class);
+        return Optional.ofNullable(describedAsFacet)
+                .map(DescribedAsFacet::value);
     }
     
 }
