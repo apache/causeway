@@ -13,8 +13,8 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.incubator.viewer.vaadin.model.action.MenuActionFactoryVaa;
-import org.apache.isis.incubator.viewer.vaadin.model.action.MenuActionVaa;
+import org.apache.isis.incubator.viewer.vaadin.model.action.ActionFactoryVaa;
+import org.apache.isis.incubator.viewer.vaadin.model.action.ActionVaa;
 import org.apache.isis.incubator.viewer.vaadin.model.menu.MenuItemVaa;
 import org.apache.isis.viewer.common.model.branding.BrandingUiModel;
 import org.apache.isis.viewer.common.model.header.HeaderUiModel;
@@ -28,7 +28,7 @@ final class MainView_createHeader {
     static Component createHeader(
             final IsisWebAppCommonContext commonContext, 
             final HeaderUiModel headerUiModel,
-            final Consumer<MenuActionVaa> subMenuEventHandler) {
+            final Consumer<ActionVaa> subMenuEventHandler) {
         
         val titleOrLogo = createTitleOrLogo(commonContext, headerUiModel.getBranding());
         val leftMenuBar = new MenuBar();
@@ -56,7 +56,7 @@ final class MainView_createHeader {
             val menuItem = parentMenu.addItem(menuSectionUiModel.getName());
             val subMenu = menuItem.getSubMenu();
             menuSectionUiModel.getSubMenuItems().forEach(menuItemModel -> {
-                val menuActionModel = (MenuActionVaa)menuItemModel.getMenuActionUiModel();
+                val menuActionModel = (ActionVaa)menuItemModel.getMenuActionUiModel();
                 
                 if(menuItemModel.isFirstInSection() 
                         && subMenu.getItems().size()>0) {
@@ -66,7 +66,7 @@ final class MainView_createHeader {
                 }
                 
                 subMenu.addItem(
-                        (Component)menuActionModel.getActionLinkUiModel().getUiComponent(), 
+                        (Component)menuActionModel.getUiComponent(), 
                         e->subMenuEventHandler.accept(menuActionModel));
             });
                     
@@ -118,7 +118,7 @@ final class MainView_createHeader {
         
         menuUiModel.buildMenuItems(
                 commonContext, 
-                new MenuActionFactoryVaa(),
+                new ActionFactoryVaa(),
                 MenuItemVaa::newMenuItem,
                 onNewMenuItem);
     }

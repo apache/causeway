@@ -950,7 +950,7 @@ implements ScalarModelSubscriber2 {
 
     private static boolean hasActionsPositionedOn(final List<LinkAndLabel> entityActionLinks, final ActionLayout.Position position) {
         for (LinkAndLabel entityActionLink : entityActionLinks) {
-            if(entityActionLink.getPosition() == position) {
+            if(entityActionLink.getActionUiMetaModel().getPosition() == position) {
                 return true;
             }
         }

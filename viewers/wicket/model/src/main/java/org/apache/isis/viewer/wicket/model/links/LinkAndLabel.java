@@ -19,30 +19,40 @@
 package org.apache.isis.viewer.wicket.model.links;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.function.Function;
 
 import org.apache.wicket.markup.html.link.AbstractLink;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.applib.annotation.ActionLayout.Position;
+import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.actionlink.ActionLinkUiModel;
+import org.apache.isis.viewer.common.model.action.ActionUiMetaModel;
+import org.apache.isis.viewer.common.model.action.ActionUiModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
-public class LinkAndLabel extends ActionLinkUiModel<AbstractLink> implements Serializable  {
+public class LinkAndLabel extends ActionUiModel<AbstractLink> implements Serializable  {
 
     private static final long serialVersionUID = 1L;
     
     public static LinkAndLabel newLinkAndLabel(
-            AbstractLink link,
-            final ManagedObject objectAdapter,
+            final Function<ActionUiModel<AbstractLink>, AbstractLink> uiComponentFactory,
+            final String named,
+            final EntityModel actionHolderModel,
             final ObjectAction objectAction) {
-        return new LinkAndLabel(link, objectAdapter, objectAction);
+        return new LinkAndLabel(uiComponentFactory, named, actionHolderModel, objectAction);
     }
     
     protected LinkAndLabel(
-            AbstractLink link, 
-            ManagedObject objectAdapter,
-            ObjectAction objectAction) {
-        super(objectAdapter, objectAction);
-        super.setUiComponent(link);
+            final Function<ActionUiModel<AbstractLink>, AbstractLink> uiComponentFactory,
+            final String named,
+            final EntityModel actionHolderModel,
+            final ObjectAction objectAction) {
+        super(uiComponentFactory, named, actionHolderModel, objectAction);
+    }
+
+    public static List<LinkAndLabel> positioned(List<LinkAndLabel> list, Position pos) {
+        return _Lists.filter(list, ActionUiMetaModel.positioned(pos, LinkAndLabel::getActionUiMetaModel));
     }
 
 }

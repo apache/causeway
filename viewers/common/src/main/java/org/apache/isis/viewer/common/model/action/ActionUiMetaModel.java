@@ -16,46 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.common.model.actionlink;
+package org.apache.isis.viewer.common.model.action;
 
-import java.util.List;
+import java.io.Serializable;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
-import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.HasUiComponent;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.val;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class ActionLinkUiModel<T> implements HasUiComponent<T> {
+public class ActionUiMetaModel implements Serializable {
 
-    public enum Parameters {
-        NO_PARAMETERS,
-        TAKES_PARAMETERS;
-
-        public static Parameters fromParameterCount(final int parameterCount) {
-            return parameterCount > 0? TAKES_PARAMETERS: NO_PARAMETERS;
-        }
-
-        public boolean isNoParameters() {
-            return this == NO_PARAMETERS;
-        }
-    }
+    private static final long serialVersionUID = 1L;
     
     @Getter private final String label;
     @Getter private final String description;
@@ -70,30 +58,23 @@ public class ActionLinkUiModel<T> implements HasUiComponent<T> {
     @Getter private final PromptStyle promptStyle;
     @Getter private final Parameters parameters;
     @Getter private final String disabledReason;
-    
     /**
-     * A menu action with no parameters AND an are-you-sure semantics
+     * An action with no parameters AND an are-you-sure semantics
      * does require an immediate confirmation dialog.
-     * <br/>
-     * Others don't.
      */
     @Getter private final boolean requiresImmediateConfirmation;
-    
-    @Setter private boolean enabled = true; // unless disabled
+
     public boolean isEnabled() {
-        return enabled && disabledReason == null;
+        return disabledReason == null;
     }
     
-    @Getter(onMethod = @__(@Override)) @Setter private T uiComponent;
-    
-    public static <T> ActionLinkUiModel<T> of(
-            final Class<T> uiComponentType,
+    public static <T> ActionUiMetaModel of(
             final ManagedObject actionHolder,
             final ObjectAction objectAction) {
-        return new ActionLinkUiModel<T>(actionHolder, objectAction);
+        return new ActionUiMetaModel(actionHolder, objectAction);
     };
     
-    protected ActionLinkUiModel(
+    protected ActionUiMetaModel(
             final ManagedObject actionHolder,
             final ObjectAction objectAction) {
         this(   ObjectAction.Util.nameFor(objectAction),
@@ -114,11 +95,25 @@ public class ActionLinkUiModel<T> implements HasUiComponent<T> {
                 );
     }
     
-    public static <T extends ActionLinkUiModel<?>> List<T> positioned(
-            final List<T> entityActionLinks,
-            final ActionLayout.Position position) {
-        
-        return _Lists.filter(entityActionLinks, linkAndLabel -> linkAndLabel.getPosition() == position);
+    public static <R, T extends ActionUiMetaModel> Predicate<R> positioned(
+            final ActionLayout.Position position,
+            final Function<R, T> posAccessor) {
+        return x -> posAccessor.apply(x).getPosition() == position;
+    }
+    
+    // -- PARAMETERS
+    
+    public enum Parameters {
+        NO_PARAMETERS,
+        TAKES_PARAMETERS;
+
+        public static Parameters fromParameterCount(final int parameterCount) {
+            return parameterCount > 0? TAKES_PARAMETERS: NO_PARAMETERS;
+        }
+
+        public boolean isNoParameters() {
+            return this == NO_PARAMETERS;
+        }
     }
     
     // -- USABILITY

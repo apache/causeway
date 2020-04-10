@@ -29,5 +29,5 @@ public interface ActionFactory<T> {
             String named,
             ManagedObject actionHolder,
             ObjectAction objectAction);
-
+    
 }

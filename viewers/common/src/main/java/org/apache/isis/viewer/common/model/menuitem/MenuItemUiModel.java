@@ -84,8 +84,6 @@ public abstract class MenuItemUiModel<T, U extends MenuItemUiModel<T, U>> {
         return parent != null;
     }
     
-
-    
     // -- CONSTRUCTION
     
     /**
@@ -104,17 +102,13 @@ public abstract class MenuItemUiModel<T, U extends MenuItemUiModel<T, U>> {
         }
 
         // build the link
-        val actionLinkUiModel = actionModel.getActionLinkUiModel();
-        if (actionLinkUiModel == null) {
+        val actionMeta = actionModel.getActionUiMetaModel();
+        if (actionMeta == null) {
             // can only get a null if invisible, so this should not happen given the visibility guard above
             return;
         }
 
-        val actionLabel = actionModel.getActionName() != null 
-                ? actionModel.getActionName() 
-                : actionLinkUiModel.getLabel();
-
-        val menutIem = newSubMenuItem(actionLabel)
+        val menutIem = newSubMenuItem(actionMeta.getLabel())
                 .setFirstInSection(isFirstInSection);
         
         if(onNewSubMenuItem!=null) {

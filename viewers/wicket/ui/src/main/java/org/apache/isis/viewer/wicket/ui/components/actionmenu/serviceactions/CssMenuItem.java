@@ -72,9 +72,9 @@ implements Serializable {
 
     private Component addMenuItemComponentTo(final MarkupContainer markupContainer) {
         
-        val actionUiModel = super.getMenuActionUiModel().getActionLinkUiModel();
+        val actionUiModel = super.getMenuActionUiModel().getActionUiMetaModel();
         
-        final AbstractLink link = actionUiModel.getUiComponent();
+        final AbstractLink link = super.getMenuActionUiModel().getUiComponent();
         final Label label = new Label(CssMenuItem.ID_MENU_LABEL, Model.of(this.getName()));
 
         if (link != null) {

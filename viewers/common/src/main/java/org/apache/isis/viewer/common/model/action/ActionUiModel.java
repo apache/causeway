@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.common.model.action;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.internal.base._Lazy;
@@ -26,8 +27,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.actionlink.ActionLinkFactory;
-import org.apache.isis.viewer.common.model.actionlink.ActionLinkUiModel;
+import org.apache.isis.viewer.common.model.HasUiComponent;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 
 import lombok.Getter;
@@ -40,22 +40,23 @@ import lombok.RequiredArgsConstructor;
  * @param <T> - link component type, native to the viewer
  */
 @RequiredArgsConstructor
-public class ActionUiModel<T> {
+public class ActionUiModel<T> implements HasUiComponent<T> {
 
-    private final ActionLinkFactory<T> actionLinkFactory;
-
-    @Getter private final String actionName;
-    @Getter private final ObjectAction objectAction;
+    private final Function<ActionUiModel<T>, T> uiComponentFactory;
+    @Getter private final String named;
     @Getter private final ObjectUiModel actionHolder;
+    @Getter private final ObjectAction objectAction;
     
-    public ActionLinkUiModel<T> getActionLinkUiModel() {
-        return actionLinkUiModel.get();
+    @Getter(onMethod = @__(@Override), lazy = true) private final T uiComponent = uiComponentFactory.apply(this);
+    
+    public ActionUiMetaModel getActionUiMetaModel() {
+        return actionUiMetaModel.get();
     }
     
     @Override
     public String toString() {
-        return Optional.ofNullable(actionName)
-                .orElse("") + " ~ " + objectAction.getIdentifier().toFullIdentityString();
+        return Optional.ofNullable(named).orElse("") + 
+                " ~ " + objectAction.getIdentifier().toFullIdentityString();
     }
     
     // -- VISIBILITY
@@ -86,10 +87,10 @@ public class ActionUiModel<T> {
     
     // -- HELPER
     
-    private final _Lazy<ActionLinkUiModel<T>> actionLinkUiModel = _Lazy.threadSafe(this::createActionLinkUiModel);
+    private final _Lazy<ActionUiMetaModel> actionUiMetaModel = _Lazy.threadSafe(this::createActionUiMetaModel);
     
-    private ActionLinkUiModel<T> createActionLinkUiModel() {
-        return actionLinkFactory.newActionLink(objectAction);
+    private ActionUiMetaModel createActionUiMetaModel() {
+        return ActionUiMetaModel.of(actionHolder.getManagedObject(), objectAction);
     }
     
 }

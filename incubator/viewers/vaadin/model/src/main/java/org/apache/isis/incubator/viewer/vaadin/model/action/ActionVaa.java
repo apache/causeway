@@ -18,22 +18,23 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.model.action;
 
+import java.util.function.Function;
+
 import com.vaadin.flow.component.Component;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.action.ActionUiModel;
-import org.apache.isis.viewer.common.model.actionlink.ActionLinkFactory;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 
-public class MenuActionVaa extends ActionUiModel<Component> {
+public class ActionVaa extends ActionUiModel<Component> {
 
-    public MenuActionVaa(
-            final ActionLinkFactory<Component> actionLinkFactory,
-            final String actionName, 
-            final ObjectAction objectAction,
-            final ObjectUiModel actionHolder) {
+    public ActionVaa(
+            final Function<ActionUiModel<Component>, Component> uiComponentFactory,
+            final String named,
+            final ObjectUiModel actionHolder,
+            final ObjectAction objectAction) {
         
-        super(actionLinkFactory, actionName, objectAction, actionHolder);
+        super(uiComponentFactory, named, actionHolder, objectAction);
     }
     
 }

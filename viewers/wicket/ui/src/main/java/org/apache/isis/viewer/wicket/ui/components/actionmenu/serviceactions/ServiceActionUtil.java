@@ -60,8 +60,8 @@ public final class ServiceActionUtil {
 
         Fragment leafItem = new Fragment("content", "leafItem", parent);
 
-        val actionUiModel = menuItem.getMenuActionUiModel().getActionLinkUiModel();
-        val menuItemActionLink = menuItem.getMenuActionUiModel().getActionLinkUiModel().getUiComponent();
+        val actionUiModel = menuItem.getMenuActionUiModel().getActionUiMetaModel();
+        val menuItemActionLink = menuItem.getMenuActionUiModel().getUiComponent();
 
         Label menuItemLabel = new Label("menuLinkLabel", menuItem.getName());
         menuItemActionLink.addOrReplace(menuItemLabel);
@@ -150,23 +150,28 @@ public final class ServiceActionUtil {
                 String named, 
                 ManagedObject serviceAction,
                 ObjectAction objectAction) {
-
-            val objectModel = EntityModel.ofAdapter(commonContext, serviceAction);
-
+        
+            val serviceModel = EntityModel.ofAdapter(commonContext, serviceAction);
+            
+            val actionLinkFactory = new MenuActionLinkFactory(
+                    PageAbstract.ID_MENU_LINK, 
+                    serviceModel);
+            
             return new MenuActionWkt(
-                    new MenuActionLinkFactory(PageAbstract.ID_MENU_LINK, objectModel), 
-                    named, 
-                    objectAction,
-                    objectModel);
+                    model->actionLinkFactory.newActionLink(objectAction, named).getUiComponent(),
+                    named,
+                    serviceModel,
+                    objectAction);
         }
-
+        
     }
+
 
     public static void buildMenu(
             final IsisWebAppCommonContext commonContext,
             final MenuUiModel menuUiModel,
             final Consumer<CssMenuItem> onNewMenuItem) {
-
+        
         menuUiModel.buildMenuItems(
                 commonContext, 
                 new MenuActionFactoryWkt(),

@@ -18,32 +18,62 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.model.action;
 
-import com.vaadin.flow.component.Component;
+import java.util.Optional;
 
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.entity.ObjectVaa;
 import org.apache.isis.viewer.common.model.action.ActionFactory;
+import org.apache.isis.viewer.common.model.action.ActionUiModel;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-public class MenuActionFactoryVaa implements ActionFactory<Component> {
+@RequiredArgsConstructor
+public class ActionFactoryVaa implements ActionFactory<Component> {
 
     @Override
-    public MenuActionVaa newAction(
+    public ActionUiModel<Component> newAction(
             IsisWebAppCommonContext commonContext, 
             String named,
-            ManagedObject actionHolder,
+            ManagedObject actionHolder, 
             ObjectAction objectAction) {
         
-        val objectModel = new ObjectVaa(commonContext, actionHolder);
+        val model = new ActionVaa(
+                this::createUiComponent,
+                named,
+                new ObjectVaa(commonContext, actionHolder), 
+                objectAction);
         
-        return new MenuActionVaa(
-                        new MenuActionLinkFactoryVaa(objectModel),
-                        named,
-                        objectAction,
-                        objectModel);
+        return model;
+    }
+    
+    // -- HELPER
+    
+    private Component createUiComponent(
+            final ActionUiModel<Component> model) {
+        
+        val actionMeta = model.getActionUiMetaModel();
+        
+        val faIcon = new Span();
+        
+        Optional.ofNullable(actionMeta.getCssClassFa())
+        .ifPresent(cssClassFa->{
+            _Strings.splitThenStreamTrimmed(cssClassFa, " ")
+            .forEach(faIcon::addClassName);
+            //faIcon.addClassNames("fa", cssClassFa, "fa-fw");    
+        });
+        
+        return new HorizontalLayout(faIcon, new Label(actionMeta.getLabel()));
     }
 
+
+    
 }

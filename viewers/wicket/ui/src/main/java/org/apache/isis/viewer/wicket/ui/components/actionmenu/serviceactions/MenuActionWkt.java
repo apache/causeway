@@ -18,22 +18,23 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
+import java.util.function.Function;
+
 import org.apache.wicket.markup.html.link.AbstractLink;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.action.ActionUiModel;
-import org.apache.isis.viewer.common.model.actionlink.ActionLinkFactory;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 
 class MenuActionWkt extends ActionUiModel<AbstractLink> {
 
     MenuActionWkt(
-            final ActionLinkFactory<AbstractLink> actionLinkFactory,
-            final String actionName,
-            final ObjectAction objectAction,
-            final ObjectUiModel serviceModel) {
+            final Function<ActionUiModel<AbstractLink>, AbstractLink> uiComponentFactory,
+            final String named,
+            final ObjectUiModel serviceModel,
+            final ObjectAction objectAction) {
 
-        super(actionLinkFactory, actionName, objectAction, serviceModel); 
+        super(uiComponentFactory, named, serviceModel, objectAction); 
     }
 
 }
