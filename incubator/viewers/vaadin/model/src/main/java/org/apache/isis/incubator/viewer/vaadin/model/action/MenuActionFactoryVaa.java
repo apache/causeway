@@ -24,18 +24,18 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.entity.ObjectVaa;
-import org.apache.isis.viewer.common.model.action.MenuActionFactory;
+import org.apache.isis.viewer.common.model.action.ActionFactory;
 
 import lombok.val;
 
-public class MenuActionFactoryVaa implements MenuActionFactory<Component> {
+public class MenuActionFactoryVaa implements ActionFactory<Component> {
 
     @Override
-    public MenuActionVaa newMenuAction(
+    public MenuActionVaa newAction(
             IsisWebAppCommonContext commonContext, 
-            String named, 
-            ObjectAction objectAction,
-            ManagedObject actionHolder) {
+            String named,
+            ManagedObject actionHolder,
+            ObjectAction objectAction) {
         
         val objectModel = new ObjectVaa(commonContext, actionHolder);
         

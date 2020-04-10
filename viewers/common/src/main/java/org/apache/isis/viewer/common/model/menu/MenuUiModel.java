@@ -27,7 +27,7 @@ import java.util.function.Function;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.viewer.common.model.action.MenuActionFactory;
+import org.apache.isis.viewer.common.model.action.ActionFactory;
 import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModel;
 import org.apache.isis.viewer.common.model.userprofile.UserProfileUiModelProvider;
 
@@ -52,7 +52,7 @@ public class MenuUiModel implements Serializable {
     public <T, M extends MenuItemUiModel<T, M>> 
     void buildMenuItems(
             final IsisWebAppCommonContext commonContext,
-            final MenuActionFactory<T> menuActionFactory,
+            final ActionFactory<T> menuActionFactory,
             final Function<String, M> menuItemFactory,
             final Consumer<M> onNewMenuItem) {
         
