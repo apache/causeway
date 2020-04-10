@@ -24,7 +24,7 @@ import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 public interface MenuActionFactory<T> {
 
-    MenuActionUiModel<T> newMenuAction(
+    ActionUiModel<T> newMenuAction(
             IsisWebAppCommonContext commonContext, 
             String named,
             ObjectAction objectAction,

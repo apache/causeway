@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.action.MenuActionUiModel;
+import org.apache.isis.viewer.common.model.action.ActionUiModel;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -88,7 +88,7 @@ public abstract class MenuItemUiModel<T, U extends MenuItemUiModel<T, U>> {
     @Getter @Setter private boolean blobOrClob = false; // unless set otherwise
     
     @Getter @Setter(AccessLevel.PRIVATE) private T actionLinkComponent;
-    @Getter @Setter private MenuActionUiModel<T> menuActionUiModel;
+    @Getter @Setter private ActionUiModel<T> menuActionUiModel;
     
     private final List<U> subMenuItems = _Lists.newArrayList();
     protected void addSubMenuItem(final U cssMenuItem) {
@@ -171,7 +171,7 @@ public abstract class MenuItemUiModel<T, U extends MenuItemUiModel<T, U>> {
      * {@link MenuActionWkt action model}, based on visibility and usability.
      */
     public void addSubMenuItemFor(
-            @NonNull final MenuActionUiModel<T> menuActionModel,
+            @NonNull final ActionUiModel<T> menuActionModel,
             final boolean isFirstInSection,
             @Nullable final Consumer<U> onNewSubMenuItem) {
 
