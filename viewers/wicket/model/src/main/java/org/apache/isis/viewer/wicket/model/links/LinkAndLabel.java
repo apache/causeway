@@ -18,15 +18,21 @@
  */
 package org.apache.isis.viewer.wicket.model.links;
 
+import java.io.Serializable;
+
 import org.apache.wicket.markup.html.link.AbstractLink;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.link.LinkAndLabelUiModel;
+import org.apache.isis.viewer.common.model.link.ActionLinkUiModel;
 
-public class LinkAndLabel extends LinkAndLabelUiModel<AbstractLink>  {
+import lombok.Getter;
+
+public class LinkAndLabel extends ActionLinkUiModel<AbstractLink> implements Serializable  {
 
     private static final long serialVersionUID = 1L;
+    
+    @Getter(onMethod = @__(@Override)) private AbstractLink uiComponent;
     
     public static LinkAndLabel newLinkAndLabel(
             AbstractLink link,
@@ -41,7 +47,8 @@ public class LinkAndLabel extends LinkAndLabelUiModel<AbstractLink>  {
             ManagedObject objectAdapter,
             ObjectAction objectAction,
             boolean blobOrClob) {
-        super(link, objectAdapter, objectAction, blobOrClob);
+        super(objectAdapter, objectAction, blobOrClob);
+        
     }
     
 

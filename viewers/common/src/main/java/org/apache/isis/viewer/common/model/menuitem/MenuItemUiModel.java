@@ -210,7 +210,7 @@ public abstract class MenuItemUiModel<T, U extends MenuItemUiModel<T, U>> {
                 .setCssClassFa(ObjectAction.Util.cssClassFaFor(objectAction))
                 .setCssClassFaPosition(ObjectAction.Util.cssClassFaPositionFor(objectAction));
         
-        menutIem.setActionLinkComponent(linkAndLabel.getLinkComponent());
+        menutIem.setActionLinkComponent(linkAndLabel.getUiComponent());
         
         if(onNewSubMenuItem!=null) {
             onNewSubMenuItem.accept(_Casts.uncheckedCast(menutIem));

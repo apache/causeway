@@ -29,7 +29,7 @@ import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.incubator.viewer.vaadin.model.entity.ObjectVaa;
 import org.apache.isis.viewer.common.model.link.ActionLinkFactory;
-import org.apache.isis.viewer.common.model.link.LinkAndLabelUiModel;
+import org.apache.isis.viewer.common.model.link.ActionLinkUiModel;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -41,26 +41,26 @@ public class MenuActionLinkFactoryVaa implements ActionLinkFactory<Component> {
     private final ObjectVaa serviceModel; 
     
     @Override
-    public LinkAndLabelUiModel<Component> newLink(final ObjectAction objectAction) {
+    public ActionLinkUiModel<Component> newLink(final ObjectAction objectAction) {
 
         val objectAdapter = serviceModel.getManagedObject();
         val whetherReturnsBlobOrClob = ObjectAction.Util.returnsBlobOrClob(objectAction);
-        val linkComponent = new HorizontalLayout();
         
-        val model = LinkAndLabelUiModel.newLinkAndLabel(
-                (Component)linkComponent, 
+        val model = ActionLinkUiModel.of(
+                Component.class,
                 objectAdapter, 
                 objectAction, 
                 whetherReturnsBlobOrClob);
         
-        addContent(linkComponent, model);
+        addUiComponentTo(model);
         
         return model;
     }
     
-    private void addContent(
-            final HorizontalLayout linkComponent, 
-            final LinkAndLabelUiModel<Component> model) {
+    private void addUiComponentTo(
+            final ActionLinkUiModel<Component> model) {
+        
+        val uiComponent = new HorizontalLayout();
         
         val faIcon = new Span();
         
@@ -71,19 +71,11 @@ public class MenuActionLinkFactoryVaa implements ActionLinkFactory<Component> {
             //faIcon.addClassNames("fa", cssClassFa, "fa-fw");    
         });
         
-        linkComponent.add(faIcon, new Label(model.getLabel()));
+        uiComponent.add(faIcon, new Label(model.getLabel()));
+        
+        model.setUiComponent(uiComponent);
+        
+        
     }
     
-//    private Component createLinkComponent(final ObjectAction objectAction) {
-//        val label = new Label(objectAction.getName());
-//        label.addClassNames("fa", "fa-bolt");
-//        return label;
-//    }
-    
-//    private Component createLinkComponent(final ObjectAction objectAction) {
-//        val label = new Label(objectAction.getName());
-//        val icon = new Icon(VaadinIcon.BELL);
-//        icon.setSize("1.0em");
-//        return new HorizontalLayout(icon, label);
-//    }
 }

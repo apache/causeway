@@ -102,7 +102,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
             @Override
             public boolean isVisible() {
                 for (val linkAndLabel : linkAndLabels) {
-                    val link = linkAndLabel.getLinkComponent();
+                    val link = linkAndLabel.getUiComponent();
                     if(link.isVisible()) {
                         return true;
                     }
@@ -124,7 +124,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
             protected void populateItem(ListItem<LinkAndLabel> item) {
                 final LinkAndLabel linkAndLabel = item.getModelObject();
 
-                final AbstractLink link = linkAndLabel.getLinkComponent();
+                final AbstractLink link = linkAndLabel.getUiComponent();
                 final Model<String> tooltipModel = link instanceof ActionLink
                         ? new Model<String>() {
                     private static final long serialVersionUID = 1L;

@@ -10,5 +10,5 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
  */
 public interface ActionLinkFactory<T> {
 
-    LinkAndLabelUiModel<T> newLink(ObjectAction objectAction);
+    ActionLinkUiModel<T> newLink(ObjectAction objectAction);
 }

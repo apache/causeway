@@ -38,10 +38,10 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -410,7 +410,7 @@ implements ScalarModelSubscriber2 {
                 if(inlineActionIfAny != null) {
 
                     final LinkAndLabel linkAndLabelAsIfEdit = LinkAndLabelUtil.asActionLink(this.scalarModel, inlineActionIfAny);
-                    final ActionLink actionLinkInlineAsIfEdit = (ActionLink) linkAndLabelAsIfEdit.getLinkComponent();
+                    final ActionLink actionLinkInlineAsIfEdit = (ActionLink) linkAndLabelAsIfEdit.getUiComponent();
 
                     if(actionLinkInlineAsIfEdit.isVisible() && actionLinkInlineAsIfEdit.isEnabled()) {
                         configureInlinePromptLinkCallback(inlinePromptLink, actionLinkInlineAsIfEdit);
