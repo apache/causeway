@@ -186,7 +186,7 @@ public abstract class MenuItemUiModel<T, U extends MenuItemUiModel<T, U>> {
         }
 
         // build the link
-        val linkAndLabel = actionLinkFactory.newLink(objectAction);
+        val linkAndLabel = actionLinkFactory.newActionLink(objectAction);
         if (linkAndLabel == null) {
             // can only get a null if invisible, so this should not happen given the visibility guard above
             return;

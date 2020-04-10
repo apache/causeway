@@ -82,7 +82,7 @@ public final class LinkAndLabelUtil {
 
         return _NullSafe.stream(objectActions)
                 .map((ObjectAction objectAction) ->
-                    linkFactory.newLink(objectAction))
+                    linkFactory.newActionLink(objectAction))
                 .filter(_NullSafe::isPresent)
                 .collect(Collectors.toList());
     }

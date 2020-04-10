@@ -41,7 +41,7 @@ public class MenuActionLinkFactoryVaa implements ActionLinkFactory<Component> {
     private final ObjectVaa serviceModel; 
     
     @Override
-    public ActionLinkUiModel<Component> newLink(final ObjectAction objectAction) {
+    public ActionLinkUiModel<Component> newActionLink(final ObjectAction objectAction) {
 
         val objectAdapter = serviceModel.getManagedObject();
         val whetherReturnsBlobOrClob = ObjectAction.Util.returnsBlobOrClob(objectAction);

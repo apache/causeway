@@ -39,7 +39,7 @@ class MenuActionLinkFactory extends ActionLinkFactoryForWicket {
     }
 
     @Override
-    public LinkAndLabel newLink(
+    public LinkAndLabel newActionLink(
             final ObjectAction objectAction) {
 
         val objectAdapter = this.targetEntityModel.load();
