@@ -34,7 +34,7 @@ import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.viewer.common.model.action.ActionFactory;
+import org.apache.isis.viewer.common.model.action.ActionUiModelFactory;
 import org.apache.isis.viewer.common.model.menu.MenuUiModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
@@ -142,7 +142,7 @@ public final class ServiceActionUtil {
     }
 
 
-    private static class MenuActionFactoryWkt implements ActionFactory<AbstractLink> {
+    private static class MenuActionFactoryWkt implements ActionUiModelFactory<AbstractLink> {
 
         @Override
         public MenuActionWkt newAction(

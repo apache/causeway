@@ -20,13 +20,13 @@ package org.apache.isis.viewer.wicket.model.links;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.function.Function;
 
 import org.apache.wicket.markup.html.link.AbstractLink;
 
 import org.apache.isis.applib.annotation.ActionLayout.Position;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.viewer.common.model.action.ActionLinkUiComponentFactory;
 import org.apache.isis.viewer.common.model.action.ActionUiMetaModel;
 import org.apache.isis.viewer.common.model.action.ActionUiModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -36,7 +36,7 @@ public class LinkAndLabel extends ActionUiModel<AbstractLink> implements Seriali
     private static final long serialVersionUID = 1L;
     
     public static LinkAndLabel newLinkAndLabel(
-            final Function<ActionUiModel<AbstractLink>, AbstractLink> uiComponentFactory,
+            final ActionLinkUiComponentFactory<AbstractLink> uiComponentFactory,
             final String named,
             final EntityModel actionHolderModel,
             final ObjectAction objectAction) {
@@ -44,7 +44,7 @@ public class LinkAndLabel extends ActionUiModel<AbstractLink> implements Seriali
     }
     
     protected LinkAndLabel(
-            final Function<ActionUiModel<AbstractLink>, AbstractLink> uiComponentFactory,
+            final ActionLinkUiComponentFactory<AbstractLink> uiComponentFactory,
             final String named,
             final EntityModel actionHolderModel,
             final ObjectAction objectAction) {

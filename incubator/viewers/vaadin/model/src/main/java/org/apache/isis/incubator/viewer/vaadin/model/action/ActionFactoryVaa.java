@@ -30,14 +30,14 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.entity.ObjectVaa;
-import org.apache.isis.viewer.common.model.action.ActionFactory;
+import org.apache.isis.viewer.common.model.action.ActionUiModelFactory;
 import org.apache.isis.viewer.common.model.action.ActionUiModel;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @RequiredArgsConstructor
-public class ActionFactoryVaa implements ActionFactory<Component> {
+public class ActionFactoryVaa implements ActionUiModelFactory<Component> {
 
     @Override
     public ActionUiModel<Component> newAction(

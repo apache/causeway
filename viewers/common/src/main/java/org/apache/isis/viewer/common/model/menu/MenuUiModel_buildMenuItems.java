@@ -24,7 +24,7 @@ import java.util.function.Function;
 
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.viewer.common.model.action.ActionFactory;
+import org.apache.isis.viewer.common.model.action.ActionUiModelFactory;
 import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModel;
 
 import lombok.val;
@@ -37,7 +37,7 @@ final class MenuUiModel_buildMenuItems {
     void buildMenuItems(
             final IsisWebAppCommonContext commonContext,
             final BS3MenuBar menuBar,
-            final ActionFactory<T> menuActionFactory,
+            final ActionUiModelFactory<T> menuActionFactory,
             final Function<String, M> menuItemFactory,
             final Consumer<M> onNewMenuItem) {
 

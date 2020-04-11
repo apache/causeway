@@ -19,7 +19,6 @@
 package org.apache.isis.viewer.common.model.action;
 
 import java.util.Optional;
-import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.internal.base._Lazy;
@@ -35,19 +34,35 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**
+ * Holder of the <em>Action's</em> meta-model and a click-able UI action component; eg. link, button, menu-items.
  * 
+ * @see ActionUiModelFactory
  * @since 2.0.0
  * @param <T> - link component type, native to the viewer
  */
 @RequiredArgsConstructor
 public class ActionUiModel<T> implements HasUiComponent<T> {
 
-    private final Function<ActionUiModel<T>, T> uiComponentFactory;
+    private final ActionLinkUiComponentFactory<T> uiComponentFactory;
+    
+    /**
+     * used when explicitly named (eg. menu bar layout file), otherwise {@code null}
+     */
     @Getter private final String named;
+    
+    /**
+     * domain object that is the <em>Action's</em> holder or owner
+     */
     @Getter private final ObjectUiModel actionHolder;
+    
+    /**
+     * framework internal <em>Action</em> model
+     */
     @Getter private final ObjectAction objectAction;
     
-    @Getter(onMethod = @__(@Override), lazy = true) private final T uiComponent = uiComponentFactory.apply(this);
+    // implements HasUiComponent<T>
+    @Getter(onMethod = @__(@Override), lazy = true) 
+    private final T uiComponent = uiComponentFactory.newActionLinkUiComponent(this);
     
     public ActionUiMetaModel getActionUiMetaModel() {
         return actionUiMetaModel.get();

@@ -22,8 +22,25 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
-public interface ActionFactory<T> {
-
+/**
+ * Creates an {@link ActionUiModel}, a holder of the <em>Action's</em> meta-model 
+ * and a click-able UI action component; eg. link, button, menu-items.
+ * 
+ * @see ActionUiModel
+ * 
+ * @since 2.0.0
+ * @param <T> - link component type, native to the viewer
+ */
+public interface ActionUiModelFactory<T> {
+    
+    /**
+     * 
+     * @param commonContext
+     * @param named - used when explicitly named (eg. menu bar layout file), otherwise {@code null}
+     * @param actionHolder
+     * @param objectAction
+     * @return
+     */
     ActionUiModel<T> newAction(
             IsisWebAppCommonContext commonContext, 
             String named,
