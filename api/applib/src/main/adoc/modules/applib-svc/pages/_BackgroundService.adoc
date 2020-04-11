@@ -37,7 +37,7 @@ public interface BackgroundService {
 
 The default implementation is provided by core (`o.a.i.core.runtime.services.background.BackgroundServiceDefault`).
 
-To provide an alternative implementation, subclass and link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] or equivalent (as explained in the xref:refguide:applib-svc:about.adoc#overriding-the-services.adoc[introduction] to this guide).
+To provide an alternative implementation, subclass and link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] or equivalent (as explained in the xref:refguide:applib-svc:about.adoc#overriding-the-services[introduction] to this guide).
 
 
 == Usage

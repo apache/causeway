@@ -53,7 +53,7 @@ Although URIs are not the same as URLs, you will find that the schemas are also 
 The corresponding XML will use this as its top-level element.
 <4> each instance of this schema indicates the version of the schema it is compatible with (following semantic versioning)
 <5> unique identifier for the transaction in which this interaction is being executed.
-The transaction Id is used to correlate back to the xref:refguide:schema:command[command] that represented the intention to perform this execution, as well as to the xref:refguide:schema:about.adoc#interaction.adoc[interaction] that executes said command.
+The transaction Id is used to correlate back to the xref:refguide:schema:cmd.adoc[command] that represented the intention to perform this execution, as well as to the xref:refguide:schema:ixn.adoc[interaction] that executes said command.
 <6> uniquely identifies this set of changes within the interaction.
 Can be combined with `transactionId` to create a unique identifier (across all other changed object events and also any interaction executions) of this particular set of changed objects.
 <7> the date/time that the transaction that dirtied this objects completed

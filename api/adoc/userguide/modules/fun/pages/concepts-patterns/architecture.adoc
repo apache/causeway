@@ -87,7 +87,7 @@ Mixins can also contribute read-only properties or collections: effectively the 
 In other words, we can dissociate behaviour from data.
 
 That's not always the right thing to do of course.
-In Richard Pawson's description of the xref:userguide:fun:concepts-patterns.adoc#naked-objects-pattern.adoc[naked objects pattern] he talks about "behaviourally rich" objects, in other words where the business functionality encapsulates the data.
+In Richard Pawson's description of the xref:userguide:fun:concepts-patterns.adoc#naked-objects-pattern[naked objects pattern] he talks about "behaviourally rich" objects, in other words where the business functionality encapsulates the data.
 But on the other hand sometimes the behaviour and data structures change at different rates.
 The link:http://en.wikipedia.org/wiki/Single_responsibility_principle[single responsibility principle] says we should only lump code together that changes at the same rate.
 Apache Isis' support for contributions (not only contributed actions, but also contributed properties and contributed collections) enables this.

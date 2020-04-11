@@ -79,7 +79,7 @@ ie `MemberReprMode`
 As discussed in the introduction, the framework provides a default implementation, `o.a.i.v.ro.rendering.service.RepresentationServiceContentNegotiator`.
 This delegates to xref:core:runtime-services:ContentNegotiationService.adoc[`ContentNegotiationService`] to generate an alternative representation; but if none is provided then it falls back on generating the representations as defined in the link:http://restfulobjects.org[Restful Objects spec] v1.0.
 
-To use an alternative implementation, use Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation (as explained in the xref:refguide:applib-svc:about.adoc#overriding-the-services.adoc[introduction] to this guide).
+To use an alternative implementation, use Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation (as explained in the xref:refguide:applib-svc:about.adoc#overriding-the-services[introduction] to this guide).
 
 
 == Registering the Services

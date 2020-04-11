@@ -35,7 +35,7 @@ There will typically be only one `ComponentFactory` capable of rendering a parti
 
 [NOTE]
 ====
-There is one refinement to the above algorithm where multiple component factories might be used to render an object; this is discussed in xref:vw:ROOT:extending/replacing-page-elements.adoc#collections[Additional Views of Collections], below.
+There is one refinement to the above algorithm where multiple component factories might be used to render an object; this is discussed in xref:vw:ROOT:extending/replacing-page-elements.adoc#additional-views-of-collections[Additional Views of Collections], below.
 ====
 
 
@@ -129,6 +129,7 @@ public class MyAppApplication extends IsisWicketApplication {
 
 
 
+[#additional-views-of-collections]
 == Additional Views of Collections
 
 As explained above, in most cases Apache Isis' Wicket viewer will search for the first `ComponentFactory` that can render an element, and use it.
