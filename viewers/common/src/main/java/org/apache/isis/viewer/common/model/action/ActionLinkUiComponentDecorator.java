@@ -19,16 +19,17 @@
 package org.apache.isis.viewer.common.model.action;
 
 /**
- * Creates a click-able UI component of type {@code <T>} based on an {@link ActionUiModel}.
- * eg. link, button, menu-item
+ * Decorates a click-able UI component of type {@code <T>} based on an {@link ActionUiModel}.
  * 
  * @see ActionUiModel
  * 
  * @since 2.0.0
  * @param <T> - link component type, native to the viewer
  */
-public interface ActionLinkUiComponentFactory<T> {
+public interface ActionLinkUiComponentDecorator<T> {
 
-    T newActionLinkUiComponent(ActionUiModel<T> actionUiModel);
+      //TODO just a draft yet
+//    void decorateAsDisabled(ActionUiModel<T> actionUiModel, T actionLinkUiComponent);
+//    void addTooltip(ActionUiModel<T> actionUiModel, T actionLinkUiComponent);
    
 }

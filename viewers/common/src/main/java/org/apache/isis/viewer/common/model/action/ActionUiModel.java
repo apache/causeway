@@ -74,6 +74,12 @@ public class ActionUiModel<T> implements HasUiComponent<T> {
                 " ~ " + objectAction.getIdentifier().toFullIdentityString();
     }
     
+    // -- SHORTCUTS
+    
+    public String getLabel() {
+        return getActionUiMetaModel().getLabel();
+    }
+    
     // -- VISIBILITY
     
     public boolean isVisible() {

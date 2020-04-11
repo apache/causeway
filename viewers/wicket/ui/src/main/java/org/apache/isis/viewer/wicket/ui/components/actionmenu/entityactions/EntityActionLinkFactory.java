@@ -27,11 +27,11 @@ import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ToggledMementosProvider;
-import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionFactoryWktAbstract;
+import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.LinkAndLabelFactoryAbstract;
 
 import lombok.val;
 
-public final class EntityActionLinkFactory extends ActionFactoryWktAbstract {
+public final class EntityActionLinkFactory extends LinkAndLabelFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 

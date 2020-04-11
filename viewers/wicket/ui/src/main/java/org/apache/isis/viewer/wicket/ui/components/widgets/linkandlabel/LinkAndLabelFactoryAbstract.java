@@ -67,7 +67,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import lombok.val;
 
-public abstract class ActionFactoryWktAbstract 
+public abstract class LinkAndLabelFactoryAbstract 
 implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -77,7 +77,7 @@ implements Serializable {
     protected final ScalarModel scalarModelForAssociationIfAny;
     protected final ToggledMementosProvider toggledMementosProviderIfAny;
 
-    protected ActionFactoryWktAbstract(
+    protected LinkAndLabelFactoryAbstract(
             final String linkId,
             final EntityModel targetEntityModel,
             final ScalarModel scalarModelForAssociationIfAny,
@@ -137,7 +137,7 @@ implements Serializable {
             }
 
             private ActionPrompt performOnClick(final AjaxRequestTarget target) {
-                return ActionFactoryWktAbstract.this.onClick(this, target);
+                return LinkAndLabelFactoryAbstract.this.onClick(this, target);
             }
 
         };

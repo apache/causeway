@@ -53,7 +53,7 @@ final class MainView_createHeader {
         
         // menu section handler, that creates and adds sub-menus to their parent top level menu   
         final BiConsumer<MenuBar, MenuItemVaa> menuSectionBuilder = (parentMenu, menuSectionUiModel) -> {
-            val menuItem = parentMenu.addItem(menuSectionUiModel.getName());
+            val menuItem = parentMenu.addItem(menuSectionUiModel.getName()); //TODO needs decorator
             val subMenu = menuItem.getSubMenu();
             menuSectionUiModel.getSubMenuItems().forEach(menuItemModel -> {
                 val menuActionModel = (ActionVaa)menuItemModel.getMenuActionUiModel();
