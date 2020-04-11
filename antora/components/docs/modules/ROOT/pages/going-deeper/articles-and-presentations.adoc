@@ -74,7 +74,7 @@ Slides available *link:http://www.danhaywood.com/spa2016/#/[here]*
 * *Article, Methods and Tools: link:http://www.methodsandtools.com/archive/archive.php?id=97[An Introduction to Domain Driven Design]*
 * Presentation, Skillsmatter: link:http://skillsmatter.com/podcast/design-architecture/exploring-domains-and-collaborating-with-domain-experts[Exploring Domains and Collaborating with Domain Experts] (1 hr video)
 * Article, PragPub: link:http://pragprog.com/magazines/2009-12[Going Naked]
-* *Book: xref:docs:ROOT:books/books.adoc#__books_DDD-using-NO[Domain Driven Design using Naked Objects], Dan Haywood*
+* *Book: xref:docs:ROOT:going-deeper/books.adoc#domain-driven-design-using-naked-objects[Domain Driven Design using Naked Objects], Dan Haywood*
 
 
 == 2008:
@@ -95,4 +95,4 @@ Slides available *link:http://www.danhaywood.com/spa2016/#/[here]*
 
 == 2002:
 
-* *Book: xref:docs:ROOT:books/books.adoc#__books_Naked-Objects[Naked Objects], Richard Pawson and Robert Matthews.*
+* *Book: xref:docs:ROOT:going-deeper/books.adoc#naked-objects[Naked Objects], Richard Pawson and Robert Matthews.*

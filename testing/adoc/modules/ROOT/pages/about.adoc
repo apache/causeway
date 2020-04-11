@@ -133,7 +133,7 @@ This defines a pattern (command pattern and composite pattern) with supporting c
 
 include::testing:fakedata:partial$intro.adoc[]
 
-Apache Isis provides the link:testing:fakedata:about.adoc[Fake Data] library to assist with this.
+Apache Isis provides the xref:testing:fakedata:about.adoc[Fake Data] library to assist with this.
 
 [TIP]
 ====

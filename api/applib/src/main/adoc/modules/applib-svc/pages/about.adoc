@@ -91,6 +91,7 @@ For transient objects (instantiated programmatically), the xref:refguide:applib-
 
 Alternatively the object can be instantiated simply using `new`, then services injected using xref:refguide:applib-svc:ServiceRegistry.adoc[`ServiceRegistry`]'s ``injectServicesInto(...)`` method.
 
+[#overriding-the-services]
 == Overriding the services
 
 The framework provides default implementations for many of the domain services.
@@ -163,7 +164,7 @@ In the majority of cases there is likely to be just a single top-level node of t
 * before and after each action invocation/property edit, a xref:applib-classes:classes/domainevent.adoc[domain event] is may be broadcast to all subscribers.
 Whether this occurs depends on whether the action/property has been annotated (using xref:refguide:applib-ant:Action.adoc#domainEvent[`@Action#domainEvent()`] or xref:refguide:applib-ant:Property.adoc#domainEvent[`@Property#domainEvent()`]).
 +
-(Note that susbcribers will also receive events for vetoing the action/property; this is not shown on the diagram).
+(Note that subscribers will also receive events for vetoing the action/property; this is not shown on the diagram).
 
 * As each execution progresses, and objects that are modified are "enlisted" into the (internal) xref:core:runtime-services:ChangedObjectsServiceInternal.adoc[`ChangedObjectsServiceInternal`] domain service.
 Metrics as to which objects are merely loaded into memory are also captured using the xref:refguide:applib-svc:MetricsService.adoc[`MetricsService`] (not shown on the diagram).
