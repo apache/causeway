@@ -22,7 +22,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeUiModel;
 
 import lombok.NonNull;
@@ -60,8 +59,4 @@ public class CssClassFaBehavior extends Behavior {
         super.afterRender(component);
     }
 
-    @Deprecated // use constructor with FontAwesomeUiModel instead
-    public static CssClassFaBehavior of(String cssClassFa, CssClassFaPosition position) {
-        return new CssClassFaBehavior(FontAwesomeUiModel.of(cssClassFa, position).orElseThrow(_Exceptions::unexpectedCodeReach));
-    }
 }

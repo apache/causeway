@@ -52,7 +52,6 @@ public class Decorators {
         
     }
     
-    //TODO make available for reuse
     public final static class IconDecorator implements FontAwesomeDecorator<Component, Component> {
 
         @Override
@@ -65,7 +64,6 @@ public class Decorators {
         
     }
 
-    //TODO make available for reuse
     public final static class MissingIconDecorator implements FontAwesomeDecorator<Component, Component> {
 
         @Override
