@@ -25,11 +25,10 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModel;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.Decorators;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
 import lombok.val;
@@ -82,9 +81,9 @@ implements Serializable {
             // show link...
             markupContainer.add(actionLink);
             actionLink.add(label);
-
+            
             if (actionMeta.getDescription() != null) {
-                Tooltips.addTooltip(actionLink, Model.of(actionMeta.getDescription()));
+                Tooltips.addTooltip(actionLink, actionMeta.getDescription());
             }
             if (actionMeta.isBlobOrClob()) {
                 actionLink.add(new CssClassAppender("noVeil"));
@@ -98,10 +97,8 @@ implements Serializable {
             }
             actionLink.add(new CssClassAppender(actionMeta.getActionIdentifier()));
 
-            String cssClassFa = actionMeta.getCssClassFa();
-            if (!_Strings.isNullOrEmpty(cssClassFa)) {
-                label.add(new CssClassFaBehavior(cssClassFa, actionMeta.getCssClassFaPosition()));
-            }
+            val fontAwesome = actionMeta.getFontAwesomeUiModel();
+            Decorators.getIconDecorator().decorate(label, fontAwesome);
 
             if (!actionMeta.isEnabled()) {
                 Tooltips.addTooltip(actionLink, actionMeta.getDisabledReason());

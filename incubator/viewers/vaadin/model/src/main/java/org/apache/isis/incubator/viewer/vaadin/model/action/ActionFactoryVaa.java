@@ -25,13 +25,16 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
+import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.entity.ObjectVaa;
-import org.apache.isis.viewer.common.model.action.ActionUiModelFactory;
 import org.apache.isis.viewer.common.model.action.ActionUiModel;
+import org.apache.isis.viewer.common.model.action.ActionUiModelFactory;
+import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeDecorator;
+import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeUiModel;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -39,6 +42,43 @@ import lombok.val;
 @RequiredArgsConstructor
 public class ActionFactoryVaa implements ActionUiModelFactory<Component> {
 
+    private static class IconDecorator implements FontAwesomeDecorator<Component, Label> {
+
+        @Override
+        public Component decorate(
+                final Label uiComponent,
+                final Optional<FontAwesomeUiModel> fontAwesomeUiModel) {
+            
+            val decoratedUiComponent = fontAwesomeUiModel
+                    .map(fontAwesome->{
+
+                        val faIcon = new Span();
+                        
+                        _Strings.splitThenStreamTrimmed(fontAwesome.getCssClass(), " ")
+                        .forEach(faIcon::addClassName);
+                        
+                        return CssClassFaPosition.isLeftOrUnspecified(fontAwesome.getPosition())
+                                ? new HorizontalLayout(faIcon, uiComponent)
+                                : new HorizontalLayout(uiComponent, faIcon);
+                                
+                    })
+                    .orElseGet(()->{
+                        
+                        // TODO add spacer, to account for missing fa icon?
+                        // but then where to add, left or right?
+                        
+                        return new HorizontalLayout(uiComponent);
+                    });
+            
+            return decoratedUiComponent;
+            
+        }
+        
+    }
+    
+    private final IconDecorator iconDecorator = new IconDecorator();
+    
+    
     @Override
     public ActionUiModel<Component> newAction(
             IsisWebAppCommonContext commonContext, 
@@ -61,17 +101,10 @@ public class ActionFactoryVaa implements ActionUiModelFactory<Component> {
             final ActionUiModel<Component> model) {
         
         val actionMeta = model.getActionUiMetaModel();
+        val uiLabel = new Label(actionMeta.getLabel());
         
-        val faIcon = new Span();
-        
-        Optional.ofNullable(actionMeta.getCssClassFa())
-        .ifPresent(cssClassFa->{
-            _Strings.splitThenStreamTrimmed(cssClassFa, " ")
-            .forEach(faIcon::addClassName);
-            //faIcon.addClassNames("fa", cssClassFa, "fa-fw");    
-        });
-        
-        return new HorizontalLayout(faIcon, new Label(actionMeta.getLabel()));
+        return iconDecorator.decorate(uiLabel, actionMeta.getFontAwesomeUiModel());
+                
     }
 
 

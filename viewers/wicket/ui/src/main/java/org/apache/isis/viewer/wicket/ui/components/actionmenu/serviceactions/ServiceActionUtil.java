@@ -37,11 +37,10 @@ import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.common.model.action.ActionUiModelFactory;
 import org.apache.isis.viewer.common.model.menu.MenuUiModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Confirmations;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
-import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.viewer.wicket.ui.util.Decorators;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -52,36 +51,32 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig
 //@Log4j2
 public final class ServiceActionUtil {
 
+
     static void addLeafItem(
             IsisWebAppCommonContext commonContext, 
             CssMenuItem menuItem,
             ListItem<CssMenuItem> listItem,
             MarkupContainer parent) {
+        
+        val actionUiModel = menuItem.getMenuActionUiModel();
+        
+        val actionMeta = actionUiModel.getActionUiMetaModel();
+        val menuItemActionLink = actionUiModel.getUiComponent();
 
-        Fragment leafItem = new Fragment("content", "leafItem", parent);
-
-        val actionUiModel = menuItem.getMenuActionUiModel().getActionUiMetaModel();
-        val menuItemActionLink = menuItem.getMenuActionUiModel().getUiComponent();
-
-        Label menuItemLabel = new Label("menuLinkLabel", menuItem.getName());
+        val menuItemLabel = new Label("menuLinkLabel", menuItem.getName());
         menuItemActionLink.addOrReplace(menuItemLabel);
+        
+        Decorators.getTooltip().decorate(listItem, actionUiModel);        
 
-        listItem.add(new CssClassAppender("isis-" + CssClassAppender.asCssStyle(actionUiModel.getActionIdentifier())));
-        if (!actionUiModel.isEnabled()) {
+        listItem.add(new CssClassAppender("isis-" + CssClassAppender.asCssStyle(actionMeta.getActionIdentifier())));
+        if (!actionMeta.isEnabled()) {
             listItem.add(new CssClassAppender("disabled"));
             menuItemActionLink.setEnabled(false);
 
-            Tooltips.addTooltip(listItem, actionUiModel.getDisabledReason());
-
-
         } else {
 
-            if(!_Strings.isNullOrEmpty(actionUiModel.getDescription())) {
-                Tooltips.addTooltip(listItem, actionUiModel.getDescription());
-            }
-
             //XXX ISIS-1626, confirmation dialog for no-parameter menu actions
-            if (actionUiModel.isRequiresImmediateConfirmation()) {
+            if (actionMeta.isRequiresImmediateConfirmation()) {
 
                 val translationService =
                         commonContext.lookupServiceElseFail(TranslationService.class);
@@ -90,19 +85,17 @@ public final class ServiceActionUtil {
             }
 
         }
-        if (actionUiModel.isPrototyping()) {
+        if (actionMeta.isPrototyping()) {
             menuItemActionLink.add(new CssClassAppender("prototype"));
         }
+        val leafItem = new Fragment("content", "leafItem", parent);
         leafItem.add(menuItemActionLink);
 
-        String cssClassFa = actionUiModel.getCssClassFa();
-        if (_Strings.isNullOrEmpty(cssClassFa)) {
-            menuItemActionLink.add(new CssClassAppender("menuLinkSpacer"));
-        } else {
-            menuItemLabel.add(new CssClassFaBehavior(cssClassFa, actionUiModel.getCssClassFaPosition()));
-        }
+        val fontAwesome = actionMeta.getFontAwesomeUiModel();
+        Decorators.getIconDecorator().decorate(menuItemLabel, fontAwesome);
+        Decorators.getMissingIconDecorator().decorate(menuItemActionLink, fontAwesome);
 
-        String cssClass = actionUiModel.getCssClass();
+        String cssClass = actionMeta.getCssClass();
         if (!_Strings.isNullOrEmpty(cssClass)) {
             menuItemActionLink.add(new CssClassAppender(cssClass));
         }

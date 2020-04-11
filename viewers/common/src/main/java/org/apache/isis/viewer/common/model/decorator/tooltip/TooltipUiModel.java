@@ -16,17 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.component;
+package org.apache.isis.viewer.common.model.decorator.tooltip;
 
-import javax.xml.bind.annotation.XmlType;
+import java.io.Serializable;
+import java.util.Optional;
 
-@XmlType(
-        namespace = "http://isis.apache.org/applib/layout/component"
-        )
-public enum CssClassFaPosition {
-    LEFT, RIGHT;
+import javax.annotation.Nullable;
 
-    public static boolean isLeftOrUnspecified(final CssClassFaPosition posistion) {
-        return posistion!=RIGHT;
+import lombok.NonNull;
+import lombok.Value;
+
+@Value(staticConstructor = "of")
+public class TooltipUiModel implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    
+    @NonNull final Optional<String> label;
+    @NonNull final String body;
+    
+    public static TooltipUiModel ofBody(@NonNull String body) {
+        return of(Optional.empty(), body);
     }
+    
+    public static TooltipUiModel of(@Nullable String label, @NonNull String body) {
+        return of(Optional.ofNullable(label), body);
+    }
+
 }

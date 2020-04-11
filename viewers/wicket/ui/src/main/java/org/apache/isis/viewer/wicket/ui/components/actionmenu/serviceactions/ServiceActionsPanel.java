@@ -92,7 +92,7 @@ public class ServiceActionsPanel extends MenuActionPanel {
     // -- HELPER
     
     private static String cssForTopMenu(CssMenuItem menuItem) {
-        return "top-menu-" + CssClassAppender.asCssStyle(menuItem.getMenuActionUiModel().getLabel());        
+        return "top-menu-" + CssClassAppender.asCssStyle(menuItem.getName());        
     }
     
     private static String cssForServices(CssMenuItem menuItem) {

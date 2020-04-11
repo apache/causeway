@@ -27,12 +27,12 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeUiModel;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -51,8 +51,7 @@ public class ActionUiMetaModel implements Serializable {
     @Getter private final boolean prototyping;
     @Getter private final String actionIdentifier;
     @Getter private final String cssClass;
-    @Getter private final String cssClassFa;
-    @Getter private final CssClassFaPosition cssClassFaPosition;
+    @Getter private final Optional<FontAwesomeUiModel> fontAwesomeUiModel;
     @Getter private final ActionLayout.Position position;
     @Getter private final SemanticsOf semantics;
     @Getter private final PromptStyle promptStyle;
@@ -83,8 +82,9 @@ public class ActionUiMetaModel implements Serializable {
                 objectAction.isPrototype(),
                 ObjectAction.Util.actionIdentifierFor(objectAction),
                 ObjectAction.Util.cssClassFor(objectAction, actionHolder), 
-                ObjectAction.Util.cssClassFaFor(objectAction), 
-                ObjectAction.Util.cssClassFaPositionFor(objectAction), 
+                FontAwesomeUiModel.of(
+                        ObjectAction.Util.cssClassFaFor(objectAction),
+                        ObjectAction.Util.cssClassFaPositionFor(objectAction)),
                 ObjectAction.Util.actionLayoutPositionOf(objectAction),
                 objectAction.getSemantics(),
                 ObjectAction.Util.promptStyleFor(objectAction),

@@ -29,16 +29,15 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.ListOfLinksModel;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.Confirmations;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.Decorators;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
 import lombok.val;
@@ -136,7 +135,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 } 
                 : Model.of(actionMeta.getDescription());
                 
-                Tooltips.addTooltip(link, tooltipModel);
+                Tooltips.addTooltip(link, tooltipModel.getObject());
 
                 val viewTitleLabel = new Label(ID_ADDITIONAL_LINK_TITLE, actionMeta.getLabel());
                 if(actionMeta.isBlobOrClob()) {
@@ -166,13 +165,9 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
 
                 link.addOrReplace(viewTitleLabel);
 
-                val cssClassFa = actionMeta.getCssClassFa();
-                if (_Strings.isNullOrEmpty(cssClassFa)) {
-                    viewTitleLabel.add(new CssClassAppender("menuLinkSpacer"));
-                } else {
-                    final CssClassFaPosition position = actionMeta.getCssClassFaPosition();
-                    viewTitleLabel.add(new CssClassFaBehavior(cssClassFa, position));
-                }
+                val fontAwesome = actionMeta.getFontAwesomeUiModel();
+                Decorators.getIconDecorator().decorate(viewTitleLabel, fontAwesome);
+                Decorators.getMissingIconDecorator().decorate(viewTitleLabel, fontAwesome);
 
                 item.addOrReplace(link);
             }
