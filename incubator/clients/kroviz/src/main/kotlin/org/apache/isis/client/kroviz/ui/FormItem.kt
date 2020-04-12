@@ -1,7 +1,6 @@
 package org.apache.isis.client.kroviz.ui
 
 import org.apache.isis.client.kroviz.to.Member
-import pl.treksoft.kvision.window.Window
 
 class FormItem(
         val label: String,
@@ -13,11 +12,10 @@ class FormItem(
         var dspl: Displayable? = null,
         val callBackId: String? = null) {
 
-    private var originalContent: Any?
+    private var originalContent: Any? = content
     var readOnly = false
 
     init {
-        originalContent = content
         if (member != null) {
             readOnly = member.isReadOnly()
         }
@@ -27,10 +25,6 @@ class FormItem(
         dspl?.setDirty(true)
         if (member != null) {
             member.value?.content = value
-        }
-        //IMPROVE this is special logic in a generic place
-        if (type == org.apache.isis.client.kroviz.to.ValueType.SLIDER.type) {
-            setOpacity(value!!)
         }
     }
 
@@ -43,15 +37,6 @@ class FormItem(
 
     fun setDisplay(displayable: Displayable) {
         dspl = displayable
-    }
-
-    @Deprecated("this needs a better home")
-    fun setOpacity(value: String) {
-        val opacity = value.toDouble()
-        (dspl as Window).getElementJQuery()?.css(
-                "background-color",
-                "rgba(255, 255, 255, $opacity)"
-        )
     }
 
 }

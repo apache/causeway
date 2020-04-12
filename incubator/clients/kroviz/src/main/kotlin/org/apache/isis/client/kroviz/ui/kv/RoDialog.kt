@@ -1,8 +1,7 @@
 package org.apache.isis.client.kroviz.ui.kv
 
+import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.*
-import org.w3c.dom.events.Event
-import org.w3c.dom.events.MouseEvent
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.core.Widget
@@ -11,11 +10,9 @@ import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.ButtonStyle
 import pl.treksoft.kvision.panel.FlexJustify
 import pl.treksoft.kvision.panel.HPanel
-import pl.treksoft.kvision.panel.SimplePanel
 import pl.treksoft.kvision.panel.vPanel
 import pl.treksoft.kvision.utils.perc
 import pl.treksoft.kvision.utils.px
-import pl.treksoft.kvision.window.Window
 
 class RoDialog(
         caption: String,
@@ -89,6 +86,11 @@ class RoDialog(
         super.remove(this)
         clearParent()
         dispose()
+    }
+
+    fun hasScalableContent(): Boolean {
+        val scalable = items.first { it.type == ValueType.IMAGE.type }
+        return scalable != null
     }
 
 }

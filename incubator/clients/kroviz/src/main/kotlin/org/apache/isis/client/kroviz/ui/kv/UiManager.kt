@@ -12,6 +12,7 @@ import org.apache.isis.client.kroviz.core.model.ObjectDM
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.w3c.dom.events.KeyboardEvent
+import pl.treksoft.kvision.core.Component
 import pl.treksoft.kvision.core.Widget
 import pl.treksoft.kvision.dropdown.ContextMenu
 import pl.treksoft.kvision.panel.SimplePanel
@@ -124,6 +125,13 @@ object UiManager {
     fun closeDialog(panel: RoDialog) {
         RoApp.remove(panel)
         pop()
+    }
+
+    fun topDialog(): Component {
+        val allDialogs = RoApp.getChildren().filter {
+            it is RoDialog
+        }
+        return allDialogs.first()
     }
 
     fun getUrl(): String {
