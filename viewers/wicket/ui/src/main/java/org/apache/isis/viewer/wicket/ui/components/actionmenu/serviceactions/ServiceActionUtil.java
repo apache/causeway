@@ -34,14 +34,13 @@ import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.viewer.common.model.action.MenuActionFactory;
+import org.apache.isis.viewer.common.model.action.ActionUiModelFactory;
 import org.apache.isis.viewer.common.model.menu.MenuUiModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Confirmations;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
-import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+import org.apache.isis.viewer.wicket.ui.util.Decorators;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -52,35 +51,32 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig
 //@Log4j2
 public final class ServiceActionUtil {
 
+
     static void addLeafItem(
             IsisWebAppCommonContext commonContext, 
             CssMenuItem menuItem,
             ListItem<CssMenuItem> listItem,
             MarkupContainer parent) {
+        
+        val actionUiModel = menuItem.getMenuActionUiModel();
+        
+        val actionMeta = actionUiModel.getActionUiMetaModel();
+        val menuItemActionLink = actionUiModel.getUiComponent();
 
-        Fragment leafItem = new Fragment("content", "leafItem", parent);
-
-        val menuItemActionLink = menuItem.getActionLinkComponent();
-
-        Label menuItemLabel = new Label("menuLinkLabel", menuItem.getName());
+        val menuItemLabel = new Label("menuLinkLabel", menuItem.getName());
         menuItemActionLink.addOrReplace(menuItemLabel);
+        
+        Decorators.getTooltip().decorate(listItem, actionUiModel);        
 
-        listItem.add(new CssClassAppender("isis-" + CssClassAppender.asCssStyle(menuItem.getActionIdentifier())));
-        if (!menuItem.isEnabled()) {
+        listItem.add(new CssClassAppender("isis-" + CssClassAppender.asCssStyle(actionMeta.getActionIdentifier())));
+        if (!actionMeta.isEnabled()) {
             listItem.add(new CssClassAppender("disabled"));
             menuItemActionLink.setEnabled(false);
 
-            Tooltips.addTooltip(listItem, menuItem.getDisabledReason());
-
-
         } else {
 
-            if(!_Strings.isNullOrEmpty(menuItem.getDescription())) {
-                Tooltips.addTooltip(listItem, menuItem.getDescription());
-            }
-
             //XXX ISIS-1626, confirmation dialog for no-parameter menu actions
-            if (menuItem.isRequiresImmediateConfirmation()) {
+            if (actionMeta.isRequiresImmediateConfirmation()) {
 
                 val translationService =
                         commonContext.lookupServiceElseFail(TranslationService.class);
@@ -89,19 +85,17 @@ public final class ServiceActionUtil {
             }
 
         }
-        if (menuItem.isPrototyping()) {
+        if (actionMeta.isPrototyping()) {
             menuItemActionLink.add(new CssClassAppender("prototype"));
         }
+        val leafItem = new Fragment("content", "leafItem", parent);
         leafItem.add(menuItemActionLink);
 
-        String cssClassFa = menuItem.getCssClassFa();
-        if (_Strings.isNullOrEmpty(cssClassFa)) {
-            menuItemActionLink.add(new CssClassAppender("menuLinkSpacer"));
-        } else {
-            menuItemLabel.add(new CssClassFaBehavior(cssClassFa, menuItem.getCssClassFaPosition()));
-        }
+        val fontAwesome = actionMeta.getFontAwesomeUiModel();
+        Decorators.getIconDecorator().decorate(menuItemLabel, fontAwesome);
+        Decorators.getMissingIconDecorator().decorate(menuItemActionLink, fontAwesome);
 
-        String cssClass = menuItem.getCssClass();
+        String cssClass = actionMeta.getCssClass();
         if (!_Strings.isNullOrEmpty(cssClass)) {
             menuItemActionLink.add(new CssClassAppender(cssClass));
         }
@@ -120,7 +114,7 @@ public final class ServiceActionUtil {
         Fragment folderItem = new Fragment("content", "folderItem", parent);
         listItem.add(folderItem);
 
-        folderItem.add(new Label("folderName", subMenuItem.getName()));
+        folderItem.add(new Label("folderName", subMenuItem.getMenuActionUiModel().getLabel()));
         final List<CssMenuItem> menuItems = subMenuItem.getSubMenuItems();
         ListView<CssMenuItem> subMenuItemsView = new ListView<CssMenuItem>("subMenuItems",
                 menuItems) {
@@ -141,31 +135,36 @@ public final class ServiceActionUtil {
     }
 
 
-    private static class MenuActionFactoryWkt implements MenuActionFactory<AbstractLink> {
+    private static class MenuActionFactoryWkt implements ActionUiModelFactory<AbstractLink> {
 
         @Override
-        public MenuActionWkt newMenuAction(
+        public MenuActionWkt newAction(
                 IsisWebAppCommonContext commonContext, 
                 String named, 
-                ObjectAction objectAction,
-                ManagedObject serviceAction) {
-
-            val objectModel = EntityModel.ofAdapter(commonContext, serviceAction);
-
+                ManagedObject serviceAction,
+                ObjectAction objectAction) {
+        
+            val serviceModel = EntityModel.ofAdapter(commonContext, serviceAction);
+            
+            val actionLinkFactory = new MenuActionLinkFactory(
+                    PageAbstract.ID_MENU_LINK, 
+                    serviceModel);
+            
             return new MenuActionWkt(
-                    new MenuActionLinkFactory(PageAbstract.ID_MENU_LINK, objectModel), 
-                    named, 
-                    objectAction,
-                    objectModel);
+                    model->actionLinkFactory.newActionLink(objectAction, named).getUiComponent(),
+                    named,
+                    serviceModel,
+                    objectAction);
         }
-
+        
     }
+
 
     public static void buildMenu(
             final IsisWebAppCommonContext commonContext,
             final MenuUiModel menuUiModel,
             final Consumer<CssMenuItem> onNewMenuItem) {
-
+        
         menuUiModel.buildMenuItems(
                 commonContext, 
                 new MenuActionFactoryWkt(),

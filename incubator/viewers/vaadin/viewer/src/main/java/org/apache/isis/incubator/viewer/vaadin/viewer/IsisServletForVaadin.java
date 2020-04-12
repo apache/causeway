@@ -74,9 +74,16 @@ extends SpringServlet {
         } else {
             // do not open an IsisInteraction, instead redirect to login page
             // this should happen afterwards by means of the VaadinAuthenticationHandler
-            
             super.service(request, response);    
         }
+        
+        log.debug("request was successfully serviced (authentication={})", authSession);
+        
+        if(isisInteractionFactory.isInInteraction()) {
+            isisInteractionFactory.closeSessionStack();
+            log.warn("after servicing current request some interactions have been closed forcefully (authentication={})", authSession);
+        }
+        
     }
   
 

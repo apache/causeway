@@ -12,7 +12,7 @@ There is relevant material in xref:post-release-successful.adoc[Post Release (Su
 
 
 
-Apache Isis' documentation (meaning the website and the users' guide, the reference guide and this contributors' guide) is written using link:https://asciidoctor.org/[Asciidoctor] syntax, and organized to be published as an link:https:antora.org[Antora] website.
+Apache Isis' documentation (meaning the website and the users' guide, the reference guide and this contributors' guide) is written using link:https://asciidoctor.org/[Asciidoctor] syntax, and organized to be published as an link:https://antora.org[Antora] website.
 
 The website and guides are created by running build tools (documented below) which create the HTML version of the site and guides.
 You can therefore easily check the documentation before raising a pull request (as a contributor) or publishing the site (if a committer).

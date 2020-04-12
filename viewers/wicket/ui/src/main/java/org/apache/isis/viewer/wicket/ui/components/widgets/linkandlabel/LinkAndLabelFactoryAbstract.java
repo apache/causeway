@@ -24,7 +24,6 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.cycle.RequestCycle;
 
@@ -40,7 +39,6 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.security.authentication.logout.LogoutMenu.LoginRedirect;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.viewer.common.model.link.ActionLinkFactory;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -69,8 +67,8 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import lombok.val;
 
-public abstract class ActionLinkFactoryForWicket 
-implements ActionLinkFactory<AbstractLink>, Serializable {
+public abstract class LinkAndLabelFactoryAbstract 
+implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -79,7 +77,7 @@ implements ActionLinkFactory<AbstractLink>, Serializable {
     protected final ScalarModel scalarModelForAssociationIfAny;
     protected final ToggledMementosProvider toggledMementosProviderIfAny;
 
-    protected ActionLinkFactoryForWicket(
+    protected LinkAndLabelFactoryAbstract(
             final String linkId,
             final EntityModel targetEntityModel,
             final ScalarModel scalarModelForAssociationIfAny,
@@ -90,6 +88,8 @@ implements ActionLinkFactory<AbstractLink>, Serializable {
         this.scalarModelForAssociationIfAny = scalarModelForAssociationIfAny;
         this.toggledMementosProviderIfAny = toggledMementosProviderIfAny;
     }
+    
+    public abstract LinkAndLabel newActionLink(ObjectAction action, String named);
     
     protected ActionLink newLinkComponent(
             final ObjectAction action,
@@ -137,7 +137,7 @@ implements ActionLinkFactory<AbstractLink>, Serializable {
             }
 
             private ActionPrompt performOnClick(final AjaxRequestTarget target) {
-                return ActionLinkFactoryForWicket.this.onClick(this, target);
+                return LinkAndLabelFactoryAbstract.this.onClick(this, target);
             }
 
         };
@@ -291,16 +291,6 @@ implements ActionLinkFactory<AbstractLink>, Serializable {
         }
 
         return null;
-    }
-
-    protected LinkAndLabel newLinkAndLabel(
-            final ManagedObject objectAdapter,
-            final ObjectAction objectAction,
-            final AbstractLink link) {
-
-        final boolean whetherReturnsBlobOrClob = ObjectAction.Util.returnsBlobOrClob(objectAction);
-
-        return LinkAndLabel.newLinkAndLabel(link, objectAdapter, objectAction, whetherReturnsBlobOrClob);
     }
 
     private InlinePromptContext determineInlinePromptContext() {

@@ -25,21 +25,19 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.ListOfLinksModel;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.Confirmations;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.Decorators;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
 import lombok.val;
@@ -102,7 +100,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
             @Override
             public boolean isVisible() {
                 for (val linkAndLabel : linkAndLabels) {
-                    val link = linkAndLabel.getLinkComponent();
+                    val link = linkAndLabel.getUiComponent();
                     if(link.isVisible()) {
                         return true;
                     }
@@ -122,9 +120,9 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
 
             @Override
             protected void populateItem(ListItem<LinkAndLabel> item) {
-                final LinkAndLabel linkAndLabel = item.getModelObject();
-
-                final AbstractLink link = linkAndLabel.getLinkComponent();
+                val linkAndLabel = item.getModelObject();
+                val actionMeta = linkAndLabel.getActionUiMetaModel();
+                val link = linkAndLabel.getUiComponent();
                 final Model<String> tooltipModel = link instanceof ActionLink
                         ? new Model<String>() {
                     private static final long serialVersionUID = 1L;
@@ -132,24 +130,24 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                     public String getObject() {
                         final ActionLink actionLink = (ActionLink) link;
                         final String reasonDisabledIfAny = actionLink.getReasonDisabledIfAny();
-                        return first(reasonDisabledIfAny, linkAndLabel.getDescriptionIfAny());
+                        return first(reasonDisabledIfAny, actionMeta.getDescription());
                     }
                 } 
-                : Model.of(linkAndLabel.getDescriptionIfAny());
+                : Model.of(actionMeta.getDescription());
                 
-                Tooltips.addTooltip(link, tooltipModel);
+                Tooltips.addTooltip(link, tooltipModel.getObject());
 
-                val viewTitleLabel = new Label(ID_ADDITIONAL_LINK_TITLE, linkAndLabel.getLabel());
-                if(linkAndLabel.isBlobOrClob()) {
+                val viewTitleLabel = new Label(ID_ADDITIONAL_LINK_TITLE, actionMeta.getLabel());
+                if(actionMeta.isBlobOrClob()) {
                     link.add(new CssClassAppender("noVeil"));
                 }
-                if(linkAndLabel.isPrototype()) {
+                if(actionMeta.isPrototyping()) {
                     link.add(new CssClassAppender("prototype"));
                 }
-                link.add(new CssClassAppender(linkAndLabel.getActionIdentifier()));
+                link.add(new CssClassAppender(actionMeta.getActionIdentifier()));
 
-                if (linkAndLabel.getSemantics().isAreYouSure()) { 
-                    if(linkAndLabel.getParameters().isNoParameters()) {
+                if (actionMeta.getSemantics().isAreYouSure()) { 
+                    if(actionMeta.getParameters().isNoParameters()) {
                         val hasDisabledReason = link instanceof ActionLink 
                                 ? _Strings.isNotEmpty(((ActionLink)link).getReasonDisabledIfAny()) 
                                 : false;
@@ -162,18 +160,14 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                     Confirmations.addConfirmationStyle(link);
                 }
 
-                val cssClass = linkAndLabel.getCssClass();
+                val cssClass = actionMeta.getCssClass();
                 CssClassAppender.appendCssClassTo(link, cssClass);
 
                 link.addOrReplace(viewTitleLabel);
 
-                val cssClassFa = linkAndLabel.getCssClassFa();
-                if (_Strings.isNullOrEmpty(cssClassFa)) {
-                    viewTitleLabel.add(new CssClassAppender("menuLinkSpacer"));
-                } else {
-                    final CssClassFaPosition position = linkAndLabel.getCssClassFaPosition();
-                    viewTitleLabel.add(new CssClassFaBehavior(cssClassFa, position));
-                }
+                val fontAwesome = actionMeta.getFontAwesomeUiModel();
+                Decorators.getIconDecorator().decorate(viewTitleLabel, fontAwesome);
+                Decorators.getMissingIconDecorator().decorate(viewTitleLabel, fontAwesome);
 
                 item.addOrReplace(link);
             }

@@ -22,36 +22,41 @@ import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
+import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeUiModel;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 /**
  * A behavior that prepends or appends the markup needed to show a Font Awesome icon
  * for a LinkAndLabel
  */
+@RequiredArgsConstructor
 public class CssClassFaBehavior extends Behavior {
 
     private static final long serialVersionUID = 1L;
     
-    private final String cssClassFa;
-    private final CssClassFaPosition position;
-
-    public CssClassFaBehavior(final String cssClassFa, final CssClassFaPosition position) {
-        this.cssClassFa = cssClassFa;
-        this.position = position;
-    }
+    @NonNull private final FontAwesomeUiModel fontAwesomeUiModel;
 
     @Override
     public void beforeRender(final Component component) {
         super.beforeRender(component);
+        val position = fontAwesomeUiModel.getPosition();
         if (position == null || CssClassFaPosition.LEFT == position) {
+            val cssClassFa = fontAwesomeUiModel.getCssClass();
             component.getResponse().write("<span class=\""+cssClassFa+" fontAwesomeIcon\"></span>");
         }
     }
 
     @Override
     public void afterRender(final Component component) {
+        val position = fontAwesomeUiModel.getPosition();
         if (CssClassFaPosition.RIGHT == position) {
+            val cssClassFa = fontAwesomeUiModel.getCssClass();
             component.getResponse().write("<span class=\""+cssClassFa+" fontAwesomeIcon\"></span>");
         }
         super.afterRender(component);
     }
+
 }

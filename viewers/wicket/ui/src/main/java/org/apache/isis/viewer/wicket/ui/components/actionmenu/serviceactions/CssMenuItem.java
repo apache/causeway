@@ -25,11 +25,10 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModel;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.Decorators;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
 import lombok.val;
@@ -71,51 +70,52 @@ implements Serializable {
     }
 
     private Component addMenuItemComponentTo(final MarkupContainer markupContainer) {
-        final AbstractLink link = super.getActionLinkComponent();
-        final Label label = new Label(CssMenuItem.ID_MENU_LABEL, Model.of(this.getName()));
+        
+        val actionMeta = super.getMenuActionUiModel().getActionUiMetaModel();
+        val actionLink = super.getMenuActionUiModel().getUiComponent();
+        
+        val label = new Label(CssMenuItem.ID_MENU_LABEL, Model.of(this.getName()));
 
-        if (link != null) {
+        if (actionLink != null) {
 
             // show link...
-            markupContainer.add(link);
-            link.add(label);
-
-            if (getDescription() != null) {
-                Tooltips.addTooltip(link, Model.of(getDescription()));
+            markupContainer.add(actionLink);
+            actionLink.add(label);
+            
+            if (actionMeta.getDescription() != null) {
+                Tooltips.addTooltip(actionLink, actionMeta.getDescription());
             }
-            if (isBlobOrClob()) {
-                link.add(new CssClassAppender("noVeil"));
+            if (actionMeta.isBlobOrClob()) {
+                actionLink.add(new CssClassAppender("noVeil"));
             }
-            if (isPrototyping()) {
-                link.add(new CssClassAppender("prototype"));
-            }
-
-            if (getCssClass() != null) {
-                link.add(new CssClassAppender(getCssClass()));
-            }
-            link.add(new CssClassAppender(getActionIdentifier()));
-
-            String cssClassFa = getCssClassFa();
-            if (!_Strings.isNullOrEmpty(cssClassFa)) {
-                label.add(new CssClassFaBehavior(cssClassFa, getCssClassFaPosition()));
+            if (actionMeta.isPrototyping()) {
+                actionLink.add(new CssClassAppender("prototype"));
             }
 
-            if (!this.isEnabled()) {
-                Tooltips.addTooltip(link, this.getDisabledReason());
-                link.add(new CssClassAppender("disabled"));
+            if (actionMeta.getCssClass() != null) {
+                actionLink.add(new CssClassAppender(actionMeta.getCssClass()));
+            }
+            actionLink.add(new CssClassAppender(actionMeta.getActionIdentifier()));
 
-                link.setEnabled(false);
+            val fontAwesome = actionMeta.getFontAwesomeUiModel();
+            Decorators.getIconDecorator().decorate(label, fontAwesome);
+
+            if (!actionMeta.isEnabled()) {
+                Tooltips.addTooltip(actionLink, actionMeta.getDisabledReason());
+                actionLink.add(new CssClassAppender("disabled"));
+
+                actionLink.setEnabled(false);
             }
 
             // .. and hide label
             Components.permanentlyHide(markupContainer, CssMenuItem.ID_MENU_LABEL);
-            return link;
+            return actionLink;
         }
         else {
             // hide link...
             Components.permanentlyHide(markupContainer, ID_MENU_LINK);
             // ... and show label, along with disabled reason
-            Tooltips.addTooltip(link, this.getDisabledReason());
+            Tooltips.addTooltip(actionLink, actionMeta.getDisabledReason());
             label.add(new AttributeModifier("class", Model.of("disabled")));
 
             markupContainer.add(label);

@@ -16,24 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.vaadin.model.action;
+package org.apache.isis.viewer.common.model;
 
-import com.vaadin.flow.component.Component;
+public interface HasUiComponent<T> {
 
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.action.MenuActionUiModel;
-import org.apache.isis.viewer.common.model.link.ActionLinkFactory;
-import org.apache.isis.viewer.common.model.object.ObjectUiModel;
-
-public class MenuActionVaa extends MenuActionUiModel<Component> {
-
-    public MenuActionVaa(
-            final ActionLinkFactory<Component> actionLinkFactory,
-            final String actionName, 
-            final ObjectAction objectAction,
-            final ObjectUiModel actionHolder) {
-        
-        super(actionLinkFactory, actionName, objectAction, actionHolder);
-    }
+    T getUiComponent();
     
 }

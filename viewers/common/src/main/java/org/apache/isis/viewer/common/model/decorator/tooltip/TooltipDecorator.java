@@ -16,24 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
+package org.apache.isis.viewer.common.model.decorator.tooltip;
 
-import org.apache.wicket.markup.html.link.AbstractLink;
-
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.action.ActionLinkUiComponentFactory;
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.viewer.common.model.action.ActionUiModel;
-import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 
-class MenuActionWkt extends ActionUiModel<AbstractLink> {
+import lombok.val;
 
-    MenuActionWkt(
-            final ActionLinkUiComponentFactory<AbstractLink> uiComponentFactory,
-            final String named,
-            final ObjectUiModel serviceModel,
-            final ObjectAction objectAction) {
+public interface TooltipDecorator<T> {
 
-        super(uiComponentFactory, named, serviceModel, objectAction); 
+    void addTooltip(T uiComponent, TooltipUiModel tooltipUiModel);
+    
+    default void decorate(T uiComponent, ActionUiModel<?> actionUiModel) {
+        val actionMeta = actionUiModel.getActionUiMetaModel();
+        //val uiComponent = actionUiModel.getUiComponent();
+        
+        if (actionMeta.isEnabled()) {
+            if(!_Strings.isNullOrEmpty(actionMeta.getDescription())) {
+                addTooltip(uiComponent, TooltipUiModel.ofBody(actionMeta.getDescription()));
+            }
+
+        } else {
+            addTooltip(uiComponent, TooltipUiModel.ofBody(actionMeta.getDisabledReason()));
+        }
+        
     }
-
+    
+    
+    
 }

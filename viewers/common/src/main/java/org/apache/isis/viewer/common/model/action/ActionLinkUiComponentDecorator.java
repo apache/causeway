@@ -16,24 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
+package org.apache.isis.viewer.common.model.action;
 
-import org.apache.wicket.markup.html.link.AbstractLink;
+/**
+ * Decorates a click-able UI component of type {@code <T>} based on an {@link ActionUiModel}.
+ * 
+ * @see ActionUiModel
+ * 
+ * @since 2.0.0
+ * @param <T> - link component type, native to the viewer
+ */
+public interface ActionLinkUiComponentDecorator<T> {
 
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.action.ActionLinkUiComponentFactory;
-import org.apache.isis.viewer.common.model.action.ActionUiModel;
-import org.apache.isis.viewer.common.model.object.ObjectUiModel;
-
-class MenuActionWkt extends ActionUiModel<AbstractLink> {
-
-    MenuActionWkt(
-            final ActionLinkUiComponentFactory<AbstractLink> uiComponentFactory,
-            final String named,
-            final ObjectUiModel serviceModel,
-            final ObjectAction objectAction) {
-
-        super(uiComponentFactory, named, serviceModel, objectAction); 
-    }
-
+      //TODO just a draft yet
+//    void decorateAsDisabled(ActionUiModel<T> actionUiModel, T actionLinkUiComponent);
+//    void addTooltip(ActionUiModel<T> actionUiModel, T actionLinkUiComponent);
+   
 }

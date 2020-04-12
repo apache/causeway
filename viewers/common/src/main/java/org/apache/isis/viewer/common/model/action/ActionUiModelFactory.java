@@ -16,40 +16,35 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.common.model.link;
+package org.apache.isis.viewer.common.model.action;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-
-import lombok.Getter;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 /**
+ * Creates an {@link ActionUiModel}, a holder of the <em>Action's</em> meta-model 
+ * and a click-able UI action component; eg. link, button, menu-items.
  * 
- * @since Apr 6, 2020
- *
+ * @see ActionUiModel
+ * 
+ * @since 2.0.0
  * @param <T> - link component type, native to the viewer
  */
-public class LinkAndLabelUiModel<T> extends LinkAndLabelUiModelAbstract {
-
-    private static final long serialVersionUID = 1L;
-
-    public static <X> LinkAndLabelUiModel<X> newLinkAndLabel(
-            final X linkComponent,
-            final ManagedObject objectAdapter,
-            final ObjectAction objectAction,
-            final boolean blobOrClob) {
-        return new LinkAndLabelUiModel<>(linkComponent, objectAdapter, objectAction, blobOrClob);
-    }
-
-    @Getter private final T linkComponent;
-
-    protected LinkAndLabelUiModel(
-            final T linkComponent,
-            final ManagedObject objectAdapter,
-            final ObjectAction objectAction,
-            final boolean blobOrClob) {
-        super(objectAdapter, objectAction, blobOrClob);
-        this.linkComponent = linkComponent;
-    }
+public interface ActionUiModelFactory<T> {
+    
+    /**
+     * 
+     * @param commonContext
+     * @param named - used when explicitly named (eg. menu bar layout file), otherwise {@code null}
+     * @param actionHolder
+     * @param objectAction
+     * @return
+     */
+    ActionUiModel<T> newAction(
+            IsisWebAppCommonContext commonContext, 
+            String named,
+            ManagedObject actionHolder,
+            ObjectAction objectAction);
     
 }

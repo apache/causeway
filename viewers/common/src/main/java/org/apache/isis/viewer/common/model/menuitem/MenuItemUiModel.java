@@ -20,23 +20,14 @@ package org.apache.isis.viewer.common.model.menuitem;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.action.MenuActionUiModel;
+import org.apache.isis.viewer.common.model.action.ActionUiModel;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -51,44 +42,19 @@ import lombok.extern.log4j.Log4j2;
  * @param <T> - link component type, native to the viewer
  * @param <U> - concrete type implementing this class
  */
-@Log4j2
 @Accessors(chain = true)
 @RequiredArgsConstructor
+@Log4j2
 public abstract class MenuItemUiModel<T, U extends MenuItemUiModel<T, U>> {
     
     @Getter private final String name;
-    @Setter private boolean enabled = true; // unless disabled
-    public boolean isEnabled() {
-        return enabled && disabledReason == null;
-    }
-    
-    @Getter @Setter private String actionIdentifier;
-    @Getter @Setter private String cssClass;
-    @Getter @Setter private String cssClassFa;
-    @Getter @Setter private CssClassFaPosition cssClassFaPosition;
-    @Getter @Setter private String description;
+
     /**
      * To determine whether requires a separator before it.
      */
     @Getter @Setter private boolean isFirstInSection = false; // unless set otherwise
 
-    @Getter @Setter private String disabledReason;
-    
-    /**
-     * A menu action with no parameters AND an are-you-sure semantics
-     * does require an immediate confirmation dialog.
-     * <br/>
-     * Others don't.
-     */
-    @Getter @Setter private boolean requiresImmediateConfirmation = false; // unless set otherwise
-    @Getter @Setter private boolean prototyping = false; // unless set otherwise
-    /**
-     * Whether this MenuItem's Action returns a Blob or Clob
-     */
-    @Getter @Setter private boolean blobOrClob = false; // unless set otherwise
-    
-    @Getter @Setter(AccessLevel.PRIVATE) private T actionLinkComponent;
-    @Getter @Setter private MenuActionUiModel<T> menuActionUiModel;
+    @Getter @Setter private ActionUiModel<T> menuActionUiModel;
     
     private final List<U> subMenuItems = _Lists.newArrayList();
     protected void addSubMenuItem(final U cssMenuItem) {
@@ -118,52 +84,6 @@ public abstract class MenuItemUiModel<T, U extends MenuItemUiModel<T, U>> {
         return parent != null;
     }
     
-    // -- VISIBILITY
-    
-    protected boolean isVisible(
-            @NonNull final ManagedObject actionHolder, 
-            @NonNull final ObjectAction objectAction) {
-        
-        // check hidden
-        if (actionHolder.getSpecification().isHidden()) {
-            return false;
-        }
-        // check visibility
-        final Consent visibility = objectAction.isVisible(
-                actionHolder,
-                InteractionInitiatedBy.USER,
-                Where.ANYWHERE);
-        if (visibility.isVetoed()) {
-            return false;
-        }
-        return true;
-    }
-    
-    // -- USABILITY
-    
-    protected Optional<String> getReasonWhyDisabled(
-            @NonNull final ManagedObject actionHolder, 
-            @NonNull final ObjectAction objectAction) {
-            
-        // check usability
-        final Consent usability = objectAction.isUsable(
-                actionHolder,
-                InteractionInitiatedBy.USER,
-                Where.ANYWHERE
-                );
-        return Optional.ofNullable(usability.getReason());
-    }
-    
-    // -- DESCRIBED AS
-    
-    protected Optional<String> getDescription(
-            @NonNull final ObjectAction objectAction) {
-        
-        val describedAsFacet = objectAction.getFacet(DescribedAsFacet.class);
-        return Optional.ofNullable(describedAsFacet)
-                .map(DescribedAsFacet::value);
-    }
-    
     // -- CONSTRUCTION
     
     /**
@@ -171,46 +91,25 @@ public abstract class MenuItemUiModel<T, U extends MenuItemUiModel<T, U>> {
      * {@link MenuActionWkt action model}, based on visibility and usability.
      */
     public void addSubMenuItemFor(
-            @NonNull final MenuActionUiModel<T> menuActionModel,
+            @NonNull final ActionUiModel<T> actionModel,
             final boolean isFirstInSection,
             @Nullable final Consumer<U> onNewSubMenuItem) {
 
-        val serviceModel = menuActionModel.getActionHolder();
-        val objectAction = menuActionModel.getObjectAction();
-        val actionLinkFactory = menuActionModel.getActionLinkFactory();
-
-        val actionHolder = serviceModel.getManagedObject();
-        if(!isVisible(actionHolder, objectAction)) {
+        val objectAction = actionModel.getObjectAction();
+        if(!actionModel.isVisible()) {
             log.debug("not visible {}", objectAction.getName());
             return;
         }
 
         // build the link
-        val linkAndLabel = actionLinkFactory.newLink(objectAction);
-        if (linkAndLabel == null) {
+        val actionMeta = actionModel.getActionUiMetaModel();
+        if (actionMeta == null) {
             // can only get a null if invisible, so this should not happen given the visibility guard above
             return;
         }
 
-        val actionLabel = menuActionModel.getActionName() != null 
-                ? menuActionModel.getActionName() 
-                : linkAndLabel.getLabel();
-
-        val menutIem = newSubMenuItem(actionLabel)
-                .setFirstInSection(isFirstInSection)
-                .setDisabledReason(getReasonWhyDisabled(actionHolder, objectAction).orElse(null))
-                .setPrototyping(objectAction.isPrototype())
-                .setRequiresImmediateConfirmation(
-                        ObjectAction.Util.isAreYouSureSemantics(objectAction) &&
-                        ObjectAction.Util.isNoParameters(objectAction))
-                .setBlobOrClob(ObjectAction.Util.returnsBlobOrClob(objectAction))
-                .setDescription(getDescription(objectAction).orElse(null))
-                .setActionIdentifier(ObjectAction.Util.actionIdentifierFor(objectAction))
-                .setCssClass(ObjectAction.Util.cssClassFor(objectAction, actionHolder))
-                .setCssClassFa(ObjectAction.Util.cssClassFaFor(objectAction))
-                .setCssClassFaPosition(ObjectAction.Util.cssClassFaPositionFor(objectAction));
-        
-        menutIem.setActionLinkComponent(linkAndLabel.getLinkComponent());
+        val menutIem = newSubMenuItem(actionMeta.getLabel())
+                .setFirstInSection(isFirstInSection);
         
         if(onNewSubMenuItem!=null) {
             onNewSubMenuItem.accept(_Casts.uncheckedCast(menutIem));

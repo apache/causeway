@@ -24,11 +24,9 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLinkFactoryForWicket;
+import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.LinkAndLabelFactoryAbstract;
 
-import lombok.val;
-
-class MenuActionLinkFactory extends ActionLinkFactoryForWicket {
+class MenuActionLinkFactory extends LinkAndLabelFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,14 +37,13 @@ class MenuActionLinkFactory extends ActionLinkFactoryForWicket {
     }
 
     @Override
-    public LinkAndLabel newLink(
-            final ObjectAction objectAction) {
-
-        val objectAdapter = this.targetEntityModel.load();
+    public LinkAndLabel newActionLink(
+            final ObjectAction objectAction, 
+            final String named) {
 
         final AbstractLink link = super.newLinkComponent(objectAction, toggledMementosProviderIfAny);
-
-        return newLinkAndLabel(objectAdapter, objectAction, link);
+        
+        return LinkAndLabel.newLinkAndLabel(model->link, named, this.targetEntityModel, objectAction);
     }
 
 

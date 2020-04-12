@@ -24,7 +24,7 @@ import java.util.function.Function;
 
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.viewer.common.model.action.MenuActionFactory;
+import org.apache.isis.viewer.common.model.action.ActionUiModelFactory;
 import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModel;
 
 import lombok.val;
@@ -37,7 +37,7 @@ final class MenuUiModel_buildMenuItems {
     void buildMenuItems(
             final IsisWebAppCommonContext commonContext,
             final BS3MenuBar menuBar,
-            final MenuActionFactory<T> menuActionFactory,
+            final ActionUiModelFactory<T> menuActionFactory,
             final Function<String, M> menuItemFactory,
             final Consumer<M> onNewMenuItem) {
 
@@ -75,11 +75,11 @@ final class MenuUiModel_buildMenuItems {
 
                     val isFirstInSection = itemsPerSectionCounter.intValue()==0; 
                     
-                    val menuActionUiModel = menuActionFactory.newMenuAction(
+                    val menuActionUiModel = menuActionFactory.newAction(
                             commonContext,
                             actionLayoutData.getNamed(),
-                            objectAction,
-                            serviceAdapter);
+                            serviceAdapter,
+                            objectAction);
 
                     // Optionally creates a sub-menu item based on visibility and usability
                     menuItemModel.addSubMenuItemFor(

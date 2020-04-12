@@ -31,17 +31,17 @@ import lombok.val;
 public class MenuItemVaa 
 extends MenuItemUiModel<Component, MenuItemVaa> {
 
-    public static MenuItemVaa newMenuItem(final String name) {
-        return new MenuItemVaa(name);
+    public static MenuItemVaa newMenuItem(final String label) {
+        return new MenuItemVaa(label);
     }
 
-    private MenuItemVaa(final String name) {
-        super(name);
+    private MenuItemVaa(final String label) {
+        super(label);
     }
     
     @Override
-    protected MenuItemVaa newSubMenuItem(final String name) {
-        val subMenuItem = newMenuItem(name);
+    protected MenuItemVaa newSubMenuItem(final String label) {
+        val subMenuItem = newMenuItem(label);
         subMenuItem.setParent(this);
         return subMenuItem;
     }

@@ -40,7 +40,7 @@ The service implementation is `o.a.i.c.m.s.publishing.PublisherDispatchService`.
 
 Apache Isis' default implementation of `PublisherDispatchService` class is automatically registered (it is annotated with `@DomainService`) so no further configuration is required.
 
-To use an alternative implementation, use Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation (as explained in the xref:refguide:applib-svc:about.adoc#overriding-the-services.adoc[introduction] to this guide).
+To use an alternative implementation, use Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation (as explained in the xref:refguide:applib-svc:about.adoc#overriding-the-services[introduction] to this guide).
 
 
 == Related Classes

@@ -16,24 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
+package org.apache.isis.viewer.common.model.decorator.fa;
 
-import org.apache.wicket.markup.html.link.AbstractLink;
+import java.util.Optional;
 
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.action.ActionLinkUiComponentFactory;
-import org.apache.isis.viewer.common.model.action.ActionUiModel;
-import org.apache.isis.viewer.common.model.object.ObjectUiModel;
+public interface FontAwesomeDecorator<R, U> {
 
-class MenuActionWkt extends ActionUiModel<AbstractLink> {
-
-    MenuActionWkt(
-            final ActionLinkUiComponentFactory<AbstractLink> uiComponentFactory,
-            final String named,
-            final ObjectUiModel serviceModel,
-            final ObjectAction objectAction) {
-
-        super(uiComponentFactory, named, serviceModel, objectAction); 
-    }
-
+    R decorate(U uiComponent, Optional<FontAwesomeUiModel> fontAwesomeUiModel);
+    
 }

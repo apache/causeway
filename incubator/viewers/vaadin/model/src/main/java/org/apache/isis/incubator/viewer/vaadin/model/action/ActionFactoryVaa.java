@@ -19,31 +19,50 @@
 package org.apache.isis.incubator.viewer.vaadin.model.action;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.html.Label;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.incubator.viewer.vaadin.model.decorator.Decorators;
 import org.apache.isis.incubator.viewer.vaadin.model.entity.ObjectVaa;
-import org.apache.isis.viewer.common.model.action.MenuActionFactory;
+import org.apache.isis.viewer.common.model.action.ActionUiModel;
+import org.apache.isis.viewer.common.model.action.ActionUiModelFactory;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-public class MenuActionFactoryVaa implements MenuActionFactory<Component> {
+@RequiredArgsConstructor
+public class ActionFactoryVaa implements ActionUiModelFactory<Component> {
 
     @Override
-    public MenuActionVaa newMenuAction(
+    public ActionUiModel<Component> newAction(
             IsisWebAppCommonContext commonContext, 
-            String named, 
-            ObjectAction objectAction,
-            ManagedObject actionHolder) {
+            String named,
+            ManagedObject actionHolder, 
+            ObjectAction objectAction) {
         
-        val objectModel = new ObjectVaa(commonContext, actionHolder);
+        val model = new ActionVaa(
+                this::createUiComponent,
+                named,
+                new ObjectVaa(commonContext, actionHolder), 
+                objectAction);
         
-        return new MenuActionVaa(
-                        new MenuActionLinkFactoryVaa(objectModel),
-                        named,
-                        objectAction,
-                        objectModel);
+        return model;
+    }
+    
+    // -- HELPER
+    
+    private Component createUiComponent(
+            final ActionUiModel<Component> model) {
+        
+        val actionMeta = model.getActionUiMetaModel();
+        val uiLabel = new Label(actionMeta.getLabel());
+        
+        return Decorators.getIconDecorator().decorate(uiLabel, actionMeta.getFontAwesomeUiModel());
+                
     }
 
+
+    
 }

@@ -10,7 +10,7 @@ The release process consists of:
 
 * the release manager xref:comguide:ROOT:cutting-a-release.adoc[cutting the release]
 * members of the Apache Isis PMC verifying and voting on the release (documented below)
-* the release manager performing post-release tasks, for either a xref:comguide:ROOT:post-release-successful.adoc.adoc[successful] or an xref:comguide:ROOT:post-release-unsuccessful[unsuccessful] vote.
+* the release manager performing post-release tasks, for either a xref:comguide:ROOT:post-release-successful.adoc[successful] or an xref:comguide:ROOT:post-release-unsuccessful.adoc[unsuccessful] vote.
 
 This section describes some guidance on what a voter (members of the Apache Isis PMC and anyone else who wishes) is expected to do before casting their vote in order to verify a release.
 

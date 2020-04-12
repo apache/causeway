@@ -74,15 +74,16 @@ public final class LinkAndLabelUtil {
             final ScalarModel scalarModelIfAny,
             final ToggledMementosProvider toggledMementosProviderIfAny) {
 
-        val linkFactory = new EntityActionLinkFactory(
+        val actionLinkFactory = new EntityActionLinkFactory(
                 AdditionalLinksPanel.ID_ADDITIONAL_LINK, 
                 parentEntityModel, 
                 scalarModelIfAny,
                 toggledMementosProviderIfAny);
-
+        
+        val named = (String)null;
+        
         return _NullSafe.stream(objectActions)
-                .map((ObjectAction objectAction) ->
-                    linkFactory.newLink(objectAction))
+                .map(objectAction->actionLinkFactory.newActionLink(objectAction, named))
                 .filter(_NullSafe::isPresent)
                 .collect(Collectors.toList());
     }

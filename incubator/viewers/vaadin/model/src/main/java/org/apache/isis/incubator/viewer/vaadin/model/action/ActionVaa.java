@@ -16,24 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
+package org.apache.isis.incubator.viewer.vaadin.model.action;
 
-import org.apache.wicket.markup.html.link.AbstractLink;
+import com.vaadin.flow.component.Component;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.action.ActionLinkUiComponentFactory;
 import org.apache.isis.viewer.common.model.action.ActionUiModel;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 
-class MenuActionWkt extends ActionUiModel<AbstractLink> {
+public class ActionVaa extends ActionUiModel<Component> {
 
-    MenuActionWkt(
-            final ActionLinkUiComponentFactory<AbstractLink> uiComponentFactory,
+    public ActionVaa(
+            final ActionLinkUiComponentFactory<Component> uiComponentFactory,
             final String named,
-            final ObjectUiModel serviceModel,
+            final ObjectUiModel actionHolder,
             final ObjectAction objectAction) {
-
-        super(uiComponentFactory, named, serviceModel, objectAction); 
+        
+        super(uiComponentFactory, named, actionHolder, objectAction);
     }
-
+    
 }

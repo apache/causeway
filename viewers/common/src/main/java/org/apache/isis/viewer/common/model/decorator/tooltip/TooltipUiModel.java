@@ -16,29 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.common.model.action;
+package org.apache.isis.viewer.common.model.decorator.tooltip;
 
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.link.ActionLinkFactory;
-import org.apache.isis.viewer.common.model.object.ObjectUiModel;
+import java.io.Serializable;
+import java.util.Optional;
 
-import lombok.Getter;
+import javax.annotation.Nullable;
 
-/**
- * 
- * @since 2.0.0
- * @param <T> - link component type, native to the viewer
- */
-@Getter
-public class MenuActionUiModel<T> extends ActionUiModel<T> {
+import lombok.NonNull;
+import lombok.Value;
 
-    public MenuActionUiModel(
-            final ActionLinkFactory<T> actionLinkFactory,
-            final String actionName, 
-            final ObjectAction objectAction,
-            final ObjectUiModel serviceModel) {
-        
-        super(actionLinkFactory, actionName, objectAction, serviceModel);
+@Value(staticConstructor = "of")
+public class TooltipUiModel implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    
+    @NonNull final Optional<String> label;
+    @NonNull final String body;
+    
+    public static TooltipUiModel ofBody(@NonNull String body) {
+        return of(Optional.empty(), body);
     }
     
+    public static TooltipUiModel of(@Nullable String label, @NonNull String body) {
+        return of(Optional.ofNullable(label), body);
+    }
+
 }

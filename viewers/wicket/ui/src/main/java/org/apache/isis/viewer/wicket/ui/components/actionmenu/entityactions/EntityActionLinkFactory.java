@@ -27,11 +27,11 @@ import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ToggledMementosProvider;
-import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLinkFactoryForWicket;
+import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.LinkAndLabelFactoryAbstract;
 
 import lombok.val;
 
-public final class EntityActionLinkFactory extends ActionLinkFactoryForWicket {
+public final class EntityActionLinkFactory extends LinkAndLabelFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
@@ -44,8 +44,9 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryForWicket {
     }
 
     @Override
-    public LinkAndLabel newLink(
-            final ObjectAction objectAction) {
+    public LinkAndLabel newActionLink(
+            final ObjectAction objectAction, 
+            final String named) {
 
         val objectAdapter = this.targetEntityModel.load();
 
@@ -60,8 +61,8 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryForWicket {
 
         final AbstractLink link = super.newLinkComponent(objectAction, toggledMementosProviderIfAny);
 
-        return newLinkAndLabel(objectAdapter, objectAction, link);
+        return LinkAndLabel.newLinkAndLabel(model->link, named, this.targetEntityModel, objectAction);
     }
-
-
+    
+    
 }

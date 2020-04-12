@@ -10,6 +10,7 @@ Indeed, the generic user interfaces provided by Apache Isis xref:vw:ROOT:about.a
 
 If the idea of naked objects is of interest, then there are a couple of books on the topic that you might want to read.
 
+[#naked-objects]
 == Naked Objects
 
 Richard Pawson and Robert Matthews, Wiley 2002
@@ -32,6 +33,7 @@ The book is freely available online http://www.nakedobjects.org/book/[here]. Or,
 
 
 
+[#domain-driven-design-using-naked-objects]
 == Domain Driven Design using Naked Objects
 
 Dan Haywood, Pragmatic Bookshelf 2009

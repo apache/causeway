@@ -17,6 +17,8 @@
 
 package org.apache.isis.viewer.wicket.ui.util;
 
+import javax.annotation.Nullable;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.head.CssHeaderItem;
@@ -26,15 +28,18 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipUiModel;
 
 import lombok.NonNull;
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.PopoverBehavior;
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.PopoverConfig;
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig.OpenTrigger;
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig.Placement;
 
+@UtilityClass
 public class Tooltips {
 
     /**
@@ -46,21 +51,23 @@ public class Tooltips {
     }
     
     /**
-     * Adds popover behavior to the {@code target}, if the bodyModel is not empty/blank.
+     * Adds popover behavior to the {@code target}, if at least the body is not empty/blank.
      * @param target
-     * @param labelModel
-     * @param bodyModel
+     * @param tooltipUiModel
      */
     public static void addTooltip(
-            @NonNull Component target, 
-            IModel<String> labelModel,  
-            IModel<String> bodyModel) {
-        if(bodyModel==null || _Strings.isEmpty(bodyModel.getObject())) {
+            @NonNull final Component target,
+            @Nullable final TooltipUiModel tooltipUiModel) {
+        if(tooltipUiModel==null || _Strings.isEmpty(tooltipUiModel.getBody())) {
             return; // no body so don't render
         }
-        if(labelModel==null) {
-            labelModel = emptyModel();
-        }
+        
+        final IModel<String> labelModel = tooltipUiModel
+                .getLabel()
+                .map(label->Model.of(label))
+                .orElseGet(()->Model.of());  
+        final IModel<String> bodyModel = Model.of(tooltipUiModel.getBody());
+        
         val tooltipBehavior = createTooltipBehavior(labelModel, bodyModel);
         target.add(new AttributeAppender("class", " isis-component-with-tooltip"));    
         target.add(tooltipBehavior);
@@ -73,24 +80,20 @@ public class Tooltips {
     
     // -- SHORTCUTS
     
-    public static void addTooltip(@NonNull Component target, String body) {
-        addTooltip(target, emptyModel(), Model.of(body));
-    }
-    
-    public static void addTooltip(@NonNull Component target, IModel<String> bodyModel) {
-        addTooltip(target, emptyModel(), bodyModel);
+    public static void addTooltip(@NonNull Component target, @Nullable String body) {
+        addTooltip(target, _Strings.isEmpty(body)
+                ? null
+                : TooltipUiModel.ofBody(body));
     }
 
-    public static void addTooltip(@NonNull Component target, String label, String body) {
-        addTooltip(target, Model.of(label), Model.of(body));
+    public static void addTooltip(@NonNull Component target, @Nullable String label, @Nullable String body) {
+        addTooltip(target, _Strings.isEmpty(body)
+                ? null
+                : TooltipUiModel.of(label, body));
     }
 
     // -- HELPER
     
-    private static IModel<String> emptyModel() {
-        return Model.of();
-    }
-
     private static PopoverBehavior createTooltipBehavior(IModel<String> label, IModel<String> body) {
         return new PopoverBehavior(label, body, createTooltipConfig());
     }
