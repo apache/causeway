@@ -136,14 +136,11 @@ public class Decorators {
             super.decorateMenuItem(uiComponent, actionUiModel, translationService);
             
             val actionMeta = actionUiModel.getActionUiMetaModel();
-            val fontAwesome = actionMeta.getFontAwesomeUiModel();
-            val actionLinkUiCompnent = actionUiModel.getUiComponent();
-            
-            Decorators.getMissingIcon().decorate(actionLinkUiCompnent, fontAwesome);
+            val actionLinkUiComponent = actionUiModel.getUiComponent();
             
             String cssClass = actionMeta.getCssClass();
             if (!_Strings.isNullOrEmpty(cssClass)) {
-                actionLinkUiCompnent.add(new CssClassAppender(cssClass));
+                actionLinkUiComponent.add(new CssClassAppender(cssClass));
             }
             
         }

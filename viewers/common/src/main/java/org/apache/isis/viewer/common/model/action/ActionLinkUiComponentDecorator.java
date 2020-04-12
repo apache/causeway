@@ -29,6 +29,7 @@ import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingDeco
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipDecorator;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipUiModel;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -40,6 +41,7 @@ import lombok.val;
  * @since 2.0.0
  * @param <T> - link component type, native to the viewer
  */
+@Getter
 @RequiredArgsConstructor
 public class ActionLinkUiComponentDecorator<T> {
     
@@ -84,8 +86,6 @@ public class ActionLinkUiComponentDecorator<T> {
         if (actionMeta.isPrototyping()) {
             prototypingDecorator.decorate(actionLinkUiComponent);
         }
-        
-        faDecorator.decorate(uiComponent, actionMeta.getFontAwesomeUiModel());
 
     }
 
