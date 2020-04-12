@@ -89,6 +89,10 @@ public class IsisWebAppCommonContext implements MetaModelContext.Delegating {
     
     // -- SHORTCUTS
     
+    public <T> Optional<T> lookupService(Class<T> serviceClass) {
+        return getMetaModelContext().getServiceRegistry().lookupService(serviceClass);
+    }
+    
     public <T> T lookupServiceElseFail(Class<T> serviceClass) {
         return getMetaModelContext().getServiceRegistry().lookupServiceElseFail(serviceClass);
     }

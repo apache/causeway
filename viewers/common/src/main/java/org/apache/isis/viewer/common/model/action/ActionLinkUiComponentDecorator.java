@@ -18,7 +18,11 @@
  */
 package org.apache.isis.viewer.common.model.action;
 
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmDecorator;
+import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
+import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel.Placement;
 import org.apache.isis.viewer.common.model.decorator.disable.DisableDecorator;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipDecorator;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipUiModel;
@@ -39,21 +43,33 @@ public class ActionLinkUiComponentDecorator<T> {
     
     private final TooltipDecorator<T> tooltipDecorator;
     private final DisableDecorator<T> disableDecorator;
+    private final ConfirmDecorator<T> confirmDecorator;
 
-    public void decorate(T uiComponent, ActionUiModel<?> actionUiModel) {
+    public void decorate(TranslationService translationService, T uiComponent, ActionUiModel<? extends T> actionUiModel) {
         val actionMeta = actionUiModel.getActionUiMetaModel();
-        //val uiComponent = actionUiModel.getUiComponent();
         
         val disableUiModel = actionMeta.getDisableUiModel();
         disableDecorator.decorate(uiComponent, disableUiModel);
         
         if (disableUiModel.isDisabled()) {
             tooltipDecorator.decorate(uiComponent, TooltipUiModel.ofBody(disableUiModel.getReason().orElse(null)));
+            
         } else {
 
             if(!_Strings.isNullOrEmpty(actionMeta.getDescription())) {
                 tooltipDecorator.decorate(uiComponent, TooltipUiModel.ofBody(actionMeta.getDescription()));
             }
+            
+            //XXX ISIS-1626, confirmation dialog for no-parameter menu actions
+            if (actionMeta.isRequiresImmediateConfirmation()) {
+                
+                val actionLinkUiComponent = actionUiModel.getUiComponent();
+
+                val confirmUiModel = ConfirmUiModel.ofAreYouSure(translationService, Placement.BOTTOM);
+                confirmDecorator.decorate(actionLinkUiComponent, confirmUiModel);
+                
+            }
+            
         }
 
     }

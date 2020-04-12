@@ -29,7 +29,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 
-import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -38,14 +37,11 @@ import org.apache.isis.viewer.common.model.action.ActionUiModelFactory;
 import org.apache.isis.viewer.common.model.menu.MenuUiModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
-import org.apache.isis.viewer.wicket.ui.util.Confirmations;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Decorators;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
-
-import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
 
 @UtilityClass
 //@Log4j2
@@ -66,20 +62,12 @@ public final class ServiceActionUtil {
         val menuItemLabel = new Label("menuLinkLabel", menuItem.getName());
         menuItemActionLink.addOrReplace(menuItemLabel);
         
-        Decorators.getActionLink().decorate(listItem, actionUiModel);
+        Decorators.getActionLink().decorate(
+                commonContext.getTranslationService(), 
+                listItem, 
+                actionUiModel);
         
-        if (!actionMeta.getDisableUiModel().isDisabled()) {
 
-            //XXX ISIS-1626, confirmation dialog for no-parameter menu actions
-            if (actionMeta.isRequiresImmediateConfirmation()) {
-
-                val translationService =
-                        commonContext.lookupServiceElseFail(TranslationService.class);
-                Confirmations
-                .addConfirmationDialog(translationService, menuItemActionLink, TooltipConfig.Placement.bottom);
-            }
-
-        }
         if (actionMeta.isPrototyping()) {
             menuItemActionLink.add(new CssClassAppender("prototype"));
         }

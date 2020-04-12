@@ -25,16 +25,45 @@ import org.apache.wicket.markup.html.form.Button;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.config.messages.MessageRegistry;
+import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
 
 import lombok.NonNull;
 import lombok.val;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig.Placement;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
 
 public class Confirmations {
+    
+    public static void addConfirmationDialog(Component uiComponent, ConfirmUiModel confirmUiModel) {
+        
+        val confirmationConfig = new ConfirmationConfig()
+        .withTitle(confirmUiModel.getTitle())
+        .withBtnOkLabel(confirmUiModel.getOkLabel())
+        .withBtnCancelLabel(confirmUiModel.getCancelLabel())
+        .withBtnOkClass("btn btn-danger")
+        .withBtnCancelClass("btn btn-default")
+        .withPlacement(Placement.valueOf(confirmUiModel.getPlacement().name().toLowerCase()));
+        
+        if(uiComponent instanceof Button) {
+            // ensure dialog ok buttons receive the danger style as well
+            // don't care if expressed twice
+            addConfirmationStyle(uiComponent);
+        }
+        
+        uiComponent.add(new ConfirmationBehavior(confirmationConfig));
+        
+    }
+    
+    public static void addConfirmationStyle(final Component component) {
+        component.add(new CssClassAppender("btn-danger"));
+    }
+    
+    // -- DEPRECATIONS
 
+    @Deprecated
     public static void addConfirmationDialog(
             @Nullable final TranslationService translationService,
             @NonNull  final Component component,
@@ -50,10 +79,7 @@ public class Confirmations {
         component.add(new ConfirmationBehavior(confirmationConfig));
     }
     
-    public static void addConfirmationStyle(final Component component) {
-        component.add(new CssClassAppender("btn-danger"));
-    }
-    
+    @Deprecated
     private static ConfirmationConfig getConfirmationConfig(
             @Nullable final TranslationService translationService) {
         
@@ -72,11 +98,14 @@ public class Confirmations {
         return confirmationConfig;
     }
 
+    @Deprecated
     private static String translate(TranslationService translationService, String msg) {
         if(translationService!=null) {
             return translationService.translate(MessageRegistry.class.getName(), msg);
         }
         return msg;
     }
+
+
     
 }
