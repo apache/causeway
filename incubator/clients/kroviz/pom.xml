@@ -38,6 +38,8 @@
 
     <!-- see: http://andresalmiray.com/running-gradle-inside-maven/ -->
     <profiles>
+    
+    	<!-- GRADLE WRAPPER SCRIPT AUTO SELECT -->
         <profile>
             <id>windows</id>
             <activation>
@@ -60,10 +62,37 @@
                 <gradle.executable>./gradlew.sh</gradle.executable>
             </properties>
         </profile>
+        
+        <!-- GRADLE BUILD TASK SELECTIVE SKIPPING -->
+        <profile>
+        	<id>skipTests</id>
+			<activation>
+				<property>
+					<name>skipTests</name>
+				</property>
+			</activation>
+			<properties>
+                <gradle.skipTests>-xtest</gradle.skipTests>
+                <gradle.skipBrowserTests>-xbrowserTest</gradle.skipBrowserTests>
+            </properties>
+        </profile>
+        <profile>
+        	<id>skipBrowserTests</id>
+			<activation>
+				<property>
+					<name>skipBrowserTests</name>
+				</property>
+			</activation>
+			<properties>
+                <gradle.skipBrowserTests>-xbrowserTest</gradle.skipBrowserTests>
+            </properties>
+        </profile>
+        
     </profiles>
 
     <build>
         <plugins>
+        
             <!-- execute Gradle command -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -80,6 +109,8 @@
                                 <argument>-Pgroup=${project.groupId}</argument>
                                 <argument>-Pversion=${project.version}</argument>
                                 <argument>-S</argument>
+                                <argument>${gradle.skipTests}</argument>
+                                <argument>${gradle.skipBrowserTests}</argument>
                             </arguments>
                         </configuration>
                         <goals>
