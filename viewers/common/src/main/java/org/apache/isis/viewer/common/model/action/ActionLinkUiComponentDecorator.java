@@ -18,6 +18,14 @@
  */
 package org.apache.isis.viewer.common.model.action;
 
+import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.viewer.common.model.decorator.disable.DisableDecorator;
+import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipDecorator;
+import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipUiModel;
+
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+
 /**
  * Decorates a click-able UI component of type {@code <T>} based on an {@link ActionUiModel}.
  * 
@@ -26,10 +34,28 @@ package org.apache.isis.viewer.common.model.action;
  * @since 2.0.0
  * @param <T> - link component type, native to the viewer
  */
-public interface ActionLinkUiComponentDecorator<T> {
+@RequiredArgsConstructor
+public class ActionLinkUiComponentDecorator<T> {
+    
+    private final TooltipDecorator<T> tooltipDecorator;
+    private final DisableDecorator<T> disableDecorator;
 
-      //TODO just a draft yet
-//    void decorateAsDisabled(ActionUiModel<T> actionUiModel, T actionLinkUiComponent);
-//    void addTooltip(ActionUiModel<T> actionUiModel, T actionLinkUiComponent);
-   
+    public void decorate(T uiComponent, ActionUiModel<?> actionUiModel) {
+        val actionMeta = actionUiModel.getActionUiMetaModel();
+        //val uiComponent = actionUiModel.getUiComponent();
+        
+        val disableUiModel = actionMeta.getDisableUiModel();
+        disableDecorator.decorate(uiComponent, disableUiModel);
+        
+        if (disableUiModel.isDisabled()) {
+            tooltipDecorator.decorate(uiComponent, TooltipUiModel.ofBody(disableUiModel.getReason().orElse(null)));
+        } else {
+
+            if(!_Strings.isNullOrEmpty(actionMeta.getDescription())) {
+                tooltipDecorator.decorate(uiComponent, TooltipUiModel.ofBody(actionMeta.getDescription()));
+            }
+        }
+
+    }
+
 }

@@ -20,8 +20,8 @@ package org.apache.isis.viewer.common.model.decorator.fa;
 
 import java.util.Optional;
 
-public interface FontAwesomeDecorator<R, U> {
+public interface FontAwesomeDecorator<T> {
 
-    R decorate(U uiComponent, Optional<FontAwesomeUiModel> fontAwesomeUiModel);
+    T decorate(T uiComponent, Optional<FontAwesomeUiModel> fontAwesomeUiModel);
     
 }

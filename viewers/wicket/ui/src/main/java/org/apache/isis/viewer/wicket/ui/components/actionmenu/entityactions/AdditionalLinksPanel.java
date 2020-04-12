@@ -166,8 +166,8 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 link.addOrReplace(viewTitleLabel);
 
                 val fontAwesome = actionMeta.getFontAwesomeUiModel();
-                Decorators.getIconDecorator().decorate(viewTitleLabel, fontAwesome);
-                Decorators.getMissingIconDecorator().decorate(viewTitleLabel, fontAwesome);
+                Decorators.getIcon().decorate(viewTitleLabel, fontAwesome);
+                Decorators.getMissingIcon().decorate(viewTitleLabel, fontAwesome);
 
                 item.addOrReplace(link);
             }

@@ -59,7 +59,7 @@ public class ActionFactoryVaa implements ActionUiModelFactory<Component> {
         val actionMeta = model.getActionUiMetaModel();
         val uiLabel = new Label(actionMeta.getLabel());
         
-        return Decorators.getIconDecorator().decorate(uiLabel, actionMeta.getFontAwesomeUiModel());
+        return Decorators.getIcon().decorate(uiLabel, actionMeta.getFontAwesomeUiModel());
                 
     }
 

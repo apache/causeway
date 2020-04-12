@@ -98,15 +98,11 @@ implements Serializable {
             actionLink.add(new CssClassAppender(actionMeta.getActionIdentifier()));
 
             val fontAwesome = actionMeta.getFontAwesomeUiModel();
-            Decorators.getIconDecorator().decorate(label, fontAwesome);
+            Decorators.getIcon().decorate(label, fontAwesome);
 
-            if (!actionMeta.isEnabled()) {
-                Tooltips.addTooltip(actionLink, actionMeta.getDisabledReason());
-                actionLink.add(new CssClassAppender("disabled"));
-
-                actionLink.setEnabled(false);
-            }
-
+            val disableUiModel = actionMeta.getDisableUiModel();
+            Decorators.getDisable().decorate(actionLink, disableUiModel);
+            
             // .. and hide label
             Components.permanentlyHide(markupContainer, CssMenuItem.ID_MENU_LABEL);
             return actionLink;
@@ -115,7 +111,10 @@ implements Serializable {
             // hide link...
             Components.permanentlyHide(markupContainer, ID_MENU_LINK);
             // ... and show label, along with disabled reason
-            Tooltips.addTooltip(actionLink, actionMeta.getDisabledReason());
+            
+            val disableUiModel = actionMeta.getDisableUiModel();
+            
+            Tooltips.addTooltip(actionLink, disableUiModel.getReason().orElse(null));
             label.add(new AttributeModifier("class", Model.of("disabled")));
 
             markupContainer.add(label);

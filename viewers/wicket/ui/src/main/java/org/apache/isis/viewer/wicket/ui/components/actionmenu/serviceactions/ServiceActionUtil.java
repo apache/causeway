@@ -66,14 +66,9 @@ public final class ServiceActionUtil {
         val menuItemLabel = new Label("menuLinkLabel", menuItem.getName());
         menuItemActionLink.addOrReplace(menuItemLabel);
         
-        Decorators.getTooltip().decorate(listItem, actionUiModel);        
-
-        listItem.add(new CssClassAppender("isis-" + CssClassAppender.asCssStyle(actionMeta.getActionIdentifier())));
-        if (!actionMeta.isEnabled()) {
-            listItem.add(new CssClassAppender("disabled"));
-            menuItemActionLink.setEnabled(false);
-
-        } else {
+        Decorators.getActionLink().decorate(listItem, actionUiModel);
+        
+        if (!actionMeta.getDisableUiModel().isDisabled()) {
 
             //XXX ISIS-1626, confirmation dialog for no-parameter menu actions
             if (actionMeta.isRequiresImmediateConfirmation()) {
@@ -92,8 +87,8 @@ public final class ServiceActionUtil {
         leafItem.add(menuItemActionLink);
 
         val fontAwesome = actionMeta.getFontAwesomeUiModel();
-        Decorators.getIconDecorator().decorate(menuItemLabel, fontAwesome);
-        Decorators.getMissingIconDecorator().decorate(menuItemActionLink, fontAwesome);
+        Decorators.getIcon().decorate(menuItemLabel, fontAwesome);
+        Decorators.getMissingIcon().decorate(menuItemActionLink, fontAwesome);
 
         String cssClass = actionMeta.getCssClass();
         if (!_Strings.isNullOrEmpty(cssClass)) {

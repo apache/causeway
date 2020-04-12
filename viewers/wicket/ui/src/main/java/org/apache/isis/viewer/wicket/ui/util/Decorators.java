@@ -22,6 +22,10 @@ import java.util.Optional;
 
 import org.apache.wicket.Component;
 
+import org.apache.isis.viewer.common.model.action.ActionLinkUiComponentDecorator;
+import org.apache.isis.viewer.common.model.action.ActionUiModel;
+import org.apache.isis.viewer.common.model.decorator.disable.DisableDecorator;
+import org.apache.isis.viewer.common.model.decorator.disable.DisableUiModel;
 import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeDecorator;
 import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeUiModel;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipDecorator;
@@ -29,6 +33,7 @@ import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipUiModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
 
 import lombok.Getter;
+import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -37,22 +42,41 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class Decorators {
 
+    // -- BASIC DECORATORS
     @Getter(lazy = true) private final static Tooltip tooltip = new Tooltip();
-    @Getter(lazy = true) private final static IconDecorator iconDecorator = new IconDecorator();
-    @Getter(lazy = true) private final static MissingIconDecorator missingIconDecorator = new MissingIconDecorator();
+    @Getter(lazy = true) private final static Disable disable = new Disable();
+    @Getter(lazy = true) private final static IconDecorator icon = new IconDecorator();
+    @Getter(lazy = true) private final static MissingIconDecorator missingIcon = new MissingIconDecorator();
     
-    // -- DECORATOR CLASSES
+    // -- ADVANCED DECORATORS
+    
+    @Getter(lazy = true) private final static ActionLink actionLink = new ActionLink();
+    
+    // -- BASIC DECORATOR CLASSES 
     
     public final static class Tooltip implements TooltipDecorator<Component> {
 
         @Override
-        public void addTooltip(Component uiComponent, TooltipUiModel tooltipUiModel) {
+        public void decorate(Component uiComponent, TooltipUiModel tooltipUiModel) {
             Tooltips.addTooltip(uiComponent, tooltipUiModel);
         }
         
     }
     
-    public final static class IconDecorator implements FontAwesomeDecorator<Component, Component> {
+    public final static class Disable implements DisableDecorator<Component> {
+
+        @Override
+        public void decorate(Component uiComponent, DisableUiModel disableUiModel) {
+            if (disableUiModel.isDisabled()) {
+                Tooltips.addTooltip(uiComponent, disableUiModel.getReason().orElse(null));
+                uiComponent.add(new CssClassAppender("disabled")); //might be redundant
+                uiComponent.setEnabled(false);
+            }
+        }
+        
+    }
+    
+    public final static class IconDecorator implements FontAwesomeDecorator<Component> {
 
         @Override
         public Component decorate(Component uiComponent, Optional<FontAwesomeUiModel> fontAwesome) {
@@ -64,7 +88,7 @@ public class Decorators {
         
     }
 
-    public final static class MissingIconDecorator implements FontAwesomeDecorator<Component, Component> {
+    public final static class MissingIconDecorator implements FontAwesomeDecorator<Component> {
 
         @Override
         public Component decorate(Component uiComponent, Optional<FontAwesomeUiModel> fontAwesome) {
@@ -73,6 +97,29 @@ public class Decorators {
             }
             return uiComponent;
         }
+        
+    }
+    
+    // -- ADVANCED DECORATOR CLASSES
+    
+    public final static class ActionLink extends ActionLinkUiComponentDecorator<Component> {
+
+        public ActionLink() {
+            super(getTooltip(), getDisable());
+        }
+
+        @Override
+        public void decorate(Component uiComponent, ActionUiModel<?> actionUiModel) {
+            addCssClassForAction(uiComponent, actionUiModel);
+            super.decorate(uiComponent, actionUiModel);
+        }
+        
+        private void addCssClassForAction(Component uiComponent, ActionUiModel<?> actionUiModel) {
+            val actionMeta = actionUiModel.getActionUiMetaModel();
+            uiComponent.add(new CssClassAppender("isis-" 
+                    + CssClassAppender.asCssStyle(actionMeta.getActionIdentifier())));
+        }
+        
         
     }
     

@@ -21,7 +21,6 @@ package org.apache.isis.incubator.viewer.vaadin.model.decorator;
 import java.util.Optional;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
@@ -45,24 +44,24 @@ import lombok.extern.log4j.Log4j2;
 public class Decorators {
 
     @Getter(lazy = true) private final static Tooltip tooltip = new Tooltip();
-    @Getter(lazy = true) private final static IconDecoratorForLabels iconDecorator = new IconDecoratorForLabels();
+    @Getter(lazy = true) private final static Icon icon = new Icon();
     
     // -- DECORATOR CLASSES
     
     public final static class Tooltip implements TooltipDecorator<Component> {
 
         @Override
-        public void addTooltip(Component uiComponent, TooltipUiModel tooltipUiModel) {
+        public void decorate(Component uiComponent, TooltipUiModel tooltipUiModel) {
             log.warn("not implemented yet");
         }
         
     }
     
-    public final static class IconDecoratorForLabels implements FontAwesomeDecorator<Component, Label> {
+    public final static class Icon implements FontAwesomeDecorator<Component> {
 
         @Override
         public Component decorate(
-                final Label uiComponent,
+                final Component uiComponent,
                 final Optional<FontAwesomeUiModel> fontAwesomeUiModel) {
             
             val decoratedUiComponent = fontAwesomeUiModel

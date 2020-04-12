@@ -16,14 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.common.model.decorator.tooltip;
+package org.apache.isis.viewer.common.model.decorator.disable;
 
-public interface TooltipDecorator<T> {
+public interface DisableDecorator<T> {
 
-    void decorate(T uiComponent, TooltipUiModel tooltipUiModel);
-    
-
-    
-    
+    void decorate(T uiComponent, DisableUiModel disableUiModel);
     
 }
