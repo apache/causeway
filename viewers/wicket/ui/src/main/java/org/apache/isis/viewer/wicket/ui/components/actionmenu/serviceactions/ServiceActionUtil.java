@@ -29,7 +29,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 
-import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
@@ -47,7 +46,6 @@ import lombok.experimental.UtilityClass;
 //@Log4j2
 public final class ServiceActionUtil {
 
-
     static void addLeafItem(
             IsisWebAppCommonContext commonContext, 
             CssMenuItem menuItem,
@@ -55,33 +53,18 @@ public final class ServiceActionUtil {
             MarkupContainer parent) {
         
         val actionUiModel = menuItem.getMenuActionUiModel();
-        
-        val actionMeta = actionUiModel.getActionUiMetaModel();
         val menuItemActionLink = actionUiModel.getUiComponent();
 
         val menuItemLabel = new Label("menuLinkLabel", menuItem.getName());
         menuItemActionLink.addOrReplace(menuItemLabel);
         
-        Decorators.getActionLink().decorate(
-                commonContext.getTranslationService(), 
+        Decorators.getActionLink().decorateMenuItem(
                 listItem, 
-                actionUiModel);
+                actionUiModel,
+                commonContext.getTranslationService());
         
-
-        if (actionMeta.isPrototyping()) {
-            menuItemActionLink.add(new CssClassAppender("prototype"));
-        }
         val leafItem = new Fragment("content", "leafItem", parent);
         leafItem.add(menuItemActionLink);
-
-        val fontAwesome = actionMeta.getFontAwesomeUiModel();
-        Decorators.getIcon().decorate(menuItemLabel, fontAwesome);
-        Decorators.getMissingIcon().decorate(menuItemActionLink, fontAwesome);
-
-        String cssClass = actionMeta.getCssClass();
-        if (!_Strings.isNullOrEmpty(cssClass)) {
-            menuItemActionLink.add(new CssClassAppender(cssClass));
-        }
 
         listItem.add(leafItem);
     }

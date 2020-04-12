@@ -24,6 +24,8 @@ import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmDecorator;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel.Placement;
 import org.apache.isis.viewer.common.model.decorator.disable.DisableDecorator;
+import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeDecorator;
+import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingDecorator;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipDecorator;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipUiModel;
 
@@ -44,8 +46,17 @@ public class ActionLinkUiComponentDecorator<T> {
     private final TooltipDecorator<T> tooltipDecorator;
     private final DisableDecorator<T> disableDecorator;
     private final ConfirmDecorator<T> confirmDecorator;
+    private final PrototypingDecorator<T> prototypingDecorator;
+    private final FontAwesomeDecorator<T> faDecorator;
 
-    public void decorate(TranslationService translationService, T uiComponent, ActionUiModel<? extends T> actionUiModel) {
+    //TODO this is yet the result of refactoring the logic originating from the wicket viewer
+    //there is a little design flaw yet: this code decorates 2 UI components at once which is confusing 
+    public void decorateMenuItem(
+            final T uiComponent, // with wicket this is a menu item component
+            final ActionUiModel<? extends T> actionUiModel,
+            final TranslationService translationService) {
+        
+        val actionLinkUiComponent = actionUiModel.getUiComponent();
         val actionMeta = actionUiModel.getActionUiMetaModel();
         
         val disableUiModel = actionMeta.getDisableUiModel();
@@ -63,14 +74,18 @@ public class ActionLinkUiComponentDecorator<T> {
             //XXX ISIS-1626, confirmation dialog for no-parameter menu actions
             if (actionMeta.isRequiresImmediateConfirmation()) {
                 
-                val actionLinkUiComponent = actionUiModel.getUiComponent();
-
                 val confirmUiModel = ConfirmUiModel.ofAreYouSure(translationService, Placement.BOTTOM);
                 confirmDecorator.decorate(actionLinkUiComponent, confirmUiModel);
                 
             }
             
         }
+        
+        if (actionMeta.isPrototyping()) {
+            prototypingDecorator.decorate(actionLinkUiComponent);
+        }
+        
+        faDecorator.decorate(uiComponent, actionMeta.getFontAwesomeUiModel());
 
     }
 

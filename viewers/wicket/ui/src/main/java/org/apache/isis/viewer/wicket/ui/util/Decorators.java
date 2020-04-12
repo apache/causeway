@@ -23,6 +23,7 @@ import java.util.Optional;
 import org.apache.wicket.Component;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.viewer.common.model.action.ActionLinkUiComponentDecorator;
 import org.apache.isis.viewer.common.model.action.ActionUiModel;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmDecorator;
@@ -122,16 +123,29 @@ public class Decorators {
     public final static class ActionLink extends ActionLinkUiComponentDecorator<Component> {
 
         public ActionLink() {
-            super(getTooltip(), getDisable(), getConfirm());
+            super(getTooltip(), getDisable(), getConfirm(), getPrototyping(), getIcon());
         }
 
         @Override
-        public void decorate(
-                final TranslationService translationService, 
+        public void decorateMenuItem(
                 final Component uiComponent,
-                final ActionUiModel<? extends Component> actionUiModel) {
+                final ActionUiModel<? extends Component> actionUiModel,
+                final TranslationService translationService) {
+            
             addCssClassForAction(uiComponent, actionUiModel);
-            super.decorate(translationService, uiComponent, actionUiModel);
+            super.decorateMenuItem(uiComponent, actionUiModel, translationService);
+            
+            val actionMeta = actionUiModel.getActionUiMetaModel();
+            val fontAwesome = actionMeta.getFontAwesomeUiModel();
+            val actionLinkUiCompnent = actionUiModel.getUiComponent();
+            
+            Decorators.getMissingIcon().decorate(actionLinkUiCompnent, fontAwesome);
+            
+            String cssClass = actionMeta.getCssClass();
+            if (!_Strings.isNullOrEmpty(cssClass)) {
+                actionLinkUiCompnent.add(new CssClassAppender(cssClass));
+            }
+            
         }
         
         private void addCssClassForAction(Component uiComponent, ActionUiModel<?> actionUiModel) {
