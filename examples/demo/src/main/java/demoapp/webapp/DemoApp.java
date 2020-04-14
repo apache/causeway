@@ -60,6 +60,7 @@ import lombok.extern.log4j.Log4j2;
 import demoapp.dom.DemoModule;
 import demoapp.utils.DemoRequestScopedBean;
 import demoapp.utils.LibraryPreloadingService;
+import demoapp.utils.ThereCanBeOnlyOne;
 
 /**
  * Bootstrap the application.
@@ -81,6 +82,8 @@ public class DemoApp extends SpringBootServletInitializer {
         //IsisPresets.prototyping();
         //DebugLoggingPreset.PERSISTENCE.apply();
         //DebugLoggingPreset.ISIS_SESSION.apply();
+        
+        ThereCanBeOnlyOne.remoteShutdownOthersIfAny();
         
         SpringApplication.run(new Class[] { DemoApp.class }, args);
     }
