@@ -43,6 +43,10 @@ import lombok.Getter;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig.Placement;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
+
 /**
  * 
  */
@@ -98,16 +102,32 @@ public class Decorators {
     public final static class Confirm implements ConfirmDecorator<Component> {
         @Override
         public void decorate(Component uiComponent, ConfirmUiModel confirmUiModel) {
-            Confirmations.addConfirmationDialog(uiComponent, confirmUiModel);
+            
+            val confirmationConfig = new ConfirmationConfig()
+                    .withTitle(confirmUiModel.getTitle())
+                    .withBtnOkLabel(confirmUiModel.getOkLabel())
+                    .withBtnCancelLabel(confirmUiModel.getCancelLabel())
+                    .withBtnOkClass("btn btn-danger")
+                    .withBtnCancelClass("btn btn-default")
+                    .withPlacement(Placement.valueOf(confirmUiModel.getPlacement().name().toLowerCase()));
+            
+            uiComponent.add(new ConfirmationBehavior(confirmationConfig));
+            
+            if(uiComponent instanceof Button) {
+                // ensure dialog ok buttons receive the danger style as well
+                // don't care if expressed twice
+                Decorators.getDanger().decorate(uiComponent);
+            }
+            
         }
     }
     
     public final static class Danger implements DangerDecorator<Component> {
         @Override
         public void decorate(Component uiComponent) {
-            if(uiComponent instanceof Button) {
+            //if(uiComponent instanceof Button) { 
                 uiComponent.add(new CssClassAppender("btn-danger"));
-            }
+            //}
         }
     }
     
