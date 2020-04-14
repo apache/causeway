@@ -251,6 +251,10 @@
                 </exclusion>
                 <exclusion>
                     <groupId>org.webjars</groupId>
+                    <artifactId>font-awesome</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.webjars</groupId>
                     <artifactId>jquery</artifactId>
                 </exclusion>
                 <exclusion>
