@@ -53,7 +53,7 @@ public class Object_clearHints {
             )
     @ActionLayout(
             contributed = Contributed.AS_ACTION,
-            cssClassFa = "fa-circle-o",
+            cssClassFa = "fa-circle",
             position = ActionLayout.Position.PANEL_DROPDOWN
             )
     @MemberOrder(name = "datanucleusIdLong", sequence = "400.1")
