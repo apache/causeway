@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.util;
 import java.util.Optional;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.form.Button;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.internal.base._Strings;
@@ -28,6 +29,7 @@ import org.apache.isis.viewer.common.model.action.ActionLinkUiComponentDecorator
 import org.apache.isis.viewer.common.model.action.ActionUiModel;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmDecorator;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
+import org.apache.isis.viewer.common.model.decorator.danger.DangerDecorator;
 import org.apache.isis.viewer.common.model.decorator.disable.DisableDecorator;
 import org.apache.isis.viewer.common.model.decorator.disable.DisableUiModel;
 import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeDecorator;
@@ -52,6 +54,8 @@ public class Decorators {
     @Getter(lazy = true) private final static Disable disable = new Disable();
     @Getter(lazy = true) private final static Prototyping prototyping = new Prototyping();
     @Getter(lazy = true) private final static Confirm confirm = new Confirm();
+    @Getter(lazy = true) private final static Danger danger = new Danger();
+    
     
     @Getter(lazy = true) private final static IconDecorator icon = new IconDecorator();
     @Getter(lazy = true) private final static MissingIconDecorator missingIcon = new MissingIconDecorator();
@@ -95,6 +99,15 @@ public class Decorators {
         @Override
         public void decorate(Component uiComponent, ConfirmUiModel confirmUiModel) {
             Confirmations.addConfirmationDialog(uiComponent, confirmUiModel);
+        }
+    }
+    
+    public final static class Danger implements DangerDecorator<Component> {
+        @Override
+        public void decorate(Component uiComponent) {
+            if(uiComponent instanceof Button) {
+                uiComponent.add(new CssClassAppender("btn-danger"));
+            }
         }
     }
     

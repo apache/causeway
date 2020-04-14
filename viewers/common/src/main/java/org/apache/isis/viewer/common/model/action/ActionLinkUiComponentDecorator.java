@@ -52,13 +52,15 @@ public class ActionLinkUiComponentDecorator<T> {
     private final FontAwesomeDecorator<T> faDecorator;
 
     //TODO this is yet the result of refactoring the logic originating from the wicket viewer
-    //there is a little design flaw yet: this code decorates 2 UI components at once which is confusing 
+    //I'm not happy with this yet: this code decorates 2 UI components at once which is confusing
+    //also is not generic enough, because wicket still needs to override this in order to decorate
+    //even another UI component
     public void decorateMenuItem(
-            final T uiComponent, // with wicket this is a menu item component
+            final T uiComponent, // UI component #1
             final ActionUiModel<? extends T> actionUiModel,
             final TranslationService translationService) {
         
-        val actionLinkUiComponent = actionUiModel.getUiComponent();
+        val actionLinkUiComponent = actionUiModel.getUiComponent(); // UI component #2
         val actionMeta = actionUiModel.getActionUiMetaModel();
         
         val disableUiModel = actionMeta.getDisableUiModel();

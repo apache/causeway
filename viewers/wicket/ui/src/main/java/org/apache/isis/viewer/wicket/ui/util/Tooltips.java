@@ -20,7 +20,6 @@ package org.apache.isis.viewer.wicket.ui.util;
 import javax.annotation.Nullable;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.model.IModel;
@@ -69,7 +68,7 @@ public class Tooltips {
         final IModel<String> bodyModel = Model.of(tooltipUiModel.getBody());
         
         val tooltipBehavior = createTooltipBehavior(labelModel, bodyModel);
-        target.add(new AttributeAppender("class", " isis-component-with-tooltip"));    
+        target.add(new CssClassAppender("isis-component-with-tooltip"));    
         target.add(tooltipBehavior);
     }
 
