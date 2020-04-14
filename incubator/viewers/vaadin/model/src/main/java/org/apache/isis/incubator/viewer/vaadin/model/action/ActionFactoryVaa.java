@@ -42,21 +42,23 @@ public class ActionFactoryVaa implements ActionUiModelFactory<Component> {
             ManagedObject actionHolder, 
             ObjectAction objectAction) {
         
-        val model = new ActionVaa(
+        val serviceModel = new ObjectVaa(commonContext, actionHolder);
+        
+        val actionUiModel = new ActionVaa(
                 this::createUiComponent,
                 named,
-                new ObjectVaa(commonContext, actionHolder), 
+                serviceModel, 
                 objectAction);
         
-        return model;
+        return actionUiModel;
     }
     
     // -- HELPER
     
     private Component createUiComponent(
-            final ActionUiModel<Component> model) {
+            final ActionUiModel<Component> actionUiModel) {
         
-        val actionMeta = model.getActionUiMetaModel();
+        val actionMeta = actionUiModel.getActionUiMetaModel();
         val uiLabel = new Label(actionMeta.getLabel());
         
         return Decorators.getIcon().decorate(uiLabel, actionMeta.getFontAwesomeUiModel());

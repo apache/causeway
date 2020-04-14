@@ -50,10 +50,11 @@ public final class EntityActionLinkFactory extends LinkAndLabelFactoryAbstract {
 
         val objectAdapter = this.targetEntityModel.load();
 
-        val isBookmarkable = ManagedObject.isIdentifiable(objectAdapter);
-        if (!isBookmarkable) {
+        val isIdentifiable = ManagedObject.isIdentifiable(objectAdapter);
+        if (!isIdentifiable) {
             throw new IllegalArgumentException(String.format(
-                    "Object '%s' is not persistent/bookmarkable.", objectAdapter.titleString(null)));
+                    "Object '%s' is not identifiable (has no identifier).", 
+                    objectAdapter.titleString(null)));
         }
 
         // previously we computed visibility and usability here, but

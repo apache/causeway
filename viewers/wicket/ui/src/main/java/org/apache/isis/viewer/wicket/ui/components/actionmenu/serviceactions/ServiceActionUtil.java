@@ -112,10 +112,10 @@ public final class ServiceActionUtil {
         public MenuActionWkt newAction(
                 IsisWebAppCommonContext commonContext, 
                 String named, 
-                ManagedObject serviceAction,
+                ManagedObject actionHolder,
                 ObjectAction objectAction) {
         
-            val serviceModel = EntityModel.ofAdapter(commonContext, serviceAction);
+            val serviceModel = EntityModel.ofAdapter(commonContext, actionHolder);
             
             val actionLinkFactory = new MenuActionLinkFactory(
                     PageAbstract.ID_MENU_LINK, 

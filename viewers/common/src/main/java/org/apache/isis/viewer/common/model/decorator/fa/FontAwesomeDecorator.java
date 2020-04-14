@@ -21,6 +21,12 @@ package org.apache.isis.viewer.common.model.decorator.fa;
 import java.util.Optional;
 
 public interface FontAwesomeDecorator<T> {
+    
+    /**
+     * corresponds to the webjars path as provided by the maven artifact 
+     * {@code org.webjars:font-awesome}
+     */
+    public static final String FONTAWESOME_RESOURCE = "font-awesome/5.13.0/css/all.min.css";
 
     T decorate(T uiComponent, Optional<FontAwesomeUiModel> fontAwesomeUiModel);
     
