@@ -22,10 +22,13 @@ import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.apache.isis.applib.layout.menubars.bootstrap3.BS3Menu;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.common.model.action.ActionUiModelFactory;
 import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModel;
+import org.apache.isis.viewer.common.model.userprofile.UserProfileUiModelProvider;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -47,8 +50,8 @@ final class MenuUiModel_buildMenuItems {
         val itemsPerSectionCounter = new LongAdder();
         
         for (val menu : menuBar.getMenus()) {
-
-            val menuItemModel = menuItemFactory.apply(menu.getNamed()); // top level menu item name
+            
+            val menuItemModel = processTopLevel(commonContext, menuItemFactory, menu);
 
             for (val menuSection : menu.getSections()) {
 
@@ -99,7 +102,42 @@ final class MenuUiModel_buildMenuItems {
         }
         
     }
+    
+    // -- HELPER
 
+    /**
+     * @implNote when ever the top level MenuItem name is empty or {@code null} we set the name
+     * to the current user's profile name 
+     */
+    private static <T, M extends MenuItemUiModel<T, M>>  
+    M processTopLevel(
+            final IsisWebAppCommonContext commonContext,
+            final Function<String, M> menuItemFactory, 
+            final BS3Menu menu) {
+        
+        val menuItemIsUserProfile = _Strings.isNullOrEmpty(menu.getNamed()); // top level menu item name
+            
+        val menuItemName = menuItemIsUserProfile
+                ? userProfileName(commonContext)
+                : menu.getNamed();
+        
+        val menuItemModel = menuItemFactory.apply(menuItemName); 
+        
+        if(menuItemIsUserProfile) {
+            // under the assumption that this can only be the case when we have discovered the empty named top level menu
+            menuItemModel.setTertiaryRoot(true);  
+        }
+        
+        return menuItemModel;
+    }
+
+    private static String userProfileName(
+            final IsisWebAppCommonContext commonContext) {
+        val userProfile = commonContext
+                .lookupServiceElseFail(UserProfileUiModelProvider.class)
+                .getUserProfile();
+        return userProfile.getUserProfileName();
+    }
     
     
 }

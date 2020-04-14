@@ -53,6 +53,8 @@ public abstract class MenuItemUiModel<T, U extends MenuItemUiModel<T, U>> {
      * To determine whether requires a separator before it.
      */
     @Getter @Setter private boolean isFirstInSection = false; // unless set otherwise
+    
+    @Getter @Setter private boolean isTertiaryRoot = false; // unless set otherwise
 
     @Getter @Setter private ActionUiModel<T> menuActionUiModel;
     

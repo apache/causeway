@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.common.model.userprofile;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
@@ -40,7 +42,8 @@ public class UserProfileUiModelProvider implements UserProfileService {
     }
 
     public UserProfileUiModel getUserProfile() {
-        return UserProfileUiModel.of(userProfileName());
+        Optional<String> avatarUrl = Optional.empty(); //not supported yet
+        return UserProfileUiModel.of(userProfileName(), avatarUrl);
     }
     
 }

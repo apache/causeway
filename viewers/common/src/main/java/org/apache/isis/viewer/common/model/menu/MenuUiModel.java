@@ -29,7 +29,6 @@ import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.common.model.action.ActionUiModelFactory;
 import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModel;
-import org.apache.isis.viewer.common.model.userprofile.UserProfileUiModelProvider;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -65,36 +64,9 @@ public class MenuUiModel implements Serializable {
                 commonContext, 
                 menuBar,
                 menuActionFactory,
-                menuItemFactoryHonoringUserProfile(commonContext, menuItemFactory),
+                menuItemFactory,
                 onNewMenuItem);
         
-    }
-    
-    // -- HELPER IN SUPPORT OF THE CURRENT USER PROFILE
-
-    /**
-     * Wraps a (simple) menu item factory.
-     * @implNote when ever the top level MenuItem name is {@code null} we set the name
-     * to the current user's profile name 
-     */
-    private <M> Function<String, M> menuItemFactoryHonoringUserProfile(
-            final IsisWebAppCommonContext commonContext,
-            final Function<String, M> menuItemFactory) {
-        return (String topLevelMenuItemName)->
-            menuItemFactory.apply(
-                replaceNullWithUserProfileName(commonContext, topLevelMenuItemName));
-    }
-    
-    private String replaceNullWithUserProfileName(
-            final IsisWebAppCommonContext commonContext, 
-            final String x) {
-        if(x==null) {
-            val userProfile = commonContext
-                    .lookupServiceElseFail(UserProfileUiModelProvider.class)
-                    .getUserProfile();
-            return userProfile.getUserProfileName();
-        }
-        return x; 
     }
     
 
