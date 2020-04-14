@@ -60,7 +60,7 @@ public class FeaturedTypesMenu {
     }
 
     @Action
-    @ActionLayout(cssClassFa="fa-clock-o")
+    @ActionLayout(cssClassFa="fa-clock")
     public TemporalDemo temporals(){
         val demo = factoryService.viewModel(TemporalDemo.class);
         demo.initDefaults();  

@@ -43,6 +43,12 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-webapp</artifactId>
         </dependency>
+        
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>font-awesome</artifactId>
+			<version>5.13.0</version> <!-- must correspond to entry in /viewer/common/.../FontAwesomeDecorator.java -->
+		</dependency>
 	
 	<!-- TEST DEPENDENCIES -->
         <dependency>

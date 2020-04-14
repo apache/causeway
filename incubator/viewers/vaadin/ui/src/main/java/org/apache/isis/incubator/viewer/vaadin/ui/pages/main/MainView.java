@@ -40,6 +40,7 @@ import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.action.ActionVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableView;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.object.ObjectFormView;
+import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeDecorator;
 import org.apache.isis.viewer.common.model.header.HeaderUiModelProvider;
 
 import lombok.val;
@@ -77,8 +78,8 @@ implements BeforeEnterObserver {
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
 
-        UI.getCurrent().getPage().addStyleSheet("context://"
-                + "webjars/font-awesome/4.7.0/css/font-awesome.min.css");
+        UI.getCurrent().getPage().addStyleSheet("context://webjars/" 
+                + FontAwesomeDecorator.FONTAWESOME_RESOURCE);
         
         setPrimarySection(Section.NAVBAR);
 

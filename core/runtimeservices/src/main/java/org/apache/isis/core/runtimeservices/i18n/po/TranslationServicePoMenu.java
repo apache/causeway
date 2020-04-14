@@ -117,7 +117,7 @@ public class TranslationServicePoMenu {
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(
-            cssClassFa = "fa-pencil"
+            cssClassFa = "fa-pencil-alt"
             )
     @MemberOrder(sequence="500.700.3")
     public void switchToWritingTranslations() {
