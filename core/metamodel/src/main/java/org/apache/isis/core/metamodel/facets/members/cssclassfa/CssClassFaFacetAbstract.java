@@ -17,64 +17,115 @@
 
 package org.apache.isis.core.metamodel.facets.members.cssclassfa;
 
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
+import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Sets;
-import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.commons.internal.functions._Predicates;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;
 
-public class CssClassFaFacetAbstract extends SingleStringValueFacetAbstract implements CssClassFaFacet {
+import lombok.Getter;
+import lombok.val;
+
+public class CssClassFaFacetAbstract extends FacetAbstract implements CssClassFaFacet {
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
-
-    private CssClassFaPosition position;
-
-    public CssClassFaFacetAbstract(final String value, final CssClassFaPosition position,
+    private static final String FIXED_WIDTH = "fa-fw";
+    private static final String DEFAULT_PRIMARY_PREFIX = "fa";
+    
+    
+    @Getter(onMethod = @__(@Override)) private CssClassFaPosition position;
+    private List<String> cssClasses; // serializable list implementation
+    
+    public CssClassFaFacetAbstract(
+            final String value, 
+            final CssClassFaPosition position,
             final FacetHolder holder) {
-        super(type(), holder, sanitize(value));
+        
+        super(CssClassFaFacet.class, holder);
         this.position = position;
+        this.cssClasses = parse(value);
     }
 
     @Override
-    public CssClassFaPosition getPosition() {
-        return position;
+    public Stream<String> streamCssClasses() {
+        return _NullSafe.stream(cssClasses);
     }
-
+    
+    // -- HELPER
+    
     /**
-     * Adds the optional <em>fa</em> and <em>fa-fw</em> FontAwesome classes
-     *
-     * @param value The original CSS classes defined with {@literal @}
-     *            {@link org.apache.isis.applib.annotation.CssClassFa CssClassFa}
+     * Parses given value for CSS classes (space separated).
+     * <ul>
+     * <li> 
+     * Adds the optional <em>fa-fw</em> fixed width FontAwesome class, if not provided.
+     * <li>
+     * Adds the default <em>fa</em> FontAwesome prefix class, if no other prefix class provided (fab, far or fas).
+     * </ul>
+     * @param parsedClasses
      * @return The original CSS classes plus <em>fa</em> and <em>fa-fw</em> if not already provided
      */
-    static String sanitize(final String value) {
-        final Stream<String> classes = _Strings.splitThenStream(value.trim(), WHITESPACE);
-        final Set<String> cssClassesSet = _Sets.newLinkedHashSet();
-        cssClassesSet.add("fa");
-        cssClassesSet.add("fa-fw");
-        classes.forEach(cssClass->cssClassesSet.add(faPrefix(cssClass)));
-        return cssClassesSet.stream().collect(Collectors.joining(" ")).trim();
+    static List<String> parse(String value) {
+        val cssClassesSet = _Sets.<String>newLinkedHashSet(); // preserved order
+        _Strings.splitThenStreamTrimmed(value.trim(), WHITESPACE)
+        .map(CssClassFaFacetAbstract::faPrefix)
+        .forEach(cssClass->cssClassesSet.add(faPrefix(cssClass)));
+        
+        return sanitize(cssClassesSet);
+    }
+
+    private static List<String> sanitize(final Set<String> parsedClasses) {
+        val cssClasses = _Lists.<String>newArrayList();
+        
+        val primaryPrefix = parsedClasses.stream()
+        .filter(CssClassFaFacetAbstract::isFaPrimaryPrefix)
+        .findFirst()
+        .orElse(DEFAULT_PRIMARY_PREFIX);
+        
+        cssClasses.add(primaryPrefix);
+        cssClasses.add(FIXED_WIDTH);
+        
+        parsedClasses.stream()
+        .filter(_Predicates.not(CssClassFaFacetAbstract::isFaPrimaryPrefix))
+        .filter(_Predicates.not(CssClassFaFacetAbstract::isFixedWidth))
+        .forEach(cssClasses::add);
+        
+        return cssClasses;
     }
 
     private static String faPrefix(final String cssClass) {
-        return cssClass.startsWith("fa-") || "fa".equals(cssClass)
+        return cssClass.startsWith("fa-") || isFaPrimaryPrefix(cssClass)
                 ? cssClass
                         : "fa-" + cssClass;
     }
-
-    public static Class<? extends Facet> type() {
-        return CssClassFaFacet.class;
+    
+    private static boolean isFixedWidth(final String cssClass) {
+        return FIXED_WIDTH.equals(cssClass);
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("position", position);
+    private static boolean isFaPrimaryPrefix(final String cssClass) {
+        if(_NullSafe.isEmpty(cssClass)) {
+            return false;
+        }
+        switch(cssClass) {
+        case "fa":
+        case "far":
+        case "fab":
+        case "fas":
+            return true;
+        default:
+            return false;
+        }
+        
     }
+
+
+    
 }

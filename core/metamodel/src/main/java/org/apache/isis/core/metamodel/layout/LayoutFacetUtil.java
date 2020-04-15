@@ -105,7 +105,7 @@ public class LayoutFacetUtil {
 
         val cssClassFaFacet = facetHolder.getFacet(CssClassFaFacet.class);
         if (isDoOp(cssClassFaFacet)) {
-            final String cssClassFa = cssClassFaFacet.value();
+            final String cssClassFa = cssClassFaFacet.asSpaceSeparated();
             if(!_Strings.isNullOrEmpty(cssClassFa)) {
                 hasCssClassFa.setCssClassFa(cssClassFa);
                 hasCssClassFa.setCssClassFaPosition(cssClassFaFacet.getPosition());

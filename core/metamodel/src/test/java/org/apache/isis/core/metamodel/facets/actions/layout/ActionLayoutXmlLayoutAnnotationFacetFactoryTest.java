@@ -153,7 +153,7 @@ public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFac
             assertThat(facet, is(notNullValue()));
             assertThat(facet, is(instanceOf(CssClassFaFacetForActionLayoutAnnotation.class)));
             CssClassFaFacetForActionLayoutAnnotation classFaFacetForActionLayoutAnnotation = (CssClassFaFacetForActionLayoutAnnotation) facet;
-            assertThat(classFaFacetForActionLayoutAnnotation.value(), is(equalTo("fa fa-fw fa-font-awesome")));
+            assertThat(classFaFacetForActionLayoutAnnotation.asSpaceSeparated(), is(equalTo("fa fa-fw fa-font-awesome")));
             assertThat(classFaFacetForActionLayoutAnnotation.getPosition(), is(CssClassFaPosition.LEFT));
         }
 
@@ -188,7 +188,7 @@ public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFac
             assertThat(facet, is(notNullValue()));
             assertThat(facet, is(instanceOf(CssClassFaFacetForActionLayoutAnnotation.class)));
             CssClassFaFacetForActionLayoutAnnotation classFaFacetForActionLayoutAnnotation = (CssClassFaFacetForActionLayoutAnnotation) facet;
-            assertThat(classFaFacetForActionLayoutAnnotation.value(), is(equalTo("fa fa-fw fa-font-awesome")));
+            assertThat(classFaFacetForActionLayoutAnnotation.asSpaceSeparated(), is(equalTo("fa fa-fw fa-font-awesome")));
             assertThat(classFaFacetForActionLayoutAnnotation.getPosition(), is(CssClassFaPosition.RIGHT));
         }
 

@@ -298,7 +298,7 @@ public interface ObjectAction extends ObjectMember {
 
         public static String cssClassFaFor(final ObjectAction action) {
             final CssClassFaFacet cssClassFaFacet = action.getFacet(CssClassFaFacet.class);
-            return cssClassFaFacet != null ? cssClassFaFacet.value() : null;
+            return cssClassFaFacet != null ? cssClassFaFacet.asSpaceSeparated() : null;
         }
 
         public static CssClassFaPosition cssClassFaPositionFor(final ObjectAction action) {

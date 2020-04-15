@@ -50,7 +50,7 @@ public class Object_rebuildMetamodel {
             )
     @ActionLayout(
             contributed = Contributed.AS_ACTION,
-            cssClassFa = "fa-refresh",
+            cssClassFa = "fa-sync",
             position = ActionLayout.Position.PANEL
             )
     @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "800.1")

@@ -293,7 +293,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 assertTrue(facet instanceof CssClassFaFacetForDomainObjectLayoutAnnotation);
 
                 final CssClassFaFacetForDomainObjectLayoutAnnotation facetImpl = (CssClassFaFacetForDomainObjectLayoutAnnotation) facet;
-                assertThat(facetImpl.value(), equalTo("fa fa-fw fa-foo"));
+                assertThat(facetImpl.asSpaceSeparated(), equalTo("fa fa-fw fa-foo"));
                 assertThat(facetImpl.getPosition(), is(CssClassFaPosition.RIGHT));
 
                 expectNoMethodsRemoved();
@@ -327,7 +327,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 assertTrue(facet instanceof CssClassFaFacetForViewModelLayoutAnnotation);
 
                 final CssClassFaFacetForViewModelLayoutAnnotation facetImpl = (CssClassFaFacetForViewModelLayoutAnnotation) facet;
-                assertThat(facetImpl.value(), equalTo("fa fa-fw fa-foo"));
+                assertThat(facetImpl.asSpaceSeparated(), equalTo("fa fa-fw fa-foo"));
                 assertThat(facetImpl.getPosition(), is(CssClassFaPosition.RIGHT));
 
                 expectNoMethodsRemoved();

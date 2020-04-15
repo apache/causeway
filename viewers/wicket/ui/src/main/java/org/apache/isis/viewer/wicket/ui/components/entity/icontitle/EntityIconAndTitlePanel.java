@@ -128,7 +128,7 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
             } else {
                 Label dummy = new Label(ID_ENTITY_FONT_AWESOME, "");
                 link.addOrReplace(dummy);
-                dummy.add(new CssClassAppender(cssClassFaFacet.value() + " fa-2x"));
+                dummy.add(new CssClassAppender(cssClassFaFacet.asSpaceSeparated("fa-2x")));
                 Components.permanentlyHide(link, ID_ENTITY_ICON);
             }
 

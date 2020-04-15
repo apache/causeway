@@ -29,17 +29,17 @@ public class CssClassFaFacetAbstractTest {
 
         @Test
         public void present() throws Exception {
-            assertThat(CssClassFaFacetAbstract.sanitize("fa foo"), is("fa fa-fw fa-foo"));
+            assertThat(CssClassFaFacetAbstract.parse("fab foo").toString(), is("[fab, fa-fw, fa-foo]"));
         }
 
         @Test
         public void presentAtEnd() throws Exception {
-            assertThat(CssClassFaFacetAbstract.sanitize("foo fa "), is("fa fa-fw fa-foo"));
+            assertThat(CssClassFaFacetAbstract.parse("foo far ").toString(), is("[far, fa-fw, fa-foo]"));
         }
 
         @Test
         public void missing() throws Exception {
-            assertThat(CssClassFaFacetAbstract.sanitize("foo"), is("fa fa-fw fa-foo"));
+            assertThat(CssClassFaFacetAbstract.parse("foo").toString(), is("[fa, fa-fw, fa-foo]"));
         }
     }
 }
