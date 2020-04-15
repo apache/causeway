@@ -18,25 +18,23 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.ui.components.object;
 
-import java.io.ByteArrayInputStream;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.server.InputStreamFactory;
-import com.vaadin.flow.server.StreamResource;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentMapperVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableView;
 
 import lombok.val;
@@ -56,6 +54,7 @@ public class ObjectFormView extends VerticalLayout {
         val title = specification.getTitle(null, managedObject);
         add(new H1(title));
 
+        UiComponentMapperVaa uiComponentMapper = UiComponentMapperVaa.createDefault(); // TODO should eventually be managed by spring  
         val objectAssociations = specification
                 .streamAssociations(Contributed.INCLUDED)
                 .filter(ObjectMember::isPropertyOrCollection)
@@ -63,38 +62,20 @@ public class ObjectFormView extends VerticalLayout {
         val formLayout = new FormLayout();
         val tablesLayout = new VerticalLayout();
         objectAssociations.forEach(objectAssociation -> {
-            val assocObject = objectAssociation.get(managedObject);
-            if (assocObject == null) {
-                formLayout.add(createErrorField(objectAssociation, "assoc. object is null: "));
-                return;
-            }
-            val propSpec = assocObject.getSpecification();
-            switch (propSpec.getBeanSort()) {
-            case VALUE: {
-                formLayout.add(createValueField(objectAssociation, assocObject));
-                break;
-            }
-            case COLLECTION: {
+
+            val assocSpec = objectAssociation.getSpecification(); 
+            val assocObject = Optional.ofNullable(objectAssociation.get(managedObject))
+                    .orElse(ManagedObject.of(assocSpec, null));
+
+            if(objectAssociation.getFeatureType().isCollection()) {
                 tablesLayout.add(new Label(objectAssociation.getName()));
                 tablesLayout.add(createCollectionComponent(objectAssociation, assocObject));
-                break;
+            } else {
+                val uiComponentCreateRequest = UiComponentMapperVaa.Request.of(assocObject, objectAssociation);
+                val uiComponent = uiComponentMapper.componentFor(uiComponentCreateRequest);
+                formLayout.add(uiComponent);
             }
-            case VIEW_MODEL:
-            case ENTITY:
-            case MANAGED_BEAN_CONTRIBUTING:
-            case MANAGED_BEAN_NOT_CONTRIBUTING:
-            case MIXIN:
-            case UNKNOWN:
-            default: 
-                val stringValue = propSpec.toString();
-                val textField = new TextField(stringValue);
-                textField.setLabel(
-                        "Unhandled kind assoc.: " + propSpec.getBeanSort() + " " + objectAssociation.getName());
-                textField.setValue(propSpec.toString());
-                textField.setInvalid(true);
-                formLayout.add(textField);
-                break;
-            }
+            
         });
 
         add(formLayout);
@@ -106,22 +87,9 @@ public class ObjectFormView extends VerticalLayout {
     
     // -- HELPER
 
-    private Component createErrorField(final ObjectAssociation objectAssociation, final String error) {
-        return createErrorField("Error:" + objectAssociation.getName(),
-                error + objectAssociation.toString());
-    }
-
-    private Component createErrorField(final String label, final String message) {
-        val textField = new TextField();
-        textField.setLabel(label);
-        textField.setValue(message);
-        return textField;
-    }
-
     private Component createCollectionComponent(
             final ObjectAssociation objectAssociation,
-            final ManagedObject assocObject
-    ) {
+            final ManagedObject assocObject) {
 
         val labelLiteral = "Collection: " + objectAssociation.getName();
         val pojo = assocObject.getPojo();
@@ -143,35 +111,5 @@ public class ObjectFormView extends VerticalLayout {
         return textField;
     }
 
-    private Component createValueField(final ObjectAssociation association, final ManagedObject assocObject) {
-        // TODO how to handle object type / id
 
-        // How to handle blobs?
-        //        final BlobValueSemanticsProvider blobValueFacet = association.getFacet(BlobValueSemanticsProvider.class);
-        //        if (blobValueFacet != null) {
-        //            final java.awt.Image aByte = blobValueFacet.getParser(assocObject);
-        //            new Image(aByte);
-        //            return null;
-        //        }
-        val description = assocObject.getSpecification().streamFacets()
-                .map(facet -> facet.getClass().getName())
-                .collect(Collectors.joining("\n"));
-
-        val textField = createTextField(association, assocObject);
-        //        Tooltips.getCurrent().setTooltip(textField, description);
-        return textField;
-    }
-
-    private Image convertToImage(final byte[] imageData) {
-        val streamResource = new StreamResource("isr",
-                (InputStreamFactory) () -> new ByteArrayInputStream(imageData));
-        return new Image(streamResource, "photo");
-    }
-
-    private TextField createTextField(final ObjectAssociation association, final ManagedObject assocObject) {
-        val textField = new TextField();
-        textField.setLabel(association.getName());
-        textField.setValue(assocObject.titleString(null));
-        return textField;
-    }
 }

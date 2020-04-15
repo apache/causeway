@@ -127,9 +127,8 @@ public class TableView extends VerticalLayout {
         .forEach(property -> {
             
             objectGrid.addColumn(targetObject -> {
-                log.info("about to get property value for property {}", 
-                        property.getId());
-                return stringify(property, targetObject);
+                log.debug("about to get property value for property {}", property.getId());
+                return stringifyPropertyValue(property, targetObject);
             })
             .setHeader(property.getName());
         });
@@ -147,7 +146,7 @@ public class TableView extends VerticalLayout {
         return Optional.of(elementSpec);
     }
     
-    private String stringify(
+    private String stringifyPropertyValue(
             ObjectAssociation property, 
             ManagedObject targetObject) {
         try {

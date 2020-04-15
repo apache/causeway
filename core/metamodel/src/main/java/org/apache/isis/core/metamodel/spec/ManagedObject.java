@@ -164,16 +164,16 @@ public interface ManagedObject {
     static final class SimpleManagedObject implements ManagedObject {
         
         public static ManagedObject identified(
-                @NonNull final ObjectSpecification spec, 
-                final Object pojo, 
-                @NonNull final RootOid rootOid) {
+                @NonNull  final ObjectSpecification spec, 
+                @Nullable final Object pojo, 
+                @NonNull  final RootOid rootOid) {
             val managedObject = SimpleManagedObject.of(spec, pojo);
             managedObject.rootOidLazy.set(Optional.of(rootOid));
             return managedObject;
         }
         
         @NonNull private final ObjectSpecification specification;
-        @NonNull private final Object pojo;
+        @Nullable private final Object pojo;
 
         public Optional<RootOid> getRootOid() {
             return rootOidLazy.get();
@@ -334,7 +334,8 @@ public interface ManagedObject {
      * @return
      */
     public static ManagedObject of(ObjectSpecification specification, Object pojo) {
-        if(!specification.getCorrespondingClass().isAssignableFrom(pojo.getClass())) {
+        // can do this check only when the pojo is not null, otherwise is always considered valid
+        if(pojo!=null && !specification.getCorrespondingClass().isAssignableFrom(pojo.getClass())) {
             throw _Exceptions.illegalArgument(
                     "Pojo not compatible with ObjectSpecification, " +
                     "objectSpec.correspondingClass = %s, " +
