@@ -28,7 +28,6 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
-import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeDecorator;
 import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeUiModel;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipDecorator;
@@ -74,7 +73,7 @@ public class Decorators {
 
                 val faIcon = new Span();
 
-                _Strings.splitThenStreamTrimmed(fontAwesome.getCssClass(), " ")
+                fontAwesome.streamCssClasses()
                 .forEach(faIcon::addClassName);
 
                 return CssClassFaPosition.isLeftOrUnspecified(fontAwesome.getPosition())

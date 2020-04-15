@@ -44,14 +44,21 @@ public interface CssClassFaFacet extends Facet {
     Stream<String> streamCssClasses();
 
     /**
+     * @return space separated (distinct) CSS-class strings
+     */
+    default String asSpaceSeparated() {
+        return streamCssClasses()
+                .collect(Collectors.joining(" "));
+    }
+    
+    /**
      * @param additionalClasses - trimmed and filtered by non-empty, then added to the resulting string 
      * @return space separated (distinct) CSS-class strings
      */
-    default String asSpaceSeparated(String ... additionalClasses) {
+    default String asSpaceSeparatedWithAdditional(String ... additionalClasses) {
         
         if(_NullSafe.size(additionalClasses)==0) {
-            return streamCssClasses()
-                    .collect(Collectors.joining(" "));    
+            return asSpaceSeparated(); 
         }
         
         return Stream.concat(

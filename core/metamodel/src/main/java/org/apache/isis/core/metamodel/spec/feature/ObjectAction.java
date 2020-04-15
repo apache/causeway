@@ -33,7 +33,6 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.commons.collections.Can;
@@ -296,14 +295,9 @@ public interface ObjectAction extends ObjectMember {
             return layoutFacet != null ? layoutFacet.position() : ActionLayout.Position.BELOW;
         }
 
-        public static String cssClassFaFor(final ObjectAction action) {
-            final CssClassFaFacet cssClassFaFacet = action.getFacet(CssClassFaFacet.class);
-            return cssClassFaFacet != null ? cssClassFaFacet.asSpaceSeparated() : null;
-        }
-
-        public static CssClassFaPosition cssClassFaPositionFor(final ObjectAction action) {
-            CssClassFaFacet facet = action.getFacet(CssClassFaFacet.class);
-            return facet != null ? facet.getPosition() : CssClassFaPosition.LEFT;
+        public static Optional<CssClassFaFacet> cssClassFaFacetFor(final ObjectAction action) {
+            return Optional.ofNullable(action)
+            .map(a->a.getFacet(CssClassFaFacet.class));
         }
 
         public static String cssClassFor(final ObjectAction action, final ManagedObject objectAdapter) {
