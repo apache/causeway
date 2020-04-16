@@ -18,6 +18,7 @@
 package org.apache.isis.core.metamodel.facets.members.cssclassfa;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -57,6 +58,13 @@ public class CssClassFaFacetAbstract extends FacetAbstract implements CssClassFa
     @Override
     public Stream<String> streamCssClasses() {
         return _NullSafe.stream(cssClasses);
+    }
+    
+    @Override 
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("position", position);
+        attributeMap.put("classes", asSpaceSeparated());
     }
     
     // -- HELPER
