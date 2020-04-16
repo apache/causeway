@@ -16,23 +16,41 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.vaadin.ui.components.debug;
+package org.apache.isis.incubator.viewer.vaadin.ui.components.clob;
 
-import java.util.Map;
+import javax.annotation.Nullable;
 
-import org.apache.isis.core.commons.internal.collections._Maps;
+import com.vaadin.flow.component.customfield.CustomField;
 
-import lombok.Value;
+import org.apache.isis.applib.value.Clob;
 
-@Value(staticConstructor = "of")
-public class DebugUiModel {
+public class ClobField extends CustomField<Clob> {
 
-    private final String summaryText;
-    private final Map<String, String> keyValuePairs = _Maps.newLinkedHashMap();
+    private static final long serialVersionUID = 1L;
     
-    public DebugUiModel withProperty(String key, String value) {
-        keyValuePairs.put(key, value);
-        return this;
+    private Clob clob;
+
+    public ClobField(String label) {
+        super();
+        setLabel(label);
+        // ...
     }
     
+    @Override
+    protected Clob generateModelValue() {
+        return clob;
+    }
+
+    @Override
+    protected void setPresentationValue(@Nullable Clob clob) {
+        this.clob = clob;
+        
+        if(clob==null) {
+            // ...
+            return;
+        }
+        
+        // ...
+    }
+
 }

@@ -16,23 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.vaadin.ui.components;
-
-import com.vaadin.flow.component.Component;
+package org.apache.isis.viewer.common.model.binding;
 
 import org.apache.isis.core.commons.handler.ChainOfResponsibility;
-import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 
 import lombok.NonNull;
 import lombok.Value;
-import lombok.val;
 
-public interface UiComponentMapperVaa {
+public interface UiComponentFactory<T> {
     
-    Component componentFor(UiComponentMapperVaa.Request request);
+    T componentFor(UiComponentFactory.Request request);
     
     // -- REQUEST (VALUE) TYPE
     
@@ -43,31 +38,11 @@ public interface UiComponentMapperVaa {
         @NonNull private final ObjectFeature objectFeature;
     }
     
+    
     // -- HANDLER
     
-    static interface Handler 
-    extends ChainOfResponsibility.Handler<UiComponentMapperVaa.Request, Component> {
+    static interface Handler<T> 
+    extends ChainOfResponsibility.Handler<UiComponentFactory.Request, T> {
     }
-
-    // -- FACTORY
-    
-    public static UiComponentMapperVaa createDefault() {
-        
-        val chainOfHandlers = _Lists.of(
-                UiComponentMapperVaa_builtinHandlers.getClob(),
-                UiComponentMapperVaa_builtinHandlers.getBlob(),
-                UiComponentMapperVaa_builtinHandlers.getText(),
-                UiComponentMapperVaa_builtinHandlers.getOther());
-        
-        val chainOfRespo = ChainOfResponsibility.of(chainOfHandlers);
-        
-        return request -> chainOfRespo
-                .handle(request)
-                .orElseThrow(()->_Exceptions.unrecoverableFormatted(
-                        "Component Mapper failed to handle request %s", request));
-        
-    }
-    
-
     
 }

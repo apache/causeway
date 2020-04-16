@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.action.ActionVaa;
+import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableView;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.object.ObjectFormView;
 import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeDecorator;
@@ -60,6 +61,7 @@ implements BeforeEnterObserver {
     private static final long serialVersionUID = 1L;
     
     private final transient IsisWebAppCommonContext commonContext;
+    private final transient UiComponentFactoryVaa uiComponentFactory;
     private final transient HeaderUiModelProvider headerUiModelProvider;
     private Div pageContent = new Div();
     
@@ -69,9 +71,11 @@ implements BeforeEnterObserver {
     @Inject
     public MainView(
             final MetaModelContext metaModelContext,
+            final UiComponentFactoryVaa uiComponentFactory,
             final HeaderUiModelProvider headerUiModelProvider) {
 
         this.commonContext = IsisWebAppCommonContext.of(metaModelContext);
+        this.uiComponentFactory = uiComponentFactory;
         this.headerUiModelProvider = headerUiModelProvider;
     }
     
@@ -111,7 +115,7 @@ implements BeforeEnterObserver {
         if (result.getSpecification().isParentedOrFreeCollection()) {
             pageContent.add(TableView.fromCollection(result));
         } else {
-            pageContent.add(new ObjectFormView(result));
+            pageContent.add(new ObjectFormView(uiComponentFactory, result));
         };
     }
 

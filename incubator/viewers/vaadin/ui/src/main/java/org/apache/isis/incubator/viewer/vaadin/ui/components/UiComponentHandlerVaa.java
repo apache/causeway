@@ -16,23 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.vaadin.ui.components.debug;
+package org.apache.isis.incubator.viewer.vaadin.ui.components;
 
-import java.util.Map;
+import com.vaadin.flow.component.Component;
 
-import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
 
-import lombok.Value;
+public interface UiComponentHandlerVaa extends UiComponentFactory.Handler<Component> {
 
-@Value(staticConstructor = "of")
-public class DebugUiModel {
-
-    private final String summaryText;
-    private final Map<String, String> keyValuePairs = _Maps.newLinkedHashMap();
-    
-    public DebugUiModel withProperty(String key, String value) {
-        keyValuePairs.put(key, value);
-        return this;
-    }
-    
 }

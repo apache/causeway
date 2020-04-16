@@ -34,9 +34,11 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentMapperVaa;
+import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableView;
+import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
 
+import lombok.NonNull;
 import lombok.val;
 
 public class ObjectFormView extends VerticalLayout {
@@ -44,17 +46,18 @@ public class ObjectFormView extends VerticalLayout {
     private static final long serialVersionUID = 1L;
     
     private static final String NULL_LITERAL = "<NULL>";
-
+    
     /**
      * Constructs given domain object's view, with all its visible members and actions.
      * @param managedObject - domain object
      */
-    public ObjectFormView(final ManagedObject managedObject) {
+    public ObjectFormView(
+            @NonNull final UiComponentFactoryVaa uiComponentFactory,
+            @NonNull final ManagedObject managedObject) {
         val specification = managedObject.getSpecification();
         val title = specification.getTitle(null, managedObject);
         add(new H1(title));
 
-        UiComponentMapperVaa uiComponentMapper = UiComponentMapperVaa.createDefault(); // TODO should eventually be managed by spring  
         val objectAssociations = specification
                 .streamAssociations(Contributed.INCLUDED)
                 .filter(ObjectMember::isPropertyOrCollection)
@@ -71,8 +74,8 @@ public class ObjectFormView extends VerticalLayout {
                 tablesLayout.add(new Label(objectAssociation.getName()));
                 tablesLayout.add(createCollectionComponent(objectAssociation, assocObject));
             } else {
-                val uiComponentCreateRequest = UiComponentMapperVaa.Request.of(assocObject, objectAssociation);
-                val uiComponent = uiComponentMapper.componentFor(uiComponentCreateRequest);
+                val uiComponentCreateRequest = UiComponentFactory.Request.of(assocObject, objectAssociation);
+                val uiComponent = uiComponentFactory.componentFor(uiComponentCreateRequest);
                 formLayout.add(uiComponent);
             }
             
