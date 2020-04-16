@@ -22,7 +22,7 @@ import com.vaadin.flow.component.customfield.CustomField;
 import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.details.DetailsVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.textfield.TextArea;
 
 import lombok.val;
 
@@ -59,11 +59,11 @@ public class DebugField extends CustomField<DebugUiModel> {
         formLayout.removeAll();
         
         model.getKeyValuePairs().forEach((k, v)->{
-            val textField = new TextField();
-            textField.setLabel(k);
-            textField.setValue(v);
-            textField.setInvalid(true);
-            formLayout.add(textField);
+            val textArea = new TextArea();
+            textArea.setLabel(k);
+            textArea.setValue(v);
+            textArea.setInvalid(true);
+            formLayout.add(textArea);
         });
         
     }

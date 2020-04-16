@@ -23,6 +23,9 @@ import com.vaadin.flow.component.textfield.TextField;
 
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
+import org.apache.isis.core.commons.internal.collections._Maps;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facets.value.blobs.BlobValueFacet;
 import org.apache.isis.core.metamodel.facets.value.clobs.ClobValueFacet;
 import org.apache.isis.core.metamodel.facets.value.string.StringValueFacet;
@@ -115,7 +118,9 @@ final class UiComponentMapperVaa_builtinHandlers {
             
             spec.streamFacets()
             .forEach(facet -> {
-                debugUiModel.withProperty(facet.facetType().getSimpleName(), facet.getClass().getSimpleName());
+                debugUiModel.withProperty(
+                        facet.facetType().getSimpleName(), 
+                        summarize(facet));
             });
             
             
@@ -123,6 +128,20 @@ final class UiComponentMapperVaa_builtinHandlers {
             uiField.setValue(debugUiModel);
             return uiField;
         }
+        
+        private String summarize(Facet facet) {
+            val sb = new StringBuilder();
+            sb.append(facet.getClass().getSimpleName());
+            if(facet instanceof FacetAbstract) {
+                val attributeMap = _Maps.<String, Object>newTreeMap();
+                ((FacetAbstract)facet).appendAttributesTo(attributeMap);
+                attributeMap.forEach((k, v)->{
+                    sb.append("\n • ").append(k).append(": ").append(v);    
+                });
+            }
+            return sb.toString();
+        }
+        
 
 
     }
