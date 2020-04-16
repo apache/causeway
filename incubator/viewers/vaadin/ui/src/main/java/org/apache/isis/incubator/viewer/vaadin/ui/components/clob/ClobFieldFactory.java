@@ -27,6 +27,7 @@ import org.apache.isis.viewer.common.model.binding.UiComponentFactory.Request;
 
 import lombok.val;
 
+@org.springframework.stereotype.Component
 public class ClobFieldFactory implements UiComponentHandlerVaa {
 
     @Override
