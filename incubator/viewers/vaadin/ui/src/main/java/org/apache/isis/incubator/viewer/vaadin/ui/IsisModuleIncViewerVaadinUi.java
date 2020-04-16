@@ -29,6 +29,7 @@ import org.apache.isis.incubator.viewer.vaadin.ui.auth.VaadinAuthenticationHandl
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.blob.BlobFieldFactory;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.clob.ClobFieldFactory;
+import org.apache.isis.incubator.viewer.vaadin.ui.components.markup.MarkupFieldFactory;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.other.FallbackFieldFactory;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.text.TextFieldFactory;
 import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
@@ -48,6 +49,7 @@ import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
         // Component Factories
         BlobFieldFactory.class,
         ClobFieldFactory.class,
+        MarkupFieldFactory.class,
         TextFieldFactory.class,
         FallbackFieldFactory.class,
         
