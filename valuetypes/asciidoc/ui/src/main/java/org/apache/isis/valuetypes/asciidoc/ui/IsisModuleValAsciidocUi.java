@@ -22,13 +22,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.valuetypes.asciidoc.applib.IsisModuleValAsciidocApplib;
-import org.apache.isis.valuetypes.asciidoc.ui.components.AsciiDocPanelFactoriesForWicket;
+import org.apache.isis.valuetypes.asciidoc.ui.components.vaa.AsciiDocFieldFactoryVaa;
+import org.apache.isis.valuetypes.asciidoc.ui.components.wkt.AsciiDocPanelFactoriesWkt;
 
 @Configuration
 @Import({
     IsisModuleValAsciidocApplib.class,
-    AsciiDocPanelFactoriesForWicket.Parented.class,
-    AsciiDocPanelFactoriesForWicket.Standalone.class
+    AsciiDocFieldFactoryVaa.class,
+    AsciiDocPanelFactoriesWkt.Parented.class,
+    AsciiDocPanelFactoriesWkt.Standalone.class,
 })
 public class IsisModuleValAsciidocUi {
 }

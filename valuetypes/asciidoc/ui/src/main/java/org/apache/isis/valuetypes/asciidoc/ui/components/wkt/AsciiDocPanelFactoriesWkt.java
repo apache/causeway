@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.valuetypes.asciidoc.ui.components;
+package org.apache.isis.valuetypes.asciidoc.ui.components.wkt;
 
 import org.springframework.stereotype.Component;
 
@@ -33,7 +33,7 @@ import lombok.val;
  * the {@link AsciiDoc} value-type which requires client-side java-script to be
  * executed to enable syntax highlighting
  */
-public class AsciiDocPanelFactoriesForWicket {
+public class AsciiDocPanelFactoriesWkt {
 
     // -- PARENTED
 
@@ -48,7 +48,7 @@ public class AsciiDocPanelFactoriesForWicket {
         @Override
         protected MarkupComponentFactory getMarkupComponentFactory() {
             return (id, model) -> {
-                val markupComponent = new AsciiDocComponent(id, model);
+                val markupComponent = new AsciiDocComponentWkt(id, model);
                 markupComponent.setEnabled(false);
                 return markupComponent;    
             };
@@ -70,7 +70,7 @@ public class AsciiDocPanelFactoriesForWicket {
         @Override
         protected MarkupComponentFactory getMarkupComponentFactory() {
             return (id, model) -> {
-                val markupComponent = new AsciiDocComponent(id, model);
+                val markupComponent = new AsciiDocComponentWkt(id, model);
                 return markupComponent;    
             };
         }

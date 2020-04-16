@@ -45,6 +45,13 @@
             <artifactId>isis-viewer-wicket-ui</artifactId>
             <scope>provided</scope>
         </dependency>
+        
+        <dependency>
+			<groupId>org.apache.isis.incubator.viewer</groupId>
+            <artifactId>isis-viewer-vaadin-ui</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
 
 		<!-- provides a ASCII-DOC parser -->
 		<dependency>
@@ -117,6 +124,13 @@
 			<version>0.9.11</version>
 		</dependency>
 		<!-- END OF ASCII-DOC -->
+		
+<!-- TODO instead of providing prism resources with our class path, we should switch to the webjars version -->		
+<!-- 		<dependency> -->
+<!-- 		    <groupId>org.webjars.bower</groupId> -->
+<!-- 		    <artifactId>prism</artifactId> -->
+<!-- 		    <version>1.16.0</version> -->
+<!-- 		</dependency> -->
 
 	</dependencies>
 

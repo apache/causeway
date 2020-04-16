@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.valuetypes.asciidoc.ui.components;
+package org.apache.isis.valuetypes.asciidoc.ui.components.wkt;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
@@ -24,20 +24,19 @@ import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
-import org.apache.isis.core.commons.internal.base._Lazy;
+import org.apache.isis.valuetypes.asciidoc.ui.components.prism.PrismResources;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent_reloadJs;
 
 import lombok.val;
 
-public class AsciiDocComponent extends MarkupComponent {
+public class AsciiDocComponentWkt extends MarkupComponent {
 
     private static final long serialVersionUID = 1L;
 
-    public AsciiDocComponent(String id, IModel<?> model) {
+    public AsciiDocComponentWkt(String id, IModel<?> model) {
         super(id, model);
     }
 
@@ -45,21 +44,19 @@ public class AsciiDocComponent extends MarkupComponent {
     public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
         val htmlContent = extractHtmlOrElse(getDefaultModelObject(), "" /*fallback*/);
         replaceComponentTagBody(markupStream, openTag, 
-                MarkupComponent_reloadJs.decorate(htmlContent, jsRef.get()));
+                MarkupComponent_reloadJs.decorate(htmlContent, jsRef()));
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
 
-        response.render(CssHeaderItem.forReference(
-                new CssResourceReference(AsciiDocComponent.class, "css/prism.css")));
-
-        response.render(JavaScriptHeaderItem.forReference(jsRef.get()));
-
+        response.render(CssHeaderItem.forReference(PrismResources.getCssResourceReferenceWkt()));
+        response.render(JavaScriptHeaderItem.forReference(jsRef()));
     }
 
-    private static final _Lazy<JavaScriptResourceReference> jsRef = _Lazy.threadSafe(()->
-    new JavaScriptResourceReference(AsciiDocComponent.class, "js/prism1.14.js"));
+    private static final JavaScriptResourceReference jsRef() {
+        return PrismResources.getJsResourceReferenceWkt();
+    }
 
 }
