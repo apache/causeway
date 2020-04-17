@@ -58,5 +58,5 @@ public class AsciiDocComponentWkt extends MarkupComponent {
     private static final ResourceReference jsRef() {
         return PrismResources.getJsResourceReferenceWkt();
     }
-
+    
 }

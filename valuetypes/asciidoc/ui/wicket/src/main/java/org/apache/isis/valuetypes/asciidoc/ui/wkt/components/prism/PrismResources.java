@@ -30,11 +30,11 @@ public final class PrismResources {
 
 
     @Getter(lazy = true) private static final ResourceReference cssResourceReferenceWkt =
-            //new ContextRelativeResourceReference("webjars/prism/1.16.0/themes/prism.css", false);
-            new CssResourceReference(PrismResources.class, "css/prism.css");
+            //new WebjarsCssResourceReference("prism/1.16.0/themes/prism.css");
+            new CssResourceReference(PrismResources.class, "css/prism1.20.css");
     
     @Getter(lazy = true) private static final ResourceReference jsResourceReferenceWkt =
-            //new ContextRelativeResourceReference("webjars/prism/1.16.0/prism.js", false);
-            new JavaScriptResourceReference(PrismResources.class, "js/prism1.14.js");
+            //new WebjarsJavaScriptResourceReference("prism/1.16.0/components/prism-java.min.js");
+            new JavaScriptResourceReference(PrismResources.class, "js/prism1.20.js");
     
 }

@@ -28,12 +28,12 @@ public final class PrismResourcesVaa {
 
     @Getter(lazy = true) private static final LocalResourceUtil.ResourceDescriptor cssResourceReferenceVaa = 
             //LocalResourceUtil.ResourceDescriptor.webjars("prism/1.16.0/themes/prism.css");
-            LocalResourceUtil.ResourceDescriptor.staticRoot("prism/css/prism.css");
+            LocalResourceUtil.ResourceDescriptor.staticRoot("prism/css/prism1.20.css");
     
     
     @Getter(lazy = true) private static final LocalResourceUtil.ResourceDescriptor jsResourceReferenceVaa =
             //LocalResourceUtil.ResourceDescriptor.webjars("prism/1.16.0/prism.js");
-            LocalResourceUtil.ResourceDescriptor.staticRoot("prism/js/prism1.14.js");
+            LocalResourceUtil.ResourceDescriptor.staticRoot("prism/js/prism1.20.js");
     
     
 }

@@ -18,6 +18,11 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.ui.components.other;
 
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
+
 import com.vaadin.flow.component.Component;
 
 import org.springframework.core.annotation.Order;
@@ -26,6 +31,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
+import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.debug.DebugField;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.debug.DebugUiModel;
@@ -36,6 +42,8 @@ import lombok.val;
 @org.springframework.stereotype.Component
 @Order(OrderPrecedence.LAST)
 public class FallbackFieldFactory implements UiComponentHandlerVaa {
+    
+    @Inject private Provider<UiComponentFactoryVaa> uiComponentFactory;
 
     @Override
     public boolean isHandling(Request request) {
@@ -50,6 +58,14 @@ public class FallbackFieldFactory implements UiComponentHandlerVaa {
         val debugUiModel = DebugUiModel.of("type not handled")
         .withProperty("ObjectFeature.specification.fullIdentifier",  spec.getFullIdentifier())
         .withProperty("ObjectFeature.identifier",  request.getObjectFeature().getIdentifier().toString());
+        
+        val handlerInfo = uiComponentFactory.get().getRegisteredHandlers()
+        .stream()
+        .map(Class::getSimpleName)
+        .map(handlerName->" • " + handlerName)
+        .collect(Collectors.joining("\n"));
+        
+        debugUiModel.withProperty("Handlers", handlerInfo);
         
         spec.streamFacets()
         .forEach(facet -> {

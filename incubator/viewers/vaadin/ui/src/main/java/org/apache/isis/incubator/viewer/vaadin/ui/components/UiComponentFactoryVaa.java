@@ -19,6 +19,7 @@
 package org.apache.isis.incubator.viewer.vaadin.ui.components;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -30,14 +31,23 @@ import org.apache.isis.core.commons.handler.ChainOfResponsibility;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
 
+import lombok.Getter;
+
 @Service
 public class UiComponentFactoryVaa implements UiComponentFactory<Component> {
 
     private final ChainOfResponsibility<Request, Component> chainOfHandlers;
     
+    /** handlers in order of precedence (debug info)*/
+    @Getter 
+    private final List<Class<?>> registeredHandlers; 
+    
     @Inject
     private UiComponentFactoryVaa(List<Handler<Component>> handlers) {
         this.chainOfHandlers = ChainOfResponsibility.of(handlers);
+        this.registeredHandlers = handlers.stream()
+                .map(Handler::getClass)
+                .collect(Collectors.toList());
     }
     
     @Override

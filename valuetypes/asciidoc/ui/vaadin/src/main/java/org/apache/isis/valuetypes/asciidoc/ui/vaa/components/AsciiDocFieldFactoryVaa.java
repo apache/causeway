@@ -20,6 +20,9 @@ package org.apache.isis.valuetypes.asciidoc.ui.vaa.components;
 
 import com.vaadin.flow.component.Component;
 
+import org.springframework.core.annotation.Order;
+
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory.Request;
@@ -27,6 +30,7 @@ import org.apache.isis.viewer.common.model.binding.UiComponentFactory.Request;
 import lombok.val;
 
 @org.springframework.stereotype.Component
+@Order(OrderPrecedence.MIDPOINT)
 public class AsciiDocFieldFactoryVaa implements UiComponentHandlerVaa {
 
     @Override
