@@ -18,7 +18,13 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.ui.util;
 
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.function.Supplier;
+
 import com.vaadin.flow.component.UI;
+
+import org.apache.isis.core.commons.internal.base._Strings;
 
 import lombok.Value;
 import lombok.experimental.UtilityClass;
@@ -46,6 +52,10 @@ public final class LocalResourceUtil {
     
     public static void addJavaScript(ResourceDescriptor resourceDescriptor) {
         UI.getCurrent().getPage().addJavaScript(resourceDescriptor.getUrl());
+    }
+    
+    public static void executeJavaScript(Supplier<InputStream> scriptResourceProvider) {
+        UI.getCurrent().getPage().executeJs(_Strings.read(scriptResourceProvider.get(), StandardCharsets.UTF_8));
     }
     
 }

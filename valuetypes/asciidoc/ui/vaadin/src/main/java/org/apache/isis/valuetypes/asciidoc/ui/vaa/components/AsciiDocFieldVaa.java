@@ -39,8 +39,8 @@ public class AsciiDocFieldVaa extends CustomField<AsciiDoc> {
         setLabel(label);
         add(div);
         
-        LocalResourceUtil.addStyleSheet(PrismResourcesVaa.getCssResourceReferenceVaa());
-        LocalResourceUtil.addJavaScript(PrismResourcesVaa.getJsResourceReferenceVaa());
+        LocalResourceUtil.addStyleSheet(PrismResources.getCssResourceReference());
+        LocalResourceUtil.executeJavaScript(PrismResources::readJsResource);
     }
     
     @Override

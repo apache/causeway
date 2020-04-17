@@ -18,22 +18,28 @@
  */
 package org.apache.isis.valuetypes.asciidoc.ui.vaa.components;
 
+import java.io.InputStream;
+
 import org.apache.isis.incubator.viewer.vaadin.ui.util.LocalResourceUtil;
 
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public final class PrismResourcesVaa {
+public final class PrismResources {
 
-    @Getter(lazy = true) private static final LocalResourceUtil.ResourceDescriptor cssResourceReferenceVaa = 
+    @Getter(lazy = true) private static final LocalResourceUtil.ResourceDescriptor cssResourceReference = 
             //LocalResourceUtil.ResourceDescriptor.webjars("prism/1.16.0/themes/prism.css");
             LocalResourceUtil.ResourceDescriptor.staticRoot("prism/css/prism1.20.css");
     
     
-    @Getter(lazy = true) private static final LocalResourceUtil.ResourceDescriptor jsResourceReferenceVaa =
+    @Getter(lazy = true) private static final LocalResourceUtil.ResourceDescriptor jsResourceReference =
             //LocalResourceUtil.ResourceDescriptor.webjars("prism/1.16.0/prism.js");
             LocalResourceUtil.ResourceDescriptor.staticRoot("prism/js/prism1.20.js");
+
+    public static InputStream readJsResource() {
+        return PrismResources.class.getResourceAsStream("/static/prism/js/prism1.20.js");
+    }
     
     
 }
