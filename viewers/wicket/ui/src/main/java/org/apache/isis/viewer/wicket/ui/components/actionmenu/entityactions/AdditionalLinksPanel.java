@@ -83,27 +83,19 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
         return additionalLinksPanel;
     }
 
-
     protected AdditionalLinksPanel(
             String id, 
             List<LinkAndLabel> linksDoNotUseDirectlyInsteadUseOfListOfLinksModel) {
         
         super(id, new ListOfLinksModel(linksDoNotUseDirectlyInsteadUseOfListOfLinksModel));
 
-        final List<LinkAndLabel> linkAndLabels = getModel().getObject();
 
         final WebMarkupContainer container = new WebMarkupContainer(ID_ADDITIONAL_LINK_LIST) {
             private static final long serialVersionUID = 1L;
 
             @Override
             public boolean isVisible() {
-                for (val linkAndLabel : linkAndLabels) {
-                    val link = linkAndLabel.getUiComponent();
-                    if(link.isVisible()) {
-                        return true;
-                    }
-                }
-                return false;
+                return AdditionalLinksPanel.this.getModel().hasAnyVisibleLink();
             }
         };
         addOrReplace(container);
@@ -112,7 +104,8 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
 
         setOutputMarkupId(true);
         
-        final ListView<LinkAndLabel> listView = new ListView<LinkAndLabel>(ID_ADDITIONAL_LINK_ITEM, linkAndLabels) {
+        final ListView<LinkAndLabel> listView = 
+                new ListView<LinkAndLabel>(ID_ADDITIONAL_LINK_ITEM, getModel()) {
 
             private static final long serialVersionUID = 1L;
 

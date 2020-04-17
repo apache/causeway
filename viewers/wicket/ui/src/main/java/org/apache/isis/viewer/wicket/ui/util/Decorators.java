@@ -26,7 +26,6 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.viewer.common.model.action.ActionLinkUiComponentDecorator;
-import org.apache.isis.viewer.common.model.action.ActionUiModel;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmDecorator;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
 import org.apache.isis.viewer.common.model.decorator.danger.DangerDecorator;
@@ -37,6 +36,7 @@ import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeUiModel;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingDecorator;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipDecorator;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipUiModel;
+import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
 
 import lombok.Getter;
@@ -165,7 +165,7 @@ public class Decorators {
         //even another UI component
         private <T extends Component> void commonDecorateMenuItem(
                 final T uiComponent, // UI component #1
-                final ActionUiModel<? extends T> actionUiModel,
+                final LinkAndLabel actionUiModel,
                 final TranslationService translationService) {
             
             val actionLinkUiComponent = actionUiModel.getUiComponent(); // UI component #2
@@ -202,7 +202,7 @@ public class Decorators {
         
         public void decorateMenuItem(
                 final Component uiComponent,
-                final ActionUiModel<? extends Component> actionUiModel,
+                final LinkAndLabel actionUiModel,
                 final TranslationService translationService) {
             
             addCssClassForAction(uiComponent, actionUiModel);
@@ -219,7 +219,7 @@ public class Decorators {
             
         }
         
-        private void addCssClassForAction(Component uiComponent, ActionUiModel<?> actionUiModel) {
+        private void addCssClassForAction(Component uiComponent, LinkAndLabel actionUiModel) {
             val actionMeta = actionUiModel.getActionUiMetaModel();
             uiComponent.add(new CssClassAppender("isis-" 
                     + CssClassAppender.asCssStyle(actionMeta.getActionIdentifier())));

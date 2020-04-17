@@ -62,7 +62,11 @@ public final class EntityActionLinkFactory extends LinkAndLabelFactoryAbstract {
 
         final AbstractLink link = super.newLinkComponent(objectAction, toggledMementosProviderIfAny);
 
-        return LinkAndLabel.newLinkAndLabel(model->link, named, this.targetEntityModel, objectAction);
+        return LinkAndLabel.newLinkAndLabel(
+                model->link,
+                named, 
+                this.targetEntityModel, 
+                objectAction);
     }
     
     

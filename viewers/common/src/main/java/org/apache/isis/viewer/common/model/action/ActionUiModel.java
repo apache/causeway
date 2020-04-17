@@ -41,9 +41,9 @@ import lombok.RequiredArgsConstructor;
  * @param <T> - link component type, native to the viewer
  */
 @RequiredArgsConstructor
-public class ActionUiModel<T> implements HasUiComponent<T> {
+public abstract class ActionUiModel<T> implements HasUiComponent<T> {
 
-    private final ActionLinkUiComponentFactory<T> uiComponentFactory;
+    protected final ActionLinkUiComponentFactory<T> uiComponentFactory;
     
     /**
      * used when explicitly named (eg. menu bar layout file), otherwise {@code null}

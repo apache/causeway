@@ -18,25 +18,35 @@
  */
 package org.apache.isis.viewer.wicket.model.links;
 
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.List;
+
+import javax.annotation.Nullable;
 
 import org.apache.wicket.markup.html.link.AbstractLink;
 
 import org.apache.isis.applib.annotation.ActionLayout.Position;
+import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.action.ActionLinkUiComponentFactory;
 import org.apache.isis.viewer.common.model.action.ActionUiMetaModel;
 import org.apache.isis.viewer.common.model.action.ActionUiModel;
+import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+
+import lombok.NonNull;
+import lombok.val;
 
 public class LinkAndLabel extends ActionUiModel<AbstractLink> implements Serializable  {
 
     private static final long serialVersionUID = 1L;
     
     public static LinkAndLabel newLinkAndLabel(
-            final ActionLinkUiComponentFactory<AbstractLink> uiComponentFactory,
+            final ActionLinkUiComponentFactoryWkt uiComponentFactory,
             final String named,
             final EntityModel actionHolderModel,
             final ObjectAction objectAction) {
@@ -44,7 +54,7 @@ public class LinkAndLabel extends ActionUiModel<AbstractLink> implements Seriali
     }
     
     protected LinkAndLabel(
-            final ActionLinkUiComponentFactory<AbstractLink> uiComponentFactory,
+            final ActionLinkUiComponentFactoryWkt uiComponentFactory,
             final String named,
             final EntityModel actionHolderModel,
             final ObjectAction objectAction) {
@@ -55,4 +65,45 @@ public class LinkAndLabel extends ActionUiModel<AbstractLink> implements Seriali
         return _Lists.filter(list, ActionUiMetaModel.positioned(pos, LinkAndLabel::getActionUiMetaModel));
     }
 
+    public static List<LinkAndLabel> recoverFromIncompleteDeserialization(List<SerializationProxy> list) {
+        return _Casts.uncheckedCast(_Lists.map(list, SerializationProxy::readResolve));
+    }
+    
+    // -- SERIALIZATION PROXY
+
+    private Object writeReplace() {
+        return new SerializationProxy(this);
+    }
+
+    private void readObject(ObjectInputStream stream) throws InvalidObjectException {
+        throw new InvalidObjectException("Proxy required");
+    }
+
+    private static class SerializationProxy implements Serializable {
+        private static final long serialVersionUID = 1L;
+        @NonNull  private final ActionLinkUiComponentFactoryWkt uiComponentFactory;
+        @Nullable private final String named;
+        @NonNull  private final EntityModel actionHolder;
+        @NonNull  private final ObjectSpecId actionHolderSpecId;
+        @NonNull  private final String objectActionId;
+        
+        private SerializationProxy(LinkAndLabel target) {
+            this.uiComponentFactory = (ActionLinkUiComponentFactoryWkt)target.uiComponentFactory;
+            this.named = target.getNamed();
+            this.actionHolder = (EntityModel) target.getActionHolder();
+            this.actionHolderSpecId = actionHolder.getManagedObject().getSpecification().getSpecId(); 
+            this.objectActionId = target.getObjectAction().getId();
+        }
+
+        private Object readResolve() {
+            val commonContext = CommonContextUtils.getCommonContext();
+            val actionHolderSpec = commonContext.getSpecificationLoader().loadSpecification(actionHolderSpecId);
+            val objectMember = actionHolderSpec
+                    .getMember(objectActionId)
+                    .orElseThrow(()->
+                        _Exceptions.noSuchElement("could not restore objectAction from id %s", objectActionId));
+            return new LinkAndLabel(uiComponentFactory, named, actionHolder, (ObjectAction) objectMember);
+        }
+    }
+    
 }

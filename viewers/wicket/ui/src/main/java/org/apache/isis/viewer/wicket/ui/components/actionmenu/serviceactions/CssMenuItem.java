@@ -16,7 +16,11 @@
  * under the License. */
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -26,6 +30,7 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModel;
+import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Decorators;
@@ -55,6 +60,11 @@ implements Serializable {
         val subMenuItem = newMenuItem(name);
         subMenuItem.setParent(this);
         return subMenuItem;
+    }
+    
+    @Override
+    public LinkAndLabel getMenuActionUiModel() {
+        return (LinkAndLabel) super.getMenuActionUiModel();
     }
     
     // //////////////////////////////////////////////////////////////
@@ -145,6 +155,42 @@ implements Serializable {
         }
     }
 
+    // -- SERIALIZATION PROXY
+
+    private Object writeReplace() {
+        return new SerializationProxy(this);
+    }
+
+    private void readObject(ObjectInputStream stream) throws InvalidObjectException {
+        throw new InvalidObjectException("Proxy required");
+    }
+
+    private static class SerializationProxy implements Serializable {
+        private static final long serialVersionUID = 1L;
+        private final String name;
+        private final LinkAndLabel menuActionUiModel;
+        private final boolean firstInSection;
+        private final boolean tertiaryRoot;
+        //private final CssMenuItem parent;
+        private List<CssMenuItem> children;
+        
+        public SerializationProxy(CssMenuItem menuItem) {
+            this.name = menuItem.getName();
+            this.menuActionUiModel = menuItem.getMenuActionUiModel();
+            this.firstInSection = menuItem.isFirstInSection();
+            this.tertiaryRoot = menuItem.isTertiaryRoot();
+            //this.parent = menuItem.getParent();
+            this.children = new ArrayList<CssMenuItem>(menuItem.getSubMenuItems());
+        }
+        private Object readResolve() {
+            val menuItem = new CssMenuItem(name);
+            menuItem.setFirstInSection(firstInSection);
+            menuItem.setTertiaryRoot(tertiaryRoot);
+            menuItem.setMenuActionUiModel(menuActionUiModel);
+            children.forEach(menuItem::addSubMenuItem);
+            return menuItem;
+        }
+    }
 
 
 }

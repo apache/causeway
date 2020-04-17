@@ -302,6 +302,10 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel {
         this.adapterMemento = adapterMemento;
     }
 
+    @Override
+    public ManagedObject getManagedObject() {
+        return getObject();
+    }
 
     // //////////////////////////////////////////////////////////
     // PropertyModels
@@ -513,8 +517,6 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel {
     }
 
 
-
-
     // //////////////////////////////////////////////////////////
     // equals, hashCode
     // //////////////////////////////////////////////////////////
@@ -550,10 +552,7 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel {
 
     }
 
-    @Override
-    public ManagedObject getManagedObject() {
-        return load();
-    }
+
 
 
 }
