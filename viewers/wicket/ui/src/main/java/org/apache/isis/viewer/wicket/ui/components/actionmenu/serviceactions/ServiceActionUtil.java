@@ -122,7 +122,7 @@ public final class ServiceActionUtil {
                     PageAbstract.ID_MENU_LINK, 
                     serviceModel);
             
-            return LinkAndLabel.newLinkAndLabel(
+            return LinkAndLabel.of(
                     model->actionLinkFactory.newActionLink(model.getObjectAction(), named).getUiComponent(),
                     named,
                     serviceModel,

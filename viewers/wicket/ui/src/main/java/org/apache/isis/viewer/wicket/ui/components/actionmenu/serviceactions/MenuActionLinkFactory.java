@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
-import org.apache.wicket.markup.html.link.AbstractLink;
-
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -41,9 +39,11 @@ class MenuActionLinkFactory extends LinkAndLabelFactoryAbstract {
             final ObjectAction objectAction, 
             final String named) {
 
-        final AbstractLink link = super.newLinkComponent(objectAction, toggledMementosProviderIfAny);
-        
-        return LinkAndLabel.newLinkAndLabel(model->link, named, this.targetEntityModel, objectAction);
+        return LinkAndLabel.of(
+                model->super.newLinkComponent(model.getObjectAction(), toggledMementosProviderIfAny), 
+                named, 
+                this.targetEntityModel, 
+                objectAction);
     }
 
 

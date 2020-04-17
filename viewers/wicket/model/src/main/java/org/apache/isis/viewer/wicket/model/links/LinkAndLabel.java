@@ -41,11 +41,11 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import lombok.NonNull;
 import lombok.val;
 
-public class LinkAndLabel extends ActionUiModel<AbstractLink> implements Serializable  {
+public final class LinkAndLabel extends ActionUiModel<AbstractLink> implements Serializable  {
 
     private static final long serialVersionUID = 1L;
     
-    public static LinkAndLabel newLinkAndLabel(
+    public static LinkAndLabel of(
             final ActionLinkUiComponentFactoryWkt uiComponentFactory,
             final String named,
             final EntityModel actionHolderModel,
@@ -53,7 +53,7 @@ public class LinkAndLabel extends ActionUiModel<AbstractLink> implements Seriali
         return new LinkAndLabel(uiComponentFactory, named, actionHolderModel, objectAction);
     }
     
-    protected LinkAndLabel(
+    private LinkAndLabel(
             final ActionLinkUiComponentFactoryWkt uiComponentFactory,
             final String named,
             final EntityModel actionHolderModel,
@@ -91,7 +91,8 @@ public class LinkAndLabel extends ActionUiModel<AbstractLink> implements Seriali
             this.uiComponentFactory = (ActionLinkUiComponentFactoryWkt)target.uiComponentFactory;
             this.named = target.getNamed();
             this.actionHolder = (EntityModel) target.getActionHolder();
-            this.actionHolderSpecId = actionHolder.getManagedObject().getSpecification().getSpecId(); 
+            // make sure we do this without side-effects
+            this.actionHolderSpecId = actionHolder.getTypeOfSpecification().getSpecId(); 
             this.objectActionId = target.getObjectAction().getId();
         }
 

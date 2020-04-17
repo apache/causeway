@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
 
-import org.apache.wicket.markup.html.link.AbstractLink;
-
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -60,10 +58,8 @@ public final class EntityActionLinkFactory extends LinkAndLabelFactoryAbstract {
         // previously we computed visibility and usability here, but
         // this is now done at the point of rendering
 
-        final AbstractLink link = super.newLinkComponent(objectAction, toggledMementosProviderIfAny);
-
-        return LinkAndLabel.newLinkAndLabel(
-                model->link,
+        return LinkAndLabel.of(
+                model->super.newLinkComponent(model.getObjectAction(), toggledMementosProviderIfAny),
                 named, 
                 this.targetEntityModel, 
                 objectAction);
