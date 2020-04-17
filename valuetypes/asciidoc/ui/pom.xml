@@ -122,4 +122,8 @@
 
 	</dependencies>
 
+	<modules>
+		<module>vaadin</module>
+		<module>wicket</module>
+	</modules>
 </project>
