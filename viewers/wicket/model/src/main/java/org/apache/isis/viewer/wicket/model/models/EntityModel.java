@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
 
@@ -66,7 +67,7 @@ extends BookmarkableModel<ManagedObject>
 implements ObjectAdapterModel, UiHintContainer, ObjectUiModel {
 
     private static final long serialVersionUID = 1L;
-
+    
     // -- FACTORY METHODS FOR PAGE PARAMETERS
 
     /**
@@ -90,6 +91,7 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel {
     }
 
     private final Map<PropertyMemento, ScalarModel> propertyScalarModels;
+    
     private ObjectMemento adapterMemento;
     private ObjectMemento contextAdapterIfAny;
 
@@ -264,10 +266,17 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel {
      */
     @Override
     public ObjectSpecification getTypeOfSpecification() {
-        if (adapterMemento == null) {
-            return null;
-        }
-        return getSpecificationFor(adapterMemento.getObjectSpecId());
+        return getTypeOfSpecificationId()
+                .map(this::getSpecificationFor)
+                .orElse(null);
+    }
+    
+    /**
+     * @implNote free of side-effects, used for serialization
+     */
+    public Optional<ObjectSpecId> getTypeOfSpecificationId() {
+        return Optional.ofNullable(adapterMemento)
+                .map(ObjectMemento::getObjectSpecId);
     }
 
     private ObjectSpecification getSpecificationFor(ObjectSpecId objectSpecId) {

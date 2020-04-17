@@ -92,7 +92,8 @@ public final class LinkAndLabel extends ActionUiModel<AbstractLink> implements S
             this.named = target.getNamed();
             this.actionHolder = (EntityModel) target.getActionHolder();
             // make sure we do this without side-effects
-            this.actionHolderSpecId = actionHolder.getTypeOfSpecification().getSpecId(); 
+            this.actionHolderSpecId = actionHolder.getTypeOfSpecificationId()
+                    .orElseThrow(_Exceptions::unexpectedCodeReach); 
             this.objectActionId = target.getObjectAction().getId();
         }
 
