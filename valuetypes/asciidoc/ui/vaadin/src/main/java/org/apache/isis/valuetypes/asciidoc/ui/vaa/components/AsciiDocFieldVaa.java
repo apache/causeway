@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.valuetypes.asciidoc.ui.components.vaa;
+package org.apache.isis.valuetypes.asciidoc.ui.vaa.components;
 
 import javax.annotation.Nullable;
 
@@ -26,7 +26,6 @@ import com.vaadin.flow.component.html.Div;
 
 import org.apache.isis.incubator.viewer.vaadin.ui.util.LocalResourceUtil;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
-import org.apache.isis.valuetypes.asciidoc.ui.components.prism.PrismResources;
 
 public class AsciiDocFieldVaa extends CustomField<AsciiDoc> {
 
@@ -40,8 +39,8 @@ public class AsciiDocFieldVaa extends CustomField<AsciiDoc> {
         setLabel(label);
         add(div);
         
-        LocalResourceUtil.addStyleSheet(PrismResources.getCssResourceReferenceVaa());
-        LocalResourceUtil.addJavaScript(PrismResources.getJsResourceReferenceVaa());
+        LocalResourceUtil.addStyleSheet(PrismResourcesVaa.getCssResourceReferenceVaa());
+        LocalResourceUtil.addJavaScript(PrismResourcesVaa.getJsResourceReferenceVaa());
     }
     
     @Override

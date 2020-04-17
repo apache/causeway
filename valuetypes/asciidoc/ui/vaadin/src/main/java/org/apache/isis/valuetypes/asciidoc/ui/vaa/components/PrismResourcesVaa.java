@@ -16,11 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.valuetypes.asciidoc.ui.components.prism;
-
-import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.apache.wicket.request.resource.ResourceReference;
+package org.apache.isis.valuetypes.asciidoc.ui.vaa.components;
 
 import org.apache.isis.incubator.viewer.vaadin.ui.util.LocalResourceUtil;
 
@@ -28,7 +24,7 @@ import lombok.Getter;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public final class PrismResources {
+public final class PrismResourcesVaa {
 
     @Getter(lazy = true) private static final LocalResourceUtil.ResourceDescriptor cssResourceReferenceVaa = 
             //LocalResourceUtil.ResourceDescriptor.webjars("prism/1.16.0/themes/prism.css");
@@ -39,12 +35,5 @@ public final class PrismResources {
             //LocalResourceUtil.ResourceDescriptor.webjars("prism/1.16.0/prism.js");
             LocalResourceUtil.ResourceDescriptor.staticRoot("prism/js/prism1.14.js");
     
-    @Getter(lazy = true) private static final ResourceReference cssResourceReferenceWkt =
-            //new ContextRelativeResourceReference("webjars/prism/1.16.0/themes/prism.css", false);
-            new CssResourceReference(PrismResources.class, "css/prism.css");
-    
-    @Getter(lazy = true) private static final ResourceReference jsResourceReferenceWkt =
-            //new ContextRelativeResourceReference("webjars/prism/1.16.0/prism.js", false);
-            new JavaScriptResourceReference(PrismResources.class, "js/prism1.14.js");
     
 }

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.valuetypes.asciidoc.ui.components.vaa;
+package org.apache.isis.valuetypes.asciidoc.ui.vaa.components;
 
 import com.vaadin.flow.component.Component;
 

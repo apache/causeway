@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.valuetypes.asciidoc.ui.components.wkt;
+package org.apache.isis.valuetypes.asciidoc.ui.wkt.components;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
@@ -26,7 +26,7 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.ResourceReference;
 
-import org.apache.isis.valuetypes.asciidoc.ui.components.prism.PrismResources;
+import org.apache.isis.valuetypes.asciidoc.ui.wkt.components.prism.PrismResources;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent_reloadJs;
 

@@ -48,7 +48,7 @@ import org.apache.isis.persistence.jdo.datanucleus5.IsisModuleJdoDataNucleus5;
 import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 import org.apache.isis.testing.h2console.ui.IsisModuleTestingH2ConsoleUi;
-import org.apache.isis.valuetypes.asciidoc.ui.IsisModuleValAsciidocUi;
+import org.apache.isis.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
 import org.apache.isis.valuetypes.sse.ui.IsisModuleValSseUi;
 import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRestfulObjectsJaxrsResteasy4;
 import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleViewerRestfulObjectsViewer;
@@ -104,7 +104,7 @@ public class DemoApp extends SpringBootServletInitializer {
         IsisModuleJdoDataNucleus5.class,
         IsisModuleViewerWicketViewer.class, // wicket viewer
         IsisModuleValSseUi.class, // server sent events
-        IsisModuleValAsciidocUi.class, // ascii-doc rendering support
+        IsisModuleValAsciidocUiWkt.class, // ascii-doc rendering support (for Wicket)
 
         // REST
         IsisModuleViewerRestfulObjectsViewer.class,

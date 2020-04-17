@@ -16,24 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
+package org.apache.isis.valuetypes.asciidoc.ui.wkt;
 
-import org.apache.wicket.markup.html.link.AbstractLink;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.action.ActionLinkUiComponentFactory;
-import org.apache.isis.viewer.common.model.action.ActionUiModel;
-import org.apache.isis.viewer.common.model.object.ObjectUiModel;
+import org.apache.isis.valuetypes.asciidoc.applib.IsisModuleValAsciidocApplib;
+import org.apache.isis.valuetypes.asciidoc.ui.wkt.components.AsciiDocPanelFactoriesWkt;
 
-class MenuActionWkt extends ActionUiModel<AbstractLink> {
-
-    MenuActionWkt(
-            final ActionLinkUiComponentFactory<AbstractLink> uiComponentFactory,
-            final String named,
-            final ObjectUiModel serviceModel,
-            final ObjectAction objectAction) {
-
-        super(uiComponentFactory, named, serviceModel, objectAction); 
-    }
-
+@Configuration
+@Import({
+    IsisModuleValAsciidocApplib.class,
+    AsciiDocPanelFactoriesWkt.Parented.class,
+    AsciiDocPanelFactoriesWkt.Standalone.class,
+})
+public class IsisModuleValAsciidocUiWkt {
 }

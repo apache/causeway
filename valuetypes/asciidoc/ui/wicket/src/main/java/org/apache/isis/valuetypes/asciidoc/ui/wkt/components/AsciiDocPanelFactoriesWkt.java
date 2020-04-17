@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.valuetypes.asciidoc.ui.components.wkt;
+package org.apache.isis.valuetypes.asciidoc.ui.wkt.components;
 
 import org.springframework.stereotype.Component;
 

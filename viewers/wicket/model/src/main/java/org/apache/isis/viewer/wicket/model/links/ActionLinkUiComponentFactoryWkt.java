@@ -16,21 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.valuetypes.asciidoc.ui;
+package org.apache.isis.viewer.wicket.model.links;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import java.io.Serializable;
 
-import org.apache.isis.valuetypes.asciidoc.applib.IsisModuleValAsciidocApplib;
-import org.apache.isis.valuetypes.asciidoc.ui.components.vaa.AsciiDocFieldFactoryVaa;
-import org.apache.isis.valuetypes.asciidoc.ui.components.wkt.AsciiDocPanelFactoriesWkt;
+import org.apache.wicket.markup.html.link.AbstractLink;
 
-@Configuration
-@Import({
-    IsisModuleValAsciidocApplib.class,
-    AsciiDocFieldFactoryVaa.class,
-    AsciiDocPanelFactoriesWkt.Parented.class,
-    AsciiDocPanelFactoriesWkt.Standalone.class,
-})
-public class IsisModuleValAsciidocUi {
+import org.apache.isis.viewer.common.model.action.ActionLinkUiComponentFactory;
+
+public interface ActionLinkUiComponentFactoryWkt 
+extends ActionLinkUiComponentFactory<AbstractLink>, Serializable {
+
 }

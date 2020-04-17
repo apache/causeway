@@ -28,6 +28,7 @@ import org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefaul
 import org.apache.isis.incubator.viewer.vaadin.ui.auth.VaadinAuthenticationHandler;
 import org.apache.isis.incubator.viewer.vaadin.viewer.IsisModuleIncViewerVaadinViewer;
 import org.apache.isis.incubator.viewer.vaadin.viewer.IsisServletForVaadin;
+import org.apache.isis.valuetypes.asciidoc.ui.vaa.IsisModuleValAsciidocUiVaa;
 
 import demoapp.utils.ThereCanBeOnlyOne;
 import demoapp.webapp.DemoApp;
@@ -41,6 +42,7 @@ import demoapp.webapp.DemoApp;
     
     // INCUBATING
     IsisModuleIncViewerVaadinViewer.class, // vaadin viewer
+    IsisModuleValAsciidocUiVaa.class, // ascii-doc rendering support (for Vaadin)
   
 })
 public class DemoAppVaadin extends SpringBootServletInitializer {

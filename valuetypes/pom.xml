@@ -68,7 +68,12 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.valuetypes</groupId>
-				<artifactId>isis-valuetypes-asciidoc-ui</artifactId>
+				<artifactId>isis-valuetypes-asciidoc-ui-vaa</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.valuetypes</groupId>
+				<artifactId>isis-valuetypes-asciidoc-ui-wkt</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 

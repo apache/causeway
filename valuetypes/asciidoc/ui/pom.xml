@@ -22,6 +22,7 @@
 
 	<artifactId>isis-valuetypes-asciidoc-ui</artifactId>
 	<name>Apache Isis Val - Asciidoctor (ui)</name>
+	<packaging>pom</packaging>
 
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes.asciidoc.ui</jar-plugin.automaticModuleName>
@@ -39,19 +40,6 @@
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-metamodel</artifactId>
 		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-            <artifactId>isis-viewer-wicket-ui</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        
-        <dependency>
-			<groupId>org.apache.isis.incubator.viewer</groupId>
-            <artifactId>isis-viewer-vaadin-ui</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
 
 		<!-- provides a ASCII-DOC parser -->
 		<dependency>
