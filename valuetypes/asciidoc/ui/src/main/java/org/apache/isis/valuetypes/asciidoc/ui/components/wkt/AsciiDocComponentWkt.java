@@ -24,7 +24,7 @@ import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 
 import org.apache.isis.valuetypes.asciidoc.ui.components.prism.PrismResources;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
@@ -55,7 +55,7 @@ public class AsciiDocComponentWkt extends MarkupComponent {
         response.render(JavaScriptHeaderItem.forReference(jsRef()));
     }
 
-    private static final JavaScriptResourceReference jsRef() {
+    private static final ResourceReference jsRef() {
         return PrismResources.getJsResourceReferenceWkt();
     }
 

@@ -125,12 +125,12 @@
 		</dependency>
 		<!-- END OF ASCII-DOC -->
 		
-<!-- TODO instead of providing prism resources with our class path, we should switch to the webjars version -->		
-<!-- 		<dependency> -->
-<!-- 		    <groupId>org.webjars.bower</groupId> -->
-<!-- 		    <artifactId>prism</artifactId> -->
-<!-- 		    <version>1.16.0</version> -->
-<!-- 		</dependency> -->
+		<!-- PRISM (SYNTAX HIGHLIGHTING) -->
+		<dependency>
+		    <groupId>org.webjars.bower</groupId>
+		    <artifactId>prism</artifactId>
+		    <version>1.16.0</version>
+		</dependency>
 
 	</dependencies>
 

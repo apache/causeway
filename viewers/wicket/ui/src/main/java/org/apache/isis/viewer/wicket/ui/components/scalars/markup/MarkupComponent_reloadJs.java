@@ -23,7 +23,7 @@ import java.util.UUID;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.handler.resource.ResourceReferenceRequestHandler;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 
 import lombok.val;
 
@@ -33,7 +33,7 @@ import lombok.val;
  */
 public class MarkupComponent_reloadJs {
 
-    public static CharSequence decorate(CharSequence htmlContent, JavaScriptResourceReference jsRef) {
+    public static CharSequence decorate(CharSequence htmlContent, ResourceReference jsRef) {
 
         val targetId = UUID.randomUUID().toString();
 
@@ -48,7 +48,7 @@ public class MarkupComponent_reloadJs {
         return sb.toString();
     }
 
-    private static String getUrl(JavaScriptResourceReference jsRef) {
+    private static String getUrl(ResourceReference jsRef) {
         IRequestHandler handler = new ResourceReferenceRequestHandler(jsRef, null);
         return RequestCycle.get().urlFor(handler).toString();
     }
