@@ -31,7 +31,7 @@ import org.apache.isis.incubator.viewer.vaadin.ui.components.blob.BlobFieldFacto
 import org.apache.isis.incubator.viewer.vaadin.ui.components.clob.ClobFieldFactory;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.markup.MarkupFieldFactory;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.other.FallbackFieldFactory;
-import org.apache.isis.incubator.viewer.vaadin.ui.components.temporal.date.TemporalFieldFactory;
+import org.apache.isis.incubator.viewer.vaadin.ui.components.temporal.TemporalFieldFactory;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.text.TextFieldFactory;
 import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
 
