@@ -18,8 +18,15 @@
  */
 package org.apache.isis.viewer.common.model.binding;
 
+import java.util.Optional;
+
+import javax.annotation.Nullable;
+
 import org.apache.isis.core.commons.handler.ChainOfResponsibility;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 
 import lombok.NonNull;
@@ -36,11 +43,86 @@ public interface UiComponentFactory<T> {
         /** not null but the wrapped pojo is allowed to be null*/
         @NonNull private final ManagedObject managedObject; 
         @NonNull private final ObjectFeature objectFeature;
+        
+        // -- SHORTCUTS
+        
+        /**
+         * @return The feature's name. (With the UI to be used as form field title.) 
+         */
+        public String getFeatureLabel() {
+            return getObjectFeature().getName(); //TODO need to check what we actually use with wicket   
+        }
+        
+        /**
+         * @return The specification of the feature's underlying type. 
+         */
+        public ObjectSpecification getFeatureSpec() {
+            return getObjectFeature().getSpecification();    
+        }
+        
+        /**
+         * @return The feature's underlying type. 
+         */
+        public Class<?> getFeatureType() {
+            return getFeatureSpec().getCorrespondingClass();    
+        }
+        
+        public boolean isFeatureTypeEqualTo(@Nullable Class<?> type) {
+            return getFeatureType() == type;
+        }
+        
+        public boolean isFeatureTypeAssignableFrom(@Nullable Class<?> type) {
+            return type!=null
+                    ? getFeatureType().isAssignableFrom(type)
+                    : false;
+        }
+        
+        /**
+         * @param facetType
+         * @return Whether there exists a facet for this feature, that is of the 
+         * specified {@code facetType} (as per the type it reports from {@link Facet#facetType()}).
+         */
+        public <T extends Facet> boolean hasFeatureFacet(@Nullable Class<T> facetType) {
+            return facetType!=null
+                    ? getFeatureSpec().getFacet(facetType)!=null
+                    : false;
+        }
+
+        /**
+         * @param facetType
+         * @return Optionally the feature's facet of the specified {@code facetType} 
+         * (as per the type it reports from {@link Facet#facetType()}), based on existence.
+         */
+        public <T extends Facet> Optional<T> getFeatureFacet(@Nullable Class<T> facetType) {
+            return facetType!=null
+                    ? Optional.ofNullable(getFeatureSpec().getFacet(facetType))
+                    : Optional.empty();
+        }
+        
+        public <T extends Facet> T getFeatureFacetElseFail(@Nullable Class<T> facetType) {
+            return getFeatureFacet(facetType)
+                    .orElseThrow(()->_Exceptions
+                            .noSuchElement("Feature %s has no such facet %s",
+                                    getObjectFeature().getIdentifier(),
+                                    facetType.getName()));    
+        }
+        
+        public <T> Optional<T> getPojo(@Nullable Class<T> type) {
+            //TODO do a type check before the cast, so we can throw a more detailed exception
+            // that is, given type must be assignable from the actual pojo type 
+            return Optional.ofNullable(getManagedObject().getPojo())
+                    .map(type::cast);
+        }
+        
+        
     }
     
     
     // -- HANDLER
     
+    /**
+     * @param <T> - the Handler's Response type
+     */
     static interface Handler<T> 
     extends ChainOfResponsibility.Handler<UiComponentFactory.Request, T> {
     }

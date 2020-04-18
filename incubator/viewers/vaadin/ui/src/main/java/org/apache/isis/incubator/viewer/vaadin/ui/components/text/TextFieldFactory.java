@@ -32,14 +32,13 @@ public class TextFieldFactory implements UiComponentHandlerVaa {
 
     @Override
     public boolean isHandling(Request request) {
-        val spec = request.getObjectFeature().getSpecification();
-        return spec.getFacet(StringValueFacet.class)!=null;
+        return request.hasFeatureFacet(StringValueFacet.class);
     }
 
     @Override
     public Component handle(Request request) {
-        val uiField = new TextField(request.getObjectFeature().getName());
-        uiField.setValue(request.getManagedObject().titleString(null));
+        val uiField = new TextField(request.getFeatureLabel());
+        uiField.setValue(request.getPojo(String.class).orElse(null));
         return uiField;
     }
     

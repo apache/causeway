@@ -36,14 +36,13 @@ public class ClobFieldFactory implements UiComponentHandlerVaa {
 
     @Override
     public boolean isHandling(Request request) {
-        val spec = request.getObjectFeature().getSpecification();
-        return spec.getFacet(ClobValueFacet.class)!=null;
+        return request.hasFeatureFacet(ClobValueFacet.class);
     }
 
     @Override
     public Component handle(Request request) {
-        val uiField = new ClobField(request.getObjectFeature().getName());
-        uiField.setValue((Clob)request.getManagedObject().getPojo()); // pojo is nullable!
+        val uiField = new ClobField(request.getFeatureLabel());
+        uiField.setValue(request.getPojo(Clob.class).orElse(null));
         return uiField;
     }
     

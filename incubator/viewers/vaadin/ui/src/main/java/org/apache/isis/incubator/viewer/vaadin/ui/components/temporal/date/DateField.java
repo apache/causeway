@@ -16,13 +16,43 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.vaadin.ui.components;
+package org.apache.isis.incubator.viewer.vaadin.ui.components.temporal.date;
 
-import com.vaadin.flow.component.Component;
+import java.time.LocalDate;
 
-import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
+import javax.annotation.Nullable;
 
-public interface UiComponentHandlerVaa 
-extends UiComponentFactory.Handler<Component> {
+import com.vaadin.flow.component.customfield.CustomField;
+
+// TODO just a stub yet
+//
+public class DateField extends CustomField<LocalDate> {
+
+    private static final long serialVersionUID = 1L;
+    
+    private LocalDate temporal;
+
+    public DateField(String label) {
+        super();
+        setLabel(label);
+        // ...
+    }
+    
+    @Override
+    protected LocalDate generateModelValue() {
+        return temporal;
+    }
+
+    @Override
+    protected void setPresentationValue(@Nullable LocalDate temporal) {
+        this.temporal = temporal;
+        
+        if(temporal==null) {
+            // ...
+            return;
+        }
+        
+        // ...
+    }
 
 }

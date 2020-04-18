@@ -24,6 +24,8 @@ import com.vaadin.flow.component.customfield.CustomField;
 
 import org.apache.isis.applib.value.Clob;
 
+// TODO just a stub yet
+//
 public class ClobField extends CustomField<Clob> {
 
     private static final long serialVersionUID = 1L;

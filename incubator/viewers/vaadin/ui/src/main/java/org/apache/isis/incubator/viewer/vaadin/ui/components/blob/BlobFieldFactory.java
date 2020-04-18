@@ -36,14 +36,13 @@ public class BlobFieldFactory implements UiComponentHandlerVaa {
 
     @Override
     public boolean isHandling(Request request) {
-        val spec = request.getObjectFeature().getSpecification();
-        return spec.getFacet(BlobValueFacet.class)!=null;
+        return request.hasFeatureFacet(BlobValueFacet.class);
     }
 
     @Override
     public Component handle(Request request) {
-        val uiField = new BlobField(request.getObjectFeature().getName());
-        uiField.setValue((Blob)request.getManagedObject().getPojo()); // pojo is nullable!
+        val uiField = new BlobField(request.getFeatureLabel());
+        uiField.setValue(request.getPojo(Blob.class).orElse(null));
         return uiField;
     }
     

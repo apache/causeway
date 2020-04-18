@@ -23,7 +23,6 @@ import com.vaadin.flow.component.Component;
 import org.springframework.core.annotation.Order;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.value.Markup;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory.Request;
 
@@ -35,14 +34,13 @@ public class MarkupFieldFactory implements UiComponentHandlerVaa {
 
     @Override
     public boolean isHandling(Request request) {
-        val spec = request.getObjectFeature().getSpecification();
-        return spec.getFullIdentifier().contentEquals(org.apache.isis.applib.value.Markup.class.getName());
+        return request.isFeatureTypeEqualTo(org.apache.isis.applib.value.Markup.class);
     }
 
     @Override
     public Component handle(Request request) {
-        val uiField = new MarkupField(request.getObjectFeature().getName());
-        uiField.setValue((Markup)request.getManagedObject().getPojo()); // pojo is nullable!
+        val uiField = new MarkupField(request.getFeatureLabel());
+        uiField.setValue(request.getPojo(org.apache.isis.applib.value.Markup.class).orElse(null));
         return uiField;
     }
     

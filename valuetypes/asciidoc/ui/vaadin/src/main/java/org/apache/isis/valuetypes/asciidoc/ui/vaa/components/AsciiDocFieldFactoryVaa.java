@@ -35,14 +35,13 @@ public class AsciiDocFieldFactoryVaa implements UiComponentHandlerVaa {
 
     @Override
     public boolean isHandling(Request request) {
-        val spec = request.getObjectFeature().getSpecification();
-        return spec.getFullIdentifier().contentEquals(AsciiDoc.class.getName());
+        return request.isFeatureTypeAssignableFrom(AsciiDoc.class);
     }
 
     @Override
     public Component handle(Request request) {
-        val uiField = new AsciiDocFieldVaa(request.getObjectFeature().getName());
-        uiField.setValue((AsciiDoc)request.getManagedObject().getPojo()); // pojo is nullable!
+        val uiField = new AsciiDocFieldVaa(request.getFeatureLabel());
+        uiField.setValue(request.getPojo(AsciiDoc.class).orElse(null));
         return uiField;
     }
     
