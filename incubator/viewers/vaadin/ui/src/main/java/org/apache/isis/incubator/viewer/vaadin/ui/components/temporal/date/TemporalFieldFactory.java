@@ -53,7 +53,7 @@ public class TemporalFieldFactory implements UiComponentHandlerVaa {
         val offsetCharacteristic = temporalFacet.getOffsetCharacteristic();
         val temporal = request.getPojo(Temporal.class);
         
-        switch(temporalFacet.getTemporalCharacteristic()) {
+        switch(temporalCharacteristic) {
         case DATE_ONLY:{
             val uiField = new DateField(request.getFeatureLabel());
             uiField.setValue(toLocalDate(temporal).orElse(null));
@@ -66,7 +66,7 @@ public class TemporalFieldFactory implements UiComponentHandlerVaa {
             // TODO ...
             }    
         default:
-            throw _Exceptions.unmatchedCase(temporalFacet.getTemporalCharacteristic());
+            throw _Exceptions.unmatchedCase(temporalCharacteristic);
         }
         
     }

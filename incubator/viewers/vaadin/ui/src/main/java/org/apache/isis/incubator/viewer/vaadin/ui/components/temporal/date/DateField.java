@@ -23,19 +23,19 @@ import java.time.LocalDate;
 import javax.annotation.Nullable;
 
 import com.vaadin.flow.component.customfield.CustomField;
+import com.vaadin.flow.component.datepicker.DatePicker;
 
-// TODO just a stub yet
-//
 public class DateField extends CustomField<LocalDate> {
 
     private static final long serialVersionUID = 1L;
     
+    private final DatePicker datePicker = new DatePicker();
     private LocalDate temporal;
 
     public DateField(String label) {
         super();
         setLabel(label);
-        // ...
+        add(datePicker);
     }
     
     @Override
@@ -48,11 +48,12 @@ public class DateField extends CustomField<LocalDate> {
         this.temporal = temporal;
         
         if(temporal==null) {
-            // ...
+            datePicker.setPlaceholder("no date");
             return;
         }
         
-        // ...
+        datePicker.setValue(temporal);
+        
     }
-
+    
 }
