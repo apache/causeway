@@ -79,6 +79,8 @@ public class Tooltips {
     
     // -- SHORTCUTS
     
+    //sonar-ignore-on ... fails to interpret _Strings.isEmpty as null guard
+    
     public static void addTooltip(@NonNull Component target, @Nullable String body) {
         addTooltip(target, _Strings.isEmpty(body)
                 ? null
@@ -90,6 +92,8 @@ public class Tooltips {
                 ? null
                 : TooltipUiModel.of(label, body));
     }
+    
+    //sonar-ignore-off
 
     // -- HELPER
     

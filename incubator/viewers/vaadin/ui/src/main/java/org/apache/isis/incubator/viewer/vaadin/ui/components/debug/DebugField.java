@@ -55,15 +55,20 @@ public class DebugField extends CustomField<DebugUiModel> {
         
         details.setSummaryText(model.getSummaryText());
 
-        val formLayout = (FormLayout) details.getContent().findFirst().get();
-        formLayout.removeAll();
+        details.getContent().findFirst()
+        .map(FormLayout.class::cast)
+        .ifPresent(formLayout->{
         
-        model.getKeyValuePairs().forEach((k, v)->{
-            val textArea = new TextArea();
-            textArea.setLabel(k);
-            textArea.setValue(v);
-            textArea.setInvalid(true);
-            formLayout.add(textArea);
+            formLayout.removeAll();
+            
+            model.getKeyValuePairs().forEach((k, v)->{
+                val textArea = new TextArea();
+                textArea.setLabel(k);
+                textArea.setValue(v);
+                textArea.setInvalid(true);
+                formLayout.add(textArea);
+            });
+            
         });
         
     }

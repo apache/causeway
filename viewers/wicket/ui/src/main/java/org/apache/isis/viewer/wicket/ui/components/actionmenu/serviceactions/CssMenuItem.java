@@ -116,15 +116,14 @@ implements Serializable {
             // .. and hide label
             Components.permanentlyHide(markupContainer, CssMenuItem.ID_MENU_LABEL);
             return actionLink;
-        }
-        else {
+        } else {
             // hide link...
             Components.permanentlyHide(markupContainer, ID_MENU_LINK);
             // ... and show label, along with disabled reason
             
             val disableUiModel = actionMeta.getDisableUiModel();
             
-            Tooltips.addTooltip(actionLink, disableUiModel.getReason().orElse(null));
+            Tooltips.addTooltip(label, disableUiModel.getReason().orElse(null));
             label.add(new AttributeModifier("class", Model.of("disabled")));
 
             markupContainer.add(label);
