@@ -30,8 +30,8 @@ public class DateField extends CustomField<LocalDate> {
     private static final long serialVersionUID = 1L;
     
     private final DatePicker datePicker = new DatePicker();
-    private LocalDate temporal;
-
+    private boolean isNull;
+    
     public DateField(String label) {
         super();
         setLabel(label);
@@ -40,20 +40,20 @@ public class DateField extends CustomField<LocalDate> {
     
     @Override
     protected LocalDate generateModelValue() {
-        return temporal;
+        return datePicker.getValue();
     }
 
     @Override
-    protected void setPresentationValue(@Nullable LocalDate temporal) {
-        this.temporal = temporal;
+    protected void setPresentationValue(@Nullable LocalDate newValue) {
         
-        if(temporal==null) {
+        this.isNull = newValue==null;
+        datePicker.setValue(newValue);
+        
+        if(this.isNull) {
             datePicker.setPlaceholder("no date");
-            return;
         }
         
-        datePicker.setValue(temporal);
-        
     }
+   
     
 }

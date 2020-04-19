@@ -19,16 +19,17 @@
 package org.apache.isis.incubator.viewer.vaadin.ui.components.temporal;
 
 import java.time.LocalDate;
-import java.time.temporal.Temporal;
-import java.util.Optional;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.data.binder.Binder;
 
 import org.springframework.core.annotation.Order;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet;
+import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet.TemporalCharacteristic;
+import org.apache.isis.incubator.viewer.vaadin.ui.binding.BinderUtil;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory.Request;
 
@@ -40,24 +41,44 @@ public class TemporalFieldFactory implements UiComponentHandlerVaa {
 
     @Override
     public boolean isHandling(Request request) {
-        return request.hasFeatureFacet(TemporalValueFacet.class)
+        return request.isFeatureTypeEqualTo(java.sql.Date.class)
+            ||(request.hasFeatureFacet(TemporalValueFacet.class)
                 // TODO lift this restrictions, as we support more types
-                && request.isFeatureTypeEqualTo(LocalDate.class); 
+                && (
+                        request.isFeatureTypeEqualTo(LocalDate.class)
+//                        || request.isFeatureTypeEqualTo(java.sql.Date.class)
+                )); 
     }
 
     @Override
     public Component handle(Request request) {
 
-        val temporalFacet = request.getFeatureFacetElseFail(TemporalValueFacet.class);
-        val temporalCharacteristic = temporalFacet.getTemporalCharacteristic();
-        val offsetCharacteristic = temporalFacet.getOffsetCharacteristic();
-        val temporal = request.getPojo(Temporal.class);
+        val temporalFacet = request.getFeatureFacet(TemporalValueFacet.class);
+        val temporalCharacteristic = temporalFacet
+                .map(TemporalValueFacet::getTemporalCharacteristic)
+                .orElse(TemporalCharacteristic.DATE_ONLY);
+        //val offsetCharacteristic = temporalFacet.getOffsetCharacteristic();
         
         switch(temporalCharacteristic) {
         case DATE_ONLY:{
+
             val uiField = new DateField(request.getFeatureLabel());
-            uiField.setValue(toLocalDate(temporal).orElse(null));
+            
+            final Binder<Request> binder;
+            if(request.isFeatureTypeEqualTo(LocalDate.class)) {
+                binder = BinderUtil.DateBinder.JAVA_TIME_LOCAL_DATE.bind(uiField);
+            } else if(request.isFeatureTypeEqualTo(java.sql.Date.class)) {
+                binder = BinderUtil.DateBinder.JAVA_SQL_DATE.bind(uiField);
+            } else {
+                throw _Exceptions.unmatchedCase(request.getFeatureType());
+            }
+            
+            binder.setBean(request);
             return uiField;
+            
+            //val uiField = DateField.bind(request);
+            
+
             }    
         case TIME_ONLY:{
             // TODO ... 
@@ -71,14 +92,4 @@ public class TemporalFieldFactory implements UiComponentHandlerVaa {
         
     }
 
-    private Optional<LocalDate> toLocalDate(Optional<Temporal> temporal) {
-        return temporal.map(this::toLocalDate);
-    }
-    
-    private LocalDate toLocalDate(Temporal temporal) {
-        return (temporal instanceof LocalDate)
-                ? (LocalDate) temporal
-                : null;
-    }
-    
 }

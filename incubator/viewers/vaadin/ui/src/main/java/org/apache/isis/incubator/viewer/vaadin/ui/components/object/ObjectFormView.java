@@ -20,6 +20,7 @@ package org.apache.isis.incubator.viewer.vaadin.ui.components.object;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 import com.vaadin.flow.component.Component;
@@ -30,8 +31,10 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.MutableCurrentHolder;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
@@ -74,7 +77,16 @@ public class ObjectFormView extends VerticalLayout {
                 tablesLayout.add(new Label(objectAssociation.getName()));
                 tablesLayout.add(createCollectionComponent(objectAssociation, assocObject));
             } else {
-                val uiComponentCreateRequest = UiComponentFactory.Request.of(assocObject, objectAssociation);
+                
+                final UnaryOperator<ManagedObject> toDomainPropagator = proposedNewValue -> {
+                    MutableCurrentHolder property = (MutableCurrentHolder) objectAssociation;
+                    property.set(managedObject, proposedNewValue, InteractionInitiatedBy.USER);
+                    // TODO where is the rule checking part?
+                    return proposedNewValue;
+                };
+                
+                val uiComponentCreateRequest = UiComponentFactory.Request
+                        .of(assocObject, objectAssociation, toDomainPropagator);
                 val uiComponent = uiComponentFactory.componentFor(uiComponentCreateRequest);
                 formLayout.add(uiComponent);
             }

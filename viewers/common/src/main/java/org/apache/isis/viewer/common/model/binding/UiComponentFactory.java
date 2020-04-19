@@ -19,10 +19,12 @@
 package org.apache.isis.viewer.common.model.binding;
 
 import java.util.Optional;
+import java.util.function.UnaryOperator;
 
 import javax.annotation.Nullable;
 
 import org.apache.isis.core.commons.handler.ChainOfResponsibility;
+import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -31,6 +33,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 
 import lombok.NonNull;
 import lombok.Value;
+import lombok.val;
 
 public interface UiComponentFactory<T> {
     
@@ -43,6 +46,7 @@ public interface UiComponentFactory<T> {
         /** not null but the wrapped pojo is allowed to be null*/
         @NonNull private final ManagedObject managedObject; 
         @NonNull private final ObjectFeature objectFeature;
+        @NonNull private final UnaryOperator<ManagedObject> toDomainPropagator;
         
         // -- SHORTCUTS
         
@@ -113,7 +117,16 @@ public interface UiComponentFactory<T> {
             return Optional.ofNullable(getManagedObject().getPojo())
                     .map(type::cast);
         }
-        
+
+        public <T> UnaryOperator<T> getPropagator(Class<T> pojoType) {
+            return (T newValueProposal)->{
+                val newValue = ManagedObject.of(getFeatureSpec(), newValueProposal);
+                return _Casts.uncheckedCast(
+                        toDomainPropagator
+                            .apply(newValue)
+                            .getPojo());
+            };
+        }
         
     }
     
