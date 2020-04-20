@@ -45,6 +45,7 @@ import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.testdomain.Incubating;
 import org.apache.isis.testdomain.Smoketest;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
@@ -72,7 +73,7 @@ import lombok.val;
 })
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DirtiesContext // because of the temporary installed PublisherServiceProbe
-//@Incubating("fails when run with surefire")
+@Incubating("possibly fails when run with surefire")
 class PublisherServiceTest extends IsisIntegrationTestAbstract {
 
     @Inject private RepositoryService repository;
