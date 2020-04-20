@@ -28,6 +28,7 @@ import org.springframework.core.annotation.Order;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet;
+import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet.OffsetCharacteristic;
 import org.apache.isis.core.metamodel.facets.value.temporal.TemporalValueFacet.TemporalCharacteristic;
 import org.apache.isis.incubator.viewer.vaadin.ui.binding.BinderUtil;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
@@ -53,11 +54,8 @@ public class TemporalFieldFactory implements UiComponentHandlerVaa {
     @Override
     public Component handle(Request request) {
 
-        val temporalFacet = request.getFeatureFacet(TemporalValueFacet.class);
-        val temporalCharacteristic = temporalFacet
-                .map(TemporalValueFacet::getTemporalCharacteristic)
-                .orElse(TemporalCharacteristic.DATE_ONLY);
-        //val offsetCharacteristic = temporalFacet.getOffsetCharacteristic();
+        val temporalCharacteristic = getTemporalCharacteristic(request);
+        val offsetCharacteristic = getOffsetCharacteristic(request);
         
         switch(temporalCharacteristic) {
         case DATE_ONLY:{
@@ -90,6 +88,38 @@ public class TemporalFieldFactory implements UiComponentHandlerVaa {
             throw _Exceptions.unmatchedCase(temporalCharacteristic);
         }
         
+    }
+    
+    // -- HELPER
+    
+    private TemporalCharacteristic getTemporalCharacteristic(Request request) {
+        @SuppressWarnings("rawtypes")
+        val temporalFacet = request.getFeatureFacet(TemporalValueFacet.class);
+        if(temporalFacet.isPresent()) {
+            return temporalFacet.get().getTemporalCharacteristic();
+        }
+        if(request.isFeatureTypeEqualTo(java.sql.Date.class)) {
+            return TemporalCharacteristic.DATE_ONLY;
+        }
+        if(request.isFeatureTypeEqualTo(java.util.Date.class)) {
+            return TemporalCharacteristic.DATE_TIME;
+        }
+        throw _Exceptions.unrecoverableFormatted("type %s not handled", request.getFeatureType());
+    }
+    
+    private OffsetCharacteristic getOffsetCharacteristic(Request request) {
+        @SuppressWarnings("rawtypes")
+        val temporalFacet = request.getFeatureFacet(TemporalValueFacet.class);
+        if(temporalFacet.isPresent()) {
+            return temporalFacet.get().getOffsetCharacteristic();
+        }
+        if(request.isFeatureTypeEqualTo(java.sql.Date.class)) {
+            return OffsetCharacteristic.LOCAL;
+        }
+        if(request.isFeatureTypeEqualTo(java.util.Date.class)) {
+            return OffsetCharacteristic.LOCAL;
+        }
+        throw _Exceptions.unrecoverableFormatted("type %s not handled", request.getFeatureType());
     }
 
 }

@@ -50,7 +50,7 @@ public class DateField extends CustomField<LocalDate> {
         datePicker.setValue(newValue);
         
         if(this.isNull) {
-            datePicker.setPlaceholder("no date");
+            datePicker.setPlaceholder("no date"); //TODO allow translation
         }
         
     }

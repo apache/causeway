@@ -33,6 +33,7 @@ import org.apache.isis.incubator.viewer.vaadin.ui.components.markup.MarkupFieldF
 import org.apache.isis.incubator.viewer.vaadin.ui.components.other.FallbackFieldFactory;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.temporal.TemporalFieldFactory;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.text.TextFieldFactory;
+import org.apache.isis.incubator.viewer.vaadin.ui.components.text.uuid.UuidFieldFactory;
 import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
 
 
@@ -53,7 +54,10 @@ import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
         MarkupFieldFactory.class,
         TemporalFieldFactory.class,
         TextFieldFactory.class,
+        UuidFieldFactory.class,
+        // last in chain
         FallbackFieldFactory.class,
+        
         
 })
 @EnableVaadin("org.apache.isis.incubator.viewer.vaadin.ui") // scan for vaadin annotations

@@ -19,18 +19,16 @@
 package org.apache.isis.incubator.viewer.vaadin.ui.binding;
 
 import java.time.LocalDate;
-import java.util.Locale;
 
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.binder.ValueContext;
 import com.vaadin.flow.data.converter.Converter;
 import com.vaadin.flow.data.converter.DateToSqlDateConverter;
 import com.vaadin.flow.data.converter.LocalDateToDateConverter;
 
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory.Request;
 
+import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -62,26 +60,17 @@ public final class BinderUtil {
             final Class<U> modelValueType,
             final Converter<T, U> converter) {
         
-        final ValueContext valueContext = new ValueContext(Locale.getDefault());
-        
-        final Binder<Request> binder = new Binder<>();
+        val binder = new Binder<Request>();
         
         binder.forField(uiField)
+        .withConverter(converter)
         .bind(
-                request->request
-                    .getPojo(modelValueType)
-                    .map(modelValue->converter.convertToPresentation(modelValue, valueContext))
-                    .orElse(null), 
-                (request, newValue)->request
-                    .getPropagator(modelValueType)
-                    .apply(converter
-                            .convertToModel(newValue, valueContext)
-                            .getOrThrow(message-> {
-                                throw _Exceptions.illegalArgument("cannot convert due %s", message);   
-                            }))
+                request->request.getPojo(modelValueType).orElse(null), 
+                (request, newValue)->request.getPropagator(modelValueType).apply(newValue)
         );
         return binder;
     }
+   
 
     // -- SHORTCUTS
     
@@ -108,7 +97,6 @@ public final class BinderUtil {
         public abstract Binder<Request> bind(final HasValue<?, LocalDate> uiField);
         
     }
-
             
     
 }
