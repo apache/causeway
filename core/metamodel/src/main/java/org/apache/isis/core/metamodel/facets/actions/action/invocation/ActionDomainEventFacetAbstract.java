@@ -30,6 +30,7 @@ import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
+import org.apache.isis.core.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
@@ -115,6 +116,9 @@ implements ActionDomainEventFacet {
     @Override
     public String invalidates(final ValidityContext<? extends ValidityEvent> ic) {
 
+        _Assert.assertTrue(ic instanceof ActionValidityContext, ()->
+            String.format("expecting an action context but got %s", ic.getIdentifier()));
+        
         final ActionValidityContext aic = (ActionValidityContext) ic;
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(

@@ -20,7 +20,7 @@ package org.apache.isis.incubator.viewer.vaadin.ui.components.object;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.function.UnaryOperator;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.vaadin.flow.component.Component;
@@ -31,15 +31,15 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
-import org.apache.isis.core.metamodel.spec.feature.MutableCurrentHolder;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableView;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
+import org.apache.isis.viewer.common.model.binding.interaction.ObjectInteractor;
 
 import lombok.NonNull;
 import lombok.val;
@@ -57,6 +57,9 @@ public class ObjectFormView extends VerticalLayout {
     public ObjectFormView(
             @NonNull final UiComponentFactoryVaa uiComponentFactory,
             @NonNull final ManagedObject managedObject) {
+        
+        val objectInteractor = ObjectInteractor.bind(managedObject);
+        
         val specification = managedObject.getSpecification();
         val title = specification.getTitle(null, managedObject);
         add(new H1(title));
@@ -78,11 +81,15 @@ public class ObjectFormView extends VerticalLayout {
                 tablesLayout.add(createCollectionComponent(objectAssociation, assocObject));
             } else {
                 
-                final UnaryOperator<ManagedObject> toDomainPropagator = proposedNewValue -> {
-                    MutableCurrentHolder property = (MutableCurrentHolder) objectAssociation;
-                    property.set(managedObject, proposedNewValue, InteractionInitiatedBy.USER);
-                    // TODO where is the rule checking part?
-                    return proposedNewValue;
+                final Function<ManagedObject, String> toDomainPropagator = proposedNewValue -> {
+                    
+                    val property = (OneToOneAssociation) objectAssociation;
+                    
+                    val iResponse = objectInteractor.modifyProperty(property, proposedNewValue);
+                    if (iResponse.isFailure()) {
+                        return iResponse.getFailureMessage(); // validation result if any
+                    }
+                    return null; 
                 };
                 
                 val uiComponentCreateRequest = UiComponentFactory.Request

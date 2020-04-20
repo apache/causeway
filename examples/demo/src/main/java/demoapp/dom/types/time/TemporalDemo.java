@@ -41,6 +41,8 @@ import org.apache.isis.applib.util.JaxbAdapters.LocalDateTimeAdapter;
 import org.apache.isis.applib.util.JaxbAdapters.OffsetDateTimeAdapter;
 import org.apache.isis.applib.util.JaxbAdapters.SqlDateAdapter;
 import org.apache.isis.applib.util.JaxbAdapters.SqlTimestampAdapter;
+import org.apache.isis.core.commons.internal.debug._Probe;
+import org.apache.isis.incubator.model.applib.annotation.Model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -65,12 +67,29 @@ public class TemporalDemo extends DemoStub {
     @Property
     @PropertyLayout(describedAs="java.sql.Date")
     @XmlElement @XmlJavaTypeAdapter(SqlDateAdapter.class)
-    @Getter @Setter private java.sql.Date javaSqlDate;
+    @Getter //@Setter 
+    private java.sql.Date javaSqlDate;
+    public void setJavaSqlDate(java.sql.Date javaSqlDate) {
+        this.javaSqlDate = javaSqlDate;
+        _Probe.sysOut("setJavaSqlDate %s", javaSqlDate);
+    }
 
     @Property
     @PropertyLayout(describedAs="java.time.LocalDate")
     @XmlElement @XmlJavaTypeAdapter(LocalDateAdapter.class)
-    @Getter @Setter private LocalDate javaLocalDate;
+    @Getter //@Setter 
+    private LocalDate javaLocalDate;
+    public void setJavaLocalDate(LocalDate javaLocalDate) {
+        this.javaLocalDate = javaLocalDate;
+        _Probe.sysOut("setJavaLocalDate %s", javaLocalDate);
+    }
+    @Model
+    public String validateJavaLocalDate(LocalDate javaLocalDate) {
+        if(javaLocalDate.isBefore(LocalDate.now())) {
+            return "cannot be in the past";
+        }
+        return null;
+    }
 
     // -- DATE AND TIME (LOCAL TIME)
 

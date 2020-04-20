@@ -61,6 +61,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
+import org.apache.isis.viewer.common.model.binding.interaction.ObjectInteractor;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -451,23 +452,20 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
-        final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
+        val accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
 
-        final OneToOneAssociation property = accessHelper.getPropertyThatIsVisibleForIntent(propertyId,
+        val property = accessHelper.getPropertyThatIsVisibleForIntent(propertyId,
                 ObjectAdapterAccessHelper.Intent.MUTATE);
 
-        final ObjectSpecification propertySpec = property.getSpecification();
-        final String bodyAsString = Util.asStringUtf8(body);
+        val proposedNewValue = new JsonParserHelper(resourceContext, property.getSpecification())
+                .parseAsMapWithSingleValue(Util.asStringUtf8(body));
 
-        final ManagedObject argAdapter = new JsonParserHelper(resourceContext, propertySpec).parseAsMapWithSingleValue(
-                bodyAsString);
-
-        final Consent consent = property.isAssociationValid(objectAdapter, argAdapter, InteractionInitiatedBy.USER);
-        if (consent.isVetoed()) {
-            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.UNAUTHORIZED, consent.getReason());
+        val objectInteractor = ObjectInteractor.bind(objectAdapter);
+        val iResponse = objectInteractor.modifyProperty(property, proposedNewValue);
+        if (iResponse.isFailure()) {
+            throw RestfulObjectsApplicationException
+                .createWithMessage(HttpStatusCode.UNAUTHORIZED, iResponse.getFailureMessage());
         }
-
-        property.set(objectAdapter, argAdapter, InteractionInitiatedBy.USER);
 
         return domainResourceHelper.propertyDetails(
                 propertyId,
@@ -494,15 +492,15 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
         val accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
 
-        final OneToOneAssociation property = accessHelper.getPropertyThatIsVisibleForIntent(
+        val property = accessHelper.getPropertyThatIsVisibleForIntent(
                 propertyId, ObjectAdapterAccessHelper.Intent.MUTATE);
 
-        final Consent consent = property.isAssociationValid(objectAdapter, null, InteractionInitiatedBy.USER);
-        if (consent.isVetoed()) {
-            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.UNAUTHORIZED, consent.getReason());
+        val objectInteractor = ObjectInteractor.bind(objectAdapter);
+        val iResponse = objectInteractor.modifyProperty(property, null);
+        if (iResponse.isFailure()) {
+            throw RestfulObjectsApplicationException
+                .createWithMessage(HttpStatusCode.UNAUTHORIZED, iResponse.getFailureMessage());
         }
-
-        property.set(objectAdapter, null, InteractionInitiatedBy.USER);
 
         return domainResourceHelper.propertyDetails(
                 propertyId,
