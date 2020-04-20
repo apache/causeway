@@ -59,7 +59,7 @@ public class ObjectInteractor {
     
     public Stream<ObjectAction> streamVisisbleActions() {
         return managedObject.getSpecification()
-        .streamAssociations(Contributed.INCLUDED)
+        .streamObjectActions(Contributed.INCLUDED)
         .filter(objMember->objMember.getFeatureType().isAction())
         //TODO filter visibility
         .map(ObjectAction.class::cast);
