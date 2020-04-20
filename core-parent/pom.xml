@@ -948,6 +948,7 @@ under the License.
 			</activation>
 			<modules>
 				<module>../examples/demo</module>
+				<module>../examples/demo-vaadin</module>
 			</modules>
 		</profile>
 
