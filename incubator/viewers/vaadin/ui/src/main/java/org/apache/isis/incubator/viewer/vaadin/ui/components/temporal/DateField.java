@@ -30,7 +30,6 @@ public class DateField extends CustomField<LocalDate> {
     private static final long serialVersionUID = 1L;
     
     private final DatePicker datePicker = new DatePicker();
-    private boolean isNull;
     
     public DateField(String label) {
         super();
@@ -46,10 +45,9 @@ public class DateField extends CustomField<LocalDate> {
     @Override
     protected void setPresentationValue(@Nullable LocalDate newValue) {
         
-        this.isNull = newValue==null;
         datePicker.setValue(newValue);
         
-        if(this.isNull) {
+        if(newValue==null) {
             datePicker.setPlaceholder("no date"); //TODO allow translation
         }
         

@@ -20,25 +20,20 @@ package org.apache.isis.incubator.viewer.vaadin.ui.components.object;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableView;
-import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
 import org.apache.isis.viewer.common.model.binding.interaction.ObjectInteractor;
 
 import lombok.NonNull;
@@ -60,50 +55,50 @@ public class ObjectFormView extends VerticalLayout {
         
         val objectInteractor = ObjectInteractor.bind(managedObject);
         
-        val specification = managedObject.getSpecification();
-        val title = specification.getTitle(null, managedObject);
-        add(new H1(title));
+        add(new H1(objectInteractor.getTitle()));
 
-        val objectAssociations = specification
-                .streamAssociations(Contributed.INCLUDED)
-                .filter(ObjectMember::isPropertyOrCollection)
-                .collect(Collectors.toList());
+        val actionsLayout = new HorizontalLayout();
+        add(actionsLayout);
+        
         val formLayout = new FormLayout();
+        add(formLayout);
+        
         val tablesLayout = new VerticalLayout();
-        objectAssociations.forEach(objectAssociation -> {
-
-            val assocSpec = objectAssociation.getSpecification(); 
-            val assocObject = Optional.ofNullable(objectAssociation.get(managedObject))
-                    .orElse(ManagedObject.of(assocSpec, null));
-
-            if(objectAssociation.getFeatureType().isCollection()) {
-                tablesLayout.add(new Label(objectAssociation.getName()));
-                tablesLayout.add(createCollectionComponent(objectAssociation, assocObject));
-            } else {
-                
-                final Function<ManagedObject, String> toDomainPropagator = proposedNewValue -> {
-                    
-                    val property = (OneToOneAssociation) objectAssociation;
-                    
-                    val iResponse = objectInteractor.modifyProperty(property, proposedNewValue);
-                    if (iResponse.isFailure()) {
-                        return iResponse.getFailureMessage(); // validation result if any
-                    }
-                    return null; 
-                };
-                
-                val uiComponentCreateRequest = UiComponentFactory.Request
-                        .of(assocObject, objectAssociation, toDomainPropagator);
-                val uiComponent = uiComponentFactory.componentFor(uiComponentCreateRequest);
-                formLayout.add(uiComponent);
-            }
+        add(tablesLayout);
+        
+        setWidthFull();
+        
+        // -- populate actions
+        
+        objectInteractor
+        .streamVisisbleActions()
+        .forEach(action -> {
+            actionsLayout.add(new Button(action.getName()));
+        });
+        
+        // -- populate properties
+        
+        objectInteractor
+        .streamVisisbleProperties()
+        .forEach(property -> {
+            val uiComponentCreateRequest = objectInteractor.newUiComponentCreateRequest(property);
+            val uiComponent = uiComponentFactory.componentFor(uiComponentCreateRequest);
+            formLayout.add(uiComponent);
+        });
+        
+        // -- populate collections
+        
+        objectInteractor
+        .streamVisisbleCollections()
+        .forEach(collection->{
+            
+            val collectionValue = Optional.ofNullable(collection.get(managedObject))
+                    .orElse(ManagedObject.of(collection.getSpecification(), null));
+            
+            tablesLayout.add(new H3(collection.getName()));
+            tablesLayout.add(createCollectionComponent(collection, collectionValue));
             
         });
-
-        add(formLayout);
-        add(new H3("Tables"));
-        add(tablesLayout);
-        setWidthFull();
 
     }
     

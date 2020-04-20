@@ -18,9 +18,16 @@
  */
 package org.apache.isis.viewer.common.model.binding.interaction;
 
+import java.util.Optional;
+import java.util.stream.Stream;
+
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -29,6 +36,34 @@ import lombok.val;
 public class ObjectInteractor {
 
     private final ManagedObject managedObject;
+    
+    public String getTitle() {
+        return managedObject.getSpecification().getTitle(null, managedObject);
+    }
+
+    public Stream<OneToOneAssociation> streamVisisbleProperties() {
+        return managedObject.getSpecification()
+        .streamAssociations(Contributed.INCLUDED)
+        .filter(objMember->objMember.getFeatureType().isProperty())
+        //TODO filter visibility
+        .map(OneToOneAssociation.class::cast);
+    }
+    
+    public Stream<OneToManyAssociation> streamVisisbleCollections() {
+        return managedObject.getSpecification()
+        .streamAssociations(Contributed.INCLUDED)
+        .filter(objMember->objMember.getFeatureType().isCollection())
+        //TODO filter visibility
+        .map(OneToManyAssociation.class::cast);
+    }
+    
+    public Stream<ObjectAction> streamVisisbleActions() {
+        return managedObject.getSpecification()
+        .streamAssociations(Contributed.INCLUDED)
+        .filter(objMember->objMember.getFeatureType().isAction())
+        //TODO filter visibility
+        .map(ObjectAction.class::cast);
+    }
     
     public InteractionResponse modifyProperty(
             final OneToOneAssociation property, 
@@ -43,5 +78,31 @@ public class ObjectInteractor {
         
         return InteractionResponse.success();
     }
+
+    public UiComponentFactory.Request newUiComponentCreateRequest(
+            final OneToOneAssociation property) {
+        
+        val propertyValue = Optional.ofNullable(property.get(managedObject))
+                .orElse(ManagedObject.of(property.getSpecification(), null));
+        
+        return UiComponentFactory.Request
+        .of(propertyValue, property, proposedNewValue -> {
+            
+            val iResponse = modifyProperty(property, proposedNewValue);
+            if (iResponse.isFailure()) {
+                return iResponse.getFailureMessage(); // validation result if any
+            }
+            return null;
+            
+        });
+        
+    }
+
+//    public UiComponentFactory.Request newUiComponentCreateRequest(
+//            final ObjectAction action) {
+//        // TODO Auto-generated method stub
+//        return null;
+//    }
+    
     
 }

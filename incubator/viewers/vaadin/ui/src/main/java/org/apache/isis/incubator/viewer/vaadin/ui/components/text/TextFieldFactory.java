@@ -45,10 +45,12 @@ public class TextFieldFactory implements UiComponentHandlerVaa {
 
         val uiField = new TextField(request.getFeatureLabel());
         
-        val binder = BinderUtil.requestBinder(uiField, String.class);
+        val binder = BinderUtil.requestBinder(uiField, String.class, 
+                builder->builder.withNullRepresentation(""));
         
-        if(request.getFeatureSpec().isImmutable()) {
-            binder.readBean(request);    
+        if(request.isReadOnly()) {
+            uiField.setReadOnly(true);
+            binder.readBean(request);
         } else {
             binder.setBean(request);
         }

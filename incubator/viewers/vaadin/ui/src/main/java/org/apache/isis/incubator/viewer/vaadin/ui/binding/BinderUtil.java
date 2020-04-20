@@ -19,9 +19,11 @@
 package org.apache.isis.incubator.viewer.vaadin.ui.binding;
 
 import java.time.LocalDate;
+import java.util.function.Function;
 
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.binder.Binder.BindingBuilder;
 import com.vaadin.flow.data.binder.Result;
 import com.vaadin.flow.data.binder.ValueContext;
 import com.vaadin.flow.data.converter.Converter;
@@ -37,11 +39,29 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class BinderUtil {
 
+    public static <P, M> Binder<Request> requestBinder(
+            final HasValue<?, P> uiField,
+            final Class<M> modelValueType,
+            final Function<BindingBuilder<Request, P>, BindingBuilder<Request, M>> chain) {
+        
+        val binder = new Binder<Request>();
+        val propagator = new Propagator<M>(modelValueType);
+        
+        chain.apply(binder.forField(uiField))
+        .withConverter(propagator)
+        .bind(
+                propagator::init, 
+                propagator::propagate 
+        );
+        return binder;
+    }
+    
     /**
      * 
      * @param <P> presentation type (field value type)
      * @param uiField
      * @param fieldValueType
+     * @param nullRepresentation 
      * @return
      */
     public static <P> Binder<Request> requestBinder(
@@ -69,41 +89,13 @@ public final class BinderUtil {
      * @param converter
      * @return
      */
-//    public static <P, M> Binder<Request> requestBinderWithConverterX(
-//            final HasValue<?, P> uiField,
-//            final Class<M> modelValueType,
-//            final Converter<P, M> converter) {
-//        
-//        val binder = new Binder<Request>();
-//        
-//        binder.forField(uiField)
-//        .withConverter(converter)
-//        .bind(
-//                request->request.getPojo(modelValueType).orElse(null), 
-//                (request, newValue)->request.getPropagator(modelValueType).apply(newValue)
-//        )
-//        ;
-//        return binder;
-//    }
-    
     public static <P, M> Binder<Request> requestBinderWithConverter(
             final HasValue<?, P> uiField,
             final Class<M> modelValueType,
             final Converter<P, M> converter) {
         
-        val binder = new Binder<Request>();
-        val propagator = new Propagator<M>(modelValueType);
-        
-        binder.forField(uiField)
-        .withConverter(converter)
-        .withConverter(propagator)
-        .bind(
-                propagator::init, 
-                propagator::propagate 
-        );
-        
-        
-        return binder;
+        return requestBinder(uiField, modelValueType, 
+                binder->binder.withConverter(converter));
     }
     
     @RequiredArgsConstructor
@@ -165,6 +157,6 @@ public final class BinderUtil {
         public abstract Binder<Request> bind(final HasValue<?, LocalDate> uiField);
         
     }
-            
+    
     
 }

@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 import org.apache.isis.core.commons.handler.ChainOfResponsibility;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
@@ -123,6 +124,10 @@ public interface UiComponentFactory<T> {
                 val newValue = ManagedObject.of(getFeatureSpec(), newValueProposal);
                 return toDomainPropagator.apply(newValue);
             };
+        }
+
+        public boolean isReadOnly() {
+            return objectFeature.getFacet(DisabledFacet.class)!=null;
         }
         
     }
