@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.common.model.binding.interaction;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -98,11 +99,17 @@ public class ObjectInteractor {
         
     }
 
-//    public UiComponentFactory.Request newUiComponentCreateRequest(
-//            final ObjectAction action) {
-//        // TODO Auto-generated method stub
-//        return null;
-//    }
+    public Optional<OneToOneAssociation> lookupProperty(String id) {
+        return streamVisisbleProperties()
+                .filter(property->Objects.equals(id, property.getId()))
+                .findFirst();
+    }
+
+    public Optional<ObjectAction> lookupAction(String id) {
+        return streamVisisbleActions()
+                .filter(action->Objects.equals(id, action.getId()))
+                .findFirst();
+    }
     
     
 }

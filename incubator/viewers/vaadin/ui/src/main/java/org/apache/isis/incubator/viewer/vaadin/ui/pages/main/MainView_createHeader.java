@@ -132,8 +132,8 @@ final class MainView_createHeader {
             val logo = new Image(
                     webAppContextPath.prependContextPathIfLocal(brandingLogo.get()), 
                     "brandingLogo");
-            logo.setWidth("48px");
-            logo.setHeight("48px");
+            logo.setWidth("48px"); //TODO make this part of the UI model
+            logo.setHeight("48px"); //TODO make this part of the UI model
             return logo;
         }
         return new Text(brandingName.orElse("App"));
