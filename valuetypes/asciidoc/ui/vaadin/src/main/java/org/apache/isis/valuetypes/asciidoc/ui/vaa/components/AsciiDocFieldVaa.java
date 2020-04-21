@@ -58,7 +58,7 @@ public class AsciiDocFieldVaa extends CustomField<AsciiDoc> {
             return;
         }
 
-        div.add(new Html("<div>" + markup.asString() + "</div>"));
+        div.add(new Html("<div style=\"line-height:normal\">" + markup.asString() + "</div>"));
     }
 
 }
