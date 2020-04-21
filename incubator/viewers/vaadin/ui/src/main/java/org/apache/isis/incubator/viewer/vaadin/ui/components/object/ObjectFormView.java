@@ -24,11 +24,12 @@ import java.util.Optional;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
@@ -36,6 +37,8 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.TextField;
 
 import org.apache.isis.applib.layout.component.ActionLayoutData;
+import org.apache.isis.applib.layout.component.CollectionLayoutData;
+import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3ClearFix;
@@ -43,8 +46,6 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
-import org.apache.isis.core.commons.internal.primitives._Ints;
-import org.apache.isis.core.commons.internal.primitives._Ints.Bound;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
@@ -72,17 +73,22 @@ public class ObjectFormView extends VerticalLayout {
         
         val objectInteractor = ObjectInteractor.bind(managedObject);
         
-        add(new H1(objectInteractor.getTitle()));
-        
         val uiGridLayout = UiGridLayout.bind(managedObject);
         
         // force new row
         //formLayout.getElement().appendChild(ElementFactory.createBr());
         
-        val range1_12 = _Ints.Range.of(Bound.inclusive(1), Bound.inclusive(12));
-        
         val gridVisistor = new UiGridLayout.Visitor<HasComponents>(this) {
 
+            @Override
+            protected void onObjectTitle(HasComponents container, DomainObjectLayoutData domainObjectData) {
+                val uiTitle = new H1(objectInteractor.getTitle());
+//                uiTitle.addThemeVariants(
+//                        ButtonVariant.LUMO_LARGE,
+//                        ButtonVariant.LUMO_TERTIARY_INLINE);
+                container.add(uiTitle);     
+            }
+            
             @Override
             protected HasComponents newRow(HasComponents container, BS3Row bs3Row) {
                 val uiRow = new FlexLayout();
@@ -98,7 +104,7 @@ public class ObjectFormView extends VerticalLayout {
                 val uiCol = new VerticalLayout();
                 container.add(uiCol);
                 
-                final int span = range1_12.bounded(bs3col.getSpan());
+                final int span = bs3col.getSpan();
                 ((FlexLayout)container).setFlexGrow(span, uiCol);
                 val widthEm = String.format("%dem", span * 3); // 1em ~ 16px
                 uiCol.setWidth(null); // clear preset width style
@@ -113,7 +119,7 @@ public class ObjectFormView extends VerticalLayout {
                 container.add(uiActionPanel);
                 
                 uiActionPanel.setWrapMode(FlexLayout.WrapMode.WRAP); // allow line breaking
-                
+                uiActionPanel.setAlignItems(Alignment.BASELINE);
                 return uiActionPanel;
             }
 
@@ -135,7 +141,7 @@ public class ObjectFormView extends VerticalLayout {
             @Override
             protected HasComponents newFieldSet(HasComponents container, FieldSet fieldSetData) {
                 
-                container.add(new H4(fieldSetData.getName()));
+                container.add(new H2(fieldSetData.getName()));
                 
                 val uiFieldSet = new FormLayout();
                 container.add(uiFieldSet);
@@ -159,6 +165,10 @@ public class ObjectFormView extends VerticalLayout {
                 .ifPresent(action->{
                     val uiAction = new Button(action.getName());
                     container.add(uiAction);
+                    uiAction.getStyle().set("margin-left", "0.5em");
+                    uiAction.addThemeVariants(
+                            ButtonVariant.LUMO_SMALL);
+                    
                 });
             }
 
@@ -171,16 +181,22 @@ public class ObjectFormView extends VerticalLayout {
                     container.add(uiProperty);                    
                 });
             }
+
+            @Override
+            protected void onCollection(HasComponents container, CollectionLayoutData collectionData) {
+                objectInteractor.lookupCollection(collectionData.getId())
+                .ifPresent(collection->{
+                    container.add(new H3(collection.getName()));
+                    
+                    val collectionValue = Optional.ofNullable(collection.get(managedObject))
+                            .orElse(ManagedObject.of(collection.getSpecification(), null));
+                    container.add(createCollectionComponent(collection, collectionValue));
+                });
+            }
             
         };
         
-        
-        
         uiGridLayout.visit(gridVisistor);
-        
-        val tablesLayout = new VerticalLayout();
-        add(tablesLayout);
-        
         setWidthFull();
         
         // -- populate actions
@@ -210,21 +226,7 @@ public class ObjectFormView extends VerticalLayout {
 ////                    e->subMenuEventHandler.accept(menuActionModel));
 //            
 //        });
-        
-        
-        // -- populate collections
-        
-        objectInteractor
-        .streamVisisbleCollections()
-        .forEach(collection->{
-            
-            val collectionValue = Optional.ofNullable(collection.get(managedObject))
-                    .orElse(ManagedObject.of(collection.getSpecification(), null));
-            
-            tablesLayout.add(new H3(collection.getName()));
-            tablesLayout.add(createCollectionComponent(collection, collectionValue));
-            
-        });
+
 
     }
     

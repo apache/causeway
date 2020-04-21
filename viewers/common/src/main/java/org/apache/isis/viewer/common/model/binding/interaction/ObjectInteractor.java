@@ -99,15 +99,21 @@ public class ObjectInteractor {
         
     }
 
+    public Optional<ObjectAction> lookupAction(String id) {
+        return streamVisisbleActions()
+                .filter(action->Objects.equals(id, action.getId()))
+                .findFirst();
+    }
+    
     public Optional<OneToOneAssociation> lookupProperty(String id) {
         return streamVisisbleProperties()
                 .filter(property->Objects.equals(id, property.getId()))
                 .findFirst();
     }
 
-    public Optional<ObjectAction> lookupAction(String id) {
-        return streamVisisbleActions()
-                .filter(action->Objects.equals(id, action.getId()))
+    public Optional<OneToManyAssociation> lookupCollection(String id) {
+        return streamVisisbleCollections()
+                .filter(collection->Objects.equals(id, collection.getId()))
                 .findFirst();
     }
     

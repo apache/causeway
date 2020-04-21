@@ -21,6 +21,8 @@ package org.apache.isis.viewer.common.model.gridlayout;
 import java.util.Optional;
 
 import org.apache.isis.applib.layout.component.ActionLayoutData;
+import org.apache.isis.applib.layout.component.CollectionLayoutData;
+import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3ClearFix;
@@ -49,9 +51,12 @@ public class UiGridLayout {
         protected abstract T newTabGroup(T container, BS3TabGroup tabGroupData);
         protected abstract T newTab(T container, BS3Tab tabData);
         protected abstract T newFieldSet(T container, FieldSet fieldSetData);
+        protected abstract void onObjectTitle(T container, DomainObjectLayoutData domainObjectData);
         protected abstract void onClearfix(T container, BS3ClearFix clearFixData);
         protected abstract void onAction(T container, ActionLayoutData actionData);
         protected abstract void onProperty(T container, PropertyLayoutData propertyData);
+        protected abstract void onCollection(T container, CollectionLayoutData collectionData);
+        
     }
     
     @NonNull private final ManagedObject managedObject;
@@ -97,11 +102,23 @@ public class UiGridLayout {
     private <T> void visitCol(BS3Col bS3Col, T container, Visitor<T> visitor) {
         val uiCol = visitor.newCol(container, bS3Col);
         
-        if(bS3Col.getActions().size()>0) {
+        val hasDomainObject = bS3Col.getDomainObject()!=null; 
+        val hasActions = bS3Col.getActions().size()>0;
+        
+        if(hasDomainObject || hasActions) {
             val uiActionPanel = visitor.newActionPanel(uiCol);
-            for(val action : bS3Col.getActions()) {
-                visitor.onAction(uiActionPanel, action);
+            if(hasDomainObject) {
+                visitor.onObjectTitle(uiActionPanel, bS3Col.getDomainObject());    
             }
+            if(hasActions) {
+                for(val action : bS3Col.getActions()) {
+                    visitor.onAction(uiActionPanel, action);
+                }    
+            }
+        }
+        
+        for(val collectionData : bS3Col.getCollections()) {
+            visitor.onCollection(uiCol, collectionData);    
         }
         
         for(val fieldSet : bS3Col.getFieldSets()) {

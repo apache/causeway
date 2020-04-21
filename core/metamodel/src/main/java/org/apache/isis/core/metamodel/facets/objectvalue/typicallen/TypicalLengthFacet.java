@@ -19,7 +19,11 @@
 
 package org.apache.isis.core.metamodel.facets.objectvalue.typicallen;
 
+import org.apache.isis.core.commons.internal.primitives._Ints;
+import org.apache.isis.core.commons.internal.primitives._Ints.Bound;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
+
+import lombok.val;
 
 /**
  * The typical length of a property or a parameter.
@@ -36,5 +40,20 @@ public interface TypicalLengthFacet extends SingleIntValueFacet {
 
     @Override
     public int value();
+    
+    /**
+     * 
+     * @param min lower bound allowed 
+     * @param max upper bound allowed
+     * @param fallback
+     * @return #value() if within given constraints [min,max], or else {@code fallback}
+     */
+    default public int bounded(int min, int max, int fallback) {
+        final int value = value();
+        val bounds = _Ints.Range.of(Bound.inclusive(min), Bound.inclusive(max));
+        return bounds.contains(value)
+                ? value
+                : bounds.bounded(fallback); 
+    }
 
 }

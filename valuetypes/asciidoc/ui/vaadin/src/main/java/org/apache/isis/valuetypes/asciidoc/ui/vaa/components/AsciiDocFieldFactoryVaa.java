@@ -23,6 +23,7 @@ import com.vaadin.flow.component.Component;
 import org.springframework.core.annotation.Order;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory.Request;
@@ -33,6 +34,8 @@ import lombok.val;
 @Order(OrderPrecedence.MIDPOINT)
 public class AsciiDocFieldFactoryVaa implements UiComponentHandlerVaa {
 
+    private final static int TYPICAL_LENGTH = 80;
+    
     @Override
     public boolean isHandling(Request request) {
         return request.isFeatureTypeAssignableFrom(AsciiDoc.class);
@@ -42,6 +45,14 @@ public class AsciiDocFieldFactoryVaa implements UiComponentHandlerVaa {
     public Component handle(Request request) {
         val uiField = new AsciiDocFieldVaa(request.getFeatureLabel());
         uiField.setValue(request.getPojo(AsciiDoc.class).orElse(null));
+        
+        final int typicalLength = request
+            .getFeatureFacet(TypicalLengthFacet.class)
+            .map(typicalLengthFacet->typicalLengthFacet.bounded(10, 10000, TYPICAL_LENGTH))
+            .orElse(TYPICAL_LENGTH);
+        
+        uiField.setMaxWidth("" + typicalLength + "em");    
+        
         return uiField;
     }
     
