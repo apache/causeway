@@ -74,6 +74,28 @@ public class _Ints {
             }
             return true;
         }
+        /**
+         * @param value
+         * @return the value or if not within range, the nearest integer to the value, that is within range   
+         */
+        public int bounded(int value) {
+            if(contains(value)) {
+                return value;
+            }
+            final int nearestToLower = nearestToLower();
+            final int nearestToUpper = nearestToUpper();
+            final int distanceToLower = value - nearestToLower; 
+            final int distanceToUpper = value - nearestToUpper;
+            return (distanceToLower <= distanceToUpper)
+                    ? nearestToLower
+                    : nearestToUpper;
+        }
+        private int nearestToLower() {
+            return lowerBound.isInclusive() ? lowerBound.getValue() : lowerBound.getValue()+1;  
+        }
+        private int nearestToUpper() {
+            return upperBound.isInclusive() ? upperBound.getValue() : upperBound.getValue()-1;
+        }
         @Override
         public String toString() {
             return String.format("%s%d,%d%S", 
