@@ -117,10 +117,6 @@ public class UiGridLayout {
             }
         }
         
-        for(val collectionData : bS3Col.getCollections()) {
-            visitor.onCollection(uiCol, collectionData);    
-        }
-        
         for(val fieldSet : bS3Col.getFieldSets()) {
             visitFieldSet(fieldSet, uiCol, visitor);
         }
@@ -133,6 +129,10 @@ public class UiGridLayout {
         for(val bs3Row: bS3Col.getRows()) { 
             throw _Exceptions.unsupportedOperation();
             //visitRow(bs3Row, uiCol, visitor);         
+        }
+        
+        for(val collectionData : bS3Col.getCollections()) {
+            visitor.onCollection(uiCol, collectionData);    
         }
         
     }

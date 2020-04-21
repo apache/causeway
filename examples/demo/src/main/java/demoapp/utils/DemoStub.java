@@ -41,7 +41,7 @@ public abstract class DemoStub {
 
     public abstract void initDefaults();
 
-    @PropertyLayout(cssClass = "adoc", typicalLength = 80)
+    @PropertyLayout(cssClass = "adoc", typicalLength = 40)
     public AsciiDoc getDescription() {
         return AsciiDoc.valueOfAdoc(readAsciiDocDescription());
     }
