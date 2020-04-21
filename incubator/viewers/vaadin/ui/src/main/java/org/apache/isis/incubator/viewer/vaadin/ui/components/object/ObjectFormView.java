@@ -87,7 +87,7 @@ public class ObjectFormView extends VerticalLayout {
             protected HasComponents newRow(HasComponents container, BS3Row bs3Row) {
                 val uiRow = new FlexLayout();
                 container.add(uiRow);
-                //uiRow.setWidthFull();
+                uiRow.setWidthFull();
                 uiRow.setWrapMode(FlexLayout.WrapMode.WRAP); // allow line breaking
                 return uiRow;
             }
@@ -100,7 +100,7 @@ public class ObjectFormView extends VerticalLayout {
                 
                 final int span = range1_12.bounded(bs3col.getSpan());
                 ((FlexLayout)container).setFlexGrow(span, uiCol);
-                val widthEm = String.format("%.2fem", span * 100./16.); // 1em ~ 16px
+                val widthEm = String.format("%dem", span * 3); // 1em ~ 16px
                 uiCol.setWidth(null); // clear preset width style
                 uiCol.setMinWidth(widthEm);
                 
@@ -142,7 +142,7 @@ public class ObjectFormView extends VerticalLayout {
                 //uiFieldSet.setWidthFull();
                 
                 uiFieldSet.setResponsiveSteps(
-                        new ResponsiveStep("0", 1));
+                        new ResponsiveStep("0", 1)); // single column only
                 
                 return uiFieldSet;
             }
