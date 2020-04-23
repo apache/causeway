@@ -92,6 +92,8 @@
 
 	<dependencies>
 	
+		<!-- DEMO DOMAIN -->
+	
 		<dependency>
 			<groupId>org.apache.isis.examples.apps</groupId>
 			<artifactId>demo</artifactId>
