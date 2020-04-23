@@ -35,6 +35,14 @@ import lombok.val;
 
 @RequiredArgsConstructor(staticName = "bind")
 public class ObjectInteractor {
+    
+    public static enum AccessIntent {
+        ACCESS, MUTATE;
+
+        public boolean isMutate() {
+            return this == MUTATE;
+        }
+    }
 
     private final ManagedObject managedObject;
     

@@ -59,7 +59,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
 import org.apache.isis.viewer.common.model.binding.interaction.ObjectInteractor;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -455,7 +454,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         val accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
 
         val property = accessHelper.getPropertyThatIsVisibleForIntent(propertyId,
-                ObjectAdapterAccessHelper.Intent.MUTATE);
+                ObjectInteractor.AccessIntent.MUTATE);
 
         val proposedNewValue = new JsonParserHelper(resourceContext, property.getSpecification())
                 .parseAsMapWithSingleValue(Util.asStringUtf8(body));
@@ -493,7 +492,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         val accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
 
         val property = accessHelper.getPropertyThatIsVisibleForIntent(
-                propertyId, ObjectAdapterAccessHelper.Intent.MUTATE);
+                propertyId, ObjectInteractor.AccessIntent.MUTATE);
 
         val objectInteractor = ObjectInteractor.bind(objectAdapter);
         val iResponse = objectInteractor.modifyProperty(property, null);
@@ -555,7 +554,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
 
         final OneToManyAssociation collection = accessHelper.getCollectionThatIsVisibleForIntent(
-                collectionId, ObjectAdapterAccessHelper.Intent.MUTATE);
+                collectionId, ObjectInteractor.AccessIntent.MUTATE);
 
         if (!collection.getCollectionSemantics().isAnySet()) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Collection '%s' does not have set semantics", collectionId);
@@ -594,7 +593,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
 
         final OneToManyAssociation collection = accessHelper.getCollectionThatIsVisibleForIntent(
-                collectionId, ObjectAdapterAccessHelper.Intent.MUTATE);
+                collectionId, ObjectInteractor.AccessIntent.MUTATE);
 
         if (!collection.getCollectionSemantics().isListOrArray()) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.METHOD_NOT_ALLOWED, "Collection '%s' does not have list or array semantics", collectionId);
@@ -633,7 +632,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
 
         final OneToManyAssociation collection = accessHelper.getCollectionThatIsVisibleForIntent(
-                collectionId, ObjectAdapterAccessHelper.Intent.MUTATE);
+                collectionId, ObjectInteractor.AccessIntent.MUTATE);
 
         final ObjectSpecification collectionSpec = collection.getSpecification();
         final ManagedObject argAdapter = new JsonParserHelper(resourceContext, collectionSpec)

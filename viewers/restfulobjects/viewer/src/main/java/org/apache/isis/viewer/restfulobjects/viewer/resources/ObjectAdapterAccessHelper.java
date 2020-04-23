@@ -26,6 +26,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.viewer.common.model.binding.interaction.ObjectInteractor.AccessIntent;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
@@ -48,14 +49,6 @@ public class ObjectAdapterAccessHelper {
                 memberId);
     }
 
-    static enum Intent {
-        ACCESS, MUTATE;
-
-        public boolean isMutate() {
-            return this == MUTATE;
-        }
-    }
-
     private final ManagedObject objectAdapter;
     private final IResourceContext resourceContext;
 
@@ -65,7 +58,7 @@ public class ObjectAdapterAccessHelper {
     }
 
     public OneToOneAssociation getPropertyThatIsVisibleForIntent(
-            final String propertyId, final Intent intent) {
+            final String propertyId, final AccessIntent intent) {
 
         val spec = objectAdapter.getSpecification();
         val association = spec.getAssociation(propertyId)
@@ -80,7 +73,7 @@ public class ObjectAdapterAccessHelper {
     }
 
     public OneToManyAssociation getCollectionThatIsVisibleForIntent(
-            final String collectionId, final Intent intent) {
+            final String collectionId, final AccessIntent intent) {
 
         val spec = objectAdapter.getSpecification();
         val association = spec.getAssociation(collectionId)
@@ -95,7 +88,7 @@ public class ObjectAdapterAccessHelper {
     }
 
     public ObjectAction getObjectActionThatIsVisibleForIntent(
-            final String actionId, final Intent intent) {
+            final String actionId, final AccessIntent intent) {
 
         val spec = objectAdapter.getSpecification();
         val action = spec.getObjectAction(actionId)
@@ -105,7 +98,7 @@ public class ObjectAdapterAccessHelper {
     }
 
     public <T extends ObjectMember> T memberThatIsVisibleForIntent(
-            final T objectMember, final MemberType memberType, final Intent intent) {
+            final T objectMember, final MemberType memberType, final AccessIntent intent) {
 
         final Where where = resourceContext.getWhere();
 
