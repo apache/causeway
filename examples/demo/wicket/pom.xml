@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+	license agreements. See the NOTICE file distributed with this work for additional 
+	information regarding copyright ownership. The ASF licenses this file to 
+	you under the Apache License, Version 2.0 (the "License"); you may not use 
+	this file except in compliance with the License. You may obtain a copy of 
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.apache.isis.app</groupId>
+		<artifactId>isis-app-starter-parent</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
+		<relativePath>../../../starters/pom.xml</relativePath>
+	</parent>
+
+	<groupId>org.apache.isis.examples.apps</groupId>
+	<artifactId>demo-wicket</artifactId>
+
+	<name>Apache Isis App - Demo (Wicket)</name>
+
+	<packaging>${packaging.type}</packaging>
+
+	<properties>
+		<packaging.type>jar</packaging.type>
+
+		<maven-war-plugin.warName>${project.artifactId}</maven-war-plugin.warName>
+
+		<!-- this can be overridden using -Dflavor=... -->
+		<flavor>springboot</flavor>
+
+	</properties>
+
+	<build>
+		<resources>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**</include>
+				</includes>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+		</resources>
+
+	</build>
+
+	<dependencies>
+	
+		<!-- DEMO DOMAIN -->
+	
+		<dependency>
+			<groupId>org.apache.isis.examples.apps</groupId>
+			<artifactId>demo</artifactId>
+			<version>2.0.0-SNAPSHOT</version>
+			<type>jar</type>
+		</dependency>
+
+		<!-- WEB APPLICATION DEPENDENCY BUNDLE -->
+
+		<dependency>
+			<groupId>org.apache.isis.mavendeps</groupId>
+			<artifactId>isis-mavendeps-webapp</artifactId>
+			<type>pom</type>
+		</dependency>
+
+		<!-- JDK11+ SUPPORT -->
+
+		<dependency>
+			<groupId>org.apache.isis.mavendeps</groupId>
+			<artifactId>isis-mavendeps-jdk11</artifactId>
+			<type>pom</type>
+		</dependency>
+
+		<!-- EXTENSIONS -->
+
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-asciidoc-ui-wkt</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.incubator</groupId>
+			<artifactId>isis-incubator-model</artifactId>
+			<!-- incubator version is not managed by app starter bundles -->
+			<version>2.0.0-SNAPSHOT</version> 
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-sse-ui</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-cors-impl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-exceldownload-ui</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-secman-model</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-secman-encryption-jbcrypt</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-secman-persistence-jdo</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-secman-shiro-realm</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.testing</groupId>
+			<artifactId>isis-testing-h2console-ui</artifactId>
+		</dependency>
+		
+		<!-- OTHER DEPENDENCIES -->
+
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.hsqldb</groupId> -->
+<!-- 			<artifactId>hsqldb</artifactId> -->
+<!-- 		</dependency> -->
+
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+	</dependencies>
+
+	<profiles>
+
+		<!-- running: mvn spring-boot:run -->
+		<profile>
+			<id>package-as-jar</id>
+			<activation>
+				<property>
+					<name>!package-as-war</name>
+				</property>
+			</activation>
+			<properties>
+				<packaging.type>jar</packaging.type>
+			</properties>
+
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<goals>
+									<goal>repackage</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+
+		<profile>
+			<id>flavor-springboot</id>
+			<activation>
+				<property>
+					<name>flavor</name>
+					<value>springboot</value>
+				</property>
+			</activation>
+			<properties>
+				<packaging.type>jar</packaging.type>
+				<package-as-war>false</package-as-war>
+			</properties>
+			<dependencies>
+				<!-- add flavor specific here -->
+			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.google.cloud.tools</groupId>
+						<artifactId>jib-maven-plugin</artifactId>
+						<configuration>
+							<from>
+								<image>openjdk:13-alpine</image>
+							</from>
+							<container>
+								<jvmFlags>
+									<jvmFlag>-Xmx512m</jvmFlag>
+								</jvmFlags>
+								<mainClass>demoapp.webapp.DemoApp</mainClass>
+								<ports>
+									<port>8080</port>
+								</ports>
+							</container>
+							<to>
+								<image>docker.io/apacheisis/demo-springboot</image>
+								<tags>
+									<tag>nightly</tag>
+								</tags>
+								<auth>
+									<username>${env.DOCKER_REGISTRY_USERNAME}</username>
+									<password>${env.DOCKER_REGISTRY_PASSWORD}</password>
+								</auth>
+							</to>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+
+		<profile>
+			<id>flavor-dryrun</id>
+			<activation>
+				<property>
+					<name>flavor</name>
+					<value>dryrun</value>
+				</property>
+			</activation>
+			<properties>
+				<packaging.type>jar</packaging.type>
+				<package-as-war>false</package-as-war>
+			</properties>
+			<dependencies>
+				<!-- add flavor specific here -->
+			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.google.cloud.tools</groupId>
+						<artifactId>jib-maven-plugin</artifactId>
+						<configuration>
+							<from>
+								<image>openjdk:13-alpine</image>
+							</from>
+							<container>
+								<jvmFlags>
+									<jvmFlag>-Xmx512m</jvmFlag>
+								</jvmFlags>
+								<mainClass>demoapp.webapp.DemoApp</mainClass>
+								<ports>
+									<port>8080</port>
+								</ports>
+							</container>
+							<to>
+								<image>docker.io/apacheisis/demo-dryrun</image>
+								<auth>
+									<username>${env.DOCKER_REGISTRY_USERNAME}</username>
+									<password>${env.DOCKER_REGISTRY_PASSWORD}</password>
+								</auth>
+							</to>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+
+		<profile>
+			<id>flavor-tomcat</id>
+			<activation>
+				<property>
+					<name>flavor</name>
+					<value>tomcat</value>
+				</property>
+			</activation>
+			<properties>
+				<packaging.type>war</packaging.type>
+				<package-as-war>true</package-as-war>
+			</properties>
+			<dependencies>
+				<!-- add flavor specific here -->
+			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.google.cloud.tools</groupId>
+						<artifactId>jib-maven-plugin</artifactId>
+						<configuration>
+							<from>
+								<image>tomcat:9-jdk11-openjdk</image>
+							</from>
+							<container>
+								<appRoot>/usr/local/tomcat/webapps/demo</appRoot>
+							</container>
+							<to>
+								<image>docker.io/apacheisis/demo-tomcat</image>
+								<auth>
+									<username>${env.DOCKER_REGISTRY_USERNAME}</username>
+									<password>${env.DOCKER_REGISTRY_PASSWORD}</password>
+								</auth>
+							</to>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>flavor-payara</id>
+			<activation>
+				<property>
+					<name>flavor</name>
+					<value>payara</value>
+				</property>
+			</activation>
+			<properties>
+				<packaging.type>war</packaging.type>
+				<package-as-war>true</package-as-war>
+			</properties>
+			<dependencies>
+				<!-- add flavor specific here -->
+			</dependencies>
+		</profile>
+
+	</profiles>
+
+</project>

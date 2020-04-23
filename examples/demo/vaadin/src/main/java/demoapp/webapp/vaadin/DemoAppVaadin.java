@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.vaadin.webapp;
+package demoapp.webapp.vaadin;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -29,20 +29,28 @@ import org.apache.isis.incubator.viewer.vaadin.ui.auth.VaadinAuthenticationHandl
 import org.apache.isis.incubator.viewer.vaadin.viewer.IsisModuleIncViewerVaadinViewer;
 import org.apache.isis.incubator.viewer.vaadin.viewer.IsisServletForVaadin;
 import org.apache.isis.valuetypes.asciidoc.ui.vaa.IsisModuleValAsciidocUiVaa;
+import org.apache.isis.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
+import org.apache.isis.valuetypes.sse.ui.IsisModuleValSseUi;
+import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
 import demoapp.utils.ThereCanBeOnlyOne;
-import demoapp.webapp.DemoApp;
+import demoapp.webapp.DemoAppManifest;
 
 /**
  * Bootstrap the application.
  */
 @SpringBootApplication
 @Import({
-    DemoApp.AppManifest.class,
+    DemoAppManifest.class,
     
     // INCUBATING
     IsisModuleIncViewerVaadinViewer.class, // vaadin viewer
     IsisModuleValAsciidocUiVaa.class, // ascii-doc rendering support (for Vaadin)
+    
+    // WICKET INTEGRATION ... to allow side by side comparison
+    IsisModuleViewerWicketViewer.class, // wicket viewer
+    IsisModuleValSseUi.class, // server sent events
+    IsisModuleValAsciidocUiWkt.class, // ascii-doc rendering support (for Wicket)
   
 })
 public class DemoAppVaadin extends SpringBootServletInitializer {

@@ -20,7 +20,6 @@ package org.apache.isis.incubator.viewer.vaadin.ui.components.object;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
@@ -47,7 +46,6 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
-import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
@@ -57,9 +55,6 @@ import org.apache.isis.viewer.common.model.gridlayout.UiGridLayout;
 
 import lombok.NonNull;
 import lombok.val;
-
-import elemental.json.Json;
-import elemental.json.JsonValue;
 
 public class ObjectFormView extends VerticalLayout {
 
