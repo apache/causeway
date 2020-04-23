@@ -29,6 +29,14 @@
 		<git-plugin.propertiesDir>org/apache/isis/incubator/viewer/vaadin/ui</git-plugin.propertiesDir>
 	</properties>
 
+<!-- IN CASE WE WANT TO USE VAADIN ADDONS -->
+<!-- 	<repositories> -->
+<!-- 		<repository> -->
+<!-- 			<id>vaadin-addons</id> -->
+<!-- 			<url>https://maven.vaadin.com/vaadin-addons</url> -->
+<!-- 		</repository> -->
+<!-- 	</repositories> -->
+
 	<build>
 
 		<plugins>
@@ -94,7 +102,7 @@
 			<artifactId>vaadin-spring</artifactId>
 			<exclusions>
 				<exclusion>
-				    <!-- convergence issue with wicket 1.3.3 vs 1.4  -->
+					<!-- convergence issue with wicket 1.3.3 vs 1.4 -->
 					<groupId>commons-fileupload</groupId>
 					<artifactId>commons-fileupload</artifactId>
 				</exclusion>
@@ -105,6 +113,15 @@
 			<artifactId>commons-fileupload</artifactId>
 			<version>1.4</version>
 		</dependency>
+
+		<!-- VAADIN ADDONS -->
+
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.github.appreciated</groupId> -->
+<!-- 			<artifactId>vaadin-css-grid</artifactId> -->
+<!-- 			<version>2.0.0.beta3</version> -->
+<!-- 			<version>0.8.4</version> -->
+<!-- 		</dependency> -->
 
 	</dependencies>
 
