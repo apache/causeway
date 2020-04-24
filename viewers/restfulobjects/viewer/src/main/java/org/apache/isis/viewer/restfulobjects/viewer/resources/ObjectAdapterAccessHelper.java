@@ -28,7 +28,6 @@ import org.apache.isis.viewer.common.model.binding.interaction.ObjectBinding.Acc
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Utility class that encapsulates the logic for checking access to the specified
@@ -52,31 +51,24 @@ public class ObjectAdapterAccessHelper {
             final String propertyId, final AccessIntent intent) {
 
         return objectInteractor.getPropertyBinding(propertyId, where, intent)
-        .onFailure(InteractionFailureHandler::onFailure)
-        .getProperty();
+            .onFailure(InteractionFailureHandler::onFailure)
+            .getProperty();
     }
 
     public OneToManyAssociation getCollectionThatIsVisibleForIntent(
             final String collectionId, final AccessIntent intent) {
         
-        val collectionBindingOrFailure = objectInteractor.getCollectionBinding(collectionId, where, intent);
-
-        collectionBindingOrFailure.right()
-        .ifPresent(InteractionFailureHandler::onFailure);
-
-        return collectionBindingOrFailure.leftIfAny().getCollection();
+        return objectInteractor.getCollectionBinding(collectionId, where, intent)
+            .onFailure(InteractionFailureHandler::onFailure)
+            .getCollection();
     }
 
     public ObjectAction getObjectActionThatIsVisibleForIntent(
             final String actionId, final AccessIntent intent) {
         
-        val actionBindingOrFailure = objectInteractor.getActionBinding(actionId, where, intent);
-
-        actionBindingOrFailure.right()
-        .ifPresent(InteractionFailureHandler::onFailure);
-
-        return actionBindingOrFailure.leftIfAny().getAction();
-
+        return objectInteractor.getActionBinding(actionId, where, intent)
+            .onFailure(InteractionFailureHandler::onFailure)
+            .getAction();
     }
 
 

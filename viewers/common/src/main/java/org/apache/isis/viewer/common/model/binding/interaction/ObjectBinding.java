@@ -129,16 +129,18 @@ public class ObjectBinding {
     /**
      * @param actionId
      * @param where
-     * @return either an editable or readonly ActionBinding, based on visibility and usability
+     * @return ActionAccessChain with either an editable or readonly ActionBinding, 
+     * based on visibility and usability
      */
-    public _Either<ActionBinding, InteractionResponse> getActionBinding(String actionId, Where where) {
-        return getActionThatIsVisible(actionId, where)
+    public ActionAccessChain getActionBinding(String actionId, Where where) {
+        val either = getActionThatIsVisible(actionId, where)
         .map(
                 action->
                     checkUsability(action, where).isSuccess()
                        ? ActionBindingUsable.of(managedObject, action)
                        : ActionBindingReadonly.of(managedObject, action), 
                 UnaryOperator.identity());
+        return ActionAccessChain.of(either);
     }
     
     /**
@@ -146,14 +148,15 @@ public class ObjectBinding {
      * @param actionId
      * @param where
      * @param accessIntent
-     * @return either an editable or readonly PropertyBinding, based on visibility and accessIntent
+     * @return ActionAccessChain with either an editable or readonly PropertyBinding, 
+     * based on visibility and accessIntent
      */
-    public _Either<ActionBinding, InteractionResponse> getActionBinding(
+    public ActionAccessChain getActionBinding(
             final String actionId, 
             final Where where, 
             final AccessIntent accessIntent) {
         
-        return getActionThatIsVisibleForIntent(actionId, where, accessIntent)
+        val either = getActionThatIsVisibleForIntent(actionId, where, accessIntent)
         .map(
                 action->{
                     switch(accessIntent) {
@@ -166,7 +169,7 @@ public class ObjectBinding {
                     }
                 },
                 UnaryOperator.identity());
-
+        return ActionAccessChain.of(either);
     }
     
     /**
@@ -218,16 +221,19 @@ public class ObjectBinding {
     /**
      * @param collectionId
      * @param where
-     * @return either an editable or readonly CollectionBinding, based on visibility and usability
+     * @return CollectionAccessChain with either an editable or readonly CollectionBinding, 
+     * based on visibility and usability
      */
-    public _Either<CollectionBinding, InteractionResponse> getCollectionBinding(String collectionId, Where where) {
-        return getCollectionThatIsVisible(collectionId, where)
+    public CollectionAccessChain getCollectionBinding(String collectionId, Where where) {
+        val either = getCollectionThatIsVisible(collectionId, where)
         .map(
                 coll->
                     checkUsability(coll, where).isSuccess()
                        ? CollectionBindingEditable.of(managedObject, coll)
                        : CollectionBindingReadonly.of(managedObject, coll), 
                 UnaryOperator.identity());
+        
+        return CollectionAccessChain.of(either);
     }
     
     /**
@@ -235,14 +241,15 @@ public class ObjectBinding {
      * @param collectionId
      * @param where
      * @param accessIntent
-     * @return either an editable or readonly CollectionBinding, based on visibility and accessIntent
+     * @return CollectionAccessChain with either an editable or readonly CollectionBinding, 
+     * based on visibility and accessIntent
      */
-    public _Either<CollectionBinding, InteractionResponse> getCollectionBinding(
+    public CollectionAccessChain getCollectionBinding(
             final String collectionId, 
             final Where where, 
             final AccessIntent accessIntent) {
         
-        return getCollectionThatIsVisibleForIntent(collectionId, where, accessIntent)
+        val either = getCollectionThatIsVisibleForIntent(collectionId, where, accessIntent)
         .map(
                 coll->{
                     switch(accessIntent) {
@@ -255,6 +262,8 @@ public class ObjectBinding {
                     }
                 },
                 UnaryOperator.identity());
+        
+        return CollectionAccessChain.of(either);
 
     }
     
