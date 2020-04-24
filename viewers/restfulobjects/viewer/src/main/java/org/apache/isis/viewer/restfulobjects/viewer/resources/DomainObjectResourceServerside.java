@@ -451,7 +451,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
-        val accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
+        val accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
 
         val property = accessHelper.getPropertyThatIsVisibleForIntent(propertyId,
                 ObjectInteractor.AccessIntent.MUTATE);
@@ -460,6 +460,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
                 .parseAsMapWithSingleValue(Util.asStringUtf8(body));
 
         val objectInteractor = ObjectInteractor.bind(objectAdapter);
+        
+        
         val iResponse = objectInteractor.modifyProperty(property, proposedNewValue);
         if (iResponse.isFailure()) {
             throw RestfulObjectsApplicationException
@@ -489,7 +491,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
-        val accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
+        val accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
 
         val property = accessHelper.getPropertyThatIsVisibleForIntent(
                 propertyId, ObjectInteractor.AccessIntent.MUTATE);
@@ -551,7 +553,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
-        final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
+        final ObjectAdapterAccessHelper accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
 
         final OneToManyAssociation collection = accessHelper.getCollectionThatIsVisibleForIntent(
                 collectionId, ObjectInteractor.AccessIntent.MUTATE);
@@ -590,7 +592,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
-        final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
+        final ObjectAdapterAccessHelper accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
 
         final OneToManyAssociation collection = accessHelper.getCollectionThatIsVisibleForIntent(
                 collectionId, ObjectInteractor.AccessIntent.MUTATE);
@@ -629,7 +631,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
-        final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
+        final ObjectAdapterAccessHelper accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
 
         final OneToManyAssociation collection = accessHelper.getCollectionThatIsVisibleForIntent(
                 collectionId, ObjectInteractor.AccessIntent.MUTATE);

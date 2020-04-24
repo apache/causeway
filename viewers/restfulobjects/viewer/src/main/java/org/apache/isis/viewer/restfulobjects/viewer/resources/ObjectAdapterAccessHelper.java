@@ -19,28 +19,30 @@
 package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.viewer.common.model.binding.interaction.InteractionResponse;
+import org.apache.isis.viewer.common.model.binding.interaction.ObjectInteractor;
 import org.apache.isis.viewer.common.model.binding.interaction.ObjectInteractor.AccessIntent;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberType;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
  * Utility class that encapsulates the logic for checking access to the specified
  * {@link ManagedObject}'s members.
  */
+@RequiredArgsConstructor
 public class ObjectAdapterAccessHelper {
 
-    public static RestfulObjectsApplicationException notFoundException(final String memberId, final MemberType memberType) {
+    public static RestfulObjectsApplicationException notFoundException(
+            final String memberId, final MemberType memberType) {
         final String memberTypeStr = memberType.name().toLowerCase();
         return RestfulObjectsApplicationException.createWithMessage(
                 RestfulResponse.HttpStatusCode.NOT_FOUND, 
@@ -48,78 +50,67 @@ public class ObjectAdapterAccessHelper {
                 memberTypeStr,
                 memberId);
     }
-
-    private final ManagedObject objectAdapter;
-    private final IResourceContext resourceContext;
-
-    public ObjectAdapterAccessHelper(IResourceContext resourceContext, ManagedObject objectAdapter) {
-        this.objectAdapter = objectAdapter;
-        this.resourceContext = resourceContext;
+    
+    public static ObjectAdapterAccessHelper of(
+            final IResourceContext resourceContext,
+            final ManagedObject managedObject) {
+        return new ObjectAdapterAccessHelper(
+                ObjectInteractor.bind(managedObject),
+                resourceContext.getWhere());
     }
+
+    private final ObjectInteractor objectInteractor;
+    private final Where where;
 
     public OneToOneAssociation getPropertyThatIsVisibleForIntent(
             final String propertyId, final AccessIntent intent) {
+        
+        val propertyInteractor = objectInteractor.getPropertyInteractor();
+        
+        val check = propertyInteractor.getPropertyThatIsVisibleForIntent(propertyId, where, intent);
+        check.right()
+        .ifPresent(failure->handleFailure(failure, propertyId, MemberType.PROPERTY));
 
-        val spec = objectAdapter.getSpecification();
-        val association = spec.getAssociation(propertyId)
-                .orElseThrow(()->notFoundException(propertyId, MemberType.PROPERTY));
-
-        if (!association.isOneToOneAssociation()) {
-            throw notFoundException(propertyId, MemberType.PROPERTY);
-        }
-
-        final OneToOneAssociation property = (OneToOneAssociation) association;
-        return memberThatIsVisibleForIntent(property, MemberType.PROPERTY, intent);
+        return check.leftIfAny();
     }
 
     public OneToManyAssociation getCollectionThatIsVisibleForIntent(
             final String collectionId, final AccessIntent intent) {
+        
+        val propertyInteractor = objectInteractor.getCollectionInteractor();
+        
+        val check = propertyInteractor.getPropertyThatIsVisibleForIntent(collectionId, where, intent);
+        check.right()
+        .ifPresent(failure->handleFailure(failure, collectionId, MemberType.COLLECTION));
 
-        val spec = objectAdapter.getSpecification();
-        val association = spec.getAssociation(collectionId)
-                .orElseThrow(()->notFoundException(collectionId, MemberType.COLLECTION));
-        
-        if (!association.isOneToManyAssociation()) {
-            throw notFoundException(collectionId, MemberType.COLLECTION);
-        }
-        
-        final OneToManyAssociation collection = (OneToManyAssociation) association;
-        return memberThatIsVisibleForIntent(collection, MemberType.COLLECTION, intent);
+        return check.leftIfAny();
     }
 
     public ObjectAction getObjectActionThatIsVisibleForIntent(
             final String actionId, final AccessIntent intent) {
 
-        val spec = objectAdapter.getSpecification();
-        val action = spec.getObjectAction(actionId)
-                .orElseThrow(()->notFoundException(actionId, MemberType.ACTION));
+        val actionInteractor = objectInteractor.getActionInteractor();
+        
+        val check = actionInteractor.getActionThatIsVisibleForIntent(actionId, where, intent);
+        check.right()
+        .ifPresent(failure->handleFailure(failure, actionId, MemberType.ACTION));
 
-        return memberThatIsVisibleForIntent(action, MemberType.ACTION, intent);
+        return check.leftIfAny();
     }
 
-    public <T extends ObjectMember> T memberThatIsVisibleForIntent(
-            final T objectMember, final MemberType memberType, final AccessIntent intent) {
-
-        final Where where = resourceContext.getWhere();
-
-        final String memberId = objectMember.getId();
-        final Consent visibilityConsent =
-                objectMember.isVisible(
-                        objectAdapter, InteractionInitiatedBy.USER, where);
-        if (visibilityConsent.isVetoed()) {
-            throw notFoundException(memberId, memberType);
+    private void handleFailure(final InteractionResponse failure, String memberId, MemberType memberType) {
+        switch(failure.getVeto()) {
+        case NOT_FOUND:
+        case HIDDEN:
+            throw RestfulObjectsApplicationException
+            .createWithMessage(RestfulResponse.HttpStatusCode.NOT_FOUND,
+                    failure.getFailureMessage());
+        case UNAUTHORIZED:
+        case FORBIDDEN:
+            throw RestfulObjectsApplicationException
+            .createWithMessage(RestfulResponse.HttpStatusCode.FORBIDDEN,
+                    failure.getFailureMessage());
         }
-        if (intent.isMutate()) {
-            final Consent usabilityConsent = objectMember.isUsable(
-                    objectAdapter, InteractionInitiatedBy.USER, where
-                    );
-            if (usabilityConsent.isVetoed()) {
-                throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.FORBIDDEN,
-                        usabilityConsent.getReason());
-            }
-        }
-        return objectMember;
     }
-
-
+    
 }

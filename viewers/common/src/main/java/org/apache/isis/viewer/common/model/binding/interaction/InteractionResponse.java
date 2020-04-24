@@ -20,16 +20,25 @@ package org.apache.isis.viewer.common.model.binding.interaction;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
 public class InteractionResponse {
     
-    private final static InteractionResponse SUCCESS = of(null);
+    public static enum Veto {
+        NOT_FOUND,
+        HIDDEN,
+        FORBIDDEN,
+        UNAUTHORIZED, 
+    }
+    
+    private final static InteractionResponse SUCCESS = of(null, null);
+    @Getter private final Veto veto;
     @Getter private final String failureMessage;
     
     public boolean isSuccess() {
-        return failureMessage==null;
+        return veto==null;
     }
     
     public boolean isFailure() {
@@ -38,8 +47,12 @@ public class InteractionResponse {
     
     // -- FACTORIES
     
-    public static InteractionResponse failed(String reason) {
-        return of(reason);
+    public static InteractionResponse failed(@NonNull Veto veto) {
+        return of(veto, "unspecified");
+    }
+    
+    public static InteractionResponse failed(@NonNull Veto veto, String reason) {
+        return of(veto, reason);
     }
 
     public static InteractionResponse success() {

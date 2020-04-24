@@ -107,7 +107,7 @@ class DomainResourceHelper {
             final String propertyId,
             final MemberReprMode memberMode) {
 
-        ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
+        ObjectAdapterAccessHelper accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
 
         final OneToOneAssociation property = accessHelper.getPropertyThatIsVisibleForIntent(propertyId, ObjectInteractor.AccessIntent.ACCESS);
 
@@ -125,7 +125,7 @@ class DomainResourceHelper {
             final String collectionId,
             final MemberReprMode memberMode) {
 
-        ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
+        ObjectAdapterAccessHelper accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
 
         final OneToManyAssociation collection = accessHelper.getCollectionThatIsVisibleForIntent(collectionId, ObjectInteractor.AccessIntent.ACCESS);
 
@@ -141,7 +141,7 @@ class DomainResourceHelper {
      */
     public Response actionPrompt(final String actionId) {
 
-        ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
+        ObjectAdapterAccessHelper accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
 
         final ObjectAction action = accessHelper.getObjectActionThatIsVisibleForIntent(actionId, ObjectInteractor.AccessIntent.ACCESS);
 
@@ -161,7 +161,7 @@ class DomainResourceHelper {
      */
     public Response invokeActionQueryOnly(final String actionId, final JsonRepresentation arguments) {
 
-        final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
+        final ObjectAdapterAccessHelper accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
 
         final ObjectAction action = accessHelper.getObjectActionThatIsVisibleForIntent(actionId, ObjectInteractor.AccessIntent.MUTATE);
 
@@ -185,7 +185,7 @@ class DomainResourceHelper {
      */
     public Response invokeActionIdempotent(final String actionId, final JsonRepresentation arguments) {
 
-        final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
+        final ObjectAdapterAccessHelper accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
 
         final ObjectAction action = accessHelper.getObjectActionThatIsVisibleForIntent(actionId, ObjectInteractor.AccessIntent.MUTATE);
 
@@ -203,7 +203,7 @@ class DomainResourceHelper {
      */
     public Response invokeAction(final String actionId, final JsonRepresentation arguments) {
 
-        ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
+        ObjectAdapterAccessHelper accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
 
         final ObjectAction action = accessHelper.getObjectActionThatIsVisibleForIntent(actionId, ObjectInteractor.AccessIntent.MUTATE);
 

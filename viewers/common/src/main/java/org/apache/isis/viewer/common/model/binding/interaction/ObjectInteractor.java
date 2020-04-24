@@ -29,7 +29,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
+import org.apache.isis.viewer.common.model.binding.interaction.InteractionResponse.Veto;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -44,6 +46,7 @@ public class ObjectInteractor {
         }
     }
 
+    @Getter
     private final ManagedObject managedObject;
     
     public String getTitle() {
@@ -80,7 +83,7 @@ public class ObjectInteractor {
         
         val consent = property.isAssociationValid(managedObject, proposedNewValue, InteractionInitiatedBy.USER);
         if (consent.isVetoed()) {
-            return InteractionResponse.failed(consent.getReason());
+            return InteractionResponse.failed(Veto.UNAUTHORIZED, consent.getReason());
         }
         
         property.set(managedObject, proposedNewValue, InteractionInitiatedBy.USER);
@@ -123,6 +126,22 @@ public class ObjectInteractor {
         return streamVisisbleCollections()
                 .filter(collection->Objects.equals(id, collection.getId()))
                 .findFirst();
+    }
+
+    public MemberInteractor getMemberInteractor() {
+        return new MemberInteractor(this);
+    }
+
+    public ActionInteractor getActionInteractor() {
+        return new ActionInteractor(this);
+    }
+    
+    public PropertyInteractor getPropertyInteractor() {
+        return new PropertyInteractor(this);
+    }
+    
+    public CollectionInteractor getCollectionInteractor() {
+        return new CollectionInteractor(this);
     }
     
     
