@@ -450,24 +450,23 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         setCommandExecutor(Command.Executor.USER);
 
         val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        val propertyInteractor = ObjectInteractor.bind(objectAdapter)
+                .getPropertyInteractor(
+                    propertyId,
+                    resourceContext.getWhere(),
+                    ObjectInteractor.AccessIntent.MUTATE);
+        
+        propertyInteractor
+        .onFailure(InteractionFailureHandler::onFailure)
+        .modifyProperty(property->{
+            
+            val proposedNewValue = new JsonParserHelper(resourceContext, property.getSpecification())
+                    .parseAsMapWithSingleValue(Util.asStringUtf8(body));
+            
+            return proposedNewValue;
+        });
+
         val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
-        val accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
-
-        val property = accessHelper.getPropertyThatIsVisibleForIntent(propertyId,
-                ObjectInteractor.AccessIntent.MUTATE);
-
-        val proposedNewValue = new JsonParserHelper(resourceContext, property.getSpecification())
-                .parseAsMapWithSingleValue(Util.asStringUtf8(body));
-
-        val objectInteractor = ObjectInteractor.bind(objectAdapter);
-        
-        
-        val iResponse = objectInteractor.modifyProperty(property, proposedNewValue);
-        if (iResponse.isFailure()) {
-            throw RestfulObjectsApplicationException
-                .createWithMessage(HttpStatusCode.UNAUTHORIZED, iResponse.getFailureMessage());
-        }
-
         return domainResourceHelper.propertyDetails(
                 propertyId,
                 MemberReprMode.WRITE
@@ -488,21 +487,19 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
                 ResourceDescriptor.generic(Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE));
 
         setCommandExecutor(Command.Executor.USER);
-
+        
         val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        val propertyInteractor = ObjectInteractor.bind(objectAdapter)
+                .getPropertyInteractor(
+                    propertyId,
+                    resourceContext.getWhere(),
+                    ObjectInteractor.AccessIntent.MUTATE);
+        
+        propertyInteractor
+        .onFailure(InteractionFailureHandler::onFailure)
+        .modifyProperty(property->null);
+
         val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
-        val accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
-
-        val property = accessHelper.getPropertyThatIsVisibleForIntent(
-                propertyId, ObjectInteractor.AccessIntent.MUTATE);
-
-        val objectInteractor = ObjectInteractor.bind(objectAdapter);
-        val iResponse = objectInteractor.modifyProperty(property, null);
-        if (iResponse.isFailure()) {
-            throw RestfulObjectsApplicationException
-                .createWithMessage(HttpStatusCode.UNAUTHORIZED, iResponse.getFailureMessage());
-        }
-
         return domainResourceHelper.propertyDetails(
                 propertyId,
                 MemberReprMode.WRITE

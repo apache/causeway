@@ -18,6 +18,10 @@
  */
 package org.apache.isis.viewer.common.model.binding.interaction;
 
+import java.util.function.BiConsumer;
+
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.internal.base._Either;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -28,14 +32,22 @@ import lombok.val;
 
 public class ActionInteractor extends MemberInteractor {
 
-    public ActionInteractor(ObjectInteractor objectInteractor) {
-        super(objectInteractor);
-    }
-
-    public _Either<ObjectAction, InteractionResponse> getActionThatIsVisibleForIntent(
+    private final String actionId;
+    private final Where where;
+    private final AccessIntent accessIntent;
+    
+    public ActionInteractor(
+            final ObjectInteractor objectInteractor,
             final String actionId,
             final Where where,
-            final AccessIntent intent) {
+            final AccessIntent accessIntent) {
+        super(objectInteractor);
+        this.actionId = actionId;
+        this.where = where;
+        this.accessIntent = accessIntent;
+    }
+
+    public _Either<ObjectAction, InteractionResponse> getActionThatIsVisibleForIntent() {
 
         val managedObject = objectInteractor.getManagedObject();
         
@@ -48,7 +60,12 @@ public class ActionInteractor extends MemberInteractor {
         
         return super.memberThatIsVisibleForIntent(
                 MemberType.ACTION,
-                action, where, intent);
+                action, where, accessIntent);
+    }
+    
+    public ActionInteractor onFailure(@Nullable final BiConsumer<InteractionResponse, String> onFailure) {
+        super.onFailure = onFailure;
+        return this;
     }
 
 }

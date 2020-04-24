@@ -18,6 +18,10 @@
  */
 package org.apache.isis.viewer.common.model.binding.interaction;
 
+import java.util.function.BiConsumer;
+
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.internal.base._Either;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -28,14 +32,22 @@ import lombok.val;
 
 public class CollectionInteractor extends MemberInteractor {
 
-    public CollectionInteractor(ObjectInteractor objectInteractor) {
-        super(objectInteractor);
-    }
-
-    public _Either<OneToManyAssociation, InteractionResponse> getPropertyThatIsVisibleForIntent(
+    private final String collectionId;
+    private final Where where;
+    private final AccessIntent accessIntent;
+    
+    public CollectionInteractor(
+            final ObjectInteractor objectInteractor,
             final String collectionId,
             final Where where,
-            final AccessIntent intent) {
+            final AccessIntent accessIntent) {
+        super(objectInteractor);
+        this.collectionId = collectionId;
+        this.where = where;
+        this.accessIntent = accessIntent;
+    }
+
+    public _Either<OneToManyAssociation, InteractionResponse> getCollectionThatIsVisibleForIntent() {
 
         val managedObject = objectInteractor.getManagedObject();
         
@@ -47,7 +59,12 @@ public class CollectionInteractor extends MemberInteractor {
         
         return super.memberThatIsVisibleForIntent(
                 MemberType.COLLECTION,
-                (OneToManyAssociation) collection, where, intent);
+                (OneToManyAssociation) collection, where, accessIntent);
+    }
+    
+    public CollectionInteractor onFailure(@Nullable final BiConsumer<InteractionResponse, String> onFailure) {
+        super.onFailure = onFailure;
+        return this;
     }
 
 }

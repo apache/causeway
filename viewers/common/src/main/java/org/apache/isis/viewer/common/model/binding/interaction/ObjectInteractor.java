@@ -22,6 +22,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -128,21 +129,22 @@ public class ObjectInteractor {
                 .findFirst();
     }
 
-    public MemberInteractor getMemberInteractor() {
-        return new MemberInteractor(this);
+    public ActionInteractor getActionInteractor(
+            String actionId, Where where, AccessIntent accessIntent) {
+        return new ActionInteractor(this, actionId, where, accessIntent);
+    }
+    
+    public PropertyInteractor getPropertyInteractor(
+            String propertyId, Where where, AccessIntent accessIntent) {
+        return new PropertyInteractor(this, propertyId, where, accessIntent);
+    }
+    
+    public CollectionInteractor getCollectionInteractor(
+            String collectionId, Where where, AccessIntent accessIntent) {
+        return new CollectionInteractor(this, collectionId, where, accessIntent);
     }
 
-    public ActionInteractor getActionInteractor() {
-        return new ActionInteractor(this);
-    }
     
-    public PropertyInteractor getPropertyInteractor() {
-        return new PropertyInteractor(this);
-    }
-    
-    public CollectionInteractor getCollectionInteractor() {
-        return new CollectionInteractor(this);
-    }
     
     
 }

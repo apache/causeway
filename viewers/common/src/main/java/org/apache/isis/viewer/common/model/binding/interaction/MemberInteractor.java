@@ -18,9 +18,10 @@
  */
 package org.apache.isis.viewer.common.model.binding.interaction;
 
+import java.util.function.BiConsumer;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.internal.base._Either;
-import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.common.model.binding.interaction.InteractionResponse.Veto;
@@ -40,6 +41,7 @@ class MemberInteractor {
     }
     
     protected final ObjectInteractor objectInteractor;
+    protected BiConsumer<InteractionResponse, String> onFailure;
 
     protected <T extends ObjectMember> 
     _Either<T, InteractionResponse> memberThatIsVisibleForIntent(
@@ -57,7 +59,8 @@ class MemberInteractor {
             return notFound(memberType, memberId, Veto.HIDDEN);
         }
         if (intent.isMutate()) {
-            final Consent usabilityConsent = objectMember.isUsable(
+            val usabilityConsent = 
+                objectMember.isUsable(
                     managedObject, InteractionInitiatedBy.USER, where);
             if (usabilityConsent.isVetoed()) {
                 return _Either.right(InteractionResponse.failed(

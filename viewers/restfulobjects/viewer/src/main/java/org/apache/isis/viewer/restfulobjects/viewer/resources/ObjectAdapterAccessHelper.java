@@ -23,13 +23,9 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.viewer.common.model.binding.interaction.InteractionResponse;
 import org.apache.isis.viewer.common.model.binding.interaction.ObjectInteractor;
 import org.apache.isis.viewer.common.model.binding.interaction.ObjectInteractor.AccessIntent;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
-import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberType;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -55,11 +51,11 @@ public class ObjectAdapterAccessHelper {
     public OneToOneAssociation getPropertyThatIsVisibleForIntent(
             final String propertyId, final AccessIntent intent) {
 
-        val propertyInteractor = objectInteractor.getPropertyInteractor();
+        val propertyInteractor = objectInteractor.getPropertyInteractor(propertyId, where, intent);
 
-        val check = propertyInteractor.getPropertyThatIsVisibleForIntent(propertyId, where, intent);
+        val check = propertyInteractor.getPropertyThatIsVisibleForIntent();
         check.right()
-        .ifPresent(failure->handleFailure(failure, propertyId, MemberType.PROPERTY));
+        .ifPresent(failure->InteractionFailureHandler.onFailure(failure, propertyId));
 
         return check.leftIfAny();
     }
@@ -67,11 +63,11 @@ public class ObjectAdapterAccessHelper {
     public OneToManyAssociation getCollectionThatIsVisibleForIntent(
             final String collectionId, final AccessIntent intent) {
 
-        val propertyInteractor = objectInteractor.getCollectionInteractor();
+        val collectionInteractor = objectInteractor.getCollectionInteractor(collectionId, where, intent);
 
-        val check = propertyInteractor.getPropertyThatIsVisibleForIntent(collectionId, where, intent);
+        val check = collectionInteractor.getCollectionThatIsVisibleForIntent();
         check.right()
-        .ifPresent(failure->handleFailure(failure, collectionId, MemberType.COLLECTION));
+        .ifPresent(failure->InteractionFailureHandler.onFailure(failure, collectionId));
 
         return check.leftIfAny();
     }
@@ -79,28 +75,14 @@ public class ObjectAdapterAccessHelper {
     public ObjectAction getObjectActionThatIsVisibleForIntent(
             final String actionId, final AccessIntent intent) {
 
-        val actionInteractor = objectInteractor.getActionInteractor();
+        val actionInteractor = objectInteractor.getActionInteractor(actionId, where, intent);
 
-        val check = actionInteractor.getActionThatIsVisibleForIntent(actionId, where, intent);
+        val check = actionInteractor.getActionThatIsVisibleForIntent();
         check.right()
-        .ifPresent(failure->handleFailure(failure, actionId, MemberType.ACTION));
+        .ifPresent(failure->InteractionFailureHandler.onFailure(failure, actionId));
 
         return check.leftIfAny();
     }
 
-    private void handleFailure(final InteractionResponse failure, String memberId, MemberType memberType) {
-        switch(failure.getVeto()) {
-        case NOT_FOUND:
-        case HIDDEN:
-            throw RestfulObjectsApplicationException
-            .createWithMessage(RestfulResponse.HttpStatusCode.NOT_FOUND,
-                    failure.getFailureMessage());
-        case UNAUTHORIZED:
-        case FORBIDDEN:
-            throw RestfulObjectsApplicationException
-            .createWithMessage(RestfulResponse.HttpStatusCode.FORBIDDEN,
-                    failure.getFailureMessage());
-        }
-    }
 
 }

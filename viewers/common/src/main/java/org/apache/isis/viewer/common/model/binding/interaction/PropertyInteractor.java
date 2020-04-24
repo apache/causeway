@@ -18,8 +18,14 @@
  */
 package org.apache.isis.viewer.common.model.binding.interaction;
 
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.internal.base._Either;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.common.model.binding.interaction.InteractionResponse.Veto;
 import org.apache.isis.viewer.common.model.binding.interaction.ObjectInteractor.AccessIntent;
@@ -28,14 +34,22 @@ import lombok.val;
 
 public class PropertyInteractor extends MemberInteractor {
 
-    public PropertyInteractor(ObjectInteractor objectInteractor) {
-        super(objectInteractor);
-    }
-
-    public _Either<OneToOneAssociation, InteractionResponse> getPropertyThatIsVisibleForIntent(
+    private final String propertyId;
+    private final Where where;
+    private final AccessIntent accessIntent;
+    
+    public PropertyInteractor(
+            final ObjectInteractor objectInteractor,
             final String propertyId,
             final Where where,
-            final AccessIntent intent) {
+            final AccessIntent accessIntent) {
+        super(objectInteractor);
+        this.propertyId = propertyId;
+        this.where = where;
+        this.accessIntent = accessIntent;
+    }
+
+    public _Either<OneToOneAssociation, InteractionResponse> getPropertyThatIsVisibleForIntent() {
 
         val managedObject = objectInteractor.getManagedObject();
         
@@ -46,7 +60,27 @@ public class PropertyInteractor extends MemberInteractor {
         }
         
         return super.memberThatIsVisibleForIntent(
-                MemberType.PROPERTY, (OneToOneAssociation)property, where, intent);
+                MemberType.PROPERTY, (OneToOneAssociation)property, where, accessIntent);
     }
+
+    public PropertyInteractor onFailure(@Nullable final BiConsumer<InteractionResponse, String> onFailure) {
+        super.onFailure = onFailure;
+        return this;
+    }
+
+    public InteractionResponse modifyProperty(Function<OneToOneAssociation, ManagedObject> newProperyValueProvider) {
+        
+        val check = getPropertyThatIsVisibleForIntent();
+        if(check.isRight()) {
+            return check.rightIfAny();
+        }
+
+        val property = check.leftIfAny();
+        val proposedNewValue = newProperyValueProvider.apply(property);
+        
+        return objectInteractor.modifyProperty(property, proposedNewValue);
+    }
+
+    
 
 }
