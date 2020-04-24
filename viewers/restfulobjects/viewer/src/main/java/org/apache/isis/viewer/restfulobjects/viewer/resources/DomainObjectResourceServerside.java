@@ -47,7 +47,6 @@ import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.layout.links.Link;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.core.commons.internal.base._Bytes;
-import org.apache.isis.core.commons.internal.base._Either;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.codec._UrlDecoderUtil;
 import org.apache.isis.core.commons.internal.resources._Resources;
@@ -457,24 +456,13 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             propertyId,
             resourceContext.getWhere(),
             ObjectBinding.AccessIntent.MUTATE)
-        .leftRemap(propertyBinding->{
+        .modifyProperty(property->{
+            val proposedNewValue = new JsonParserHelper(resourceContext, property.getSpecification())
+                    .parseAsMapWithSingleValue(Util.asStringUtf8(body));
             
-            val iResponse = propertyBinding.modifyProperty(property->{
-                
-                val proposedNewValue = new JsonParserHelper(resourceContext, property.getSpecification())
-                        .parseAsMapWithSingleValue(Util.asStringUtf8(body));
-                
-                return proposedNewValue;
-            });
-            
-            if(iResponse.isFailure()) {
-                _Either.right(iResponse);
-            }
-            
-            return _Either.left(propertyBinding);
+            return proposedNewValue;
         })
-        .right()
-        .ifPresent(InteractionFailureHandler::onFailure);
+        .onFailure(InteractionFailureHandler::onFailure)
         ;
 
         val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
@@ -506,21 +494,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             propertyId,
             resourceContext.getWhere(),
             ObjectBinding.AccessIntent.MUTATE)
-        .leftRemap(propertyBinding->{
-            
-            val iResponse = propertyBinding.modifyProperty(property->{
-                return null;
-            });
-            
-            if(iResponse.isFailure()) {
-                _Either.right(iResponse);
-            }
-            
-            return _Either.left(propertyBinding);
-        })
-        .right()
-        .ifPresent(InteractionFailureHandler::onFailure);
-        ;
+        .modifyProperty(property->null)
+        .onFailure(InteractionFailureHandler::onFailure);
 
         val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
         return domainResourceHelper.propertyDetails(

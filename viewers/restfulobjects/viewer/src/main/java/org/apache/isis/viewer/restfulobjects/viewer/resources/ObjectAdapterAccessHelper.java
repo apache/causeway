@@ -51,12 +51,9 @@ public class ObjectAdapterAccessHelper {
     public OneToOneAssociation getPropertyThatIsVisibleForIntent(
             final String propertyId, final AccessIntent intent) {
 
-        val propertyBindingOrFailure = objectInteractor.getPropertyBinding(propertyId, where, intent);
-
-        propertyBindingOrFailure.right()
-        .ifPresent(InteractionFailureHandler::onFailure);
-
-        return propertyBindingOrFailure.leftIfAny().getProperty();
+        return objectInteractor.getPropertyBinding(propertyId, where, intent)
+        .onFailure(InteractionFailureHandler::onFailure)
+        .getProperty();
     }
 
     public OneToManyAssociation getCollectionThatIsVisibleForIntent(

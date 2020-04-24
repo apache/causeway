@@ -185,7 +185,6 @@ public class ObjectFormView extends VerticalLayout {
             protected void onProperty(HasComponents container, PropertyLayoutData propertyData) {
                 objectInteractor
                 .getPropertyBinding(propertyData.getId(), Where.OBJECT_FORMS)
-                .left() // if visible
                 .ifPresent(propertyBinding->{
                     val uiProperty = uiComponentFactory
                             .componentFor(UiComponentFactory.Request.of(propertyBinding));

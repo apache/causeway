@@ -172,16 +172,18 @@ public class ObjectBinding {
     /**
      * @param propertyId
      * @param where
-     * @return either an editable or readonly PropertyBinding, based on visibility and usability
+     * @return PropertyAccessChain with either an editable or readonly PropertyBinding, 
+     * based on visibility and usability
      */
-    public _Either<PropertyBinding, InteractionResponse> getPropertyBinding(String propertyId, Where where) {
-        return getPropertyThatIsVisible(propertyId, where)
+    public PropertyAccessChain getPropertyBinding(String propertyId, Where where) {
+        val either = getPropertyThatIsVisible(propertyId, where)
         .map(
                 property->
                     checkUsability(property, where).isSuccess()
                        ? PropertyBindingEditable.of(managedObject, property)
                        : PropertyBindingReadonly.of(managedObject, property), 
                 UnaryOperator.identity());
+        return PropertyAccessChain.of(either);
     }
     
     /**
@@ -189,14 +191,15 @@ public class ObjectBinding {
      * @param propertyId
      * @param where
      * @param accessIntent
-     * @return either an editable or readonly PropertyBinding, based on visibility and accessIntent
+     * @return PropertyAccessChain with either an editable or readonly PropertyBinding, 
+     * based on visibility and accessIntent
      */
-    public _Either<PropertyBinding, InteractionResponse> getPropertyBinding(
+    public PropertyAccessChain getPropertyBinding(
             final String propertyId, 
             final Where where, 
             final AccessIntent accessIntent) {
         
-        return getPropertyThatIsVisibleForIntent(propertyId, where, accessIntent)
+        val either = getPropertyThatIsVisibleForIntent(propertyId, where, accessIntent)
         .map(
                 property->{
                     switch(accessIntent) {
@@ -209,7 +212,7 @@ public class ObjectBinding {
                     }
                 },
                 UnaryOperator.identity());
-
+        return PropertyAccessChain.of(either);
     }
     
     /**
