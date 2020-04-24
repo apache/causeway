@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.isis.viewer.common.model.binding.interaction.PropertyBinding;
 
 import lombok.NonNull;
 import lombok.Value;
@@ -47,6 +48,22 @@ public interface UiComponentFactory<T> {
         @NonNull private final ManagedObject managedObject; 
         @NonNull private final ObjectFeature objectFeature;
         @NonNull private final Function<ManagedObject, String> toDomainPropagator;
+        
+        public static Request of(PropertyBinding propertyBinding) {
+            val property = propertyBinding.getProperty();
+            //TODO there is also the aspect of editable or not
+            val propertyValue = propertyBinding.getPropertyValue();
+            
+            return of(propertyValue, property, proposedNewValue -> {
+
+                val iResponse = propertyBinding.modifyProperty(proposedNewValue);
+                if (iResponse.isFailure()) {
+                    return iResponse.getFailureMessage(); // validation result if any
+                }
+                return null;
+
+            });
+        }
         
         // -- SHORTCUTS
         
@@ -129,6 +146,8 @@ public interface UiComponentFactory<T> {
         public boolean isReadOnly() {
             return objectFeature.getFacet(DisabledFacet.class)!=null;
         }
+
+
         
     }
     

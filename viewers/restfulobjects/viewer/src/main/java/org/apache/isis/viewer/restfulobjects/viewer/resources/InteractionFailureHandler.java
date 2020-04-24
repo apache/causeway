@@ -24,7 +24,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplication
 
 public class InteractionFailureHandler {
 
-    public static void onFailure(final InteractionResponse failure, final String memberId) {
+    public static void onFailure(final InteractionResponse failure) {
         
         if(failure==null || failure.isSuccess()) {
             return;

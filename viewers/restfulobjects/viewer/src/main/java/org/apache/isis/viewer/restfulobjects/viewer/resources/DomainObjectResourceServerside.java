@@ -47,6 +47,7 @@ import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.layout.links.Link;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.core.commons.internal.base._Bytes;
+import org.apache.isis.core.commons.internal.base._Either;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.codec._UrlDecoderUtil;
 import org.apache.isis.core.commons.internal.resources._Resources;
@@ -60,7 +61,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
-import org.apache.isis.viewer.common.model.binding.interaction.ObjectInteractor;
+import org.apache.isis.viewer.common.model.binding.interaction.ObjectBinding;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -450,21 +451,31 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         setCommandExecutor(Command.Executor.USER);
 
         val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-        val propertyInteractor = ObjectInteractor.bind(objectAdapter)
-                .getPropertyInteractor(
-                    propertyId,
-                    resourceContext.getWhere(),
-                    ObjectInteractor.AccessIntent.MUTATE);
         
-        propertyInteractor
-        .onFailure(InteractionFailureHandler::onFailure)
-        .modifyProperty(property->{
+        ObjectBinding.bind(objectAdapter)
+        .getPropertyBinding(
+            propertyId,
+            resourceContext.getWhere(),
+            ObjectBinding.AccessIntent.MUTATE)
+        .leftRemap(propertyBinding->{
             
-            val proposedNewValue = new JsonParserHelper(resourceContext, property.getSpecification())
-                    .parseAsMapWithSingleValue(Util.asStringUtf8(body));
+            val iResponse = propertyBinding.modifyProperty(property->{
+                
+                val proposedNewValue = new JsonParserHelper(resourceContext, property.getSpecification())
+                        .parseAsMapWithSingleValue(Util.asStringUtf8(body));
+                
+                return proposedNewValue;
+            });
             
-            return proposedNewValue;
-        });
+            if(iResponse.isFailure()) {
+                _Either.right(iResponse);
+            }
+            
+            return _Either.left(propertyBinding);
+        })
+        .right()
+        .ifPresent(InteractionFailureHandler::onFailure);
+        ;
 
         val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
         return domainResourceHelper.propertyDetails(
@@ -489,15 +500,27 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         setCommandExecutor(Command.Executor.USER);
         
         val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-        val propertyInteractor = ObjectInteractor.bind(objectAdapter)
-                .getPropertyInteractor(
-                    propertyId,
-                    resourceContext.getWhere(),
-                    ObjectInteractor.AccessIntent.MUTATE);
         
-        propertyInteractor
-        .onFailure(InteractionFailureHandler::onFailure)
-        .modifyProperty(property->null);
+        ObjectBinding.bind(objectAdapter)
+        .getPropertyBinding(
+            propertyId,
+            resourceContext.getWhere(),
+            ObjectBinding.AccessIntent.MUTATE)
+        .leftRemap(propertyBinding->{
+            
+            val iResponse = propertyBinding.modifyProperty(property->{
+                return null;
+            });
+            
+            if(iResponse.isFailure()) {
+                _Either.right(iResponse);
+            }
+            
+            return _Either.left(propertyBinding);
+        })
+        .right()
+        .ifPresent(InteractionFailureHandler::onFailure);
+        ;
 
         val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
         return domainResourceHelper.propertyDetails(
@@ -553,7 +576,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final ObjectAdapterAccessHelper accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
 
         final OneToManyAssociation collection = accessHelper.getCollectionThatIsVisibleForIntent(
-                collectionId, ObjectInteractor.AccessIntent.MUTATE);
+                collectionId, ObjectBinding.AccessIntent.MUTATE);
 
         if (!collection.getCollectionSemantics().isAnySet()) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Collection '%s' does not have set semantics", collectionId);
@@ -592,7 +615,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final ObjectAdapterAccessHelper accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
 
         final OneToManyAssociation collection = accessHelper.getCollectionThatIsVisibleForIntent(
-                collectionId, ObjectInteractor.AccessIntent.MUTATE);
+                collectionId, ObjectBinding.AccessIntent.MUTATE);
 
         if (!collection.getCollectionSemantics().isListOrArray()) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.METHOD_NOT_ALLOWED, "Collection '%s' does not have list or array semantics", collectionId);
@@ -631,7 +654,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final ObjectAdapterAccessHelper accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
 
         final OneToManyAssociation collection = accessHelper.getCollectionThatIsVisibleForIntent(
-                collectionId, ObjectInteractor.AccessIntent.MUTATE);
+                collectionId, ObjectBinding.AccessIntent.MUTATE);
 
         final ObjectSpecification collectionSpec = collection.getSpecification();
         final ManagedObject argAdapter = new JsonParserHelper(resourceContext, collectionSpec)

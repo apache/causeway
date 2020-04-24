@@ -23,8 +23,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.viewer.common.model.binding.interaction.ObjectInteractor;
-import org.apache.isis.viewer.common.model.binding.interaction.ObjectInteractor.AccessIntent;
+import org.apache.isis.viewer.common.model.binding.interaction.ObjectBinding;
+import org.apache.isis.viewer.common.model.binding.interaction.ObjectBinding.AccessIntent;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 
 import lombok.RequiredArgsConstructor;
@@ -41,47 +41,45 @@ public class ObjectAdapterAccessHelper {
             final IResourceContext resourceContext,
             final ManagedObject managedObject) {
         return new ObjectAdapterAccessHelper(
-                ObjectInteractor.bind(managedObject),
+                ObjectBinding.bind(managedObject),
                 resourceContext.getWhere());
     }
 
-    private final ObjectInteractor objectInteractor;
+    private final ObjectBinding objectInteractor;
     private final Where where;
 
     public OneToOneAssociation getPropertyThatIsVisibleForIntent(
             final String propertyId, final AccessIntent intent) {
 
-        val propertyInteractor = objectInteractor.getPropertyInteractor(propertyId, where, intent);
+        val propertyBindingOrFailure = objectInteractor.getPropertyBinding(propertyId, where, intent);
 
-        val check = propertyInteractor.getPropertyThatIsVisibleForIntent();
-        check.right()
-        .ifPresent(failure->InteractionFailureHandler.onFailure(failure, propertyId));
+        propertyBindingOrFailure.right()
+        .ifPresent(InteractionFailureHandler::onFailure);
 
-        return check.leftIfAny();
+        return propertyBindingOrFailure.leftIfAny().getProperty();
     }
 
     public OneToManyAssociation getCollectionThatIsVisibleForIntent(
             final String collectionId, final AccessIntent intent) {
+        
+        val collectionBindingOrFailure = objectInteractor.getCollectionBinding(collectionId, where, intent);
 
-        val collectionInteractor = objectInteractor.getCollectionInteractor(collectionId, where, intent);
+        collectionBindingOrFailure.right()
+        .ifPresent(InteractionFailureHandler::onFailure);
 
-        val check = collectionInteractor.getCollectionThatIsVisibleForIntent();
-        check.right()
-        .ifPresent(failure->InteractionFailureHandler.onFailure(failure, collectionId));
-
-        return check.leftIfAny();
+        return collectionBindingOrFailure.leftIfAny().getCollection();
     }
 
     public ObjectAction getObjectActionThatIsVisibleForIntent(
             final String actionId, final AccessIntent intent) {
+        
+        val actionBindingOrFailure = objectInteractor.getActionBinding(actionId, where, intent);
 
-        val actionInteractor = objectInteractor.getActionInteractor(actionId, where, intent);
+        actionBindingOrFailure.right()
+        .ifPresent(InteractionFailureHandler::onFailure);
 
-        val check = actionInteractor.getActionThatIsVisibleForIntent();
-        check.right()
-        .ifPresent(failure->InteractionFailureHandler.onFailure(failure, actionId));
+        return actionBindingOrFailure.leftIfAny().getAction();
 
-        return check.leftIfAny();
     }
 
 
