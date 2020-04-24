@@ -41,16 +41,6 @@ import lombok.val;
 @RequiredArgsConstructor
 public class ObjectAdapterAccessHelper {
 
-    public static RestfulObjectsApplicationException notFoundException(
-            final String memberId, final MemberType memberType) {
-        final String memberTypeStr = memberType.name().toLowerCase();
-        return RestfulObjectsApplicationException.createWithMessage(
-                RestfulResponse.HttpStatusCode.NOT_FOUND, 
-                "%s '%s' either does not exist, is disabled or is not visible", 
-                memberTypeStr,
-                memberId);
-    }
-    
     public static ObjectAdapterAccessHelper of(
             final IResourceContext resourceContext,
             final ManagedObject managedObject) {
@@ -64,9 +54,9 @@ public class ObjectAdapterAccessHelper {
 
     public OneToOneAssociation getPropertyThatIsVisibleForIntent(
             final String propertyId, final AccessIntent intent) {
-        
+
         val propertyInteractor = objectInteractor.getPropertyInteractor();
-        
+
         val check = propertyInteractor.getPropertyThatIsVisibleForIntent(propertyId, where, intent);
         check.right()
         .ifPresent(failure->handleFailure(failure, propertyId, MemberType.PROPERTY));
@@ -76,9 +66,9 @@ public class ObjectAdapterAccessHelper {
 
     public OneToManyAssociation getCollectionThatIsVisibleForIntent(
             final String collectionId, final AccessIntent intent) {
-        
+
         val propertyInteractor = objectInteractor.getCollectionInteractor();
-        
+
         val check = propertyInteractor.getPropertyThatIsVisibleForIntent(collectionId, where, intent);
         check.right()
         .ifPresent(failure->handleFailure(failure, collectionId, MemberType.COLLECTION));
@@ -90,7 +80,7 @@ public class ObjectAdapterAccessHelper {
             final String actionId, final AccessIntent intent) {
 
         val actionInteractor = objectInteractor.getActionInteractor();
-        
+
         val check = actionInteractor.getActionThatIsVisibleForIntent(actionId, where, intent);
         check.right()
         .ifPresent(failure->handleFailure(failure, actionId, MemberType.ACTION));
@@ -112,5 +102,5 @@ public class ObjectAdapterAccessHelper {
                     failure.getFailureMessage());
         }
     }
-    
+
 }
