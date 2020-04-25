@@ -30,6 +30,7 @@ import com.vaadin.flow.data.converter.Converter;
 import com.vaadin.flow.data.converter.DateToSqlDateConverter;
 import com.vaadin.flow.data.converter.LocalDateToDateConverter;
 
+import org.apache.isis.core.metamodel.spec.interaction.InteractionVeto;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory.Request;
 
 import lombok.RequiredArgsConstructor;
@@ -109,7 +110,10 @@ public final class BinderUtil {
         @Override
         public Result<P> convertToModel(P newValue, ValueContext context) {
             // propagate new value down the domain model, and handle validation feedback
-            val validationMessage = request.getPropagator(pojoType).apply(newValue);
+            val validationMessage = request.getPropagator(pojoType).apply(newValue)
+                    .map(InteractionVeto::getReason)
+                    .orElse(null);
+                                        
             return validationMessage==null
                     ? Result.ok(newValue)
                     : Result.error(validationMessage);

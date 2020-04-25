@@ -18,30 +18,64 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
-import org.apache.isis.viewer.common.model.binding.interaction.InteractionResponse;
+import javax.annotation.Nullable;
+
+import org.apache.isis.core.metamodel.spec.interaction.InteractionVeto;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 
 public class InteractionFailureHandler {
 
-    public static void onFailure(final InteractionResponse failure) {
+    public static RestfulObjectsApplicationException onFailure(@Nullable final InteractionVeto failure) {
         
-        if(failure==null || failure.isSuccess()) {
-            return;
+        if(failure==null) {
+            return RestfulObjectsApplicationException
+                    .createWithMessage(RestfulResponse.HttpStatusCode.INTERNAL_SERVER_ERROR,
+                            "unexpected empty failure holder");
         }
         
-        switch(failure.getVeto()) {
+        switch(failure.getVetoType()) {
         case NOT_FOUND:
         case HIDDEN:
-            throw RestfulObjectsApplicationException
+            return RestfulObjectsApplicationException
             .createWithMessage(RestfulResponse.HttpStatusCode.NOT_FOUND,
-                    failure.getFailureMessage());
-        case UNAUTHORIZED:
-        case FORBIDDEN:
-            throw RestfulObjectsApplicationException
+                    failure.getReason());
+        case READONLY:
+        case INVALID:
+            return RestfulObjectsApplicationException
             .createWithMessage(RestfulResponse.HttpStatusCode.FORBIDDEN,
-                    failure.getFailureMessage());
+                    failure.getReason());
         }
+        
+        return RestfulObjectsApplicationException
+                .createWithMessage(RestfulResponse.HttpStatusCode.INTERNAL_SERVER_ERROR,
+                        "unmatched veto type " + failure.getVetoType());
+        
     }
+    
+    
+//    public static void onFailure(@Nullable final InteractionVeto failure) {
+//        
+//        if(failure==null) {
+//            return;
+//        }
+//        
+//        switch(failure.getVetoType()) {
+//        case NOT_FOUND:
+//        case HIDDEN:
+//            throw RestfulObjectsApplicationException
+//            .createWithMessage(RestfulResponse.HttpStatusCode.NOT_FOUND,
+//                    failure.getReason());
+//        case READONLY:
+//        case INVALID:
+//            throw RestfulObjectsApplicationException
+//            .createWithMessage(RestfulResponse.HttpStatusCode.FORBIDDEN,
+//                    failure.getReason());
+//        }
+//        
+//    }
+        
+        
+
     
 }

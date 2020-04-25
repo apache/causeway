@@ -16,49 +16,55 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.common.model.binding.interaction;
+package org.apache.isis.core.metamodel.spec.interaction;
+
+import java.io.Serializable;
+
+import org.apache.isis.core.metamodel.consent.Consent;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+@Getter
 @RequiredArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
-public class InteractionResponse {
-    
-    public static enum Veto {
+public class InteractionVeto implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    public static enum VetoType {
         NOT_FOUND,
         HIDDEN,
-        FORBIDDEN,
-        UNAUTHORIZED, 
+        READONLY,
+        INVALID, 
     }
     
-    private final static InteractionResponse SUCCESS = of(null, null);
-    @Getter private final Veto veto;
-    @Getter private final String failureMessage;
+    @NonNull private final VetoType vetoType;
+    @NonNull private final Consent vetoConsent;
     
-    public boolean isSuccess() {
-        return veto==null;
+    public static InteractionVeto notFound(@NonNull Consent vetoConsent) {
+        return of(VetoType.NOT_FOUND, vetoConsent);
     }
     
-    public boolean isFailure() {
-        return !isSuccess();
+    public static InteractionVeto hidden(@NonNull Consent vetoConsent) {
+        return of(VetoType.HIDDEN, vetoConsent);
     }
     
-    // -- FACTORIES
-    
-    public static InteractionResponse failed(@NonNull Veto veto) {
-        return of(veto, "unspecified");
+    public static InteractionVeto readonly(@NonNull Consent vetoConsent) {
+        return of(VetoType.READONLY, vetoConsent);
     }
     
-    public static InteractionResponse failed(@NonNull Veto veto, String reason) {
-        return of(veto, reason);
+    public static InteractionVeto invalid(@NonNull Consent vetoConsent) {
+        return of(VetoType.INVALID, vetoConsent);
     }
 
-    public static InteractionResponse success() {
-        return SUCCESS;
+    public String getReason() {
+        return getVetoConsent().getReason();
     }
-
     
+    public String getDescription() {
+        return getVetoConsent().getDescription();
+    }
     
 }

@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
@@ -34,6 +35,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedCollection;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -70,14 +72,12 @@ public class TableView extends VerticalLayout {
     }
     
     /**
-     * Constructs a (page-able) {@link Grid} from given {@code objectAssociation} and {@code assocObject}   
-     * @param objectAssociation
-     * @param assocObject
+     * Constructs a (page-able) {@link Grid} from given {@code managedCollection}   
+     * @param managedCollection
      */
-    public static TableView fromObjectAssociation(
-            @NonNull final ObjectAssociation objectAssociation,
-            @Nullable final ManagedObject assocObject) {
+    public static Component fromManagedCollection(ManagedCollection managedCollection) {
         
+        val assocObject = managedCollection.getOwner();
         val assocObjectSpecification = assocObject.getSpecification();
         val collectionFacet = assocObjectSpecification.getFacet(CollectionFacet.class);
 
@@ -158,4 +158,6 @@ public class TableView extends VerticalLayout {
             return Optional.ofNullable(e.getMessage()).orElse(e.getClass().getName());
         }
     }
+
+
 }

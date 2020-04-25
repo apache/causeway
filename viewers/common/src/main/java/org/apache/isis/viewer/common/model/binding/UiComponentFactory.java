@@ -30,7 +30,8 @@ import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
-import org.apache.isis.viewer.common.model.binding.interaction.PropertyBinding;
+import org.apache.isis.core.metamodel.spec.interaction.InteractionVeto;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedProperty;
 
 import lombok.NonNull;
 import lombok.Value;
@@ -47,21 +48,15 @@ public interface UiComponentFactory<T> {
         /** not null but the wrapped pojo is allowed to be null*/
         @NonNull private final ManagedObject managedObject; 
         @NonNull private final ObjectFeature objectFeature;
-        @NonNull private final Function<ManagedObject, String> toDomainPropagator;
+        @NonNull private final Function<ManagedObject, Optional<InteractionVeto> > toDomainPropagator;
         
-        public static Request of(PropertyBinding propertyBinding) {
+        public static Request of(ManagedProperty propertyBinding) {
             val property = propertyBinding.getProperty();
             //TODO there is also the aspect of editable or not
             val propertyValue = propertyBinding.getPropertyValue();
             
             return of(propertyValue, property, proposedNewValue -> {
-
-                val iResponse = propertyBinding.modifyProperty(proposedNewValue);
-                if (iResponse.isFailure()) {
-                    return iResponse.getFailureMessage(); // validation result if any
-                }
-                return null;
-
+                return propertyBinding.modifyProperty(proposedNewValue);
             });
         }
         
@@ -135,7 +130,7 @@ public interface UiComponentFactory<T> {
                     .map(type::cast);
         }
 
-        public <T> Function<T, String> getPropagator(Class<T> pojoType) {
+        public <T> Function<T, Optional<InteractionVeto>> getPropagator(Class<T> pojoType) {
             return (T newValueProposal)->{
                 //TODO we are loosing any fields that are cached within ManagedObject
                 val newValue = ManagedObject.of(getFeatureSpec(), newValueProposal);

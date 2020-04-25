@@ -27,7 +27,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.viewer.common.model.binding.interaction.ObjectBinding;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
@@ -43,6 +42,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCo
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty2;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.viewer.context.ResourceContext;
+import org.apache.isis.viewer.restfulobjects.viewer.resources.ObjectAdapterAccessHelper.AccessIntent;
 
 import lombok.val;
 
@@ -109,7 +109,7 @@ class DomainResourceHelper {
 
         ObjectAdapterAccessHelper accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
 
-        final OneToOneAssociation property = accessHelper.getPropertyThatIsVisibleForIntent(propertyId, ObjectBinding.AccessIntent.ACCESS);
+        final OneToOneAssociation property = accessHelper.getPropertyThatIsVisibleForIntent(propertyId, AccessIntent.ACCESS);
 
         transactionService.flushTransaction();
         return representationService.propertyDetails(resourceContext, new ObjectAndProperty2(objectAdapter, property, memberMode), memberMode);
@@ -127,7 +127,7 @@ class DomainResourceHelper {
 
         ObjectAdapterAccessHelper accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
 
-        final OneToManyAssociation collection = accessHelper.getCollectionThatIsVisibleForIntent(collectionId, ObjectBinding.AccessIntent.ACCESS);
+        final OneToManyAssociation collection = accessHelper.getCollectionThatIsVisibleForIntent(collectionId, AccessIntent.ACCESS);
 
         transactionService.flushTransaction();
         return representationService.collectionDetails(resourceContext, new ObjectAndCollection2(objectAdapter, collection, memberMode), memberMode);
@@ -143,7 +143,7 @@ class DomainResourceHelper {
 
         ObjectAdapterAccessHelper accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
 
-        final ObjectAction action = accessHelper.getObjectActionThatIsVisibleForIntent(actionId, ObjectBinding.AccessIntent.ACCESS);
+        final ObjectAction action = accessHelper.getObjectActionThatIsVisibleForIntent(actionId, AccessIntent.ACCESS);
 
         transactionService.flushTransaction();
         return representationService.actionPrompt(resourceContext, new ObjectAndAction(objectAdapter, action));
@@ -163,7 +163,7 @@ class DomainResourceHelper {
 
         final ObjectAdapterAccessHelper accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
 
-        final ObjectAction action = accessHelper.getObjectActionThatIsVisibleForIntent(actionId, ObjectBinding.AccessIntent.MUTATE);
+        final ObjectAction action = accessHelper.getObjectActionThatIsVisibleForIntent(actionId, AccessIntent.MUTATE);
 
         final SemanticsOf actionSemantics = action.getSemantics();
         if (! actionSemantics.isSafeInNature()) {
@@ -187,7 +187,7 @@ class DomainResourceHelper {
 
         final ObjectAdapterAccessHelper accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
 
-        final ObjectAction action = accessHelper.getObjectActionThatIsVisibleForIntent(actionId, ObjectBinding.AccessIntent.MUTATE);
+        final ObjectAction action = accessHelper.getObjectActionThatIsVisibleForIntent(actionId, AccessIntent.MUTATE);
 
         final SemanticsOf actionSemantics = action.getSemantics();
         if (!actionSemantics.isIdempotentInNature()) {
@@ -205,7 +205,7 @@ class DomainResourceHelper {
 
         ObjectAdapterAccessHelper accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
 
-        final ObjectAction action = accessHelper.getObjectActionThatIsVisibleForIntent(actionId, ObjectBinding.AccessIntent.MUTATE);
+        final ObjectAction action = accessHelper.getObjectActionThatIsVisibleForIntent(actionId, AccessIntent.MUTATE);
 
         return invokeActionUsingAdapters(action, arguments, ActionResultReprRenderer.SelfLink.EXCLUDED);
     }

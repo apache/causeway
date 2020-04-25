@@ -59,8 +59,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedProperty;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
-import org.apache.isis.viewer.common.model.binding.interaction.ObjectBinding;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -74,6 +74,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberReprM
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 import org.apache.isis.viewer.restfulobjects.viewer.context.ResourceContext;
+import org.apache.isis.viewer.restfulobjects.viewer.resources.ObjectAdapterAccessHelper.AccessIntent;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -451,19 +452,16 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         
-        ObjectBinding.bind(objectAdapter)
-        .getPropertyBinding(
-            propertyId,
-            resourceContext.getWhere(),
-            ObjectBinding.AccessIntent.MUTATE)
+        ManagedProperty.getPropertyHandle(objectAdapter, propertyId)
+        .checkVisibility(resourceContext.getWhere())
+        .checkUsability(resourceContext.getWhere()) // only when ObjectBinding.AccessIntent.MUTATE
         .modifyProperty(property->{
             val proposedNewValue = new JsonParserHelper(resourceContext, property.getSpecification())
                     .parseAsMapWithSingleValue(Util.asStringUtf8(body));
             
             return proposedNewValue;
         })
-        .onFailure(InteractionFailureHandler::onFailure)
-        ;
+        .getOrElseThrow(InteractionFailureHandler::onFailure);
 
         val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
         return domainResourceHelper.propertyDetails(
@@ -489,13 +487,11 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         
         val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         
-        ObjectBinding.bind(objectAdapter)
-        .getPropertyBinding(
-            propertyId,
-            resourceContext.getWhere(),
-            ObjectBinding.AccessIntent.MUTATE)
+        ManagedProperty.getPropertyHandle(objectAdapter, propertyId)
+        .checkVisibility(resourceContext.getWhere())
+        .checkUsability(resourceContext.getWhere()) // only when ObjectBinding.AccessIntent.MUTATE
         .modifyProperty(property->null)
-        .onFailure(InteractionFailureHandler::onFailure);
+        .getOrElseThrow(InteractionFailureHandler::onFailure);
 
         val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
         return domainResourceHelper.propertyDetails(
@@ -551,7 +547,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final ObjectAdapterAccessHelper accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
 
         final OneToManyAssociation collection = accessHelper.getCollectionThatIsVisibleForIntent(
-                collectionId, ObjectBinding.AccessIntent.MUTATE);
+                collectionId, AccessIntent.MUTATE);
 
         if (!collection.getCollectionSemantics().isAnySet()) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Collection '%s' does not have set semantics", collectionId);
@@ -590,7 +586,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final ObjectAdapterAccessHelper accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
 
         final OneToManyAssociation collection = accessHelper.getCollectionThatIsVisibleForIntent(
-                collectionId, ObjectBinding.AccessIntent.MUTATE);
+                collectionId, AccessIntent.MUTATE);
 
         if (!collection.getCollectionSemantics().isListOrArray()) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.METHOD_NOT_ALLOWED, "Collection '%s' does not have list or array semantics", collectionId);
@@ -629,7 +625,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final ObjectAdapterAccessHelper accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
 
         final OneToManyAssociation collection = accessHelper.getCollectionThatIsVisibleForIntent(
-                collectionId, ObjectBinding.AccessIntent.MUTATE);
+                collectionId, AccessIntent.MUTATE);
 
         final ObjectSpecification collectionSpec = collection.getSpecification();
         final ManagedObject argAdapter = new JsonParserHelper(resourceContext, collectionSpec)

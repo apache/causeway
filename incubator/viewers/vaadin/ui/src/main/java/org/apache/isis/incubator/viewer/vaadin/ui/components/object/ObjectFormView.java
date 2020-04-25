@@ -19,7 +19,6 @@
 package org.apache.isis.incubator.viewer.vaadin.ui.components.object;
 
 import java.util.Collection;
-import java.util.Optional;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
@@ -48,7 +47,9 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedAction;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedCollection;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedProperty;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableView;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
@@ -170,38 +171,51 @@ public class ObjectFormView extends VerticalLayout {
 
             @Override
             protected void onAction(HasComponents container, ActionLayoutData actionData) {
-                objectInteractor.lookupAction(actionData.getId())
-                .ifPresent(action->{
-                    val uiAction = new Button(action.getName());
+                
+                val owner = objectInteractor.getManagedObject();
+                ManagedAction.getActionHandle(owner, actionData.getId())
+                .checkVisibility(Where.OBJECT_FORMS)
+                .get()
+                .ifPresent(managedAction -> {
+                    // TODO yet not doing anything
+                    val uiAction = new Button(managedAction.getName());
                     container.add(uiAction);
                     uiAction.getStyle().set("margin-left", "0.5em");
                     uiAction.addThemeVariants(
                             ButtonVariant.LUMO_SMALL);
-
                 });
             }
 
             @Override
             protected void onProperty(HasComponents container, PropertyLayoutData propertyData) {
-                objectInteractor
-                .getPropertyBinding(propertyData.getId(), Where.OBJECT_FORMS)
-                .ifPresent(propertyBinding->{
+                
+                val owner = objectInteractor.getManagedObject();
+                
+                ManagedProperty.getPropertyHandle(owner, propertyData.getId())
+                .checkVisibility(Where.OBJECT_FORMS)
+                .get()
+                .ifPresent(managedProperty -> {
                     val uiProperty = uiComponentFactory
-                            .componentFor(UiComponentFactory.Request.of(propertyBinding));
-                    container.add(uiProperty);                    
+                            .componentFor(UiComponentFactory.Request.of(managedProperty));
+                    container.add(uiProperty);
                 });
             }
 
             @Override
             protected void onCollection(HasComponents container, CollectionLayoutData collectionData) {
-                objectInteractor.lookupCollection(collectionData.getId())
-                .ifPresent(collection->{
-                    container.add(new H3(collection.getName()));
-
-                    val collectionValue = Optional.ofNullable(collection.get(managedObject))
-                            .orElse(ManagedObject.of(collection.getSpecification(), null));
-                    container.add(createCollectionComponent(collection, collectionValue));
+                
+                val owner = objectInteractor.getManagedObject();
+                
+                ManagedCollection.getCollectionHandle(owner, collectionData.getId())
+                .checkVisibility(Where.OBJECT_FORMS)
+                .get()
+                .ifPresent(managedCollection -> {
+                    container.add(new H3(managedCollection.getName()));
+                    
+                    val uiCollection = createCollectionComponent(managedCollection);
+                    container.add(uiCollection);
                 });
+                
             }
 
         };
@@ -243,13 +257,12 @@ public class ObjectFormView extends VerticalLayout {
     // -- HELPER
 
     private Component createCollectionComponent(
-            final ObjectAssociation objectAssociation,
-            final ManagedObject assocObject) {
+            final ManagedCollection managedCollection) {
 
-        val labelLiteral = "Collection: " + objectAssociation.getName();
-        val pojo = assocObject.getPojo();
+        val labelLiteral = "Collection: " + managedCollection.getName();
+        val pojo = managedCollection.getCollectionValue().getPojo();
         if (pojo instanceof Collection) {
-            return TableView.fromObjectAssociation(objectAssociation, assocObject);
+            return TableView.fromManagedCollection(managedCollection);
         }
 
         if (pojo == null) {
