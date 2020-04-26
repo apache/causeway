@@ -29,13 +29,13 @@ import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedAction;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedCollection;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedProperty;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAction;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCollection;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty;
 
 public abstract class ContentNegotiationServiceAbstract implements ContentNegotiationService {
 
@@ -49,21 +49,21 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
     @Override
     public Response.ResponseBuilder buildResponse(
             final IResourceContext renderContext2,
-            final ObjectAndProperty objectAndProperty)  {
+            final ManagedProperty objectAndProperty)  {
         return null;
     }
 
     @Override
     public Response.ResponseBuilder buildResponse(
             final IResourceContext renderContext2,
-            final ObjectAndCollection objectAndCollection) {
+            final ManagedCollection objectAndCollection) {
         return null;
     }
 
     @Override
     public Response.ResponseBuilder buildResponse(
             final IResourceContext renderContext2,
-            final ObjectAndAction objectAndAction)  {
+            final ManagedAction objectAndAction)  {
         return null;
     }
 

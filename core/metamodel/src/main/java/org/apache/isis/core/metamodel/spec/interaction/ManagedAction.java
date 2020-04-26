@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.spec.interaction;
 
 import java.util.Optional;
 
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
@@ -30,12 +31,18 @@ public final class ManagedAction extends ManagedMember {
 
     // -- FACTORIES
     
+    public static final ManagedAction of(
+            final @NonNull ManagedObject owner, 
+            final @NonNull ObjectAction action) {
+        return new ManagedAction(owner, action);
+    }
+    
     public static final Optional<ManagedAction> lookupAction(
             @NonNull final ManagedObject owner,
             @NonNull final String memberId) {
         
         return ManagedMember.<ObjectAction>lookup(owner, MemberType.ACTION, memberId)
-        .map(objectAction -> new ManagedAction(owner, objectAction));
+        .map(objectAction -> of(owner, objectAction));
     }
     
     // -- IMPLEMENTATION
@@ -58,6 +65,10 @@ public final class ManagedAction extends ManagedMember {
     @Override
     public MemberType getMemberType() {
         return MemberType.ACTION;
+    }
+
+    public SemanticsOf getSemantics() {
+        return getMember().getSemantics();
     }
 
 }

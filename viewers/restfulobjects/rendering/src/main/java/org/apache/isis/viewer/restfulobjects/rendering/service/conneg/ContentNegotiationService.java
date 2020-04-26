@@ -21,11 +21,11 @@ package org.apache.isis.viewer.restfulobjects.rendering.service.conneg;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedAction;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedCollection;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedProperty;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAction;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCollection;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty;
 
 public interface ContentNegotiationService {
 
@@ -35,15 +35,15 @@ public interface ContentNegotiationService {
 
     public Response.ResponseBuilder buildResponse(
             IResourceContext renderContext,
-            ObjectAndProperty objectAndProperty);
+            ManagedProperty objectAndProperty);
 
     public Response.ResponseBuilder buildResponse(
             IResourceContext renderContext,
-            ObjectAndCollection objectAndCollection);
+            ManagedCollection objectAndCollection);
 
     public Response.ResponseBuilder buildResponse(
             IResourceContext renderContext,
-            ObjectAndAction objectAndAction);
+            ManagedAction objectAndAction);
 
     public Response.ResponseBuilder buildResponse(
             IResourceContext renderContext,

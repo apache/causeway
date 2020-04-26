@@ -31,12 +31,18 @@ public final class ManagedCollection extends ManagedMember {
 
     // -- FACTORIES
     
+    public static final ManagedCollection of(
+            final @NonNull ManagedObject owner, 
+            final @NonNull OneToManyAssociation collection) {
+        return new ManagedCollection(owner, collection);
+    }
+    
     public static final Optional<ManagedCollection> lookupCollection(
             @NonNull final ManagedObject owner,
             @NonNull final String memberId) {
         
         return ManagedMember.<OneToManyAssociation>lookup(owner, MemberType.COLLECTION, memberId)
-        .map(objectAction -> new ManagedCollection(owner, objectAction));
+        .map(objectAction -> of(owner, objectAction));
     }
     
     // -- IMPLEMENTATION

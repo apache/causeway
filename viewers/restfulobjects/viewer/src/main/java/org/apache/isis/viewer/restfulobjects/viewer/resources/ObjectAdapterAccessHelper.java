@@ -20,11 +20,11 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.spec.interaction.ActionInteraction;
 import org.apache.isis.core.metamodel.spec.interaction.CollectionInteraction;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedAction;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedCollection;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedProperty;
 import org.apache.isis.core.metamodel.spec.interaction.MemberInteraction.AccessIntent;
 import org.apache.isis.core.metamodel.spec.interaction.PropertyInteraction;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
@@ -49,38 +49,37 @@ public class ObjectAdapterAccessHelper {
     private final ManagedObject managedObject;
     private final Where where;
     
-    public ObjectAction getObjectActionThatIsVisibleForIntent(
+    public ManagedAction getObjectActionThatIsVisibleForIntent(
             final String actionId, final AccessIntent intent) {
         
         return ActionInteraction
                 .start(managedObject, actionId)
                 .checkVisibility(where)
                 .checkUsability(where, intent)
-                .getOrElseThrow(InteractionFailureHandler::onFailure)
-                .getAction();
+                .getOrElseThrow(InteractionFailureHandler::onFailure);
     }
 
-    public OneToOneAssociation getPropertyThatIsVisibleForIntent(
+    public ManagedProperty getPropertyThatIsVisibleForIntent(
             final String propertyId, final AccessIntent intent) {
         
+        //TODO somehow preset Intent
         return PropertyInteraction
                 .start(managedObject, propertyId)
                 .checkVisibility(where)
                 .checkUsability(where, intent)
-                .getOrElseThrow(InteractionFailureHandler::onFailure)
-                .getProperty();
+                .getOrElseThrow(InteractionFailureHandler::onFailure);
         
     }
 
-    public OneToManyAssociation getCollectionThatIsVisibleForIntent(
+    public ManagedCollection getCollectionThatIsVisibleForIntent(
             final String collectionId, final AccessIntent intent) {
 
+        //TODO somehow preset Intent
         return CollectionInteraction
                 .start(managedObject, collectionId)
                 .checkVisibility(where)
                 .checkUsability(where, intent)
-                .getOrElseThrow(InteractionFailureHandler::onFailure)
-                .getCollection();
+                .getOrElseThrow(InteractionFailureHandler::onFailure);
 
     }
 

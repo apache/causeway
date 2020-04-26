@@ -34,6 +34,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedAction;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedCollection;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedProperty;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -329,7 +332,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             final JsonRepresentation propertyRepresentation = JsonRepresentation.newMap();
             final ObjectPropertyReprRenderer renderer =
                     new ObjectPropertyReprRenderer(getResourceContext(), linkFollowerForProp, property.getId(), propertyRepresentation);
-            renderer.with(new ObjectAndProperty(objectAdapter, property)).usingLinkTo(linkToBuilder);
+            renderer.with(ManagedProperty.of(objectAdapter, property)).usingLinkTo(linkToBuilder);
 
             if (mode.isArgs()) {
                 renderer.asArguments();
@@ -368,7 +371,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             final ObjectCollectionReprRenderer renderer =
                     new ObjectCollectionReprRenderer(getResourceContext(), linkFollowerForColl, collection.getId(), collectionRepresentation);
 
-            renderer.with(new ObjectAndCollection(objectAdapter, collection)).usingLinkTo(linkToBuilder);
+            renderer.with(ManagedCollection.of(objectAdapter, collection)).usingLinkTo(linkToBuilder);
             if(mode.isEventSerialization()) {
                 renderer.asEventSerialization();
             }
@@ -393,7 +396,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                     new ObjectActionReprRenderer(getResourceContext(), linkFollowSpecs, action.getId(), 
                             JsonRepresentation.newMap());
 
-            renderer.with(new ObjectAndAction(objectAdapter, action)).usingLinkTo(linkToBuilder);
+            renderer.with(ManagedAction.of(objectAdapter, action)).usingLinkTo(linkToBuilder);
             members.mapPut(action.getId(), renderer.render());
         });
 

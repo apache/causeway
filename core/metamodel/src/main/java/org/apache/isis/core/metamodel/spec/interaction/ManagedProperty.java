@@ -34,12 +34,18 @@ public final class ManagedProperty extends ManagedMember {
 
     // -- FACTORIES
     
+    public static final ManagedProperty of(
+            final @NonNull ManagedObject owner, 
+            final @NonNull OneToOneAssociation property) {
+        return new ManagedProperty(owner, property);
+    }
+    
     public static final Optional<ManagedProperty> lookupProperty(
             @NonNull final ManagedObject owner,
             @NonNull final String memberId) {
         
         return ManagedMember.<OneToOneAssociation>lookup(owner, MemberType.PROPERTY, memberId)
-        .map(objectAction -> new ManagedProperty(owner, objectAction));
+        .map(objectAction -> of(owner, objectAction));
     }
     
     // -- IMPLEMENTATION
@@ -87,8 +93,6 @@ public final class ManagedProperty extends ManagedMember {
         return Optional.ofNullable(property.get(getOwner()))
         .orElse(ManagedObject.of(property.getSpecification(), null));
     }
-
-
     
     
 }

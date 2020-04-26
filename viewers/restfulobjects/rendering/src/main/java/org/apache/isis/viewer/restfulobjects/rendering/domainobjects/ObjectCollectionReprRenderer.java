@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedCollection;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -139,7 +140,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         final JsonRepresentation representation = JsonRepresentation.newMap();
         final ObjectCollectionReprRenderer renderer = new ObjectCollectionReprRenderer(getResourceContext(), getLinkFollowSpecs(), null,
                 representation);
-        renderer.with(new ObjectAndCollection(objectAdapter, objectMember)).asFollowed();
+        renderer.with(ManagedCollection.of(objectAdapter, objectMember)).asFollowed();
         detailsLink.mapPut("value", renderer.render());
     }
 

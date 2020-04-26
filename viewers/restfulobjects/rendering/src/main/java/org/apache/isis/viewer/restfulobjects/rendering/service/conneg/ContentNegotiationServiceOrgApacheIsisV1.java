@@ -33,7 +33,6 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.client.SuppressionType;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
@@ -41,13 +40,13 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedAction;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedCollection;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedProperty;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAction;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCollection;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 
@@ -148,7 +147,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
     @Override
     public Response.ResponseBuilder buildResponse(
             final IResourceContext resourceContext,
-            final ObjectAndProperty objectAndProperty)  {
+            final ManagedProperty objectAndProperty)  {
 
         return null;
     }
@@ -160,7 +159,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
     @Override
     public Response.ResponseBuilder buildResponse(
             final IResourceContext resourceContext,
-            final ObjectAndCollection objectAndCollection) {
+            final ManagedCollection objectAndCollection) {
 
         if(!canAccept(resourceContext)) {
             return null;
@@ -170,7 +169,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
 
         final JsonRepresentation rootRepresentation = JsonRepresentation.newArray();
 
-        ManagedObject objectAdapter = objectAndCollection.getObjectAdapter();
+        ManagedObject objectAdapter = objectAndCollection.getOwner();
         OneToManyAssociation collection = objectAndCollection.getMember();
 
         appendCollectionTo(resourceContext, objectAdapter, collection, rootRepresentation, suppression);
@@ -202,7 +201,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
     @Override
     public Response.ResponseBuilder buildResponse(
             final IResourceContext resourceContext,
-            final ObjectAndAction objectAndAction)  {
+            final ManagedAction objectAndAction)  {
         return null;
     }
 
@@ -358,7 +357,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
             final ObjectPropertyReprRenderer renderer =
                     new ObjectPropertyReprRenderer(resourceContext, null, property.getId(), propertyRepresentation)
                     .asStandalone();
-            renderer.with(new ObjectAndProperty(objectAdapter, property));
+            renderer.with(ManagedProperty.of(objectAdapter, property));
 
             final JsonRepresentation propertyValueRepresentation = renderer.render();
 

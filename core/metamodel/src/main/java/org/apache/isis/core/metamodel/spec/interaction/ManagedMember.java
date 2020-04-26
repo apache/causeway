@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.val;
 
 @RequiredArgsConstructor
@@ -70,6 +71,21 @@ public abstract class ManagedMember {
         
     }
     
+    /**
+     * Some representations may vary according to whether the member is to be represented for read
+     * (render the state of the property or collection) or for write (render additional hypermedia controls to allow
+     * the property to be modified/cleared, or the collection to be added to/removed from).
+     */
+    public enum RepresentationMode {
+        AUTO,
+        READ,
+        WRITE;
+        public boolean isAuto() {return this == AUTO;}
+        public boolean isRead() {return this == READ;}
+        public boolean isWrite() {return this == WRITE;}
+        public boolean isExplicit() {return !isAuto();}
+    }
+    
     @Getter
     private final ManagedObject owner;
     
@@ -81,6 +97,10 @@ public abstract class ManagedMember {
         return getMember().getSpecification();
     }
     
+    public String getId() {
+        return getMember().getId();
+    }
+    
     public String getName() {
         return getMember().getName();
     }
@@ -88,6 +108,10 @@ public abstract class ManagedMember {
     public Identifier getIdentifier() {
         return getMember().getIdentifier();
     }
+    
+    @Getter @Setter @NonNull 
+    private RepresentationMode representationMode = RepresentationMode.AUTO;
+
     
     /**
      * @param where
