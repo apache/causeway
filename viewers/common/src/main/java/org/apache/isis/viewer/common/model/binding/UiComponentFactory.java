@@ -19,18 +19,17 @@
 package org.apache.isis.viewer.common.model.binding;
 
 import java.util.Optional;
-import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.handler.ChainOfResponsibility;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.interaction.InteractionVeto;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedMember;
 import org.apache.isis.core.metamodel.spec.interaction.ManagedProperty;
 
 import lombok.NonNull;
@@ -45,20 +44,8 @@ public interface UiComponentFactory<T> {
     
     @Value(staticConstructor = "of")
     public static class Request {
-        /** not null but the wrapped pojo is allowed to be null*/
-        @NonNull private final ManagedObject managedObject; 
-        @NonNull private final ObjectFeature objectFeature;
-        @NonNull private final Function<ManagedObject, Optional<InteractionVeto> > toDomainPropagator;
-        
-        public static Request of(ManagedProperty propertyBinding) {
-            val property = propertyBinding.getProperty();
-            //TODO there is also the aspect of editable or not
-            val propertyValue = propertyBinding.getPropertyValue();
-            
-            return of(propertyValue, property, proposedNewValue -> {
-                return propertyBinding.modifyProperty(proposedNewValue);
-            });
-        }
+        @NonNull private final Where where;
+        @NonNull private final ManagedMember objectFeature;
         
         // -- SHORTCUTS
         
@@ -123,26 +110,22 @@ public interface UiComponentFactory<T> {
                                     facetType.getName()));    
         }
         
-        public <T> Optional<T> getPojo(@Nullable Class<T> type) {
+        public <T> Optional<T> getFeatureValue(@Nullable Class<T> type) {
             //TODO do a type check before the cast, so we can throw a more detailed exception
             // that is, given type must be assignable from the actual pojo type 
-            return Optional.ofNullable(getManagedObject().getPojo())
+            return Optional.ofNullable(((ManagedProperty)getObjectFeature()).getPropertyValue().getPojo())
                     .map(type::cast);
         }
 
-        public <T> Function<T, Optional<InteractionVeto>> getPropagator(Class<T> pojoType) {
-            return (T newValueProposal)->{
-                //TODO we are loosing any fields that are cached within ManagedObject
-                val newValue = ManagedObject.of(getFeatureSpec(), newValueProposal);
-                return toDomainPropagator.apply(newValue);
-            };
-        }
-
         public boolean isReadOnly() {
-            return objectFeature.getFacet(DisabledFacet.class)!=null;
+            return getObjectFeature().checkUsability(where).isPresent();
         }
 
-
+        public Optional<InteractionVeto> setFeatureValue(Object proposedNewValuePojo) {
+            //TODO we are loosing any fields that are cached within ManagedObject
+            val proposedNewValue = ManagedObject.of(getFeatureSpec(), proposedNewValuePojo);
+            return ((ManagedProperty)getObjectFeature()).modifyProperty(proposedNewValue);
+        }
         
     }
     

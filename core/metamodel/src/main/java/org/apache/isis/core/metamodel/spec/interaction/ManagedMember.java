@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.spec.interaction;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -78,6 +79,14 @@ public abstract class ManagedMember {
     
     public ObjectSpecification getSpecification() {
         return getMember().getSpecification();
+    }
+    
+    public String getName() {
+        return getMember().getName();
+    }
+    
+    public Identifier getIdentifier() {
+        return getMember().getIdentifier();
     }
     
     /**

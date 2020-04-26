@@ -110,7 +110,7 @@ public final class BinderUtil {
         @Override
         public Result<P> convertToModel(P newValue, ValueContext context) {
             // propagate new value down the domain model, and handle validation feedback
-            val validationMessage = request.getPropagator(pojoType).apply(newValue)
+            val validationMessage = request.setFeatureValue(newValue)
                     .map(InteractionVeto::getReason)
                     .orElse(null);
                                         
@@ -126,7 +126,7 @@ public final class BinderUtil {
         
         public P init(Request request) {
             this.request = request;
-            return request.getPojo(pojoType).orElse(null);
+            return request.getFeatureValue(pojoType).orElse(null);
         }
         
         public P propagate(Request request, P newValue) {

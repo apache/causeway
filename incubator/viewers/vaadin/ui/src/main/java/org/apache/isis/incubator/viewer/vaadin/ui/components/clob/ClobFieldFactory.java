@@ -42,7 +42,7 @@ public class ClobFieldFactory implements UiComponentHandlerVaa {
     @Override
     public Component handle(Request request) {
         val uiField = new ClobField(request.getFeatureLabel());
-        uiField.setValue(request.getPojo(Clob.class).orElse(null));
+        uiField.setValue(request.getFeatureValue(Clob.class).orElse(null));
         return uiField;
     }
     

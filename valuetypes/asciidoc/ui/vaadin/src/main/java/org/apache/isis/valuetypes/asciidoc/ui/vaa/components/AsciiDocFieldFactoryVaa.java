@@ -43,7 +43,7 @@ public class AsciiDocFieldFactoryVaa implements UiComponentHandlerVaa {
     @Override
     public Component handle(Request request) {
         val uiField = new AsciiDocFieldVaa(request.getFeatureLabel());
-        uiField.setValue(request.getPojo(AsciiDoc.class).orElse(null));
+        uiField.setValue(request.getFeatureValue(AsciiDoc.class).orElse(null));
 
 //not compatible with flexibly growing grids        
 //        final int typicalLength = request

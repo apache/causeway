@@ -61,10 +61,6 @@ public final class ManagedCollection extends ManagedMember {
         return MemberType.COLLECTION;
     }
 
-    public String getName() {
-        return getCollection().getName();
-    }
-
     public ManagedObject getCollectionValue() {
         val collection = getCollection();
         

@@ -197,7 +197,7 @@ public class ObjectFormView extends VerticalLayout {
                 .get()
                 .ifPresent(managedProperty -> {
                     val uiProperty = uiComponentFactory
-                            .componentFor(UiComponentFactory.Request.of(managedProperty));
+                            .componentFor(UiComponentFactory.Request.of(Where.OBJECT_FORMS, managedProperty));
                     container.add(uiProperty);
                 });
             }

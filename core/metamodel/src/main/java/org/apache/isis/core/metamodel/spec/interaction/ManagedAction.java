@@ -60,8 +60,4 @@ public final class ManagedAction extends ManagedMember {
         return MemberType.ACTION;
     }
 
-    public String getName() {
-        return getAction().getName();
-    }
-
 }
