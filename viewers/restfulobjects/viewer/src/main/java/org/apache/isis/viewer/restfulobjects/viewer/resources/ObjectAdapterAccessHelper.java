@@ -21,6 +21,7 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.interaction.ActionInteraction;
+import org.apache.isis.core.metamodel.spec.interaction.ActionInteraction.SemanticConstraint;
 import org.apache.isis.core.metamodel.spec.interaction.CollectionInteraction;
 import org.apache.isis.core.metamodel.spec.interaction.ManagedAction;
 import org.apache.isis.core.metamodel.spec.interaction.ManagedCollection;
@@ -29,6 +30,7 @@ import org.apache.isis.core.metamodel.spec.interaction.MemberInteraction.AccessI
 import org.apache.isis.core.metamodel.spec.interaction.PropertyInteraction;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -49,20 +51,23 @@ public class ObjectAdapterAccessHelper {
     private final ManagedObject managedObject;
     private final Where where;
     
-    public ManagedAction getObjectActionThatIsVisibleForIntent(
-            final String actionId, final AccessIntent intent) {
+    public ManagedAction getObjectActionThatIsVisibleForIntentAndSemanticConstraint(
+            @NonNull final String actionId, 
+            @NonNull final AccessIntent intent,
+            @NonNull final SemanticConstraint semanticConstraint) {
         
         return ActionInteraction
                 .start(managedObject, actionId)
                 .checkVisibility(where)
-                .checkUsability(where, intent)
+                .checkUsability(where, AccessIntent.MUTATE)
+                .checkSemanticConstraint(semanticConstraint)
                 .getOrElseThrow(InteractionFailureHandler::onFailure);
     }
 
     public ManagedProperty getPropertyThatIsVisibleForIntent(
-            final String propertyId, final AccessIntent intent) {
+            @NonNull final String propertyId, 
+            @NonNull final AccessIntent intent) {
         
-        //TODO somehow preset Intent
         return PropertyInteraction
                 .start(managedObject, propertyId)
                 .checkVisibility(where)
@@ -72,9 +77,9 @@ public class ObjectAdapterAccessHelper {
     }
 
     public ManagedCollection getCollectionThatIsVisibleForIntent(
-            final String collectionId, final AccessIntent intent) {
+            @NonNull final String collectionId, 
+            @NonNull final AccessIntent intent) {
 
-        //TODO somehow preset Intent
         return CollectionInteraction
                 .start(managedObject, collectionId)
                 .checkVisibility(where)

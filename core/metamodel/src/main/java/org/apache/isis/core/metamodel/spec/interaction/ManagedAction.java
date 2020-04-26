@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.spec.interaction;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
@@ -67,8 +66,5 @@ public final class ManagedAction extends ManagedMember {
         return MemberType.ACTION;
     }
 
-    public SemanticsOf getSemantics() {
-        return getMember().getSemantics();
-    }
 
 }

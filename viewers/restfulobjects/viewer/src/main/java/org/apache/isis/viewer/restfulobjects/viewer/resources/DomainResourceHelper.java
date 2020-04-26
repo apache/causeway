@@ -24,13 +24,12 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.interaction.ActionInteraction.SemanticConstraint;
 import org.apache.isis.core.metamodel.spec.interaction.ManagedAction;
 import org.apache.isis.core.metamodel.spec.interaction.ManagedMember;
 import org.apache.isis.core.metamodel.spec.interaction.MemberInteraction.AccessIntent;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
-import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectLinkTo;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainServiceLinkTo;
@@ -102,9 +101,8 @@ class DomainResourceHelper {
             final String propertyId,
             final ManagedMember.RepresentationMode representationMode) {
 
-        val accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
-
-        val property = accessHelper.getPropertyThatIsVisibleForIntent(propertyId, AccessIntent.ACCESS);
+        val property = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter)
+                .getPropertyThatIsVisibleForIntent(propertyId, AccessIntent.ACCESS);
         property.setRepresentationMode(representationMode);
 
         transactionService.flushTransaction();
@@ -121,9 +119,8 @@ class DomainResourceHelper {
             final String collectionId,
             final ManagedMember.RepresentationMode representationMode) {
 
-        val accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
-
-        val collection = accessHelper.getCollectionThatIsVisibleForIntent(collectionId, AccessIntent.ACCESS);
+        val collection = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter)
+                .getCollectionThatIsVisibleForIntent(collectionId, AccessIntent.ACCESS);
         collection.setRepresentationMode(representationMode);
 
         transactionService.flushTransaction();
@@ -138,9 +135,9 @@ class DomainResourceHelper {
      */
     public Response actionPrompt(final String actionId) {
 
-        ObjectAdapterAccessHelper accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
-
-        val action = accessHelper.getObjectActionThatIsVisibleForIntent(actionId, AccessIntent.ACCESS);
+        val action = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter)
+                .getObjectActionThatIsVisibleForIntentAndSemanticConstraint(
+                        actionId, AccessIntent.ACCESS, SemanticConstraint.NONE);
 
         transactionService.flushTransaction();
         return representationService.actionPrompt(resourceContext, action);
@@ -158,14 +155,9 @@ class DomainResourceHelper {
      */
     public Response invokeActionQueryOnly(final String actionId, final JsonRepresentation arguments) {
 
-        val accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
-
-        val action = accessHelper.getObjectActionThatIsVisibleForIntent(actionId, AccessIntent.MUTATE);
-
-        val actionSemantics = action.getSemantics();
-        if (! actionSemantics.isSafeInNature()) {
-            throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Method not allowed; action '%s' does not have safe semantics", action.getId());
-        }
+        val action = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter)
+                .getObjectActionThatIsVisibleForIntentAndSemanticConstraint(
+                        actionId, AccessIntent.MUTATE, SemanticConstraint.SAFE);
 
         return invokeActionUsingAdapters(action, arguments, ActionResultReprRenderer.SelfLink.INCLUDED);
     }
@@ -182,14 +174,10 @@ class DomainResourceHelper {
      */
     public Response invokeActionIdempotent(final String actionId, final JsonRepresentation arguments) {
 
-        val accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
+        val action = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter)
+                .getObjectActionThatIsVisibleForIntentAndSemanticConstraint(
+                        actionId, AccessIntent.MUTATE, SemanticConstraint.IDEMPOTENT);
 
-        val action = accessHelper.getObjectActionThatIsVisibleForIntent(actionId, AccessIntent.MUTATE);
-
-        val actionSemantics = action.getSemantics();
-        if (!actionSemantics.isIdempotentInNature()) {
-            throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Method not allowed; action '%s' is not idempotent", action.getId());
-        }
         return invokeActionUsingAdapters(action, arguments, ActionResultReprRenderer.SelfLink.EXCLUDED);
     }
 
@@ -200,9 +188,9 @@ class DomainResourceHelper {
      */
     public Response invokeAction(final String actionId, final JsonRepresentation arguments) {
 
-        val accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
-
-        val action = accessHelper.getObjectActionThatIsVisibleForIntent(actionId, AccessIntent.MUTATE);
+        val action = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter)
+                .getObjectActionThatIsVisibleForIntentAndSemanticConstraint(
+                        actionId, AccessIntent.MUTATE, SemanticConstraint.NONE);
 
         return invokeActionUsingAdapters(action, arguments, ActionResultReprRenderer.SelfLink.EXCLUDED);
     }

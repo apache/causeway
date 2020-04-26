@@ -45,6 +45,12 @@ public class InteractionFailureHandler {
             return RestfulObjectsApplicationException
             .createWithMessage(RestfulResponse.HttpStatusCode.FORBIDDEN,
                     failure.getReason());
+            
+        case ACTION_NOT_SAFE:
+        case ACTION_NOT_IDEMPOTENT:
+            return RestfulObjectsApplicationException
+            .createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                    failure.getReason());
         }
         
         return RestfulObjectsApplicationException

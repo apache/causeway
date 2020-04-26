@@ -43,6 +43,9 @@ public class InteractionVeto implements Serializable {
         HIDDEN,
         READONLY,
         INVALID, 
+        
+        ACTION_NOT_SAFE,
+        ACTION_NOT_IDEMPOTENT,
     }
     
     @NonNull private final VetoType vetoType;
@@ -68,6 +71,18 @@ public class InteractionVeto implements Serializable {
     public static InteractionVeto invalid(@NonNull Consent vetoConsent) {
         return of(VetoType.INVALID, vetoConsent);
     }
+    
+    public static InteractionVeto actionNotSafe(@NonNull ManagedAction action) {
+        val reason = String.format("Method not allowed; action '%s' does not have safe semantics", 
+                action.getId());
+        return of(VetoType.ACTION_NOT_SAFE, new Veto(reason));
+    }
+    
+    public static InteractionVeto actionNotIdempotent(@NonNull ManagedAction action) {
+        val reason = String.format("Method not allowed; action '%s' does not have idempotent semantics", 
+                action.getId());
+        return of(VetoType.ACTION_NOT_IDEMPOTENT, new Veto(reason));
+    }
 
     public String getReason() {
         return getVetoConsent().getReason();
@@ -76,5 +91,7 @@ public class InteractionVeto implements Serializable {
     public String getDescription() {
         return getVetoConsent().getDescription();
     }
+
+
     
 }

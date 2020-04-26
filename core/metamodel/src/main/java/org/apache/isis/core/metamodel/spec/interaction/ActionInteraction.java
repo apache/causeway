@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.spec.interaction;
 
 import org.apache.isis.core.commons.internal.base._Either;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.interaction.ManagedMember.MemberType;
 
@@ -27,6 +28,12 @@ import lombok.val;
 
 public final class ActionInteraction extends MemberInteraction<ManagedAction, ActionInteraction> {
 
+    public static enum SemanticConstraint {
+        NONE,
+        IDEMPOTENT,
+        SAFE
+    }
+    
     public static final ActionInteraction start(
             @NonNull final ManagedObject owner,
             @NonNull final String memberId) {
@@ -44,6 +51,32 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
         super(chain);
     }
 
+    public ActionInteraction checkSemanticConstraint(@NonNull SemanticConstraint semanticConstraint) {
+        
+        chain = chain.leftRemap(action->{
+            
+            val actionSemantics = action.getAction().getSemantics();
+            
+            switch(semanticConstraint) {
+            case NONE:
+                return _Either.left(action);
+            
+            case IDEMPOTENT:
+                return (! actionSemantics.isIdempotentInNature()) 
+                        ? _Either.right(InteractionVeto.actionNotIdempotent(action)) 
+                        : _Either.left(action);
+            case SAFE:
+                return (! actionSemantics.isSafeInNature()) 
+                        ? _Either.right(InteractionVeto.actionNotSafe(action)) 
+                        : _Either.left(action);
+            default:
+                throw _Exceptions.unmatchedCase(semanticConstraint); // unexpected code reach
+            }
+             
+        });
+        
+        return this;
+    }
 
 
 //    public PropertyHandle modifyProperty(
