@@ -86,7 +86,7 @@ do
 	      -Dskip.arch \
 	      -DskipTests
 	
-	  cd $PROJECT_ROOT_PATH/examples/$domain
+	  cd $PROJECT_ROOT_PATH/examples/$app
 	done
 
 
