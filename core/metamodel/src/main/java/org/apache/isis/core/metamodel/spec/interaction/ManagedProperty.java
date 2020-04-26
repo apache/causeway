@@ -22,9 +22,7 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.core.commons.internal.base._Either;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
@@ -42,19 +40,6 @@ public final class ManagedProperty extends ManagedMember {
         
         return ManagedMember.<OneToOneAssociation>lookup(owner, MemberType.PROPERTY, memberId)
         .map(objectAction -> new ManagedProperty(owner, objectAction));
-    }
-    
-    public static final PropertyHandle getPropertyHandle(
-            @NonNull final ManagedObject owner,
-            @NonNull final String memberId) {
-    
-        val managedProperty = ManagedProperty.lookupProperty(owner, memberId);
-        
-        final _Either<ManagedProperty, InteractionVeto> chain = managedProperty.isPresent()
-                ? _Either.left(managedProperty.get())
-                : _Either.right(InteractionVeto.notFound(new Veto(notFound(MemberType.PROPERTY, memberId))));
-                
-        return new PropertyHandle(chain);
     }
     
     // -- IMPLEMENTATION

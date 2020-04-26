@@ -47,9 +47,10 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.interaction.ManagedAction;
+import org.apache.isis.core.metamodel.spec.interaction.ActionInteraction;
+import org.apache.isis.core.metamodel.spec.interaction.CollectionInteraction;
 import org.apache.isis.core.metamodel.spec.interaction.ManagedCollection;
-import org.apache.isis.core.metamodel.spec.interaction.ManagedProperty;
+import org.apache.isis.core.metamodel.spec.interaction.PropertyInteraction;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableView;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
@@ -173,7 +174,7 @@ public class ObjectFormView extends VerticalLayout {
             protected void onAction(HasComponents container, ActionLayoutData actionData) {
                 
                 val owner = objectInteractor.getManagedObject();
-                ManagedAction.getActionHandle(owner, actionData.getId())
+                ActionInteraction.start(owner, actionData.getId())
                 .checkVisibility(Where.OBJECT_FORMS)
                 .get()
                 .ifPresent(managedAction -> {
@@ -191,7 +192,7 @@ public class ObjectFormView extends VerticalLayout {
                 
                 val owner = objectInteractor.getManagedObject();
                 
-                ManagedProperty.getPropertyHandle(owner, propertyData.getId())
+                PropertyInteraction.start(owner, propertyData.getId())
                 .checkVisibility(Where.OBJECT_FORMS)
                 .get()
                 .ifPresent(managedProperty -> {
@@ -206,7 +207,7 @@ public class ObjectFormView extends VerticalLayout {
                 
                 val owner = objectInteractor.getManagedObject();
                 
-                ManagedCollection.getCollectionHandle(owner, collectionData.getId())
+                CollectionInteraction.start(owner, collectionData.getId())
                 .checkVisibility(Where.OBJECT_FORMS)
                 .get()
                 .ifPresent(managedCollection -> {

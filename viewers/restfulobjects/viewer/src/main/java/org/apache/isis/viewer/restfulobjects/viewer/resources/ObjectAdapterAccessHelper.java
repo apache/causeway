@@ -23,13 +23,13 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.spec.interaction.ManagedAction;
-import org.apache.isis.core.metamodel.spec.interaction.ManagedCollection;
-import org.apache.isis.core.metamodel.spec.interaction.ManagedProperty;
+import org.apache.isis.core.metamodel.spec.interaction.ActionInteraction;
+import org.apache.isis.core.metamodel.spec.interaction.CollectionInteraction;
+import org.apache.isis.core.metamodel.spec.interaction.MemberInteraction.AccessIntent;
+import org.apache.isis.core.metamodel.spec.interaction.PropertyInteraction;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Utility class that encapsulates the logic for checking access to the specified
@@ -38,14 +38,6 @@ import lombok.val;
 @RequiredArgsConstructor
 public class ObjectAdapterAccessHelper {
     
-    public static enum AccessIntent {
-        ACCESS, MUTATE;
-
-        public boolean isMutate() {
-            return this == MUTATE;
-        }
-    }
-
     public static ObjectAdapterAccessHelper of(
             final IResourceContext resourceContext,
             final ManagedObject managedObject) {
@@ -60,15 +52,10 @@ public class ObjectAdapterAccessHelper {
     public ObjectAction getObjectActionThatIsVisibleForIntent(
             final String actionId, final AccessIntent intent) {
         
-        val actionHandle = ManagedAction
-                .getActionHandle(managedObject, actionId)
-                .checkVisibility(where);
-        
-        if(intent.isMutate()) {
-            actionHandle.checkUsability(where);
-        }
-        
-        return actionHandle
+        return ActionInteraction
+                .start(managedObject, actionId)
+                .checkVisibility(where)
+                .checkUsability(where, intent)
                 .getOrElseThrow(InteractionFailureHandler::onFailure)
                 .getAction();
     }
@@ -76,15 +63,10 @@ public class ObjectAdapterAccessHelper {
     public OneToOneAssociation getPropertyThatIsVisibleForIntent(
             final String propertyId, final AccessIntent intent) {
         
-        val propertyHandle = ManagedProperty
-                .getPropertyHandle(managedObject, propertyId)
-                .checkVisibility(where);
-        
-        if(intent.isMutate()) {
-            propertyHandle.checkUsability(where);
-        }
-        
-        return propertyHandle
+        return PropertyInteraction
+                .start(managedObject, propertyId)
+                .checkVisibility(where)
+                .checkUsability(where, intent)
                 .getOrElseThrow(InteractionFailureHandler::onFailure)
                 .getProperty();
         
@@ -92,18 +74,14 @@ public class ObjectAdapterAccessHelper {
 
     public OneToManyAssociation getCollectionThatIsVisibleForIntent(
             final String collectionId, final AccessIntent intent) {
-        
-        val collectionHandle = ManagedCollection
-                .getCollectionHandle(managedObject, collectionId)
-                .checkVisibility(where);
-        
-        if(intent.isMutate()) {
-            collectionHandle.checkUsability(where);
-        }
-        
-        return collectionHandle
+
+        return CollectionInteraction
+                .start(managedObject, collectionId)
+                .checkVisibility(where)
+                .checkUsability(where, intent)
                 .getOrElseThrow(InteractionFailureHandler::onFailure)
                 .getCollection();
+
     }
 
 

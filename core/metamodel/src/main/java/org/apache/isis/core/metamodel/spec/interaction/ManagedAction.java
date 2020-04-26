@@ -20,14 +20,11 @@ package org.apache.isis.core.metamodel.spec.interaction;
 
 import java.util.Optional;
 
-import org.apache.isis.core.commons.internal.base._Either;
-import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public final class ManagedAction extends ManagedMember {
 
@@ -41,19 +38,6 @@ public final class ManagedAction extends ManagedMember {
         .map(objectAction -> new ManagedAction(owner, objectAction));
     }
     
-    public static final ActionHandle getActionHandle(
-            @NonNull final ManagedObject owner,
-            @NonNull final String memberId) {
-    
-        val managedAction = ManagedAction.lookupAction(owner, memberId);
-        
-        final _Either<ManagedAction, InteractionVeto> chain = managedAction.isPresent()
-                ? _Either.left(managedAction.get())
-                : _Either.right(InteractionVeto.notFound(new Veto(notFound(MemberType.ACTION, memberId))));
-                
-        return new ActionHandle(chain);
-    }
-
     // -- IMPLEMENTATION
     
     @Getter private final ObjectAction action;

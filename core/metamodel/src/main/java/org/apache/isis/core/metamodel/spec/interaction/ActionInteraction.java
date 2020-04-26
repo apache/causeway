@@ -19,14 +19,32 @@
 package org.apache.isis.core.metamodel.spec.interaction;
 
 import org.apache.isis.core.commons.internal.base._Either;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedMember.MemberType;
 
 import lombok.NonNull;
+import lombok.val;
 
-public final class ActionHandle extends MemberHandle<ManagedAction, ActionHandle> {
+public final class ActionInteraction extends MemberInteraction<ManagedAction, ActionInteraction> {
 
-    ActionHandle(@NonNull _Either<ManagedAction, InteractionVeto> chain) {
+    public static final ActionInteraction start(
+            @NonNull final ManagedObject owner,
+            @NonNull final String memberId) {
+    
+        val managedAction = ManagedAction.lookupAction(owner, memberId);
+        
+        final _Either<ManagedAction, InteractionVeto> chain = managedAction.isPresent()
+                ? _Either.left(managedAction.get())
+                : _Either.right(InteractionVeto.notFound(MemberType.ACTION, memberId));
+                
+        return new ActionInteraction(chain);
+    }
+    
+    ActionInteraction(@NonNull _Either<ManagedAction, InteractionVeto> chain) {
         super(chain);
     }
+
+
 
 //    public PropertyHandle modifyProperty(
 //            @NonNull final Function<ManagedProperty, ManagedObject> newProperyValueProvider) {

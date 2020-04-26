@@ -119,12 +119,4 @@ public abstract class ManagedMember {
         return memberType.lookup(owner, memberId);
     }
     
-    protected static <T extends ObjectMember> String notFound(
-            MemberType memberType, 
-            String memberId) {
-        return String.format("%s '%s' either does not exist, is disabled or is not visible", 
-                        memberId, 
-                        memberType.name().toLowerCase());
-    }
-    
 }

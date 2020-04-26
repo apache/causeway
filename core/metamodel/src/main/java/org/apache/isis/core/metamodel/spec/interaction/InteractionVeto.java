@@ -20,12 +20,17 @@ package org.apache.isis.core.metamodel.spec.interaction;
 
 import java.io.Serializable;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.Veto;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedMember.MemberType;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Getter
 @RequiredArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
@@ -43,8 +48,13 @@ public class InteractionVeto implements Serializable {
     @NonNull private final VetoType vetoType;
     @NonNull private final Consent vetoConsent;
     
-    public static InteractionVeto notFound(@NonNull Consent vetoConsent) {
-        return of(VetoType.NOT_FOUND, vetoConsent);
+    public static InteractionVeto notFound(
+            @NonNull MemberType memberType, 
+            @Nullable String memberId) {
+        val reason = String.format("%s '%s' either does not exist, is disabled or is not visible", 
+                "" + memberId, 
+                memberType.name().toLowerCase());
+        return of(VetoType.NOT_FOUND, new Veto(reason));
     }
     
     public static InteractionVeto hidden(@NonNull Consent vetoConsent) {

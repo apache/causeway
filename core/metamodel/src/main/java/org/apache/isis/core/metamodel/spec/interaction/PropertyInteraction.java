@@ -22,17 +22,31 @@ import java.util.function.Function;
 
 import org.apache.isis.core.commons.internal.base._Either;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedMember.MemberType;
 
 import lombok.NonNull;
 import lombok.val;
 
-public final class PropertyHandle extends MemberHandle<ManagedProperty, PropertyHandle> {
+public final class PropertyInteraction extends MemberInteraction<ManagedProperty, PropertyInteraction> {
 
-    PropertyHandle(@NonNull _Either<ManagedProperty, InteractionVeto> chain) {
+    public static final PropertyInteraction start(
+            @NonNull final ManagedObject owner,
+            @NonNull final String memberId) {
+    
+        val managedProperty = ManagedProperty.lookupProperty(owner, memberId);
+        
+        final _Either<ManagedProperty, InteractionVeto> chain = managedProperty.isPresent()
+                ? _Either.left(managedProperty.get())
+                : _Either.right(InteractionVeto.notFound(MemberType.PROPERTY, memberId));
+                
+        return new PropertyInteraction(chain);
+    }
+    
+    PropertyInteraction(@NonNull _Either<ManagedProperty, InteractionVeto> chain) {
         super(chain);
     }
 
-    public PropertyHandle modifyProperty(
+    public PropertyInteraction modifyProperty(
             @NonNull final Function<ManagedProperty, ManagedObject> newProperyValueProvider) {
 
         chain = chain.leftRemap(property->{

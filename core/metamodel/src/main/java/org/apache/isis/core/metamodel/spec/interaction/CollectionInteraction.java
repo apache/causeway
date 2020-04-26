@@ -19,12 +19,28 @@
 package org.apache.isis.core.metamodel.spec.interaction;
 
 import org.apache.isis.core.commons.internal.base._Either;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedMember.MemberType;
 
 import lombok.NonNull;
+import lombok.val;
 
-public final class CollectionHandle extends MemberHandle<ManagedCollection, CollectionHandle> {
+public final class CollectionInteraction extends MemberInteraction<ManagedCollection, CollectionInteraction> {
 
-    CollectionHandle(@NonNull _Either<ManagedCollection, InteractionVeto> chain) {
+    public static final CollectionInteraction start(
+            @NonNull final ManagedObject owner,
+            @NonNull final String memberId) {
+    
+        val managedCollection = ManagedCollection.lookupCollection(owner, memberId);
+        
+        final _Either<ManagedCollection, InteractionVeto> chain = managedCollection.isPresent()
+                ? _Either.left(managedCollection.get())
+                : _Either.right(InteractionVeto.notFound(MemberType.COLLECTION, memberId));
+                
+        return new CollectionInteraction(chain);
+    }
+    
+    CollectionInteraction(@NonNull _Either<ManagedCollection, InteractionVeto> chain) {
         super(chain);
     }
 

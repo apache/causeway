@@ -29,11 +29,19 @@ import org.apache.isis.core.commons.internal.base._Either;
 import lombok.NonNull;
 import lombok.val;
 
-public abstract class MemberHandle<T extends ManagedMember, H extends MemberHandle<T, ?>> {
+public abstract class MemberInteraction<T extends ManagedMember, H extends MemberInteraction<T, ?>> {
 
+    public static enum AccessIntent {
+        ACCESS, MUTATE;
+
+        public boolean isMutate() {
+            return this == MUTATE;
+        }
+    }
+    
     @NonNull protected _Either<T, InteractionVeto> chain;
 
-    protected MemberHandle(@NonNull _Either<T, InteractionVeto> chain) {
+    protected MemberInteraction(@NonNull _Either<T, InteractionVeto> chain) {
         this.chain = chain;
     }
     
@@ -54,6 +62,19 @@ public abstract class MemberHandle<T extends ManagedMember, H extends MemberHand
                 ? _Either.right(usablitiyVeto.get()) 
                 : _Either.left(property); 
         });
+        return _Casts.uncheckedCast(this);
+    }
+    
+    /**
+     * Only check usability if intent is {@code MUTATE}. 
+     * @param where
+     * @param intent
+     * @return self
+     */
+    public H checkUsability(@NonNull final Where where, @NonNull final AccessIntent intent) {
+        if(intent.isMutate()) {
+            return checkUsability(where);
+        }
         return _Casts.uncheckedCast(this);
     }
     

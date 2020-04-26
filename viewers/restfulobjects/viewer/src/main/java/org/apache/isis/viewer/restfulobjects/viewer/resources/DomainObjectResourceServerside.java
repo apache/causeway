@@ -59,7 +59,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.spec.interaction.ManagedProperty;
+import org.apache.isis.core.metamodel.spec.interaction.MemberInteraction.AccessIntent;
+import org.apache.isis.core.metamodel.spec.interaction.PropertyInteraction;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
@@ -74,7 +75,6 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberReprM
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 import org.apache.isis.viewer.restfulobjects.viewer.context.ResourceContext;
-import org.apache.isis.viewer.restfulobjects.viewer.resources.ObjectAdapterAccessHelper.AccessIntent;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -452,9 +452,9 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         
-        ManagedProperty.getPropertyHandle(objectAdapter, propertyId)
+        PropertyInteraction.start(objectAdapter, propertyId)
         .checkVisibility(resourceContext.getWhere())
-        .checkUsability(resourceContext.getWhere()) // only when ObjectBinding.AccessIntent.MUTATE
+        .checkUsability(resourceContext.getWhere(), AccessIntent.MUTATE)
         .modifyProperty(property->{
             val proposedNewValue = new JsonParserHelper(resourceContext, property.getSpecification())
                     .parseAsMapWithSingleValue(Util.asStringUtf8(body));
@@ -487,9 +487,9 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         
         val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         
-        ManagedProperty.getPropertyHandle(objectAdapter, propertyId)
+        PropertyInteraction.start(objectAdapter, propertyId)
         .checkVisibility(resourceContext.getWhere())
-        .checkUsability(resourceContext.getWhere()) // only when ObjectBinding.AccessIntent.MUTATE
+        .checkUsability(resourceContext.getWhere(), AccessIntent.MUTATE)
         .modifyProperty(property->null)
         .getOrElseThrow(InteractionFailureHandler::onFailure);
 

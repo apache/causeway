@@ -20,8 +20,6 @@ package org.apache.isis.core.metamodel.spec.interaction;
 
 import java.util.Optional;
 
-import org.apache.isis.core.commons.internal.base._Either;
-import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
@@ -39,19 +37,6 @@ public final class ManagedCollection extends ManagedMember {
         
         return ManagedMember.<OneToManyAssociation>lookup(owner, MemberType.COLLECTION, memberId)
         .map(objectAction -> new ManagedCollection(owner, objectAction));
-    }
-    
-    public static final CollectionHandle getCollectionHandle(
-            @NonNull final ManagedObject owner,
-            @NonNull final String memberId) {
-    
-        val managedCollection = ManagedCollection.lookupCollection(owner, memberId);
-        
-        final _Either<ManagedCollection, InteractionVeto> chain = managedCollection.isPresent()
-                ? _Either.left(managedCollection.get())
-                : _Either.right(InteractionVeto.notFound(new Veto(notFound(MemberType.COLLECTION, memberId))));
-                
-        return new CollectionHandle(chain);
     }
     
     // -- IMPLEMENTATION
