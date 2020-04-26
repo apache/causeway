@@ -203,7 +203,7 @@ class DomainResourceHelper {
 
         val action = managedAction.getAction();
         val objectAdapter = this.objectAdapter;
-        val argHelper = new ObjectActionArgHelper(resourceContext, objectAdapter, action);
+        val argHelper = new ObjectActionArgHelper(resourceContext, managedAction);
         val argAdapters = argHelper.parseAndValidateArguments(arguments);
 
         if(resourceContext.isValidateOnly()) {

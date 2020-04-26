@@ -28,33 +28,30 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedAction;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
  * Utility class that encapsulates the logic for parsing arguments to be invoked by an
  * {@link ObjectAction}.
  */
+@RequiredArgsConstructor
 public class ObjectActionArgHelper {
 
     private final IResourceContext resourceContext;
-    private final ManagedObject objectAdapter;
-    private final ObjectAction action;
-
-    public ObjectActionArgHelper(
-            final IResourceContext resourceContext,
-            final ManagedObject objectAdapter,
-            final ObjectAction action) {
-        this.resourceContext = resourceContext;
-        this.objectAdapter = objectAdapter;
-        this.action = action;
-    }
+    private final ManagedAction managedAction;
 
     public List<ManagedObject> parseAndValidateArguments(final JsonRepresentation arguments) {
+        
+        val action = managedAction.getAction();
+        val owner = managedAction.getOwner();
+        
         final List<JsonRepresentation> argList = argListFor(action, arguments);
 
         final List<ManagedObject> argAdapters = _Lists.newArrayList();
@@ -70,7 +67,7 @@ public class ObjectActionArgHelper {
                 // validate individual arg
                 final ObjectActionParameter parameter = parameters.getElseFail(i);
                 final Object argPojo = argAdapter!=null?argAdapter.getPojo():null;
-                final String reasonNotValid = parameter.isValid(objectAdapter, argPojo, InteractionInitiatedBy.USER);
+                final String reasonNotValid = parameter.isValid(owner, argPojo, InteractionInitiatedBy.USER);
                 if (reasonNotValid != null) {
                     argRepr.mapPut("invalidReason", reasonNotValid);
                     valid = false;
@@ -83,7 +80,7 @@ public class ObjectActionArgHelper {
 
         // validate entire argument set
         final Consent consent = action.isArgumentSetValid(
-                objectAdapter, argAdapters, InteractionInitiatedBy.USER);
+                owner, argAdapters, InteractionInitiatedBy.USER);
         if (consent.isVetoed()) {
             arguments.mapPut("x-ro-invalidReason", consent.getReason());
             valid = false;
