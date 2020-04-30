@@ -200,7 +200,7 @@ class DomainResourceHelper {
         
         val where = resourceContext.getWhere();
         
-        val actionInteraction = ActionInteraction.start(objectAdapter, actionId)
+        val actionInteraction = (ActionInteraction) ActionInteraction.start(objectAdapter, actionId)
         .checkVisibility(where)
         .checkUsability(where, intent)
         .checkSemanticConstraint(semanticConstraint)

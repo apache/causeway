@@ -19,20 +19,15 @@
 
 package org.apache.isis.core.metamodel.facets.param.defaults.methodnum;
 
-import java.lang.reflect.Method;
-import java.util.List;
-
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.ParameterSupport;
+import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 
 import lombok.val;
@@ -58,77 +53,49 @@ public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBa
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-
-        final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
-        final List<FacetedMethodParameter> holderList = facetedMethod.getParameters();
-
-        attachDefaultFacetForParametersIfDefaultsNumMethodIsFound(processMethodContext, holderList);
-    }
-
-    private void attachDefaultFacetForParametersIfDefaultsNumMethodIsFound(final ProcessMethodContext processMethodContext, final List<FacetedMethodParameter> parameters) {
+    
+        val facetedMethod = processMethodContext.getFacetHolder();
+        val parameters = facetedMethod.getParameters();
 
         if (parameters.isEmpty()) {
             return;
         }
 
-        final Method actionMethod = processMethodContext.getMethod();
-        final int paramCount = actionMethod.getParameterCount();
+        // attach DefaultFacetForParameters if defaultNumMethod is found ...
+        
+        //val translationService = getMetaModelContext().getTranslationService();
+        val actionMethod = processMethodContext.getMethod();
+        val capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
 
-        for (int i = 0; i < paramCount; i++) {
-
-            // attempt to match method...
-            Method defaultMethod = findDefaultNumMethod(processMethodContext, i);
-            if (defaultMethod == null) {
-                continue;
-            }
-
+        val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
+                .processMethodContext(processMethodContext)
+                .returnType(ReturnType.SAME_AS_PARAMETER_TYPE)
+                .paramIndexToMethodName(paramIndex -> 
+                    MethodLiteralConstants.DEFAULT_PREFIX + paramIndex + capitalizedName)
+                .build();
+        
+        ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {
+            
+            val defaultMethod = searchResult.getSupportingMethod();
+            val paramIndex = searchResult.getParamIndex();
+            
             processMethodContext.removeMethod(defaultMethod);
 
-            final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
             if (facetedMethod.containsNonFallbackFacet(ActionDefaultsFacet.class)) {
-                final Class<?> cls2 = processMethodContext.getCls();
-                throw new MetaModelException(cls2 + " uses both old and new default syntax for " + actionMethod.getName() + "(...) - must use one or other");
+                val cls = processMethodContext.getCls();
+                throw new MetaModelException(cls + " uses both old and new default syntax for " 
+                        + actionMethod.getName() + "(...) - must use one or other");
             }
-
+            
             // add facets directly to parameters, not to actions
-            final FacetedMethodParameter paramAsHolder = parameters.get(i);
-            super.addFacet(new ActionParameterDefaultsFacetViaMethod(defaultMethod, i, paramAsHolder));
-        }
+            val paramAsHolder = parameters.get(paramIndex);
+            //val translationContext = paramAsHolder.getIdentifier().toFullIdentityString();
+            
+            super.addFacet(
+                    new ActionParameterDefaultsFacetViaMethod(
+                            defaultMethod, paramIndex, paramAsHolder));
+        });
     }
     
-    /**
-     * search successively for the default method, trimming number of param types each loop
-     */
-    private static Method findDefaultNumMethod(ProcessMethodContext processMethodContext, int n) {
-        
-        val cls = processMethodContext.getCls();
-        val actionMethod = processMethodContext.getMethod();
-        Class<?>[] paramTypes = actionMethod.getParameterTypes();
-        val returnType = paramTypes[n];
-        val capitalizedName =
-                MethodLiteralConstants.DEFAULT_PREFIX + n +
-                StringExtensions.asCapitalizedName(actionMethod.getName());
-
-        for(;;) {
-            val method = MethodFinderUtils.findMethod(
-                    cls,
-                    capitalizedName,
-                    returnType, 
-                    paramTypes);
-            
-            if(method != null) {
-                return method;
-            }
-            
-            if(paramTypes.length==0) {
-                break;
-            }
-            
-            // remove last, and search again
-            paramTypes = _Arrays.removeByIndex(paramTypes, paramTypes.length-1);
-        }
-        
-        return null;
-    }
 
 }

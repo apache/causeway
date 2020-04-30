@@ -23,8 +23,8 @@ import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.DependentArgUtils;
-import org.apache.isis.core.metamodel.facets.DependentArgUtils.ParamSupportingMethodSearchRequest.ReturnType;
+import org.apache.isis.core.metamodel.facets.ParameterSupport;
+import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.param.hide.ActionParameterHiddenFacet;
@@ -58,14 +58,14 @@ public class ActionParameterHiddenFacetViaMethodFactory extends MethodPrefixBase
         val actionMethod = processMethodContext.getMethod();
         val capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
 
-        val searchRequest = DependentArgUtils.ParamSupportingMethodSearchRequest.builder()
+        val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)
                 .returnType(ReturnType.BOOLEAN)
                 .paramIndexToMethodName(paramIndex -> 
                     MethodLiteralConstants.HIDE_PREFIX + paramIndex + capitalizedName)
                 .build();
         
-        DependentArgUtils.findParamSupportingMethods(searchRequest, searchResult -> {
+        ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {
             
             val hideMethod = searchResult.getSupportingMethod();
             val paramIndex = searchResult.getParamIndex();

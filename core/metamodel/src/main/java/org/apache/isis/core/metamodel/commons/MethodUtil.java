@@ -71,6 +71,10 @@ public class MethodUtil {
     @UtilityClass
     public static class Predicates {
         
+        public static Predicate<Method> paramCount(int n) {
+            return method -> method.getParameterCount() == n;
+        }
+        
         /**
          * @param methodName
          * @param returnType

@@ -42,8 +42,9 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0
  *
  */
-@UtilityClass @Log4j2
-public class DependentArgUtils {
+@UtilityClass 
+@Log4j2
+public class ParameterSupport {
     
     @Value @Builder
     public static class ParamSupportingMethodSearchRequest {
@@ -51,7 +52,8 @@ public class DependentArgUtils {
         public static enum ReturnType {
             NON_SCALAR,
             TEXT,
-            BOOLEAN
+            BOOLEAN, 
+            SAME_AS_PARAMETER_TYPE,
         }
         
         @NonNull FacetFactory.ProcessMethodContext processMethodContext;
@@ -72,8 +74,8 @@ public class DependentArgUtils {
     }
 
     public static void findParamSupportingMethods(
-            final DependentArgUtils.ParamSupportingMethodSearchRequest searchRequest, 
-            final Consumer<DependentArgUtils.ParamSupportingMethodSearchResult> onMethodFound) {
+            final ParameterSupport.ParamSupportingMethodSearchRequest searchRequest, 
+            final Consumer<ParameterSupport.ParamSupportingMethodSearchResult> onMethodFound) {
         
         val actionMethod = searchRequest.getProcessMethodContext().getMethod();
         val paramCount = actionMethod.getParameterCount();
@@ -99,8 +101,8 @@ public class DependentArgUtils {
     /*
      * search successively for the supporting method, trimming number of param types each loop
      */
-    private static DependentArgUtils.ParamSupportingMethodSearchResult findParamSupportingMethod(
-            final DependentArgUtils.ParamSupportingMethodSearchRequest searchRequest,
+    private static ParameterSupport.ParamSupportingMethodSearchResult findParamSupportingMethod(
+            final ParameterSupport.ParamSupportingMethodSearchRequest searchRequest,
             final int paramIndex) {
 
         val processMethodContext = searchRequest.getProcessMethodContext();
@@ -130,6 +132,10 @@ public class DependentArgUtils {
             case NON_SCALAR:
                 supportingMethod = MethodFinderUtils
                     .findMethod_returningNonScalar(type, methodName, paramType, paramTypesToLookFor);
+                break;
+            case SAME_AS_PARAMETER_TYPE:
+                supportingMethod = MethodFinderUtils
+                    .findMethod(type, methodName, paramType, paramTypesToLookFor);
                 break;
             default:
                 supportingMethod = null;
@@ -177,7 +183,7 @@ public class DependentArgUtils {
     }
     
     private String toString(
-            DependentArgUtils.ParamSupportingMethodSearchRequest searchRequest, 
+            ParameterSupport.ParamSupportingMethodSearchRequest searchRequest, 
             int paramIndex) {
         
         return String.format("%s.%s(%s) : %s",

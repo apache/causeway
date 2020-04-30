@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.core.commons.internal.reflection._MethodCache;
@@ -112,7 +113,19 @@ public final class MethodFinderUtils {
         return null;
     }
     
-    public static Method findMethod(final Class<?> type, final String name, final Class<?> returnType) {
+    public static Optional<Method> findNoArgMethod(final Class<?> type, final String name, final Class<?> returnType) {
+        return streamMethods(type, name, returnType)
+                .filter(MethodUtil.Predicates.paramCount(0))
+                .findFirst();
+    }
+    
+    public static Optional<Method> findSingleArgMethod(final Class<?> type, final String name, final Class<?> returnType) {
+        return streamMethods(type, name, returnType)
+                .filter(MethodUtil.Predicates.paramCount(1))
+                .findFirst();
+    }
+    
+    public static Stream<Method> streamMethods(final Class<?> type, final String name, final Class<?> returnType) {
         try {
             final Method[] methods = type.getMethods();
             return Arrays.stream(methods)
@@ -120,10 +133,8 @@ public final class MethodFinderUtils {
                     .filter(MethodUtil::isNotStatic)
                     .filter(method -> method.getName().equals(name))
                     .filter(method -> returnType == null ||
-                                      returnType == method.getReturnType())
-                    .findFirst()
-                    .orElse(null);
-
+                                      returnType.isAssignableFrom(method.getReturnType()))
+                    ;
         } catch (final SecurityException e) {
             return null;
         }
@@ -232,5 +243,6 @@ public final class MethodFinderUtils {
         
         return findMethod_returningAnyOf(nonScalarTypes, type, name, paramTypes);
     }
+
 
 }

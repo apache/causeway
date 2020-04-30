@@ -84,7 +84,7 @@ implements MetaModelRefiner {
             val notRecognizedMethods =
                     _Sets.minus(potentialOrphans, recognizedMethods);
 
-            // find reasons about why these are not recognized    
+            // find reasons why these are not recognized    
             notRecognizedMethods.forEach(notRecognizedMethod->{
                 
                 val unmetContraints = unmetContraints(spec, notRecognizedMethod);
