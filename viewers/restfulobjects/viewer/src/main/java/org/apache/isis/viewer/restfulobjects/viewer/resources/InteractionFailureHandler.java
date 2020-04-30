@@ -20,8 +20,8 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.core.metamodel.spec.interaction.ActionInteraction.ManagedParameter;
 import org.apache.isis.core.metamodel.spec.interaction.InteractionVeto;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedParameter;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;

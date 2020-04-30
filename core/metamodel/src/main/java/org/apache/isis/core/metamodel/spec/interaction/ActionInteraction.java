@@ -20,16 +20,12 @@ package org.apache.isis.core.metamodel.spec.interaction;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 
-import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Either;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.interaction.ManagedMember.MemberType;
 
 import lombok.Data;
@@ -96,33 +92,6 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
         return this;
     }
 
-    @Value(staticConstructor = "of")
-    public static class ManagedParameter {
-        @NonNull private final ManagedAction owningAction;
-        @NonNull private final ObjectActionParameter parameter;
-        @NonNull private final ManagedObject value;
-        public ManagedObject getOwningObject() {
-            return getOwningAction().getOwner();
-        }
-        //TODO unchecked length
-        public static Can<ManagedParameter> listOf(ManagedAction owningAction, List<ManagedObject> paramValueList) {
-            val paramValueIterator = paramValueList.iterator();
-            return owningAction.getAction().getParameters()
-            .map(param->{
-                final ManagedObject paramValue = Optional
-                        .ofNullable(paramValueIterator.next())
-                        .orElse(ManagedObject.of(param.getSpecification(), null));
-                return ManagedParameter.of(owningAction, param, paramValue);
-            });
-        }
-        public Optional<InteractionVeto> validate() {
-            return Optional.ofNullable(
-                getParameter()
-                    .isValid(getOwningObject(), getValue(), InteractionInitiatedBy.USER))
-            .map(reasonNotValid->InteractionVeto.actionParamInvalid(new Veto(reasonNotValid)));
-        }
-    }
-    
     public static interface ParameterInvalidCallback {
         void onParameterInvalid(ManagedParameter managedParameter, InteractionVeto veto);
     }
@@ -136,7 +105,7 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
             
             state.setParameterList(actionParameterProvider.apply(action));
             
-            val managedParameters = ManagedParameter.listOf(action, state.getParameterList());
+            val managedParameters = ManagedParameterList.of(action, state.getParameterList());
             
             boolean invalid = false;
             for(val managedParameter : managedParameters) {
