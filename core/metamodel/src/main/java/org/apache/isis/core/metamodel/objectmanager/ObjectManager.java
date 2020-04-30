@@ -95,7 +95,7 @@ public interface ObjectManager {
     
     public default ManagedObject adapt(@Nullable Object pojo) {
         if(pojo==null) {
-            return ManagedObject.empty(); 
+            return ManagedObject.unspecified(); 
         }
         return ManagedObject.of(this::loadSpecification, pojo);
     }

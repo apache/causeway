@@ -23,10 +23,10 @@ import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.ParameterSupport;
-import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.ParameterSupport;
+import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 
 import lombok.val;
@@ -78,9 +78,11 @@ public class ActionParameterAutoCompleteFacetViaMethodFactory extends MethodPref
             
             // add facets directly to parameters, not to actions
             val paramAsHolder = parameters.get(paramIndex);
+            val ppmFactory = searchResult.getPpmFactory();
+            
             super.addFacet(
                     new ActionParameterAutoCompleteFacetViaMethod(
-                            autoCompleteMethod, paramType, paramAsHolder));
+                            autoCompleteMethod, paramType, ppmFactory, paramAsHolder));
         });
         
     }

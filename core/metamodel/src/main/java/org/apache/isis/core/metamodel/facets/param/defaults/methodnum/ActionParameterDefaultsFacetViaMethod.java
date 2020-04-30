@@ -19,10 +19,12 @@
 
 package org.apache.isis.core.metamodel.facets.param.defaults.methodnum;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._NullSafe;
@@ -37,6 +39,7 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
 
     private final Method method;
     private final int paramNum;
+    private final Optional<Constructor<?>> ppmFactory;
 
     /**
      *
@@ -48,11 +51,13 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
     public ActionParameterDefaultsFacetViaMethod(
             final Method method,
             final int paramNum,
+            final Optional<Constructor<?>> ppmFactory,
             final FacetHolder holder) {
 
         super(holder);
         this.method = method;
         this.paramNum = paramNum;
+        this.ppmFactory = ppmFactory;
     }
 
     /**
@@ -78,6 +83,10 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
         // this isn't a dependent defaults situation, so just evaluate the default.
         if (_NullSafe.isEmpty(pendingArgs) || paramNumUpdated == null) {
             return ManagedObject.InvokeUtil.invokeAutofit(method, target, pendingArgs);
+        }
+        
+        if(ppmFactory.isPresent()) {
+            return ManagedObject.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, target, pendingArgs);
         }
 
         // this could be a dependent defaults situation, but has a previous parameter been updated

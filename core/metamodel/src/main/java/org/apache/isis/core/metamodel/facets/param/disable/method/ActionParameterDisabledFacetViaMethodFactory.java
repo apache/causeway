@@ -83,10 +83,11 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
             // add facets directly to parameters, not to actions
             val paramAsHolder = parameters.get(paramIndex);
             val translationContext = paramAsHolder.getIdentifier().toFullIdentityString();
+            val ppmFactory = searchResult.getPpmFactory();
             
             super.addFacet(
                     new ActionParameterDisabledFacetViaMethod(
-                            disableMethod, translationService, translationContext, paramAsHolder));
+                            disableMethod, translationService, translationContext, ppmFactory, paramAsHolder));
         });
         
     }

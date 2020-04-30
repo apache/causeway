@@ -87,9 +87,10 @@ extends MethodPrefixBasedFacetFactoryAbstract {
             
             // add facets directly to parameters, not to actions
             val paramAsHolder = parameters.get(paramIndex);
+            val ppmFactory = searchResult.getPpmFactory();
             super.addFacet(
                     new ActionParameterChoicesFacetViaMethod(
-                            choicesMethod, returnType, paramAsHolder));
+                            choicesMethod, returnType, ppmFactory, paramAsHolder));
         });
         
     }

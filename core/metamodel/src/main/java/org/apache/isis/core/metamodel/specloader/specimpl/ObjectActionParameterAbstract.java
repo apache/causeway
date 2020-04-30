@@ -473,7 +473,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
         final int paramIndex = getNumber();
         val arguments = new ArrayList<ManagedObject>(paramCount);
         for(int i=0; i<paramCount; ++i) {
-            arguments.add(i==paramIndex ? proposedValue : ManagedObject.empty());
+            arguments.add(i==paramIndex ? proposedValue : ManagedObject.unspecified());
         }
         return Can.ofCollection(arguments);
     }

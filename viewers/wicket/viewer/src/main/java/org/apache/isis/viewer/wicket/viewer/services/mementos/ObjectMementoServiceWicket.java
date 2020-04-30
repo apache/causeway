@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.viewer.services.mementos;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -40,7 +41,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.core.webapp.context.memento.ObjectMementoCollection;
-import org.apache.isis.core.webapp.context.memento.ObjectMementoForNull;
+import org.apache.isis.core.webapp.context.memento.ObjectMementoForEmpty;
+import org.apache.isis.core.webapp.context.memento.ObjectMementoForUnspecified;
 import org.apache.isis.core.webapp.context.memento.ObjectMementoService;
 
 import lombok.Getter;
@@ -70,10 +72,12 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
     }
 
     @Override
-    public ObjectMemento mementoForObject(@NonNull ManagedObject adapter) {
+    public ObjectMemento mementoForObject(@Nullable ManagedObject adapter) {
         val mementoAdapter = ObjectMementoLegacy.createOrNull(adapter);
         if(mementoAdapter==null) {
-            return new ObjectMementoForNull(adapter.getSpecification().getSpecId());
+            return ManagedObject.isSpecified(adapter)
+                    ? new ObjectMementoForEmpty(adapter.getSpecification().getSpecId())
+                    : new ObjectMementoForUnspecified();
         }
         return ObjectMementoAdapter.of(mementoAdapter);
     }
@@ -96,11 +100,15 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
     @Override
     public ManagedObject reconstructObject(@NonNull ObjectMemento memento) {
 
-        if(memento instanceof ObjectMementoForNull) {
-            val objectMementoForNull = (ObjectMementoForNull) memento;
-            val specId = objectMementoForNull.getObjectSpecId();
+        if(memento instanceof ObjectMementoForUnspecified) {
+            return ManagedObject.unspecified();
+        }
+        
+        if(memento instanceof ObjectMementoForEmpty) {
+            val objectMementoForEmpty = (ObjectMementoForEmpty) memento;
+            val specId = objectMementoForEmpty.getObjectSpecId();
             val spec = specificationLoader.loadSpecification(specId);
-            return ManagedObject.of(spec, null);
+            return ManagedObject.empty(spec);
         }
         
         if(memento instanceof ObjectMementoCollection) {

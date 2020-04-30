@@ -21,18 +21,13 @@ package org.apache.isis.core.webapp.context.memento;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
-import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class ObjectMementoForNull implements ObjectMemento {
+public class ObjectMementoForUnspecified implements ObjectMemento {
 
     private static final long serialVersionUID = 1L;
     
-    @Getter(onMethod = @__(@Override))
-    @NonNull private ObjectSpecId objectSpecId;
-
     @Override
     public String asString() {
         return getObjectSpecId().asString();
@@ -46,6 +41,11 @@ public class ObjectMementoForNull implements ObjectMemento {
     @Override
     public Bookmark asHintingBookmarkIfSupported() {
         return null;
+    }
+
+    @Override
+    public ObjectSpecId getObjectSpecId() {
+        return ObjectSpecId.of("unspecified");
     }
 
 

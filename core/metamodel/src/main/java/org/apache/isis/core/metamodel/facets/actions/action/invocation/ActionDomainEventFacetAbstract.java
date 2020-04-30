@@ -155,7 +155,7 @@ implements ActionDomainEventFacet {
 
             val adapter = contributee.getIndex() == 0
                     ? contributee.getValue()
-                            : ManagedObject.empty();
+                    : ManagedObject.unspecified();
             
             return Can.ofSingleton(adapter);
                 

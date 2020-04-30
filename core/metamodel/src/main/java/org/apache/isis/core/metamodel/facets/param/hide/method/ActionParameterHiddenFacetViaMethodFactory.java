@@ -80,9 +80,10 @@ public class ActionParameterHiddenFacetViaMethodFactory extends MethodPrefixBase
             
             // add facets directly to parameters, not to actions
             val paramAsHolder = parameters.get(paramIndex);
+            val ppmFactory = searchResult.getPpmFactory();
             
             super.addFacet(
-                    new ActionParameterHiddenFacetViaMethod(hideMethod, paramAsHolder));
+                    new ActionParameterHiddenFacetViaMethod(hideMethod, ppmFactory, paramAsHolder));
         });
         
     }

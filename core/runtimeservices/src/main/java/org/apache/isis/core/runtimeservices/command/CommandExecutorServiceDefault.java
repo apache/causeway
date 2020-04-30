@@ -358,7 +358,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     private ManagedObject adapterFor(final Object pojo) {
         if(pojo==null) {
-            return ManagedObject.empty();
+            return ManagedObject.unspecified();
         }
         if(pojo instanceof OidDto) {
             return adapterFor((OidDto)pojo);

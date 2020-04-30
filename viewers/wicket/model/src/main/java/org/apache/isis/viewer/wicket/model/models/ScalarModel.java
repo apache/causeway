@@ -822,7 +822,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
     @Override
     public void setObject(ManagedObject adapter) {
         if(adapter == null) {
-            super.setObject(null);
+            super.setObject(ManagedObject.unspecified());
             return;
         }
 

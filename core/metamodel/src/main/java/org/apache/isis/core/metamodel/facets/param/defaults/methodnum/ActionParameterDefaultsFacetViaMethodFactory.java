@@ -90,10 +90,10 @@ public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBa
             // add facets directly to parameters, not to actions
             val paramAsHolder = parameters.get(paramIndex);
             //val translationContext = paramAsHolder.getIdentifier().toFullIdentityString();
+            val ppmFactory = searchResult.getPpmFactory();
             
-            super.addFacet(
-                    new ActionParameterDefaultsFacetViaMethod(
-                            defaultMethod, paramIndex, paramAsHolder));
+            super.addFacet(new ActionParameterDefaultsFacetViaMethod(
+                    defaultMethod, paramIndex, ppmFactory, paramAsHolder));
         });
     }
     

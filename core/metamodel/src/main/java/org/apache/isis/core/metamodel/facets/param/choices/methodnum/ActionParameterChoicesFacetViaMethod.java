@@ -19,10 +19,12 @@
 
 package org.apache.isis.core.metamodel.facets.param.choices.methodnum;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal._Constants;
@@ -40,15 +42,18 @@ implements ImperativeFacet {
 
     private final Method method;
     private final Class<?> choicesType;
+    private final Optional<Constructor<?>> ppmFactory;
 
     public ActionParameterChoicesFacetViaMethod(
             final Method method,
-            final Class<?> choicesType, 
+            final Class<?> choicesType,
+            final Optional<Constructor<?>> ppmFactory,
             final FacetHolder holder) {
         
         super(holder);
         this.method = method;
         this.choicesType = choicesType;
+        this.ppmFactory = ppmFactory;
     }
 
     /**
@@ -71,8 +76,9 @@ implements ImperativeFacet {
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        final Object choices = ManagedObject.InvokeUtil
-                .invokeAutofit(method, owningAdapter, pendingArgs);
+        final Object choices = ppmFactory.isPresent()
+                ? ManagedObject.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, owningAdapter, pendingArgs) 
+                : ManagedObject.InvokeUtil.invokeAutofit(method, owningAdapter, pendingArgs);
         if (choices == null) {
             return _Constants.emptyObjects;
         }

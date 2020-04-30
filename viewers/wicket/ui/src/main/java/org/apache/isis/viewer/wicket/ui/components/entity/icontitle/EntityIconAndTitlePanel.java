@@ -19,7 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.components.entity.icontitle;
 
-import java.util.Optional;
+import javax.annotation.Nullable;
 
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -33,6 +33,7 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
@@ -192,9 +193,9 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
     }
 
     private String determineTitle() {
-        return Optional.ofNullable(getModel().getObject())
-        .flatMap(adapter->getContextAdapterIfAny().map(adapter::titleString))
-        .orElse("(no object)");
+        ObjectAdapterModel model = getModel();
+        val adapter = model.getObject();
+        return adapter != null ? adapter.titleString(getContextAdapterIfAny()) : "(no object)";
     }
 
     private int abbreviateTo(ObjectAdapterModel model, String titleString) {
@@ -220,9 +221,13 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
         return image;
     }
 
-    public Optional<ManagedObject> getContextAdapterIfAny() {
-        return Optional.ofNullable(getModel().getContextAdapterIfAny())
-                .map(getCommonContext()::reconstructObject);
+    @Nullable
+    public ManagedObject getContextAdapterIfAny() {
+        ObjectAdapterModel model = getModel();
+        ObjectMemento contextAdapterMementoIfAny = model.getContextAdapterIfAny();
+        return contextAdapterMementoIfAny!=null
+                ? getCommonContext().reconstructObject(contextAdapterMementoIfAny)
+                : null;
     }
 
     static String abbreviated(final String str, final int maxLength) {

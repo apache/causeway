@@ -33,7 +33,6 @@ import javax.xml.bind.Unmarshaller;
 
 import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.NonRecoverableException;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.mixins.dto.Dto_downloadXsd;
 import org.apache.isis.applib.util.JaxbUtil;
 import org.apache.isis.core.commons.internal.base._Casts;

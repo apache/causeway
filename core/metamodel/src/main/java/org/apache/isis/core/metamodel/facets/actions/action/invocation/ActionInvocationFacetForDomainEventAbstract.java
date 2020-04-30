@@ -310,7 +310,7 @@ implements ImperativeFacet {
             // don't trample over any existing result, eg subsequent mixins.
             return;
         }
-        if(ManagedObject.isNull(resultAdapter)) {
+        if(ManagedObject.isNullOrUnspecifiedOrEmpty(resultAdapter)) {
             return;
         }
 
@@ -347,7 +347,7 @@ implements ImperativeFacet {
             final ManagedObject resultAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        if(ManagedObject.isNull(resultAdapter)) { 
+        if(ManagedObject.isNullOrUnspecifiedOrEmpty(resultAdapter)) { 
             return null;
         }
 

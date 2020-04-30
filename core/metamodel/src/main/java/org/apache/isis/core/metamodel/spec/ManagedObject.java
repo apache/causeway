@@ -102,7 +102,7 @@ public interface ManagedObject {
     // -- SHORTCUTS
     
     static Optional<RootOid> identify(@Nullable ManagedObject adapter) {
-        return adapter!=null ? adapter.getRootOid() : Optional.empty(); 
+        return isSpecified(adapter)  ? adapter.getRootOid() : Optional.empty(); 
     }
     
     static RootOid identifyElseFail(@Nullable ManagedObject adapter) {
@@ -133,8 +133,8 @@ public interface ManagedObject {
     
     // -- EMPTY
     
-    static class EmptyUtil {
-        private static final ManagedObject EMPTY = new ManagedObject() {
+    static class UnspecifiedHolder {
+        private static final ManagedObject UNSPECIFIED = new ManagedObject() {
 
             @Override
             public ObjectSpecification getSpecification() {
@@ -154,9 +154,18 @@ public interface ManagedObject {
         };
     }
     
-    static ManagedObject empty() {
-        return EmptyUtil.EMPTY;
+    /** has no ObjectSpecification and no value */
+    static ManagedObject unspecified() {
+        return UnspecifiedHolder.UNSPECIFIED;
     }
+    
+    /** has an ObjectSpecification, but no value */
+    static ManagedObject empty(@NonNull final ObjectSpecification spec) {
+        return ManagedObject.of(spec, null);
+    }
+    
+
+    
 
     // -- SIMPLE
 
@@ -246,7 +255,12 @@ public interface ManagedObject {
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     static final class TitleUtil {
 
-        private static String titleString(ManagedObject managedObject, ManagedObject contextAdapterIfAny) {
+        private static String titleString(@Nullable ManagedObject managedObject, @Nullable ManagedObject contextAdapterIfAny) {
+            
+            if(!ManagedObject.isSpecified(managedObject)) {
+                return "unspecified object";
+            }
+            
             if (managedObject.getSpecification().isParentedOrFreeCollection()) {
                 final CollectionFacet facet = managedObject.getSpecification().getFacet(CollectionFacet.class);
                 return collectionTitleString(managedObject, facet);
@@ -381,7 +395,9 @@ public interface ManagedObject {
 
     @Nullable
     public static Object unwrapSingle(@Nullable final ManagedObject adapter) {
-        return adapter != null ? adapter.getPojo() : null;
+        return isSpecified(adapter)
+                ? adapter.getPojo() 
+                : null;
     }
     
     @Nullable
@@ -459,24 +475,24 @@ public interface ManagedObject {
 
     // -- SHORTCUTS
 
-    public static String getDomainType(ManagedObject objectAdapter) {
-        if (objectAdapter == null) {
+    public static String getDomainType(ManagedObject adapter) {
+        if(!isSpecified(adapter)) {
             return null;
         }
-        return objectAdapter.getSpecification().getSpecId().asString();
+        return adapter.getSpecification().getSpecId().asString();
     }
 
     // -- BASIC PREDICATES
 
     static boolean isEntity(ManagedObject adapter) {
-        if(adapter==null) {
+        if(!isSpecified(adapter)) {
             return false;
         }
         return adapter.getSpecification().isEntity();
     }
 
     static boolean isValue(ManagedObject adapter) {
-        if(adapter==null) {
+        if(!isSpecified(adapter)) {
             return false;
         }
         return adapter.getSpecification().isValue();
@@ -486,19 +502,24 @@ public interface ManagedObject {
      * @return whether the corresponding type can be mapped onto a REFERENCE (schema) or an Oid,
      * that is the type is 'identifiable' (aka 'referencable' or 'bookmarkable') 
      */
-    static boolean isIdentifiable(ManagedObject adapter) {
-        if(adapter==null) {
+    static boolean isIdentifiable(@Nullable ManagedObject adapter) {
+        if(!isSpecified(adapter)) {
             return false;
         }
         val spec = adapter.getSpecification();
         return spec.isIdentifiable();
     }
 
-    static boolean isNull(ManagedObject adapter) {
-        if(adapter==null) {
+    static boolean isNullOrUnspecifiedOrEmpty(@Nullable ManagedObject adapter) {
+        if(adapter==null || adapter==ManagedObject.unspecified()) {
             return true;
         }
         return adapter.getPojo()==null;
+    }
+    
+    /** whether has at least a spec */
+    static boolean isSpecified(@Nullable ManagedObject adapter) {
+        return adapter!=null && adapter!=ManagedObject.unspecified();
     }
 
     // -- COMPARE UTILITIES
@@ -612,7 +633,7 @@ public interface ManagedObject {
                 ManagedObject adapter,
                 InteractionInitiatedBy interactionInitiatedBy) {
 
-            if(adapter == null) {
+            if(isNullOrUnspecifiedOrEmpty(adapter)) {
                 // a choices list could include a null (eg example in ToDoItems#choices1Categorized()); want to show as "visible"
                 return true;
             }
@@ -652,8 +673,11 @@ public interface ManagedObject {
     static final class InvokeUtil {
     
         public static Object invokeWithPPM(
-                Constructor<?> ppmConstructor, 
-                Method method, ManagedObject adapter, Can<ManagedObject> argumentAdapters) {
+                final Constructor<?> ppmConstructor, 
+                final Method method, 
+                final ManagedObject adapter, 
+                final Can<ManagedObject> argumentAdapters,
+                final List<Object> additionalArguments) {
             
             final Object pendingParamModel;
             try {
@@ -662,7 +686,16 @@ public interface ManagedObject {
                 return ThrowableExtensions.handleInvocationException(e, ppmConstructor.getName());
             }
             
-            return invoke(method, adapter, pendingParamModel);
+            val paramPojos = _Arrays.combine(pendingParamModel, additionalArguments.toArray());
+            return MethodExtensions.invoke(method, unwrapSingle(adapter), paramPojos);
+        }
+        
+        public static Object invokeWithPPM(
+                final Constructor<?> ppmConstructor, 
+                final Method method, 
+                final ManagedObject adapter, 
+                final Can<ManagedObject> argumentAdapters) {
+            return invokeWithPPM(ppmConstructor, method, adapter, argumentAdapters, Collections.emptyList());
         }
         
         public static void invokeAll(Collection<Method> methods, final ManagedObject adapter) {
@@ -828,7 +861,7 @@ public interface ManagedObject {
             ManagedObject first,
             ManagedObject second) {
 
-        if(ManagedObject.isIdentifiable(first) && second!=null) {
+        if(ManagedObject.isIdentifiable(first) && ManagedObject.isSpecified(second)) {
 
             val refSpec = second.getSpecification();
 

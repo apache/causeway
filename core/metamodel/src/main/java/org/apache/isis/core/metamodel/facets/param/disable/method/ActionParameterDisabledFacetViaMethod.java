@@ -19,10 +19,12 @@
 
 package org.apache.isis.core.metamodel.facets.param.disable.method;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -39,17 +41,20 @@ implements ImperativeFacet {
     private final Method method;
     private final TranslationService translationService;
     private final String translationContext;
+    private final Optional<Constructor<?>> ppmFactory;
 
     public ActionParameterDisabledFacetViaMethod(
             final Method method,
             final TranslationService translationService,
             final String translationContext,
+            final Optional<Constructor<?>> ppmFactory, 
             final FacetHolder holder) {
 
         super(holder);
         this.method = method;
         this.translationService = translationService;
         this.translationContext = translationContext;
+        this.ppmFactory = ppmFactory;
     }
 
     /**
@@ -71,8 +76,10 @@ implements ImperativeFacet {
             final ManagedObject owningAdapter, 
             final Can<ManagedObject> argumentAdapters) {
         
-        final Object returnValue = ManagedObject.InvokeUtil
-                .invokeAutofit(method, owningAdapter, argumentAdapters);
+        final Object returnValue = ppmFactory.isPresent()
+                ? ManagedObject.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, owningAdapter, argumentAdapters)
+                : ManagedObject.InvokeUtil.invokeAutofit(method, owningAdapter, argumentAdapters);
+                
         if(returnValue instanceof String) {
             return (String) returnValue;
         }
