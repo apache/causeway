@@ -539,11 +539,5 @@ public interface Can<T> extends Iterable<T>, Serializable {
      * @return a non-null array, containing the elements of this Can
      */
     T[] toArray(Class<T> elementType);
-
-// debug    
-//    public static boolean isPresent(Object x) {
-//        if(x==null) throw _Exceptions.illegalArgument("putting null into a can");
-//        return x!=null;
-//    }
     
 }
