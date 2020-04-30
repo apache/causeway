@@ -84,7 +84,10 @@ public class ActionChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFa
         
     }
 
-    protected Method findChoicesMethodReturning(final ProcessMethodContext processMethodContext, final Class<?> returnType2) {
+    protected Method findChoicesMethodReturning(
+            final ProcessMethodContext processMethodContext, 
+            final Class<?> returnType2) {
+        
         Method choicesMethod;
         final Class<?> cls = processMethodContext.getCls();
 

@@ -18,16 +18,21 @@
  */
 package org.apache.isis.core.metamodel.facets;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal._Constants;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Arrays;
+import org.apache.isis.core.metamodel.facets.MethodFinderUtils.MethodAndPpmConstructor;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -71,6 +76,7 @@ public class ParameterSupport {
         Class<?> paramType;
         Method supportingMethod;
         Class<?> returnType;
+        Optional<Constructor<?>> ppmFactory;
     }
 
     public static void findParamSupportingMethods(
@@ -81,23 +87,85 @@ public class ParameterSupport {
         val paramCount = actionMethod.getParameterCount();
         
         for (int i = 0; i < paramCount; i++) {
+            for (int j = 0; j < 2; j++) { // account for 2 different search algorithms
 
-            val paramIndex = i;
-            val searchResult = findParamSupportingMethod(searchRequest, paramIndex);
-            
-            if(log.isDebugEnabled()) {
-                log.debug("search {}{}", 
-                        searchResult != null ? "FOUND " : "",
-                        toString(searchRequest, paramIndex));
-            }
-
-            if (searchResult != null) {
-                onMethodFound.accept(searchResult);
+                val algorithmIndex = j;
+                val paramIndex = i;
+                val searchResult = algorithmIndex==0
+                        ? findParamSupportingMethodWithPPMArg(searchRequest, paramIndex)
+                        : findParamSupportingMethod(searchRequest, paramIndex);
+                
+                if(log.isDebugEnabled()) {
+                    log.debug("search algorithm={} {}{}",
+                            algorithmIndex,
+                            searchResult != null ? "FOUND " : "",
+                            toString(searchRequest, paramIndex));
+                }
+    
+                if (searchResult != null) {
+                    onMethodFound.accept(searchResult);
+                }
             }
         }
         
     }
 
+    private static ParameterSupport.ParamSupportingMethodSearchResult findParamSupportingMethodWithPPMArg(
+            final ParameterSupport.ParamSupportingMethodSearchRequest searchRequest,
+            final int paramIndex) {
+        
+        val processMethodContext = searchRequest.getProcessMethodContext();
+        val type = processMethodContext.getCls();
+        val paramTypes = searchRequest.getParamTypes();
+        val methodName = searchRequest.getParamIndexToMethodName().apply(paramIndex);
+        val paramType = paramTypes[paramIndex];
+        val additionalParamTypes = Can.of(searchRequest.getAdditionalParamType());
+        
+        final MethodAndPpmConstructor supportingMethodAndPpmConstructor;
+        
+        switch(searchRequest.getReturnType()) {
+        case BOOLEAN:
+            supportingMethodAndPpmConstructor = MethodFinderUtils
+                .findMethodWithPPMArg_returningBoolean(type, methodName, paramTypes, additionalParamTypes);
+            break;
+        case TEXT:
+            supportingMethodAndPpmConstructor = MethodFinderUtils
+                .findMethodWithPPMArg_returningText(type, methodName, paramTypes, additionalParamTypes);
+            break;
+        case NON_SCALAR:
+            supportingMethodAndPpmConstructor = MethodFinderUtils
+                .findMethodWithPPMArg_returningNonScalar(type, methodName, paramType, paramTypes, additionalParamTypes);
+            break;
+        case SAME_AS_PARAMETER_TYPE:
+            supportingMethodAndPpmConstructor = MethodFinderUtils
+                .findMethodWithPPMArg(type, methodName, paramType, paramTypes, additionalParamTypes);
+            break;
+        default:
+            supportingMethodAndPpmConstructor = null;
+        }
+        
+        if(log.isDebugEnabled()) {
+            
+            log.debug(". signature (<any>, {}) {}", 
+                    toString(additionalParamTypes.toArray(_Constants.emptyClasses)),
+                    supportingMethodAndPpmConstructor != null 
+                        ? "found -> " + supportingMethodAndPpmConstructor.getSupportingMethod() 
+                        : "");
+        }
+        
+        if(supportingMethodAndPpmConstructor != null) {
+            val searchResult = ParamSupportingMethodSearchResult
+                    .of(paramIndex, paramType, 
+                            supportingMethodAndPpmConstructor.getSupportingMethod(), 
+                            supportingMethodAndPpmConstructor.getSupportingMethod().getReturnType(),
+                            Optional.of(supportingMethodAndPpmConstructor.getPpmFactory()));
+            return searchResult;
+        }
+        
+        return null;
+        
+    }
+    
     /*
      * search successively for the supporting method, trimming number of param types each loop
      */
@@ -149,7 +217,7 @@ public class ParameterSupport {
             
             if(supportingMethod != null) {
                 val searchResult = ParamSupportingMethodSearchResult
-                        .of(paramIndex, paramType, supportingMethod, supportingMethod.getReturnType());
+                        .of(paramIndex, paramType, supportingMethod, supportingMethod.getReturnType(), Optional.empty());
                 return searchResult;
             }
 

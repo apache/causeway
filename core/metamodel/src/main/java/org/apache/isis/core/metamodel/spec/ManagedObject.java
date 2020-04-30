@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.spec;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
@@ -46,10 +47,12 @@ import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.commons.MethodExtensions;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
+import org.apache.isis.core.metamodel.commons.ThrowableExtensions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
@@ -383,7 +386,8 @@ public interface ManagedObject {
     
     @Nullable
     public static Object[] unwrapMultipleAsArray(@NonNull final Can<ManagedObject> adapters) {
-        return adapters.map(ManagedObject::unwrapSingle).toArray(Object.class);
+        val unwrappedObjects = _Arrays.mapCollection(adapters.toList(), ManagedObject::unwrapSingle);
+        return unwrappedObjects;
     }
     
     @Nullable
@@ -647,6 +651,20 @@ public interface ManagedObject {
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     static final class InvokeUtil {
     
+        public static Object invokeWithPPM(
+                Constructor<?> ppmConstructor, 
+                Method method, ManagedObject adapter, Can<ManagedObject> argumentAdapters) {
+            
+            final Object pendingParamModel;
+            try {
+                pendingParamModel = _Reflect.invokeConstructor(ppmConstructor, unwrapMultipleAsArray(argumentAdapters)); 
+            } catch (Exception e) {
+                return ThrowableExtensions.handleInvocationException(e, ppmConstructor.getName());
+            }
+            
+            return invoke(method, adapter, pendingParamModel);
+        }
+        
         public static void invokeAll(Collection<Method> methods, final ManagedObject adapter) {
             MethodUtil.invoke(methods, unwrapSingle(adapter));
         }
@@ -659,7 +677,7 @@ public interface ManagedObject {
             return MethodExtensions.invoke(method, unwrapSingle(adapter), new Object[] {arg0});
         }
     
-        public static Object invoke(Method method, ManagedObject adapter, List<ManagedObject> argumentAdapters) {
+        public static Object invoke(Method method, ManagedObject adapter, Can<ManagedObject> argumentAdapters) {
             return MethodExtensions.invoke(method, unwrapSingle(adapter), unwrapMultipleAsArray(argumentAdapters));
         }
 

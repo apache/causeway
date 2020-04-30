@@ -23,10 +23,12 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 
 import lombok.val;
@@ -71,8 +73,38 @@ public class MethodUtil {
     @UtilityClass
     public static class Predicates {
         
-        public static Predicate<Method> paramCount(int n) {
+        public static Predicate<Method> paramCount(final int n) {
             return method -> method.getParameterCount() == n;
+        }
+        
+        public static Predicate<Method> matchParamTypes(
+                final int paramIndexOffset, 
+                final Can<Class<?>> matchingParamTypes) {
+            return method -> {
+                // check params (if required)
+
+                if(matchingParamTypes.isEmpty()) {
+                    return true;
+                }
+                
+                if(method.getParameterCount()<(paramIndexOffset+matchingParamTypes.size())) {
+                    return false;
+                }
+                
+                final Class<?>[] parameterTypes = method.getParameterTypes();
+                
+                for (int c = 0; c < matchingParamTypes.size(); c++) {
+                    val left = parameterTypes[paramIndexOffset + c];
+                    val right = matchingParamTypes.getElseFail(paramIndexOffset);
+                    
+                    if(!Objects.equals(left, right)) {
+                        return false;
+                    }
+                }
+                
+                return true;
+                
+            };
         }
         
         /**
@@ -82,7 +114,9 @@ public class MethodUtil {
          * @return whether the method under test matches the given signature
          */
         public static Predicate<Method> signature(
-                String methodName, Class<?> returnType, Class<?>[] paramTypes) {
+                final String methodName, 
+                final Class<?> returnType, 
+                final Class<?>[] paramTypes) {
 
             return method -> {
 

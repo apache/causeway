@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.components.entity.icontitle;
 
+import java.util.Optional;
+
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -39,7 +41,6 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 
 import lombok.val;
 
@@ -191,9 +192,9 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
     }
 
     private String determineTitle() {
-        ObjectAdapterModel model = getModel();
-        val adapter = model.getObject();
-        return adapter != null ? adapter.titleString(getContextAdapterIfAny()) : "(no object)";
+        return Optional.ofNullable(getModel().getObject())
+        .flatMap(adapter->getContextAdapterIfAny().map(adapter::titleString))
+        .orElse("(no object)");
     }
 
     private int abbreviateTo(ObjectAdapterModel model, String titleString) {
@@ -219,10 +220,9 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
         return image;
     }
 
-    public ManagedObject getContextAdapterIfAny() {
-        ObjectAdapterModel model = getModel();
-        ObjectMemento contextAdapterMementoIfAny = model.getContextAdapterIfAny();
-        return getCommonContext().reconstructObject(contextAdapterMementoIfAny);
+    public Optional<ManagedObject> getContextAdapterIfAny() {
+        return Optional.ofNullable(getModel().getContextAdapterIfAny())
+                .map(getCommonContext()::reconstructObject);
     }
 
     static String abbreviated(final String str, final int maxLength) {
