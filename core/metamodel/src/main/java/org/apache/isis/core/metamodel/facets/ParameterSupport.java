@@ -119,7 +119,7 @@ public class ParameterSupport {
         val paramTypes = searchRequest.getParamTypes();
         val methodName = searchRequest.getParamIndexToMethodName().apply(paramIndex);
         val paramType = paramTypes[paramIndex];
-        val additionalParamTypes = Can.of(searchRequest.getAdditionalParamType());
+        val additionalParamTypes = Can.ofNullable(searchRequest.getAdditionalParamType());
         
         final MethodAndPpmConstructor supportingMethodAndPpmConstructor;
         

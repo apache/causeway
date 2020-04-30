@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.commons.collections;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -35,6 +36,7 @@ import javax.annotation.Nullable;
 import javax.enterprise.inject.Instance;
 
 import org.apache.isis.core.commons.internal.base._NullSafe;
+//import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
@@ -58,7 +60,7 @@ import lombok.val;
  * @param <T>
  * @since 2.0
  */
-public interface Can<T> extends Iterable<T> {
+public interface Can<T> extends Iterable<T>, Serializable {
 
     /**
      * @return this Can's cardinality
@@ -537,5 +539,11 @@ public interface Can<T> extends Iterable<T> {
      * @return a non-null array, containing the elements of this Can
      */
     T[] toArray(Class<T> elementType);
+
+// debug    
+//    public static boolean isPresent(Object x) {
+//        if(x==null) throw _Exceptions.illegalArgument("putting null into a can");
+//        return x!=null;
+//    }
     
 }

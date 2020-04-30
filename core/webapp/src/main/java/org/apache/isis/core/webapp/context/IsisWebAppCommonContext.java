@@ -41,6 +41,7 @@ import org.apache.isis.core.webapp.context.memento.ObjectMementoService;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -113,6 +114,10 @@ public class IsisWebAppCommonContext implements MetaModelContext.Delegating {
     
     public ObjectMemento mementoFor(ManagedObject adapter) {
         return getMementoService().mementoForObject(adapter);
+    }
+    
+    public ObjectMemento mementoForParameter(@NonNull ManagedObject adapter) {
+        return getMementoService().mementoForParameter(adapter);
     }
     
     public ObjectMemento mementoFor(RootOid rootOid) {

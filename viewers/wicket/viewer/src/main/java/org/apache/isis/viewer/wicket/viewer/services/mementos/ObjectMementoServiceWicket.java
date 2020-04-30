@@ -42,7 +42,6 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.core.webapp.context.memento.ObjectMementoCollection;
 import org.apache.isis.core.webapp.context.memento.ObjectMementoForEmpty;
-import org.apache.isis.core.webapp.context.memento.ObjectMementoForUnspecified;
 import org.apache.isis.core.webapp.context.memento.ObjectMementoService;
 
 import lombok.Getter;
@@ -77,10 +76,20 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
         if(mementoAdapter==null) {
             return ManagedObject.isSpecified(adapter)
                     ? new ObjectMementoForEmpty(adapter.getSpecification().getSpecId())
-                    : new ObjectMementoForUnspecified();
+                    : null;
         }
         return ObjectMementoAdapter.of(mementoAdapter);
     }
+    
+    @Override
+    public ObjectMemento mementoForParameter(@NonNull ManagedObject paramAdapter) {
+        val mementoAdapter = ObjectMementoLegacy.createOrNull(paramAdapter);
+        if(mementoAdapter==null) {
+            return new ObjectMementoForEmpty(paramAdapter.getSpecification().getSpecId());
+        }
+        return ObjectMementoAdapter.of(mementoAdapter);
+    }
+    
 
     @Override
     public ObjectMemento mementoForPojo(Object pojo) {
@@ -98,10 +107,10 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
     }
 
     @Override
-    public ManagedObject reconstructObject(@NonNull ObjectMemento memento) {
+    public ManagedObject reconstructObject(@Nullable ObjectMemento memento) {
 
-        if(memento instanceof ObjectMementoForUnspecified) {
-            return ManagedObject.unspecified();
+        if(memento==null) {
+            return null;
         }
         
         if(memento instanceof ObjectMementoForEmpty) {

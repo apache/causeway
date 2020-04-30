@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
@@ -509,17 +510,24 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
         
         val objectAction = getAction();
         val paramCount = objectAction.getParameterCount();
+        val paramTypes = objectAction.getParameterTypes();
         
         if(this.arguments.size() < paramCount) {
             primeArgumentModels();
         }
         
-        val arguments = new ArrayList<ManagedObject>(paramCount);
-        for (int i = 0; i < paramCount; i++) {
-            val actionArgumentModel = this.arguments.get(i);
-            arguments.add(actionArgumentModel.getObject());
-        }
-        return Can.ofCollection(arguments);
+        return IntStream.range(0, paramCount)
+        .mapToObj(paramIndex->{
+        
+            val actionArgumentModel = this.arguments.get(paramIndex);
+            val adapter = Optional.ofNullable(actionArgumentModel.getObject())
+                    .orElse(ManagedObject.empty(paramTypes.getElseFail(paramIndex)));
+            
+            return adapter;
+        
+        })
+        .collect(Can.toCan());
+        
     }
 
     @Override

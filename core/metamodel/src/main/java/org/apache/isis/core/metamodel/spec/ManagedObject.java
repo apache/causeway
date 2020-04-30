@@ -676,17 +676,16 @@ public interface ManagedObject {
                 final Constructor<?> ppmConstructor, 
                 final Method method, 
                 final ManagedObject adapter, 
-                final Can<ManagedObject> argumentAdapters,
+                final Can<ManagedObject> pendingArguments,
                 final List<Object> additionalArguments) {
             
             final Object pendingParamModel;
             try {
-                pendingParamModel = _Reflect.invokeConstructor(ppmConstructor, unwrapMultipleAsArray(argumentAdapters)); 
+                pendingParamModel = _Reflect.invokeConstructor(ppmConstructor, unwrapMultipleAsArray(pendingArguments)); 
             } catch (Exception e) {
                 return ThrowableExtensions.handleInvocationException(e, ppmConstructor.getName());
             }
-            
-            val paramPojos = _Arrays.combine(pendingParamModel, additionalArguments.toArray());
+            val paramPojos = _Arrays.combineWithExplicitType(Object.class, pendingParamModel, additionalArguments.toArray());
             return MethodExtensions.invoke(method, unwrapSingle(adapter), paramPojos);
         }
         

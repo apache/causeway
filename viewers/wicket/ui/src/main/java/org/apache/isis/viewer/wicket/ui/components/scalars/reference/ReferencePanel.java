@@ -342,15 +342,15 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
         
         if (getModel().hasChoices()) {
             val choices = getModel().getChoices(pendingArgs);
-            val choiceMementos = choices.map(commonContext::mementoFor);
+            val choiceMementos = choices.map(commonContext::mementoForParameter);
             return new ObjectAdapterMementoProviderForReferenceChoices(getModel(), choiceMementos);
         }
 
         if(getModel().hasAutoComplete()) {
-            val dependentArgMementos = pendingArgs
-                    .map(commonContext::mementoFor);
+            val autoCompleteMementos = pendingArgs
+                    .map(commonContext::mementoForParameter);
             return new ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(
-                    getModel(), dependentArgMementos);
+                    getModel(), autoCompleteMementos);
         }
 
         return new ObjectAdapterMementoProviderForReferenceObjectAutoComplete(getModel());

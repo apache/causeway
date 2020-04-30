@@ -80,13 +80,20 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
             final Can<ManagedObject> pendingArgs,
             final Integer paramNumUpdated) {
 
+        if(ppmFactory.isPresent()) {
+            
+            if(_NullSafe.isEmpty(pendingArgs)) {
+                return pendingArgs.get(paramNum)
+                        .map(ManagedObject::getPojo)
+                        .orElse(null) ;
+            }
+            
+            return ManagedObject.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, target, pendingArgs);
+        }
+        
         // this isn't a dependent defaults situation, so just evaluate the default.
         if (_NullSafe.isEmpty(pendingArgs) || paramNumUpdated == null) {
             return ManagedObject.InvokeUtil.invokeAutofit(method, target, pendingArgs);
-        }
-        
-        if(ppmFactory.isPresent()) {
-            return ManagedObject.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, target, pendingArgs);
         }
 
         // this could be a dependent defaults situation, but has a previous parameter been updated

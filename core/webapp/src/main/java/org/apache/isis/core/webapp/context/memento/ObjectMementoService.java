@@ -22,6 +22,8 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
+import lombok.NonNull;
+
 /**
  * @since 2.0
  * 
@@ -38,6 +40,8 @@ public interface ObjectMementoService {
     ObjectMemento mementoForPojos(Iterable<Object> iterablePojos, ObjectSpecId specId);
 
     ManagedObject reconstructObject(ObjectMemento memento);
+
+    ObjectMemento mementoForParameter(@NonNull ManagedObject paramAdapter);
     
 
 }

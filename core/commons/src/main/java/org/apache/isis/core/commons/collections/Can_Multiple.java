@@ -39,6 +39,8 @@ import lombok.val;
 @RequiredArgsConstructor(staticName="of")
 final class Can_Multiple<T> implements Can<T> {
 
+    private static final long serialVersionUID = 1L;
+
     private final List<T> elements;
 
     @Getter(lazy=true, onMethod=@__({@Override})) 
