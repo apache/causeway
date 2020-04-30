@@ -33,6 +33,9 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.incubator.model.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
+import lombok.val;
+import lombok.experimental.Accessors;
 
 @ActionLayout(named="Choices", promptStyle = PromptStyle.DIALOG_MODAL)
 @Action(semantics = SemanticsOf.SAFE)
@@ -42,6 +45,12 @@ public class DependentArgsActionDemo_useChoices {
     @Inject MessageService messageService;
 
     private final DependentArgsActionDemo holder;
+    
+    @Value @Accessors(fluent = true) // fluent so we can replace this with Java(14+) records later
+    static class Parameters {
+        Parity parity;
+        DemoItem item1;
+    }
 
     public DependentArgsActionDemo act(
 
@@ -69,11 +78,9 @@ public class DependentArgsActionDemo_useChoices {
     // -- PARAM 1 (DemoItem)
 
     @Model
-    public Collection<DemoItem> choices1Act(
-            
-            Parity parity // <-- the refining parameter from the dialog above
-            
-            ) {
+    public Collection<DemoItem> choices1Act(Parameters params) {
+        
+        val parity = params.parity(); // <-- the refining parameter from the dialog above
         
         if(parity == null) {
             return holder.getItems();
