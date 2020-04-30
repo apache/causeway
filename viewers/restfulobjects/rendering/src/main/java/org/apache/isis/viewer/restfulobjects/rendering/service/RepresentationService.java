@@ -25,7 +25,6 @@ import org.apache.isis.core.metamodel.spec.interaction.ManagedAction;
 import org.apache.isis.core.metamodel.spec.interaction.ManagedCollection;
 import org.apache.isis.core.metamodel.spec.interaction.ManagedProperty;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 
 /**
@@ -75,8 +74,6 @@ public interface RepresentationService {
 
     Response actionResult(
             IResourceContext resourceContext,
-            ObjectAndActionInvocation objectAndActionInvocation,
-            ActionResultReprRenderer.SelfLink selfLink);
-    
+            ObjectAndActionInvocation objectAndActionInvocation);
 
 }

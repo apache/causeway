@@ -22,10 +22,11 @@ import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.interaction.ActionInteraction;
+import org.apache.isis.core.metamodel.spec.interaction.InteractionVeto;
+import org.apache.isis.core.metamodel.spec.interaction.ActionInteraction.ManagedParameter;
 import org.apache.isis.core.metamodel.spec.interaction.ActionInteraction.SemanticConstraint;
-import org.apache.isis.core.metamodel.spec.interaction.ManagedAction;
 import org.apache.isis.core.metamodel.spec.interaction.ManagedMember;
 import org.apache.isis.core.metamodel.spec.interaction.MemberInteraction.AccessIntent;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -38,6 +39,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAc
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.viewer.context.ResourceContext;
 
+import lombok.NonNull;
 import lombok.val;
 
 class DomainResourceHelper {
@@ -155,11 +157,9 @@ class DomainResourceHelper {
      */
     public Response invokeActionQueryOnly(final String actionId, final JsonRepresentation arguments) {
 
-        val action = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter)
-                .getObjectActionThatIsVisibleForIntentAndSemanticConstraint(
-                        actionId, AccessIntent.MUTATE, SemanticConstraint.SAFE);
-
-        return invokeActionUsingAdapters(action, arguments, ActionResultReprRenderer.SelfLink.INCLUDED);
+        return invokeAction( 
+                actionId, AccessIntent.MUTATE, SemanticConstraint.SAFE, 
+                arguments, ActionResultReprRenderer.SelfLink.EXCLUDED);
     }
 
     /**
@@ -174,11 +174,9 @@ class DomainResourceHelper {
      */
     public Response invokeActionIdempotent(final String actionId, final JsonRepresentation arguments) {
 
-        val action = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter)
-                .getObjectActionThatIsVisibleForIntentAndSemanticConstraint(
-                        actionId, AccessIntent.MUTATE, SemanticConstraint.IDEMPOTENT);
-
-        return invokeActionUsingAdapters(action, arguments, ActionResultReprRenderer.SelfLink.EXCLUDED);
+        return invokeAction( 
+                actionId, AccessIntent.MUTATE, SemanticConstraint.IDEMPOTENT, 
+                arguments, ActionResultReprRenderer.SelfLink.EXCLUDED);
     }
 
     /**
@@ -188,42 +186,50 @@ class DomainResourceHelper {
      */
     public Response invokeAction(final String actionId, final JsonRepresentation arguments) {
 
-        val action = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter)
-                .getObjectActionThatIsVisibleForIntentAndSemanticConstraint(
-                        actionId, AccessIntent.MUTATE, SemanticConstraint.NONE);
-
-        return invokeActionUsingAdapters(action, arguments, ActionResultReprRenderer.SelfLink.EXCLUDED);
+        return invokeAction( 
+                actionId, AccessIntent.MUTATE, SemanticConstraint.NONE, 
+                arguments, ActionResultReprRenderer.SelfLink.EXCLUDED);
     }
 
-
-    private Response invokeActionUsingAdapters(
-            final ManagedAction managedAction,
-            final JsonRepresentation arguments,
-            final ActionResultReprRenderer.SelfLink selfLink) {
-
-        val action = managedAction.getAction();
-        val objectAdapter = this.objectAdapter;
-        val argHelper = new ObjectActionArgHelper(resourceContext, managedAction);
-        val argAdapters = argHelper.parseAndValidateArguments(arguments);
-
+    private Response invokeAction(
+            @NonNull final String actionId, 
+            @NonNull final AccessIntent intent,
+            @NonNull final SemanticConstraint semanticConstraint,
+            @NonNull final JsonRepresentation arguments,
+            @NonNull final ActionResultReprRenderer.SelfLink selfLink) {
+        
+        val where = resourceContext.getWhere();
+        
+        val actionInteraction = ActionInteraction.start(objectAdapter, actionId)
+        .checkVisibility(where)
+        .checkUsability(where, intent)
+        .checkSemanticConstraint(semanticConstraint)
+        .useParameters(action->{
+            
+            val argAdapters = ObjectActionArgHelper.of(resourceContext, action)
+                    .parseAndValidateArguments(arguments);
+            
+            return argAdapters;
+            
+        }, 
+                (ManagedParameter managedParameter, InteractionVeto veto)->{
+                    InteractionFailureHandler.onParameterInvalid(managedParameter, veto, arguments);
+                }
+        );
+        
         if(resourceContext.isValidateOnly()) {
-            // nothing more to do.
-            // if there had been a validation error, then an exception would have been thrown above.
+            actionInteraction.validateElseThrow(InteractionFailureHandler::onFailure);
             return Response.noContent().build();
         }
-
-        // invoke
-        final ManagedObject mixedInAdapter = null; // action will automatically fill in if a mixin
-        final ManagedObject returnedAdapter = action.execute(
-                objectAdapter,  mixedInAdapter, argAdapters,
-                InteractionInitiatedBy.USER);
-
-        final ObjectAndActionInvocation objectAndActionInvocation =
-                new ObjectAndActionInvocation(objectAdapter, action, arguments, argAdapters, returnedAdapter, selfLink);
+        
+        val actionInteractionResult = actionInteraction
+                .getResultElseThrow(InteractionFailureHandler::onFailure);
+        
+        val objectAndActionInvocation = ObjectAndActionInvocation.of(actionInteractionResult, arguments, selfLink);
 
         // response
         transactionService.flushTransaction();
-        return representationService.actionResult(resourceContext, objectAndActionInvocation, selfLink);
+        return representationService.actionResult(resourceContext, objectAndActionInvocation);
     }
 
 

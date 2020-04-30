@@ -18,13 +18,17 @@
  */
 package org.apache.isis.core.metamodel.spec.interaction;
 
+import java.util.List;
 import java.util.Optional;
 
+import org.apache.isis.core.commons.internal.base._Either;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.val;
 
 public final class ManagedAction extends ManagedMember {
 
@@ -64,6 +68,20 @@ public final class ManagedAction extends ManagedMember {
     @Override
     public MemberType getMemberType() {
         return MemberType.ACTION;
+    }
+    
+    // -- INTERACTION
+    
+    public _Either<ManagedObject, InteractionVeto> invoke(@NonNull List<ManagedObject> actionParameters) {
+            
+        //TODO validate params, and handle invocation exceptions
+        
+        final ManagedObject mixedInAdapter = null; // filled in automatically ?
+        val actionResult = getAction()
+                .execute(getOwner(), mixedInAdapter , actionParameters, InteractionInitiatedBy.USER);
+        
+        return _Either.left(actionResult);
+        
     }
 
 

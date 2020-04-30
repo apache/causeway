@@ -18,12 +18,23 @@
  */
 package org.apache.isis.core.metamodel.spec.interaction;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Either;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.interaction.ManagedMember.MemberType;
 
+import lombok.Data;
 import lombok.NonNull;
+import lombok.Value;
 import lombok.val;
 
 public final class ActionInteraction extends MemberInteraction<ManagedAction, ActionInteraction> {
@@ -34,33 +45,40 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
         SAFE
     }
     
+    @Value(staticConstructor = "of")
+    public static class Result {
+        private final ManagedAction managedAction;
+        private final List<ManagedObject> parameterList;
+        private final ManagedObject actionReturnedObject;
+    }
+
     public static final ActionInteraction start(
             @NonNull final ManagedObject owner,
             @NonNull final String memberId) {
-    
+
         val managedAction = ManagedAction.lookupAction(owner, memberId);
-        
+
         final _Either<ManagedAction, InteractionVeto> chain = managedAction.isPresent()
                 ? _Either.left(managedAction.get())
                 : _Either.right(InteractionVeto.notFound(MemberType.ACTION, memberId));
-                
+
         return new ActionInteraction(chain);
     }
-    
+
     ActionInteraction(@NonNull _Either<ManagedAction, InteractionVeto> chain) {
         super(chain);
     }
 
     public ActionInteraction checkSemanticConstraint(@NonNull SemanticConstraint semanticConstraint) {
-        
+
         chain = chain.leftRemap(action->{
-            
+
             val actionSemantics = action.getAction().getSemantics();
-            
+
             switch(semanticConstraint) {
             case NONE:
                 return _Either.left(action);
-            
+
             case IDEMPOTENT:
                 return (! actionSemantics.isIdempotentInNature()) 
                         ? _Either.right(InteractionVeto.actionNotIdempotent(action)) 
@@ -72,24 +90,113 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
             default:
                 throw _Exceptions.unmatchedCase(semanticConstraint); // unexpected code reach
             }
-             
+
         });
-        
+
         return this;
     }
 
+    @Value(staticConstructor = "of")
+    public static class ManagedParameter {
+        @NonNull private final ManagedAction owningAction;
+        @NonNull private final ObjectActionParameter parameter;
+        @NonNull private final ManagedObject value;
+        public ManagedObject getOwningObject() {
+            return getOwningAction().getOwner();
+        }
+        //TODO unchecked length
+        public static Can<ManagedParameter> listOf(ManagedAction owningAction, List<ManagedObject> paramValueList) {
+            val paramValueIterator = paramValueList.iterator();
+            return owningAction.getAction().getParameters()
+            .map(param->{
+                final ManagedObject paramValue = Optional
+                        .ofNullable(paramValueIterator.next())
+                        .orElse(ManagedObject.of(param.getSpecification(), null));
+                return ManagedParameter.of(owningAction, param, paramValue);
+            });
+        }
+        public Optional<InteractionVeto> validate() {
+            return Optional.ofNullable(
+                getParameter()
+                    .isValid(getOwningObject(), getValue(), InteractionInitiatedBy.USER))
+            .map(reasonNotValid->InteractionVeto.actionParamInvalid(new Veto(reasonNotValid)));
+        }
+    }
+    
+    public static interface ParameterInvalidCallback {
+        void onParameterInvalid(ManagedParameter managedParameter, InteractionVeto veto);
+    }
+    
+    
+    public ActionInteraction useParameters(
+            @NonNull final Function<ManagedAction, List<ManagedObject>> actionParameterProvider, 
+            final ParameterInvalidCallback parameterInvalidCallback) {
 
-//    public PropertyHandle modifyProperty(
-//            @NonNull final Function<ManagedProperty, ManagedObject> newProperyValueProvider) {
-//
-//        chain = chain.leftRemap(property->{
-//            val validityVeto = property.modifyProperty(newProperyValueProvider.apply(property));
-//            return validityVeto.isPresent()
-//                ? _Either.right(validityVeto.get()) 
-//                : _Either.left(property); 
-//        });
-//        return this;
-//    }
+        chain = chain.leftRemap(action->{
+            
+            state.setParameterList(actionParameterProvider.apply(action));
+            
+            val managedParameters = ManagedParameter.listOf(action, state.getParameterList());
+            
+            boolean invalid = false;
+            for(val managedParameter : managedParameters) {
+                // validate each individual argument
+                val veto = managedParameter.validate();
+                if(veto.isPresent()) {
+                    invalid = true;
+                    if(parameterInvalidCallback!=null) {
+                        parameterInvalidCallback.onParameterInvalid(managedParameter, veto.get());
+                    }
+                }
+            }
+            
+            if(invalid) {
+                //TODO veto
+            }
+            
+            // validate entire param-list
+            val validityVeto = action.getAction()
+                    .isArgumentSetValid(action.getOwner(), state.getParameterList(), InteractionInitiatedBy.USER);
+            return validityVeto.isVetoed()
+                    ? _Either.right(InteractionVeto.actionParamInvalid(validityVeto)) 
+                    : _Either.left(action); 
+                    
+        });
+        return this;
+    }
+
+    public <X extends Throwable> 
+    Result getResultElseThrow(Function<InteractionVeto, ? extends X> onFailure) throws X {
+        
+        chain = chain.leftRemap(action->{
+            val actionResultOrVeto = action.invoke(state.getParameterList());
+            
+            if(actionResultOrVeto.isLeft()) {
+                val actionResult = actionResultOrVeto.leftIfAny();
+                state.setInteractionResult(Result.of(action, state.getParameterList(), actionResult));
+                return _Either.left(action);
+            } else {
+                return _Either.right(actionResultOrVeto.rightIfAny());
+            }
+            
+        });
+        
+        if (chain.isLeft()) {
+            return state.getInteractionResult();
+        } else {
+            throw onFailure.apply(chain.rightIfAny());
+        }
+    }
+    
+    // -- HELPER
+    
+    private final State state = new State();
+    @Data
+    private static class State {
+        @NonNull private List<ManagedObject> parameterList = Collections.emptyList();
+        private Result interactionResult;
+    }
 
     
+
 }

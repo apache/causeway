@@ -37,7 +37,6 @@ import org.apache.isis.core.metamodel.spec.interaction.ManagedAction;
 import org.apache.isis.core.metamodel.spec.interaction.ManagedCollection;
 import org.apache.isis.core.metamodel.spec.interaction.ManagedProperty;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer.SelfLink;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationService;
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceForRestfulObjectsV1_0;
@@ -109,8 +108,7 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
     @Override
     public Response actionResult(
             final IResourceContext renderContext,
-            final ObjectAndActionInvocation objectAndActionInvocation,
-            final SelfLink selfLink) {
+            final ObjectAndActionInvocation objectAndActionInvocation) {
 
         final ResponseBuilder responseBuilder = buildResponse(
                 connegService -> connegService.buildResponse(renderContext, objectAndActionInvocation));

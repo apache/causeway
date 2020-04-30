@@ -41,7 +41,7 @@ import lombok.val;
  * Utility class that encapsulates the logic for parsing arguments to be invoked by an
  * {@link ObjectAction}.
  */
-@RequiredArgsConstructor
+@RequiredArgsConstructor(staticName = "of")
 public class ObjectActionArgHelper {
 
     private final IResourceContext resourceContext;

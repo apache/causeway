@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.spec.interaction;
 
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.Where;
@@ -77,13 +76,18 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
         }
         return _Casts.uncheckedCast(this);
     }
-    
-    @Deprecated
-    public H peekOnFailure(Consumer<InteractionVeto> onFailure) {
-        chain.right().ifPresent(onFailure);
-        return _Casts.uncheckedCast(this);
+
+    public <X extends Throwable> 
+    H validateElseThrow(Function<InteractionVeto, ? extends X> onFailure) throws X {
+        val veto = chain.rightIfAny();
+        if (veto == null) {
+            return _Casts.uncheckedCast(this);
+        } else {
+            throw onFailure.apply(veto);
+        }
     }
 
+    @Deprecated // use more specialized methods 
     public <X extends Throwable> 
     T getOrElseThrow(Function<InteractionVeto, ? extends X> onFailure) throws X {
         val value = chain.leftIfAny();
@@ -94,6 +98,7 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
         }
     }
     
+    @Deprecated 
     public Optional<T> get() {
         return chain.left();
     }

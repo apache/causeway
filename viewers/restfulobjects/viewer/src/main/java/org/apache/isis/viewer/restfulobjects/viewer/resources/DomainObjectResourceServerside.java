@@ -460,13 +460,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             
             return proposedNewValue;
         })
-        .getOrElseThrow(InteractionFailureHandler::onFailure);
+        .validateElseThrow(InteractionFailureHandler::onFailure);
 
-        val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
-        return domainResourceHelper.propertyDetails(
-                propertyId,
-                ManagedMember.RepresentationMode.WRITE
-                );
+        return DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter)
+                .propertyDetails(propertyId, ManagedMember.RepresentationMode.WRITE);
     }
 
     @Override
@@ -490,13 +487,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         .checkVisibility(resourceContext.getWhere())
         .checkUsability(resourceContext.getWhere(), AccessIntent.MUTATE)
         .modifyProperty(property->null)
-        .getOrElseThrow(InteractionFailureHandler::onFailure);
+        .validateElseThrow(InteractionFailureHandler::onFailure);
 
-        val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
-        return domainResourceHelper.propertyDetails(
-                propertyId,
-                ManagedMember.RepresentationMode.WRITE
-                );
+        return DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter)
+                .propertyDetails(propertyId, ManagedMember.RepresentationMode.WRITE);
     }
 
     @Override

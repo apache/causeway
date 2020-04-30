@@ -25,11 +25,27 @@ import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.interaction.ActionInteraction;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
 
+import lombok.NonNull;
+
 public class ObjectAndActionInvocation {
 
+    public static ObjectAndActionInvocation of(
+            @NonNull ActionInteraction.Result actionInteractionResult, 
+            @NonNull JsonRepresentation argsJsonRepr,
+            @NonNull ActionResultReprRenderer.SelfLink selfLink) {
+        return new ObjectAndActionInvocation(
+                actionInteractionResult.getManagedAction().getOwner(), 
+                actionInteractionResult.getManagedAction().getAction(),
+                argsJsonRepr,
+                actionInteractionResult.getParameterList(),
+                actionInteractionResult.getActionReturnedObject(), 
+                selfLink);
+    }
+    
     private final ManagedObject objectAdapter;
     private final ObjectAction action;
     private final JsonRepresentation arguments;
@@ -102,5 +118,7 @@ public class ObjectAndActionInvocation {
         // else
         return ActionResultRepresentation.ResultType.DOMAIN_OBJECT;
     }
+
+
 
 }
