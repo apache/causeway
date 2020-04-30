@@ -18,11 +18,11 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -125,7 +125,7 @@ extends OneToManyAssociationDefault implements ContributeeMember {
             final ManagedObject ownerAdapter, 
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        val params = Collections.singletonList(ownerAdapter);
+        val params = Can.ofSingleton(ownerAdapter);
         
         return serviceAction.execute(getServiceAdapter(), /*mixin*/null, params, interactionInitiatedBy);
     }

@@ -106,11 +106,11 @@ public interface ObjectAction extends ObjectMember {
      * @param mixedInAdapter - will be null for regular actions, and for mixin actions.  When a mixin action invokes its underlying mixedIn action, then will be populated (so that the ActionDomainEvent can correctly provide the underlying mixin)
      */
     ManagedObject executeWithRuleChecking(
-            final ManagedObject target,
-            final ManagedObject mixedInAdapter,
-            final List<ManagedObject> parameters,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) throws AuthorizationException;
+            ManagedObject target,
+            ManagedObject mixedInAdapter,
+            Can<ManagedObject> parameters,
+            InteractionInitiatedBy interactionInitiatedBy,
+            Where where) throws AuthorizationException;
 
     /**
      * Invokes the action's method on the target object given the specified set
@@ -123,8 +123,8 @@ public interface ObjectAction extends ObjectMember {
     ManagedObject execute(
             ManagedObject targetAdapter,
             ManagedObject mixedInAdapter,
-            List<ManagedObject> parameters,
-            final InteractionInitiatedBy interactionInitiatedBy);
+            Can<ManagedObject> parameters,
+            InteractionInitiatedBy interactionInitiatedBy);
 
 
     // -- isProposedArgumentSetValid, isEachIndividualArgumentValid, isArgumentSetValid
@@ -143,17 +143,17 @@ public interface ObjectAction extends ObjectMember {
      */
     Consent isProposedArgumentSetValid(
             ManagedObject object,
-            List<ManagedObject> proposedArguments,
+            Can<ManagedObject> proposedArguments,
             InteractionInitiatedBy interactionInitiatedBy);
 
     Consent isEachIndividualArgumentValid(
             ManagedObject objectAdapter,
-            List<ManagedObject> proposedArguments,
+            Can<ManagedObject> proposedArguments,
             InteractionInitiatedBy interactionInitiatedBy);
 
     Consent isArgumentSetValid(
             ManagedObject objectAdapter,
-            List<ManagedObject> proposedArguments,
+            Can<ManagedObject> proposedArguments,
             InteractionInitiatedBy interactionInitiatedBy);
 
 

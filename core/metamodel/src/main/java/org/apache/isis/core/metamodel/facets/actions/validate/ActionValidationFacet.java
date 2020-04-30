@@ -19,8 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.actions.validate;
 
-import java.util.List;
-
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
@@ -45,5 +44,5 @@ public interface ActionValidationFacet extends Facet, ValidatingInteractionAdvis
     /**
      * Reason why the validation has failed, or <tt>null</tt> if okay.
      */
-    public String invalidReason(ManagedObject target, List<ManagedObject> arguments);
+    public String invalidReason(ManagedObject target, Can<ManagedObject> arguments);
 }

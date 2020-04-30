@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -71,7 +72,7 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
     @Override
     public Object getDefault(
             final ManagedObject target,
-            final List<ManagedObject> pendingArgs,
+            final Can<ManagedObject> pendingArgs,
             final Integer paramNumUpdated) {
 
         // this isn't a dependent defaults situation, so just evaluate the default.

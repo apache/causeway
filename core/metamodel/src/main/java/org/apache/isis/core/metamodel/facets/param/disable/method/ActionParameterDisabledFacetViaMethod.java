@@ -26,6 +26,7 @@ import java.util.Map;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.disable.ActionParameterDisabledFacetAbstract;
@@ -68,7 +69,7 @@ implements ImperativeFacet {
     @Override
     public String disabledReason(
             final ManagedObject owningAdapter, 
-            final List<ManagedObject> argumentAdapters) {
+            final Can<ManagedObject> argumentAdapters) {
         
         final Object returnValue = ManagedObject.InvokeUtil
                 .invokeAutofit(method, owningAdapter, argumentAdapters);

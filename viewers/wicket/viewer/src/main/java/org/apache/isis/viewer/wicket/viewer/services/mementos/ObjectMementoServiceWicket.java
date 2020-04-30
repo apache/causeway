@@ -40,9 +40,11 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.core.webapp.context.memento.ObjectMementoCollection;
+import org.apache.isis.core.webapp.context.memento.ObjectMementoForNull;
 import org.apache.isis.core.webapp.context.memento.ObjectMementoService;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -62,16 +64,16 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
     @Inject private ObjectManager objectManager;
 
     @Override
-    public ObjectMemento mementoForRootOid(RootOid rootOid) {
+    public ObjectMemento mementoForRootOid(@NonNull RootOid rootOid) {
         val mementoAdapter = ObjectMementoLegacy.createPersistent(rootOid, specificationLoader);
         return ObjectMementoAdapter.of(mementoAdapter);
     }
 
     @Override
-    public ObjectMemento mementoForObject(ManagedObject adapter) {
+    public ObjectMemento mementoForObject(@NonNull ManagedObject adapter) {
         val mementoAdapter = ObjectMementoLegacy.createOrNull(adapter);
         if(mementoAdapter==null) {
-            return null;
+            return new ObjectMementoForNull(adapter.getSpecification().getSpecId());
         }
         return ObjectMementoAdapter.of(mementoAdapter);
     }
@@ -92,11 +94,15 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
     }
 
     @Override
-    public ManagedObject reconstructObject(ObjectMemento memento) {
-        if(memento==null) {
-            return null;
-        }
+    public ManagedObject reconstructObject(@NonNull ObjectMemento memento) {
 
+        if(memento instanceof ObjectMementoForNull) {
+            val objectMementoForNull = (ObjectMementoForNull) memento;
+            val specId = objectMementoForNull.getObjectSpecId();
+            val spec = specificationLoader.loadSpecification(specId);
+            return ManagedObject.of(spec, null);
+        }
+        
         if(memento instanceof ObjectMementoCollection) {
             val objectMementoCollection = (ObjectMementoCollection) memento;
 

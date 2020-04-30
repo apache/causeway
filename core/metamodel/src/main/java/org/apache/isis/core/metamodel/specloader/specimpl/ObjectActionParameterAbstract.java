@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
@@ -209,7 +208,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
     @Override
     public Can<ManagedObject> getAutoComplete(
             final ManagedObject adapter,
-            final List<ManagedObject> pendingArgs,
+            final Can<ManagedObject> pendingArgs,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
@@ -246,7 +245,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
     @Override
     public Can<ManagedObject> getChoices(
             final ManagedObject adapter,
-            final List<ManagedObject> pendingArgs,
+            final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         val args = argsForDefaultOrChoices(adapter, pendingArgs);
@@ -257,7 +256,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
 
     private Can<ManagedObject> findChoices(
             final ManagedObject target,
-            final List<ManagedObject> pendingArgs,
+            final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         final List<ManagedObject> adapters = _Lists.newArrayList();
@@ -279,7 +278,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
     @Override
     public ManagedObject getDefault(
             final ManagedObject adapter,
-            final List<ManagedObject> pendingArgs,
+            final Can<ManagedObject> pendingArgs,
             final Integer paramNumUpdated) {
 
         final ManagedObject target = targetForDefaultOrChoices(adapter);
@@ -290,7 +289,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
 
     private ManagedObject findDefault(
             final ManagedObject target,
-            final List<ManagedObject> args,
+            final Can<ManagedObject> args,
             final Integer paramNumUpdated) {
         
         final ActionParameterDefaultsFacet defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);
@@ -316,9 +315,9 @@ implements ObjectActionParameter, FacetHolder.Delegating {
     /**
      * Hook method; {@link ObjectActionParameterContributee contributed action parameter}s override.
      */
-    protected List<ManagedObject> argsForDefaultOrChoices(
+    protected Can<ManagedObject> argsForDefaultOrChoices(
             final ManagedObject adapter,
-            final List<ManagedObject> argumentsIfAvailable) {
+            final Can<ManagedObject> argumentsIfAvailable) {
         return argumentsIfAvailable;
     }
 
@@ -362,7 +361,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
 
     private ActionArgVisibilityContext createArgumentVisibilityContext(
             final ManagedObject objectAdapter,
-            final List<ManagedObject> pendingArgs,
+            final Can<ManagedObject> pendingArgs,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
@@ -373,7 +372,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
     @Override
     public Consent isVisible(
             final ManagedObject targetAdapter,
-            final List<ManagedObject> pendingArgs,
+            final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final VisibilityContext<?> ic = createArgumentVisibilityContext(
@@ -389,7 +388,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
 
     private ActionArgUsabilityContext createArgumentUsabilityContext(
             final ManagedObject objectAdapter,
-            final List<ManagedObject> pendingArgs,
+            final Can<ManagedObject> pendingArgs,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
@@ -405,7 +404,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
     @Override
     public Consent isUsable(
             final ManagedObject targetAdapter,
-            final List<ManagedObject> pendingArgs,
+            final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final UsabilityContext<?> ic = createArgumentUsabilityContext(
@@ -423,7 +422,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
     @Override
     public ActionArgValidityContext createProposedArgumentInteractionContext(
             final ManagedObject objectAdapter,
-            final List<ManagedObject> proposedArguments,
+            final Can<ManagedObject> proposedArguments,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
@@ -469,14 +468,14 @@ implements ObjectActionParameter, FacetHolder.Delegating {
      * to do this in two passes, one to build up the argument set as a single
      * unit, and then validate each in turn.
      */
-    private List<ManagedObject> arguments(final ManagedObject proposedValue) {
+    private Can<ManagedObject> arguments(final ManagedObject proposedValue) {
         final int paramCount = getAction().getParameterCount();
         final int paramIndex = getNumber();
         val arguments = new ArrayList<ManagedObject>(paramCount);
         for(int i=0; i<paramCount; ++i) {
             arguments.add(i==paramIndex ? proposedValue : ManagedObject.empty());
         }
-        return Collections.unmodifiableList(arguments);
+        return Can.ofCollection(arguments);
     }
 
 

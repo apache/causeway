@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal._Constants;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -75,7 +76,7 @@ implements ImperativeFacet {
     @Override
     public Object[] autoComplete(
             final ManagedObject owningAdapter,
-            final List<ManagedObject> pendingArgs,
+            final Can<ManagedObject> pendingArgs,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 

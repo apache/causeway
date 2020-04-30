@@ -18,10 +18,9 @@
  */
 package org.apache.isis.core.metamodel.spec.interaction;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.function.Function;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Either;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -44,7 +43,7 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
     @Value(staticConstructor = "of")
     public static class Result {
         private final ManagedAction managedAction;
-        private final List<ManagedObject> parameterList;
+        private final Can<ManagedObject> parameterList;
         private final ManagedObject actionReturnedObject;
     }
 
@@ -98,14 +97,14 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
     
     
     public ActionInteraction useParameters(
-            @NonNull final Function<ManagedAction, List<ManagedObject>> actionParameterProvider, 
+            @NonNull final Function<ManagedAction, Can<ManagedObject>> actionParameterProvider, 
             final ParameterInvalidCallback parameterInvalidCallback) {
 
         chain = chain.leftRemap(action->{
             
             state.setParameterList(actionParameterProvider.apply(action));
             
-            val managedParameters = ManagedParameterList.of(action, state.getParameterList());
+            val managedParameters = ManagedParameterList.ofValues(action, state.getParameterList());
             
             boolean invalid = false;
             for(val managedParameter : managedParameters) {
@@ -162,7 +161,7 @@ public final class ActionInteraction extends MemberInteraction<ManagedAction, Ac
     private final State state = new State();
     @Data
     private static class State {
-        @NonNull private List<ManagedObject> parameterList = Collections.emptyList();
+        @NonNull private Can<ManagedObject> parameterList = Can.empty();
         private Result interactionResult;
     }
 

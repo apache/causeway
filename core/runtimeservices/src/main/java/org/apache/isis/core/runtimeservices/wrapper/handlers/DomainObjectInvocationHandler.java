@@ -21,7 +21,6 @@ package org.apache.isis.core.runtimeservices.wrapper.handlers;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -41,9 +40,9 @@ import org.apache.isis.applib.services.wrapper.events.PropertyAccessEvent;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Arrays;
-import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -665,7 +664,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     private void checkValidity(
             final ManagedObject targetAdapter, 
             final ObjectAction objectAction, 
-            final List<ManagedObject> argAdapters) {
+            final Can<ManagedObject> argAdapters) {
         
         val interactionResult = objectAction
                 .isProposedArgumentSetValid(targetAdapter, argAdapters,getInteractionInitiatedBy())
@@ -673,10 +672,10 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         notifyListenersAndVetoIfRequired(interactionResult);
     }
 
-    private List<ManagedObject> asObjectAdaptersUnderlying(final Object[] args) {
+    private Can<ManagedObject> asObjectAdaptersUnderlying(final Object[] args) {
         val argAdapters = _NullSafe.stream(args)
         .map(getObjectManager()::adapt)
-        .collect(_Lists.toUnmodifiable());
+        .collect(Can.toCan());
         
         return argAdapters;
     }

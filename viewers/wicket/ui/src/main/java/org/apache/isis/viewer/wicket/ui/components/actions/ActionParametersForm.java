@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.actions;
 
-import java.util.Collections;
 import java.util.Optional;
 
 import org.apache.wicket.Component;
@@ -29,6 +28,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -91,7 +91,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
                 val realTargetAdapter = actionModel.getActionMemento().getAction(getSpecificationLoader())
                         .realTargetAdapter(targetAdapter);
                 val consent = actionParameterMemento.getActionParameter(getSpecificationLoader())
-                        .isVisible(realTargetAdapter, Collections.emptyList(), InteractionInitiatedBy.USER);
+                        .isVisible(realTargetAdapter, Can.empty(), InteractionInitiatedBy.USER);
                 val allowed = consent.isAllowed();
                 paramPanel.setVisible(allowed);
                 

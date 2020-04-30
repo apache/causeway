@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.math.BigDecimal;
@@ -186,7 +185,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             @Override
             public ManagedObject getDefault(
                     final ScalarModel scalarModel,
-                    final List<ManagedObject> pendingArgs,
+                    final Can<ManagedObject> pendingArgs,
                     final int paramNumUpdated) {
 
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
@@ -204,9 +203,9 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             }
 
             @Override
-            public List<ManagedObject> getChoices(
+            public Can<ManagedObject> getChoices(
                     final ScalarModel scalarModel,
-                    final List<ManagedObject> pendingArgs) {
+                    final Can<ManagedObject> pendingArgs) {
 
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
                 final OneToOneAssociation property = propertyMemento
@@ -216,7 +215,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
                         parentAdapter,
                         InteractionInitiatedBy.USER);
 
-                return choices.toList();
+                return choices;
             }
 
             @Override
@@ -227,9 +226,9 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             }
 
             @Override
-            public List<ManagedObject> getAutoComplete(
+            public Can<ManagedObject> getAutoComplete(
                     final ScalarModel scalarModel,
-                    final List<ManagedObject> pendingArgs, // ignored for properties
+                    final Can<ManagedObject> pendingArgs, // ignored for properties
                     final String searchArg) {
 
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
@@ -241,7 +240,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
                                 parentAdapter, 
                                 searchArg,
                                 InteractionInitiatedBy.USER);
-                return choices.toList();
+                return choices;
             }
 
             @Override
@@ -419,7 +418,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             @Override
             public ManagedObject getDefault(
                     final ScalarModel scalarModel,
-                    final List<ManagedObject> pendingArgs,
+                    final Can<ManagedObject> pendingArgs,
                     final int paramNumUpdated) {
 
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
@@ -437,9 +436,9 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
                 return actionParameter.hasChoices();
             }
             @Override
-            public List<ManagedObject> getChoices(
+            public Can<ManagedObject> getChoices(
                     final ScalarModel scalarModel,
-                    final List<ManagedObject> pendingArgs) {
+                    final Can<ManagedObject> pendingArgs) {
                 
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
                 final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
@@ -452,7 +451,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
                                 parentAdapter, 
                                 pendingArgs,
                                 InteractionInitiatedBy.USER);
-                return choices.toList();
+                return choices;
             }
 
             @Override
@@ -462,9 +461,9 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
                 return actionParameter.hasAutoComplete();
             }
             @Override
-            public List<ManagedObject> getAutoComplete(
+            public Can<ManagedObject> getAutoComplete(
                     final ScalarModel scalarModel,
-                    final List<ManagedObject> pendingArgs,
+                    final Can<ManagedObject> pendingArgs,
                     final String searchArg) {
                 
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
@@ -476,7 +475,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
                         pendingArgs,
                         searchArg,
                         InteractionInitiatedBy.USER);
-                return choices.toList();
+                return choices;
             }
 
             @Override
@@ -542,7 +541,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
                         scalarModel.getSpecificationLoader());
                 final ManagedObject parentAdapter =
                         scalarModel.getParentEntityModel().load();
-                final ManagedObject defaultAdapter = actionParameter.getDefault(parentAdapter, Collections.emptyList(), null);
+                final ManagedObject defaultAdapter = actionParameter.getDefault(parentAdapter, Can.empty(), null);
                 scalarModel.setObject(defaultAdapter);
             }
 
@@ -618,18 +617,18 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
 
         public abstract ManagedObject getDefault(
                 ScalarModel scalarModel,
-                List<ManagedObject> pendingArgs,
+                Can<ManagedObject> pendingArgs,
                 int paramNumUpdated);
 
         public abstract boolean hasChoices(ScalarModel scalarModel);
-        public abstract List<ManagedObject> getChoices(
+        public abstract Can<ManagedObject> getChoices(
                 ScalarModel scalarModel,
-                List<ManagedObject> pendingArgs);
+                Can<ManagedObject> pendingArgs);
 
         public abstract boolean hasAutoComplete(ScalarModel scalarModel);
-        public abstract List<ManagedObject> getAutoComplete(
+        public abstract Can<ManagedObject> getAutoComplete(
                 ScalarModel scalarModel,
-                List<ManagedObject> pendingArgs,
+                Can<ManagedObject> pendingArgs,
                 String searchArg);
 
         public abstract int getAutoCompleteOrChoicesMinLength(ScalarModel scalarModel);
@@ -906,8 +905,8 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
         return kind.hasChoices(this);
     }
 
-    public List<ManagedObject> getChoices(
-            final List<ManagedObject> pendingArgs) {
+    public Can<ManagedObject> getChoices(
+            final Can<ManagedObject> pendingArgs) {
         
         return kind.getChoices(this, pendingArgs);
     }
@@ -916,8 +915,8 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
         return kind.hasAutoComplete(this);
     }
 
-    public List<ManagedObject> getAutoComplete(
-            final List<ManagedObject> pendingArgs,
+    public Can<ManagedObject> getAutoComplete(
+            final Can<ManagedObject> pendingArgs,
             final String searchTerm) {
         
         return kind.getAutoComplete(this, pendingArgs, searchTerm);
@@ -1229,7 +1228,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
      * @implNote transient because only temporary hint.
      */
     @Getter @Setter
-    private transient List<ManagedObject> actionArgsHint;
+    private transient Can<ManagedObject> actionArgsHint;
 
 
     @Override

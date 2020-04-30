@@ -19,8 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.param.autocomplete;
 
-import java.util.List;
-
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -37,7 +36,7 @@ public interface ActionParameterAutoCompleteFacet extends Facet {
 
     public Object[] autoComplete(
             ManagedObject inObject,
-            List<ManagedObject> pendingArgs,
+            Can<ManagedObject> pendingArgs,
             String searchArg,
             InteractionInitiatedBy interactionInitiatedBy);
     /**

@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.isis.core.commons.collections.Can;
@@ -58,7 +57,7 @@ implements ObjectActionParameterContributee {
     @Override
     public Can<ManagedObject> getAutoComplete(
             final ManagedObject adapter,
-            final List<ManagedObject> pendingArgs,
+            final Can<ManagedObject> pendingArgs,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
@@ -80,14 +79,14 @@ implements ObjectActionParameterContributee {
 
     
     @Override
-    protected List<ManagedObject> argsForDefaultOrChoices(
+    protected Can<ManagedObject> argsForDefaultOrChoices(
             final ManagedObject contributee,
-            final List<ManagedObject> pendingArgs) {
+            final Can<ManagedObject> pendingArgs) {
 
-        final List<ManagedObject> suppliedArgs = new ArrayList<>(pendingArgs);
+        final List<ManagedObject> suppliedArgs = pendingArgs.toList();
         final int contributeeParam = contributeeAction.getContributeeParamIndex();
         ListExtensions.insert(suppliedArgs, contributeeParam, contributee);
-        return suppliedArgs;
+        return Can.ofCollection(suppliedArgs);
     }
 
 }

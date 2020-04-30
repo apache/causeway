@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices;
 
-import java.util.List;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -29,15 +27,15 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.wicketstuff.select2.ChoiceProvider;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelect2Abstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForValueChoices;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 
 import lombok.val;
 
@@ -73,13 +71,13 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
     }
 
 
-    private List<ObjectMemento> getChoiceMementos(final List<ManagedObject> pendingArgs) {
+    private Can<ObjectMemento> getChoiceMementos(final Can<ManagedObject> pendingArgs) {
         
         val commonContext = super.getCommonContext();
         
         val choices = scalarModel.getChoices(pendingArgs);
 
-        return _Lists.map(choices, commonContext::mementoFor);
+        return choices.map(commonContext::mementoFor);
     }
 
     // ///////////////////////////////////////////////////////////////////
@@ -163,8 +161,8 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
     // in corresponding code in ReferencePanelFactory, these is a branch for different types of providers
     // (choice vs autoComplete).  Here though - because values don't currently support autoComplete - no branch is required
     @Override
-    protected ChoiceProvider<ObjectMemento> buildChoiceProvider(List<ManagedObject> pendingArgs) {
-        final List<ObjectMemento> choicesMementos = getChoiceMementos(pendingArgs);
+    protected ChoiceProvider<ObjectMemento> buildChoiceProvider(Can<ManagedObject> pendingArgs) {
+        final Can<ObjectMemento> choicesMementos = getChoiceMementos(pendingArgs);
         return new ObjectAdapterMementoProviderForValueChoices(scalarModel, choicesMementos);
     }
 

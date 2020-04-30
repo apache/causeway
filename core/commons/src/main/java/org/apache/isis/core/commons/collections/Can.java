@@ -158,6 +158,11 @@ public interface Can<T> extends Iterable<T> {
         return Can_Singleton.of(element);
     }
 
+    @SafeVarargs
+    public static <T> Can<T> of(T ... array) {
+        return ofArray(array);
+    }
+    
     public static <T> Can<T> ofArray(@Nullable T[] array) {
 
         if(_NullSafe.size(array)==0) {

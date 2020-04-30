@@ -168,7 +168,7 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
     @Override
     public Consent isProposedArgumentSetValid(
             final ManagedObject contributee,
-            final List<ManagedObject> proposedArguments,
+            final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         val serviceArguments = argsPlusContributee(contributee, proposedArguments);
@@ -179,7 +179,7 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
     @Override
     public Consent isEachIndividualArgumentValid(
             final ManagedObject contributee,
-            final List<ManagedObject> proposedArguments,
+            final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         val serviceArguments = argsPlusContributee(contributee, proposedArguments);
@@ -190,7 +190,7 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
     @Override
     public Consent isArgumentSetValid(
             final ManagedObject contributee,
-            final List<ManagedObject> proposedArguments,
+            final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         val serviceArguments = argsPlusContributee(contributee, proposedArguments);
@@ -202,7 +202,7 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
     public ManagedObject execute(
             final ManagedObject targetAdapter,
             final ManagedObject mixedInAdapter,
-            final List<ManagedObject> argumentAdapters,
+            final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         setupCommand(targetAdapter, argumentAdapters);
@@ -213,9 +213,9 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
     }
 
 
-    private List<ManagedObject> argsPlusContributee(
+    private Can<ManagedObject> argsPlusContributee(
             final ManagedObject contributee, 
-            final List<ManagedObject> arguments) {
+            final Can<ManagedObject> arguments) {
         
         arguments.add(contributeeParamIndex, contributee);
         return arguments;

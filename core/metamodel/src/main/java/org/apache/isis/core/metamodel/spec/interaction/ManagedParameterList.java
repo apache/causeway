@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.spec.interaction;
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.Optional;
 
 import org.apache.isis.core.commons.collections.Can;
@@ -37,7 +36,7 @@ public class ManagedParameterList implements Iterable<ManagedParameter> {
     @NonNull private final ManagedAction owningAction;
     @NonNull private final Can<ManagedParameter> parameters;
     
-    public static ManagedParameterList of(ManagedAction owningAction, List<ManagedObject> paramValueList) {
+    public static ManagedParameterList ofValues(ManagedAction owningAction, Can<ManagedObject> paramValueList) {
         
         val paramValueIterator = paramValueList.iterator();
         val parameters = owningAction.getAction().getParameters()

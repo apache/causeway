@@ -18,9 +18,9 @@
  */
 package org.apache.isis.core.metamodel.spec.interaction;
 
-import java.util.List;
 import java.util.Optional;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Either;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -72,7 +72,7 @@ public final class ManagedAction extends ManagedMember {
     
     // -- INTERACTION
     
-    public _Either<ManagedObject, InteractionVeto> invoke(@NonNull List<ManagedObject> actionParameters) {
+    public _Either<ManagedObject, InteractionVeto> invoke(@NonNull Can<ManagedObject> actionParameters) {
             
         //TODO validate params, and handle invocation exceptions
         

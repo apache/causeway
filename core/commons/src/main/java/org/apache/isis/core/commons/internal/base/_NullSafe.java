@@ -32,6 +32,8 @@ import java.util.stream.StreamSupport;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.core.commons.collections.Can;
+
 /**
  * <h1>- internal use only -</h1>
  * <p>
@@ -73,6 +75,16 @@ public final class _NullSafe {
         return nullable != null ? Stream.of(nullable) : Stream.empty();
     }
 
+    /**
+     * If {@code can} is {@code null} returns the empty stream,
+     * otherwise returns a stream of the can's elements.
+     * @param can
+     * @return non-null stream object
+     */
+    public static <T> Stream<T> stream(@Nullable final Can<T> can){
+        return can!=null ? can.stream() : Stream.empty();
+    }
+    
     /**
      * If {@code collection} is {@code null} returns the empty stream,
      * otherwise returns a stream of the collection's elements.
@@ -206,6 +218,7 @@ public final class _NullSafe {
     // -- EMTPY CHECKS
 
     public static boolean isEmpty(String x) { return x==null || x.length() == 0; }
+    public static boolean isEmpty(Can<?> x) { return x==null || x.size() == 0; }
     public static boolean isEmpty(Collection<?> x) { return x==null || x.size() == 0; }
     public static boolean isEmpty(Map<?,?> x) { return x==null || x.size() == 0; }
     public static boolean isEmpty(boolean[] array){ return array==null || array.length == 0;}
@@ -249,9 +262,6 @@ public final class _NullSafe {
         }
         return map.getOrDefault(key, defaultValue);
     }
-
-
-
 
 
 }

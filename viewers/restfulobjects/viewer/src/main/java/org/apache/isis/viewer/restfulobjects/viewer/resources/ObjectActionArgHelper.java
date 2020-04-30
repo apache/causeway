@@ -21,6 +21,7 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -47,7 +48,7 @@ public class ObjectActionArgHelper {
     private final IResourceContext resourceContext;
     private final ManagedAction managedAction;
 
-    public List<ManagedObject> parseAndValidateArguments(final JsonRepresentation arguments) {
+    public Can<ManagedObject> parseAndValidateArguments(final JsonRepresentation arguments) {
         
         val action = managedAction.getAction();
         val owner = managedAction.getOwner();
@@ -73,14 +74,17 @@ public class ObjectActionArgHelper {
                     valid = false;
                 }
             } catch (final IllegalArgumentException e) {
-                argAdapters.add(null);
+                argAdapters.add(ManagedObject.of(paramSpec, null));
                 valid = false;
             }
         }
 
+        val proposedArguments = Can.ofCollection(argAdapters);
+        
+        
         // validate entire argument set
         final Consent consent = action.isArgumentSetValid(
-                owner, argAdapters, InteractionInitiatedBy.USER);
+                owner, proposedArguments, InteractionInitiatedBy.USER);
         if (consent.isVetoed()) {
             arguments.mapPut("x-ro-invalidReason", consent.getReason());
             valid = false;
@@ -93,7 +97,7 @@ public class ObjectActionArgHelper {
                     "Validation failed, see body for details");
         }
 
-        return argAdapters;
+        return proposedArguments;
     }
 
     private static List<JsonRepresentation> argListFor(final ObjectAction action, final JsonRepresentation arguments) {

@@ -382,6 +382,11 @@ public interface ManagedObject {
     }
     
     @Nullable
+    public static Object[] unwrapMultipleAsArray(@NonNull final Can<ManagedObject> adapters) {
+        return adapters.map(ManagedObject::unwrapSingle).toArray(Object.class);
+    }
+    
+    @Nullable
     public static Object[] unwrapMultipleAsArray(@Nullable final Collection<ManagedObject> adapters) {
         val unwrappedObjects = _Arrays.mapCollection(adapters, ManagedObject::unwrapSingle);
         return unwrappedObjects;
@@ -700,7 +705,7 @@ public interface ManagedObject {
         public static Object invokeAutofit(
                 final Method method, 
                 final ManagedObject target, 
-                final List<? extends ManagedObject> pendingArgs,
+                final Can<? extends ManagedObject> pendingArgs,
                 final List<Object> additionalArgValues) {
     
             val argArray = adjust(method, pendingArgs, additionalArgValues);
@@ -714,14 +719,14 @@ public interface ManagedObject {
         public static Object invokeAutofit(
                 final Method method, 
                 final ManagedObject target, 
-                final List<? extends ManagedObject> pendingArgs) {
+                final Can<? extends ManagedObject> pendingArgs) {
             
             return invokeAutofit(method, target, pendingArgs, Collections.emptyList());
         }
     
         private static Object[] adjust(
                 final Method method, 
-                final List<? extends ManagedObject> pendingArgs,
+                final Can<? extends ManagedObject> pendingArgs,
                 final List<Object> additionalArgValues) {
             
             val parameterTypes = method.getParameterTypes();
@@ -751,7 +756,7 @@ public interface ManagedObject {
 
         }
 
-        private static Iterator<? extends ManagedObject> argIteratorFrom(List<? extends ManagedObject> pendingArgs) {
+        private static Iterator<? extends ManagedObject> argIteratorFrom(Can<? extends ManagedObject> pendingArgs) {
             return pendingArgs!=null ? pendingArgs.iterator() : Collections.emptyIterator();
         }
 

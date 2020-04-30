@@ -16,25 +16,37 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.webapp.context.memento;
 
-package org.apache.isis.core.metamodel.facets.param.disable;
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
-/**
- * The mechanism by which a single parameter of the action can be disabled.
- *
- * <p>
- * In the standard Apache Isis Programming Model, corresponds to invoking the
- * <tt>disableNXxx</tt> support method for an action.
- */
-public interface ActionParameterDisabledFacet extends Facet, DisablingInteractionAdvisor {
+@RequiredArgsConstructor
+public class ObjectMementoForNull implements ObjectMemento {
 
-    /**
-     * Reason why the parameter is disabled, or <tt>null</tt> if okay.
-     */
-    public String disabledReason(ManagedObject target, Can<ManagedObject> arguments);
+    private static final long serialVersionUID = 1L;
+    
+    @Getter(onMethod = @__(@Override))
+    @NonNull private ObjectSpecId objectSpecId;
+
+    @Override
+    public String asString() {
+        return getObjectSpecId().asString();
+    }
+
+    @Override
+    public Bookmark asBookmarkIfSupported() {
+        return null;
+    }
+
+    @Override
+    public Bookmark asHintingBookmarkIfSupported() {
+        return null;
+    }
+
+
 }

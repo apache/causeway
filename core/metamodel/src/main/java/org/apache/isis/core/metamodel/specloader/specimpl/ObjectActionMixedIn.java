@@ -209,7 +209,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     @Override
     protected void validateArgumentSet(
             final ManagedObject mixedInAdapter,
-            final List<ManagedObject> proposedArguments,
+            final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy,
             final InteractionResultSet resultSet) {
 
@@ -228,7 +228,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     public ManagedObject execute(
             final ManagedObject target,         // will be the mixedInAdapter
             final ManagedObject mixedInAdapter, // will be passed in as null
-            final List<ManagedObject> arguments,
+            final Can<ManagedObject> arguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
 

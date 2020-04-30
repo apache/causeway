@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -40,6 +41,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -134,7 +136,7 @@ implements ScalarModelSubscriber2 {
             final AjaxRequestTarget target) {
 
         final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
-        final List<ManagedObject> pendingArguments = actionModel.getArgumentsAsImmutable();
+        final Can<ManagedObject> pendingArguments = actionModel.getArgumentsAsImmutable();
 
         // could almost certainly simplify this... (used by visibility and usability checks)
         final ObjectActionParameter actionParameter = action.getParameters().getElseFail(paramNumToPossiblyUpdate);
@@ -171,7 +173,7 @@ implements ScalarModelSubscriber2 {
         val actionParameterMemento = new ActionParameterMemento(actionParameter);
         val actionArgumentModel = actionModel.getArgumentModel(actionParameterMemento);
 
-        val pendingArg = pendingArguments.get(paramNumToPossiblyUpdate);
+        val pendingArg = pendingArguments.getElseFail(paramNumToPossiblyUpdate);
         
         if (defaultIfAny != null) {
             scalarModel.setObject(defaultIfAny);
@@ -225,11 +227,13 @@ implements ScalarModelSubscriber2 {
     private boolean isPartOfChoicesConsideringDependentArgs(
             ScalarModel scalarModel, 
             ManagedObject pendingArg, 
-            List<ManagedObject> choices) {
+            Can<ManagedObject> choices) {
         
-        val choiceValues = ManagedObject.unwrapMultipleAsSet(choices);
         val pendingValue = pendingArg.getPojo();
-        return choiceValues.contains(pendingValue);
+        
+        return choices
+                .stream()
+                .anyMatch(choice->Objects.equals(pendingValue, choice.getPojo()));
     }
 
     public static class InlinePromptConfig {

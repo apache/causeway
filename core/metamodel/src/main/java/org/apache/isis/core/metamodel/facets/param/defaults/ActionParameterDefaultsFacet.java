@@ -19,8 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.param.defaults;
 
-import java.util.List;
-
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
@@ -36,6 +35,6 @@ public interface ActionParameterDefaultsFacet extends Facet {
 
     public abstract Object getDefault(
             ManagedObject target,
-            List<ManagedObject> parameters,
+            Can<ManagedObject> parameters,
             Integer paramNumUpdated);
 }

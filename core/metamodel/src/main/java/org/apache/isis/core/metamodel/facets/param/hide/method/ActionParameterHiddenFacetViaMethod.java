@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.hide.ActionParameterHiddenFacetAbstract;
@@ -58,7 +59,7 @@ public class ActionParameterHiddenFacetViaMethod extends ActionParameterHiddenFa
     @Override
     public boolean isHidden(
             final ManagedObject owningAdapter, 
-            final List<ManagedObject> argumentAdapters) {
+            final Can<ManagedObject> argumentAdapters) {
         
         final Object returnValue = ManagedObject.InvokeUtil
                 .invokeAutofit(method, owningAdapter, argumentAdapters);

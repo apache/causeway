@@ -18,8 +18,6 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.ui.pages.main;
 
-import java.util.Collections;
-
 import javax.inject.Inject;
 
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -33,6 +31,7 @@ import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
@@ -108,7 +107,7 @@ implements BeforeEnterObserver {
                 .execute(
                         actionOwner,
                         null,
-                        Collections.emptyList(),
+                        Can.empty(),
                         InteractionInitiatedBy.USER
                         );
 
