@@ -18,9 +18,12 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
+import java.util.Objects;
 import java.util.function.Function;
 
 import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.assertions._Assert;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -62,19 +65,44 @@ public class PendingParameterModel {
         return !paramValues.isEmpty();
     }
     
+    public Can<ManagedObject> getEmptyValues() {
+        return getAction().getParameters().stream()
+        .map(objectActionParameter->
+            ManagedObject.empty(objectActionParameter.getSpecification()))
+        .collect(Can.toCan());
+    }
 
     public PendingParameterModel defaultsFixedPointSearch() {
         
+        _Assert.assertTrue(isPopulated()); // don't start this algorithm with a populated model 
+        
+        final int maxIterations = getAction().getParameterCount();
         val paramDefaultProviders = getParameterDefaultProviders();
         
         val initialDefaults = paramDefaultProviders
         .map(paramDefaultProvider->paramDefaultProvider.getDefault(this));
         
-        //TODO do fixed point search
-
-        return PendingParameterModel.of(action, actionOwner, actionTarget, initialDefaults);
+        // fixed point search
+        
+        Can<ManagedObject> old_pl, pl = initialDefaults;
+        for(int i=0; i<maxIterations; ++i) {
+            val ppm = PendingParameterModel.of(action, actionOwner, actionTarget, pl);
+            old_pl = pl;
+            pl = paramDefaultProviders
+                    .map(paramDefaultProvider->paramDefaultProvider.getDefault(ppm));
+            
+            if(equals(old_pl, pl)) {
+                // fixed point found, return the latest iteration 
+                return PendingParameterModel.of(action, actionOwner, actionTarget, pl);
+            }
+            
+        }
+        
+        throw _Exceptions.unrecoverableFormatted("Cannot find an initial fixed point for action "
+                + "parameter defaults on action %s.", getAction());
+        
     }
-    
+
     // -- HELPER
     
     @RequiredArgsConstructor(staticName = "of")
@@ -89,7 +117,7 @@ public class PendingParameterModel {
     }
     
     private Can<ParameterDefaultProvider> getParameterDefaultProviders() {
-        return action.getParameters().stream()
+        return getAction().getParameters().stream()
         .map(objectActionParameter->{
             val paramSpec = objectActionParameter.getSpecification();
             val paramDefaultFacet = objectActionParameter.getFacet(ActionParameterDefaultsFacet.class);
@@ -100,6 +128,20 @@ public class PendingParameterModel {
         .collect(Can.toCan());
     }
     
-    
+    private boolean equals(Can<ManagedObject> left, Can<ManagedObject> right) {
+        // equal length is guaranteed as used only local to this class
+        val leftIt = left.iterator();
+        for(val r : right) {
+            val leftPojo = leftIt.next().getPojo();
+            val rightPojo = r.getPojo();
+            if(!Objects.equals(leftPojo, rightPojo)){
+                return false;        
+            }
+        }
+        return true;
+    }
+
+
+
     
 }

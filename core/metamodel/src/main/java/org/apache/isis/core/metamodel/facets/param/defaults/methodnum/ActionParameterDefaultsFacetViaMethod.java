@@ -93,7 +93,15 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
                         pendingArgs.getActionTarget(), pendingArgs.getParamValues());
         }
         
-        // call no-arg defaultNAct() instead 
+        // call no-arg defaultNAct() instead
+        
+        if(ppmFactory.isPresent()) {
+            // PPM programming model
+            return ManagedObject.InvokeUtil
+                    .invokeWithPPM(ppmFactory.get(), method, 
+                            pendingArgs.getActionTarget(), pendingArgs.getEmptyValues());    
+        }
+        
         return ManagedObject.InvokeUtil.invoke(method, pendingArgs.getActionTarget());
         
 // legacy of        
