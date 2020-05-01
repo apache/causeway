@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 
 /**
  * Analogous to {@link ObjectAssociation}.
@@ -91,8 +92,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * user can choose from, based on the input search argument.
      */
     Can<ManagedObject> getAutoComplete(
-            ManagedObject adapter,
-            Can<ManagedObject> pendingArgs,
+            PendingParameterModel pendingArgs,
             String searchArg,
             InteractionInitiatedBy interactionInitiatedBy);
 
@@ -110,16 +110,18 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * user can choose from.
      */
     Can<ManagedObject> getChoices(
-            ManagedObject adapter,
-            Can<ManagedObject> pendingArgs,
+            PendingParameterModel pendingArgs,
             InteractionInitiatedBy interactionInitiatedBy);
 
 
     ManagedObject getDefault(
-            ManagedObject adapter,
-            Can<ManagedObject> pendingArgs,
+            PendingParameterModel pendingArgs,
             Integer paramNumUpdated);
 
+    default ManagedObject getDefault(ManagedObject actionOnwer) {
+        return getDefault(getAction().newPendingParameterModel(actionOnwer), null);
+    }
+    
 
     /**
      * Whether this parameter is visible given the entered previous arguments

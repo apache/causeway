@@ -55,9 +55,11 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
+import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 
 import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
+import lombok.NonNull;
 import lombok.val;
 
 public interface ObjectAction extends ObjectMember {
@@ -157,7 +159,18 @@ public interface ObjectAction extends ObjectMember {
             InteractionInitiatedBy interactionInitiatedBy);
 
 
+    // -- Model for Parameter Negotiation
+    
+    
+    PendingParameterModel newPendingParameterModel(
+            @NonNull ManagedObject actionOwner,
+            @NonNull Can<ManagedObject> paramValues);
 
+    default PendingParameterModel newPendingParameterModel(
+            @NonNull ManagedObject actionOwner) {
+        return newPendingParameterModel(actionOwner, Can.empty()); // init defaults
+    }
+    
     // -- Parameters (declarative)
 
     /**

@@ -63,7 +63,6 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionContributee;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 
 import lombok.SneakyThrows;
@@ -634,11 +633,6 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
                 checkVisibility(contributeeAdapter, contributeeMember);
                 checkUsability(contributeeAdapter, contributeeMember);
                 
-                if(contributeeMember instanceof ObjectActionContributee) {
-                    val objectActionContributee = (ObjectActionContributee) contributeeMember;
-                    val contributeeArgAdapters = asObjectAdaptersUnderlying(contributeeArgs);
-                    checkValidity(contributeeAdapter, objectActionContributee, contributeeArgAdapters);
-                }
                 // nothing to do for contributed properties or collections
                 
             } else {

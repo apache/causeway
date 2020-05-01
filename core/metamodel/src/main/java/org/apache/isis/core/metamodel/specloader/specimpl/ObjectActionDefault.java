@@ -67,6 +67,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
+import lombok.NonNull;
 import lombok.val;
 
 public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectAction {
@@ -148,6 +149,13 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
 
+    @Override
+    public PendingParameterModel newPendingParameterModel(
+            @NonNull ManagedObject actionOwner,
+            @NonNull Can<ManagedObject> paramValues) {
+        return PendingParameterModel.of(this, actionOwner, actionOwner, paramValues);
+    }
+    
     // -- Parameters
 
     @Override

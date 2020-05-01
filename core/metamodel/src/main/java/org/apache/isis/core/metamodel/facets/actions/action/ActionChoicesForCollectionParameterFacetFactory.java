@@ -32,7 +32,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionContributee;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
@@ -81,9 +80,8 @@ implements MetaModelRefiner {
                 
                 objectSpec.streamObjectActions(Contributed.INCLUDED)
                 .forEach(objectAction->{
-                    if(objectAction instanceof ObjectActionMixedIn 
-                            || objectAction instanceof ObjectActionContributee) {
-                        // we'll report only the mixin or contributor
+                    if(objectAction instanceof ObjectActionMixedIn) {
+                        // we'll report only the mixin
                         return;
                     }
 

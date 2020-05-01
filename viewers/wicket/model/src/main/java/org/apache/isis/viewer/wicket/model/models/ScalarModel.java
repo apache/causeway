@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiFunction;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
@@ -48,6 +49,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
@@ -420,13 +422,11 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
                     final ScalarModel scalarModel,
                     final Can<ManagedObject> pendingArgs,
                     final int paramNumUpdated) {
-
-                final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
-                final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
-
-                //XXX lombok issue, no val
-                ManagedObject parentAdapter = scalarModel.getParentEntityModel().load();
-                return actionParameter.getDefault(parentAdapter, pendingArgs, paramNumUpdated);
+                
+                return withPendingParamsDo(scalarModel, pendingArgs, (pendingParamsModel, actionParameter)->
+                actionParameter.getDefault(
+                        pendingParamsModel,
+                        paramNumUpdated));
             }
 
             @Override
@@ -440,18 +440,11 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
                     final ScalarModel scalarModel,
                     final Can<ManagedObject> pendingArgs) {
                 
-                final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
-                final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
-
-                //XXX lombok issue, no val
-                ManagedObject parentAdapter = scalarModel.getParentEntityModel().load();
-
-                final Can<ManagedObject> choices =
-                        actionParameter.getChoices(
-                                parentAdapter, 
-                                pendingArgs,
-                                InteractionInitiatedBy.USER);
-                return choices;
+                return withPendingParamsDo(scalarModel, pendingArgs, (pendingParamsModel, actionParameter)->
+                actionParameter.getChoices(
+                        pendingParamsModel,
+                        InteractionInitiatedBy.USER));
+                
             }
 
             @Override
@@ -466,18 +459,26 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
                     final Can<ManagedObject> pendingArgs,
                     final String searchArg) {
                 
-                final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
-                final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
-
-                ManagedObject parentAdapter = scalarModel.getParentEntityModel().load();
-                final Can<ManagedObject> choices = actionParameter.getAutoComplete(
-                        parentAdapter,
-                        pendingArgs,
+                return withPendingParamsDo(scalarModel, pendingArgs, (pendingParamsModel, actionParameter)->
+                actionParameter.getAutoComplete(
+                        pendingParamsModel,
                         searchArg,
-                        InteractionInitiatedBy.USER);
-                return choices;
+                        InteractionInitiatedBy.USER)); 
             }
 
+            // pending args helper
+            private <T> T withPendingParamsDo(
+                    final ScalarModel scalarModel,
+                    final Can<ManagedObject> pendingArgs,
+                    final BiFunction<PendingParameterModel, ObjectActionParameter, T> function) {
+                
+                val parameterMemento = scalarModel.getParameterMemento();
+                val actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
+                val actionOwner = scalarModel.getParentEntityModel().load();
+                val pendingParamsModel = actionParameter.getAction().newPendingParameterModel(actionOwner, pendingArgs);
+                return function.apply(pendingParamsModel, actionParameter);
+            }
+            
             @Override
             public int getAutoCompleteOrChoicesMinLength(ScalarModel scalarModel) {
                 if (scalarModel.hasAutoComplete()) {
@@ -541,7 +542,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
                         scalarModel.getSpecificationLoader());
                 final ManagedObject parentAdapter =
                         scalarModel.getParentEntityModel().load();
-                final ManagedObject defaultAdapter = actionParameter.getDefault(parentAdapter, Can.empty(), null);
+                final ManagedObject defaultAdapter = actionParameter.getDefault(parentAdapter);
                 scalarModel.setObject(defaultAdapter);
             }
 

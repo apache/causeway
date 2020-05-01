@@ -23,13 +23,13 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+
+import lombok.val;
 
 public abstract class ObjectActionParameterMixedInAbstract
 extends ObjectActionParameterAbstract
 implements ObjectActionParameterMixedIn {
 
-    private final ObjectActionParameter mixinParameter;
     private final ObjectActionMixedIn mixedInAction;
 
     public ObjectActionParameterMixedInAbstract(
@@ -38,31 +38,7 @@ implements ObjectActionParameterMixedIn {
             final ObjectActionMixedIn mixedInAction) {
         
         super(featureType, mixinParameter.getNumber(), mixedInAction, mixinParameter.getPeer());
-        this.mixinParameter = mixinParameter;
         this.mixedInAction = mixedInAction;
-    }
-
-    @Override
-    public Can<ManagedObject> getAutoComplete(
-            final ManagedObject mixedInAdapter,
-            final Can<ManagedObject> pendingArgs,
-            final String searchArg,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-        
-        return mixinParameter.getAutoComplete(
-                mixinAdapterFor(mixedInAdapter),
-                pendingArgs,
-                searchArg,
-                interactionInitiatedBy);
-    }
-
-    @Override
-    protected ManagedObject targetForDefaultOrChoices(final ManagedObject mixedInAdapter) {
-        return mixinAdapterFor(mixedInAdapter);
-    }
-
-    private ManagedObject mixinAdapterFor(final ManagedObject mixedInAdapter) {
-        return mixedInAction.mixinAdapterFor(mixedInAdapter);
     }
 
     @Override
@@ -72,10 +48,11 @@ implements ObjectActionParameterMixedIn {
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final ManagedObject targetObject = mixinAdapterFor(mixedInAdapter);
+        val targetObject = mixedInAction.mixinAdapterFor(mixedInAdapter);
 
-        final ActionArgValidityContext actionArgValidityContext = new ActionArgValidityContext(
-                targetObject, mixedInAction.mixinAction, getIdentifier(), proposedArguments, position, interactionInitiatedBy);
+        val actionArgValidityContext = new ActionArgValidityContext(
+                targetObject, mixedInAction.mixinAction, getIdentifier(), 
+                proposedArguments, position, interactionInitiatedBy);
         actionArgValidityContext.setMixedIn(mixedInAdapter);
         return actionArgValidityContext;
     }

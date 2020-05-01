@@ -45,6 +45,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 
 public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInMember {
@@ -135,6 +136,13 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
         return mixinAdapterFor(targetAdapter);
     }
 
+    @Override
+    public PendingParameterModel newPendingParameterModel(
+            @NonNull ManagedObject actionOwner,
+            @NonNull Can<ManagedObject> paramValues) {
+        return PendingParameterModel.of(this, actionOwner, mixinAdapterFor(actionOwner), paramValues);
+    }
+    
     @Override
     protected synchronized Can<ObjectActionParameter> determineParameters() {
         if (parameters != null) {

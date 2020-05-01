@@ -207,17 +207,16 @@ implements ObjectActionParameter, FacetHolder.Delegating {
 
     @Override
     public Can<ManagedObject> getAutoComplete(
-            final ManagedObject adapter,
-            final Can<ManagedObject> pendingArgs,
+            final PendingParameterModel pendingArgs,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final List<ManagedObject> adapters = _Lists.newArrayList();
-        final ActionParameterAutoCompleteFacet facet = getFacet(ActionParameterAutoCompleteFacet.class);
+        val adapters = _Lists.<ManagedObject>newArrayList();
+        val autoCompleteFacet = getFacet(ActionParameterAutoCompleteFacet.class);
 
-        if (facet != null) {
-            final Object[] choices = facet
-                    .autoComplete(adapter, pendingArgs, searchArg, interactionInitiatedBy);
+        if (autoCompleteFacet != null) {
+            final Object[] choices = autoCompleteFacet
+                    .autoComplete(pendingArgs.getActionTarget(), pendingArgs.getParamValues(), searchArg, interactionInitiatedBy);
             checkChoicesOrAutoCompleteType(getSpecificationLoader(), choices, getSpecification());
             for (final Object choice : choices) {
                 adapters.add(getObjectManager().adapt(choice));
@@ -244,26 +243,21 @@ implements ObjectActionParameter, FacetHolder.Delegating {
 
     @Override
     public Can<ManagedObject> getChoices(
-            final ManagedObject adapter,
-            final Can<ManagedObject> pendingArgs,
+            final PendingParameterModel pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        val args = argsForDefaultOrChoices(adapter, pendingArgs);
-        val target = targetForDefaultOrChoices(adapter);
-
-        return findChoices(target, args, interactionInitiatedBy);
+        return findChoices(pendingArgs, interactionInitiatedBy);
     }
 
     private Can<ManagedObject> findChoices(
-            final ManagedObject target,
-            final Can<ManagedObject> pendingArgs,
+            final PendingParameterModel pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         final List<ManagedObject> adapters = _Lists.newArrayList();
         final ActionParameterChoicesFacet facet = getFacet(ActionParameterChoicesFacet.class);
 
         if (facet != null) {
-            final Object[] choices = facet.getChoices(target, pendingArgs, interactionInitiatedBy);
+            final Object[] choices = facet.getChoices(pendingArgs.getActionTarget(), pendingArgs.getParamValues(), interactionInitiatedBy);
             checkChoicesOrAutoCompleteType(getSpecificationLoader(), choices, getSpecification());
             for (final Object choice : choices) {
                 ManagedObject adapter = choice != null? getObjectManager().adapt(choice) : null;
@@ -277,50 +271,29 @@ implements ObjectActionParameter, FacetHolder.Delegating {
 
     @Override
     public ManagedObject getDefault(
-            final ManagedObject adapter,
-            final Can<ManagedObject> pendingArgs,
+            final PendingParameterModel pendingArgs,
             final Integer paramNumUpdated) {
 
-        final ManagedObject target = targetForDefaultOrChoices(adapter);
-        val args = argsForDefaultOrChoices(adapter, pendingArgs);
-
-        return findDefault(target, args, paramNumUpdated);
+        return findDefault(pendingArgs, paramNumUpdated);
     }
 
     private ManagedObject findDefault(
-            final ManagedObject target,
-            final Can<ManagedObject> args,
+            final PendingParameterModel pendingArgs,
             final Integer paramNumUpdated) {
         
-        final ActionParameterDefaultsFacet defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);
+        val defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);
         if (defaultsFacet != null) {
-            final Object dflt = defaultsFacet.getDefault(target, args, paramNumUpdated);
-            if (dflt == null) {
+            final Object defaultValue = defaultsFacet
+                    .getDefault(pendingArgs.getActionTarget(), pendingArgs.getParamValues(), paramNumUpdated);
+            if (defaultValue == null) {
                 // it's possible that even though there is a default facet, when
                 // invoked it is unable to return a default.
                 return null;
             }
-            return getObjectManager().adapt(dflt);
+            return getObjectManager().adapt(defaultValue);
         }
         return null;
     }
-
-    /**
-     * Hook method; {@link ObjectActionParameterContributee contributed action parameter}s override.
-     */
-    protected ManagedObject targetForDefaultOrChoices(final ManagedObject adapter) {
-        return adapter;
-    }
-
-    /**
-     * Hook method; {@link ObjectActionParameterContributee contributed action parameter}s override.
-     */
-    protected Can<ManagedObject> argsForDefaultOrChoices(
-            final ManagedObject adapter,
-            final Can<ManagedObject> argumentsIfAvailable) {
-        return argumentsIfAvailable;
-    }
-
 
     // helpers
     static void checkChoicesOrAutoCompleteType(

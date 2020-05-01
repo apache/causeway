@@ -842,6 +842,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * If this specification {@link #isManagedBean() is actually for} a service,
      * then returns an empty list.
      */
+    @Deprecated
     private List<ObjectAction> createContributeeActions() {
         if (isManagedBean() || isValue()) {
             return Collections.emptyList();
@@ -853,7 +854,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
 
-
+    @Deprecated
     private void forEachContributeeAction(
             final Object servicePojo,
             final Consumer<ObjectAction> onNewContributeeAction) {
@@ -875,10 +876,15 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
         serviceActions
         .filter(Predicates.isContributeeAction(this))
-        .map(ObjectActionDefault.class::cast)
-        .map(Factories.contributeeAction(this, servicePojo))
-        .peek(facetProcessor::processMemberOrder)
-        .forEach(onNewContributeeAction);
+        
+        .findAny().ifPresent(action->_Exceptions
+                .unrecoverableFormatted("ContributeeActions like %s are no longer supported", action));
+        
+        
+//        .map(ObjectActionDefault.class::cast)
+//        .map(Factories.contributeeAction(this, servicePojo))
+//        .peek(facetProcessor::processMemberOrder)
+//        .forEach(onNewContributeeAction);
 
     }
 

@@ -18,21 +18,28 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
+import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
-public class OneToOneActionParameterContributee
-extends ObjectActionParameterContributeeAbstract
-implements OneToOneActionParameter {
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
-    public OneToOneActionParameterContributee(
-            final Object servicePojo,
-            final ObjectActionParameterAbstract serviceActionParameter,
-            final int contributeeParamNumber,
-            final ObjectActionContributee contributeeAction) {
-        super(FeatureType.ACTION_PARAMETER_SCALAR, servicePojo, 
-                serviceActionParameter, contributeeParamNumber, contributeeAction);
-    }
+/**
+ * Model used to negotiate the paramValues of an action by means of a UI dialog.
+ *  
+ * @since 2.0.0
+ */
+@Getter 
+@RequiredArgsConstructor(staticName = "of")
+public class PendingParameterModel {
 
-
+    @NonNull private final ObjectAction action;
+    @NonNull private final ManagedObject actionOwner;
+    /** typically equal to {@code actionOwner}, except for mixins and contributees*/
+    @NonNull private final ManagedObject actionTarget; 
+    @NonNull private final Can<ManagedObject> paramValues;
+    
+    
 }
