@@ -18,22 +18,37 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
-import java.util.List;
-
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.interaction.ActionInteraction;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
 
+import lombok.NonNull;
+
 public class ObjectAndActionInvocation {
 
+    public static ObjectAndActionInvocation of(
+            @NonNull ActionInteraction.Result actionInteractionResult, 
+            @NonNull JsonRepresentation argsJsonRepr,
+            @NonNull ActionResultReprRenderer.SelfLink selfLink) {
+        return new ObjectAndActionInvocation(
+                actionInteractionResult.getManagedAction().getOwner(), 
+                actionInteractionResult.getManagedAction().getAction(),
+                argsJsonRepr,
+                actionInteractionResult.getParameterList(),
+                actionInteractionResult.getActionReturnedObject(), 
+                selfLink);
+    }
+    
     private final ManagedObject objectAdapter;
     private final ObjectAction action;
     private final JsonRepresentation arguments;
-    private final List<ManagedObject> argAdapters;
+    private final Can<ManagedObject> argAdapters;
     private final ManagedObject returnedAdapter;
     private final ActionResultReprRenderer.SelfLink selfLink;
 
@@ -41,7 +56,7 @@ public class ObjectAndActionInvocation {
             final ManagedObject objectAdapter,
             final ObjectAction action,
             final JsonRepresentation arguments,
-            final List<ManagedObject> argAdapters,
+            final Can<ManagedObject> argAdapters,
             final ManagedObject returnedAdapter,
             final ActionResultReprRenderer.SelfLink selfLink) {
         
@@ -65,7 +80,7 @@ public class ObjectAndActionInvocation {
         return arguments;
     }
 
-    public List<ManagedObject> getArgAdapters() {
+    public Can<ManagedObject> getArgAdapters() {
         return argAdapters;
     }
 
@@ -102,5 +117,7 @@ public class ObjectAndActionInvocation {
         // else
         return ActionResultRepresentation.ResultType.DOMAIN_OBJECT;
     }
+
+
 
 }

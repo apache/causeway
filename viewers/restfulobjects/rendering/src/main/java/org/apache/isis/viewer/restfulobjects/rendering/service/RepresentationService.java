@@ -21,13 +21,11 @@ package org.apache.isis.viewer.restfulobjects.rendering.service;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedAction;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedCollection;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedProperty;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberReprMode;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAction;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCollection;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty;
 
 /**
  * Configure the Restful Objects viewer to emit custom representations (rather than the
@@ -64,22 +62,18 @@ public interface RepresentationService {
 
     Response propertyDetails(
             IResourceContext resourceContext,
-            ObjectAndProperty objectAndProperty,
-            MemberReprMode memberReprMode);
+            ManagedProperty objectAndProperty);
 
     Response collectionDetails(
             IResourceContext resourceContext,
-            ObjectAndCollection objectAndCollection,
-            MemberReprMode memberReprMode);
+            ManagedCollection objectAndCollection);
 
     Response actionPrompt(
             IResourceContext resourceContext,
-            ObjectAndAction objectAndAction);
+            ManagedAction objectAndAction);
 
     Response actionResult(
             IResourceContext resourceContext,
-            ObjectAndActionInvocation objectAndActionInvocation,
-            ActionResultReprRenderer.SelfLink selfLink);
-    
+            ObjectAndActionInvocation objectAndActionInvocation);
 
 }

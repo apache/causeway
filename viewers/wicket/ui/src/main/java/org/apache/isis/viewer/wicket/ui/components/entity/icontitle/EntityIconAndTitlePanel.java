@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.components.entity.icontitle;
 
+import javax.annotation.Nullable;
+
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -31,6 +33,7 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
@@ -39,7 +42,6 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 
 import lombok.val;
 
@@ -128,7 +130,7 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
             } else {
                 Label dummy = new Label(ID_ENTITY_FONT_AWESOME, "");
                 link.addOrReplace(dummy);
-                dummy.add(new CssClassAppender(cssClassFaFacet.value() + " fa-2x"));
+                dummy.add(new CssClassAppender(cssClassFaFacet.asSpaceSeparatedWithAdditional("fa-2x")));
                 Components.permanentlyHide(link, ID_ENTITY_ICON);
             }
 
@@ -219,10 +221,13 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
         return image;
     }
 
+    @Nullable
     public ManagedObject getContextAdapterIfAny() {
         ObjectAdapterModel model = getModel();
         ObjectMemento contextAdapterMementoIfAny = model.getContextAdapterIfAny();
-        return getCommonContext().reconstructObject(contextAdapterMementoIfAny);
+        return contextAdapterMementoIfAny!=null
+                ? getCommonContext().reconstructObject(contextAdapterMementoIfAny)
+                : null;
     }
 
     static String abbreviated(final String str, final int maxLength) {

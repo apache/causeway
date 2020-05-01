@@ -33,6 +33,7 @@ import java.util.stream.Stream;
 import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.core.commons.internal.base._Lazy;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.base._Strings;
@@ -42,8 +43,6 @@ import org.apache.isis.core.commons.internal.collections._Multimaps.ListMultimap
 import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.internal.collections._Streams;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.applib.services.metamodel.BeanSort;
-import org.apache.isis.core.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
@@ -738,50 +737,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 .filter(ContributeeMember.Predicates.regularElse(contributed));
     }
 
-    private Stream<ManagedBeanAdapter> streamManagedBeans() {
-        return getMetaModelContext().getServiceRegistry().streamRegisteredBeans();
-    }
-
-    // -- CONTRIBUTEE ASSOCIATIONS (PROPERTIES AND COLLECTIONS)
-
-    private List<ObjectAssociation> createContributeeAssociations() {
-        if (isManagedBean() || isValue()) {
-            return Collections.emptyList();
-        }
-        val contributeeAssociations = _Lists.<ObjectAssociation>newArrayList();
-        streamManagedBeans()
-        .forEach(serviceBean->forEachContributeeAssociation(serviceBean, contributeeAssociations::add));
-        return contributeeAssociations;
-    }
-
-    private void forEachContributeeAssociation(
-            ManagedBeanAdapter serviceBean, 
-            Consumer<ObjectAssociation> onNewContributeeAssociation) {
-
-        val serviceClass = serviceBean.getBeanClass();
-        val specification = getSpecificationLoader().loadSpecification(serviceClass,
-                IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
-        
-        if(specification==null) {
-            throw _Exceptions.unrecoverableFormatted("failed to load specification for service %s", serviceClass);
-        }
-        
-        if (specification == this) {
-            return;
-        }
-        
-        final Stream<ObjectAction> serviceActions = specification
-                .streamObjectActions(ActionType.USER, Contributed.INCLUDED);
-
-        serviceActions
-                .filter(Predicates.isContributeeAssociation(this))
-                .map(ObjectActionDefault.class::cast)
-                .map(Factories.contributeeAssociation(serviceBean, this))
-                .peek(facetProcessor::processMemberOrder)
-                .forEach(onNewContributeeAssociation);
-    }
-
-
     // -- mixin associations (properties and collections)
 
     private List<ObjectAssociation> createMixedInAssociations() {
@@ -830,55 +785,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         .map(Factories.mixedInAssociation(this, mixinType, mixinMethodName))
         .peek(facetProcessor::processMemberOrder)
         .forEach(onNewMixedInAssociation);
-
-    }
-
-
-    // -- contributee actions
-    /**
-     * All contributee actions (each wrapping a service's contributed action) for this spec.
-     *
-     * <p>
-     * If this specification {@link #isManagedBean() is actually for} a service,
-     * then returns an empty list.
-     */
-    private List<ObjectAction> createContributeeActions() {
-        if (isManagedBean() || isValue()) {
-            return Collections.emptyList();
-        }
-        val contributeeActions = _Lists.<ObjectAction>newArrayList();
-        streamManagedBeans()
-        .forEach(serviceBean->forEachContributeeAction(serviceBean, contributeeActions::add));
-        return contributeeActions;
-    }
-
-
-
-    private void forEachContributeeAction(
-            final Object servicePojo,
-            final Consumer<ObjectAction> onNewContributeeAction) {
-
-        if(log.isDebugEnabled()) {
-            log.debug("{} : addContributeeActionsIfAny(...); servicePojo class is: {}", 
-                    this.getFullIdentifier(), servicePojo.getClass().getName());
-        }
-
-        val serviceType = servicePojo.getClass();
-        val specification = getSpecificationLoader().loadSpecification(serviceType,
-                IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
-        if (specification == this) {
-            return;
-        }
-
-        final Stream<ObjectAction> serviceActions = specification
-                .streamObjectActions(ActionType.ALL, Contributed.INCLUDED);
-
-        serviceActions
-        .filter(Predicates.isContributeeAction(this))
-        .map(ObjectActionDefault.class::cast)
-        .map(Factories.contributeeAction(this, servicePojo))
-        .peek(facetProcessor::processMemberOrder)
-        .forEach(onNewContributeeAction);
 
     }
 
@@ -1028,7 +934,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             synchronized (unmodifiableActions) {
                 val actions = _Lists.newArrayList(this.objectActions);
                 if (isEntityOrViewModel()) {
-                    actions.addAll(createContributeeActions());
                     actions.addAll(createMixedInActions());
                 }
                 sortCacheAndUpdateActions(actions);
@@ -1044,7 +949,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             synchronized (unmodifiableAssociations) {
                 val associations = _Lists.newArrayList(this.associations);
                 if(isEntityOrViewModel()) {
-                    associations.addAll(createContributeeAssociations());
                     associations.addAll(createMixedInAssociations());
                 }
                 sortAndUpdateAssociations(associations);

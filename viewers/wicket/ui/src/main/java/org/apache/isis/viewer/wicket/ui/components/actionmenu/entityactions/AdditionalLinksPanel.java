@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
 
 import java.util.List;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -30,19 +29,18 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
+import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel.Placement;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.ListOfLinksModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.Confirmations;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Decorators;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
 import lombok.val;
-
-import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
 
 public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
 
@@ -85,27 +83,19 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
         return additionalLinksPanel;
     }
 
-
     protected AdditionalLinksPanel(
             String id, 
             List<LinkAndLabel> linksDoNotUseDirectlyInsteadUseOfListOfLinksModel) {
         
         super(id, new ListOfLinksModel(linksDoNotUseDirectlyInsteadUseOfListOfLinksModel));
 
-        final List<LinkAndLabel> linkAndLabels = getModel().getObject();
 
         final WebMarkupContainer container = new WebMarkupContainer(ID_ADDITIONAL_LINK_LIST) {
             private static final long serialVersionUID = 1L;
 
             @Override
             public boolean isVisible() {
-                for (val linkAndLabel : linkAndLabels) {
-                    val link = linkAndLabel.getUiComponent();
-                    if(link.isVisible()) {
-                        return true;
-                    }
-                }
-                return false;
+                return AdditionalLinksPanel.this.getModel().hasAnyVisibleLink();
             }
         };
         addOrReplace(container);
@@ -114,7 +104,8 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
 
         setOutputMarkupId(true);
         
-        final ListView<LinkAndLabel> listView = new ListView<LinkAndLabel>(ID_ADDITIONAL_LINK_ITEM, linkAndLabels) {
+        final ListView<LinkAndLabel> listView = 
+                new ListView<LinkAndLabel>(ID_ADDITIONAL_LINK_ITEM, getModel()) {
 
             private static final long serialVersionUID = 1L;
 
@@ -152,12 +143,13 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                                 ? _Strings.isNotEmpty(((ActionLink)link).getReasonDisabledIfAny()) 
                                 : false;
                         if (!hasDisabledReason) {
-                            addConfirmationDialog(link);
+                            val confirmUiModel = ConfirmUiModel.ofAreYouSure(getTranslationService(), Placement.RIGHT);
+                            Decorators.getConfirm().decorate(link, confirmUiModel);
                         }
                     }
                     // ensure links receive the danger style
                     // don't care if expressed twice
-                    Confirmations.addConfirmationStyle(link);
+                    Decorators.getDanger().decorate(link);
                 }
 
                 val cssClass = actionMeta.getCssClass();
@@ -166,8 +158,8 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 link.addOrReplace(viewTitleLabel);
 
                 val fontAwesome = actionMeta.getFontAwesomeUiModel();
-                Decorators.getIconDecorator().decorate(viewTitleLabel, fontAwesome);
-                Decorators.getMissingIconDecorator().decorate(viewTitleLabel, fontAwesome);
+                Decorators.getIcon().decorate(viewTitleLabel, fontAwesome);
+                Decorators.getMissingIcon().decorate(viewTitleLabel, fontAwesome);
 
                 item.addOrReplace(link);
             }
@@ -175,12 +167,6 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
         };
 
         container.addOrReplace(listView);
-        
-    }
-    
-    private void addConfirmationDialog(final Component component) {
-        Confirmations
-        .addConfirmationDialog(super.getTranslationService(), component, TooltipConfig.Placement.right);
     }
 
     private static String first(String... str) {

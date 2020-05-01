@@ -1,5 +1,24 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
 package org.apache.isis.incubator.viewer.vaadin.ui.pages.main;
 
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -8,6 +27,7 @@ import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
@@ -15,10 +35,12 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.action.ActionFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.model.action.ActionVaa;
+import org.apache.isis.incubator.viewer.vaadin.model.decorator.Decorators;
 import org.apache.isis.incubator.viewer.vaadin.model.menu.MenuItemVaa;
 import org.apache.isis.viewer.common.model.branding.BrandingUiModel;
 import org.apache.isis.viewer.common.model.header.HeaderUiModel;
 import org.apache.isis.viewer.common.model.menu.MenuUiModel;
+import org.apache.isis.viewer.common.model.userprofile.UserProfileUiModelProvider;
 
 import lombok.val;
 
@@ -52,8 +74,15 @@ final class MainView_createHeader {
         menuBarContainer.setWidthFull();
         
         // menu section handler, that creates and adds sub-menus to their parent top level menu   
-        final BiConsumer<MenuBar, MenuItemVaa> menuSectionBuilder = (parentMenu, menuSectionUiModel) -> {
-            val menuItem = parentMenu.addItem(menuSectionUiModel.getName()); //TODO needs decorator
+        final BiConsumer<MenuBar, MenuItemVaa> menuSectionBuilder = (menuBar, menuSectionUiModel) -> {
+            val menuItem = menuSectionUiModel.isTertiaryRoot() 
+                    ? menuBar.addItem(Decorators.getUser().decorate(
+                            new Label(),
+                            Optional.ofNullable(
+                                commonContext.lookupServiceElseFail(UserProfileUiModelProvider.class)
+                                .getUserProfile())
+                            ))
+                    : menuBar.addItem(menuSectionUiModel.getName());
             val subMenu = menuItem.getSubMenu();
             menuSectionUiModel.getSubMenuItems().forEach(menuItemModel -> {
                 val menuActionModel = (ActionVaa)menuItemModel.getMenuActionUiModel();
@@ -103,8 +132,8 @@ final class MainView_createHeader {
             val logo = new Image(
                     webAppContextPath.prependContextPathIfLocal(brandingLogo.get()), 
                     "brandingLogo");
-            logo.setWidth("48px");
-            logo.setHeight("48px");
+            logo.setWidth("48px"); //TODO make this part of the UI model
+            logo.setHeight("48px"); //TODO make this part of the UI model
             return logo;
         }
         return new Text(brandingName.orElse("App"));

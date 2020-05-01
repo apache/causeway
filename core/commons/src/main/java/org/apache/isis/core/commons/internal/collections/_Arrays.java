@@ -158,6 +158,9 @@ public final class _Arrays {
      * @param first (non-null)
      * @param rest (nullable)
      * @return (non-null)
+     * @exception  ArrayStoreException  if an element in the <code>src</code>
+     *               array could not be stored into the <code>dest</code> array
+     *               because of a type mismatch.
      */
     @SafeVarargs
     public static <T> T[] combine(T first, @Nullable  T... rest) {

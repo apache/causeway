@@ -16,21 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.viewer.wicket.model.links;
 
 import java.util.List;
 
 import org.apache.wicket.model.LoadableDetachableModel;
 
+import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.collections._Lists;
 
+import lombok.val;
 
 public class ListOfLinksModel extends LoadableDetachableModel<List<LinkAndLabel>> {
 
     private static final long serialVersionUID = 1L;
 
-    private final List<LinkAndLabel> links;
+    private List<LinkAndLabel> links;
 
     public ListOfLinksModel(List<LinkAndLabel> links) {
         // copy, in case supplied list is a non-serializable guava list using lazy evaluation;
@@ -39,7 +40,30 @@ public class ListOfLinksModel extends LoadableDetachableModel<List<LinkAndLabel>
 
     @Override
     protected List<LinkAndLabel> load() {
+        return getAsList();
+    }
+
+    public boolean hasAnyVisibleLink() {
+
+        for (val linkAndLabel : getAsList()) {
+            val link = linkAndLabel.getUiComponent();
+            if(link.isVisible()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // -- INCOMPLETE DESERIALIZATION WORKAROUND
+
+    private List<LinkAndLabel> getAsList() {
+        if(links.size()>0) {
+            if(! (links.get(0) instanceof LinkAndLabel)) {
+                return links = LinkAndLabel.recoverFromIncompleteDeserialization(_Casts.uncheckedCast(links));
+            } 
+        }
         return links;
     }
+
 
 }

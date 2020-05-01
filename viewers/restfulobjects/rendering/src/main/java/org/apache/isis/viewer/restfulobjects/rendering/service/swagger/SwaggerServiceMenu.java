@@ -73,7 +73,7 @@ public class SwaggerServiceMenu {
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(
-            cssClassFa = "fa-external-link"
+            cssClassFa = "fa-external-link-alt"
             )
     @MemberOrder(sequence="500.600.1")
     public LocalResourcePath openSwaggerUi() {
@@ -92,7 +92,7 @@ public class SwaggerServiceMenu {
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(
-            cssClassFa = "fa-external-link"
+            cssClassFa = "fa-external-link-alt"
             )
     @MemberOrder(sequence="500.600.2")
     public LocalResourcePath openRestApi() {

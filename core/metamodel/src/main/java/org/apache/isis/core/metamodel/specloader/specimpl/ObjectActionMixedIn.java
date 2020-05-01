@@ -45,6 +45,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 
 public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInMember {
@@ -136,6 +137,13 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     }
 
     @Override
+    public PendingParameterModel newPendingParameterModel(
+            @NonNull ManagedObject actionOwner,
+            @NonNull Can<ManagedObject> paramValues) {
+        return PendingParameterModel.of(this, actionOwner, mixinAdapterFor(actionOwner), paramValues);
+    }
+    
+    @Override
     protected synchronized Can<ObjectActionParameter> determineParameters() {
         if (parameters != null) {
             // because possible race condition (caller isn't synchronized)
@@ -209,7 +217,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     @Override
     protected void validateArgumentSet(
             final ManagedObject mixedInAdapter,
-            final List<ManagedObject> proposedArguments,
+            final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy,
             final InteractionResultSet resultSet) {
 
@@ -228,7 +236,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     public ManagedObject execute(
             final ManagedObject target,         // will be the mixedInAdapter
             final ManagedObject mixedInAdapter, // will be passed in as null
-            final List<ManagedObject> arguments,
+            final Can<ManagedObject> arguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
 

@@ -40,17 +40,18 @@ import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.Interaction.ActionInvocation;
 import org.apache.isis.applib.services.iactn.InteractionContext;
+import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.metamodel.MetaModelService.Mode;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.core.metamodel.commons.MethodInvocationPreprocessor;
 import org.apache.isis.core.metamodel.commons.ThrowableExtensions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -117,7 +118,7 @@ implements ImperativeFacet {
             final ObjectAction owningAction,
             final ManagedObject targetAdapter,
             final ManagedObject mixedInAdapter,
-            final List<ManagedObject> argumentAdapters,
+            final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final ManagedObject executionResult = 
@@ -150,7 +151,7 @@ implements ImperativeFacet {
             final ObjectAction owningAction,
             final ManagedObject targetAdapter,
             final ManagedObject mixedInAdapter,
-            final List<ManagedObject> argumentAdapters,
+            final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
         // similar code in PropertySetterOrClearFacetFDEA
 
@@ -197,7 +198,7 @@ implements ImperativeFacet {
                             targetClass);
             final Interaction.MemberExecutor<Interaction.ActionInvocation> callable =
                     new DomainEventMemberExecutor(
-                            argumentAdapters, targetAdapter, argumentAdapters, command, owningAction,
+                            argumentAdapters, targetAdapter, command, owningAction,
                             mixinElseRegularAdapter, mixedInAdapter, execution);
 
             // sets up startedAt and completedAt on the execution, also manages the execution call graph
@@ -255,7 +256,7 @@ implements ImperativeFacet {
 
     private Object invokeMethodElseFromCache(
             final ManagedObject targetAdapter, 
-            final List<ManagedObject> arguments)
+            final Can<ManagedObject> arguments)
                     throws IllegalAccessException, InvocationTargetException {
 
         final Object[] executionParameters = ManagedObject.unwrapMultipleAsArray(arguments);
@@ -309,7 +310,7 @@ implements ImperativeFacet {
             // don't trample over any existing result, eg subsequent mixins.
             return;
         }
-        if(ManagedObject.isNull(resultAdapter)) {
+        if(ManagedObject.isNullOrUnspecifiedOrEmpty(resultAdapter)) {
             return;
         }
 
@@ -346,7 +347,7 @@ implements ImperativeFacet {
             final ManagedObject resultAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        if(ManagedObject.isNull(resultAdapter)) { 
+        if(ManagedObject.isNullOrUnspecifiedOrEmpty(resultAdapter)) { 
             return null;
         }
 
@@ -414,9 +415,8 @@ implements ImperativeFacet {
     private final class DomainEventMemberExecutor 
     implements Interaction.MemberExecutor<Interaction.ActionInvocation> {
         
-        private final List<ManagedObject> argumentAdapters;
+        private final Can<ManagedObject> argumentAdapters;
         private final ManagedObject targetAdapter;
-        private final List<ManagedObject> argumentAdapterList;
         private final Command command;
         private final ObjectAction owningAction;
         private final ManagedObject mixinElseRegularAdapter;
@@ -430,7 +430,7 @@ implements ImperativeFacet {
 
                 // update the current execution with the DTO (memento)
                 val invocationDto = getInteractionDtoServiceInternal()
-                .asActionInvocationDto(owningAction, mixinElseRegularAdapter, argumentAdapterList);
+                .asActionInvocationDto(owningAction, mixinElseRegularAdapter, argumentAdapters.toList());
                 
                 currentExecution.setDto(invocationDto);
 

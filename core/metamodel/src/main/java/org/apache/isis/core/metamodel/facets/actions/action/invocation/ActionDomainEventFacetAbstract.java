@@ -19,9 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.i18n.TranslatableString;
@@ -30,6 +27,8 @@ import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
+import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
@@ -115,6 +114,9 @@ implements ActionDomainEventFacet {
     @Override
     public String invalidates(final ValidityContext<? extends ValidityEvent> ic) {
 
+        _Assert.assertTrue(ic instanceof ActionValidityContext, ()->
+            String.format("expecting an action context but got %s", ic.getIdentifier()));
+        
         final ActionValidityContext aic = (ActionValidityContext) ic;
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
@@ -144,7 +146,7 @@ implements ActionDomainEventFacet {
         return ((ActionInteractionContext) ic).getObjectAction();
     }
 
-    private static List<ManagedObject> argumentAdaptersFrom(
+    private static Can<ManagedObject> argumentAdaptersFrom(
             final InteractionContext<? extends InteractionEvent> ic) {
         
         val contributee = ic.getContributeeWithParamIndex();
@@ -153,13 +155,13 @@ implements ActionDomainEventFacet {
 
             val adapter = contributee.getIndex() == 0
                     ? contributee.getValue()
-                            : ManagedObject.empty();
+                    : ManagedObject.unspecified();
             
-            return Collections.singletonList(adapter);
+            return Can.ofSingleton(adapter);
                 
         }
 
-        return Collections.emptyList();
+        return Can.empty();
     }
 
 }

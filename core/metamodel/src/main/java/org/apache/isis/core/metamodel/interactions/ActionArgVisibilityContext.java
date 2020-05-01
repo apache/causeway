@@ -19,12 +19,11 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import java.util.List;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.ActionArgumentVisibilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ActionArgumentEvent;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -41,14 +40,14 @@ extends VisibilityContext<ActionArgumentVisibilityEvent>
 implements ActionInteractionContext {
 
     @Getter(onMethod = @__(@Override)) private final ObjectAction objectAction;
-    @Getter private final List<ManagedObject> args;
+    @Getter private final Can<ManagedObject> args;
     @Getter private final int position;
     
     public ActionArgVisibilityContext(
             final ManagedObject targetAdapter,
             final ObjectAction objectAction,
             final Identifier id,
-            final List<ManagedObject> args,
+            final Can<ManagedObject> args,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
@@ -69,7 +68,7 @@ implements ActionInteractionContext {
         return new ActionArgumentVisibilityEvent(
                 ManagedObject.unwrapSingle(getTarget()), 
                 getIdentifier(), 
-                ManagedObject.unwrapMultipleAsArray(getArgs()), 
+                ManagedObject.unwrapMultipleAsArray(getArgs().toList()), 
                 getPosition());
     }
 

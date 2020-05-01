@@ -33,13 +33,11 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedAction;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedCollection;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedProperty;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer.SelfLink;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberReprMode;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAction;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCollection;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty;
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationService;
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceForRestfulObjectsV1_0;
 
@@ -69,8 +67,7 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
     @Override
     public Response propertyDetails(
             final IResourceContext renderContext,
-            final ObjectAndProperty objectAndProperty,
-            final MemberReprMode memberReprMode) {
+            final ManagedProperty objectAndProperty) {
 
         final ResponseBuilder responseBuilder = buildResponse(
                 connegService -> connegService.buildResponse(renderContext, objectAndProperty));
@@ -83,8 +80,7 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
     @Override
     public Response collectionDetails(
             final IResourceContext renderContext,
-            final ObjectAndCollection objectAndCollection,
-            final MemberReprMode memberReprMode) {
+            final ManagedCollection objectAndCollection) {
 
         final ResponseBuilder responseBuilder = buildResponse(
                 connegService -> connegService.buildResponse(renderContext, objectAndCollection));
@@ -99,7 +95,7 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
     @Override
     public Response actionPrompt(
             final IResourceContext renderContext,
-            final ObjectAndAction objectAndAction) {
+            final ManagedAction objectAndAction) {
 
         final ResponseBuilder responseBuilder = buildResponse(
                 connegService -> connegService.buildResponse(renderContext, objectAndAction));
@@ -112,8 +108,7 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
     @Override
     public Response actionResult(
             final IResourceContext renderContext,
-            final ObjectAndActionInvocation objectAndActionInvocation,
-            final SelfLink selfLink) {
+            final ObjectAndActionInvocation objectAndActionInvocation) {
 
         final ResponseBuilder responseBuilder = buildResponse(
                 connegService -> connegService.buildResponse(renderContext, objectAndActionInvocation));

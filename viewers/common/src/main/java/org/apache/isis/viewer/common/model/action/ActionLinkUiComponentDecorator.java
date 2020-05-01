@@ -18,6 +18,15 @@
  */
 package org.apache.isis.viewer.common.model.action;
 
+import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmDecorator;
+import org.apache.isis.viewer.common.model.decorator.disable.DisableDecorator;
+import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeDecorator;
+import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingDecorator;
+import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipDecorator;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 /**
  * Decorates a click-able UI component of type {@code <T>} based on an {@link ActionUiModel}.
  * 
@@ -26,10 +35,16 @@ package org.apache.isis.viewer.common.model.action;
  * @since 2.0.0
  * @param <T> - link component type, native to the viewer
  */
-public interface ActionLinkUiComponentDecorator<T> {
+@Getter
+@RequiredArgsConstructor
+public class ActionLinkUiComponentDecorator<T> {
+    
+    private final TooltipDecorator<T> tooltipDecorator;
+    private final DisableDecorator<T> disableDecorator;
+    private final ConfirmDecorator<T> confirmDecorator;
+    private final PrototypingDecorator<T> prototypingDecorator;
+    private final FontAwesomeDecorator<T> iconDecorator;
 
-      //TODO just a draft yet
-//    void decorateAsDisabled(ActionUiModel<T> actionUiModel, T actionLinkUiComponent);
-//    void addTooltip(ActionUiModel<T> actionUiModel, T actionLinkUiComponent);
-   
+
+
 }

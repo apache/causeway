@@ -256,10 +256,10 @@ public interface FacetFactory {
                     optional
                         : supplier.get();
         }
-
         
     }
-
+    
+    
     /**
      * Process the method, and return the correctly setup annotation if present.
      */

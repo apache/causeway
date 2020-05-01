@@ -26,6 +26,7 @@ import java.util.Map;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFacetAbstract;
@@ -59,7 +60,7 @@ public class ActionValidationFacetViaMethod extends ActionValidationFacetAbstrac
     }
 
     @Override
-    public String invalidReason(final ManagedObject owningAdapter, final List<ManagedObject> proposedArgumentAdapters) {
+    public String invalidReason(final ManagedObject owningAdapter, final Can<ManagedObject> proposedArgumentAdapters) {
         final Object returnValue = ManagedObject.InvokeUtil.invoke(method, owningAdapter, proposedArgumentAdapters);
         if(returnValue instanceof String) {
             return (String) returnValue;

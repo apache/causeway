@@ -515,6 +515,25 @@ public final class _Reflect {
             return ex->ex.getParameterTypes()[paramIndex].isAssignableFrom(paramType);
         }
         
+        public static Predicate<Executable> paramSignatureMatch(Class<?>[] matchingParamTypes) {
+            return ex->{
+                // check params (if required)
+                if (matchingParamTypes != null) {
+                    final Class<?>[] parameterTypes = ex.getParameterTypes();
+                    if (matchingParamTypes.length != parameterTypes.length) {
+                        return false;
+                    }
+
+                    for (int c = 0; c < matchingParamTypes.length; c++) {
+                        if ((matchingParamTypes[c] != null) && (matchingParamTypes[c] != parameterTypes[c])) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            };
+        }
+        
         public static Predicate<Executable> paramAssignableFromValue(int paramIndex, @Nullable Object value) {
             if(value==null) {
                 return _Predicates.alwaysTrue();

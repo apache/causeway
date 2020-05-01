@@ -18,15 +18,13 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._NullSafe;
-import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
+import lombok.NonNull;
 import lombok.val;
 
 public class ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete
@@ -34,40 +32,43 @@ extends ObjectAdapterMementoProviderAbstract {
 
     private static final long serialVersionUID = 1L;
     
-    private final ArrayList<ObjectMemento> dependentArgMementos;
+    private final Can<ObjectMemento> dependentArgMementos;
 
     public ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(
-            ScalarModel model,
-            ArrayList<ObjectMemento> dependentArgMementos) { 
+            @NonNull ScalarModel model,
+            @NonNull Can<ObjectMemento> dependentArgMementos) { 
         
         super(model);
         this.dependentArgMementos = dependentArgMementos;
     }
 
     @Override
-    protected List<ObjectMemento> obtainMementos(String term) {
+    protected Can<ObjectMemento> obtainMementos(String term) {
         
-        val commonContext = super.getCommonContext();
-        
-        val autoCompleteChoices = _Lists.<ManagedObject>newArrayList();
         if (getScalarModel().hasAutoComplete()) {
+        
+            val commonContext = super.getCommonContext();
+            
             // recover any pendingArgs
             val pendingArgs = reconstructDependentArgs(dependentArgMementos); 
-            val autoCompleteAdapters = getScalarModel()
-                    .getAutoComplete(pendingArgs, term);
-            autoCompleteChoices.addAll(autoCompleteAdapters);
+            return getScalarModel()
+                    .getAutoComplete(pendingArgs, term)
+                    .map(commonContext::mementoFor);
+            
         }
         
-        return _Lists.map(autoCompleteChoices, commonContext::mementoFor);
+        return Can.empty();
         
     }
     
-    private List<ManagedObject> reconstructDependentArgs(List<ObjectMemento> dependentArgMementos) {
+    private Can<ManagedObject> reconstructDependentArgs(
+            final Can<ObjectMemento> dependentArgMementos) {
+        
         val commonContext = super.getCommonContext();
         val pendingArgsList = _NullSafe.stream(dependentArgMementos)
             .map(commonContext::reconstructObject)
             .map(ManagedObject.class::cast)
-            .collect(_Lists.toUnmodifiable());
+            .collect(Can.toCan());
         
         return pendingArgsList;
     }

@@ -22,27 +22,24 @@ import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.spec.interaction.ActionInteraction;
+import org.apache.isis.core.metamodel.spec.interaction.InteractionVeto;
+import org.apache.isis.core.metamodel.spec.interaction.ActionInteraction.SemanticConstraint;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedMember;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedParameter;
+import org.apache.isis.core.metamodel.spec.interaction.MemberInteraction.AccessIntent;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
-import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectLinkTo;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainServiceLinkTo;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberReprMode;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAction;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCollection2;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty2;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.viewer.context.ResourceContext;
 
+import lombok.NonNull;
 import lombok.val;
 
 class DomainResourceHelper {
@@ -104,14 +101,14 @@ class DomainResourceHelper {
      */
     public Response propertyDetails(
             final String propertyId,
-            final MemberReprMode memberMode) {
+            final ManagedMember.RepresentationMode representationMode) {
 
-        ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
-
-        final OneToOneAssociation property = accessHelper.getPropertyThatIsVisibleForIntent(propertyId, ObjectAdapterAccessHelper.Intent.ACCESS);
+        val property = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter)
+                .getPropertyThatIsVisibleForIntent(propertyId, AccessIntent.ACCESS);
+        property.setRepresentationMode(representationMode);
 
         transactionService.flushTransaction();
-        return representationService.propertyDetails(resourceContext, new ObjectAndProperty2(objectAdapter, property, memberMode), memberMode);
+        return representationService.propertyDetails(resourceContext, property);
     }
 
 
@@ -122,14 +119,14 @@ class DomainResourceHelper {
      */
     public Response collectionDetails(
             final String collectionId,
-            final MemberReprMode memberMode) {
+            final ManagedMember.RepresentationMode representationMode) {
 
-        ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
-
-        final OneToManyAssociation collection = accessHelper.getCollectionThatIsVisibleForIntent(collectionId, ObjectAdapterAccessHelper.Intent.ACCESS);
+        val collection = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter)
+                .getCollectionThatIsVisibleForIntent(collectionId, AccessIntent.ACCESS);
+        collection.setRepresentationMode(representationMode);
 
         transactionService.flushTransaction();
-        return representationService.collectionDetails(resourceContext, new ObjectAndCollection2(objectAdapter, collection, memberMode), memberMode);
+        return representationService.collectionDetails(resourceContext, collection);
     }
 
 
@@ -140,12 +137,12 @@ class DomainResourceHelper {
      */
     public Response actionPrompt(final String actionId) {
 
-        ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
-
-        final ObjectAction action = accessHelper.getObjectActionThatIsVisibleForIntent(actionId, ObjectAdapterAccessHelper.Intent.ACCESS);
+        val action = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter)
+                .getObjectActionThatIsVisibleForIntentAndSemanticConstraint(
+                        actionId, AccessIntent.ACCESS, SemanticConstraint.NONE);
 
         transactionService.flushTransaction();
-        return representationService.actionPrompt(resourceContext, new ObjectAndAction(objectAdapter, action));
+        return representationService.actionPrompt(resourceContext, action);
     }
 
     /**
@@ -160,16 +157,9 @@ class DomainResourceHelper {
      */
     public Response invokeActionQueryOnly(final String actionId, final JsonRepresentation arguments) {
 
-        final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
-
-        final ObjectAction action = accessHelper.getObjectActionThatIsVisibleForIntent(actionId, ObjectAdapterAccessHelper.Intent.MUTATE);
-
-        final SemanticsOf actionSemantics = action.getSemantics();
-        if (! actionSemantics.isSafeInNature()) {
-            throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Method not allowed; action '%s' does not have safe semantics", action.getId());
-        }
-
-        return invokeActionUsingAdapters(action, arguments, ActionResultReprRenderer.SelfLink.INCLUDED);
+        return invokeAction( 
+                actionId, AccessIntent.MUTATE, SemanticConstraint.SAFE, 
+                arguments, ActionResultReprRenderer.SelfLink.EXCLUDED);
     }
 
     /**
@@ -184,15 +174,9 @@ class DomainResourceHelper {
      */
     public Response invokeActionIdempotent(final String actionId, final JsonRepresentation arguments) {
 
-        final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
-
-        final ObjectAction action = accessHelper.getObjectActionThatIsVisibleForIntent(actionId, ObjectAdapterAccessHelper.Intent.MUTATE);
-
-        final SemanticsOf actionSemantics = action.getSemantics();
-        if (!actionSemantics.isIdempotentInNature()) {
-            throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Method not allowed; action '%s' is not idempotent", action.getId());
-        }
-        return invokeActionUsingAdapters(action, arguments, ActionResultReprRenderer.SelfLink.EXCLUDED);
+        return invokeAction( 
+                actionId, AccessIntent.MUTATE, SemanticConstraint.IDEMPOTENT, 
+                arguments, ActionResultReprRenderer.SelfLink.EXCLUDED);
     }
 
     /**
@@ -202,41 +186,51 @@ class DomainResourceHelper {
      */
     public Response invokeAction(final String actionId, final JsonRepresentation arguments) {
 
-        ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
-
-        final ObjectAction action = accessHelper.getObjectActionThatIsVisibleForIntent(actionId, ObjectAdapterAccessHelper.Intent.MUTATE);
-
-        return invokeActionUsingAdapters(action, arguments, ActionResultReprRenderer.SelfLink.EXCLUDED);
+        return invokeAction( 
+                actionId, AccessIntent.MUTATE, SemanticConstraint.NONE, 
+                arguments, ActionResultReprRenderer.SelfLink.EXCLUDED);
     }
 
-
-    private Response invokeActionUsingAdapters(
-            final ObjectAction action,
-            final JsonRepresentation arguments,
-            final ActionResultReprRenderer.SelfLink selfLink) {
-
-        val objectAdapter = this.objectAdapter;
-        val argHelper = new ObjectActionArgHelper(resourceContext, objectAdapter, action);
-        val argAdapters = argHelper.parseAndValidateArguments(arguments);
-
+    private Response invokeAction(
+            @NonNull final String actionId, 
+            @NonNull final AccessIntent intent,
+            @NonNull final SemanticConstraint semanticConstraint,
+            @NonNull final JsonRepresentation arguments,
+            @NonNull final ActionResultReprRenderer.SelfLink selfLink) {
+        
+        val where = resourceContext.getWhere();
+        
+        // lombok issue, needs explicit cast here 
+        val actionInteraction = (ActionInteraction) ActionInteraction.start(objectAdapter, actionId)
+        .checkVisibility(where)
+        .checkUsability(where, intent)
+        .checkSemanticConstraint(semanticConstraint)
+        .useParameters(action->{
+            
+            val argAdapters = ObjectActionArgHelper.of(resourceContext, action)
+                    .parseAndValidateArguments(arguments);
+            
+            return argAdapters;
+            
+        }, 
+                (ManagedParameter managedParameter, InteractionVeto veto)->{
+                    InteractionFailureHandler.onParameterInvalid(managedParameter, veto, arguments);
+                }
+        );
+        
         if(resourceContext.isValidateOnly()) {
-            // nothing more to do.
-            // if there had been a validation error, then an exception would have been thrown above.
+            actionInteraction.validateElseThrow(InteractionFailureHandler::onFailure);
             return Response.noContent().build();
         }
-
-        // invoke
-        final ManagedObject mixedInAdapter = null; // action will automatically fill in if a mixin
-        final ManagedObject returnedAdapter = action.execute(
-                objectAdapter,  mixedInAdapter, argAdapters,
-                InteractionInitiatedBy.USER);
-
-        final ObjectAndActionInvocation objectAndActionInvocation =
-                new ObjectAndActionInvocation(objectAdapter, action, arguments, argAdapters, returnedAdapter, selfLink);
+        
+        val actionInteractionResult = actionInteraction
+                .getResultElseThrow(InteractionFailureHandler::onFailure);
+        
+        val objectAndActionInvocation = ObjectAndActionInvocation.of(actionInteractionResult, arguments, selfLink);
 
         // response
         transactionService.flushTransaction();
-        return representationService.actionResult(resourceContext, objectAndActionInvocation, selfLink);
+        return representationService.actionResult(resourceContext, objectAndActionInvocation);
     }
 
 

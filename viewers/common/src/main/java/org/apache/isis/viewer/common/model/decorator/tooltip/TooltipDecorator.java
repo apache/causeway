@@ -18,29 +18,11 @@
  */
 package org.apache.isis.viewer.common.model.decorator.tooltip;
 
-import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.viewer.common.model.action.ActionUiModel;
-
-import lombok.val;
-
 public interface TooltipDecorator<T> {
 
-    void addTooltip(T uiComponent, TooltipUiModel tooltipUiModel);
+    void decorate(T uiComponent, TooltipUiModel tooltipUiModel);
     
-    default void decorate(T uiComponent, ActionUiModel<?> actionUiModel) {
-        val actionMeta = actionUiModel.getActionUiMetaModel();
-        //val uiComponent = actionUiModel.getUiComponent();
-        
-        if (actionMeta.isEnabled()) {
-            if(!_Strings.isNullOrEmpty(actionMeta.getDescription())) {
-                addTooltip(uiComponent, TooltipUiModel.ofBody(actionMeta.getDescription()));
-            }
 
-        } else {
-            addTooltip(uiComponent, TooltipUiModel.ofBody(actionMeta.getDisabledReason()));
-        }
-        
-    }
     
     
     

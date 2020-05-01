@@ -63,11 +63,11 @@ public class CollectionAddToRemoveFromAndValidateFacetFactory extends MethodPref
         final Class<?> cls = processMethodContext.getCls();
 
         // add
-        final Method addToMethod = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.ADD_TO_PREFIX + capitalizedName, void.class);
+        final Method addToMethod = MethodFinderUtils.findSingleArgMethod(cls, MethodLiteralConstants.ADD_TO_PREFIX + capitalizedName, void.class).orElse(null);
         processMethodContext.removeMethod(addToMethod);
 
         // remove
-        final Method removeFromMethod = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.REMOVE_FROM_PREFIX + capitalizedName, void.class);
+        final Method removeFromMethod = MethodFinderUtils.findSingleArgMethod(cls, MethodLiteralConstants.REMOVE_FROM_PREFIX + capitalizedName, void.class).orElse(null);
         processMethodContext.removeMethod(removeFromMethod);
 
         // add facets

@@ -19,11 +19,14 @@
 
 package org.apache.isis.core.metamodel.facets.param.autocomplete.method;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal._Constants;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -41,16 +44,19 @@ implements ImperativeFacet {
     private final Method method;
     private final Class<?> choicesType;
     private final int minLength;
+    private final Optional<Constructor<?>> ppmFactory;
 
     public ActionParameterAutoCompleteFacetViaMethod(
             final Method method,
             final Class<?> choicesType,
+            final Optional<Constructor<?>> ppmFactory, 
             final FacetHolder holder) {
 
         super(holder);
         this.method = method;
         this.choicesType = choicesType;
         this.minLength = MinLengthUtil.determineMinLength(method);
+        this.ppmFactory = ppmFactory;
     }
 
     /**
@@ -75,14 +81,15 @@ implements ImperativeFacet {
     @Override
     public Object[] autoComplete(
             final ManagedObject owningAdapter,
-            final List<ManagedObject> pendingArgs,
+            final Can<ManagedObject> pendingArgs,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final Object collectionOrArray = 
-                ManagedObject.InvokeUtil.invokeAutofit(
-                        method, owningAdapter, pendingArgs, 
-                        Collections.singletonList(searchArg));
+        final Object collectionOrArray = ppmFactory.isPresent()
+                ? ManagedObject.InvokeUtil.invokeWithPPM(
+                        ppmFactory.get(), method, owningAdapter, pendingArgs, Collections.singletonList(searchArg))
+                : ManagedObject.InvokeUtil.invokeAutofit(
+                        method, owningAdapter, pendingArgs, Collections.singletonList(searchArg));
         
         if (collectionOrArray == null) {
             return _Constants.emptyObjects;

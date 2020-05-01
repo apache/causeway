@@ -32,6 +32,7 @@ import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.assertions._Assert;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
@@ -51,10 +52,9 @@ import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.p
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 @RequiredArgsConstructor(staticName = "ofEventService")
-@Log4j2
+//@Log4j2
 public class DomainEventHelper {
 
     public static DomainEventHelper ofServiceRegistry(final ServiceRegistry serviceRegistry) {
@@ -74,7 +74,7 @@ public class DomainEventHelper {
             final IdentifiedHolder identified,
             final ManagedObject targetAdapter,
             final ManagedObject mixedInAdapter,
-            final List<ManagedObject> argumentAdapters,
+            final Can<ManagedObject> argumentAdapters,
             final ManagedObject resultAdapter) {
         
         return postEventForAction(phase, uncheckedCast(eventType), /*existingEvent*/null, objectAction, identified, 
@@ -89,7 +89,7 @@ public class DomainEventHelper {
             final IdentifiedHolder identified,
             final ManagedObject targetAdapter,
             final ManagedObject mixedInAdapter,
-            final List<ManagedObject> argumentAdapters,
+            final Can<ManagedObject> argumentAdapters,
             final ManagedObject resultAdapter) {
         
         return postEventForAction(phase, 
@@ -105,7 +105,7 @@ public class DomainEventHelper {
             final IdentifiedHolder identified,
             final ManagedObject targetAdapter,
             final ManagedObject mixedInAdapter,
-            final List<ManagedObject> argumentAdapters,
+            final Can<ManagedObject> argumentAdapters,
             final ManagedObject resultAdapter) {
         
         _Assert.assertTypeIsInstanceOf(eventType, ActionDomainEvent.class);

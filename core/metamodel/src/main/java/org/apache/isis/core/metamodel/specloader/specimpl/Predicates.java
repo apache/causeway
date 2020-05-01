@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import java.util.function.Predicate;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacet;
@@ -74,58 +72,6 @@ final class Predicates {
             final ObjectAction contributeeAction) {
 
         return Utils.contributeeParameterIndexOf(typeSpec, contributeeAction)!=-1;
-    }
-    
-    // -- HIGHER LEVEL - CONTRIBUTEES
-    
-    static Predicate<ObjectAction> isContributeeAssociation(
-            final ObjectSpecification typeSpec) {
-        
-        return contributeeAction -> {
-            if(!isRequiredType(contributeeAction)) {
-                return false;
-            }
-            if(isAlwaysHidden(contributeeAction)) {
-                return false;
-            }
-            if(isActionContributionVetoed(contributeeAction)) {
-                return false;
-            }
-            if(!contributeeAction.hasReturn()) {
-                return false;
-            }
-            if(contributeeAction.getParameterCount() != 1) {
-                return false;
-            }
-            if(!contributeeAction.getSemantics().isSafeInNature()) {
-                return false;
-            }
-            if(!isAnyContributeeParameterMatching(typeSpec, contributeeAction)) {
-                return false;
-            }
-            return true;
-        };
-    }
-    
-    static Predicate<ObjectAction> isContributeeAction(
-            final ObjectSpecification typeSpec) {
-        
-        return contributeeAction -> {
-        
-            if(!isRequiredType(contributeeAction)) {
-                return false;
-            }
-            if(isAlwaysHidden(contributeeAction)) {
-                return false;
-            }
-            if(isActionContributionVetoed(contributeeAction)) {
-                return false;
-            }
-            if(!isAnyContributeeParameterMatching(typeSpec, contributeeAction)) {
-                return false;
-            }
-            return true; 
-        };
     }
     
     // -- HIGHER LEVEL - MIXINS

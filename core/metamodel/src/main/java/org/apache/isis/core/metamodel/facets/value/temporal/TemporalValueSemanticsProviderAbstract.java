@@ -44,7 +44,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * Common base for {@link java.time.temporal.Temporal} types.
@@ -53,7 +52,7 @@ import lombok.extern.log4j.Log4j2;
  *
  * @param <T> implementing {@link java.time.temporal.Temporal} type
  */
-@Log4j2
+//@Log4j2
 public abstract class TemporalValueSemanticsProviderAbstract<T extends Temporal> 
 extends ValueSemanticsProviderAndFacetAbstract<T>
 implements TemporalValueFacet<T> {
@@ -97,6 +96,13 @@ implements TemporalValueFacet<T> {
         namedFormatters = _Maps.newLinkedHashMap();
         namedFormatters.put("internal_encoding", this.getEncodingFormatter());
         updateParsers();
+    }
+    
+    @Override
+    public void appendAttributesTo(Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("temporalCharacteristic", getTemporalCharacteristic());
+        attributeMap.put("offsetCharacteristic", getOffsetCharacteristic());
     }
     
     protected void setEncodingFormatter(DateTimeFormatter encodingFormatter) {

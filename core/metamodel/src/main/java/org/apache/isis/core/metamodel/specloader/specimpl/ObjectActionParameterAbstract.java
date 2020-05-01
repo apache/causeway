@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
@@ -208,17 +207,16 @@ implements ObjectActionParameter, FacetHolder.Delegating {
 
     @Override
     public Can<ManagedObject> getAutoComplete(
-            final ManagedObject adapter,
-            final List<ManagedObject> pendingArgs,
+            final PendingParameterModel pendingArgs,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final List<ManagedObject> adapters = _Lists.newArrayList();
-        final ActionParameterAutoCompleteFacet facet = getFacet(ActionParameterAutoCompleteFacet.class);
+        val adapters = _Lists.<ManagedObject>newArrayList();
+        val autoCompleteFacet = getFacet(ActionParameterAutoCompleteFacet.class);
 
-        if (facet != null) {
-            final Object[] choices = facet
-                    .autoComplete(adapter, pendingArgs, searchArg, interactionInitiatedBy);
+        if (autoCompleteFacet != null) {
+            final Object[] choices = autoCompleteFacet
+                    .autoComplete(pendingArgs.getActionTarget(), pendingArgs.getParamValues(), searchArg, interactionInitiatedBy);
             checkChoicesOrAutoCompleteType(getSpecificationLoader(), choices, getSpecification());
             for (final Object choice : choices) {
                 adapters.add(getObjectManager().adapt(choice));
@@ -245,26 +243,21 @@ implements ObjectActionParameter, FacetHolder.Delegating {
 
     @Override
     public Can<ManagedObject> getChoices(
-            final ManagedObject adapter,
-            final List<ManagedObject> pendingArgs,
+            final PendingParameterModel pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        val args = argsForDefaultOrChoices(adapter, pendingArgs);
-        val target = targetForDefaultOrChoices(adapter);
-
-        return findChoices(target, args, interactionInitiatedBy);
+        return findChoices(pendingArgs, interactionInitiatedBy);
     }
 
     private Can<ManagedObject> findChoices(
-            final ManagedObject target,
-            final List<ManagedObject> pendingArgs,
+            final PendingParameterModel pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         final List<ManagedObject> adapters = _Lists.newArrayList();
         final ActionParameterChoicesFacet facet = getFacet(ActionParameterChoicesFacet.class);
 
         if (facet != null) {
-            final Object[] choices = facet.getChoices(target, pendingArgs, interactionInitiatedBy);
+            final Object[] choices = facet.getChoices(pendingArgs.getActionTarget(), pendingArgs.getParamValues(), interactionInitiatedBy);
             checkChoicesOrAutoCompleteType(getSpecificationLoader(), choices, getSpecification());
             for (final Object choice : choices) {
                 ManagedObject adapter = choice != null? getObjectManager().adapt(choice) : null;
@@ -278,50 +271,20 @@ implements ObjectActionParameter, FacetHolder.Delegating {
 
     @Override
     public ManagedObject getDefault(
-            final ManagedObject adapter,
-            final List<ManagedObject> pendingArgs,
-            final Integer paramNumUpdated) {
-
-        final ManagedObject target = targetForDefaultOrChoices(adapter);
-        val args = argsForDefaultOrChoices(adapter, pendingArgs);
-
-        return findDefault(target, args, paramNumUpdated);
-    }
-
-    private ManagedObject findDefault(
-            final ManagedObject target,
-            final List<ManagedObject> args,
-            final Integer paramNumUpdated) {
+            final PendingParameterModel pendingArgs) {
         
-        final ActionParameterDefaultsFacet defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);
+        val defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);
         if (defaultsFacet != null) {
-            final Object dflt = defaultsFacet.getDefault(target, args, paramNumUpdated);
-            if (dflt == null) {
+            final Object defaultValue = defaultsFacet.getDefault(pendingArgs);
+            if (defaultValue == null) {
                 // it's possible that even though there is a default facet, when
                 // invoked it is unable to return a default.
                 return null;
             }
-            return getObjectManager().adapt(dflt);
+            return getObjectManager().adapt(defaultValue);
         }
         return null;
     }
-
-    /**
-     * Hook method; {@link ObjectActionParameterContributee contributed action parameter}s override.
-     */
-    protected ManagedObject targetForDefaultOrChoices(final ManagedObject adapter) {
-        return adapter;
-    }
-
-    /**
-     * Hook method; {@link ObjectActionParameterContributee contributed action parameter}s override.
-     */
-    protected List<ManagedObject> argsForDefaultOrChoices(
-            final ManagedObject adapter,
-            final List<ManagedObject> argumentsIfAvailable) {
-        return argumentsIfAvailable;
-    }
-
 
     // helpers
     static void checkChoicesOrAutoCompleteType(
@@ -362,7 +325,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
 
     private ActionArgVisibilityContext createArgumentVisibilityContext(
             final ManagedObject objectAdapter,
-            final List<ManagedObject> pendingArgs,
+            final Can<ManagedObject> pendingArgs,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
@@ -373,7 +336,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
     @Override
     public Consent isVisible(
             final ManagedObject targetAdapter,
-            final List<ManagedObject> pendingArgs,
+            final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final VisibilityContext<?> ic = createArgumentVisibilityContext(
@@ -389,7 +352,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
 
     private ActionArgUsabilityContext createArgumentUsabilityContext(
             final ManagedObject objectAdapter,
-            final List<ManagedObject> pendingArgs,
+            final Can<ManagedObject> pendingArgs,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
@@ -405,7 +368,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
     @Override
     public Consent isUsable(
             final ManagedObject targetAdapter,
-            final List<ManagedObject> pendingArgs,
+            final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final UsabilityContext<?> ic = createArgumentUsabilityContext(
@@ -423,7 +386,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
     @Override
     public ActionArgValidityContext createProposedArgumentInteractionContext(
             final ManagedObject objectAdapter,
-            final List<ManagedObject> proposedArguments,
+            final Can<ManagedObject> proposedArguments,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
@@ -469,14 +432,14 @@ implements ObjectActionParameter, FacetHolder.Delegating {
      * to do this in two passes, one to build up the argument set as a single
      * unit, and then validate each in turn.
      */
-    private List<ManagedObject> arguments(final ManagedObject proposedValue) {
+    private Can<ManagedObject> arguments(final ManagedObject proposedValue) {
         final int paramCount = getAction().getParameterCount();
         final int paramIndex = getNumber();
         val arguments = new ArrayList<ManagedObject>(paramCount);
         for(int i=0; i<paramCount; ++i) {
-            arguments.add(i==paramIndex ? proposedValue : ManagedObject.empty());
+            arguments.add(i==paramIndex ? proposedValue : ManagedObject.empty(getAction().getParameterTypes().getElseFail(paramIndex)));
         }
-        return Collections.unmodifiableList(arguments);
+        return Can.ofCollection(arguments);
     }
 
 

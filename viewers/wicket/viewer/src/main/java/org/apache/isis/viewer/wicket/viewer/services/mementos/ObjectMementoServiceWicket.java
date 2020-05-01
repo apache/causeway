@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.viewer.services.mementos;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -40,9 +41,11 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.core.webapp.context.memento.ObjectMementoCollection;
+import org.apache.isis.core.webapp.context.memento.ObjectMementoForEmpty;
 import org.apache.isis.core.webapp.context.memento.ObjectMementoService;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -62,19 +65,31 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
     @Inject private ObjectManager objectManager;
 
     @Override
-    public ObjectMemento mementoForRootOid(RootOid rootOid) {
+    public ObjectMemento mementoForRootOid(@NonNull RootOid rootOid) {
         val mementoAdapter = ObjectMementoLegacy.createPersistent(rootOid, specificationLoader);
         return ObjectMementoAdapter.of(mementoAdapter);
     }
 
     @Override
-    public ObjectMemento mementoForObject(ManagedObject adapter) {
+    public ObjectMemento mementoForObject(@Nullable ManagedObject adapter) {
         val mementoAdapter = ObjectMementoLegacy.createOrNull(adapter);
         if(mementoAdapter==null) {
-            return null;
+            return ManagedObject.isSpecified(adapter)
+                    ? new ObjectMementoForEmpty(adapter.getSpecification().getSpecId())
+                    : null;
         }
         return ObjectMementoAdapter.of(mementoAdapter);
     }
+    
+    @Override
+    public ObjectMemento mementoForParameter(@NonNull ManagedObject paramAdapter) {
+        val mementoAdapter = ObjectMementoLegacy.createOrNull(paramAdapter);
+        if(mementoAdapter==null) {
+            return new ObjectMementoForEmpty(paramAdapter.getSpecification().getSpecId());
+        }
+        return ObjectMementoAdapter.of(mementoAdapter);
+    }
+    
 
     @Override
     public ObjectMemento mementoForPojo(Object pojo) {
@@ -92,11 +107,19 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
     }
 
     @Override
-    public ManagedObject reconstructObject(ObjectMemento memento) {
+    public ManagedObject reconstructObject(@Nullable ObjectMemento memento) {
+
         if(memento==null) {
             return null;
         }
-
+        
+        if(memento instanceof ObjectMementoForEmpty) {
+            val objectMementoForEmpty = (ObjectMementoForEmpty) memento;
+            val specId = objectMementoForEmpty.getObjectSpecId();
+            val spec = specificationLoader.loadSpecification(specId);
+            return ManagedObject.empty(spec);
+        }
+        
         if(memento instanceof ObjectMementoCollection) {
             val objectMementoCollection = (ObjectMementoCollection) memento;
 

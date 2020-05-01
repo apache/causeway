@@ -20,11 +20,12 @@ package org.apache.isis.viewer.common.model.decorator.fa;
 
 import java.io.Serializable;
 import java.util.Optional;
-
-import javax.annotation.Nullable;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -37,20 +38,20 @@ public class FontAwesomeUiModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    @NonNull private final String cssClass;
+    @NonNull private final String cssClassesSpaceSeparated;
     @NonNull private final CssClassFaPosition position;
 
-    public static Optional<FontAwesomeUiModel> of(
-            @Nullable final String cssClassFa, 
-            @Nullable final CssClassFaPosition cssClassFaPosition) {
+    public static Optional<FontAwesomeUiModel> of(Optional<CssClassFaFacet> cssClassFaFacetIfAny) {
         
-        return _Strings.isEmpty(cssClassFa)
-                ? Optional.empty()
-                : Optional.of(new FontAwesomeUiModel(
-                        cssClassFa, 
-                        cssClassFaPosition==null
-                            ? CssClassFaPosition.LEFT
-                            : cssClassFaPosition));
+        return cssClassFaFacetIfAny
+        .map(cssClassFaFacet->new FontAwesomeUiModel(
+                cssClassFaFacet.streamCssClasses().collect(Collectors.joining(" ")),
+                Optional.ofNullable(cssClassFaFacet.getPosition()).orElse(CssClassFaPosition.LEFT)));
+
+    }
+
+    public Stream<String> streamCssClasses() {
+        return _Strings.splitThenStream(getCssClassesSpaceSeparated(), " ");
     }
     
     

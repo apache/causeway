@@ -58,8 +58,9 @@ import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedMember;
+import org.apache.isis.core.metamodel.spec.interaction.MemberInteraction.AccessIntent;
+import org.apache.isis.core.metamodel.spec.interaction.PropertyInteraction;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
@@ -70,7 +71,6 @@ import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCo
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.restfulobjects.rendering.Responses;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberReprMode;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 import org.apache.isis.viewer.restfulobjects.viewer.context.ResourceContext;
@@ -430,7 +430,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         return domainResourceHelper.propertyDetails(
                 propertyId,
-                MemberReprMode.READ
+                ManagedMember.RepresentationMode.READ
                 );
     }
 
@@ -450,29 +450,20 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         setCommandExecutor(Command.Executor.USER);
 
         val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-        val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
-        final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
+        
+        PropertyInteraction.start(objectAdapter, propertyId)
+        .checkVisibility(resourceContext.getWhere())
+        .checkUsability(resourceContext.getWhere(), AccessIntent.MUTATE)
+        .modifyProperty(property->{
+            val proposedNewValue = new JsonParserHelper(resourceContext, property.getSpecification())
+                    .parseAsMapWithSingleValue(Util.asStringUtf8(body));
+            
+            return proposedNewValue;
+        })
+        .validateElseThrow(InteractionFailureHandler::onFailure);
 
-        final OneToOneAssociation property = accessHelper.getPropertyThatIsVisibleForIntent(propertyId,
-                ObjectAdapterAccessHelper.Intent.MUTATE);
-
-        final ObjectSpecification propertySpec = property.getSpecification();
-        final String bodyAsString = Util.asStringUtf8(body);
-
-        final ManagedObject argAdapter = new JsonParserHelper(resourceContext, propertySpec).parseAsMapWithSingleValue(
-                bodyAsString);
-
-        final Consent consent = property.isAssociationValid(objectAdapter, argAdapter, InteractionInitiatedBy.USER);
-        if (consent.isVetoed()) {
-            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.UNAUTHORIZED, consent.getReason());
-        }
-
-        property.set(objectAdapter, argAdapter, InteractionInitiatedBy.USER);
-
-        return domainResourceHelper.propertyDetails(
-                propertyId,
-                MemberReprMode.WRITE
-                );
+        return DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter)
+                .propertyDetails(propertyId, ManagedMember.RepresentationMode.WRITE);
     }
 
     @Override
@@ -489,25 +480,17 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
                 ResourceDescriptor.generic(Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE));
 
         setCommandExecutor(Command.Executor.USER);
-
+        
         val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-        val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
-        val accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
+        
+        PropertyInteraction.start(objectAdapter, propertyId)
+        .checkVisibility(resourceContext.getWhere())
+        .checkUsability(resourceContext.getWhere(), AccessIntent.MUTATE)
+        .modifyProperty(property->null)
+        .validateElseThrow(InteractionFailureHandler::onFailure);
 
-        final OneToOneAssociation property = accessHelper.getPropertyThatIsVisibleForIntent(
-                propertyId, ObjectAdapterAccessHelper.Intent.MUTATE);
-
-        final Consent consent = property.isAssociationValid(objectAdapter, null, InteractionInitiatedBy.USER);
-        if (consent.isVetoed()) {
-            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.UNAUTHORIZED, consent.getReason());
-        }
-
-        property.set(objectAdapter, null, InteractionInitiatedBy.USER);
-
-        return domainResourceHelper.propertyDetails(
-                propertyId,
-                MemberReprMode.WRITE
-                );
+        return DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter)
+                .propertyDetails(propertyId, ManagedMember.RepresentationMode.WRITE);
     }
 
     @Override
@@ -536,7 +519,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
 
         
-        return domainResourceHelper.collectionDetails(collectionId, MemberReprMode.READ);
+        return domainResourceHelper.collectionDetails(collectionId, ManagedMember.RepresentationMode.READ);
     }
 
     @Override
@@ -554,10 +537,11 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
-        final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
+        final ObjectAdapterAccessHelper accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
 
-        final OneToManyAssociation collection = accessHelper.getCollectionThatIsVisibleForIntent(
-                collectionId, ObjectAdapterAccessHelper.Intent.MUTATE);
+        val collection = accessHelper.getCollectionThatIsVisibleForIntent(
+                collectionId, AccessIntent.MUTATE)
+                .getCollection();
 
         if (!collection.getCollectionSemantics().isAnySet()) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Collection '%s' does not have set semantics", collectionId);
@@ -575,7 +559,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         collection.addElement(objectAdapter, argAdapter, InteractionInitiatedBy.USER);
 
-        return domainResourceHelper.collectionDetails(collectionId, MemberReprMode.WRITE);
+        return domainResourceHelper.collectionDetails(collectionId, ManagedMember.RepresentationMode.WRITE);
     }
 
     @Override
@@ -593,10 +577,11 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
-        final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
+        final ObjectAdapterAccessHelper accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
 
-        final OneToManyAssociation collection = accessHelper.getCollectionThatIsVisibleForIntent(
-                collectionId, ObjectAdapterAccessHelper.Intent.MUTATE);
+        val collection = accessHelper.getCollectionThatIsVisibleForIntent(
+                collectionId, AccessIntent.MUTATE)
+                .getCollection();
 
         if (!collection.getCollectionSemantics().isListOrArray()) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.METHOD_NOT_ALLOWED, "Collection '%s' does not have list or array semantics", collectionId);
@@ -614,7 +599,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         collection.addElement(objectAdapter, argAdapter, InteractionInitiatedBy.USER);
 
-        return domainResourceHelper.collectionDetails(collectionId, MemberReprMode.WRITE);
+        return domainResourceHelper.collectionDetails(collectionId, ManagedMember.RepresentationMode.WRITE);
     }
 
     @Override
@@ -632,10 +617,11 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         val domainResourceHelper = DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
-        final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
+        final ObjectAdapterAccessHelper accessHelper = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter);
 
-        final OneToManyAssociation collection = accessHelper.getCollectionThatIsVisibleForIntent(
-                collectionId, ObjectAdapterAccessHelper.Intent.MUTATE);
+        val collection = accessHelper.getCollectionThatIsVisibleForIntent(
+                collectionId, AccessIntent.MUTATE)
+                .getCollection();
 
         final ObjectSpecification collectionSpec = collection.getSpecification();
         final ManagedObject argAdapter = new JsonParserHelper(resourceContext, collectionSpec)
@@ -648,7 +634,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         collection.removeElement(objectAdapter, argAdapter, InteractionInitiatedBy.USER);
 
-        return domainResourceHelper.collectionDetails(collectionId, MemberReprMode.WRITE);
+        return domainResourceHelper.collectionDetails(collectionId, ManagedMember.RepresentationMode.WRITE);
     }
 
     // //////////////////////////////////////////////////////////

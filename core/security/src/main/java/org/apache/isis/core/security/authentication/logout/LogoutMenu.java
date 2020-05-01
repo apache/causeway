@@ -61,7 +61,7 @@ public class LogoutMenu {
             semantics = SemanticsOf.SAFE
             )
     @ActionLayout(
-            cssClassFa = "fa-sign-out"
+            cssClassFa = "fa-sign-out-alt"
             )
     @MemberOrder(sequence = "999")
     public LoginRedirect logout(){

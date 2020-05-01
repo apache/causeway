@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.biginteger.BigIntegerValueFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedProperty;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -178,7 +179,7 @@ extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAss
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
         final JsonRepresentation representation = JsonRepresentation.newMap();
         final ObjectPropertyReprRenderer renderer = new ObjectPropertyReprRenderer(getResourceContext(), getLinkFollowSpecs(), null, representation);
-        renderer.with(new ObjectAndProperty(objectAdapter, objectMember)).asFollowed();
+        renderer.with(ManagedProperty.of(objectAdapter, objectMember)).asFollowed();
         detailsLink.mapPut("value", renderer.render());
     }
 

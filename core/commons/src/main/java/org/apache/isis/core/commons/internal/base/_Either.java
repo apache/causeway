@@ -114,13 +114,25 @@ public final class _Either<L, R> {
     public <X, Y> _Either<X, Y> map(Function<L, X> leftMapper, Function<R, Y> rightMapper){
         return isLeft()
                 ? left(leftMapper.apply(left))
-                        : right(rightMapper.apply(right));
+                : right(rightMapper.apply(right));
     }
 
     public <X, Y> _Either<X, Y> mapNullable(Function<L, X> leftMapper, Function<R, Y> rightMapper){
         return isLeft()
                 ? leftNullable(leftMapper.apply(left))
-                        : rightNullable(rightMapper.apply(right));
+                : rightNullable(rightMapper.apply(right));
+    }
+    
+    public _Either<L, R> leftRemap(Function<L, _Either<L, R>> leftRemapper){
+        return isLeft()
+                ? leftRemapper.apply(left)
+                : this;
+    }
+
+    public _Either<L, R> rightReMap(Function<R, _Either<L, R>> rightRemapper){
+        return isLeft()
+                ? this
+                : rightRemapper.apply(right);
     }
 
     // -- REDUCTION
@@ -132,7 +144,7 @@ public final class _Either<L, R> {
     public <X> X get(Function<L, X> leftMapper, Function<R, X> rightMapper){
         return isLeft()
                 ? leftMapper.apply(left)
-                        : rightMapper.apply(right);
+                : rightMapper.apply(right);
     }
 
     // -- TERMINALS

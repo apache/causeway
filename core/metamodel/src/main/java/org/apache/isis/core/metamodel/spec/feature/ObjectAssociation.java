@@ -129,6 +129,9 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
      */
     boolean isMandatory();
 
+    /**
+     * Returns the specification for the owning {@link ManagedObject}.
+     */
     ObjectSpecification getOnType();
 
     // //////////////////////////////////////////////////////

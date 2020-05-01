@@ -18,115 +18,252 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.ui.components.object;
 
-import java.io.ByteArrayInputStream;
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.HasComponents;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.server.InputStreamFactory;
-import com.vaadin.flow.server.StreamResource;
 
+import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.layout.component.ActionLayoutData;
+import org.apache.isis.applib.layout.component.CollectionLayoutData;
+import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
+import org.apache.isis.applib.layout.component.FieldSet;
+import org.apache.isis.applib.layout.component.PropertyLayoutData;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3ClearFix;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.interaction.ActionInteraction;
+import org.apache.isis.core.metamodel.spec.interaction.CollectionInteraction;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedCollection;
+import org.apache.isis.core.metamodel.spec.interaction.PropertyInteraction;
+import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableView;
+import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
+import org.apache.isis.viewer.common.model.binding.interaction.ObjectBinding;
+import org.apache.isis.viewer.common.model.gridlayout.UiGridLayout;
 
+import lombok.NonNull;
 import lombok.val;
 
 public class ObjectFormView extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;
-    
+
     private static final String NULL_LITERAL = "<NULL>";
 
     /**
      * Constructs given domain object's view, with all its visible members and actions.
      * @param managedObject - domain object
      */
-    public ObjectFormView(final ManagedObject managedObject) {
-        val specification = managedObject.getSpecification();
-        val title = specification.getTitle(null, managedObject);
-        add(new H1(title));
+    public ObjectFormView(
+            @NonNull final UiComponentFactoryVaa uiComponentFactory,
+            @NonNull final ManagedObject managedObject) {
 
-        val objectAssociations = specification
-                .streamAssociations(Contributed.INCLUDED)
-                .filter(ObjectMember::isPropertyOrCollection)
-                .collect(Collectors.toList());
-        val formLayout = new FormLayout();
-        val tablesLayout = new VerticalLayout();
-        objectAssociations.forEach(objectAssociation -> {
-            val assocObject = objectAssociation.get(managedObject);
-            if (assocObject == null) {
-                formLayout.add(createErrorField(objectAssociation, "assoc. object is null: "));
-                return;
-            }
-            val propSpec = assocObject.getSpecification();
-            switch (propSpec.getBeanSort()) {
-            case VALUE: {
-                formLayout.add(createValueField(objectAssociation, assocObject));
-                break;
-            }
-            case COLLECTION: {
-                tablesLayout.add(new Label(objectAssociation.getName()));
-                tablesLayout.add(createCollectionComponent(objectAssociation, assocObject));
-                break;
-            }
-            case VIEW_MODEL:
-            case ENTITY:
-            case MANAGED_BEAN_CONTRIBUTING:
-            case MANAGED_BEAN_NOT_CONTRIBUTING:
-            case MIXIN:
-            case UNKNOWN:
-            default: 
-                val stringValue = propSpec.toString();
-                val textField = new TextField(stringValue);
-                textField.setLabel(
-                        "Unhandled kind assoc.: " + propSpec.getBeanSort() + " " + objectAssociation.getName());
-                textField.setValue(propSpec.toString());
-                textField.setInvalid(true);
-                formLayout.add(textField);
-                break;
-            }
-        });
 
-        add(formLayout);
-        add(new H3("Tables"));
-        add(tablesLayout);
+        val objectInteractor = ObjectBinding.bind(managedObject);
+
+        val uiGridLayout = UiGridLayout.bind(managedObject);
+
+        // force new row
+        //formLayout.getElement().appendChild(ElementFactory.createBr());
+
+        val gridVisistor = new UiGridLayout.Visitor<HasComponents>(this) {
+
+            @Override
+            protected void onObjectTitle(HasComponents container, DomainObjectLayoutData domainObjectData) {
+                val uiTitle = new H1(objectInteractor.getTitle());
+                //                uiTitle.addThemeVariants(
+                //                        ButtonVariant.LUMO_LARGE,
+                //                        ButtonVariant.LUMO_TERTIARY_INLINE);
+                container.add(uiTitle);     
+            }
+
+            @Override
+            protected HasComponents newRow(HasComponents container, BS3Row bs3Row) {
+                val uiRow = new FlexLayout();
+                container.add(uiRow);
+                uiRow.setWidthFull();
+                uiRow.setWrapMode(FlexLayout.WrapMode.WRAP); // allow line breaking
+
+                // instead of a FlexLayout we need to convert to a layout where we can control 
+                // the responsive steps
+                //                val steps = _Lists.of(
+                //                        new ResponsiveStep("0", 1),
+                //                        new ResponsiveStep("50em", 2)
+                //                        );
+
+                return uiRow;
+            }
+
+            @Override
+            protected HasComponents newCol(HasComponents container, BS3Col bs3col) {
+
+                val uiCol = new VerticalLayout();
+                container.add(uiCol);
+
+                final int span = bs3col.getSpan();
+                ((FlexLayout)container).setFlexGrow(span, uiCol);
+                val widthEm = String.format("%dem", span * 3); // 1em ~ 16px
+                uiCol.setWidth(null); // clear preset width style
+                uiCol.setMinWidth(widthEm);
+
+                return uiCol;
+            }
+
+            @Override
+            protected HasComponents newActionPanel(HasComponents container) {
+                val uiActionPanel = new FlexLayout();
+                container.add(uiActionPanel);
+
+                uiActionPanel.setWrapMode(FlexLayout.WrapMode.WRAP); // allow line breaking
+                uiActionPanel.setAlignItems(Alignment.BASELINE);
+                return uiActionPanel;
+            }
+
+            @Override
+            protected HasComponents newTabGroup(HasComponents container, BS3TabGroup tabGroupData) {
+                val uiTabGroup = new Tabs();
+                container.add(uiTabGroup);
+                uiTabGroup.setOrientation(Tabs.Orientation.HORIZONTAL);
+                return uiTabGroup;
+            }
+
+            @Override
+            protected HasComponents newTab(HasComponents container, BS3Tab tabData) {
+                val uiTab = new Tab(tabData.getName());
+                container.add(uiTab);
+                return uiTab;
+            }
+
+            @Override
+            protected HasComponents newFieldSet(HasComponents container, FieldSet fieldSetData) {
+
+                container.add(new H2(fieldSetData.getName()));
+
+                val uiFieldSet = new FormLayout();
+                container.add(uiFieldSet);
+
+                uiFieldSet.setResponsiveSteps(
+                        new ResponsiveStep("0", 1)); // single column only
+
+                return uiFieldSet;
+            }
+
+
+            @Override
+            protected void onClearfix(HasComponents container, BS3ClearFix clearFixData) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            protected void onAction(HasComponents container, ActionLayoutData actionData) {
+                
+                val owner = objectInteractor.getManagedObject();
+                ActionInteraction.start(owner, actionData.getId())
+                .checkVisibility(Where.OBJECT_FORMS)
+                .get()
+                .ifPresent(managedAction -> {
+                    // TODO yet not doing anything
+                    val uiAction = new Button(managedAction.getName());
+                    container.add(uiAction);
+                    uiAction.getStyle().set("margin-left", "0.5em");
+                    uiAction.addThemeVariants(
+                            ButtonVariant.LUMO_SMALL);
+                });
+            }
+
+            @Override
+            protected void onProperty(HasComponents container, PropertyLayoutData propertyData) {
+                
+                val owner = objectInteractor.getManagedObject();
+                
+                PropertyInteraction.start(owner, propertyData.getId())
+                .checkVisibility(Where.OBJECT_FORMS)
+                .get()
+                .ifPresent(managedProperty -> {
+                    val uiProperty = uiComponentFactory
+                            .componentFor(UiComponentFactory.Request.of(Where.OBJECT_FORMS, managedProperty));
+                    container.add(uiProperty);
+                });
+            }
+
+            @Override
+            protected void onCollection(HasComponents container, CollectionLayoutData collectionData) {
+                
+                val owner = objectInteractor.getManagedObject();
+                
+                CollectionInteraction.start(owner, collectionData.getId())
+                .checkVisibility(Where.OBJECT_FORMS)
+                .get()
+                .ifPresent(managedCollection -> {
+                    container.add(new H3(managedCollection.getName()));
+                    
+                    val uiCollection = createCollectionComponent(managedCollection);
+                    container.add(uiCollection);
+                });
+                
+            }
+
+        };
+
+        uiGridLayout.visit(gridVisistor);
         setWidthFull();
 
+        // -- populate actions
+
+        //        objectInteractor
+        //        .streamVisisbleActions()
+        //        .forEach(action -> {
+        //            
+        //            val button = new Button(action.getName());
+        //            actionsLayout.add(button);
+        //            
+        //            Dialog dialog = new Dialog();
+        //            dialog.add(new Label("Under Construction ... Close me with the esc-key or an outside click"));
+        //
+        //            dialog.setWidth("400px");
+        //            dialog.setHeight("150px");
+        //
+        //            button.addClickListener(e->{
+        //                dialog.open();
+        //            });
+        //
+        ////similar code in menu item ...            
+        ////            val actionModel = (ActionVaa)menuItemModel.getMenuActionUiModel();
+        ////            
+        ////            subMenu.addItem(
+        ////                    (Component)menuActionModel.getUiComponent(), 
+        ////                    e->subMenuEventHandler.accept(menuActionModel));
+        //            
+        //        });
+
+
     }
-    
+
     // -- HELPER
 
-    private Component createErrorField(final ObjectAssociation objectAssociation, final String error) {
-        return createErrorField("Error:" + objectAssociation.getName(),
-                error + objectAssociation.toString());
-    }
-
-    private Component createErrorField(final String label, final String message) {
-        val textField = new TextField();
-        textField.setLabel(label);
-        textField.setValue(message);
-        return textField;
-    }
-
     private Component createCollectionComponent(
-            final ObjectAssociation objectAssociation,
-            final ManagedObject assocObject
-    ) {
+            final ManagedCollection managedCollection) {
 
-        val labelLiteral = "Collection: " + objectAssociation.getName();
-        val pojo = assocObject.getPojo();
+        val labelLiteral = "Collection: " + managedCollection.getName();
+        val pojo = managedCollection.getCollectionValue().getPojo();
         if (pojo instanceof Collection) {
-            return TableView.fromObjectAssociation(objectAssociation, assocObject);
+            return TableView.fromManagedCollection(managedCollection);
         }
 
         if (pojo == null) {
@@ -143,35 +280,5 @@ public class ObjectFormView extends VerticalLayout {
         return textField;
     }
 
-    private Component createValueField(final ObjectAssociation association, final ManagedObject assocObject) {
-        // TODO how to handle object type / id
 
-        // How to handle blobs?
-        //        final BlobValueSemanticsProvider blobValueFacet = association.getFacet(BlobValueSemanticsProvider.class);
-        //        if (blobValueFacet != null) {
-        //            final java.awt.Image aByte = blobValueFacet.getParser(assocObject);
-        //            new Image(aByte);
-        //            return null;
-        //        }
-        val description = assocObject.getSpecification().streamFacets()
-                .map(facet -> facet.getClass().getName())
-                .collect(Collectors.joining("\n"));
-
-        val textField = createTextField(association, assocObject);
-        //        Tooltips.getCurrent().setTooltip(textField, description);
-        return textField;
-    }
-
-    private Image convertToImage(final byte[] imageData) {
-        val streamResource = new StreamResource("isr",
-                (InputStreamFactory) () -> new ByteArrayInputStream(imageData));
-        return new Image(streamResource, "photo");
-    }
-
-    private TextField createTextField(final ObjectAssociation association, final ManagedObject assocObject) {
-        val textField = new TextField();
-        textField.setLabel(association.getName());
-        textField.setValue(assocObject.titleString(null));
-        return textField;
-    }
 }

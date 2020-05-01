@@ -111,7 +111,7 @@ extends ValueSemanticsProviderAndFacetAbstract<Boolean> implements BooleanValueF
 
     @Override
     public boolean isSet(ManagedObject adapter) {
-        if (ManagedObject.isNull(adapter)) {
+        if (ManagedObject.isNullOrUnspecifiedOrEmpty(adapter)) {
             return false;
         }
         final Object object = adapter.getPojo();

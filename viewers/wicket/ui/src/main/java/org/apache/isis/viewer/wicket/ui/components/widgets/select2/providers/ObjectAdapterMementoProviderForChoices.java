@@ -36,13 +36,12 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
-import java.util.List;
-
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 
 public interface ObjectAdapterMementoProviderForChoices {
 
-    List<ObjectMemento> getChoiceMementos();
+    Can<ObjectMemento> getChoiceMementos();
 
 
 }

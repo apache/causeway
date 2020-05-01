@@ -30,6 +30,8 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.incubator.model.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
+import lombok.experimental.Accessors;
 
 @ActionLayout(named="Hide", promptStyle = PromptStyle.DIALOG_MODAL)
 @Action
@@ -39,6 +41,12 @@ public class DependentArgsActionDemo_useHide {
     @Inject MessageService messageService;
 
     private final DependentArgsActionDemo holder;
+    
+    @Value @Accessors(fluent = true) // fluent so we can replace this with Java(14+) records later
+    static class Parameters {
+        boolean hideMessageField;
+        String message;
+    }
 
     public DependentArgsActionDemo act(
 
@@ -57,7 +65,7 @@ public class DependentArgsActionDemo_useHide {
         return holder;
     }
     
-    // -- PARAM 0 (Parity)
+    // -- PARAM 0 (boolean hideMessageField)
 
     @Model
     public boolean default0Act() {
@@ -71,6 +79,11 @@ public class DependentArgsActionDemo_useHide {
         return hideMessageField;
     }
 
-
+    
+    public boolean hide1Act(Parameters params) {
+        return params.hideMessageField();
+    }
+    
+    
 }
 

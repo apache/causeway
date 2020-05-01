@@ -21,12 +21,14 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 import com.fasterxml.jackson.databind.node.NullNode;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedMember;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -34,9 +36,10 @@ import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
-public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbstract<R, ObjectAndMember<T>>, T extends ObjectMember> 
-extends ReprRendererAbstract<R, ObjectAndMember<T>> {
-
+public abstract class AbstractObjectMemberReprRenderer<
+    R extends ReprRendererAbstract<R, ManagedMember>, 
+    T extends ObjectMember> 
+extends ReprRendererAbstract<R, ManagedMember> {
 
     protected enum Mode {
         INLINE, FOLLOWED, STANDALONE, MUTATED, ARGUMENTS, EVENT_SERIALIZATION;
@@ -103,9 +106,9 @@ extends ReprRendererAbstract<R, ObjectAndMember<T>> {
 
 
     @Override
-    public R with(final ObjectAndMember<T> objectAndMember) {
-        this.objectAdapter = objectAndMember.getObjectAdapter();
-        this.objectMember = objectAndMember.getMember();
+    public R with(final ManagedMember objectAndMember) {
+        this.objectAdapter = objectAndMember.getOwner();
+        this.objectMember = _Casts.uncheckedCast(objectAndMember.getMember());
         this.objectMemberType = MemberType.determineFrom(objectMember);
         this.memberId = objectMember.getId();
         usingLinkTo(new DomainObjectLinkTo());
@@ -197,8 +200,8 @@ extends ReprRendererAbstract<R, ObjectAndMember<T>> {
         }
     }
 
-    public void withMemberMode(MemberReprMode memberMode) {
-        if(memberMode == MemberReprMode.WRITE) {
+    public void withMemberMode(ManagedMember.RepresentationMode memberMode) {
+        if(memberMode.isWrite()) {
             this.asMutated();
         } else {
             this.asStandalone();

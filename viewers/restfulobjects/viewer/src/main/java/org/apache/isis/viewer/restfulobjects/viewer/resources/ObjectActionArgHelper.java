@@ -21,6 +21,7 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -28,33 +29,30 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedAction;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
  * Utility class that encapsulates the logic for parsing arguments to be invoked by an
  * {@link ObjectAction}.
  */
+@RequiredArgsConstructor(staticName = "of")
 public class ObjectActionArgHelper {
 
     private final IResourceContext resourceContext;
-    private final ManagedObject objectAdapter;
-    private final ObjectAction action;
+    private final ManagedAction managedAction;
 
-    public ObjectActionArgHelper(
-            final IResourceContext resourceContext,
-            final ManagedObject objectAdapter,
-            final ObjectAction action) {
-        this.resourceContext = resourceContext;
-        this.objectAdapter = objectAdapter;
-        this.action = action;
-    }
-
-    public List<ManagedObject> parseAndValidateArguments(final JsonRepresentation arguments) {
+    public Can<ManagedObject> parseAndValidateArguments(final JsonRepresentation arguments) {
+        
+        val action = managedAction.getAction();
+        val owner = managedAction.getOwner();
+        
         final List<JsonRepresentation> argList = argListFor(action, arguments);
 
         final List<ManagedObject> argAdapters = _Lists.newArrayList();
@@ -70,20 +68,23 @@ public class ObjectActionArgHelper {
                 // validate individual arg
                 final ObjectActionParameter parameter = parameters.getElseFail(i);
                 final Object argPojo = argAdapter!=null?argAdapter.getPojo():null;
-                final String reasonNotValid = parameter.isValid(objectAdapter, argPojo, InteractionInitiatedBy.USER);
+                final String reasonNotValid = parameter.isValid(owner, argPojo, InteractionInitiatedBy.USER);
                 if (reasonNotValid != null) {
                     argRepr.mapPut("invalidReason", reasonNotValid);
                     valid = false;
                 }
             } catch (final IllegalArgumentException e) {
-                argAdapters.add(null);
+                argAdapters.add(ManagedObject.of(paramSpec, null));
                 valid = false;
             }
         }
 
+        val proposedArguments = Can.ofCollection(argAdapters);
+        
+        
         // validate entire argument set
         final Consent consent = action.isArgumentSetValid(
-                objectAdapter, argAdapters, InteractionInitiatedBy.USER);
+                owner, proposedArguments, InteractionInitiatedBy.USER);
         if (consent.isVetoed()) {
             arguments.mapPut("x-ro-invalidReason", consent.getReason());
             valid = false;
@@ -96,7 +97,7 @@ public class ObjectActionArgHelper {
                     "Validation failed, see body for details");
         }
 
-        return argAdapters;
+        return proposedArguments;
     }
 
     private static List<JsonRepresentation> argListFor(final ObjectAction action, final JsonRepresentation arguments) {

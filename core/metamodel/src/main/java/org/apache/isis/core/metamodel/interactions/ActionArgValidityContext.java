@@ -19,10 +19,9 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import java.util.List;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.ActionArgumentEvent;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -40,14 +39,14 @@ public class ActionArgValidityContext extends ValidityContext<ActionArgumentEven
 
     @Getter(onMethod = @__(@Override)) private final ObjectAction objectAction;
     @Getter(onMethod = @__(@Override)) private final ManagedObject proposed;
-    @Getter private final List<ManagedObject> args;
+    @Getter private final Can<ManagedObject> args;
     @Getter private final int position;
 
     public ActionArgValidityContext(
             final ManagedObject targetAdapter,
             final ObjectAction objectAction,
             final Identifier id,
-            final List<ManagedObject> args,
+            final Can<ManagedObject> args,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
@@ -56,13 +55,13 @@ public class ActionArgValidityContext extends ValidityContext<ActionArgumentEven
 
         this.args = args;
         this.position = position;
-        this.proposed = args.get(position);
+        this.proposed = args.getElseFail(position);
     }
 
     @Override
     public ActionArgumentEvent createInteractionEvent() {
         return new ActionArgumentEvent(
-                unwrapSingle(getTarget()), getIdentifier(), ManagedObject.unwrapMultipleAsArray(getArgs()), getPosition());
+                unwrapSingle(getTarget()), getIdentifier(), ManagedObject.unwrapMultipleAsArray(getArgs().toList()), getPosition());
     }
 
 }

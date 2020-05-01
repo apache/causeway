@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
@@ -27,12 +28,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.reflection._MethodCache;
+import org.apache.isis.core.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 
+import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramSignatureMatch;
+
+import lombok.NonNull;
+import lombok.Value;
 import lombok.val;
 
 public final class MethodFinderUtils {
@@ -112,7 +120,19 @@ public final class MethodFinderUtils {
         return null;
     }
     
-    public static Method findMethod(final Class<?> type, final String name, final Class<?> returnType) {
+    public static Optional<Method> findNoArgMethod(final Class<?> type, final String name, final Class<?> returnType) {
+        return streamMethods(type, name, returnType)
+                .filter(MethodUtil.Predicates.paramCount(0))
+                .findFirst();
+    }
+    
+    public static Optional<Method> findSingleArgMethod(final Class<?> type, final String name, final Class<?> returnType) {
+        return streamMethods(type, name, returnType)
+                .filter(MethodUtil.Predicates.paramCount(1))
+                .findFirst();
+    }
+    
+    public static Stream<Method> streamMethods(final Class<?> type, final String name, final Class<?> returnType) {
         try {
             final Method[] methods = type.getMethods();
             return Arrays.stream(methods)
@@ -120,10 +140,8 @@ public final class MethodFinderUtils {
                     .filter(MethodUtil::isNotStatic)
                     .filter(method -> method.getName().equals(name))
                     .filter(method -> returnType == null ||
-                                      returnType == method.getReturnType())
-                    .findFirst()
-                    .orElse(null);
-
+                                      returnType.isAssignableFrom(method.getReturnType()))
+                    ;
         } catch (final SecurityException e) {
             return null;
         }
@@ -232,5 +250,95 @@ public final class MethodFinderUtils {
         
         return findMethod_returningAnyOf(nonScalarTypes, type, name, paramTypes);
     }
+    
+    // -- PPM SUPPORT
+    
+    
+    @Value(staticConstructor = "of")
+    public static class MethodAndPpmConstructor {
+        @NonNull Method supportingMethod;
+        @NonNull Constructor<?> ppmFactory;
+    }
+    
+    @Value(staticConstructor = "of")
+    private static class MethodAndPpmCandidate {
+        @NonNull Method supportingMethod;
+        @NonNull Class<?> ppmCandidate;
+        Optional<MethodAndPpmConstructor> lookupConstructor(Class<?>[] paramTypes) {
+            return _Reflect.getPublicConstructors(getPpmCandidate()).stream()
+            .filter(paramSignatureMatch(paramTypes))
+            .map(constructor->MethodAndPpmConstructor.of(supportingMethod, constructor))
+            .findFirst();
+        }
+    }
+    
+    public static MethodAndPpmConstructor findMethodWithPPMArg(
+            final Class<?> type, 
+            final String name, 
+            final Class<?> returnType,
+            final Class<?>[] paramTypes,
+            final Can<Class<?>> additionalParamTypes) {
+        
+        return streamMethods(type, name, returnType)
+            .filter(MethodUtil.Predicates.paramCount(additionalParamTypes.size()+1))
+            .filter(MethodUtil.Predicates.matchParamTypes(1, additionalParamTypes))
+            .map(method->MethodAndPpmCandidate.of(method, method.getParameterTypes()[0]))
+            .map(ppmCandidate->ppmCandidate.lookupConstructor(paramTypes))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .findFirst()
+            .orElse(null);
+    }
+    
+    public static MethodAndPpmConstructor findMethodWithPPMArg_returningAnyOf(
+            final Class<?>[] returnTypes,
+            final Class<?> type,
+            final String name,
+            final Class<?>[] paramTypes,
+            final Can<Class<?>> additionalParamTypes) {
+        
+        for (val returnType : returnTypes) {
+            val result = findMethodWithPPMArg(type, name, returnType, paramTypes, additionalParamTypes);
+            if(result != null) {
+                return result;
+            }
+        }
+        return null;
+    } 
+
+    public static MethodAndPpmConstructor findMethodWithPPMArg_returningBoolean(
+            final Class<?> type, 
+            final String name,
+            final Class<?>[] paramTypes,
+            final Can<Class<?>> additionalParamTypes) {
+        
+        return findMethodWithPPMArg_returningAnyOf(BOOLEAN_TYPES, type, name, paramTypes, additionalParamTypes);
+    }
+
+    public static MethodAndPpmConstructor findMethodWithPPMArg_returningText(
+            final Class<?> type, 
+            final String name,
+            final Class<?>[] paramTypes,
+            final Can<Class<?>> additionalParamTypes) {
+        
+        return findMethodWithPPMArg_returningAnyOf(TEXT_TYPES, type, name, paramTypes, additionalParamTypes);
+    }
+
+    public static MethodAndPpmConstructor findMethodWithPPMArg_returningNonScalar(
+            final Class<?> type, 
+            final String name, 
+            final Class<?> elementReturnType,
+            final Class<?>[] paramTypes, 
+            final Can<Class<?>> additionalParamTypes) {
+        
+        val nonScalarTypes = new Class<?>[]{
+            Collection.class, 
+            Array.newInstance(elementReturnType, 0).getClass()};
+        
+        return findMethodWithPPMArg_returningAnyOf(nonScalarTypes, type, name, paramTypes, additionalParamTypes);
+    }
+    
+
+
 
 }

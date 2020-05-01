@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.common.model.userprofile;
 
+import java.util.Optional;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,4 +30,6 @@ import lombok.NoArgsConstructor;
 public class UserProfileUiModel {
 
     private String userProfileName;
+    private Optional<String> avatar;
+    
 }

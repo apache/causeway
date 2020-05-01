@@ -19,8 +19,13 @@
 
 package org.apache.isis.core.metamodel.facets.members.cssclassfa;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
-import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
+import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
  * The <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> css class(es) for an action.
@@ -29,10 +34,40 @@ import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
  * In the standard Apache Isis Programming Model, corresponds to annotating the
  * member with <tt>{@literal @}{@link org.apache.isis.applib.annotation.ActionLayout#cssClassFa()  ActionLayout}</tt>#cssClassFa().
  */
-public interface CssClassFaFacet extends SingleStringValueFacet {
+public interface CssClassFaFacet extends Facet {
 
     /**
      * @return The position of the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> icon.
      */
     CssClassFaPosition getPosition();
+    
+    Stream<String> streamCssClasses();
+
+    /**
+     * @return space separated (distinct) CSS-class strings
+     */
+    default String asSpaceSeparated() {
+        return streamCssClasses()
+                .collect(Collectors.joining(" "));
+    }
+    
+    /**
+     * @param additionalClasses - trimmed and filtered by non-empty, then added to the resulting string 
+     * @return space separated (distinct) CSS-class strings
+     */
+    default String asSpaceSeparatedWithAdditional(String ... additionalClasses) {
+        
+        if(_NullSafe.size(additionalClasses)==0) {
+            return asSpaceSeparated(); 
+        }
+        
+        return Stream.concat(
+                streamCssClasses(), 
+                _NullSafe.stream(additionalClasses)
+                    .map(String::trim)
+                    .filter(_Strings::isNotEmpty))
+        .distinct()
+        .collect(Collectors.joining(" "));
+        
+    }
 }

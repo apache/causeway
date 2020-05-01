@@ -33,7 +33,6 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.commons.collections.Can;
@@ -56,9 +55,11 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
+import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 
 import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
+import lombok.NonNull;
 import lombok.val;
 
 public interface ObjectAction extends ObjectMember {
@@ -107,11 +108,11 @@ public interface ObjectAction extends ObjectMember {
      * @param mixedInAdapter - will be null for regular actions, and for mixin actions.  When a mixin action invokes its underlying mixedIn action, then will be populated (so that the ActionDomainEvent can correctly provide the underlying mixin)
      */
     ManagedObject executeWithRuleChecking(
-            final ManagedObject target,
-            final ManagedObject mixedInAdapter,
-            final List<ManagedObject> parameters,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) throws AuthorizationException;
+            ManagedObject target,
+            ManagedObject mixedInAdapter,
+            Can<ManagedObject> parameters,
+            InteractionInitiatedBy interactionInitiatedBy,
+            Where where) throws AuthorizationException;
 
     /**
      * Invokes the action's method on the target object given the specified set
@@ -124,8 +125,8 @@ public interface ObjectAction extends ObjectMember {
     ManagedObject execute(
             ManagedObject targetAdapter,
             ManagedObject mixedInAdapter,
-            List<ManagedObject> parameters,
-            final InteractionInitiatedBy interactionInitiatedBy);
+            Can<ManagedObject> parameters,
+            InteractionInitiatedBy interactionInitiatedBy);
 
 
     // -- isProposedArgumentSetValid, isEachIndividualArgumentValid, isArgumentSetValid
@@ -144,21 +145,32 @@ public interface ObjectAction extends ObjectMember {
      */
     Consent isProposedArgumentSetValid(
             ManagedObject object,
-            List<ManagedObject> proposedArguments,
+            Can<ManagedObject> proposedArguments,
             InteractionInitiatedBy interactionInitiatedBy);
 
     Consent isEachIndividualArgumentValid(
             ManagedObject objectAdapter,
-            List<ManagedObject> proposedArguments,
+            Can<ManagedObject> proposedArguments,
             InteractionInitiatedBy interactionInitiatedBy);
 
     Consent isArgumentSetValid(
             ManagedObject objectAdapter,
-            List<ManagedObject> proposedArguments,
+            Can<ManagedObject> proposedArguments,
             InteractionInitiatedBy interactionInitiatedBy);
 
 
+    // -- Model for Parameter Negotiation
+    
+    
+    PendingParameterModel newPendingParameterModel(
+            @NonNull ManagedObject actionOwner,
+            @NonNull Can<ManagedObject> paramValues);
 
+    default PendingParameterModel newPendingParameterModel(
+            @NonNull ManagedObject actionOwner) {
+        return newPendingParameterModel(actionOwner, Can.empty()); // init defaults
+    }
+    
     // -- Parameters (declarative)
 
     /**
@@ -296,14 +308,9 @@ public interface ObjectAction extends ObjectMember {
             return layoutFacet != null ? layoutFacet.position() : ActionLayout.Position.BELOW;
         }
 
-        public static String cssClassFaFor(final ObjectAction action) {
-            final CssClassFaFacet cssClassFaFacet = action.getFacet(CssClassFaFacet.class);
-            return cssClassFaFacet != null ? cssClassFaFacet.value() : null;
-        }
-
-        public static CssClassFaPosition cssClassFaPositionFor(final ObjectAction action) {
-            CssClassFaFacet facet = action.getFacet(CssClassFaFacet.class);
-            return facet != null ? facet.getPosition() : CssClassFaPosition.LEFT;
+        public static Optional<CssClassFaFacet> cssClassFaFacetFor(final ObjectAction action) {
+            return Optional.ofNullable(action)
+            .map(a->a.getFacet(CssClassFaFacet.class));
         }
 
         public static String cssClassFor(final ObjectAction action, final ManagedObject objectAdapter) {

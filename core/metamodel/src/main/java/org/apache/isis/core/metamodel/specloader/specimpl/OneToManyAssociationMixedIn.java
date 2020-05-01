@@ -18,11 +18,11 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -153,7 +153,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
         final ManagedObject mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
         return getPublishingServiceInternal().withPublishingSuppressed(
                 () -> mixinAction.executeInternal(
-                        mixinAdapter, mixedInAdapter, Collections.emptyList(), interactionInitiatedBy));
+                        mixinAdapter, mixedInAdapter, Can.empty(), interactionInitiatedBy));
     }
 
     @Override

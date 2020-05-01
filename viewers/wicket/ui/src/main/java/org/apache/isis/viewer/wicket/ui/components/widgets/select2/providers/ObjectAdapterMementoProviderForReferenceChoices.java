@@ -18,10 +18,9 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
-import java.util.List;
-
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 import lombok.Getter;
 
@@ -32,18 +31,18 @@ implements ObjectAdapterMementoProviderForChoices {
     private static final long serialVersionUID = 1L;
     
     @Getter(onMethod = @__(@Override))
-    private final List<ObjectMemento> choiceMementos;
+    private final Can<ObjectMemento> choiceMementos;
 
     public ObjectAdapterMementoProviderForReferenceChoices(
             ScalarModel model,
-            List<ObjectMemento> choiceMementos) {
+            Can<ObjectMemento> choiceMementos) {
         
         super(model);
         this.choiceMementos = choiceMementos;
     }
 
     @Override
-    protected List<ObjectMemento> obtainMementos(String term) {
+    protected Can<ObjectMemento> obtainMementos(String term) {
         return super.obtainMementos(term, choiceMementos);
     }
 

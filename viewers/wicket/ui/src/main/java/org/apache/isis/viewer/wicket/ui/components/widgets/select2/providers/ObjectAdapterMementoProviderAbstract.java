@@ -28,17 +28,18 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.string.Strings;
 import org.wicketstuff.select2.ChoiceProvider;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.IsisConverterLocator;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 
 import lombok.Getter;
 import lombok.val;
@@ -114,7 +115,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
         response.addAll(mementos);
     }
 
-    protected abstract List<ObjectMemento> obtainMementos(String term);
+    protected abstract Can<ObjectMemento> obtainMementos(String term);
 
     /**
      * Filters all choices against a term by using their
@@ -124,24 +125,20 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
      * @param choicesMementos The collections of choices to filter
      * @return A list of all matching choices
      */
-    protected final List<ObjectMemento> obtainMementos(
+    protected final Can<ObjectMemento> obtainMementos(
             String term, 
-            Collection<ObjectMemento> choicesMementos) {
+            Can<ObjectMemento> choicesMementos) {
         
-        List<ObjectMemento> matches = _Lists.newArrayList();
         if (Strings.isEmpty(term)) {
-            matches.addAll(choicesMementos);
-        } else {
-            for (ObjectMemento candidate : choicesMementos) {
-                val objectAdapter = commonContext.reconstructObject(candidate); 
-                String title = objectAdapter.titleString(objectAdapter);
-                if (title.toLowerCase().contains(term.toLowerCase())) {
-                    matches.add(candidate);
-                }
-            }
-        }
-
-        return matches;
+            return choicesMementos;
+        } 
+            
+        return choicesMementos.filter((ObjectMemento candidate)->{
+            val objectAdapter = commonContext.reconstructObject(candidate); 
+            val title = objectAdapter.titleString(objectAdapter);
+            return title.toLowerCase().contains(term.toLowerCase());
+        });
+        
     }
 
     @Override

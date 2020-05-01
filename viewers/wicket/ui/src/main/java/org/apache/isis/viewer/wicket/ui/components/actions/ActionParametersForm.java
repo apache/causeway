@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.actions;
 
-import java.util.Collections;
 import java.util.Optional;
 
 import org.apache.wicket.Component;
@@ -29,10 +28,13 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
+import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel.Placement;
 import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionArgumentModel;
@@ -41,12 +43,11 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorStrategy;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
-import org.apache.isis.viewer.wicket.ui.util.Confirmations;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.Decorators;
 
 import lombok.val;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
 
 class ActionParametersForm extends PromptFormAbstract<ActionModel> {
@@ -90,7 +91,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
                 val realTargetAdapter = actionModel.getActionMemento().getAction(getSpecificationLoader())
                         .realTargetAdapter(targetAdapter);
                 val consent = actionParameterMemento.getActionParameter(getSpecificationLoader())
-                        .isVisible(realTargetAdapter, Collections.emptyList(), InteractionInitiatedBy.USER);
+                        .isVisible(realTargetAdapter, Can.empty(), InteractionInitiatedBy.USER);
                 val allowed = consent.isAllowed();
                 paramPanel.setVisible(allowed);
                 
@@ -155,8 +156,8 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
         val action = actionModel.getActionMemento().getAction(getSpecificationLoader());
         
         if (action.getSemantics().isAreYouSure()) {
-            Confirmations
-            .addConfirmationDialog(super.getTranslationService(), button, TooltipConfig.Placement.right);
+            val confirmUiModel = ConfirmUiModel.ofAreYouSure(getTranslationService(), Placement.RIGHT);
+            Decorators.getConfirm().decorate(button, confirmUiModel);
         }
     }
 

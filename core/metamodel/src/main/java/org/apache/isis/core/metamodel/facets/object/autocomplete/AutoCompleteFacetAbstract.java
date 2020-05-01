@@ -22,10 +22,9 @@ package org.apache.isis.core.metamodel.facets.object.autocomplete;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -66,7 +65,7 @@ implements AutoCompleteFacet {
     }
 
     @Override
-    public List<ManagedObject> execute(
+    public Can<ManagedObject> execute(
             final String search,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
@@ -89,7 +88,7 @@ implements AutoCompleteFacet {
                 });
 
         return ManagedObject.VisibilityUtil.streamVisibleAdapters(resultAdapter, interactionInitiatedBy)
-                .collect(Collectors.toList());
+                .collect(Can.toCan());
 
     }
 

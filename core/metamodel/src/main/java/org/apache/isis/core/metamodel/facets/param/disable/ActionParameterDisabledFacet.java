@@ -19,8 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.param.disable;
 
-import java.util.List;
-
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -37,5 +36,5 @@ public interface ActionParameterDisabledFacet extends Facet, DisablingInteractio
     /**
      * Reason why the parameter is disabled, or <tt>null</tt> if okay.
      */
-    public String disabledReason(ManagedObject target, List<ManagedObject> arguments);
+    public String disabledReason(ManagedObject target, Can<ManagedObject> arguments);
 }

@@ -38,6 +38,8 @@ import lombok.val;
 @Value @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class Can_Empty<T> implements Can<T> {
 
+    private static final long serialVersionUID = 1L;
+    
     static final Can_Empty<?> INSTANCE = new Can_Empty<>(); 
 
     @Override

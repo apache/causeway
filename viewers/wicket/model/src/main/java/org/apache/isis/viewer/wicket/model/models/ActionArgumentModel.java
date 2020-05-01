@@ -18,10 +18,9 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import java.util.List;
-
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 
@@ -31,5 +30,5 @@ public interface ActionArgumentModel extends IModel<ManagedObject> {
 
     void reset();
 
-    void setActionArgsHint(List<ManagedObject> arguments);
+    void setActionArgsHint(Can<ManagedObject> arguments);
 }

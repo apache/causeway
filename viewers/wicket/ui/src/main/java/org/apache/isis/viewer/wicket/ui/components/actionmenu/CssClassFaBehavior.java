@@ -44,7 +44,7 @@ public class CssClassFaBehavior extends Behavior {
         super.beforeRender(component);
         val position = fontAwesomeUiModel.getPosition();
         if (position == null || CssClassFaPosition.LEFT == position) {
-            val cssClassFa = fontAwesomeUiModel.getCssClass();
+            val cssClassFa = fontAwesomeUiModel.getCssClassesSpaceSeparated();
             component.getResponse().write("<span class=\""+cssClassFa+" fontAwesomeIcon\"></span>");
         }
     }
@@ -53,7 +53,7 @@ public class CssClassFaBehavior extends Behavior {
     public void afterRender(final Component component) {
         val position = fontAwesomeUiModel.getPosition();
         if (CssClassFaPosition.RIGHT == position) {
-            val cssClassFa = fontAwesomeUiModel.getCssClass();
+            val cssClassFa = fontAwesomeUiModel.getCssClassesSpaceSeparated();
             component.getResponse().write("<span class=\""+cssClassFa+" fontAwesomeIcon\"></span>");
         }
         super.afterRender(component);

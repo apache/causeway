@@ -56,7 +56,7 @@ public class Object_openRestApi {
             )
     @ActionLayout(
             contributed = Contributed.AS_ACTION,
-            cssClassFa = "fa-external-link",
+            cssClassFa = "fa-external-link-alt",
             position = ActionLayout.Position.PANEL_DROPDOWN
             )
     @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "750.1")

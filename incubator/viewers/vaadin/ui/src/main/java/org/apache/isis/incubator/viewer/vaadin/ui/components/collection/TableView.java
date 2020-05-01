@@ -19,10 +19,13 @@
 package org.apache.isis.incubator.viewer.vaadin.ui.components.collection;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
@@ -32,13 +35,16 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedCollection;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Log4j2
 public class TableView extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;
@@ -56,32 +62,33 @@ public class TableView extends VerticalLayout {
     public static TableView fromCollection(final ManagedObject collection) {
         val collectionFacet = collection.getSpecification()
                 .getFacet(CollectionFacet.class);
+        
         val objects = collectionFacet.stream(collection)
                 .collect(Collectors.toList());
-        if (_NullSafe.isEmpty(objects)) {
-            return empty();
-        }
         
-        val elementSpec = objects.iterator().next().getSpecification();
-        return new TableView(elementSpec, objects);
+        return inferElementSpecification(objects)
+                .map(elementSpec->new TableView(elementSpec, objects))
+                .orElseGet(TableView::empty);
     }
     
     /**
-     * Constructs a (page-able) {@link Grid} from given {@code objectAssociation} and {@code assocObject}   
-     * @param objectAssociation
-     * @param assocObject
+     * Constructs a (page-able) {@link Grid} from given {@code managedCollection}   
+     * @param managedCollection
      */
-    public static TableView fromObjectAssociation(
-            @NonNull final ObjectAssociation objectAssociation,
-            @Nullable final ManagedObject assocObject) {
+    public static Component fromManagedCollection(ManagedCollection managedCollection) {
         
+        val assocObject = managedCollection.getOwner();
         val assocObjectSpecification = assocObject.getSpecification();
         val collectionFacet = assocObjectSpecification.getFacet(CollectionFacet.class);
 
         val pojo = assocObject.getPojo();
         if (pojo instanceof Collection) {
-            val objects = collectionFacet.stream(assocObject).collect(Collectors.toList());
-            return new TableView(objectAssociation.getOnType(), objects);
+            val objects = collectionFacet.stream(assocObject)
+                    .collect(Collectors.toList());
+            
+            return inferElementSpecification(objects)
+            .map(elementSpec->new TableView(elementSpec, objects))
+            .orElseGet(TableView::empty);
         }
         
         return empty();
@@ -120,11 +127,8 @@ public class TableView extends VerticalLayout {
         .forEach(property -> {
             
             objectGrid.addColumn(targetObject -> {
-                val propertyValue = property.get(targetObject);
-                return propertyValue == null 
-                        ? NULL_LITERAL
-                        : propertyValue.titleString();
-
+                log.debug("about to get property value for property {}", property.getId());
+                return stringifyPropertyValue(property, targetObject);
             })
             .setHeader(property.getName());
         });
@@ -133,4 +137,27 @@ public class TableView extends VerticalLayout {
         objectGrid.setColumnReorderingAllowed(true);
         
     }
+    
+    private static Optional<ObjectSpecification> inferElementSpecification(List<ManagedObject> objects) {
+        if (_NullSafe.isEmpty(objects)) {
+            return Optional.empty();
+        }
+        val elementSpec = objects.iterator().next().getSpecification();
+        return Optional.of(elementSpec);
+    }
+    
+    private String stringifyPropertyValue(
+            ObjectAssociation property, 
+            ManagedObject targetObject) {
+        try {
+            val propertyValue = property.get(targetObject);
+            return propertyValue == null 
+                    ? NULL_LITERAL
+                    : propertyValue.titleString();
+        } catch (Exception e) {
+            return Optional.ofNullable(e.getMessage()).orElse(e.getClass().getName());
+        }
+    }
+
+
 }

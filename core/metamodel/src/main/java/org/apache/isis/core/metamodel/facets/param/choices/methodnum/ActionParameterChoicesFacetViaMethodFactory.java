@@ -24,8 +24,8 @@ import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.DependentArgUtils;
-import org.apache.isis.core.metamodel.facets.DependentArgUtils.ParamSupportingMethodSearchRequest.ReturnType;
+import org.apache.isis.core.metamodel.facets.ParameterSupport;
+import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacet;
@@ -64,14 +64,14 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         val actionMethod = processMethodContext.getMethod();
         val capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
 
-        val searchRequest = DependentArgUtils.ParamSupportingMethodSearchRequest.builder()
+        val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)
                 .returnType(ReturnType.NON_SCALAR)
                 .paramIndexToMethodName(paramIndex -> 
                     MethodLiteralConstants.CHOICES_PREFIX + paramIndex + capitalizedName)
                 .build();
 
-        DependentArgUtils.findParamSupportingMethods(searchRequest, searchResult -> {
+        ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {
             
             val choicesMethod = searchResult.getSupportingMethod();
             val paramIndex = searchResult.getParamIndex();
@@ -87,9 +87,10 @@ extends MethodPrefixBasedFacetFactoryAbstract {
             
             // add facets directly to parameters, not to actions
             val paramAsHolder = parameters.get(paramIndex);
+            val ppmFactory = searchResult.getPpmFactory();
             super.addFacet(
                     new ActionParameterChoicesFacetViaMethod(
-                            choicesMethod, returnType, paramAsHolder));
+                            choicesMethod, returnType, ppmFactory, paramAsHolder));
         });
         
     }

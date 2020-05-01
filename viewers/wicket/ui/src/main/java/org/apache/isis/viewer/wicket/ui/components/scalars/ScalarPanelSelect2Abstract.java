@@ -32,7 +32,9 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.wicketstuff.select2.ChoiceProvider;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
@@ -40,7 +42,6 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 
 import lombok.val;
 
@@ -112,7 +113,7 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
     /**
      * sets up the choices, also ensuring that any currently held value is compatible.
      */
-    private void setProviderAndCurrAndPending(Select2 select2, List<ManagedObject> pendingArgs) {
+    private void setProviderAndCurrAndPending(Select2 select2, Can<ManagedObject> pendingArgs) {
 
         final ChoiceProvider<ObjectMemento> choiceProvider = buildChoiceProvider(pendingArgs);
 
@@ -131,7 +132,7 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
     /**
      * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, List<ManagedObject>)})
      */
-    protected abstract ChoiceProvider<ObjectMemento> buildChoiceProvider(List<ManagedObject> pendingArgs);
+    protected abstract ChoiceProvider<ObjectMemento> buildChoiceProvider(Can<ManagedObject> pendingArgs);
 
     /**
      * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, List<ManagedObject>)})
@@ -180,7 +181,7 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
             final int paramNumToPossiblyUpdate,
             final AjaxRequestTarget target) {
 
-        final List<ManagedObject> arguments = actionModel.getArgumentsAsImmutable();
+        final Can<ManagedObject> arguments = actionModel.getArgumentsAsImmutable();
 
         val repaint = super.updateIfNecessary(actionModel, paramNumUpdated, paramNumToPossiblyUpdate, target);
 
@@ -197,7 +198,7 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
         }
     }
 
-    private boolean updateChoices(List<ManagedObject> pendingArgs) {
+    private boolean updateChoices(Can<ManagedObject> pendingArgs) {
         if (select2 == null) {
             return false;
         }

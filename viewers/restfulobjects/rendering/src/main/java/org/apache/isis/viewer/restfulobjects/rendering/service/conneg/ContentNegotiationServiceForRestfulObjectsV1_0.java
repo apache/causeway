@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.core.MediaType;
@@ -41,6 +40,9 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedAction;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedCollection;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedProperty;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -52,12 +54,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplication
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectActionReprRenderer;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAction;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCollection;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCollection2;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty2;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectCollectionReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
@@ -128,7 +125,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
     @Override
     public ResponseBuilder buildResponse(
             final IResourceContext resourceContext,
-            final ObjectAndProperty objectAndProperty) {
+            final ManagedProperty objectAndProperty) {
 
         final List<MediaType> list = resourceContext.getAcceptableMediaTypes();
         ensureCompatibleAcceptHeader(RepresentationType.OBJECT_PROPERTY, list);
@@ -137,11 +134,9 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
         renderer.with(objectAndProperty)
         .usingLinkTo(resourceContext.getObjectAdapterLinkTo());
 
-        if(objectAndProperty instanceof ObjectAndProperty2) {
-            final ObjectAndProperty2 objectAndProperty2 = (ObjectAndProperty2) objectAndProperty;
-            renderer
-            .withMemberMode(objectAndProperty2.getMemberReprMode());
-
+        val repMode = objectAndProperty.getRepresentationMode();
+        if(repMode.isExplicit()) {
+            renderer.withMemberMode(repMode);
         }
 
         final ResponseBuilder responseBuilder = Responses.ofOk(renderer, Caching.NONE);
@@ -151,7 +146,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
     @Override
     public ResponseBuilder buildResponse(
             final IResourceContext resourceContext,
-            final ObjectAndCollection objectAndCollection) {
+            final ManagedCollection objectAndCollection) {
 
         final List<MediaType> list = resourceContext.getAcceptableMediaTypes();
         ensureCompatibleAcceptHeader(RepresentationType.OBJECT_COLLECTION, list);
@@ -167,7 +162,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
      */
     ResponseBuilder buildResponseTo(
             final IResourceContext resourceContext,
-            final ObjectAndCollection objectAndCollection,
+            final ManagedCollection objectAndCollection,
             final JsonRepresentation representation,
             final JsonRepresentation rootRepresentation) {
         final ObjectCollectionReprRenderer renderer =
@@ -175,10 +170,8 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
         renderer.with(objectAndCollection)
         .usingLinkTo(resourceContext.getObjectAdapterLinkTo());
 
-        if(objectAndCollection instanceof ObjectAndCollection2) {
-            final ObjectAndCollection2 objectAndCollection2 = (ObjectAndCollection2) objectAndCollection;
-
-            renderer.withMemberMode(objectAndCollection2.getMemberReprMode());
+        if(objectAndCollection.getRepresentationMode().isExplicit()) {
+            renderer.withMemberMode(objectAndCollection.getRepresentationMode());
         }
 
         return Responses.ofOk(renderer, Caching.NONE, rootRepresentation);
@@ -187,7 +180,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
     @Override
     public ResponseBuilder buildResponse(
             final IResourceContext resourceContext,
-            final ObjectAndAction objectAndAction) {
+            final ManagedAction objectAndAction) {
 
         final List<MediaType> list = resourceContext.getAcceptableMediaTypes();
         ensureCompatibleAcceptHeader(RepresentationType.OBJECT_ACTION, list);
@@ -255,7 +248,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
                 
                 val paramIndex = i;
                 val param = parameters.getElseFail(paramIndex);
-                val argAdapter = argAdapters.get(paramIndex);
+                val argAdapter = argAdapters.getElseFail(paramIndex);
 
                 if(buf.length() > 0) {
                     buf.append(",");

@@ -19,9 +19,9 @@
 
 package org.apache.isis.core.metamodel.postprocessors.param;
 
-import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
@@ -46,7 +46,7 @@ public class ActionParameterChoicesFacetFromParentedCollection extends ActionPar
     @Override
     public Object[] getChoices(
             final ManagedObject target,
-            final List<ManagedObject> pendingArgs,
+            final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final ManagedObject parentAdapter = determineParentAdapter(target);

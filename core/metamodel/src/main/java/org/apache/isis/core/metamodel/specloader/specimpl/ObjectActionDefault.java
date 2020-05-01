@@ -52,7 +52,6 @@ import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
-import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.interactions.ActionUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ActionValidityContext;
 import org.apache.isis.core.metamodel.interactions.ActionVisibilityContext;
@@ -67,6 +66,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
+import lombok.NonNull;
 import lombok.val;
 
 public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectAction {
@@ -148,6 +148,13 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
 
+    @Override
+    public PendingParameterModel newPendingParameterModel(
+            @NonNull ManagedObject actionOwner,
+            @NonNull Can<ManagedObject> paramValues) {
+        return PendingParameterModel.of(this, actionOwner, actionOwner, paramValues);
+    }
+    
     // -- Parameters
 
     @Override
@@ -255,7 +262,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     @Override
     public Consent isProposedArgumentSetValid(
             final ManagedObject targetObject,
-            final List<ManagedObject> proposedArguments,
+            final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final InteractionResultSet resultSet = new InteractionResultSet();
@@ -285,7 +292,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     @Override
     public Consent isEachIndividualArgumentValid(
             final ManagedObject objectAdapter,
-            final List<ManagedObject> proposedArguments,
+            final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final InteractionResultSet resultSet = new InteractionResultSet();
@@ -297,7 +304,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     private void validateArgumentsIndividually(
             final ManagedObject objectAdapter,
-            final List<ManagedObject> proposedArguments,
+            final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy,
             final InteractionResultSet resultSet) {
         
@@ -329,7 +336,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     @Override
     public Consent isArgumentSetValid(
             final ManagedObject objectAdapter,
-            final List<ManagedObject> proposedArguments,
+            final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final InteractionResultSet resultSet = new InteractionResultSet();
@@ -340,7 +347,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     protected void validateArgumentSet(
             final ManagedObject objectAdapter,
-            final List<ManagedObject> proposedArguments,
+            final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy,
             final InteractionResultSet resultSet) {
         
@@ -351,7 +358,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     ActionValidityContext createActionInvocationInteractionContext(
             final ManagedObject targetObject,
-            final List<ManagedObject> proposedArguments,
+            final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         return new ActionValidityContext(targetObject, this, getIdentifier(), proposedArguments,
@@ -366,7 +373,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     public ManagedObject executeWithRuleChecking(
             final ManagedObject target,
             final ManagedObject mixedInAdapter,
-            final List<ManagedObject> arguments,
+            final Can<ManagedObject> arguments,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
 
@@ -402,7 +409,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     public ManagedObject execute(
             final ManagedObject targetAdapter,
             final ManagedObject mixedInAdapter,
-            final List<ManagedObject> argumentAdapters,
+            final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         setupCommand(targetAdapter, argumentAdapters);
@@ -416,7 +423,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     public ManagedObject executeInternal(
             final ManagedObject targetAdapter,
             final ManagedObject mixedInAdapter,
-            final List<ManagedObject> argumentAdapters,
+            final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         val actionInvocationFacet = getFacet(ActionInvocationFacet.class);
@@ -436,17 +443,18 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     @Override
     public Can<ManagedObject> getDefaults(final ManagedObject target) {
 
-        final int parameterCount = getParameterCount();
-        val parameters = getParameters();
-
-        final Object[] parameterDefaultPojos;
-
-        final ActionDefaultsFacet facet = getFacet(ActionDefaultsFacet.class);
-        if (!facet.isFallback()) {
+        val actionDefaultsFacet = getFacet(ActionDefaultsFacet.class);
+        if (!actionDefaultsFacet.isFallback()) {
+            
             // use the old defaultXxx approach
-            parameterDefaultPojos = facet.getDefaults(target);
+            
+            final int parameterCount = getParameterCount();
+            val parameters = getParameters();
+            final Object[] parameterDefaultPojos;
+            
+            parameterDefaultPojos = actionDefaultsFacet.getDefaults(target);
             if (parameterDefaultPojos.length != parameterCount) {
-                throw new DomainModelException("Defaults array of incompatible size; expected " + parameterCount + " elements, but was " + parameterDefaultPojos.length + " for " + facet);
+                throw new DomainModelException("Defaults array of incompatible size; expected " + parameterCount + " elements, but was " + parameterDefaultPojos.length + " for " + actionDefaultsFacet);
             }
             for (int i = 0; i < parameterCount; i++) {
                 if (parameterDefaultPojos[i] != null) {
@@ -458,34 +466,27 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
                     }
                 }
             }
-        } else {
-            // use the new defaultNXxx approach for each param in turn
-            // (the reflector will have made sure both aren't installed).
-            parameterDefaultPojos = new Object[parameterCount];
+            
+            final ManagedObject[] parameterDefaultAdapters = new ManagedObject[parameterCount];
             for (int i = 0; i < parameterCount; i++) {
-                final ActionParameterDefaultsFacet paramFacet = parameters.getElseFail(i)
-                        .getFacet(ActionParameterDefaultsFacet.class);
-                if (paramFacet != null && !paramFacet.isFallback()) {
-                    parameterDefaultPojos[i] = paramFacet
-                            .getDefault(
-                                    target, 
-                                    Collections.emptyList(),
-                                    null);
-                } else {
-                    parameterDefaultPojos[i] = null;
-                }
+                val paramSpec = parameters.getElseFail(i).getSpecification();
+                parameterDefaultAdapters[i] = ManagedObject.of(paramSpec, parameterDefaultPojos[i]);
             }
-        }
 
-        final ManagedObject[] parameterDefaultAdapters = new ManagedObject[parameterCount];
-        for (int i = 0; i < parameterCount; i++) {
-            val paramSpec = parameters.getElseFail(i).getSpecification();
-            parameterDefaultAdapters[i] = ManagedObject.of(paramSpec, parameterDefaultPojos[i]);
-        }
+            return Can.ofArray(parameterDefaultAdapters);
+            
+        } 
+        
+        // else use the new defaultNXxx approach for each param in turn
+        // (the reflector will have made sure both aren't installed).
+        return newPendingParameterModel(target, Can.empty())
+                .defaultsFixedPointSearch()
+                .getParamValues();
 
-        return Can.ofArray(parameterDefaultAdapters);
     }
 
+        
+    
     private static ThreadLocal<List<ManagedObject>> commandTargetAdaptersHolder = new ThreadLocal<>();
 
     /**
@@ -613,7 +614,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
      */
     public void setupCommand(
             final ManagedObject targetAdapter,
-            final List<ManagedObject> argumentAdapters) {
+            final Can<ManagedObject> argumentAdapters) {
 
         final CommandContext commandContext = getCommandContext();
         final Command command = commandContext.getCommand();
@@ -629,15 +630,15 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     private void setupCommandTarget(
             final ManagedObject targetAdapter,
-            final List<ManagedObject> argumentAdapters) {
+            final Can<ManagedObject> argumentAdapters) {
 
-        final String arguments = CommandUtil.argDescriptionFor(this, argumentAdapters);
+        final String arguments = CommandUtil.argDescriptionFor(this, argumentAdapters.toList());
         super.setupCommandTarget(targetAdapter, arguments);
     }
 
     private void setupCommandMementoAndExecutionContext(
             final ManagedObject targetAdapter,
-            final List<ManagedObject> argumentAdapters) {
+            final Can<ManagedObject> argumentAdapters) {
 
         val commandDtoServiceInternal = getCommandDtoService();
         final List<ManagedObject> commandTargetAdapters =
@@ -646,7 +647,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
                         : Collections.singletonList(targetAdapter);
 
                 val commandDto = commandDtoServiceInternal.asCommandDto(
-                        commandTargetAdapters, this, argumentAdapters);
+                        commandTargetAdapters, this, argumentAdapters.toList());
 
                 setupCommandDtoAndExecutionContext(commandDto);
 

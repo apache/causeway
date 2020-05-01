@@ -48,20 +48,6 @@ final class Factories {
         };
     }
     
-    public static Function<ObjectActionDefault, ObjectActionContributee> contributeeAction(
-            final ObjectSpecification typeSpec,
-            final Object servicePojo) {
-
-        return contributedAction -> {
-            // see if qualifies by inspecting all parameters
-            val contributeeParam = Utils.contributeeParameterIndexOf(typeSpec, contributedAction);
-            if(contributeeParam == -1) {
-                return null; // should not happen if filtered correctly before
-            }
-            return new ObjectActionContributee(servicePojo, contributedAction, contributeeParam, typeSpec);
-        };
-    }
-    
     // -- MIXINS
     
     static Function<ObjectActionDefault, ObjectActionMixedIn> mixedInAction(

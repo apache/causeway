@@ -19,10 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -35,10 +31,11 @@ import org.apache.wicket.model.Model;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Settings;
 
-import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModelForReference;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -55,7 +52,6 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.Obj
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 
 import lombok.val;
 
@@ -340,22 +336,21 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
     // //////////////////////////////////////
 
     @Override
-    protected ChoiceProvider<ObjectMemento> buildChoiceProvider(List<ManagedObject> pendingArgs) {
+    protected ChoiceProvider<ObjectMemento> buildChoiceProvider(Can<ManagedObject> pendingArgs) {
         
         val commonContext = super.getCommonContext();
         
         if (getModel().hasChoices()) {
             val choices = getModel().getChoices(pendingArgs);
-            val choiceMementos = _Lists.map(choices, commonContext::mementoFor);
+            val choiceMementos = choices.map(commonContext::mementoForParameter);
             return new ObjectAdapterMementoProviderForReferenceChoices(getModel(), choiceMementos);
         }
 
         if(getModel().hasAutoComplete()) {
-            val dependentArgMementos = pendingArgs.stream()
-                    .map(commonContext::mementoFor)
-                    .collect(Collectors.toCollection(ArrayList::new)); // serializable
+            val autoCompleteMementos = pendingArgs
+                    .map(commonContext::mementoForParameter);
             return new ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(
-                    getModel(), dependentArgMementos);
+                    getModel(), autoCompleteMementos);
         }
 
         return new ObjectAdapterMementoProviderForReferenceObjectAutoComplete(getModel());

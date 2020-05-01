@@ -18,13 +18,11 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
-import java.util.List;
-
-import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 import lombok.val;
 
@@ -38,13 +36,13 @@ extends ObjectAdapterMementoProviderAbstract {
     }
 
     @Override
-    protected List<ObjectMemento> obtainMementos(String term) {
+    protected Can<ObjectMemento> obtainMementos(String term) {
         val typeOfSpecification = getScalarModel().getTypeOfSpecification();
         val autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
         val autoCompleteAdapters = autoCompleteFacet.execute(term,InteractionInitiatedBy.USER);
         val commonContext = super.getCommonContext();
         
-        return _Lists.map(autoCompleteAdapters, commonContext::mementoFor);
+        return autoCompleteAdapters.map(commonContext::mementoFor);
     }
 
 

@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.viewer.common.model.decorator.disable.DisableUiModel;
 import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeUiModel;
 
 import lombok.AccessLevel;
@@ -56,17 +57,13 @@ public class ActionUiMetaModel implements Serializable {
     @Getter private final SemanticsOf semantics;
     @Getter private final PromptStyle promptStyle;
     @Getter private final Parameters parameters;
-    @Getter private final String disabledReason;
+    @Getter private final DisableUiModel disableUiModel;
     /**
      * An action with no parameters AND an are-you-sure semantics
      * does require an immediate confirmation dialog.
      */
     @Getter private final boolean requiresImmediateConfirmation;
 
-    public boolean isEnabled() {
-        return disabledReason == null;
-    }
-    
     public static <T> ActionUiMetaModel of(
             final ManagedObject actionHolder,
             final ObjectAction objectAction) {
@@ -82,14 +79,12 @@ public class ActionUiMetaModel implements Serializable {
                 objectAction.isPrototype(),
                 ObjectAction.Util.actionIdentifierFor(objectAction),
                 ObjectAction.Util.cssClassFor(objectAction, actionHolder), 
-                FontAwesomeUiModel.of(
-                        ObjectAction.Util.cssClassFaFor(objectAction),
-                        ObjectAction.Util.cssClassFaPositionFor(objectAction)),
+                FontAwesomeUiModel.of(ObjectAction.Util.cssClassFaFacetFor(objectAction)),
                 ObjectAction.Util.actionLayoutPositionOf(objectAction),
                 objectAction.getSemantics(),
                 ObjectAction.Util.promptStyleFor(objectAction),
                 Parameters.fromParameterCount(objectAction.getParameterCount()),
-                getReasonWhyDisabled(actionHolder, objectAction).orElse(null),
+                disabledUiModelFor(actionHolder, objectAction),
                 ObjectAction.Util.isAreYouSureSemantics(objectAction) 
                 && ObjectAction.Util.isNoParameters(objectAction)
                 );
@@ -118,7 +113,7 @@ public class ActionUiMetaModel implements Serializable {
     
     // -- USABILITY
     
-    private static Optional<String> getReasonWhyDisabled(
+    private static DisableUiModel disabledUiModelFor(
             @NonNull final ManagedObject actionHolder, 
             @NonNull final ObjectAction objectAction) {
             
@@ -128,7 +123,9 @@ public class ActionUiMetaModel implements Serializable {
                 InteractionInitiatedBy.USER,
                 Where.ANYWHERE
                 );
-        return Optional.ofNullable(usability.getReason());
+        
+        val enabled = usability.getReason() == null;
+        return DisableUiModel.of(!enabled, usability.getReason()) ;
     }
     
     // -- DESCRIBED AS

@@ -19,12 +19,10 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.function.Predicate;
 
-import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 import lombok.Getter;
 import lombok.val;
@@ -36,31 +34,30 @@ implements ObjectAdapterMementoProviderForChoices {
     private static final long serialVersionUID = 1L;
     
     @Getter(onMethod = @__(@Override))
-    private final List<ObjectMemento> choiceMementos;
+    private final Can<ObjectMemento> choiceMementos;
 
     public ObjectAdapterMementoProviderForValueChoices(
             ScalarModel scalarModel,
-            List<ObjectMemento> choicesMementos) {
+            Can<ObjectMemento> choicesMementos) {
         
         super(scalarModel);
         this.choiceMementos = choicesMementos;
     }
 
     @Override
-    protected List<ObjectMemento> obtainMementos(String term) {
+    protected Can<ObjectMemento> obtainMementos(String term) {
         return obtainMementos(term, choiceMementos);
     }
 
     @Override
     public Collection<ObjectMemento> toChoices(final Collection<String> ids) {
-        final List<ObjectMemento> mementos = obtainMementos(null);
-
-        final Predicate<ObjectMemento> lookupOam = (ObjectMemento input) -> {
+        
+        return obtainMementos(null)
+        .filter((ObjectMemento input) -> {
             val id = getIdValue(input);
             return ids.contains(id);
-        };
-        
-        return _Lists.filter(mementos, lookupOam);
+        })
+        .toList();
     }
 
 }

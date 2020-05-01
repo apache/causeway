@@ -20,7 +20,6 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.valuechoices;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -31,23 +30,23 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 
-import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForValueChoices;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 
 public class ObjectAdapterMementoProviderForValueChoicesTest {
 
     @Rule public JUnitRuleMockery2 context = 
             JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
-    private List<ObjectMemento> mementos;
+    private Can<ObjectMemento> mementos;
 
     private ObjectMemento mockMemento1;
     private ObjectMemento mockMemento2;
@@ -66,7 +65,7 @@ public class ObjectAdapterMementoProviderForValueChoicesTest {
         mockMemento1 = mock(fakeSpecId, "mockMemento1");
         mockMemento2 = mock(fakeSpecId, "mockMemento2");
 
-        mementos = _Lists.of(mockMemento1, mockMemento2);
+        mementos = Can.of(mockMemento1, mockMemento2);
         
         context.checking(new Expectations() {        {
             

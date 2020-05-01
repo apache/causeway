@@ -26,6 +26,14 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.incubator.viewer.vaadin.model.IsisModuleIncViewerVaadinModel;
 import org.apache.isis.incubator.viewer.vaadin.ui.auth.LogoutHandlerVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.auth.VaadinAuthenticationHandler;
+import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
+import org.apache.isis.incubator.viewer.vaadin.ui.components.blob.BlobFieldFactory;
+import org.apache.isis.incubator.viewer.vaadin.ui.components.clob.ClobFieldFactory;
+import org.apache.isis.incubator.viewer.vaadin.ui.components.markup.MarkupFieldFactory;
+import org.apache.isis.incubator.viewer.vaadin.ui.components.other.FallbackFieldFactory;
+import org.apache.isis.incubator.viewer.vaadin.ui.components.temporal.TemporalFieldFactory;
+import org.apache.isis.incubator.viewer.vaadin.ui.components.text.TextFieldFactory;
+import org.apache.isis.incubator.viewer.vaadin.ui.components.text.uuid.UuidFieldFactory;
 import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
 
 
@@ -37,7 +45,19 @@ import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
 
         // @Service's
         VaadinAuthenticationHandler.class,
-        LogoutHandlerVaa.class
+        LogoutHandlerVaa.class,
+        UiComponentFactoryVaa.class,
+        
+        // Component Factories
+        BlobFieldFactory.class,
+        ClobFieldFactory.class,
+        MarkupFieldFactory.class,
+        TemporalFieldFactory.class,
+        TextFieldFactory.class,
+        UuidFieldFactory.class,
+        // last in chain
+        FallbackFieldFactory.class,
+        
         
 })
 @EnableVaadin("org.apache.isis.incubator.viewer.vaadin.ui") // scan for vaadin annotations

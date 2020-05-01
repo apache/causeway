@@ -23,12 +23,12 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
@@ -437,7 +437,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
     private ManagedObject executeAction() {
 
         val targetAdapter = getTargetAdapter();
-        final List<ManagedObject> arguments = getArgumentsAsImmutable();
+        final Can<ManagedObject> arguments = getArgumentsAsImmutable();
         final ObjectAction action = getAction();
 
         // if this action is a mixin, then it will fill in the details automatically.
@@ -494,7 +494,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
 
     public String getReasonInvalidIfAny() {
         val targetAdapter = getTargetAdapter();
-        final List<ManagedObject> proposedArguments = getArgumentsAsImmutable();
+        final Can<ManagedObject> proposedArguments = getArgumentsAsImmutable();
         final ObjectAction objectAction = getAction();
         final Consent validity = objectAction
                 .isProposedArgumentSetValid(targetAdapter, proposedArguments, InteractionInitiatedBy.USER);
@@ -506,21 +506,28 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
         throw new UnsupportedOperationException("target adapter for ActionModel cannot be changed");
     }
 
-    public List<ManagedObject> getArgumentsAsImmutable() {
+    public Can<ManagedObject> getArgumentsAsImmutable() {
         
         val objectAction = getAction();
         val paramCount = objectAction.getParameterCount();
+        val paramTypes = objectAction.getParameterTypes();
         
         if(this.arguments.size() < paramCount) {
             primeArgumentModels();
         }
         
-        val arguments = new ArrayList<ManagedObject>(paramCount);
-        for (int i = 0; i < paramCount; i++) {
-            val actionArgumentModel = this.arguments.get(i);
-            arguments.add(actionArgumentModel.getObject());
-        }
-        return Collections.unmodifiableList(arguments);
+        return IntStream.range(0, paramCount)
+        .mapToObj(paramIndex->{
+        
+            val actionArgumentModel = this.arguments.get(paramIndex);
+            val adapter = Optional.ofNullable(actionArgumentModel.getObject())
+                    .orElse(ManagedObject.empty(paramTypes.getElseFail(paramIndex)));
+            
+            return adapter;
+        
+        })
+        .collect(Can.toCan());
+        
     }
 
     @Override

@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
-import java.util.List;
 import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
@@ -32,6 +31,7 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 
 /**
  * Analogous to {@link ObjectAssociation}.
@@ -76,7 +76,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
     // internal API
     ActionArgValidityContext createProposedArgumentInteractionContext(
             ManagedObject targetObject,
-            List<ManagedObject> args,
+            Can<ManagedObject> args,
             int position,
             InteractionInitiatedBy interactionInitiatedBy);
 
@@ -92,8 +92,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * user can choose from, based on the input search argument.
      */
     Can<ManagedObject> getAutoComplete(
-            ManagedObject adapter,
-            List<ManagedObject> pendingArgs,
+            PendingParameterModel pendingArgs,
             String searchArg,
             InteractionInitiatedBy interactionInitiatedBy);
 
@@ -111,16 +110,16 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * user can choose from.
      */
     Can<ManagedObject> getChoices(
-            ManagedObject adapter,
-            List<ManagedObject> pendingArgs,
+            PendingParameterModel pendingArgs,
             InteractionInitiatedBy interactionInitiatedBy);
 
 
-    ManagedObject getDefault(
-            ManagedObject adapter,
-            List<ManagedObject> pendingArgs,
-            Integer paramNumUpdated);
+    ManagedObject getDefault(PendingParameterModel pendingArgs);
 
+    default ManagedObject getDefault(ManagedObject actionOnwer) {
+        return getDefault(getAction().newPendingParameterModel(actionOnwer));
+    }
+    
 
     /**
      * Whether this parameter is visible given the entered previous arguments
@@ -131,7 +130,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      */
     Consent isVisible(
             ManagedObject targetAdapter,
-            List<ManagedObject> pendingArgs,
+            Can<ManagedObject> pendingArgs,
             InteractionInitiatedBy interactionInitiatedBy);
 
     /**
@@ -143,7 +142,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      */
     Consent isUsable(
             ManagedObject targetAdapter,
-            List<ManagedObject> pendingArgs,
+            Can<ManagedObject> pendingArgs,
             InteractionInitiatedBy interactionInitiatedBy);
 
     /**

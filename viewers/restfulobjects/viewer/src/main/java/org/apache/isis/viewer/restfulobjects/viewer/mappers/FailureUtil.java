@@ -32,12 +32,8 @@ final class FailureUtil {
 
     public static HttpStatusCode getFailureStatusCodeIfAny(Throwable ex) {
 
-        // legacy of
-        // return (ex instanceof org.jboss.resteasy.spi.Failure)
-        //                ? RestfulResponse.HttpStatusCode.statusFor(((org.jboss.resteasy.spi.Failure)ex).getErrorCode())
-        //                        : null;
-        
-        val errorCodeGetter = MethodFinderUtils.findMethod(ex.getClass(), "getErrorCode", int.class);
+        val errorCodeGetter = MethodFinderUtils.findNoArgMethod(ex.getClass(), "getErrorCode", int.class)
+                .orElse(null);
         if(errorCodeGetter!=null) {
             try {
                 val errorCode = (int)errorCodeGetter.invoke(ex);

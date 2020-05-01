@@ -19,10 +19,8 @@
 
 package org.apache.isis.core.runtimeservices.wrapper.handlers;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -33,8 +31,8 @@ import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.HiddenException;
 import org.apache.isis.applib.services.wrapper.InteractionException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
-import org.apache.isis.applib.services.wrapper.control.ExecutionMode;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
+import org.apache.isis.applib.services.wrapper.control.ExecutionMode;
 import org.apache.isis.applib.services.wrapper.control.SyncControl;
 import org.apache.isis.applib.services.wrapper.events.CollectionAccessEvent;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
@@ -42,9 +40,9 @@ import org.apache.isis.applib.services.wrapper.events.PropertyAccessEvent;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Arrays;
-import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -65,7 +63,6 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionContributee;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 
 import lombok.SneakyThrows;
@@ -636,11 +633,6 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
                 checkVisibility(contributeeAdapter, contributeeMember);
                 checkUsability(contributeeAdapter, contributeeMember);
                 
-                if(contributeeMember instanceof ObjectActionContributee) {
-                    val objectActionContributee = (ObjectActionContributee) contributeeMember;
-                    val contributeeArgAdapters = asObjectAdaptersUnderlying(contributeeArgs);
-                    checkValidity(contributeeAdapter, objectActionContributee, contributeeArgAdapters);
-                }
                 // nothing to do for contributed properties or collections
                 
             } else {
@@ -666,7 +658,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     private void checkValidity(
             final ManagedObject targetAdapter, 
             final ObjectAction objectAction, 
-            final List<ManagedObject> argAdapters) {
+            final Can<ManagedObject> argAdapters) {
         
         val interactionResult = objectAction
                 .isProposedArgumentSetValid(targetAdapter, argAdapters,getInteractionInitiatedBy())
@@ -674,10 +666,10 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         notifyListenersAndVetoIfRequired(interactionResult);
     }
 
-    private List<ManagedObject> asObjectAdaptersUnderlying(final Object[] args) {
+    private Can<ManagedObject> asObjectAdaptersUnderlying(final Object[] args) {
         val argAdapters = _NullSafe.stream(args)
         .map(getObjectManager()::adapt)
-        .collect(_Lists.toUnmodifiable());
+        .collect(Can.toCan());
         
         return argAdapters;
     }

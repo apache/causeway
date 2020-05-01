@@ -24,9 +24,10 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public class StringValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<String> implements StringValueFacet {
+public class StringValueSemanticsProvider 
+extends ValueSemanticsProviderAndFacetAbstract<String> 
+implements StringValueFacet {
 
     public static Class<? extends Facet> type() {
         return StringValueFacet.class;
@@ -106,15 +107,7 @@ public class StringValueSemanticsProvider extends ValueSemanticsProviderAndFacet
     // StringValueFacet
     // //////////////////////////////////////////////////////////////////
 
-    @Override
-    public String stringValue(final ManagedObject object) {
-        return object == null ? "" : (String) object.getPojo();
-    }
 
-    @Override
-    public ManagedObject createValue(final String value) {
-        return getObjectManager().adapt(value);
-    }
 
     // /////// toString ///////
 

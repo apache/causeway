@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedAction;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -80,7 +81,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     @Override
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
         final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(getResourceContext(), getLinkFollowSpecs(), null, JsonRepresentation.newMap());
-        renderer.with(new ObjectAndAction(objectAdapter, objectMember)).usingLinkTo(linkTo).asFollowed();
+        renderer.with(ManagedAction.of(objectAdapter, objectMember)).usingLinkTo(linkTo).asFollowed();
         detailsLink.mapPut("value", renderer.render());
     }
 
@@ -171,7 +172,9 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
             final ObjectActionParameter param,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        val choiceAdapters = param.getChoices(objectAdapter, null, interactionInitiatedBy);
+        val pendingArgs = param.getAction().newPendingParameterModel(objectAdapter);
+        
+        val choiceAdapters = param.getChoices(pendingArgs, interactionInitiatedBy);
         if (choiceAdapters == null || choiceAdapters.isEmpty()) {
             return null;
         }
@@ -185,7 +188,8 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     }
 
     private Object defaultFor(final ObjectActionParameter param) {
-        final ManagedObject defaultAdapter = param.getDefault(objectAdapter, null, null);
+        
+        final ManagedObject defaultAdapter = param.getDefault(objectAdapter);
         if (defaultAdapter == null) {
             return null;
         }
