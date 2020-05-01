@@ -43,7 +43,6 @@ import org.apache.isis.core.commons.internal.collections._Multimaps.ListMultimap
 import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.internal.collections._Streams;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
@@ -738,50 +737,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 .filter(ContributeeMember.Predicates.regularElse(contributed));
     }
 
-    private Stream<ManagedBeanAdapter> streamManagedBeans() {
-        return getMetaModelContext().getServiceRegistry().streamRegisteredBeans();
-    }
-
-    // -- CONTRIBUTEE ASSOCIATIONS (PROPERTIES AND COLLECTIONS)
-
-    private List<ObjectAssociation> createContributeeAssociations() {
-        if (isManagedBean() || isValue()) {
-            return Collections.emptyList();
-        }
-        val contributeeAssociations = _Lists.<ObjectAssociation>newArrayList();
-        streamManagedBeans()
-        .forEach(serviceBean->forEachContributeeAssociation(serviceBean, contributeeAssociations::add));
-        return contributeeAssociations;
-    }
-
-    private void forEachContributeeAssociation(
-            ManagedBeanAdapter serviceBean, 
-            Consumer<ObjectAssociation> onNewContributeeAssociation) {
-
-        val serviceClass = serviceBean.getBeanClass();
-        val specification = getSpecificationLoader().loadSpecification(serviceClass,
-                IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
-        
-        if(specification==null) {
-            throw _Exceptions.unrecoverableFormatted("failed to load specification for service %s", serviceClass);
-        }
-        
-        if (specification == this) {
-            return;
-        }
-        
-        final Stream<ObjectAction> serviceActions = specification
-                .streamObjectActions(ActionType.USER, Contributed.INCLUDED);
-
-        serviceActions
-                .filter(Predicates.isContributeeAssociation(this))
-                .map(ObjectActionDefault.class::cast)
-                .map(Factories.contributeeAssociation(serviceBean, this))
-                .peek(facetProcessor::processMemberOrder)
-                .forEach(onNewContributeeAssociation);
-    }
-
-
     // -- mixin associations (properties and collections)
 
     private List<ObjectAssociation> createMixedInAssociations() {
@@ -994,7 +949,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             synchronized (unmodifiableAssociations) {
                 val associations = _Lists.newArrayList(this.associations);
                 if(isEntityOrViewModel()) {
-                    associations.addAll(createContributeeAssociations());
                     associations.addAll(createMixedInAssociations());
                 }
                 sortAndUpdateAssociations(associations);
