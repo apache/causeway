@@ -37,7 +37,8 @@ public class PendingParameterModel {
 
     @NonNull private final ObjectAction action;
     @NonNull private final ManagedObject actionOwner;
-    /** typically equal to {@code actionOwner}, except for mixins and contributees*/
+    /** typically equal to {@code actionOwner}, except for mixins, where {@code actionTarget}
+     * is the mixin instance */
     @NonNull private final ManagedObject actionTarget; 
     @NonNull private final Can<ManagedObject> paramValues;
     
