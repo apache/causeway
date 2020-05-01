@@ -271,20 +271,11 @@ implements ObjectActionParameter, FacetHolder.Delegating {
 
     @Override
     public ManagedObject getDefault(
-            final PendingParameterModel pendingArgs,
-            final Integer paramNumUpdated) {
-
-        return findDefault(pendingArgs, paramNumUpdated);
-    }
-
-    private ManagedObject findDefault(
-            final PendingParameterModel pendingArgs,
-            final Integer paramNumUpdated) {
+            final PendingParameterModel pendingArgs) {
         
         val defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);
         if (defaultsFacet != null) {
-            final Object defaultValue = defaultsFacet
-                    .getDefault(pendingArgs.getActionTarget(), pendingArgs.getParamValues(), paramNumUpdated);
+            final Object defaultValue = defaultsFacet.getDefault(pendingArgs);
             if (defaultValue == null) {
                 // it's possible that even though there is a default facet, when
                 // invoked it is unable to return a default.

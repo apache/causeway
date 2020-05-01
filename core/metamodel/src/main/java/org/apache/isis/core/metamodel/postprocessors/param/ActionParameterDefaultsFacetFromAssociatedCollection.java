@@ -25,7 +25,9 @@ import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacetAbstract;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
+
+import lombok.NonNull;
 
 public class ActionParameterDefaultsFacetFromAssociatedCollection extends ActionParameterDefaultsFacetAbstract {
 
@@ -51,13 +53,9 @@ public class ActionParameterDefaultsFacetFromAssociatedCollection extends Action
     }
 
     @Override
-    public Object getDefault(
-            final ManagedObject target,
-            final Can<ManagedObject> pendingArgs,
-            final Integer paramNumUpdated) {
+    public Object getDefault(@NonNull PendingParameterModel pendingArgs) {
         
         return _selectedPojos.get();
     }
-
 
 }

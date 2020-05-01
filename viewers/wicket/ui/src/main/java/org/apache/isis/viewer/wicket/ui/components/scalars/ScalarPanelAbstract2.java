@@ -168,7 +168,7 @@ implements ScalarModelSubscriber2 {
         // (else can hit complicated edge cases with stale data when next re-enable/make visible)
         final ScalarModel model = getModel();
         val defaultIfAny = model.getKind()
-                .getDefault(scalarModel, pendingArguments, paramNumUpdated);
+                .getDefault(scalarModel, pendingArguments);
 
         val actionParameterMemento = new ActionParameterMemento(actionParameter);
         val actionArgumentModel = actionModel.getArgumentModel(actionParameterMemento);

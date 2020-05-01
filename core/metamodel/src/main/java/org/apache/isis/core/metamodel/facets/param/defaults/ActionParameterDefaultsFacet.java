@@ -19,9 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.param.defaults;
 
-import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
+
+import lombok.NonNull;
 
 /**
  * Obtain defaults for each of the parameters of the action.
@@ -33,8 +34,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
  */
 public interface ActionParameterDefaultsFacet extends Facet {
 
-    public abstract Object getDefault(
-            ManagedObject target,
-            Can<ManagedObject> parameters,
-            Integer paramNumUpdated);
+    /** default parameter value, depending on other pending parameters */
+    Object getDefault(@NonNull PendingParameterModel pendingArgs);
 }

@@ -52,7 +52,6 @@ import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
-import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.interactions.ActionUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ActionValidityContext;
 import org.apache.isis.core.metamodel.interactions.ActionVisibilityContext;
@@ -444,17 +443,18 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     @Override
     public Can<ManagedObject> getDefaults(final ManagedObject target) {
 
-        final int parameterCount = getParameterCount();
-        val parameters = getParameters();
-
-        final Object[] parameterDefaultPojos;
-
-        final ActionDefaultsFacet facet = getFacet(ActionDefaultsFacet.class);
-        if (!facet.isFallback()) {
+        val actionDefaultsFacet = getFacet(ActionDefaultsFacet.class);
+        if (!actionDefaultsFacet.isFallback()) {
+            
             // use the old defaultXxx approach
-            parameterDefaultPojos = facet.getDefaults(target);
+            
+            final int parameterCount = getParameterCount();
+            val parameters = getParameters();
+            final Object[] parameterDefaultPojos;
+            
+            parameterDefaultPojos = actionDefaultsFacet.getDefaults(target);
             if (parameterDefaultPojos.length != parameterCount) {
-                throw new DomainModelException("Defaults array of incompatible size; expected " + parameterCount + " elements, but was " + parameterDefaultPojos.length + " for " + facet);
+                throw new DomainModelException("Defaults array of incompatible size; expected " + parameterCount + " elements, but was " + parameterDefaultPojos.length + " for " + actionDefaultsFacet);
             }
             for (int i = 0; i < parameterCount; i++) {
                 if (parameterDefaultPojos[i] != null) {
@@ -466,34 +466,27 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
                     }
                 }
             }
-        } else {
-            // use the new defaultNXxx approach for each param in turn
-            // (the reflector will have made sure both aren't installed).
-            parameterDefaultPojos = new Object[parameterCount];
+            
+            final ManagedObject[] parameterDefaultAdapters = new ManagedObject[parameterCount];
             for (int i = 0; i < parameterCount; i++) {
-                final ActionParameterDefaultsFacet paramFacet = parameters.getElseFail(i)
-                        .getFacet(ActionParameterDefaultsFacet.class);
-                if (paramFacet != null && !paramFacet.isFallback()) {
-                    parameterDefaultPojos[i] = paramFacet
-                            .getDefault(
-                                    target, 
-                                    Can.empty(),
-                                    null);
-                } else {
-                    parameterDefaultPojos[i] = null;
-                }
+                val paramSpec = parameters.getElseFail(i).getSpecification();
+                parameterDefaultAdapters[i] = ManagedObject.of(paramSpec, parameterDefaultPojos[i]);
             }
-        }
 
-        final ManagedObject[] parameterDefaultAdapters = new ManagedObject[parameterCount];
-        for (int i = 0; i < parameterCount; i++) {
-            val paramSpec = parameters.getElseFail(i).getSpecification();
-            parameterDefaultAdapters[i] = ManagedObject.of(paramSpec, parameterDefaultPojos[i]);
-        }
+            return Can.ofArray(parameterDefaultAdapters);
+            
+        } 
+        
+        // else use the new defaultNXxx approach for each param in turn
+        // (the reflector will have made sure both aren't installed).
+        return newPendingParameterModel(target, Can.empty())
+                .defaultsFixedPointSearch()
+                .getParamValues();
 
-        return Can.ofArray(parameterDefaultAdapters);
     }
 
+        
+    
     private static ThreadLocal<List<ManagedObject>> commandTargetAdaptersHolder = new ThreadLocal<>();
 
     /**

@@ -187,8 +187,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             @Override
             public ManagedObject getDefault(
                     final ScalarModel scalarModel,
-                    final Can<ManagedObject> pendingArgs,
-                    final int paramNumUpdated) {
+                    final Can<ManagedObject> pendingArgs) {
 
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
                 final OneToOneAssociation property = propertyMemento
@@ -420,13 +419,11 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
             @Override
             public ManagedObject getDefault(
                     final ScalarModel scalarModel,
-                    final Can<ManagedObject> pendingArgs,
-                    final int paramNumUpdated) {
+                    final Can<ManagedObject> pendingArgs) {
                 
                 return withPendingParamsDo(scalarModel, pendingArgs, (pendingParamsModel, actionParameter)->
                 actionParameter.getDefault(
-                        pendingParamsModel,
-                        paramNumUpdated));
+                        pendingParamsModel));
             }
 
             @Override
@@ -466,18 +463,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
                         InteractionInitiatedBy.USER)); 
             }
 
-            // pending args helper
-            private <T> T withPendingParamsDo(
-                    final ScalarModel scalarModel,
-                    final Can<ManagedObject> pendingArgs,
-                    final BiFunction<PendingParameterModel, ObjectActionParameter, T> function) {
-                
-                val parameterMemento = scalarModel.getParameterMemento();
-                val actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
-                val actionOwner = scalarModel.getParentEntityModel().load();
-                val pendingParamsModel = actionParameter.getAction().newPendingParameterModel(actionOwner, pendingArgs);
-                return function.apply(pendingParamsModel, actionParameter);
-            }
+
             
             @Override
             public int getAutoCompleteOrChoicesMinLength(ScalarModel scalarModel) {
@@ -618,8 +604,7 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
 
         public abstract ManagedObject getDefault(
                 ScalarModel scalarModel,
-                Can<ManagedObject> pendingArgs,
-                int paramNumUpdated);
+                Can<ManagedObject> pendingArgs);
 
         public abstract boolean hasChoices(ScalarModel scalarModel);
         public abstract Can<ManagedObject> getChoices(
@@ -868,6 +853,19 @@ implements LinksProvider, FormExecutorContext, ActionArgumentModel {
         }
     }
 
+    // pending args helper
+    private static <T> T withPendingParamsDo(
+            final ScalarModel scalarModel,
+            final Can<ManagedObject> pendingArgs,
+            final BiFunction<PendingParameterModel, ObjectActionParameter, T> function) {
+        
+        val parameterMemento = scalarModel.getParameterMemento();
+        val actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
+        val actionOwner = scalarModel.getParentEntityModel().load();
+        val pendingParamsModel = actionParameter.getAction().newPendingParameterModel(actionOwner, pendingArgs);
+        return function.apply(pendingParamsModel, actionParameter);
+    }
+    
     public boolean whetherHidden() {
         final Where where = getRenderingHint().asWhere();
         return kind.whetherHidden(this, where);
