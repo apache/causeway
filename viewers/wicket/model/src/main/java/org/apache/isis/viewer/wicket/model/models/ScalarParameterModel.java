@@ -258,16 +258,6 @@ implements ActionArgumentModel {
     }
 
     @Override
-    public void reset() {
-        final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(
-                getSpecificationLoader());
-        final ManagedObject parentAdapter =
-                getParentEntityModel().load();
-        final ManagedObject defaultAdapter = actionParameter.getDefault(parentAdapter);
-        setObject(defaultAdapter);
-    }
-
-    @Override
     public ManagedObject load() {
         final ActionParameterMemento parameterMemento = getParameterMemento();
         final ObjectActionParameter actionParameter = parameterMemento

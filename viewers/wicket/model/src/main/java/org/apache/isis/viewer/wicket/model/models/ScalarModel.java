@@ -47,6 +47,7 @@ import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 
+import lombok.NonNull;
 import lombok.val;
 
 
@@ -73,10 +74,14 @@ implements LinksProvider, FormExecutorContext {
 
     private static final long serialVersionUID = 1L;
 
-    public enum Kind {
+    private enum Kind {
         PROPERTY,
         PARAMETER;
     }
+    @NonNull private final Kind kind;
+    public boolean isProperty() { return kind == Kind.PROPERTY; }
+    public boolean isParameter() { return kind == Kind.PARAMETER; }
+    
 
     static boolean isRequired(final FacetHolder facetHolder) {
         final MandatoryFacet mandatoryFacet = facetHolder.getFacet(MandatoryFacet.class);
@@ -84,7 +89,7 @@ implements LinksProvider, FormExecutorContext {
         return required;
     }
 
-    private final Kind kind;
+
 
     private final EntityModel parentEntityModel;
 

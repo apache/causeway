@@ -433,9 +433,10 @@ implements ScalarModelSubscriber2 {
         }
 
         // prevent from tabbing into non-editable widgets.
-        if(scalarModel.getKind() == ScalarModel.Kind.PROPERTY &&
-                scalarModel.getMode() == EntityModel.Mode.VIEW     &&
-                (scalarModel.getPromptStyle().isDialog() || !scalarModel.canEnterEditMode())) {
+        if(scalarModel.isProperty() 
+                && scalarModel.getMode() == EntityModel.Mode.VIEW
+                && (scalarModel.getPromptStyle().isDialog() 
+                        || !scalarModel.canEnterEditMode())) {
             getScalarValueComponent().add(new AttributeAppender("tabindex", "-1"));
         }
 
@@ -601,7 +602,7 @@ implements ScalarModelSubscriber2 {
     public void onUpdate(
             final AjaxRequestTarget target, final ScalarPanelAbstract2 scalarPanel) {
 
-        if(getModel().getKind() == ScalarModel.Kind.PARAMETER) {
+        if(getModel().isParameter()) {
             target.appendJavaScript(
                     String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_PARAMETER, '%s')", getMarkupId()));
         }

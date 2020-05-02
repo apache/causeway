@@ -279,7 +279,6 @@ public class ScalarPropertyModel extends ScalarModel {
         return facet != null? facet.value(): null;
     }
 
-    @Override
     public void reset() {
         final OneToOneAssociation property = getPropertyMemento().getProperty(getSpecificationLoader());
 

@@ -47,6 +47,7 @@ import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
 import org.apache.isis.viewer.wicket.model.models.ParentEntityModelProvider;
+import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber2;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormFeedbackPanel;
@@ -288,7 +289,9 @@ implements ScalarModelSubscriber2 {
     private void completePrompt(final AjaxRequestTarget target) {
 
         if (isWithinPrompt()) {
-            formExecutorContext.reset();
+            if(formExecutorContext instanceof ScalarPropertyModel) {            
+                ((ScalarPropertyModel)formExecutorContext).reset();
+            }
             rebuildGuiAfterInlinePromptDone(target);
         } else {
             closePromptIfAny(target);

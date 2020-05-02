@@ -62,7 +62,6 @@ for app in demo
 do
   cd $PROJECT_ROOT_PATH/examples/$app
 
-  mvn versions:set -DnewVersion=$REVISION
   mvn clean install \
       $BATCH_MODE \
       -Dskip.git \
@@ -73,14 +72,6 @@ do
   do
 	cd $variant
 	
-	mvn versions:set -DnewVersion=$REVISION
-	mvn clean install \
-	    $BATCH_MODE \
-	    -Dflavor=$FLAVOR \
-	    -Dskip.git \
-	    -Dskip.arch \
-	    -DskipTests
-	
 	mvn --batch-mode \
 	    compile jib:build \
 	    -Dflavor=$FLAVOR \
@@ -89,7 +80,7 @@ do
 	    -DskipTests
 	
 	cd $PROJECT_ROOT_PATH/examples/$app
-	done
+  done
 
 
   cd $PROJECT_ROOT_PATH

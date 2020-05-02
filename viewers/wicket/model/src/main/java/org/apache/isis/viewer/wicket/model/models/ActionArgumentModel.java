@@ -28,7 +28,5 @@ public interface ActionArgumentModel extends IModel<ManagedObject> {
 
     ActionParameterMemento getParameterMemento();
 
-    void reset();
-
     void setActionArgsHint(Can<ManagedObject> arguments);
 }
