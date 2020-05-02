@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -34,7 +35,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 /**
  * Corresponding component to prompt for action (parameters) is {@link ActionParametersPanel}.
  */
-public class PropertyEditPanel extends PanelAbstract<ScalarModel> {
+public class PropertyEditPanel extends PanelAbstract<ScalarPropertyModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -49,8 +50,8 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel> {
 
     public PropertyEditPanel(
             final String id,
-            final ScalarModel scalarModel) {
-        super(id, new ScalarModel(scalarModel.getParentEntityModel(), scalarModel.getPropertyMemento(),
+            final ScalarPropertyModel scalarModel) {
+        super(id, new ScalarPropertyModel(scalarModel.getParentEntityModel(), scalarModel.getPropertyMemento(),
                 EntityModel.Mode.EDIT, EntityModel.RenderingHint.REGULAR));
 
         buildGui(scalarModel);
@@ -67,7 +68,7 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel> {
         buildGuiForParameters(scalarModel);
     }
 
-    ScalarModel getScalarModel() {
+    ScalarPropertyModel getScalarModel() {
         return super.getModel();
     }
 

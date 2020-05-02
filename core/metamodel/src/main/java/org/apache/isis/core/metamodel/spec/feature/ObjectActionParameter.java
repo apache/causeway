@@ -113,11 +113,14 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
             PendingParameterModel pendingArgs,
             InteractionInitiatedBy interactionInitiatedBy);
 
-
     ManagedObject getDefault(PendingParameterModel pendingArgs);
 
+    /** default value as result of a initial param value fixed point search */
     default ManagedObject getDefault(ManagedObject actionOnwer) {
-        return getDefault(getAction().newPendingParameterModel(actionOnwer));
+        return getAction()
+                .newPendingParameterModelHead(actionOnwer).defaults()
+                .getParamValues()
+                .getElseFail(getNumber());
     }
     
 

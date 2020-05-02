@@ -24,18 +24,18 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 import lombok.val;
 
-public class PropertyEditPromptHeaderPanel extends PanelAbstract<ScalarModel> {
+public class PropertyEditPromptHeaderPanel extends PanelAbstract<ScalarPropertyModel> {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_PROPERTY_NAME = "propertyName";
 
-    public PropertyEditPromptHeaderPanel(String id, final ScalarModel model) {
+    public PropertyEditPromptHeaderPanel(String id, final ScalarPropertyModel model) {
         super(id, model);
 
         val targetAdapter = model.getParentEntityModel().load();

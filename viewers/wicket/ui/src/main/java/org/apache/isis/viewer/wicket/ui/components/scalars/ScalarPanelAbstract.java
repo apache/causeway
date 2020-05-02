@@ -60,8 +60,8 @@ import lombok.val;
  *     It is however still used by some wicket addons (specifically, pdfjs).
  * </p>
  */
-public abstract class ScalarPanelAbstract 
-extends PanelAbstract<ScalarModel> 
+public abstract class ScalarPanelAbstract<T extends ScalarModel> 
+extends PanelAbstract<T> 
 implements ScalarModelProvider {
 
     private static final long serialVersionUID = 1L;

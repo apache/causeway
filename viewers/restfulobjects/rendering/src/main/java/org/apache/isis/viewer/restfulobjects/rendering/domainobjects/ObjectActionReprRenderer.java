@@ -172,7 +172,9 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
             final ObjectActionParameter param,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        val pendingArgs = param.getAction().newPendingParameterModel(objectAdapter);
+        val pendingArgs = param.getAction()
+                .newPendingParameterModelHead(objectAdapter)
+                .emptyModel();
         
         val choiceAdapters = param.getChoices(pendingArgs, interactionInitiatedBy);
         if (choiceAdapters == null || choiceAdapters.isEmpty()) {

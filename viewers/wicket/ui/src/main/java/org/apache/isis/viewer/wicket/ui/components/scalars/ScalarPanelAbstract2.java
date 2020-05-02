@@ -53,6 +53,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
@@ -61,6 +62,7 @@ import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelUtil;
@@ -132,12 +134,14 @@ implements ScalarModelSubscriber2 {
     public Repaint updateIfNecessary(
             final ActionModel actionModel,
             final int paramNumUpdated,
-            final int paramNumToPossiblyUpdate,
+            final int paramNumToPossiblyUpdate,//FIXME I guess we need to re-rerender all not just the next
             final AjaxRequestTarget target) {
 
         final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
-        final Can<ManagedObject> pendingArguments = actionModel.getArgumentsAsImmutable();
-
+        final PendingParameterModel pendingArguments = actionModel.getArgumentsAsParamModel();
+        final Can<ManagedObject> pendingArgumentsReadonly = pendingArguments.getParamValues();
+        
+        
         // could almost certainly simplify this... (used by visibility and usability checks)
         final ObjectActionParameter actionParameter = action.getParameters().getElseFail(paramNumToPossiblyUpdate);
         val targetAdapter = actionModel.getTargetAdapter();
@@ -145,7 +149,7 @@ implements ScalarModelSubscriber2 {
 
         // check visibility
         final Consent visibilityConsent = actionParameter
-                .isVisible(realTargetAdapter, pendingArguments, InteractionInitiatedBy.USER);
+                .isVisible(realTargetAdapter, pendingArgumentsReadonly, InteractionInitiatedBy.USER);
 
         final boolean visibilityBefore = isVisible();
         final boolean visibilityAfter = visibilityConsent.isAllowed();
@@ -154,7 +158,7 @@ implements ScalarModelSubscriber2 {
 
         // check usability
         final Consent usabilityConsent = actionParameter
-                .isUsable(realTargetAdapter, pendingArguments, InteractionInitiatedBy.USER);
+                .isUsable(realTargetAdapter, pendingArgumentsReadonly, InteractionInitiatedBy.USER);
 
         final boolean usabilityBefore = isEnabled();
         final boolean usabilityAfter = usabilityConsent.isAllowed();
@@ -167,13 +171,12 @@ implements ScalarModelSubscriber2 {
         // even if now invisible or unusable, we recalculate args and ensure compatible
         // (else can hit complicated edge cases with stale data when next re-enable/make visible)
         final ScalarModel model = getModel();
-        val defaultIfAny = model.getKind()
-                .getDefault(scalarModel, pendingArguments);
+        val defaultIfAny = model.getDefault(pendingArgumentsReadonly);
 
         val actionParameterMemento = new ActionParameterMemento(actionParameter);
         val actionArgumentModel = actionModel.getArgumentModel(actionParameterMemento);
 
-        val pendingArg = pendingArguments.getElseFail(paramNumToPossiblyUpdate);
+        val pendingArg = pendingArgumentsReadonly.getElseFail(paramNumToPossiblyUpdate);
         
         if (defaultIfAny != null) {
             scalarModel.setObject(defaultIfAny);
@@ -183,11 +186,11 @@ implements ScalarModelSubscriber2 {
 
             boolean shouldBlankout = false;
             
-            if(pendingArg != null) {
+            if(ManagedObject.isNullOrUnspecifiedOrEmpty(pendingArg)) {
                 if(scalarModel.hasChoices()) {
                     // make sure the object is one of the choices, else blank it out.
                     val choices = scalarModel
-                            .getChoices(pendingArguments);
+                            .getChoices(pendingArgumentsReadonly);
                     
                     shouldBlankout = 
                             ! isPartOfChoicesConsideringDependentArgs(scalarModel, pendingArg, choices);
@@ -375,11 +378,11 @@ implements ScalarModelSubscriber2 {
         scalarTypeContainer.addOrReplace(scalarIfCompact, scalarIfRegular);
 
         // find associated actions for this scalar property (only properties will have any.)
-        final ScalarModel.AssociatedActions associatedActionsIfProperty =
-                scalarModel.associatedActionsIfProperty();
+        final ScalarModel.AssociatedActions associatedActions =
+                scalarModel.getAssociatedActions(); 
         final ObjectAction inlineActionIfAny =
-                associatedActionsIfProperty.getFirstAssociatedWithInlineAsIfEdit();
-        final List<ObjectAction> remainingAssociated = associatedActionsIfProperty.getRemainingAssociated();
+                associatedActions.getFirstAssociatedWithInlineAsIfEdit();
+        final List<ObjectAction> remainingAssociated = associatedActions.getRemainingAssociated();
 
         // convert those actions into UI layer widgets
         final List<LinkAndLabel> linkAndLabels  = LinkAndLabelUtil.asActionLinks(this.scalarModel, remainingAssociated);
@@ -868,8 +871,9 @@ implements ScalarModelSubscriber2 {
                     final ActionPrompt prompt = ActionPromptProvider
                             .getFrom(ScalarPanelAbstract2.this).getActionPrompt(promptStyle, sort);
 
-                    PropertyEditPromptHeaderPanel titlePanel = new PropertyEditPromptHeaderPanel(prompt.getTitleId(),
-                            ScalarPanelAbstract2.this.scalarModel);
+                    PropertyEditPromptHeaderPanel titlePanel = new PropertyEditPromptHeaderPanel(
+                            prompt.getTitleId(),
+                            (ScalarPropertyModel)ScalarPanelAbstract2.this.scalarModel);
 
                     final PropertyEditPanel propertyEditPanel =
                             (PropertyEditPanel) getComponentFactoryRegistry().createComponent(

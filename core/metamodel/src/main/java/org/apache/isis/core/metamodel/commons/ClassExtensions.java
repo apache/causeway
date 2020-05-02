@@ -24,6 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URL;
+import java.util.Objects;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.internal._Constants;
@@ -175,6 +176,13 @@ public final class ClassExtensions {
         }
 
         return (returnTypeExtendee.isAssignableFrom(type));
+    }
+
+    public static boolean equalsWhenBoxing(Class<?> t1, Class<?> t2) {
+        if(Objects.equals(t1, t2)) {
+            return true;
+        }
+        return Objects.equals(asWrappedIfNecessary(t1), asWrappedIfNecessary(t2));
     }
 
 }

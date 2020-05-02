@@ -76,7 +76,7 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
     @Override
     public Object getDefault(@NonNull PendingParameterModel pendingArgs) {
 
-        if(pendingArgs.isPopulated()) {
+//        if(pendingArgs.isPopulated()) {
             
             // call with args: defaultNAct(X x, Y y, ...) 
             
@@ -91,18 +91,18 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
             return ManagedObject.InvokeUtil
                     .invokeAutofit(method, 
                         pendingArgs.getActionTarget(), pendingArgs.getParamValues());
-        }
+//        }
         
         // call no-arg defaultNAct() instead
         
-        if(ppmFactory.isPresent()) {
-            // PPM programming model
-            return ManagedObject.InvokeUtil
-                    .invokeWithPPM(ppmFactory.get(), method, 
-                            pendingArgs.getActionTarget(), pendingArgs.getEmptyValues());    
-        }
-        
-        return ManagedObject.InvokeUtil.invoke(method, pendingArgs.getActionTarget());
+//        if(ppmFactory.isPresent()) {
+//            // PPM programming model
+//            return ManagedObject.InvokeUtil
+//                    .invokeWithPPM(ppmFactory.get(), method, 
+//                            pendingArgs.getActionTarget(), pendingArgs.getEmptyValues());    
+//        }
+//        
+//        return ManagedObject.InvokeUtil.invoke(method, pendingArgs.getActionTarget());
         
 // legacy of        
 //        // this isn't a dependent defaults situation, so just evaluate the default.

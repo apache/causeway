@@ -39,6 +39,7 @@ import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionArgumentModel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarParameterModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorStrategy;
@@ -166,7 +167,9 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
 
         final ActionModel actionModel = getActionModel();
 
-        final int paramNumberUpdated = scalarPanelUpdated.getModel().getParameterMemento().getNumber();
+        val paramModel = (ScalarParameterModel)scalarPanelUpdated.getModel();
+        
+        final int paramNumberUpdated = paramModel.getParameterMemento().getNumber();
         
         val action = actionModel.getActionMemento().getAction(getSpecificationLoader());
 

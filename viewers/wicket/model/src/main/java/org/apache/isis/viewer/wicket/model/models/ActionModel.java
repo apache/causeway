@@ -69,6 +69,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
@@ -400,7 +401,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
         final int i = apm.getNumber();
         ActionArgumentModel actionArgumentModel = arguments.get(i);
         if (actionArgumentModel == null) {
-            actionArgumentModel = new ScalarModel(entityModel, apm);
+            actionArgumentModel = new ScalarParameterModel(entityModel, apm);
             final int number = actionArgumentModel.getParameterMemento().getNumber();
             arguments.put(number, actionArgumentModel);
         }
@@ -506,6 +507,12 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
         throw new UnsupportedOperationException("target adapter for ActionModel cannot be changed");
     }
 
+    public PendingParameterModel getArgumentsAsParamModel() {
+        return getAction().newPendingParameterModelHead(getTargetAdapter())
+                .model(getArgumentsAsImmutable());
+    }
+
+    @Deprecated // make private (use getArgumentsAsParamModel instead)
     public Can<ManagedObject> getArgumentsAsImmutable() {
         
         val objectAction = getAction();

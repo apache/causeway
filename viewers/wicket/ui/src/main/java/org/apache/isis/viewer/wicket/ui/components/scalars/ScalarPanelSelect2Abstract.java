@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarParameterModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderAbstract;
@@ -58,7 +59,10 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
 
     protected Select2 createSelect2(final String id) {
         final Select2 select2 = Select2.createSelect2(id, scalarModel);
-        setProviderAndCurrAndPending(select2, scalarModel.getActionArgsHint());
+        setProviderAndCurrAndPending(select2, 
+                (scalarModel instanceof ScalarParameterModel)
+                    ? ((ScalarParameterModel)scalarModel).getActionArgsHint()
+                    : null);
         select2.setRequired(scalarModel.isRequired());
         return select2;
     }

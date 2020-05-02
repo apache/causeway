@@ -352,13 +352,20 @@ public interface ManagedObject {
      */
     public static ManagedObject of(ObjectSpecification specification, Object pojo) {
         // can do this check only when the pojo is not null, otherwise is always considered valid
-        if(pojo!=null && !specification.getCorrespondingClass().isAssignableFrom(pojo.getClass())) {
-            throw _Exceptions.illegalArgument(
-                    "Pojo not compatible with ObjectSpecification, " +
-                    "objectSpec.correspondingClass = %s, " +
-                    "pojo.getClass() = %s, " +
-                    "pojo.toString() = %s",
-                    specification.getCorrespondingClass(), pojo.getClass(), pojo.toString());
+        if(pojo!=null) {
+            val expectedType = specification.getCorrespondingClass();
+            val actualType = pojo.getClass();
+            
+            if(!expectedType.isAssignableFrom(actualType)) {
+                if(!ClassExtensions.equalsWhenBoxing(expectedType, actualType)) {
+                    throw _Exceptions.illegalArgument(
+                            "Pojo not compatible with ObjectSpecification, " +
+                            "objectSpec.correspondingClass = %s, " +
+                            "pojo.getClass() = %s, " +
+                            "pojo.toString() = %s",
+                            specification.getCorrespondingClass(), pojo.getClass(), pojo.toString());    
+                }
+            }    
         }
         return new SimpleManagedObject(specification, pojo);
     }

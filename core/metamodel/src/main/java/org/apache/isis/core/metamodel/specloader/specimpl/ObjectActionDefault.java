@@ -147,12 +147,9 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         return ActionType.USER;
     }
 
-
     @Override
-    public PendingParameterModel newPendingParameterModel(
-            @NonNull ManagedObject actionOwner,
-            @NonNull Can<ManagedObject> paramValues) {
-        return PendingParameterModel.of(this, actionOwner, actionOwner, paramValues);
+    public PendingParameterModelHead newPendingParameterModelHead(@NonNull ManagedObject actionOwner) {
+        return PendingParameterModelHead.of(this, actionOwner, actionOwner);
     }
     
     // -- Parameters
@@ -479,8 +476,8 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         
         // else use the new defaultNXxx approach for each param in turn
         // (the reflector will have made sure both aren't installed).
-        return newPendingParameterModel(target, Can.empty())
-                .defaultsFixedPointSearch()
+        return newPendingParameterModelHead(target)
+                .defaults()
                 .getParamValues();
 
     }

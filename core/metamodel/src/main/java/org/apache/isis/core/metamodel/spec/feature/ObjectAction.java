@@ -55,7 +55,7 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
-import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
+import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModelHead;
 
 import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
@@ -160,16 +160,9 @@ public interface ObjectAction extends ObjectMember {
 
 
     // -- Model for Parameter Negotiation
-    
-    
-    PendingParameterModel newPendingParameterModel(
-            @NonNull ManagedObject actionOwner,
-            @NonNull Can<ManagedObject> paramValues);
 
-    default PendingParameterModel newPendingParameterModel(
-            @NonNull ManagedObject actionOwner) {
-        return newPendingParameterModel(actionOwner, Can.empty()); // init defaults
-    }
+    PendingParameterModelHead newPendingParameterModelHead(
+            @NonNull ManagedObject actionOwner);
     
     // -- Parameters (declarative)
 
