@@ -244,11 +244,6 @@ extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAss
     }
 
     @Override
-    protected void addLinksIsisProprietary() {
-        // none
-    }
-
-    @Override
     protected void putExtensionsIsisProprietary() {
         // none
     }

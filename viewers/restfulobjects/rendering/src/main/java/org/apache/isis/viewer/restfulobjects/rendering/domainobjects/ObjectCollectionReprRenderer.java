@@ -181,11 +181,6 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
     }
 
     @Override
-    protected void addLinksIsisProprietary() {
-        // none
-    }
-
-    @Override
     protected void putExtensionsIsisProprietary() {
         final CollectionSemantics semantics = CollectionSemantics.determine(objectMember);
         getExtensions().mapPut("collectionSemantics", semantics.name().toLowerCase());

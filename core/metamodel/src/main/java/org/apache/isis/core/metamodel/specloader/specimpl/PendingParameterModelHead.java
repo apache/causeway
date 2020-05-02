@@ -31,7 +31,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- * The 'head' of the a {@link PendingParameterModel}, that is it holds no parameter values.
+ * The 'head' of a {@link PendingParameterModel}, which in contrast to the (owning) 
+ * {@link PendingParameterModel} holds no parameter values.
  *  
  * @since 2.0.0
  */

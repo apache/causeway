@@ -33,6 +33,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 
+import lombok.NonNull;
+
 /**
  * Analogous to {@link ObjectAssociation}.
  */
@@ -113,7 +115,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
             PendingParameterModel pendingArgs,
             InteractionInitiatedBy interactionInitiatedBy);
 
-    ManagedObject getDefault(PendingParameterModel pendingArgs);
+    @NonNull ManagedObject getDefault(PendingParameterModel pendingArgs);
 
     /** default value as result of a initial param value fixed point search */
     default ManagedObject getDefault(ManagedObject actionOnwer) {
