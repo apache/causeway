@@ -49,11 +49,11 @@ echo ""
 #
 # update version (but just for the modules we need to build)
 #
-#if [ ! -z "$REVISION" ]; then
-#  cd $PROJECT_ROOT_PATH/core-parent
-#  mvn versions:set -DnewVersion=$REVISION -Ddemo-app-modules
-#  cd $PROJECT_ROOT_PATH
-#fi
+if [ ! -z "$REVISION" ]; then
+  cd $PROJECT_ROOT_PATH/core-parent
+  mvn versions:set -DnewVersion=$REVISION -Ddemo-app-modules
+  cd $PROJECT_ROOT_PATH
+fi
 
 #
 # now build the apps

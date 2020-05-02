@@ -176,7 +176,11 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
 
     private Object defaultFor(final ObjectActionParameter param) {
         
-        final ManagedObject defaultAdapter = param.getDefault(objectAdapter);
+        val emptyPpm = param.getAction()
+                .newPendingParameterModelHead(objectAdapter)
+                .emptyModel();
+        
+        val defaultAdapter = param.getDefault(emptyPpm);
         if (ManagedObject.isNullOrUnspecifiedOrEmpty(defaultAdapter)) {
             return null;
         }
