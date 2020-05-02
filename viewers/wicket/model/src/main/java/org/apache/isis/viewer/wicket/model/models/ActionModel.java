@@ -22,13 +22,10 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
@@ -51,7 +48,6 @@ import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.NamedWithMimeType;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._NullSafe;
-import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.internal.primitives._Ints;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -185,7 +181,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
         val pageParameters = createPageParameters(adapter, objectAction);
 
         // capture argument values
-        for(val argumentAdapter: getArgumentsAsImmutable()) {
+        for(val argumentAdapter: argCache().snapshot()) {
             val encodedArg = encodeArg(argumentAdapter);
             PageParameterNames.ACTION_ARGS.addStringTo(pageParameters, encodedArg);
         }
@@ -205,7 +201,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
         final ObjectAction objectAction = getAction();
 
         final StringBuilder buf = new StringBuilder();
-        for(val argumentAdapter: getArgumentsAsImmutable()) {
+        for(val argumentAdapter: argCache().snapshot()) {
             if(buf.length() > 0) {
                 buf.append(",");
             }
@@ -245,12 +241,17 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
 
     private final EntityModel entityModel;
     private final ActionMemento actionMemento;
-
-    /**
-     * Lazily populated in {@link #getArgumentModel(ActionParameterMemento)}
-     */
-    private final Map<Integer, ActionArgumentModel> arguments = _Maps.newHashMap();
-
+    
+    // lazy in support of serialization of this class
+    private transient ActionArgumentCache argCache;
+    private ActionArgumentCache argCache() {
+        return argCache!=null
+                ? argCache
+                : (argCache = new ActionArgumentCache(
+                        entityModel, 
+                        actionMemento, 
+                        getActionMemento().getAction(getSpecificationLoader())));
+    }
     
     private static ActionMemento newActionMementoFrom(
             IsisWebAppCommonContext commonContext,
@@ -296,12 +297,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
         super(actionModel.getCommonContext());
         this.entityModel = actionModel.entityModel;
         this.actionMemento = actionModel.actionMemento;
-
-        primeArgumentModels();
-        val argumentModelByIdx = actionModel.arguments;
-        for (val argumentModel : argumentModelByIdx.entrySet()) {
-            setArgument(argumentModel.getKey(), argumentModel.getValue().getObject());
-        }
+        this.argCache = actionModel.argCache().copy(); 
     }
 
     private void setArgumentsIfPossible(final PageParameters pageParameters) {
@@ -353,7 +349,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
 
     private void setArgument(final int paramNum, final ObjectSpecification argSpec, final String encoded) {
         val argumentAdapter = decodeArg(argSpec, encoded);
-        setArgument(paramNum, argumentAdapter);
+        argCache().putArgumentValue(paramNum, argumentAdapter);
     }
 
     private String encodeArg(ManagedObject adapter) {
@@ -388,26 +384,6 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
         }
     }
 
-    private void setArgument(int paramNum, ManagedObject argumentAdapter) {
-        
-        final ObjectAction action = actionMemento.getAction(getSpecificationLoader());
-        final ObjectActionParameter actionParam = action.getParameters().getElseFail(paramNum);
-        final ActionParameterMemento apm = new ActionParameterMemento(actionParam);
-        final ActionArgumentModel actionArgumentModel = getArgumentModel(apm);
-        actionArgumentModel.setObject(argumentAdapter);
-    }
-
-
-    public ActionArgumentModel getArgumentModel(final ActionParameterMemento apm) {
-        final int i = apm.getNumber();
-        ActionArgumentModel actionArgumentModel = arguments.get(i);
-        if (actionArgumentModel == null) {
-            actionArgumentModel = new ScalarParameterModel(entityModel, apm);
-            final int number = actionArgumentModel.getParameterMemento().getNumber();
-            arguments.put(number, actionArgumentModel);
-        }
-        return actionArgumentModel;
-    }
 
     public ManagedObject getTargetAdapter() {
         return entityModel.load();
@@ -439,7 +415,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
     private ManagedObject executeAction() {
 
         val targetAdapter = getTargetAdapter();
-        final Can<ManagedObject> arguments = getArgumentsAsImmutable();
+        final Can<ManagedObject> arguments = argCache().snapshot();
         final ObjectAction action = getAction();
 
         // if this action is a mixin, then it will fill in the details automatically.
@@ -496,7 +472,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
 
     public String getReasonInvalidIfAny() {
         val targetAdapter = getTargetAdapter();
-        final Can<ManagedObject> proposedArguments = getArgumentsAsImmutable();
+        final Can<ManagedObject> proposedArguments = argCache().snapshot();
         final ObjectAction objectAction = getAction();
         final Consent validity = objectAction
                 .isProposedArgumentSetValid(targetAdapter, proposedArguments, InteractionInitiatedBy.USER);
@@ -510,33 +486,9 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
 
     public PendingParameterModel getArgumentsAsParamModel() {
         return getAction().newPendingParameterModelHead(getTargetAdapter())
-                .model(getArgumentsAsImmutable());
+                .model(argCache().snapshot());
     }
 
-    @Deprecated // make private (use getArgumentsAsParamModel instead)
-    public Can<ManagedObject> getArgumentsAsImmutable() {
-        
-        val objectAction = getAction();
-        val paramCount = objectAction.getParameterCount();
-        val paramTypes = objectAction.getParameterTypes();
-        
-        if(this.arguments.size() < paramCount) {
-            primeArgumentModels();
-        }
-        
-        return IntStream.range(0, paramCount)
-        .mapToObj(paramIndex->{
-        
-            val actionArgumentModel = this.arguments.get(paramIndex);
-            val adapter = Optional.ofNullable(actionArgumentModel.getObject())
-                    .orElse(ManagedObject.empty(paramTypes.getElseFail(paramIndex)));
-            
-            return adapter;
-        
-        })
-        .collect(Can.toCan());
-        
-    }
 
     /** Resets arguments to their fixed point default values
      * @see {@link PendingParameterModelHead#defaults()}
@@ -548,11 +500,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
                 .defaults()
                 .getParamValues();
         
-        for (final ActionArgumentModel actionArgumentModel : arguments.values()) {
-            int paramIndex = actionArgumentModel.getParameterMemento().getNumber();
-            val paramDefaultValue = defaultsFixedPoint.getElseFail(paramIndex);
-            actionArgumentModel.setObject(paramDefaultValue);
-        }
+        argCache().resetTo(defaultsFixedPoint);
     }
 
     /**
@@ -640,31 +588,6 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
         return handler;
     }
 
-    // //////////////////////////////////////
-
-    public List<ActionParameterMemento> primeArgumentModels() {
-        val objectAction = getAction();
-        val parameters = objectAction.getParameters();
-        val actionParameterMementos = buildParameterMementos(parameters);
-        for (val actionParameterMemento : actionParameterMementos) {
-            getArgumentModel(actionParameterMemento);
-        }
-
-        return actionParameterMementos;
-    }
-
-
-    private static List<ActionParameterMemento> buildParameterMementos(
-            final Can<ObjectActionParameter> parameters) {
-
-        // we copy into a new array list otherwise we get lazy evaluation =
-        // reference to a non-serializable object
-        return parameters.stream()
-                .map(ActionParameterMemento::new)
-                .collect(Collectors.toCollection(ArrayList::new));
-    }
-
-
     //////////////////////////////////////////////////
 
     @Override
@@ -725,6 +648,48 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
     public void setInlinePromptContext(InlinePromptContext inlinePromptContext) {
         this.inlinePromptContext = inlinePromptContext;
     }
+
+    public void setParameterValue(ObjectActionParameter actionParameter, ManagedObject defaultIfAny) {
+        val actionParameterMemento = new ActionParameterMemento(actionParameter);
+        val actionArgumentModel = argCache().computeIfAbsent(actionParameterMemento);
+        actionArgumentModel.setObject(defaultIfAny);
+    }
+
+    public void clearParameterValue(ObjectActionParameter actionParameter) {
+        setParameterValue(actionParameter, null);
+    }
+    
+    @Value(staticConstructor = "of")
+    public static class ActionArgumentModelAndVisibilityConsent {
+        final ActionArgumentModel actionArgumentModel;
+        final Consent visibilityConsent;
+    }
+
+    public Stream<ActionArgumentModelAndVisibilityConsent> streamActionArgumentModels() {
+
+        val specificationLoader = getSpecificationLoader();
+        val targetAdapter = this.getTargetAdapter();
+        val realTargetAdapter = this.getActionMemento().getAction(specificationLoader)
+                .realTargetAdapter(targetAdapter);
+        val actionArgsHint = argCache().snapshot();
+        
+        return argCache().streamActionArgumentModels()
+        .map(actionArgumentModel->{
+        
+            actionArgumentModel.setActionArgsHint(actionArgsHint);
+            
+            // visibility
+            val visibilityConsent = actionArgumentModel.getActionParameter(specificationLoader)
+                    .isVisible(realTargetAdapter, Can.empty(), InteractionInitiatedBy.USER);
+            
+            return ActionArgumentModelAndVisibilityConsent.of(actionArgumentModel, visibilityConsent);
+            
+        });
+        
+
+    }
+
+    
 
 
 }

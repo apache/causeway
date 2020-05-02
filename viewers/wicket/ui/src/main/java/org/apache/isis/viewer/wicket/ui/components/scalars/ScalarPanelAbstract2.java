@@ -55,7 +55,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
@@ -173,15 +172,13 @@ implements ScalarModelSubscriber2 {
         final ScalarModel model = getModel();
         val defaultIfAny = model.getDefault(pendingArgumentsReadonly);
 
-        val actionParameterMemento = new ActionParameterMemento(actionParameter);
-        val actionArgumentModel = actionModel.getArgumentModel(actionParameterMemento);
-
         val pendingArg = pendingArgumentsReadonly.getElseFail(paramNumToPossiblyUpdate);
         
         if (defaultIfAny != null) {
             scalarModel.setObject(defaultIfAny);
             scalarModel.setPendingAdapter(defaultIfAny);
-            actionArgumentModel.setObject(defaultIfAny);
+            actionModel.setParameterValue(actionParameter, defaultIfAny);
+
         } else {
 
             boolean shouldBlankout = false;
@@ -205,7 +202,7 @@ implements ScalarModelSubscriber2 {
             if(shouldBlankout) {
                 scalarModel.setObject(null);
                 scalarModel.setPending(null);
-                actionArgumentModel.setObject(null);
+                actionModel.clearParameterValue(actionParameter);
             }
             
         }

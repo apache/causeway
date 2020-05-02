@@ -185,7 +185,8 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
             final int paramNumToPossiblyUpdate,
             final AjaxRequestTarget target) {
 
-        final Can<ManagedObject> arguments = actionModel.getArgumentsAsImmutable();
+        final Can<ManagedObject> arguments = actionModel.getArgumentsAsParamModel()
+                .getParamValues();
 
         val repaint = super.updateIfNecessary(actionModel, paramNumUpdated, paramNumToPossiblyUpdate, target);
 

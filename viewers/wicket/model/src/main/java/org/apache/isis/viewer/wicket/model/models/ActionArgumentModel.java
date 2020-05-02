@@ -22,6 +22,8 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 
 public interface ActionArgumentModel extends IModel<ManagedObject> {
@@ -29,4 +31,16 @@ public interface ActionArgumentModel extends IModel<ManagedObject> {
     ActionParameterMemento getParameterMemento();
 
     void setActionArgsHint(Can<ManagedObject> arguments);
+    
+    // -- SHORTCUTS
+    
+    default ObjectActionParameter getActionParameter(SpecificationLoader specificationLoader) {
+        return getParameterMemento().getActionParameter(specificationLoader);
+    }
+    
+    default int getNumber() {
+        return getParameterMemento().getNumber();
+    }
+
+
 }

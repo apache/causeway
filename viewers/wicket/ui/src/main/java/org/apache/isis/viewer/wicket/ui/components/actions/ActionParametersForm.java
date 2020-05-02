@@ -28,9 +28,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
-import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
@@ -75,37 +73,33 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
         add(repeatingView);
 
         paramPanels.clear();
-        val parameterMementos = actionModel.primeArgumentModels();
-        for (val actionParameterMemento : parameterMementos) {
+        
+        actionModel.streamActionArgumentModels()
+        .forEach(tuple->{
+            
+            val actionArgumentModel = tuple.getActionArgumentModel(); 
+            val visibilityConsent = tuple.getVisibilityConsent();
+            
             val container = new WebMarkupContainer(repeatingView.newChildId());
             repeatingView.add(container);
-
-            val actionArgumentModel = actionModel.getArgumentModel(actionParameterMemento);
-            actionArgumentModel.setActionArgsHint(actionModel.getArgumentsAsImmutable());
+            
             newParamPanel(container, actionArgumentModel)
             .ifPresent(paramPanel->{
-            
                 paramPanels.add(paramPanel);
-
-                // TODO: maybe this logic should move instead to ScalarModel.Kind#whether{Hidden/Disabled}
-                val targetAdapter = actionModel.getTargetAdapter();
-                val realTargetAdapter = actionModel.getActionMemento().getAction(getSpecificationLoader())
-                        .realTargetAdapter(targetAdapter);
-                val consent = actionParameterMemento.getActionParameter(getSpecificationLoader())
-                        .isVisible(realTargetAdapter, Can.empty(), InteractionInitiatedBy.USER);
-                val allowed = consent.isAllowed();
-                paramPanel.setVisible(allowed);
-                
+                paramPanel.setVisible(visibilityConsent.isAllowed());
             });
             
-        }
+        });
 
         setOutputMarkupId(true);
 
 
     }
 
-    private Optional<ScalarPanelAbstract2> newParamPanel(final WebMarkupContainer container, final ActionArgumentModel model) {
+    private Optional<ScalarPanelAbstract2> newParamPanel(
+            final WebMarkupContainer container, 
+            final ActionArgumentModel model) {
+        
         final Component component = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE, model);
 
@@ -113,8 +107,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
             final MarkupContainer markupContainer = (MarkupContainer) component;
 
             // TODO: copy-n-paste of ScalarModel.Kind#getCssClass(ScalarModel), so could perhaps unify
-            final ObjectActionParameter actionParameter = model.getParameterMemento()
-                    .getActionParameter(getSpecificationLoader());
+            final ObjectActionParameter actionParameter = model.getActionParameter(getSpecificationLoader());
 
             final ObjectAction action = actionParameter.getAction();
             final String objectSpecId = action.getOnType().getSpecId().asString().replace(".", "-");
