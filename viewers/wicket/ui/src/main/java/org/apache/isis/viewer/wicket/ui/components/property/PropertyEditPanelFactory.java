@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.property;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -40,12 +40,12 @@ public class PropertyEditPanelFactory extends ComponentFactoryAbstract {
 
     @Override
     public ApplicationAdvice appliesTo(final IModel<?> model) {
-        return appliesIf(model instanceof ScalarModel);
+        return appliesIf(model instanceof ScalarPropertyModel);
     }
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        final ScalarModel scalarModel = (ScalarModel) model;
+        final ScalarPropertyModel scalarModel = (ScalarPropertyModel) model;
         return new PropertyEditPanel(id, scalarModel);
     }
 

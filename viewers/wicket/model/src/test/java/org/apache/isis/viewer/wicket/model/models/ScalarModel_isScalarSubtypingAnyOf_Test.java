@@ -90,7 +90,7 @@ public class ScalarModel_isScalarSubtypingAnyOf_Test {
     }
 
     private ScalarModel newScalarModelFor(final Class<?> result) {
-        val scalarModel = new ScalarModel(mockEntityModel, null) {
+        val scalarModel = new ScalarParameterModel(mockEntityModel, null) {
             private static final long serialVersionUID = 1L;
 
             @Override public ObjectSpecification getTypeOfSpecification() {

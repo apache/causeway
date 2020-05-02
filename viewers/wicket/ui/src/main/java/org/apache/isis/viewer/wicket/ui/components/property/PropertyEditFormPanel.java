@@ -19,7 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.components.property;
 
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersFormPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormPanelAbstract;
@@ -33,19 +33,19 @@ import org.apache.isis.viewer.wicket.ui.panels.PromptFormPanelAbstract;
  * </p>
  */
 public class PropertyEditFormPanel
-extends PromptFormPanelAbstract<ScalarModel> {
+extends PromptFormPanelAbstract<ScalarPropertyModel> {
 
     private static final long serialVersionUID = 1L;
 
     static final String ID_PROPERTY = "property";
 
-    public PropertyEditFormPanel(final String id, final ScalarModel model) {
+    public PropertyEditFormPanel(final String id, final ScalarPropertyModel model) {
         super(id, model);
         buildGui();
     }
 
     private void buildGui() {
-        ScalarModel model = getModel();
+        ScalarPropertyModel model = getModel();
         add(new PropertyEditForm("inputForm", this, this.getWicketViewerSettings(), model));
     }
 

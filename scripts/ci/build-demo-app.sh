@@ -68,26 +68,19 @@ do
       -Dskip.arch \
       -DskipTests
 
-	for variant in wicket
-	do
-	  cd $variant
+  for variant in wicket
+  do
+	cd $variant
 	
-	  mvn clean install \
-	      $BATCH_MODE \
-	      -Dflavor=$FLAVOR \
-	      -Dskip.git \
-	      -Dskip.arch \
-	      -DskipTests
+	mvn --batch-mode \
+	    compile jib:build \
+	    -Dflavor=$FLAVOR \
+	    -Dskip.git \
+	    -Dskip.arch \
+	    -DskipTests
 	
-	  mvn --batch-mode \
-	      compile jib:build \
-	      -Dflavor=$FLAVOR \
-	      -Dskip.git \
-	      -Dskip.arch \
-	      -DskipTests
-	
-	  cd $PROJECT_ROOT_PATH/examples/$app
-	done
+	cd $PROJECT_ROOT_PATH/examples/$app
+  done
 
 
   cd $PROJECT_ROOT_PATH

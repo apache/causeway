@@ -28,30 +28,29 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.viewer.wicket.model.hints.IsisPropertyEditCompletedEvent;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorStrategy;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
 
-class PropertyEditForm extends PromptFormAbstract<ScalarModel> {
+import lombok.val;
+
+class PropertyEditForm extends PromptFormAbstract<ScalarPropertyModel> {
 
     private static final long serialVersionUID = 1L;
-
-
 
     public PropertyEditForm(
             final String id,
             final Component parentPanel,
             final WicketViewerSettings settings,
-            final ScalarModel propertyModel) {
+            final ScalarPropertyModel propertyModel) {
         super(id, parentPanel, settings, propertyModel);
     }
 
-    private ScalarModel getScalarModel() {
-        return (ScalarModel) super.getModel();
+    private ScalarPropertyModel getScalarModel() {
+        return (ScalarPropertyModel) super.getModel();
     }
-
-
 
     @Override
     protected void addParameters() {
@@ -107,8 +106,8 @@ class PropertyEditForm extends PromptFormAbstract<ScalarModel> {
     }
 
     @Override
-    protected FormExecutorStrategy<ScalarModel> getFormExecutorStrategy() {
-        ScalarModel scalarModel = getScalarModel();
+    protected FormExecutorStrategy<ScalarPropertyModel> getFormExecutorStrategy() {
+        val scalarModel = getScalarModel();
         return new PropertyFormExecutorStrategy(scalarModel);
     }
 }

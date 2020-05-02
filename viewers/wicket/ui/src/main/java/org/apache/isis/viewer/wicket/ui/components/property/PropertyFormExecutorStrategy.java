@@ -22,22 +22,22 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorStrategy;
 
 import lombok.val;
 
-public class PropertyFormExecutorStrategy implements FormExecutorStrategy<ScalarModel> {
+public class PropertyFormExecutorStrategy implements FormExecutorStrategy<ScalarPropertyModel> {
 
-    private final ScalarModel model;
+    private final ScalarPropertyModel model;
 
-    public PropertyFormExecutorStrategy(final ScalarModel scalarModel) {
+    public PropertyFormExecutorStrategy(final ScalarPropertyModel scalarModel) {
         model = scalarModel;
     }
 
     @Override
-    public ScalarModel getModel() {
+    public ScalarPropertyModel getModel() {
         return model;
     }
 

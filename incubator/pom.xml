@@ -120,7 +120,6 @@
 		<module>core/model</module>
 		<module>mappings/microprofile</module>
 		<module>viewers/vaadin</module>
-		<module>clients/kroviz</module>
 	</modules>
 
 </project>

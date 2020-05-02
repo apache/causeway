@@ -61,6 +61,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
 
+import lombok.NonNull;
 import lombok.val;
 
 public abstract class ObjectActionParameterAbstract 
@@ -270,20 +271,17 @@ implements ObjectActionParameter, FacetHolder.Delegating {
     // -- Defaults
 
     @Override
+    @NonNull
     public ManagedObject getDefault(
-            final PendingParameterModel pendingArgs) {
+            @NonNull final PendingParameterModel pendingArgs) {
         
+        val paramSpec = getSpecification();
         val defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);
-        if (defaultsFacet != null) {
-            final Object defaultValue = defaultsFacet.getDefault(pendingArgs);
-            if (defaultValue == null) {
-                // it's possible that even though there is a default facet, when
-                // invoked it is unable to return a default.
-                return null;
-            }
-            return getObjectManager().adapt(defaultValue);
+        if (defaultsFacet != null && !defaultsFacet.isFallback()) {
+            final Object paramValuePojo = defaultsFacet.getDefault(pendingArgs);
+            return ManagedObject.of(paramSpec, paramValuePojo);
         }
-        return null;
+        return ManagedObject.of(paramSpec, null);
     }
 
     // helpers

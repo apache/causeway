@@ -196,7 +196,6 @@ extends ReprRendererAbstract<R, ManagedMember> {
                 putExtensionsIsisProprietary();
             }
             addLinksToFormalDomainModel();
-            addLinksIsisProprietary();
         }
     }
 
@@ -290,8 +289,6 @@ extends ReprRendererAbstract<R, ManagedMember> {
     protected abstract void putExtensionsIsisProprietary();
 
     protected abstract void addLinksToFormalDomainModel();
-
-    protected abstract void addLinksIsisProprietary();
 
     /**
      * Convenience method.

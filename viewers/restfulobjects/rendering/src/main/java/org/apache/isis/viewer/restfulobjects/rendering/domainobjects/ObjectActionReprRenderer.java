@@ -20,7 +20,6 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 import com.fasterxml.jackson.databind.node.NullNode;
 
@@ -30,7 +29,6 @@ import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.interaction.ManagedAction;
@@ -105,20 +103,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
 
     @Override
     protected ObjectAdapterLinkTo linkToForMutatorInvoke() {
-        if (true /*!objectMember.isContributed()*/) {
-            return super.linkToForMutatorInvoke();
-        }
-        final DomainServiceLinkTo linkTo = new DomainServiceLinkTo();
-        return linkTo.usingUrlBase(getResourceContext()).with(contributingServiceAdapter());
-    }
-
-    private ManagedObject contributingServiceAdapter() {
-        final ObjectSpecification serviceType = objectMember.getOnType();
-        final Stream<ManagedObject> serviceAdapters = streamServiceAdapters();
-        return serviceAdapters
-                .filter(serviceAdapter->serviceAdapter.getSpecification() == serviceType)
-                .findFirst()
-                .orElseThrow(()->new IllegalStateException("Unable to locate contributing service")); // fail fast
+        return super.linkToForMutatorInvoke();
     }
 
     @Override
@@ -172,7 +157,9 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
             final ObjectActionParameter param,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        val pendingArgs = param.getAction().newPendingParameterModel(objectAdapter);
+        val pendingArgs = param.getAction()
+                .newPendingParameterModelHead(objectAdapter)
+                .emptyModel();
         
         val choiceAdapters = param.getChoices(pendingArgs, interactionInitiatedBy);
         if (choiceAdapters == null || choiceAdapters.isEmpty()) {
@@ -189,8 +176,12 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
 
     private Object defaultFor(final ObjectActionParameter param) {
         
-        final ManagedObject defaultAdapter = param.getDefault(objectAdapter);
-        if (defaultAdapter == null) {
+        val emptyPpm = param.getAction()
+                .newPendingParameterModelHead(objectAdapter)
+                .emptyModel();
+        
+        val defaultAdapter = param.getDefault(emptyPpm);
+        if (ManagedObject.isNullOrUnspecifiedOrEmpty(defaultAdapter)) {
             return null;
         }
         // REVIEW: previously was using the spec of the parameter, but think instead it should be the spec of the adapter itself
@@ -209,16 +200,6 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         }
         final JsonRepresentation link = ActionDescriptionReprRenderer.newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build();
         getLinks().arrayAdd(link);
-    }
-
-    @Override
-    protected void addLinksIsisProprietary() {
-        // umm...
-        if (false /*objectMember.isContributed() */) {
-            final ManagedObject serviceAdapter = contributingServiceAdapter();
-            final JsonRepresentation contributedByLink = DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.CONTRIBUTED_BY, serviceAdapter).build();
-            getLinks().arrayAdd(contributedByLink);
-        }
     }
 
     @Override

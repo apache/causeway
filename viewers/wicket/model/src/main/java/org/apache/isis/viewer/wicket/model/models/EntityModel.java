@@ -329,7 +329,7 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel {
             final RenderingHint renderingHint) {
         ScalarModel scalarModel = propertyScalarModels.get(pm);
         if (scalarModel == null) {
-            scalarModel = new ScalarModel(this, pm, mode, renderingHint);
+            scalarModel = new ScalarPropertyModel(this, pm, mode, renderingHint);
 
             propertyScalarModels.put(pm, scalarModel);
         }

@@ -137,10 +137,8 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     }
 
     @Override
-    public PendingParameterModel newPendingParameterModel(
-            @NonNull ManagedObject actionOwner,
-            @NonNull Can<ManagedObject> paramValues) {
-        return PendingParameterModel.of(this, actionOwner, mixinAdapterFor(actionOwner), paramValues);
+    public PendingParameterModelHead newPendingParameterModelHead(@NonNull ManagedObject actionOwner) {
+        return PendingParameterModelHead.of(this, actionOwner, mixinAdapterFor(actionOwner));
     }
     
     @Override
