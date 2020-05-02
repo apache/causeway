@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.commons;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Executable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -30,6 +32,7 @@ import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.commons.internal.collections._Collections;
+import org.apache.isis.core.commons.internal.reflection._Reflect;
 
 import static org.apache.isis.core.commons.internal.base._NullSafe.isEmpty;
 
@@ -47,14 +50,35 @@ import lombok.val;
  */
 public class MethodInvocationPreprocessor {
 
+    public static <T> T invoke(Constructor<T> constructor, Object[] executionParameters)
+            throws IllegalAccessException, InvocationTargetException, InstantiationException {
+
+        val adaptedExecutionParameters = preprocess(constructor, executionParameters);
+        try {
+            // this utility supports effective private constructors as well
+            return _Reflect.invokeConstructor(constructor, adaptedExecutionParameters);
+        } catch (IllegalArgumentException e) {
+            throw verboseArgumentException(constructor.getParameterTypes(), adaptedExecutionParameters, e);
+        }
+    }
+    
     public static Object invoke(Method method, Object targetPojo, Object[] executionParameters)
             throws IllegalAccessException, InvocationTargetException {
 
-        if (isEmpty(executionParameters)) {
-            return method.invoke(targetPojo, executionParameters);
-        }
+        val adaptedExecutionParameters = preprocess(method, executionParameters);
 
-        val parameterTypes = method.getParameterTypes();
+        try {
+            return method.invoke(targetPojo, adaptedExecutionParameters);
+        } catch (IllegalArgumentException e) {
+            throw verboseArgumentException(method.getParameterTypes(), adaptedExecutionParameters, e);
+        }
+    }
+    
+    private static Object[] preprocess(Executable executable, Object[] executionParameters) {
+        if (isEmpty(executionParameters)) {
+            return executionParameters;
+        }
+        val parameterTypes = executable.getParameterTypes();
         val paramCount = parameterTypes.length;
         val adaptedExecutionParameters = new Object[paramCount];
 
@@ -62,12 +86,7 @@ public class MethodInvocationPreprocessor {
             val origParam = _Arrays.get(executionParameters, i).orElse(null);
             adaptedExecutionParameters[i] = adapt(origParam, parameterTypes[i]);
         }
-
-        try {
-            return method.invoke(targetPojo, adaptedExecutionParameters);
-        } catch (IllegalArgumentException e) {
-            throw verboseArgumentException(parameterTypes, adaptedExecutionParameters, e);
-        }
+        return adaptedExecutionParameters;
     }
 
     // -- OBJECT ADAPTER

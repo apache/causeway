@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.commons;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
@@ -32,6 +34,21 @@ public class MethodExtensions {
     }
 
     // //////////////////////////////////////
+    
+    public static <T> T invoke(final Constructor<T> con) {
+        final Object[] parameters = MethodExtensions.getNullOrDefaultArgs(con);
+        return MethodExtensions.invoke(con, parameters);
+    }
+
+    public static <T> T invoke(final Constructor<T> con, final Object[] arguments) {
+        try {
+            Object[] defaultAnyPrimitive = defaultAnyPrimitive(con.getParameterTypes(), arguments);
+            return MethodInvocationPreprocessor.invoke(con, defaultAnyPrimitive);
+        } catch (Exception e) {
+             ThrowableExtensions.handleInvocationException(e, con.getName());
+             return null;
+        }
+    }
 
     public static Object invoke(final Method method, final Object object) {
         final Object[] parameters = MethodExtensions.getNullOrDefaultArgs(method);
@@ -78,8 +95,7 @@ public class MethodExtensions {
 
     // //////////////////////////////////////
 
-
-    public static Object[] getNullOrDefaultArgs(final Method method) {
+    public static Object[] getNullOrDefaultArgs(final Executable method) {
         final Class<?>[] paramTypes = method.getParameterTypes();
         final Object[] parameters = new Object[paramTypes.length];
         for (int i = 0; i < parameters.length; i++) {
@@ -87,6 +103,8 @@ public class MethodExtensions {
         }
         return parameters;
     }
+
+
 
 
 }

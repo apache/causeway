@@ -47,12 +47,10 @@ import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.commons.MethodExtensions;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
-import org.apache.isis.core.metamodel.commons.ThrowableExtensions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
@@ -686,13 +684,8 @@ public interface ManagedObject {
                 final Can<ManagedObject> pendingArguments,
                 final List<Object> additionalArguments) {
             
-            final Object pendingParamModel;
-            try {
-                pendingParamModel = _Reflect.invokeConstructor(ppmConstructor, unwrapMultipleAsArray(pendingArguments)); 
-            } catch (Exception e) {
-                return ThrowableExtensions.handleInvocationException(e, ppmConstructor.getName());
-            }
-            val paramPojos = _Arrays.combineWithExplicitType(Object.class, pendingParamModel, additionalArguments.toArray());
+            val ppmTuple = MethodExtensions.invoke(ppmConstructor, unwrapMultipleAsArray(pendingArguments));
+            val paramPojos = _Arrays.combineWithExplicitType(Object.class, ppmTuple, additionalArguments.toArray());
             return MethodExtensions.invoke(method, unwrapSingle(adapter), paramPojos);
         }
         
