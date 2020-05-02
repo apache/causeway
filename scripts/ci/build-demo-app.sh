@@ -49,11 +49,11 @@ echo ""
 #
 # update version (but just for the modules we need to build)
 #
-if [ ! -z "$REVISION" ]; then
-  cd $PROJECT_ROOT_PATH/core-parent
-  mvn versions:set -DnewVersion=$REVISION -Ddemo-app-modules
-  cd $PROJECT_ROOT_PATH
-fi
+#if [ ! -z "$REVISION" ]; then
+#  cd $PROJECT_ROOT_PATH/core-parent
+#  mvn versions:set -DnewVersion=$REVISION -Ddemo-app-modules
+#  cd $PROJECT_ROOT_PATH
+#fi
 
 #
 # now build the apps
@@ -62,31 +62,33 @@ for app in demo
 do
   cd $PROJECT_ROOT_PATH/examples/$app
 
+  mvn versions:set -DnewVersion=$REVISION
   mvn clean install \
       $BATCH_MODE \
       -Dskip.git \
       -Dskip.arch \
       -DskipTests
 
-	for variant in wicket
-	do
-	  cd $variant
+  for variant in wicket
+  do
+	cd $variant
 	
-	  mvn clean install \
-	      $BATCH_MODE \
-	      -Dflavor=$FLAVOR \
-	      -Dskip.git \
-	      -Dskip.arch \
-	      -DskipTests
+	mvn versions:set -DnewVersion=$REVISION
+	mvn clean install \
+	    $BATCH_MODE \
+	    -Dflavor=$FLAVOR \
+	    -Dskip.git \
+	    -Dskip.arch \
+	    -DskipTests
 	
-	  mvn --batch-mode \
-	      compile jib:build \
-	      -Dflavor=$FLAVOR \
-	      -Dskip.git \
-	      -Dskip.arch \
-	      -DskipTests
+	mvn --batch-mode \
+	    compile jib:build \
+	    -Dflavor=$FLAVOR \
+	    -Dskip.git \
+	    -Dskip.arch \
+	    -DskipTests
 	
-	  cd $PROJECT_ROOT_PATH/examples/$app
+	cd $PROJECT_ROOT_PATH/examples/$app
 	done
 
 

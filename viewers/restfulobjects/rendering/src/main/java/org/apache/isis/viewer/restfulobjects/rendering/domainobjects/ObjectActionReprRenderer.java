@@ -192,7 +192,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     private Object defaultFor(final ObjectActionParameter param) {
         
         final ManagedObject defaultAdapter = param.getDefault(objectAdapter);
-        if (defaultAdapter == null) {
+        if (ManagedObject.isNullOrUnspecifiedOrEmpty(defaultAdapter)) {
             return null;
         }
         // REVIEW: previously was using the spec of the parameter, but think instead it should be the spec of the adapter itself

@@ -19,13 +19,10 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.Objects;
-import java.util.function.Function;
 
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
@@ -82,13 +79,13 @@ public class PendingParameterModelHead {
     public PendingParameterModel defaults() {
         
         final int maxIterations = getAction().getParameterCount();
-        val paramDefaultProviders = getParameterDefaultProviders();
+        
+        val params = getAction().getParameters();
         
         // init defaults with empty pending-parameter values 
         val emptyModel = emptyModel();
-        val initialDefaults = paramDefaultProviders
-        .map(paramDefaultProvider->paramDefaultProvider
-                .getDefault(emptyModel));
+        val initialDefaults = params
+                .map(param->param.getDefault(emptyModel));
         
         // fixed point search
         
@@ -96,8 +93,8 @@ public class PendingParameterModelHead {
         for(int i=0; i<maxIterations; ++i) {
             val ppm = model(pl);
             old_pl = pl;
-            pl = paramDefaultProviders
-                    .map(paramDefaultProvider->paramDefaultProvider.getDefault(ppm));
+            pl = params
+                    .map(param->param.getDefault(ppm));
             
             if(equals(old_pl, pl)) {
                 // fixed point found, return the latest iteration 
@@ -112,30 +109,6 @@ public class PendingParameterModelHead {
     }
 
     // -- HELPER
-    
-    @RequiredArgsConstructor(staticName = "of")
-    private static final class ParameterDefaultProvider {
-        
-        final ObjectSpecification paramSpec;
-        final Function<PendingParameterModel, Object> defaultPojoProvider;
-        
-        ManagedObject getDefault(PendingParameterModel ppm) {
-            val paramValuePojo = defaultPojoProvider.apply(ppm);
-            return ManagedObject.of(paramSpec, paramValuePojo);
-        }
-    }
-    
-    private Can<ParameterDefaultProvider> getParameterDefaultProviders() {
-        return getAction().getParameters().stream()
-        .map(objectActionParameter->{
-            val paramSpec = objectActionParameter.getSpecification();
-            val paramDefaultFacet = objectActionParameter.getFacet(ActionParameterDefaultsFacet.class);
-            return (paramDefaultFacet != null && !paramDefaultFacet.isFallback()) 
-                        ? ParameterDefaultProvider.of(paramSpec, ppm->paramDefaultFacet.getDefault(ppm))
-                        : ParameterDefaultProvider.of(paramSpec, ppm->null);
-        })
-        .collect(Can.toCan());
-    }
     
     private boolean equals(Can<ManagedObject> left, Can<ManagedObject> right) {
         // equal length is guaranteed as used only local to this class
