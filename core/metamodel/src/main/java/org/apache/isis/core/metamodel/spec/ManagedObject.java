@@ -23,10 +23,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
@@ -41,7 +39,6 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Lazy;
-import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.base._Tuples.Indexed;
 import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.commons.internal.collections._Lists;
@@ -59,7 +56,6 @@ import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
 
@@ -250,6 +246,7 @@ public interface ManagedObject {
         return TitleUtil.titleString(this, contextAdapterIfAny);
     }
     
+    @Deprecated // move to ManagedObjects
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     static final class TitleUtil {
 
@@ -527,58 +524,10 @@ public interface ManagedObject {
         return adapter!=null && adapter!=ManagedObject.unspecified();
     }
 
-    // -- COMPARE UTILITIES
-    
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    static final class CompareUtil {
-
-        public static int compare(@Nullable ManagedObject p, @Nullable ManagedObject q) {
-            return NATURAL_NULL_FIRST.compare(p, q);
-        }
-        
-        public static Comparator<ManagedObject> orderingBy(ObjectAssociation sortProperty, boolean ascending) {
-            
-            final Comparator<ManagedObject> comparator = ascending 
-                    ? NATURAL_NULL_FIRST 
-                            : NATURAL_NULL_FIRST.reversed();
-            
-            return (p, q) -> {
-                    val pSort = sortProperty.get(p, InteractionInitiatedBy.FRAMEWORK);
-                    val qSort = sortProperty.get(q, InteractionInitiatedBy.FRAMEWORK);
-                    return comparator.compare(pSort, qSort);
-            };
-            
-        }
-        
-        // -- PREDEFINED COMPARATOR
-        
-        private static final Comparator<ManagedObject> NATURAL_NULL_FIRST = new Comparator<ManagedObject>(){
-            @SuppressWarnings({ "unchecked", "rawtypes" })
-            @Override
-            public int compare(@Nullable ManagedObject p, @Nullable ManagedObject q) {
-                val pPojo = ManagedObject.unwrapSingle(p);
-                val qPojo = ManagedObject.unwrapSingle(q);
-                if(pPojo instanceof Comparable && qPojo instanceof Comparable) {
-                    return _NullSafe.compareNullsFirst((Comparable)pPojo, (Comparable)qPojo);
-                }
-                if(Objects.equals(pPojo, qPojo)) {
-                    return 0;
-                }
-                
-                final int hashCompare = Integer.compare(Objects.hashCode(pPojo), Objects.hashCode(qPojo));
-                if(hashCompare!=0) {
-                    return hashCompare;
-                }
-                //TODO what to return on hash-collision?
-                return -1;
-            }
-            
-        };
-        
-    }
     
     // -- VISIBILITY UTILITIES
 
+    @Deprecated // move to ManagedObjects
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     static final class VisibilityUtil {
 
@@ -674,6 +623,7 @@ public interface ManagedObject {
 
     // -- INVOCATION UTILITY
 
+    @Deprecated // move to ManagedObjects
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     static final class InvokeUtil {
     
@@ -684,7 +634,7 @@ public interface ManagedObject {
                 final Can<ManagedObject> pendingArguments,
                 final List<Object> additionalArguments) {
             
-            val ppmTuple = MethodExtensions.invoke(ppmConstructor, unwrapMultipleAsArray(pendingArguments));
+            val ppmTuple = MethodExtensions.construct(ppmConstructor, unwrapMultipleAsArray(pendingArguments));
             val paramPojos = _Arrays.combineWithExplicitType(Object.class, ppmTuple, additionalArguments.toArray());
             return MethodExtensions.invoke(method, unwrapSingle(adapter), paramPojos);
         }

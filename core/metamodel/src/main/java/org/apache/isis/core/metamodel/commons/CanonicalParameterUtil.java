@@ -48,9 +48,9 @@ import lombok.val;
  * By now we do this for collection parameter types List, Set, SortedSet, Collection and Arrays.
  * </p>
  */
-public class MethodInvocationPreprocessor {
+public class CanonicalParameterUtil {
 
-    public static <T> T invoke(Constructor<T> constructor, Object[] executionParameters)
+    public static <T> T construct(Constructor<T> constructor, Object[] executionParameters)
             throws IllegalAccessException, InvocationTargetException, InstantiationException {
 
         val adaptedExecutionParameters = preprocess(constructor, executionParameters);

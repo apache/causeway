@@ -35,15 +35,15 @@ public class MethodExtensions {
 
     // //////////////////////////////////////
     
-    public static <T> T invoke(final Constructor<T> con) {
+    public static <T> T construct(final Constructor<T> con) {
         final Object[] parameters = MethodExtensions.getNullOrDefaultArgs(con);
-        return MethodExtensions.invoke(con, parameters);
+        return MethodExtensions.construct(con, parameters);
     }
 
-    public static <T> T invoke(final Constructor<T> con, final Object[] arguments) {
+    public static <T> T construct(final Constructor<T> con, final Object[] arguments) {
         try {
             Object[] defaultAnyPrimitive = defaultAnyPrimitive(con.getParameterTypes(), arguments);
-            return MethodInvocationPreprocessor.invoke(con, defaultAnyPrimitive);
+            return CanonicalParameterUtil.construct(con, defaultAnyPrimitive);
         } catch (Exception e) {
              ThrowableExtensions.handleInvocationException(e, con.getName());
              return null;
@@ -58,7 +58,7 @@ public class MethodExtensions {
     public static Object invoke(final Method method, final Object object, final Object[] arguments) {
         try {
             Object[] defaultAnyPrimitive = defaultAnyPrimitive(method.getParameterTypes(), arguments);
-            return MethodInvocationPreprocessor.invoke(method, object, defaultAnyPrimitive);
+            return CanonicalParameterUtil.invoke(method, object, defaultAnyPrimitive);
         } catch (Exception e) {
             return ThrowableExtensions.handleInvocationException(e, method.getName());
         }

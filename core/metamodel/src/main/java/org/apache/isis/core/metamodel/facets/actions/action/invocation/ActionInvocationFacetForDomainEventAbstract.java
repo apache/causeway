@@ -52,7 +52,7 @@ import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.commons.MethodInvocationPreprocessor;
+import org.apache.isis.core.metamodel.commons.CanonicalParameterUtil;
 import org.apache.isis.core.metamodel.commons.ThrowableExtensions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -268,11 +268,11 @@ implements ImperativeFacet {
             final QueryResultsCache queryResultsCache = getQueryResultsCache();
             final Object[] targetPojoPlusExecutionParameters = _Arrays.combine(executionParameters, targetPojo);
             return queryResultsCache.execute(
-                    ()->MethodInvocationPreprocessor.invoke(method, targetPojo, executionParameters),
+                    ()->CanonicalParameterUtil.invoke(method, targetPojo, executionParameters),
                     targetPojo.getClass(), method.getName(), targetPojoPlusExecutionParameters);
 
         } else {
-            return MethodInvocationPreprocessor.invoke(method, targetPojo, executionParameters);
+            return CanonicalParameterUtil.invoke(method, targetPojo, executionParameters);
         }
     }
 
