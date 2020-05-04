@@ -14,7 +14,7 @@ abstract class DisplayModel {
     abstract fun addData(obj: TransferObject)
 
     open fun getObject(): TObject? {
-       // subclass responsibility
+        // subclass responsibility
         return null
     }
 
@@ -25,11 +25,10 @@ abstract class DisplayModel {
     fun extractTitle(): String {
         val strList = this.title.split("/")
         val len = strList.size
-        return if (len > 2) {
-            strList[len - 2]
-        } else {
-            ""
-        }
+        var answer = ""
+        if (len > 2) answer =
+                strList[len - 2]
+        return answer
     }
 
 }

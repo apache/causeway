@@ -25,6 +25,7 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
 
         if (dsp.canBeDisplayed()) {
             RoStatusBar.updateDiagram(dsp as DiagramDM)
+            dsp.isRendered = true
         }
     }
 

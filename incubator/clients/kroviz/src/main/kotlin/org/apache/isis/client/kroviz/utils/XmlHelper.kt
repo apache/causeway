@@ -15,8 +15,7 @@ object XmlHelper {
     fun nonTextChildren(node: Node): List<Node> {
         val match = "#text"
         val childNodes = node.childNodes.asList()
-        val list = childNodes.filter { !it.nodeName.contains(match) }
-        return list
+        return childNodes.filter { !it.nodeName.contains(match) }
     }
 
     fun firstChildMatching(node: Node, match: String): Node? {

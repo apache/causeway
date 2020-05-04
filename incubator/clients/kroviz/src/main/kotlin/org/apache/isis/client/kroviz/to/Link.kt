@@ -40,7 +40,7 @@ data class Link(val rel: String = "",
     }
 
     fun isProperty() : Boolean {
-        return type.endsWith("/object-property")
+        return rel.endsWith("/property")
     }
 
     fun isPropertyDescription() : Boolean {

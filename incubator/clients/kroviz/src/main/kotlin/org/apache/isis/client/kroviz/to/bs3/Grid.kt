@@ -26,12 +26,4 @@ class Grid(document: Document) : TransferObject {
         }
     }
 
-    fun getPropertyList(): List<Property> {
-        val list = mutableListOf<Property>()
-        rows.forEach { c ->
-            list.addAll(c.getPropertyList())
-        }
-        return list
-    }
-
 }

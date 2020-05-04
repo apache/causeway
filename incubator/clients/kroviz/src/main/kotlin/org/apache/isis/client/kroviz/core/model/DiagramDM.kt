@@ -20,9 +20,10 @@ class DiagramDM(override val title: String) : DisplayModel() {
     }
 
     override fun canBeDisplayed(): Boolean {
-        return (numberOfClasses == classes.size
+        if (isRendered) return false
+        return (numberOfClasses == classes.size)
                 //TODO && numberOfProperties == properties.size
-                )
+
     }
 
     override fun addData(obj: TransferObject) {

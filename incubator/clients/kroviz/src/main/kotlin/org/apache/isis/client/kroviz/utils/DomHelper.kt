@@ -1,5 +1,6 @@
 package org.apache.isis.client.kroviz.utils
 
+import org.w3c.dom.Element
 import org.w3c.dom.parsing.DOMParser
 import kotlin.browser.document
 
@@ -15,6 +16,15 @@ object DomHelper {
         val svg = p.parseFromString(response, type)
         val element = document.getElementById(elementId)
         element.asDynamic().appendChild(svg.documentElement)
+    }
+
+    fun getById(elementId: String): Element {
+        return document.getElementById(elementId)!!
+    }
+
+    fun replaceWith(elementId: String, svgElement: Element) {
+        val element = getById(elementId)!!
+        element.replaceWith(svgElement)
     }
 
     fun download(filename: String, text: String) {

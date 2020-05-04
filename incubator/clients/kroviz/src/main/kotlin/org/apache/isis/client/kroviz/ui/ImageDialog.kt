@@ -2,9 +2,11 @@ package org.apache.isis.client.kroviz.ui
 
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.kv.RoDialog
-import org.apache.isis.client.kroviz.ui.kv.UiManager
+import org.apache.isis.client.kroviz.utils.DomHelper
+import org.apache.isis.client.kroviz.utils.ScalableVectorGraphic
 import org.apache.isis.client.kroviz.utils.UmlUtils
-import org.w3c.dom.events.KeyboardEvent
+import org.w3c.dom.parsing.DOMParser
+import pl.treksoft.kvision.core.onEvent
 import kotlin.js.Date
 
 class ImageDialog(
@@ -21,50 +23,65 @@ class ImageDialog(
     }
 
     private val uuid: String = Date().toTimeString() //IMPROVE
+    private var dialog: RoDialog
 
     fun open() {
-        val formItems = mutableListOf<FormItem>()
-//        val slider = FormItem("Scale", ValueType.SLIDER.type, content = 1.0)
-//        formItems.add(slider)
-
-        val img = FormItem("svg", ValueType.IMAGE.type, callBackId = uuid)
-        formItems.add(img)
-
-        val dialog = RoDialog(
-                caption = label,
-                items = formItems,
-                command = this,
-                widthPerc = 80,
-                heightPerc = 80)
         dialog.open()
-//        slider.setDisplay(dialog)
-
         UmlUtils.generateDiagram(pumlCode, uuid)
     }
 
     init {
-        kotlin.browser.window.addEventListener("keydown", fun(event) {
-            val dlg = UiManager.topDialog() as RoDialog
-            console.log("[ImageDialog.event] topWindow: $dlg")
-            console.log(dlg)
-            if (dlg.hasScalableContent()) {
-                val ke = event as KeyboardEvent
-                if (ke.ctrlKey && ke.keyCode == 189) { // -
-                    //adjust svg viewbox
-                    console.log("[<CTRL>-<->]")
-                    event.stopPropagation()
-                    ke.preventDefault()
-                }
-                if (ke.ctrlKey && ke.keyCode == 187) { // +
-                    //adjust svg viewbox
-                    console.log("[<CTRL>-<+>]")
-                    event.stopPropagation()
-                    ke.preventDefault()
+        val formItems = mutableListOf<FormItem>()
+        val img = FormItem("svg", ValueType.IMAGE.type, callBackId = uuid)
+        formItems.add(img)
+
+        dialog = RoDialog(
+                widthPerc = 80,
+                caption = label,
+                items = formItems,
+                command = this,
+                heightPerc = 80)
+        console.log("[ImageDialog.init] $dialog")
+ //       if (dialog.hasScalableContent()) {
+            dialog.onEvent {
+                keypress = { e ->
+                    console.log("[ImageDialog.open] keydown")
+                    console.log(e)
+                    if (e.key === "+" && e.ctrlKey) {
+                        scale(true)
+                        console.log("[<CTRL>-<Alt>-<+>]")
+                        e.stopPropagation()
+                        e.preventDefault()
+                    }
+                    if (e.key === "-" && e.ctrlKey) {
+                        scale(false)
+                        console.log("[<CTRL>-<Alt>-<->]")
+                        e.stopPropagation()
+                        e.preventDefault()
+                    }
                 }
             }
-        })
+ //       }
     }
 
+
+    private fun scale(upOrDown: Boolean) {
+        val mimeType = "image/svg+xml"
+        val oldElement = DomHelper.getById(uuid)
+        val oldStr = oldElement.toString()
+        console.log(oldStr)
+        val p = DOMParser()
+        var svg = p.parseFromString(oldStr, mimeType)
+        val image = ScalableVectorGraphic(svg)
+        if (upOrDown) {
+            image.scaleUp()
+        } else {
+            image.scaleDown()
+        }
+        val newStr = image.serialized()
+        svg = p.parseFromString(newStr, mimeType)
+        DomHelper.replaceWith(uuid, svg.documentElement!!)
+    }
 
 }
 
