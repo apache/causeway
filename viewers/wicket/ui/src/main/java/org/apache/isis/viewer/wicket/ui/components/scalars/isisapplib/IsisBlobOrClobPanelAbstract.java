@@ -190,17 +190,17 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     // //////////////////////////////////////
 
     @Override
-    protected void onInitializeWhenViewMode() {
+    protected void onInitializeNotEditable() {
         updateRegularFormComponents(InputFieldVisibility.VISIBLE, InputFieldEditability.NOT_EDITABLE, null, null);
     }
 
     @Override
-    protected void onInitializeWhenDisabled(final String disableReason) {
+    protected void onInitializeReadonly(final String disableReason) {
         updateRegularFormComponents(InputFieldVisibility.VISIBLE, InputFieldEditability.NOT_EDITABLE, null, null);
     }
 
     @Override
-    protected void onInitializeWhenEnabled() {
+    protected void onInitializeEditable() {
         updateRegularFormComponents(InputFieldVisibility.VISIBLE, InputFieldEditability.EDITABLE, null, null);
     }
 
@@ -236,7 +236,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     }
 
     @Override
-    protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
+    protected void onNotEditable(final String disableReason, final AjaxRequestTarget target) {
         updateRegularFormComponents(InputFieldVisibility.VISIBLE, InputFieldEditability.NOT_EDITABLE, disableReason, target);
     }
 

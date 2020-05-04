@@ -207,20 +207,20 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
     }
 
     @Override
-    protected void onInitializeWhenEnabled() {
-        super.onInitializeWhenEnabled();
+    protected void onInitializeEditable() {
+        super.onInitializeEditable();
         checkBox.setEnabled(true);
     }
 
     @Override
-    protected void onInitializeWhenViewMode() {
-        super.onInitializeWhenViewMode();
+    protected void onInitializeNotEditable() {
+        super.onInitializeNotEditable();
         checkBox.setEnabled(false);
     }
 
     @Override
-    protected void onInitializeWhenDisabled(final String disableReason) {
-        super.onInitializeWhenDisabled(disableReason);
+    protected void onInitializeReadonly(final String disableReason) {
+        super.onInitializeReadonly(disableReason);
         checkBox.setEnabled(false);
         final AttributeModifier title = new AttributeModifier("title",
                 Model.of(disableReason != null ? disableReason : ""));
@@ -228,7 +228,7 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
     }
 
     @Override
-    protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
+    protected void onNotEditable(final String disableReason, final AjaxRequestTarget target) {
         checkBox.setEnabled(false);
         final AttributeModifier title = new AttributeModifier("title",
                 Model.of(disableReason != null ? disableReason : ""));

@@ -660,12 +660,13 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
     }
     
     @Value(staticConstructor = "of")
-    public static class ActionArgumentModelAndVisibilityConsent {
+    public static class ActionArgumentModelAndConsents {
         final ActionArgumentModel actionArgumentModel;
         final Consent visibilityConsent;
+        final Consent usabilityConsent;
     }
 
-    public Stream<ActionArgumentModelAndVisibilityConsent> streamActionArgumentModels() {
+    public Stream<ActionArgumentModelAndConsents> streamActionArgumentModels() {
 
         val specificationLoader = getSpecificationLoader();
         val targetAdapter = this.getTargetAdapter();
@@ -676,13 +677,16 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
         return argCache().streamActionArgumentModels()
         .map(actionArgumentModel->{
         
-            actionArgumentModel.setActionArgsHint(actionArgsHint);
-            
             // visibility
             val visibilityConsent = actionArgumentModel.getActionParameter(specificationLoader)
-                    .isVisible(realTargetAdapter, Can.empty(), InteractionInitiatedBy.USER);
+                    .isVisible(realTargetAdapter, actionArgsHint, InteractionInitiatedBy.USER);
             
-            return ActionArgumentModelAndVisibilityConsent.of(actionArgumentModel, visibilityConsent);
+            // usability
+            val usabilityConsent = actionArgumentModel.getActionParameter(specificationLoader)
+                    .isUsable(realTargetAdapter, actionArgsHint, InteractionInitiatedBy.USER);
+            
+            return ActionArgumentModelAndConsents.of(
+                    actionArgumentModel, visibilityConsent, usabilityConsent);
             
         });
         

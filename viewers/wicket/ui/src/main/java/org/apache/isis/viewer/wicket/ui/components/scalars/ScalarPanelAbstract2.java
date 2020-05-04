@@ -164,7 +164,7 @@ implements ScalarModelSubscriber2 {
         if(usabilityAfter) {
             onEnabled(target);
         } else {
-            onDisabled(usabilityConsent.getReason(), target);
+            onNotEditable(usabilityConsent.getReason(), target);
         }
 
         // even if now invisible or unusable, we recalculate args and ensure compatible
@@ -312,15 +312,15 @@ implements ScalarModelSubscriber2 {
         final boolean mustBeEditable = scalarModel.mustBeEditable();
         if (disableReasonIfAny != null) {
             if(mustBeEditable) {
-                onInitializeWhenViewMode();
+                onInitializeNotEditable();
             } else {
-                onInitializeWhenDisabled(disableReasonIfAny);
+                onInitializeReadonly(disableReasonIfAny);
             }
         } else {
             if (scalarModel.isViewMode()) {
-                onInitializeWhenViewMode();
+                onInitializeNotEditable();
             } else {        
-                onInitializeWhenEnabled();
+                onInitializeEditable();
             }
         }
 
@@ -453,43 +453,28 @@ implements ScalarModelSubscriber2 {
 
     /**
      * The widget starts off in read-only, but should be possible to activate into edit mode.
-     *
-     * <p>
-     *     TODO: perhaps rename to 'notEditable'
-     * </p>
      */
-    protected void onInitializeWhenViewMode() {
+    protected void onInitializeNotEditable() {
     }
 
     /**
      * The widget starts off read-only, and CANNOT be activated into edit mode.
-     *
-     * <p>
-     *     TODO: perhaps rename to 'readOnly'
-     * </p>
      */
-    protected void onInitializeWhenDisabled(final String disableReason) {
+    protected void onInitializeReadonly(final String disableReason) {
     }
 
     /**
      * The widget starts off immediately editable.
-     *
-     * <p>
-     *     TODO: perhaps rename to 'editable'.
-     * </p>
      */
-    protected void onInitializeWhenEnabled() {
+    protected void onInitializeEditable() {
     }
 
     /**
      * The widget is no longer editable.
-     *
-     * <p>
-     *     TODO: perhaps rename to 'onNotEditable', because the semantics here aren't the same as 'onInitializeWhenDisabled'
-     *       (the latter is never editable).
-     * </p>
+     * @apiNote
+     *     the semantics here aren't the same as 'onInitializeWhenDisabled' (the latter is never editable).
      */
-    protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
+    protected void onNotEditable(final String disableReason, final AjaxRequestTarget target) {
     }
 
     /**

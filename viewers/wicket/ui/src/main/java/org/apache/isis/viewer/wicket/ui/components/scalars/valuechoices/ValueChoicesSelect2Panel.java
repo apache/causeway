@@ -102,13 +102,13 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
 
 
     @Override
-    protected void onInitializeWhenViewMode() {
+    protected void onInitializeNotEditable() {
         // View: Read only
         select2.setEnabled(false);
     }
 
     @Override
-    protected void onInitializeWhenEnabled() {
+    protected void onInitializeEditable() {
         // Edit: read/write
         select2.setEnabled(true);
 
@@ -116,8 +116,8 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
     }
 
     @Override
-    protected void onInitializeWhenDisabled(final String disableReason) {
-        super.onInitializeWhenDisabled(disableReason);
+    protected void onInitializeReadonly(final String disableReason) {
+        super.onInitializeReadonly(disableReason);
         setTitleAttribute(disableReason);
         select2.setEnabled(false);
     }
@@ -137,8 +137,8 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
     }
 
     @Override
-    protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
-        super.onDisabled(disableReason, target);
+    protected void onNotEditable(final String disableReason, final AjaxRequestTarget target) {
+        super.onNotEditable(disableReason, target);
 
         setTitleAttribute(disableReason);
         select2.setEnabled(false);

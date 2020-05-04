@@ -159,7 +159,7 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
     }
 
     @Override
-    protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
+    protected void onNotEditable(final String disableReason, final AjaxRequestTarget target) {
         setEnabled(false);
     }
 

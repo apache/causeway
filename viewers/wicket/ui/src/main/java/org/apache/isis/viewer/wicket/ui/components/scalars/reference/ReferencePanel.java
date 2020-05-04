@@ -194,22 +194,22 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
     // //////////////////////////////////////
 
     @Override
-    protected void onInitializeWhenEnabled() {
-        super.onInitializeWhenEnabled();
+    protected void onInitializeEditable() {
+        super.onInitializeEditable();
         entityLink.setEnabled(true);
         syncWithInput();
     }
 
     @Override
-    protected void onInitializeWhenViewMode() {
-        super.onInitializeWhenViewMode();
+    protected void onInitializeNotEditable() {
+        super.onInitializeNotEditable();
         entityLink.setEnabled(false);
         syncWithInput();
     }
 
     @Override
-    protected void onInitializeWhenDisabled(final String disableReason) {
-        super.onInitializeWhenDisabled(disableReason);
+    protected void onInitializeReadonly(final String disableReason) {
+        super.onInitializeReadonly(disableReason);
         syncWithInput();
         val entityLinkModel = (EntityModel) entityLink.getModel();
         entityLinkModel.toViewMode();
@@ -218,8 +218,8 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
     }
 
     @Override
-    protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
-        super.onDisabled(disableReason, target);
+    protected void onNotEditable(final String disableReason, final AjaxRequestTarget target) {
+        super.onNotEditable(disableReason, target);
 
         entityLink.setEnabled(false);
         entityLink.add(new AttributeModifier("title", Model.of(disableReason)));

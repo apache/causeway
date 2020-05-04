@@ -29,8 +29,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel.Placement;
 import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
@@ -75,10 +73,11 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
         paramPanels.clear();
         
         actionModel.streamActionArgumentModels()
-        .forEach(tuple->{
+        .forEach(argsAndConsents->{
             
-            val actionArgumentModel = tuple.getActionArgumentModel(); 
-            val visibilityConsent = tuple.getVisibilityConsent();
+            val actionArgumentModel = argsAndConsents.getActionArgumentModel(); 
+            val visibilityConsent = argsAndConsents.getVisibilityConsent();
+            val usabilityConsent = argsAndConsents.getVisibilityConsent();
             
             val container = new WebMarkupContainer(repeatingView.newChildId());
             repeatingView.add(container);
@@ -87,6 +86,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
             .ifPresent(paramPanel->{
                 paramPanels.add(paramPanel);
                 paramPanel.setVisible(visibilityConsent.isAllowed());
+                //paramPanel.onInitializeReadonly(usabilityConsent.getReason());
             });
             
         });
@@ -104,23 +104,15 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
                 .addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE, model);
 
         if(component instanceof MarkupContainer) {
-            final MarkupContainer markupContainer = (MarkupContainer) component;
-
-            // TODO: copy-n-paste of ScalarModel.Kind#getCssClass(ScalarModel), so could perhaps unify
-            final ObjectActionParameter actionParameter = model.getActionParameter(getSpecificationLoader());
-
-            final ObjectAction action = actionParameter.getAction();
-            final String objectSpecId = action.getOnType().getSpecId().asString().replace(".", "-");
-            final String parmId = actionParameter.getId();
-
-            final String css = "isis-" + objectSpecId + "-" + action.getId() + "-" + parmId;
-
+            val markupContainer = (MarkupContainer) component;
+            val css = model.getCssClass();
             CssClassAppender.appendCssClassTo(markupContainer, CssClassAppender.asCssStyle(css));
         }
-        final ScalarPanelAbstract2 paramPanel =
+        
+        val paramPanel =
                 component instanceof ScalarPanelAbstract2
                 ? (ScalarPanelAbstract2) component
-                        : null;
+                : null;
                 
         if (paramPanel != null) {
             paramPanel.setOutputMarkupId(true);

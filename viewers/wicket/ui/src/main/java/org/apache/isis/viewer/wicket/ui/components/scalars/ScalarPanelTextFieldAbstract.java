@@ -321,8 +321,8 @@ implements TextFieldValueModel.ScalarModelProvider {
 
 
     @Override
-    protected void onInitializeWhenViewMode() {
-        super.onInitializeWhenViewMode();
+    protected void onInitializeNotEditable() {
+        super.onInitializeNotEditable();
 
         textField.setEnabled(false);
         addReplaceDisabledTagWithReadonlyTagBehaviourIfRequired(textField);
@@ -331,8 +331,8 @@ implements TextFieldValueModel.ScalarModelProvider {
     }
 
     @Override
-    protected void onInitializeWhenDisabled(final String disableReason) {
-        super.onInitializeWhenDisabled(disableReason);
+    protected void onInitializeReadonly(final String disableReason) {
+        super.onInitializeReadonly(disableReason);
 
         textField.setEnabled(false);
         addReplaceDisabledTagWithReadonlyTagBehaviourIfRequired(textField);
@@ -343,15 +343,15 @@ implements TextFieldValueModel.ScalarModelProvider {
     }
 
     @Override
-    protected void onInitializeWhenEnabled() {
-        super.onInitializeWhenEnabled();
+    protected void onInitializeEditable() {
+        super.onInitializeEditable();
         textField.setEnabled(true);
         inlinePromptLink.setEnabled(true);
         clearTooltip();
     }
 
     @Override
-    protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
+    protected void onNotEditable(final String disableReason, final AjaxRequestTarget target) {
         textField.setEnabled(false);
         inlinePromptLink.setEnabled(false);
         setTooltip(disableReason);

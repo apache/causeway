@@ -20,7 +20,6 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -29,9 +28,8 @@ import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 public interface ActionArgumentModel extends IModel<ManagedObject> {
 
     ActionParameterMemento getParameterMemento();
+    String getCssClass();
 
-    void setActionArgsHint(Can<ManagedObject> arguments);
-    
     // -- SHORTCUTS
     
     default ObjectActionParameter getActionParameter(SpecificationLoader specificationLoader) {
@@ -41,6 +39,5 @@ public interface ActionArgumentModel extends IModel<ManagedObject> {
     default int getNumber() {
         return getParameterMemento().getNumber();
     }
-
 
 }
