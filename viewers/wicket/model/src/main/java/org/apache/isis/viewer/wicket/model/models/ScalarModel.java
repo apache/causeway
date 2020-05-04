@@ -41,6 +41,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
@@ -276,10 +277,10 @@ implements LinksProvider, FormExecutorContext {
     public abstract String getFileAccept();
 
     public abstract boolean hasChoices();
-    public abstract Can<ManagedObject> getChoices(Can<ManagedObject> pendingArgs);
+    public abstract Can<ManagedObject> getChoices(PendingParameterModel pendingArgs);
 
     public abstract boolean hasAutoComplete();
-    public abstract Can<ManagedObject> getAutoComplete(Can<ManagedObject> pendingArg, String searchTerm);
+    public abstract Can<ManagedObject> getAutoComplete(PendingParameterModel pendingArgs, String searchTerm);
 
     /**
      * for {@link BigDecimal}s only.
@@ -506,7 +507,7 @@ implements LinksProvider, FormExecutorContext {
 
     public abstract int getAutoCompleteOrChoicesMinLength();
 
-    public abstract ManagedObject getDefault(Can<ManagedObject> pendingArgs);
+    public abstract ManagedObject getDefault(PendingParameterModel pendingArgs);
 
     public int getAutoCompleteMinLength() {
         return getAutoCompleteOrChoicesMinLength();

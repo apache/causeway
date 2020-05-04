@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -32,10 +33,9 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.wicketstuff.select2.ChoiceProvider;
 
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
-import org.apache.isis.viewer.wicket.model.models.ActionModel;
+import org.apache.isis.viewer.wicket.model.models.ActionModel.ActionArgumentModelAndConsents;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarParameterModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
@@ -44,6 +44,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.Obj
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
+import lombok.NonNull;
 import lombok.val;
 
 public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
@@ -117,7 +118,9 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
     /**
      * sets up the choices, also ensuring that any currently held value is compatible.
      */
-    private void setProviderAndCurrAndPending(Select2 select2, Can<ManagedObject> pendingArgs) {
+    private void setProviderAndCurrAndPending(
+            final Select2 select2, 
+            final PendingParameterModel pendingArgs) {
 
         final ChoiceProvider<ObjectMemento> choiceProvider = buildChoiceProvider(pendingArgs);
 
@@ -136,7 +139,7 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
     /**
      * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, List<ManagedObject>)})
      */
-    protected abstract ChoiceProvider<ObjectMemento> buildChoiceProvider(Can<ManagedObject> pendingArgs);
+    protected abstract ChoiceProvider<ObjectMemento> buildChoiceProvider(PendingParameterModel pendingArgs);
 
     /**
      * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, List<ManagedObject>)})
@@ -159,12 +162,12 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
     }
 
     @Override
-    protected void onNotEditable(final String disableReason, final AjaxRequestTarget target) {
+    protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
         setEnabled(false);
     }
 
     @Override
-    protected void onEnabled(final AjaxRequestTarget target) {
+    protected void onEditable(final Optional<AjaxRequestTarget> target) {
         setEnabled(true);
 
     }
@@ -180,17 +183,12 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
      */
     @Override
     public Repaint updateIfNecessary(
-            final ActionModel actionModel,
-            final int paramNumUpdated,
-            final int paramNumToPossiblyUpdate,
-            final AjaxRequestTarget target) {
+            @NonNull final ActionArgumentModelAndConsents argsAndConsents,
+            @NonNull final Optional<AjaxRequestTarget> target) {
 
-        final Can<ManagedObject> arguments = actionModel.getArgumentsAsParamModel()
-                .getParamValues();
+        val repaint = super.updateIfNecessary(argsAndConsents, target);
 
-        val repaint = super.updateIfNecessary(actionModel, paramNumUpdated, paramNumToPossiblyUpdate, target);
-
-        final boolean choicesUpdated = updateChoices(arguments);
+        final boolean choicesUpdated = updateChoices(argsAndConsents.getPendingArgs());
 
         if (repaint == Repaint.NOTHING) {
             if (choicesUpdated) {
@@ -203,7 +201,7 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
         }
     }
 
-    private boolean updateChoices(Can<ManagedObject> pendingArgs) {
+    private boolean updateChoices(final PendingParameterModel pendingArgs) {
         if (select2 == null) {
             return false;
         }

@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 
+import java.util.Optional;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -31,10 +33,9 @@ import org.apache.wicket.model.Model;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Settings;
 
-import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModelForReference;
@@ -218,7 +219,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
     }
 
     @Override
-    protected void onNotEditable(final String disableReason, final AjaxRequestTarget target) {
+    protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
         super.onNotEditable(disableReason, target);
 
         entityLink.setEnabled(false);
@@ -226,8 +227,8 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
     }
 
     @Override
-    protected void onEnabled(final AjaxRequestTarget target) {
-        super.onEnabled(target);
+    protected void onEditable(final Optional<AjaxRequestTarget> target) {
+        super.onEditable(target);
 
         entityLink.setEnabled(true);
         entityLink.add(new AttributeModifier("title", Model.of("")));
@@ -336,7 +337,8 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
     // //////////////////////////////////////
 
     @Override
-    protected ChoiceProvider<ObjectMemento> buildChoiceProvider(Can<ManagedObject> pendingArgs) {
+    protected ChoiceProvider<ObjectMemento> buildChoiceProvider(
+            final PendingParameterModel pendingArgs) {
         
         val commonContext = super.getCommonContext();
         
@@ -347,7 +349,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
         }
 
         if(getModel().hasAutoComplete()) {
-            val autoCompleteMementos = pendingArgs
+            val autoCompleteMementos = pendingArgs.getParamValues()
                     .map(commonContext::mementoForParameter);
             return new ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(
                     getModel(), autoCompleteMementos);

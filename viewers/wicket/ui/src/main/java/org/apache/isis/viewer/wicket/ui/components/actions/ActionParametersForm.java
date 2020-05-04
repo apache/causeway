@@ -28,6 +28,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
+import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel.Placement;
@@ -35,7 +36,6 @@ import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionArgumentModel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.model.models.ScalarParameterModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorStrategy;
@@ -76,8 +76,6 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
         .forEach(argsAndConsents->{
             
             val actionArgumentModel = argsAndConsents.getActionArgumentModel(); 
-            val visibilityConsent = argsAndConsents.getVisibilityConsent();
-            val usabilityConsent = argsAndConsents.getUsabilityConsent();
             
             val container = new WebMarkupContainer(repeatingView.newChildId());
             repeatingView.add(container);
@@ -85,8 +83,8 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
             newParamPanel(container, actionArgumentModel)
             .ifPresent(paramPanel->{
                 paramPanels.add(paramPanel);
-                paramPanel.setVisible(visibilityConsent.isAllowed());
-                //paramPanel.onInitializeReadonly(usabilityConsent.getReason());
+                //val paramModel = (ScalarParameterModel) paramPanel.getModel();
+                paramPanel.postInit(argsAndConsents);
             });
             
         });
@@ -106,7 +104,9 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
         if(component instanceof MarkupContainer) {
             val markupContainer = (MarkupContainer) component;
             val css = actionArgumentModel.getCssClass();
-            CssClassAppender.appendCssClassTo(markupContainer, CssClassAppender.asCssStyle(css));
+            if (!_Strings.isNullOrEmpty(css)) {
+                CssClassAppender.appendCssClassTo(markupContainer, CssClassAppender.asCssStyle(css));    
+            }
         }
         
         val paramPanel =
@@ -150,26 +150,22 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
     @Override
     public void onUpdate(final AjaxRequestTarget target, final ScalarPanelAbstract2 scalarPanelUpdated) {
 
-        final ActionModel actionModel = getActionModel();
-
-        val paramModel = (ScalarParameterModel)scalarPanelUpdated.getModel();
+        val actionModel = getActionModel();
+        val paramModel = (ActionArgumentModel)scalarPanelUpdated.getModel();
+        final int paramNumberUpdated = paramModel.getNumber();
+        // only updates subsequent parameter panels starting from (paramNumberUpdated + 1)
+        final int skipCount = paramNumberUpdated + 1;   
         
-        final int paramNumberUpdated = paramModel.getParameterMemento().getNumber();
+        actionModel.reassessActionArgumentModels(skipCount);
         
-        val action = actionModel.getAction();
-
-        final int numParams = action.getParameterCount();
-
-        // only updates subsequent parameter panels starting from [paramNumberUpdated + 1] 
-        for (int i = paramNumberUpdated + 1; i < numParams; i++) {
-
-            val paramNumToUpdate = i;
-            val paramPanel = paramPanels.get(paramNumToUpdate);
-            val repaint = paramPanel
-                    .updateIfNecessary(actionModel, paramNumberUpdated, paramNumToUpdate, target);
+        actionModel.streamActionArgumentModels()
+        .skip(skipCount)
+        .forEach(argAndConsents->{
             
-            //final boolean multiPart = isMultiPart(); // side-effects(?) or remove
-
+            val paramNumToUpdate = argAndConsents.getActionArgumentModel().getNumber();
+            val paramPanel = paramPanels.get(paramNumToUpdate);
+            val repaint = paramPanel.updateIfNecessary(argAndConsents, Optional.of(target));
+            
             switch (repaint) {
             case ENTIRE_FORM:
                 target.add(this);
@@ -182,7 +178,9 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
             default:
                 throw _Exceptions.unmatchedCase(repaint);
             }
-        }
+            
+        });
+
 
         // previously this method was also doing:
         // target.add(this);

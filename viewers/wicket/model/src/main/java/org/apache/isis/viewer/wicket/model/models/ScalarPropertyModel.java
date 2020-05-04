@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 
@@ -173,7 +174,7 @@ public class ScalarPropertyModel extends ScalarModel {
 
     @Override
     public ManagedObject getDefault(
-            final Can<ManagedObject> pendingArgs /*not used*/) {
+            final PendingParameterModel pendingArgs /*not used*/) {
 
         final PropertyMemento propertyMemento = getPropertyMemento();
         final OneToOneAssociation property = propertyMemento
@@ -191,7 +192,7 @@ public class ScalarPropertyModel extends ScalarModel {
 
     @Override
     public Can<ManagedObject> getChoices(
-            final Can<ManagedObject> pendingArgs /*not used*/) { 
+            final PendingParameterModel pendingArgs /*not used on properties*/) { 
 
         final PropertyMemento propertyMemento = getPropertyMemento();
         final OneToOneAssociation property = propertyMemento
@@ -213,7 +214,7 @@ public class ScalarPropertyModel extends ScalarModel {
 
     @Override
     public Can<ManagedObject> getAutoComplete(
-            final Can<ManagedObject> pendingArgs, /*not used*/
+            final PendingParameterModel pendingArgs, /*not used on properties*/
             final String searchArg) {
 
         final PropertyMemento propertyMemento = getPropertyMemento();

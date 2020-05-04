@@ -20,7 +20,6 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.function.BiFunction;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.collections.Can;
@@ -37,6 +36,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
+import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModelHead;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 
@@ -57,7 +57,7 @@ implements ActionArgumentModel {
      * @implNote transient because only temporary hint.
      */
     @Getter @Setter
-    private transient Can<ManagedObject> actionArgsHint;
+    private transient PendingParameterModel actionArgsHint;
 
     /**
      * Creates a model representing an action parameter of an action of a parent
@@ -118,7 +118,6 @@ implements ActionArgumentModel {
         final ObjectActionParameter parameter = getParameterMemento().getActionParameter(
                 getSpecificationLoader());
         try {
-            //XXX lombok issue, no val
             ManagedObject parentAdapter = getParentEntityModel().load();
             final String invalidReasonIfAny = parameter.isValid(parentAdapter, proposedPojoAsStr,
                     InteractionInitiatedBy.USER
@@ -134,7 +133,6 @@ implements ActionArgumentModel {
         final ObjectActionParameter parameter = getParameterMemento().getActionParameter(
                 getSpecificationLoader());
         try {
-            //XXX lombok issue, no val
             ManagedObject parentAdapter = getParentEntityModel().load();
             final String invalidReasonIfAny = parameter.isValid(parentAdapter, proposedAdapter.getPojo(),
                     InteractionInitiatedBy.USER
@@ -161,11 +159,9 @@ implements ActionArgumentModel {
 
     @Override
     public ManagedObject getDefault(
-            @NonNull final Can<ManagedObject> pendingArgs) {
+            @NonNull final PendingParameterModel pendingArgs) {
         
-        return withPendingParamsDo(pendingArgs, (pendingParamsModel, actionParameter)->
-        actionParameter.getDefault(
-                pendingParamsModel));
+        return getParameter().getDefault(pendingArgs);
     }
 
     @Override
@@ -176,13 +172,8 @@ implements ActionArgumentModel {
     }
     @Override
     public Can<ManagedObject> getChoices(
-            @NonNull final Can<ManagedObject> pendingArgs) {
-        
-        return withPendingParamsDo(pendingArgs, (pendingParamsModel, actionParameter)->
-        actionParameter.getChoices(
-                pendingParamsModel,
-                InteractionInitiatedBy.USER));
-        
+            @NonNull final PendingParameterModel pendingArgs) {
+        return getParameter().getChoices(pendingArgs, InteractionInitiatedBy.USER);
     }
 
     @Override
@@ -193,17 +184,11 @@ implements ActionArgumentModel {
     }
     @Override
     public Can<ManagedObject> getAutoComplete(
-            @NonNull final Can<ManagedObject> pendingArgs,
+            @NonNull final PendingParameterModel pendingArgs,
             final String searchArg) {
         
-        return withPendingParamsDo(pendingArgs, (pendingParamsModel, actionParameter)->
-        actionParameter.getAutoComplete(
-                pendingParamsModel,
-                searchArg,
-                InteractionInitiatedBy.USER)); 
+        return getParameter().getAutoComplete(pendingArgs, searchArg, InteractionInitiatedBy.USER);
     }
-
-
     
     @Override
     public int getAutoCompleteOrChoicesMinLength() {
@@ -298,21 +283,24 @@ implements ActionArgumentModel {
     public String toStringOf() {
         return getName() + ": " + getParameterMemento().toString();
     }
-
-    // pending args helper
-    private <T> T withPendingParamsDo(
-            @NonNull final Can<ManagedObject> pendingArgs,
-            final BiFunction<PendingParameterModel, ObjectActionParameter, T> function) {
-        val parameterMemento = getParameterMemento();
-        val actionParameter = parameterMemento.getActionParameter(getSpecificationLoader());
-        val actionOwner = getParentEntityModel().load();
-        val pendingParamsModel = actionParameter.getAction().newPendingParameterModelHead(actionOwner)
-                .model(pendingArgs);
-        return function.apply(pendingParamsModel, actionParameter);
-    }
     
     @Override
     protected List<ObjectAction> calcAssociatedActions() {
         return Collections.emptyList();
     }
+    
+    public ObjectActionParameter getParameter() {
+        val parameterMemento = getParameterMemento();
+        val actionParameter = parameterMemento.getActionParameter(getSpecificationLoader());
+        return actionParameter;
+    }
+    
+    public PendingParameterModelHead getPendingParamHead() {
+        val actionParameter = getParameter();
+        val actionOwner = getParentEntityModel().load();
+        return actionParameter.getAction().newPendingParameterModelHead(actionOwner);
+    }
+
+
+    
 }

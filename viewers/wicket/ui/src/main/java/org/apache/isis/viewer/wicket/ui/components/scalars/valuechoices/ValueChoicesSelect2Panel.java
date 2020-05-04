@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices;
 
+import java.util.Optional;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -29,7 +31,7 @@ import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelect2Abstract;
@@ -71,7 +73,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
     }
 
 
-    private Can<ObjectMemento> getChoiceMementos(final Can<ManagedObject> pendingArgs) {
+    private Can<ObjectMemento> getChoiceMementos(final PendingParameterModel pendingArgs) {
         
         val commonContext = super.getCommonContext();
         
@@ -137,7 +139,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
     }
 
     @Override
-    protected void onNotEditable(final String disableReason, final AjaxRequestTarget target) {
+    protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
         super.onNotEditable(disableReason, target);
 
         setTitleAttribute(disableReason);
@@ -145,8 +147,8 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
     }
 
     @Override
-    protected void onEnabled(final AjaxRequestTarget target) {
-        super.onEnabled(target);
+    protected void onEditable(final Optional<AjaxRequestTarget> target) {
+        super.onEditable(target);
 
         setTitleAttribute("");
         select2.setEnabled(true);
@@ -161,7 +163,8 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
     // in corresponding code in ReferencePanelFactory, these is a branch for different types of providers
     // (choice vs autoComplete).  Here though - because values don't currently support autoComplete - no branch is required
     @Override
-    protected ChoiceProvider<ObjectMemento> buildChoiceProvider(Can<ManagedObject> pendingArgs) {
+    protected ChoiceProvider<ObjectMemento> buildChoiceProvider(
+            final PendingParameterModel pendingArgs) {
         final Can<ObjectMemento> choicesMementos = getChoiceMementos(pendingArgs);
         return new ObjectAdapterMementoProviderForValueChoices(scalarModel, choicesMementos);
     }

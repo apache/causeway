@@ -23,6 +23,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -89,7 +90,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
     }
 
     // -- FACTORY METHODS
-    
+
     /**
      * @param entityModel
      * @param action
@@ -100,11 +101,11 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
         val actionModel = new ActionModel(entityModel, homePageActionMemento);
         return actionModel;
     }
-    
+
     public static ActionModel createForPersistent(
             IsisWebAppCommonContext commonContext, 
             PageParameters pageParameters) {
-        
+
         val entityModel = newEntityModelFrom(commonContext, pageParameters);
         val actionMemento = newActionMementoFrom(commonContext, pageParameters);
         val actionModel = new ActionModel(entityModel, actionMemento);
@@ -122,8 +123,8 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
 
         ManagedObject.stringify(adapter)
         .ifPresent(oidStr->
-            PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr)
-        );
+        PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr)
+                );
 
         val actionType = objectAction.getType();
         PageParameterNames.ACTION_TYPE.addEnumTo(pageParameters, actionType);
@@ -150,22 +151,22 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
         if (!matcher.matches()) {
             return Optional.empty();
         }
-        
+
         try {
-        
+
             val intLiteral = matcher.group(1);
             val oidStr = matcher.group(2);
-            
+
             val parseResult = _Ints.parseInt(intLiteral, 10);
             if(parseResult.isPresent()) {
                 val paramNum = parseResult.getAsInt();
                 return Optional.of(ParamNumAndOidString.of(paramNum, oidStr));
             }
-            
+
         } catch (final Exception e) {
             // ignore and fall through
         }
-        
+
         return Optional.empty();
 
     }
@@ -241,22 +242,22 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
 
     private final EntityModel entityModel;
     private final ActionMemento actionMemento;
-    
+
     // lazy in support of serialization of this class
     private transient ActionArgumentCache argCache;
     private ActionArgumentCache argCache() {
         return argCache!=null
                 ? argCache
-                : (argCache = new ActionArgumentCache(
-                        entityModel, 
-                        actionMemento, 
-                        getActionMemento().getAction(getSpecificationLoader())));
+                        : (argCache = new ActionArgumentCache(
+                                entityModel, 
+                                actionMemento, 
+                                getActionMemento().getAction(getSpecificationLoader())));
     }
-    
+
     private static ActionMemento newActionMementoFrom(
             IsisWebAppCommonContext commonContext,
             PageParameters pageParameters) {
-        
+
         final ObjectSpecId owningSpec = ObjectSpecId.of(PageParameterNames.ACTION_OWNING_SPEC.getStringFrom(pageParameters));
         final ActionType actionType = PageParameterNames.ACTION_TYPE.getEnumFrom(pageParameters, ActionType.class);
         final String actionNameParms = PageParameterNames.ACTION_ID.getStringFrom(pageParameters);
@@ -267,7 +268,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
     private static EntityModel newEntityModelFrom(
             IsisWebAppCommonContext commonContext,
             PageParameters pageParameters) {
-        
+
         val rootOid = oidFor(pageParameters);
         val memento = commonContext.mementoFor(rootOid);
         return EntityModel.ofMemento(commonContext, memento);
@@ -301,7 +302,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
     }
 
     private void setArgumentsIfPossible(final PageParameters pageParameters) {
-        
+
         final List<String> args = PageParameterNames.ACTION_ARGS.getListFrom(pageParameters);
 
         val action = actionMemento.getAction(getSpecificationLoader());
@@ -494,12 +495,12 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
      * @see {@link PendingParameterModelHead#defaults()}
      */
     public void clearArguments() {
-        
+
         val defaultsFixedPoint = getAction()
                 .newPendingParameterModelHead(getTargetAdapter())
                 .defaults()
                 .getParamValues();
-        
+
         argCache().resetTo(defaultsFixedPoint);
     }
 
@@ -658,9 +659,10 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
     public void clearParameterValue(ObjectActionParameter actionParameter) {
         setParameterValue(actionParameter, null);
     }
-    
+
     @Value(staticConstructor = "of")
     public static class ActionArgumentModelAndConsents {
+        final PendingParameterModel pendingArgs;
         final ActionArgumentModel actionArgumentModel;
         final Consent visibilityConsent;
         final Consent usabilityConsent;
@@ -670,30 +672,101 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
 
         val specificationLoader = getSpecificationLoader();
         val targetAdapter = this.getTargetAdapter();
-        val realTargetAdapter = this.getActionMemento().getAction(specificationLoader)
+        val realTargetAdapter = this.getActionMemento()
+                .getAction(specificationLoader)
                 .realTargetAdapter(targetAdapter);
-        val actionArgsHint = argCache().snapshot();
-        
-        return argCache().streamActionArgumentModels()
-        .map(actionArgumentModel->{
-        
-            // visibility
-            val visibilityConsent = actionArgumentModel.getActionParameter(specificationLoader)
-                    .isVisible(realTargetAdapter, actionArgsHint, InteractionInitiatedBy.USER);
-            
-            // usability
-            val usabilityConsent = actionArgumentModel.getActionParameter(specificationLoader)
-                    .isUsable(realTargetAdapter, actionArgsHint, InteractionInitiatedBy.USER);
-            
-            return ActionArgumentModelAndConsents.of(
-                    actionArgumentModel, visibilityConsent, usabilityConsent);
-            
-        });
-        
+        val pendingArgs = getArgumentsAsParamModel();
+        val pendingArgValues = pendingArgs.getParamValues();
+
+        return argCache()
+                .streamActionArgumentModels()
+                .map(actionArgumentModel->{
+
+                    actionArgumentModel.setActionArgsHint(pendingArgs);
+
+                    val objectActionParamter = actionArgumentModel.getActionParameter(specificationLoader);
+
+                    // visibility
+                    val visibilityConsent = objectActionParamter
+                            .isVisible(realTargetAdapter, pendingArgValues, InteractionInitiatedBy.USER);
+
+                    // usability
+                    val usabilityConsent = objectActionParamter
+                            .isUsable(realTargetAdapter, pendingArgValues, InteractionInitiatedBy.USER);
+
+                    return ActionArgumentModelAndConsents.of(
+                            pendingArgs, actionArgumentModel, visibilityConsent, usabilityConsent);
+
+                });
 
     }
 
-    
+    public void reassessActionArgumentModels(int skipCount) {
+
+        val specificationLoader = getSpecificationLoader();
+        val pendingArgs = getArgumentsAsParamModel();
+
+        argCache()
+        .streamActionArgumentModels()
+        .skip(skipCount)
+        .forEach(actionArgumentModel->{
+
+            val actionParameter = actionArgumentModel.getActionParameter(specificationLoader);
+            val paramValue = actionArgumentModel.getValue();
+            val hasChoices = actionParameter.hasChoices();
+            val hasAutoComplete = actionParameter.hasAutoComplete();
+            val isEmpty = ManagedObject.isNullOrUnspecifiedOrEmpty(paramValue);
+            // if we have choices or autoSelect, don't override any param value, already chosen by the user
+            val vetoDefaultsToBeSet = !isEmpty 
+                    && (hasChoices||hasAutoComplete);
+            
+            if(!vetoDefaultsToBeSet) {
+                val paramDefaultValue = actionParameter.getDefault(pendingArgs);
+                if (ManagedObject.isNullOrUnspecifiedOrEmpty(paramDefaultValue)) {
+                    clearParameterValue(actionParameter);
+                } else {
+                    setParameterValue(actionParameter, paramDefaultValue);
+                }
+                return;
+            }
+            
+            boolean shouldBlankout = false;
+
+            if(!isEmpty) {
+                if(hasChoices) {
+                    // make sure the object is one of the choices, else blank it out.
+                    
+                    val choices = actionParameter
+                            .getChoices(pendingArgs, InteractionInitiatedBy.USER);
+
+                    shouldBlankout = 
+                            ! isPartOfChoicesConsideringDependentArgs(paramValue, choices);
+
+                } else if(hasAutoComplete) {
+
+                    //XXX poor man's implementation: don't blank-out, even though could fail validation later 
+                    shouldBlankout = false;
+                }
+            }
+
+            if(shouldBlankout) {
+                clearParameterValue(actionParameter);
+            }
+
+        });
+
+    }
+
+    private boolean isPartOfChoicesConsideringDependentArgs(
+            ManagedObject paramValue, 
+            Can<ManagedObject> choices) {
+
+        val pendingValue = paramValue.getPojo();
+
+        return choices
+                .stream()
+                .anyMatch(choice->Objects.equals(pendingValue, choice.getPojo()));
+    }
 
 
 }

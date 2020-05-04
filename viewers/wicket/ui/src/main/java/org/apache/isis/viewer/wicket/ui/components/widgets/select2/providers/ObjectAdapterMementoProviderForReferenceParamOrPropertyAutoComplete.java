@@ -21,8 +21,10 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarParameterModel;
 
 import lombok.NonNull;
 import lombok.val;
@@ -45,13 +47,15 @@ extends ObjectAdapterMementoProviderAbstract {
     @Override
     protected Can<ObjectMemento> obtainMementos(String term) {
         
-        if (getScalarModel().hasAutoComplete()) {
+        val parameterModel = (ScalarParameterModel)getScalarModel();
+        
+        if (parameterModel.hasAutoComplete()) {
         
             val commonContext = super.getCommonContext();
             
             // recover any pendingArgs
-            val pendingArgs = reconstructDependentArgs(dependentArgMementos); 
-            return getScalarModel()
+            val pendingArgs = reconstructDependentArgs(parameterModel, dependentArgMementos); 
+            return parameterModel
                     .getAutoComplete(pendingArgs, term)
                     .map(commonContext::mementoFor);
             
@@ -61,7 +65,8 @@ extends ObjectAdapterMementoProviderAbstract {
         
     }
     
-    private Can<ManagedObject> reconstructDependentArgs(
+    private PendingParameterModel reconstructDependentArgs(
+            final ScalarParameterModel parameterModel, 
             final Can<ObjectMemento> dependentArgMementos) {
         
         val commonContext = super.getCommonContext();
@@ -70,7 +75,8 @@ extends ObjectAdapterMementoProviderAbstract {
             .map(ManagedObject.class::cast)
             .collect(Can.toCan());
         
-        return pendingArgsList;
+       return parameterModel.getPendingParamHead()
+            .model(pendingArgsList);
     }
 
 }
