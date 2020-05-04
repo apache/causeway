@@ -79,7 +79,7 @@ public class ActionLinkPanel extends PanelAbstract<ActionModel> {
     }
 
     private String determineTitle() {
-        return getModel().getActionMemento().getAction(getSpecificationLoader()).getId();
+        return getModel().getAction().getId();
     }
 
     private AbstractLink newLink(final String linkId, final Class<? extends Page> pageClass, final PageParameters pageParameters) {

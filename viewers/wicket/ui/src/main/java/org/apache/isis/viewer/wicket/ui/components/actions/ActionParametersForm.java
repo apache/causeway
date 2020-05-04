@@ -77,7 +77,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
             
             val actionArgumentModel = argsAndConsents.getActionArgumentModel(); 
             val visibilityConsent = argsAndConsents.getVisibilityConsent();
-            val usabilityConsent = argsAndConsents.getVisibilityConsent();
+            val usabilityConsent = argsAndConsents.getUsabilityConsent();
             
             val container = new WebMarkupContainer(repeatingView.newChildId());
             repeatingView.add(container);
@@ -98,14 +98,14 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
 
     private Optional<ScalarPanelAbstract2> newParamPanel(
             final WebMarkupContainer container, 
-            final ActionArgumentModel model) {
+            final ActionArgumentModel actionArgumentModel) {
         
         final Component component = getComponentFactoryRegistry()
-                .addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE, model);
+                .addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE, actionArgumentModel);
 
         if(component instanceof MarkupContainer) {
             val markupContainer = (MarkupContainer) component;
-            val css = model.getCssClass();
+            val css = actionArgumentModel.getCssClass();
             CssClassAppender.appendCssClassTo(markupContainer, CssClassAppender.asCssStyle(css));
         }
         
@@ -139,7 +139,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
      */
     private void applyAreYouSure(AjaxButton button) {
         val actionModel = getActionModel();
-        val action = actionModel.getActionMemento().getAction(getSpecificationLoader());
+        val action = actionModel.getAction();
         
         if (action.getSemantics().isAreYouSure()) {
             val confirmUiModel = ConfirmUiModel.ofAreYouSure(getTranslationService(), Placement.RIGHT);
@@ -156,7 +156,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
         
         final int paramNumberUpdated = paramModel.getParameterMemento().getNumber();
         
-        val action = actionModel.getActionMemento().getAction(getSpecificationLoader());
+        val action = actionModel.getAction();
 
         final int numParams = action.getParameterCount();
 

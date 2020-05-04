@@ -48,12 +48,12 @@ public class ActionPromptHeaderPanel extends PanelAbstract<ActionModel> {
             private static final long serialVersionUID = 1L;
             @Override
             public String getObject() {
-                final ObjectAction action = model.getActionMemento().getAction(getSpecificationLoader());
+                final ObjectAction action = model.getAction();
                 return action.getName();
             }
         });
 
-        final ObjectAction action = model.getActionMemento().getAction(getSpecificationLoader());
+        final ObjectAction action = model.getAction();
         NamedFacet namedFacet = action.getFacet(NamedFacet.class);
         if (namedFacet != null) {
             label.setEscapeModelStrings(namedFacet.escaped());

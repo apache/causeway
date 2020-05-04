@@ -313,7 +313,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
         }
     }
 
-    private ObjectAction getAction() {
+    public ObjectAction getAction() {
         return getActionMemento().getAction(getSpecificationLoader());
     }
 
@@ -389,7 +389,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
         return entityModel.load();
     }
 
-    public ActionMemento getActionMemento() {
+    private ActionMemento getActionMemento() {
         return actionMemento;
     }
 

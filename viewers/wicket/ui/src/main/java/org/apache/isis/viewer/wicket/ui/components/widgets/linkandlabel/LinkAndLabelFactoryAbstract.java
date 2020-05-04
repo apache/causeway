@@ -182,7 +182,7 @@ implements Serializable {
                     private static final long serialVersionUID = 1L;
                     @Override
                     public String getObject() {
-                        final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
+                        final ObjectAction action = actionModel.getAction();
                         return action.getName();
                     }
                 });
@@ -195,7 +195,7 @@ implements Serializable {
                     final ActionPromptWithExtraContent promptWithExtraContent =
                             (ActionPromptWithExtraContent) prompt;
 
-                    final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
+                    final ObjectAction action = actionModel.getAction();
                     if(action instanceof ObjectActionMixedIn) {
                         final ObjectActionMixedIn actionMixedIn = (ObjectActionMixedIn) action;
                         final ObjectSpecification mixinSpec = actionMixedIn.getMixinType();

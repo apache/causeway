@@ -133,10 +133,10 @@ implements ScalarModelSubscriber2 {
     public Repaint updateIfNecessary(
             final ActionModel actionModel,
             final int paramNumUpdated,
-            final int paramNumToPossiblyUpdate,//FIXME I guess we need to re-rerender all not just the next
+            final int paramNumToPossiblyUpdate,
             final AjaxRequestTarget target) {
 
-        final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
+        final ObjectAction action = actionModel.getAction();
         final PendingParameterModel pendingArguments = actionModel.getArgumentsAsParamModel();
         final Can<ManagedObject> pendingArgumentsReadonly = pendingArguments.getParamValues();
         

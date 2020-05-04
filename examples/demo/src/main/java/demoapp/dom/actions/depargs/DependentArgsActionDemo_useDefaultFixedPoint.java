@@ -26,6 +26,7 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.core.commons.internal.debug._Probe;
 import org.apache.isis.incubator.model.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
@@ -77,23 +78,39 @@ public class DependentArgsActionDemo_useDefaultFixedPoint {
 
     @Model
     public int default0Act(Parameters params) {
+        _Probe.sysOut("p0: %d %d %d %d", params.a, params.b, params.c, params.d);
         return 1;
     }
-
+    
+    // -- PARAM 1
+    
     @Model
     public int default1Act(Parameters params) {
+        _Probe.sysOut("p1: %d %d %d %d", params.a, params.b, params.c, params.d);
         return params.a() + 1;
     }
     
-    @Model
-    public int default2Act(Parameters params) {
-        return params.b() + 1;
-    }
+    // -- PARAM 2
+    
+//    @Model
+//    public int default2Act(Parameters params) {
+//        _Probe.sysOut("p2: %d %d %d %d", params.a, params.b, params.c, params.d);
+//        return params.b() + 1;
+//    }
+    
+    // -- PARAM 3
     
     @Model
     public int default3Act(Parameters params) {
+        _Probe.sysOut("p3: %d %d %d %d", params.a, params.b, params.c, params.d);
         return params.c() + 1;
     }
+
+    
+    
+    
+    
+
 
 }
 

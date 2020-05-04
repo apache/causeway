@@ -55,7 +55,7 @@ public class VoidReturnPage extends PageAbstract {
     private static String actionNameFrom(final VoidModel model) {
         ActionModel actionModel = model.getActionModelHint();
         if(actionModel != null) {
-            return actionModel.getActionMemento().getAction(model.getSpecificationLoader()).getName();
+            return actionModel.getAction().getName();
         }
         return "Results"; // fallback, probably not required because hint should always exist on the model.
     }

@@ -169,7 +169,7 @@ implements FormExecutor {
             RedirectFacet redirectFacet = null;
             if(model instanceof ActionModel) {
                 final ActionModel actionModel = (ActionModel) model;
-                redirectFacet = actionModel.getActionMemento().getAction(getSpecificationLoader()).getFacet(RedirectFacet.class);
+                redirectFacet = actionModel.getAction().getFacet(RedirectFacet.class);
             }
 
             if (shouldRedirect(targetAdapter, resultAdapter, redirectFacet) 

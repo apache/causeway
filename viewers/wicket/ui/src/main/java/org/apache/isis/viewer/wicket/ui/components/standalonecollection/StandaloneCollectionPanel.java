@@ -63,7 +63,7 @@ implements CollectionCountProvider, CollectionSelectorProvider {
         addOrReplace(outerDiv);
 
         ActionModel actionModel = entityCollectionModel.getActionModelHint();
-        ObjectAction action = actionModel.getActionMemento().getAction(entityCollectionModel.getSpecificationLoader());
+        ObjectAction action = actionModel.getAction();
         outerDiv.addOrReplace(new Label(StandaloneCollectionPanel.ID_ACTION_NAME, Model.of(action.getName())));
 
         CssClassAppender.appendCssClassTo(outerDiv,

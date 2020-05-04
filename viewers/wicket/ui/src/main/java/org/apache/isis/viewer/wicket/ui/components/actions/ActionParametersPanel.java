@@ -97,7 +97,7 @@ public class ActionParametersPanel extends PanelAbstract<ActionModel> {
             getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, actionModel
                     .getParentEntityModel());
 
-            final String actionName = getActionModel().getActionMemento().getAction(actionModel.getSpecificationLoader()).getName();
+            final String actionName = getActionModel().getAction().getName();
             header.add(new Label(ID_ACTION_NAME, Model.of(actionName)));
 
         } 
