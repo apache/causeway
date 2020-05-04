@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import java.util.Objects;
 
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
@@ -29,6 +28,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * The 'head' of a {@link PendingParameterModel}, which in contrast to the (owning) 
@@ -38,6 +38,7 @@ import lombok.val;
  */
 @Getter 
 @RequiredArgsConstructor(staticName = "of")
+@Log4j2
 public class PendingParameterModelHead {
 
     @NonNull private final ObjectAction action;
@@ -79,7 +80,9 @@ public class PendingParameterModelHead {
      */
     public PendingParameterModel defaults() {
         
-        final int maxIterations = getAction().getParameterCount();
+        // first pass to calculate proposed fixed point
+        // second pass to verify we have found a fixed point
+        final int maxIterations = 2;  
         
         val params = getAction().getParameters();
         
@@ -88,7 +91,7 @@ public class PendingParameterModelHead {
         val initialDefaults = params
                 .map(param->param.getDefault(emptyModel));
         
-        // fixed point search
+        // could be a fixed point search here, but we assume, params can only depend on params with lower index
         
         Can<ManagedObject> old_pl, pl = initialDefaults;
         for(int i=0; i<maxIterations; ++i) {
@@ -104,8 +107,10 @@ public class PendingParameterModelHead {
             
         }
         
-        throw _Exceptions.unrecoverableFormatted("Cannot find an initial fixed point for action "
+        log.warn("Cannot find an initial fixed point for action "
                 + "parameter defaults on action %s.", getAction());
+        
+        return model(pl);
         
     }
 

@@ -39,12 +39,13 @@ public class PendingParameterModel {
 
     // -- SHORTCUTS
     
-    public ManagedObject getActionTarget() {
+    @NonNull public ManagedObject getActionTarget() {
         return getHead().getActionTarget();
     }
-    
 
-
+    @NonNull public ManagedObject getParamValue(int paramNum) {
+        return paramValues.getElseFail(paramNum);
+    }
 
     
 }

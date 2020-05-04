@@ -115,7 +115,23 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
             PendingParameterModel pendingArgs,
             InteractionInitiatedBy interactionInitiatedBy);
 
+    /** 
+     * Needs to account for 2 scenarios,
+     * <ul>
+     * <li>there is no default providing facet associated with this parameter, 
+     * we return the corresponding value from the given {@link PendingParameterModel}</li>
+     * <li>there is a default providing facet associated with this parameter, 
+     * it may return {@code null}, but in any case the value is wrapped in a 
+     * non-null {@link ManagedObject}</li>
+     * </ul>
+     * @return a {@link ManagedObject}, {@code null} is represented by an empty 
+     * but non-null {@link ManagedObject}
+     */
     @NonNull ManagedObject getDefault(PendingParameterModel pendingArgs);
+    
+    @NonNull default ManagedObject getEmpty() {
+        return ManagedObject.of(getSpecification(), null);
+    }
 
     /** default value as result of a initial param value fixed point search */
     default ManagedObject getDefault(ManagedObject actionOnwer) {

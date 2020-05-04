@@ -281,7 +281,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
             final Object paramValuePojo = defaultsFacet.getDefault(pendingArgs);
             return ManagedObject.of(paramSpec, paramValuePojo);
         }
-        return ManagedObject.of(paramSpec, null);
+        return pendingArgs.getParamValue(getNumber());
     }
 
     // helpers
