@@ -106,6 +106,7 @@ implements LinksProvider, UiHintContainer {
         final ObjectMementoService mementoService = model.getMementoService();
 
         final List<ObjectMemento> mementoList = streamElementsOf(collectionAsAdapter) // pojos
+                .filter(_NullSafe::isPresent)
                 .peek(lowestCommonSuperclassFinder::collect)
                 .map(mementoService::mementoForPojo)
                 .collect(Collectors.toList());
