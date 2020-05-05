@@ -32,6 +32,7 @@ import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.common.OnSelectionHandler;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -46,7 +47,6 @@ import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 
 import lombok.val;
 
@@ -131,7 +131,6 @@ implements CollectionSelectorProvider, BulkActionsProvider {
     }
 
 
-
     // -- BulkActionsProvider
     ObjectAdapterToggleboxColumn toggleboxColumn;
 
@@ -142,14 +141,14 @@ implements CollectionSelectorProvider, BulkActionsProvider {
             final List<ObjectAction> associatedActions =
                     associatedWithActionsHelper.getAssociatedActions(getSpecificationLoader());
 
-            final EntityCollectionModel entityCollectionModel = getModel();
+            val entityCollectionModel = getModel();
             if(associatedActions.isEmpty() || entityCollectionModel.isStandalone()) {
                 return null;
             }
 
             toggleboxColumn = new ObjectAdapterToggleboxColumn(super.getCommonContext());
             
-            final OnSelectionHandler handler = new OnSelectionHandler() {
+            val handler = new OnSelectionHandler() {
 
                 private static final long serialVersionUID = 1L;
 
@@ -159,9 +158,9 @@ implements CollectionSelectorProvider, BulkActionsProvider {
                         final ManagedObject selectedAdapter,
                         final AjaxRequestTarget ajaxRequestTarget) {
                     
-                    ContainedToggleboxPanel togglePanel = (ContainedToggleboxPanel) context;
+                    val togglePanel = (ContainedToggleboxPanel) context;
                     
-                    boolean isSelected = getModel().toggleSelectionOn(selectedAdapter);
+                    val isSelected = getModel().toggleSelectionOn(selectedAdapter);
                     togglePanel.setModel(isSelected); // sync the checkbox's model
                 }
 
