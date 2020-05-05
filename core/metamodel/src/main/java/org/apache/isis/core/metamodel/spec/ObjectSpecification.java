@@ -34,7 +34,6 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Streams;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -479,16 +478,14 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
                 || ClassExtensions.equalsWhenBoxing(expectedType, actualType)) {
             return true;
         }
-
-        if(getElementSpecification().isPresent()) {
-            
-            val elementSpec = getElementSpecification().get();
-
-            return !_NullSafe.streamAutodetect(pojo)
-            .anyMatch(_Predicates.not(elementSpec::isPojoCompatible));
-        }
         
-        return false;
+        // XXX rather hard to understand ...
+        // for non-scalar param types, param-spec is always the element-type spec (not the spec of any container)
+        val elementSpec = getElementSpecification()
+                .orElse(this);
+        return _NullSafe.streamAutodetect(pojo)
+                .filter(element->!Objects.equals(element, pojo)) // to prevent infinite recursion depth
+                .allMatch(elementSpec::isPojoCompatible);
     }
     
 

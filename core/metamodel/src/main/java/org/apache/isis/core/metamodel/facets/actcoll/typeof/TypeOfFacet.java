@@ -85,7 +85,7 @@ public interface TypeOfFacet extends SingleClassValueFacet {
                 final FacetHolder holder) {
 
             final Class<?> methodReturnType = method.getReturnType();
-            if (!_Collections.isCollectionType(methodReturnType)) {
+            if (!_Collections.isCollectionType(methodReturnType) && !_Collections.isCanType(methodReturnType)) {
                 return null;
             }
 
@@ -149,7 +149,8 @@ public interface TypeOfFacet extends SingleClassValueFacet {
                 final Class<?> parameterType,
                 final Type genericParameterType) {
 
-            final Class<?> elementType = _Collections.inferElementTypeIfAny(parameterType, genericParameterType);
+            Class<?> elementType = _Collections.inferElementTypeIfAny(parameterType, genericParameterType);
+            
             return elementType != null
                     ? new TypeOfFacetInferredFromGenerics(elementType, holder)
                     : null;

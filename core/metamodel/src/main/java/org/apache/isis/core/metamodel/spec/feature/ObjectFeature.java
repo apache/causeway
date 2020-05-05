@@ -67,7 +67,7 @@ public interface ObjectFeature extends Specification {
      * {@link ObjectSpecification} of the type that the accessor returns.
      * <li>for a {@link OneToManyAssociation collection} it will be the type of
      * element the collection holds (not the type of collection).
-     * <li>for a {@link ObjectAction action}, will always return <tt>null</tt>.
+     * <li>for an {@link ObjectAction action}, will always return <tt>null</tt>.
      * See instead {@link ObjectAction#getReturnType()} and
      * {@link ObjectAction#getParameterTypes()}.
      * <li>for a {@link ObjectActionParameter action}, will return the type of

@@ -94,27 +94,10 @@ implements ObjectActionParameter, FacetHolder.Delegating {
         return featureType;
     }
 
-
-    /**
-     * Gets the proposed value of the {@link ManagedObject} (downcast as a
-     * <code>MutableProposedHolder</code>, wrapping the proposed value into a
-     * {@link ManagedObject}.
-     */
     @Override
     public ManagedObject get(final ManagedObject owner, final InteractionInitiatedBy interactionInitiatedBy) {
-        throw _Exceptions.unexpectedCodeReach();
-        //FIXME[ISIS-1976] marked for removal (must be dead code, since MutableProposedHolder has no implementation)
-        //        final MutableProposedHolder proposedHolder = getProposedHolder(owner);
-        //        final Object proposed = proposedHolder.getProposed();
-        //        return getObjectAdapterProvider().adapterFor(proposed);
+        throw _Exceptions.unexpectedCodeReach(); // not available for params
     }
-
-    //    protected MutableProposedHolder getProposedHolder(final ObjectAdapter owner) {
-    //        if (!(owner instanceof MutableProposedHolder)) {
-    //            throw new IllegalArgumentException("Instance should implement MutableProposedHolder");
-    //        }
-    //        return (MutableProposedHolder) owner;
-    //    }
 
     /**
      * Parameter number, 0-based.
@@ -279,7 +262,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
         val defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);
         if (defaultsFacet != null && !defaultsFacet.isFallback()) {
             final Object paramValuePojo = defaultsFacet.getDefault(pendingArgs);
-            return ManagedObject.of(paramSpec, paramValuePojo);
+            return ManagedObject.of(paramSpec, paramValuePojo);    
         }
         return pendingArgs.getParamValue(getNumber());
     }

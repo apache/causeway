@@ -24,6 +24,8 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.SortedSet;
 
+import org.apache.isis.core.commons.collections.Can;
+
 public enum CollectionSemantics {
 
     ARRAY(true),
@@ -39,6 +41,8 @@ public enum CollectionSemantics {
     SET_IMPLEMENTATION,
     SET_INTERFACE(true),
 
+    CAN,
+    
     OTHER_IMPLEMENTATION
     ;
 
@@ -53,6 +57,9 @@ public enum CollectionSemantics {
     }
 
     public static CollectionSemantics of(final Class<?> accessorReturnType) {
+        if (Can.class.isAssignableFrom(accessorReturnType)) {
+            return CAN;
+        }
         if (!Collection.class.isAssignableFrom(accessorReturnType)) {
             return ARRAY;
         }
@@ -78,6 +85,10 @@ public enum CollectionSemantics {
         return this == ARRAY;
     }
 
+    public boolean isCan() {
+        return this == CAN;
+    }
+    
     /**
      * {@link List} is assignable from the corresponding class.
      */
