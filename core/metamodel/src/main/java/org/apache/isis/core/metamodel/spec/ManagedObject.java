@@ -279,7 +279,7 @@ public interface ManagedObject {
 
         private static String collectionTitleString(ManagedObject managedObject, final CollectionFacet facet) {
             final int size = facet.size(managedObject);
-            final ObjectSpecification elementSpecification = managedObject.getElementSpecification();
+            final ObjectSpecification elementSpecification = managedObject.getElementSpecification().orElse(null);
             if (elementSpecification == null || elementSpecification.getFullIdentifier().equals(Object.class.getName())) {
                 switch (size) {
                 case -1:
@@ -315,11 +315,8 @@ public interface ManagedObject {
 
     /**
      * Used only for (standalone or parented) collections.
-     * @deprecated use {@link ObjectSpecification#getElementSpecification()} instead, 
-     * (proposed for removal, to keep the API slim)
      */
-    @Deprecated
-    default public ObjectSpecification getElementSpecification() {
+    default public Optional<ObjectSpecification> getElementSpecification() {
         return getSpecification().getElementSpecification();
     }
 
@@ -330,8 +327,6 @@ public interface ManagedObject {
      * graphically.
      * <p>
      * May return <code>null</code> if no icon is specified.
-     * @deprecated use {@link ObjectSpecification#getIconName(ManagedObject))} instead, 
-     * (proposed for removal, to keep the API slim)
      */
     default public String getIconName() {
         return getSpecification().getIconName(this);
@@ -342,28 +337,17 @@ public interface ManagedObject {
     /**
      * Optimized for cases, when the pojo's specification is already available.
      * @param specification
-     * @param pojo
+     * @param pojo - might also be a collection of pojos
      * @return
      */
-    public static ManagedObject of(ObjectSpecification specification, Object pojo) {
-        // can do this check only when the pojo is not null, otherwise is always considered valid
-        if(pojo!=null) {
-            val expectedType = specification.getCorrespondingClass();
-            val actualType = pojo.getClass();
-            
-            if(!expectedType.isAssignableFrom(actualType)) {
-                if(!ClassExtensions.equalsWhenBoxing(expectedType, actualType)) {
-                    throw _Exceptions.illegalArgument(
-                            "Pojo not compatible with ObjectSpecification, " +
-                            "objectSpec.correspondingClass = %s, " +
-                            "pojo.getClass() = %s, " +
-                            "pojo.toString() = %s",
-                            specification.getCorrespondingClass(), pojo.getClass(), pojo.toString());    
-                }
-            }    
-        }
+    public static ManagedObject of(@NonNull ObjectSpecification specification, @Nullable Object pojo) {
+        
+        specification.assertPojoCompatible(pojo);
+        
         return new SimpleManagedObject(specification, pojo);
     }
+    
+    
     
     /**
      * Optimized for cases, when the pojo's specification and rootOid are already available.

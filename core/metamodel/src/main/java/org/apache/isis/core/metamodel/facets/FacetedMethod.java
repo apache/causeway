@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -115,10 +114,9 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
             final Type genericParameterType = genericParameterTypes[paramNum];
 
             final FeatureType featureType =
-                    CollectionUtils
-                    .isParamCollection(parameterType, genericParameterType)
-                    ? FeatureType.ACTION_PARAMETER_COLLECTION
-                            : FeatureType.ACTION_PARAMETER_SCALAR;
+                    CollectionUtils.isParamCollection(parameterType, genericParameterType)
+                        ? FeatureType.ACTION_PARAMETER_COLLECTION
+                        : FeatureType.ACTION_PARAMETER_SCALAR;
 
             final FacetedMethodParameter fmp = new FacetedMethodParameter(featureType, declaringType, actionMethod, parameterType);
             actionParams.add(fmp);
@@ -131,13 +129,8 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
                 FacetUtil.addFacet(semanticsFacet);
 
                 TypeOfFacet typeOfFacet = TypeOfFacet.Util
-                        .inferFromGenericParamType(fmp, parameterType, genericParameterType);
-
-                if(typeOfFacet == null ) {
-                    if (_Arrays.isArrayType(parameterType)) {
-                        typeOfFacet = TypeOfFacet.Util.inferFromArrayType(fmp, parameterType);
-                    }
-                }
+                        .inferFromParameterType(fmp, parameterType, genericParameterType);
+                
 
                 // copy over (corresponds to similar code for OneToManyAssociation in FacetMethodsBuilder).
                 if(typeOfFacet != null ) {

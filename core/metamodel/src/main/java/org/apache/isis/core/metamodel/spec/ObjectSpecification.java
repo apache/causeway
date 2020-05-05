@@ -22,13 +22,20 @@ package org.apache.isis.core.metamodel.spec;
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.commons.internal.collections._Streams;
 import org.apache.isis.applib.services.metamodel.BeanSort;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.collections._Streams;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.functions._Predicates;
+import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -215,10 +222,10 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     boolean isAbstract();
 
     /**
-     * 
+     * @return optionally the element type spec based on presence of the TypeOfFacet
      * @since 2.0
      */
-    ObjectSpecification getElementSpecification();
+    Optional<ObjectSpecification> getElementSpecification();
 
     /**
      * 
@@ -442,8 +449,47 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     default boolean isIdentifiable() {
         return isManagedBean() || isViewModel() || isEntity();
     }
-
     
+    // -- TYPE COMPATIBILITY UTILITIES
+    
+    default public void assertPojoCompatible(@Nullable Object pojo) {
+        if(!isPojoCompatible(pojo)) {
+            Objects.requireNonNull(pojo);
+            val expectedType = getCorrespondingClass();
+            throw _Exceptions.illegalArgument(
+                    "Pojo not compatible with ObjectSpecification, " +
+                    "objectSpec.correspondingClass = %s, " +
+                    "pojo.getClass() = %s, " +
+                    "pojo.toString() = %s",
+                    expectedType, pojo.getClass(), pojo.toString());
+        }
+    }
+    
+    default public boolean isPojoCompatible(@Nullable Object pojo) {
+        
+        // can do this check only when the pojo is not null, otherwise is always considered valid
+        if(pojo==null) {
+            return true;
+        }
+        
+        val expectedType = getCorrespondingClass();
+        val actualType = pojo.getClass();
+        
+        if(expectedType.isAssignableFrom(actualType)
+                || ClassExtensions.equalsWhenBoxing(expectedType, actualType)) {
+            return true;
+        }
 
+        if(getElementSpecification().isPresent()) {
+            
+            val elementSpec = getElementSpecification().get();
+
+            return _NullSafe.streamAutodetect(pojo)
+            .anyMatch(_Predicates.not(elementSpec::isPojoCompatible));
+        }
+        
+        return true;
+    }
+    
 
 }

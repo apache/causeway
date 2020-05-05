@@ -25,11 +25,12 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.commons.internal.collections._Collections;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacet;
+
+import lombok.val;
 
 /**
  * The type of the collection or the action.
@@ -43,9 +44,42 @@ public interface TypeOfFacet extends SingleClassValueFacet {
 
     public static class Util {
         private Util(){}
+        
+        public static TypeOfFacet inferFromParameterType(
+                final FacetHolder holder,
+                final Class<?> parameterType,
+                final Type genericParameterType) {
+        
+            TypeOfFacet typeOfFacet = inferFromGenericParamType(holder, parameterType, genericParameterType);
+            
+            if(typeOfFacet == null ) {
+                if (_Arrays.isArrayType(parameterType)) {
+                    typeOfFacet = inferFromArrayType(holder, parameterType);
+                }
+            }
+            
+            return typeOfFacet;
+        }
+        
+        public static TypeOfFacet inferFromMethodReturnType(
+                final FacetHolder holder,
+                final Class<?> methodOwner,
+                final Method method) {
+            
+            // infer from return type
+            val returnType = method.getReturnType();
+            TypeOfFacet typeOfFacet = inferFromArrayType(holder, returnType);
 
-        @Programmatic
-        public static TypeOfFacet inferFromGenericReturnType(
+            // infer from generic return type
+            if(typeOfFacet == null) {
+                typeOfFacet = inferFromGenericReturnType(methodOwner, method, holder);
+            }
+            
+            return typeOfFacet;
+        }
+        
+
+        private static TypeOfFacet inferFromGenericReturnType(
                 final Class<?> cls,
                 final Method method,
                 final FacetHolder holder) {
@@ -100,19 +134,17 @@ public interface TypeOfFacet extends SingleClassValueFacet {
             return null;
         }
 
-        @Programmatic
-        public static TypeOfFacet inferFromArrayType(
+        private static TypeOfFacet inferFromArrayType(
                 final FacetHolder holder,
                 final Class<?> type) {
 
             final Class<?> elementType = _Arrays.inferComponentTypeIfAny(type);
             return elementType != null
                     ? new TypeOfFacetInferredFromArray(elementType, holder)
-                            : null;
+                    : null;
         }
 
-        @Programmatic
-        public static TypeOfFacet inferFromGenericParamType(
+        private static TypeOfFacet inferFromGenericParamType(
                 final FacetHolder holder,
                 final Class<?> parameterType,
                 final Type genericParameterType) {
@@ -120,7 +152,7 @@ public interface TypeOfFacet extends SingleClassValueFacet {
             final Class<?> elementType = _Collections.inferElementTypeIfAny(parameterType, genericParameterType);
             return elementType != null
                     ? new TypeOfFacetInferredFromGenerics(elementType, holder)
-                            : null;
+                    : null;
         }
     }
 }

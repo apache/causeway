@@ -71,8 +71,6 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbs
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationDefault;
 
-import static org.apache.isis.core.commons.internal.base._With.mapIfPresentElse;
-
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -428,18 +426,16 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     // -- ELEMENT SPECIFICATION
 
-    private final _Lazy<ObjectSpecification> elementSpecification = _Lazy.of(this::lookupElementSpecification); 
+    private final _Lazy<Optional<ObjectSpecification>> elementSpecification = _Lazy.of(this::lookupElementSpecification); 
 
     @Override
-    public ObjectSpecification getElementSpecification() {
+    public Optional<ObjectSpecification> getElementSpecification() {
         return elementSpecification.get();
     }
 
-    private ObjectSpecification lookupElementSpecification() {
-        return mapIfPresentElse(
-                getFacet(TypeOfFacet.class), 
-                typeOfFacet -> ElementSpecificationProvider.of(typeOfFacet).getElementType(), 
-                null);
+    private Optional<ObjectSpecification> lookupElementSpecification() {
+        return Optional.ofNullable(getFacet(TypeOfFacet.class))
+                .map(typeOfFacet -> ElementSpecificationProvider.of(typeOfFacet).getElementType());
     }
 
     // --

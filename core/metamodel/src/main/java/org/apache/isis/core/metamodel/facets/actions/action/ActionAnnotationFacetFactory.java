@@ -248,16 +248,10 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
                 .map(typeOf -> new TypeOfFacetForActionAnnotation(typeOf, facetedMethod))
                 .orElse(null);
 
-        // infer from return type
-        if(typeOfFacet == null) {
-            val returnType = method.getReturnType();
-            typeOfFacet = TypeOfFacet.Util.inferFromArrayType(facetedMethod, returnType);
-        }
-
         // infer from generic return type
         if(typeOfFacet == null) {
             val cls = processMethodContext.getCls();
-            typeOfFacet = TypeOfFacet.Util.inferFromGenericReturnType(cls, method, facetedMethod);
+            typeOfFacet = TypeOfFacet.Util.inferFromMethodReturnType(facetedMethod, cls, method);
         }
 
         super.addFacet(typeOfFacet);
