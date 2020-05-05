@@ -350,7 +350,7 @@ public class ScalarPropertyModel extends ScalarModel {
         val associate = getObject();
         property.set(adapter, associate, InteractionInitiatedBy.USER);
 
-        return ManagedObjects.copyOfIfClonable(adapter);
+        return ManagedObjects.copyIfClonable(adapter);
 
     }
     

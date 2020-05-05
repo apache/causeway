@@ -58,6 +58,8 @@ import org.apache.isis.viewer.wicket.model.models.Util.LowestCommonSuperclassFin
 
 import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
+import lombok.Getter;
+
 /**
  * Model representing a collection of entities, either {@link Variant#STANDALONE
  * standalone} (eg result of invoking an action) or {@link Variant#PARENTED
@@ -295,12 +297,8 @@ implements LinksProvider, UiHintContainer {
         this.actionModelHint = actionModelHint;
     }
 
-    private final Variant type;
-
-    public Variant getType() {
-        return type;
-    }
-
+    @Getter private final Variant variant;
+    
     private final Class<?> typeOf;
     private transient ObjectSpecification typeOfSpec;
 
@@ -350,7 +348,7 @@ implements LinksProvider, UiHintContainer {
             int pageSize) {
 
         super(commonContext);
-        this.type = type;
+        this.variant = type;
         this.entityModel = entityModel;
         this.typeOf = typeOf;
         this.pageSize = pageSize;
@@ -385,11 +383,11 @@ implements LinksProvider, UiHintContainer {
     }
 
     public boolean isParented() {
-        return type == Variant.PARENTED;
+        return variant == Variant.PARENTED;
     }
 
     public boolean isStandalone() {
-        return type == Variant.STANDALONE;
+        return variant == Variant.STANDALONE;
     }
 
     public int getPageSize() {
@@ -405,11 +403,11 @@ implements LinksProvider, UiHintContainer {
      * (eg 'Customers').
      */
     public String getName() {
-        return type.getName(this);
+        return variant.getName(this);
     }
 
     public int getCount() {
-        return this.type.getCount(this);
+        return this.variant.getCount(this);
     }
 
     /**
@@ -423,7 +421,7 @@ implements LinksProvider, UiHintContainer {
 
     @Override
     protected List<ManagedObject> load() {
-        return type.load(this);
+        return variant.load(this);
     }
 
     public ObjectSpecification getTypeOfSpecification() {
@@ -436,7 +434,7 @@ implements LinksProvider, UiHintContainer {
     @Override
     public void setObject(List<ManagedObject> list) {
         super.setObject(list);
-        type.setObject(this, list);
+        variant.setObject(this, list);
     }
 
     /**

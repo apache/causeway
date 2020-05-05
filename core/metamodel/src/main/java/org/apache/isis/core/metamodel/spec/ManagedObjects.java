@@ -87,7 +87,7 @@ public final class ManagedObjects {
     // -- COPY UTILITIES
     
     @Nullable 
-    public static ManagedObject copyOfIfClonable(@Nullable ManagedObject adapter) {
+    public static ManagedObject copyIfClonable(@Nullable ManagedObject adapter) {
 
         if(adapter==null) {
             return null;
