@@ -484,11 +484,11 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
             
             val elementSpec = getElementSpecification().get();
 
-            return _NullSafe.streamAutodetect(pojo)
+            return !_NullSafe.streamAutodetect(pojo)
             .anyMatch(_Predicates.not(elementSpec::isPojoCompatible));
         }
         
-        return true;
+        return false;
     }
     
 
