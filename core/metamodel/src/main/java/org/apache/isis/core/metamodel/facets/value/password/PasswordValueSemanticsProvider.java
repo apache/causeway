@@ -28,8 +28,9 @@ import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProv
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 
-public class PasswordValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Password> implements
-PasswordValueFacet {
+public class PasswordValueSemanticsProvider 
+extends ValueSemanticsProviderAndFacetAbstract<Password> 
+implements PasswordValueFacet {
 
     public static Class<? extends Facet> type() {
         return PasswordValueFacet.class;

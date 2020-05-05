@@ -25,6 +25,7 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 import lombok.val;
@@ -82,6 +83,29 @@ public final class ManagedObjects {
         }
 
     };
+    
+    // -- COPY UTILITIES
+    
+    @Nullable 
+    public static ManagedObject copyOfIfClonable(@Nullable ManagedObject adapter) {
+
+        if(adapter==null) {
+            return null;
+        }
+        
+        val viewModelFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
+        if(viewModelFacet != null) {
+            val viewModelPojo = adapter.getPojo();
+            if(viewModelFacet.isCloneable(viewModelPojo)) {
+                return ManagedObject.of(
+                        adapter.getSpecification(), 
+                        viewModelFacet.clone(viewModelPojo));
+            }
+        }
+        
+        return adapter;
+        
+    }
 
 
 }

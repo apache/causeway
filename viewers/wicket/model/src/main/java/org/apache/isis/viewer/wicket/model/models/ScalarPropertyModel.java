@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengt
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.string.StringValueSemanticsProvider;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -349,18 +350,8 @@ public class ScalarPropertyModel extends ScalarModel {
         val associate = getObject();
         property.set(adapter, associate, InteractionInitiatedBy.USER);
 
-        final ViewModelFacet recreatableObjectFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
-        if(recreatableObjectFacet != null) {
-            final Object viewModel = adapter.getPojo();
-            final boolean cloneable = recreatableObjectFacet.isCloneable(viewModel);
-            if(cloneable) {
-                //XXX lombok issue, no val
-                Object newViewModelPojo = recreatableObjectFacet.clone(viewModel);
-                adapter = super.getPojoToAdapter().apply(newViewModelPojo);
-            }
-        }
+        return ManagedObjects.copyOfIfClonable(adapter);
 
-        return adapter;
     }
     
     @Override

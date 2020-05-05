@@ -22,11 +22,15 @@ package org.apache.isis.applib.value;
 import java.io.Serializable;
 import java.util.Objects;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+
 import org.apache.isis.applib.annotation.Value;
 
 // tag::refguide[]
 // end::refguide[]
 @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.value.password.PasswordValueSemanticsProvider")
+@XmlAccessorType(XmlAccessType.FIELD)
 @lombok.Value
 public class Password implements Serializable {
     
@@ -35,6 +39,16 @@ public class Password implements Serializable {
     private static final String STARS = "********************";
     
     private final String password;
+
+    // in support of XML un-marshaling
+    @SuppressWarnings("unused")
+    private Password() {
+        this("");
+    }
+    
+    public Password(String password) {
+        this.password = password;
+    }
 
     public boolean checkPassword(final String password) {
         return Objects.equals(this.password, password);
@@ -47,4 +61,10 @@ public class Password implements Serializable {
         }
         return STARS;
     }
+
+
+
+    
+
+    
 }
