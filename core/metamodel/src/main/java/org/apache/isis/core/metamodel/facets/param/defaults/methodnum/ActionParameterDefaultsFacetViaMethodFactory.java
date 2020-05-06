@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.param.defaults.methodnum;
 
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -37,14 +36,10 @@ import lombok.val;
  */
 public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final Can<String> PREFIXES = Can.empty();
+    private static final String PREFIX = MethodLiteralConstants.DEFAULT_PREFIX;
 
-    /**
-     * Note that the {@link Facet}s registered are the generic ones from
-     * noa-architecture (where they exist)
-     */
     public ActionParameterDefaultsFacetViaMethodFactory() {
-        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
 
     // ///////////////////////////////////////////////////////
@@ -63,15 +58,13 @@ public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBa
 
         // attach DefaultFacetForParameters if defaultNumMethod is found ...
         
-        //val translationService = getMetaModelContext().getTranslationService();
         val actionMethod = processMethodContext.getMethod();
-        val capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
+        val namingConvention = PREFIX_BASED_NAMING.providerForParam(actionMethod, PREFIX);
 
         val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)
                 .returnType(ReturnType.SAME_AS_PARAMETER_TYPE)
-                .paramIndexToMethodName(paramIndex -> 
-                    MethodLiteralConstants.DEFAULT_PREFIX + paramIndex + capitalizedName)
+                .paramIndexToMethodName(namingConvention)
                 .build();
         
         ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {

@@ -20,13 +20,12 @@
 package org.apache.isis.core.metamodel.facets.param.disable.method;
 
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.ParameterSupport;
-import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.ParameterSupport;
+import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
 import org.apache.isis.core.metamodel.facets.param.disable.ActionParameterDisabledFacet;
 
 import lombok.val;
@@ -36,12 +35,11 @@ import lombok.val;
  */
 public class ActionParameterDisabledFacetViaMethodFactory 
 extends MethodPrefixBasedFacetFactoryAbstract  {
-
-    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.DISABLE_PREFIX);
+    
+    private static final String PREFIX = MethodLiteralConstants.DISABLE_PREFIX;
 
     public ActionParameterDisabledFacetViaMethodFactory() {
-        //super(FeatureType.PARAMETERS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
-        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
 
     @Override
@@ -56,21 +54,19 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
 
         // attach ActionParameterDisabledFacet if disableNumMethod is found ...
         
-        val translationService = getMetaModelContext().getTranslationService();
         val actionMethod = processMethodContext.getMethod();
-        val capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
+        val namingConvention = PREFIX_BASED_NAMING.providerForParam(actionMethod, PREFIX);
 
         val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)
                 .returnType(ReturnType.TEXT)
-                .paramIndexToMethodName(paramIndex -> 
-                    MethodLiteralConstants.DISABLE_PREFIX + paramIndex + capitalizedName)
+                .paramIndexToMethodName(namingConvention)
                 .build();
         
         ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {
             
             val disableMethod = searchResult.getSupportingMethod();
-            val paramIndex = searchResult.getParamIndex();
+            val paramNum = searchResult.getParamIndex();
             
             processMethodContext.removeMethod(disableMethod);
 
@@ -81,9 +77,10 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
             }
             
             // add facets directly to parameters, not to actions
-            val paramAsHolder = parameters.get(paramIndex);
+            val paramAsHolder = parameters.get(paramNum);
             val translationContext = paramAsHolder.getIdentifier().toFullIdentityString();
             val ppmFactory = searchResult.getPpmFactory();
+            val translationService = getMetaModelContext().getTranslationService();
             
             super.addFacet(
                     new ActionParameterDisabledFacetViaMethod(

@@ -24,32 +24,24 @@ import java.util.List;
 
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal._Constants;
-import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
+
+import lombok.val;
 
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.
  */
 public class ActionDefaultsFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.DEFAULT_PREFIX);
+    private static final String PREFIX = MethodLiteralConstants.DEFAULT_PREFIX;
 
-    /**
-     * Note that the {@link Facet}s registered are the generic ones from
-     * noa-architecture (where they exist)
-     */
     public ActionDefaultsFacetViaMethodFactory() {
-        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
-
-    // ///////////////////////////////////////////////////////
-    // Actions
-    // ///////////////////////////////////////////////////////
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
@@ -70,19 +62,19 @@ public class ActionDefaultsFacetViaMethodFactory extends MethodPrefixBasedFacetF
 
         processMethodContext.removeMethod(defaultsMethod);
 
-        final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
-        final ActionDefaultsFacetViaMethod facet = new ActionDefaultsFacetViaMethod(defaultsMethod, facetedMethod);
-        super.addFacet(facet);
+        val facetedMethod = processMethodContext.getFacetHolder();
+        super.addFacet(new ActionDefaultsFacetViaMethod(defaultsMethod, facetedMethod));
     }
 
-    private static Method findDefaultsMethodReturning(final ProcessMethodContext processMethodContext, final Class<?> returnType) {
+    private static Method findDefaultsMethodReturning(
+            final ProcessMethodContext processMethodContext, 
+            final Class<?> returnType) {
 
-        final Method actionMethod = processMethodContext.getMethod();
-        final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
-        final String name = MethodLiteralConstants.DEFAULT_PREFIX + capitalizedName;
-
-        final Class<?> cls = processMethodContext.getCls();
-        return MethodFinderUtils.findMethod(cls, name, returnType, _Constants.emptyClasses);
+        val actionMethod = processMethodContext.getMethod();
+        val namingConvention = PREFIX_BASED_NAMING.providerForAction(actionMethod, PREFIX);
+        val cls = processMethodContext.getCls();
+        return MethodFinderUtils.findMethod(
+                cls, namingConvention.get(), returnType, NO_ARG);
     }
 
 }

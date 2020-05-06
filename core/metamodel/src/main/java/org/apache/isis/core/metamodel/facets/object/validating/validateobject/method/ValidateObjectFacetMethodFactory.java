@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.object.validating.validateobject.m
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -31,12 +30,14 @@ import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
+import lombok.val;
+
 public class ValidateObjectFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.VALIDATE_PREFIX);
+    private static final String PREFIX = MethodLiteralConstants.VALIDATE_PREFIX;
 
     public ValidateObjectFacetMethodFactory() {
-        super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+        super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
 
     @Override
@@ -49,9 +50,9 @@ public class ValidateObjectFacetMethodFactory extends MethodPrefixBasedFacetFact
                 MethodLiteralConstants.VALIDATE_PREFIX,
                 NO_ARG);
         if (method != null) {
-            final TranslationService translationService = getTranslationService();
+            val translationService = getTranslationService();
             // sadness: same as in TranslationFactory
-            final String translationContext = ((IdentifiedHolder)facetHolder).getIdentifier().toClassIdentityString();
+            val translationContext = ((IdentifiedHolder)facetHolder).getIdentifier().toClassIdentityString();
             FacetUtil.addFacet(new ValidateObjectFacetMethod(method, translationService, translationContext, facetHolder));
             processClassContext.removeMethod(method);
         }

@@ -92,6 +92,11 @@ public class DependentArgsActionDemo_useDefaultFixedPoint {
     
     // -- PARAM 2
     
+    @Model
+    public int[] choices2Act(Parameters params) {
+        return new int[] {1,2,3,4};
+    }
+    
 //    @Model
 //    public int default2Act(Parameters params) {
 //        _Probe.sysOut("p2: %d %d %d %d", params.a, params.b, params.c, params.d);
@@ -104,6 +109,16 @@ public class DependentArgsActionDemo_useDefaultFixedPoint {
     public int default3Act(Parameters params) {
         _Probe.sysOut("p3: %d %d %d %d", params.a, params.b, params.c, params.d);
         return params.c() + 1;
+    }
+    
+    @Model
+    public String validate3Act(Parameters params) {
+        
+        int cPlusD = params.c()+params.d();
+        
+        return (cPlusD%2 == 1)
+                ? "c plus d must be even"
+                : null;
     }
 
     

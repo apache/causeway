@@ -121,24 +121,24 @@ public final class MethodFinderUtils {
     }
     
     public static Optional<Method> findNoArgMethod(final Class<?> type, final String name, final Class<?> returnType) {
-        return streamMethods(type, name, returnType)
+        return streamMethods(type, Can.ofSingleton(name), returnType)
                 .filter(MethodUtil.Predicates.paramCount(0))
                 .findFirst();
     }
     
     public static Optional<Method> findSingleArgMethod(final Class<?> type, final String name, final Class<?> returnType) {
-        return streamMethods(type, name, returnType)
+        return streamMethods(type, Can.ofSingleton(name), returnType)
                 .filter(MethodUtil.Predicates.paramCount(1))
                 .findFirst();
     }
     
-    public static Stream<Method> streamMethods(final Class<?> type, final String name, final Class<?> returnType) {
+    public static Stream<Method> streamMethods(final Class<?> type, final Can<String> names, final Class<?> returnType) {
         try {
             final Method[] methods = type.getMethods();
             return Arrays.stream(methods)
                     .filter(MethodUtil::isPublic)
                     .filter(MethodUtil::isNotStatic)
-                    .filter(method -> method.getName().equals(name))
+                    .filter(method -> names.contains(method.getName()))
                     .filter(method -> returnType == null ||
                                       returnType.isAssignableFrom(method.getReturnType()))
                     ;
@@ -279,7 +279,7 @@ public final class MethodFinderUtils {
             final Class<?>[] paramTypes,
             final Can<Class<?>> additionalParamTypes) {
         
-        return streamMethods(type, name, returnType)
+        return streamMethods(type, Can.ofSingleton(name), returnType)
             .filter(MethodUtil.Predicates.paramCount(additionalParamTypes.size()+1))
             .filter(MethodUtil.Predicates.matchParamTypes(1, additionalParamTypes))
             .map(method->MethodAndPpmCandidate.of(method, method.getParameterTypes()[0]))

@@ -20,13 +20,12 @@
 package org.apache.isis.core.metamodel.facets.param.hide.method;
 
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.ParameterSupport;
-import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.ParameterSupport;
+import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
 import org.apache.isis.core.metamodel.facets.param.hide.ActionParameterHiddenFacet;
 
 import lombok.val;
@@ -36,11 +35,10 @@ import lombok.val;
  */
 public class ActionParameterHiddenFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract  {
 
-    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.HIDE_PREFIX);
+    private static final String PREFIX = MethodLiteralConstants.HIDE_PREFIX;
 
     public ActionParameterHiddenFacetViaMethodFactory() {
-        //super(FeatureType.PARAMETERS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
-        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
 
     @Override
@@ -56,13 +54,12 @@ public class ActionParameterHiddenFacetViaMethodFactory extends MethodPrefixBase
         // attach ActionParameterHiddenFacet if hideNumMethod is found ...
         
         val actionMethod = processMethodContext.getMethod();
-        val capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
+        val namingConvention = PREFIX_BASED_NAMING.providerForParam(actionMethod, PREFIX);
 
         val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)
                 .returnType(ReturnType.BOOLEAN)
-                .paramIndexToMethodName(paramIndex -> 
-                    MethodLiteralConstants.HIDE_PREFIX + paramIndex + capitalizedName)
+                .paramIndexToMethodName(namingConvention)
                 .build();
         
         ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {

@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.properties.autocomplete.method;
 
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -32,11 +31,11 @@ import lombok.val;
 
 public class PropertyAutoCompleteFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.AUTO_COMPLETE_PREFIX);
+    private static final String PREFIX = MethodLiteralConstants.AUTO_COMPLETE_PREFIX;
 
     public PropertyAutoCompleteFacetMethodFactory() {
         // to also support properties from mixins, need to not only include properties but also actions
-        super(FeatureType.PROPERTIES_AND_ACTIONS, OrphanValidation.VALIDATE, PREFIXES);
+        super(FeatureType.PROPERTIES_AND_ACTIONS, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
 
     @Override
@@ -54,16 +53,17 @@ public class PropertyAutoCompleteFacetMethodFactory extends MethodPrefixBasedFac
         }
 
         val getterOrMixinMain = processMethodContext.getMethod();
-        val capitalizedName = processMethodContext.isMixinMain() 
-                ? StringExtensions.asCapitalizedName(getterOrMixinMain.getName())
-                        : StringExtensions.asJavaBaseName(getterOrMixinMain.getName());
+        val namingConvention = processMethodContext.isMixinMain() 
+                ? PREFIX_BASED_NAMING.providerForAction(getterOrMixinMain, PREFIX)
+                : PREFIX_BASED_NAMING.providerForMember(getterOrMixinMain, PREFIX); // handles getters
+
         
         val cls = processMethodContext.getCls();
         val returnType = getterOrMixinMain.getReturnType();
         val autoCompleteMethod = MethodFinderUtils
                 .findMethod(
                         cls, 
-                        MethodLiteralConstants.AUTO_COMPLETE_PREFIX + capitalizedName, 
+                        namingConvention.get(), 
                         NO_RETURN, 
                         STRING_ARG);
         if (autoCompleteMethod == null) {

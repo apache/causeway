@@ -23,8 +23,6 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.metamodel.commons.StringExtensions;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
@@ -32,21 +30,16 @@ import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
-public class DisableForContextFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract  {
+import lombok.val;
 
-    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.DISABLE_PREFIX);
+public class DisableForContextFacetViaMethodFactory 
+extends MethodPrefixBasedFacetFactoryAbstract  {
 
-    /**
-     * Note that the {@link Facet}s registered are the generic ones from
-     * noa-architecture (where they exist)
-     */
+    private static final String PREFIX = MethodLiteralConstants.DISABLE_PREFIX;
+
     public DisableForContextFacetViaMethodFactory() {
-        super(FeatureType.MEMBERS, OrphanValidation.VALIDATE, PREFIXES);
+        super(FeatureType.MEMBERS, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
-
-    // ///////////////////////////////////////////////////////
-    // Actions
-    // ///////////////////////////////////////////////////////
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
@@ -55,12 +48,13 @@ public class DisableForContextFacetViaMethodFactory extends MethodPrefixBasedFac
 
     private void attachDisabledFacetIfDisabledMethodIsFound(final ProcessMethodContext processMethodContext) {
 
-        final Method method = processMethodContext.getMethod();
-        final String capitalizedName = StringExtensions.asJavaBaseNameStripAccessorPrefixIfRequired(method.getName());
+        val actionOrGetter = processMethodContext.getMethod();
 
-        final Class<?> cls = processMethodContext.getCls();
+        val cls = processMethodContext.getCls();
 
         Method disableMethod = null;
+        
+        val namingConvention = PREFIX_BASED_NAMING.providerForMember(actionOrGetter, PREFIX);
 
         boolean noParamsOnly = getConfiguration().getCore().getMetaModel().getValidator().isNoParamsOnly();
         boolean searchExactMatch = !noParamsOnly;
@@ -68,15 +62,15 @@ public class DisableForContextFacetViaMethodFactory extends MethodPrefixBasedFac
             // search for exact match
             disableMethod = MethodFinderUtils.findMethod_returningText(
                     cls,
-                    MethodLiteralConstants.DISABLE_PREFIX + capitalizedName,
-                    method.getParameterTypes());
+                    namingConvention.get(),
+                    actionOrGetter.getParameterTypes());
         }
         if (disableMethod == null) {
             // search for no-arg version
             disableMethod = MethodFinderUtils.findMethod_returningText(
                     cls,
-                    MethodLiteralConstants.DISABLE_PREFIX + capitalizedName,
-                    new Class<?>[0]);
+                    namingConvention.get(),
+                    NO_ARG);
         }
         if (disableMethod == null) {
             return;

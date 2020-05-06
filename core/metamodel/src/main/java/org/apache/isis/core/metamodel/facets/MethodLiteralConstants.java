@@ -18,6 +18,13 @@
  */
 package org.apache.isis.core.metamodel.facets;
 
+import java.lang.reflect.Member;
+import java.lang.reflect.Method;
+import java.util.function.IntFunction;
+import java.util.function.Supplier;
+
+import org.apache.isis.core.metamodel.commons.StringExtensions;
+
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -35,7 +42,6 @@ public final class MethodLiteralConstants {
     public static final String AUTO_COMPLETE_PREFIX = "autoComplete";
 
     public static final String HIDE_PREFIX = "hide";
-
     public static final String DISABLE_PREFIX = "disable";
     public static final String VALIDATE_PREFIX = "validate";
     
@@ -63,6 +69,73 @@ public final class MethodLiteralConstants {
     public static final String HIDDEN_PREFIX = "hidden";
     public static final String ICON_NAME_PREFIX = "iconName";
     public static final String LAYOUT_METHOD_NAME = "layout";
+    
+    // -- SUPPORTING METHOD NAMING CONVENTION
+    
+    public static enum SupportingMethodNamingConvention {
+
+        /** version 1.x classic eg. hideAct(...), hide0Act(...)*/
+        PREFIX_PARAMNUM_ACTION {
+
+            @Override
+            protected String getActionSupportingMethodName(Method actionMethod, String prefix) {
+                final String capitalizedName = 
+                        StringExtensions.asCapitalizedName(actionMethod.getName());
+                return prefix + capitalizedName;
+            }
+
+            @Override
+            protected String getParameterSupportingMethodName(Method actionMethod, String prefix, int paramNum) {
+                final String capitalizedName = 
+                        StringExtensions.asCapitalizedName(actionMethod.getName());
+                return prefix + paramNum + capitalizedName;
+            }
+            
+            @Override
+            protected String getMemberSupportingMethodName(Member member, String prefix) {
+                if(member instanceof Method) {
+                    final Method method = (Method)member;
+                    if(method.getParameterCount()>0) {
+                        // definitely an action not a getter
+                        return getActionSupportingMethodName(method, prefix);
+                    }
+                    // either a no-arg action or a getter 
+                    final String capitalizedName = 
+                            StringExtensions.asJavaBaseNameStripAccessorPrefixIfRequired(member.getName());
+                    return prefix + capitalizedName;
+                }
+                // must be a field then 
+                final String capitalizedName = 
+                        StringExtensions.asCapitalizedName(member.getName());
+                return prefix + capitalizedName;
+            }
+            
+        }
+        ;
+        
+        protected abstract String getActionSupportingMethodName(Method actionMethod, String prefix);
+        protected abstract String getParameterSupportingMethodName(Method actionMethod, String prefix, int paramNum);
+        /** automatically deals with properties getters and actions */
+        protected abstract String getMemberSupportingMethodName(Member member, String prefix);
+
+        /** paramNum to param-supporting-method name provider */
+        public IntFunction<String> providerForParam(Method actionMethod, String prefix) {
+            return paramNum->getParameterSupportingMethodName(
+                    actionMethod, prefix, paramNum);
+        }
+        
+        /** action-supporting-method name provider */
+        public Supplier<String> providerForAction(Method actionMethod, String prefix) {
+            return ()->getActionSupportingMethodName(actionMethod, prefix);
+        }
+        
+        /** member-supporting-method name provider */
+        public Supplier<String> providerForMember(Member member, String prefix) {
+            return ()->getMemberSupportingMethodName(member, prefix);
+        }
+        
+    }
+     
     
     // -- DEPRECATIONS
     

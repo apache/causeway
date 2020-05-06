@@ -131,12 +131,12 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
         allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
+            
             public void someAction() {
             }
 
-            @SuppressWarnings("unused")
             public String validateSomeAction() {
                 return null;
             }

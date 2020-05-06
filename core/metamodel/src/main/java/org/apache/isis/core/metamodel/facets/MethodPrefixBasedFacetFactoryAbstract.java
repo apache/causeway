@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.MethodLiteralConstants.SupportingMethodNamingConvention;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -34,7 +35,10 @@ import lombok.val;
 public abstract class MethodPrefixBasedFacetFactoryAbstract
 extends FacetFactoryAbstract
 implements MethodPrefixBasedFacetFactory {
-
+    
+    protected static final SupportingMethodNamingConvention PREFIX_BASED_NAMING = 
+            SupportingMethodNamingConvention.PREFIX_PARAMNUM_ACTION;
+    
     @Getter(onMethod = @__(@Override))
     private final Can<String> prefixes;
 
