@@ -118,7 +118,7 @@ implements ScalarModelSubscriber2 {
     }
 
     /** this is a hack for the ScalarParameterModel, which does not support usability constraints in the model*/
-    private Runnable postInit;
+    private transient Runnable postInit;
     public void postInit(@NonNull final ActionArgumentModelAndConsents argsAndConsents) {
         this.postInit = () ->{
             // visibility

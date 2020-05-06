@@ -18,6 +18,9 @@
  */
 package demoapp.dom.actions.depargs;
 
+import java.util.Collection;
+import java.util.Set;
+
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
@@ -26,6 +29,7 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.debug._Probe;
 import org.apache.isis.incubator.model.applib.annotation.Model;
 
@@ -33,10 +37,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.experimental.Accessors;
 
-@ActionLayout(named="Default (Fixed Point Search)", promptStyle = PromptStyle.DIALOG_MODAL)
-@Action
+@ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
+@Action(associateWith="items")
 @RequiredArgsConstructor
-public class DependentArgsActionDemo_useDefaultFixedPoint {
+public class DependentArgsActionDemo_bulkAction {
 
     @Inject MessageService messageService;
 
@@ -44,6 +48,7 @@ public class DependentArgsActionDemo_useDefaultFixedPoint {
     
     @Value @Accessors(fluent = true) // fluent so we can replace this with Java(14+) records later
     static class Parameters {
+        Set<DemoItem> demoItems;
         int a;
         int b;
         int c;
@@ -52,19 +57,22 @@ public class DependentArgsActionDemo_useDefaultFixedPoint {
 
     public DependentArgsActionDemo act(
 
-            // PARAM 0
+            // BULK
+            Set<DemoItem> demoItems,
+            
+            // PARAM 1
             @Parameter(optionality = Optionality.MANDATORY)
             int a,
 
-            // PARAM 1
+            // PARAM 2
             @Parameter(optionality = Optionality.MANDATORY)
             int b,
             
-            // PARAM 2
+            // PARAM 3
             @Parameter(optionality = Optionality.MANDATORY)
             int c,
             
-            // PARAM 3
+            // PARAM 4
             @Parameter(optionality = Optionality.MANDATORY)
             int d
 
@@ -74,57 +82,64 @@ public class DependentArgsActionDemo_useDefaultFixedPoint {
         return holder;
     }
     
-    // -- PARAM 0
+    // -- PARAM 1
 
     @Model
-    public int default0Act(Parameters params) {
+    public int default1Act(Parameters params) {
         _Probe.sysOut("p0: %d %d %d %d", params.a, params.b, params.c, params.d);
         return 1;
-    }
-    
-    // -- PARAM 1
-    
-    @Model
-    public int default1Act(Parameters params) {
-        _Probe.sysOut("p1: %d %d %d %d", params.a, params.b, params.c, params.d);
-        return params.a() + 1;
     }
     
     // -- PARAM 2
     
     @Model
-    public int[] choices2Act(Parameters params) {
-        return new int[] {1,2,3,4};
+    public int default2Act(Parameters params) {
+        _Probe.sysOut("p1: %d %d %d %d", params.a, params.b, params.c, params.d);
+        return params.a() + 1;
     }
-    
-//    @Model
-//    public int default2Act(Parameters params) {
-//        _Probe.sysOut("p2: %d %d %d %d", params.a, params.b, params.c, params.d);
-//        return params.b() + 1;
-//    }
     
     // -- PARAM 3
     
     @Model
-    public int default3Act(Parameters params) {
+    public Collection<Integer> choices3Act(Parameters params) {
+        return _Lists.of(1,2,3,4);
+    }
+    
+//    @Model
+//    public int default3Act(Parameters params) {
+//        _Probe.sysOut("p2: %d %d %d %d", params.a, params.b, params.c, params.d);
+//        return params.b() + 1;
+//    }
+    
+    // -- PARAM 4
+    
+    @Model
+    public int default4Act(Parameters params) {
         _Probe.sysOut("p3: %d %d %d %d", params.a, params.b, params.c, params.d);
         return params.c() + 1;
     }
-    
-    @Model
-    public String validate3Act(Parameters params) {
-        
-        int cPlusD = params.c()+params.d();
-        
-        return (cPlusD%2 == 1)
-                ? "c plus d must be even"
-                : null;
-    }
+
+//TODO not yet supported    
+//    @Model
+//    public String validate3Act(Parameters params) {
+//        
+//        int cPlusD = params.c()+params.d();
+//        
+//        return (cPlusD%2 == 1)
+//                ? "c plus d must be even"
+//                : null;
+//    }
 
     
-    
-    
-    
+    @Model
+    public String validateAct(
+            Set<DemoItem> demoItems,
+            int a,
+            int b,
+            int c,
+            int d) {
+        return "just failing always";
+    }
 
 
 }

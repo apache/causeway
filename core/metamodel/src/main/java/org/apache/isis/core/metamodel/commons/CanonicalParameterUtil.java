@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Arrays;
@@ -104,7 +105,11 @@ public class CanonicalParameterUtil {
         if(obj==null) {
             return null;
         }
-
+        
+        if(obj instanceof Can) {
+            obj = ((Can<?>)obj).toList();            
+        }
+        
         if(_Arrays.isArrayType(parameterType)) {
             final Class<?> componentType = _Arrays.inferComponentTypeIfAny(parameterType);
             if(componentType==null) {
