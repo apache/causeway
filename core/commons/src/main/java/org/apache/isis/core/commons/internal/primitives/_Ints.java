@@ -18,10 +18,13 @@
  */
 package org.apache.isis.core.commons.internal.primitives;
 
+import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
+
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
 
@@ -96,12 +99,40 @@ public class _Ints {
         private int nearestToUpper() {
             return upperBound.isInclusive() ? upperBound.getValue() : upperBound.getValue()-1;
         }
+        public @NonNull Optional<Range> intersect(@NonNull Range other) {
+            final int s1 = this.nearestToLower();
+            final int e1 = this.nearestToUpper();
+            final int s2 = other.nearestToLower();
+            final int e2 = other.nearestToUpper();
+            if(s2>e1 || s1>e2) {
+                return Optional.empty();
+            }
+            return Optional.of(of(
+                    Bound.inclusive(Math.max(s1, s2)), 
+                    Bound.inclusive(Math.min(e1, e2))));
+        }
         @Override
         public String toString() {
             return String.format("%s%d,%d%S", 
                     lowerBound.isInclusive() ? '[' : '(', lowerBound.getValue(),
                     upperBound.getValue(), upperBound.isInclusive() ? ']' : ')');
         }
+    }
+    
+    // -- RANGE FACTORIES
+    
+    public static Range rangeClosed(int a, int b) {
+        if(a>b) {
+            throw _Exceptions.illegalArgument("bounds must be ordered in [%d, %d]", a, b);
+        }
+        return Range.of(Bound.inclusive(a), Bound.inclusive(b));
+    }
+    
+    public static Range rangeOpenEnded(int a, int b) {
+        if(a>=b) {
+            throw _Exceptions.illegalArgument("bounds must be ordered in [%d, %d]", a, b);
+        }
+        return Range.of(Bound.inclusive(a), Bound.exclusive(b));
     }
     
     // -- PARSING
