@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.param.defaults.methodnum;
 
+import java.util.EnumSet;
+
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -26,6 +28,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ParameterSupport;
+import org.apache.isis.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 
@@ -65,6 +68,7 @@ public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBa
                 .processMethodContext(processMethodContext)
                 .returnType(ReturnType.SAME_AS_PARAMETER_TYPE)
                 .paramIndexToMethodName(namingConvention)
+                .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SWEEP))
                 .build();
         
         ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {

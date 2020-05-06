@@ -19,12 +19,15 @@
 
 package org.apache.isis.core.metamodel.facets.param.hide.method;
 
+import java.util.EnumSet;
+
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ParameterSupport;
+import org.apache.isis.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
 import org.apache.isis.core.metamodel.facets.param.hide.ActionParameterHiddenFacet;
 
@@ -60,6 +63,7 @@ public class ActionParameterHiddenFacetViaMethodFactory extends MethodPrefixBase
                 .processMethodContext(processMethodContext)
                 .returnType(ReturnType.BOOLEAN)
                 .paramIndexToMethodName(namingConvention)
+                .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SWEEP))
                 .build();
         
         ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {

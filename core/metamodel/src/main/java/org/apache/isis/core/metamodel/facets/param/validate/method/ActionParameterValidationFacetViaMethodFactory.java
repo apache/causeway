@@ -19,23 +19,16 @@
 
 package org.apache.isis.core.metamodel.facets.param.validate.method;
 
-import java.lang.reflect.Method;
+import java.util.EnumSet;
 
-import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ParameterSupport;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.isis.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
-import org.apache.isis.core.metamodel.facets.param.disable.ActionParameterDisabledFacet;
-import org.apache.isis.core.metamodel.facets.param.disable.method.ActionParameterDisabledFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.param.validate.ActionParameterValidationFacet;
 
 import lombok.val;
@@ -62,6 +55,7 @@ public class ActionParameterValidationFacetViaMethodFactory extends MethodPrefix
         }
 
         // attach ActionParameterValidationFacet if validateNumMethod is found ...
+        // in any case single-arg, either same as param-type or PPM style 
         
         val actionMethod = processMethodContext.getMethod();
         val namingConvention = PREFIX_BASED_NAMING.providerForParam(actionMethod, PREFIX);
@@ -70,6 +64,7 @@ public class ActionParameterValidationFacetViaMethodFactory extends MethodPrefix
                 .processMethodContext(processMethodContext)
                 .returnType(ReturnType.TEXT)
                 .paramIndexToMethodName(namingConvention)
+                .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SINGLEARG_BEING_PARAMTYPE))
                 .build();
         
         ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {
