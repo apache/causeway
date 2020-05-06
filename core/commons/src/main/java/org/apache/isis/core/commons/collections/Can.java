@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -121,6 +122,12 @@ public interface Can<T> extends Iterable<T>, Serializable {
     default T getSingletonOrFail() {
         return getSingleton().orElseThrow(_Exceptions::noSuchElement);
     }
+    
+    /**
+     * @return whether this Can contains given {@code element}, that is, at least one contained element 
+     * passes the {@link Objects#equals(Object, Object)} test with respect to the given element.  
+     */
+    boolean contains(T element);
 
     // -- FACTORIES
 
@@ -539,5 +546,7 @@ public interface Can<T> extends Iterable<T>, Serializable {
      * @return a non-null array, containing the elements of this Can
      */
     T[] toArray(Class<T> elementType);
+
+    
     
 }
