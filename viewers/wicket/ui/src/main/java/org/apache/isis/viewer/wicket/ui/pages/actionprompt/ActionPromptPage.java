@@ -27,8 +27,6 @@ import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 
-import lombok.val;
-
 /**
  * Web page representing an action invocation.
  */
@@ -74,7 +72,6 @@ public class ActionPromptPage extends PageAbstract {
             IsisWebAppCommonContext commonContext,
             PageParameters pageParameters) {
         
-        val actionModel = ActionModel.createForPersistent(commonContext, pageParameters);
-        return actionModel;
+        return ActionModel.ofPageParameters(commonContext, pageParameters);
     }
 }

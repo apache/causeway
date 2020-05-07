@@ -95,7 +95,7 @@ implements Serializable {
             final ObjectAction action,
             final ToggledMementosProvider toggledMementosProviderIfAny) {
 
-        val actionModel = ActionModel.create(this.targetEntityModel, action);
+        val actionModel = ActionModel.of(this.targetEntityModel, action);
         val commonContext = actionModel.getCommonContext();
 
         final ActionLink link = new ActionLink(commonContext, linkId, actionModel, action) {

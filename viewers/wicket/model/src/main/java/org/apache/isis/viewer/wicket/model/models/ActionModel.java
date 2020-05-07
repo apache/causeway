@@ -22,7 +22,6 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -46,18 +45,13 @@ import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.NamedWithMimeType;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._NullSafe;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
-import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -65,7 +59,6 @@ import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModelHead;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
-import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 
 import lombok.Value;
 import lombok.val;
@@ -76,34 +69,25 @@ implements FormExecutorContext {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String NULL_ARG = "$nullArg$";
-
     public ActionModel copy() {
         return new ActionModel(this);
     }
 
     // -- FACTORY METHODS
 
-    /**
-     * @param entityModel
-     * @param action
-     * @return
-     */
-    public static ActionModel create(EntityModel entityModel, ObjectAction action) {
-        val actionModel = new ActionModel(entityModel, new ActionMemento(action));
-        return actionModel;
+    public static ActionModel of(EntityModel actionOwner, ObjectAction action) {
+        return of(actionOwner, new ActionMemento(action));
+    }
+    
+    public static ActionModel of(EntityModel actionOwner, ActionMemento actionMemento) {
+        return new ActionModel(actionOwner, actionMemento);
     }
 
-    public static ActionModel createForPersistent(
+    public static ActionModel ofPageParameters(
             IsisWebAppCommonContext commonContext, 
             PageParameters pageParameters) {
-
-        val entityModel = newEntityModelFrom(commonContext, pageParameters);
-        val actionMemento = newActionMementoFrom(commonContext, pageParameters);
-        val actionModel = new ActionModel(entityModel, actionMemento);
-        actionModel.setArgumentsIfPossible(pageParameters);
-        actionModel.setContextArgumentIfPossible(pageParameters);
-        return actionModel;
+        
+        return PageParameterUtil.actionModelFor(commonContext, pageParameters);
     }
   
 
@@ -115,14 +99,7 @@ implements FormExecutorContext {
     public PageParameters getPageParametersWithoutUiHints() {
         val adapter = getTargetAdapter();
         val objectAction = getAction();
-        val pageParameters = PageParameterUtil.createPageParameters(adapter, objectAction);
-
-        // capture argument values
-        for(val argumentAdapter: argCache().snapshot()) {
-            val encodedArg = encodeArg(argumentAdapter);
-            PageParameterNames.ACTION_ARGS.addStringTo(pageParameters, encodedArg);
-        }
-        return pageParameters;
+        return PageParameterUtil.createPageParameters(adapter, objectAction, argCache().snapshot());
     }
 
     @Override
@@ -152,10 +129,7 @@ implements FormExecutorContext {
         return true;
     }
 
-    //////////////////////////////////////////////////
-    // helpers
-    //////////////////////////////////////////////////
-
+    // -- HELPERS
 
     private static String titleOf(ManagedObject argumentAdapter) {
         return argumentAdapter!=null?argumentAdapter.titleString(null):"";
@@ -179,34 +153,8 @@ implements FormExecutorContext {
         return new ActionArgumentCache(
                 entityModel, 
                 actionMemento, 
-                getActionMemento().getAction(getSpecificationLoader()));
+                getAction());
     }
-
-    private static ActionMemento newActionMementoFrom(
-            IsisWebAppCommonContext commonContext,
-            PageParameters pageParameters) {
-
-        final ObjectSpecId owningSpec = ObjectSpecId.of(PageParameterNames.ACTION_OWNING_SPEC.getStringFrom(pageParameters));
-        final ActionType actionType = PageParameterNames.ACTION_TYPE.getEnumFrom(pageParameters, ActionType.class);
-        final String actionNameParms = PageParameterNames.ACTION_ID.getStringFrom(pageParameters);
-        return new ActionMemento(owningSpec, actionType, actionNameParms, commonContext.getSpecificationLoader());
-    }
-
-
-    private static EntityModel newEntityModelFrom(
-            IsisWebAppCommonContext commonContext,
-            PageParameters pageParameters) {
-
-        val rootOid = oidFor(pageParameters);
-        val memento = commonContext.mementoFor(rootOid);
-        return EntityModel.ofMemento(commonContext, memento);
-    }
-
-    private static RootOid oidFor(final PageParameters pageParameters) {
-        final String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
-        return Oid.unmarshaller().unmarshal(oidStr, RootOid.class);
-    }
-
 
     private ActionModel(EntityModel entityModel, ActionMemento actionMemento) {
         super(entityModel.getCommonContext());
@@ -229,93 +177,20 @@ implements FormExecutorContext {
         this.argCache = actionModel.argCache().copy(); 
     }
 
-    private void setArgumentsIfPossible(final PageParameters pageParameters) {
-
-        final List<String> argsAsEncodedOidStrings = PageParameterNames.ACTION_ARGS.getListFrom(pageParameters);
-
-        val action = actionMemento.getAction(getSpecificationLoader());
-        val parameters = action.getParameters();
-
-        for (int paramNum = 0; paramNum < argsAsEncodedOidStrings.size(); paramNum++) {
-            val oidStrEncoded = argsAsEncodedOidStrings.get(paramNum);
-            parameters.get(paramNum)
-            .ifPresent(param->decodeAndSetArgument(param, oidStrEncoded));
-        }
-    }
-
+    private transient ObjectAction objectAction;
     public ObjectAction getAction() {
-        return getActionMemento().getAction(getSpecificationLoader());
+        if(objectAction==null) {
+            objectAction = actionMemento.getAction(getSpecificationLoader()); 
+        }
+        return objectAction;
     }
-
 
     public boolean hasParameters() {
         return getAction().getParameterCount() > 0;
     }
 
-    private boolean setContextArgumentIfPossible(final PageParameters pageParameters) {
-        
-        val paramNumAndOidString = PageParameterUtil.parseParamContext(pageParameters)
-                .orElse(null);
-        if(paramNumAndOidString==null) {
-            return false;
-        }
-        
-        val action = actionMemento.getAction(getSpecificationLoader());
-        val actionParamIfAny = action.getParameters().get(paramNumAndOidString.getParamNum());
-        if(!actionParamIfAny.isPresent()) {
-            return false;
-        }
-        val actionParam = actionParamIfAny.get();
-
-        val oidStrEncoded = paramNumAndOidString.getOidString();
-        decodeAndSetArgument(actionParam, oidStrEncoded);
-        return true;
-    }
-
-    private void decodeAndSetArgument(ObjectActionParameter actionParam, String oidStrEncoded) {
-        val paramValue = decodeArg(actionParam.getSpecification(), oidStrEncoded);
-        argCache().setParameterValue(actionParam, paramValue);
-    }
-
-    private String encodeArg(ManagedObject adapter) {
-        if(adapter == null) {
-            return NULL_ARG;
-        }
-
-        final ObjectSpecification objSpec = adapter.getSpecification();
-        if(objSpec.isEncodeable()) {
-            final EncodableFacet encodeable = objSpec.getFacet(EncodableFacet.class);
-            return encodeable.toEncodedString(adapter);
-        }
-
-        return ManagedObject.stringify(adapter).orElse(null);
-    }
-
-    private ManagedObject decodeArg(final ObjectSpecification objSpec, final String encoded) {
-        if(NULL_ARG.equals(encoded)) {
-            return null;
-        }
-
-        if(objSpec.isEncodeable()) {
-            final EncodableFacet encodeable = objSpec.getFacet(EncodableFacet.class);
-            return encodeable.fromEncodedString(encoded);
-        }
-
-        try {
-            val rootOid = RootOid.deStringEncoded(encoded);
-            return ManagedObject._adapterOfRootOid(super.getSpecificationLoader(), rootOid);
-        } catch (final Exception e) {
-            return null;
-        }
-    }
-
-
     public ManagedObject getTargetAdapter() {
         return entityModel.load();
-    }
-
-    private ActionMemento getActionMemento() {
-        return actionMemento;
     }
 
     @Override
@@ -594,8 +469,7 @@ implements FormExecutorContext {
 
         val specificationLoader = getSpecificationLoader();
         val targetAdapter = this.getTargetAdapter();
-        val realTargetAdapter = this.getActionMemento()
-                .getAction(specificationLoader)
+        val realTargetAdapter = this.getAction()
                 .realTargetAdapter(targetAdapter);
         val pendingArgs = getArgumentsAsParamModel();
         val pendingArgValues = pendingArgs.getParamValues();
