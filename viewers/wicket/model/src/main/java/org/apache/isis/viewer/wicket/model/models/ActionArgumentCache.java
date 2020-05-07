@@ -29,6 +29,7 @@ import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.viewer.common.model.action.param.PendingParameterManager;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 
@@ -37,31 +38,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @RequiredArgsConstructor
-class ActionArgumentCache {
+class ActionArgumentCache implements PendingParameterManager {
     
     @NonNull private final EntityModel entityModel;
     @NonNull private final ActionMemento actionMemento;
     @NonNull private final ObjectAction action;
 
     private final Map<Integer, ActionArgumentModel> arguments = _Maps.newHashMap();
-    
-    public ActionArgumentModel computeIfAbsent(final ActionParameterMemento apm) {
-        final int i = apm.getNumber();
-        ActionArgumentModel actionArgumentModel = arguments.get(i);
-        if (actionArgumentModel == null) {
-            actionArgumentModel = new ScalarParameterModel(entityModel, apm);
-            final int number = actionArgumentModel.getParameterMemento().getNumber();
-            arguments.put(number, actionArgumentModel);
-        }
-        return actionArgumentModel;
-    }
-    
-    public void putArgumentValue(final int paramNum, final ManagedObject argumentAdapter) {
-        final ObjectActionParameter actionParam = action.getParameters().getElseFail(paramNum);
-        final ActionParameterMemento apm = new ActionParameterMemento(actionParam);
-        final ActionArgumentModel actionArgumentModel = computeIfAbsent(apm);
-        actionArgumentModel.setObject(argumentAdapter);
-    }
     
     public ActionArgumentCache copy() {
         val copy = new ActionArgumentCache(
@@ -109,12 +92,14 @@ class ActionArgumentCache {
                     arguments.computeIfAbsent(paramIndex, this::createArgumentModel));
     }
     
+    @Override
     public void setParameterValue(ObjectActionParameter actionParameter, ManagedObject newParamValue) {
         val actionParameterMemento = new ActionParameterMemento(actionParameter);
         val actionArgumentModel = computeIfAbsent(actionParameterMemento);
         actionArgumentModel.setObject(newParamValue);
     }
     
+    @Override
     public void clearParameterValue(ObjectActionParameter actionParameter) {
         setParameterValue(actionParameter, null);
     }
@@ -138,8 +123,22 @@ class ActionArgumentCache {
                 action.getParameterCount(),
                 (int)streamActionArgumentModels().count());
     }
+    
+    private ActionArgumentModel computeIfAbsent(final ActionParameterMemento apm) {
+        final int i = apm.getNumber();
+        ActionArgumentModel actionArgumentModel = arguments.get(i);
+        if (actionArgumentModel == null) {
+            actionArgumentModel = new ScalarParameterModel(entityModel, apm);
+            final int number = actionArgumentModel.getParameterMemento().getNumber();
+            arguments.put(number, actionArgumentModel);
+        }
+        return actionArgumentModel;
+    }
 
-
+    private void putArgumentValue(final int paramNum, final ManagedObject argumentAdapter) {
+        val actionParam = action.getParameters().getElseFail(paramNum);
+        setParameterValue(actionParam, argumentAdapter);
+    }
 
     
 }

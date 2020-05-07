@@ -209,10 +209,13 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
     private ActionArgumentCache argCache() {
         return argCache!=null
                 ? argCache
-                        : (argCache = new ActionArgumentCache(
-                                entityModel, 
-                                actionMemento, 
-                                getActionMemento().getAction(getSpecificationLoader())));
+                : (argCache = createActionArgumentCache());
+    }
+    private ActionArgumentCache createActionArgumentCache() {
+        return new ActionArgumentCache(
+                entityModel, 
+                actionMemento, 
+                getActionMemento().getAction(getSpecificationLoader()));
     }
 
     private static ActionMemento newActionMementoFrom(
@@ -264,14 +267,15 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
 
     private void setArgumentsIfPossible(final PageParameters pageParameters) {
 
-        final List<String> args = PageParameterNames.ACTION_ARGS.getListFrom(pageParameters);
+        final List<String> argsAsEncodedOidStrings = PageParameterNames.ACTION_ARGS.getListFrom(pageParameters);
 
         val action = actionMemento.getAction(getSpecificationLoader());
-        val parameterTypes = action.getParameterTypes();
+        val parameters = action.getParameters();
 
-        for (int paramNum = 0; paramNum < args.size(); paramNum++) {
-            final String encoded = args.get(paramNum);
-            setArgument(paramNum, parameterTypes.getElseFail(paramNum), encoded);
+        for (int paramNum = 0; paramNum < argsAsEncodedOidStrings.size(); paramNum++) {
+            val oidStrEncoded = argsAsEncodedOidStrings.get(paramNum);
+            parameters.get(paramNum)
+            .ifPresent(param->decodeAndSetArgument(param, oidStrEncoded));
         }
     }
 
@@ -291,27 +295,25 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
         }
 
         val action = actionMemento.getAction(getSpecificationLoader());
-        val parameterTypes = action.getParameterTypes();
-        final int parameterCount = parameterTypes.size();
 
         val paramNumAndOidString = parse(paramContext)
                 .orElseThrow(()->_Exceptions
                         .unrecoverableFormatted("failed to parse param context '%s'", paramContext));
-
-        final int paramNum = paramNumAndOidString.getParamNum();
-        if (paramNum >= parameterCount) {
+        
+        val actionParamIfAny = action.getParameters().get(paramNumAndOidString.getParamNum());
+        if(!actionParamIfAny.isPresent()) {
             return false;
         }
+        val actionParam = actionParamIfAny.get();
 
-        final String oidStrEncoded = paramNumAndOidString.getOidString();
-        setArgument(paramNum, parameterTypes.getElseFail(paramNum), oidStrEncoded);
-
+        val oidStrEncoded = paramNumAndOidString.getOidString();
+        decodeAndSetArgument(actionParam, oidStrEncoded);
         return true;
     }
 
-    private void setArgument(final int paramNum, final ObjectSpecification argSpec, final String encoded) {
-        val argumentAdapter = decodeArg(argSpec, encoded);
-        argCache().putArgumentValue(paramNum, argumentAdapter);
+    private void decodeAndSetArgument(ObjectActionParameter actionParam, String oidStrEncoded) {
+        val paramValue = decodeArg(actionParam.getSpecification(), oidStrEncoded);
+        argCache().setParameterValue(actionParam, paramValue);
     }
 
     private String encodeArg(ManagedObject adapter) {
