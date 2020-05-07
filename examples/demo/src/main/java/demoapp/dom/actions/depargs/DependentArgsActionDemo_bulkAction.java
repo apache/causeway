@@ -69,7 +69,7 @@ public class DependentArgsActionDemo_bulkAction {
             int b,
             
             // PARAM 3
-            @Parameter(optionality = Optionality.MANDATORY)
+            @Parameter(optionality = Optionality.OPTIONAL)
             int c,
             
             // PARAM 4
@@ -103,6 +103,11 @@ public class DependentArgsActionDemo_bulkAction {
     @Model
     public Collection<Integer> choices3Act(Parameters params) {
         return _Lists.of(1,2,3,4);
+    }
+    
+    @Model
+    public String validate3Act(Parameters params) {
+        return params.c() < 2 ? "please specify c>=2" : null;
     }
     
 //    @Model

@@ -54,9 +54,10 @@ public class AssociatedActionDemo extends DemoStub {
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
     @Action(associateWith="items")
     public AssociatedActionDemo doSomethingWithItems(
-            Set<DemoItem> items,
-            int test
-            ) {
+            
+            // bulk selection
+            Set<DemoItem> items) {
+        
         if(items!=null) {
             items.forEach(item->messageService.informUser(item.getName()));    
         }
