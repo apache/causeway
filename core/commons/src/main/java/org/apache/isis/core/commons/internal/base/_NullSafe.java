@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.commons.internal.base;
 
+import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Enumeration;
@@ -159,6 +160,36 @@ public final class _NullSafe {
         };
     }
 
+    public static Stream<?> streamAutodetect(@Nullable Object pojo) {
+        if(pojo==null) {
+            return Stream.empty();
+        }
+        if(pojo instanceof Collection) {
+            return ((Collection<?>)pojo).stream();
+        }
+        if(pojo instanceof Can) {
+            return ((Can<?>)pojo).stream();
+        }
+        if(pojo.getClass().isArray()) {
+            if(Array.getLength(pojo)==0) return Stream.empty(); 
+            if(pojo instanceof Object[]) return Stream.of((Object[]) pojo);
+            if(pojo instanceof boolean[]) return Stream.of((boolean[]) pojo);
+            if(pojo instanceof byte[]) return Stream.of((byte[]) pojo);
+            if(pojo instanceof char[]) return Stream.of((char[]) pojo);
+            if(pojo instanceof double[]) return Stream.of((double[]) pojo);
+            if(pojo instanceof float[]) return Stream.of((float[]) pojo);
+            if(pojo instanceof int[]) return Stream.of((int[]) pojo);
+            if(pojo instanceof long[]) return Stream.of((long[]) pojo);
+            if(pojo instanceof short[]) return Stream.of((short[]) pojo);
+        }
+        if(pojo instanceof Iterable) {
+            return stream((Iterable<?>)pojo);
+        }
+        if(pojo instanceof Enumeration) {
+            return stream((Enumeration<?>)pojo);
+        }
+        return Stream.of(pojo);
+    }
 
     // -- ABSENCE/PRESENCE PREDICATES
 

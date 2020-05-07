@@ -41,19 +41,19 @@ public class ActionPromptHeaderPanel extends PanelAbstract<ActionModel> {
 
         _Blackhole.consume(model.getTargetAdapter()); // side-effect: loads the model
 
-        getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ENTITY_ICON_AND_TITLE, model.getParentEntityModel());
+        getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ENTITY_ICON_AND_TITLE, model.getParentUiModel());
 
 
         final Label label = new Label(ID_ACTION_NAME, new IModel<String>() {
             private static final long serialVersionUID = 1L;
             @Override
             public String getObject() {
-                final ObjectAction action = model.getActionMemento().getAction(getSpecificationLoader());
+                final ObjectAction action = model.getAction();
                 return action.getName();
             }
         });
 
-        final ObjectAction action = model.getActionMemento().getAction(getSpecificationLoader());
+        final ObjectAction action = model.getAction();
         NamedFacet namedFacet = action.getFacet(NamedFacet.class);
         if (namedFacet != null) {
             label.setEscapeModelStrings(namedFacet.escaped());

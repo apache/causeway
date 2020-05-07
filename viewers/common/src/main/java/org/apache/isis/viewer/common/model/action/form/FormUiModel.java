@@ -16,17 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.model.models;
+package org.apache.isis.viewer.common.model.action.form;
 
-import org.apache.wicket.model.IModel;
+import java.util.stream.Stream;
 
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
+public interface FormUiModel {
 
-public interface ActionArgumentModel extends IModel<ManagedObject> {
+    Stream<FormPendingParamUiModel> streamPendingParamUiModels();
 
-    ActionParameterMemento getParameterMemento();
-
-    void setActionArgsHint(Can<ManagedObject> arguments);
 }

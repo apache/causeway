@@ -18,14 +18,12 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Lists;
@@ -42,6 +40,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
+import org.apache.isis.viewer.common.model.feature.ScalarUiModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
@@ -49,7 +48,6 @@ import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 
 import lombok.NonNull;
 import lombok.val;
-
 
 /**
  * Represents a scalar of an entity, either a {@link Kind#PROPERTY property} or
@@ -70,7 +68,7 @@ import lombok.val;
  * </p>
  */
 public abstract class ScalarModel extends EntityModel 
-implements LinksProvider, FormExecutorContext {
+implements ScalarUiModel, LinksProvider, FormExecutorContext {
 
     private static final long serialVersionUID = 1L;
 
@@ -129,11 +127,19 @@ implements LinksProvider, FormExecutorContext {
     }
 
     @Override
-    public EntityModel getParentEntityModel() {
+    public EntityModel getParentUiModel() {
         return parentEntityModel;
     }
 
-
+    private transient ManagedObject owner;
+    @Override
+    public ManagedObject getOwner() {
+        if(owner==null) {
+            owner = getParentUiModel().load(); 
+        }
+        return owner;  
+    }
+    
 
     protected static void setObjectFromPropertyIfVisible(
             final ScalarModel scalarModel,
@@ -155,8 +161,6 @@ implements LinksProvider, FormExecutorContext {
         scalarModel.setObject(associatedAdapter);
     }
 
-    public abstract boolean isCollection();
-
     /**
      * Whether the scalar represents a {@link Kind#PROPERTY property} or a
      * {@link Kind#PARAMETER}.
@@ -164,8 +168,6 @@ implements LinksProvider, FormExecutorContext {
     public Kind getKind() {
         return kind;
     }
-
-    public abstract String getName();
 
     /**
      * Overrides superclass' implementation, because a {@link ScalarModel} can
@@ -271,30 +273,6 @@ implements LinksProvider, FormExecutorContext {
 
     public abstract <T extends Facet> T getFacet(Class<T> facetType);
 
-    public abstract String getDescribedAs();
-
-    public abstract String getFileAccept();
-
-    public abstract boolean hasChoices();
-    public abstract Can<ManagedObject> getChoices(Can<ManagedObject> pendingArgs);
-
-    public abstract boolean hasAutoComplete();
-    public abstract Can<ManagedObject> getAutoComplete(Can<ManagedObject> pendingArg, String searchTerm);
-
-    /**
-     * for {@link BigDecimal}s only.
-     *
-     * @see #getScale()
-     */
-    public abstract Integer getLength();
-
-    /**
-     * for {@link BigDecimal}s only.
-     *
-     * @see #getLength()
-     */
-    public abstract Integer getScale();
-
     /**
      * Additional links to render (if any)
      */
@@ -359,8 +337,6 @@ implements LinksProvider, FormExecutorContext {
         };
     }
 
-
-
     @Override
     public PromptStyle getPromptStyle() {
         final PromptStyleFacet facet = getFacet(PromptStyleFacet.class);
@@ -388,16 +364,11 @@ implements LinksProvider, FormExecutorContext {
     }
 
 
-
-
-
     @Override
     protected void onDetach() {
         clearPending();
         super.onDetach();
     }
-
-
 
     // //////////////////////////////////////
 
@@ -501,16 +472,6 @@ implements LinksProvider, FormExecutorContext {
     protected abstract String getIdentifier();
 
     protected abstract String parseAndValidate(String proposedPojoAsStr);
-
-    protected abstract int getTypicalLength();
-
-    public abstract int getAutoCompleteOrChoicesMinLength();
-
-    public abstract ManagedObject getDefault(Can<ManagedObject> pendingArgs);
-
-    public int getAutoCompleteMinLength() {
-        return getAutoCompleteOrChoicesMinLength();
-    }
 
     public AssociatedActions getAssociatedActions() {
         if (associatedActions == null) {

@@ -74,11 +74,11 @@ implements ImperativeFacet {
     @Override
     public String disabledReason(
             final ManagedObject owningAdapter, 
-            final Can<ManagedObject> argumentAdapters) {
+            final Can<ManagedObject> pendingArgs) {
         
         final Object returnValue = ppmFactory.isPresent()
-                ? ManagedObject.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, owningAdapter, argumentAdapters)
-                : ManagedObject.InvokeUtil.invokeAutofit(method, owningAdapter, argumentAdapters);
+                ? ManagedObject.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, owningAdapter, pendingArgs)
+                : ManagedObject.InvokeUtil.invokeAutofit(method, owningAdapter, pendingArgs);
                 
         if(returnValue instanceof String) {
             return (String) returnValue;

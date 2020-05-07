@@ -19,15 +19,16 @@
 
 package org.apache.isis.core.metamodel.facets.param.choices.methodnum;
 
+import java.util.EnumSet;
+
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.ParameterSupport;
-import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.ParameterSupport;
+import org.apache.isis.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
+import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacet;
 
 import lombok.val;
@@ -35,14 +36,10 @@ import lombok.val;
 public class ActionParameterChoicesFacetViaMethodFactory 
 extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final Can<String> PREFIXES = Can.empty();
+    private static final String PREFIX = MethodLiteralConstants.CHOICES_PREFIX;
 
-    /**
-     * Note that the {@link Facet}s registered are the generic ones from
-     * noa-architecture (where they exist)
-     */
     public ActionParameterChoicesFacetViaMethodFactory() {
-        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
 
     // ///////////////////////////////////////////////////////
@@ -62,13 +59,13 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         // attach ActionChoicesFacet if choicesNumMethod is found ...
 
         val actionMethod = processMethodContext.getMethod();
-        val capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
+        val namingConvention = PREFIX_BASED_NAMING.providerForParam(actionMethod, PREFIX);
 
         val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)
                 .returnType(ReturnType.NON_SCALAR)
-                .paramIndexToMethodName(paramIndex -> 
-                    MethodLiteralConstants.CHOICES_PREFIX + paramIndex + capitalizedName)
+                .paramIndexToMethodName(namingConvention)
+                .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SWEEP))
                 .build();
 
         ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {

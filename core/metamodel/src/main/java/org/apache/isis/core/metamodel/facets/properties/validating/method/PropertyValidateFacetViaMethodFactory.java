@@ -19,24 +19,20 @@
 
 package org.apache.isis.core.metamodel.facets.properties.validating.method;
 
-import java.lang.reflect.Method;
-
-import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
+import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
-import static org.apache.isis.core.metamodel.facets.MethodLiteralConstants.VALIDATE_PREFIX;
+import lombok.val;
 
 public class PropertyValidateFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract  {
 
-    private static final Can<String> PREFIXES = Can.ofSingleton(VALIDATE_PREFIX);
+    private static final String PREFIX = MethodLiteralConstants.VALIDATE_PREFIX;
 
     public PropertyValidateFacetViaMethodFactory() {
-        super(FeatureType.PROPERTIES_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+        super(FeatureType.PROPERTIES_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
 
     @Override
@@ -47,29 +43,27 @@ public class PropertyValidateFacetViaMethodFactory extends MethodPrefixBasedFace
 
     private void attachValidateFacetIfValidateMethodIsFound(final ProcessMethodContext processMethodContext) {
 
-        final Method getMethod = processMethodContext.getMethod();
-        final String capitalizedName = StringExtensions.asJavaBaseName(getMethod.getName());
+        val cls = processMethodContext.getCls();
+        val getterMethod = processMethodContext.getMethod();
+        val namingConvention = PREFIX_BASED_NAMING.providerForMember(getterMethod, PREFIX);
+        val returnType = getterMethod.getReturnType();
 
-        final Class<?> returnType = getMethod.getReturnType();
-        final Class<?>[] paramTypes = new Class[] { returnType };
-
-        final Class<?> cls = processMethodContext.getCls();
-        final Method method = MethodFinderUtils.findMethod_returningText(
+        val validateMethod = MethodFinderUtils.findMethod_returningText(
                 cls,
-                VALIDATE_PREFIX + capitalizedName,
-                paramTypes);
-        if (method == null) {
+                namingConvention.get(),
+                new Class[] { returnType });
+        if (validateMethod == null) {
             return;
         }
-        processMethodContext.removeMethod(method);
+        processMethodContext.removeMethod(validateMethod);
 
-        final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
-
-        final TranslationService translationService = getTranslationService();
+        val facetHolder = processMethodContext.getFacetHolder();
+        val translationService = getTranslationService();
         // sadness: same as in TranslationFactory
-        final String translationContext = facetHolder.getIdentifier().toClassAndNameIdentityString();
-        final PropertyValidateFacetViaMethod facet = new PropertyValidateFacetViaMethod(method, translationService, translationContext, facetHolder);
-        super.addFacet(facet);
+        val translationContext = facetHolder.getIdentifier().toClassAndNameIdentityString();
+        super.addFacet(
+                new PropertyValidateFacetViaMethod(
+                        validateMethod, translationService, translationContext, facetHolder));
     }
 
 

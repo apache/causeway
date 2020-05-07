@@ -24,13 +24,14 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+
+import lombok.val;
 
 /**
  * Corresponding component to prompt for action (parameters) is {@link ActionParametersPanel}.
@@ -51,8 +52,10 @@ public class PropertyEditPanel extends PanelAbstract<ScalarPropertyModel> {
     public PropertyEditPanel(
             final String id,
             final ScalarPropertyModel scalarModel) {
-        super(id, new ScalarPropertyModel(scalarModel.getParentEntityModel(), scalarModel.getPropertyMemento(),
-                EntityModel.Mode.EDIT, EntityModel.RenderingHint.REGULAR));
+        
+        super(id, scalarModel.copyHaving(
+                EntityModel.Mode.EDIT, 
+                EntityModel.RenderingHint.REGULAR));
 
         buildGui(scalarModel);
     }
@@ -81,22 +84,19 @@ public class PropertyEditPanel extends PanelAbstract<ScalarPropertyModel> {
 
         WebMarkupContainer header = addHeader();
 
-        {
-            getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PROPERTY_EDIT_FORM, getScalarModel());
-            getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, scalarModel.getParentEntityModel());
+        getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PROPERTY_EDIT_FORM, getScalarModel());
+        getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, scalarModel.getParentUiModel());
 
-            final OneToOneAssociation property = getScalarModel().getPropertyMemento().getProperty(scalarModel.getSpecificationLoader());
-            final String propertyName = property.getName();
-            final Label label = new Label(ID_PROPERTY_NAME, Model.of(propertyName));
+        val property = getScalarModel().getMetaModel();
+        val propertyName = property.getName();
+        val label = new Label(ID_PROPERTY_NAME, Model.of(propertyName));
 
-            NamedFacet namedFacet = property.getFacet(NamedFacet.class);
-            if (namedFacet != null) {
-                label.setEscapeModelStrings(namedFacet.escaped());
-            }
-
-            header.add(label);
-
+        val namedFacet = property.getFacet(NamedFacet.class);
+        if (namedFacet != null) {
+            label.setEscapeModelStrings(namedFacet.escaped());
         }
+
+        header.add(label);
     }
 
     private WebMarkupContainer addHeader() {

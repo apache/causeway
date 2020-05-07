@@ -39,13 +39,13 @@ public class ContainedToggleboxPanel extends PanelAbstract<Model<Boolean>> {
     private static final String ID_TOGGLEBOX = "togglebox";
 
     private final AjaxCheckBox checkbox;
-    //    private final List<Component> componentsToRerender = _Lists.newArrayList();
 
     public ContainedToggleboxPanel(final String id) {
         super(id);
 
         final WebMarkupContainer markupContainer = new WebMarkupContainer(ID_CONTAINER);
         add(markupContainer);
+        
         final Form<Object> form = new Form<Object>(ID_FORM);
         markupContainer.add(form);
 
@@ -54,17 +54,14 @@ public class ContainedToggleboxPanel extends PanelAbstract<Model<Boolean>> {
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
+                
                 ContainedToggleboxPanel.this.toggle(target);
             }
+            
         };
         form.add(checkbox);
+        
     }
-
-
-    //    public void addComponentToRerender(final Component component) {
-    //        component.setOutputMarkupPlaceholderTag(true);
-    //        componentsToRerender.add(component);
-    //    }
 
     /**
      * Hook method for (typically anonymous) subclasses to override.

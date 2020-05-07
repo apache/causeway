@@ -22,12 +22,10 @@ package org.apache.isis.viewer.wicket.ui.pages.actionprompt;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-
-import lombok.val;
 
 /**
  * Web page representing an action invocation.
@@ -40,7 +38,7 @@ public class ActionPromptPage extends PageAbstract {
     public ActionPromptPage(final ActionModel model) {
         super(
                 new PageParameters(), 
-                model.getActionMemento().getAction(model.getSpecificationLoader()).getName(), 
+                model.getAction().getName(), 
                 ComponentType.ACTION_PROMPT);
         
         addChildComponents(themeDiv, model);
@@ -63,7 +61,7 @@ public class ActionPromptPage extends PageAbstract {
     }
 
     public ActionPromptPage(final PageParameters pageParameters, final ActionModel model) {
-        super(pageParameters, model.getActionMemento().getAction(model.getSpecificationLoader()).getName(), ComponentType.ACTION_PROMPT);
+        super(pageParameters, model.getAction().getName(), ComponentType.ACTION_PROMPT);
         addChildComponents(themeDiv, model);
 
         // no need to bookmark because the ActionParametersPanel will have done so for us
@@ -74,7 +72,6 @@ public class ActionPromptPage extends PageAbstract {
             IsisWebAppCommonContext commonContext,
             PageParameters pageParameters) {
         
-        val actionModel = ActionModel.createForPersistent(commonContext, pageParameters);
-        return actionModel;
+        return ActionModel.ofPageParameters(commonContext, pageParameters);
     }
 }

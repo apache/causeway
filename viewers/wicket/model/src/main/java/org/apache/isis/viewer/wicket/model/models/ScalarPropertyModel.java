@@ -21,33 +21,30 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
-import org.apache.isis.core.metamodel.facets.value.string.StringValueSemanticsProvider;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
+import org.apache.isis.viewer.common.model.feature.PropertyUiModel;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 
-import lombok.Getter;
 import lombok.val;
 
-public class ScalarPropertyModel extends ScalarModel {
+public class ScalarPropertyModel 
+extends ScalarModel 
+implements PropertyUiModel {
     
     private static final long serialVersionUID = 1L;
     
-    @Getter private final PropertyMemento propertyMemento;
+    private final PropertyMemento propertyMemento;
 
     /**
      * Creates a model representing a property of a parent object, with the
@@ -66,6 +63,16 @@ public class ScalarPropertyModel extends ScalarModel {
         getAndStore(parentEntityModel);
     }
     
+    public ScalarPropertyModel copyHaving(
+            EntityModel.Mode mode, 
+            EntityModel.RenderingHint renderingHint) {
+        return new ScalarPropertyModel(
+                getParentUiModel(), 
+                propertyMemento,
+                mode,
+                renderingHint);
+    }
+    
     private void getAndStore(final EntityModel parentEntityModel) {
         final ObjectMemento parentAdapterMemento = parentEntityModel.getObjectAdapterMemento();
         final OneToOneAssociation property = propertyMemento.getProperty(getSpecificationLoader());
@@ -73,37 +80,42 @@ public class ScalarPropertyModel extends ScalarModel {
         setObjectFromPropertyIfVisible(ScalarPropertyModel.this, property, parentAdapter);
     }
     
-
+    private transient OneToOneAssociation property;
+    
     @Override
-    public String getName() {
-        return getPropertyMemento().getProperty(getSpecificationLoader()).getName();
+    public OneToOneAssociation getMetaModel() {
+        if(property==null) {
+            property = propertyMemento.getProperty(getSpecificationLoader()); 
+        }
+        return property;  
     }
+
+        
 
     @Override
     public ObjectSpecification getScalarTypeSpec() {
-        ObjectSpecId type = getPropertyMemento().getType();
+        ObjectSpecId type = propertyMemento.getType();
         return getSpecificationLoader().lookupBySpecIdElseLoad(type);
     }
 
     @Override
     public String getIdentifier() {
-        return getPropertyMemento().getIdentifier();
+        return propertyMemento.getIdentifier();
     }
 
     @Override
     public String getCssClass() {
         final String objectSpecId =
-                getParentEntityModel().getTypeOfSpecification().getSpecId().asString().replace(".", "-");
+                getParentUiModel().getTypeOfSpecification().getSpecId().asString().replace(".", "-");
         final String propertyId = getIdentifier();
         return "isis-" + objectSpecId + "-" + propertyId;
     }
 
     @Override
     public boolean whetherHidden(final Where where) {
-        final ManagedObject parentAdapter = getParentEntityModel().load();
-        final OneToOneAssociation property = getPropertyMemento().getProperty(getSpecificationLoader());
+        final ManagedObject parentAdapter = getParentUiModel().load();
         try {
-            final Consent visibility = property.isVisible(parentAdapter, InteractionInitiatedBy.USER, where);
+            final Consent visibility = getMetaModel().isVisible(parentAdapter, InteractionInitiatedBy.USER, where);
             return visibility.isVetoed();
         } catch (final Exception ex) {
             return true; // will be hidden
@@ -112,10 +124,9 @@ public class ScalarPropertyModel extends ScalarModel {
 
     @Override
     public String whetherDisabled(final Where where) {
-        final ManagedObject parentAdapter = getParentEntityModel().load();
-        final OneToOneAssociation property = getPropertyMemento().getProperty(getSpecificationLoader());
+        final ManagedObject parentAdapter = getParentUiModel().load();
         try {
-            final Consent usable = property.isUsable(parentAdapter, InteractionInitiatedBy.USER, where);
+            final Consent usable = getMetaModel().isUsable(parentAdapter, InteractionInitiatedBy.USER, where);
             return usable.isAllowed() ? null : usable.getReason();
         } catch (final Exception ex) {
             return ex.getLocalizedMessage();
@@ -124,13 +135,13 @@ public class ScalarPropertyModel extends ScalarModel {
 
     @Override
     public String parseAndValidate(final String proposedPojoAsStr) {
-        final OneToOneAssociation property = getPropertyMemento().getProperty(getSpecificationLoader());
+        final OneToOneAssociation property = getMetaModel();
         ParseableFacet parseableFacet = property.getFacet(ParseableFacet.class);
         if (parseableFacet == null) {
             parseableFacet = property.getSpecification().getFacet(ParseableFacet.class);
         }
         try {
-            final ManagedObject parentAdapter = getParentEntityModel().load();
+            final ManagedObject parentAdapter = getParentUiModel().load();
             final ManagedObject currentValue = property.get(parentAdapter, InteractionInitiatedBy.USER);
             final ManagedObject proposedAdapter =
                     parseableFacet.parseTextEntry(currentValue, proposedPojoAsStr, InteractionInitiatedBy.USER);
@@ -148,10 +159,9 @@ public class ScalarPropertyModel extends ScalarModel {
 
     @Override
     public String validate(final ManagedObject proposedAdapter) {
-        final ManagedObject parentAdapter = getParentEntityModel().load();
-        final OneToOneAssociation property = getPropertyMemento().getProperty(getSpecificationLoader());
+        final ManagedObject parentAdapter = getParentUiModel().load();
         try {
-            final Consent valid = property.isAssociationValid(parentAdapter, proposedAdapter,
+            final Consent valid = getMetaModel().isAssociationValid(parentAdapter, proposedAdapter,
                     InteractionInitiatedBy.USER);
             return valid.isAllowed() ? null : valid.getReason();
         } catch (final Exception ex) {
@@ -161,130 +171,17 @@ public class ScalarPropertyModel extends ScalarModel {
 
     @Override
     public boolean isRequired() {
-        final FacetHolder facetHolder = getPropertyMemento().getProperty(getSpecificationLoader());
-        return isRequired(facetHolder);
+        return isRequired(getMetaModel());
     }
 
     @Override
     public <T extends Facet> T getFacet(final Class<T> facetType) {
-        final FacetHolder facetHolder = getPropertyMemento().getProperty(getSpecificationLoader());
-        return facetHolder.getFacet(facetType);
-    }
-
-    @Override
-    public ManagedObject getDefault(
-            final Can<ManagedObject> pendingArgs /*not used*/) {
-
-        final PropertyMemento propertyMemento = getPropertyMemento();
-        final OneToOneAssociation property = propertyMemento
-                .getProperty(getSpecificationLoader());
-        ManagedObject parentAdapter = getParentEntityModel().load();
-        return property.getDefault(parentAdapter);
-    }
-
-    @Override
-    public boolean hasChoices() {
-        final PropertyMemento propertyMemento = getPropertyMemento();
-        final OneToOneAssociation property = propertyMemento.getProperty(getSpecificationLoader());
-        return property.hasChoices();
-    }
-
-    @Override
-    public Can<ManagedObject> getChoices(
-            final Can<ManagedObject> pendingArgs /*not used*/) { 
-
-        final PropertyMemento propertyMemento = getPropertyMemento();
-        final OneToOneAssociation property = propertyMemento
-                .getProperty(getSpecificationLoader());
-        ManagedObject parentAdapter = getParentEntityModel().load();
-        final Can<ManagedObject> choices = property.getChoices(
-                parentAdapter,
-                InteractionInitiatedBy.USER);
-
-        return choices;
-    }
-
-    @Override
-    public boolean hasAutoComplete() {
-        final PropertyMemento propertyMemento = getPropertyMemento();
-        final OneToOneAssociation property = propertyMemento.getProperty(getSpecificationLoader());
-        return property.hasAutoComplete();
-    }
-
-    @Override
-    public Can<ManagedObject> getAutoComplete(
-            final Can<ManagedObject> pendingArgs, /*not used*/
-            final String searchArg) {
-
-        final PropertyMemento propertyMemento = getPropertyMemento();
-        final OneToOneAssociation property = propertyMemento.getProperty(getSpecificationLoader());
-        final ManagedObject parentAdapter =
-                getParentEntityModel().load();
-        final Can<ManagedObject> choices =
-                property.getAutoComplete(
-                        parentAdapter, 
-                        searchArg,
-                        InteractionInitiatedBy.USER);
-        return choices;
-    }
-
-    @Override
-    public int getAutoCompleteOrChoicesMinLength() {
-
-        if (hasAutoComplete()) {
-            final PropertyMemento propertyMemento = getPropertyMemento();
-            final OneToOneAssociation property = propertyMemento.getProperty(getSpecificationLoader());
-            return property.getAutoCompleteMinLength();
-        } else {
-            return 0;
-        }
-    }
-
-    @Override
-    public String getDescribedAs() {
-        final PropertyMemento propertyMemento = getPropertyMemento();
-        final OneToOneAssociation property = propertyMemento.getProperty(getSpecificationLoader());
-        return property.getDescription();
-    }
-
-    @Override
-    public Integer getLength() {
-        final PropertyMemento propertyMemento = getPropertyMemento();
-        final OneToOneAssociation property = propertyMemento.getProperty(getSpecificationLoader());
-        final BigDecimalValueFacet facet = property.getFacet(BigDecimalValueFacet.class);
-        return facet != null? facet.getPrecision(): null;
-    }
-
-    @Override
-    public Integer getScale() {
-        final PropertyMemento propertyMemento = getPropertyMemento();
-        final OneToOneAssociation property = propertyMemento.getProperty(getSpecificationLoader());
-        final BigDecimalValueFacet facet = property.getFacet(BigDecimalValueFacet.class);
-        return facet != null? facet.getScale(): null;
-    }
-
-    @Override
-    public int getTypicalLength() {
-        final PropertyMemento propertyMemento = getPropertyMemento();
-        final OneToOneAssociation property = propertyMemento.getProperty(getSpecificationLoader());
-        final TypicalLengthFacet facet = property.getFacet(TypicalLengthFacet.class);
-        return facet != null? facet.value() : StringValueSemanticsProvider.TYPICAL_LENGTH;
-    }
-
-    @Override
-    public String getFileAccept() {
-        final PropertyMemento propertyMemento = getPropertyMemento();
-        final OneToOneAssociation property = propertyMemento.getProperty(getSpecificationLoader());
-        final FileAcceptFacet facet = property.getFacet(FileAcceptFacet.class);
-        return facet != null? facet.value(): null;
+        return getMetaModel().getFacet(facetType);
     }
 
     public void reset() {
-        final OneToOneAssociation property = getPropertyMemento().getProperty(getSpecificationLoader());
-
-        val parentAdapter = getParentEntityModel().load();
-
-        setObjectFromPropertyIfVisible(this, property, parentAdapter);
+        val parentAdapter = getParentUiModel().load();
+        setObjectFromPropertyIfVisible(this, getMetaModel(), parentAdapter);
     }
 
     @Override
@@ -299,14 +196,13 @@ public class ScalarPropertyModel extends ScalarModel {
 
     @Override
     public String toStringOf() {
-        return getName() + ": " + getPropertyMemento().toString();
+        return getName() + ": " + propertyMemento.toString();
     }
     
     public String getReasonInvalidIfAny() {
-        val property = getPropertyMemento().getProperty(getSpecificationLoader());
-        val adapter = getParentEntityModel().load();
+        val adapter = getParentUiModel().load();
         val associate = getObject();
-        Consent validity = property.isAssociationValid(adapter, associate, InteractionInitiatedBy.USER);
+        Consent validity = getMetaModel().isAssociationValid(adapter, associate, InteractionInitiatedBy.USER);
         return validity.isAllowed() ? null : validity.getReason();
     }
     
@@ -316,7 +212,7 @@ public class ScalarPropertyModel extends ScalarModel {
      * @return adapter, which may be different from the original (if a {@link ViewModelFacet#isCloneable(Object) cloneable} view model, for example.
      */
     public ManagedObject applyValue(ManagedObject adapter) {
-        val property = getPropertyMemento().getProperty(getSpecificationLoader());
+        val property = getMetaModel();
 
         //
         // previously there was a guard here to only apply changes provided:
@@ -348,30 +244,16 @@ public class ScalarPropertyModel extends ScalarModel {
         val associate = getObject();
         property.set(adapter, associate, InteractionInitiatedBy.USER);
 
-        final ViewModelFacet recreatableObjectFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
-        if(recreatableObjectFacet != null) {
-            final Object viewModel = adapter.getPojo();
-            final boolean cloneable = recreatableObjectFacet.isCloneable(viewModel);
-            if(cloneable) {
-                //XXX lombok issue, no val
-                Object newViewModelPojo = recreatableObjectFacet.clone(viewModel);
-                adapter = super.getPojoToAdapter().apply(newViewModelPojo);
-            }
-        }
+        return ManagedObjects.copyIfClonable(adapter);
 
-        return adapter;
     }
     
     @Override
     protected List<ObjectAction> calcAssociatedActions() {
-
-        final EntityModel parentEntityModel1 = this.getParentEntityModel();
-        final ManagedObject parentAdapter = parentEntityModel1.load();
-
-        final OneToOneAssociation oneToOneAssociation =
-                this.getPropertyMemento().getProperty(this.getSpecificationLoader());
-
-        return ObjectAction.Util.findForAssociation(parentAdapter, oneToOneAssociation);
+        val parentAdapter = getParentUiModel().load();
+        return ObjectAction.Util.findForAssociation(parentAdapter, getMetaModel());
     }
+
+
     
 }

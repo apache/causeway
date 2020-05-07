@@ -19,29 +19,42 @@
 
 package org.apache.isis.core.metamodel.facets.param.validate.method;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.validate.ActionParameterValidationFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public class ActionParameterValidationFacetViaMethod extends ActionParameterValidationFacetAbstract implements ImperativeFacet {
+public class ActionParameterValidationFacetViaMethod 
+extends ActionParameterValidationFacetAbstract 
+implements ImperativeFacet {
 
     private final Method method;
     private final TranslationService translationService;
     private final String translationContext;
+    private final Optional<Constructor<?>> ppmFactory;
 
-    public ActionParameterValidationFacetViaMethod(final Method method, final TranslationService translationService, final String translationContext, final FacetHolder holder) {
+    public ActionParameterValidationFacetViaMethod(
+            final Method method, 
+            final TranslationService translationService, 
+            final String translationContext, 
+            final Optional<Constructor<?>> ppmFactory, 
+            final FacetHolder holder) {
+        
         super(holder);
         this.method = method;
         this.translationService = translationService;
         this.translationContext = translationContext;
+        this.ppmFactory = ppmFactory;
     }
 
     /**
@@ -59,8 +72,15 @@ public class ActionParameterValidationFacetViaMethod extends ActionParameterVali
     }
 
     @Override
-    public String invalidReason(final ManagedObject owningAdapter, final ManagedObject proposedArgumentAdapter) {
-        final Object returnValue = ManagedObject.InvokeUtil.invoke(method, owningAdapter, proposedArgumentAdapter);
+    public String invalidReason(
+            final ManagedObject owningAdapter, 
+            final Can<ManagedObject> pendingArgs, 
+            final ManagedObject proposedArgument) {
+        
+        final Object returnValue = ppmFactory.isPresent()
+                ? ManagedObject.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, owningAdapter, pendingArgs)
+                : ManagedObject.InvokeUtil.invoke(method, owningAdapter, proposedArgument);
+        
         if(returnValue instanceof String) {
             return (String) returnValue;
         }

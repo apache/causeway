@@ -22,7 +22,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -38,7 +37,7 @@ public class PropertyEditPromptHeaderPanel extends PanelAbstract<ScalarPropertyM
     public PropertyEditPromptHeaderPanel(String id, final ScalarPropertyModel model) {
         super(id, model);
 
-        val targetAdapter = model.getParentEntityModel().load();
+        val targetAdapter = model.getParentUiModel().load();
 
         getComponentFactoryRegistry().addOrReplaceComponent(
                 this, 
@@ -50,12 +49,10 @@ public class PropertyEditPromptHeaderPanel extends PanelAbstract<ScalarPropertyM
 
             @Override
             public String getObject() {
-                final OneToOneAssociation property = model.getPropertyMemento().getProperty(getSpecificationLoader());
-                return property.getName();
+                return model.getName();
             }
         });
-        final OneToOneAssociation property = model.getPropertyMemento().getProperty(getSpecificationLoader());
-        final NamedFacet namedFacet = property.getFacet(NamedFacet.class);
+        val namedFacet = model.getMetaModel().getFacet(NamedFacet.class);
         if(namedFacet != null) {
             label.setEscapeModelStrings(namedFacet.escaped());
         }

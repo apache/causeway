@@ -21,10 +21,11 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
+import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
-import lombok.NonNull;
 import lombok.val;
 
 public class ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete
@@ -32,45 +33,56 @@ extends ObjectAdapterMementoProviderAbstract {
 
     private static final long serialVersionUID = 1L;
     
-    private final Can<ObjectMemento> dependentArgMementos;
+    private final Can<ObjectMemento> pendingArgMementos;
 
-    public ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(
-            @NonNull ScalarModel model,
-            @NonNull Can<ObjectMemento> dependentArgMementos) { 
+    public ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(ScalarModel scalarModel) {
+        super(scalarModel);
+        val commonContext = scalarModel.getCommonContext();
+        val pendingArgs = scalarModel.isParameter() 
+                ? ((ParameterUiModel)scalarModel).getPendingParameterModel().getParamValues()
+                : Can.<ManagedObject>empty();
+        val pendingArgMementos = pendingArgs
+                .map(commonContext::mementoForParameter);
         
-        super(model);
-        this.dependentArgMementos = dependentArgMementos;
+        this.pendingArgMementos = pendingArgMementos;
     }
 
     @Override
     protected Can<ObjectMemento> obtainMementos(String term) {
         
-        if (getScalarModel().hasAutoComplete()) {
+        val scalarModel = getScalarModel();
         
+        if (scalarModel.hasAutoComplete()) {
+        
+            if(scalarModel.isParameter()) {
+                // recover any pendingArgs
+                val paramModel = (ParameterUiModel)scalarModel;
+                val pendingArgs = reconstructPendingArgs(paramModel, pendingArgMementos);
+                paramModel.setPendingParameterModel(pendingArgs);
+            }
+            
             val commonContext = super.getCommonContext();
-            
-            // recover any pendingArgs
-            val pendingArgs = reconstructDependentArgs(dependentArgMementos); 
-            return getScalarModel()
-                    .getAutoComplete(pendingArgs, term)
+            return scalarModel
+                    .getAutoComplete(term)
                     .map(commonContext::mementoFor);
-            
         }
         
         return Can.empty();
         
     }
     
-    private Can<ManagedObject> reconstructDependentArgs(
-            final Can<ObjectMemento> dependentArgMementos) {
+    private PendingParameterModel reconstructPendingArgs(
+            final ParameterUiModel parameterModel, 
+            final Can<ObjectMemento> pendingArgMementos) {
         
         val commonContext = super.getCommonContext();
-        val pendingArgsList = _NullSafe.stream(dependentArgMementos)
+        val pendingArgsList = _NullSafe.stream(pendingArgMementos)
             .map(commonContext::reconstructObject)
             .map(ManagedObject.class::cast)
             .collect(Can.toCan());
         
-        return pendingArgsList;
+       return parameterModel.getPendingParamHead()
+            .model(pendingArgsList);
     }
 
 }

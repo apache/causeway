@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
+import java.util.Optional;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -207,37 +209,39 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
     }
 
     @Override
-    protected void onInitializeWhenEnabled() {
-        super.onInitializeWhenEnabled();
+    protected void onInitializeEditable() {
+        super.onInitializeEditable();
         checkBox.setEnabled(true);
     }
 
     @Override
-    protected void onInitializeWhenViewMode() {
-        super.onInitializeWhenViewMode();
+    protected void onInitializeNotEditable() {
+        super.onInitializeNotEditable();
         checkBox.setEnabled(false);
     }
 
     @Override
-    protected void onInitializeWhenDisabled(final String disableReason) {
-        super.onInitializeWhenDisabled(disableReason);
-        checkBox.setEnabled(false);
-        final AttributeModifier title = new AttributeModifier("title",
-                Model.of(disableReason != null ? disableReason : ""));
-        checkBox.add(title);
-    }
-
-    @Override
-    protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
+    protected void onInitializeReadonly(final String disableReason) {
+        super.onInitializeReadonly(disableReason);
         checkBox.setEnabled(false);
         final AttributeModifier title = new AttributeModifier("title",
                 Model.of(disableReason != null ? disableReason : ""));
         checkBox.add(title);
-        target.add(checkBox);
     }
 
     @Override
-    protected void onEnabled(final AjaxRequestTarget target) {
+    protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
+        checkBox.setEnabled(false);
+        final AttributeModifier title = new AttributeModifier("title",
+                Model.of(disableReason != null ? disableReason : ""));
+        checkBox.add(title);
+        target.ifPresent(ajax->{
+            ajax.add(checkBox);   
+        });
+    }
+
+    @Override
+    protected void onEditable(final Optional<AjaxRequestTarget> target) {
         checkBox.setEnabled(true);
     }
 

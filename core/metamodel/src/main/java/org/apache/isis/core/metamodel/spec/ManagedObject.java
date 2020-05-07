@@ -23,10 +23,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
@@ -41,18 +39,15 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Lazy;
-import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.base._Tuples.Indexed;
 import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.commons.MethodExtensions;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
-import org.apache.isis.core.metamodel.commons.ThrowableExtensions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
@@ -61,7 +56,6 @@ import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
 
@@ -252,6 +246,7 @@ public interface ManagedObject {
         return TitleUtil.titleString(this, contextAdapterIfAny);
     }
     
+    @Deprecated // move to ManagedObjects
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     static final class TitleUtil {
 
@@ -284,7 +279,7 @@ public interface ManagedObject {
 
         private static String collectionTitleString(ManagedObject managedObject, final CollectionFacet facet) {
             final int size = facet.size(managedObject);
-            final ObjectSpecification elementSpecification = managedObject.getElementSpecification();
+            final ObjectSpecification elementSpecification = managedObject.getElementSpecification().orElse(null);
             if (elementSpecification == null || elementSpecification.getFullIdentifier().equals(Object.class.getName())) {
                 switch (size) {
                 case -1:
@@ -320,11 +315,8 @@ public interface ManagedObject {
 
     /**
      * Used only for (standalone or parented) collections.
-     * @deprecated use {@link ObjectSpecification#getElementSpecification()} instead, 
-     * (proposed for removal, to keep the API slim)
      */
-    @Deprecated
-    default public ObjectSpecification getElementSpecification() {
+    default public Optional<ObjectSpecification> getElementSpecification() {
         return getSpecification().getElementSpecification();
     }
 
@@ -335,8 +327,6 @@ public interface ManagedObject {
      * graphically.
      * <p>
      * May return <code>null</code> if no icon is specified.
-     * @deprecated use {@link ObjectSpecification#getIconName(ManagedObject))} instead, 
-     * (proposed for removal, to keep the API slim)
      */
     default public String getIconName() {
         return getSpecification().getIconName(this);
@@ -347,28 +337,17 @@ public interface ManagedObject {
     /**
      * Optimized for cases, when the pojo's specification is already available.
      * @param specification
-     * @param pojo
+     * @param pojo - might also be a collection of pojos
      * @return
      */
-    public static ManagedObject of(ObjectSpecification specification, Object pojo) {
-        // can do this check only when the pojo is not null, otherwise is always considered valid
-        if(pojo!=null) {
-            val expectedType = specification.getCorrespondingClass();
-            val actualType = pojo.getClass();
-            
-            if(!expectedType.isAssignableFrom(actualType)) {
-                if(!ClassExtensions.equalsWhenBoxing(expectedType, actualType)) {
-                    throw _Exceptions.illegalArgument(
-                            "Pojo not compatible with ObjectSpecification, " +
-                            "objectSpec.correspondingClass = %s, " +
-                            "pojo.getClass() = %s, " +
-                            "pojo.toString() = %s",
-                            specification.getCorrespondingClass(), pojo.getClass(), pojo.toString());    
-                }
-            }    
-        }
+    public static ManagedObject of(@NonNull ObjectSpecification specification, @Nullable Object pojo) {
+        
+        specification.assertPojoCompatible(pojo);
+        
         return new SimpleManagedObject(specification, pojo);
     }
+    
+    
     
     /**
      * Optimized for cases, when the pojo's specification and rootOid are already available.
@@ -529,58 +508,10 @@ public interface ManagedObject {
         return adapter!=null && adapter!=ManagedObject.unspecified();
     }
 
-    // -- COMPARE UTILITIES
-    
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    static final class CompareUtil {
-
-        public static int compare(@Nullable ManagedObject p, @Nullable ManagedObject q) {
-            return NATURAL_NULL_FIRST.compare(p, q);
-        }
-        
-        public static Comparator<ManagedObject> orderingBy(ObjectAssociation sortProperty, boolean ascending) {
-            
-            final Comparator<ManagedObject> comparator = ascending 
-                    ? NATURAL_NULL_FIRST 
-                            : NATURAL_NULL_FIRST.reversed();
-            
-            return (p, q) -> {
-                    val pSort = sortProperty.get(p, InteractionInitiatedBy.FRAMEWORK);
-                    val qSort = sortProperty.get(q, InteractionInitiatedBy.FRAMEWORK);
-                    return comparator.compare(pSort, qSort);
-            };
-            
-        }
-        
-        // -- PREDEFINED COMPARATOR
-        
-        private static final Comparator<ManagedObject> NATURAL_NULL_FIRST = new Comparator<ManagedObject>(){
-            @SuppressWarnings({ "unchecked", "rawtypes" })
-            @Override
-            public int compare(@Nullable ManagedObject p, @Nullable ManagedObject q) {
-                val pPojo = ManagedObject.unwrapSingle(p);
-                val qPojo = ManagedObject.unwrapSingle(q);
-                if(pPojo instanceof Comparable && qPojo instanceof Comparable) {
-                    return _NullSafe.compareNullsFirst((Comparable)pPojo, (Comparable)qPojo);
-                }
-                if(Objects.equals(pPojo, qPojo)) {
-                    return 0;
-                }
-                
-                final int hashCompare = Integer.compare(Objects.hashCode(pPojo), Objects.hashCode(qPojo));
-                if(hashCompare!=0) {
-                    return hashCompare;
-                }
-                //TODO what to return on hash-collision?
-                return -1;
-            }
-            
-        };
-        
-    }
     
     // -- VISIBILITY UTILITIES
 
+    @Deprecated // move to ManagedObjects
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     static final class VisibilityUtil {
 
@@ -676,6 +607,7 @@ public interface ManagedObject {
 
     // -- INVOCATION UTILITY
 
+    @Deprecated // move to ManagedObjects
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     static final class InvokeUtil {
     
@@ -686,13 +618,8 @@ public interface ManagedObject {
                 final Can<ManagedObject> pendingArguments,
                 final List<Object> additionalArguments) {
             
-            final Object pendingParamModel;
-            try {
-                pendingParamModel = _Reflect.invokeConstructor(ppmConstructor, unwrapMultipleAsArray(pendingArguments)); 
-            } catch (Exception e) {
-                return ThrowableExtensions.handleInvocationException(e, ppmConstructor.getName());
-            }
-            val paramPojos = _Arrays.combineWithExplicitType(Object.class, pendingParamModel, additionalArguments.toArray());
+            val ppmTuple = MethodExtensions.construct(ppmConstructor, unwrapMultipleAsArray(pendingArguments));
+            val paramPojos = _Arrays.combineWithExplicitType(Object.class, ppmTuple, additionalArguments.toArray());
             return MethodExtensions.invoke(method, unwrapSingle(adapter), paramPojos);
         }
         

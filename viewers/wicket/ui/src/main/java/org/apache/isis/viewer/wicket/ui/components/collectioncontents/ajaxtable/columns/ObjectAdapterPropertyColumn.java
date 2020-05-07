@@ -28,6 +28,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -38,7 +39,6 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanel;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;
 
@@ -55,7 +55,7 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ManagedObj
 
     private static final long serialVersionUID = 1L;
 
-    private final EntityCollectionModel.Type type;
+    private final EntityCollectionModel.Variant collectionVariant;
     private final String propertyExpression;
     private final boolean escaped;
     private final String parentTypeName;
@@ -63,7 +63,7 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ManagedObj
 
     public ObjectAdapterPropertyColumn(
             IsisWebAppCommonContext commonContext, 
-            EntityCollectionModel.Type type,
+            EntityCollectionModel.Variant collectionVariant,
             IModel<String> columnNameModel,
             String sortProperty,
             String propertyName,
@@ -72,7 +72,7 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ManagedObj
             String describedAs) {
         
         super(commonContext, columnNameModel, sortProperty);
-        this.type = type;
+        this.collectionVariant = collectionVariant;
         this.propertyExpression = propertyName;
         this.escaped = escaped;
         this.parentTypeName = parentTypeName;
@@ -114,7 +114,7 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ManagedObj
         final OneToOneAssociation property = (OneToOneAssociation) adapter.getSpecification().getAssociationElseFail(propertyExpression);
         final PropertyMemento pm = new PropertyMemento(property);
 
-        final ScalarModel scalarModel = entityModel.getPropertyModel(pm, EntityModel.Mode.VIEW, type.renderingHint());
+        final ScalarModel scalarModel = entityModel.getPropertyModel(pm, EntityModel.Mode.VIEW, collectionVariant.renderingHint());
 
         final ComponentFactory componentFactory = findComponentFactory(ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
         return componentFactory.createComponent(id, scalarModel);

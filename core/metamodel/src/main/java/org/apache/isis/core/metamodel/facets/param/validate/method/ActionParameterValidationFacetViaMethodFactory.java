@@ -19,64 +19,78 @@
 
 package org.apache.isis.core.metamodel.facets.param.validate.method;
 
-import java.lang.reflect.Method;
+import java.util.EnumSet;
 
-import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.metamodel.commons.StringExtensions;
-import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.ParameterSupport;
+import org.apache.isis.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
+import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
 import org.apache.isis.core.metamodel.facets.param.validate.ActionParameterValidationFacet;
 
 import lombok.val;
 
 /**
- * Sets up {@link ActionParameterValidationFacet}.
- */
+ * Sets up {@link ActionParameterValidationFacet}. */
 public class ActionParameterValidationFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract  {
 
-    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.VALIDATE_PREFIX);
+    private static final String PREFIX = MethodLiteralConstants.VALIDATE_PREFIX;
 
-    /**
-     * Note that the {@link Facet}s registered are the generic ones from
-     * noa-architecture (where they exist)
-     */
     public ActionParameterValidationFacetViaMethodFactory() {
-        super(FeatureType.PARAMETERS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
 
 
     @Override
-    public void processParams(final ProcessParameterContext processParameterContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
 
-        val cls = processParameterContext.getCls();
-        val actionMethod = processParameterContext.getMethod();
-        final int paramNum = processParameterContext.getParamNum();
-        val paramType = processParameterContext.getParameterType();
-        final IdentifiedHolder facetHolder = processParameterContext.getFacetHolder();
+        val facetedMethod = processMethodContext.getFacetHolder();
+        val parameters = facetedMethod.getParameters();
 
-        final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
-
-        final String validateName = MethodLiteralConstants.VALIDATE_PREFIX + paramNum + capitalizedName;
-        final Method validateMethod = MethodFinderUtils.findMethod_returningText(
-                cls,
-                validateName,
-                new Class<?>[]{paramType});
-        if (validateMethod == null) {
+        if (parameters.isEmpty()) {
             return;
         }
 
-        processParameterContext.removeMethod(validateMethod);
+        // attach ActionParameterValidationFacet if validateNumMethod is found ...
+        // in any case single-arg, either same as param-type or PPM style 
+        
+        val actionMethod = processMethodContext.getMethod();
+        val namingConvention = PREFIX_BASED_NAMING.providerForParam(actionMethod, PREFIX);
 
-        final TranslationService translationService = getMetaModelContext().getTranslationService();
-        // sadness: same as in TranslationFactory
-        final String translationContext = facetHolder.getIdentifier().toFullIdentityString();
-        final Facet facet = new ActionParameterValidationFacetViaMethod(validateMethod, translationService, translationContext, facetHolder);
-        super.addFacet(facet);
+        val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
+                .processMethodContext(processMethodContext)
+                .returnType(ReturnType.TEXT)
+                .paramIndexToMethodName(namingConvention)
+                .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SINGLEARG_BEING_PARAMTYPE))
+                .build();
+        
+        ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {
+        
+            val validateMethod = searchResult.getSupportingMethod();
+            val paramNum = searchResult.getParamIndex();
+            
+            processMethodContext.removeMethod(validateMethod);
+            
+            if (facetedMethod.containsNonFallbackFacet(ActionParameterValidationFacet.class)) {
+                val cls = processMethodContext.getCls();
+                throw new MetaModelException(cls + " uses both old and new 'validate' syntax - "
+                        + "must use one or other");
+            }
+            
+            // add facets directly to parameters, not to actions
+            val paramAsHolder = parameters.get(paramNum);
+            val translationContext = paramAsHolder.getIdentifier().toFullIdentityString();
+            val ppmFactory = searchResult.getPpmFactory();
+            val translationService = getMetaModelContext().getTranslationService();
+
+            super.addFacet(
+                    new ActionParameterValidationFacetViaMethod(
+                            validateMethod, translationService, translationContext, ppmFactory, paramAsHolder));
+        
+        });
     }
 
 

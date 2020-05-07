@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -321,8 +322,8 @@ implements TextFieldValueModel.ScalarModelProvider {
 
 
     @Override
-    protected void onInitializeWhenViewMode() {
-        super.onInitializeWhenViewMode();
+    protected void onInitializeNotEditable() {
+        super.onInitializeNotEditable();
 
         textField.setEnabled(false);
         addReplaceDisabledTagWithReadonlyTagBehaviourIfRequired(textField);
@@ -331,8 +332,8 @@ implements TextFieldValueModel.ScalarModelProvider {
     }
 
     @Override
-    protected void onInitializeWhenDisabled(final String disableReason) {
-        super.onInitializeWhenDisabled(disableReason);
+    protected void onInitializeReadonly(final String disableReason) {
+        super.onInitializeReadonly(disableReason);
 
         textField.setEnabled(false);
         addReplaceDisabledTagWithReadonlyTagBehaviourIfRequired(textField);
@@ -343,29 +344,33 @@ implements TextFieldValueModel.ScalarModelProvider {
     }
 
     @Override
-    protected void onInitializeWhenEnabled() {
-        super.onInitializeWhenEnabled();
+    protected void onInitializeEditable() {
+        super.onInitializeEditable();
         textField.setEnabled(true);
         inlinePromptLink.setEnabled(true);
         clearTooltip();
     }
 
     @Override
-    protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
+    protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
         textField.setEnabled(false);
         inlinePromptLink.setEnabled(false);
         setTooltip(disableReason);
-        target.add(textField);
-        target.add(inlinePromptLink);
+        target.ifPresent(ajax->{
+            ajax.add(textField);
+            ajax.add(inlinePromptLink);    
+        });
     }
 
     @Override
-    protected void onEnabled(final AjaxRequestTarget target) {
+    protected void onEditable(final Optional<AjaxRequestTarget> target) {
         textField.setEnabled(true);
         inlinePromptLink.setEnabled(true);
         clearTooltip();
-        target.add(textField);
-        target.add(inlinePromptLink);
+        target.ifPresent(ajax->{
+            ajax.add(textField);
+            ajax.add(inlinePromptLink);    
+        });
     }
 
     private void setTooltip(final String tooltip) {

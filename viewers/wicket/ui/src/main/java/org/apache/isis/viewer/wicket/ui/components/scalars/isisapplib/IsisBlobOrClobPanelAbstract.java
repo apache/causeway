@@ -22,6 +22,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import javax.activation.MimeType;
 import javax.imageio.ImageIO;
@@ -190,18 +191,18 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     // //////////////////////////////////////
 
     @Override
-    protected void onInitializeWhenViewMode() {
-        updateRegularFormComponents(InputFieldVisibility.VISIBLE, InputFieldEditability.NOT_EDITABLE, null, null);
+    protected void onInitializeNotEditable() {
+        updateRegularFormComponents(InputFieldVisibility.VISIBLE, InputFieldEditability.NOT_EDITABLE, null, Optional.empty());
     }
 
     @Override
-    protected void onInitializeWhenDisabled(final String disableReason) {
-        updateRegularFormComponents(InputFieldVisibility.VISIBLE, InputFieldEditability.NOT_EDITABLE, null, null);
+    protected void onInitializeReadonly(final String disableReason) {
+        updateRegularFormComponents(InputFieldVisibility.VISIBLE, InputFieldEditability.NOT_EDITABLE, null, Optional.empty());
     }
 
     @Override
-    protected void onInitializeWhenEnabled() {
-        updateRegularFormComponents(InputFieldVisibility.VISIBLE, InputFieldEditability.EDITABLE, null, null);
+    protected void onInitializeEditable() {
+        updateRegularFormComponents(InputFieldVisibility.VISIBLE, InputFieldEditability.EDITABLE, null, Optional.empty());
     }
 
     private FileUploadField createFileUploadField(String componentId) {
@@ -236,13 +237,17 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     }
 
     @Override
-    protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
-        updateRegularFormComponents(InputFieldVisibility.VISIBLE, InputFieldEditability.NOT_EDITABLE, disableReason, target);
+    protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
+        updateRegularFormComponents(
+                InputFieldVisibility.VISIBLE, InputFieldEditability.NOT_EDITABLE, 
+                disableReason, target);
     }
 
     @Override
-    protected void onEnabled(final AjaxRequestTarget target) {
-        updateRegularFormComponents(InputFieldVisibility.VISIBLE, InputFieldEditability.EDITABLE, null, target);
+    protected void onEditable(final Optional<AjaxRequestTarget> target) {
+        updateRegularFormComponents(
+                InputFieldVisibility.VISIBLE, InputFieldEditability.EDITABLE, 
+                null, target);
     }
 
     protected abstract T getBlobOrClobFrom(final List<FileUpload> fileUploads);
@@ -261,7 +266,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
             final InputFieldVisibility visibility,
             final InputFieldEditability editability,
             final String disabledReason,
-            final AjaxRequestTarget target) {
+            final Optional<AjaxRequestTarget> target) {
 
         MarkupContainer formComponent = (MarkupContainer) getComponentForRegular();
         sync(formComponent, visibility, editability, disabledReason, target);
@@ -290,7 +295,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
             final InputFieldVisibility visibility,
             final InputFieldEditability editability,
             final String disabledReason,
-            final AjaxRequestTarget target) {
+            final Optional<AjaxRequestTarget> target) {
 
         if(component == null) {
             return;
@@ -299,7 +304,10 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
 
         if(visibility != null) {
             component.setVisible(visibility == InputFieldVisibility.VISIBLE);
-            Components.addToAjaxRequest(target, component);
+            target.ifPresent(ajax->{
+                Components.addToAjaxRequest(ajax, component);
+            });
+            
         }
 
 
@@ -360,7 +368,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     private void updateClearLink(
             final InputFieldVisibility visibility,
             final InputFieldEditability editability,
-            final AjaxRequestTarget target) {
+            final Optional<AjaxRequestTarget> target) {
 
         final MarkupContainer formComponent = (MarkupContainer) getComponentForRegular();
         formComponent.setOutputMarkupId(true); // enable ajax link
@@ -385,11 +393,12 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         clearButton.setVisible(blobOrClob != null && visibility == InputFieldVisibility.VISIBLE);
         clearButton.setEnabled(blobOrClob != null);
 
-        if(target != null) {
-            target.add(formComponent);
-            target.add(clearButton);
-            target.add(ajaxLink);
-        }
+        target.ifPresent(ajax->{
+            ajax.add(formComponent);
+            ajax.add(clearButton);
+            ajax.add(ajaxLink);
+        });
+        
     }
 
     private MarkupContainer updateDownloadLink(String downloadId, MarkupContainer container) {

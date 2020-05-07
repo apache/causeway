@@ -27,13 +27,13 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.viewer.wicket.model.models.ActionModel.ParamNumAndOidString;
+import org.apache.isis.viewer.wicket.model.models.PageParameterUtil.ParamNumAndOidString;
 
 public class ActionModelTest {
 
     @Test
     public void whenParseThenParses() throws Exception {
-        final ParamNumAndOidString parsed = ActionModel.parse("3=OBJECT_OID:123")
+        final ParamNumAndOidString parsed = PageParameterUtil.parseParamContext("3=OBJECT_OID:123")
                 .orElseThrow(()->_Exceptions.unrecoverable("parsing failed"));
         
         assertThat(parsed, is(not(nullValue())));

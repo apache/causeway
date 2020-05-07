@@ -23,30 +23,21 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.commons.internal._Constants;
-import org.apache.isis.core.metamodel.commons.StringExtensions;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
+import lombok.val;
+
 public class ActionChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.CHOICES_PREFIX);
+    private static final String PREFIX = MethodLiteralConstants.CHOICES_PREFIX;
 
-    /**
-     * Note that the {@link Facet}s registered are the generic ones from
-     * noa-architecture (where they exist)
-     */
     public ActionChoicesFacetViaMethodFactory() {
-        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
-
-    // ///////////////////////////////////////////////////////
-    // Actions
-    // ///////////////////////////////////////////////////////
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
@@ -55,12 +46,12 @@ public class ActionChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFa
 
     private void attachActionChoicesFacetIfParameterChoicesMethodIsFound(final ProcessMethodContext processMethodContext) {
 
-        final Method actionMethod = processMethodContext.getMethod();
+        val actionMethod = processMethodContext.getMethod();
 
         if (actionMethod.getParameterCount() <= 0) {
             return;
         }
-
+        
         Method choicesMethod = null;
         if (choicesMethod == null) {
             choicesMethod = findChoicesMethodReturning(processMethodContext, Object[][].class);
@@ -78,24 +69,21 @@ public class ActionChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFa
 
         final Class<?> returnType = actionMethod.getReturnType();
         final FacetHolder action = processMethodContext.getFacetHolder();
-        final ActionChoicesFacetViaMethod facet = new ActionChoicesFacetViaMethod(choicesMethod, returnType, action);
         
-        super.addFacet(facet);
+        super.addFacet(new ActionChoicesFacetViaMethod(choicesMethod, returnType, action));
         
     }
 
     protected Method findChoicesMethodReturning(
             final ProcessMethodContext processMethodContext, 
-            final Class<?> returnType2) {
+            final Class<?> returnType) {
+
+        val cls = processMethodContext.getCls();
+        val actionMethod = processMethodContext.getMethod();
+        val namingConvention = PREFIX_BASED_NAMING.providerForAction(actionMethod, PREFIX);
         
-        Method choicesMethod;
-        final Class<?> cls = processMethodContext.getCls();
-
-        final Method actionMethod = processMethodContext.getMethod();
-        final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
-
-        final String name = MethodLiteralConstants.CHOICES_PREFIX + capitalizedName;
-        choicesMethod = MethodFinderUtils.findMethod(cls, name, returnType2, _Constants.emptyClasses);
+        Method choicesMethod = 
+                MethodFinderUtils.findMethod(cls, namingConvention.get(), returnType, NO_ARG);
         return choicesMethod;
     }
 

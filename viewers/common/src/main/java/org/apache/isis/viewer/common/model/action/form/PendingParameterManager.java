@@ -16,11 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.viewer.common.model.action.form;
 
-package org.apache.isis.viewer.wicket.model.models;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
-public interface ParentEntityModelProvider {
+public interface PendingParameterManager {
 
-    EntityModel getParentEntityModel();
+    void setParameterValue(ObjectActionParameter actionParameter, ManagedObject newParamValue);
+
+    void clearParameterValue(ObjectActionParameter actionParameter);
 
 }

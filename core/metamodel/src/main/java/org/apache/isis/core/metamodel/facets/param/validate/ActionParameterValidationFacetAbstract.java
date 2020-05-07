@@ -26,7 +26,11 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 
-public abstract class ActionParameterValidationFacetAbstract extends FacetAbstract implements ActionParameterValidationFacet {
+import lombok.val;
+
+public abstract class ActionParameterValidationFacetAbstract 
+extends FacetAbstract
+implements ActionParameterValidationFacet {
 
     public static Class<? extends Facet> type() {
         return ActionParameterValidationFacet.class;
@@ -41,7 +45,10 @@ public abstract class ActionParameterValidationFacetAbstract extends FacetAbstra
         if (!(context instanceof ActionArgValidityContext)) {
             return null;
         }
-        final ActionArgValidityContext actionArgValidityContext = (ActionArgValidityContext) context;
-        return invalidReason(actionArgValidityContext.getTarget(), actionArgValidityContext.getProposed());
+        val actionArgValidityContext = (ActionArgValidityContext) context;
+        return invalidReason(
+                actionArgValidityContext.getTarget(), 
+                actionArgValidityContext.getArgs(),
+                actionArgValidityContext.getProposed());
     }
 }

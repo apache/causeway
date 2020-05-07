@@ -30,11 +30,11 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.OnSelectionHandler;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import lombok.val;
 
@@ -69,11 +69,11 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ManagedOb
     @Override
     public Component getHeader(String componentId) {
 
-        final ContainedToggleboxPanel bulkToggle = new ContainedToggleboxPanel(componentId) {
+        val bulkToggle = new ContainedToggleboxPanel(componentId) {
             private static final long serialVersionUID = 1L;
             @Override
             public void onSubmit(AjaxRequestTarget target) {
-                final boolean setToChecked = !this.isChecked();
+                val setToChecked = !this.isChecked();
                 
                 for (ContainedToggleboxPanel rowToggle : rowToggles) {
                     
@@ -104,12 +104,14 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ManagedOb
         final MarkupContainer row = cellItem.getParent().getParent();
         row.setOutputMarkupId(true);
 
-        final ContainedToggleboxPanel rowToggle = new ContainedToggleboxPanel(componentId) {
+        val rowToggle = new ContainedToggleboxPanel(componentId) {
             private static final long serialVersionUID = 1L;
             @Override
             public void onSubmit(AjaxRequestTarget target) {
+                
                 val entityModel = (EntityModel) rowModel;
                 val selectedAdapter = entityModel.load();
+                
                 if(onSelectionHandler != null) {
                     onSelectionHandler.onSelected(this, selectedAdapter, target);
                 }

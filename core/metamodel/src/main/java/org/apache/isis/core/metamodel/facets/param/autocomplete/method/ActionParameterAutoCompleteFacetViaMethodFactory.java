@@ -19,24 +19,26 @@
 
 package org.apache.isis.core.metamodel.facets.param.autocomplete.method;
 
+import java.util.EnumSet;
+
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ParameterSupport;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
+import org.apache.isis.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 
 import lombok.val;
 
 public class ActionParameterAutoCompleteFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.AUTO_COMPLETE_PREFIX);
+    private static final String PREFIX = MethodLiteralConstants.AUTO_COMPLETE_PREFIX;
 
     public ActionParameterAutoCompleteFacetViaMethodFactory() {
-        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
 
     @Override
@@ -52,14 +54,14 @@ public class ActionParameterAutoCompleteFacetViaMethodFactory extends MethodPref
         // attach ActionParameterChoicesFacet if autoCompleteNumMethod is found ...
         
         val actionMethod = processMethodContext.getMethod();
-        val capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
+        val namingConvention = PREFIX_BASED_NAMING.providerForParam(actionMethod, PREFIX);
 
         val searchRequest = ParameterSupport.ParamSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)
                 .returnType(ReturnType.NON_SCALAR)
                 .additionalParamType(String.class)
-                .paramIndexToMethodName(paramIndex -> 
-                    MethodLiteralConstants.AUTO_COMPLETE_PREFIX + paramIndex + capitalizedName)
+                .paramIndexToMethodName(namingConvention)
+                .searchAlgorithms(EnumSet.of(SearchAlgorithm.PPM, SearchAlgorithm.SWEEP))
                 .build();
 
         ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {

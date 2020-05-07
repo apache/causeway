@@ -22,8 +22,6 @@ package org.apache.isis.core.metamodel.facets.members.hidden.method;
 import java.lang.reflect.Method;
 
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.metamodel.commons.StringExtensions;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -31,21 +29,16 @@ import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
-public class HideForContextFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
+import lombok.val;
 
-    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.HIDE_PREFIX);
+public class HideForContextFacetViaMethodFactory 
+extends MethodPrefixBasedFacetFactoryAbstract {
 
-    /**
-     * Note that the {@link Facet}s registered are the generic ones from
-     * noa-architecture (where they exist)
-     */
+    private static final String PREFIX = MethodLiteralConstants.HIDE_PREFIX;
+
     public HideForContextFacetViaMethodFactory() {
-        super(FeatureType.MEMBERS, OrphanValidation.VALIDATE, PREFIXES);
+        super(FeatureType.MEMBERS, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
-
-    // ///////////////////////////////////////////////////////
-    // Actions
-    // ///////////////////////////////////////////////////////
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
@@ -54,18 +47,26 @@ public class HideForContextFacetViaMethodFactory extends MethodPrefixBasedFacetF
 
     private void attachHideFacetIfHideMethodIsFound(final ProcessMethodContext processMethodContext) {
 
-        final Method getter = processMethodContext.getMethod();
-        final String capitalizedName = 
-                StringExtensions.asJavaBaseNameStripAccessorPrefixIfRequired(getter.getName());
+        final Method actionOrGetter = processMethodContext.getMethod();
         
-        final Class<?> cls = processMethodContext.getCls();
-        Method hideMethod = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.HIDE_PREFIX + capitalizedName, boolean.class, new Class[] {});
+        val namingConvention = PREFIX_BASED_NAMING.providerForMember(actionOrGetter, PREFIX);
+        
+        val cls = processMethodContext.getCls();
+        Method hideMethod = MethodFinderUtils.findMethod(
+                cls, 
+                namingConvention.get(), 
+                boolean.class, 
+                NO_ARG);
         if (hideMethod == null) {
 
             boolean noParamsOnly = getConfiguration().getCore().getMetaModel().getValidator().isNoParamsOnly();
             boolean searchExactMatch = !noParamsOnly;
             if(searchExactMatch) {
-                hideMethod = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.HIDE_PREFIX + capitalizedName, boolean.class, getter.getParameterTypes());
+                hideMethod = MethodFinderUtils.findMethod(
+                        cls, 
+                        namingConvention.get(), 
+                        boolean.class, 
+                        actionOrGetter.getParameterTypes());
             }
         }
 

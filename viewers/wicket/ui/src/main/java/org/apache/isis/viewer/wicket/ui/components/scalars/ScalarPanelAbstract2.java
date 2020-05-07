@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -41,22 +42,16 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
-import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
+import org.apache.isis.viewer.common.model.action.form.FormPendingParamUiModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
-import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -78,6 +73,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
+import lombok.NonNull;
 import lombok.val;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
@@ -121,94 +117,68 @@ implements ScalarModelSubscriber2 {
         NOTHING
     }
 
+    /** this is a hack for the ScalarParameterModel, which does not support usability constraints in the model*/
+    private transient Runnable postInit;
+    @Deprecated // properly implement ScalarParameterModel
+    public void postInit(@NonNull final FormPendingParamUiModel argAndConsents) {
+        this.postInit = () ->{
+            // visibility
+            val visibilityConsent = argAndConsents.getVisibilityConsent();
+            setVisible(visibilityConsent.isAllowed());
+
+            // usability
+            val usabilityConsent = argAndConsents.getUsabilityConsent();
+            if(usabilityConsent.isAllowed()) {
+                onInitializeEditable();
+            } else {
+                onInitializeReadonly(usabilityConsent.getReason());
+            }            
+        }; 
+    }
+    
     /**
      *
      * @param actionModel - the action being invoked
-     * @param paramNumUpdated - the # of the param that has just been updated by the user
-     * @param paramNumToPossiblyUpdate - the # of the param to be updated if necessary (will be &gt; paramNumUpdated)
      *
      * @param target - in case there's more to be repainted...
      *
      * @return - true if changed as a result of these pending arguments.
      */
     public Repaint updateIfNecessary(
-            final ActionModel actionModel,
-            final int paramNumUpdated,
-            final int paramNumToPossiblyUpdate,//FIXME I guess we need to re-rerender all not just the next
-            final AjaxRequestTarget target) {
-
-        final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
-        final PendingParameterModel pendingArguments = actionModel.getArgumentsAsParamModel();
-        final Can<ManagedObject> pendingArgumentsReadonly = pendingArguments.getParamValues();
+            @NonNull final FormPendingParamUiModel argsAndConsents,
+            @NonNull final Optional<AjaxRequestTarget> target) {
         
+        val argModel = argsAndConsents.getParamModel();
         
-        // could almost certainly simplify this... (used by visibility and usability checks)
-        final ObjectActionParameter actionParameter = action.getParameters().getElseFail(paramNumToPossiblyUpdate);
-        val targetAdapter = actionModel.getTargetAdapter();
-        val realTargetAdapter = action.realTargetAdapter(targetAdapter);
-
-        // check visibility
-        final Consent visibilityConsent = actionParameter
-                .isVisible(realTargetAdapter, pendingArgumentsReadonly, InteractionInitiatedBy.USER);
-
-        final boolean visibilityBefore = isVisible();
-        final boolean visibilityAfter = visibilityConsent.isAllowed();
+        // visibility
+        val visibilityConsent = argsAndConsents.getVisibilityConsent();
+        val visibilityBefore = isVisible();
+        val visibilityAfter = visibilityConsent.isAllowed();
         setVisible(visibilityAfter);
 
-
-        // check usability
-        final Consent usabilityConsent = actionParameter
-                .isUsable(realTargetAdapter, pendingArgumentsReadonly, InteractionInitiatedBy.USER);
-
-        final boolean usabilityBefore = isEnabled();
-        final boolean usabilityAfter = usabilityConsent.isAllowed();
+        // usability
+        val usabilityConsent = argsAndConsents.getUsabilityConsent();
+        val usabilityBefore = isEnabled();
+        val usabilityAfter = usabilityConsent.isAllowed();
         if(usabilityAfter) {
-            onEnabled(target);
+            onEditable(target);
         } else {
-            onDisabled(usabilityConsent.getReason(), target);
+            onNotEditable(usabilityConsent.getReason(), target);
         }
 
-        // even if now invisible or unusable, we recalculate args and ensure compatible
-        // (else can hit complicated edge cases with stale data when next re-enable/make visible)
-        final ScalarModel model = getModel();
-        val defaultIfAny = model.getDefault(pendingArgumentsReadonly);
-
-        val actionParameterMemento = new ActionParameterMemento(actionParameter);
-        val actionArgumentModel = actionModel.getArgumentModel(actionParameterMemento);
-
-        val pendingArg = pendingArgumentsReadonly.getElseFail(paramNumToPossiblyUpdate);
+        val paramValue = argModel.getValue();
+        val valueChanged = !Objects.equals(scalarModel.getObject(), paramValue); 
         
-        if (defaultIfAny != null) {
-            scalarModel.setObject(defaultIfAny);
-            scalarModel.setPendingAdapter(defaultIfAny);
-            actionArgumentModel.setObject(defaultIfAny);
-        } else {
-
-            boolean shouldBlankout = false;
-            
-            if(ManagedObject.isNullOrUnspecifiedOrEmpty(pendingArg)) {
-                if(scalarModel.hasChoices()) {
-                    // make sure the object is one of the choices, else blank it out.
-                    val choices = scalarModel
-                            .getChoices(pendingArgumentsReadonly);
-                    
-                    shouldBlankout = 
-                            ! isPartOfChoicesConsideringDependentArgs(scalarModel, pendingArg, choices);
-                    
-                } else if(scalarModel.hasAutoComplete()) {
-                    
-                    // poor man's implementation: blank-out in any case 
-                    shouldBlankout = true;
-                }
-            }
-            
-            if(shouldBlankout) {
+        if(valueChanged) {
+            if(ManagedObject.isNullOrUnspecifiedOrEmpty(paramValue)) {
                 scalarModel.setObject(null);
                 scalarModel.setPending(null);
-                actionArgumentModel.setObject(null);
-            }
-            
+            } else {
+                scalarModel.setObject(paramValue);
+                scalarModel.setPendingAdapter(paramValue);
+            }               
         }
+        
 
         // repaint the entire form if visibility has changed
         if (!visibilityBefore || !visibilityAfter) {
@@ -221,22 +191,9 @@ implements ScalarModelSubscriber2 {
         }
 
         // also repaint the param if its pending arg has changed.
-        return scalarModel.getObject() != pendingArg
+        return valueChanged
                 ? Repaint.PARAM_ONLY
                         : Repaint.NOTHING;
-    }
-
-    // blank out the parameter n based on dependent params 0 .. n-1
-    private boolean isPartOfChoicesConsideringDependentArgs(
-            ScalarModel scalarModel, 
-            ManagedObject pendingArg, 
-            Can<ManagedObject> choices) {
-        
-        val pendingValue = pendingArg.getPojo();
-        
-        return choices
-                .stream()
-                .anyMatch(choice->Objects.equals(pendingValue, choice.getPojo()));
     }
 
     public static class InlinePromptConfig {
@@ -311,19 +268,26 @@ implements ScalarModelSubscriber2 {
 
         final ScalarModel scalarModel = getModel();
 
-        final String disableReasonIfAny = scalarModel.whetherDisabled();
-        final boolean mustBeEditable = scalarModel.mustBeEditable();
-        if (disableReasonIfAny != null) {
-            if(mustBeEditable) {
-                onInitializeWhenViewMode();
-            } else {
-                onInitializeWhenDisabled(disableReasonIfAny);
-            }
+        if(postInit!=null) {
+            // ScalarParameterModel hack
+            postInit.run();
+            postInit=null;
         } else {
-            if (scalarModel.isViewMode()) {
-                onInitializeWhenViewMode();
-            } else {        
-                onInitializeWhenEnabled();
+        
+            final String disableReasonIfAny = scalarModel.whetherDisabled();
+            final boolean mustBeEditable = scalarModel.mustBeEditable();
+            if (disableReasonIfAny != null) {
+                if(mustBeEditable) {
+                    onInitializeNotEditable();
+                } else {
+                    onInitializeReadonly(disableReasonIfAny);
+                }
+            } else {
+                if (scalarModel.isViewMode()) {
+                    onInitializeNotEditable();
+                } else {        
+                    onInitializeEditable();
+                }
             }
         }
 
@@ -456,56 +420,34 @@ implements ScalarModelSubscriber2 {
 
     /**
      * The widget starts off in read-only, but should be possible to activate into edit mode.
-     *
-     * <p>
-     *     TODO: perhaps rename to 'notEditable'
-     * </p>
      */
-    protected void onInitializeWhenViewMode() {
+    protected void onInitializeNotEditable() {
     }
 
     /**
      * The widget starts off read-only, and CANNOT be activated into edit mode.
-     *
-     * <p>
-     *     TODO: perhaps rename to 'readOnly'
-     * </p>
      */
-    protected void onInitializeWhenDisabled(final String disableReason) {
+    protected void onInitializeReadonly(String disableReason) {
     }
 
     /**
      * The widget starts off immediately editable.
-     *
-     * <p>
-     *     TODO: perhaps rename to 'editable'.
-     * </p>
      */
-    protected void onInitializeWhenEnabled() {
+    protected void onInitializeEditable() {
     }
 
     /**
-     * The widget is no longer editable.
-     *
-     * <p>
-     *     TODO: perhaps rename to 'onNotEditable', because the semantics here aren't the same as 'onInitializeWhenDisabled'
-     *       (the latter is never editable).
-     * </p>
+     * The widget is no longer editable, but should be possible to activate into edit mode.
      */
-    protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
+    protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
     }
 
     /**
      * The widget should be made editable.
      *
-     * <p>
-     *     TODO: perhaps rename to 'onEditable'?
-     * </p>
      */
-    protected void onEnabled(final AjaxRequestTarget target) {
+    protected void onEditable(@NonNull final Optional<AjaxRequestTarget> target) {
     }
-
-
 
     private void addCssFromMetaModel() {
         final String cssForMetaModel = getModel().getCssClass();
@@ -518,7 +460,7 @@ implements ScalarModelSubscriber2 {
         if(facet != null) {
 
             val parentAdapter =
-                    model.getParentEntityModel().load();
+                    model.getParentUiModel().load();
 
             final String cssClass = facet.cssClass(parentAdapter);
             CssClassAppender.appendCssClassTo(this, cssClass);

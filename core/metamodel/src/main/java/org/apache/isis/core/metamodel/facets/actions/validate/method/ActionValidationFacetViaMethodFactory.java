@@ -23,10 +23,7 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.metamodel.commons.StringExtensions;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
@@ -35,24 +32,16 @@ import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFa
 import lombok.val;
 
 /**
- * Sets up {@link ActionValidationFacet}.
+ * Sets up {@link ActionValidationFacet} and {@link ActionParameterValidationFacetViaMethod}.
  */
-public class ActionValidationFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract  {
+public class ActionValidationFacetViaMethodFactory 
+extends MethodPrefixBasedFacetFactoryAbstract  {
+    
+    private static final String PREFIX = MethodLiteralConstants.VALIDATE_PREFIX;
 
-    private static final Can<String> PREFIXES = Can.ofSingleton(MethodLiteralConstants.VALIDATE_PREFIX);
-
-
-    /**
-     * Note that the {@link Facet}s registered are the generic ones from
-     * noa-architecture (where they exist)
-     */
     public ActionValidationFacetViaMethodFactory() {
-        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, Can.ofSingleton(PREFIX));
     }
-
-    // ///////////////////////////////////////////////////////
-    // Actions
-    // ///////////////////////////////////////////////////////
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
@@ -61,16 +50,17 @@ public class ActionValidationFacetViaMethodFactory extends MethodPrefixBasedFace
 
     private void handleValidateAllArgsMethod(final ProcessMethodContext processMethodContext) {
 
-        final Class<?> cls = processMethodContext.getCls();
-        final Method actionMethod = processMethodContext.getMethod();
-        final IdentifiedHolder facetHolder = processMethodContext.getFacetHolder();
+        val cls = processMethodContext.getCls();
+        val actionMethod = processMethodContext.getMethod();
+        val facetHolder = processMethodContext.getFacetHolder();
 
-        final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
-        final Class<?>[] paramTypes = actionMethod.getParameterTypes();
+        val paramTypes = actionMethod.getParameterTypes();
 
+        val namingConvention = PREFIX_BASED_NAMING.providerForAction(actionMethod, PREFIX);
+        
         final Method validateMethod = MethodFinderUtils.findMethod_returningText(
                 cls,
-                MethodLiteralConstants.VALIDATE_PREFIX + capitalizedName,
+                namingConvention.get(),
                 paramTypes);
         if (validateMethod == null) {
             return;
@@ -80,38 +70,11 @@ public class ActionValidationFacetViaMethodFactory extends MethodPrefixBasedFace
         final TranslationService translationService = getTranslationService();
         // sadness: same as in TranslationFactory
         final String translationContext = facetHolder.getIdentifier().toClassAndNameIdentityString();
-        final ActionValidationFacetViaMethod facet = new ActionValidationFacetViaMethod(validateMethod, translationService, translationContext, facetHolder);
+        final ActionValidationFacetViaMethod facet = 
+                new ActionValidationFacetViaMethod(validateMethod, translationService, translationContext, facetHolder);
         super.addFacet(facet);
     }
 
-    @Override
-    public void processParams(final ProcessParameterContext processParameterContext) {
-
-        final Class<?> cls = processParameterContext.getCls();
-        final Method actionMethod = processParameterContext.getMethod();
-        final int paramNum = processParameterContext.getParamNum();
-        val paramType = processParameterContext.getParameterType();
-        final IdentifiedHolder facetHolder = processParameterContext.getFacetHolder();
-
-        final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
-
-        final String validateName = MethodLiteralConstants.VALIDATE_PREFIX + paramNum + capitalizedName;
-        final Method validateMethod = MethodFinderUtils.findMethod_returningText(
-                cls,
-                validateName,
-                new Class<?>[]{paramType});
-        if (validateMethod == null) {
-            return;
-        }
-
-        processParameterContext.removeMethod(validateMethod);
-
-        final TranslationService translationService = getTranslationService();
-        // sadness: same as in TranslationFactory
-        final String translationContext = facetHolder.getIdentifier().toFullIdentityString();
-        final Facet facet = new ActionParameterValidationFacetViaMethod(validateMethod, translationService, translationContext, facetHolder);
-        super.addFacet(facet);
-    }
 
 
 }

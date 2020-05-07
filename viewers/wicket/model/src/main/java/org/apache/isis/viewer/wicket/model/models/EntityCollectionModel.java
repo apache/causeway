@@ -58,9 +58,11 @@ import org.apache.isis.viewer.wicket.model.models.Util.LowestCommonSuperclassFin
 
 import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
+import lombok.Getter;
+
 /**
- * Model representing a collection of entities, either {@link Type#STANDALONE
- * standalone} (eg result of invoking an action) or {@link Type#PARENTED
+ * Model representing a collection of entities, either {@link Variant#STANDALONE
+ * standalone} (eg result of invoking an action) or {@link Variant#PARENTED
  * parented} (contents of the collection of an entity).
  *
  * <p>
@@ -75,10 +77,22 @@ implements LinksProvider, UiHintContainer {
     private static final int PAGE_SIZE_DEFAULT_FOR_PARENTED = 12;
     private static final int PAGE_SIZE_DEFAULT_FOR_STANDALONE = 25;
 
-    // -- TOP LEVEL FACTORIES
+    // -- FACTORIES
 
-    public static EntityCollectionModel createParented(EntityModel modelWithCollectionLayoutMetadata) {
-        return parentedOf(modelWithCollectionLayoutMetadata);
+    public static EntityCollectionModel createParented(EntityModel entityModel) {
+
+        final OneToManyAssociation collection = collectionFor(entityModel);
+        final Class<?> typeOf = forName(collection.getSpecification());
+        final int pageSize = pageSize(collection.getFacet(PagedFacet.class), PAGE_SIZE_DEFAULT_FOR_PARENTED);
+        final SortedByFacet sortedByFacet = collection.getFacet(SortedByFacet.class);
+
+        final EntityCollectionModel colModel = new EntityCollectionModel(
+                entityModel.getCommonContext(), Variant.PARENTED, entityModel, typeOf, pageSize);
+
+        colModel.collectionMemento = new CollectionMemento(collection);
+        colModel.sortedBy = sortedByFacet != null ? sortedByFacet.value(): null;
+        
+        return colModel;
     }
 
     public static EntityCollectionModel createStandalone(
@@ -94,6 +108,7 @@ implements LinksProvider, UiHintContainer {
         final ObjectMementoService mementoService = model.getMementoService();
 
         final List<ObjectMemento> mementoList = streamElementsOf(collectionAsAdapter) // pojos
+                .filter(_NullSafe::isPresent)
                 .peek(lowestCommonSuperclassFinder::collect)
                 .map(mementoService::mementoForPojo)
                 .collect(Collectors.toList());
@@ -102,7 +117,7 @@ implements LinksProvider, UiHintContainer {
 
         final ObjectSpecification elementSpec = lowestCommonSuperclassFinder.getLowestCommonSuperclass()
                 .map(specificationLoader::loadSpecification)
-                .orElse(collectionAsAdapter.getSpecification().getElementSpecification());
+                .orElseGet(()->collectionAsAdapter.getSpecification().getElementSpecification().orElse(null));
 
         final Class<?> elementType;
         int pageSize = PAGE_SIZE_DEFAULT_FOR_STANDALONE;
@@ -113,47 +128,18 @@ implements LinksProvider, UiHintContainer {
             elementType = Object.class;
         }
 
-        return standaloneOf(model.getCommonContext(), elementType, mementoList, pageSize);
-    }
-
-    // -- LOW LEVEL FACTORIES (PRIVATE)
-
-    private static EntityCollectionModel parentedOf(EntityModel entityModel) {
-
-        final Type type = Type.PARENTED;
-
-        final OneToManyAssociation collection = collectionFor(entityModel);
-        final Class<?> typeOf = forName(collection.getSpecification());
-        final int pageSize = pageSize(collection.getFacet(PagedFacet.class), PAGE_SIZE_DEFAULT_FOR_PARENTED);
-        final SortedByFacet sortedByFacet = collection.getFacet(SortedByFacet.class);
-
-        final EntityCollectionModel colModel = new EntityCollectionModel(
-                entityModel.getCommonContext(), type, entityModel, typeOf, pageSize);
-
-        colModel.collectionMemento = new CollectionMemento(collection);
-        colModel.sortedBy = sortedByFacet != null ? sortedByFacet.value(): null;
-        
-        return colModel;
-    }
-
-    private static EntityCollectionModel standaloneOf(
-            IsisWebAppCommonContext commonContext, 
-            Class<?> typeOf, 
-            List<ObjectMemento> mementoList, 
-            int pageSize) {
-
-        final Type type = Type.STANDALONE;
         final EntityModel entityModel = null;
 
-        final EntityCollectionModel colModel = new EntityCollectionModel(commonContext, type, entityModel, typeOf, pageSize);
+        final EntityCollectionModel colModel = new EntityCollectionModel(
+                model.getCommonContext(), Variant.STANDALONE, entityModel, elementType, pageSize);
         colModel.mementoList = mementoList;
         return colModel;
-
+        
     }
 
     // -- VARIANTS
 
-    public enum Type {
+    public enum Variant {
         /**
          * A simple list of object mementos, eg the result of invoking an action
          *
@@ -295,7 +281,7 @@ implements LinksProvider, UiHintContainer {
      * that generated this {@link EntityCollectionModel}.
      *
      * <p>
-     * Populated only for {@link Type#STANDALONE standalone} collections.
+     * Populated only for {@link Variant#STANDALONE standalone} collections.
      *
      * @see #setActionHint(ActionModel)
      */
@@ -303,7 +289,7 @@ implements LinksProvider, UiHintContainer {
         return actionModelHint;
     }
     /**
-     * Called only for {@link Type#STANDALONE standalone} collections.
+     * Called only for {@link Variant#STANDALONE standalone} collections.
      *
      * @see #getActionModelHint()
      */
@@ -311,33 +297,29 @@ implements LinksProvider, UiHintContainer {
         this.actionModelHint = actionModelHint;
     }
 
-    private final Type type;
-
-    public Type getType() {
-        return type;
-    }
-
+    @Getter private final Variant variant;
+    
     private final Class<?> typeOf;
     private transient ObjectSpecification typeOfSpec;
 
     /**
-     * Populated only if {@link Type#STANDALONE}.
+     * Populated only if {@link Variant#STANDALONE}.
      */
     private List<ObjectMemento> mementoList;
 
     /**
-     * Populated only if {@link Type#STANDALONE}.
+     * Populated only if {@link Variant#STANDALONE}.
      */
     private Map<String, ObjectMemento> toggledMementos;
 
     /**
-     * Populated only if {@link Type#PARENTED}.
+     * Populated only if {@link Variant#PARENTED}.
      */
     private final EntityModel entityModel;
 
 
     /**
-     * Populated only if {@link Type#PARENTED}.
+     * Populated only if {@link Variant#PARENTED}.
      */
     private CollectionMemento collectionMemento;
 
@@ -349,24 +331,24 @@ implements LinksProvider, UiHintContainer {
     private List<LinkAndLabel> linkAndLabels = _Lists.newArrayList();
 
     /**
-     * Optionally populated only if {@link Type#PARENTED}.
+     * Optionally populated only if {@link Variant#PARENTED}.
      */
     private Class<? extends Comparator<?>> sortedBy;
 
     /**
-     * Optionally populated, only if {@link Type#STANDALONE} (ie called from an action).
+     * Optionally populated, only if {@link Variant#STANDALONE} (ie called from an action).
      */
     private ActionModel actionModelHint;
 
     private EntityCollectionModel(
             IsisWebAppCommonContext commonContext,
-            Type type, 
+            Variant type, 
             EntityModel entityModel, 
             Class<?> typeOf, 
             int pageSize) {
 
         super(commonContext);
-        this.type = type;
+        this.variant = type;
         this.entityModel = entityModel;
         this.typeOf = typeOf;
         this.pageSize = pageSize;
@@ -401,11 +383,11 @@ implements LinksProvider, UiHintContainer {
     }
 
     public boolean isParented() {
-        return type == Type.PARENTED;
+        return variant == Variant.PARENTED;
     }
 
     public boolean isStandalone() {
-        return type == Type.STANDALONE;
+        return variant == Variant.STANDALONE;
     }
 
     public int getPageSize() {
@@ -421,15 +403,15 @@ implements LinksProvider, UiHintContainer {
      * (eg 'Customers').
      */
     public String getName() {
-        return type.getName(this);
+        return variant.getName(this);
     }
 
     public int getCount() {
-        return this.type.getCount(this);
+        return this.variant.getCount(this);
     }
 
     /**
-     * Populated only if {@link Type#PARENTED}.
+     * Populated only if {@link Variant#PARENTED}.
      */
     public CollectionLayoutData getLayoutData() {
         return entityModel != null
@@ -439,7 +421,7 @@ implements LinksProvider, UiHintContainer {
 
     @Override
     protected List<ManagedObject> load() {
-        return type.load(this);
+        return variant.load(this);
     }
 
     public ObjectSpecification getTypeOfSpecification() {
@@ -452,7 +434,7 @@ implements LinksProvider, UiHintContainer {
     @Override
     public void setObject(List<ManagedObject> list) {
         super.setObject(list);
-        type.setObject(this, list);
+        variant.setObject(this, list);
     }
 
     /**
@@ -465,21 +447,21 @@ implements LinksProvider, UiHintContainer {
     }
 
     /**
-     * Populated only if {@link Type#PARENTED}.
+     * Populated only if {@link Variant#PARENTED}.
      */
     public EntityModel getEntityModel() {
         return entityModel;
     }
 
     /**
-     * Populated only if {@link Type#PARENTED}.
+     * Populated only if {@link Variant#PARENTED}.
      */
     public ObjectMemento getParentObjectAdapterMemento() {
         return entityModel != null? entityModel.getObjectAdapterMemento(): null;
     }
 
     /**
-     * Populated only if {@link Type#PARENTED}.
+     * Populated only if {@link Variant#PARENTED}.
      */
     public CollectionMemento getCollectionMemento() {
         return collectionMemento;
@@ -523,8 +505,10 @@ implements LinksProvider, UiHintContainer {
     }
 
     public EntityCollectionModel asDummy() {
-        return standaloneOf(
-                super.getCommonContext(), typeOf, Collections.<ObjectMemento>emptyList(), pageSize);
+        final EntityCollectionModel dummy = new EntityCollectionModel(
+                super.getCommonContext(), Variant.STANDALONE, null, typeOf, pageSize);
+        dummy.mementoList = Collections.<ObjectMemento>emptyList();
+        return dummy;
     }
 
     // //////////////////////////////////////

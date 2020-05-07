@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -111,7 +112,7 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
         
         final ObjectAssociation sortProperty = lookupAssociationFor(sort);
         if(sortProperty != null) {
-            Collections.sort(copy, ManagedObject.CompareUtil.orderingBy(sortProperty, sort.isAscending()));
+            Collections.sort(copy, ManagedObjects.orderingBy(sortProperty, sort.isAscending()));
         }
         
         return copy;

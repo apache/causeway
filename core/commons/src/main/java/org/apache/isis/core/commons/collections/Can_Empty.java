@@ -66,6 +66,11 @@ final class Can_Empty<T> implements Can<T> {
     public Optional<T> get(int elementIndex) {
         return Optional.empty();
     }
+    
+    @Override
+    public boolean contains(T element) {
+        return false;
+    }
 
     @Override
     public int size() {
@@ -136,5 +141,7 @@ final class Can_Empty<T> implements Can<T> {
         val array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, 0));        
         return array;
     }
+
+
 
 }

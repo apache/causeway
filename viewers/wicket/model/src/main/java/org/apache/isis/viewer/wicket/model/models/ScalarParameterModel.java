@@ -20,69 +20,62 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.function.BiFunction;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
-import org.apache.isis.core.metamodel.facets.value.string.StringValueSemanticsProvider;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
+import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
-import lombok.val;
 
 public class ScalarParameterModel extends ScalarModel
-implements ActionArgumentModel {
+implements ParameterUiModel {
 
     private static final long serialVersionUID = 1L;
     
-    @Getter private final ActionParameterMemento parameterMemento;
-    /**
-     * The initial call of choicesXxx() for any given scalar argument needs the current values
-     * of all args (possibly as initialized through a defaultNXxx().
-     * @implNote transient because only temporary hint.
-     */
-    @Getter @Setter
-    private transient Can<ManagedObject> actionArgsHint;
+    private final ActionParameterMemento paramMemento;
+    
+    @Getter(onMethod = @__(@Override)) 
+    @Setter(onMethod = @__(@Override))
+    private transient PendingParameterModel pendingParameterModel;
 
     /**
      * Creates a model representing an action parameter of an action of a parent
      * object, with the {@link #getObject() value of this model} to be default
      * value (if any) of that action parameter.
      */
-    public ScalarParameterModel(EntityModel parentEntityModel, ActionParameterMemento apm) {
-        super(parentEntityModel, apm);
-        this.parameterMemento = apm;
+    public ScalarParameterModel(EntityModel parentEntityModel, ActionParameterMemento paramMemento) {
+        super(parentEntityModel, paramMemento);
+        this.paramMemento = paramMemento;
     }
     
-
+    private transient ObjectActionParameter actionParameter;
+    
     @Override
-    public String getName() {
-        return getParameterMemento().getActionParameter(getSpecificationLoader()).getName();
+    public ObjectActionParameter getMetaModel() {
+        if(actionParameter==null) {
+            actionParameter = paramMemento.getActionParameter(getSpecificationLoader()); 
+        }
+        return actionParameter;  
     }
 
     @Override
     public ObjectSpecification getScalarTypeSpec() {
-        return getParameterMemento().getSpecification(getSpecificationLoader());
+        return paramMemento.getSpecification(getSpecificationLoader());
     }
 
     @Override
     public String getIdentifier() {
-        return "" + getParameterMemento().getNumber();
+        return "" + getNumber();
     }
 
     @Override
@@ -92,8 +85,7 @@ implements ActionArgumentModel {
             // shouldn't happen
             return null;
         }
-        final ObjectActionParameter actionParameter = getParameterMemento()
-                .getActionParameter(getSpecificationLoader());
+        final ObjectActionParameter actionParameter = getMetaModel();
         final ObjectAction action = actionParameter.getAction();
         final String objectSpecId = action.getOnType().getSpecId().asString().replace(".", "-");
         final String parmId = actionParameter.getId();
@@ -115,11 +107,9 @@ implements ActionArgumentModel {
 
     @Override
     public String parseAndValidate(final String proposedPojoAsStr) {
-        final ObjectActionParameter parameter = getParameterMemento().getActionParameter(
-                getSpecificationLoader());
+        final ObjectActionParameter parameter = getMetaModel();
         try {
-            //XXX lombok issue, no val
-            ManagedObject parentAdapter = getParentEntityModel().load();
+            ManagedObject parentAdapter = getParentUiModel().load();
             final String invalidReasonIfAny = parameter.isValid(parentAdapter, proposedPojoAsStr,
                     InteractionInitiatedBy.USER
                     );
@@ -131,11 +121,9 @@ implements ActionArgumentModel {
 
     @Override
     public String validate(final ManagedObject proposedAdapter) {
-        final ObjectActionParameter parameter = getParameterMemento().getActionParameter(
-                getSpecificationLoader());
+        final ObjectActionParameter parameter = getMetaModel();
         try {
-            //XXX lombok issue, no val
-            ManagedObject parentAdapter = getParentEntityModel().load();
+            ManagedObject parentAdapter = getParentUiModel().load();
             final String invalidReasonIfAny = parameter.isValid(parentAdapter, proposedAdapter.getPojo(),
                     InteractionInitiatedBy.USER
                     );
@@ -147,127 +135,22 @@ implements ActionArgumentModel {
 
     @Override
     public boolean isRequired() {
-        final FacetHolder facetHolder = getParameterMemento().getActionParameter(
-                getSpecificationLoader());
-        return isRequired(facetHolder);
+        return isRequired(getMetaModel());
     }
 
     @Override
     public <T extends Facet> T getFacet(final Class<T> facetType) {
-        final FacetHolder facetHolder = getParameterMemento().getActionParameter(
-                getSpecificationLoader());
-        return facetHolder.getFacet(facetType);
+        return getMetaModel().getFacet(facetType);
     }
-
-    @Override
-    public ManagedObject getDefault(
-            @NonNull final Can<ManagedObject> pendingArgs) {
-        
-        return withPendingParamsDo(pendingArgs, (pendingParamsModel, actionParameter)->
-        actionParameter.getDefault(
-                pendingParamsModel));
-    }
-
-    @Override
-    public boolean hasChoices() {
-        final ActionParameterMemento parameterMemento = getParameterMemento();
-        final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(getSpecificationLoader());
-        return actionParameter.hasChoices();
-    }
-    @Override
-    public Can<ManagedObject> getChoices(
-            @NonNull final Can<ManagedObject> pendingArgs) {
-        
-        return withPendingParamsDo(pendingArgs, (pendingParamsModel, actionParameter)->
-        actionParameter.getChoices(
-                pendingParamsModel,
-                InteractionInitiatedBy.USER));
-        
-    }
-
-    @Override
-    public boolean hasAutoComplete() {
-        final ActionParameterMemento parameterMemento = getParameterMemento();
-        final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(getSpecificationLoader());
-        return actionParameter.hasAutoComplete();
-    }
-    @Override
-    public Can<ManagedObject> getAutoComplete(
-            @NonNull final Can<ManagedObject> pendingArgs,
-            final String searchArg) {
-        
-        return withPendingParamsDo(pendingArgs, (pendingParamsModel, actionParameter)->
-        actionParameter.getAutoComplete(
-                pendingParamsModel,
-                searchArg,
-                InteractionInitiatedBy.USER)); 
-    }
-
-
     
     @Override
-    public int getAutoCompleteOrChoicesMinLength() {
-        if (hasAutoComplete()) {
-            final ActionParameterMemento parameterMemento = getParameterMemento();
-            final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(
-                    getSpecificationLoader());
-            return actionParameter.getAutoCompleteMinLength();
-        } else {
-            return 0;
-        }
-    }
-
-    @Override
-    public String getDescribedAs() {
-        final ActionParameterMemento parameterMemento = getParameterMemento();
-        final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(getSpecificationLoader());
-        return actionParameter.getDescription();
-    }
-
-    @Override
-    public Integer getLength() {
-        final ActionParameterMemento parameterMemento = getParameterMemento();
-        final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(getSpecificationLoader());
-        final BigDecimalValueFacet facet = actionParameter.getFacet(BigDecimalValueFacet.class);
-        return facet != null? facet.getPrecision(): null;
-    }
-
-    @Override
-    public Integer getScale() {
-        final ActionParameterMemento parameterMemento = getParameterMemento();
-        final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(getSpecificationLoader());
-        final BigDecimalValueFacet facet = actionParameter.getFacet(BigDecimalValueFacet.class);
-        return facet != null? facet.getScale(): null;
-    }
-
-    @Override
-    public int getTypicalLength() {
-        final ActionParameterMemento parameterMemento = getParameterMemento();
-        final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(getSpecificationLoader());
-        final TypicalLengthFacet facet = actionParameter.getFacet(TypicalLengthFacet.class);
-        return facet != null? facet.value() : StringValueSemanticsProvider.TYPICAL_LENGTH;
-    }
-
-
-    @Override
-    public String getFileAccept() {
-        final ActionParameterMemento parameterMemento = getParameterMemento();
-        final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(getSpecificationLoader());
-        final FileAcceptFacet facet = actionParameter.getFacet(FileAcceptFacet.class);
-        return facet != null? facet.value(): null;
-    }
-
-    @Override
     public ManagedObject load() {
-        final ActionParameterMemento parameterMemento = getParameterMemento();
-        final ObjectActionParameter actionParameter = parameterMemento
-                .getActionParameter(getSpecificationLoader());
         final ManagedObject objectAdapter = loadFromSuper();
 
         if(objectAdapter != null) {
             return objectAdapter;
         }
-        if(actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR) {
+        if(getMetaModel().getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR) {
             return objectAdapter;
         }
 
@@ -288,31 +171,24 @@ implements ActionArgumentModel {
     }
 
     @Override
-    public boolean isCollection() {
-        final ActionParameterMemento parameterMemento = getParameterMemento();
-        final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(getSpecificationLoader());
-        return actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION;
-    }
-
-    @Override
     public String toStringOf() {
-        return getName() + ": " + getParameterMemento().toString();
-    }
-
-    // pending args helper
-    private <T> T withPendingParamsDo(
-            @NonNull final Can<ManagedObject> pendingArgs,
-            final BiFunction<PendingParameterModel, ObjectActionParameter, T> function) {
-        val parameterMemento = getParameterMemento();
-        val actionParameter = parameterMemento.getActionParameter(getSpecificationLoader());
-        val actionOwner = getParentEntityModel().load();
-        val pendingParamsModel = actionParameter.getAction().newPendingParameterModelHead(actionOwner)
-                .model(pendingArgs);
-        return function.apply(pendingParamsModel, actionParameter);
+        return getName() + ": " + paramMemento.toString();
     }
     
     @Override
     protected List<ObjectAction> calcAssociatedActions() {
         return Collections.emptyList();
     }
+
+    @Override
+    public ManagedObject getValue() {
+        return getObject();
+    }
+
+    @Override
+    public void setValue(ManagedObject paramValue) {
+        super.setObject(paramValue);
+    }
+
+    
 }

@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 
+import java.util.Optional;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -31,9 +33,7 @@ import org.apache.wicket.model.Model;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Settings;
 
-import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -194,22 +194,22 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
     // //////////////////////////////////////
 
     @Override
-    protected void onInitializeWhenEnabled() {
-        super.onInitializeWhenEnabled();
+    protected void onInitializeEditable() {
+        super.onInitializeEditable();
         entityLink.setEnabled(true);
         syncWithInput();
     }
 
     @Override
-    protected void onInitializeWhenViewMode() {
-        super.onInitializeWhenViewMode();
+    protected void onInitializeNotEditable() {
+        super.onInitializeNotEditable();
         entityLink.setEnabled(false);
         syncWithInput();
     }
 
     @Override
-    protected void onInitializeWhenDisabled(final String disableReason) {
-        super.onInitializeWhenDisabled(disableReason);
+    protected void onInitializeReadonly(final String disableReason) {
+        super.onInitializeReadonly(disableReason);
         syncWithInput();
         val entityLinkModel = (EntityModel) entityLink.getModel();
         entityLinkModel.toViewMode();
@@ -218,16 +218,16 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
     }
 
     @Override
-    protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
-        super.onDisabled(disableReason, target);
+    protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
+        super.onNotEditable(disableReason, target);
 
         entityLink.setEnabled(false);
         entityLink.add(new AttributeModifier("title", Model.of(disableReason)));
     }
 
     @Override
-    protected void onEnabled(final AjaxRequestTarget target) {
-        super.onEnabled(target);
+    protected void onEditable(final Optional<AjaxRequestTarget> target) {
+        super.onEditable(target);
 
         entityLink.setEnabled(true);
         entityLink.add(new AttributeModifier("title", Model.of("")));
@@ -336,21 +336,20 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
     // //////////////////////////////////////
 
     @Override
-    protected ChoiceProvider<ObjectMemento> buildChoiceProvider(Can<ManagedObject> pendingArgs) {
+    protected ChoiceProvider<ObjectMemento> buildChoiceProvider() {
         
         val commonContext = super.getCommonContext();
         
-        if (getModel().hasChoices()) {
-            val choices = getModel().getChoices(pendingArgs);
+        val scalarModel = getModel();
+        
+        if (scalarModel.hasChoices()) {
+            val choices = scalarModel.getChoices();
             val choiceMementos = choices.map(commonContext::mementoForParameter);
-            return new ObjectAdapterMementoProviderForReferenceChoices(getModel(), choiceMementos);
+            return new ObjectAdapterMementoProviderForReferenceChoices(scalarModel, choiceMementos);
         }
 
-        if(getModel().hasAutoComplete()) {
-            val autoCompleteMementos = pendingArgs
-                    .map(commonContext::mementoForParameter);
-            return new ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(
-                    getModel(), autoCompleteMementos);
+        if(scalarModel.hasAutoComplete()) {
+            return new ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(scalarModel);
         }
 
         return new ObjectAdapterMementoProviderForReferenceObjectAutoComplete(getModel());

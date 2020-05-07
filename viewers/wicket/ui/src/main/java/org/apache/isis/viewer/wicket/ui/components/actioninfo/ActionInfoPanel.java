@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.actioninfo;
 
 import org.apache.wicket.markup.html.basic.Label;
 
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
@@ -41,7 +40,7 @@ public class ActionInfoPanel extends PanelAbstract<ActionModel> {
         super(id, actionModel);
 
         val targetAdapter = getModel().getTargetAdapter();
-        final ObjectAction objectAction = getModel().getActionMemento().getAction(getModel().getSpecificationLoader());
+        val objectAction = getModel().getAction();
 
         // TODO: render instead as links (providing isn't a service; provide a
         // component for this?)

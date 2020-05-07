@@ -75,7 +75,7 @@ import demoapp.utils.LibraryPreloadingService;
     IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,
 
     // CORS
-    IsisModuleExtCorsImpl.class,
+    //IsisModuleExtCorsImpl.class,
 
     // Security Manager Extension (secman)
     IsisModuleExtSecmanModel.class,

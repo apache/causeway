@@ -67,6 +67,14 @@ final class Can_Multiple<T> implements Can<T> {
     }
     
     @Override
+    public boolean contains(T element) {
+        if(element==null) {
+            return false; // an optimization: Can's dont't contain null
+        }
+        return elements.contains(element);
+    }
+    
+    @Override
     public Optional<T> get(int elementIndex) {
         // we do an index out of bounds check ourselves, in order to prevent any stack-traces, 
         // that pollute the heap

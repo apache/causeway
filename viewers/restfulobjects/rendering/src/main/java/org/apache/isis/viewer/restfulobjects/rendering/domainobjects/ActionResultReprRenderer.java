@@ -143,7 +143,7 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
                     new ListReprRenderer(resourceContext, null, representation).withElementRel(Rel.ELEMENT);
             listReprRenderer.with(collectionAdapters)
             .withReturnType(action.getReturnType())
-            .withElementType(returnedAdapter.getElementSpecification());
+            .withElementType(returnedAdapter.getElementSpecification().orElse(null));
 
             return listReprRenderer;
 

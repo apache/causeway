@@ -331,8 +331,8 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public ObjectSpecification getElementSpecification() {
-        return elementSpecification;
+    public Optional<ObjectSpecification> getElementSpecification() {
+        return Optional.ofNullable(elementSpecification);
     }
 
     @Override

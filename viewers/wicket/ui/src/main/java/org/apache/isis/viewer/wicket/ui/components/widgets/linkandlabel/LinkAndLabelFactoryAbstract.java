@@ -95,7 +95,7 @@ implements Serializable {
             final ObjectAction action,
             final ToggledMementosProvider toggledMementosProviderIfAny) {
 
-        val actionModel = ActionModel.create(this.targetEntityModel, action);
+        val actionModel = ActionModel.of(this.targetEntityModel, action);
         val commonContext = actionModel.getCommonContext();
 
         final ActionLink link = new ActionLink(commonContext, linkId, actionModel, action) {
@@ -182,7 +182,7 @@ implements Serializable {
                     private static final long serialVersionUID = 1L;
                     @Override
                     public String getObject() {
-                        final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
+                        final ObjectAction action = actionModel.getAction();
                         return action.getName();
                     }
                 });
@@ -195,7 +195,7 @@ implements Serializable {
                     final ActionPromptWithExtraContent promptWithExtraContent =
                             (ActionPromptWithExtraContent) prompt;
 
-                    final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
+                    final ObjectAction action = actionModel.getAction();
                     if(action instanceof ObjectActionMixedIn) {
                         final ObjectActionMixedIn actionMixedIn = (ObjectActionMixedIn) action;
                         final ObjectSpecification mixinSpec = actionMixedIn.getMixinType();

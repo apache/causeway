@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -32,18 +33,16 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.wicketstuff.select2.ChoiceProvider;
 
-import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
-import org.apache.isis.viewer.wicket.model.models.ActionModel;
+import org.apache.isis.viewer.common.model.action.form.FormPendingParamUiModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.models.ScalarParameterModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
+import lombok.NonNull;
 import lombok.val;
 
 public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
@@ -59,10 +58,7 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
 
     protected Select2 createSelect2(final String id) {
         final Select2 select2 = Select2.createSelect2(id, scalarModel);
-        setProviderAndCurrAndPending(select2, 
-                (scalarModel instanceof ScalarParameterModel)
-                    ? ((ScalarParameterModel)scalarModel).getActionArgsHint()
-                    : null);
+        setProviderAndCurrAndPending(select2);
         select2.setRequired(scalarModel.isRequired());
         return select2;
     }
@@ -117,9 +113,10 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
     /**
      * sets up the choices, also ensuring that any currently held value is compatible.
      */
-    private void setProviderAndCurrAndPending(Select2 select2, Can<ManagedObject> pendingArgs) {
+    private void setProviderAndCurrAndPending(
+            final Select2 select2) {
 
-        final ChoiceProvider<ObjectMemento> choiceProvider = buildChoiceProvider(pendingArgs);
+        final ChoiceProvider<ObjectMemento> choiceProvider = buildChoiceProvider();
 
         select2.setProvider(choiceProvider);
         getModel().clearPending();
@@ -134,12 +131,12 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
     }
 
     /**
-     * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, List<ManagedObject>)})
+     * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2)})
      */
-    protected abstract ChoiceProvider<ObjectMemento> buildChoiceProvider(Can<ManagedObject> pendingArgs);
+    protected abstract ChoiceProvider<ObjectMemento> buildChoiceProvider();
 
     /**
-     * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, List<ManagedObject>)})
+     * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2)})
      */
     protected abstract void syncIfNull(Select2 select2);
 
@@ -159,12 +156,12 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
     }
 
     @Override
-    protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
+    protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
         setEnabled(false);
     }
 
     @Override
-    protected void onEnabled(final AjaxRequestTarget target) {
+    protected void onEditable(final Optional<AjaxRequestTarget> target) {
         setEnabled(true);
 
     }
@@ -180,16 +177,11 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
      */
     @Override
     public Repaint updateIfNecessary(
-            final ActionModel actionModel,
-            final int paramNumUpdated,
-            final int paramNumToPossiblyUpdate,
-            final AjaxRequestTarget target) {
+            @NonNull final FormPendingParamUiModel argAndConsents,
+            @NonNull final Optional<AjaxRequestTarget> target) {
 
-        final Can<ManagedObject> arguments = actionModel.getArgumentsAsImmutable();
-
-        val repaint = super.updateIfNecessary(actionModel, paramNumUpdated, paramNumToPossiblyUpdate, target);
-
-        final boolean choicesUpdated = updateChoices(arguments);
+        val repaint = super.updateIfNecessary(argAndConsents, target);
+        final boolean choicesUpdated = updateChoices();
 
         if (repaint == Repaint.NOTHING) {
             if (choicesUpdated) {
@@ -202,12 +194,11 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
         }
     }
 
-    private boolean updateChoices(Can<ManagedObject> pendingArgs) {
+    private boolean updateChoices() {
         if (select2 == null) {
             return false;
         }
-        setProviderAndCurrAndPending(select2, pendingArgs);
-
+        setProviderAndCurrAndPending(select2);
         return true;
     }
 

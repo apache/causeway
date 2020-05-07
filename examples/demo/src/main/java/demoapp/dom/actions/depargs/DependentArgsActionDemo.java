@@ -90,7 +90,6 @@ public class DependentArgsActionDemo extends DemoStub {
         items.add(DemoItem.of("third", Parity.ODD));
         items.add(DemoItem.of("last", Parity.EVEN));
     }
-    
 
 }
 

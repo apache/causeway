@@ -39,6 +39,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.base._With;
 
@@ -66,6 +67,10 @@ public final class _Collections {
      */
     public static boolean isCollectionType(@Nullable final Class<?> cls) {
         return cls!=null ? java.util.Collection.class.isAssignableFrom(cls) : false;
+    }
+    
+    public static boolean isCanType(@Nullable final Class<?> cls) {
+        return cls!=null ? Can.class.isAssignableFrom(cls) : false;
     }
 
     /**
@@ -269,7 +274,7 @@ public final class _Collections {
             return null;
         }
 
-        if(!isCollectionType(collectionType)) {
+        if(!isCollectionType(collectionType) && !isCanType(collectionType)) {
             return null;
         }
 

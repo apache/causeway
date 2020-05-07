@@ -292,7 +292,7 @@ implements CollectionCountProvider {
         
         return new ObjectAdapterPropertyColumn(
                 commonContext,
-                getModel().getType(), 
+                getModel().getVariant(), 
                 Model.of(property.getName()), 
                 property.getId(), 
                 property.getId(), 

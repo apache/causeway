@@ -40,13 +40,14 @@ import org.apache.wicket.util.string.AppendingStringBuffer;
 
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.viewer.common.model.HasParentUiModel;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
-import org.apache.isis.viewer.wicket.model.models.ParentEntityModelProvider;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber2;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
@@ -57,7 +58,7 @@ import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 
 public abstract class PromptFormAbstract<T extends BookmarkableModel<ManagedObject>
-& ParentEntityModelProvider
+& HasParentUiModel<EntityModel>
 & IModel<ManagedObject>
 & FormExecutorContext>
 extends FormAbstract<ManagedObject>

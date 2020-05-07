@@ -24,6 +24,11 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
 public class InlinePromptContext implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -32,29 +37,10 @@ public class InlinePromptContext implements Serializable {
     private final WebMarkupContainer scalarIfRegularInlinePromptForm;
     private final MarkupContainer scalarTypeContainer;
 
-    public InlinePromptContext(
-            final Component scalarIfRegular,
-            final WebMarkupContainer scalarIfRegularInlinePromptForm,
-            final MarkupContainer scalarTypeContainer) {
-        this.scalarIfRegular = scalarIfRegular;
-        this.scalarIfRegularInlinePromptForm = scalarIfRegularInlinePromptForm;
-        this.scalarTypeContainer = scalarTypeContainer;
-    }
-
-    public Component getScalarIfRegular() {
-        return scalarIfRegular;
-    }
-
-    public WebMarkupContainer getScalarIfRegularInlinePromptForm() {
-        return scalarIfRegularInlinePromptForm;
-    }
-
     public void onCancel() {
         scalarIfRegular.setVisible(true);
         scalarIfRegularInlinePromptForm.setVisible(false);
     }
 
-    public MarkupContainer getScalarTypeContainer() {
-        return scalarTypeContainer;
-    }
+
 }

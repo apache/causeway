@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -69,6 +70,11 @@ final class Can_Singleton<T> implements Can<T> {
     @Override
     public int size() {
         return 1;
+    }
+    
+    @Override
+    public boolean contains(T element) {
+        return Objects.equals(this.element, element);
     }
 
     @Override

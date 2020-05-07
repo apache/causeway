@@ -34,11 +34,11 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 import lombok.Getter;
 import lombok.val;
@@ -111,7 +111,7 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
     public ObjectAction getObjectAction() {
         return objectAction != null
                 ? objectAction
-                        : (objectAction = getActionModel().getActionMemento().getAction(commonContext.getSpecificationLoader()));
+                        : (objectAction = getActionModel().getAction());
     }
 
 
@@ -261,8 +261,7 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
     }
 
     private static boolean isIdempotentOrCachable(ActionModel actionModel) {
-        final ObjectAction objectAction = actionModel.getActionMemento()
-                .getAction(actionModel.getSpecificationLoader());
+        val objectAction = actionModel.getAction();
         return ObjectAction.Util.isIdempotentOrCachable(objectAction);
     }
 
