@@ -16,29 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.model.models;
+package org.apache.isis.viewer.common.model.action.form;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 
-public interface ActionArgumentModel {
+public interface ActionParameterUiModel {
 
-    ObjectActionParameter getActionParameter();
-    
-    String getCssClass();
+    /** param meta model */
+    ObjectActionParameter getMetaModel();
     
     /** param value */
     ManagedObject getValue();
     
     /** param value */
     void setValue(ManagedObject paramValue);
+    
+    String getCssClass();
 
     // -- SHORTCUTS
     
     /** param index */
     default int getNumber() {
-        return getActionParameter().getNumber();
+        return getMetaModel().getNumber();
     }
 
     // -- DEPRECATIONS

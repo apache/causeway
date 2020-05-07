@@ -58,6 +58,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModelHead;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.viewer.common.model.action.form.ActionParameterUiModel;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 
 import lombok.Value;
@@ -460,7 +461,7 @@ implements FormExecutorContext {
     @Value(staticConstructor = "of")
     public static class ActionArgumentModelAndConsents {
         final PendingParameterModel pendingArgs;
-        final ActionArgumentModel paramModel;
+        final ActionParameterUiModel paramModel;
         final Consent visibilityConsent;
         final Consent usabilityConsent;
     }
@@ -478,7 +479,7 @@ implements FormExecutorContext {
 
             actionArgumentModel.setActionArgsHint(pendingArgs);
 
-            val objectActionParamter = actionArgumentModel.getActionParameter();
+            val objectActionParamter = actionArgumentModel.getMetaModel();
 
             // visibility
             val visibilityConsent = objectActionParamter
@@ -504,7 +505,7 @@ implements FormExecutorContext {
         .skip(skipCount)
         .forEach(actionArgumentModel->{
 
-            val actionParameter = actionArgumentModel.getActionParameter();
+            val actionParameter = actionArgumentModel.getMetaModel();
             val paramValue = actionArgumentModel.getValue();
             val hasChoices = actionParameter.hasChoices();
             val hasAutoComplete = actionParameter.hasAutoComplete();

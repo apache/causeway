@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModelHead;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
+import org.apache.isis.viewer.common.model.action.form.ActionParameterUiModel;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 
 import lombok.Getter;
@@ -45,7 +46,7 @@ import lombok.Setter;
 import lombok.val;
 
 public class ScalarParameterModel extends ScalarModel
-implements ActionArgumentModel {
+implements ActionParameterUiModel {
 
     private static final long serialVersionUID = 1L;
     
@@ -71,7 +72,7 @@ implements ActionArgumentModel {
     private transient ObjectActionParameter actionParameter;
     
     @Override
-    public ObjectActionParameter getActionParameter() {
+    public ObjectActionParameter getMetaModel() {
         if(actionParameter==null) {
             actionParameter = parameterMemento.getActionParameter(getSpecificationLoader()); 
         }
@@ -80,7 +81,7 @@ implements ActionArgumentModel {
 
     @Override
     public String getName() {
-        return getActionParameter().getName();
+        return getMetaModel().getName();
     }
 
     @Override
@@ -100,7 +101,7 @@ implements ActionArgumentModel {
             // shouldn't happen
             return null;
         }
-        final ObjectActionParameter actionParameter = getActionParameter();
+        final ObjectActionParameter actionParameter = getMetaModel();
         final ObjectAction action = actionParameter.getAction();
         final String objectSpecId = action.getOnType().getSpecId().asString().replace(".", "-");
         final String parmId = actionParameter.getId();
@@ -122,7 +123,7 @@ implements ActionArgumentModel {
 
     @Override
     public String parseAndValidate(final String proposedPojoAsStr) {
-        final ObjectActionParameter parameter = getActionParameter();
+        final ObjectActionParameter parameter = getMetaModel();
         try {
             ManagedObject parentAdapter = getParentUiModel().load();
             final String invalidReasonIfAny = parameter.isValid(parentAdapter, proposedPojoAsStr,
@@ -136,7 +137,7 @@ implements ActionArgumentModel {
 
     @Override
     public String validate(final ManagedObject proposedAdapter) {
-        final ObjectActionParameter parameter = getActionParameter();
+        final ObjectActionParameter parameter = getMetaModel();
         try {
             ManagedObject parentAdapter = getParentUiModel().load();
             final String invalidReasonIfAny = parameter.isValid(parentAdapter, proposedAdapter.getPojo(),
@@ -150,47 +151,47 @@ implements ActionArgumentModel {
 
     @Override
     public boolean isRequired() {
-        return isRequired(getActionParameter());
+        return isRequired(getMetaModel());
     }
 
     @Override
     public <T extends Facet> T getFacet(final Class<T> facetType) {
-        return getActionParameter().getFacet(facetType);
+        return getMetaModel().getFacet(facetType);
     }
 
     @Override
     public ManagedObject getDefault(
             @NonNull final PendingParameterModel pendingArgs) {
         
-        return getActionParameter().getDefault(pendingArgs);
+        return getMetaModel().getDefault(pendingArgs);
     }
 
     @Override
     public boolean hasChoices() {
-        return getActionParameter().hasChoices();
+        return getMetaModel().hasChoices();
     }
     @Override
     public Can<ManagedObject> getChoices(
             @NonNull final PendingParameterModel pendingArgs) {
-        return getActionParameter().getChoices(pendingArgs, InteractionInitiatedBy.USER);
+        return getMetaModel().getChoices(pendingArgs, InteractionInitiatedBy.USER);
     }
 
     @Override
     public boolean hasAutoComplete() {
-        return getActionParameter().hasAutoComplete();
+        return getMetaModel().hasAutoComplete();
     }
     @Override
     public Can<ManagedObject> getAutoComplete(
             @NonNull final PendingParameterModel pendingArgs,
             final String searchArg) {
         
-        return getActionParameter().getAutoComplete(pendingArgs, searchArg, InteractionInitiatedBy.USER);
+        return getMetaModel().getAutoComplete(pendingArgs, searchArg, InteractionInitiatedBy.USER);
     }
     
     @Override
     public int getAutoCompleteOrChoicesMinLength() {
         if (hasAutoComplete()) {
-            return getActionParameter().getAutoCompleteMinLength();
+            return getMetaModel().getAutoCompleteMinLength();
         } else {
             return 0;
         }
@@ -198,31 +199,31 @@ implements ActionArgumentModel {
 
     @Override
     public String getDescribedAs() {
-        return getActionParameter().getDescription();
+        return getMetaModel().getDescription();
     }
 
     @Override
     public Integer getLength() {
-        final BigDecimalValueFacet facet = getActionParameter().getFacet(BigDecimalValueFacet.class);
+        final BigDecimalValueFacet facet = getMetaModel().getFacet(BigDecimalValueFacet.class);
         return facet != null? facet.getPrecision(): null;
     }
 
     @Override
     public Integer getScale() {
-        final BigDecimalValueFacet facet = getActionParameter().getFacet(BigDecimalValueFacet.class);
+        final BigDecimalValueFacet facet = getMetaModel().getFacet(BigDecimalValueFacet.class);
         return facet != null? facet.getScale(): null;
     }
 
     @Override
     public int getTypicalLength() {
-        final TypicalLengthFacet facet = getActionParameter().getFacet(TypicalLengthFacet.class);
+        final TypicalLengthFacet facet = getMetaModel().getFacet(TypicalLengthFacet.class);
         return facet != null? facet.value() : StringValueSemanticsProvider.TYPICAL_LENGTH;
     }
 
 
     @Override
     public String getFileAccept() {
-        final FileAcceptFacet facet = getActionParameter().getFacet(FileAcceptFacet.class);
+        final FileAcceptFacet facet = getMetaModel().getFacet(FileAcceptFacet.class);
         return facet != null? facet.value(): null;
     }
 
@@ -233,7 +234,7 @@ implements ActionArgumentModel {
         if(objectAdapter != null) {
             return objectAdapter;
         }
-        if(getActionParameter().getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR) {
+        if(getMetaModel().getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR) {
             return objectAdapter;
         }
 
@@ -255,7 +256,7 @@ implements ActionArgumentModel {
 
     @Override
     public boolean isCollection() {
-        return getActionParameter().getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION;
+        return getMetaModel().getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION;
     }
 
     @Override
@@ -269,7 +270,7 @@ implements ActionArgumentModel {
     }
     
     public PendingParameterModelHead getPendingParamHead() {
-        val actionParameter = getActionParameter();
+        val actionParameter = getMetaModel();
         val actionOwner = getParentUiModel().load();
         return actionParameter.getAction().newPendingParameterModelHead(actionOwner);
     }
