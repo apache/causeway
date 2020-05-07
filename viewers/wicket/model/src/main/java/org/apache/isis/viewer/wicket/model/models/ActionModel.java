@@ -45,7 +45,6 @@ import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.NamedWithMimeType;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._NullSafe;
-import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -96,7 +95,7 @@ implements FormUiModel, FormExecutorContext {
 
     @Override
     public PageParameters getPageParametersWithoutUiHints() {
-        val adapter = getTargetAdapter();
+        val adapter = getOwner();
         val objectAction = getMetaModel();
         return PageParameterUtil.createPageParameters(adapter, objectAction, argCache().snapshot());
     }
@@ -107,21 +106,14 @@ implements FormUiModel, FormExecutorContext {
     }
 
     // --
-
+    
+    private transient ObjectAction objectAction;
     @Override
-    public String getTitle() {
-        val target = getTargetAdapter();
-        val objectAction = getMetaModel();
-
-        val buf = new StringBuilder();
-        for(val argumentAdapter: argCache().snapshot()) {
-            if(buf.length() > 0) {
-                buf.append(",");
-            }
-            buf.append(abbreviated(titleOf(argumentAdapter), 8));
+    public ObjectAction getMetaModel() {
+        if(objectAction==null) {
+            objectAction = actionMemento.getAction(getSpecificationLoader()); 
         }
-
-        return target.titleString(null) + "." + objectAction.getName() + (buf.length()>0?"(" + buf.toString() + ")":"");
+        return objectAction;
     }
 
     @Override
@@ -135,14 +127,6 @@ implements FormUiModel, FormExecutorContext {
     }
 
     // -- HELPERS
-
-    private static String titleOf(ManagedObject argumentAdapter) {
-        return argumentAdapter!=null?argumentAdapter.titleString(null):"";
-    }
-
-    private static String abbreviated(final String str, final int maxLength) {
-        return str.length() < maxLength ? str : str.substring(0, maxLength - 3) + "...";
-    }
 
     private final EntityModel entityModel;
     private final ActionMemento actionMemento;
@@ -177,20 +161,8 @@ implements FormUiModel, FormExecutorContext {
         this.argCache = actionModel.argCache().copy(); 
     }
 
-    private transient ObjectAction objectAction;
     @Override
-    public ObjectAction getMetaModel() {
-        if(objectAction==null) {
-            objectAction = actionMemento.getAction(getSpecificationLoader()); 
-        }
-        return objectAction;
-    }
-
-    public boolean hasParameters() {
-        return getMetaModel().getParameterCount() > 0;
-    }
-
-    public ManagedObject getTargetAdapter() {
+    public ManagedObject getOwner() {
         return entityModel.load();
     }
 
@@ -215,7 +187,7 @@ implements FormUiModel, FormExecutorContext {
 
     private ManagedObject executeAction() {
 
-        val targetAdapter = getTargetAdapter();
+        val targetAdapter = getOwner();
         final Can<ManagedObject> arguments = argCache().snapshot();
         final ObjectAction action = getMetaModel();
 
@@ -242,51 +214,13 @@ implements FormUiModel, FormExecutorContext {
 
     }
 
-    public String getReasonDisabledIfAny() {
-
-        val targetAdapter = getTargetAdapter();
-        final ObjectAction objectAction = getMetaModel();
-
-        final Consent usability =
-                objectAction.isUsable(
-                        targetAdapter,
-                        InteractionInitiatedBy.USER,
-                        Where.OBJECT_FORMS);
-        final String disabledReasonIfAny = usability.getReason();
-        return disabledReasonIfAny;
-    }
-
-
-    public boolean isVisible() {
-
-        val targetAdapter = getTargetAdapter();
-        val objectAction = getMetaModel();
-
-        final Consent visibility =
-                objectAction.isVisible(
-                        targetAdapter,
-                        InteractionInitiatedBy.USER,
-                        Where.OBJECT_FORMS);
-        return visibility.isAllowed();
-    }
-
-
-    public String getReasonInvalidIfAny() {
-        val targetAdapter = getTargetAdapter();
-        final Can<ManagedObject> proposedArguments = argCache().snapshot();
-        final ObjectAction objectAction = getMetaModel();
-        final Consent validity = objectAction
-                .isProposedArgumentSetValid(targetAdapter, proposedArguments, InteractionInitiatedBy.USER);
-        return validity.isAllowed() ? null : validity.getReason();
-    }
-
     @Override
     public void setObject(final ManagedObject object) {
         throw new UnsupportedOperationException("target adapter for ActionModel cannot be changed");
     }
 
     public PendingParameterModel getArgumentsAsParamModel() {
-        return getMetaModel().newPendingParameterModelHead(getTargetAdapter())
+        return getMetaModel().newPendingParameterModelHead(getOwner())
                 .model(argCache().snapshot());
     }
 
@@ -297,7 +231,7 @@ implements FormUiModel, FormExecutorContext {
     public void clearArguments() {
 
         val defaultsFixedPoint = getMetaModel()
-                .newPendingParameterModelHead(getTargetAdapter())
+                .newPendingParameterModelHead(getOwner())
                 .defaults()
                 .getParamValues();
 
@@ -461,7 +395,7 @@ implements FormUiModel, FormExecutorContext {
     @Override
     public Stream<FormPendingParamUiModel> streamPendingParamUiModels() {
 
-        val targetAdapter = this.getTargetAdapter();
+        val targetAdapter = this.getOwner();
         val realTargetAdapter = this.getMetaModel().realTargetAdapter(targetAdapter);
         val pendingArgs = getArgumentsAsParamModel();
 

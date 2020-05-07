@@ -42,12 +42,12 @@ public class ActionFormExecutorStrategy implements FormExecutorStrategy<ActionMo
 
     @Override
     public ManagedObject obtainTargetAdapter() {
-        return model.getTargetAdapter();
+        return model.getOwner();
     }
 
     @Override
     public String getReasonInvalidIfAny() {
-        return model.getReasonInvalidIfAny();
+        return model.getValidityConsent().getReason();
     }
 
     @Override

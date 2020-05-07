@@ -106,6 +106,20 @@ public final class ManagedObjects {
         return adapter;
         
     }
+    
+    // -- TITLE UTILITIES
+    
+    public static String abbreviatedTitleOf(ManagedObject adapter, int maxLength, String suffix) {
+        return abbreviated(titleOf(adapter), maxLength, suffix);
+    }
+    
+    private static String titleOf(ManagedObject adapter) {
+        return adapter!=null?adapter.titleString(null):"";
+    }
+
+    private static String abbreviated(final String str, final int maxLength, String suffix) {
+        return str.length() < maxLength ? str : str.substring(0, maxLength - 3) + suffix;
+    }
 
 
 }

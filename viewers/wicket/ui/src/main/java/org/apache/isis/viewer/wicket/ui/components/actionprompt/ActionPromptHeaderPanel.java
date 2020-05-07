@@ -39,7 +39,7 @@ public class ActionPromptHeaderPanel extends PanelAbstract<ActionModel> {
     public ActionPromptHeaderPanel(String id, final ActionModel model) {
         super(id, model);
 
-        _Blackhole.consume(model.getTargetAdapter()); // side-effect: loads the model
+        _Blackhole.consume(model.getOwner()); // side-effect: loads the model
 
         getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ENTITY_ICON_AND_TITLE, model.getParentUiModel());
 

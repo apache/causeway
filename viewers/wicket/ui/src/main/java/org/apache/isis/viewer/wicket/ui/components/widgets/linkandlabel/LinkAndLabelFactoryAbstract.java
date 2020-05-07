@@ -160,7 +160,7 @@ implements Serializable {
 
         if(inlinePromptContext == null || promptStyle.isDialog()) {
             final ActionPromptProvider promptProvider = ActionPromptProvider.getFrom(actionLink.getPage());
-            val spec = actionModel.getTargetAdapter().getSpecification();
+            val spec = actionModel.getOwner().getSpecification();
 
             final ActionPrompt prompt = promptProvider.getActionPrompt(promptStyle, spec.getBeanSort());
 
@@ -203,7 +203,7 @@ implements Serializable {
                         if(mixinSpec.isViewModel()) {
 
                             val commonContext = getCommonContext();
-                            final ManagedObject targetAdapterForMixin = action.realTargetAdapter(actionModel.getTargetAdapter());
+                            final ManagedObject targetAdapterForMixin = action.realTargetAdapter(actionModel.getOwner());
                             final EntityModel entityModelForMixin = 
                                     EntityModel.ofAdapter(commonContext, targetAdapterForMixin);
 
@@ -263,7 +263,7 @@ implements Serializable {
                     // (One way this can occur is if an event subscriber has a defect and throws an exception; in which case
                     // the EventBus' exception handler will automatically veto.  This results in a growl message rather than
                     // an error page, but is probably 'good enough').
-                    val targetAdapter = actionModel.getTargetAdapter();
+                    val targetAdapter = actionModel.getOwner();
 
                     final EntityPage entityPage = new EntityPage(getCommonContext(), targetAdapter);
 
