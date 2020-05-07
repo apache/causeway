@@ -467,7 +467,6 @@ implements FormExecutorContext {
 
     public Stream<ActionArgumentModelAndConsents> streamActionArgumentModels() {
 
-        val specificationLoader = getSpecificationLoader();
         val targetAdapter = this.getTargetAdapter();
         val realTargetAdapter = this.getAction()
                 .realTargetAdapter(targetAdapter);
@@ -480,7 +479,7 @@ implements FormExecutorContext {
 
             actionArgumentModel.setActionArgsHint(pendingArgs);
 
-            val objectActionParamter = actionArgumentModel.getActionParameter(specificationLoader);
+            val objectActionParamter = actionArgumentModel.getActionParameter();
 
             // visibility
             val visibilityConsent = objectActionParamter
@@ -499,7 +498,6 @@ implements FormExecutorContext {
 
     public void reassessActionArgumentModels(int skipCount) {
 
-        val specificationLoader = getSpecificationLoader();
         val pendingArgs = getArgumentsAsParamModel();
 
         argCache()
@@ -507,7 +505,7 @@ implements FormExecutorContext {
         .skip(skipCount)
         .forEach(actionArgumentModel->{
 
-            val actionParameter = actionArgumentModel.getActionParameter(specificationLoader);
+            val actionParameter = actionArgumentModel.getActionParameter();
             val paramValue = actionArgumentModel.getValue();
             val hasChoices = actionParameter.hasChoices();
             val hasAutoComplete = actionParameter.hasAutoComplete();

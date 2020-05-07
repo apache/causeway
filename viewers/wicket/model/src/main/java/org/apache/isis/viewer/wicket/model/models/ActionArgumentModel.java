@@ -22,13 +22,12 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
-import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 
 public interface ActionArgumentModel extends IModel<ManagedObject> {
 
-    ActionParameterMemento getParameterMemento();
+    ObjectActionParameter getActionParameter();
+    
     String getCssClass();
     
     // transient storage
@@ -36,13 +35,9 @@ public interface ActionArgumentModel extends IModel<ManagedObject> {
 
     // -- SHORTCUTS
     
-    default ObjectActionParameter getActionParameter(SpecificationLoader specificationLoader) {
-        return getParameterMemento().getActionParameter(specificationLoader);
-    }
-    
     /** param index */
     default int getNumber() {
-        return getParameterMemento().getNumber();
+        return getActionParameter().getNumber();
     }
     
     /** param value */

@@ -80,7 +80,7 @@ class ActionArgumentCache implements PendingParameterManager {
         
         streamActionArgumentModels()
         .forEach(actionArgumentModel -> {
-            int paramIndex = actionArgumentModel.getParameterMemento().getNumber();
+            int paramIndex = actionArgumentModel.getNumber();
             val paramDefaultValue = defaultsFixedPoint.getElseFail(paramIndex);
             actionArgumentModel.setObject(paramDefaultValue);
         });
@@ -129,7 +129,7 @@ class ActionArgumentCache implements PendingParameterManager {
         ActionArgumentModel actionArgumentModel = arguments.get(i);
         if (actionArgumentModel == null) {
             actionArgumentModel = new ScalarParameterModel(entityModel, apm);
-            final int number = actionArgumentModel.getParameterMemento().getNumber();
+            final int number = actionArgumentModel.getNumber();
             arguments.put(number, actionArgumentModel);
         }
         return actionArgumentModel;
