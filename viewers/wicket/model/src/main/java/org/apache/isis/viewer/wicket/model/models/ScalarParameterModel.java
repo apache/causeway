@@ -274,9 +274,15 @@ implements ActionArgumentModel {
         return actionParameter.getAction().newPendingParameterModelHead(actionOwner);
     }
 
+    @Override
+    public ManagedObject getValue() {
+        return getObject();
+    }
 
-
-
+    @Override
+    public void setValue(ManagedObject paramValue) {
+        super.setObject(paramValue);
+    }
 
     
 }

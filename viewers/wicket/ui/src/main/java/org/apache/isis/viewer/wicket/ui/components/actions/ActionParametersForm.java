@@ -36,6 +36,7 @@ import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionArgumentModel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarParameterModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorStrategy;
@@ -75,12 +76,12 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
         actionModel.streamActionArgumentModels()
         .forEach(argsAndConsents->{
             
-            val actionArgumentModel = argsAndConsents.getActionArgumentModel(); 
+            val paramModel = (ScalarParameterModel) argsAndConsents.getParamModel(); 
             
             val container = new WebMarkupContainer(repeatingView.newChildId());
             repeatingView.add(container);
             
-            newParamPanel(container, actionArgumentModel)
+            newParamPanel(container, paramModel)
             .ifPresent(paramPanel->{
                 paramPanels.add(paramPanel);
                 //val paramModel = (ScalarParameterModel) paramPanel.getModel();
@@ -96,14 +97,14 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
 
     private Optional<ScalarPanelAbstract2> newParamPanel(
             final WebMarkupContainer container, 
-            final ActionArgumentModel actionArgumentModel) {
+            final ScalarParameterModel paramModel) {
         
         final Component component = getComponentFactoryRegistry()
-                .addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE, actionArgumentModel);
+                .addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE, paramModel);
 
         if(component instanceof MarkupContainer) {
             val markupContainer = (MarkupContainer) component;
-            val css = actionArgumentModel.getCssClass();
+            val css = paramModel.getCssClass();
             if (!_Strings.isNullOrEmpty(css)) {
                 CssClassAppender.appendCssClassTo(markupContainer, CssClassAppender.asCssStyle(css));    
             }
@@ -162,7 +163,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
         .skip(skipCount)
         .forEach(argAndConsents->{
             
-            val paramNumToUpdate = argAndConsents.getActionArgumentModel().getNumber();
+            val paramNumToUpdate = argAndConsents.getParamModel().getNumber();
             val paramPanel = paramPanels.get(paramNumToUpdate);
             val repaint = paramPanel.updateIfNecessary(argAndConsents, Optional.of(target));
             

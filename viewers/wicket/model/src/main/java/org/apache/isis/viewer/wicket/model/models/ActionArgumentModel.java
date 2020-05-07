@@ -18,20 +18,21 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import org.apache.wicket.model.IModel;
-
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 
-public interface ActionArgumentModel extends IModel<ManagedObject> {
+public interface ActionArgumentModel {
 
     ObjectActionParameter getActionParameter();
     
     String getCssClass();
     
-    // transient storage
-    void setActionArgsHint(PendingParameterModel pendingArgs);
+    /** param value */
+    ManagedObject getValue();
+    
+    /** param value */
+    void setValue(ManagedObject paramValue);
 
     // -- SHORTCUTS
     
@@ -39,11 +40,11 @@ public interface ActionArgumentModel extends IModel<ManagedObject> {
     default int getNumber() {
         return getActionParameter().getNumber();
     }
+
+    // -- DEPRECATIONS
     
-    /** param value */
-    default ManagedObject getValue() {
-        return getObject();
-    }
-    
+    // transient storage
+    void setActionArgsHint(PendingParameterModel pendingArgs);
+
 
 }

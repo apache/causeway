@@ -53,7 +53,7 @@ class ActionArgumentCache implements PendingParameterManager {
                 action);
         primeArgumentModels();
         for (val argumentEntry : arguments.entrySet()) {
-            putArgumentValue(argumentEntry.getKey(), argumentEntry.getValue().getObject());
+            putArgumentValue(argumentEntry.getKey(), argumentEntry.getValue().getValue());
         }
         return copy;
     }
@@ -66,7 +66,7 @@ class ActionArgumentCache implements PendingParameterManager {
         .mapToObj(paramIndex->{
             val actionArgumentModel = Optional.ofNullable(arguments.get(paramIndex));
             val adapter = actionArgumentModel
-                    .map(ActionArgumentModel::getObject)
+                    .map(ActionArgumentModel::getValue)
                     .orElse(ManagedObject.empty(paramTypes.getElseFail(paramIndex)));
             return adapter;
         
@@ -82,7 +82,7 @@ class ActionArgumentCache implements PendingParameterManager {
         .forEach(actionArgumentModel -> {
             int paramIndex = actionArgumentModel.getNumber();
             val paramDefaultValue = defaultsFixedPoint.getElseFail(paramIndex);
-            actionArgumentModel.setObject(paramDefaultValue);
+            actionArgumentModel.setValue(paramDefaultValue);
         });
     }
     
@@ -96,7 +96,7 @@ class ActionArgumentCache implements PendingParameterManager {
     public void setParameterValue(ObjectActionParameter actionParameter, ManagedObject newParamValue) {
         val actionParameterMemento = new ActionParameterMemento(actionParameter);
         val actionArgumentModel = computeIfAbsent(actionParameterMemento);
-        actionArgumentModel.setObject(newParamValue);
+        actionArgumentModel.setValue(newParamValue);
     }
     
     @Override

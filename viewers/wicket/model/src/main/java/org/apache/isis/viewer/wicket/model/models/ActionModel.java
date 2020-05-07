@@ -460,7 +460,7 @@ implements FormExecutorContext {
     @Value(staticConstructor = "of")
     public static class ActionArgumentModelAndConsents {
         final PendingParameterModel pendingArgs;
-        final ActionArgumentModel actionArgumentModel;
+        final ActionArgumentModel paramModel;
         final Consent visibilityConsent;
         final Consent usabilityConsent;
     }
@@ -468,8 +468,7 @@ implements FormExecutorContext {
     public Stream<ActionArgumentModelAndConsents> streamActionArgumentModels() {
 
         val targetAdapter = this.getTargetAdapter();
-        val realTargetAdapter = this.getAction()
-                .realTargetAdapter(targetAdapter);
+        val realTargetAdapter = this.getAction().realTargetAdapter(targetAdapter);
         val pendingArgs = getArgumentsAsParamModel();
         val pendingArgValues = pendingArgs.getParamValues();
 

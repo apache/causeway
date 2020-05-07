@@ -119,6 +119,7 @@ implements ScalarModelSubscriber2 {
 
     /** this is a hack for the ScalarParameterModel, which does not support usability constraints in the model*/
     private transient Runnable postInit;
+    @Deprecated // properly implement ScalarParameterModel
     public void postInit(@NonNull final ActionArgumentModelAndConsents argsAndConsents) {
         this.postInit = () ->{
             // visibility
@@ -147,7 +148,7 @@ implements ScalarModelSubscriber2 {
             @NonNull final ActionArgumentModelAndConsents argsAndConsents,
             @NonNull final Optional<AjaxRequestTarget> target) {
         
-        val argModel = argsAndConsents.getActionArgumentModel();
+        val argModel = argsAndConsents.getParamModel();
         
         // visibility
         val visibilityConsent = argsAndConsents.getVisibilityConsent();
