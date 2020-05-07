@@ -38,7 +38,6 @@ import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.apache.wicket.util.resource.StringResourceStream;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
@@ -69,9 +68,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModelHead;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
-import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 
 import lombok.Value;
@@ -97,8 +94,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
      * @return
      */
     public static ActionModel create(EntityModel entityModel, ObjectAction action) {
-        val homePageActionMemento = new ActionMemento(action);
-        val actionModel = new ActionModel(entityModel, homePageActionMemento);
+        val actionModel = new ActionModel(entityModel, new ActionMemento(action));
         return actionModel;
     }
 
@@ -114,31 +110,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
         return actionModel;
     }
 
-    /**
-     * Factory method for creating {@link PageParameters}.
-     */
-    public static PageParameters createPageParameters(ManagedObject adapter, ObjectAction objectAction) {
 
-        val pageParameters = PageParametersUtils.newPageParameters();
-
-        ManagedObject.stringify(adapter)
-        .ifPresent(oidStr->
-        PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr)
-                );
-
-        val actionType = objectAction.getType();
-        PageParameterNames.ACTION_TYPE.addEnumTo(pageParameters, actionType);
-
-        val actionOnTypeSpec = objectAction.getOnType();
-        if (actionOnTypeSpec != null) {
-            PageParameterNames.ACTION_OWNING_SPEC.addStringTo(pageParameters, actionOnTypeSpec.getFullIdentifier());
-        }
-
-        val actionId = determineActionId(objectAction);
-        PageParameterNames.ACTION_ID.addStringTo(pageParameters, actionId);
-
-        return pageParameters;
-    }
 
     @Value(staticConstructor = "of")
     public static class ParamNumAndOidString {
@@ -179,14 +151,13 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
     public PageParameters getPageParametersWithoutUiHints() {
         val adapter = getTargetAdapter();
         val objectAction = getAction();
-        val pageParameters = createPageParameters(adapter, objectAction);
+        val pageParameters = PageParameterUtil.createPageParameters(adapter, objectAction);
 
         // capture argument values
         for(val argumentAdapter: argCache().snapshot()) {
             val encodedArg = encodeArg(argumentAdapter);
             PageParameterNames.ACTION_ARGS.addStringTo(pageParameters, encodedArg);
         }
-
         return pageParameters;
     }
 
@@ -228,16 +199,6 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
 
     private static String abbreviated(final String str, final int maxLength) {
         return str.length() < maxLength ? str : str.substring(0, maxLength - 3) + "...";
-    }
-
-
-    private static String determineActionId(final ObjectAction objectAction) {
-        final Identifier identifier = objectAction.getIdentifier();
-        if (identifier != null) {
-            return identifier.toNameParmsIdentityString();
-        }
-        // fallback (used for action sets)
-        return objectAction.getId();
     }
 
     private final EntityModel entityModel;
@@ -650,14 +611,12 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
         this.inlinePromptContext = inlinePromptContext;
     }
 
-    public void setParameterValue(ObjectActionParameter actionParameter, ManagedObject defaultIfAny) {
-        val actionParameterMemento = new ActionParameterMemento(actionParameter);
-        val actionArgumentModel = argCache().computeIfAbsent(actionParameterMemento);
-        actionArgumentModel.setObject(defaultIfAny);
+    public void setParameterValue(ObjectActionParameter actionParameter, ManagedObject newParamValue) {
+        argCache().setParameterValue(actionParameter, newParamValue);
     }
 
     public void clearParameterValue(ObjectActionParameter actionParameter) {
-        setParameterValue(actionParameter, null);
+        argCache().clearParameterValue(actionParameter);
     }
 
     @Value(staticConstructor = "of")
@@ -679,25 +638,25 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
         val pendingArgValues = pendingArgs.getParamValues();
 
         return argCache()
-                .streamActionArgumentModels()
-                .map(actionArgumentModel->{
+        .streamActionArgumentModels()
+        .map(actionArgumentModel->{
 
-                    actionArgumentModel.setActionArgsHint(pendingArgs);
+            actionArgumentModel.setActionArgsHint(pendingArgs);
 
-                    val objectActionParamter = actionArgumentModel.getActionParameter(specificationLoader);
+            val objectActionParamter = actionArgumentModel.getActionParameter(specificationLoader);
 
-                    // visibility
-                    val visibilityConsent = objectActionParamter
-                            .isVisible(realTargetAdapter, pendingArgValues, InteractionInitiatedBy.USER);
+            // visibility
+            val visibilityConsent = objectActionParamter
+                    .isVisible(realTargetAdapter, pendingArgValues, InteractionInitiatedBy.USER);
 
-                    // usability
-                    val usabilityConsent = objectActionParamter
-                            .isUsable(realTargetAdapter, pendingArgValues, InteractionInitiatedBy.USER);
+            // usability
+            val usabilityConsent = objectActionParamter
+                    .isUsable(realTargetAdapter, pendingArgValues, InteractionInitiatedBy.USER);
 
-                    return ActionArgumentModelAndConsents.of(
-                            pendingArgs, actionArgumentModel, visibilityConsent, usabilityConsent);
+            return ActionArgumentModelAndConsents.of(
+                    pendingArgs, actionArgumentModel, visibilityConsent, usabilityConsent);
 
-                });
+        });
 
     }
 

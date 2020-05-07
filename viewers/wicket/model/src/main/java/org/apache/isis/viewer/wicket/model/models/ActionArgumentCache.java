@@ -109,6 +109,16 @@ class ActionArgumentCache {
                     arguments.computeIfAbsent(paramIndex, this::createArgumentModel));
     }
     
+    public void setParameterValue(ObjectActionParameter actionParameter, ManagedObject newParamValue) {
+        val actionParameterMemento = new ActionParameterMemento(actionParameter);
+        val actionArgumentModel = computeIfAbsent(actionParameterMemento);
+        actionArgumentModel.setObject(newParamValue);
+    }
+    
+    public void clearParameterValue(ObjectActionParameter actionParameter) {
+        setParameterValue(actionParameter, null);
+    }
+    
     // //////////////////////////////////////
     
     private IntStream streamParamNumbers() {
@@ -128,6 +138,7 @@ class ActionArgumentCache {
                 action.getParameterCount(),
                 (int)streamActionArgumentModels().count());
     }
+
 
 
     
