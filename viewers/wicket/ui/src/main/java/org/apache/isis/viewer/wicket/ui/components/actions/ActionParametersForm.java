@@ -30,9 +30,9 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.viewer.common.model.action.form.ActionParameterUiModel;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel.Placement;
+import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
@@ -152,7 +152,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
     public void onUpdate(final AjaxRequestTarget target, final ScalarPanelAbstract2 scalarPanelUpdated) {
 
         val actionModel = getActionModel();
-        val paramModel = (ActionParameterUiModel)scalarPanelUpdated.getModel();
+        val paramModel = (ParameterUiModel)scalarPanelUpdated.getModel();
         final int paramNumberUpdated = paramModel.getNumber();
         // only updates subsequent parameter panels starting from (paramNumberUpdated + 1)
         final int skipCount = paramNumberUpdated + 1;   

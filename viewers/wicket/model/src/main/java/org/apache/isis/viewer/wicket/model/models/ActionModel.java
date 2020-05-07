@@ -58,7 +58,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModelHead;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.viewer.common.model.action.form.ActionParameterUiModel;
+import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 
 import lombok.Value;
@@ -92,9 +92,7 @@ implements FormExecutorContext {
     }
   
 
-    //////////////////////////////////////////////////
-    // BookmarkableModel
-    //////////////////////////////////////////////////
+    // -- BOOKMARKABLE
 
     @Override
     public PageParameters getPageParametersWithoutUiHints() {
@@ -108,6 +106,7 @@ implements FormExecutorContext {
         return getPageParametersWithoutUiHints();
     }
 
+    // --
 
     @Override
     public String getTitle() {
@@ -128,6 +127,11 @@ implements FormExecutorContext {
     @Override
     public boolean hasAsRootPolicy() {
         return true;
+    }
+    
+    @Override
+    public EntityModel getParentUiModel() {
+        return entityModel;
     }
 
     // -- HELPERS
@@ -161,11 +165,6 @@ implements FormExecutorContext {
         super(entityModel.getCommonContext());
         this.entityModel = entityModel;
         this.actionMemento = actionMemento;
-    }
-
-    @Override
-    public EntityModel getParentUiModel() {
-        return entityModel;
     }
 
     /**
@@ -461,7 +460,7 @@ implements FormExecutorContext {
     @Value(staticConstructor = "of")
     public static class ActionArgumentModelAndConsents {
         final PendingParameterModel pendingArgs;
-        final ActionParameterUiModel paramModel;
+        final ParameterUiModel paramModel;
         final Consent visibilityConsent;
         final Consent usabilityConsent;
     }

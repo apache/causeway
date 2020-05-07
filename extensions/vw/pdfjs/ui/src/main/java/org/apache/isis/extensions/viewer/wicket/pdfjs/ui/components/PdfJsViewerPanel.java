@@ -113,8 +113,9 @@ class PdfJsViewerPanel extends ScalarPanelAbstract<ScalarPropertyModel> implemen
         // so we have a callback URL
 
 
-        updatePageNum = new AbstractDefaultAjaxBehavior()
-        {
+        updatePageNum = new AbstractDefaultAjaxBehavior() {
+            private static final long serialVersionUID = 1L;
+            
             @Override
             protected void respond(AjaxRequestTarget _target)
             {
@@ -136,8 +137,9 @@ class PdfJsViewerPanel extends ScalarPanelAbstract<ScalarPropertyModel> implemen
             }
         };
 
-        updateScale = new AbstractDefaultAjaxBehavior()
-        {
+        updateScale = new AbstractDefaultAjaxBehavior() {
+            private static final long serialVersionUID = 1L;
+
             @Override
             protected void respond(AjaxRequestTarget _target)
             {
@@ -160,8 +162,9 @@ class PdfJsViewerPanel extends ScalarPanelAbstract<ScalarPropertyModel> implemen
             }
         };
 
-        updateHeight = new AbstractDefaultAjaxBehavior()
-        {
+        updateHeight = new AbstractDefaultAjaxBehavior() {
+            private static final long serialVersionUID = 1L;
+
             @Override
             protected void respond(AjaxRequestTarget _target)
             {
@@ -204,7 +207,7 @@ class PdfJsViewerPanel extends ScalarPanelAbstract<ScalarPropertyModel> implemen
         String userName = userService.getUser().getName();
 
         val model = getModel();
-        val propertyId = model.getPropertyMemento().getIdentifier();
+        val propertyId = model.getIdentifier();
         val bookmark = model.getParentUiModel().getObjectAdapterMemento().asBookmarkIfSupported();
         val objectType = bookmark.getObjectType();
         val identifier = bookmark.getIdentifier();
@@ -288,6 +291,8 @@ class PdfJsViewerPanel extends ScalarPanelAbstract<ScalarPropertyModel> implemen
 
     private MarkupContainer createComponent(final String id, final PdfJsConfig config) {
         return new WebMarkupContainer(id) {
+            private static final long serialVersionUID = 1L;
+
             @Override
             protected void onComponentTag(final ComponentTag tag) {
                 super.onComponentTag(tag);
@@ -330,6 +335,8 @@ class PdfJsViewerPanel extends ScalarPanelAbstract<ScalarPropertyModel> implemen
         if (pdfBlob != null) {
             final byte[] bytes = pdfBlob.getBytes();
             final ByteArrayResource resource = new ByteArrayResource("application/pdf", bytes) {
+                private static final long serialVersionUID = 1L;
+
                 @Override protected void configureResponse(
                         final ResourceResponse response, final Attributes attributes) {
                     super.configureResponse(response, attributes);

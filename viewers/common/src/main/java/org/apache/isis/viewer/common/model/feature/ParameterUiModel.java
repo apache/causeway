@@ -16,15 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.common.model.action.form;
+package org.apache.isis.viewer.common.model.feature;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 
-public interface ActionParameterUiModel {
+public interface ParameterUiModel extends FeatureUiModel {
 
     /** param meta model */
+    @Override
     ObjectActionParameter getMetaModel();
     
     /** param value */
@@ -40,6 +41,11 @@ public interface ActionParameterUiModel {
     /** param index */
     default int getNumber() {
         return getMetaModel().getNumber();
+    }
+    
+    /** param name */
+    default String getName() {
+        return getMetaModel().getName();
     }
 
     // -- DEPRECATIONS

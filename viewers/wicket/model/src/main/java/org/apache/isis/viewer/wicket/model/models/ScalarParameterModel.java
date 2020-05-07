@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModelHead;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
-import org.apache.isis.viewer.common.model.action.form.ActionParameterUiModel;
+import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 
 import lombok.Getter;
@@ -46,7 +46,7 @@ import lombok.Setter;
 import lombok.val;
 
 public class ScalarParameterModel extends ScalarModel
-implements ActionParameterUiModel {
+implements ParameterUiModel {
 
     private static final long serialVersionUID = 1L;
     
@@ -77,11 +77,6 @@ implements ActionParameterUiModel {
             actionParameter = parameterMemento.getActionParameter(getSpecificationLoader()); 
         }
         return actionParameter;  
-    }
-
-    @Override
-    public String getName() {
-        return getMetaModel().getName();
     }
 
     @Override

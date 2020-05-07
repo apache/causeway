@@ -16,31 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.model.models;
+package org.apache.isis.viewer.common.model.feature;
 
-import java.io.Serializable;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.WebMarkupContainer;
+public interface PropertyUiModel extends FeatureUiModel {
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-@Getter
-@RequiredArgsConstructor
-public class InlinePromptContext implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    private final Component scalarIfRegular;
-    private final WebMarkupContainer scalarIfRegularInlinePromptForm;
-    private final MarkupContainer scalarTypeContainer;
-
-    public void onCancel() {
-        scalarIfRegular.setVisible(true);
-        scalarIfRegularInlinePromptForm.setVisible(false);
-    }
-
+    /** prop meta model */
+    @Override
+    OneToOneAssociation getMetaModel();
 
 }

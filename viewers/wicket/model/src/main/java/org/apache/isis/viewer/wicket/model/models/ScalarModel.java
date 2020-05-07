@@ -43,6 +43,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
+import org.apache.isis.viewer.common.model.feature.FeatureUiModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
@@ -71,7 +72,7 @@ import lombok.val;
  * </p>
  */
 public abstract class ScalarModel extends EntityModel 
-implements LinksProvider, FormExecutorContext {
+implements FeatureUiModel, LinksProvider, FormExecutorContext {
 
     private static final long serialVersionUID = 1L;
 
@@ -165,8 +166,6 @@ implements LinksProvider, FormExecutorContext {
     public Kind getKind() {
         return kind;
     }
-
-    public abstract String getName();
 
     /**
      * Overrides superclass' implementation, because a {@link ScalarModel} can
