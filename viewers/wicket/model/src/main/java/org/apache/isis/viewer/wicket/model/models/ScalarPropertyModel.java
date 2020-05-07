@@ -95,14 +95,14 @@ public class ScalarPropertyModel extends ScalarModel {
     @Override
     public String getCssClass() {
         final String objectSpecId =
-                getParentEntityModel().getTypeOfSpecification().getSpecId().asString().replace(".", "-");
+                getParentUiModel().getTypeOfSpecification().getSpecId().asString().replace(".", "-");
         final String propertyId = getIdentifier();
         return "isis-" + objectSpecId + "-" + propertyId;
     }
 
     @Override
     public boolean whetherHidden(final Where where) {
-        final ManagedObject parentAdapter = getParentEntityModel().load();
+        final ManagedObject parentAdapter = getParentUiModel().load();
         final OneToOneAssociation property = getPropertyMemento().getProperty(getSpecificationLoader());
         try {
             final Consent visibility = property.isVisible(parentAdapter, InteractionInitiatedBy.USER, where);
@@ -114,7 +114,7 @@ public class ScalarPropertyModel extends ScalarModel {
 
     @Override
     public String whetherDisabled(final Where where) {
-        final ManagedObject parentAdapter = getParentEntityModel().load();
+        final ManagedObject parentAdapter = getParentUiModel().load();
         final OneToOneAssociation property = getPropertyMemento().getProperty(getSpecificationLoader());
         try {
             final Consent usable = property.isUsable(parentAdapter, InteractionInitiatedBy.USER, where);
@@ -132,7 +132,7 @@ public class ScalarPropertyModel extends ScalarModel {
             parseableFacet = property.getSpecification().getFacet(ParseableFacet.class);
         }
         try {
-            final ManagedObject parentAdapter = getParentEntityModel().load();
+            final ManagedObject parentAdapter = getParentUiModel().load();
             final ManagedObject currentValue = property.get(parentAdapter, InteractionInitiatedBy.USER);
             final ManagedObject proposedAdapter =
                     parseableFacet.parseTextEntry(currentValue, proposedPojoAsStr, InteractionInitiatedBy.USER);
@@ -150,7 +150,7 @@ public class ScalarPropertyModel extends ScalarModel {
 
     @Override
     public String validate(final ManagedObject proposedAdapter) {
-        final ManagedObject parentAdapter = getParentEntityModel().load();
+        final ManagedObject parentAdapter = getParentUiModel().load();
         final OneToOneAssociation property = getPropertyMemento().getProperty(getSpecificationLoader());
         try {
             final Consent valid = property.isAssociationValid(parentAdapter, proposedAdapter,
@@ -180,7 +180,7 @@ public class ScalarPropertyModel extends ScalarModel {
         final PropertyMemento propertyMemento = getPropertyMemento();
         final OneToOneAssociation property = propertyMemento
                 .getProperty(getSpecificationLoader());
-        ManagedObject parentAdapter = getParentEntityModel().load();
+        ManagedObject parentAdapter = getParentUiModel().load();
         return property.getDefault(parentAdapter);
     }
 
@@ -198,7 +198,7 @@ public class ScalarPropertyModel extends ScalarModel {
         final PropertyMemento propertyMemento = getPropertyMemento();
         final OneToOneAssociation property = propertyMemento
                 .getProperty(getSpecificationLoader());
-        ManagedObject parentAdapter = getParentEntityModel().load();
+        ManagedObject parentAdapter = getParentUiModel().load();
         final Can<ManagedObject> choices = property.getChoices(
                 parentAdapter,
                 InteractionInitiatedBy.USER);
@@ -221,7 +221,7 @@ public class ScalarPropertyModel extends ScalarModel {
         final PropertyMemento propertyMemento = getPropertyMemento();
         final OneToOneAssociation property = propertyMemento.getProperty(getSpecificationLoader());
         final ManagedObject parentAdapter =
-                getParentEntityModel().load();
+                getParentUiModel().load();
         final Can<ManagedObject> choices =
                 property.getAutoComplete(
                         parentAdapter, 
@@ -284,7 +284,7 @@ public class ScalarPropertyModel extends ScalarModel {
     public void reset() {
         final OneToOneAssociation property = getPropertyMemento().getProperty(getSpecificationLoader());
 
-        val parentAdapter = getParentEntityModel().load();
+        val parentAdapter = getParentUiModel().load();
 
         setObjectFromPropertyIfVisible(this, property, parentAdapter);
     }
@@ -306,7 +306,7 @@ public class ScalarPropertyModel extends ScalarModel {
     
     public String getReasonInvalidIfAny() {
         val property = getPropertyMemento().getProperty(getSpecificationLoader());
-        val adapter = getParentEntityModel().load();
+        val adapter = getParentUiModel().load();
         val associate = getObject();
         Consent validity = property.isAssociationValid(adapter, associate, InteractionInitiatedBy.USER);
         return validity.isAllowed() ? null : validity.getReason();
@@ -357,7 +357,7 @@ public class ScalarPropertyModel extends ScalarModel {
     @Override
     protected List<ObjectAction> calcAssociatedActions() {
 
-        final EntityModel parentEntityModel1 = this.getParentEntityModel();
+        final EntityModel parentEntityModel1 = this.getParentUiModel();
         final ManagedObject parentAdapter = parentEntityModel1.load();
 
         final OneToOneAssociation oneToOneAssociation =

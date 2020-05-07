@@ -51,7 +51,7 @@ public class PropertyEditPanel extends PanelAbstract<ScalarPropertyModel> {
     public PropertyEditPanel(
             final String id,
             final ScalarPropertyModel scalarModel) {
-        super(id, new ScalarPropertyModel(scalarModel.getParentEntityModel(), scalarModel.getPropertyMemento(),
+        super(id, new ScalarPropertyModel(scalarModel.getParentUiModel(), scalarModel.getPropertyMemento(),
                 EntityModel.Mode.EDIT, EntityModel.RenderingHint.REGULAR));
 
         buildGui(scalarModel);
@@ -83,7 +83,7 @@ public class PropertyEditPanel extends PanelAbstract<ScalarPropertyModel> {
 
         {
             getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PROPERTY_EDIT_FORM, getScalarModel());
-            getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, scalarModel.getParentEntityModel());
+            getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, scalarModel.getParentUiModel());
 
             final OneToOneAssociation property = getScalarModel().getPropertyMemento().getProperty(scalarModel.getSpecificationLoader());
             final String propertyName = property.getName();

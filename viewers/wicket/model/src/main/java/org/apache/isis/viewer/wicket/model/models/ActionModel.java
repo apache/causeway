@@ -24,8 +24,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.apache.wicket.request.IRequestHandler;
@@ -48,8 +46,6 @@ import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.NamedWithMimeType;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._NullSafe;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.commons.internal.primitives._Ints;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -81,8 +77,6 @@ implements FormExecutorContext {
     private static final long serialVersionUID = 1L;
 
     private static final String NULL_ARG = "$nullArg$";
-    private static final Pattern KEY_VALUE_PATTERN = Pattern.compile("([^=]+)=(.+)");
-
 
     public ActionModel copy() {
         return new ActionModel(this);
@@ -111,39 +105,7 @@ implements FormExecutorContext {
         actionModel.setContextArgumentIfPossible(pageParameters);
         return actionModel;
     }
-
-
-
-    @Value(staticConstructor = "of")
-    public static class ParamNumAndOidString {
-        int paramNum;
-        String oidString;
-    }
-
-    public static Optional<ParamNumAndOidString> parse(final String paramContext) {
-        val matcher = KEY_VALUE_PATTERN.matcher(paramContext);
-        if (!matcher.matches()) {
-            return Optional.empty();
-        }
-
-        try {
-
-            val intLiteral = matcher.group(1);
-            val oidStr = matcher.group(2);
-
-            val parseResult = _Ints.parseInt(intLiteral, 10);
-            if(parseResult.isPresent()) {
-                val paramNum = parseResult.getAsInt();
-                return Optional.of(ParamNumAndOidString.of(paramNum, oidStr));
-            }
-
-        } catch (final Exception e) {
-            // ignore and fall through
-        }
-
-        return Optional.empty();
-
-    }
+  
 
     //////////////////////////////////////////////////
     // BookmarkableModel
@@ -253,7 +215,7 @@ implements FormExecutorContext {
     }
 
     @Override
-    public EntityModel getParentEntityModel() {
+    public EntityModel getParentUiModel() {
         return entityModel;
     }
 
@@ -291,17 +253,14 @@ implements FormExecutorContext {
     }
 
     private boolean setContextArgumentIfPossible(final PageParameters pageParameters) {
-        final String paramContext = PageParameterNames.ACTION_PARAM_CONTEXT.getStringFrom(pageParameters);
-        if (paramContext == null) {
+        
+        val paramNumAndOidString = PageParameterUtil.parseParamContext(pageParameters)
+                .orElse(null);
+        if(paramNumAndOidString==null) {
             return false;
         }
-
-        val action = actionMemento.getAction(getSpecificationLoader());
-
-        val paramNumAndOidString = parse(paramContext)
-                .orElseThrow(()->_Exceptions
-                        .unrecoverableFormatted("failed to parse param context '%s'", paramContext));
         
+        val action = actionMemento.getAction(getSpecificationLoader());
         val actionParamIfAny = action.getParameters().get(paramNumAndOidString.getParamNum());
         if(!actionParamIfAny.isPresent()) {
             return false;

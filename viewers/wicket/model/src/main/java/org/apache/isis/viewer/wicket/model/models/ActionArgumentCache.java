@@ -29,7 +29,7 @@ import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.viewer.common.model.action.param.PendingParameterManager;
+import org.apache.isis.viewer.common.model.action.form.PendingParameterManager;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 

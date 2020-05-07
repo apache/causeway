@@ -44,7 +44,7 @@ public class PropertyFormExecutorStrategy implements FormExecutorStrategy<Scalar
 
     @Override
     public ManagedObject obtainTargetAdapter() {
-        return model.getParentEntityModel().load();
+        return model.getParentUiModel().load();
     }
 
     @Override
@@ -65,7 +65,7 @@ public class PropertyFormExecutorStrategy implements FormExecutorStrategy<Scalar
         val resultAdapter = this.model.applyValue(targetAdapter);
 
         if (resultAdapter != targetAdapter) {
-            this.model.getParentEntityModel().setObject(targetAdapter);
+            this.model.getParentUiModel().setObject(targetAdapter);
         }
         return resultAdapter;
     }

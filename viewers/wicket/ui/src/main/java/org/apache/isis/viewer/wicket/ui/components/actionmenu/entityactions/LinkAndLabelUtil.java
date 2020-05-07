@@ -39,7 +39,7 @@ public final class LinkAndLabelUtil {
             final ScalarModel scalarModel,
             final List<ObjectAction> associatedActions) {
 
-        final EntityModel parentEntityModel = scalarModel.getParentEntityModel();
+        final EntityModel parentEntityModel = scalarModel.getParentUiModel();
         return asActionLinksForAdditionalLinksPanel(parentEntityModel, associatedActions, scalarModel);
     }
 

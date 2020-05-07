@@ -130,7 +130,7 @@ implements LinksProvider, FormExecutorContext {
     }
 
     @Override
-    public EntityModel getParentEntityModel() {
+    public EntityModel getParentUiModel() {
         return parentEntityModel;
     }
 

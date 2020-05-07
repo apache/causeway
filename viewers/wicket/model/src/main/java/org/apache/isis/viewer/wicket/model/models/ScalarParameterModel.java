@@ -118,7 +118,7 @@ implements ActionArgumentModel {
         final ObjectActionParameter parameter = getParameterMemento().getActionParameter(
                 getSpecificationLoader());
         try {
-            ManagedObject parentAdapter = getParentEntityModel().load();
+            ManagedObject parentAdapter = getParentUiModel().load();
             final String invalidReasonIfAny = parameter.isValid(parentAdapter, proposedPojoAsStr,
                     InteractionInitiatedBy.USER
                     );
@@ -133,7 +133,7 @@ implements ActionArgumentModel {
         final ObjectActionParameter parameter = getParameterMemento().getActionParameter(
                 getSpecificationLoader());
         try {
-            ManagedObject parentAdapter = getParentEntityModel().load();
+            ManagedObject parentAdapter = getParentUiModel().load();
             final String invalidReasonIfAny = parameter.isValid(parentAdapter, proposedAdapter.getPojo(),
                     InteractionInitiatedBy.USER
                     );
@@ -297,7 +297,7 @@ implements ActionArgumentModel {
     
     public PendingParameterModelHead getPendingParamHead() {
         val actionParameter = getParameter();
-        val actionOwner = getParentEntityModel().load();
+        val actionOwner = getParentUiModel().load();
         return actionParameter.getAction().newPendingParameterModelHead(actionOwner);
     }
 

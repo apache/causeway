@@ -16,11 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.viewer.common.model.action.form;
 
-package org.apache.isis.viewer.wicket.model.models;
-
-public interface ParentEntityModelProvider {
-
-    EntityModel getParentEntityModel();
+public interface ActionFormUiModel {
 
 }

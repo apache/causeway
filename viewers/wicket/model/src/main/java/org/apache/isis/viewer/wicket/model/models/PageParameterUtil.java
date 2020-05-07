@@ -18,20 +18,27 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
+import java.util.Optional;
+import java.util.regex.Pattern;
+
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.commons.internal.primitives._Ints;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 
+import lombok.Value;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-class PageParameterUtil {
 
+
+class PageParameterUtil {
+    
     /**
      * Factory method for creating {@link PageParameters}.
      */
@@ -56,6 +63,47 @@ class PageParameterUtil {
         PageParameterNames.ACTION_ID.addStringTo(pageParameters, actionId);
 
         return pageParameters;
+    }
+
+    @Value(staticConstructor = "of")
+    public static class ParamNumAndOidString {
+        int paramNum;
+        String oidString;
+    }
+
+    public static Optional<ParamNumAndOidString> parseParamContext(PageParameters pageParameters) {
+        final String paramContext = PageParameterNames.ACTION_PARAM_CONTEXT.getStringFrom(pageParameters);
+        if (paramContext == null) {
+            return Optional.empty();
+        }
+        return parseParamContext(paramContext);
+    }
+    
+    private static final Pattern KEY_VALUE_PATTERN = Pattern.compile("([^=]+)=(.+)");
+    
+    static Optional<ParamNumAndOidString> parseParamContext(final String paramContext) {
+        val matcher = KEY_VALUE_PATTERN.matcher(paramContext);
+        if (!matcher.matches()) {
+            return Optional.empty();
+        }
+
+        try {
+
+            val intLiteral = matcher.group(1);
+            val oidStr = matcher.group(2);
+
+            val parseResult = _Ints.parseInt(intLiteral, 10);
+            if(parseResult.isPresent()) {
+                val paramNum = parseResult.getAsInt();
+                return Optional.of(ParamNumAndOidString.of(paramNum, oidStr));
+            }
+
+        } catch (final Exception e) {
+            // ignore and fall through
+        }
+
+        return Optional.empty();
+
     }
     
     private static String determineActionId(final ObjectAction objectAction) {

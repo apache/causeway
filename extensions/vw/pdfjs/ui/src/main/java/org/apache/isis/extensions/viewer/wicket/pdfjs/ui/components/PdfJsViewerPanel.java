@@ -205,7 +205,7 @@ class PdfJsViewerPanel extends ScalarPanelAbstract<ScalarPropertyModel> implemen
 
         val model = getModel();
         val propertyId = model.getPropertyMemento().getIdentifier();
-        val bookmark = model.getParentEntityModel().getObjectAdapterMemento().asBookmarkIfSupported();
+        val bookmark = model.getParentUiModel().getObjectAdapterMemento().asBookmarkIfSupported();
         val objectType = bookmark.getObjectType();
         val identifier = bookmark.getIdentifier();
 

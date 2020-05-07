@@ -41,7 +41,7 @@ public class ActionPromptHeaderPanel extends PanelAbstract<ActionModel> {
 
         _Blackhole.consume(model.getTargetAdapter()); // side-effect: loads the model
 
-        getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ENTITY_ICON_AND_TITLE, model.getParentEntityModel());
+        getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ENTITY_ICON_AND_TITLE, model.getParentUiModel());
 
 
         final Label label = new Label(ID_ACTION_NAME, new IModel<String>() {

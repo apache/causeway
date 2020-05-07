@@ -38,7 +38,7 @@ public class PropertyEditPromptHeaderPanel extends PanelAbstract<ScalarPropertyM
     public PropertyEditPromptHeaderPanel(String id, final ScalarPropertyModel model) {
         super(id, model);
 
-        val targetAdapter = model.getParentEntityModel().load();
+        val targetAdapter = model.getParentUiModel().load();
 
         getComponentFactoryRegistry().addOrReplaceComponent(
                 this, 
