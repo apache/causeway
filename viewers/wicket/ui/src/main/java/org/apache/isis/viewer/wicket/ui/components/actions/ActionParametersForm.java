@@ -140,7 +140,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
      */
     private void applyAreYouSure(AjaxButton button) {
         val actionModel = getActionModel();
-        val action = actionModel.getAction();
+        val action = actionModel.getMetaModel();
         
         if (action.getSemantics().isAreYouSure()) {
             val confirmUiModel = ConfirmUiModel.ofAreYouSure(getTranslationService(), Placement.RIGHT);

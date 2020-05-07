@@ -45,7 +45,7 @@ public class ActionLinkPanelFactory extends ComponentFactoryAbstract {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
         final ActionModel actionModel = (ActionModel) model;
-        final SemanticsOf semantics = actionModel.getAction().getSemantics();
+        final SemanticsOf semantics = actionModel.getMetaModel().getSemantics();
         return ApplicationAdvice.appliesIf(semantics.isSafeInNature());
     }
 

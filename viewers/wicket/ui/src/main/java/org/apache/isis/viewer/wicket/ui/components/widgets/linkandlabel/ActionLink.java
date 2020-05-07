@@ -111,7 +111,7 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
     public ObjectAction getObjectAction() {
         return objectAction != null
                 ? objectAction
-                        : (objectAction = getActionModel().getAction());
+                        : (objectAction = getActionModel().getMetaModel());
     }
 
 
@@ -261,7 +261,7 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
     }
 
     private static boolean isIdempotentOrCachable(ActionModel actionModel) {
-        val objectAction = actionModel.getAction();
+        val objectAction = actionModel.getMetaModel();
         return ObjectAction.Util.isIdempotentOrCachable(objectAction);
     }
 

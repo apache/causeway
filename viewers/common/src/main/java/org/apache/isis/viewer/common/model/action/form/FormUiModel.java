@@ -20,8 +20,12 @@ package org.apache.isis.viewer.common.model.action.form;
 
 import java.util.stream.Stream;
 
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+
 public interface FormUiModel {
 
+    ObjectAction getMetaModel();
+    
     Stream<FormPendingParamUiModel> streamPendingParamUiModels();
 
 }

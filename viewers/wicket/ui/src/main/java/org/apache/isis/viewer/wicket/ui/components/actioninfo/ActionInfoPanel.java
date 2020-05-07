@@ -40,7 +40,7 @@ public class ActionInfoPanel extends PanelAbstract<ActionModel> {
         super(id, actionModel);
 
         val targetAdapter = getModel().getTargetAdapter();
-        val objectAction = getModel().getAction();
+        val objectAction = getModel().getMetaModel();
 
         // TODO: render instead as links (providing isn't a service; provide a
         // component for this?)

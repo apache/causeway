@@ -97,7 +97,7 @@ implements FormUiModel, FormExecutorContext {
     @Override
     public PageParameters getPageParametersWithoutUiHints() {
         val adapter = getTargetAdapter();
-        val objectAction = getAction();
+        val objectAction = getMetaModel();
         return PageParameterUtil.createPageParameters(adapter, objectAction, argCache().snapshot());
     }
 
@@ -111,7 +111,7 @@ implements FormUiModel, FormExecutorContext {
     @Override
     public String getTitle() {
         val target = getTargetAdapter();
-        val objectAction = getAction();
+        val objectAction = getMetaModel();
 
         val buf = new StringBuilder();
         for(val argumentAdapter: argCache().snapshot()) {
@@ -158,7 +158,7 @@ implements FormUiModel, FormExecutorContext {
         return new ActionArgumentCache(
                 entityModel, 
                 actionMemento, 
-                getAction());
+                getMetaModel());
     }
 
     private ActionModel(EntityModel entityModel, ActionMemento actionMemento) {
@@ -178,7 +178,8 @@ implements FormUiModel, FormExecutorContext {
     }
 
     private transient ObjectAction objectAction;
-    public ObjectAction getAction() {
+    @Override
+    public ObjectAction getMetaModel() {
         if(objectAction==null) {
             objectAction = actionMemento.getAction(getSpecificationLoader()); 
         }
@@ -186,7 +187,7 @@ implements FormUiModel, FormExecutorContext {
     }
 
     public boolean hasParameters() {
-        return getAction().getParameterCount() > 0;
+        return getMetaModel().getParameterCount() > 0;
     }
 
     public ManagedObject getTargetAdapter() {
@@ -216,7 +217,7 @@ implements FormUiModel, FormExecutorContext {
 
         val targetAdapter = getTargetAdapter();
         final Can<ManagedObject> arguments = argCache().snapshot();
-        final ObjectAction action = getAction();
+        final ObjectAction action = getMetaModel();
 
         // if this action is a mixin, then it will fill in the details automatically.
         val mixedInAdapter = (ManagedObject)null;
@@ -244,7 +245,7 @@ implements FormUiModel, FormExecutorContext {
     public String getReasonDisabledIfAny() {
 
         val targetAdapter = getTargetAdapter();
-        final ObjectAction objectAction = getAction();
+        final ObjectAction objectAction = getMetaModel();
 
         final Consent usability =
                 objectAction.isUsable(
@@ -259,7 +260,7 @@ implements FormUiModel, FormExecutorContext {
     public boolean isVisible() {
 
         val targetAdapter = getTargetAdapter();
-        val objectAction = getAction();
+        val objectAction = getMetaModel();
 
         final Consent visibility =
                 objectAction.isVisible(
@@ -273,7 +274,7 @@ implements FormUiModel, FormExecutorContext {
     public String getReasonInvalidIfAny() {
         val targetAdapter = getTargetAdapter();
         final Can<ManagedObject> proposedArguments = argCache().snapshot();
-        final ObjectAction objectAction = getAction();
+        final ObjectAction objectAction = getMetaModel();
         final Consent validity = objectAction
                 .isProposedArgumentSetValid(targetAdapter, proposedArguments, InteractionInitiatedBy.USER);
         return validity.isAllowed() ? null : validity.getReason();
@@ -285,7 +286,7 @@ implements FormUiModel, FormExecutorContext {
     }
 
     public PendingParameterModel getArgumentsAsParamModel() {
-        return getAction().newPendingParameterModelHead(getTargetAdapter())
+        return getMetaModel().newPendingParameterModelHead(getTargetAdapter())
                 .model(argCache().snapshot());
     }
 
@@ -295,7 +296,7 @@ implements FormUiModel, FormExecutorContext {
      */
     public void clearArguments() {
 
-        val defaultsFixedPoint = getAction()
+        val defaultsFixedPoint = getMetaModel()
                 .newPendingParameterModelHead(getTargetAdapter())
                 .defaults()
                 .getParamValues();
@@ -308,7 +309,7 @@ implements FormUiModel, FormExecutorContext {
      * of {@link BookmarkPolicy#AS_ROOT root}, and has safe {@link ObjectAction#getSemantics() semantics}.
      */
     public boolean isBookmarkable() {
-        final ObjectAction action = getAction();
+        final ObjectAction action = getMetaModel();
         final BookmarkPolicyFacet bookmarkPolicy = action.getFacet(BookmarkPolicyFacet.class);
         final boolean safeSemantics = action.getSemantics().isSafeInNature();
         return bookmarkPolicy.value() == BookmarkPolicy.AS_ROOT && safeSemantics;
@@ -392,7 +393,7 @@ implements FormUiModel, FormExecutorContext {
 
     @Override
     public PromptStyle getPromptStyle() {
-        final ObjectAction objectAction = getAction();
+        final ObjectAction objectAction = getMetaModel();
         final ObjectSpecification objectActionOwner = objectAction.getOnType();
         if(objectActionOwner.isManagedBean()) {
             // tried to move this test into PromptStyleFacetFallback,
@@ -428,7 +429,7 @@ implements FormUiModel, FormExecutorContext {
     }
 
     public <T extends Facet> T getFacet(final Class<T> facetType) {
-        final FacetHolder facetHolder = getAction();
+        final FacetHolder facetHolder = getMetaModel();
         return facetHolder.getFacet(facetType);
     }
 
@@ -461,7 +462,7 @@ implements FormUiModel, FormExecutorContext {
     public Stream<FormPendingParamUiModel> streamPendingParamUiModels() {
 
         val targetAdapter = this.getTargetAdapter();
-        val realTargetAdapter = this.getAction().realTargetAdapter(targetAdapter);
+        val realTargetAdapter = this.getMetaModel().realTargetAdapter(targetAdapter);
         val pendingArgs = getArgumentsAsParamModel();
 
         return argCache()
