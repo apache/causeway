@@ -37,6 +37,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -50,6 +51,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel.ActionArgumentModelAndConsents;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
@@ -917,6 +919,11 @@ implements ScalarModelSubscriber2 {
      */
     public void repaint(AjaxRequestTarget target) {
         target.add(this);
+    }
+
+    protected ChoiceProvider<ObjectMemento> buildChoiceProvider() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 

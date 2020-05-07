@@ -35,7 +35,6 @@ import org.wicketstuff.select2.Settings;
 
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModelForReference;
@@ -337,22 +336,20 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
     // //////////////////////////////////////
 
     @Override
-    protected ChoiceProvider<ObjectMemento> buildChoiceProvider(
-            final PendingParameterModel pendingArgs) {
+    protected ChoiceProvider<ObjectMemento> buildChoiceProvider() {
         
         val commonContext = super.getCommonContext();
         
-        if (getModel().hasChoices()) {
-            val choices = getModel().getChoices(pendingArgs);
+        val scalarModel = getModel();
+        
+        if (scalarModel.hasChoices()) {
+            val choices = scalarModel.getChoices();
             val choiceMementos = choices.map(commonContext::mementoForParameter);
-            return new ObjectAdapterMementoProviderForReferenceChoices(getModel(), choiceMementos);
+            return new ObjectAdapterMementoProviderForReferenceChoices(scalarModel, choiceMementos);
         }
 
-        if(getModel().hasAutoComplete()) {
-            val autoCompleteMementos = pendingArgs.getParamValues()
-                    .map(commonContext::mementoForParameter);
-            return new ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(
-                    getModel(), autoCompleteMementos);
+        if(scalarModel.hasAutoComplete()) {
+            return new ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(scalarModel);
         }
 
         return new ObjectAdapterMementoProviderForReferenceObjectAutoComplete(getModel());

@@ -33,11 +33,9 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.wicketstuff.select2.ChoiceProvider;
 
-import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel.ActionArgumentModelAndConsents;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.models.ScalarParameterModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderAbstract;
@@ -60,10 +58,7 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
 
     protected Select2 createSelect2(final String id) {
         final Select2 select2 = Select2.createSelect2(id, scalarModel);
-        setProviderAndCurrAndPending(select2, 
-                (scalarModel instanceof ScalarParameterModel)
-                    ? ((ScalarParameterModel)scalarModel).getActionArgsHint()
-                    : null);
+        setProviderAndCurrAndPending(select2);
         select2.setRequired(scalarModel.isRequired());
         return select2;
     }
@@ -119,10 +114,9 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
      * sets up the choices, also ensuring that any currently held value is compatible.
      */
     private void setProviderAndCurrAndPending(
-            final Select2 select2, 
-            final PendingParameterModel pendingArgs) {
+            final Select2 select2) {
 
-        final ChoiceProvider<ObjectMemento> choiceProvider = buildChoiceProvider(pendingArgs);
+        final ChoiceProvider<ObjectMemento> choiceProvider = buildChoiceProvider();
 
         select2.setProvider(choiceProvider);
         getModel().clearPending();
@@ -137,12 +131,12 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
     }
 
     /**
-     * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, List<ManagedObject>)})
+     * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2)})
      */
-    protected abstract ChoiceProvider<ObjectMemento> buildChoiceProvider(PendingParameterModel pendingArgs);
+    protected abstract ChoiceProvider<ObjectMemento> buildChoiceProvider();
 
     /**
-     * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2, List<ManagedObject>)})
+     * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2)})
      */
     protected abstract void syncIfNull(Select2 select2);
 
@@ -187,8 +181,7 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
             @NonNull final Optional<AjaxRequestTarget> target) {
 
         val repaint = super.updateIfNecessary(argsAndConsents, target);
-
-        final boolean choicesUpdated = updateChoices(argsAndConsents.getPendingArgs());
+        final boolean choicesUpdated = updateChoices();
 
         if (repaint == Repaint.NOTHING) {
             if (choicesUpdated) {
@@ -201,12 +194,11 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
         }
     }
 
-    private boolean updateChoices(final PendingParameterModel pendingArgs) {
+    private boolean updateChoices() {
         if (select2 == null) {
             return false;
         }
-        setProviderAndCurrAndPending(select2, pendingArgs);
-
+        setProviderAndCurrAndPending(select2);
         return true;
     }
 

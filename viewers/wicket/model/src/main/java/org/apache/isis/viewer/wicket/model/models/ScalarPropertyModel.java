@@ -21,23 +21,17 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
-import org.apache.isis.core.metamodel.facets.value.string.StringValueSemanticsProvider;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.common.model.feature.PropertyUiModel;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
@@ -96,10 +90,7 @@ implements PropertyUiModel {
         return property;  
     }
 
-    @Override
-    public String getName() {
-        return getMetaModel().getName();
-    }
+        
 
     @Override
     public ObjectSpecification getScalarTypeSpec() {
@@ -188,84 +179,6 @@ implements PropertyUiModel {
         return getMetaModel().getFacet(facetType);
     }
 
-    @Override
-    public ManagedObject getDefault(
-            final PendingParameterModel pendingArgs /*not used*/) {
-        val parentAdapter = getParentUiModel().load();
-        return getMetaModel().getDefault(parentAdapter);
-    }
-
-    @Override
-    public boolean hasChoices() {
-        return getMetaModel().hasChoices();
-    }
-
-    @Override
-    public Can<ManagedObject> getChoices(
-            final PendingParameterModel pendingArgs /*not used on properties*/) { 
-
-        val parentAdapter = getParentUiModel().load();
-        return getMetaModel().getChoices(
-                parentAdapter,
-                InteractionInitiatedBy.USER);
-    }
-
-    @Override
-    public boolean hasAutoComplete() {
-        return getMetaModel().hasAutoComplete();
-    }
-
-    @Override
-    public Can<ManagedObject> getAutoComplete(
-            final PendingParameterModel pendingArgs, /*not used on properties*/
-            final String searchArg) {
-
-        val parentAdapter = getParentUiModel().load();
-        return getMetaModel().getAutoComplete(
-                        parentAdapter, 
-                        searchArg,
-                        InteractionInitiatedBy.USER);
-    }
-
-    @Override
-    public int getAutoCompleteOrChoicesMinLength() {
-
-        if (hasAutoComplete()) {
-            return getMetaModel().getAutoCompleteMinLength();
-        } else {
-            return 0;
-        }
-    }
-
-    @Override
-    public String getDescribedAs() {
-        return getMetaModel().getDescription();
-    }
-
-    @Override
-    public Integer getLength() {
-        final BigDecimalValueFacet facet = getMetaModel().getFacet(BigDecimalValueFacet.class);
-        return facet != null? facet.getPrecision(): null;
-    }
-
-    @Override
-    public Integer getScale() {
-        final BigDecimalValueFacet facet = getMetaModel().getFacet(BigDecimalValueFacet.class);
-        return facet != null? facet.getScale(): null;
-    }
-
-    @Override
-    public int getTypicalLength() {
-        final TypicalLengthFacet facet = getMetaModel().getFacet(TypicalLengthFacet.class);
-        return facet != null? facet.value() : StringValueSemanticsProvider.TYPICAL_LENGTH;
-    }
-
-    @Override
-    public String getFileAccept() {
-        final FileAcceptFacet facet = getMetaModel().getFacet(FileAcceptFacet.class);
-        return facet != null? facet.value(): null;
-    }
-
     public void reset() {
         val parentAdapter = getParentUiModel().load();
         setObjectFromPropertyIfVisible(this, getMetaModel(), parentAdapter);
@@ -340,5 +253,7 @@ implements PropertyUiModel {
         val parentAdapter = getParentUiModel().load();
         return ObjectAction.Util.findForAssociation(parentAdapter, getMetaModel());
     }
+
+
     
 }

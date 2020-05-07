@@ -22,51 +22,40 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
-import org.apache.isis.core.metamodel.facets.value.string.StringValueSemanticsProvider;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
-import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModelHead;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
-import lombok.val;
 
 public class ScalarParameterModel extends ScalarModel
 implements ParameterUiModel {
 
     private static final long serialVersionUID = 1L;
     
-    private final ActionParameterMemento parameterMemento;
-    /**
-     * The initial call of choicesXxx() for any given scalar argument needs the current values
-     * of all args (possibly as initialized through a defaultNXxx().
-     * @implNote transient because only temporary hint.
-     */
-    @Getter @Setter
-    private transient PendingParameterModel actionArgsHint;
+    private final ActionParameterMemento paramMemento;
+    
+    @Getter(onMethod = @__(@Override)) 
+    @Setter(onMethod = @__(@Override))
+    private transient PendingParameterModel pendingParameterModel;
 
     /**
      * Creates a model representing an action parameter of an action of a parent
      * object, with the {@link #getObject() value of this model} to be default
      * value (if any) of that action parameter.
      */
-    public ScalarParameterModel(EntityModel parentEntityModel, ActionParameterMemento apm) {
-        super(parentEntityModel, apm);
-        this.parameterMemento = apm;
+    public ScalarParameterModel(EntityModel parentEntityModel, ActionParameterMemento paramMemento) {
+        super(parentEntityModel, paramMemento);
+        this.paramMemento = paramMemento;
     }
     
     private transient ObjectActionParameter actionParameter;
@@ -74,14 +63,14 @@ implements ParameterUiModel {
     @Override
     public ObjectActionParameter getMetaModel() {
         if(actionParameter==null) {
-            actionParameter = parameterMemento.getActionParameter(getSpecificationLoader()); 
+            actionParameter = paramMemento.getActionParameter(getSpecificationLoader()); 
         }
         return actionParameter;  
     }
 
     @Override
     public ObjectSpecification getScalarTypeSpec() {
-        return parameterMemento.getSpecification(getSpecificationLoader());
+        return paramMemento.getSpecification(getSpecificationLoader());
     }
 
     @Override
@@ -153,75 +142,7 @@ implements ParameterUiModel {
     public <T extends Facet> T getFacet(final Class<T> facetType) {
         return getMetaModel().getFacet(facetType);
     }
-
-    @Override
-    public ManagedObject getDefault(
-            @NonNull final PendingParameterModel pendingArgs) {
-        
-        return getMetaModel().getDefault(pendingArgs);
-    }
-
-    @Override
-    public boolean hasChoices() {
-        return getMetaModel().hasChoices();
-    }
-    @Override
-    public Can<ManagedObject> getChoices(
-            @NonNull final PendingParameterModel pendingArgs) {
-        return getMetaModel().getChoices(pendingArgs, InteractionInitiatedBy.USER);
-    }
-
-    @Override
-    public boolean hasAutoComplete() {
-        return getMetaModel().hasAutoComplete();
-    }
-    @Override
-    public Can<ManagedObject> getAutoComplete(
-            @NonNull final PendingParameterModel pendingArgs,
-            final String searchArg) {
-        
-        return getMetaModel().getAutoComplete(pendingArgs, searchArg, InteractionInitiatedBy.USER);
-    }
     
-    @Override
-    public int getAutoCompleteOrChoicesMinLength() {
-        if (hasAutoComplete()) {
-            return getMetaModel().getAutoCompleteMinLength();
-        } else {
-            return 0;
-        }
-    }
-
-    @Override
-    public String getDescribedAs() {
-        return getMetaModel().getDescription();
-    }
-
-    @Override
-    public Integer getLength() {
-        final BigDecimalValueFacet facet = getMetaModel().getFacet(BigDecimalValueFacet.class);
-        return facet != null? facet.getPrecision(): null;
-    }
-
-    @Override
-    public Integer getScale() {
-        final BigDecimalValueFacet facet = getMetaModel().getFacet(BigDecimalValueFacet.class);
-        return facet != null? facet.getScale(): null;
-    }
-
-    @Override
-    public int getTypicalLength() {
-        final TypicalLengthFacet facet = getMetaModel().getFacet(TypicalLengthFacet.class);
-        return facet != null? facet.value() : StringValueSemanticsProvider.TYPICAL_LENGTH;
-    }
-
-
-    @Override
-    public String getFileAccept() {
-        final FileAcceptFacet facet = getMetaModel().getFacet(FileAcceptFacet.class);
-        return facet != null? facet.value(): null;
-    }
-
     @Override
     public ManagedObject load() {
         final ManagedObject objectAdapter = loadFromSuper();
@@ -250,24 +171,13 @@ implements ParameterUiModel {
     }
 
     @Override
-    public boolean isCollection() {
-        return getMetaModel().getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION;
-    }
-
-    @Override
     public String toStringOf() {
-        return getName() + ": " + parameterMemento.toString();
+        return getName() + ": " + paramMemento.toString();
     }
     
     @Override
     protected List<ObjectAction> calcAssociatedActions() {
         return Collections.emptyList();
-    }
-    
-    public PendingParameterModelHead getPendingParamHead() {
-        val actionParameter = getMetaModel();
-        val actionOwner = getParentUiModel().load();
-        return actionParameter.getAction().newPendingParameterModelHead(actionOwner);
     }
 
     @Override

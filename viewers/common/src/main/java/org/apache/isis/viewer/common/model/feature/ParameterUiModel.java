@@ -18,11 +18,14 @@
  */
 package org.apache.isis.viewer.common.model.feature;
 
+import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
+import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModelHead;
 
-public interface ParameterUiModel extends FeatureUiModel {
+public interface ParameterUiModel extends ScalarUiModel {
 
     /** param meta model */
     @Override
@@ -34,7 +37,15 @@ public interface ParameterUiModel extends FeatureUiModel {
     /** param value */
     void setValue(ManagedObject paramValue);
     
+    /** actions's owner */
+    ManagedObject getOwner();
+    
     String getCssClass();
+    
+    // -- PENDING PARAMETER MODEL
+
+    PendingParameterModel getPendingParameterModel();
+    void setPendingParameterModel(PendingParameterModel pendingArgs);
 
     // -- SHORTCUTS
     
@@ -43,15 +54,40 @@ public interface ParameterUiModel extends FeatureUiModel {
         return getMetaModel().getNumber();
     }
     
-    /** param name */
-    default String getName() {
-        return getMetaModel().getName();
+    @Override
+    default int getAutoCompleteMinLength() {
+        return hasAutoComplete() ? getMetaModel().getAutoCompleteMinLength() : 0;
+    }
+    
+    @Override
+    default boolean hasChoices() {
+        return getMetaModel().hasChoices();
+    }
+    
+    @Override
+    default boolean hasAutoComplete() {
+        return getMetaModel().hasAutoComplete();
+    }
+    
+    @Override
+    default ManagedObject getDefault() {
+        return getMetaModel().getDefault(getPendingParameterModel());
+    }
+    
+    @Override
+    default Can<ManagedObject> getChoices() {
+        return getMetaModel().getChoices(getPendingParameterModel(), InteractionInitiatedBy.USER);
     }
 
-    // -- DEPRECATIONS
+    @Override
+    default Can<ManagedObject> getAutoComplete(final String searchArg) {
+        return getMetaModel().getAutoComplete(getPendingParameterModel(), searchArg, InteractionInitiatedBy.USER);
+    }
+
+    default PendingParameterModelHead getPendingParamHead() {
+        return getMetaModel().getAction().newPendingParameterModelHead(getOwner());
+    }
     
-    // transient storage
-    void setActionArgsHint(PendingParameterModel pendingArgs);
 
 
 }

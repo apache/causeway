@@ -31,7 +31,6 @@ import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelect2Abstract;
@@ -73,11 +72,11 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
     }
 
 
-    private Can<ObjectMemento> getChoiceMementos(final PendingParameterModel pendingArgs) {
+    private Can<ObjectMemento> getChoiceMementos() {
         
         val commonContext = super.getCommonContext();
         
-        val choices = scalarModel.getChoices(pendingArgs);
+        val choices = scalarModel.getChoices();
 
         return choices.map(commonContext::mementoFor);
     }
@@ -163,9 +162,8 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
     // in corresponding code in ReferencePanelFactory, these is a branch for different types of providers
     // (choice vs autoComplete).  Here though - because values don't currently support autoComplete - no branch is required
     @Override
-    protected ChoiceProvider<ObjectMemento> buildChoiceProvider(
-            final PendingParameterModel pendingArgs) {
-        final Can<ObjectMemento> choicesMementos = getChoiceMementos(pendingArgs);
+    protected ChoiceProvider<ObjectMemento> buildChoiceProvider() {
+        final Can<ObjectMemento> choicesMementos = getChoiceMementos();
         return new ObjectAdapterMementoProviderForValueChoices(scalarModel, choicesMementos);
     }
 

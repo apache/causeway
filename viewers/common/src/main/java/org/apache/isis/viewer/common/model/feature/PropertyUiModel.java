@@ -18,12 +18,47 @@
  */
 package org.apache.isis.viewer.common.model.feature;
 
+import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-public interface PropertyUiModel extends FeatureUiModel {
+public interface PropertyUiModel extends ScalarUiModel {
 
     /** prop meta model */
     @Override
     OneToOneAssociation getMetaModel();
+    
+    // -- SHORTCUTS
+    
+    @Override
+    default int getAutoCompleteMinLength() {
+        return hasAutoComplete() ? getMetaModel().getAutoCompleteMinLength() : 0;
+    }
+    
+    @Override
+    default boolean hasChoices() {
+        return getMetaModel().hasChoices();
+    }
 
+    @Override
+    default boolean hasAutoComplete() {
+        return getMetaModel().hasAutoComplete();
+    }
+    
+    @Override
+    default ManagedObject getDefault() {
+        return getMetaModel().getDefault(getOwner());
+    }
+
+    @Override
+    default Can<ManagedObject> getChoices() { 
+        return getMetaModel().getChoices(getOwner(), InteractionInitiatedBy.USER);
+    }
+
+    @Override
+    default Can<ManagedObject> getAutoComplete(final String searchArg) {
+        return getMetaModel().getAutoComplete(getOwner(), searchArg, InteractionInitiatedBy.USER);
+    }
+    
 }

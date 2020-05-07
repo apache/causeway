@@ -476,7 +476,7 @@ implements FormExecutorContext {
         .streamActionArgumentModels()
         .map(actionArgumentModel->{
 
-            actionArgumentModel.setActionArgsHint(pendingArgs);
+            actionArgumentModel.setPendingParameterModel(pendingArgs);
 
             val objectActionParamter = actionArgumentModel.getMetaModel();
 
