@@ -73,7 +73,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
 
         paramPanels.clear();
         
-        actionModel.streamActionArgumentModels()
+        actionModel.streamPendingParamUiModels()
         .forEach(argsAndConsents->{
             
             val paramModel = (ScalarParameterModel) argsAndConsents.getParamModel(); 
@@ -157,9 +157,9 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
         // only updates subsequent parameter panels starting from (paramNumberUpdated + 1)
         final int skipCount = paramNumberUpdated + 1;   
         
-        actionModel.reassessActionArgumentModels(skipCount);
+        actionModel.reassessPendingParamUiModels(skipCount);
         
-        actionModel.streamActionArgumentModels()
+        actionModel.streamPendingParamUiModels()
         .skip(skipCount)
         .forEach(argAndConsents->{
             

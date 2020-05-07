@@ -79,7 +79,7 @@ class ActionArgumentCache implements PendingParameterManager {
         
         arguments.clear();
         
-        streamActionArgumentModels()
+        streamParamUiModels()
         .forEach(actionArgumentModel -> {
             int paramIndex = actionArgumentModel.getNumber();
             val paramDefaultValue = defaultsFixedPoint.getElseFail(paramIndex);
@@ -87,7 +87,7 @@ class ActionArgumentCache implements PendingParameterManager {
         });
     }
     
-    public Stream<ParameterUiModel> streamActionArgumentModels() {
+    public Stream<ParameterUiModel> streamParamUiModels() {
         return streamParamNumbers()
                 .mapToObj(paramIndex->
                     arguments.computeIfAbsent(paramIndex, this::createArgumentModel));
@@ -122,7 +122,7 @@ class ActionArgumentCache implements PendingParameterManager {
     private void primeArgumentModels() {
         _Assert.assertEquals(
                 action.getParameterCount(),
-                (int)streamActionArgumentModels().count());
+                (int)streamParamUiModels().count());
     }
     
     private ParameterUiModel computeIfAbsent(final ActionParameterMemento apm) {

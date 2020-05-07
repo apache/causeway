@@ -59,13 +59,14 @@ import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModelHead;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.common.model.action.form.FormPendingParamUiModel;
+import org.apache.isis.viewer.common.model.action.form.FormUiModel;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 
 import lombok.val;
 
 public class ActionModel 
 extends BookmarkableModel<ManagedObject> 
-implements FormExecutorContext {
+implements FormUiModel, FormExecutorContext {
 
     private static final long serialVersionUID = 1L;
 
@@ -456,44 +457,27 @@ implements FormExecutorContext {
         argCache().clearParameterValue(actionParameter);
     }
 
-
-
-    public Stream<FormPendingParamUiModel> streamActionArgumentModels() {
+    @Override
+    public Stream<FormPendingParamUiModel> streamPendingParamUiModels() {
 
         val targetAdapter = this.getTargetAdapter();
         val realTargetAdapter = this.getAction().realTargetAdapter(targetAdapter);
         val pendingArgs = getArgumentsAsParamModel();
-        val pendingArgValues = pendingArgs.getParamValues();
 
         return argCache()
-        .streamActionArgumentModels()
-        .map(actionArgumentModel->{
-
-            actionArgumentModel.setPendingParameterModel(pendingArgs);
-
-            val objectActionParamter = actionArgumentModel.getMetaModel();
-
-            // visibility
-            val visibilityConsent = objectActionParamter
-                    .isVisible(realTargetAdapter, pendingArgValues, InteractionInitiatedBy.USER);
-
-            // usability
-            val usabilityConsent = objectActionParamter
-                    .isUsable(realTargetAdapter, pendingArgValues, InteractionInitiatedBy.USER);
-
-            return FormPendingParamUiModel.of(
-                    pendingArgs, actionArgumentModel, visibilityConsent, usabilityConsent);
-
+        .streamParamUiModels()
+        .map(paramUiModel->{
+            return FormPendingParamUiModel.of(realTargetAdapter, paramUiModel, pendingArgs);
         });
 
     }
 
-    public void reassessActionArgumentModels(int skipCount) {
+    public void reassessPendingParamUiModels(int skipCount) {
 
         val pendingArgs = getArgumentsAsParamModel();
 
         argCache()
-        .streamActionArgumentModels()
+        .streamParamUiModels()
         .skip(skipCount)
         .forEach(actionArgumentModel->{
 

@@ -22,7 +22,8 @@ package org.apache.isis.viewer.wicket.model.models;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.viewer.common.model.HasParentUiModel;
 
-public interface FormExecutorContext extends HasParentUiModel<EntityModel> {
+public interface FormExecutorContext 
+extends HasParentUiModel<EntityModel> {
 
     PromptStyle getPromptStyle();
 

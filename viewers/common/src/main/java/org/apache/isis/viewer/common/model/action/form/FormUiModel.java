@@ -18,6 +18,10 @@
  */
 package org.apache.isis.viewer.common.model.action.form;
 
+import java.util.stream.Stream;
+
 public interface FormUiModel {
+
+    Stream<FormPendingParamUiModel> streamPendingParamUiModels();
 
 }

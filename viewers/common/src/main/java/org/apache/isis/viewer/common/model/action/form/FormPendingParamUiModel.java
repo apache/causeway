@@ -19,15 +19,39 @@
 package org.apache.isis.viewer.common.model.action.form;
 
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 
 import lombok.Value;
+import lombok.val;
 
 @Value(staticConstructor = "of")
 public class FormPendingParamUiModel {
-    final PendingParameterModel pendingArgs;
+    
     final ParameterUiModel paramModel;
     final Consent visibilityConsent;
     final Consent usabilityConsent;
+    
+    public static FormPendingParamUiModel of(
+            ManagedObject target,
+            ParameterUiModel paramUiModel, 
+            PendingParameterModel pendingArgs) {
+
+        val objectActionParamter = paramUiModel.getMetaModel();
+        val pendingArgValues = pendingArgs.getParamValues();
+
+        paramUiModel.setPendingParameterModel(pendingArgs);
+        
+        // visibility
+        val visibilityConsent = objectActionParamter
+                .isVisible(target, pendingArgValues, InteractionInitiatedBy.USER);
+
+        // usability
+        val usabilityConsent = objectActionParamter
+                .isUsable(target, pendingArgValues, InteractionInitiatedBy.USER);
+        
+        return of(paramUiModel, visibilityConsent, usabilityConsent);
+    }
 }
