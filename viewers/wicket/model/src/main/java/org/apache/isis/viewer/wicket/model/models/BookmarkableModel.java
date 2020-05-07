@@ -22,8 +22,11 @@ package org.apache.isis.viewer.wicket.model.models;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.viewer.common.model.HasTitle;
 
-public abstract class BookmarkableModel<T> extends ModelAbstract<T>  {
+public abstract class BookmarkableModel<T> 
+extends ModelAbstract<T>  
+implements HasTitle {
 
     private static final long serialVersionUID = 1L;
 
@@ -44,7 +47,5 @@ public abstract class BookmarkableModel<T> extends ModelAbstract<T>  {
     public abstract PageParameters getPageParametersWithoutUiHints();
 
     public abstract boolean hasAsRootPolicy();
-
-    public abstract String getTitle();
 
 }

@@ -74,7 +74,9 @@ import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import lombok.Value;
 import lombok.val;
 
-public class ActionModel extends BookmarkableModel<ManagedObject> implements FormExecutorContext {
+public class ActionModel 
+extends BookmarkableModel<ManagedObject> 
+implements FormExecutorContext {
 
     private static final long serialVersionUID = 1L;
 
@@ -169,10 +171,10 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
 
     @Override
     public String getTitle() {
-        val adapter = getTargetAdapter();
-        final ObjectAction objectAction = getAction();
+        val target = getTargetAdapter();
+        val objectAction = getAction();
 
-        final StringBuilder buf = new StringBuilder();
+        val buf = new StringBuilder();
         for(val argumentAdapter: argCache().snapshot()) {
             if(buf.length() > 0) {
                 buf.append(",");
@@ -180,7 +182,7 @@ public class ActionModel extends BookmarkableModel<ManagedObject> implements For
             buf.append(abbreviated(titleOf(argumentAdapter), 8));
         }
 
-        return adapter.titleString(null) + "." + objectAction.getName() + (buf.length()>0?"(" + buf.toString() + ")":"");
+        return target.titleString(null) + "." + objectAction.getName() + (buf.length()>0?"(" + buf.toString() + ")":"");
     }
 
     @Override
