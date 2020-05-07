@@ -50,8 +50,8 @@ import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.viewer.common.model.action.form.FormPendingParamUiModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.models.ActionModel.ActionArgumentModelAndConsents;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -120,14 +120,14 @@ implements ScalarModelSubscriber2 {
     /** this is a hack for the ScalarParameterModel, which does not support usability constraints in the model*/
     private transient Runnable postInit;
     @Deprecated // properly implement ScalarParameterModel
-    public void postInit(@NonNull final ActionArgumentModelAndConsents argsAndConsents) {
+    public void postInit(@NonNull final FormPendingParamUiModel argAndConsents) {
         this.postInit = () ->{
             // visibility
-            val visibilityConsent = argsAndConsents.getVisibilityConsent();
+            val visibilityConsent = argAndConsents.getVisibilityConsent();
             setVisible(visibilityConsent.isAllowed());
 
             // usability
-            val usabilityConsent = argsAndConsents.getUsabilityConsent();
+            val usabilityConsent = argAndConsents.getUsabilityConsent();
             if(usabilityConsent.isAllowed()) {
                 onInitializeEditable();
             } else {
@@ -145,7 +145,7 @@ implements ScalarModelSubscriber2 {
      * @return - true if changed as a result of these pending arguments.
      */
     public Repaint updateIfNecessary(
-            @NonNull final ActionArgumentModelAndConsents argsAndConsents,
+            @NonNull final FormPendingParamUiModel argsAndConsents,
             @NonNull final Optional<AjaxRequestTarget> target) {
         
         val argModel = argsAndConsents.getParamModel();

@@ -58,10 +58,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModelHead;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
+import org.apache.isis.viewer.common.model.action.form.FormPendingParamUiModel;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 
-import lombok.Value;
 import lombok.val;
 
 public class ActionModel 
@@ -457,15 +456,9 @@ implements FormExecutorContext {
         argCache().clearParameterValue(actionParameter);
     }
 
-    @Value(staticConstructor = "of")
-    public static class ActionArgumentModelAndConsents {
-        final PendingParameterModel pendingArgs;
-        final ParameterUiModel paramModel;
-        final Consent visibilityConsent;
-        final Consent usabilityConsent;
-    }
 
-    public Stream<ActionArgumentModelAndConsents> streamActionArgumentModels() {
+
+    public Stream<FormPendingParamUiModel> streamActionArgumentModels() {
 
         val targetAdapter = this.getTargetAdapter();
         val realTargetAdapter = this.getAction().realTargetAdapter(targetAdapter);
@@ -488,7 +481,7 @@ implements FormExecutorContext {
             val usabilityConsent = objectActionParamter
                     .isUsable(realTargetAdapter, pendingArgValues, InteractionInitiatedBy.USER);
 
-            return ActionArgumentModelAndConsents.of(
+            return FormPendingParamUiModel.of(
                     pendingArgs, actionArgumentModel, visibilityConsent, usabilityConsent);
 
         });

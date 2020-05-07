@@ -37,9 +37,6 @@ public interface ParameterUiModel extends ScalarUiModel {
     /** param value */
     void setValue(ManagedObject paramValue);
     
-    /** actions's owner */
-    ManagedObject getOwner();
-    
     String getCssClass();
     
     // -- PENDING PARAMETER MODEL

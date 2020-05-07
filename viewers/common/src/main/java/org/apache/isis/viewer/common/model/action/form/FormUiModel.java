@@ -18,6 +18,6 @@
  */
 package org.apache.isis.viewer.common.model.action.form;
 
-public interface ActionFormUiModel {
+public interface FormUiModel {
 
 }
