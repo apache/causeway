@@ -20,12 +20,16 @@
 package org.apache.isis.core.metamodel.interactions;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Represents an interaction between the framework and (a {@link Facet} of) the
@@ -55,25 +59,6 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
  */
 public abstract class InteractionContext {
 
-    private final InteractionContextType interactionType;
-    private final InteractionInitiatedBy interactionInitiatedBy;
-    private final Identifier identifier;
-    private final ManagedObject target;
-
-    private ManagedObject mixedInAdapter = null; // for mixin members only, obviously
-
-    public InteractionContext(
-            final InteractionContextType interactionType,
-            final InteractionInitiatedBy invocationMethod,
-            final Identifier identifier,
-            final ManagedObject target) {
-        this.interactionType = interactionType;
-        this.interactionInitiatedBy = invocationMethod;
-        this.identifier = identifier;
-        this.target = target;
-    }
-
-
     /**
      * The type of interaction.
      *
@@ -86,12 +71,16 @@ public abstract class InteractionContext {
      * <p>
      * Alternatively, {@link Facet}s can use <tt>instanceof</tt>.
      */
-    public InteractionContextType getInteractionType() {
-        return interactionType;
-    }
-
+    @Getter private final InteractionContextType interactionType;
+    
     /**
-     * The identifier of the object or member that is being identified with.
+     * How the interaction was initiated.
+     */
+    @Getter private final InteractionInitiatedBy initiatedBy;
+    
+    /**
+     * The identifier of the object or member that this interaction is being 
+     * identified with.
      *
      * <p>
      * If the {@link #getInteractionType() type} is
@@ -99,43 +88,41 @@ public abstract class InteractionContext {
      * the {@link #getTarget() target} object's specification. Otherwise will be
      * the identifier of the member.
      */
-    public Identifier getIdentifier() {
-        return identifier;
-    }
-
+    @Getter private final Identifier identifier;
+    
+    /**
+     * The target object that this interaction is associated with.
+     */
+    @Getter private final ManagedObject target;
 
     /**
-     * How the interaction was initiated.
+     * Where the element is to be rendered.
      */
-    public InteractionInitiatedBy getInitiatedBy() {
-        return interactionInitiatedBy;
+    @Getter private final Where where;
+    
+    @Getter @Setter private ManagedObject mixedIn = null; // for mixin members only, obviously
+
+    protected InteractionContext(
+            final InteractionContextType interactionType,
+            final InteractionInitiatedBy invocationMethod,
+            final Identifier identifier,
+            final ManagedObject target,
+            final Where where) {
+        this.interactionType = interactionType;
+        this.initiatedBy = invocationMethod;
+        this.identifier = identifier;
+        this.target = target;
+        this.where = where;
     }
+
 
     /**
      * Convenience method that indicates whether the
      * {@link #getInitiatedBy() interaction was invoked} by the framework.
      */
     public boolean isFrameworkInitiated() {
-        return interactionInitiatedBy == InteractionInitiatedBy.FRAMEWORK;
+        return initiatedBy == InteractionInitiatedBy.FRAMEWORK;
     }
-
-    /**
-     * The target object that this interaction is with.
-     */
-    public ManagedObject getTarget() {
-        return target;
-    }
-
-    // //////////////////////////////////////
-
-    public void setMixedIn(final ManagedObject mixedInAdapter) {
-        this.mixedInAdapter = mixedInAdapter;
-    }
-
-    public ManagedObject getMixedIn() {
-        return mixedInAdapter;
-    }
-
     
 
 }

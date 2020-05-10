@@ -34,24 +34,13 @@ public abstract class UsabilityContext
 extends InteractionContext
 implements InteractionEventSupplier<UsabilityEvent> {
 
-    private final Where where;
-
     public UsabilityContext(
             final InteractionContextType interactionType,
             final ManagedObject targetAdapter,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
-        super(interactionType, interactionInitiatedBy, identifier, targetAdapter);
-        this.where = where;
+        super(interactionType, interactionInitiatedBy, identifier, targetAdapter, where);
     }
-
-    /**
-     * Where the element is to be rendered.
-     */
-    public Where getWhere() {
-        return where;
-    }
-
 
 }

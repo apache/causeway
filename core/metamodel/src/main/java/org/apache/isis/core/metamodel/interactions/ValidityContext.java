@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.interactions;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -38,7 +39,7 @@ implements InteractionEventSupplier<ValidityEvent> {
             final ManagedObject target,
             final Identifier identifier,
             final InteractionInitiatedBy invocationMethod) {
-        super(interactionType, invocationMethod, identifier, target);
+        super(interactionType, invocationMethod, identifier, target, Where.NOT_SPECIFIED);
     }
 
 }
