@@ -70,7 +70,7 @@ public abstract class InteractionContext {
      * Model that holds the objects involved with the interaction.
      * @since 2.0
      */
-    @Value(staticConstructor = "of2")
+    @Value(staticConstructor = "unchecked")
     public static class Head {
         /**
          * The owning object that this interaction is associated with.
@@ -85,16 +85,15 @@ public abstract class InteractionContext {
         /** in support of legacy code */
         public static Head of(@NonNull ManagedObject owner, @NonNull ManagedObject target) {
             if(ManagedObject.isSpecified(owner) 
-                    && owner.getSpecification().getBeanSort().isMixin()
-                    && owner.getPojo()==null) {
-                throw _Exceptions.unrecoverableFormatted("owner not spec. %s", owner);
+                    && owner.getSpecification().getBeanSort().isMixin()) {
+                throw _Exceptions.unrecoverableFormatted("unexpected: owner is a mixin %s", owner);
             }
             if(ManagedObject.isSpecified(target)                    
                     && target.getSpecification().getBeanSort().isMixin()
                     && target.getPojo()==null) {
                 throw _Exceptions.unrecoverableFormatted("target not spec. %s", target);
             }
-            return of2(owner, target);
+            return unchecked(owner, target);
         }
         
         /** when owner equals target (no mixin) */
