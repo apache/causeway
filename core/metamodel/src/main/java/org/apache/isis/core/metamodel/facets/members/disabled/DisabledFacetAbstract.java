@@ -26,11 +26,8 @@ import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.WhereValueFacetAbstract;
-import org.apache.isis.core.metamodel.interactions.ActionUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationContributee;
-import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationContributee;
 
 public abstract class DisabledFacetAbstract extends WhereValueFacetAbstract implements DisabledFacet {
 
@@ -71,10 +68,6 @@ public abstract class DisabledFacetAbstract extends WhereValueFacetAbstract impl
             return null;
         }
 
-        if(ic instanceof ActionUsabilityContext && (getFacetHolder() instanceof OneToOneAssociationContributee || getFacetHolder() instanceof OneToManyAssociationContributee)) {
-            // otherwise ends up vetoing the invocation of the contributing action
-            return null;
-        }
         final ManagedObject target = ic.getTarget();
         final String disabledReason = disabledReason(target);
         if (disabledReason != null) {

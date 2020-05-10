@@ -19,12 +19,8 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import javax.annotation.Nullable;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
-import org.apache.isis.core.commons.internal.base._Tuples;
-import org.apache.isis.core.commons.internal.base._Tuples.Indexed;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -50,7 +46,7 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
  * code-smell. However, it is required because the {@link InteractionContext
  * context} hierarchy is internal to the framework (with references to
  * {@link ManagedObject}s, {@link AuthenticationSession}s and so forth), whereas
- * the {@link InteractionEvent event} hierarchy is part of the corelib, that is
+ * the {@link InteractionEvent event} hierarchy is part of AppLib, that is
  * public API.
  *
  * <p>
@@ -64,9 +60,6 @@ public abstract class InteractionContext<T extends InteractionEvent> {
     private final Identifier identifier;
     private final ManagedObject target;
 
-    private int contributeeParam = -1; // no contributee
-    private ManagedObject contributee = null;
-    
     private ManagedObject mixedInAdapter = null; // for mixin members only, obviously
 
     public InteractionContext(
@@ -135,20 +128,6 @@ public abstract class InteractionContext<T extends InteractionEvent> {
 
     // //////////////////////////////////////
 
-    public void putContributee(int contributeeParam, ManagedObject contributee) {
-        this.contributeeParam = contributeeParam;
-        this.contributee = contributee;
-    }
-
-    public @Nullable Indexed<ManagedObject> getContributeeWithParamIndex() {
-        if(contributee==null) {
-            return null;
-        }
-        return _Tuples.indexed(contributeeParam, contributee);
-    }
-
-    // //////////////////////////////////////
-
     public void setMixedIn(final ManagedObject mixedInAdapter) {
         this.mixedInAdapter = mixedInAdapter;
     }
@@ -158,8 +137,6 @@ public abstract class InteractionContext<T extends InteractionEvent> {
     }
 
     // //////////////////////////////////////
-
-
 
     /**
      * Factory method to create corresponding {@link InteractionEvent}.

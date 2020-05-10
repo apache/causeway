@@ -44,7 +44,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 
 public abstract class ActionDomainEventFacetAbstract
 extends SingleClassValueFacetAbstract 
@@ -146,20 +145,9 @@ implements ActionDomainEventFacet {
         return ((ActionInteractionContext) ic).getObjectAction();
     }
 
+    @Deprecated
     private static Can<ManagedObject> argumentAdaptersFrom(
             final InteractionContext<? extends InteractionEvent> ic) {
-        
-        val contributee = ic.getContributeeWithParamIndex();
-
-        if(contributee!=null) {
-
-            val adapter = contributee.getIndex() == 0
-                    ? contributee.getValue()
-                    : ManagedObject.unspecified();
-            
-            return Can.ofSingleton(adapter);
-                
-        }
 
         return Can.empty();
     }
