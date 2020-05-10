@@ -83,7 +83,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
         // created from mixin actions.
         val type = actionTypeOfFacet != null
                 ? actionTypeOfFacet.value()
-                : (Class)Object.class;
+                : (Class<?>)Object.class;
                 
         return objectAction.getSpecificationLoader().loadSpecification(type);
     }
@@ -178,7 +178,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
             final Where where) {
 
         final ManagedObject mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
-        final VisibilityContext<?> ic =
+        final VisibilityContext ic =
                 mixinAction.createVisibleInteractionContext(mixinAdapter, interactionInitiatedBy, where);
         ic.setMixedIn(mixedInAdapter);
         return InteractionUtils.isVisibleResult(this, ic).createConsent();
@@ -191,7 +191,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
             final Where where) {
 
         final ManagedObject mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
-        final UsabilityContext<?> ic =
+        final UsabilityContext ic =
                 mixinAction.createUsableInteractionContext(
                         mixinAdapter, interactionInitiatedBy, where);
         ic.setMixedIn(mixedInAdapter);

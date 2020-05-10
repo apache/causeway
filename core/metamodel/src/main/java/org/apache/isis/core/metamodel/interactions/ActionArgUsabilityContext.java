@@ -36,7 +36,7 @@ import lombok.Getter;
  * {@link ActionArgumentEvent}.
  */
 public class ActionArgUsabilityContext 
-extends UsabilityContext<ActionArgumentUsabilityEvent> 
+extends UsabilityContext 
 implements ActionInteractionContext {
 
     @Getter(onMethod = @__(@Override)) private final ObjectAction objectAction;

@@ -164,7 +164,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
             final Where where) {
 
         val mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
-        final VisibilityContext<?> ic =
+        final VisibilityContext ic =
                 mixinAction.createVisibleInteractionContext(mixinAdapter, interactionInitiatedBy, where);
         ic.setMixedIn(mixedInAdapter);
         return InteractionUtils.isVisibleResult(this, ic).createConsent();
@@ -177,7 +177,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
             final Where where) {
 
         val mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
-        final UsabilityContext<?> ic =
+        final UsabilityContext ic =
                 mixinAction.createUsableInteractionContext(mixinAdapter, interactionInitiatedBy, where);
         ic.setMixedIn(mixedInAdapter);
         return InteractionUtils.isUsableResult(this, ic).createConsent();

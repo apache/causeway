@@ -30,7 +30,7 @@ import lombok.val;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class InteractionUtils {
 
-    public static InteractionResult isVisibleResult(FacetHolder facetHolder, VisibilityContext<?> context) {
+    public static InteractionResult isVisibleResult(FacetHolder facetHolder, VisibilityContext context) {
         
         val iaResult = new InteractionResult(context.createInteractionEvent());
         
@@ -43,7 +43,7 @@ public final class InteractionUtils {
         return iaResult;
     }
 
-    public static InteractionResult isUsableResult(FacetHolder facetHolder, UsabilityContext<?> context) {
+    public static InteractionResult isUsableResult(FacetHolder facetHolder, UsabilityContext context) {
         
         val isResult = new InteractionResult(context.createInteractionEvent());
         
@@ -59,7 +59,7 @@ public final class InteractionUtils {
         return isResult;
     }
 
-    public static InteractionResult isValidResult(FacetHolder facetHolder, ValidityContext<?> context) {
+    public static InteractionResult isValidResult(FacetHolder facetHolder, ValidityContext context) {
         
         val iaResult = new InteractionResult(context.createInteractionEvent());
         
@@ -74,7 +74,7 @@ public final class InteractionUtils {
 
     public static InteractionResultSet isValidResultSet(
             FacetHolder facetHolder, 
-            ValidityContext<?> context, 
+            ValidityContext context, 
             InteractionResultSet resultSet) {
         
         return resultSet.add(isValidResult(facetHolder, context));

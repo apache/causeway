@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
+import static org.apache.isis.core.commons.internal.base._With.requires;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,8 +60,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-
-import static org.apache.isis.core.commons.internal.base._With.requires;
 
 import lombok.NonNull;
 import lombok.val;
@@ -320,7 +320,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final VisibilityContext<?> ic = createArgumentVisibilityContext(
+        final VisibilityContext ic = createArgumentVisibilityContext(
                 targetAdapter, pendingArgs, getNumber(), interactionInitiatedBy);
 
         final InteractionResult visibleResult = InteractionUtils.isVisibleResult(this, ic);
@@ -352,7 +352,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final UsabilityContext<?> ic = createArgumentUsabilityContext(
+        final UsabilityContext ic = createArgumentUsabilityContext(
                 targetAdapter, pendingArgs, getNumber(), interactionInitiatedBy);
 
         final InteractionResult usableResult = InteractionUtils.isUsableResult(this, ic);
@@ -395,7 +395,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
         }
 
         val argumentAdapters = arguments(proposedValueAdapter);
-        final ValidityContext<?> ic = createProposedArgumentInteractionContext(
+        final ValidityContext ic = createProposedArgumentInteractionContext(
                 objectAdapter, argumentAdapters, getNumber(), interactionInitiatedBy);
 
         final InteractionResultSet buf = new InteractionResultSet();

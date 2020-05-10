@@ -19,15 +19,6 @@
 
 package org.apache.isis.core.runtime.system;
 
-import java.util.Optional;
-
-import org.datanucleus.enhancement.Persistable;
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-
 import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -37,7 +28,18 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Optional;
+
+import org.datanucleus.enhancement.Persistable;
+import org.jmock.Expectations;
+import org.jmock.auto.Mock;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
@@ -65,8 +67,6 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.PojoAdapter;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 public class ObjectMemberAbstractTest {
 
@@ -214,14 +214,14 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
     }
 
     @Override
-    public UsabilityContext<?> createUsableInteractionContext(
+    public UsabilityContext createUsableInteractionContext(
             final ManagedObject target, final InteractionInitiatedBy interactionInitiatedBy,
             Where where) {
         return new PropertyUsabilityContext(target, getIdentifier(), interactionInitiatedBy, where);
     }
 
     @Override
-    public VisibilityContext<?> createVisibleInteractionContext(
+    public VisibilityContext createVisibleInteractionContext(
             final ManagedObject targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
             Where where) {
         return new PropertyVisibilityContext(targetObjectAdapter, getIdentifier(), interactionInitiatedBy,

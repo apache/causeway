@@ -108,7 +108,7 @@ implements ParseableFacet {
         }
     }
 
-    private void validate(final ValidityContext<?> validityContext) {
+    private void validate(final ValidityContext validityContext) {
         final InteractionResultSet resultSet = new InteractionResultSet();
         InteractionUtils.isValidResultSet(getFacetHolder(), validityContext, resultSet);
         if (resultSet.isVetoed()) {

@@ -30,7 +30,9 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
  * See {@link InteractionContext} for overview; analogous to
  * {@link UsabilityEvent}.
  */
-public abstract class UsabilityContext<T extends UsabilityEvent> extends InteractionContext<T> {
+public abstract class UsabilityContext 
+extends InteractionContext
+implements InteractionEventSupplier<UsabilityEvent> {
 
     private final Where where;
 

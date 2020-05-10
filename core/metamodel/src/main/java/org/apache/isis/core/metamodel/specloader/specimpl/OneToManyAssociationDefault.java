@@ -73,7 +73,7 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
     // -- visible, usable
 
     @Override
-    public VisibilityContext<?> createVisibleInteractionContext(
+    public VisibilityContext createVisibleInteractionContext(
             final ManagedObject ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy,
             Where where) {
         return new CollectionVisibilityContext(ownerAdapter, getIdentifier(), interactionInitiatedBy, where);
@@ -81,7 +81,7 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
 
 
     @Override
-    public UsabilityContext<?> createUsableInteractionContext(
+    public UsabilityContext createUsableInteractionContext(
             final ManagedObject ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy,
             Where where) {
         return new CollectionUsabilityContext(ownerAdapter, getIdentifier(), interactionInitiatedBy, where);
@@ -91,7 +91,7 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
 
     // -- Validate Add
     // Not API
-    private ValidityContext<?> createValidateAddInteractionContext(
+    private ValidityContext createValidateAddInteractionContext(
             final InteractionInitiatedBy interactionInitiatedBy,
             final ManagedObject ownerAdapter,
             final ManagedObject proposedToAddAdapter) {
@@ -111,7 +111,7 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
             final ManagedObject ownerAdapter,
             final ManagedObject proposedToAddAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final ValidityContext<?> validityContext = createValidateAddInteractionContext(
+        final ValidityContext validityContext = createValidateAddInteractionContext(
                 interactionInitiatedBy, ownerAdapter, proposedToAddAdapter);
         return InteractionUtils.isValidResult(this, validityContext);
     }
@@ -119,7 +119,7 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
 
 
     // -- Validate Remove
-    private ValidityContext<?> createValidateRemoveInteractionContext(
+    private ValidityContext createValidateRemoveInteractionContext(
             final ManagedObject ownerAdapter,
             final ManagedObject proposedToRemoveAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
@@ -141,7 +141,7 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
             final ManagedObject ownerAdapter,
             final ManagedObject proposedToRemoveAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final ValidityContext<?> validityContext = createValidateRemoveInteractionContext(
+        final ValidityContext validityContext = createValidateRemoveInteractionContext(
                 ownerAdapter, proposedToRemoveAdapter, interactionInitiatedBy);
         return InteractionUtils.isValidResult(this, validityContext);
     }

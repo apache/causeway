@@ -228,16 +228,18 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     // -- visable, usable
 
     @Override
-    public VisibilityContext<?> createVisibleInteractionContext(
-            final ManagedObject targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
-            Where where) {
+    public VisibilityContext createVisibleInteractionContext(
+            final ManagedObject targetObjectAdapter, 
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where) {
         return new ActionVisibilityContext(targetObjectAdapter, this, getIdentifier(), interactionInitiatedBy, where);
     }
 
     @Override
-    public UsabilityContext<?> createUsableInteractionContext(
-            final ManagedObject targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
-            Where where) {
+    public UsabilityContext createUsableInteractionContext(
+            final ManagedObject targetObjectAdapter, 
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where) {
         return new ActionUsabilityContext(targetObjectAdapter, this, getIdentifier(), interactionInitiatedBy, where);
     }
 
@@ -308,7 +310,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         val actionParameters = getParameters();
         if (proposedArguments != null) {
             for (int i = 0; i < proposedArguments.size(); i++) {
-                final ValidityContext<?> ic = actionParameters.getElseFail(i)
+                final ValidityContext ic = actionParameters.getElseFail(i)
                         .createProposedArgumentInteractionContext(
                                 objectAdapter, proposedArguments, i, interactionInitiatedBy);
                 
@@ -348,7 +350,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
             final InteractionInitiatedBy interactionInitiatedBy,
             final InteractionResultSet resultSet) {
         
-        final ValidityContext<?> ic = createActionInvocationInteractionContext(
+        final ValidityContext ic = createActionInvocationInteractionContext(
                 objectAdapter, proposedArguments, interactionInitiatedBy);
         InteractionUtils.isValidResultSet(this, ic, resultSet);
     }

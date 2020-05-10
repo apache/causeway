@@ -593,7 +593,7 @@ public interface ManagedObject {
                     .isNotVetoing();
         }
 
-        private static VisibilityContext<?> createVisibleInteractionContextForUser(
+        private static VisibilityContext createVisibleInteractionContextForUser(
                 ManagedObject adapter) {
 
             return new ObjectVisibilityContext(

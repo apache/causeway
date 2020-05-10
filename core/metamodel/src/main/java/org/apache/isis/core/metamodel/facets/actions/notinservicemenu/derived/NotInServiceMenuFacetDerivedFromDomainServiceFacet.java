@@ -22,13 +22,13 @@ package org.apache.isis.core.metamodel.facets.actions.notinservicemenu.derived;
 import java.util.Map;
 
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
 
-public class NotInServiceMenuFacetDerivedFromDomainServiceFacet extends NotInServiceMenuFacetAbstract {
+public class NotInServiceMenuFacetDerivedFromDomainServiceFacet 
+extends NotInServiceMenuFacetAbstract {
 
     private final NatureOfService natureOfService;
 
@@ -39,7 +39,7 @@ public class NotInServiceMenuFacetDerivedFromDomainServiceFacet extends NotInSer
     }
 
     @Override
-    public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
+    public String hides(final VisibilityContext ic) {
         return String.format("@DomainService(nature=%s) annotation present", natureOfService);
     }
 

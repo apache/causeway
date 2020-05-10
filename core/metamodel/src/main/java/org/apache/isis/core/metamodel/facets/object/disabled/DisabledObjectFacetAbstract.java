@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.object.disabled;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -38,10 +37,7 @@ public abstract class DisabledObjectFacetAbstract extends FacetAbstract implemen
     }
 
     @Override
-    public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
-        if (!(ic instanceof UsabilityContext)) {
-            return null;
-        }
+    public String disables(final UsabilityContext ic) {
         final ManagedObject toDisable = ic.getTarget();
         final Identifier identifier = ic.getIdentifier();
         return toDisable != null ? disabledReason(toDisable, identifier) : null;

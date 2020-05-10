@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
+import static org.apache.isis.core.metamodel.spec.ManagedObject.unwrapSingle;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
@@ -26,13 +28,11 @@ import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-import static org.apache.isis.core.metamodel.spec.ManagedObject.unwrapSingle;
-
 /**
  * See {@link InteractionContext} for overview; analogous to
  * {@link PropertyVisibilityEvent}.
  */
-public class PropertyVisibilityContext extends VisibilityContext<PropertyVisibilityEvent> {
+public class PropertyVisibilityContext extends VisibilityContext {
 
     public PropertyVisibilityContext(
             final ManagedObject targetAdapter,

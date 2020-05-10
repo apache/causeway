@@ -16,29 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.interactions;
 
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
-import org.apache.isis.core.metamodel.consent.InteractionContextType;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 
 /**
- * See {@link InteractionContext} for overview; analogous to
- * {@link ValidityEvent}
+ * 
+ * @since 2.0
+ *
+ * @param <T>
  */
-public abstract class ValidityContext 
-extends InteractionContext
-implements InteractionEventSupplier<ValidityEvent> {
+public interface InteractionEventSupplier<T extends InteractionEvent> {
 
-    public ValidityContext(
-            final InteractionContextType interactionType,
-            final ManagedObject target,
-            final Identifier identifier,
-            final InteractionInitiatedBy invocationMethod) {
-        super(interactionType, invocationMethod, identifier, target);
-    }
-
+    /**
+     * Factory method to create an {@link InteractionEvent}.
+     */
+    T createInteractionEvent();
+    
 }

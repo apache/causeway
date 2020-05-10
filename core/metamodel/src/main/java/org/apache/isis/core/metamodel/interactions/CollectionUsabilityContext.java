@@ -30,7 +30,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
  * See {@link InteractionContext} for overview; analogous to
  * {@link CollectionUsabilityEvent}.
  */
-public class CollectionUsabilityContext extends UsabilityContext<CollectionUsabilityEvent> {
+public class CollectionUsabilityContext 
+extends UsabilityContext {
 
     public CollectionUsabilityContext(
             final ManagedObject targetAdapter,

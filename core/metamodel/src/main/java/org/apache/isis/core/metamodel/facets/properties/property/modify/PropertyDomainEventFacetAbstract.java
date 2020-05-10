@@ -26,9 +26,6 @@ import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
-import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
-import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
@@ -90,7 +87,7 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
     }
 
     @Override
-    public String hides(VisibilityContext<? extends VisibilityEvent> ic) {
+    public String hides(VisibilityContext ic) {
 
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
@@ -105,7 +102,7 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
     }
 
     @Override
-    public String disables(UsabilityContext<? extends UsabilityEvent> ic) {
+    public String disables(UsabilityContext ic) {
 
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
@@ -124,7 +121,7 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
     }
 
     @Override
-    public String invalidates(ValidityContext<? extends ValidityEvent> ic) {
+    public String invalidates(ValidityContext ic) {
 
         if(getterFacetIfAny == null) {
             return null;

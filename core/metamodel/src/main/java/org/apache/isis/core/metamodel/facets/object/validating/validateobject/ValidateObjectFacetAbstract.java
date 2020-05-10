@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.validating.validateobject;
 
-import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -38,7 +37,7 @@ public abstract class ValidateObjectFacetAbstract extends FacetAbstract implemen
     }
 
     @Override
-    public String invalidates(final ValidityContext<? extends ValidityEvent> vc) {
+    public String invalidates(final ValidityContext vc) {
         if (!(vc instanceof ObjectValidityContext)) {
             return null;
         }

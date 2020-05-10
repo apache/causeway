@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract.Hiding;
 
 /**
@@ -43,5 +42,5 @@ public interface HidingInteractionAdvisor extends InteractionAdvisorFacet, Hidin
      * {@link InteractionContext#getSession() session} - neither are guaranteed
      * to be populated.
      */
-    String hides(final VisibilityContext<? extends VisibilityEvent> ic);
+    String hides(VisibilityContext ic);
 }

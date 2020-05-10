@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.members.disabled;
 import java.util.Map;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.WhereValueFacetAbstract;
@@ -63,7 +62,7 @@ public abstract class DisabledFacetAbstract extends WhereValueFacetAbstract impl
     }
 
     @Override
-    public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
+    public String disables(final UsabilityContext ic) {
         if(isInvertedSemantics()) {
             return null;
         }

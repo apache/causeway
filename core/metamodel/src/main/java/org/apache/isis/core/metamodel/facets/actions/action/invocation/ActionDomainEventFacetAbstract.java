@@ -23,10 +23,6 @@ import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
-import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
-import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
-import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -74,7 +70,7 @@ implements ActionDomainEventFacet {
     }
     
     @Override
-    public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
+    public String hides(final VisibilityContext ic) {
 
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
@@ -90,7 +86,7 @@ implements ActionDomainEventFacet {
     }
 
     @Override
-    public String disables(UsabilityContext<? extends UsabilityEvent> ic) {
+    public String disables(UsabilityContext ic) {
 
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
@@ -111,7 +107,7 @@ implements ActionDomainEventFacet {
     }
 
     @Override
-    public String invalidates(final ValidityContext<? extends ValidityEvent> ic) {
+    public String invalidates(final ValidityContext ic) {
 
         _Assert.assertTrue(ic instanceof ActionValidityContext, ()->
             String.format("expecting an action context but got %s", ic.getIdentifier()));
@@ -137,7 +133,7 @@ implements ActionDomainEventFacet {
     
     // -- HELPER
     
-    private static ObjectAction actionFrom(final InteractionContext<?> ic) {
+    private static ObjectAction actionFrom(final InteractionContext ic) {
         if(!(ic instanceof ActionInteractionContext)) {
             throw new IllegalStateException(
                     "Expecting ic to be of type ActionInteractionContext, instead was: " + ic);
@@ -147,7 +143,7 @@ implements ActionDomainEventFacet {
 
     @Deprecated
     private static Can<ManagedObject> argumentAdaptersFrom(
-            final InteractionContext<? extends InteractionEvent> ic) {
+            final InteractionContext ic) {
 
         return Can.empty();
     }

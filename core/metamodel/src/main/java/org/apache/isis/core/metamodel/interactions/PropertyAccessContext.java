@@ -19,19 +19,20 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
+import static org.apache.isis.core.metamodel.spec.ManagedObject.unwrapSingle;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.PropertyAccessEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-import static org.apache.isis.core.metamodel.spec.ManagedObject.unwrapSingle;
-
 /**
  * See {@link InteractionContext} for overview; analogous to
  * {@link PropertyAccessEvent}.
  */
-public class PropertyAccessContext extends AccessContext<PropertyAccessEvent> {
+public class PropertyAccessContext 
+extends AccessContext {
 
     private final ManagedObject value;
 

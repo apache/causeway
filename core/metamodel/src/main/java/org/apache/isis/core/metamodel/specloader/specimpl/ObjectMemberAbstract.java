@@ -157,7 +157,7 @@ implements ObjectMember, MetaModelContext.Delegating, FacetHolder.Delegating {
      * provided as API for symmetry with interactions (such as
      * {@link AccessContext} accesses) have no corresponding vetoing methods.
      */
-    protected abstract VisibilityContext<?> createVisibleInteractionContext(
+    protected abstract VisibilityContext createVisibleInteractionContext(
             final ManagedObject targetObjectAdapter,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where);
@@ -190,7 +190,7 @@ implements ObjectMember, MetaModelContext.Delegating, FacetHolder.Delegating {
             final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
-        final VisibilityContext<?> ic = createVisibleInteractionContext(target, interactionInitiatedBy, where);
+        final VisibilityContext ic = createVisibleInteractionContext(target, interactionInitiatedBy, where);
         return InteractionUtils.isVisibleResult(this, ic);
     }
 
@@ -206,7 +206,7 @@ implements ObjectMember, MetaModelContext.Delegating, FacetHolder.Delegating {
      * provided as API for symmetry with interactions (such as
      * {@link AccessContext} accesses) have no corresponding vetoing methods.
      */
-    protected abstract UsabilityContext<?> createUsableInteractionContext(
+    protected abstract UsabilityContext createUsableInteractionContext(
             final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where);
@@ -227,7 +227,7 @@ implements ObjectMember, MetaModelContext.Delegating, FacetHolder.Delegating {
             final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
-        final UsabilityContext<?> ic = createUsableInteractionContext(target, interactionInitiatedBy, where);
+        final UsabilityContext ic = createUsableInteractionContext(target, interactionInitiatedBy, where);
         return InteractionUtils.isUsableResult(this, ic);
     }
 

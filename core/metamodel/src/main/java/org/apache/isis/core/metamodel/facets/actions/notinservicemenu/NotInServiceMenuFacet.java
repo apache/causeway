@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.actions.notinservicemenu;
 
-import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
@@ -33,6 +32,6 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
  */
 public interface NotInServiceMenuFacet extends Facet {
 
-    String hides(VisibilityContext<? extends VisibilityEvent> ic);
+    String hides(VisibilityContext ic);
 
 }

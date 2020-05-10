@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.param.disable;
 
-import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -39,7 +38,7 @@ implements ActionParameterDisabledFacet {
     }
 
     @Override
-    public String disables(final UsabilityContext<? extends UsabilityEvent> context) {
+    public String disables(final UsabilityContext context) {
         if (!(context instanceof ActionArgUsabilityContext)) {
             return null;
         }

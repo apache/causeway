@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.authorization.standard;
 
-import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
-import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -50,7 +48,7 @@ public abstract class AuthorizationFacetAbstract extends FacetAbstract implement
     }
 
     @Override
-    public String hides(VisibilityContext<? extends VisibilityEvent> ic) {
+    public String hides(VisibilityContext ic) {
         
         val hides = authorizationManager
                 .isVisible(
@@ -67,7 +65,7 @@ public abstract class AuthorizationFacetAbstract extends FacetAbstract implement
     }
 
     @Override
-    public String disables(UsabilityContext<? extends UsabilityEvent> ic) {
+    public String disables(UsabilityContext ic) {
         
         val disables = authorizationManager
                 .isUsable(

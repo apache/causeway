@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract.Validating;
 
@@ -47,5 +46,5 @@ public interface ValidatingInteractionAdvisor extends InteractionAdvisorFacet, V
      * and {@link ValidityContext#getSession() session} - neither are guaranteed
      * to be populated.
      */
-    String invalidates(final ValidityContext<? extends ValidityEvent> ic);
+    String invalidates(ValidityContext ic);
 }

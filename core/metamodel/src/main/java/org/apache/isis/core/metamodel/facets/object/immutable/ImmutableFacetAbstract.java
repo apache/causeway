@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.immutable;
 
-import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -40,7 +39,7 @@ public abstract class ImmutableFacetAbstract extends FacetAbstract implements Im
      * Immutable facet only prevents changes to a property or a collection.
      */
     @Override
-    public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
+    public String disables(final UsabilityContext ic) {
         final ManagedObject target = ic.getTarget();
         switch (ic.getInteractionType()) {
         case PROPERTY_MODIFY:

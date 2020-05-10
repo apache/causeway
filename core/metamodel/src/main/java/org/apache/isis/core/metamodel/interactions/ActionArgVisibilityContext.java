@@ -36,7 +36,7 @@ import lombok.Getter;
  * {@link ActionArgumentEvent}.
  */
 public class ActionArgVisibilityContext 
-extends VisibilityContext<ActionArgumentVisibilityEvent> 
+extends VisibilityContext 
 implements ActionInteractionContext {
 
     @Getter(onMethod = @__(@Override)) private final ObjectAction objectAction;

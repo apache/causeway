@@ -19,19 +19,21 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
+import static org.apache.isis.core.metamodel.spec.ManagedObject.unwrapSingle;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.ObjectValidityEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-import static org.apache.isis.core.metamodel.spec.ManagedObject.unwrapSingle;
-
 /**
  * See {@link InteractionContext} for overview; analogous to
  * {@link ObjectValidityEvent}.
  */
-public class ObjectValidityContext extends ValidityContext<ObjectValidityEvent> implements ProposedHolder {
+public class ObjectValidityContext
+extends ValidityContext 
+implements ProposedHolder {
 
     public ObjectValidityContext(
             final ManagedObject targetAdapter,

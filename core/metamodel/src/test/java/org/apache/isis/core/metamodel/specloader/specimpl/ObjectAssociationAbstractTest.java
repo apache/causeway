@@ -19,18 +19,20 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -43,8 +45,6 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 public class ObjectAssociationAbstractTest {
 
@@ -110,14 +110,14 @@ public class ObjectAssociationAbstractTest {
             }
 
             @Override
-            public UsabilityContext<?> createUsableInteractionContext(
+            public UsabilityContext createUsableInteractionContext(
                     final ManagedObject target, final InteractionInitiatedBy interactionInitiatedBy,
                     Where where) {
                 return null;
             }
 
             @Override
-            public VisibilityContext<?> createVisibleInteractionContext(
+            public VisibilityContext createVisibleInteractionContext(
                     final ManagedObject targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
                     Where where) {
                 return null;

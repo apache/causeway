@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.properties.validating.dflt;
 
-import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.validating.PropertyValidateFacet;
@@ -33,7 +32,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 public class PropertyValidateFacetDefault extends FacetAbstract implements PropertyValidateFacet {
 
     @Override
-    public String invalidates(final ValidityContext<? extends ValidityEvent> ic) {
+    public String invalidates(final ValidityContext ic) {
         return null;
     }
 

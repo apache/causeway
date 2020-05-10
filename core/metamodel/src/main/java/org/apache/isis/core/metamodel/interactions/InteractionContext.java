@@ -53,7 +53,7 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
  * The class is generic so that the {@link #createInteractionEvent() factory
  * method} can return the correct subclass without having to downcast.
  */
-public abstract class InteractionContext<T extends InteractionEvent> {
+public abstract class InteractionContext {
 
     private final InteractionContextType interactionType;
     private final InteractionInitiatedBy interactionInitiatedBy;
@@ -136,13 +136,6 @@ public abstract class InteractionContext<T extends InteractionEvent> {
         return mixedInAdapter;
     }
 
-    // //////////////////////////////////////
-
-    /**
-     * Factory method to create corresponding {@link InteractionEvent}.
-     *
-     * @return
-     */
-    public abstract T createInteractionEvent();
+    
 
 }

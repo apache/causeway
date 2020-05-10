@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.actions.prototype;
 
 import java.util.Map;
 
-import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.core.commons.internal.environment.DeploymentType;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -43,7 +42,7 @@ public abstract class PrototypeFacetAbstract extends FacetAbstract implements Pr
 
     @Override
     public String hides(
-            final VisibilityContext<? extends VisibilityEvent> ic) {
+            final VisibilityContext ic) {
         return deploymentType.isProduction()
                 ? "Prototyping action not visible in production mode"
                         : null;

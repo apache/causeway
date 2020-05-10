@@ -36,7 +36,7 @@ import lombok.Getter;
  * {@link ActionArgumentEvent}.
  */
 public class ActionArgValidityContext 
-extends ValidityContext<ActionArgumentEvent> 
+extends ValidityContext 
 implements ProposedHolder, ActionInteractionContext {
 
     @Getter(onMethod = @__(@Override)) private final ObjectAction objectAction;

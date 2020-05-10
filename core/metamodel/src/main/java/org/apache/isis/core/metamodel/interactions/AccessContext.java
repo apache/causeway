@@ -29,7 +29,9 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
  * See {@link InteractionContext} for overview; analogous to {@link AccessEvent}
  * .
  */
-public abstract class AccessContext<T extends AccessEvent> extends InteractionContext<T> {
+public abstract class AccessContext
+extends InteractionContext
+implements InteractionEventSupplier<AccessEvent> {
 
     public AccessContext(
             final InteractionContextType interactionType,

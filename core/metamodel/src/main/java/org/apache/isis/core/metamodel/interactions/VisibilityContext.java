@@ -30,7 +30,9 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
  * See {@link InteractionContext} for overview; analogous to
  * {@link VisibilityEvent}.
  */
-public abstract class VisibilityContext<T extends VisibilityEvent> extends InteractionContext<T> {
+public abstract class VisibilityContext 
+extends InteractionContext
+implements InteractionEventSupplier<VisibilityEvent> {
 
     private Where where;
 

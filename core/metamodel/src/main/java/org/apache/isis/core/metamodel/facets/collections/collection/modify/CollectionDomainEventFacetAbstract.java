@@ -23,9 +23,6 @@ import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
-import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
-import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
@@ -73,7 +70,7 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
     }
 
     @Override
-    public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
+    public String hides(final VisibilityContext ic) {
 
         final CollectionDomainEvent<?, ?> event =
                 domainEventHelper.postEventForCollection(
@@ -89,7 +86,7 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
     }
 
     @Override
-    public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
+    public String disables(final UsabilityContext ic) {
 
         final CollectionDomainEvent<?, ?> event =
                 domainEventHelper.postEventForCollection(
@@ -109,7 +106,7 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
     }
 
     @Override
-    public String invalidates(final ValidityContext<? extends ValidityEvent> ic) {
+    public String invalidates(final ValidityContext ic) {
 
         // if this is a mixin, then this ain't true.
         if(!(ic instanceof ProposedHolder)) {

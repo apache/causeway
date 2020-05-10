@@ -176,7 +176,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
             final Where where) {
 
         final ManagedObject mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
-        final VisibilityContext<?> ic =
+        final VisibilityContext ic =
                 mixinAction.createVisibleInteractionContext(mixinAdapter, interactionInitiatedBy, where);
         ic.setMixedIn(mixedInAdapter);
         return InteractionUtils.isVisibleResult(this, ic).createConsent();
@@ -188,7 +188,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
             final InteractionInitiatedBy interactionInitiatedBy, final Where where) {
 
         final ManagedObject mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
-        final UsabilityContext<?> ic =
+        final UsabilityContext ic =
                 mixinAction.createUsableInteractionContext(mixinAdapter, interactionInitiatedBy, where);
         ic.setMixedIn(mixedInAdapter);
         return InteractionUtils.isUsableResult(this, ic).createConsent();
@@ -221,7 +221,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
 
         final ManagedObject targetObject = mixinAdapterFor(mixinType, mixedInAdapter);
 
-        final ValidityContext<?> ic =
+        final ValidityContext ic =
                 mixinAction.createActionInvocationInteractionContext(targetObject, proposedArguments, interactionInitiatedBy);
         ic.setMixedIn(mixedInAdapter);
 
