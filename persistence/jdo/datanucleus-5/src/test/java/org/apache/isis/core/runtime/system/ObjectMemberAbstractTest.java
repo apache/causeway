@@ -38,6 +38,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
@@ -117,6 +118,9 @@ public class ObjectMemberAbstractTest {
 
             allowing(mockSpecForCustomer).isViewModel();
             will(returnValue(false));
+            
+            allowing(mockSpecForCustomer).getBeanSort();
+            will(returnValue(BeanSort.ENTITY));
 
             allowing(mockSpecForCustomer).getShortIdentifier();
             will(returnValue("Customer"));

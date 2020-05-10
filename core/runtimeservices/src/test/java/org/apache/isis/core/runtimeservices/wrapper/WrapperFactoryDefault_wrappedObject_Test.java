@@ -365,8 +365,6 @@ public class WrapperFactoryDefault_wrappedObject_Test {
 
                 ignoring(mockCommand);
 
-                //ignoring(mockStringSpec);
-                
                 allowing(mockStringSpec).isParented();
                 will(returnValue(false));
                 
