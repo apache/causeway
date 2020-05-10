@@ -76,7 +76,7 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
                 domainEventHelper.postEventForCollection(
                         AbstractDomainEvent.Phase.HIDE,
                         getEventType(), null,
-                        getIdentified(), ic.getTarget(), ic.getMixedIn(),
+                        getIdentified(), ic.getHead(),
                         CollectionDomainEvent.Of.ACCESS,
                         null);
         if (event != null && event.isHidden()) {
@@ -92,7 +92,7 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
                 domainEventHelper.postEventForCollection(
                         AbstractDomainEvent.Phase.DISABLE,
                         getEventType(), null,
-                        getIdentified(), ic.getTarget(), ic.getMixedIn(),
+                        getIdentified(), ic.getHead(),
                         CollectionDomainEvent.Of.ACCESS,
                         null);
         if (event != null && event.isDisabled()) {
@@ -124,7 +124,7 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
                 domainEventHelper.postEventForCollection(
                         AbstractDomainEvent.Phase.VALIDATE,
                         getEventType(), null,
-                        getIdentified(), ic.getTarget(), ic.getMixedIn(),
+                        getIdentified(), ic.getHead(),
                         of,
                         proposed);
         if (event != null && event.isInvalid()) {

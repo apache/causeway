@@ -20,10 +20,14 @@
 package org.apache.isis.core.metamodel.interactions;
 
 import java.util.Objects;
+import java.util.Optional;
+
+import javax.annotation.Nullable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -66,7 +70,7 @@ public abstract class InteractionContext {
      * Model that holds the objects involved with the interaction.
      * @since 2.0
      */
-    @Value(staticConstructor = "of")
+    @Value(staticConstructor = "of2")
     public static class Head {
         /**
          * The owning object that this interaction is associated with.
@@ -78,10 +82,43 @@ public abstract class InteractionContext {
          */
         @NonNull private final ManagedObject target;
         
+        /** in support of legacy code */
+        public static Head of(@NonNull ManagedObject owner, @NonNull ManagedObject target) {
+            if(ManagedObject.isSpecified(owner) 
+                    && owner.getSpecification().getBeanSort().isMixin()
+                    && owner.getPojo()==null) {
+                throw _Exceptions.unrecoverableFormatted("owner not spec. %s", owner);
+            }
+            if(ManagedObject.isSpecified(target)                    
+                    && target.getSpecification().getBeanSort().isMixin()
+                    && target.getPojo()==null) {
+                throw _Exceptions.unrecoverableFormatted("target not spec. %s", target);
+            }
+            return of2(owner, target);
+        }
+        
         /** when owner equals target (no mixin) */
         public static Head simple(ManagedObject owner) {
             return Head.of(owner, owner);
         }
+        
+        /** 
+         * as used by the domain event subsystem
+         * @return optionally the owner, if the target is a mixin 
+         */
+        public Optional<ManagedObject> getMixedIn() {
+            return Objects.equals(getOwner(), getTarget()) 
+                    ? Optional.empty()
+                    : Optional.of(getOwner());
+        }
+
+        /** in support of legacy code */
+        public static Head mixedIn(@NonNull ManagedObject target, @Nullable ManagedObject mixedIn) {
+            return mixedIn==null
+                    ? of(target, target)
+                    : of(mixedIn, target);
+        }
+        
     }
     
     /**
@@ -121,17 +158,10 @@ public abstract class InteractionContext {
     @Getter private final Head head;
     
     /**
-     * The target object that this interaction is associated with.
-     */
-    @Getter private final ManagedObject target;
-
-    /**
      * Where the element is to be rendered.
      */
     @Getter private final Where where;
     
-    @Getter private final ManagedObject mixedIn; // for mixin members only, obviously
-
     protected InteractionContext(
             final InteractionContextType interactionType,
             final InteractionInitiatedBy invocationMethod,
@@ -143,12 +173,16 @@ public abstract class InteractionContext {
         this.identifier = identifier;
         this.head = head;
         this.where = where;
-        
-        this.target = head.getTarget();
-        this.mixedIn = Objects.equals(head.getOwner(), head.getTarget()) ? null : head.getOwner();
     }
 
+    /**
+     * The target object that this interaction is associated with.
+     */
+    public ManagedObject getTarget() {
+        return head.getTarget();
+    }
 
+    
     /**
      * Convenience method that indicates whether the
      * {@link #getInitiatedBy() interaction was invoked} by the framework.

@@ -23,6 +23,7 @@ import java.util.List;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.assertions._Assert;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -137,11 +138,14 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
             final ManagedObject mixedInAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
+        val head = headFor(mixedInAdapter);
+        
         val mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
+        _Assert.assertEquals(mixedInAdapter, head.getMixedIn().orElse(null));
+        
 
         return getPublisherDispatchService().withPublishingSuppressed(
-                () -> mixinAction.executeInternal(
-                        mixinAdapter, mixedInAdapter, Can.empty(), interactionInitiatedBy)
+                () -> mixinAction.executeInternal(head, Can.empty(), interactionInitiatedBy)
         );
     }
 

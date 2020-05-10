@@ -56,6 +56,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
+import lombok.NonNull;
 import lombok.val;
 
 public abstract class ObjectMemberAbstract 
@@ -244,13 +245,13 @@ implements ObjectMember, MetaModelContext.Delegating, FacetHolder.Delegating {
      * For mixins
      */
     ManagedObject mixinAdapterFor(
-            final Class<?> mixinType,
-            final ManagedObject mixedInAdapter) {
+            @NonNull final Class<?> mixinType,
+            @NonNull final ManagedObject mixedInAdapter) {
         
         val spec = getSpecificationLoader().loadSpecification(mixinType);
         val mixinFacet = spec.getFacet(MixinFacet.class);
-        val mixinPojo = mixinFacet.instantiate(mixedInAdapter.getPojo());
-        return ManagedObject.of(spec, mixinPojo);
+        val mixinPojo = mixinFacet.instantiate(Objects.requireNonNull(mixedInAdapter.getPojo()));
+        return ManagedObject.of(spec, Objects.requireNonNull(mixinPojo));
     }
 
     static String determineNameFrom(final ObjectAction mixinAction) {

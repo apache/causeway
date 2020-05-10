@@ -150,13 +150,12 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
 
     @Override
     public ManagedObject get(
-            final ManagedObject mixedInAdapter,
+            final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        final ManagedObject mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
         return getPublishingServiceInternal().withPublishingSuppressed(
                 () -> mixinAction.executeInternal(
-                        mixinAdapter, mixedInAdapter, Can.empty(), interactionInitiatedBy));
+                        headFor(ownerAdapter), Can.empty(), interactionInitiatedBy));
     }
 
     @Override

@@ -19,6 +19,11 @@
 
 package org.apache.isis.core.metamodel.facets;
 
+import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
+import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramAssignableFrom;
+import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramAssignableFromValue;
+import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramCount;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -38,16 +43,12 @@ import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-
-import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
-import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramAssignableFrom;
-import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramAssignableFromValue;
-import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramCount;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -72,13 +73,13 @@ public class DomainEventHelper {
             @NonNull final Class<? extends ActionDomainEvent<?>> eventType,
             final ObjectAction objectAction,
             final IdentifiedHolder identified,
-            final ManagedObject targetAdapter,
-            final ManagedObject mixedInAdapter,
+            final Head head,
             final Can<ManagedObject> argumentAdapters,
             final ManagedObject resultAdapter) {
         
-        return postEventForAction(phase, uncheckedCast(eventType), /*existingEvent*/null, objectAction, identified, 
-                targetAdapter, mixedInAdapter, argumentAdapters, resultAdapter);
+        return postEventForAction(phase, uncheckedCast(eventType), /*existingEvent*/null, 
+                objectAction, identified, 
+                head, argumentAdapters, resultAdapter);
     }
     
     // variant using existing event and not eventType (is derived from event)
@@ -87,14 +88,13 @@ public class DomainEventHelper {
             @NonNull final ActionDomainEvent<?> existingEvent,
             final ObjectAction objectAction,
             final IdentifiedHolder identified,
-            final ManagedObject targetAdapter,
-            final ManagedObject mixedInAdapter,
+            final Head head,
             final Can<ManagedObject> argumentAdapters,
             final ManagedObject resultAdapter) {
         
         return postEventForAction(phase, 
                 uncheckedCast(existingEvent.getClass()), existingEvent, objectAction, identified, 
-                targetAdapter, mixedInAdapter, argumentAdapters, resultAdapter);
+                head, argumentAdapters, resultAdapter);
     }
 
     private <S> ActionDomainEvent<S> postEventForAction(
@@ -103,8 +103,7 @@ public class DomainEventHelper {
             final ActionDomainEvent<S> existingEvent,
             final ObjectAction objectAction,
             final IdentifiedHolder identified,
-            final ManagedObject targetAdapter,
-            final ManagedObject mixedInAdapter,
+            final Head head,
             final Can<ManagedObject> argumentAdapters,
             final ManagedObject resultAdapter) {
         
@@ -118,15 +117,15 @@ public class DomainEventHelper {
                 event = existingEvent;
             } else {
                 // all other phases, create a new event
-                final S source = uncheckedCast(ManagedObject.unwrapSingle(targetAdapter));
+                final S source = uncheckedCast(ManagedObject.unwrapSingle(head.getTarget()));
                 final Object[] arguments = ManagedObject.unwrapMultipleAsArray(argumentAdapters);
                 final Identifier identifier = identified.getIdentifier();
                 event = newActionDomainEvent(eventType, identifier, source, arguments);
 
                 // copy over if have
-                if(mixedInAdapter != null ) {
-                    event.setMixedIn(mixedInAdapter.getPojo());
-                }
+                head.getMixedIn()
+                .ifPresent(mixedInAdapter->
+                    event.setMixedIn(mixedInAdapter.getPojo()));
 
                 if(objectAction != null) {
                     // should always be the case...
@@ -215,8 +214,7 @@ public class DomainEventHelper {
             final Class<? extends PropertyDomainEvent<S, T>> eventType,
                     final PropertyDomainEvent<S, T> existingEvent,
                     final IdentifiedHolder identified,
-                    final ManagedObject targetAdapter,
-                    final ManagedObject mixedInAdapter,
+                    final Head head,
                     final T oldValue,
                     final T newValue) {
         
@@ -224,7 +222,7 @@ public class DomainEventHelper {
 
         try {
             final PropertyDomainEvent<S, T> event;
-            final S source = uncheckedCast(ManagedObject.unwrapSingle(targetAdapter));
+            final S source = uncheckedCast(ManagedObject.unwrapSingle(head.getTarget()));
             final Identifier identifier = identified.getIdentifier();
 
             if(existingEvent != null && phase.isExecuted()) {
@@ -235,9 +233,9 @@ public class DomainEventHelper {
                 event = newPropertyDomainEvent(eventType, identifier, source, oldValue, newValue);
 
                 // copy over if have
-                if(mixedInAdapter != null ) {
-                    event.setMixedIn(mixedInAdapter.getPojo());
-                }
+                head.getMixedIn()
+                .ifPresent(mixedInAdapter->
+                    event.setMixedIn(mixedInAdapter.getPojo()));
 
             }
 
@@ -304,8 +302,7 @@ public class DomainEventHelper {
             final Class<? extends CollectionDomainEvent<S, T>> eventType,
                     final CollectionDomainEvent<S, T> existingEvent,
                     final IdentifiedHolder identified,
-                    final ManagedObject targetAdapter,
-                    final ManagedObject mixedInAdapter,
+                    final Head head,
                     final CollectionDomainEvent.Of of,
                     final T reference) {
         
@@ -318,14 +315,14 @@ public class DomainEventHelper {
                 event = existingEvent;
             } else {
                 // all other phases, create a new event
-                final S source = uncheckedCast(ManagedObject.unwrapSingle(targetAdapter));
+                final S source = uncheckedCast(ManagedObject.unwrapSingle(head.getTarget()));
                 final Identifier identifier = identified.getIdentifier();
                 event = newCollectionDomainEvent(eventType, phase, identifier, source, of, reference);
 
                 // copy over if have
-                if(mixedInAdapter != null ) {
-                    event.setMixedIn(mixedInAdapter.getPojo());
-                }
+                head.getMixedIn()
+                .ifPresent(mixedInAdapter->
+                    event.setMixedIn(mixedInAdapter.getPojo()));
             }
 
             event.setEventPhase(phase);

@@ -93,7 +93,7 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
                 domainEventHelper.postEventForProperty(
                         AbstractDomainEvent.Phase.HIDE,
                         getEventType(), null,
-                        getIdentified(), ic.getTarget(), ic.getMixedIn(),
+                        getIdentified(), ic.getHead(),
                         null, null);
         if (event != null && event.isHidden()) {
             return "Hidden by subscriber";
@@ -108,7 +108,7 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
                 domainEventHelper.postEventForProperty(
                         AbstractDomainEvent.Phase.DISABLE,
                         getEventType(), null,
-                        getIdentified(), ic.getTarget(), ic.getMixedIn(),
+                        getIdentified(), ic.getHead(),
                         null, null);
         if (event != null && event.isDisabled()) {
             final TranslatableString reasonTranslatable = event.getDisabledReasonTranslatable();
@@ -141,7 +141,7 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
                 domainEventHelper.postEventForProperty(
                         AbstractDomainEvent.Phase.VALIDATE,
                         getEventType(), null,
-                        getIdentified(), ic.getTarget(), ic.getMixedIn(),
+                        getIdentified(), ic.getHead(),
                         oldValue, proposedValue);
         if (event != null && event.isInvalid()) {
             final TranslatableString reasonTranslatable = event.getInvalidityReasonTranslatable();

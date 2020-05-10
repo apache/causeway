@@ -17,6 +17,8 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -50,14 +52,13 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
+import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderFacetComparator;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModelHead;
-
-import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
 import lombok.NonNull;
 import lombok.val;
@@ -108,8 +109,7 @@ public interface ObjectAction extends ObjectMember {
      * @param mixedInAdapter - will be null for regular actions, and for mixin actions.  When a mixin action invokes its underlying mixedIn action, then will be populated (so that the ActionDomainEvent can correctly provide the underlying mixin)
      */
     ManagedObject executeWithRuleChecking(
-            ManagedObject target,
-            ManagedObject mixedInAdapter,
+            Head head,
             Can<ManagedObject> parameters,
             InteractionInitiatedBy interactionInitiatedBy,
             Where where) throws AuthorizationException;
@@ -123,8 +123,7 @@ public interface ObjectAction extends ObjectMember {
      * (so that the ActionDomainEvent can correctly provide the underlying mixin)
      */
     ManagedObject execute(
-            ManagedObject targetAdapter,
-            ManagedObject mixedInAdapter,
+            Head head,
             Can<ManagedObject> parameters,
             InteractionInitiatedBy interactionInitiatedBy);
 

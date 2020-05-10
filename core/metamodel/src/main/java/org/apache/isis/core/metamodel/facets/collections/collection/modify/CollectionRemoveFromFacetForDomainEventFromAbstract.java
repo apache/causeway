@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.collections.collection.modify;
 
+import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
+
 import java.util.Collection;
 import java.util.Map;
 
@@ -33,9 +35,8 @@ import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-
-import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
 
 
 public abstract class CollectionRemoveFromFacetForDomainEventFromAbstract
@@ -86,16 +87,17 @@ implements CollectionRemoveFromFacet {
             return;
         }
 
+        final Head head = Head.simple(targetAdapter);
+        
         // contains the element, so
         // execute the remove wrapped between the executing and executed events ...
-        final ManagedObject mixedInAdapter = null;
 
         // ... post the executing event
         final CollectionDomainEvent<?, ?> event =
                 domainEventHelper.postEventForCollection(
                         AbstractDomainEvent.Phase.EXECUTING,
                         getEventType(), null,
-                        getIdentified(), targetAdapter, mixedInAdapter,
+                        getIdentified(), head,
                         CollectionDomainEvent.Of.REMOVE_FROM,
                         referencedObject);
 
@@ -106,7 +108,7 @@ implements CollectionRemoveFromFacet {
         domainEventHelper.postEventForCollection(
                 AbstractDomainEvent.Phase.EXECUTED,
                 getEventType(), uncheckedCast(event),
-                getIdentified(), targetAdapter, mixedInAdapter,
+                getIdentified(), head,
                 CollectionDomainEvent.Of.REMOVE_FROM,
                 referencedObject);
     }

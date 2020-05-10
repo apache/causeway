@@ -192,11 +192,12 @@ implements FormUiModel, FormExecutorContext {
         final Can<ManagedObject> arguments = argCache().snapshot();
         final ObjectAction action = getMetaModel();
 
-        // if this action is a mixin, then it will fill in the details automatically.
-        val mixedInAdapter = (ManagedObject)null;
+        val head2 = action.newPendingParameterModelHead(targetAdapter);
+        val head = Head.of(head2.getActionOwner(), head2.getActionTarget());
+        
         val resultAdapter =
                 action.executeWithRuleChecking(
-                        targetAdapter, mixedInAdapter, arguments,
+                        head, arguments,
                         InteractionInitiatedBy.USER,
                         WHERE_FOR_ACTION_INVOCATION);
 

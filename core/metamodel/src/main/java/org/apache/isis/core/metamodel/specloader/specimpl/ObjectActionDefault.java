@@ -388,12 +388,13 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     @Override
     public ManagedObject executeWithRuleChecking(
-            final ManagedObject target,
-            final ManagedObject mixedInAdapter,
+            final Head head,
             final Can<ManagedObject> arguments,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
 
+        val target = head.getOwner();
+        
         // see it?
         final Consent visibility = isVisible(target, interactionInitiatedBy, where);
         if (visibility.isVetoed()) {
@@ -412,7 +413,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
             throw new RecoverableException(validity.getReason());
         }
 
-        return execute(target, mixedInAdapter, arguments, interactionInitiatedBy);
+        return execute(head, arguments, interactionInitiatedBy);
     }
 
     /**
@@ -420,40 +421,37 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
      * {@link #executeInternal(ManagedObject, ManagedObject, List, InteractionInitiatedBy) executeInternal}
      * to invoke the {@link ActionInvocationFacet invocation facet}.
      *
-     * @param mixedInAdapter - will be null for regular actions, and for mixin actions.  When a mixin action invokes its underlying mixedIn action, then will be populated (so that the ActionDomainEvent can correctly provide the underlying mixin)
+     * @param mixedInAdapter - will be null for regular actions, and for mixin actions.  
+     * When a mixin action invokes its underlying mixedIn action, then will be populated 
+     * (so that the ActionDomainEvent can correctly provide the underlying mixin)
      */
     @Override
     public ManagedObject execute(
-            final ManagedObject targetAdapter,
-            final ManagedObject mixedInAdapter,
+            final Head head,
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        setupCommand(targetAdapter, argumentAdapters);
-
-        return this.executeInternal(targetAdapter, mixedInAdapter, argumentAdapters, interactionInitiatedBy);
+        setupCommand(head.getTarget(), argumentAdapters);
+        
+        return this.executeInternal(head, argumentAdapters, interactionInitiatedBy);
     }
 
     /**
-     * private API, called by mixins and contributees.
+     * private API, called by mixins
      */
-    public ManagedObject executeInternal(
-            final ManagedObject targetAdapter,
-            final ManagedObject mixedInAdapter,
+    protected ManagedObject executeInternal(
+            final Head head,
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         val actionInvocationFacet = getFacet(ActionInvocationFacet.class);
         return actionInvocationFacet
-                .invoke(this, targetAdapter, mixedInAdapter, argumentAdapters, interactionInitiatedBy);
+                .invoke(this, head, argumentAdapters, interactionInitiatedBy);
     }
 
     protected ActionInvocationFacet getActionInvocationFacet() {
         return getFacetedMethod().getFacet(ActionInvocationFacet.class);
     }
-
-
-
 
     // -- defaults
 

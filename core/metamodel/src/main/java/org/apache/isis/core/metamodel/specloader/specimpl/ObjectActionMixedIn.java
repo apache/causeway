@@ -22,21 +22,17 @@ import java.util.List;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.assertions._Assert;
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
 import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -64,11 +60,6 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
      */
     @Getter(onMethod = @__(@Override))
     private final FacetHolder facetHolder = new FacetHolderImpl();
-
-    /**
-     * Lazily initialized by {@link #getParameters()} (so don't use directly!)
-     */
-    private Can<ObjectActionParameter> parameters;
 
     private final Identifier identifier;
 
@@ -102,9 +93,9 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     }
 
     @Override
-    protected Head headFor(final ManagedObject mixedInAdapter) {
-        val mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
-        return Head.of(mixedInAdapter, mixinAdapter);
+    protected Head headFor(final ManagedObject owner) {
+        val target = mixinAdapterFor(mixinType, owner);
+        return Head.of(owner, target);
     }
     
     @Override
@@ -140,36 +131,6 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     public PendingParameterModelHead newPendingParameterModelHead(@NonNull ManagedObject actionOwner) {
         return PendingParameterModelHead.of(this, actionOwner, mixinAdapterFor(actionOwner));
     }
-//    
-//    @Override
-//    protected synchronized Can<ObjectActionParameter> determineParameters() {
-//        if (parameters != null) {
-//            // because possible race condition (caller isn't synchronized)
-//            return parameters;
-//        }
-//        val mixinActionParameters = mixinAction.getParameters();
-//        final List<FacetedMethodParameter> paramPeers = getFacetedMethod().getParameters();
-//
-//        final List<ObjectActionParameter> mixedInParameters = _Lists.newArrayList();
-//
-//        for(int paramIndex = 0; paramIndex < mixinActionParameters.size(); paramIndex++) {
-//
-//            val mixinParameter =
-//                    (ObjectActionParameterAbstract) mixinActionParameters.getElseFail(paramIndex);
-//
-//            final TypedHolder paramPeer = paramPeers.get(paramIndex);
-//            getSpecificationLoader().loadSpecification(paramPeer.getType());
-//
-//            final ObjectActionParameterMixedIn mixedInParameter =
-//                    mixinParameter.getPeer().getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR
-//                    ? new OneToOneActionParameterMixedIn(mixinParameter, this)
-//                    : new OneToManyActionParameterMixedIn(mixinParameter, this);
-//            mixedInParameters.add(mixedInParameter);
-//        }
-//        return Can.ofCollection(mixedInParameters);
-//    }
-//    
-
 
     @Override
     public Can<ManagedObject> getDefaults(final ManagedObject mixedInAdapter) {
@@ -191,19 +152,17 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
 
     @Override
     public ManagedObject execute(
-            final ManagedObject target,         // will be the mixedInAdapter
-            final ManagedObject mixedInAdapter, // will be passed in as null
+            final Head head,
             final Can<ManagedObject> arguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-
-        final ManagedObject targetAdapter = mixinAdapterFor(mixinType, target);
-        final ManagedObject actualMixedInAdapter = target;
-
-        setupCommand(actualMixedInAdapter, arguments);
-
+        final ManagedObject owner = head.getOwner();
+        final ManagedObject target = mixinAdapterFor(mixinType, owner);
+        _Assert.assertEquals(target.getSpecification(), head.getTarget().getSpecification());
+        
+        setupCommand(head.getTarget(), arguments);
         return mixinAction.executeInternal(
-                targetAdapter, actualMixedInAdapter, arguments,
+                head, arguments,
                 interactionInitiatedBy);
     }
 

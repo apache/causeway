@@ -23,6 +23,7 @@ import java.util.Optional;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Either;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
@@ -76,9 +77,8 @@ public final class ManagedAction extends ManagedMember {
             
         //TODO validate params, and handle invocation exceptions
         
-        final ManagedObject mixedInAdapter = null; // filled in automatically ?
         val actionResult = getAction()
-                .execute(getOwner(), mixedInAdapter , actionParameters, InteractionInitiatedBy.USER);
+                .execute(Head.simple(getOwner()) , actionParameters, InteractionInitiatedBy.USER);
         
         return _Either.left(actionResult);
         

@@ -77,7 +77,7 @@ implements ActionDomainEventFacet {
                         AbstractDomainEvent.Phase.HIDE,
                         getEventType(),
                         actionFrom(ic), getIdentified(),
-                        ic.getTarget(), ic.getMixedIn(), argumentAdaptersFrom(ic),
+                        ic.getHead(), argumentAdaptersFrom(ic),
                         null);
         if (event != null && event.isHidden()) {
             return "Hidden by subscriber";
@@ -93,7 +93,7 @@ implements ActionDomainEventFacet {
                         AbstractDomainEvent.Phase.DISABLE,
                         getEventType(),
                         actionFrom(ic), getIdentified(),
-                        ic.getTarget(), ic.getMixedIn(), argumentAdaptersFrom(ic),
+                        ic.getHead(), argumentAdaptersFrom(ic),
                         null);
         if (event != null && event.isDisabled()) {
             final TranslatableString reasonTranslatable = event.getDisabledReasonTranslatable();
@@ -118,7 +118,7 @@ implements ActionDomainEventFacet {
                         AbstractDomainEvent.Phase.VALIDATE,
                         getEventType(),
                         actionFrom(ic), getIdentified(),
-                        ic.getTarget(), ic.getMixedIn(), aic.getArgs(),
+                        ic.getHead(), aic.getArgs(),
                         null);
         if (event != null && event.isInvalid()) {
             final TranslatableString reasonTranslatable = event.getInvalidityReasonTranslatable();

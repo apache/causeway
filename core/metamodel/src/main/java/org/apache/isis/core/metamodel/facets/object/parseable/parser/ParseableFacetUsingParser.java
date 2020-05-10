@@ -73,7 +73,9 @@ implements ParseableFacet {
 
         // check string is valid
         // (eg pick up any @RegEx on value type)
-        if (getFacetHolder().containsFacet(ValueFacet.class)) {
+        if (contextAdapter!=null 
+                && getFacetHolder().containsFacet(ValueFacet.class)) {
+            
             val entryAdapter = getObjectManager().adapt(entry);
             final Identifier identifier = getIdentified().getIdentifier();
             final ParseValueContext parseValueContext =
@@ -99,8 +101,7 @@ implements ParseableFacet {
             final ObjectSpecification specification = adapter.getSpecification();
             final ObjectValidityContext validateContext =
                     specification.createValidityInteractionContext(
-                            adapter, interactionInitiatedBy
-                            );
+                            adapter, interactionInitiatedBy);
             validate(validateContext);
 
             return adapter;

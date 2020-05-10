@@ -24,6 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -67,28 +68,24 @@ implements MixinFacet {
     @Override
     public Object instantiate(final Object domainPojo) {
         if(constructor == null) {
-            return null; // invalid mix-in declaration; ought we to fail-fast?
+            throw _Exceptions.unrecoverableFormatted(
+                    "invalid mix-in declaration of type %s, missing contructor", mixinType);
         }
         if(domainPojo == null) {
             return null;
         }
         if(!isMixinFor(domainPojo.getClass())) {
-            // shouldn't happen; ought we to fail-fast instead?
-            return null;
+            throw _Exceptions.unrecoverableFormatted(
+                    "invalid mix-in declaration of type %s, unexpect owner type %s", 
+                    mixinType, domainPojo.getClass());
         }
         try {
             val mixinPojo = constructor.newInstance(domainPojo);
             getServiceInjector().injectServicesInto(mixinPojo);
             return mixinPojo;
-        } catch (InvocationTargetException e) {
-            // shouldn't happen; ought we to fail-fast instead?
-            return null;
-        } catch (InstantiationException e) {
-            // shouldn't happen; ought we to fail-fast instead?
-            return null;
-        } catch (IllegalAccessException e) {
-            // shouldn't happen; ought we to fail-fast instead?
-            return null;
+        } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
+            throw _Exceptions.unrecoverableFormatted(
+                    "invalid mix-in declaration of type %s, failing instance construction with %s", mixinType, e);
         }
     }
 
