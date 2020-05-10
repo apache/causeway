@@ -41,7 +41,9 @@ extends AccessContext {
             final Identifier identifier,
             final String title,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        super(InteractionContextType.OBJECT_TITLE, identifier, targetAdapter, interactionInitiatedBy);
+        
+        super(InteractionContextType.OBJECT_TITLE, 
+                identifier, Head.simple(targetAdapter), interactionInitiatedBy);
         this.title = title;
     }
 

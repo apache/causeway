@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
+import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
@@ -77,7 +78,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
 
     // internal API
     ActionArgValidityContext createProposedArgumentInteractionContext(
-            ManagedObject targetObject,
+            Head head,
             Can<ManagedObject> args,
             int position,
             InteractionInitiatedBy interactionInitiatedBy);
@@ -150,7 +151,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * @return
      */
     Consent isVisible(
-            ManagedObject targetAdapter,
+            Head head,
             Can<ManagedObject> pendingArgs,
             InteractionInitiatedBy interactionInitiatedBy);
 
@@ -162,7 +163,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * @return
      */
     Consent isUsable(
-            ManagedObject targetAdapter,
+            Head head,
             Can<ManagedObject> pendingArgs,
             InteractionInitiatedBy interactionInitiatedBy);
 
@@ -175,9 +176,9 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * @return
      */
     String isValid(
-            final ManagedObject adapter,
-            final Object proposedValue,
-            final InteractionInitiatedBy interactionInitiatedBy);
+            Head head,
+            Object proposedValue,
+            InteractionInitiatedBy interactionInitiatedBy);
 
     @Vetoed
     public static class Predicates {

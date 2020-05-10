@@ -43,13 +43,13 @@ implements ActionInteractionContext {
     @Getter private final Can<ManagedObject> args;
 
     public ActionValidityContext(
-            final ManagedObject targetAdapter,
+            final Head head,
             final ObjectAction objectAction,
             final Identifier id,
             final Can<ManagedObject> args,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        super(InteractionContextType.ACTION_INVOKE, targetAdapter, id, interactionInitiatedBy);
+        super(InteractionContextType.ACTION_INVOKE, head, id, interactionInitiatedBy);
         this.objectAction = objectAction;
         this.args = args;
     }

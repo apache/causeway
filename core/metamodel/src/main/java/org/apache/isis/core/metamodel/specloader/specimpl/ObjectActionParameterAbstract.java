@@ -49,10 +49,9 @@ import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefau
 import org.apache.isis.core.metamodel.interactions.ActionArgUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.interactions.ActionArgVisibilityContext;
+import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
-import org.apache.isis.core.metamodel.interactions.ValidityContext;
-import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -302,43 +301,40 @@ implements ObjectActionParameter, FacetHolder.Delegating {
     }
 
   
-    //region > Visibility
+    // > Visibility
 
     private ActionArgVisibilityContext createArgumentVisibilityContext(
-            final ManagedObject objectAdapter,
+            final Head head,
             final Can<ManagedObject> pendingArgs,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         return new ActionArgVisibilityContext(
-                objectAdapter, parentAction, getIdentifier(), pendingArgs, position, interactionInitiatedBy);
+                head, parentAction, getIdentifier(), pendingArgs, position, interactionInitiatedBy);
     }
 
     @Override
     public Consent isVisible(
-            final ManagedObject targetAdapter,
+            final Head head,
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final VisibilityContext ic = createArgumentVisibilityContext(
-                targetAdapter, pendingArgs, getNumber(), interactionInitiatedBy);
+        val visibilityContext = createArgumentVisibilityContext(
+                head, pendingArgs, getNumber(), interactionInitiatedBy);
 
-        final InteractionResult visibleResult = InteractionUtils.isVisibleResult(this, ic);
-        return visibleResult.createConsent();
+        return InteractionUtils.isVisibleResult(this, visibilityContext).createConsent();
     }
 
-    //endregion
-
-    //region > Usability
+    // > Usability
 
     private ActionArgUsabilityContext createArgumentUsabilityContext(
-            final ManagedObject objectAdapter,
+            final Head head,
             final Can<ManagedObject> pendingArgs,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         return new ActionArgUsabilityContext(
-                objectAdapter, 
+                head, 
                 parentAction, 
                 getIdentifier(), 
                 pendingArgs, 
@@ -348,36 +344,34 @@ implements ObjectActionParameter, FacetHolder.Delegating {
 
     @Override
     public Consent isUsable(
-            final ManagedObject targetAdapter,
+            final Head head,
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final UsabilityContext ic = createArgumentUsabilityContext(
-                targetAdapter, pendingArgs, getNumber(), interactionInitiatedBy);
+                head, pendingArgs, getNumber(), interactionInitiatedBy);
 
         final InteractionResult usableResult = InteractionUtils.isUsableResult(this, ic);
         return usableResult.createConsent();
     }
-
-    //endregion
 
 
     // -- Validation
 
     @Override
     public ActionArgValidityContext createProposedArgumentInteractionContext(
-            final ManagedObject objectAdapter,
+            final Head head,
             final Can<ManagedObject> proposedArguments,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         return new ActionArgValidityContext(
-                objectAdapter, parentAction, getIdentifier(), proposedArguments, position, interactionInitiatedBy);
+                head, parentAction, getIdentifier(), proposedArguments, position, interactionInitiatedBy);
     }
 
     @Override
     public String isValid(
-            final ManagedObject objectAdapter,
+            final Head head,
             final Object proposedValue,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
@@ -395,11 +389,11 @@ implements ObjectActionParameter, FacetHolder.Delegating {
         }
 
         val argumentAdapters = arguments(proposedValueAdapter);
-        final ValidityContext ic = createProposedArgumentInteractionContext(
-                objectAdapter, argumentAdapters, getNumber(), interactionInitiatedBy);
+        val validityContext = createProposedArgumentInteractionContext(
+                head, argumentAdapters, getNumber(), interactionInitiatedBy);
 
         final InteractionResultSet buf = new InteractionResultSet();
-        InteractionUtils.isValidResultSet(this, ic, buf);
+        InteractionUtils.isValidResultSet(this, validityContext, buf);
         if (buf.isVetoed()) {
             return buf.getInteractionResult().getReason();
         }

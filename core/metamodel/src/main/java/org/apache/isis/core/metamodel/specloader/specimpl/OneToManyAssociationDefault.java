@@ -69,22 +69,25 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
         return facet != null ? facet.value() : CollectionSemantics.OTHER_IMPLEMENTATION;
     }
 
-
     // -- visible, usable
 
     @Override
     public VisibilityContext createVisibleInteractionContext(
-            final ManagedObject ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy,
-            Where where) {
-        return new CollectionVisibilityContext(ownerAdapter, getIdentifier(), interactionInitiatedBy, where);
+            final ManagedObject ownerAdapter, 
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where) {
+        return new CollectionVisibilityContext(
+                headFor(ownerAdapter), getIdentifier(), interactionInitiatedBy, where);
     }
 
 
     @Override
     public UsabilityContext createUsableInteractionContext(
-            final ManagedObject ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy,
-            Where where) {
-        return new CollectionUsabilityContext(ownerAdapter, getIdentifier(), interactionInitiatedBy, where);
+            final ManagedObject ownerAdapter, 
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where) {
+        return new CollectionUsabilityContext(
+                headFor(ownerAdapter), getIdentifier(), interactionInitiatedBy, where);
     }
 
 
@@ -95,7 +98,8 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
             final InteractionInitiatedBy interactionInitiatedBy,
             final ManagedObject ownerAdapter,
             final ManagedObject proposedToAddAdapter) {
-        return new CollectionAddToContext(ownerAdapter, getIdentifier(), proposedToAddAdapter,
+        return new CollectionAddToContext(
+                headFor(ownerAdapter), getIdentifier(), proposedToAddAdapter,
                 interactionInitiatedBy);
     }
 
@@ -124,8 +128,7 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
             final ManagedObject proposedToRemoveAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         return new CollectionRemoveFromContext(
-                ownerAdapter, getIdentifier(), proposedToRemoveAdapter, interactionInitiatedBy
-                );
+                headFor(ownerAdapter), getIdentifier(), proposedToRemoveAdapter, interactionInitiatedBy);
     }
 
     @Override

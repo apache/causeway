@@ -38,12 +38,12 @@ implements ProposedHolder {
     private final ManagedObject proposed;
 
     public ParseValueContext(
-            final ManagedObject targetAdapter,
+            final Head head,
             final Identifier identifier,
             final ManagedObject proposed,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        super(InteractionContextType.PARSE_VALUE, targetAdapter, identifier, interactionInitiatedBy);
+        super(InteractionContextType.PARSE_VALUE, head, identifier, interactionInitiatedBy);
         this.proposed = proposed;
     }
 

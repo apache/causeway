@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
+import java.util.Objects;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
@@ -29,7 +31,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NonNull;
+import lombok.Value;
 
 /**
  * Represents an interaction between the framework and (a {@link Facet} of) the
@@ -59,6 +62,28 @@ import lombok.Setter;
  */
 public abstract class InteractionContext {
 
+    /**
+     * Model that holds the objects involved with the interaction.
+     * @since 2.0
+     */
+    @Value(staticConstructor = "of")
+    public static class Head {
+        /**
+         * The owning object that this interaction is associated with.
+         */
+        @NonNull private final ManagedObject owner;
+        
+        /**
+         * The target object that this interaction is associated with.
+         */
+        @NonNull private final ManagedObject target;
+        
+        /** when owner equals target (no mixin) */
+        public static Head simple(ManagedObject owner) {
+            return Head.of(owner, owner);
+        }
+    }
+    
     /**
      * The type of interaction.
      *
@@ -91,6 +116,11 @@ public abstract class InteractionContext {
     @Getter private final Identifier identifier;
     
     /**
+     * Model that holds the object involved with the interaction.
+     */
+    @Getter private final Head head;
+    
+    /**
      * The target object that this interaction is associated with.
      */
     @Getter private final ManagedObject target;
@@ -100,19 +130,22 @@ public abstract class InteractionContext {
      */
     @Getter private final Where where;
     
-    @Getter @Setter private ManagedObject mixedIn = null; // for mixin members only, obviously
+    @Getter private final ManagedObject mixedIn; // for mixin members only, obviously
 
     protected InteractionContext(
             final InteractionContextType interactionType,
             final InteractionInitiatedBy invocationMethod,
             final Identifier identifier,
-            final ManagedObject target,
+            final Head head,
             final Where where) {
         this.interactionType = interactionType;
         this.initiatedBy = invocationMethod;
         this.identifier = identifier;
-        this.target = target;
+        this.head = head;
         this.where = where;
+        
+        this.target = head.getTarget();
+        this.mixedIn = Objects.equals(head.getOwner(), head.getTarget()) ? null : head.getOwner();
     }
 
 

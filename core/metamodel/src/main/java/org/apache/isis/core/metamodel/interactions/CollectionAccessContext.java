@@ -25,7 +25,6 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.CollectionAccessEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -34,10 +33,10 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 public class CollectionAccessContext extends AccessContext {
 
     public CollectionAccessContext(
-            final ManagedObject target,
+            final Head head,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        super(InteractionContextType.COLLECTION_READ, identifier, target, interactionInitiatedBy);
+        super(InteractionContextType.COLLECTION_READ, identifier, head, interactionInitiatedBy);
     }
 
     @Override

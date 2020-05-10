@@ -24,7 +24,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -36,10 +35,10 @@ implements InteractionEventSupplier<ValidityEvent> {
 
     public ValidityContext(
             final InteractionContextType interactionType,
-            final ManagedObject target,
+            final Head head,
             final Identifier identifier,
             final InteractionInitiatedBy invocationMethod) {
-        super(interactionType, invocationMethod, identifier, target, Where.NOT_SPECIFIED);
+        super(interactionType, invocationMethod, identifier, head, Where.NOT_SPECIFIED);
     }
 
 }

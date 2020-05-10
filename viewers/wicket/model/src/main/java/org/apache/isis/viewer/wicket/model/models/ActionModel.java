@@ -50,6 +50,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
+import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -399,10 +400,12 @@ implements FormUiModel, FormExecutorContext {
         val realTargetAdapter = this.getMetaModel().realTargetAdapter(targetAdapter);
         val pendingArgs = getArgumentsAsParamModel();
 
+        val head = Head.of(targetAdapter, realTargetAdapter);
+        
         return argCache()
         .streamParamUiModels()
         .map(paramUiModel->{
-            return FormPendingParamUiModel.of(realTargetAdapter, paramUiModel, pendingArgs);
+            return FormPendingParamUiModel.of(head, paramUiModel, pendingArgs);
         });
 
     }

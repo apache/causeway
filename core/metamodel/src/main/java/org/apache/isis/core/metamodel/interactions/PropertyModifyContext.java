@@ -38,11 +38,11 @@ implements ProposedHolder {
     private final ManagedObject proposed;
 
     public PropertyModifyContext(
-            final ManagedObject targetAdapter,
+            final Head head,
             final Identifier id,
             final ManagedObject proposed,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        super(InteractionContextType.PROPERTY_MODIFY, targetAdapter, id, interactionInitiatedBy);
+        super(InteractionContextType.PROPERTY_MODIFY, head, id, interactionInitiatedBy);
 
         this.proposed = proposed;
     }

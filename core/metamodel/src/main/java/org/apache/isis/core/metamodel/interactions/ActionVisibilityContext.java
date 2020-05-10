@@ -26,7 +26,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.ActionVisibilityEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 /**
@@ -40,12 +39,12 @@ implements ActionInteractionContext  {
     private final ObjectAction objectAction;
 
     public ActionVisibilityContext(
-            final ManagedObject targetAdapter,
+            final Head head,
             final ObjectAction objectAction,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
-        super(InteractionContextType.ACTION_VISIBLE, targetAdapter, identifier, interactionInitiatedBy, where);
+        super(InteractionContextType.ACTION_VISIBLE, head, identifier, interactionInitiatedBy, where);
         this.objectAction = objectAction;
     }
 

@@ -55,9 +55,9 @@ import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoice
 import org.apache.isis.core.metamodel.interactions.ActionUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ActionValidityContext;
 import org.apache.isis.core.metamodel.interactions.ActionVisibilityContext;
+import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
-import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
@@ -223,24 +223,36 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         return parameters.getElseFail(position);
     }
 
-
+    protected Head headFor(final ManagedObject target) {
+        return Head.simple(target);
+    }
 
     // -- visable, usable
 
     @Override
     public VisibilityContext createVisibleInteractionContext(
-            final ManagedObject targetObjectAdapter, 
+            final ManagedObject target, 
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
-        return new ActionVisibilityContext(targetObjectAdapter, this, getIdentifier(), interactionInitiatedBy, where);
+        return new ActionVisibilityContext(
+                headFor(target), 
+                this, 
+                getIdentifier(), 
+                interactionInitiatedBy, 
+                where);
     }
 
     @Override
     public UsabilityContext createUsableInteractionContext(
-            final ManagedObject targetObjectAdapter, 
+            final ManagedObject target, 
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
-        return new ActionUsabilityContext(targetObjectAdapter, this, getIdentifier(), interactionInitiatedBy, where);
+        return new ActionUsabilityContext(
+                headFor(target), 
+                this, 
+                getIdentifier(), 
+                interactionInitiatedBy, 
+                where);
     }
 
 
@@ -302,19 +314,21 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
     private void validateArgumentsIndividually(
-            final ManagedObject objectAdapter,
+            final ManagedObject target,
             final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy,
             final InteractionResultSet resultSet) {
         
+        val head = headFor(target);
+        
         val actionParameters = getParameters();
         if (proposedArguments != null) {
             for (int i = 0; i < proposedArguments.size(); i++) {
-                final ValidityContext ic = actionParameters.getElseFail(i)
+                val validityContext = actionParameters.getElseFail(i)
                         .createProposedArgumentInteractionContext(
-                                objectAdapter, proposedArguments, i, interactionInitiatedBy);
+                                head, proposedArguments, i, interactionInitiatedBy);
                 
-                InteractionUtils.isValidResultSet(getParameter(i), ic, resultSet);
+                InteractionUtils.isValidResultSet(getParameter(i), validityContext, resultSet);
             }
         }
     }
@@ -350,17 +364,21 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
             final InteractionInitiatedBy interactionInitiatedBy,
             final InteractionResultSet resultSet) {
         
-        final ValidityContext ic = createActionInvocationInteractionContext(
+        val validityContext = createActionInvocationInteractionContext(
                 objectAdapter, proposedArguments, interactionInitiatedBy);
-        InteractionUtils.isValidResultSet(this, ic, resultSet);
+        InteractionUtils.isValidResultSet(this, validityContext, resultSet);
     }
 
     ActionValidityContext createActionInvocationInteractionContext(
-            final ManagedObject targetObject,
+            final ManagedObject target,
             final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        return new ActionValidityContext(targetObject, this, getIdentifier(), proposedArguments,
+        return new ActionValidityContext(
+                headFor(target), 
+                this, 
+                getIdentifier(), 
+                proposedArguments,
                 interactionInitiatedBy);
     }
 

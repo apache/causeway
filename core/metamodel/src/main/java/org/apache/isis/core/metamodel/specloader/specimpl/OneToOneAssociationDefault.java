@@ -74,17 +74,21 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
 
     @Override
     public VisibilityContext createVisibleInteractionContext(
-            final ManagedObject ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy,
-            Where where) {
-        return new PropertyVisibilityContext(ownerAdapter, getIdentifier(), interactionInitiatedBy, where);
+            final ManagedObject ownerAdapter, 
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where) {
+        return new PropertyVisibilityContext(
+                headFor(ownerAdapter), getIdentifier(), interactionInitiatedBy, where);
     }
 
 
     @Override
     public UsabilityContext createUsableInteractionContext(
-            final ManagedObject ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy,
-            Where where) {
-        return new PropertyUsabilityContext(ownerAdapter, getIdentifier(), interactionInitiatedBy, where);
+            final ManagedObject ownerAdapter, 
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where) {
+        return new PropertyUsabilityContext(
+                headFor(ownerAdapter), getIdentifier(), interactionInitiatedBy, where);
     }
 
 
@@ -94,7 +98,8 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
             final ManagedObject ownerAdapter,
             final ManagedObject proposedToReferenceAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        return new PropertyModifyContext(ownerAdapter, getIdentifier(), proposedToReferenceAdapter,
+        return new PropertyModifyContext(
+                headFor(ownerAdapter), getIdentifier(), proposedToReferenceAdapter,
                 interactionInitiatedBy);
     }
 
@@ -112,8 +117,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
             final InteractionInitiatedBy interactionInitiatedBy) {
         final ValidityContext validityContext =
                 createValidateInteractionContext(
-                        ownerAdapter, proposedToReferenceAdapter, interactionInitiatedBy
-                        );
+                        ownerAdapter, proposedToReferenceAdapter, interactionInitiatedBy);
         return InteractionUtils.isValidResult(this, validityContext);
     }
 

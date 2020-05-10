@@ -21,13 +21,10 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -35,10 +32,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
-import org.apache.isis.core.metamodel.interactions.InteractionUtils;
-import org.apache.isis.core.metamodel.interactions.UsabilityContext;
-import org.apache.isis.core.metamodel.interactions.ValidityContext;
-import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -108,6 +102,12 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     }
 
     @Override
+    protected Head headFor(final ManagedObject mixedInAdapter) {
+        val mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
+        return Head.of(mixedInAdapter, mixinAdapter);
+    }
+    
+    @Override
     public String getId() {
         return determineIdFrom(this.mixinAction);
     }
@@ -140,59 +140,36 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     public PendingParameterModelHead newPendingParameterModelHead(@NonNull ManagedObject actionOwner) {
         return PendingParameterModelHead.of(this, actionOwner, mixinAdapterFor(actionOwner));
     }
-    
-    @Override
-    protected synchronized Can<ObjectActionParameter> determineParameters() {
-        if (parameters != null) {
-            // because possible race condition (caller isn't synchronized)
-            return parameters;
-        }
-        val mixinActionParameters = mixinAction.getParameters();
-        final List<FacetedMethodParameter> paramPeers = getFacetedMethod().getParameters();
+//    
+//    @Override
+//    protected synchronized Can<ObjectActionParameter> determineParameters() {
+//        if (parameters != null) {
+//            // because possible race condition (caller isn't synchronized)
+//            return parameters;
+//        }
+//        val mixinActionParameters = mixinAction.getParameters();
+//        final List<FacetedMethodParameter> paramPeers = getFacetedMethod().getParameters();
+//
+//        final List<ObjectActionParameter> mixedInParameters = _Lists.newArrayList();
+//
+//        for(int paramIndex = 0; paramIndex < mixinActionParameters.size(); paramIndex++) {
+//
+//            val mixinParameter =
+//                    (ObjectActionParameterAbstract) mixinActionParameters.getElseFail(paramIndex);
+//
+//            final TypedHolder paramPeer = paramPeers.get(paramIndex);
+//            getSpecificationLoader().loadSpecification(paramPeer.getType());
+//
+//            final ObjectActionParameterMixedIn mixedInParameter =
+//                    mixinParameter.getPeer().getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR
+//                    ? new OneToOneActionParameterMixedIn(mixinParameter, this)
+//                    : new OneToManyActionParameterMixedIn(mixinParameter, this);
+//            mixedInParameters.add(mixedInParameter);
+//        }
+//        return Can.ofCollection(mixedInParameters);
+//    }
+//    
 
-        final List<ObjectActionParameter> mixedInParameters = _Lists.newArrayList();
-
-        for(int paramIndex = 0; paramIndex < mixinActionParameters.size(); paramIndex++) {
-
-            val mixinParameter =
-                    (ObjectActionParameterAbstract) mixinActionParameters.getElseFail(paramIndex);
-
-            final TypedHolder paramPeer = paramPeers.get(paramIndex);
-            getSpecificationLoader().loadSpecification(paramPeer.getType());
-
-            final ObjectActionParameterMixedIn mixedInParameter =
-                    mixinParameter.getPeer().getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR
-                    ? new OneToOneActionParameterMixedIn(mixinParameter, this)
-                            : new OneToManyActionParameterMixedIn(mixinParameter, this);
-                    mixedInParameters.add(mixedInParameter);
-        }
-        return Can.ofCollection(mixedInParameters);
-    }
-
-    @Override
-    public Consent isVisible(
-            final ManagedObject mixedInAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
-
-        final ManagedObject mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
-        final VisibilityContext ic =
-                mixinAction.createVisibleInteractionContext(mixinAdapter, interactionInitiatedBy, where);
-        ic.setMixedIn(mixedInAdapter);
-        return InteractionUtils.isVisibleResult(this, ic).createConsent();
-    }
-
-    @Override
-    public Consent isUsable(
-            final ManagedObject mixedInAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy, final Where where) {
-
-        final ManagedObject mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
-        final UsabilityContext ic =
-                mixinAction.createUsableInteractionContext(mixinAdapter, interactionInitiatedBy, where);
-        ic.setMixedIn(mixedInAdapter);
-        return InteractionUtils.isUsableResult(this, ic).createConsent();
-    }
 
     @Override
     public Can<ManagedObject> getDefaults(final ManagedObject mixedInAdapter) {
@@ -211,24 +188,6 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     protected ManagedObject mixinAdapterFor(final ManagedObject mixedInAdapter) {
         return mixinAdapterFor(mixinType, mixedInAdapter);
     }
-
-    @Override
-    protected void validateArgumentSet(
-            final ManagedObject mixedInAdapter,
-            final Can<ManagedObject> proposedArguments,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final InteractionResultSet resultSet) {
-
-        final ManagedObject targetObject = mixinAdapterFor(mixinType, mixedInAdapter);
-
-        final ValidityContext ic =
-                mixinAction.createActionInvocationInteractionContext(targetObject, proposedArguments, interactionInitiatedBy);
-        ic.setMixedIn(mixedInAdapter);
-
-        InteractionUtils.isValidResultSet(this, ic, resultSet);
-    }
-
-
 
     @Override
     public ManagedObject execute(

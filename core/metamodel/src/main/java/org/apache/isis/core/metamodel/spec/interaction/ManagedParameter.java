@@ -22,11 +22,13 @@ import java.util.Optional;
 
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.Veto;
+import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 import lombok.NonNull;
 import lombok.Value;
+import lombok.val;
 
 @Value(staticConstructor = "of")
 public class ManagedParameter {
@@ -39,9 +41,13 @@ public class ManagedParameter {
     }
     
     public Optional<InteractionVeto> validate() {
+        
+        val head2 = owningAction.getAction().newPendingParameterModelHead(getOwningObject());
+        val head = Head.of(head2.getActionOwner(), head2.getActionTarget());
+        
         return Optional.ofNullable(
             getParameter()
-                .isValid(getOwningObject(), getValue(), InteractionInitiatedBy.USER))
+                .isValid(head, getValue(), InteractionInitiatedBy.USER))
         .map(reasonNotValid->InteractionVeto.actionParamInvalid(new Veto(reasonNotValid)));
     }
     

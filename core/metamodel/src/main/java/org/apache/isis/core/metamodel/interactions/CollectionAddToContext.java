@@ -36,11 +36,11 @@ implements ProposedHolder {
     private final ManagedObject proposed;
 
     public CollectionAddToContext(
-            final ManagedObject targetAdapter,
+            final Head head,
             final Identifier id,
             final ManagedObject proposed,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        super(InteractionContextType.COLLECTION_ADD_TO, targetAdapter, id, interactionInitiatedBy);
+        super(InteractionContextType.COLLECTION_ADD_TO, head, id, interactionInitiatedBy);
 
         this.proposed = proposed;
     }

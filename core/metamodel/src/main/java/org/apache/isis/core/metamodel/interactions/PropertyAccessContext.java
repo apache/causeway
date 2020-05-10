@@ -37,11 +37,11 @@ extends AccessContext {
     private final ManagedObject value;
 
     public PropertyAccessContext(
-            final ManagedObject targetAdapter,
+            final Head head,
             final Identifier id,
             final ManagedObject value,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        super(InteractionContextType.PROPERTY_READ, id, targetAdapter, interactionInitiatedBy);
+        super(InteractionContextType.PROPERTY_READ, id, head, interactionInitiatedBy);
 
         this.value = value;
     }

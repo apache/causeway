@@ -55,6 +55,7 @@ import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstractAlwaysEverywhere;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstractImpl;
 import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContextFacetNone;
+import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
 import org.apache.isis.core.metamodel.interactions.PropertyUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.PropertyVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
@@ -200,10 +201,6 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
         super.getFacetedMethod().setMetaModelContext(mmc);
     }
 
-    /**
-     * @deprecated - unused ?
-     */
-    @Deprecated
     public Consent isUsable(final ObjectAdapter target) {
         return null;
     }
@@ -215,17 +212,20 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
 
     @Override
     public UsabilityContext createUsableInteractionContext(
-            final ManagedObject target, final InteractionInitiatedBy interactionInitiatedBy,
-            Where where) {
-        return new PropertyUsabilityContext(target, getIdentifier(), interactionInitiatedBy, where);
+            final ManagedObject target, 
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where) {
+        return new PropertyUsabilityContext(
+                Head.simple(target), getIdentifier(), interactionInitiatedBy, where);
     }
 
     @Override
     public VisibilityContext createVisibleInteractionContext(
-            final ManagedObject targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
-            Where where) {
-        return new PropertyVisibilityContext(targetObjectAdapter, getIdentifier(), interactionInitiatedBy,
-                where);
+            final ManagedObject target, 
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where) {
+        return new PropertyVisibilityContext(
+                Head.simple(target), getIdentifier(), interactionInitiatedBy, where);
     }
 
 

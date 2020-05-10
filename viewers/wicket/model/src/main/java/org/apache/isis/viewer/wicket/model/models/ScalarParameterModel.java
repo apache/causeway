@@ -25,10 +25,12 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.interaction.ManagedParameter;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
@@ -36,6 +38,7 @@ import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.val;
 
 public class ScalarParameterModel extends ScalarModel
 implements ParameterUiModel {
@@ -108,9 +111,15 @@ implements ParameterUiModel {
     @Override
     public String parseAndValidate(final String proposedPojoAsStr) {
         final ObjectActionParameter parameter = getMetaModel();
+        
+        val action = parameter.getAction();
+        
         try {
             ManagedObject parentAdapter = getParentUiModel().load();
-            final String invalidReasonIfAny = parameter.isValid(parentAdapter, proposedPojoAsStr,
+            val head2 = action.newPendingParameterModelHead(parentAdapter);
+            val head = Head.of(head2.getActionOwner(), head2.getActionTarget());
+            
+            final String invalidReasonIfAny = parameter.isValid(head, proposedPojoAsStr,
                     InteractionInitiatedBy.USER
                     );
             return invalidReasonIfAny;
@@ -122,9 +131,17 @@ implements ParameterUiModel {
     @Override
     public String validate(final ManagedObject proposedAdapter) {
         final ObjectActionParameter parameter = getMetaModel();
+        
+        val action = parameter.getAction();
+        
+        
         try {
             ManagedObject parentAdapter = getParentUiModel().load();
-            final String invalidReasonIfAny = parameter.isValid(parentAdapter, proposedAdapter.getPojo(),
+            
+            val head2 = action.newPendingParameterModelHead(parentAdapter);
+            val head = Head.of(head2.getActionOwner(), head2.getActionTarget());    
+            
+            final String invalidReasonIfAny = parameter.isValid(head, proposedAdapter.getPojo(),
                     InteractionInitiatedBy.USER
                     );
             return invalidReasonIfAny;

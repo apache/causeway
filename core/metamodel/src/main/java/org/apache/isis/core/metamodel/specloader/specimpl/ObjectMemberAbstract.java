@@ -30,7 +30,6 @@ import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -158,7 +157,7 @@ implements ObjectMember, MetaModelContext.Delegating, FacetHolder.Delegating {
      * {@link AccessContext} accesses) have no corresponding vetoing methods.
      */
     protected abstract VisibilityContext createVisibleInteractionContext(
-            final ManagedObject targetObjectAdapter,
+            final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where);
 
@@ -183,17 +182,10 @@ implements ObjectMember, MetaModelContext.Delegating, FacetHolder.Delegating {
             final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
-        return isVisibleResult(target, interactionInitiatedBy, where).createConsent();
+        
+        val visibilityContext = createVisibleInteractionContext(target, interactionInitiatedBy, where);
+        return InteractionUtils.isVisibleResult(this, visibilityContext).createConsent();
     }
-
-    private InteractionResult isVisibleResult(
-            final ManagedObject target,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
-        final VisibilityContext ic = createVisibleInteractionContext(target, interactionInitiatedBy, where);
-        return InteractionUtils.isVisibleResult(this, ic);
-    }
-
 
     // -- Disabled (or enabled)
     /**
@@ -220,18 +212,10 @@ implements ObjectMember, MetaModelContext.Delegating, FacetHolder.Delegating {
             final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
-        return isUsableResult(target, interactionInitiatedBy, where).createConsent();
+        
+        val usabilityContext = createUsableInteractionContext(target, interactionInitiatedBy, where);
+        return InteractionUtils.isUsableResult(this, usabilityContext).createConsent();
     }
-
-    private InteractionResult isUsableResult(
-            final ManagedObject target,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
-        final UsabilityContext ic = createUsableInteractionContext(target, interactionInitiatedBy, where);
-        return InteractionUtils.isUsableResult(this, ic);
-    }
-
-
 
     // -- isAssociation, isAction
     @Override

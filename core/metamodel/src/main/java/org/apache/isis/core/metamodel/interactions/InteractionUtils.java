@@ -19,9 +19,11 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
+import org.apache.isis.core.metamodel.consent.InteractionAdvisor;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -35,6 +37,7 @@ public final class InteractionUtils {
         val iaResult = new InteractionResult(context.createInteractionEvent());
         
         facetHolder.streamFacets(HidingInteractionAdvisor.class)
+        .filter(advisor->compatible(advisor, context))
         .forEach(advisor->{
             val hidingReason = advisor.hides(context);
             iaResult.advise(hidingReason, advisor);
@@ -43,16 +46,15 @@ public final class InteractionUtils {
         return iaResult;
     }
 
+
     public static InteractionResult isUsableResult(FacetHolder facetHolder, UsabilityContext context) {
         
         val isResult = new InteractionResult(context.createInteractionEvent());
         
         facetHolder.streamFacets(DisablingInteractionAdvisor.class)
+        .filter(advisor->compatible(advisor, context))
         .forEach(advisor->{
             val disablingReason = advisor.disables(context);
-// debugging            
-//            if(disablingReason!=null)
-//                System.out.println(String.format("disabling %s -> %s", advisor, disablingReason) );
             isResult.advise(disablingReason, advisor);
         });
         
@@ -64,6 +66,7 @@ public final class InteractionUtils {
         val iaResult = new InteractionResult(context.createInteractionEvent());
         
         facetHolder.streamFacets(ValidatingInteractionAdvisor.class)
+        .filter(advisor->compatible(advisor, context))
         .forEach(advisor->{
             val invalidatingReason = advisor.invalidates(context); 
             iaResult.advise(invalidatingReason, advisor);
@@ -79,6 +82,14 @@ public final class InteractionUtils {
         
         return resultSet.add(isValidResult(facetHolder, context));
     }
-  
+    
+    private static boolean compatible(InteractionAdvisor advisor, InteractionContext ic) {
+        
+        if(advisor instanceof ActionDomainEventFacet) {
+            return ic instanceof ActionInteractionContext;
+        }
+        
+        return true;
+    }
   
 }

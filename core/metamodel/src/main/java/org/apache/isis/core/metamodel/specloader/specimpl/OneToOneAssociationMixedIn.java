@@ -24,7 +24,6 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
@@ -34,9 +33,7 @@ import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetForContributee;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacetAbstract;
-import org.apache.isis.core.metamodel.interactions.InteractionUtils;
-import org.apache.isis.core.metamodel.interactions.UsabilityContext;
-import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
 import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -118,6 +115,12 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
 
         identifier = Identifier.actionIdentifier(mixedInType.getCorrespondingClass().getName(), getId(), memberParameterNames);
     }
+    
+    @Override
+    protected Head headFor(final ManagedObject mixedInAdapter) {
+        val mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
+        return Head.of(mixedInAdapter, mixinAdapter);
+    }
 
     private DisabledFacet disabledFacet() {
         final DisabledFacet originalFacet = facetHolder.getFacet(DisabledFacet.class);
@@ -155,32 +158,6 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
     @Override
     public String getOriginalId() {
         return super.getId();
-    }
-
-    @Override
-    public Consent isVisible(
-            final ManagedObject mixedInAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
-
-        val mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
-        final VisibilityContext ic =
-                mixinAction.createVisibleInteractionContext(mixinAdapter, interactionInitiatedBy, where);
-        ic.setMixedIn(mixedInAdapter);
-        return InteractionUtils.isVisibleResult(this, ic).createConsent();
-    }
-
-    @Override
-    public Consent isUsable(
-            final ManagedObject mixedInAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
-
-        val mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
-        final UsabilityContext ic =
-                mixinAction.createUsableInteractionContext(mixinAdapter, interactionInitiatedBy, where);
-        ic.setMixedIn(mixedInAdapter);
-        return InteractionUtils.isUsableResult(this, ic).createConsent();
     }
 
     @Override

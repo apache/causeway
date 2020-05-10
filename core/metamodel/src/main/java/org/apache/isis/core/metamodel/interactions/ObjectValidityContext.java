@@ -39,7 +39,9 @@ implements ProposedHolder {
             final ManagedObject targetAdapter,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        super(InteractionContextType.OBJECT_VALIDATE, targetAdapter, identifier, interactionInitiatedBy);
+        
+        super(InteractionContextType.OBJECT_VALIDATE, 
+                Head.simple(targetAdapter), identifier, interactionInitiatedBy);
     }
 
     @Override

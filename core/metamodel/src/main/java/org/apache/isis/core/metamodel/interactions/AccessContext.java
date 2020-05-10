@@ -24,7 +24,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.AccessEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * See {@link InteractionContext} for overview; analogous to {@link AccessEvent}
@@ -37,9 +36,9 @@ implements InteractionEventSupplier<AccessEvent> {
     public AccessContext(
             final InteractionContextType interactionType,
             final Identifier identifier,
-            final ManagedObject target,
+            final Head head,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        super(interactionType, interactionInitiatedBy, identifier, target, Where.NOT_SPECIFIED);
+        super(interactionType, interactionInitiatedBy, identifier, head, Where.NOT_SPECIFIED);
     }
 
 }

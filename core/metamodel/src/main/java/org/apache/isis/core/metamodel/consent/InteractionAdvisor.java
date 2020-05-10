@@ -26,6 +26,7 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.InteractionAdvisorFacet;
+import org.apache.isis.core.metamodel.interactions.InteractionContext;
 
 /**
  * Marker interface for implementations (specifically, {@link Facet}s) that can
@@ -34,6 +35,8 @@ import org.apache.isis.core.metamodel.interactions.InteractionAdvisorFacet;
  * Used within {@link Allow} and {@link Veto}.
  */
 public interface InteractionAdvisor {
+    
+    //boolean handles(InteractionContext ic);
 
     /**
      * For testing purposes only.
@@ -96,7 +99,6 @@ public interface InteractionAdvisor {
         public Class<? extends Facet> facetAliasType() {
             return null;
         }
-
 
     };
 

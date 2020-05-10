@@ -26,7 +26,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.PropertyUsabilityEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -36,11 +35,11 @@ public class PropertyUsabilityContext
 extends UsabilityContext {
 
     public PropertyUsabilityContext(
-            final ManagedObject targetAdapter,
+            final Head head,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
-        super(InteractionContextType.PROPERTY_USABLE, targetAdapter, identifier, interactionInitiatedBy, where);
+        super(InteractionContextType.PROPERTY_USABLE, head, identifier, interactionInitiatedBy, where);
     }
 
     @Override

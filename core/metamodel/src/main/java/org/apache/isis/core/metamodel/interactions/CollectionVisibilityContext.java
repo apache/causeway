@@ -26,7 +26,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.CollectionVisibilityEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -36,11 +35,11 @@ public class CollectionVisibilityContext
 extends VisibilityContext {
 
     public CollectionVisibilityContext(
-            final ManagedObject target,
+            final Head head,
             final Identifier identifierAdapter,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
-        super(InteractionContextType.COLLECTION_VISIBLE, target, identifierAdapter, interactionInitiatedBy, where);
+        super(InteractionContextType.COLLECTION_VISIBLE, head, identifierAdapter, interactionInitiatedBy, where);
     }
 
     @Override

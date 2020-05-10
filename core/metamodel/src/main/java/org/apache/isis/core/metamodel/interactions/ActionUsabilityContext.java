@@ -26,7 +26,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.ActionUsabilityEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 /**
@@ -40,12 +39,12 @@ implements ActionInteractionContext {
     private final ObjectAction objectAction;
 
     public ActionUsabilityContext(
-            final ManagedObject targetAdapter,
+            final Head head,
             final ObjectAction objectAction,
             final Identifier id,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
-        super(InteractionContextType.ACTION_USABLE, targetAdapter, id, interactionInitiatedBy, where);
+        super(InteractionContextType.ACTION_USABLE, head, id, interactionInitiatedBy, where);
         this.objectAction = objectAction;
     }
 

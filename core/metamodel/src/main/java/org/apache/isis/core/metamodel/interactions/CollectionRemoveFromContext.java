@@ -38,11 +38,11 @@ implements ProposedHolder{
     private final ManagedObject proposed;
 
     public CollectionRemoveFromContext(
-            final ManagedObject targetAdapter,
+            final Head head,
             final Identifier identifier,
             final ManagedObject proposed,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        super(InteractionContextType.COLLECTION_REMOVE_FROM, targetAdapter, identifier, interactionInitiatedBy);
+        super(InteractionContextType.COLLECTION_REMOVE_FROM, head, identifier, interactionInitiatedBy);
 
         this.proposed = proposed;
     }
