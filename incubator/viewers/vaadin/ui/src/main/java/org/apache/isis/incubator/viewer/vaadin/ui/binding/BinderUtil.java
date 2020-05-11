@@ -30,7 +30,7 @@ import com.vaadin.flow.data.converter.Converter;
 import com.vaadin.flow.data.converter.DateToSqlDateConverter;
 import com.vaadin.flow.data.converter.LocalDateToDateConverter;
 
-import org.apache.isis.core.metamodel.spec.interaction.InteractionVeto;
+import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory.Request;
 
 import lombok.RequiredArgsConstructor;

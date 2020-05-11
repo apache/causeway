@@ -16,13 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.spec.interaction;
+package org.apache.isis.core.metamodel.interactions.managed;
 
 import java.util.function.Function;
 
 import org.apache.isis.core.commons.internal.base._Either;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedMember.MemberType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.interaction.ManagedMember.MemberType;
 
 import lombok.NonNull;
 import lombok.val;

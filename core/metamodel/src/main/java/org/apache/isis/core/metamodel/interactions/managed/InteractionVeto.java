@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.spec.interaction;
+package org.apache.isis.core.metamodel.interactions.managed;
 
 import java.io.Serializable;
 
@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.Veto;
-import org.apache.isis.core.metamodel.spec.interaction.ManagedMember.MemberType;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedMember.MemberType;
 
 import lombok.AccessLevel;
 import lombok.Getter;

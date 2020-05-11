@@ -26,11 +26,11 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.handler.ChainOfResponsibility;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.interaction.InteractionVeto;
-import org.apache.isis.core.metamodel.spec.interaction.ManagedMember;
-import org.apache.isis.core.metamodel.spec.interaction.ManagedProperty;
 
 import lombok.NonNull;
 import lombok.Value;

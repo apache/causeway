@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.spec.interaction;
+package org.apache.isis.core.metamodel.interactions.managed;
 
 import java.util.Iterator;
 import java.util.Optional;
