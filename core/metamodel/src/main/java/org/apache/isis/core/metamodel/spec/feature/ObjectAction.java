@@ -53,12 +53,12 @@ import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderFacetComparator;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
-import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModelHead;
 
 import lombok.NonNull;
 import lombok.val;
@@ -160,7 +160,7 @@ public interface ObjectAction extends ObjectMember {
 
     // -- Model for Parameter Negotiation
 
-    PendingParameterModelHead interactionHead(
+    ActionInteractionHead interactionHead(
             @NonNull ManagedObject actionOwner);
     
     // -- Parameters (declarative)

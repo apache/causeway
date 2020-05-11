@@ -26,14 +26,17 @@ import javax.annotation.Nullable;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NonNull;
-import lombok.Value;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Model that holds the objects involved with the interaction.
  * @since 2.0
  */
-@Value(staticConstructor = "unchecked")
+@Getter
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class InteractionHead {
     /**
      * The owning object of an interaction.
@@ -57,7 +60,7 @@ public class InteractionHead {
                 && target.getPojo()==null) {
             throw _Exceptions.unrecoverableFormatted("target not spec. %s", target);
         }
-        return unchecked(owner, target);
+        return new InteractionHead(owner, target);
     }
     
     /** Simple case, when owner equals target. (no mixin) */

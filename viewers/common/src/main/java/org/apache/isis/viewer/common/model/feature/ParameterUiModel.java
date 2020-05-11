@@ -20,10 +20,10 @@ package org.apache.isis.viewer.common.model.feature;
 
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
-import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModelHead;
 
 public interface ParameterUiModel extends ScalarUiModel {
 
@@ -81,7 +81,7 @@ public interface ParameterUiModel extends ScalarUiModel {
         return getMetaModel().getAutoComplete(getPendingParameterModel(), searchArg, InteractionInitiatedBy.USER);
     }
 
-    default PendingParameterModelHead getPendingParamHead() {
+    default ActionInteractionHead getPendingParamHead() {
         return getMetaModel().getAction().interactionHead(getOwner());
     }
     

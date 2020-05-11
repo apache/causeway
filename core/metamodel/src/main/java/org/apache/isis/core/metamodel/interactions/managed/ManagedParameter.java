@@ -22,7 +22,6 @@ import java.util.Optional;
 
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.Veto;
-import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
@@ -42,8 +41,7 @@ public class ManagedParameter {
     
     public Optional<InteractionVeto> validate() {
         
-        val head2 = owningAction.getAction().interactionHead(getOwningObject());
-        val head = InteractionHead.of(head2.getActionOwner(), head2.getActionTarget());
+        val head = owningAction.getAction().interactionHead(getOwningObject()).toInteractionHead();
         
         return Optional.ofNullable(
             getParameter()

@@ -27,7 +27,6 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModelHead;
 import org.apache.isis.viewer.common.model.HasTitle;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 

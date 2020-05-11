@@ -16,40 +16,44 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.specloader.specimpl;
+package org.apache.isis.core.metamodel.interactions.managed;
 
 import java.util.Objects;
 
 import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-/**
- * The 'head' of a {@link PendingParameterModel}, which in contrast to the (owning) 
- * {@link PendingParameterModel} holds no parameter values.
- *  
- * @since 2.0.0
- */
-@Getter 
-@RequiredArgsConstructor(staticName = "of")
 @Log4j2
-public class PendingParameterModelHead {
+public class ActionInteractionHead 
+extends InteractionHead 
+implements HasMetaModel<ObjectAction> {
 
-    @NonNull private final ObjectAction action;
-    @NonNull private final ManagedObject actionOwner;
+    @Getter(onMethod = @__(@Override))
+    @NonNull private final ObjectAction metaModel;
     
-    /** 
-     * typically equal to {@code actionOwner}, except for mixins, 
-     * where {@code actionTarget} is the mixin instance 
-     */
-    @NonNull private final ManagedObject actionTarget; 
+    public static ActionInteractionHead of(
+            @NonNull ObjectAction objectAction,
+            @NonNull ManagedObject owner, 
+            @NonNull ManagedObject target) {
+        return new ActionInteractionHead(objectAction, owner, target);
+    } 
     
+    protected ActionInteractionHead(
+            @NonNull ObjectAction objectAction,
+            @NonNull ManagedObject owner, 
+            @NonNull ManagedObject target) {
+        super(owner, target);
+        this.metaModel = objectAction;
+    }
+
     /**  
      * Immutable tuple of ManagedObjects, each representing {@code null} and each holding 
      * the corresponding parameter's {@code ObjectSpecification}.
@@ -57,7 +61,7 @@ public class PendingParameterModelHead {
      * The size of the tuple corresponds to the number of parameters.
      */
     public Can<ManagedObject> getEmptyParameterValues() {
-        return getAction().getParameters().stream()
+        return getMetaModel().getParameters().stream()
         .map(objectActionParameter->
             ManagedObject.empty(objectActionParameter.getSpecification()))
         .collect(Can.toCan());
@@ -84,7 +88,7 @@ public class PendingParameterModelHead {
         // second pass to verify we have found a fixed point
         final int maxIterations = 2;  
         
-        val params = getAction().getParameters();
+        val params = getMetaModel().getParameters();
         
         // init defaults with empty pending-parameter values 
         val emptyModel = emptyModel();
@@ -108,10 +112,14 @@ public class PendingParameterModelHead {
         }
         
         log.warn("Cannot find an initial fixed point for action "
-                + "parameter defaults on action %s.", getAction());
+                + "parameter defaults on action %s.", getMetaModel());
         
         return model(pl);
         
+    }
+    
+    public InteractionHead toInteractionHead() {
+        return this;
     }
 
     // -- HELPER
@@ -128,10 +136,6 @@ public class PendingParameterModelHead {
         }
         return true;
     }
+    
 
-   
-
-    
-    
-    
 }

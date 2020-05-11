@@ -56,7 +56,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
-import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModelHead;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.common.model.action.form.FormPendingParamUiModel;
 import org.apache.isis.viewer.common.model.action.form.FormUiModel;
@@ -191,9 +190,8 @@ implements FormUiModel, FormExecutorContext {
         val targetAdapter = getOwner();
         final Can<ManagedObject> arguments = argCache().snapshot();
         final ObjectAction action = getMetaModel();
-
-        val head2 = action.interactionHead(targetAdapter);
-        val head = InteractionHead.of(head2.getActionOwner(), head2.getActionTarget());
+        
+        val head = action.interactionHead(targetAdapter).toInteractionHead();
         
         val resultAdapter =
                 action.executeWithRuleChecking(

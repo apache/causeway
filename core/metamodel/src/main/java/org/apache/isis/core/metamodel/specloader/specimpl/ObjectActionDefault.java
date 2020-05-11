@@ -59,6 +59,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -148,8 +149,8 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
     @Override
-    public PendingParameterModelHead interactionHead(@NonNull ManagedObject actionOwner) {
-        return PendingParameterModelHead.of(this, actionOwner, actionOwner);
+    public ActionInteractionHead interactionHead(@NonNull ManagedObject actionOwner) {
+        return ActionInteractionHead.of(this, actionOwner, actionOwner);
     }
     
     // -- Parameters

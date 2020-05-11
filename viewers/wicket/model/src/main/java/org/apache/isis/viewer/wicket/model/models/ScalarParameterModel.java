@@ -25,8 +25,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.interactions.InteractionHead;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -116,12 +114,11 @@ implements ParameterUiModel {
         
         try {
             ManagedObject parentAdapter = getParentUiModel().load();
-            val head2 = action.interactionHead(parentAdapter);
-            val head = InteractionHead.of(head2.getActionOwner(), head2.getActionTarget());
+            
+            val head = action.interactionHead(parentAdapter).toInteractionHead();
             
             final String invalidReasonIfAny = parameter.isValid(head, proposedPojoAsStr,
-                    InteractionInitiatedBy.USER
-                    );
+                    InteractionInitiatedBy.USER);
             return invalidReasonIfAny;
         } catch (final Exception ex) {
             return ex.getLocalizedMessage();
@@ -138,12 +135,10 @@ implements ParameterUiModel {
         try {
             ManagedObject parentAdapter = getParentUiModel().load();
             
-            val head2 = action.interactionHead(parentAdapter);
-            val head = InteractionHead.of(head2.getActionOwner(), head2.getActionTarget());    
+            val head = action.interactionHead(parentAdapter).toInteractionHead();    
             
             final String invalidReasonIfAny = parameter.isValid(head, proposedAdapter.getPojo(),
-                    InteractionInitiatedBy.USER
-                    );
+                    InteractionInitiatedBy.USER);
             return invalidReasonIfAny;
         } catch (final Exception ex) {
             return ex.getLocalizedMessage();

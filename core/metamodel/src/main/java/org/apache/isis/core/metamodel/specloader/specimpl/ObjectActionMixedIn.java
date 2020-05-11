@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -128,8 +129,8 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     }
 
     @Override
-    public PendingParameterModelHead interactionHead(@NonNull ManagedObject actionOwner) {
-        return PendingParameterModelHead.of(this, actionOwner, mixinAdapterFor(actionOwner));
+    public ActionInteractionHead interactionHead(@NonNull ManagedObject actionOwner) {
+        return ActionInteractionHead.of(this, actionOwner, mixinAdapterFor(actionOwner));
     }
 
     @Override
