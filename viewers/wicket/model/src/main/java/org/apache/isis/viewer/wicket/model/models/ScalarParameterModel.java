@@ -115,7 +115,7 @@ implements ParameterUiModel {
         try {
             ManagedObject parentAdapter = getParentUiModel().load();
             
-            val head = action.interactionHead(parentAdapter).toInteractionHead();
+            val head = action.interactionHead(parentAdapter);
             
             final String invalidReasonIfAny = parameter.isValid(head, proposedPojoAsStr,
                     InteractionInitiatedBy.USER);
@@ -135,7 +135,7 @@ implements ParameterUiModel {
         try {
             ManagedObject parentAdapter = getParentUiModel().load();
             
-            val head = action.interactionHead(parentAdapter).toInteractionHead();    
+            val head = action.interactionHead(parentAdapter);    
             
             final String invalidReasonIfAny = parameter.isValid(head, proposedAdapter.getPojo(),
                     InteractionInitiatedBy.USER);

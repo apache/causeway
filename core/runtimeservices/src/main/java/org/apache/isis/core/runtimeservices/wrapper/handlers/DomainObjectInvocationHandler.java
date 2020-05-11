@@ -645,7 +645,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         
         return runExecutionTask(()->{
             val interactionInitiatedBy = getInteractionInitiatedBy();
-            val head = objectAction.interactionHead(targetAdapter).toInteractionHead();
+            val head = objectAction.interactionHead(targetAdapter);
             
             val returnedAdapter = objectAction.execute(
                     head, argAdapters,

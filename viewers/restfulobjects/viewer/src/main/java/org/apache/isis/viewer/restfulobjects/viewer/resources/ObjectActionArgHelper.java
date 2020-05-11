@@ -53,7 +53,7 @@ public class ObjectActionArgHelper {
         
         val action = managedAction.getAction();
         val owner = managedAction.getOwner();
-        val head = action.interactionHead(owner).toInteractionHead();
+        val head = action.interactionHead(owner);
         
         final List<JsonRepresentation> argList = argListFor(action, arguments);
 

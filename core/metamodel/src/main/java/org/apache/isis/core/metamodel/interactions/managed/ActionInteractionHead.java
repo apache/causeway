@@ -118,10 +118,6 @@ implements HasMetaModel<ObjectAction> {
         
     }
     
-    public InteractionHead toInteractionHead() {
-        return this;
-    }
-
     // -- HELPER
     
     private boolean equals(Can<ManagedObject> left, Can<ManagedObject> right) {

@@ -191,7 +191,7 @@ implements FormUiModel, FormExecutorContext {
         final Can<ManagedObject> arguments = argCache().snapshot();
         final ObjectAction action = getMetaModel();
         
-        val head = action.interactionHead(targetAdapter).toInteractionHead();
+        val head = action.interactionHead(targetAdapter);
         
         val resultAdapter =
                 action.executeWithRuleChecking(

@@ -41,7 +41,7 @@ public class ManagedParameter {
     
     public Optional<InteractionVeto> validate() {
         
-        val head = owningAction.getAction().interactionHead(getOwningObject()).toInteractionHead();
+        val head = owningAction.getAction().interactionHead(getOwningObject());
         
         return Optional.ofNullable(
             getParameter()
