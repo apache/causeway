@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 
@@ -87,7 +87,7 @@ implements CollectionRemoveFromFacet {
             return;
         }
 
-        final Head head = Head.simple(targetAdapter);
+        final InteractionHead head = InteractionHead.simple(targetAdapter);
         
         // contains the element, so
         // execute the remove wrapped between the executing and executed events ...

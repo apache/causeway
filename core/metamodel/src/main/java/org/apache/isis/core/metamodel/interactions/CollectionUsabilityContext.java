@@ -33,7 +33,7 @@ public class CollectionUsabilityContext
 extends UsabilityContext {
 
     public CollectionUsabilityContext(
-            final Head head,
+            final InteractionHead head,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {

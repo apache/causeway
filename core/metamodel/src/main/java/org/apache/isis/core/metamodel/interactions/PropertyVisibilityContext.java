@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 public class PropertyVisibilityContext extends VisibilityContext {
 
     public PropertyVisibilityContext(
-            final Head head,
+            final InteractionHead head,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {

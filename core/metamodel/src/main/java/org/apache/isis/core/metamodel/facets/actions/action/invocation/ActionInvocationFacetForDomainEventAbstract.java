@@ -61,7 +61,7 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
 import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -117,7 +117,7 @@ implements ImperativeFacet {
     @Override
     public ManagedObject invoke(
             final ObjectAction owningAction,
-            final Head head,
+            final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
@@ -437,7 +437,7 @@ implements ImperativeFacet {
                 
                 currentExecution.setDto(invocationDto);
                 
-                val head = Head.mixedIn(targetAdapter, mixedInAdapter);
+                val head = InteractionHead.mixedIn(targetAdapter, mixedInAdapter);
 
 
                 // set the startedAt (and update command if this is the top-most member execution)

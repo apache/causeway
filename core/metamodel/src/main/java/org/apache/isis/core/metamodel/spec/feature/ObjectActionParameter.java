@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
-import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
@@ -78,7 +78,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
 
     // internal API
     ActionArgValidityContext createProposedArgumentInteractionContext(
-            Head head,
+            InteractionHead head,
             Can<ManagedObject> args,
             int position,
             InteractionInitiatedBy interactionInitiatedBy);
@@ -137,7 +137,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
     /** default value as result of a initial param value fixed point search */
     default ManagedObject getDefault(ManagedObject actionOnwer) {
         return getAction()
-                .newPendingParameterModelHead(actionOnwer).defaults()
+                .interactionHead(actionOnwer).defaults()
                 .getParamValues()
                 .getElseFail(getNumber());
     }
@@ -151,7 +151,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * @return
      */
     Consent isVisible(
-            Head head,
+            InteractionHead head,
             Can<ManagedObject> pendingArgs,
             InteractionInitiatedBy interactionInitiatedBy);
 
@@ -163,7 +163,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * @return
      */
     Consent isUsable(
-            Head head,
+            InteractionHead head,
             Can<ManagedObject> pendingArgs,
             InteractionInitiatedBy interactionInitiatedBy);
 
@@ -176,7 +176,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * @return
      */
     String isValid(
-            Head head,
+            InteractionHead head,
             Object proposedValue,
             InteractionInitiatedBy interactionInitiatedBy);
 

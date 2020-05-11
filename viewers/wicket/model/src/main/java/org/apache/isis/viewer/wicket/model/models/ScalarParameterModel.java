@@ -25,7 +25,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -116,8 +116,8 @@ implements ParameterUiModel {
         
         try {
             ManagedObject parentAdapter = getParentUiModel().load();
-            val head2 = action.newPendingParameterModelHead(parentAdapter);
-            val head = Head.of(head2.getActionOwner(), head2.getActionTarget());
+            val head2 = action.interactionHead(parentAdapter);
+            val head = InteractionHead.of(head2.getActionOwner(), head2.getActionTarget());
             
             final String invalidReasonIfAny = parameter.isValid(head, proposedPojoAsStr,
                     InteractionInitiatedBy.USER
@@ -138,8 +138,8 @@ implements ParameterUiModel {
         try {
             ManagedObject parentAdapter = getParentUiModel().load();
             
-            val head2 = action.newPendingParameterModelHead(parentAdapter);
-            val head = Head.of(head2.getActionOwner(), head2.getActionTarget());    
+            val head2 = action.interactionHead(parentAdapter);
+            val head = InteractionHead.of(head2.getActionOwner(), head2.getActionTarget());    
             
             final String invalidReasonIfAny = parameter.isValid(head, proposedAdapter.getPojo(),
                     InteractionInitiatedBy.USER

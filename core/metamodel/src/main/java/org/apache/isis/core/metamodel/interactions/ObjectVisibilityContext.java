@@ -44,7 +44,7 @@ implements ProposedHolder {
         
         super(
                 InteractionContextType.OBJECT_VISIBILITY, 
-                Head.simple(targetAdapter), identifier, interactionInitiatedBy, where);
+                InteractionHead.simple(targetAdapter), identifier, interactionInitiatedBy, where);
     }
 
     @Override

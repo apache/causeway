@@ -45,7 +45,7 @@ implements ProposedHolder, ActionInteractionContext {
     @Getter private final int position;
 
     public ActionArgValidityContext(
-            final Head head,
+            final InteractionHead head,
             final ObjectAction objectAction,
             final Identifier id,
             final Can<ManagedObject> args,

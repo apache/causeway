@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 public class CollectionAccessContext extends AccessContext {
 
     public CollectionAccessContext(
-            final Head head,
+            final InteractionHead head,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy) {
         super(InteractionContextType.COLLECTION_READ, identifier, head, interactionInitiatedBy);

@@ -25,7 +25,7 @@ import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -54,8 +54,8 @@ public class ObjectActionArgHelper {
         val action = managedAction.getAction();
         val owner = managedAction.getOwner();
         
-        val head2 = action.newPendingParameterModelHead(owner);
-        val head = Head.of(owner, head2.getActionTarget());
+        val head2 = action.interactionHead(owner);
+        val head = InteractionHead.of(owner, head2.getActionTarget());
         
         final List<JsonRepresentation> argList = argListFor(action, arguments);
 

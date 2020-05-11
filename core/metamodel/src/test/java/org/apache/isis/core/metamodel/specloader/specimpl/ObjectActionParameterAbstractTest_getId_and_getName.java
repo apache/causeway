@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -84,7 +84,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
 
         @Override
         public String isValid(
-                final Head head,
+                final InteractionHead head,
                 final Object proposedValue,
                 final InteractionInitiatedBy interactionInitiatedBy) {
             return null;

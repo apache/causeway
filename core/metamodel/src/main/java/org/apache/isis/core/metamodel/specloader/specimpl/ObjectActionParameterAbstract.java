@@ -49,7 +49,7 @@ import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefau
 import org.apache.isis.core.metamodel.interactions.ActionArgUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.interactions.ActionArgVisibilityContext;
-import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
@@ -304,7 +304,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
     // > Visibility
 
     private ActionArgVisibilityContext createArgumentVisibilityContext(
-            final Head head,
+            final InteractionHead head,
             final Can<ManagedObject> pendingArgs,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
@@ -315,7 +315,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
 
     @Override
     public Consent isVisible(
-            final Head head,
+            final InteractionHead head,
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
@@ -328,7 +328,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
     // > Usability
 
     private ActionArgUsabilityContext createArgumentUsabilityContext(
-            final Head head,
+            final InteractionHead head,
             final Can<ManagedObject> pendingArgs,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
@@ -344,7 +344,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
 
     @Override
     public Consent isUsable(
-            final Head head,
+            final InteractionHead head,
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
@@ -360,7 +360,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
 
     @Override
     public ActionArgValidityContext createProposedArgumentInteractionContext(
-            final Head head,
+            final InteractionHead head,
             final Can<ManagedObject> proposedArguments,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
@@ -371,7 +371,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
 
     @Override
     public String isValid(
-            final Head head,
+            final InteractionHead head,
             final Object proposedValue,
             final InteractionInitiatedBy interactionInitiatedBy) {
 

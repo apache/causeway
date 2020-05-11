@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFace
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
-import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -50,8 +50,8 @@ implements ObjectAssociation {
         this.specification = specification;
     }
     
-    protected Head headFor(final ManagedObject ownerAdapter) {
-        return Head.simple(ownerAdapter);
+    protected InteractionHead headFor(final ManagedObject ownerAdapter) {
+        return InteractionHead.simple(ownerAdapter);
     }
     
     @Override

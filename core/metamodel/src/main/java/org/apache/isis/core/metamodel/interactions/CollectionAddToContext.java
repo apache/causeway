@@ -36,7 +36,7 @@ implements ProposedHolder {
     private final ManagedObject proposed;
 
     public CollectionAddToContext(
-            final Head head,
+            final InteractionHead head,
             final Identifier id,
             final ManagedObject proposed,
             final InteractionInitiatedBy interactionInitiatedBy) {

@@ -38,7 +38,7 @@ implements ProposedHolder {
     private final ManagedObject proposed;
 
     public ParseValueContext(
-            final Head head,
+            final InteractionHead head,
             final Identifier identifier,
             final ManagedObject proposed,
             final InteractionInitiatedBy interactionInitiatedBy) {

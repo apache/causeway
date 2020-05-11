@@ -20,7 +20,7 @@ package org.apache.isis.viewer.common.model.action.form;
 
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 
@@ -35,7 +35,7 @@ public class FormPendingParamUiModel {
     final Consent usabilityConsent;
     
     public static FormPendingParamUiModel of(
-            Head head,
+            InteractionHead head,
             ParameterUiModel paramUiModel, 
             PendingParameterModel pendingArgs) {
 

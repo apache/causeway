@@ -55,7 +55,7 @@ import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoice
 import org.apache.isis.core.metamodel.interactions.ActionUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ActionValidityContext;
 import org.apache.isis.core.metamodel.interactions.ActionVisibilityContext;
-import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
@@ -148,7 +148,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
     @Override
-    public PendingParameterModelHead newPendingParameterModelHead(@NonNull ManagedObject actionOwner) {
+    public PendingParameterModelHead interactionHead(@NonNull ManagedObject actionOwner) {
         return PendingParameterModelHead.of(this, actionOwner, actionOwner);
     }
     
@@ -223,8 +223,8 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         return parameters.getElseFail(position);
     }
 
-    protected Head headFor(final ManagedObject target) {
-        return Head.simple(target);
+    protected InteractionHead headFor(final ManagedObject target) {
+        return InteractionHead.simple(target);
     }
 
     // -- visable, usable
@@ -388,7 +388,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     @Override
     public ManagedObject executeWithRuleChecking(
-            final Head head,
+            final InteractionHead head,
             final Can<ManagedObject> arguments,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
@@ -427,7 +427,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
      */
     @Override
     public ManagedObject execute(
-            final Head head,
+            final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
@@ -440,7 +440,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
      * private API, called by mixins
      */
     protected ManagedObject executeInternal(
-            final Head head,
+            final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
@@ -494,7 +494,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         
         // else use the new defaultNXxx approach for each param in turn
         // (the reflector will have made sure both aren't installed).
-        return newPendingParameterModelHead(target)
+        return interactionHead(target)
                 .defaults()
                 .getParamValues();
 

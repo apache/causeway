@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
@@ -86,7 +86,7 @@ implements CollectionAddToFacet {
             }
         }
 
-        final Head head = Head.simple(targetAdapter);
+        final InteractionHead head = InteractionHead.simple(targetAdapter);
         
         // either doesn't contain object, or doesn't have set semantics, so
         // execute the add wrapped between the executing and executed events ...

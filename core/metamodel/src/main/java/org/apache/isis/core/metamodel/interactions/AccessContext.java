@@ -36,7 +36,7 @@ implements InteractionEventSupplier<AccessEvent> {
     public AccessContext(
             final InteractionContextType interactionType,
             final Identifier identifier,
-            final Head head,
+            final InteractionHead head,
             final InteractionInitiatedBy interactionInitiatedBy) {
         super(interactionType, interactionInitiatedBy, identifier, head, Where.NOT_SPECIFIED);
     }

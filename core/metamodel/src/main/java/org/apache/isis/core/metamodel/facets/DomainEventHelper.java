@@ -43,7 +43,7 @@ import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -73,7 +73,7 @@ public class DomainEventHelper {
             @NonNull final Class<? extends ActionDomainEvent<?>> eventType,
             final ObjectAction objectAction,
             final IdentifiedHolder identified,
-            final Head head,
+            final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
             final ManagedObject resultAdapter) {
         
@@ -88,7 +88,7 @@ public class DomainEventHelper {
             @NonNull final ActionDomainEvent<?> existingEvent,
             final ObjectAction objectAction,
             final IdentifiedHolder identified,
-            final Head head,
+            final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
             final ManagedObject resultAdapter) {
         
@@ -103,7 +103,7 @@ public class DomainEventHelper {
             final ActionDomainEvent<S> existingEvent,
             final ObjectAction objectAction,
             final IdentifiedHolder identified,
-            final Head head,
+            final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
             final ManagedObject resultAdapter) {
         
@@ -214,7 +214,7 @@ public class DomainEventHelper {
             final Class<? extends PropertyDomainEvent<S, T>> eventType,
                     final PropertyDomainEvent<S, T> existingEvent,
                     final IdentifiedHolder identified,
-                    final Head head,
+                    final InteractionHead head,
                     final T oldValue,
                     final T newValue) {
         
@@ -302,7 +302,7 @@ public class DomainEventHelper {
             final Class<? extends CollectionDomainEvent<S, T>> eventType,
                     final CollectionDomainEvent<S, T> existingEvent,
                     final IdentifiedHolder identified,
-                    final Head head,
+                    final InteractionHead head,
                     final CollectionDomainEvent.Of of,
                     final T reference) {
         

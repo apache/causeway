@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
-import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -93,9 +93,9 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     }
 
     @Override
-    protected Head headFor(final ManagedObject owner) {
+    protected InteractionHead headFor(final ManagedObject owner) {
         val target = mixinAdapterFor(mixinType, owner);
-        return Head.of(owner, target);
+        return InteractionHead.of(owner, target);
     }
     
     @Override
@@ -128,7 +128,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     }
 
     @Override
-    public PendingParameterModelHead newPendingParameterModelHead(@NonNull ManagedObject actionOwner) {
+    public PendingParameterModelHead interactionHead(@NonNull ManagedObject actionOwner) {
         return PendingParameterModelHead.of(this, actionOwner, mixinAdapterFor(actionOwner));
     }
 
@@ -152,7 +152,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
 
     @Override
     public ManagedObject execute(
-            final Head head,
+            final InteractionHead head,
             final Can<ManagedObject> arguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
 

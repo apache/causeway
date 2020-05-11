@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -39,7 +39,7 @@ public interface ActionInvocationFacet extends Facet {
 
     ManagedObject invoke(
             ObjectAction owningAction,
-            Head head,
+            InteractionHead head,
             Can<ManagedObject> argumentAdapters,
             InteractionInitiatedBy interactionInitiatedBy);
     

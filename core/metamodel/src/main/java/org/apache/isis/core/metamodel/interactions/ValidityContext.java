@@ -35,7 +35,7 @@ implements InteractionEventSupplier<ValidityEvent> {
 
     public ValidityContext(
             final InteractionContextType interactionType,
-            final Head head,
+            final InteractionHead head,
             final Identifier identifier,
             final InteractionInitiatedBy invocationMethod) {
         super(interactionType, invocationMethod, identifier, head, Where.NOT_SPECIFIED);

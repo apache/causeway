@@ -44,7 +44,7 @@ import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollect
 import org.apache.isis.core.metamodel.facets.properties.publish.PublishedPropertyFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
-import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
 import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -156,7 +156,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         getTransactionService().executeWithinTransaction(()->{
-            doSetOrClearProperty(style, owningProperty, Head.simple(targetAdapter), newValueAdapter, interactionInitiatedBy);
+            doSetOrClearProperty(style, owningProperty, InteractionHead.simple(targetAdapter), newValueAdapter, interactionInitiatedBy);
         });
 
     }
@@ -164,7 +164,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
     private void doSetOrClearProperty(
             final Style style,
             final OneToOneAssociation owningProperty,
-            final Head head,
+            final InteractionHead head,
             final ManagedObject newValueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 

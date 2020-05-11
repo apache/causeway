@@ -35,7 +35,7 @@ implements InteractionEventSupplier<UsabilityEvent> {
 
     public UsabilityContext(
             final InteractionContextType interactionType,
-            final Head head,
+            final InteractionHead head,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {

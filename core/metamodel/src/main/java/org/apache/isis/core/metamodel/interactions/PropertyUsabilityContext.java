@@ -35,7 +35,7 @@ public class PropertyUsabilityContext
 extends UsabilityContext {
 
     public PropertyUsabilityContext(
-            final Head head,
+            final InteractionHead head,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {

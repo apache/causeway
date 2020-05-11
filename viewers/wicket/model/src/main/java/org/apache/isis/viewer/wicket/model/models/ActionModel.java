@@ -50,7 +50,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
-import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -192,8 +192,8 @@ implements FormUiModel, FormExecutorContext {
         final Can<ManagedObject> arguments = argCache().snapshot();
         final ObjectAction action = getMetaModel();
 
-        val head2 = action.newPendingParameterModelHead(targetAdapter);
-        val head = Head.of(head2.getActionOwner(), head2.getActionTarget());
+        val head2 = action.interactionHead(targetAdapter);
+        val head = InteractionHead.of(head2.getActionOwner(), head2.getActionTarget());
         
         val resultAdapter =
                 action.executeWithRuleChecking(
@@ -222,7 +222,7 @@ implements FormUiModel, FormExecutorContext {
     }
 
     public PendingParameterModel getArgumentsAsParamModel() {
-        return getMetaModel().newPendingParameterModelHead(getOwner())
+        return getMetaModel().interactionHead(getOwner())
                 .model(argCache().snapshot());
     }
 
@@ -233,7 +233,7 @@ implements FormUiModel, FormExecutorContext {
     public void clearArguments() {
 
         val defaultsFixedPoint = getMetaModel()
-                .newPendingParameterModelHead(getOwner())
+                .interactionHead(getOwner())
                 .defaults()
                 .getParamValues();
 
@@ -401,7 +401,7 @@ implements FormUiModel, FormExecutorContext {
         val realTargetAdapter = this.getMetaModel().realTargetAdapter(targetAdapter);
         val pendingArgs = getArgumentsAsParamModel();
 
-        val head = Head.of(targetAdapter, realTargetAdapter);
+        val head = InteractionHead.of(targetAdapter, realTargetAdapter);
         
         return argCache()
         .streamParamUiModels()

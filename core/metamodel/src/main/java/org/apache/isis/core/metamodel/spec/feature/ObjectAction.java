@@ -52,7 +52,7 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
-import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderFacetComparator;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -109,7 +109,7 @@ public interface ObjectAction extends ObjectMember {
      * @param mixedInAdapter - will be null for regular actions, and for mixin actions.  When a mixin action invokes its underlying mixedIn action, then will be populated (so that the ActionDomainEvent can correctly provide the underlying mixin)
      */
     ManagedObject executeWithRuleChecking(
-            Head head,
+            InteractionHead head,
             Can<ManagedObject> parameters,
             InteractionInitiatedBy interactionInitiatedBy,
             Where where) throws AuthorizationException;
@@ -123,7 +123,7 @@ public interface ObjectAction extends ObjectMember {
      * (so that the ActionDomainEvent can correctly provide the underlying mixin)
      */
     ManagedObject execute(
-            Head head,
+            InteractionHead head,
             Can<ManagedObject> parameters,
             InteractionInitiatedBy interactionInitiatedBy);
 
@@ -160,7 +160,7 @@ public interface ObjectAction extends ObjectMember {
 
     // -- Model for Parameter Negotiation
 
-    PendingParameterModelHead newPendingParameterModelHead(
+    PendingParameterModelHead interactionHead(
             @NonNull ManagedObject actionOwner);
     
     // -- Parameters (declarative)

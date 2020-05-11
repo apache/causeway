@@ -82,7 +82,7 @@ public interface ParameterUiModel extends ScalarUiModel {
     }
 
     default PendingParameterModelHead getPendingParamHead() {
-        return getMetaModel().getAction().newPendingParameterModelHead(getOwner());
+        return getMetaModel().getAction().interactionHead(getOwner());
     }
     
 

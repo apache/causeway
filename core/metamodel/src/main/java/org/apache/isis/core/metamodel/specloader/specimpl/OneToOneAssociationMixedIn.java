@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetForContributee;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacetAbstract;
-import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -118,9 +118,9 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
     }
     
     @Override
-    protected Head headFor(final ManagedObject mixedInAdapter) {
+    protected InteractionHead headFor(final ManagedObject mixedInAdapter) {
         val mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
-        return Head.of(mixedInAdapter, mixinAdapter);
+        return InteractionHead.of(mixedInAdapter, mixinAdapter);
     }
 
     private DisabledFacet disabledFacet() {

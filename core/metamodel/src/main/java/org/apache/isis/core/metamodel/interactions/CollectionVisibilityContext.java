@@ -35,7 +35,7 @@ public class CollectionVisibilityContext
 extends VisibilityContext {
 
     public CollectionVisibilityContext(
-            final Head head,
+            final InteractionHead head,
             final Identifier identifierAdapter,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {

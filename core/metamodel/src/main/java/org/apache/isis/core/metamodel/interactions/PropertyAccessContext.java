@@ -37,7 +37,7 @@ extends AccessContext {
     private final ManagedObject value;
 
     public PropertyAccessContext(
-            final Head head,
+            final InteractionHead head,
             final Identifier id,
             final ManagedObject value,
             final InteractionInitiatedBy interactionInitiatedBy) {

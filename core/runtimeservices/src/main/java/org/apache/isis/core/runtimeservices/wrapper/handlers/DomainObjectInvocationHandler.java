@@ -51,7 +51,7 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
-import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -645,8 +645,8 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         
         return runExecutionTask(()->{
             val interactionInitiatedBy = getInteractionInitiatedBy();
-            val head2 = objectAction.newPendingParameterModelHead(targetAdapter);
-            val head = Head.of(head2.getActionOwner(), head2.getActionTarget()); 
+            val head2 = objectAction.interactionHead(targetAdapter);
+            val head = InteractionHead.of(head2.getActionOwner(), head2.getActionTarget()); 
             
             val returnedAdapter = objectAction.execute(
                     head, argAdapters,

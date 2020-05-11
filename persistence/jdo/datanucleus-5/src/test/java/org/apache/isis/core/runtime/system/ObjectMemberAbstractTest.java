@@ -56,7 +56,7 @@ import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstractAlwaysEverywhere;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstractImpl;
 import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContextFacetNone;
-import org.apache.isis.core.metamodel.interactions.InteractionContext.Head;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.PropertyUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.PropertyVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
@@ -220,7 +220,7 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
         return new PropertyUsabilityContext(
-                Head.simple(target), getIdentifier(), interactionInitiatedBy, where);
+                InteractionHead.simple(target), getIdentifier(), interactionInitiatedBy, where);
     }
 
     @Override
@@ -229,7 +229,7 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
         return new PropertyVisibilityContext(
-                Head.simple(target), getIdentifier(), interactionInitiatedBy, where);
+                InteractionHead.simple(target), getIdentifier(), interactionInitiatedBy, where);
     }
 
 

@@ -39,7 +39,7 @@ implements ActionInteractionContext {
     private final ObjectAction objectAction;
 
     public ActionUsabilityContext(
-            final Head head,
+            final InteractionHead head,
             final ObjectAction objectAction,
             final Identifier id,
             final InteractionInitiatedBy interactionInitiatedBy,
