@@ -66,7 +66,7 @@ public class Select2 implements Serializable {
         this.select2MultiChoice = select2MultiChoice;
     }
 
-    public AbstractSelect2Choice component() {
+    public AbstractSelect2Choice<ObjectMemento, ?> component() {
         return select2Choice != null
                 ? select2Choice
                 : select2MultiChoice;
