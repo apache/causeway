@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.select2;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 import org.apache.wicket.model.IModel;
 import org.wicketstuff.select2.Select2MultiChoice;
@@ -29,6 +30,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.EmptyChoiceProvider;
+
+import lombok.val;
 
 public class Select2MultiChoiceExt
 extends Select2MultiChoice<ObjectMemento>
@@ -72,7 +75,10 @@ implements ChoiceExt {
     
     @Override
     public Collection<ObjectMemento> getModelObject() {
-        return new ArrayList<>(super.getModelObject());
+        val modelObj = super.getModelObject();
+        return modelObj==null
+                ? Collections.emptyList() 
+                : new ArrayList<>(modelObj);
     }
     
 }
