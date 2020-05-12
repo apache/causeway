@@ -157,29 +157,14 @@ implements ParameterUiModel {
     
     @Override
     public ManagedObject load() {
-        final ManagedObject objectAdapter = loadFromSuper();
+        val objectAdapter = loadFromSuper();
 
-        if(objectAdapter != null) {
-            return objectAdapter;
+        if(objectAdapter == null) {
+            if(getMetaModel().getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR) {
+                return ManagedObject.of(getMetaModel().getSpecification(), null);
+            }
         }
-        if(getMetaModel().getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR) {
-            return objectAdapter;
-        }
-
-
-        // hmmm... I think we should simply return null, as an indicator that there is no "pending" (see ScalarModelWithMultiPending)
-
-        //                // return an empty collection
-        //                // TODO: this should probably move down into OneToManyActionParameter impl
-        //                final OneToManyActionParameter otmap = (OneToManyActionParameter) actionParameter;
-        //                final CollectionSemantics collectionSemantics = otmap.getCollectionSemantics();
-        //                final TypeOfFacet typeOfFacet = actionParameter.getFacet(TypeOfFacet.class);
-        //                final Class<?> elementType = typeOfFacet.value();
-        //                final Object emptyCollection = collectionSemantics.emptyCollectionOf(elementType);
-        //                return scalarModel.getCurrentSession().getPersistenceSession().adapterFor(emptyCollection);
-
         return objectAdapter;
-
     }
 
     @Override

@@ -50,7 +50,7 @@ public class DependentArgsActionDemo_bulkAction {
     static class Parameters {
         Set<DemoItem> demoItems;
         int a;
-        int b;
+        Integer b;
         int c;
         int d;
     }
@@ -65,8 +65,8 @@ public class DependentArgsActionDemo_bulkAction {
             int a,
 
             // PARAM 2
-            @Parameter(optionality = Optionality.MANDATORY)
-            int b,
+            @Parameter(optionality = Optionality.OPTIONAL)
+            Integer b,
             
             // PARAM 3
             @Parameter(optionality = Optionality.OPTIONAL)
@@ -93,9 +93,9 @@ public class DependentArgsActionDemo_bulkAction {
     // -- PARAM 2
     
     @Model
-    public int default2Act(Parameters params) {
+    public Integer default2Act(Parameters params) {
         _Probe.sysOut("p1: %d %d %d %d", params.a, params.b, params.c, params.d);
-        return params.a() + 1;
+        return null;
     }
     
     // -- PARAM 3
@@ -140,7 +140,7 @@ public class DependentArgsActionDemo_bulkAction {
     public String validateAct(
             Set<DemoItem> demoItems,
             int a,
-            int b,
+            Integer b,
             int c,
             int d) {
         return "just failing always";

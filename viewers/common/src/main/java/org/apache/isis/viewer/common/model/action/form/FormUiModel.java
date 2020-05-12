@@ -71,7 +71,7 @@ public interface FormUiModel extends HasTitle {
                 .map(FormPendingParamUiModel::getParamModel)
                 .map(ParameterUiModel::getValue)
                 .collect(Can.toCan());
-                
+        
         return getMetaModel().isProposedArgumentSetValid(
                 getOwner(), 
                 proposedArguments, 
