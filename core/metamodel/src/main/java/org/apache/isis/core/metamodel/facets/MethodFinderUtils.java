@@ -32,6 +32,7 @@ import java.util.stream.Stream;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.reflection._MethodCache;
 import org.apache.isis.core.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
@@ -42,7 +43,9 @@ import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.p
 import lombok.NonNull;
 import lombok.Value;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public final class MethodFinderUtils {
 
     private MethodFinderUtils() {
@@ -134,8 +137,7 @@ public final class MethodFinderUtils {
     
     public static Stream<Method> streamMethods(final Class<?> type, final Can<String> names, final Class<?> returnType) {
         try {
-            final Method[] methods = type.getMethods();
-            return Arrays.stream(methods)
+            return _NullSafe.stream(type.getMethods())
                     .filter(MethodUtil::isPublic)
                     .filter(MethodUtil::isNotStatic)
                     .filter(method -> names.contains(method.getName()))
@@ -143,7 +145,8 @@ public final class MethodFinderUtils {
                                       returnType.isAssignableFrom(method.getReturnType()))
                     ;
         } catch (final SecurityException e) {
-            return null;
+            log.error("failed to enumerate methods of class %s", type);
+            return Stream.empty();
         }
     }
 

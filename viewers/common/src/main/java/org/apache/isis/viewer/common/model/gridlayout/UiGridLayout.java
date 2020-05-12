@@ -31,6 +31,8 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
+import org.apache.isis.core.commons.internal.base._Lazy;
+import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -60,26 +62,26 @@ public class UiGridLayout {
     }
     
     @NonNull private final ManagedObject managedObject;
-    private Optional<BS3Grid> gridData;
+    private _Lazy<Optional<BS3Grid>> gridData = _Lazy.threadSafe(this::initGridData);
     
     public <T> void visit(Visitor<T> visitor) {
         
-        if(gridData==null) {
-            gridData = Optional.ofNullable(
-                    managedObject.getSpecification().getFacet(GridFacet.class))
-            .map(gridFacet->gridFacet.getGrid(managedObject))
-            .filter(grid->grid instanceof BS3Grid)
-            .map(BS3Grid.class::cast);
-        }
-        
         // recursively visit the grid
-        gridData
+        gridData.get()
         .ifPresent(bs3Grid->{
             for(val bs3Row: bs3Grid.getRows()) {
                 visitRow(bs3Row, visitor.rootContainer, visitor);         
             }
         });
         
+    }
+
+    private Optional<BS3Grid> initGridData() {
+        return Optional.ofNullable(
+                managedObject.getSpecification().getFacet(GridFacet.class))
+        .map(gridFacet->gridFacet.getGrid(managedObject))
+        .filter(grid->grid instanceof BS3Grid)
+        .map(BS3Grid.class::cast);
     }
 
     private <T> void visitRow(BS3Row bs3Row, T container, Visitor<T> visitor) {
@@ -126,10 +128,13 @@ public class UiGridLayout {
         }
         
         // columns having rows seems not permitted by XML schema
-        for(val bs3Row: bS3Col.getRows()) { 
+        if(_NullSafe.size(bS3Col.getRows())>0) {
             throw _Exceptions.unsupportedOperation();
-            //visitRow(bs3Row, uiCol, visitor);         
         }
+        
+//        for(val bs3Row: bS3Col.getRows()) { 
+//            visitRow(bs3Row, uiCol, visitor);         
+//        }
         
         for(val collectionData : bS3Col.getCollections()) {
             visitor.onCollection(uiCol, collectionData);    

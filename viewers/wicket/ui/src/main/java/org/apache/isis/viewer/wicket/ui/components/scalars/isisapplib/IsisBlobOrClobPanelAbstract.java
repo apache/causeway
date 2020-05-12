@@ -268,7 +268,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
             final String disabledReason,
             final Optional<AjaxRequestTarget> target) {
 
-        MarkupContainer formComponent = (MarkupContainer) getComponentForRegular();
+        final MarkupContainer formComponent = (MarkupContainer) getComponentForRegular();
         sync(formComponent, visibility, editability, disabledReason, target);
 
         final Component component = formComponent.get(ID_SCALAR_VALUE);
@@ -337,7 +337,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
 
     private void addAcceptFilterTo(Component component){
         final String filter = getAcceptFilter();
-        if(filter==null || filter.isEmpty())
+        if(component==null || filter==null || filter.isEmpty())
             return; // ignore
         class AcceptAttributeModel extends Model<String> {
             private static final long serialVersionUID = 1L;
