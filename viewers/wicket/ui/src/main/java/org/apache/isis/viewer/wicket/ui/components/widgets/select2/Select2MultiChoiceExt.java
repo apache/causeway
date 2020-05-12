@@ -20,7 +20,6 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.select2;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
 import org.apache.wicket.model.IModel;
 import org.wicketstuff.select2.Select2MultiChoice;
@@ -48,6 +47,7 @@ implements ChoiceExt {
     }
 
     private final ObjectSpecId specId;
+    
 
     Select2MultiChoiceExt(
             final String id,
@@ -67,18 +67,28 @@ implements ChoiceExt {
         return specId;
     }
     
+    // -- bug in wicket 8.8.0 -------------------------------------------
+    
+    private boolean workaround;
     
     @Override
     public void updateModel() {
+        workaround = true;
         super.updateModel();
+        workaround = false;
     }
     
     @Override
     public Collection<ObjectMemento> getModelObject() {
         val modelObj = super.getModelObject();
-        return modelObj==null
-                ? Collections.emptyList() 
-                : new ArrayList<>(modelObj);
+        if(workaround) {
+            return modelObj==null
+                    ? null 
+                    : new ArrayList<>(modelObj);    
+        }
+        return modelObj;
     }
+    
+    // ------------------------------------------------------------------
     
 }
