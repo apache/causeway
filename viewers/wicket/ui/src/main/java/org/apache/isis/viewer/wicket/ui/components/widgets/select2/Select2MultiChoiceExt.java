@@ -25,6 +25,7 @@ import org.apache.wicket.model.IModel;
 import org.wicketstuff.select2.Select2MultiChoice;
 
 import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.core.commons.internal.debug._Probe;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -60,6 +61,8 @@ implements ChoiceExt {
         getSettings().setCloseOnSelect(true);
 
         setOutputMarkupPlaceholderTag(true);
+        
+        _Probe.sysOut("Select2MultiChoiceExt %s", id);
     }
 
     @Override
@@ -74,6 +77,7 @@ implements ChoiceExt {
     @Override
     public void updateModel() {
         workaround = true;
+        _Probe.sysOut("about to update %s", getId());
         super.updateModel();
         workaround = false;
     }

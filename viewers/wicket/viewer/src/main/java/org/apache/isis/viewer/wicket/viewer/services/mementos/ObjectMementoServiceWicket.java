@@ -74,9 +74,11 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
     public ObjectMemento mementoForObject(@Nullable ManagedObject adapter) {
         val mementoAdapter = ObjectMementoLegacy.createOrNull(adapter);
         if(mementoAdapter==null) {
+            // sonar-ignore-on (fails to detect this as null guard) 
             return ManagedObject.isSpecified(adapter)
                     ? new ObjectMementoForEmpty(adapter.getSpecification().getSpecId())
                     : null;
+            // sonar-ignore-on
         }
         return ObjectMementoAdapter.of(mementoAdapter);
     }

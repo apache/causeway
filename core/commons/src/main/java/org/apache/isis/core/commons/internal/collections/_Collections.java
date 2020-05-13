@@ -83,6 +83,17 @@ public final class _Collections {
         return _Collections.isCollectionType(cls) || _Arrays.isArrayType(cls);
     }
 
+    /**
+     * @param cls
+     * @return whether {@code cls} implements the java.util.Collection interface
+     * or represents an array or is of type {@link Can}
+     */
+    public static boolean isCollectionOrArrayOrCanType(final Class<?> cls) {
+        return _Collections.isCollectionType(cls) 
+                || _Arrays.isArrayType(cls)
+                || Can.class.isAssignableFrom(cls);
+    }
+    
     // -- COLLECTION UNMODIFIABLE ADAPTERS (FOR LIST)
 
     /**
