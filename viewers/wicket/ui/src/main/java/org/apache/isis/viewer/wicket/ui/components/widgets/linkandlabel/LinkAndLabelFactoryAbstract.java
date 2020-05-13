@@ -108,15 +108,13 @@ implements Serializable {
                 if(toggledMementosProviderIfAny != null) {
 
                     val selectedMementos = toggledMementosProviderIfAny.getToggles();
-                    val selectedPojos = selectedMementos
+                    val selectedPojosFromAssocCollection = selectedMementos
                             .map(super.getCommonContext()::reconstructObject)
                             .map(ManagedObject::getPojo);
                     
                     val actionPrompt = ActionParameterDefaultsFacetFromAssociatedCollection
                             .applyWithSelected(
-                                    selectedPojos,
-                                    // if this lambda still needs to be serializable uncomment the cast ... 
-                                    //(Function<AjaxRequestTarget, ActionPrompt>&Serializable) 
+                                    selectedPojosFromAssocCollection,
                                     this::performOnClick,
                                     target);
                     

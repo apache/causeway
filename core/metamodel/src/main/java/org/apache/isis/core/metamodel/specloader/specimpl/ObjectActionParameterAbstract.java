@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import static org.apache.isis.core.commons.internal.base._With.requires;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +57,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+
+import static org.apache.isis.core.commons.internal.base._With.requires;
 
 import lombok.NonNull;
 import lombok.val;
@@ -262,7 +262,7 @@ implements ObjectActionParameter, FacetHolder.Delegating {
         if (defaultsFacet != null && !defaultsFacet.isFallback()) {
             final Object paramValuePojo = defaultsFacet.getDefault(pendingArgs);
             return ManagedObject.of(paramSpec, paramValuePojo);    
-        }
+        }   
         return pendingArgs.getParamValue(getNumber());
     }
 

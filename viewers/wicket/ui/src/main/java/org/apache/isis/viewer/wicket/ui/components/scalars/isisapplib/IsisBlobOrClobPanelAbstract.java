@@ -56,7 +56,8 @@ import lombok.val;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 
-public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> extends ScalarPanelAbstract2 {
+public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> 
+extends ScalarPanelAbstract2 {
 
 
     private static final long serialVersionUID = 1L;
@@ -271,10 +272,12 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         final MarkupContainer formComponent = (MarkupContainer) getComponentForRegular();
         sync(formComponent, visibility, editability, disabledReason, target);
 
+        // sonar-ignore-on (detects potential NPE, which is a false positive here) 
         final Component component = formComponent.get(ID_SCALAR_VALUE);
-        final InputFieldVisibility editingWidgetVisibility = editability == InputFieldEditability.EDITABLE ?
-                InputFieldVisibility.VISIBLE :
-                    InputFieldVisibility.NOT_VISIBLE;
+        // sonar-ignore-off
+        final InputFieldVisibility editingWidgetVisibility = editability == InputFieldEditability.EDITABLE 
+                ? InputFieldVisibility.VISIBLE
+                : InputFieldVisibility.NOT_VISIBLE;
         sync(component, editingWidgetVisibility, null, disabledReason, target);
 
         addAcceptFilterTo(component);
