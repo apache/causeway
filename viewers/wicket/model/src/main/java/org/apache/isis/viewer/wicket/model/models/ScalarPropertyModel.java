@@ -49,14 +49,14 @@ implements PropertyUiModel {
      */
     public ScalarPropertyModel(
             EntityModel parentEntityModel, 
-            PropertyMemento pm,
+            PropertyMemento propertyMemento,
             EntityModel.Mode mode, 
             EntityModel.RenderingHint renderingHint) {
         
-        super(parentEntityModel, pm, mode, renderingHint);
-        this.propertyMemento = pm;
+        super(parentEntityModel, propertyMemento, mode, renderingHint);
+        this.propertyMemento = propertyMemento;
         reset();
-        getAndStore(parentEntityModel);
+        //getAndStore(parentEntityModel);
     }
     
     public ScalarPropertyModel copyHaving(
@@ -128,9 +128,16 @@ implements PropertyUiModel {
     }
 
     public void reset() {
-        val parentAdapter = getParentUiModel().load();
-        setObjectFromPropertyIfVisible(this, getMetaModel(), parentAdapter);
+        val where = this.getRenderingHint().asWhere();
+        val propertyValue = getManagedProperty().getPropertyValue(where);
+        
+        val presentationValue = ManagedObject.isNullOrUnspecifiedOrEmpty(propertyValue)
+                ? null
+                : propertyValue;
+        
+        this.setObject(presentationValue);
     }
+    
 
     @Override
     public ManagedObject load() {
@@ -172,15 +179,5 @@ implements PropertyUiModel {
     protected Can<ObjectAction> calcAssociatedActions() {
         return getManagedProperty().getAssociatedActions();
     }
-
-    // -- HELPER
-    
-    private void getAndStore(final EntityModel parentEntityModel) {
-        val parentAdapterMemento = parentEntityModel.getObjectAdapterMemento();
-        val parentAdapter = super.getCommonContext().reconstructObject(parentAdapterMemento);
-        val property = propertyMemento.getProperty(getSpecificationLoader());
-        setObjectFromPropertyIfVisible(ScalarPropertyModel.this, property, parentAdapter);
-    }
-
     
 }

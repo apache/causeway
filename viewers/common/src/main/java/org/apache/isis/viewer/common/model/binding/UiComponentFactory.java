@@ -111,9 +111,10 @@ public interface UiComponentFactory<T> {
         }
         
         public <T> Optional<T> getFeatureValue(@Nullable Class<T> type) {
+            val managedProperty = (ManagedProperty)getObjectFeature();
             //TODO do a type check before the cast, so we can throw a more detailed exception
             // that is, given type must be assignable from the actual pojo type 
-            return Optional.ofNullable(((ManagedProperty)getObjectFeature()).getPropertyValue().getPojo())
+            return Optional.ofNullable(managedProperty.getPropertyValue(where).getPojo())
                     .map(type::cast);
         }
 

@@ -28,7 +28,6 @@ import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
@@ -37,7 +36,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.common.model.feature.ScalarUiModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -131,27 +129,6 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
         return owner;  
     }
     
-
-    protected static void setObjectFromPropertyIfVisible(
-            final ScalarModel scalarModel,
-            final OneToOneAssociation property,
-            final ManagedObject parentAdapter) {
-
-        final Where where = scalarModel.getRenderingHint().asWhere();
-
-        final Consent visibility =
-                property.isVisible(parentAdapter, InteractionInitiatedBy.FRAMEWORK, where);
-
-        final ManagedObject associatedAdapter;
-        if (visibility.isAllowed()) {
-            associatedAdapter = property.get(parentAdapter, InteractionInitiatedBy.USER);
-        } else {
-            associatedAdapter = null;
-        }
-
-        scalarModel.setObject(associatedAdapter);
-    }
-
     /**
      * Whether the scalar represents a {@link Kind#PROPERTY property} or a
      * {@link Kind#PARAMETER}.

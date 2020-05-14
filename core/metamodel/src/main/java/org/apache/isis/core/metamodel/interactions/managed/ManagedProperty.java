@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.Veto;
@@ -114,11 +115,18 @@ public final class ManagedProperty extends ManagedMember {
         return Optional.empty();
     }
 
-    public ManagedObject getPropertyValue() {
+    /**
+     * If visibility is vetoed, returns an empty but specified ManagedObject.
+     * @return the property value as to be used by the UI for representation
+     */
+    public ManagedObject getPropertyValue(@NonNull Where where) {
         val property = getProperty();
+        val owner = getOwner();
         
-        return Optional.ofNullable(property.get(getOwner()))
-        .orElse(ManagedObject.of(property.getSpecification(), null));
+        return property.isVisible(owner, InteractionInitiatedBy.FRAMEWORK, where).isAllowed() 
+                && property.isVisible(owner, InteractionInitiatedBy.USER, where).isAllowed()
+            ? property.get(owner, InteractionInitiatedBy.USER)
+            : ManagedObject.of(property.getSpecification(), null);
     }
     
     
