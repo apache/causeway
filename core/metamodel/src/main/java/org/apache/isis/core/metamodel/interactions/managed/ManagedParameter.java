@@ -25,28 +25,33 @@ import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
+import lombok.Getter;
 import lombok.NonNull;
-import lombok.Value;
-import lombok.val;
+import lombok.RequiredArgsConstructor;
 
-@Value(staticConstructor = "of")
+@Getter
+@RequiredArgsConstructor(staticName = "of")
 public class ManagedParameter {
     @NonNull private final ManagedAction owningAction;
     @NonNull private final ObjectActionParameter parameter;
+    
+    @Deprecated //TODO use a binder instead
     @NonNull private final ManagedObject value;
     
     public ManagedObject getOwningObject() {
         return getOwningAction().getOwner();
     }
     
-    public Optional<InteractionVeto> validate() {
-        
-        val head = owningAction.getAction().interactionHead(getOwningObject());
+    public Optional<InteractionVeto> validate(ManagedObject proposedValue) {
         
         return Optional.ofNullable(
             getParameter()
-                .isValid(head, getValue(), InteractionInitiatedBy.USER))
+                .isValid(getOwningAction().getInteractionHead(), proposedValue, InteractionInitiatedBy.USER))
         .map(reasonNotValid->InteractionVeto.actionParamInvalid(new Veto(reasonNotValid)));
+    }
+    
+    public Optional<InteractionVeto> validate() {
+        return validate(getValue());
     }
     
 }

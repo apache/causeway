@@ -229,6 +229,10 @@ public interface ObjectAction extends ObjectMember {
             final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy);
 
+    default String getCssClass(String prefix) {
+        final String ownerId = getOnType().getSpecId().asString().replace(".", "-");
+        return prefix + ownerId + "-" + getId();
+    }
 
     // -- Util
     public static final class Util {

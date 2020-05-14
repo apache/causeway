@@ -25,12 +25,12 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 
@@ -38,7 +38,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
 
-public class ScalarParameterModel extends ScalarModel
+public class ScalarParameterModel
+extends ScalarModel
 implements ParameterUiModel {
 
     private static final long serialVersionUID = 1L;
@@ -68,10 +69,31 @@ implements ParameterUiModel {
         }
         return actionParameter;  
     }
+    
+    private transient ManagedAction managedAction;
+    
+    public ManagedAction getManagedAction() {
+        if(managedAction==null) {
+            val actionOwner = getParentUiModel().load();
+            managedAction = ManagedAction.of(actionOwner, getMetaModel().getAction()); 
+        }
+        return managedAction;  
+    }
+    
+//    private transient ManagedParameter managedParameter;
+//    
+//    public ManagedParameter getManagedParameter() {
+//        if(managedParameter==null) {
+//            val parameter = getMetaModel();
+//            managedParameter = getManagedAction().managedParameter(parameter.getNumber()); 
+//        }
+//        return managedParameter;  
+//    } 
+    
 
     @Override
     public ObjectSpecification getScalarTypeSpec() {
-        return paramMemento.getSpecification(getSpecificationLoader());
+        return getMetaModel().getSpecification();
     }
 
     @Override
@@ -81,48 +103,19 @@ implements ParameterUiModel {
 
     @Override
     public String getCssClass() {
-        final ObjectMemento adapterMemento = getObjectAdapterMemento();
-        if (adapterMemento == null) {
-            // shouldn't happen
-            return null;
-        }
-        final ObjectActionParameter actionParameter = getMetaModel();
-        final ObjectAction action = actionParameter.getAction();
-        final String objectSpecId = action.getOnType().getSpecId().asString().replace(".", "-");
-        final String parmId = actionParameter.getId();
-
-        return "isis-" + objectSpecId + "-" + action.getId() + "-" + parmId;
+        return getMetaModel().getCssClass("isis-");
     }
 
     @Override
     public String whetherDisabled(Where where) {
-        // always enabled
+        // always enabled TODO this is not true
         return null;
     }
 
     @Override
     public boolean whetherHidden(Where where) {
-        // always enabled
+        // always enabled TODO this is not true
         return false;
-    }
-
-    @Override
-    public String parseAndValidate(final String proposedPojoAsStr) {
-        final ObjectActionParameter parameter = getMetaModel();
-        
-        val action = parameter.getAction();
-        
-        try {
-            ManagedObject parentAdapter = getParentUiModel().load();
-            
-            val head = action.interactionHead(parentAdapter);
-            
-            final String invalidReasonIfAny = parameter.isValid(head, proposedPojoAsStr,
-                    InteractionInitiatedBy.USER);
-            return invalidReasonIfAny;
-        } catch (final Exception ex) {
-            return ex.getLocalizedMessage();
-        }
     }
 
     @Override

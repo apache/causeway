@@ -471,8 +471,6 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
 
     protected abstract String getIdentifier();
 
-    protected abstract String parseAndValidate(String proposedPojoAsStr);
-
     public AssociatedActions getAssociatedActions() {
         if (associatedActions == null) {
             associatedActions = new AssociatedActions(calcAssociatedActions());

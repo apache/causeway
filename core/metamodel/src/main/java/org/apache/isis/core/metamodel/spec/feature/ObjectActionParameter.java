@@ -253,4 +253,8 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
             }
         }
     }
+
+    default String getCssClass(String prefix) {
+        return getAction().getCssClass(prefix) + "-" + getId();
+    }
 }

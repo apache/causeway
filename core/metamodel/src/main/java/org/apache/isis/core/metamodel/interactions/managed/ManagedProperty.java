@@ -69,7 +69,7 @@ public final class ManagedProperty extends ManagedMember {
     public MemberType getMemberType() {
         return MemberType.PROPERTY;
     }
-
+    
     // -- INTERACTION
     
     /**
@@ -93,6 +93,8 @@ public final class ManagedProperty extends ManagedMember {
         return Optional.ofNullable(property.get(getOwner()))
         .orElse(ManagedObject.of(property.getSpecification(), null));
     }
+
+
     
     
 }

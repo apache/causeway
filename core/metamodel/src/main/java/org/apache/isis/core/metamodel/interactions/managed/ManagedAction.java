@@ -53,12 +53,15 @@ public final class ManagedAction extends ManagedMember {
     
     @Getter private final ObjectAction action;
     
+    @Getter private final ActionInteractionHead interactionHead;
+
     private ManagedAction(
             final @NonNull ManagedObject owner, 
             final @NonNull ObjectAction action) {
         
         super(owner);
         this.action = action;
+        this.interactionHead = action.interactionHead(owner);
     }
 
     @Override

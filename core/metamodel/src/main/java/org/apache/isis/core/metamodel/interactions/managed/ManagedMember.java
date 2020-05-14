@@ -25,6 +25,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -120,13 +121,21 @@ public abstract class ManagedMember {
     public Optional<InteractionVeto> checkVisibility(
             @NonNull final Where where) {
 
-        val visibilityConsent = 
-                getMember()
-                .isVisible(getOwner(), InteractionInitiatedBy.USER, where);
+        try {
+            val visibilityConsent = 
+                    getMember()
+                    .isVisible(getOwner(), InteractionInitiatedBy.USER, where);
+            
+            return visibilityConsent.isVetoed()
+                    ? Optional.of(InteractionVeto.hidden(visibilityConsent)) 
+                    : Optional.empty();
+            
+        } catch (final Exception ex) {
+            
+            return Optional.of(InteractionVeto.hidden(new Veto("failure during visibility evaluation")));
+            
+        }
         
-        return visibilityConsent.isVetoed()
-                ? Optional.of(InteractionVeto.hidden(visibilityConsent)) 
-                : Optional.empty();
     }
 
     /**
@@ -136,13 +145,25 @@ public abstract class ManagedMember {
     public Optional<InteractionVeto> checkUsability(
             @NonNull final Where where) {
         
-        val usabilityConsent = 
-                getMember()
-                .isUsable(getOwner(), InteractionInitiatedBy.USER, where);
+        try {
+            
+            val usabilityConsent = 
+                    getMember()
+                    .isUsable(getOwner(), InteractionInitiatedBy.USER, where);
+            
+            return usabilityConsent.isVetoed()
+                    ? Optional.of(InteractionVeto.readonly(usabilityConsent))
+                    : Optional.empty();
+            
+        } catch (final Exception ex) {
+            
+            return Optional.of(InteractionVeto
+                    .readonly(
+                            new Veto(ex.getLocalizedMessage())));
+            
+        }
         
-        return usabilityConsent.isVetoed()
-                ? Optional.of(InteractionVeto.readonly(usabilityConsent))
-                : Optional.empty();
+        
     }
     
     protected static <T extends ObjectMember> Optional<T> lookup(
@@ -151,5 +172,7 @@ public abstract class ManagedMember {
             @NonNull final String memberId) {
         return memberType.lookup(owner, memberId);
     }
+
+    
     
 }

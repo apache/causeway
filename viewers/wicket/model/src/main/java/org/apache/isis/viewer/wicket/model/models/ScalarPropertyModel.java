@@ -24,15 +24,14 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.common.model.feature.PropertyUiModel;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 
@@ -73,13 +72,6 @@ implements PropertyUiModel {
                 renderingHint);
     }
     
-    private void getAndStore(final EntityModel parentEntityModel) {
-        final ObjectMemento parentAdapterMemento = parentEntityModel.getObjectAdapterMemento();
-        final OneToOneAssociation property = propertyMemento.getProperty(getSpecificationLoader());
-        final ManagedObject parentAdapter = super.getCommonContext().reconstructObject(parentAdapterMemento); 
-        setObjectFromPropertyIfVisible(ScalarPropertyModel.this, property, parentAdapter);
-    }
-    
     private transient OneToOneAssociation property;
     
     @Override
@@ -90,71 +82,44 @@ implements PropertyUiModel {
         return property;  
     }
 
-        
-
+    private transient ManagedProperty managedProperty;
+    
+    public ManagedProperty getManagedProperty() {
+        if(managedProperty==null) {
+            val parentAdapter = getParentUiModel().load();
+            managedProperty = ManagedProperty.of(parentAdapter, getMetaModel()); 
+        }
+        return managedProperty;  
+    } 
+    
     @Override
     public ObjectSpecification getScalarTypeSpec() {
-        ObjectSpecId type = propertyMemento.getType();
-        return getSpecificationLoader().lookupBySpecIdElseLoad(type);
+        return getMetaModel().getSpecification();
     }
 
     @Override
     public String getIdentifier() {
-        return propertyMemento.getIdentifier();
+        return getMetaModel().getIdentifier().toNameIdentityString();
     }
 
     @Override
     public String getCssClass() {
-        final String objectSpecId =
-                getParentUiModel().getTypeOfSpecification().getSpecId().asString().replace(".", "-");
-        final String propertyId = getIdentifier();
-        return "isis-" + objectSpecId + "-" + propertyId;
+        return getMetaModel().getCssClass("isis-");
     }
 
     @Override
     public boolean whetherHidden(final Where where) {
-        final ManagedObject parentAdapter = getParentUiModel().load();
-        try {
-            final Consent visibility = getMetaModel().isVisible(parentAdapter, InteractionInitiatedBy.USER, where);
-            return visibility.isVetoed();
-        } catch (final Exception ex) {
-            return true; // will be hidden
-        }
+        return getManagedProperty()
+                .checkVisibility(where)
+                .isPresent();
     }
 
     @Override
     public String whetherDisabled(final Where where) {
-        final ManagedObject parentAdapter = getParentUiModel().load();
-        try {
-            final Consent usable = getMetaModel().isUsable(parentAdapter, InteractionInitiatedBy.USER, where);
-            return usable.isAllowed() ? null : usable.getReason();
-        } catch (final Exception ex) {
-            return ex.getLocalizedMessage();
-        }
-    }
-
-    @Override
-    public String parseAndValidate(final String proposedPojoAsStr) {
-        final OneToOneAssociation property = getMetaModel();
-        ParseableFacet parseableFacet = property.getFacet(ParseableFacet.class);
-        if (parseableFacet == null) {
-            parseableFacet = property.getSpecification().getFacet(ParseableFacet.class);
-        }
-        try {
-            final ManagedObject parentAdapter = getParentUiModel().load();
-            final ManagedObject currentValue = property.get(parentAdapter, InteractionInitiatedBy.USER);
-            final ManagedObject proposedAdapter =
-                    parseableFacet.parseTextEntry(currentValue, proposedPojoAsStr, InteractionInitiatedBy.USER);
-            final Consent valid = property.isAssociationValid(parentAdapter, proposedAdapter,
-                    InteractionInitiatedBy.USER);
-            return valid.isAllowed() ? null : valid.getReason();
-//        } catch (final ConcurrencyException ex) {
-//            // disregard concurrency exceptions because will pick up at the IFormValidator level rather
-//            // than each individual property.
-//            return null;
-        } catch (final Exception ex) {
-            return ex.getLocalizedMessage();
-        }
+        return getManagedProperty()
+                .checkUsability(where)
+                .map(InteractionVeto::getReason)
+                .orElse(null);
     }
 
     @Override
@@ -214,33 +179,6 @@ implements PropertyUiModel {
     public ManagedObject applyValue(ManagedObject adapter) {
         val property = getMetaModel();
 
-        //
-        // previously there was a guard here to only apply changes provided:
-        //
-        // property.containsDoOpFacet(NotPersistedFacet.class) == null
-        //
-        // however, that logic is wrong; although a property may not be directly
-        // persisted so far as JDO is concerned, it may be indirectly persisted
-        // as the result of business logic in the setter.
-        //
-        // for example, see ExampleTaggableEntity (in isisaddons-module-tags).
-        //
-
-        //
-        // previously (prior to XML layouts and 'single property' edits) we also used to check if
-        // the property was disabled, using:
-        //
-        // if(property.containsDoOpFacet(DisabledFacet.class)) {
-        //    // skip, as per comments above
-        //    return;
-        // }
-        //
-        // However, this would seem to be wrong, because the presence of a DisabledFacet doesn't necessarily mean
-        // that the property is disabled (its disabledReason(...) might return null).
-        //
-        // In any case, the only code that calls this method already does the check, so think this is safe
-        // to just remove.
-
         val associate = getObject();
         property.set(adapter, associate, InteractionInitiatedBy.USER);
 
@@ -254,6 +192,14 @@ implements PropertyUiModel {
         return ObjectAction.Util.findForAssociation(parentAdapter, getMetaModel());
     }
 
+    // -- HELPER
+    
+    private void getAndStore(final EntityModel parentEntityModel) {
+        val parentAdapterMemento = parentEntityModel.getObjectAdapterMemento();
+        val parentAdapter = super.getCommonContext().reconstructObject(parentAdapterMemento);
+        val property = propertyMemento.getProperty(getSpecificationLoader());
+        setObjectFromPropertyIfVisible(ScalarPropertyModel.this, property, parentAdapter);
+    }
 
     
 }
