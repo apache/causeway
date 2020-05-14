@@ -26,8 +26,6 @@ import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorStrategy;
 
-import lombok.val;
-
 public class PropertyFormExecutorStrategy implements FormExecutorStrategy<ScalarPropertyModel> {
 
     private final ScalarPropertyModel model;
@@ -44,7 +42,7 @@ public class PropertyFormExecutorStrategy implements FormExecutorStrategy<Scalar
 
     @Override
     public ManagedObject obtainTargetAdapter() {
-        return model.getParentUiModel().load();
+        return model.getManagedProperty().getOwner();
     }
 
     @Override
@@ -60,14 +58,7 @@ public class PropertyFormExecutorStrategy implements FormExecutorStrategy<Scalar
 
     @Override
     public ManagedObject obtainResultAdapter() {
-        val targetAdapter = obtainTargetAdapter();
-
-        val resultAdapter = this.model.applyValue(targetAdapter);
-
-        if (resultAdapter != targetAdapter) {
-            this.model.getParentUiModel().setObject(targetAdapter);
-        }
-        return resultAdapter;
+        return this.model.applyValue();
     }
 
 

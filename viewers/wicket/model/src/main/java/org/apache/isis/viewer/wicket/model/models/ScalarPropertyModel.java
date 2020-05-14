@@ -20,7 +20,6 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
@@ -56,7 +55,6 @@ implements PropertyUiModel {
         super(parentEntityModel, propertyMemento, mode, renderingHint);
         this.propertyMemento = propertyMemento;
         reset();
-        //getAndStore(parentEntityModel);
     }
     
     public ScalarPropertyModel copyHaving(
@@ -83,8 +81,8 @@ implements PropertyUiModel {
     
     public ManagedProperty getManagedProperty() {
         if(managedProperty==null) {
-            val parentAdapter = getParentUiModel().load();
-            managedProperty = ManagedProperty.of(parentAdapter, getMetaModel()); 
+            val owner = getParentUiModel().getObject();
+            managedProperty = ManagedProperty.of(owner, getMetaModel()); 
         }
         return managedProperty;  
     } 
@@ -165,13 +163,13 @@ implements PropertyUiModel {
      * @return adapter, which may be different from the original
      *  (if a {@link ViewModelFacet#isCloneable(Object) cloneable} view model, for example.
      */
-    public ManagedObject applyValue(ManagedObject adapter) {
-        val property = getMetaModel();
-
-        val associate = getObject();
-        property.set(adapter, associate, InteractionInitiatedBy.USER);
-
-        return ManagedObjects.copyIfClonable(adapter);
+    public ManagedObject applyValue() {
+        
+        val proposedNewValue = getObject();
+        getManagedProperty().modifyProperty(proposedNewValue);
+        val owner = getManagedProperty().getOwner();
+        val result = ManagedObjects.copyIfClonable(owner); //XXX I don't understand, why do we need this?
+        return result;
 
     }
     
