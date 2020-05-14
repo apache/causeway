@@ -18,12 +18,9 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -139,11 +136,6 @@ implements ParameterUiModel {
     }
 
     @Override
-    public <T extends Facet> T getFacet(final Class<T> facetType) {
-        return getMetaModel().getFacet(facetType);
-    }
-    
-    @Override
     public ManagedObject load() {
         val objectAdapter = loadFromSuper();
 
@@ -161,8 +153,8 @@ implements ParameterUiModel {
     }
     
     @Override
-    protected List<ObjectAction> calcAssociatedActions() {
-        return Collections.emptyList();
+    protected Can<ObjectAction> calcAssociatedActions() {
+        return Can.empty();
     }
 
     @Override

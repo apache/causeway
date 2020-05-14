@@ -22,9 +22,11 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.Getter;
@@ -71,6 +73,10 @@ public final class ManagedProperty extends ManagedMember {
         return MemberType.PROPERTY;
     }
     
+    public Can<ObjectAction> getAssociatedActions() {
+        return Can.ofCollection(ObjectAction.Util.findForAssociation(getOwner(), getProperty()));
+    }
+    
     // -- INTERACTION
     
     public Optional<InteractionVeto> checkValidity(ManagedObject proposedNewValue) {
@@ -114,10 +120,6 @@ public final class ManagedProperty extends ManagedMember {
         return Optional.ofNullable(property.get(getOwner()))
         .orElse(ManagedObject.of(property.getSpecification(), null));
     }
-
-
-
-
     
     
 }

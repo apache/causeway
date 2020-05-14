@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Lists;
@@ -263,7 +264,9 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
 
     public abstract String getCssClass();
 
-    public abstract <T extends Facet> T getFacet(Class<T> facetType);
+    public final <T extends Facet> T getFacet(final Class<T> facetType) {
+        return getMetaModel().getFacet(facetType);
+    }
 
     /**
      * Additional links to render (if any)
@@ -395,8 +398,8 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
         private final ObjectAction firstAssociatedWithInlineAsIfEdit;
         private final List<ObjectAction> remainingAssociated;
 
-        AssociatedActions(final List<ObjectAction> allAssociated) {
-            final List<ObjectAction> temp = _Lists.newArrayList(allAssociated);
+        AssociatedActions(final Can<ObjectAction> allAssociated) {
+            final List<ObjectAction> temp = allAssociated.toList();
             this.firstAssociatedWithInlineAsIfEdit = firstAssociatedActionWithInlineAsIfEdit(allAssociated);
             if(this.firstAssociatedWithInlineAsIfEdit != null) {
                 temp.remove(firstAssociatedWithInlineAsIfEdit);
@@ -414,7 +417,7 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
             return firstAssociatedWithInlineAsIfEdit != null;
         }
 
-        private static ObjectAction firstAssociatedActionWithInlineAsIfEdit(final List<ObjectAction> objectActions) {
+        private static ObjectAction firstAssociatedActionWithInlineAsIfEdit(final Can<ObjectAction> objectActions) {
             for (ObjectAction objectAction : objectActions) {
                 final PromptStyle promptStyle = ObjectAction.Util.promptStyleFor(objectAction);
                 if(promptStyle.isInlineAsIfEdit()) {
@@ -470,7 +473,7 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
         return associatedActions;
     }
     
-    protected abstract List<ObjectAction> calcAssociatedActions();
+    protected abstract Can<ObjectAction> calcAssociatedActions();
     
     public final boolean hasAssociatedActionWithInlineAsIfEdit() {
         return getAssociatedActions().hasAssociatedActionWithInlineAsIfEdit();

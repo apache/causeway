@@ -18,12 +18,9 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import java.util.List;
-
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
@@ -101,7 +98,7 @@ implements PropertyUiModel {
     public String getIdentifier() {
         return getMetaModel().getIdentifier().toNameIdentityString();
     }
-
+    
     @Override
     public String getCssClass() {
         return getMetaModel().getCssClass("isis-");
@@ -130,11 +127,6 @@ implements PropertyUiModel {
                 .orElse(null);
     }
 
-    @Override
-    public <T extends Facet> T getFacet(final Class<T> facetType) {
-        return getMetaModel().getFacet(facetType);
-    }
-
     public void reset() {
         val parentAdapter = getParentUiModel().load();
         setObjectFromPropertyIfVisible(this, getMetaModel(), parentAdapter);
@@ -156,16 +148,15 @@ implements PropertyUiModel {
     }
     
     public String getReasonInvalidIfAny() {
-        val adapter = getParentUiModel().load();
         val associate = getObject();
-        Consent validity = getMetaModel().isAssociationValid(adapter, associate, InteractionInitiatedBy.USER);
-        return validity.isAllowed() ? null : validity.getReason();
+        return validate(associate);
     }
     
     /**
      * Apply changes to the underlying adapter (possibly returning a new adapter).
      *
-     * @return adapter, which may be different from the original (if a {@link ViewModelFacet#isCloneable(Object) cloneable} view model, for example.
+     * @return adapter, which may be different from the original
+     *  (if a {@link ViewModelFacet#isCloneable(Object) cloneable} view model, for example.
      */
     public ManagedObject applyValue(ManagedObject adapter) {
         val property = getMetaModel();
@@ -178,9 +169,8 @@ implements PropertyUiModel {
     }
     
     @Override
-    protected List<ObjectAction> calcAssociatedActions() {
-        val parentAdapter = getParentUiModel().load();
-        return ObjectAction.Util.findForAssociation(parentAdapter, getMetaModel());
+    protected Can<ObjectAction> calcAssociatedActions() {
+        return getManagedProperty().getAssociatedActions();
     }
 
     // -- HELPER
