@@ -117,24 +117,24 @@ implements ScalarModelSubscriber2 {
         NOTHING
     }
 
-//    /** this is a hack for the ScalarParameterModel, which does not support usability constraints in the model*/
-//    private transient Runnable postInit;
-//    @Deprecated // properly implement ScalarParameterModel
-//    public void postInit(@NonNull final FormPendingParamUiModel argAndConsents) {
-//        this.postInit = () ->{
-//            // visibility
-//            val visibilityConsent = argAndConsents.getVisibilityConsent();
-//            setVisible(visibilityConsent.isAllowed());
-//
-//            // usability
-//            val usabilityConsent = argAndConsents.getUsabilityConsent();
-//            if(usabilityConsent.isAllowed()) {
-//                onInitializeEditable();
-//            } else {
-//                onInitializeReadonly(usabilityConsent.getReason());
-//            }            
-//        }; 
-//    }
+    /** this is a hack for the ScalarParameterModel, which does not support usability constraints in the model*/
+    private transient Runnable postInit;
+    @Deprecated // properly implement ScalarParameterModel
+    public void postInit(@NonNull final FormPendingParamUiModel argAndConsents) {
+        this.postInit = () ->{
+            // visibility
+            val visibilityConsent = argAndConsents.getVisibilityConsent();
+            setVisible(visibilityConsent.isAllowed());
+
+            // usability
+            val usabilityConsent = argAndConsents.getUsabilityConsent();
+            if(usabilityConsent.isAllowed()) {
+                onInitializeEditable();
+            } else {
+                onInitializeReadonly(usabilityConsent.getReason());
+            }            
+        }; 
+    }
     
     /**
      *
@@ -268,6 +268,12 @@ implements ScalarModelSubscriber2 {
 
         final ScalarModel scalarModel = getModel();
 
+        if(postInit!=null) {
+            // ScalarParameterModel hack
+            postInit.run();
+            postInit=null;
+        } else {
+        
         final String disableReasonIfAny = scalarModel.whetherDisabled();
         final boolean mustBeEditable = scalarModel.mustBeEditable();
         if (disableReasonIfAny != null) {
@@ -283,6 +289,8 @@ implements ScalarModelSubscriber2 {
                 onInitializeEditable();
             }
         }
+        }
+
 
     }
 
