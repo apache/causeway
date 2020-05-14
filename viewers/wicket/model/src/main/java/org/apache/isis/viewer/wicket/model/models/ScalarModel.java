@@ -30,10 +30,8 @@ import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -80,14 +78,6 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
     public boolean isProperty() { return kind == Kind.PROPERTY; }
     public boolean isParameter() { return kind == Kind.PARAMETER; }
     
-
-    static boolean isRequired(final FacetHolder facetHolder) {
-        final MandatoryFacet mandatoryFacet = facetHolder.getFacet(MandatoryFacet.class);
-        final boolean required = mandatoryFacet != null && !mandatoryFacet.isInvertedSemantics();
-        return required;
-    }
-
-
 
     private final EntityModel parentEntityModel;
 
@@ -267,7 +257,9 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
 
     public abstract String validate(ManagedObject proposedAdapter);
 
-    public abstract boolean isRequired();
+    public boolean isRequired() {
+        return !getMetaModel().isOptional();
+    }
 
     public abstract String getCssClass();
 

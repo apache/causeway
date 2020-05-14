@@ -23,6 +23,7 @@ import java.util.Optional;
 import javax.annotation.Nullable;
 
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
@@ -31,7 +32,7 @@ import lombok.NonNull;
 import lombok.val;
 
 public final class ManagedProperty extends ManagedMember {
-
+    
     // -- FACTORIES
     
     public static final ManagedProperty of(
@@ -72,15 +73,35 @@ public final class ManagedProperty extends ManagedMember {
     
     // -- INTERACTION
     
+    public Optional<InteractionVeto> checkValidity(ManagedObject proposedNewValue) {
+        try {
+            
+            val validityConsent = 
+                    property.isAssociationValid(getOwner(), proposedNewValue, InteractionInitiatedBy.USER);
+            
+            return validityConsent.isVetoed()
+                    ? Optional.of(InteractionVeto.invalid(validityConsent)) 
+                    : Optional.empty();
+            
+        } catch (final Exception ex) {
+            
+            return Optional.of(InteractionVeto
+                    .invalid(
+                            new Veto(ex.getLocalizedMessage())));
+            
+        }
+    }
+    
+    
     /**
      * @param proposedNewValue
      * @return non-empty if the interaction is not valid for given {@code proposedNewValue}
      */
     public Optional<InteractionVeto> modifyProperty(@Nullable ManagedObject proposedNewValue) {
             
-        val validityVeto = property.isAssociationValid(getOwner(), proposedNewValue, InteractionInitiatedBy.USER);
-        if (validityVeto.isVetoed()) {
-            return Optional.of(InteractionVeto.invalid(validityVeto));
+        val interactionVeto = checkValidity(proposedNewValue);
+        if(interactionVeto.isPresent()) {
+            return interactionVeto;
         }
         
         property.set(getOwner(), proposedNewValue, InteractionInitiatedBy.USER);
@@ -93,6 +114,8 @@ public final class ManagedProperty extends ManagedMember {
         return Optional.ofNullable(property.get(getOwner()))
         .orElse(ManagedObject.of(property.getSpecification(), null));
     }
+
+
 
 
     

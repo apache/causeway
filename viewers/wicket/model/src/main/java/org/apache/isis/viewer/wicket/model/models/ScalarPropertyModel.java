@@ -123,20 +123,11 @@ implements PropertyUiModel {
     }
 
     @Override
-    public String validate(final ManagedObject proposedAdapter) {
-        final ManagedObject parentAdapter = getParentUiModel().load();
-        try {
-            final Consent valid = getMetaModel().isAssociationValid(parentAdapter, proposedAdapter,
-                    InteractionInitiatedBy.USER);
-            return valid.isAllowed() ? null : valid.getReason();
-        } catch (final Exception ex) {
-            return ex.getLocalizedMessage();
-        }
-    }
-
-    @Override
-    public boolean isRequired() {
-        return isRequired(getMetaModel());
+    public String validate(final ManagedObject proposedNewValue) {
+        return getManagedProperty()
+                .checkValidity(proposedNewValue)
+                .map(InteractionVeto::getReason)
+                .orElse(null);
     }
 
     @Override

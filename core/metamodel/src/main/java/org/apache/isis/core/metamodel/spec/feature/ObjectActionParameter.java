@@ -47,12 +47,6 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
     ObjectAction getAction();
 
     /**
-     * Returns a flag indicating if it can be left unset when the action can be
-     * invoked.
-     */
-    boolean isOptional();
-
-    /**
      * Returns the 0-based index to this parameter.
      */
     int getNumber();

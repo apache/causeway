@@ -39,7 +39,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
@@ -161,12 +160,6 @@ implements ObjectActionParameter, FacetHolder.Delegating {
         final DescribedAsFacet facet = getFacet(DescribedAsFacet.class);
         final String description = facet.value();
         return description == null ? "" : description;
-    }
-
-    @Override
-    public boolean isOptional() {
-        final MandatoryFacet facet = getFacet(MandatoryFacet.class);
-        return facet.isInvertedSemantics();
     }
 
     public Consent isUsable() {

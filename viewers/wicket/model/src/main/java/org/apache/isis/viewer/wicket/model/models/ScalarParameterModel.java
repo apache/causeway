@@ -139,11 +139,6 @@ implements ParameterUiModel {
     }
 
     @Override
-    public boolean isRequired() {
-        return isRequired(getMetaModel());
-    }
-
-    @Override
     public <T extends Facet> T getFacet(final Class<T> facetType) {
         return getMetaModel().getFacet(facetType);
     }
