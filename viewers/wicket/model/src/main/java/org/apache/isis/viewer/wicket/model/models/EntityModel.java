@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
+import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
@@ -45,6 +46,8 @@ import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.val;
 
 /**
@@ -57,7 +60,7 @@ import lombok.val;
 //@Log4j2
 public class EntityModel 
 extends ManagedObjectModel 
-implements ObjectAdapterModel, UiHintContainer, ObjectUiModel, BookmarkableModel {
+implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel, BookmarkableModel {
 
     private static final long serialVersionUID = 1L;
     
@@ -87,7 +90,12 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel, BookmarkableModel
     
     private ObjectMemento contextAdapterIfAny;
 
+    @Getter(onMethod = @__(@Override)) 
+    @Setter(onMethod = @__(@Override)) 
     private Mode mode;
+    
+    @Getter(onMethod = @__(@Override)) 
+    @Setter(onMethod = @__(@Override)) 
     private RenderingHint renderingHint;
 
     // -- FACTORIES
@@ -153,7 +161,9 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel, BookmarkableModel
         
         super(requires(commonContext, "commonContext"), adapterMemento);
         
-        this.propertyScalarModels = propertyScalarModels!=null ? propertyScalarModels : _Maps.<PropertyMemento, ScalarModel>newHashMap();
+        this.propertyScalarModels = propertyScalarModels!=null 
+                ? propertyScalarModels 
+                : _Maps.<PropertyMemento, ScalarModel>newHashMap();
         this.mode = mode;
         this.renderingHint = renderingHint;
     }
@@ -263,50 +273,19 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel, BookmarkableModel
     }
 
     // //////////////////////////////////////////////////////////
-    // RenderingHint, Mode, entityDetailsVisible
-    // //////////////////////////////////////////////////////////
-
-
-    @Override
-    public RenderingHint getRenderingHint() {
-        return renderingHint;
-    }
-    @Override
-    public void setRenderingHint(RenderingHint renderingHint) {
-        this.renderingHint = renderingHint;
-    }
 
     @Override
     public ObjectMemento getContextAdapterIfAny() {
         return contextAdapterIfAny;
     }
 
-    /**
-     * Used as a hint when the {@link #getRenderingHint()} is {@link RenderingHint#PARENTED_TITLE_COLUMN},
-     * provides a context adapter to obtain the title.
-     */
     @Override
     public void setContextAdapterIfAny(ObjectMemento contextAdapterIfAny) {
         this.contextAdapterIfAny = contextAdapterIfAny;
     }
 
+
     @Override
-    public Mode getMode() {
-        return mode;
-    }
-
-    protected void setMode(final Mode mode) {
-        this.mode = mode;
-    }
-
-    public boolean isViewMode() {
-        return mode == Mode.VIEW;
-    }
-
-    public boolean isEditMode() {
-        return mode == Mode.EDIT;
-    }
-
     public EntityModel toEditMode() {
         setMode(Mode.EDIT);
         for (final ScalarModel scalarModel : propertyScalarModels.values()) {
@@ -315,6 +294,7 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel, BookmarkableModel
         return this;
     }
 
+    @Override
     public EntityModel toViewMode() {
         setMode(Mode.VIEW);
         for (final ScalarModel scalarModel : propertyScalarModels.values()) {

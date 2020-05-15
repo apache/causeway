@@ -23,10 +23,11 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.ManagedObjectModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+
+import lombok.val;
 
 public class EntityLinkSimplePanelFactory extends ComponentFactoryAbstract {
 
@@ -38,17 +39,16 @@ public class EntityLinkSimplePanelFactory extends ComponentFactoryAbstract {
 
     @Override
     public ApplicationAdvice appliesTo(final IModel<?> model) {
-        if (!(model instanceof EntityModel)) {
+        if (!(model instanceof ManagedObjectModel)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
-        final EntityModel entityModel = (EntityModel) model;
-        final ObjectSpecification specification = entityModel.getTypeOfSpecification();
-        return appliesIf(specification != null && !specification.containsFacet(ValueFacet.class));
+        val objectModel = (ManagedObjectModel) model;
+        return appliesIf(!objectModel.lookupFacet(ValueFacet.class).isPresent());
     }
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        final EntityModel scalarModel = (EntityModel) model;
-        return new EntityLinkSimplePanel(id, scalarModel);
+        final ManagedObjectModel objectModel = (ManagedObjectModel) model;
+        return new EntityLinkSimplePanel(id, objectModel);
     }
 }

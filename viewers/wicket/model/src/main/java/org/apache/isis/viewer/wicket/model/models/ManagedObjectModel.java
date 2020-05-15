@@ -160,7 +160,7 @@ extends ModelAbstract<ManagedObject> {
                 .orElse(false);
     }
 
-    private <T extends Facet> Optional<T> lookupFacet(Class<T> facetClass) {
+    public <T extends Facet> Optional<T> lookupFacet(Class<T> facetClass) {
         return Optional.ofNullable(getTypeOfSpecification())
                 .map(objectSpec->objectSpec.getFacet(facetClass));
     }

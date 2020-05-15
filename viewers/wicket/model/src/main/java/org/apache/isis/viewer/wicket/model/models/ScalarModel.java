@@ -43,13 +43,19 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.common.model.feature.ScalarUiModel;
+import org.apache.isis.viewer.common.model.object.ObjectUiModel;
+import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
+import org.apache.isis.viewer.common.model.object.ObjectUiModel.Mode;
+import org.apache.isis.viewer.common.model.object.ObjectUiModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -61,20 +67,11 @@ import lombok.extern.log4j.Log4j2;
  * Is the backing model to each of the fields that appear in forms (for entities
  * or action dialogs).
  *
- * <p>
- *     NOTE: although this inherits from {@link EntityModel}, this is wrong I think; what is being shared
- *     is just some of the implementation - both objects have to wrap some arbitrary memento holding some state
- *     (a value or entity reference in a ScalarModel's case, an entity reference in an EntityModel's), they have
- *     a view mode, they have a rendering hint, and scalar models have a pending value.
- *     
- *     Fundamentally though a ScalarModel is NOT really an EntityModel, so this hierarchy should be broken out with a
- *     common superclass for both EntityModel and ScalarModel.
- * </p>
  */
 @Log4j2
 public abstract class ScalarModel 
-extends EntityModel 
-implements ScalarUiModel, LinksProvider, FormExecutorContext {
+extends ManagedObjectModel 
+implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext {
 
     private static final long serialVersionUID = 1L;
 
@@ -88,6 +85,15 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
     
 
     private final EntityModel parentEntityModel;
+    
+    @Getter(onMethod = @__(@Override)) 
+    @Setter(onMethod = @__(@Override)) 
+    private Mode mode;
+    
+    @Getter(onMethod = @__(@Override)) 
+    @Setter(onMethod = @__(@Override)) 
+    private RenderingHint renderingHint;
+    
 
     /**
      * Creates a model representing an action parameter of an action of a parent
@@ -96,13 +102,13 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
      */
     protected ScalarModel(EntityModel parentEntityModel, ActionParameterMemento apm) {
         
-        super(parentEntityModel.getCommonContext(),
-                EntityModel.Mode.EDIT, 
-                EntityModel.RenderingHint.REGULAR);
+        super(parentEntityModel.getCommonContext());
         
         this.kind = Kind.PARAMETER;
         this.parentEntityModel = parentEntityModel;
         this.pendingModel = new PendingModel(this);
+        this.mode = ObjectUiModel.Mode.EDIT;
+        this.renderingHint = ObjectUiModel.RenderingHint.REGULAR;
     }
 
     /**
@@ -113,13 +119,15 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
     protected ScalarModel(
             EntityModel parentEntityModel, 
             PropertyMemento pm,
-            EntityModel.Mode mode, 
-            EntityModel.RenderingHint renderingHint) {
+            ObjectUiModel.Mode mode, 
+            ObjectUiModel.RenderingHint renderingHint) {
         
-        super(parentEntityModel.getCommonContext(), mode, renderingHint);
+        super(parentEntityModel.getCommonContext());
         this.kind = Kind.PROPERTY;
         this.parentEntityModel = parentEntityModel;
         this.pendingModel = new PendingModel(this);
+        this.mode = mode;
+        this.renderingHint = renderingHint;
     }
 
     protected ManagedObject loadFromSuper() {
@@ -458,7 +466,7 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
     private static final class PendingModel extends Model<ObjectMemento> {
         private static final long serialVersionUID = 1L;
 
-        @NonNull private final EntityModel entityModel;
+        @NonNull private final ManagedObjectModel pendingValueModel;
 
         /**
          * Whether pending has been set (could have been set to null)
@@ -475,22 +483,22 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
                 return pending;
             }
             
-            if(entityModel.memento()!=null) {
-                return entityModel.memento();
+            if(pendingValueModel.memento()!=null) {
+                return pendingValueModel.memento();
             }
             
             //XXX [a.huber] as I don't understand the big picture here, given newly introduced branch above,
             // there might be a slight chance, that this is dead code anyway ...
-            val adapter = entityModel.getObject();
+            val adapter = pendingValueModel.getObject();
             val pojo = adapter.getPojo();
             if(pojo!=null && _Collections.isCollectionOrArrayOrCanType(pojo.getClass())) {
-                val specId = entityModel.getTypeOfSpecification().getSpecId();
+                val specId = pendingValueModel.getTypeOfSpecification().getSpecId();
                 log.warn("potentially a bug, wild guess fix for non-scalar %s", specId);
                 val pojos = _NullSafe.streamAutodetect(pojo)
                         .collect(Collectors.<Object>toList());
-                return entityModel.getMementoService().mementoForPojos(pojos, specId);
+                return pendingValueModel.getMementoService().mementoForPojos(pojos, specId);
             }
-            return entityModel.getMementoService().mementoForObject(adapter);
+            return pendingValueModel.getMementoService().mementoForObject(adapter);
         }
 
         @Override
@@ -506,11 +514,11 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
 
         private ManagedObject getPendingAdapter() {
             val memento = getObject();
-            return entityModel.getCommonContext().reconstructObject(memento);
+            return pendingValueModel.getCommonContext().reconstructObject(memento);
         }
 
         public ManagedObject getPendingElseCurrentAdapter() {
-            return hasPending ? getPendingAdapter() : entityModel.getObject();
+            return hasPending ? getPendingAdapter() : pendingValueModel.getObject();
         }
 
         public ObjectMemento getPending() {

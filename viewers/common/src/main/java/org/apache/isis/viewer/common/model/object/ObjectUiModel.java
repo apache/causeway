@@ -80,4 +80,43 @@ public interface ObjectUiModel {
         }
     }
     
+    public interface HasRenderingHints {
+
+        /**
+         * Similar to {@link #mustBeEditable()}, though not called from the same locations.
+         *
+         * My suspicion is that it amounts to more or less the same set of conditions.
+         *
+         * @return
+         */
+        boolean isInlinePrompt();
+        
+        RenderingHint getRenderingHint();
+        void setRenderingHint(RenderingHint renderingHint);
+        
+        Mode getMode();
+        void setMode(Mode mode);
+        
+        // -- SHORTCUTS
+        
+        default boolean isViewMode() {
+            return getMode() == Mode.VIEW;
+        }
+
+        default boolean isEditMode() {
+            return getMode() == Mode.EDIT;
+        }
+
+        default HasRenderingHints toEditMode() {
+            setMode(Mode.EDIT);
+            return this;
+        }
+
+        default HasRenderingHints toViewMode() {
+            setMode(Mode.VIEW);
+            return this;
+        }
+
+    }
+    
 }

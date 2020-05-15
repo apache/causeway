@@ -36,7 +36,7 @@ import org.wicketstuff.select2.Settings;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
 import org.apache.isis.viewer.wicket.model.models.EntityModelForReference;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -87,7 +87,8 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
         final ScalarModel scalarModel = getModel();
         final String name = scalarModel.getName();
 
-        entitySimpleLink = (EntityLinkSimplePanel) getComponentFactoryRegistry().createComponent(ComponentType.ENTITY_LINK, getModel());
+        entitySimpleLink = (EntityLinkSimplePanel) getComponentFactoryRegistry()
+                .createComponent(ComponentType.ENTITY_LINK, scalarModel);
 
         entitySimpleLink.setOutputMarkupId(true);
         entitySimpleLink.setLabel(Model.of(name));
@@ -211,7 +212,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
     protected void onInitializeReadonly(final String disableReason) {
         super.onInitializeReadonly(disableReason);
         syncWithInput();
-        val entityLinkModel = (EntityModel) entityLink.getModel();
+        val entityLinkModel = (HasRenderingHints) entityLink.getModel();
         entityLinkModel.toViewMode();
         entityLink.setEnabled(false);
         Tooltips.addTooltip(entityLink, disableReason);
@@ -252,7 +253,8 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
 
             final EntityModelForReference entityModelForLink = new EntityModelForReference(getModel());
 
-            entityModelForLink.setContextAdapterIfAny(getModel().getContextAdapterIfAny());
+            //XXX assuming, that scalar models don't have a context adapter 
+            //entityModelForLink.setContextAdapterIfAny(model.getContextAdapterIfAny());    
             entityModelForLink.setRenderingHint(getModel().getRenderingHint());
 
             final ComponentFactory componentFactory =
