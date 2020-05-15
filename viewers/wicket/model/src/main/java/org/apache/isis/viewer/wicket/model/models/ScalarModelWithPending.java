@@ -59,7 +59,7 @@ public interface ScalarModelWithPending extends Serializable {
                     }
                     log.debug("pending is null");
 
-                    final ObjectMemento objectAdapterMemento = owner.getScalarModel().getObjectAdapterMemento();
+                    final ObjectMemento objectAdapterMemento = owner.getScalarModel().memento();
                     owner.setPending(objectAdapterMemento);
 
                     return objectAdapterMemento;

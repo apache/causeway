@@ -30,6 +30,8 @@ import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
+import lombok.val;
+
 
 public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> {
 
@@ -128,15 +130,8 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
     }
 
     public void remove(EntityModel entityModel) {
-        BookmarkTreeNode rootNode = null;
-        for (BookmarkTreeNode eachNode : rootNodes) {
-            if(eachNode.getOidNoVerStr().equals((entityModel).getObjectAdapterMemento().toString())) {
-                rootNode = eachNode;
-            }
-        }
-        if(rootNode != null) {
-            rootNodes.remove(rootNode);
-        }
+        val str = entityModel.oidStringIfSupported();
+        rootNodes.removeIf(node->node.getOidNoVerStr().equals(str));
     }
 
 

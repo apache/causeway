@@ -155,7 +155,7 @@ implements FormExecutor {
             }
 
             // update target, since version updated (concurrency checks)
-            targetAdapter = targetEntityModel.load();
+            targetAdapter = targetEntityModel.getManagedObject();
             if(!ManagedObject._isDestroyed(targetAdapter)) {
                 targetEntityModel.resetPropertyModels();
             }
@@ -183,7 +183,7 @@ implements FormExecutor {
                 // the OID might have changed if a view model.
                 if (resultAdapter != null && targetAdapter != resultAdapter) {
                     targetEntityModel.setObject(resultAdapter);
-                    targetAdapter = targetEntityModel.load();
+                    targetAdapter = targetEntityModel.getManagedObject();
                 }
                 if(!ManagedObject._isDestroyed(targetAdapter)) {
                     targetEntityModel.resetPropertyModels();

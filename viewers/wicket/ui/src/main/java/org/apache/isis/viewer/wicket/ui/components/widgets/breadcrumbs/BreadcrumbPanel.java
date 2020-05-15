@@ -74,9 +74,7 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
             }
 
             private String titleFor(final EntityModel model) {
-                return getCommonContext()
-                        .reconstructObject(model.getObjectAdapterMemento())
-                        .titleString(null);
+                return model.getManagedObject().titleString(null);
             }
 
 

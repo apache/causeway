@@ -64,7 +64,7 @@ public interface ScalarModelWithMultiPending extends Serializable {
                     log.debug("pending is null");
 
                     val scalarModel = owner.getScalarModel();
-                    val objectAdapterMemento = scalarModel.getObjectAdapterMemento();
+                    val objectAdapterMemento = scalarModel.memento();
                     return ObjectMemento.unwrapList(objectAdapterMemento)
                             .orElse(null);
                 }
@@ -83,7 +83,7 @@ public interface ScalarModelWithMultiPending extends Serializable {
                         if (ownerPending != null) {
                             log.debug("setting to pending: {}", ownerPending.toString());
                             final ObjectSpecId objectSpecId = ownerScalarModel.getTypeOfSpecification().getSpecId();
-                            ownerScalarModel.setObjectMemento(
+                            ownerScalarModel.memento(
                                     ObjectMemento.wrapMementoList(adapterMemento, objectSpecId));
                         }
                     }

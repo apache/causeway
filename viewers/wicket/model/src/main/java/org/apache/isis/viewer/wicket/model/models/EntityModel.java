@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
@@ -97,7 +96,6 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel, BookmarkableModel
 
     private final Map<PropertyMemento, ScalarModel> propertyScalarModels;
     
-    private ObjectMemento adapterMemento;
     private ObjectMemento contextAdapterIfAny;
 
     private Mode mode;
@@ -166,8 +164,7 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel, BookmarkableModel
             Mode mode,
             RenderingHint renderingHint) {
         
-        super(requires(commonContext, "commonContext"));
-        this.adapterMemento = adapterMemento;
+        super(requires(commonContext, "commonContext"), adapterMemento);
         this.pendingModel = new PendingModel(this);
         this.propertyScalarModels = propertyScalarModels!=null ? propertyScalarModels : _Maps.<PropertyMemento, ScalarModel>newHashMap();
         this.mode = mode;
@@ -213,7 +210,7 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel, BookmarkableModel
     public String getHint(final Component component, final String keyName) {
         final ComponentHintKey componentHintKey = ComponentHintKey.create(super.getCommonContext(), component, keyName);
         if(componentHintKey != null) {
-            return componentHintKey.get(getObjectAdapterMemento().asHintingBookmarkIfSupported());
+            return componentHintKey.get(super.asHintingBookmarkIfSupported());
         }
         return null;
     }
@@ -221,7 +218,7 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel, BookmarkableModel
     @Override
     public void setHint(Component component, String keyName, String hintValue) {
         ComponentHintKey componentHintKey = ComponentHintKey.create(super.getCommonContext(), component, keyName);
-        componentHintKey.set(this.getObjectAdapterMemento().asHintingBookmarkIfSupported(), hintValue);
+        componentHintKey.set(super.asHintingBookmarkIfSupported(), hintValue);
     }
 
     @Override
@@ -233,87 +230,6 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel, BookmarkableModel
     @Override
     public String getTitle() {
         return getObject().titleString(null);
-    }
-
-    @Override
-    public boolean hasAsRootPolicy() {
-        return hasBookmarkPolicy(BookmarkPolicy.AS_ROOT);
-    }
-
-    public boolean hasAsChildPolicy() {
-        return hasBookmarkPolicy(BookmarkPolicy.AS_CHILD);
-    }
-
-    private boolean hasBookmarkPolicy(final BookmarkPolicy policy) {
-        final BookmarkPolicyFacet facet = getBookmarkPolicyFacetIfAny();
-        return facet != null && facet.value() == policy;
-    }
-
-    private BookmarkPolicyFacet getBookmarkPolicyFacetIfAny() {
-        final ObjectSpecId specId = getObjectAdapterMemento().getObjectSpecId();
-        final ObjectSpecification objectSpec = super.getSpecificationLoader().lookupBySpecIdElseLoad(specId);
-        return objectSpec.getFacet(BookmarkPolicyFacet.class);
-    }
-
-
-
-    // //////////////////////////////////////////////////////////
-    // ObjectAdapterMemento, typeOfSpecification
-    // //////////////////////////////////////////////////////////
-
-    public ObjectMemento getObjectAdapterMemento() {
-        return adapterMemento;
-    }
-
-    /**
-     * Overridable for submodels (eg {@link ScalarModel}) that know the type of
-     * the adapter without there being one.
-     */
-    @Override
-    public ObjectSpecification getTypeOfSpecification() {
-        return getTypeOfSpecificationId()
-                .map(this::getSpecificationFor)
-                .orElse(null);
-    }
-    
-    /**
-     * @implNote free of side-effects, used for serialization
-     */
-    public Optional<ObjectSpecId> getTypeOfSpecificationId() {
-        return Optional.ofNullable(adapterMemento)
-                .map(ObjectMemento::getObjectSpecId);
-    }
-
-    private ObjectSpecification getSpecificationFor(ObjectSpecId objectSpecId) {
-        return super.getSpecificationLoader().lookupBySpecIdElseLoad(objectSpecId);
-    }
-
-    // //////////////////////////////////////////////////////////
-    // loadObject, load, setObject
-    // //////////////////////////////////////////////////////////
-
-    /**
-     * Callback from {@link #getObject()}.
-     */
-    @Override
-    public ManagedObject load() {
-        if (adapterMemento == null) {
-            return null;
-        }
-        val adapter = super.getCommonContext().reconstructObject(adapterMemento);
-        return adapter;
-    }
-
-    @Override
-    public void setObject(ManagedObject adapter) {
-        super.setObject(adapter);
-        adapterMemento = super.getMementoService().mementoForObject(adapter); 
-    }
-
-    public void setObjectMemento(final ObjectMemento adapterMemento) {
-        val adapter = super.getCommonContext().reconstructObject(adapterMemento);
-        super.setObject(adapter);
-        this.adapterMemento = adapterMemento;
     }
 
     @Override
@@ -461,8 +377,8 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel, BookmarkableModel
                 return pending;
             }
             
-            if(entityModel.getObjectAdapterMemento()!=null) {
-                return entityModel.getObjectAdapterMemento();
+            if(entityModel.memento()!=null) {
+                return entityModel.memento();
             }
             
             //XXX [a.huber] as I don't understand the big picture here, given newly introduced branch above,
@@ -544,44 +460,6 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel, BookmarkableModel
     public void setCollectionLayoutData(final CollectionLayoutData collectionLayoutData) {
         this.collectionLayoutData = collectionLayoutData;
     }
-
-
-    // //////////////////////////////////////////////////////////
-    // equals, hashCode
-    // //////////////////////////////////////////////////////////
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((adapterMemento == null) ? 0 : adapterMemento.hashCode());
-        return result;
-    }
-
-    /**
-     * In order that <tt>IsisAjaxFallbackDataTable</tt> can use a
-     * <tt>ReuseIfModelsEqualStrategy</tt> to preserve any concurrency exception
-     * information in original model.
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        EntityModel other = (EntityModel) obj;
-        if (adapterMemento == null) {
-            if (other.adapterMemento != null)
-                return false;
-        } else if (!adapterMemento.equals(other.adapterMemento))
-            return false;
-        return true;
-
-    }
-
-
 
 
 }

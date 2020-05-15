@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
@@ -140,13 +141,19 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
     /**
      * Overrides superclass' implementation, because a {@link ScalarModel} can
      * know the {@link ObjectSpecification of} the {@link ManagedObject adapter}
-     * without there necessarily being any adapter being
+     * without there necessarily having any adapter 
      * {@link #setObject(ManagedObject) set}.
      */
     @Override
     public ObjectSpecification getTypeOfSpecification() {
         return getScalarTypeSpec();
     }
+
+    @Override
+    public Optional<ObjectSpecId> getTypeOfSpecificationId() {
+        return Optional.of(getScalarTypeSpec().getSpecId());
+    }
+    
 
     public boolean isScalarTypeAnyOf(final Class<?>... requiredClass) {
         final String fullName = getTypeOfSpecification().getFullIdentifier();
@@ -186,7 +193,7 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
             val memento = super.getMementoService()
                     .mementoForPojos(_Casts.uncheckedCast(pojo), getTypeOfSpecification().getSpecId());
                     
-            super.setObjectMemento(memento); // associated value
+            super.memento(memento); // associated value
         } else {
             super.setObject(adapter); // associated value
         }

@@ -79,7 +79,7 @@ implements CollectionSelectorProvider, BulkActionsProvider {
 
         final OneToManyAssociation otma = collectionModel.getCollectionMemento().getCollection(collectionModel.getSpecificationLoader());
         final EntityModel entityModel = collectionModel.getEntityModel();
-        val adapter = entityModel.load();
+        val adapter = entityModel.getManagedObject();
 
         final List<ObjectAction> associatedActions =
                 ObjectAction.Util.findForAssociation(adapter, otma);

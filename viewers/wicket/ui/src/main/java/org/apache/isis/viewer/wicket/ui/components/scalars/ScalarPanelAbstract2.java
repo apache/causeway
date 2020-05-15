@@ -460,7 +460,7 @@ implements ScalarModelSubscriber2 {
         if(facet != null) {
 
             val parentAdapter =
-                    model.getParentUiModel().load();
+                    model.getParentUiModel().getManagedObject();
 
             final String cssClass = facet.cssClass(parentAdapter);
             CssClassAppender.appendCssClassTo(this, cssClass);

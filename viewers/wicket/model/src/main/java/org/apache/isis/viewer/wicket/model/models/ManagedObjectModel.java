@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -91,31 +92,47 @@ extends ModelAbstract<ManagedObject> {
         }
     }
     
-    public Bookmark asHintingBookmarkIfSupported() {
+    public final Bookmark asHintingBookmarkIfSupported() {
         return memento!=null
                 ? memento.asHintingBookmarkIfSupported()
                 : null;
     }
 
-    public Bookmark asBookmarkIfSupported() {
+    public final Bookmark asBookmarkIfSupported() {
         return memento!=null
                 ? memento.asBookmarkIfSupported()
                 : null;
     }
     
-    public String oidStringIfSupported() {
+    public final String oidStringIfSupported() {
         return memento!=null
                 ? memento.toString()
                 : null;
     }
     
     /**
-     * @implNote free of side-effects, used for serialization
+     * free of side-effects, used for serialization
+     * @implNote overriding this must be consistent with {@link #getTypeOfSpecificationId()}
      */
     public Optional<ObjectSpecId> getTypeOfSpecificationId() {
         return Optional.ofNullable(memento)
                 .map(ObjectMemento::getObjectSpecId);
     }
+    
+    private transient ObjectSpecification objectSpec;
+    /**
+     * @implNote can be overridden by sub-models (eg {@link ScalarModel}) that know the type of
+     * the adapter without there being one. Overriding this must be consistent 
+     * with {@link #getTypeOfSpecificationId()} 
+     */
+    public ObjectSpecification getTypeOfSpecification() {
+        if(objectSpec==null) {
+            val specId = getTypeOfSpecificationId().orElse(null);
+            objectSpec = super.getSpecificationLoader().lookupBySpecIdElseLoad(specId); 
+        }
+        return objectSpec;
+    }
+
     
     public boolean hasAsRootPolicy() {
         return hasBookmarkPolicy(BookmarkPolicy.AS_ROOT);
@@ -126,26 +143,33 @@ extends ModelAbstract<ManagedObject> {
     }
 
     private boolean hasBookmarkPolicy(final BookmarkPolicy policy) {
-        final BookmarkPolicyFacet facet = getBookmarkPolicyFacetIfAny();
-        return facet != null && facet.value() == policy;
+        return lookupFacet(BookmarkPolicyFacet.class)
+                .map(facet->facet.value() == policy)
+                .orElse(false);
     }
 
-    private BookmarkPolicyFacet getBookmarkPolicyFacetIfAny() {
-        final ObjectSpecId specId = getTypeOfSpecificationId().orElse(null);
-        final ObjectSpecification objectSpec = super.getSpecificationLoader().lookupBySpecIdElseLoad(specId);
-        return objectSpec.getFacet(BookmarkPolicyFacet.class);
+    private <T extends Facet> Optional<T> lookupFacet(Class<T> facetClass) {
+        return Optional.ofNullable(getTypeOfSpecification())
+                .map(objectSpec->objectSpec.getFacet(facetClass));
     }
     
+    // -- CONTRACT
     
-    private transient ObjectSpecification objectSpec; 
-    public ObjectSpecification getTypeOfSpecification() {
-        if(objectSpec==null) {
-            val specId = getTypeOfSpecificationId().orElse(null);
-            objectSpec = super.getSpecificationLoader().lookupBySpecIdElseLoad(specId); 
+    @Override
+    public final int hashCode() {
+        return Objects.hashCode(memento);
+    }
+
+    @Override
+    public final boolean equals(Object obj) {
+        if(obj instanceof ManagedObjectModel) {
+            val other = (ManagedObjectModel) obj;
+            return Objects.equals(this.memento, other.memento);
         }
-        return objectSpec;
+        return false;
     }
     
+    // -- DEPRECATIONS
     
     @Deprecated //TODO do not expose this implementation detail
     public ObjectMemento memento() {
@@ -154,22 +178,11 @@ extends ModelAbstract<ManagedObject> {
     
     @Deprecated //TODO do not expose this implementation detail
     public void memento(ObjectMemento memento) {
+        val manageObject = super.getCommonContext().reconstructObject(memento);
+        super.setObject(manageObject);
         this.memento = memento;
-    }
-    
-    
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(memento);
+        this.objectSpec = null; // invalidate
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if(obj instanceof ManagedObjectModel) {
-            val other = (ManagedObjectModel) obj;
-            return Objects.equals(this.memento, other.memento);
-        }
-        return false;
-    }
 
 }

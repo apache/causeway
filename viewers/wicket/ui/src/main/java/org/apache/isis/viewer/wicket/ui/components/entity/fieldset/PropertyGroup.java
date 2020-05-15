@@ -150,7 +150,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
         final List<PropertyLayoutData> properties = this.fieldSet.getProperties();
         // changed to NO_CHECK because more complex BS3 layouts trip concurrency exception
         // (haven't investigated as to why).
-        val adapter = getModel().load();
+        val adapter = getModel().getManagedObject();
         return getObjectAssociations(properties, adapter);
     }
 
@@ -204,7 +204,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
         final Component component = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
 
-        val adapter = entityModel.load();
+        val adapter = entityModel.getManagedObject();
         final List<ObjectAction> associatedActions =
                 ObjectAction.Util.findForAssociation(adapter, otoa);
 

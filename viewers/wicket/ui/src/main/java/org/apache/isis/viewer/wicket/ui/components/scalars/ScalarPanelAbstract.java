@@ -269,7 +269,7 @@ implements ScalarModelProvider {
         ScalarModel model = getModel();
         final CssClassFacet facet = model.getFacet(CssClassFacet.class);
         if(facet != null) {
-            val parentAdapter = model.getParentUiModel().load();
+            val parentAdapter = model.getParentUiModel().getManagedObject();
             final String cssClass = facet.cssClass(parentAdapter);
             CssClassAppender.appendCssClassTo(this, cssClass);
         }

@@ -123,12 +123,12 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel<ManagedObject> {
     
     @Override
     public EntityModel getParentUiModel() {
-        return entityModel;
+        return ownerModel;
     }
 
     // -- HELPERS
 
-    private final EntityModel entityModel;
+    private final EntityModel ownerModel;
     private final ActionMemento actionMemento;
 
     // lazy in support of serialization of this class
@@ -140,14 +140,14 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel<ManagedObject> {
     }
     private ActionArgumentCache createActionArgumentCache() {
         return new ActionArgumentCache(
-                entityModel, 
+                ownerModel, 
                 actionMemento, 
                 getMetaModel());
     }
 
     private ActionModel(EntityModel entityModel, ActionMemento actionMemento) {
         super(entityModel.getCommonContext());
-        this.entityModel = entityModel;
+        this.ownerModel = entityModel;
         this.actionMemento = actionMemento;
     }
 
@@ -156,14 +156,14 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel<ManagedObject> {
      */
     private ActionModel(ActionModel actionModel) {
         super(actionModel.getCommonContext());
-        this.entityModel = actionModel.entityModel;
+        this.ownerModel = actionModel.ownerModel;
         this.actionMemento = actionModel.actionMemento;
         this.argCache = actionModel.argCache().copy(); 
     }
 
     @Override
     public ManagedObject getOwner() {
-        return entityModel.load();
+        return ownerModel.load();
     }
 
     @Override
