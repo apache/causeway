@@ -176,29 +176,6 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
         return adapter.titleString(null);
     }
 
-    @Override
-    public void setObject(ManagedObject adapter) {
-        if(adapter == null) {
-            super.setObject(null);
-            return;
-        }
-
-        final Object pojo = adapter.getPojo();
-        if(pojo == null) {
-            super.setObject(null);
-            return;
-        }
-
-        if(isCollection()) {
-            val memento = super.getMementoService()
-                    .mementoForPojos(_Casts.uncheckedCast(pojo), getTypeOfSpecification().getSpecId());
-                    
-            super.memento(memento); // associated value
-        } else {
-            super.setObject(adapter); // associated value
-        }
-    }
-
     public void setObjectAsString(final String enteredText) {
         // parse text to get adapter
         ParseableFacet parseableFacet = getTypeOfSpecification().getFacet(ParseableFacet.class);
@@ -223,8 +200,6 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
             setPending(memento);
         }
     }
-
-
     
     public boolean whetherHidden() {
         final Where where = getRenderingHint().asWhere();

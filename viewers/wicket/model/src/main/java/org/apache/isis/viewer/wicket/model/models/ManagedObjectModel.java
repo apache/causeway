@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.core.commons.internal.collections._Collections;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -81,15 +82,26 @@ extends ModelAbstract<ManagedObject> {
 
         super.setObject(adapter);
 
-        if(adapter.getSpecification().isParentedOrFreeCollection()) {
-            val pojo = adapter.getPojo();
-            memento = super.getMementoService()
-                    .mementoForPojos(_Casts.uncheckedCast(pojo), getTypeOfSpecificationId()
-                            .orElseGet(()->adapter.getElementSpecification().get().getSpecId()));
+        if(_Collections.isCollectionOrArrayOrCanType(adapter.getPojo().getClass())) {
+            setObjectCollection(adapter);
         } else {
-
             memento = super.getMementoService().mementoForObject(adapter);
         }
+    }
+    
+    public void setObjectCollection(final ManagedObject adapter) {
+        
+        if(ManagedObject.isNullOrUnspecifiedOrEmpty(adapter)) {
+            super.setObject(null);
+            return;
+        }
+
+        super.setObject(adapter);
+        
+        val pojos = adapter.getPojo();
+        memento = super.getMementoService()
+                .mementoForPojos(_Casts.uncheckedCast(pojos), getTypeOfSpecificationId()
+                        .orElseGet(()->adapter.getElementSpecification().get().getSpecId()));
     }
     
     public final Bookmark asHintingBookmarkIfSupported() {
@@ -112,7 +124,7 @@ extends ModelAbstract<ManagedObject> {
     
     /**
      * free of side-effects, used for serialization
-     * @implNote overriding this must be consistent with {@link #getTypeOfSpecificationId()}
+     * @implNote overriding this must be consistent with {@link #getTypeOfSpecification()}
      */
     public Optional<ObjectSpecId> getTypeOfSpecificationId() {
         return Optional.ofNullable(memento)
