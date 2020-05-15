@@ -21,26 +21,18 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
-import org.apache.isis.core.commons.internal.base._NullSafe;
-import org.apache.isis.core.commons.internal.collections._Collections;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
@@ -53,10 +45,7 @@ import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * Backing model to represent a {@link ManagedObject}.
@@ -65,7 +54,7 @@ import lombok.extern.log4j.Log4j2;
  * So that the model is {@link Serializable}, the {@link ManagedObject} is
  * stored as a {@link ObjectMemento}.
  */
-@Log4j2
+//@Log4j2
 public class EntityModel 
 extends ManagedObjectModel 
 implements ObjectAdapterModel, UiHintContainer, ObjectUiModel, BookmarkableModel<ManagedObject> {
@@ -100,8 +89,6 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel, BookmarkableModel
 
     private Mode mode;
     private RenderingHint renderingHint;
-    private final PendingModel pendingModel;
-
 
     // -- FACTORIES
 
@@ -165,7 +152,7 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel, BookmarkableModel
             RenderingHint renderingHint) {
         
         super(requires(commonContext, "commonContext"), adapterMemento);
-        this.pendingModel = new PendingModel(this);
+        
         this.propertyScalarModels = propertyScalarModels!=null ? propertyScalarModels : _Maps.<PropertyMemento, ScalarModel>newHashMap();
         this.mode = mode;
         this.renderingHint = renderingHint;
@@ -349,101 +336,6 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel, BookmarkableModel
         }
         // we no longer clear these, because we want to call resetPropertyModels(...) after an object has been updated.
         //propertyScalarModels.clear();
-    }
-
-
-    // //////////////////////////////////////////////////////////
-    // Pending
-    // //////////////////////////////////////////////////////////
-
-    @RequiredArgsConstructor
-    private static final class PendingModel extends Model<ObjectMemento> {
-        private static final long serialVersionUID = 1L;
-
-        @NonNull private final EntityModel entityModel;
-
-        /**
-         * Whether pending has been set (could have been set to null)
-         */
-        private boolean hasPending;
-        /**
-         * The new value (could be set to null; hasPending is used to distinguish).
-         */
-        private ObjectMemento pending;
-
-        @Override
-        public ObjectMemento getObject() {
-            if (hasPending) {
-                return pending;
-            }
-            
-            if(entityModel.memento()!=null) {
-                return entityModel.memento();
-            }
-            
-            //XXX [a.huber] as I don't understand the big picture here, given newly introduced branch above,
-            // there might be a slight chance, that this is dead code anyway ...
-            val adapter = entityModel.getObject();
-            val pojo = adapter.getPojo();
-            if(pojo!=null && _Collections.isCollectionOrArrayOrCanType(pojo.getClass())) {
-                val specId = entityModel.getTypeOfSpecification().getSpecId();
-                log.warn("potentially a bug, wild guess fix for non-scalar %s", specId);
-                val pojos = _NullSafe.streamAutodetect(pojo)
-                        .collect(Collectors.<Object>toList());
-                return entityModel.getMementoService().mementoForPojos(pojos, specId);
-            }
-            return entityModel.getMementoService().mementoForObject(adapter);
-        }
-
-        @Override
-        public void setObject(final ObjectMemento adapterMemento) {
-            pending = adapterMemento;
-            hasPending = true;
-        }
-
-        public void clearPending() {
-            this.hasPending = false;
-            this.pending = null;
-        }
-
-        private ManagedObject getPendingAdapter() {
-            val memento = getObject();
-            return entityModel.getCommonContext().reconstructObject(memento);
-        }
-
-        public ManagedObject getPendingElseCurrentAdapter() {
-            return hasPending ? getPendingAdapter() : entityModel.getObject();
-        }
-
-        public ObjectMemento getPending() {
-            return pending;
-        }
-
-        public void setPending(ObjectMemento selectedAdapterMemento) {
-            this.pending = selectedAdapterMemento;
-            hasPending=true;
-        }
-    }
-
-
-    public ManagedObject getPendingElseCurrentAdapter() {
-        return pendingModel.getPendingElseCurrentAdapter();
-    }
-
-    public ManagedObject getPendingAdapter() {
-        return pendingModel.getPendingAdapter();
-    }
-
-    public ObjectMemento getPending() {
-        return pendingModel.getPending();
-    }
-
-    public void setPending(ObjectMemento selectedAdapterMemento) {
-        pendingModel.setPending(selectedAdapterMemento);
-    }
-
-    public void clearPending() {
-        pendingModel.clearPending();
     }
 
 

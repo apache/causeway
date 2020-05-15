@@ -22,12 +22,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.collections._Collections;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -45,7 +49,9 @@ import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Represents a scalar of an entity, either a {@link Kind#PROPERTY property} or
@@ -59,12 +65,13 @@ import lombok.val;
  *     NOTE: although this inherits from {@link EntityModel}, this is wrong I think; what is being shared
  *     is just some of the implementation - both objects have to wrap some arbitrary memento holding some state
  *     (a value or entity reference in a ScalarModel's case, an entity reference in an EntityModel's), they have
- *     a view mode, they have a rendering hint, and scalar models have a pending value (not sure if Entity Model really
- *     requires this).
+ *     a view mode, they have a rendering hint, and scalar models have a pending value.
+ *     
  *     Fundamentally though a ScalarModel is NOT really an EntityModel, so this hierarchy should be broken out with a
  *     common superclass for both EntityModel and ScalarModel.
  * </p>
  */
+@Log4j2
 public abstract class ScalarModel extends EntityModel 
 implements ScalarUiModel, LinksProvider, FormExecutorContext {
 
@@ -94,6 +101,7 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
         
         this.kind = Kind.PARAMETER;
         this.parentEntityModel = parentEntityModel;
+        this.pendingModel = new PendingModel(this);
     }
 
     /**
@@ -110,6 +118,7 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
         super(parentEntityModel.getCommonContext(), mode, renderingHint);
         this.kind = Kind.PROPERTY;
         this.parentEntityModel = parentEntityModel;
+        this.pendingModel = new PendingModel(this);
     }
 
     protected ManagedObject loadFromSuper() {
@@ -437,5 +446,103 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
     public final boolean hasAssociatedActionWithInlineAsIfEdit() {
         return getAssociatedActions().hasAssociatedActionWithInlineAsIfEdit();
     }
+    
+    // //////////////////////////////////////////////////////////
+    // Pending
+    // //////////////////////////////////////////////////////////
+    
+    private final PendingModel pendingModel;
+
+    @RequiredArgsConstructor
+    private static final class PendingModel extends Model<ObjectMemento> {
+        private static final long serialVersionUID = 1L;
+
+        @NonNull private final EntityModel entityModel;
+
+        /**
+         * Whether pending has been set (could have been set to null)
+         */
+        private boolean hasPending;
+        /**
+         * The new value (could be set to null; hasPending is used to distinguish).
+         */
+        private ObjectMemento pending;
+
+        @Override
+        public ObjectMemento getObject() {
+            if (hasPending) {
+                return pending;
+            }
+            
+            if(entityModel.memento()!=null) {
+                return entityModel.memento();
+            }
+            
+            //XXX [a.huber] as I don't understand the big picture here, given newly introduced branch above,
+            // there might be a slight chance, that this is dead code anyway ...
+            val adapter = entityModel.getObject();
+            val pojo = adapter.getPojo();
+            if(pojo!=null && _Collections.isCollectionOrArrayOrCanType(pojo.getClass())) {
+                val specId = entityModel.getTypeOfSpecification().getSpecId();
+                log.warn("potentially a bug, wild guess fix for non-scalar %s", specId);
+                val pojos = _NullSafe.streamAutodetect(pojo)
+                        .collect(Collectors.<Object>toList());
+                return entityModel.getMementoService().mementoForPojos(pojos, specId);
+            }
+            return entityModel.getMementoService().mementoForObject(adapter);
+        }
+
+        @Override
+        public void setObject(final ObjectMemento adapterMemento) {
+            pending = adapterMemento;
+            hasPending = true;
+        }
+
+        public void clearPending() {
+            this.hasPending = false;
+            this.pending = null;
+        }
+
+        private ManagedObject getPendingAdapter() {
+            val memento = getObject();
+            return entityModel.getCommonContext().reconstructObject(memento);
+        }
+
+        public ManagedObject getPendingElseCurrentAdapter() {
+            return hasPending ? getPendingAdapter() : entityModel.getObject();
+        }
+
+        public ObjectMemento getPending() {
+            return pending;
+        }
+
+        public void setPending(ObjectMemento selectedAdapterMemento) {
+            this.pending = selectedAdapterMemento;
+            hasPending=true;
+        }
+    }
+
+
+    public ManagedObject getPendingElseCurrentAdapter() {
+        return pendingModel.getPendingElseCurrentAdapter();
+    }
+
+    public ManagedObject getPendingAdapter() {
+        return pendingModel.getPendingAdapter();
+    }
+
+    public ObjectMemento getPending() {
+        return pendingModel.getPending();
+    }
+
+    public void setPending(ObjectMemento selectedAdapterMemento) {
+        pendingModel.setPending(selectedAdapterMemento);
+    }
+
+    public void clearPending() {
+        pendingModel.clearPending();
+    }
+    
+    // //////////////////////////////////////////////////////////
     
 }
