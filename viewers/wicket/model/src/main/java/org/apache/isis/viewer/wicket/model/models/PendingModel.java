@@ -18,28 +18,21 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import java.util.stream.Collectors;
-
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.core.commons.internal.base._NullSafe;
-import org.apache.isis.core.commons.internal.collections._Collections;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
-import org.apache.isis.core.webapp.context.memento.ObjectMementoService;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 @RequiredArgsConstructor
-@Log4j2
 final class PendingModel extends Model<ObjectMemento> {
     private static final long serialVersionUID = 1L;
 
-    @NonNull private final ManagedObjectModel pendingValueModel;
+    @NonNull private final ManagedObjectModel ownerModel;
 
     /**
      * Whether pending has been set (could have been set to null)
@@ -48,45 +41,31 @@ final class PendingModel extends Model<ObjectMemento> {
     /**
      * The new value (could be set to null; hasPending is used to distinguish).
      */
-    private ObjectMemento pending;
+    private ObjectMemento pendingMemento;
 
     @Override
     public ObjectMemento getObject() {
         if (hasPending) {
-            return pending;
+            return pendingMemento;
         }
-        
-        if(pendingValueModel.memento()!=null) {
-            return pendingValueModel.memento();
-        }
-        
-        //XXX [a.huber] as I don't understand the big picture here, given newly introduced branch above,
-        // there might be a slight chance, that this is dead code anyway ...
-        val adapter = pendingValueModel.getObject();
-        val pojo = adapter.getPojo();
-        if(pojo!=null && _Collections.isCollectionOrArrayOrCanType(pojo.getClass())) {
-            val specId = pendingValueModel.getTypeOfSpecification().getSpecId();
-            log.warn("potentially a bug, wild guess fix for non-scalar %s", specId);
-            val pojos = _NullSafe.streamAutodetect(pojo)
-                    .collect(Collectors.<Object>toList());
-            return getMementoService().mementoForPojos(pojos, specId);
-        }
-        return getMementoService().mementoForObject(adapter);
+        return ownerModel.memento();
     }
 
     @Override
     public void setObject(final ObjectMemento adapterMemento) {
-        pending = adapterMemento;
+        pendingMemento = adapterMemento;
         hasPending = true;
     }
 
     public void clearPending() {
         this.hasPending = false;
-        this.pending = null;
+        this.pendingMemento = null;
     }
 
     public ManagedObject getPendingElseCurrentAdapter() {
-        return hasPending ? getPendingAdapter() : pendingValueModel.getObject();
+        return hasPending 
+                ? getPendingAdapter() 
+                : ownerModel.getObject();
     }
     
     ManagedObject getPendingAdapter() {
@@ -95,20 +74,18 @@ final class PendingModel extends Model<ObjectMemento> {
     }
 
     ObjectMemento getPendingMemento() {
-        return pending;
+        return pendingMemento;
     }
 
     void setPendingMemento(ObjectMemento selectedAdapterMemento) {
-        this.pending = selectedAdapterMemento;
+        this.pendingMemento = selectedAdapterMemento;
         hasPending=true;
     }
     
-    private IsisWebAppCommonContext getCommonContext() {
-        return pendingValueModel.getCommonContext();
-    }
+    // -- HELPER
     
-    private ObjectMementoService getMementoService() {
-        return pendingValueModel.getMementoService();
+    private IsisWebAppCommonContext getCommonContext() {
+        return ownerModel.getCommonContext();
     }
     
     
