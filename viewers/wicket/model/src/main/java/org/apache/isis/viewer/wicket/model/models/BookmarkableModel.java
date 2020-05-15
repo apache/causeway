@@ -21,23 +21,10 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.common.model.HasTitle;
 
-public abstract class BookmarkableModel<T> 
-extends ModelAbstract<T>  
-implements HasTitle {
-
-    private static final long serialVersionUID = 1L;
-
-    public BookmarkableModel(IsisWebAppCommonContext commonContext) {
-        super(commonContext);
-    }
-
-    public BookmarkableModel(IsisWebAppCommonContext commonContext, T t) {
-        super(commonContext, t);
-    }
-
+public interface BookmarkableModel<T> 
+extends HasTitle {
 
     /**
      * So can be bookmarked / added to <tt>BookmarkedPagesModel</tt>.

@@ -39,6 +39,7 @@ import org.apache.isis.core.security.authentication.AuthenticationRequestPasswor
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
@@ -53,8 +54,9 @@ import lombok.val;
  * also tracks thread usage (so that multiple concurrent requests are all
  * associated with the same session).
  */
-public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession 
-implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, IsisWebAppCommonContext.Delegating {
+public class AuthenticatedWebSessionForIsis 
+extends AuthenticatedWebSession 
+implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonContext {
 
     private static final long serialVersionUID = 1L;
 

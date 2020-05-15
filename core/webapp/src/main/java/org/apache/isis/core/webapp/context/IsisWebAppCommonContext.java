@@ -136,7 +136,7 @@ public class IsisWebAppCommonContext implements MetaModelContext.Delegating {
     
     // -- FOR THOSE THAT IMPLEMENT BY DELEGATION
     
-    public static interface Delegating {
+    public static interface HasCommonContext {
         
         IsisWebAppCommonContext getCommonContext();
         

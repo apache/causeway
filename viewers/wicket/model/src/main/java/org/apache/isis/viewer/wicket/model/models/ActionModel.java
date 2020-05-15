@@ -63,9 +63,9 @@ import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 
 import lombok.val;
 
-public class ActionModel 
-extends BookmarkableModel<ManagedObject> 
-implements FormUiModel, FormExecutorContext {
+public final class ActionModel 
+extends ManagedObjectModel 
+implements FormUiModel, FormExecutorContext, BookmarkableModel<ManagedObject> {
 
     private static final long serialVersionUID = 1L;
 

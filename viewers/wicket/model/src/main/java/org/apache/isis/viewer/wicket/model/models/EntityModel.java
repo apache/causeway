@@ -68,8 +68,8 @@ import lombok.extern.log4j.Log4j2;
  */
 @Log4j2
 public class EntityModel 
-extends BookmarkableModel<ManagedObject> 
-implements ObjectAdapterModel, UiHintContainer, ObjectUiModel {
+extends ManagedObjectModel 
+implements ObjectAdapterModel, UiHintContainer, ObjectUiModel, BookmarkableModel<ManagedObject> {
 
     private static final long serialVersionUID = 1L;
     

@@ -56,12 +56,11 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.MessageBroker;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
-import org.apache.isis.viewer.common.model.HasParentUiModel;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
+import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobOrClobPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
@@ -72,7 +71,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public final class FormExecutorDefault<M extends BookmarkableModel<ManagedObject> & HasParentUiModel<EntityModel>>
+public final class FormExecutorDefault<M extends FormExecutorContext>
 implements FormExecutor {
 
     private static final long serialVersionUID = 1L;
