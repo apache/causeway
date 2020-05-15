@@ -52,10 +52,10 @@ public class Select2 implements Serializable {
                 ? new Select2(
                         null,
                         Select2MultiChoiceExt.create(id,
-                                ScalarModelWithMultiPending.Util.createModel(scalarModel), scalarModel))
+                                ScalarModelWithMultiPending.create(scalarModel), scalarModel))
                 : new Select2(
                         Select2ChoiceExt.create(id,
-                                ScalarModelWithPending.Util.createModel(scalarModel), scalarModel),
+                                ScalarModelWithPending.create(scalarModel), scalarModel),
                         null);
     }
 

@@ -20,7 +20,6 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
 
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
@@ -34,33 +33,55 @@ import lombok.extern.log4j.Log4j2;
  */
 public interface ScalarModelWithPending extends Serializable {
 
-    public ObjectMemento getPending();
-    public void setPending(ObjectMemento pending);
+    public ObjectMemento getPendingMemento();
+    public void setPendingMemento(ObjectMemento pending);
 
     public ScalarModel getScalarModel();
 
+    public static Model<ObjectMemento> create(ScalarModel scalarModel) {
+        return Factory.createModel(Factory.asScalarModelWithPending(scalarModel));
+    }
+    
     @Log4j2
-    static class Util {
+    static class Factory {
+        
+        private static ScalarModelWithPending asScalarModelWithPending(final ScalarModel scalarModel) {
+            return new ScalarModelWithPending(){
 
-        public static IModel<ObjectMemento> createModel(final ScalarModel model) {
-            return createModel(model.asScalarModelWithPending());
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                public ObjectMemento getPendingMemento() {
+                    return scalarModel.getPendingMemento();
+                }
+
+                @Override
+                public void setPendingMemento(ObjectMemento pending) {
+                    scalarModel.setPendingMemento(pending);
+                }
+
+                @Override
+                public ScalarModel getScalarModel() {
+                    return scalarModel;
+                }
+            };
         }
 
-        public static Model<ObjectMemento> createModel(final ScalarModelWithPending owner) {
+        private static Model<ObjectMemento> createModel(final ScalarModelWithPending owner) {
             return new Model<ObjectMemento>() {
 
                 private static final long serialVersionUID = 1L;
 
                 @Override
                 public ObjectMemento getObject() {
-                    if (owner.getPending() != null) {
-                        log.debug("pending not null: {}", owner.getPending().toString());
-                        return owner.getPending();
+                    if (owner.getPendingMemento() != null) {
+                        log.debug("pending not null: {}", owner.getPendingMemento().toString());
+                        return owner.getPendingMemento();
                     }
                     log.debug("pending is null");
 
                     final ObjectMemento objectAdapterMemento = owner.getScalarModel().memento();
-                    owner.setPending(objectAdapterMemento);
+                    owner.setPendingMemento(objectAdapterMemento);
 
                     return objectAdapterMemento;
                 }
@@ -68,13 +89,13 @@ public interface ScalarModelWithPending extends Serializable {
                 @Override
                 public void setObject(final ObjectMemento adapterMemento) {
                     log.debug("setting to: {}", (adapterMemento!=null?adapterMemento.toString():null) );
-                    owner.setPending(adapterMemento);
+                    owner.setPendingMemento(adapterMemento);
                     final ScalarModel ownerScalarModel = owner.getScalarModel();
                     if (ownerScalarModel != null) {
                         if(adapterMemento == null) {
                             ownerScalarModel.setObject(null);
                         } else {
-                            final ObjectMemento ownerPending = owner.getPending();
+                            final ObjectMemento ownerPending = owner.getPendingMemento();
                             if (ownerPending != null) {
                                 log.debug("setting to pending: {}", ownerPending.toString());
                                 ownerScalarModel.setObject(
@@ -87,4 +108,6 @@ public interface ScalarModelWithPending extends Serializable {
         }
 
     }
+
+
 }

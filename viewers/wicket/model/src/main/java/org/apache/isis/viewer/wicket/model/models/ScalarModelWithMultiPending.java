@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -41,15 +40,42 @@ public interface ScalarModelWithMultiPending extends Serializable {
     public void setMultiPending(ArrayList<ObjectMemento> pending);
 
     public ScalarModel getScalarModel();
+    
+    public static Model<ArrayList<ObjectMemento>> create(ScalarModel scalarModel) {
+        return Factory.createModel(Factory.asScalarModelWithMultiPending(scalarModel));
+    }
+    
 
     @Log4j2
-    static class Util {
+    static class Factory {
 
-        public static IModel<ArrayList<ObjectMemento>> createModel(final ScalarModel model) {
-            return createModel(model.asScalarModelWithMultiPending());
+        private static ScalarModelWithMultiPending asScalarModelWithMultiPending(final ScalarModel scalarModel) {
+            return new ScalarModelWithMultiPending(){
+
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                public ArrayList<ObjectMemento> getMultiPending() {
+                    ObjectMemento pendingMemento = scalarModel.getPendingMemento();
+                    return ObjectMemento.unwrapList(pendingMemento)
+                            .orElse(null);
+                }
+
+                @Override
+                public void setMultiPending(final ArrayList<ObjectMemento> pending) {
+                    ObjectSpecId specId = getScalarModel().getTypeOfSpecification().getSpecId();
+                    ObjectMemento adapterMemento = ObjectMemento.wrapMementoList(pending, specId);
+                    scalarModel.setPendingMemento(adapterMemento);
+                }
+
+                @Override
+                public ScalarModel getScalarModel() {
+                    return scalarModel;
+                }
+            };
         }
 
-        public static Model<ArrayList<ObjectMemento>> createModel(final ScalarModelWithMultiPending owner) {
+        private static Model<ArrayList<ObjectMemento>> createModel(final ScalarModelWithMultiPending owner) {
             return new Model<ArrayList<ObjectMemento>>() {
 
                 private static final long serialVersionUID = 1L;

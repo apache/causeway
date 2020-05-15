@@ -393,7 +393,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
             // flush changes to pending
             ObjectMemento convertedInput = select2.getConvertedInput();
 
-            getModel().setPending(convertedInput);
+            getModel().setPendingMemento(convertedInput);
             if(select2 != null) {
                 select2.getModel().setObject(convertedInput);
             }

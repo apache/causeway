@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -211,11 +210,11 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
             val pojos = objectAdapter.getPojo();
             val memento = super.getMementoService()
                     .mementoForPojos(_Casts.uncheckedCast(pojos), getTypeOfSpecification().getSpecId());
-            setPending(memento);
+            setPendingMemento(memento);
         } else {
             val memento = super.getMementoService()
                     .mementoForObject(objectAdapter);
-            setPending(memento);
+            setPendingMemento(memento);
         }
     }
     
@@ -253,60 +252,6 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
     @Override
     public List<LinkAndLabel> getLinks() {
         return Collections.unmodifiableList(linkAndLabels);
-    }
-
-    /**
-     * @return
-     */
-    public ScalarModelWithPending asScalarModelWithPending() {
-        return new ScalarModelWithPending(){
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public ObjectMemento getPending() {
-                return ScalarModel.this.getPending();
-            }
-
-            @Override
-            public void setPending(ObjectMemento pending) {
-                ScalarModel.this.setPending(pending);
-            }
-
-            @Override
-            public ScalarModel getScalarModel() {
-                return ScalarModel.this;
-            }
-        };
-    }
-
-    /**
-     * @return
-     */
-    public ScalarModelWithMultiPending asScalarModelWithMultiPending() {
-        return new ScalarModelWithMultiPending(){
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public ArrayList<ObjectMemento> getMultiPending() {
-                ObjectMemento pendingMemento = ScalarModel.this.getPending();
-                return ObjectMemento.unwrapList(pendingMemento)
-                        .orElse(null);
-            }
-
-            @Override
-            public void setMultiPending(final ArrayList<ObjectMemento> pending) {
-                ObjectSpecId specId = getScalarModel().getTypeOfSpecification().getSpecId();
-                ObjectMemento adapterMemento = ObjectMemento.wrapMementoList(pending, specId);
-                ScalarModel.this.setPending(adapterMemento);
-            }
-
-            @Override
-            public ScalarModel getScalarModel() {
-                return ScalarModel.this;
-            }
-        };
     }
 
     @Override
@@ -521,11 +466,11 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
             return hasPending ? getPendingAdapter() : pendingValueModel.getObject();
         }
 
-        public ObjectMemento getPending() {
+        public ObjectMemento getPendingMemento() {
             return pending;
         }
 
-        public void setPending(ObjectMemento selectedAdapterMemento) {
+        public void setPendingMemento(ObjectMemento selectedAdapterMemento) {
             this.pending = selectedAdapterMemento;
             hasPending=true;
         }
@@ -540,12 +485,12 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         return pendingModel.getPendingAdapter();
     }
 
-    public ObjectMemento getPending() {
-        return pendingModel.getPending();
+    public ObjectMemento getPendingMemento() {
+        return pendingModel.getPendingMemento();
     }
 
-    public void setPending(ObjectMemento selectedAdapterMemento) {
-        pendingModel.setPending(selectedAdapterMemento);
+    public void setPendingMemento(ObjectMemento selectedAdapterMemento) {
+        pendingModel.setPendingMemento(selectedAdapterMemento);
     }
 
     public void clearPending() {
