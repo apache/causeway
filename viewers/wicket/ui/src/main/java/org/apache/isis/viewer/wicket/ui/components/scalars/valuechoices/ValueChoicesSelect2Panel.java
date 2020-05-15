@@ -169,9 +169,8 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
 
     @Override
     protected void syncIfNull(final Select2 select2) {
-        final ObjectMemento curr = getModel().memento();
 
-        if(curr == null) {
+        if(getModel().isEmpty()) {
             select2.getModel().setObject(null);
         }
     }

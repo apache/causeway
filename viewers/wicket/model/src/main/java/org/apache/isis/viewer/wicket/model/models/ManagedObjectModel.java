@@ -167,6 +167,10 @@ extends ModelAbstract<ManagedObject> {
                 .map(objectSpec->objectSpec.getFacet(facetClass));
     }
     
+    public boolean isEmpty() {
+        return memento == null;
+    }
+    
     // -- CONTRACT
     
     @Override
@@ -185,13 +189,13 @@ extends ModelAbstract<ManagedObject> {
     
     // -- DEPRECATIONS
     
-    @Deprecated //TODO do not expose this implementation detail
-    public ObjectMemento memento() {
+    @Deprecated //XXX we'de rather not expose this implementation detail
+    ObjectMemento memento() {
         return memento;
     }
     
-    @Deprecated //TODO do not expose this implementation detail
-    public void memento(ObjectMemento memento) {
+    @Deprecated //XXX we'de rather not expose this implementation detail
+    void memento(ObjectMemento memento) {
         val manageObject = super.getCommonContext().reconstructObject(memento);
         super.setObject(manageObject);
         this.memento = memento;
