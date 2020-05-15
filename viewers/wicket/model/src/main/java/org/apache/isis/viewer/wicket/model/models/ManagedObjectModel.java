@@ -77,6 +77,7 @@ extends ModelAbstract<ManagedObject> {
 
         if(ManagedObject.isNullOrUnspecifiedOrEmpty(adapter)) {
             super.setObject(null);
+            memento = null;
             return;
         }
 
@@ -93,6 +94,7 @@ extends ModelAbstract<ManagedObject> {
         
         if(ManagedObject.isNullOrUnspecifiedOrEmpty(adapter)) {
             super.setObject(null);
+            memento = null;
             return;
         }
 

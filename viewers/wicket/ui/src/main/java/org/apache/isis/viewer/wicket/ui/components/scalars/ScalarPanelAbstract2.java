@@ -172,11 +172,10 @@ implements ScalarModelSubscriber2 {
         if(valueChanged) {
             if(ManagedObject.isNullOrUnspecifiedOrEmpty(paramValue)) {
                 scalarModel.setObject(null);
-                scalarModel.setPendingMemento(null);
             } else {
                 scalarModel.setObject(paramValue);
-                scalarModel.setPendingAdapter(paramValue);
-            }               
+            }
+            scalarModel.clearPending();
         }
         
 

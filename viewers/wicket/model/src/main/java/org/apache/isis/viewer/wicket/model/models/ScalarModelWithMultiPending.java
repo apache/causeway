@@ -56,7 +56,7 @@ public interface ScalarModelWithMultiPending extends Serializable {
 
                 @Override
                 public ArrayList<ObjectMemento> getMultiPending() {
-                    ObjectMemento pendingMemento = scalarModel.getPendingMemento();
+                    ObjectMemento pendingMemento = scalarModel.getPendingModel().getPendingMemento();
                     return ObjectMemento.unwrapList(pendingMemento)
                             .orElse(null);
                 }
@@ -65,7 +65,7 @@ public interface ScalarModelWithMultiPending extends Serializable {
                 public void setMultiPending(final ArrayList<ObjectMemento> pending) {
                     ObjectSpecId specId = getScalarModel().getTypeOfSpecification().getSpecId();
                     ObjectMemento adapterMemento = ObjectMemento.wrapMementoList(pending, specId);
-                    scalarModel.setPendingMemento(adapterMemento);
+                    scalarModel.getPendingModel().setPendingMemento(adapterMemento);
                 }
 
                 @Override
