@@ -45,7 +45,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
         super(commonContext);
     }
 
-    public void bookmarkPage(final BookmarkableModel<?> bookmarkableModel) {
+    public void bookmarkPage(final BookmarkableModel bookmarkableModel) {
 
         // hack: remove any garbage that might've got stored in 'rootNodes'
         cleanUpGarbage(rootNodes);

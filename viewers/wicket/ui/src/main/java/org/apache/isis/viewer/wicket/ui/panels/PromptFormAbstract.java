@@ -57,7 +57,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 
-public abstract class PromptFormAbstract<T extends BookmarkableModel<ManagedObject>
+public abstract class PromptFormAbstract<T extends BookmarkableModel
 & HasParentUiModel<EntityModel>
 & IModel<ManagedObject>
 & FormExecutorContext>

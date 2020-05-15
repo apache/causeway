@@ -65,7 +65,7 @@ import lombok.val;
 
 public final class ActionModel 
 extends ManagedObjectModel 
-implements FormUiModel, FormExecutorContext, BookmarkableModel<ManagedObject> {
+implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
     private static final long serialVersionUID = 1L;
 

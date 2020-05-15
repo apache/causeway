@@ -72,7 +72,8 @@ import lombok.extern.log4j.Log4j2;
  * </p>
  */
 @Log4j2
-public abstract class ScalarModel extends EntityModel 
+public abstract class ScalarModel 
+extends EntityModel 
 implements ScalarUiModel, LinksProvider, FormExecutorContext {
 
     private static final long serialVersionUID = 1L;

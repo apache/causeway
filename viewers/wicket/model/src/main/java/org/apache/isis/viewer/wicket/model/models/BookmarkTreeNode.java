@@ -54,12 +54,12 @@ public class BookmarkTreeNode implements Serializable {
     private PageParameters pageParameters;
 
     public static BookmarkTreeNode newRoot(
-            BookmarkableModel<?> bookmarkableModel) {
+            BookmarkableModel bookmarkableModel) {
         return new BookmarkTreeNode(bookmarkableModel, 0);
     }
 
     private BookmarkTreeNode(
-            final BookmarkableModel<?> bookmarkableModel,
+            final BookmarkableModel bookmarkableModel,
             final int depth) {
         pageParameters = bookmarkableModel.getPageParametersWithoutUiHints();
         RootOid oid = oidFrom(pageParameters);
@@ -90,7 +90,7 @@ public class BookmarkTreeNode implements Serializable {
     public List<BookmarkTreeNode> getChildren() {
         return children;
     }
-    public BookmarkTreeNode addChild(BookmarkableModel<?> childModel) {
+    public BookmarkTreeNode addChild(BookmarkableModel childModel) {
         final BookmarkTreeNode childNode = new BookmarkTreeNode(childModel, depth+1);
         children.add(childNode);
         return childNode;
@@ -110,7 +110,7 @@ public class BookmarkTreeNode implements Serializable {
      *
      * @return - whether the provided candidate is found or was added to this node's tree.
      */
-    public boolean matches(BookmarkableModel<?> candidateBookmarkableModel) {
+    public boolean matches(BookmarkableModel candidateBookmarkableModel) {
         if(candidateBookmarkableModel instanceof EntityModel) {
             if(this.pageType != PageType.ENTITY) {
                 return false;
@@ -188,7 +188,7 @@ public class BookmarkTreeNode implements Serializable {
         return true;
     }
 
-    private boolean addToGraphIfParented(BookmarkableModel<?> candidateBookmarkableModel) {
+    private boolean addToGraphIfParented(BookmarkableModel candidateBookmarkableModel) {
 
         final boolean whetherAdded[] = {false}; // simply a fast non-thread-safe value reference
 
@@ -258,7 +258,7 @@ public class BookmarkTreeNode implements Serializable {
         }
     }
 
-    public static String oidStrFrom(BookmarkableModel<?> candidateBookmarkableModel) {
+    public static String oidStrFrom(BookmarkableModel candidateBookmarkableModel) {
         final RootOid oid = oidFrom(candidateBookmarkableModel.getPageParametersWithoutUiHints());
         return oid != null? Oid.marshaller().marshal(oid): null;
     }
