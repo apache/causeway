@@ -26,7 +26,6 @@ import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @RequiredArgsConstructor
 final class PendingModel extends Model<ObjectMemento> {
@@ -38,6 +37,7 @@ final class PendingModel extends Model<ObjectMemento> {
      * Whether pending has been set (could have been set to null)
      */
     private boolean hasPending;
+    
     /**
      * The new value (could be set to null; hasPending is used to distinguish).
      */
@@ -45,16 +45,13 @@ final class PendingModel extends Model<ObjectMemento> {
 
     @Override
     public ObjectMemento getObject() {
-        if (hasPending) {
-            return pendingMemento;
-        }
-        return ownerModel.memento();
+        return pendingMemento;
     }
 
     @Override
-    public void setObject(final ObjectMemento adapterMemento) {
-        pendingMemento = adapterMemento;
-        hasPending = true;
+    public void setObject(final ObjectMemento pendingMemento) {
+        this.pendingMemento = pendingMemento;
+        this.hasPending = true;
     }
 
     public void clearPending() {
@@ -64,23 +61,10 @@ final class PendingModel extends Model<ObjectMemento> {
 
     public ManagedObject getPendingElseCurrentAdapter() {
         return hasPending 
-                ? getPendingAdapter() 
+                ? getCommonContext().reconstructObject(pendingMemento) 
                 : ownerModel.getObject();
     }
-    
-    ManagedObject getPendingAdapter() {
-        val memento = getObject();
-        return getCommonContext().reconstructObject(memento);
-    }
 
-    ObjectMemento getPendingMemento() {
-        return pendingMemento;
-    }
-
-    void setPendingMemento(ObjectMemento selectedAdapterMemento) {
-        this.pendingMemento = selectedAdapterMemento;
-        hasPending=true;
-    }
     
     // -- HELPER
     

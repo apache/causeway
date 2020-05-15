@@ -52,12 +52,12 @@ public interface ScalarModelWithPending extends Serializable {
 
                 @Override
                 public ObjectMemento getPendingMemento() {
-                    return scalarModel.getPendingModel().getPendingMemento();
+                    return scalarModel.getPendingModel().getObject();
                 }
 
                 @Override
                 public void setPendingMemento(ObjectMemento pending) {
-                    scalarModel.getPendingModel().setPendingMemento(pending);
+                    scalarModel.getPendingModel().setObject(pending);
                 }
 
                 @Override
