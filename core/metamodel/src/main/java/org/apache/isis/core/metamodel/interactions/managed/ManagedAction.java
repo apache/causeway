@@ -80,9 +80,14 @@ public final class ManagedAction extends ManagedMember {
             
         //TODO validate params, and handle invocation exceptions
         
-        val actionResult = getAction()
+        val action = getAction();
+        
+        val actionResult = action
                 .execute(InteractionHead.simple(getOwner()) , actionParameters, InteractionInitiatedBy.USER);
         
+        if(actionResult==null) {
+            return _Either.left(ManagedObject.empty(action.getReturnType()));
+        }
         return _Either.left(actionResult);
         
     }

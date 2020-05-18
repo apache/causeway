@@ -149,7 +149,13 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     @Override
     public DomainObjectReprRenderer with(final ManagedObject objectAdapter) {
         this.objectAdapter = objectAdapter;
-        String domainTypeHref = DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.DOMAIN_TYPE, objectAdapter.getSpecification()).build().getString("href");
+        String domainTypeHref = DomainTypeReprRenderer
+                .newLinkToBuilder(
+                        getResourceContext(), 
+                        Rel.DOMAIN_TYPE, 
+                        objectAdapter.getSpecification())
+                .build()
+                .getString("href");
         addMediaTypeParams(X_RO_DOMAIN_TYPE, domainTypeHref);
         return this;
     }

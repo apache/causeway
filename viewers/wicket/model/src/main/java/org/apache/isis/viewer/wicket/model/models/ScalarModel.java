@@ -268,12 +268,6 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
 
     // //////////////////////////////////////
 
-    //    @Override
-    //    public boolean isInlinePrompt() {
-    //        return getPromptStyle() == PromptStyle.INLINE && canEnterEditMode();
-    //    }
-
-
     private InlinePromptContext inlinePromptContext;
 
     /**
