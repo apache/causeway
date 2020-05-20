@@ -15,13 +15,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.app</groupId>
-		<artifactId>isis-app-starter-parent</artifactId>
+		<groupId>org.apache.isis.examples.apps</groupId>
+		<artifactId>demo-parent</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
-		<relativePath>../../../starters/pom.xml</relativePath>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.examples.apps</groupId>
 	<artifactId>demo-vaadin</artifactId>
 
 	<name>Apache Isis App - Demo (Vaadin)</name>
