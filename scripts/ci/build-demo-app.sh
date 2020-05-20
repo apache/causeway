@@ -92,6 +92,7 @@ do
 	
 	mvn --batch-mode \
 	    compile jib:build \
+	    -Djib.httpTimeout=60000 \
 	    -Dflavor=$FLAVOR \
 	    -Dskip.git \
 	    -Dskip.arch \
