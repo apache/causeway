@@ -8,9 +8,9 @@ It is bundled as a Docker image (link:https://hub.docker.com/r/apacheisis/demo-s
 The app allows you to learn the very basics with a minimum of hassle.
 You can also use it to discover some of the more advanced features that the framework has to offer.
 
-image::https://raw.githubusercontent.com/apache/isis/master/examples/demo/demo/src/main/adoc/modules/demo/images/teaser-light.png[link="https://raw.githubusercontent.com/apache/isis/master/examples/demo/demo/src/main/adoc/modules/demo/images/teaser-light.png"]
+image::https://raw.githubusercontent.com/apache/isis/master/examples/demo/domain/src/main/adoc/modules/demo/images/teaser-light.png[link="https://raw.githubusercontent.com/apache/isis/master/examples/demo/domain/src/main/adoc/modules/demo/images/teaser-light.png"]
 
-image::https://raw.githubusercontent.com/apache/isis/master/examples/demo/demo/src/main/adoc/modules/demo/images/teaser-dark.png[link="https://raw.githubusercontent.com/apache/isis/master/examples/demo/demo/src/main/adoc/modules/demo/images/teaser-dark.png"]
+image::https://raw.githubusercontent.com/apache/isis/master/examples/demo/domain/src/main/adoc/modules/demo/images/teaser-dark.png[link="https://raw.githubusercontent.com/apache/isis/master/examples/demo/domain/src/main/adoc/modules/demo/images/teaser-dark.png"]
 
 == Prereqs
 
