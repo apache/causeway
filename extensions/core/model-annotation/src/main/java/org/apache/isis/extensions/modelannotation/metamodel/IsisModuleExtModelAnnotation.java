@@ -16,13 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.model.metamodel;
+package org.apache.isis.extensions.modelannotation.metamodel;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.incubator.model.applib.IsisModuleIncModelApplib;
-import org.apache.isis.incubator.model.metamodel.services.IncubatorMetaModelPlugin;
+import org.apache.isis.extensions.modelannotation.applib.IsisModuleIncModelApplib;
+import org.apache.isis.extensions.modelannotation.metamodel.services.IncubatorMetaModelPlugin;
 
 @Configuration
 @Import({
@@ -32,6 +32,6 @@ import org.apache.isis.incubator.model.metamodel.services.IncubatorMetaModelPlug
         // @Component's
         IncubatorMetaModelPlugin.class
 })
-public class IsisModuleIncModelMetaModel {
+public class IsisModuleExtModelAnnotation {
 
 }

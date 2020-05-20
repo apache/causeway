@@ -42,7 +42,7 @@ import org.apache.isis.applib.util.JaxbAdapters.OffsetDateTimeAdapter;
 import org.apache.isis.applib.util.JaxbAdapters.SqlDateAdapter;
 import org.apache.isis.applib.util.JaxbAdapters.SqlTimestampAdapter;
 import org.apache.isis.core.commons.internal.debug._Probe;
-import org.apache.isis.incubator.model.applib.annotation.Model;
+import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.Getter;
 import lombok.Setter;

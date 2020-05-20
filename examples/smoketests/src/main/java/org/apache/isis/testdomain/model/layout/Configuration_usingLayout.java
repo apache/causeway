@@ -22,11 +22,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.incubator.model.metamodel.IsisModuleIncModelMetaModel;
+import org.apache.isis.extensions.modelannotation.metamodel.IsisModuleExtModelAnnotation;
 
 @Configuration
 @Import({
-    IsisModuleIncModelMetaModel.class
+    IsisModuleExtModelAnnotation.class
 })
 @ComponentScan(
         basePackageClasses= {               

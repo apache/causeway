@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.model.applib;
+package org.apache.isis.extensions.modelannotation.applib;
 
 import org.springframework.context.annotation.Configuration;
 

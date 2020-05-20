@@ -43,7 +43,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Markup;
-import org.apache.isis.incubator.model.applib.annotation.Model;
+import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -15,22 +15,22 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.incubator</groupId>
-		<artifactId>isis-incubator</artifactId>
+		<groupId>org.apache.isis.extensions</groupId>
+		<artifactId>isis-extensions</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-incubator-model</artifactId>
-	<name>Apache Isis Inc - @Model</name>
+	<artifactId>isis-extensions-modelannotation</artifactId>
+	<name>Apache Isis Ext - @Model</name>
 	<description>
 		Allows supporting methods to be annotated as @Model, to make explicit the bounds of the metamodel.
 	</description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.incubator.model</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/incubator/model</git-plugin.propertiesDir>
-	</properties>
+        <jar-plugin.automaticModuleName>org.apache.isis.extensions.modelannotation</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/modelannotation</git-plugin.propertiesDir>
+    </properties>
 
 	<dependencies>
 	

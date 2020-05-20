@@ -16,24 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.model.metamodel.services;
 
-import org.springframework.stereotype.Component;
+package org.apache.isis.extensions.modelannotation.applib.annotation;
 
-import org.apache.isis.incubator.model.metamodel.facets.SupportingMethodValidatorRefinerFactory;
-import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@Component
-public class IncubatorMetaModelPlugin implements MetaModelRefiner {
-
-    @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
-        programmingModel.addFactory(
-                ProgrammingModel.FacetProcessingOrder.C2_AFTER_METHOD_REMOVING, 
-                SupportingMethodValidatorRefinerFactory.class,
-                ProgrammingModel.Marker.INCUBATING
-                );
-    }
+/**
+ * Indicates that a method is a supporting-method, one that contributes (hide, validate, ...) 
+ * to an <em>Action/</em>.
+ * <p>
+ * By placing the {@link Model} annotation on a method, a contract with the meta-model is enforced, 
+ * such that this method must be recognized and cannot be ignored.
+ *
+ * @since 2.0
+ */
+@Inherited
+@Target({ ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Model {
 
 }

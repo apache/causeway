@@ -30,7 +30,7 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.incubator.model.applib.annotation.Model;
+import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;

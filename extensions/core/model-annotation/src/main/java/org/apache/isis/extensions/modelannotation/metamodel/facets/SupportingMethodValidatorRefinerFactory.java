@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.model.metamodel.facets;
+package org.apache.isis.extensions.modelannotation.metamodel.facets;
 
 import java.lang.reflect.Method;
 import java.util.HashSet;
@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.incubator.model.applib.annotation.Model;
+import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 /**
  * 

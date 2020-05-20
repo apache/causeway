@@ -76,14 +76,12 @@
 			<artifactId>isis-valuetypes-asciidoc-ui-wkt</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.incubator</groupId>
-			<artifactId>isis-incubator-model</artifactId>
-			<!-- incubator version is not managed by app starter bundles -->
-			<version>${project.version}</version> 
-		</dependency>
-		<dependency>
 			<groupId>org.apache.isis.valuetypes</groupId>
 			<artifactId>isis-valuetypes-sse-ui</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-modelannotation</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
