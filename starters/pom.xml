@@ -339,7 +339,7 @@ under the License.
 				</property>
 			</activation>
 			<properties>
-				<jib-maven-plugin.version>2.1.0</jib-maven-plugin.version>
+				<jib-maven-plugin.version>2.2.0</jib-maven-plugin.version>
 			</properties>
 			<build>
 				<pluginManagement>
