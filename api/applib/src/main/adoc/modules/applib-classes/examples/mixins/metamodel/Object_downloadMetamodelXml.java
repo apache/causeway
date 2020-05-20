@@ -39,7 +39,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Action(
-        domainEvent = Object_downloadMetaModelXml.ActionDomainEvent.class,
+        domainEvent = Object_downloadMetamodelXml.ActionDomainEvent.class,
         semantics = SemanticsOf.SAFE,
         restrictTo = RestrictTo.PROTOTYPING
         )
@@ -48,12 +48,12 @@ import lombok.val;
         position = ActionLayout.Position.PANEL_DROPDOWN
         )
 @RequiredArgsConstructor
-public class Object_downloadMetaModelXml {
+public class Object_downloadMetamodelXml {
 
     private final Object holder;
 
     public static class ActionDomainEvent 
-    extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_downloadMetaModelXml> {}
+    extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_downloadMetamodelXml> {}
 
     @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.2")
     public Object act(

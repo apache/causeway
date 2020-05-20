@@ -27,7 +27,6 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.LongAdder;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;

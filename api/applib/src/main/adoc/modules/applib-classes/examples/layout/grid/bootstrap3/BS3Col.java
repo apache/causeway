@@ -35,6 +35,8 @@ import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutDataOwner;
 import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.applib.layout.component.FieldSetOwner;
+import org.apache.isis.core.commons.internal.primitives._Ints;
+import org.apache.isis.core.commons.internal.primitives._Ints.Bound;
 
 /**
  * A column within a row which, depending on its {@link #getSpan()}, could be as narrow as 1/12th of the page's width, all the way up to spanning the entire page.
@@ -71,7 +73,7 @@ CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
 
     private static final long serialVersionUID = 1L;
 
-
+    private static final _Ints.Range range1_12 = _Ints.Range.of(Bound.inclusive(1), Bound.inclusive(12));
 
     private String id;
 
@@ -93,11 +95,11 @@ CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
 
     @XmlAttribute(required = true)
     public int getSpan() {
-        return span;
+        return range1_12.bounded(span);
     }
 
     public void setSpan(final int span) {
-        this.span = span;
+        this.span = range1_12.bounded(span);
     }
 
 
