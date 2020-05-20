@@ -53,8 +53,8 @@ jobs:
       shell: bash
       run: bash $CI_SCRIPTS_PATH/build-core.sh
       env:
-        # also build and run smoketests
-        MVN_ADDITIONAL_OPTS: -Dsmoketests-module
+        # also build and run smoketests and kroviz
+        MVN_ADDITIONAL_OPTS: -Dsmoketests-module -Dkroviz-module
 
 # FOR DEBUG USE
 #   - name: Dump GitHub context 
