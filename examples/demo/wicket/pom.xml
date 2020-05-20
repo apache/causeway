@@ -28,6 +28,7 @@
 	<packaging>${packaging.type}</packaging>
 
 	<properties>
+		<sonar.skip>true</sonar.skip>
 		<packaging.type>jar</packaging.type>
 
 		<maven-war-plugin.warName>${project.artifactId}</maven-war-plugin.warName>
@@ -63,7 +64,7 @@
 	
 		<dependency>
 			<groupId>org.apache.isis.examples.apps</groupId>
-			<artifactId>demo</artifactId>
+			<artifactId>demo-domain</artifactId>
 			<version>${project.version}</version>
 			<type>jar</type>
 		</dependency>
