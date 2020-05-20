@@ -46,14 +46,29 @@ echo "\$Docker Image Flavor: ${FLAVOR}"
 echo "\$Isis Version: ${ISIS_VERSION}"
 echo ""
 
-#
-# update version (but just for the modules we need to build)
-#
-if [ ! -z "$REVISION" ]; then
-  cd $PROJECT_ROOT_PATH/core-parent
-  mvn versions:set -DnewVersion=$REVISION -Ddemo-app-modules
-  cd $PROJECT_ROOT_PATH
-fi
+function setRevision() {
+	#
+	# set version (but just for the modules we need to build)
+	#
+	if [ ! -z "$REVISION" ]; then
+	  cd $PROJECT_ROOT_PATH/core-parent
+	  mvn versions:set -DnewVersion=$REVISION -Ddemo-app-module
+	  cd $PROJECT_ROOT_PATH
+	fi
+}
+
+function revertRevision() {
+	#
+	# revert the version (but just for the modules we need to build)
+	#
+	if [ ! -z "$REVISION" ]; then
+	  cd $PROJECT_ROOT_PATH/core-parent
+	  mvn versions:revert -DnewVersion=$REVISION -Ddemo-app-module
+	  cd $PROJECT_ROOT_PATH
+	fi
+}
+
+setRevision
 
 #
 # now build the apps
@@ -86,14 +101,6 @@ do
   cd $PROJECT_ROOT_PATH
 done
 
+revertRevision
 
 
-
-#
-# finally, revert the version
-#
-if [ ! -z "$REVISION" ]; then
-  cd $PROJECT_ROOT_PATH/core-parent
-  mvn versions:revert -Dstarter-apps-modules
-  cd $PROJECT_ROOT_PATH
-fi
