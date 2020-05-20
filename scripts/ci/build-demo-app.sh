@@ -47,23 +47,27 @@ echo "\$Isis Version: ${ISIS_VERSION}"
 echo ""
 
 function setRevision() {
+	local dir=core-parent
+
 	#
 	# set version (but just for the modules we need to build)
 	#
 	if [ ! -z "$REVISION" ]; then
-	  cd $PROJECT_ROOT_PATH/core-parent
-	  mvn versions:set -DnewVersion=$REVISION -Ddemo-app-module
+	  cd $PROJECT_ROOT_PATH/${dir}
+	  mvn versions:set -DnewVersion=$REVISION -P demo-app-module
 	  cd $PROJECT_ROOT_PATH
 	fi
 }
 
 function revertRevision() {
+	local dir=core-parent
+	
 	#
 	# revert the version (but just for the modules we need to build)
 	#
 	if [ ! -z "$REVISION" ]; then
-	  cd $PROJECT_ROOT_PATH/core-parent
-	  mvn versions:revert -DnewVersion=$REVISION -Ddemo-app-module
+	  cd $PROJECT_ROOT_PATH/${dir}
+	  mvn versions:revert -DnewVersion=$REVISION -P demo-app-module
 	  cd $PROJECT_ROOT_PATH
 	fi
 }
