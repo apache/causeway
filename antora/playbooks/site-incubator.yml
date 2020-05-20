@@ -38,9 +38,6 @@ content:
       start_path: incubator/adoc # incubator
       branches: HEAD
     - url: .
-      start_path: incubator/core/model/src/main/adoc # incubator
-      branches: HEAD
-    - url: .
       start_path: incubator/mappings/microprofile/src/main/adoc # incubator
       branches: HEAD
 
