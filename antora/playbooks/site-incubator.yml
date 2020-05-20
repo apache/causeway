@@ -29,7 +29,7 @@ content:
       branches: HEAD
 # examples
     - url: .
-      start_path: examples/demo/demo-domain/src/main/adoc # docs
+      start_path: examples/demo/demo/src/main/adoc # docs
       branches: HEAD
 
 
