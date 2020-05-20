@@ -170,7 +170,7 @@
 
 	<modules>
 		<module>core/flyway</module>
-		<module>core/modelannotation</module>
+		<module>core/model-annotation</module>
 		<module>security/secman</module>
 		<module>security/shiro-realm-ldap</module>
 
