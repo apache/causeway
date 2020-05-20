@@ -18,7 +18,7 @@
         <groupId>org.apache.isis.app</groupId>
         <artifactId>isis-app-starter-parent</artifactId>
         <version>2.0.0-SNAPSHOT</version>
-		<!-- explicitly setting the path so sonar analysis does not fail parsing this? -->
+		<!-- explicitly setting the path so sonar analysis does not fail parsing this POM -->
         <relativePath>../../starters/pom.xml</relativePath>
     </parent>
 
