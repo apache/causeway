@@ -101,6 +101,9 @@ content:
       branches: HEAD
 
     - url: .
+      start_path: extensions/core/model-annotation/src/main/adoc # extensions
+      branches: HEAD
+    - url: .
       start_path: extensions/core/command-log/adoc # extensions
       branches: HEAD
     - url: .
@@ -139,9 +142,6 @@ content:
 # incubator
     - url: .
       start_path: incubator/adoc # incubator
-      branches: HEAD
-    - url: .
-      start_path: incubator/core/model/src/main/adoc # incubator
       branches: HEAD
     - url: .
       start_path: incubator/mappings/microprofile/src/main/adoc # incubator
