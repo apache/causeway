@@ -2,6 +2,7 @@ package org.apache.isis.client.kroviz.ui.kv
 
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.*
+import org.apache.isis.client.kroviz.utils.Direction
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.core.Widget
@@ -39,6 +40,22 @@ class RoDialog(
                 close()
             }
 
+    private val scaleUpButton = Button(
+            "",
+            "fas fa-plus",
+            ButtonStyle.OUTLINEINFO)
+            .onClick {
+                (command as ImageDialog).scale(Direction.UP)
+            }
+
+    private val scaleDownButton = Button(
+            "",
+            "fas fa-minus",
+            ButtonStyle.OUTLINEINFO)
+            .onClick {
+                (command as ImageDialog).scale(Direction.DOWN)
+            }
+
     var formPanel: FormPanel<String>? = null
 
     init {
@@ -63,6 +80,10 @@ class RoDialog(
             }
             buttonBar.add(okButton)
             buttonBar.add(cancelButton)
+            if (items.isNotEmpty() && hasScalableContent()) {
+                buttonBar.add(scaleDownButton)
+                buttonBar.add(scaleUpButton)
+            }
             add(buttonBar)
         }
     }
@@ -88,8 +109,8 @@ class RoDialog(
         dispose()
     }
 
-    fun hasScalableContent(): Boolean {
-        val scalable = items.first { it.type == ValueType.IMAGE.type }
+    private fun hasScalableContent(): Boolean {
+        val scalable = items.firstOrNull() { it.type == ValueType.IMAGE.type }
         return scalable != null
     }
 
