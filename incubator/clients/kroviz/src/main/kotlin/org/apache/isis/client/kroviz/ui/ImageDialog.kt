@@ -10,20 +10,20 @@ import org.apache.isis.client.kroviz.utils.UmlUtils
 @ExperimentalUnsignedTypes
 class ImageDialog(
         var label: String = defaultLabel,
-        var pumlCode: String = defaultPumlCode) : Command {
+        private var pumlCode: String = defaultPumlCode) : Command {
 
     companion object {
-        val defaultLabel = "UML Diagram Sample"
-        val defaultPumlCode = "\"" +
+        const val defaultLabel = "UML Diagram Sample"
+        const val defaultPumlCode = "\"" +
                 "participant BOB [[https://en.wiktionary.org/wiki/best_of_breed]]\\n" +
                 "participant PITA [[https://en.wiktionary.org/wiki/PITA]]\\n" +
                 "BOB -> PITA: sometimes is a" +
                 "\""
     }
 
-    val uuid: String = DomHelper.uuid()
+    private val uuid: String = DomHelper.uuid()
     private var dialog: RoDialog
-    val formItems = mutableListOf<FormItem>()
+    private val formItems = mutableListOf<FormItem>()
 
     fun open() {
         dialog.open()

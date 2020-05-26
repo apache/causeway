@@ -10,14 +10,13 @@ enum class Direction(val id: String) {
 
 class ScalableVectorGraphic(val data: String) {
 
-    private val parser = DOMParser()
-    private val mimeType = "image/svg+xml"
     private val tag = "viewBox"
     var document: Document
     var viewBox: ViewBox
 
     init {
-        document = parser.parseFromString(data, mimeType)
+        val mimeType = "image/svg+xml"
+        document = DOMParser().parseFromString(data, mimeType)
 
         val root = document.rootElement!!
         val raw = root.getAttribute(tag) as String
@@ -33,7 +32,7 @@ class ScalableVectorGraphic(val data: String) {
 
     fun scaleUp(factor: Double = 0.1) {
         var f = factor
-        if (factor < 1) f = 1 + factor
+        if (f < 1) f += 1
         val newWidth = (viewBox.width * f).toInt()
         val newHeight = (viewBox.height * f).toInt()
         setCorner(newWidth, newHeight)

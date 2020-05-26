@@ -142,8 +142,10 @@ data class LogEntry(
     private fun stripHostPort(url: String): String {
         var result = url
         val protocolHostPort = UiManager.getUrl()
-        result = result.replace(protocolHostPort + "restful/", "")
-        result = removeHexCode(result)
+        if (url.contains("restful/")) {
+            result = result.replace(protocolHostPort + "restful/", "")
+            result = removeHexCode(result)
+        }
         return result
     }
 

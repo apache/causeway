@@ -1,11 +1,22 @@
 package org.apache.isis.client.kroviz.core.event
 
-import kotlinx.serialization.UnstableDefault
 import kotlin.test.Test
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-@UnstableDefault
 class LogEntryTest {
+
+    @Test
+    fun testTitle() {
+        // given
+        val url = "https://kroki.io"
+
+        // when
+        val le = LogEntry(url)
+
+        // then
+        assertFalse(le.title.startsWith("/"))
+    }
 
     @Test
     fun testCalculate() {

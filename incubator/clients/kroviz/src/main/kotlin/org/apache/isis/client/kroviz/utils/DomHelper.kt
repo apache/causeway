@@ -46,9 +46,8 @@ object DomHelper {
         abData[6] = (0x40 or (abData[6].toInt() and 0xf)).toByte()
         abData[8] = (0x80 or (abData[8].toInt() and 0x3f)).toByte()
 
-        var strHex = abData.toHexString()
-        strHex = "$(strHex.substring(0, 8))-$(strHex.substring(8, 4))-$(strHex.substring(12, 4))-$(strHex.substring(16, 4))-$(strHex.substring(20, 12))"
-        return strHex
+        var strHex= abData.toHexString()
+        return "$(strHex.substring(0, 8))-$(strHex.substring(8, 4))-$(strHex.substring(12, 4))-$(strHex.substring(16, 4))-$(strHex.substring(20, 12))"
     }
 
     @ExperimentalUnsignedTypes // just to make it clear that the experimental unsigned types are used

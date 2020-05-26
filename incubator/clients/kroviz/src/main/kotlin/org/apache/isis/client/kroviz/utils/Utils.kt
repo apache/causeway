@@ -50,10 +50,10 @@ object Utils {
         //split string by "/" and remove parts longer than 40chars
         list.forEach { s ->
             output += "/"
-            output += if (s.length < 40) {
-                s
-            } else {
+            output += if (s.length > 40) {
                 "..."
+            } else {
+                s
             }
         }
         return output
