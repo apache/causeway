@@ -9,6 +9,22 @@ import kotlin.test.assertEquals
 class ScalableVectorGraphicTest {
 
     @Test
+    fun testViewBox() {
+        //given
+        val response = PUML_SVG.str
+        val type = "image/svg+xml"
+        val p = DOMParser()
+        //when
+        val svg = ScalableVectorGraphic(response)
+        val viewBox = svg.viewBox
+        // then
+        assertEquals(0, viewBox.x)
+        assertEquals(0, viewBox.y)
+        assertEquals(309, viewBox.width)
+        assertEquals(203, viewBox.height)
+    }
+
+    @Test
     fun testScaleDown() {
         //given
         val response = PUML_SVG.str
@@ -19,8 +35,8 @@ class ScalableVectorGraphicTest {
         svg.scaleDown()
 
         // then
-        assertEquals((203 * 0.9).toInt(), svg.getHeight())
-        assertEquals((309 * 0.9).toInt(), svg.getWidth())
+        assertEquals((203 * 0.9).toInt(), svg.viewBox.height)
+        assertEquals((309 * 0.9).toInt(), svg.viewBox.width)
     }
 
     @Test
@@ -34,8 +50,8 @@ class ScalableVectorGraphicTest {
         svg.scaleUp()
 
         // then
-        assertEquals((203 * 1.1).toInt(), svg.getHeight())
-        assertEquals((309 * 1.1).toInt(), svg.getWidth())
+        assertEquals((203 * 1.1).toInt(), svg.viewBox.height)
+        assertEquals((309 * 1.1).toInt(), svg.viewBox.width)
     }
 
     @Test
@@ -49,8 +65,8 @@ class ScalableVectorGraphicTest {
         svg.scaleUp(2.0)
 
         //then
-        assertEquals(406, svg.getHeight())
-        assertEquals(618, svg.getWidth())
+        assertEquals(406, svg.viewBox.height)
+        assertEquals(618, svg.viewBox.width)
     }
 
 }

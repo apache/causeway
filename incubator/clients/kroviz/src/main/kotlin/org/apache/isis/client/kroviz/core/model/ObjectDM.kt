@@ -1,7 +1,9 @@
 package org.apache.isis.client.kroviz.core.model
 
+import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
+import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Method
 import org.apache.isis.client.kroviz.to.TObject
@@ -48,10 +50,10 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
             val putLink = Link(method = Method.PUT.operation, href = href)
             val logEntry = EventStore.find(reSpec)
             val aggregator = logEntry?.getAggregator()!!
-            aggregator.invokeWith(putLink)
+            putLink.invokeWith(aggregator)
 
             // now data should be reloaded - wait for invoking PUT?
-            aggregator.invokeWith(getLink)
+            getLink.invokeWith(aggregator)
             //refresh of display to be triggered?
         }
     }
@@ -60,6 +62,10 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
         if (dirty) {
             //TODO reset()
         }
+    }
+
+    fun Link.invokeWith(aggregator: BaseAggregator) {
+        RoXmlHttpRequest().invoke(this, aggregator)
     }
 
 }

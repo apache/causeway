@@ -38,11 +38,6 @@ abstract class BaseAggregator {
         throw Throwable("[BaseAggregator.log] no handler found: ${this::class.simpleName}")
     }
 
-    @Deprecated("use extension function")
-    fun invokeWith(link: Link) {
-        RoXmlHttpRequest().invoke(link, this)
-    }
-
     fun TObject.getLayoutLink(): Link? {
         return links.firstOrNull { l ->
             l.isLayout()

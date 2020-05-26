@@ -1,10 +1,7 @@
 package org.apache.isis.client.kroviz.utils
 
 import org.w3c.dom.Document
-import org.w3c.dom.Element
 import org.w3c.dom.parsing.DOMParser
-import org.w3c.dom.parsing.XMLSerializer
-import org.w3c.dom.svg.SVGSVGElement
 
 enum class Direction(val id: String) {
     UP("UP"),
@@ -13,56 +10,43 @@ enum class Direction(val id: String) {
 
 class ScalableVectorGraphic(val data: String) {
 
-    val parser = DOMParser()
-    val mimeType = "image/svg+xml"
+    private val parser = DOMParser()
+    private val mimeType = "image/svg+xml"
+    private val tag = "viewBox"
     var document: Document
+    var viewBox: ViewBox
 
     init {
         document = parser.parseFromString(data, mimeType)
+
+        val root = document.rootElement!!
+        val raw = root.getAttribute(tag) as String
+        val arr = raw.split(" ")
+        viewBox = ViewBox(arr[0].toInt(), arr[1].toInt(), arr[2].toInt(), arr[3].toInt())
     }
 
-    fun asDocumentElement(): Element? {
-        val xs = XMLSerializer()
-        val str = xs.serializeToString(document)
-        val svg = parser.parseFromString(str, mimeType)
-        return svg.documentElement
-    }
-
-    private fun root(): SVGSVGElement {
-        return document.rootElement!!
-    }
-
-    fun setHeight(height: Int) {
-        root().setAttribute("height", height.toString() + "px")
-    }
-
-    fun getHeight(): Int {
-        val raw = root().getAttribute("height") as String
-        val value = raw.replace("px", "")
-        return value.toInt()
-    }
-
-    fun setWidth(width: Int) {
-        root().setAttribute("width", width.toString() + "px")
-    }
-
-    fun getWidth(): Int {
-        val raw = root().getAttribute("width") as String
-        val value = raw.replace("px", "")
-        return value.toInt()
+    private fun setCorner(width: Int, height: Int) {
+        viewBox.width = width
+        viewBox.height = height
+        document.rootElement?.setAttribute(tag, viewBox.asArgs())
     }
 
     fun scaleUp(factor: Double = 0.1) {
         var f = factor
         if (factor < 1) f = 1 + factor
-        val oldHeight = getHeight()
-        val oldWidth = getWidth()
-        setHeight((oldHeight * f).toInt())
-        setWidth((oldWidth * f).toInt())
+        val newWidth = (viewBox.width * f).toInt()
+        val newHeight = (viewBox.height * f).toInt()
+        setCorner(newWidth, newHeight)
     }
 
     fun scaleDown(factor: Double = 0.1) {
         scaleUp(factor * -1)
+    }
+
+    class ViewBox(val x: Int, val y: Int, var width: Int, var height: Int) {
+        fun asArgs(): String {
+            return "$x $y $width $height"
+        }
     }
 
 }

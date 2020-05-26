@@ -42,7 +42,7 @@ class RoDialog(
 
     private val scaleUpButton = Button(
             "",
-            "fas fa-plus",
+            "fas fa-minus",    // TODO fix brain twister
             ButtonStyle.OUTLINEINFO)
             .onClick {
                 (command as ImageDialog).scale(Direction.UP)
@@ -50,7 +50,7 @@ class RoDialog(
 
     private val scaleDownButton = Button(
             "",
-            "fas fa-minus",
+            "fas fa-plus",     // TODO fix brain twister
             ButtonStyle.OUTLINEINFO)
             .onClick {
                 (command as ImageDialog).scale(Direction.DOWN)
@@ -110,7 +110,7 @@ class RoDialog(
     }
 
     private fun hasScalableContent(): Boolean {
-        val scalable = items.firstOrNull() { it.type == ValueType.IMAGE.type }
+        val scalable = items.firstOrNull { it.type == ValueType.IMAGE.type }
         return scalable != null
     }
 
