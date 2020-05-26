@@ -45,7 +45,6 @@ class ImageDialog(
     fun scale(direction: Direction) {
         val oldElement = DomHelper.getById(uuid)
         val oldStr = oldElement!!.innerHTML
-        console.log(oldStr)
         val newImage = ScalableVectorGraphic(oldStr)
         when (direction) {
             Direction.UP -> newImage.scaleUp()
