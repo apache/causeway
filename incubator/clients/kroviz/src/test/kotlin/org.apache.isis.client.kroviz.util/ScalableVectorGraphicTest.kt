@@ -15,8 +15,7 @@ class ScalableVectorGraphicTest {
         val type = "image/svg+xml"
         val p = DOMParser()
         //when
-        val doc = p.parseFromString(response, type)
-        val svg = ScalableVectorGraphic(doc)
+        val svg = ScalableVectorGraphic(response)
         svg.scaleDown()
 
         // then
@@ -31,8 +30,7 @@ class ScalableVectorGraphicTest {
         val type = "image/svg+xml"
         val p = DOMParser()
         //when
-        val doc = p.parseFromString(response, type)
-        val svg = ScalableVectorGraphic(doc)
+        val svg = ScalableVectorGraphic(response)
         svg.scaleUp()
 
         // then
@@ -47,8 +45,7 @@ class ScalableVectorGraphicTest {
         val type = "image/svg+xml"
         val p = DOMParser()
         //when
-        val doc = p.parseFromString(response, type)
-        val svg = ScalableVectorGraphic(doc)
+        val svg = ScalableVectorGraphic(response)
         svg.scaleUp(2.0)
 
         //then

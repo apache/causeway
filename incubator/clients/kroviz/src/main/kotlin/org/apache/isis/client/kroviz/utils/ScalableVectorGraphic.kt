@@ -32,21 +32,21 @@ class ScalableVectorGraphic(val data: String) {
         return document.rootElement!!
     }
 
-    private fun setHeight(height: Int) {
+    fun setHeight(height: Int) {
         root().setAttribute("height", height.toString() + "px")
     }
 
-    private fun getHeight(): Int {
+    fun getHeight(): Int {
         val raw = root().getAttribute("height") as String
         val value = raw.replace("px", "")
         return value.toInt()
     }
 
-    private fun setWidth(width: Int) {
+    fun setWidth(width: Int) {
         root().setAttribute("width", width.toString() + "px")
     }
 
-    private fun getWidth(): Int {
+    fun getWidth(): Int {
         val raw = root().getAttribute("width") as String
         val value = raw.replace("px", "")
         return value.toInt()
