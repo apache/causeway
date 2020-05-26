@@ -358,7 +358,7 @@ implements LinksProvider, UiHintContainer {
 
     private static OneToManyAssociation collectionFor(EntityModel entityModel) {
 
-        final ObjectMemento parentObjectAdapterMemento = entityModel.getObjectAdapterMemento();
+        final ObjectMemento parentObjectAdapterMemento = entityModel.memento();
         final CollectionLayoutData collectionLayoutData = entityModel.getCollectionLayoutData();
         final SpecificationLoader specificationLoader = entityModel.getSpecificationLoader();
 
@@ -456,13 +456,15 @@ implements LinksProvider, UiHintContainer {
     /**
      * Populated only if {@link Variant#PARENTED}.
      */
+    @Deprecated // don't expose this implementation detail
     public ObjectMemento getParentObjectAdapterMemento() {
-        return entityModel != null? entityModel.getObjectAdapterMemento(): null;
+        return entityModel != null? entityModel.memento(): null;
     }
 
     /**
      * Populated only if {@link Variant#PARENTED}.
      */
+    @Deprecated // don't expose this implementation detail
     public CollectionMemento getCollectionMemento() {
         return collectionMemento;
     }

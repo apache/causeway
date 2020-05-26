@@ -19,19 +19,20 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
+import static org.apache.isis.core.metamodel.spec.ManagedObject.unwrapSingle;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.ObjectTitleEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-import static org.apache.isis.core.metamodel.spec.ManagedObject.unwrapSingle;
-
 /**
  * See {@link InteractionContext} for overview; analogous to
  * {@link ObjectTitleEvent}.
  */
-public class ObjectTitleContext extends AccessContext<ObjectTitleEvent> {
+public class ObjectTitleContext 
+extends AccessContext {
 
     private final String title;
 
@@ -40,7 +41,9 @@ public class ObjectTitleContext extends AccessContext<ObjectTitleEvent> {
             final Identifier identifier,
             final String title,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        super(InteractionContextType.OBJECT_TITLE, identifier, targetAdapter, interactionInitiatedBy);
+        
+        super(InteractionContextType.OBJECT_TITLE, 
+                identifier, InteractionHead.simple(targetAdapter), interactionInitiatedBy);
         this.title = title;
     }
 

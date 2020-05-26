@@ -23,8 +23,6 @@ import java.util.concurrent.Callable;
 
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
-import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -59,7 +57,7 @@ public class TenantedAuthorizationFacetDefault extends FacetAbstract implements 
     }
 
     @Override
-    public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
+    public String hides(final VisibilityContext ic) {
 
         if(evaluators == null || evaluators.isEmpty()) {
             return null;
@@ -85,7 +83,7 @@ public class TenantedAuthorizationFacetDefault extends FacetAbstract implements 
 
 
     @Override
-    public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
+    public String disables(final UsabilityContext ic) {
         if(evaluators == null || evaluators.isEmpty()) {
             return null;
         }

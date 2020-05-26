@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.hidden;
 
-import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -37,10 +36,7 @@ public abstract class HiddenObjectFacetAbstract extends FacetAbstract implements
     }
 
     @Override
-    public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
-        if (!(ic instanceof VisibilityContext)) {
-            return null;
-        }
+    public String hides(final VisibilityContext ic) {
         final ManagedObject toValidate = ic.getTarget();
         return toValidate != null ? hiddenReason(toValidate) : null;
     }

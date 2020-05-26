@@ -5,6 +5,7 @@ include::extensions:ROOT:partial$module-nav.adoc[]
 include::security:session-log:partial$module-nav.adoc[]
 include::command-log:partial$module-nav.adoc[]
 include::userguide:flyway:partial$module-nav.adoc[]
+include::model-annotation:partial$module-nav.adoc[]
 
 * Security
 include::security:shiro-realm-ldap:partial$module-nav.adoc[]

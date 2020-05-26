@@ -28,10 +28,10 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.interaction.ManagedAction;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -158,7 +158,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         val pendingArgs = param.getAction()
-                .newPendingParameterModelHead(objectAdapter)
+                .interactionHead(objectAdapter)
                 .emptyModel();
         
         val choiceAdapters = param.getChoices(pendingArgs, interactionInitiatedBy);
@@ -177,7 +177,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     private Object defaultFor(final ObjectActionParameter param) {
         
         val emptyPpm = param.getAction()
-                .newPendingParameterModelHead(objectAdapter)
+                .interactionHead(objectAdapter)
                 .emptyModel();
         
         val defaultAdapter = param.getDefault(emptyPpm);

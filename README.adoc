@@ -3,7 +3,7 @@
 :toc-title: pass:[<h3>Contents</h3>]
 :toc-placement!:
 
-image:https://maven-badges.herokuapp.com/maven-central/org.apache.isis.core/isis-core-applib/badge.svg[]
+image:https://maven-badges.herokuapp.com/maven-central/org.apache.isis.core/isis-applib/badge.svg[]
 image:https://sonarcloud.io/api/project_badges/measure?project=apache_isis&metric=alert_status[link="https://sonarcloud.io/dashboard?id=apache_isis"]
 image:https://github.com/apache/isis/workflows/Core/badge.svg[link="https://github.com/apache/isis/actions?query=workflow%3A%22Core%22"]
 image:https://github.com/apache/isis/workflows/Site/badge.svg[link="https://github.com/apache/isis/actions?query=workflow%3A%22Site%22"]
@@ -12,7 +12,7 @@ image:https://github.com/apache-isis-committers/isis-nightly/workflows/Nightly/b
 _http://isis.apache.org[Apache Isis] software is a framework for rapidly developing domain-driven apps in Java. Write your business logic in entities, domain services and repositories, and the framework dynamically generates a representation of that domain model as a webapp or a RESTful API._
 
 Start learning about Apache Isis using the https://github.com/apache/isis-app-helloworld["Hello World"] starter app. 
-Explore features with our daily built demo docker image https://github.com/apache/isis/blob/master/examples/demo/src/main/adoc/modules/demo/pages/about.adoc["DemoApp"]. 
+Explore features with our daily built demo docker image https://github.com/apache/isis/blob/master/examples/demo/domain/src/main/adoc/modules/demo/pages/about.adoc["DemoApp"]. 
 Build your own apps using our https://github.com/apache/isis-app-simpleapp["SimpleApp"] starter app.
 
 For help and support, join our https://cwiki.apache.org/confluence/display/ISIS/Signing+up+to+Slack[Slack channel] or http://isis.apache.org/support.html[mailing list].

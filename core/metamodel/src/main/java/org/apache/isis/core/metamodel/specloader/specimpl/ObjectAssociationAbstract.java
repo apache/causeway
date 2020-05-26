@@ -27,11 +27,14 @@ import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFace
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
-public abstract class ObjectAssociationAbstract extends ObjectMemberAbstract implements ObjectAssociation {
+public abstract class ObjectAssociationAbstract 
+extends ObjectMemberAbstract 
+implements ObjectAssociation {
 
     private final ObjectSpecification specification;
 
@@ -45,6 +48,10 @@ public abstract class ObjectAssociationAbstract extends ObjectMemberAbstract imp
             throw new IllegalArgumentException("field type for '" + getId() + "' must exist");
         }
         this.specification = specification;
+    }
+    
+    protected InteractionHead headFor(final ManagedObject ownerAdapter) {
+        return InteractionHead.simple(ownerAdapter);
     }
     
     @Override

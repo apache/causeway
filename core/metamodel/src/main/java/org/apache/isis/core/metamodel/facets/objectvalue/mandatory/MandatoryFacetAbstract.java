@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.objectvalue.mandatory;
 
 import java.util.Map;
 
-import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -82,7 +81,7 @@ public abstract class MandatoryFacetAbstract extends FacetAbstract implements Ma
     }
 
     @Override
-    public String invalidates(final ValidityContext<? extends ValidityEvent> context) {
+    public String invalidates(final ValidityContext context) {
         if (!(context instanceof PropertyModifyContext) && !(context instanceof ActionArgValidityContext)) {
             return null;
         }

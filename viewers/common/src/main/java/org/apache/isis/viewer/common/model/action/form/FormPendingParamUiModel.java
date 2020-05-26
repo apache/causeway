@@ -20,7 +20,7 @@ package org.apache.isis.viewer.common.model.action.form;
 
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 
@@ -35,7 +35,7 @@ public class FormPendingParamUiModel {
     final Consent usabilityConsent;
     
     public static FormPendingParamUiModel of(
-            ManagedObject target,
+            InteractionHead head,
             ParameterUiModel paramUiModel, 
             PendingParameterModel pendingArgs) {
 
@@ -46,11 +46,11 @@ public class FormPendingParamUiModel {
         
         // visibility
         val visibilityConsent = objectActionParamter
-                .isVisible(target, pendingArgValues, InteractionInitiatedBy.USER);
+                .isVisible(head, pendingArgValues, InteractionInitiatedBy.USER);
 
         // usability
         val usabilityConsent = objectActionParamter
-                .isUsable(target, pendingArgValues, InteractionInitiatedBy.USER);
+                .isUsable(head, pendingArgValues, InteractionInitiatedBy.USER);
         
         return of(paramUiModel, visibilityConsent, usabilityConsent);
     }

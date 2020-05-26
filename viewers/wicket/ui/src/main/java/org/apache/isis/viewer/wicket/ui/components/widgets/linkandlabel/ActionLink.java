@@ -111,7 +111,7 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
     public ObjectAction getObjectAction() {
         return objectAction != null
                 ? objectAction
-                        : (objectAction = getActionModel().getAction());
+                        : (objectAction = getActionModel().getMetaModel());
     }
 
 
@@ -128,7 +128,7 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
 
     public String getReasonDisabledIfAny() {
         // no point evaluating if not visible
-        return isVisible() ? getActionModel().getReasonDisabledIfAny() : null;
+        return isVisible() ? getActionModel().getUsabilityConsent().getReason() : null;
     }
 
     @Override
@@ -155,22 +155,13 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
 
     @Override
     public boolean isVisible() {
-        return determineIfVisible();
-    }
-
-    private boolean determineIfVisible() {
-        return getActionModel().isVisible();
+        return getActionModel().getVisibilityConsent().isAllowed();
     }
 
     @Override
     @Programmatic
     public boolean isEnabled() {
-        return determineIfEnabled();
-    }
-
-    private boolean determineIfEnabled() {
-        val reasonDisabledIfAny = getReasonDisabledIfAny();
-        return reasonDisabledIfAny == null;
+        return getActionModel().getUsabilityConsent().isAllowed();
     }
 
     @Override
@@ -261,7 +252,7 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
     }
 
     private static boolean isIdempotentOrCachable(ActionModel actionModel) {
-        val objectAction = actionModel.getAction();
+        val objectAction = actionModel.getMetaModel();
         return ObjectAction.Util.isIdempotentOrCachable(objectAction);
     }
 

@@ -21,28 +21,23 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.annotation.Nullable;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
+import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
@@ -51,8 +46,8 @@ import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 
 import static org.apache.isis.core.commons.internal.base._With.requires;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.val;
 
 /**
@@ -62,9 +57,10 @@ import lombok.val;
  * So that the model is {@link Serializable}, the {@link ManagedObject} is
  * stored as a {@link ObjectMemento}.
  */
+//@Log4j2
 public class EntityModel 
-extends BookmarkableModel<ManagedObject> 
-implements ObjectAdapterModel, UiHintContainer, ObjectUiModel {
+extends ManagedObjectModel 
+implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel, BookmarkableModel {
 
     private static final long serialVersionUID = 1L;
     
@@ -92,13 +88,15 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel {
 
     private final Map<PropertyMemento, ScalarModel> propertyScalarModels;
     
-    private ObjectMemento adapterMemento;
     private ObjectMemento contextAdapterIfAny;
 
+    @Getter(onMethod = @__(@Override)) 
+    @Setter(onMethod = @__(@Override)) 
     private Mode mode;
+    
+    @Getter(onMethod = @__(@Override)) 
+    @Setter(onMethod = @__(@Override)) 
     private RenderingHint renderingHint;
-    private final PendingModel pendingModel;
-
 
     // -- FACTORIES
 
@@ -161,10 +159,11 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel {
             Mode mode,
             RenderingHint renderingHint) {
         
-        super(requires(commonContext, "commonContext"));
-        this.adapterMemento = adapterMemento;
-        this.pendingModel = new PendingModel(this);
-        this.propertyScalarModels = propertyScalarModels!=null ? propertyScalarModels : _Maps.<PropertyMemento, ScalarModel>newHashMap();
+        super(requires(commonContext, "commonContext"), adapterMemento);
+        
+        this.propertyScalarModels = propertyScalarModels!=null 
+                ? propertyScalarModels 
+                : _Maps.<PropertyMemento, ScalarModel>newHashMap();
         this.mode = mode;
         this.renderingHint = renderingHint;
     }
@@ -208,7 +207,7 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel {
     public String getHint(final Component component, final String keyName) {
         final ComponentHintKey componentHintKey = ComponentHintKey.create(super.getCommonContext(), component, keyName);
         if(componentHintKey != null) {
-            return componentHintKey.get(getObjectAdapterMemento().asHintingBookmarkIfSupported());
+            return componentHintKey.get(super.asHintingBookmarkIfSupported());
         }
         return null;
     }
@@ -216,7 +215,7 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel {
     @Override
     public void setHint(Component component, String keyName, String hintValue) {
         ComponentHintKey componentHintKey = ComponentHintKey.create(super.getCommonContext(), component, keyName);
-        componentHintKey.set(this.getObjectAdapterMemento().asHintingBookmarkIfSupported(), hintValue);
+        componentHintKey.set(super.asHintingBookmarkIfSupported(), hintValue);
     }
 
     @Override
@@ -228,87 +227,6 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel {
     @Override
     public String getTitle() {
         return getObject().titleString(null);
-    }
-
-    @Override
-    public boolean hasAsRootPolicy() {
-        return hasBookmarkPolicy(BookmarkPolicy.AS_ROOT);
-    }
-
-    public boolean hasAsChildPolicy() {
-        return hasBookmarkPolicy(BookmarkPolicy.AS_CHILD);
-    }
-
-    private boolean hasBookmarkPolicy(final BookmarkPolicy policy) {
-        final BookmarkPolicyFacet facet = getBookmarkPolicyFacetIfAny();
-        return facet != null && facet.value() == policy;
-    }
-
-    private BookmarkPolicyFacet getBookmarkPolicyFacetIfAny() {
-        final ObjectSpecId specId = getObjectAdapterMemento().getObjectSpecId();
-        final ObjectSpecification objectSpec = super.getSpecificationLoader().lookupBySpecIdElseLoad(specId);
-        return objectSpec.getFacet(BookmarkPolicyFacet.class);
-    }
-
-
-
-    // //////////////////////////////////////////////////////////
-    // ObjectAdapterMemento, typeOfSpecification
-    // //////////////////////////////////////////////////////////
-
-    public ObjectMemento getObjectAdapterMemento() {
-        return adapterMemento;
-    }
-
-    /**
-     * Overridable for submodels (eg {@link ScalarModel}) that know the type of
-     * the adapter without there being one.
-     */
-    @Override
-    public ObjectSpecification getTypeOfSpecification() {
-        return getTypeOfSpecificationId()
-                .map(this::getSpecificationFor)
-                .orElse(null);
-    }
-    
-    /**
-     * @implNote free of side-effects, used for serialization
-     */
-    public Optional<ObjectSpecId> getTypeOfSpecificationId() {
-        return Optional.ofNullable(adapterMemento)
-                .map(ObjectMemento::getObjectSpecId);
-    }
-
-    private ObjectSpecification getSpecificationFor(ObjectSpecId objectSpecId) {
-        return super.getSpecificationLoader().lookupBySpecIdElseLoad(objectSpecId);
-    }
-
-    // //////////////////////////////////////////////////////////
-    // loadObject, load, setObject
-    // //////////////////////////////////////////////////////////
-
-    /**
-     * Callback from {@link #getObject()}.
-     */
-    @Override
-    public ManagedObject load() {
-        if (adapterMemento == null) {
-            return null;
-        }
-        val adapter = super.getCommonContext().reconstructObject(adapterMemento);
-        return adapter;
-    }
-
-    @Override
-    public void setObject(ManagedObject adapter) {
-        super.setObject(adapter);
-        adapterMemento = super.getMementoService().mementoForObject(adapter); 
-    }
-
-    public void setObjectMemento(final ObjectMemento adapterMemento) {
-        val adapter = super.getCommonContext().reconstructObject(adapterMemento);
-        super.setObject(adapter);
-        this.adapterMemento = adapterMemento;
     }
 
     @Override
@@ -355,50 +273,19 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel {
     }
 
     // //////////////////////////////////////////////////////////
-    // RenderingHint, Mode, entityDetailsVisible
-    // //////////////////////////////////////////////////////////
-
-
-    @Override
-    public RenderingHint getRenderingHint() {
-        return renderingHint;
-    }
-    @Override
-    public void setRenderingHint(RenderingHint renderingHint) {
-        this.renderingHint = renderingHint;
-    }
 
     @Override
     public ObjectMemento getContextAdapterIfAny() {
         return contextAdapterIfAny;
     }
 
-    /**
-     * Used as a hint when the {@link #getRenderingHint()} is {@link RenderingHint#PARENTED_TITLE_COLUMN},
-     * provides a context adapter to obtain the title.
-     */
     @Override
     public void setContextAdapterIfAny(ObjectMemento contextAdapterIfAny) {
         this.contextAdapterIfAny = contextAdapterIfAny;
     }
 
+
     @Override
-    public Mode getMode() {
-        return mode;
-    }
-
-    protected void setMode(final Mode mode) {
-        this.mode = mode;
-    }
-
-    public boolean isViewMode() {
-        return mode == Mode.VIEW;
-    }
-
-    public boolean isEditMode() {
-        return mode == Mode.EDIT;
-    }
-
     public EntityModel toEditMode() {
         setMode(Mode.EDIT);
         for (final ScalarModel scalarModel : propertyScalarModels.values()) {
@@ -407,6 +294,7 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel {
         return this;
     }
 
+    @Override
     public EntityModel toViewMode() {
         setMode(Mode.VIEW);
         for (final ScalarModel scalarModel : propertyScalarModels.values()) {
@@ -432,86 +320,6 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel {
 
 
     // //////////////////////////////////////////////////////////
-    // Pending
-    // //////////////////////////////////////////////////////////
-
-    @RequiredArgsConstructor
-    private static final class PendingModel extends Model<ObjectMemento> {
-        private static final long serialVersionUID = 1L;
-
-        @NonNull private final EntityModel entityModel;
-
-        /**
-         * Whether pending has been set (could have been set to null)
-         */
-        private boolean hasPending;
-        /**
-         * The new value (could be set to null; hasPending is used to distinguish).
-         */
-        private ObjectMemento pending;
-
-        @Override
-        public ObjectMemento getObject() {
-            if (hasPending) {
-                return pending;
-            }
-            val adapter = entityModel.getObject();
-            return entityModel.getMementoService().mementoForObject(adapter);
-        }
-
-        @Override
-        public void setObject(final ObjectMemento adapterMemento) {
-            pending = adapterMemento;
-            hasPending = true;
-        }
-
-        public void clearPending() {
-            this.hasPending = false;
-            this.pending = null;
-        }
-
-        private ManagedObject getPendingAdapter() {
-            val memento = getObject();
-            return entityModel.getCommonContext().reconstructObject(memento);
-        }
-
-        public ManagedObject getPendingElseCurrentAdapter() {
-            return hasPending ? getPendingAdapter() : entityModel.getObject();
-        }
-
-        public ObjectMemento getPending() {
-            return pending;
-        }
-
-        public void setPending(ObjectMemento selectedAdapterMemento) {
-            this.pending = selectedAdapterMemento;
-            hasPending=true;
-        }
-    }
-
-
-    public ManagedObject getPendingElseCurrentAdapter() {
-        return pendingModel.getPendingElseCurrentAdapter();
-    }
-
-    public ManagedObject getPendingAdapter() {
-        return pendingModel.getPendingAdapter();
-    }
-
-    public ObjectMemento getPending() {
-        return pendingModel.getPending();
-    }
-
-    public void setPending(ObjectMemento selectedAdapterMemento) {
-        pendingModel.setPending(selectedAdapterMemento);
-    }
-
-    public void clearPending() {
-        pendingModel.clearPending();
-    }
-
-
-    // //////////////////////////////////////////////////////////
     // tab and column metadata (if any)
     // //////////////////////////////////////////////////////////
 
@@ -524,44 +332,6 @@ implements ObjectAdapterModel, UiHintContainer, ObjectUiModel {
     public void setCollectionLayoutData(final CollectionLayoutData collectionLayoutData) {
         this.collectionLayoutData = collectionLayoutData;
     }
-
-
-    // //////////////////////////////////////////////////////////
-    // equals, hashCode
-    // //////////////////////////////////////////////////////////
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((adapterMemento == null) ? 0 : adapterMemento.hashCode());
-        return result;
-    }
-
-    /**
-     * In order that <tt>IsisAjaxFallbackDataTable</tt> can use a
-     * <tt>ReuseIfModelsEqualStrategy</tt> to preserve any concurrency exception
-     * information in original model.
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        EntityModel other = (EntityModel) obj;
-        if (adapterMemento == null) {
-            if (other.adapterMemento != null)
-                return false;
-        } else if (!adapterMemento.equals(other.adapterMemento))
-            return false;
-        return true;
-
-    }
-
-
 
 
 }

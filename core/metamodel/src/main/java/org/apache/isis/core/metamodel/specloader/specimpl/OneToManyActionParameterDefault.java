@@ -25,7 +25,9 @@ import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSeman
 import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyActionParameter;
 
-public class OneToManyActionParameterDefault extends ObjectActionParameterAbstract implements OneToManyActionParameter {
+public class OneToManyActionParameterDefault 
+extends ObjectActionParameterAbstract 
+implements OneToManyActionParameter {
 
     public OneToManyActionParameterDefault(
             final int index,

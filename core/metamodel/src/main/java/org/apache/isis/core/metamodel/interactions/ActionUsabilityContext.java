@@ -19,31 +19,32 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
+import static org.apache.isis.core.metamodel.spec.ManagedObject.unwrapSingle;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.ActionUsabilityEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-
-import static org.apache.isis.core.metamodel.spec.ManagedObject.unwrapSingle;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
  * {@link ActionUsabilityEvent}.
  */
-public class ActionUsabilityContext extends UsabilityContext<ActionUsabilityEvent> implements ActionInteractionContext {
+public class ActionUsabilityContext 
+extends UsabilityContext 
+implements ActionInteractionContext {
 
     private final ObjectAction objectAction;
 
     public ActionUsabilityContext(
-            final ManagedObject targetAdapter,
+            final InteractionHead head,
             final ObjectAction objectAction,
             final Identifier id,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
-        super(InteractionContextType.ACTION_USABLE, targetAdapter, id, interactionInitiatedBy, where);
+        super(InteractionContextType.ACTION_USABLE, head, id, interactionInitiatedBy, where);
         this.objectAction = objectAction;
     }
 

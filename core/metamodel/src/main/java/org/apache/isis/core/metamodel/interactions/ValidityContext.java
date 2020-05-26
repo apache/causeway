@@ -20,23 +20,25 @@
 package org.apache.isis.core.metamodel.interactions;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
  * {@link ValidityEvent}
  */
-public abstract class ValidityContext<T extends ValidityEvent> extends InteractionContext<T> {
+public abstract class ValidityContext 
+extends InteractionContext
+implements InteractionEventSupplier<ValidityEvent> {
 
     public ValidityContext(
             final InteractionContextType interactionType,
-            final ManagedObject target,
+            final InteractionHead head,
             final Identifier identifier,
             final InteractionInitiatedBy invocationMethod) {
-        super(interactionType, invocationMethod, identifier, target);
+        super(interactionType, invocationMethod, identifier, head, Where.NOT_SPECIFIED);
     }
 
 }

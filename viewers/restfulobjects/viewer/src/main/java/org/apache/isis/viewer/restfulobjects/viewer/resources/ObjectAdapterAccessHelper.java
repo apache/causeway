@@ -19,15 +19,15 @@
 package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
+import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
+import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction.SemanticConstraint;
+import org.apache.isis.core.metamodel.interactions.managed.MemberInteraction.AccessIntent;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.interaction.ActionInteraction;
-import org.apache.isis.core.metamodel.spec.interaction.ActionInteraction.SemanticConstraint;
-import org.apache.isis.core.metamodel.spec.interaction.CollectionInteraction;
-import org.apache.isis.core.metamodel.spec.interaction.ManagedAction;
-import org.apache.isis.core.metamodel.spec.interaction.ManagedCollection;
-import org.apache.isis.core.metamodel.spec.interaction.ManagedProperty;
-import org.apache.isis.core.metamodel.spec.interaction.MemberInteraction.AccessIntent;
-import org.apache.isis.core.metamodel.spec.interaction.PropertyInteraction;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 
 import lombok.NonNull;

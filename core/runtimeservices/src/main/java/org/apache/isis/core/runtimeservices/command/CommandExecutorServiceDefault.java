@@ -54,6 +54,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -189,8 +190,8 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 // it will switch the targetAdapter to be the mixedInAdapter transparently
                 val argAdapters = argAdaptersFor(actionDto);
 
-                val resultAdapter = objectAction.execute(
-                        targetAdapter, null, argAdapters, InteractionInitiatedBy.FRAMEWORK);
+                val resultAdapter = objectAction.execute(InteractionHead.simple(targetAdapter)
+                        , argAdapters, InteractionInitiatedBy.FRAMEWORK);
 
                 // flush any Isis PersistenceCommands pending
                 // (else might get transient objects for the return value)

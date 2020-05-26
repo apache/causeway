@@ -24,20 +24,20 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.CollectionUsabilityEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
  * {@link CollectionUsabilityEvent}.
  */
-public class CollectionUsabilityContext extends UsabilityContext<CollectionUsabilityEvent> {
+public class CollectionUsabilityContext 
+extends UsabilityContext {
 
     public CollectionUsabilityContext(
-            final ManagedObject targetAdapter,
+            final InteractionHead head,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
-        super(InteractionContextType.COLLECTION_USABLE, targetAdapter, identifier, interactionInitiatedBy, where);
+        super(InteractionContextType.COLLECTION_USABLE, head, identifier, interactionInitiatedBy, where);
     }
 
     @Override

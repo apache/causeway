@@ -22,14 +22,15 @@ package org.apache.isis.core.metamodel.facets.object.hidden.method;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.object.hidden.HiddenObjectFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-public class HiddenObjectFacetViaMethod extends HiddenObjectFacetAbstract {
+public class HiddenObjectFacetViaMethod 
+extends HiddenObjectFacetAbstract {
+    
     private final Method method;
 
     public HiddenObjectFacetViaMethod(final Method method, final FacetHolder holder) {
@@ -38,7 +39,7 @@ public class HiddenObjectFacetViaMethod extends HiddenObjectFacetAbstract {
     }
 
     @Override
-    public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
+    public String hides(final VisibilityContext ic) {
         final ManagedObject toValidate = ic.getTarget();
         return toValidate != null ? hiddenReason(toValidate) : null;
     }

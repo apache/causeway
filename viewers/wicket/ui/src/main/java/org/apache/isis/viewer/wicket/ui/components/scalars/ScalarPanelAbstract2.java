@@ -172,11 +172,10 @@ implements ScalarModelSubscriber2 {
         if(valueChanged) {
             if(ManagedObject.isNullOrUnspecifiedOrEmpty(paramValue)) {
                 scalarModel.setObject(null);
-                scalarModel.setPending(null);
             } else {
                 scalarModel.setObject(paramValue);
-                scalarModel.setPendingAdapter(paramValue);
-            }               
+            }
+            scalarModel.clearPending();
         }
         
 
@@ -274,21 +273,21 @@ implements ScalarModelSubscriber2 {
             postInit=null;
         } else {
         
-            final String disableReasonIfAny = scalarModel.whetherDisabled();
-            final boolean mustBeEditable = scalarModel.mustBeEditable();
-            if (disableReasonIfAny != null) {
-                if(mustBeEditable) {
-                    onInitializeNotEditable();
-                } else {
-                    onInitializeReadonly(disableReasonIfAny);
-                }
+        final String disableReasonIfAny = scalarModel.whetherDisabled();
+        final boolean mustBeEditable = scalarModel.mustBeEditable();
+        if (disableReasonIfAny != null) {
+            if(mustBeEditable) {
+                onInitializeNotEditable();
             } else {
-                if (scalarModel.isViewMode()) {
-                    onInitializeNotEditable();
-                } else {        
-                    onInitializeEditable();
-                }
+                onInitializeReadonly(disableReasonIfAny);
             }
+        } else {
+            if (scalarModel.isViewMode()) {
+                onInitializeNotEditable();
+            } else {        
+                onInitializeEditable();
+            }
+        }
         }
 
 
@@ -460,7 +459,7 @@ implements ScalarModelSubscriber2 {
         if(facet != null) {
 
             val parentAdapter =
-                    model.getParentUiModel().load();
+                    model.getParentUiModel().getManagedObject();
 
             final String cssClass = facet.cssClass(parentAdapter);
             CssClassAppender.appendCssClassTo(this, cssClass);

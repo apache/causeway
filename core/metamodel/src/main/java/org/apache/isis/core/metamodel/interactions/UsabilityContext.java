@@ -24,32 +24,22 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
  * {@link UsabilityEvent}.
  */
-public abstract class UsabilityContext<T extends UsabilityEvent> extends InteractionContext<T> {
-
-    private final Where where;
+public abstract class UsabilityContext 
+extends InteractionContext
+implements InteractionEventSupplier<UsabilityEvent> {
 
     public UsabilityContext(
             final InteractionContextType interactionType,
-            final ManagedObject targetAdapter,
+            final InteractionHead head,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
-        super(interactionType, interactionInitiatedBy, identifier, targetAdapter);
-        this.where = where;
+        super(interactionType, interactionInitiatedBy, identifier, head, where);
     }
-
-    /**
-     * Where the element is to be rendered.
-     */
-    public Where getWhere() {
-        return where;
-    }
-
 
 }

@@ -51,7 +51,7 @@ public class ActionParametersFormPanel extends PromptFormPanelAbstract<ActionMod
         final ActionParametersForm inputForm =
                 new ActionParametersForm("inputForm", this, this.getWicketViewerSettings(), model);
 
-        final ObjectAction action = model.getAction();
+        final ObjectAction action = model.getMetaModel();
         CssClassAppender.appendCssClassTo(inputForm, "isis-" + CssClassAppender.asCssStyle(action.getOnType().getSpecId().asString().replace(".","-") + "-" + action.getId()));
         add(inputForm);
     }

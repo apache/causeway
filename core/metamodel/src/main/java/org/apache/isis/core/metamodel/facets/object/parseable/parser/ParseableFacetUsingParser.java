@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.interactions.ParseValueContext;
@@ -72,12 +73,14 @@ implements ParseableFacet {
 
         // check string is valid
         // (eg pick up any @RegEx on value type)
-        if (getFacetHolder().containsFacet(ValueFacet.class)) {
+        if (contextAdapter!=null 
+                && getFacetHolder().containsFacet(ValueFacet.class)) {
+            
             val entryAdapter = getObjectManager().adapt(entry);
             final Identifier identifier = getIdentified().getIdentifier();
             final ParseValueContext parseValueContext =
                     new ParseValueContext(
-                            contextAdapter, identifier, entryAdapter, interactionInitiatedBy
+                            InteractionHead.simple(contextAdapter), identifier, entryAdapter, interactionInitiatedBy
                             );
             validate(parseValueContext);
         }
@@ -98,8 +101,7 @@ implements ParseableFacet {
             final ObjectSpecification specification = adapter.getSpecification();
             final ObjectValidityContext validateContext =
                     specification.createValidityInteractionContext(
-                            adapter, interactionInitiatedBy
-                            );
+                            adapter, interactionInitiatedBy);
             validate(validateContext);
 
             return adapter;
@@ -108,7 +110,7 @@ implements ParseableFacet {
         }
     }
 
-    private void validate(final ValidityContext<?> validityContext) {
+    private void validate(final ValidityContext validityContext) {
         final InteractionResultSet resultSet = new InteractionResultSet();
         InteractionUtils.isValidResultSet(getFacetHolder(), validityContext, resultSet);
         if (resultSet.isVetoed()) {

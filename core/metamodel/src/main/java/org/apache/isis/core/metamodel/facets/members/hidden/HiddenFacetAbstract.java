@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.members.hidden;
 import java.util.function.Predicate;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -73,7 +72,7 @@ public abstract class HiddenFacetAbstract extends WhereValueFacetAbstract implem
     }
 
     @Override
-    public String hides(VisibilityContext<? extends VisibilityEvent> ic) {
+    public String hides(VisibilityContext ic) {
         return hiddenReason(ic.getTarget(), ic.getWhere());
     }
 

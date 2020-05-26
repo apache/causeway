@@ -20,11 +20,9 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.Collections;
-import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.commons.ToString;
@@ -75,28 +73,33 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
     // -- visible, usable
 
     @Override
-    public VisibilityContext<?> createVisibleInteractionContext(
-            final ManagedObject ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy,
-            Where where) {
-        return new PropertyVisibilityContext(ownerAdapter, getIdentifier(), interactionInitiatedBy, where);
+    public VisibilityContext createVisibleInteractionContext(
+            final ManagedObject ownerAdapter, 
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where) {
+        return new PropertyVisibilityContext(
+                headFor(ownerAdapter), getIdentifier(), interactionInitiatedBy, where);
     }
 
 
     @Override
-    public UsabilityContext<?> createUsableInteractionContext(
-            final ManagedObject ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy,
-            Where where) {
-        return new PropertyUsabilityContext(ownerAdapter, getIdentifier(), interactionInitiatedBy, where);
+    public UsabilityContext createUsableInteractionContext(
+            final ManagedObject ownerAdapter, 
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where) {
+        return new PropertyUsabilityContext(
+                headFor(ownerAdapter), getIdentifier(), interactionInitiatedBy, where);
     }
 
 
 
     // -- Validity
-    private ValidityContext<?> createValidateInteractionContext(
+    private ValidityContext createValidateInteractionContext(
             final ManagedObject ownerAdapter,
             final ManagedObject proposedToReferenceAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        return new PropertyModifyContext(ownerAdapter, getIdentifier(), proposedToReferenceAdapter,
+        return new PropertyModifyContext(
+                headFor(ownerAdapter), getIdentifier(), proposedToReferenceAdapter,
                 interactionInitiatedBy);
     }
 
@@ -112,10 +115,9 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
             final ManagedObject ownerAdapter,
             final ManagedObject proposedToReferenceAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final ValidityContext<?> validityContext =
+        final ValidityContext validityContext =
                 createValidateInteractionContext(
-                        ownerAdapter, proposedToReferenceAdapter, interactionInitiatedBy
-                        );
+                        ownerAdapter, proposedToReferenceAdapter, interactionInitiatedBy);
         return InteractionUtils.isValidResult(this, validityContext);
     }
 

@@ -19,7 +19,10 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import java.util.Optional;
+
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
 
@@ -75,5 +78,15 @@ public interface ObjectFeature extends Specification {
      * </ul>
      */
     ObjectSpecification getSpecification();
+    
+    /**
+     * Returns a flag indicating if it can be left unset when the action can be
+     * invoked.
+     */
+    default boolean isOptional() {
+        return Optional.ofNullable(getFacet(MandatoryFacet.class))
+        .map(MandatoryFacet::isInvertedSemantics)
+        .orElse(true);
+    }
 
 }

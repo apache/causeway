@@ -62,7 +62,7 @@ public class ValuePage extends PageAbstract {
     private static String actionNameFrom(final ValueModel valueModel) {
         ActionModel actionModel = valueModel.getActionModelHint();
         if(actionModel != null) {
-            return actionModel.getAction().getName();
+            return actionModel.getMetaModel().getName();
         }
         return "Results"; // fallback, probably not required because hint should always exist on the model.
     }

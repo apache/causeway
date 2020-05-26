@@ -29,7 +29,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacetAbstract;
 
-public class PrototypeFacetForActionAnnotation extends PrototypeFacetAbstract {
+public class PrototypeFacetForActionAnnotation
+extends PrototypeFacetAbstract {
 
     public static PrototypeFacet create(
             final Optional<Action> actionsIfAny,

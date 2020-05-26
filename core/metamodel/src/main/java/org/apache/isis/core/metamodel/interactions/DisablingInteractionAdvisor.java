@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract.Disabling;
 
 /**
@@ -41,6 +40,6 @@ public interface DisablingInteractionAdvisor extends InteractionAdvisorFacet, Di
      * They must however guard against a <tt>null</tt>
      * {@link InteractionContext#getTarget() target} - this is not guaranteed to be populated.
      */
-    String disables(final UsabilityContext<? extends UsabilityEvent> ic);
+    String disables(UsabilityContext ic);
 
 }

@@ -19,15 +19,6 @@
 
 package org.apache.isis.core.runtime.system;
 
-import java.util.Optional;
-
-import org.datanucleus.enhancement.Persistable;
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-
 import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -37,7 +28,19 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Optional;
+
+import org.datanucleus.enhancement.Persistable;
+import org.jmock.Expectations;
+import org.jmock.auto.Mock;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.metamodel.BeanSort;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
@@ -53,6 +56,7 @@ import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstractAlwaysEverywhere;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstractImpl;
 import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContextFacetNone;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.PropertyUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.PropertyVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
@@ -65,8 +69,6 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.AuthenticationSessionTracker;
 import org.apache.isis.persistence.jdo.datanucleus5.objectadapter.PojoAdapter;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 public class ObjectMemberAbstractTest {
 
@@ -116,6 +118,9 @@ public class ObjectMemberAbstractTest {
 
             allowing(mockSpecForCustomer).isViewModel();
             will(returnValue(false));
+            
+            allowing(mockSpecForCustomer).getBeanSort();
+            will(returnValue(BeanSort.ENTITY));
 
             allowing(mockSpecForCustomer).getShortIdentifier();
             will(returnValue("Customer"));
@@ -200,10 +205,6 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
         super.getFacetedMethod().setMetaModelContext(mmc);
     }
 
-    /**
-     * @deprecated - unused ?
-     */
-    @Deprecated
     public Consent isUsable(final ObjectAdapter target) {
         return null;
     }
@@ -214,18 +215,21 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
     }
 
     @Override
-    public UsabilityContext<?> createUsableInteractionContext(
-            final ManagedObject target, final InteractionInitiatedBy interactionInitiatedBy,
-            Where where) {
-        return new PropertyUsabilityContext(target, getIdentifier(), interactionInitiatedBy, where);
+    public UsabilityContext createUsableInteractionContext(
+            final ManagedObject target, 
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where) {
+        return new PropertyUsabilityContext(
+                InteractionHead.simple(target), getIdentifier(), interactionInitiatedBy, where);
     }
 
     @Override
-    public VisibilityContext<?> createVisibleInteractionContext(
-            final ManagedObject targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
-            Where where) {
-        return new PropertyVisibilityContext(targetObjectAdapter, getIdentifier(), interactionInitiatedBy,
-                where);
+    public VisibilityContext createVisibleInteractionContext(
+            final ManagedObject target, 
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where) {
+        return new PropertyVisibilityContext(
+                InteractionHead.simple(target), getIdentifier(), interactionInitiatedBy, where);
     }
 
 

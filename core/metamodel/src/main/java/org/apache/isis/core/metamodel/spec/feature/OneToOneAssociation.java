@@ -50,4 +50,12 @@ public interface OneToOneAssociation extends ObjectAssociation, OneToOneFeature,
             final InteractionInitiatedBy interactionInitiatedBy);
 
 
+
+    default String getCssClass(String prefix) {
+        final String ownerSpecId = getOnType().getSpecId().asString().replace(".", "-");
+        final String memberId = getIdentifier().toNameIdentityString();
+        return prefix + ownerSpecId + "-" + memberId;
+    }
+
+
 }

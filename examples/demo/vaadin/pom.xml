@@ -15,13 +15,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.app</groupId>
-		<artifactId>isis-app-starter-parent</artifactId>
+		<groupId>org.apache.isis.examples.apps</groupId>
+		<artifactId>demo-parent</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
-		<relativePath>../../../starters/pom.xml</relativePath>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.examples.apps</groupId>
 	<artifactId>demo-vaadin</artifactId>
 
 	<name>Apache Isis App - Demo (Vaadin)</name>
@@ -29,6 +28,7 @@
 	<packaging>${packaging.type}</packaging>
 
 	<properties>
+		<sonar.skip>true</sonar.skip>
 		<packaging.type>jar</packaging.type>
 
 		<maven-war-plugin.warName>${project.artifactId}</maven-war-plugin.warName>
@@ -96,8 +96,8 @@
 	
 		<dependency>
 			<groupId>org.apache.isis.examples.apps</groupId>
-			<artifactId>demo</artifactId>
-			<version>2.0.0-SNAPSHOT</version>
+			<artifactId>demo-domain</artifactId>
+			<version>${project.version}</version>
 			<type>jar</type>
 		</dependency>
 	
@@ -115,7 +115,7 @@
 			<groupId>org.apache.isis.incubator.viewer</groupId>
 			<artifactId>isis-viewer-vaadin-viewer</artifactId>
 			<!-- incubator version is not managed by app starter bundles -->
-			<version>2.0.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<!-- EXTENSIONS -->

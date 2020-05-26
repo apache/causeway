@@ -20,12 +20,13 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.core.metamodel.spec.interaction.InteractionVeto;
-import org.apache.isis.core.metamodel.spec.interaction.ManagedParameter;
+import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 
+import lombok.NonNull;
 import lombok.val;
 
 public class InteractionFailureHandler {
@@ -71,10 +72,12 @@ public class InteractionFailureHandler {
     }
 
     public static RestfulObjectsApplicationException onParameterListInvalid(
-            @Nullable final InteractionVeto veto, 
-            @Nullable final JsonRepresentation arguments) {
+            @NonNull final InteractionVeto veto, 
+            @NonNull final JsonRepresentation arguments) {
 
-        arguments.mapPut("x-ro-invalidReason", veto.getReason());
+        if(veto!=null) {
+            arguments.mapPut("x-ro-invalidReason", veto.getReason());
+        }
         return RestfulObjectsApplicationException
                 .createWithBody(RestfulResponse.HttpStatusCode.VALIDATION_FAILED,
                         arguments,
@@ -83,9 +86,9 @@ public class InteractionFailureHandler {
     
     // collect info for each individual param that is not valid
     public static void onParameterInvalid(
-            @Nullable final ManagedParameter managedParameter, 
-            @Nullable final InteractionVeto veto, 
-            @Nullable final JsonRepresentation arguments) {
+            @NonNull final ManagedParameter managedParameter, 
+            @NonNull final InteractionVeto veto, 
+            @NonNull final JsonRepresentation arguments) {
 
         val paramId = managedParameter.getParameter().getId();
         val argRepr = arguments.getRepresentation(paramId);

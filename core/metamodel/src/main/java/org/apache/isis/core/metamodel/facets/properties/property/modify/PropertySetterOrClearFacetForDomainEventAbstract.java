@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.properties.property.modify;
 
+import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
+
 import java.util.Map;
 import java.util.Objects;
 
@@ -42,13 +44,12 @@ import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollect
 import org.apache.isis.core.metamodel.facets.properties.publish.PublishedPropertyFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
 import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.ixn.v2.PropertyEditDto;
-
-import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
 
 import lombok.val;
 
@@ -132,7 +133,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         setOrClearProperty(Style.CLEAR,
-                owningProperty, targetAdapter, /*mixedInAdapter*/ null, interactionInitiatedBy);
+                owningProperty, targetAdapter, /*newValueAdapter*/ null, interactionInitiatedBy);
 
     }
 
@@ -154,10 +155,8 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
             final ManagedObject newValueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final ManagedObject mixedInAdapter = null;
-
         getTransactionService().executeWithinTransaction(()->{
-            doSetOrClearProperty(style, owningProperty, targetAdapter, mixedInAdapter, newValueAdapter, interactionInitiatedBy);
+            doSetOrClearProperty(style, owningProperty, InteractionHead.simple(targetAdapter), newValueAdapter, interactionInitiatedBy);
         });
 
     }
@@ -165,8 +164,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
     private void doSetOrClearProperty(
             final Style style,
             final OneToOneAssociation owningProperty,
-            final ManagedObject targetAdapter,
-            final ManagedObject mixedInAdapter,
+            final InteractionHead head,
             final ManagedObject newValueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
@@ -202,6 +200,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
 
         } else {
 
+            val targetAdapter = head.getTarget();
             final Object target = ManagedObject.unwrapSingle(targetAdapter);
             final Object argValue = ManagedObject.unwrapSingle(newValueAdapter);
 
@@ -240,7 +239,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
                                 domainEventHelper.postEventForProperty(
                                         AbstractDomainEvent.Phase.EXECUTING,
                                         getEventType(), null,
-                                        getIdentified(), targetAdapter, mixedInAdapter,
+                                        getIdentified(), head,
                                         oldValue, newValue);
 
                         // set event onto the execution
@@ -260,7 +259,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
                             domainEventHelper.postEventForProperty(
                                     AbstractDomainEvent.Phase.EXECUTED,
                                     getEventType(), uncheckedCast(event),
-                                    getIdentified(), targetAdapter, mixedInAdapter,
+                                    getIdentified(), head,
                                     oldValue, actualNewValue);
                         }
 

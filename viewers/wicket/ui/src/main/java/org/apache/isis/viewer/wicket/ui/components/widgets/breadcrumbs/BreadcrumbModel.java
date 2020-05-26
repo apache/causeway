@@ -166,7 +166,7 @@ public class BreadcrumbModel implements Serializable {
     }
 
     protected Bookmark toBookmark(final EntityModel entityModel) {
-        return entityModel.getObjectAdapterMemento().asBookmarkIfSupported();
+        return entityModel.asBookmarkIfSupported();
     }
 
     protected EntityModel toEntityModel(final Bookmark bookmark) {

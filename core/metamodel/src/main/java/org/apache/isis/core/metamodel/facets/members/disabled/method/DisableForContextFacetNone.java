@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.members.disabled.method;
 
-import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 
@@ -36,7 +35,7 @@ public class DisableForContextFacetNone extends DisableForContextFacetAbstract {
      * Always returns <tt>null</tt>.
      */
     @Override
-    public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
+    public String disables(final UsabilityContext ic) {
         return null;
     }
 

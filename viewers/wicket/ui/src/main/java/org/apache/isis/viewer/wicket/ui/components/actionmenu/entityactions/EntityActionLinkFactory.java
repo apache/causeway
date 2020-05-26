@@ -46,7 +46,7 @@ public final class EntityActionLinkFactory extends LinkAndLabelFactoryAbstract {
             final ObjectAction objectAction, 
             final String named) {
 
-        val objectAdapter = this.targetEntityModel.load();
+        val objectAdapter = this.targetEntityModel.getManagedObject();
 
         val isIdentifiable = ManagedObject.isIdentifiable(objectAdapter);
         if (!isIdentifiable) {

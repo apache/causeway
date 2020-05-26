@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.function.Function;
 
-import org.apache.isis.core.commons.internal.ioc.ManagedBeanAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
@@ -32,22 +31,6 @@ import lombok.val;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class Factories {
 
-    // -- CONTRIBUTED
-    
-    static Function<ObjectActionDefault, ObjectAssociation> contributeeAssociation(
-            final ManagedBeanAdapter serviceBean,
-            final ObjectSpecification contributeeType) {
-
-        return objectAction -> {
-            val returnType = objectAction.getReturnType();
-            if (returnType.isNotCollection()) {
-                return new OneToOneAssociationContributee(serviceBean, objectAction, contributeeType);
-            } 
-            return new OneToManyAssociationContributee(serviceBean, objectAction, contributeeType);
-            
-        };
-    }
-    
     // -- MIXINS
     
     static Function<ObjectActionDefault, ObjectActionMixedIn> mixedInAction(

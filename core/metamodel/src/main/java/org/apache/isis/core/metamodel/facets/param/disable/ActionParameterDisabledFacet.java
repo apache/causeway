@@ -37,4 +37,5 @@ public interface ActionParameterDisabledFacet extends Facet, DisablingInteractio
      * Reason why the parameter is disabled, or <tt>null</tt> if okay.
      */
     public String disabledReason(ManagedObject target, Can<ManagedObject> arguments);
+    
 }

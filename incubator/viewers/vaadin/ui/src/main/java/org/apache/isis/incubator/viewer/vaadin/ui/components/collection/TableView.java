@@ -31,11 +31,11 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.interaction.ManagedCollection;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

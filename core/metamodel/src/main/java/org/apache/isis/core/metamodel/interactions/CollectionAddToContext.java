@@ -29,16 +29,18 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
  * See {@link InteractionContext} for overview; analogous to
  * {@link CollectionAddToEvent}.
  */
-public class CollectionAddToContext extends ValidityContext<CollectionAddToEvent> implements ProposedHolder {
+public class CollectionAddToContext 
+extends ValidityContext 
+implements ProposedHolder {
 
     private final ManagedObject proposed;
 
     public CollectionAddToContext(
-            final ManagedObject targetAdapter,
+            final InteractionHead head,
             final Identifier id,
             final ManagedObject proposed,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        super(InteractionContextType.COLLECTION_ADD_TO, targetAdapter, id, interactionInitiatedBy);
+        super(InteractionContextType.COLLECTION_ADD_TO, head, id, interactionInitiatedBy);
 
         this.proposed = proposed;
     }

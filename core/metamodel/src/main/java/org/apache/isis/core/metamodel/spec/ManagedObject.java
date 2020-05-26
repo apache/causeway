@@ -39,7 +39,6 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Lazy;
-import org.apache.isis.core.commons.internal.base._Tuples.Indexed;
 import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Sets;
@@ -594,7 +593,7 @@ public interface ManagedObject {
                     .isNotVetoing();
         }
 
-        private static VisibilityContext<?> createVisibleInteractionContextForUser(
+        private static VisibilityContext createVisibleInteractionContextForUser(
                 ManagedObject adapter) {
 
             return new ObjectVisibilityContext(
@@ -655,25 +654,11 @@ public interface ManagedObject {
             return MethodExtensions.invoke(method, unwrapSingle(adapter), unwrapMultipleAsArray(argumentAdapters));
         }
     
+        @Deprecated
         public static Object invokeC(
                 Method method, 
-                ManagedObject adapter, 
-                Stream<Indexed<? extends ManagedObject>> paramsAndIndexes) {
-            return invoke(method, adapter, asArray(paramsAndIndexes, method.getParameterTypes().length));
-        }
-    
-        private static ManagedObject[] asArray(
-                Stream<Indexed<? extends ManagedObject>> paramsAndIndexes, 
-                int length) {
-            
-            final ManagedObject[] args = new ManagedObject[length];
-            paramsAndIndexes.forEach(entry->{
-                final int paramNum = entry.getIndex();
-                if(paramNum < length) {
-                    args[paramNum] = entry.getValue();
-                }
-            });
-            return args;
+                ManagedObject adapter) {
+            return invoke(method, adapter, new ManagedObject[method.getParameterTypes().length]);
         }
     
         /**

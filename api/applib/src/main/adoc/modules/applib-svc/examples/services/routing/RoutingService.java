@@ -18,8 +18,6 @@
  */
 package org.apache.isis.applib.services.routing;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
 /**
  * Provides the ability to return (and therefore have rendered) an alternative object from an action invocation.
  */

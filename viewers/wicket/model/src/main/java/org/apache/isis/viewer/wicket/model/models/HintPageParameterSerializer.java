@@ -42,7 +42,7 @@ class HintPageParameterSerializer implements Serializable {
             final EntityModel entityModel) {
         
         val hintStore = entityModel.getCommonContext().lookupServiceElseFail(HintStore.class);
-        val objectAdapterMemento = entityModel.getObjectAdapterMemento();
+        val objectAdapterMemento = entityModel.memento();
         hintStoreToPageParameters(pageParameters, objectAdapterMemento, hintStore);
     }
 
@@ -60,33 +60,5 @@ class HintPageParameterSerializer implements Serializable {
             ComponentHintKey.create(hintStore, hintKey).hintTo(bookmark, pageParameters, PREFIX);
         }
     }
-
-//XXX not used
-//    private static void updateHintStoreUNUSED(
-//            final PageParameters pageParameters,
-//            final ObjectAdapterMemento objectAdapterMemento,
-//            final HintStore hintStore) {
-//        
-//        if(objectAdapterMemento == null) {
-//            return;
-//        }
-//        Set<String> namedKeys = pageParameters.getNamedKeys();
-//        if (namedKeys.contains("no-hints")) {
-//            hintStore.removeAll(objectAdapterMemento.asHintingBookmarkIfSupported());
-//            return;
-//        }
-//        List<ComponentHintKey> newComponentHintKeys = _Lists.newArrayList();
-//        for (String namedKey : namedKeys) {
-//            if (namedKey.startsWith(PREFIX)) {
-//                String value = pageParameters.get(namedKey).toString(null);
-//                String key = namedKey.substring(5);
-//                final ComponentHintKey componentHintKey = ComponentHintKey.create(key);
-//                newComponentHintKeys.add(componentHintKey);
-//                final Bookmark bookmark = objectAdapterMemento.asHintingBookmarkIfSupported();
-//                componentHintKey.set(bookmark, value);
-//            }
-//        }
-//    }
-
 
 }

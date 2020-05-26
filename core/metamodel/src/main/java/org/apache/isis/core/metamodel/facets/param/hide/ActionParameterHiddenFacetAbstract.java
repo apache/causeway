@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.param.hide;
 
-import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -41,7 +40,7 @@ implements ActionParameterHiddenFacet {
     }
 
     @Override
-    public String hides(final VisibilityContext<? extends VisibilityEvent> context) {
+    public String hides(final VisibilityContext context) {
         if (!(context instanceof ActionArgVisibilityContext)) {
             return null;
         }

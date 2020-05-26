@@ -26,13 +26,16 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 
 /**
  * Provides all the system dependencies for sub-classes.
  * @since 2.0
  */
-public abstract class WebPageBase extends WebPage implements IsisWebAppCommonContext.Delegating {
+public abstract class WebPageBase
+extends WebPage 
+implements HasCommonContext {
 
     private static final long serialVersionUID = 1L;
     

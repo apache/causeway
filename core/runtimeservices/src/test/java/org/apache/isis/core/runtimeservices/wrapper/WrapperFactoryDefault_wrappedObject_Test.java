@@ -19,10 +19,16 @@
 
 package org.apache.isis.core.runtimeservices.wrapper;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -31,11 +37,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command.Executor;
@@ -43,6 +45,7 @@ import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.HiddenException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
@@ -65,6 +68,7 @@ import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyCle
 import org.apache.isis.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetViaModifyMethod;
 import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethod;
+import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -116,6 +120,7 @@ public class WrapperFactoryDefault_wrappedObject_Test {
     @Mock private ManagedObject mockEmployeeAdapter;
     @Mock private ManagedObject mockAdapterForStringSmith;
     @Mock private ManagedObject mockAdapterForStringJones;
+    @Mock private Identifier mockId;
 
     private final SimpleSession session = new SimpleSession("tester", Collections.<String>emptyList());
 
@@ -168,11 +173,11 @@ public class WrapperFactoryDefault_wrappedObject_Test {
                 allowing(mockObjectManager).adapt(employeeDO);
                 will(returnValue(mockEmployeeAdapter));
 
-//                allowing(mockEmployeeAdapter).getOid();
-//                will(returnValue(Factory.persistentOf(ObjectSpecId.of("EMP"), "1")));
-
                 allowing(mockEmployeeSpec).isManagedBean();
                 will(returnValue(true));
+                
+                allowing(mockEmployeeSpec).getBeanSort();
+                will(returnValue(BeanSort.ENTITY));
                 
                 allowing(mockEmployeeSpec).isIdentifiable();
                 will(returnValue(true));
@@ -200,9 +205,6 @@ public class WrapperFactoryDefault_wrappedObject_Test {
 
                 allowing(mockAuthenticationSessionTracker).currentAuthenticationSession();
                 will(returnValue(Optional.of(session)));
-
-//                allowing(mockAdapterManager).adapterFor(employeeDO);
-//                will(returnValue(mockEmployeeAdapter));
 
                 allowing(mockEmployeeAdapter).titleString(null);
                 will(returnValue("titleOf[mockEmployeeAdapter]"));
@@ -315,11 +317,18 @@ public class WrapperFactoryDefault_wrappedObject_Test {
             allowing(mockAdapterForStringSmith).getSpecification();
             will(returnValue(mockStringSpec));
 
-            ignoring(mockStringSpec);
-
-//            allowing(mockAdapterForStringSmith).isDestroyed();
-//            will(returnValue(false));
-
+            allowing(mockStringSpec).isEntity();
+            will(returnValue(false));
+            
+            allowing(mockStringSpec).getIdentifier();
+            will(returnValue(mockId));
+            
+            allowing(mockStringSpec).getBeanSort();
+            will(returnValue(BeanSort.VIEW_MODEL));
+            
+            allowing(mockStringSpec).streamFacets(HidingInteractionAdvisor.class);
+            will(returnValue(Stream.empty()));
+            
             allowing(mockObjectManager).adapt("Smith");
             will(returnValue(mockAdapterForStringSmith));
         }});
@@ -356,7 +365,21 @@ public class WrapperFactoryDefault_wrappedObject_Test {
 
                 ignoring(mockCommand);
 
-                ignoring(mockStringSpec);
+                allowing(mockStringSpec).isParented();
+                will(returnValue(false));
+                
+                allowing(mockStringSpec).isEntity();
+                will(returnValue(false));
+                
+                allowing(mockStringSpec).getIdentifier();
+                will(returnValue(mockId));
+                
+                allowing(mockStringSpec).getBeanSort();
+                will(returnValue(BeanSort.VIEW_MODEL));
+                
+                allowing(mockStringSpec).streamFacets(HidingInteractionAdvisor.class);
+                will(returnValue(Stream.empty()));
+                
             }
         });
 

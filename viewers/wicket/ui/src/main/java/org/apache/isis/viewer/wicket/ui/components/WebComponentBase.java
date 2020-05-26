@@ -24,6 +24,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 
 /**
@@ -32,7 +33,7 @@ import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
  */
 public abstract class WebComponentBase
 extends WebComponent
-implements IsisWebAppCommonContext.Delegating {
+implements HasCommonContext {
 
     public WebComponentBase(final String id) {
         super(id);

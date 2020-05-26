@@ -27,10 +27,7 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.spec.Specification;
-import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -72,7 +69,7 @@ public abstract class MustSatisfySpecificationFacetAbstract extends FacetAbstrac
     }
 
     @Override
-    public String invalidates(final ValidityContext<? extends ValidityEvent> validityContext) {
+    public String invalidates(final ValidityContext validityContext) {
         if (!(validityContext instanceof ProposedHolder)) {
             return null;
         }

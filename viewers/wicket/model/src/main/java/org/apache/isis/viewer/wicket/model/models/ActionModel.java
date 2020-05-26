@@ -45,18 +45,17 @@ import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.NamedWithMimeType;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._NullSafe;
-import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
-import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModelHead;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.common.model.action.form.FormPendingParamUiModel;
 import org.apache.isis.viewer.common.model.action.form.FormUiModel;
@@ -64,9 +63,9 @@ import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 
 import lombok.val;
 
-public class ActionModel 
-extends BookmarkableModel<ManagedObject> 
-implements FormUiModel, FormExecutorContext {
+public final class ActionModel 
+extends ManagedObjectModel 
+implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
     private static final long serialVersionUID = 1L;
 
@@ -96,8 +95,8 @@ implements FormUiModel, FormExecutorContext {
 
     @Override
     public PageParameters getPageParametersWithoutUiHints() {
-        val adapter = getTargetAdapter();
-        val objectAction = getAction();
+        val adapter = getOwner();
+        val objectAction = getMetaModel();
         return PageParameterUtil.createPageParameters(adapter, objectAction, argCache().snapshot());
     }
 
@@ -107,21 +106,14 @@ implements FormUiModel, FormExecutorContext {
     }
 
     // --
-
+    
+    private transient ObjectAction objectAction;
     @Override
-    public String getTitle() {
-        val target = getTargetAdapter();
-        val objectAction = getAction();
-
-        val buf = new StringBuilder();
-        for(val argumentAdapter: argCache().snapshot()) {
-            if(buf.length() > 0) {
-                buf.append(",");
-            }
-            buf.append(abbreviated(titleOf(argumentAdapter), 8));
+    public ObjectAction getMetaModel() {
+        if(objectAction==null) {
+            objectAction = actionMemento.getAction(getSpecificationLoader()); 
         }
-
-        return target.titleString(null) + "." + objectAction.getName() + (buf.length()>0?"(" + buf.toString() + ")":"");
+        return objectAction;
     }
 
     @Override
@@ -131,20 +123,12 @@ implements FormUiModel, FormExecutorContext {
     
     @Override
     public EntityModel getParentUiModel() {
-        return entityModel;
+        return ownerModel;
     }
 
     // -- HELPERS
 
-    private static String titleOf(ManagedObject argumentAdapter) {
-        return argumentAdapter!=null?argumentAdapter.titleString(null):"";
-    }
-
-    private static String abbreviated(final String str, final int maxLength) {
-        return str.length() < maxLength ? str : str.substring(0, maxLength - 3) + "...";
-    }
-
-    private final EntityModel entityModel;
+    private final EntityModel ownerModel;
     private final ActionMemento actionMemento;
 
     // lazy in support of serialization of this class
@@ -156,14 +140,14 @@ implements FormUiModel, FormExecutorContext {
     }
     private ActionArgumentCache createActionArgumentCache() {
         return new ActionArgumentCache(
-                entityModel, 
+                ownerModel, 
                 actionMemento, 
-                getAction());
+                getMetaModel());
     }
 
     private ActionModel(EntityModel entityModel, ActionMemento actionMemento) {
         super(entityModel.getCommonContext());
-        this.entityModel = entityModel;
+        this.ownerModel = entityModel;
         this.actionMemento = actionMemento;
     }
 
@@ -172,25 +156,14 @@ implements FormUiModel, FormExecutorContext {
      */
     private ActionModel(ActionModel actionModel) {
         super(actionModel.getCommonContext());
-        this.entityModel = actionModel.entityModel;
+        this.ownerModel = actionModel.ownerModel;
         this.actionMemento = actionModel.actionMemento;
         this.argCache = actionModel.argCache().copy(); 
     }
 
-    private transient ObjectAction objectAction;
-    public ObjectAction getAction() {
-        if(objectAction==null) {
-            objectAction = actionMemento.getAction(getSpecificationLoader()); 
-        }
-        return objectAction;
-    }
-
-    public boolean hasParameters() {
-        return getAction().getParameterCount() > 0;
-    }
-
-    public ManagedObject getTargetAdapter() {
-        return entityModel.load();
+    @Override
+    public ManagedObject getOwner() {
+        return ownerModel.load();
     }
 
     @Override
@@ -214,15 +187,15 @@ implements FormUiModel, FormExecutorContext {
 
     private ManagedObject executeAction() {
 
-        val targetAdapter = getTargetAdapter();
+        val targetAdapter = getOwner();
         final Can<ManagedObject> arguments = argCache().snapshot();
-        final ObjectAction action = getAction();
-
-        // if this action is a mixin, then it will fill in the details automatically.
-        val mixedInAdapter = (ManagedObject)null;
+        final ObjectAction action = getMetaModel();
+        
+        val head = action.interactionHead(targetAdapter);
+        
         val resultAdapter =
                 action.executeWithRuleChecking(
-                        targetAdapter, mixedInAdapter, arguments,
+                        head, arguments,
                         InteractionInitiatedBy.USER,
                         WHERE_FOR_ACTION_INVOCATION);
 
@@ -241,51 +214,13 @@ implements FormUiModel, FormExecutorContext {
 
     }
 
-    public String getReasonDisabledIfAny() {
-
-        val targetAdapter = getTargetAdapter();
-        final ObjectAction objectAction = getAction();
-
-        final Consent usability =
-                objectAction.isUsable(
-                        targetAdapter,
-                        InteractionInitiatedBy.USER,
-                        Where.OBJECT_FORMS);
-        final String disabledReasonIfAny = usability.getReason();
-        return disabledReasonIfAny;
-    }
-
-
-    public boolean isVisible() {
-
-        val targetAdapter = getTargetAdapter();
-        val objectAction = getAction();
-
-        final Consent visibility =
-                objectAction.isVisible(
-                        targetAdapter,
-                        InteractionInitiatedBy.USER,
-                        Where.OBJECT_FORMS);
-        return visibility.isAllowed();
-    }
-
-
-    public String getReasonInvalidIfAny() {
-        val targetAdapter = getTargetAdapter();
-        final Can<ManagedObject> proposedArguments = argCache().snapshot();
-        final ObjectAction objectAction = getAction();
-        final Consent validity = objectAction
-                .isProposedArgumentSetValid(targetAdapter, proposedArguments, InteractionInitiatedBy.USER);
-        return validity.isAllowed() ? null : validity.getReason();
-    }
-
     @Override
     public void setObject(final ManagedObject object) {
         throw new UnsupportedOperationException("target adapter for ActionModel cannot be changed");
     }
 
     public PendingParameterModel getArgumentsAsParamModel() {
-        return getAction().newPendingParameterModelHead(getTargetAdapter())
+        return getMetaModel().interactionHead(getOwner())
                 .model(argCache().snapshot());
     }
 
@@ -295,8 +230,8 @@ implements FormUiModel, FormExecutorContext {
      */
     public void clearArguments() {
 
-        val defaultsFixedPoint = getAction()
-                .newPendingParameterModelHead(getTargetAdapter())
+        val defaultsFixedPoint = getMetaModel()
+                .interactionHead(getOwner())
                 .defaults()
                 .getParamValues();
 
@@ -308,7 +243,7 @@ implements FormUiModel, FormExecutorContext {
      * of {@link BookmarkPolicy#AS_ROOT root}, and has safe {@link ObjectAction#getSemantics() semantics}.
      */
     public boolean isBookmarkable() {
-        final ObjectAction action = getAction();
+        final ObjectAction action = getMetaModel();
         final BookmarkPolicyFacet bookmarkPolicy = action.getFacet(BookmarkPolicyFacet.class);
         final boolean safeSemantics = action.getSemantics().isSafeInNature();
         return bookmarkPolicy.value() == BookmarkPolicy.AS_ROOT && safeSemantics;
@@ -392,7 +327,7 @@ implements FormUiModel, FormExecutorContext {
 
     @Override
     public PromptStyle getPromptStyle() {
-        final ObjectAction objectAction = getAction();
+        final ObjectAction objectAction = getMetaModel();
         final ObjectSpecification objectActionOwner = objectAction.getOnType();
         if(objectActionOwner.isManagedBean()) {
             // tried to move this test into PromptStyleFacetFallback,
@@ -428,7 +363,7 @@ implements FormUiModel, FormExecutorContext {
     }
 
     public <T extends Facet> T getFacet(final Class<T> facetType) {
-        final FacetHolder facetHolder = getAction();
+        final FacetHolder facetHolder = getMetaModel();
         return facetHolder.getFacet(facetType);
     }
 
@@ -460,14 +395,16 @@ implements FormUiModel, FormExecutorContext {
     @Override
     public Stream<FormPendingParamUiModel> streamPendingParamUiModels() {
 
-        val targetAdapter = this.getTargetAdapter();
-        val realTargetAdapter = this.getAction().realTargetAdapter(targetAdapter);
+        val targetAdapter = this.getOwner();
+        val realTargetAdapter = this.getMetaModel().realTargetAdapter(targetAdapter);
         val pendingArgs = getArgumentsAsParamModel();
 
+        val head = InteractionHead.of(targetAdapter, realTargetAdapter);
+        
         return argCache()
         .streamParamUiModels()
         .map(paramUiModel->{
-            return FormPendingParamUiModel.of(realTargetAdapter, paramUiModel, pendingArgs);
+            return FormPendingParamUiModel.of(head, paramUiModel, pendingArgs);
         });
 
     }

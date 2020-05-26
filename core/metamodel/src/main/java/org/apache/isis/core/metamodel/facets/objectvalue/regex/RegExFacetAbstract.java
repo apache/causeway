@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.objectvalue.regex;
 
 import javax.validation.constraints.Pattern;
 
-import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -84,7 +83,7 @@ public abstract class RegExFacetAbstract extends FacetAbstract implements RegExF
     // //////////////////////////////////////////////////////////
 
     @Override
-    public String invalidates(final ValidityContext<? extends ValidityEvent> context) {
+    public String invalidates(final ValidityContext context) {
         if (!(context instanceof ProposedHolder)) {
             return null;
         }

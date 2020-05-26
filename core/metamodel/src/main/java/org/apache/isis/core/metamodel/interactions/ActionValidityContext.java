@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
+import static org.apache.isis.core.metamodel.spec.ManagedObject.unwrapSingle;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.ActionInvocationEvent;
 import org.apache.isis.core.commons.collections.Can;
@@ -27,8 +29,6 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
-import static org.apache.isis.core.metamodel.spec.ManagedObject.unwrapSingle;
-
 import lombok.Getter;
 
 /**
@@ -36,20 +36,20 @@ import lombok.Getter;
  * {@link ActionInvocationEvent}.
  */
 public class ActionValidityContext
-extends ValidityContext<ActionInvocationEvent> 
+extends ValidityContext 
 implements ActionInteractionContext {
 
     @Getter(onMethod = @__(@Override)) private final ObjectAction objectAction;
     @Getter private final Can<ManagedObject> args;
 
     public ActionValidityContext(
-            final ManagedObject targetAdapter,
+            final InteractionHead head,
             final ObjectAction objectAction,
             final Identifier id,
             final Can<ManagedObject> args,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        super(InteractionContextType.ACTION_INVOKE, targetAdapter, id, interactionInitiatedBy);
+        super(InteractionContextType.ACTION_INVOKE, head, id, interactionInitiatedBy);
         this.objectAction = objectAction;
         this.args = args;
     }

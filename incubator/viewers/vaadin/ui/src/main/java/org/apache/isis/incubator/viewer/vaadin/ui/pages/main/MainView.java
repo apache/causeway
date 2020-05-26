@@ -34,6 +34,7 @@ import com.vaadin.flow.theme.lumo.Lumo;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.action.ActionVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
@@ -105,8 +106,7 @@ implements BeforeEnterObserver {
 
         val result = objectAction
                 .execute(
-                        actionOwner,
-                        null,
+                        InteractionHead.simple(actionOwner),
                         Can.empty(),
                         InteractionInitiatedBy.USER
                         );

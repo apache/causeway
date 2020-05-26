@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.objectvalue.maxlen;
 
-import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacetAbstract;
@@ -54,7 +53,7 @@ public abstract class MaxLengthFacetAbstract extends SingleIntValueFacetAbstract
     }
 
     @Override
-    public String invalidates(final ValidityContext<? extends ValidityEvent> context) {
+    public String invalidates(final ValidityContext context) {
         if (!(context instanceof ProposedHolder)) {
             return null;
         }

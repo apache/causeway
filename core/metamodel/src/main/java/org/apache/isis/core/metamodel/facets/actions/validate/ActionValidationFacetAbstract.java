@@ -19,14 +19,15 @@
 
 package org.apache.isis.core.metamodel.facets.actions.validate;
 
-import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.ActionValidityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 
-public abstract class ActionValidationFacetAbstract extends FacetAbstract implements ActionValidationFacet {
+public abstract class ActionValidationFacetAbstract 
+extends FacetAbstract 
+implements ActionValidationFacet {
 
     public static Class<? extends Facet> type() {
         return ActionValidationFacet.class;
@@ -37,7 +38,7 @@ public abstract class ActionValidationFacetAbstract extends FacetAbstract implem
     }
 
     @Override
-    public String invalidates(final ValidityContext<? extends ValidityEvent> context) {
+    public String invalidates(final ValidityContext context) {
         if (!(context instanceof ActionValidityContext)) {
             return null;
         }

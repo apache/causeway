@@ -23,10 +23,6 @@ import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
-import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
-import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
-import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -44,7 +40,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 
 public abstract class ActionDomainEventFacetAbstract
 extends SingleClassValueFacetAbstract 
@@ -75,14 +70,14 @@ implements ActionDomainEventFacet {
     }
     
     @Override
-    public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
+    public String hides(final VisibilityContext ic) {
 
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
                         AbstractDomainEvent.Phase.HIDE,
                         getEventType(),
                         actionFrom(ic), getIdentified(),
-                        ic.getTarget(), ic.getMixedIn(), argumentAdaptersFrom(ic),
+                        ic.getHead(), argumentAdaptersFrom(ic),
                         null);
         if (event != null && event.isHidden()) {
             return "Hidden by subscriber";
@@ -91,14 +86,14 @@ implements ActionDomainEventFacet {
     }
 
     @Override
-    public String disables(UsabilityContext<? extends UsabilityEvent> ic) {
+    public String disables(UsabilityContext ic) {
 
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
                         AbstractDomainEvent.Phase.DISABLE,
                         getEventType(),
                         actionFrom(ic), getIdentified(),
-                        ic.getTarget(), ic.getMixedIn(), argumentAdaptersFrom(ic),
+                        ic.getHead(), argumentAdaptersFrom(ic),
                         null);
         if (event != null && event.isDisabled()) {
             final TranslatableString reasonTranslatable = event.getDisabledReasonTranslatable();
@@ -112,7 +107,7 @@ implements ActionDomainEventFacet {
     }
 
     @Override
-    public String invalidates(final ValidityContext<? extends ValidityEvent> ic) {
+    public String invalidates(final ValidityContext ic) {
 
         _Assert.assertTrue(ic instanceof ActionValidityContext, ()->
             String.format("expecting an action context but got %s", ic.getIdentifier()));
@@ -123,7 +118,7 @@ implements ActionDomainEventFacet {
                         AbstractDomainEvent.Phase.VALIDATE,
                         getEventType(),
                         actionFrom(ic), getIdentified(),
-                        ic.getTarget(), ic.getMixedIn(), aic.getArgs(),
+                        ic.getHead(), aic.getArgs(),
                         null);
         if (event != null && event.isInvalid()) {
             final TranslatableString reasonTranslatable = event.getInvalidityReasonTranslatable();
@@ -138,7 +133,7 @@ implements ActionDomainEventFacet {
     
     // -- HELPER
     
-    private static ObjectAction actionFrom(final InteractionContext<?> ic) {
+    private static ObjectAction actionFrom(final InteractionContext ic) {
         if(!(ic instanceof ActionInteractionContext)) {
             throw new IllegalStateException(
                     "Expecting ic to be of type ActionInteractionContext, instead was: " + ic);
@@ -146,20 +141,9 @@ implements ActionDomainEventFacet {
         return ((ActionInteractionContext) ic).getObjectAction();
     }
 
+    @Deprecated
     private static Can<ManagedObject> argumentAdaptersFrom(
-            final InteractionContext<? extends InteractionEvent> ic) {
-        
-        val contributee = ic.getContributeeWithParamIndex();
-
-        if(contributee!=null) {
-
-            val adapter = contributee.getIndex() == 0
-                    ? contributee.getValue()
-                    : ManagedObject.unspecified();
-            
-            return Can.ofSingleton(adapter);
-                
-        }
+            final InteractionContext ic) {
 
         return Can.empty();
     }

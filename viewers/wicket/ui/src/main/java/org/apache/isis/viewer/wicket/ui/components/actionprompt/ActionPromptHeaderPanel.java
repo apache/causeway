@@ -39,7 +39,7 @@ public class ActionPromptHeaderPanel extends PanelAbstract<ActionModel> {
     public ActionPromptHeaderPanel(String id, final ActionModel model) {
         super(id, model);
 
-        _Blackhole.consume(model.getTargetAdapter()); // side-effect: loads the model
+        _Blackhole.consume(model.getOwner()); // side-effect: loads the model
 
         getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ENTITY_ICON_AND_TITLE, model.getParentUiModel());
 
@@ -48,12 +48,12 @@ public class ActionPromptHeaderPanel extends PanelAbstract<ActionModel> {
             private static final long serialVersionUID = 1L;
             @Override
             public String getObject() {
-                final ObjectAction action = model.getAction();
+                final ObjectAction action = model.getMetaModel();
                 return action.getName();
             }
         });
 
-        final ObjectAction action = model.getAction();
+        final ObjectAction action = model.getMetaModel();
         NamedFacet namedFacet = action.getFacet(NamedFacet.class);
         if (namedFacet != null) {
             label.setEscapeModelStrings(namedFacet.escaped());

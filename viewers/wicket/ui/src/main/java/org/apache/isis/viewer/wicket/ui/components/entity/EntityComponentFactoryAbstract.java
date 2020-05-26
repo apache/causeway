@@ -65,7 +65,7 @@ public abstract class EntityComponentFactoryAbstract extends ComponentFactoryAbs
         // is therefore not called. resulting in a concurrency exception.
         //
         // Therefore, we do the same processing here instead.
-        val adapter = entityModel.load();
+        val adapter = entityModel.getManagedObject();
         if (adapter == null) {
             // is ok;
         }

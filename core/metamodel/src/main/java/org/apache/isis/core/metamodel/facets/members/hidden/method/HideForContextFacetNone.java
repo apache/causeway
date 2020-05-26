@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.members.hidden.method;
 
-import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
@@ -33,7 +32,7 @@ public class HideForContextFacetNone extends HideForContextFacetAbstract {
      * Always returns <tt>null</tt>.
      */
     @Override
-    public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
+    public String hides(final VisibilityContext ic) {
         return null;
     }
 

@@ -410,7 +410,7 @@ public abstract class PageAbstract extends WebPageBase implements ActionPromptPr
         return getCommonContext().getConfiguration().getViewer().getWicket().getBookmarkedPages().isShowDropDownOnFooter();
     }
 
-    protected void bookmarkPageIfShown(final BookmarkableModel<?> model) {
+    protected void bookmarkPageIfShown(final BookmarkableModel model) {
         if(!isShowBookmarks()) {
             // no need...
             return;

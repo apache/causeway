@@ -18,36 +18,37 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.common.model.feature.ScalarUiModel;
+import org.apache.isis.viewer.common.model.object.ObjectUiModel;
+import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
+import org.apache.isis.viewer.common.model.object.ObjectUiModel.Mode;
+import org.apache.isis.viewer.common.model.object.ObjectUiModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
+import lombok.Setter;
 
 /**
  * Represents a scalar of an entity, either a {@link Kind#PROPERTY property} or
@@ -57,18 +58,11 @@ import lombok.val;
  * Is the backing model to each of the fields that appear in forms (for entities
  * or action dialogs).
  *
- * <p>
- *     NOTE: although this inherits from {@link EntityModel}, this is wrong I think; what is being shared
- *     is just some of the implementation - both objects have to wrap some arbitrary memento holding some state
- *     (a value or entity reference in a ScalarModel's case, an entity reference in an EntityModel's), they have
- *     a view mode, they have a rendering hint, and scalar models have a pending value (not sure if Entity Model really
- *     requires this).
- *     Fundamentally though a ScalarModel is NOT really an EntityModel, so this hierarchy should be broken out with a
- *     common superclass for both EntityModel and ScalarModel.
- * </p>
  */
-public abstract class ScalarModel extends EntityModel 
-implements ScalarUiModel, LinksProvider, FormExecutorContext {
+//@Log4j2
+public abstract class ScalarModel 
+extends ManagedObjectModel 
+implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext {
 
     private static final long serialVersionUID = 1L;
 
@@ -81,15 +75,16 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
     public boolean isParameter() { return kind == Kind.PARAMETER; }
     
 
-    static boolean isRequired(final FacetHolder facetHolder) {
-        final MandatoryFacet mandatoryFacet = facetHolder.getFacet(MandatoryFacet.class);
-        final boolean required = mandatoryFacet != null && !mandatoryFacet.isInvertedSemantics();
-        return required;
-    }
-
-
-
     private final EntityModel parentEntityModel;
+    
+    @Getter(onMethod = @__(@Override)) 
+    @Setter(onMethod = @__(@Override)) 
+    private Mode mode;
+    
+    @Getter(onMethod = @__(@Override)) 
+    @Setter(onMethod = @__(@Override)) 
+    private RenderingHint renderingHint;
+    
 
     /**
      * Creates a model representing an action parameter of an action of a parent
@@ -98,12 +93,13 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
      */
     protected ScalarModel(EntityModel parentEntityModel, ActionParameterMemento apm) {
         
-        super(parentEntityModel.getCommonContext(),
-                EntityModel.Mode.EDIT, 
-                EntityModel.RenderingHint.REGULAR);
+        super(parentEntityModel.getCommonContext());
         
         this.kind = Kind.PARAMETER;
         this.parentEntityModel = parentEntityModel;
+        this.pendingModel = new PendingModel(this);
+        this.mode = ObjectUiModel.Mode.EDIT;
+        this.renderingHint = ObjectUiModel.RenderingHint.REGULAR;
     }
 
     /**
@@ -114,12 +110,15 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
     protected ScalarModel(
             EntityModel parentEntityModel, 
             PropertyMemento pm,
-            EntityModel.Mode mode, 
-            EntityModel.RenderingHint renderingHint) {
+            ObjectUiModel.Mode mode, 
+            ObjectUiModel.RenderingHint renderingHint) {
         
-        super(parentEntityModel.getCommonContext(), mode, renderingHint);
+        super(parentEntityModel.getCommonContext());
         this.kind = Kind.PROPERTY;
         this.parentEntityModel = parentEntityModel;
+        this.pendingModel = new PendingModel(this);
+        this.mode = mode;
+        this.renderingHint = renderingHint;
     }
 
     protected ManagedObject loadFromSuper() {
@@ -140,27 +139,6 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
         return owner;  
     }
     
-
-    protected static void setObjectFromPropertyIfVisible(
-            final ScalarModel scalarModel,
-            final OneToOneAssociation property,
-            final ManagedObject parentAdapter) {
-
-        final Where where = scalarModel.getRenderingHint().asWhere();
-
-        final Consent visibility =
-                property.isVisible(parentAdapter, InteractionInitiatedBy.FRAMEWORK, where);
-
-        final ManagedObject associatedAdapter;
-        if (visibility.isAllowed()) {
-            associatedAdapter = property.get(parentAdapter, InteractionInitiatedBy.USER);
-        } else {
-            associatedAdapter = null;
-        }
-
-        scalarModel.setObject(associatedAdapter);
-    }
-
     /**
      * Whether the scalar represents a {@link Kind#PROPERTY property} or a
      * {@link Kind#PARAMETER}.
@@ -172,13 +150,19 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
     /**
      * Overrides superclass' implementation, because a {@link ScalarModel} can
      * know the {@link ObjectSpecification of} the {@link ManagedObject adapter}
-     * without there necessarily being any adapter being
+     * without there necessarily having any adapter 
      * {@link #setObject(ManagedObject) set}.
      */
     @Override
     public ObjectSpecification getTypeOfSpecification() {
         return getScalarTypeSpec();
     }
+
+    @Override
+    public Optional<ObjectSpecId> getTypeOfSpecificationId() {
+        return Optional.of(getScalarTypeSpec().getSpecId());
+    }
+    
 
     public boolean isScalarTypeAnyOf(final Class<?>... requiredClass) {
         final String fullName = getTypeOfSpecification().getFullIdentifier();
@@ -201,29 +185,6 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
         return adapter.titleString(null);
     }
 
-    @Override
-    public void setObject(ManagedObject adapter) {
-        if(adapter == null) {
-            super.setObject(null);
-            return;
-        }
-
-        final Object pojo = adapter.getPojo();
-        if(pojo == null) {
-            super.setObject(null);
-            return;
-        }
-
-        if(isCollection()) {
-            val memento = super.getMementoService()
-                    .mementoForPojos(_Casts.uncheckedCast(pojo), getTypeOfSpecification().getSpecId());
-                    
-            super.setObjectMemento(memento); // associated value
-        } else {
-            super.setObject(adapter); // associated value
-        }
-    }
-
     public void setObjectAsString(final String enteredText) {
         // parse text to get adapter
         ParseableFacet parseableFacet = getTypeOfSpecification().getFacet(ParseableFacet.class);
@@ -236,21 +197,6 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
         setObject(adapter);
     }
 
-    public void setPendingAdapter(final ManagedObject objectAdapter) {
-        if(isCollection()) {
-            val pojos = objectAdapter.getPojo();
-            val memento = super.getMementoService()
-                    .mementoForPojos(_Casts.uncheckedCast(pojos), getTypeOfSpecification().getSpecId());
-            setPending(memento);
-        } else {
-            val memento = super.getMementoService()
-                    .mementoForObject(objectAdapter);
-            setPending(memento);
-        }
-    }
-
-
-    
     public boolean whetherHidden() {
         final Where where = getRenderingHint().asWhere();
         return whetherHidden(where);
@@ -267,11 +213,15 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
 
     public abstract String validate(ManagedObject proposedAdapter);
 
-    public abstract boolean isRequired();
+    public boolean isRequired() {
+        return !getMetaModel().isOptional();
+    }
 
     public abstract String getCssClass();
 
-    public abstract <T extends Facet> T getFacet(Class<T> facetType);
+    public final <T extends Facet> T getFacet(final Class<T> facetType) {
+        return getMetaModel().getFacet(facetType);
+    }
 
     /**
      * Additional links to render (if any)
@@ -281,60 +231,6 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
     @Override
     public List<LinkAndLabel> getLinks() {
         return Collections.unmodifiableList(linkAndLabels);
-    }
-
-    /**
-     * @return
-     */
-    public ScalarModelWithPending asScalarModelWithPending() {
-        return new ScalarModelWithPending(){
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public ObjectMemento getPending() {
-                return ScalarModel.this.getPending();
-            }
-
-            @Override
-            public void setPending(ObjectMemento pending) {
-                ScalarModel.this.setPending(pending);
-            }
-
-            @Override
-            public ScalarModel getScalarModel() {
-                return ScalarModel.this;
-            }
-        };
-    }
-
-    /**
-     * @return
-     */
-    public ScalarModelWithMultiPending asScalarModelWithMultiPending() {
-        return new ScalarModelWithMultiPending(){
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public ArrayList<ObjectMemento> getMultiPending() {
-                ObjectMemento pendingMemento = ScalarModel.this.getPending();
-                return ObjectMemento.unwrapList(pendingMemento)
-                        .orElse(null);
-            }
-
-            @Override
-            public void setMultiPending(final ArrayList<ObjectMemento> pending) {
-                ObjectSpecId specId = getScalarModel().getTypeOfSpecification().getSpecId();
-                ObjectMemento adapterMemento = ObjectMemento.wrapMementoList(pending, specId);
-                ScalarModel.this.setPending(adapterMemento);
-            }
-
-            @Override
-            public ScalarModel getScalarModel() {
-                return ScalarModel.this;
-            }
-        };
     }
 
     @Override
@@ -372,12 +268,6 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
 
     // //////////////////////////////////////
 
-    //    @Override
-    //    public boolean isInlinePrompt() {
-    //        return getPromptStyle() == PromptStyle.INLINE && canEnterEditMode();
-    //    }
-
-
     private InlinePromptContext inlinePromptContext;
 
     /**
@@ -403,8 +293,8 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
         private final ObjectAction firstAssociatedWithInlineAsIfEdit;
         private final List<ObjectAction> remainingAssociated;
 
-        AssociatedActions(final List<ObjectAction> allAssociated) {
-            final List<ObjectAction> temp = _Lists.newArrayList(allAssociated);
+        AssociatedActions(final Can<ObjectAction> allAssociated) {
+            final List<ObjectAction> temp = allAssociated.toList();
             this.firstAssociatedWithInlineAsIfEdit = firstAssociatedActionWithInlineAsIfEdit(allAssociated);
             if(this.firstAssociatedWithInlineAsIfEdit != null) {
                 temp.remove(firstAssociatedWithInlineAsIfEdit);
@@ -422,7 +312,7 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
             return firstAssociatedWithInlineAsIfEdit != null;
         }
 
-        private static ObjectAction firstAssociatedActionWithInlineAsIfEdit(final List<ObjectAction> objectActions) {
+        private static ObjectAction firstAssociatedActionWithInlineAsIfEdit(final Can<ObjectAction> objectActions) {
             for (ObjectAction objectAction : objectActions) {
                 final PromptStyle promptStyle = ObjectAction.Util.promptStyleFor(objectAction);
                 if(promptStyle.isInlineAsIfEdit()) {
@@ -471,8 +361,6 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
 
     protected abstract String getIdentifier();
 
-    protected abstract String parseAndValidate(String proposedPojoAsStr);
-
     public AssociatedActions getAssociatedActions() {
         if (associatedActions == null) {
             associatedActions = new AssociatedActions(calcAssociatedActions());
@@ -480,10 +368,26 @@ implements ScalarUiModel, LinksProvider, FormExecutorContext {
         return associatedActions;
     }
     
-    protected abstract List<ObjectAction> calcAssociatedActions();
+    protected abstract Can<ObjectAction> calcAssociatedActions();
     
     public final boolean hasAssociatedActionWithInlineAsIfEdit() {
         return getAssociatedActions().hasAssociatedActionWithInlineAsIfEdit();
     }
+    
+    // -- PENDING STUFF
+    
+    @Getter(value = AccessLevel.PACKAGE)
+    private final PendingModel pendingModel;
+
+    public ManagedObject getPendingElseCurrentAdapter() {
+        return pendingModel.getPendingElseCurrentAdapter();
+    }
+
+    public void clearPending() {
+        pendingModel.clearPending();
+    }
+
+    
+    // --
     
 }

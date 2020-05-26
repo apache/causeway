@@ -38,7 +38,7 @@ public class ActionPromptPage extends PageAbstract {
     public ActionPromptPage(final ActionModel model) {
         super(
                 new PageParameters(), 
-                model.getAction().getName(), 
+                model.getMetaModel().getName(), 
                 ComponentType.ACTION_PROMPT);
         
         addChildComponents(themeDiv, model);
@@ -61,7 +61,7 @@ public class ActionPromptPage extends PageAbstract {
     }
 
     public ActionPromptPage(final PageParameters pageParameters, final ActionModel model) {
-        super(pageParameters, model.getAction().getName(), ComponentType.ACTION_PROMPT);
+        super(pageParameters, model.getMetaModel().getName(), ComponentType.ACTION_PROMPT);
         addChildComponents(themeDiv, model);
 
         // no need to bookmark because the ActionParametersPanel will have done so for us

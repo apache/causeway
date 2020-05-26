@@ -55,10 +55,11 @@ import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoice
 import org.apache.isis.core.metamodel.interactions.ActionUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ActionValidityContext;
 import org.apache.isis.core.metamodel.interactions.ActionVisibilityContext;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
-import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -148,8 +149,8 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
     @Override
-    public PendingParameterModelHead newPendingParameterModelHead(@NonNull ManagedObject actionOwner) {
-        return PendingParameterModelHead.of(this, actionOwner, actionOwner);
+    public ActionInteractionHead interactionHead(@NonNull ManagedObject actionOwner) {
+        return ActionInteractionHead.of(this, actionOwner, actionOwner);
     }
     
     // -- Parameters
@@ -223,22 +224,36 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         return parameters.getElseFail(position);
     }
 
-
+    protected InteractionHead headFor(final ManagedObject target) {
+        return InteractionHead.simple(target);
+    }
 
     // -- visable, usable
 
     @Override
-    public VisibilityContext<?> createVisibleInteractionContext(
-            final ManagedObject targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
-            Where where) {
-        return new ActionVisibilityContext(targetObjectAdapter, this, getIdentifier(), interactionInitiatedBy, where);
+    public VisibilityContext createVisibleInteractionContext(
+            final ManagedObject target, 
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where) {
+        return new ActionVisibilityContext(
+                headFor(target), 
+                this, 
+                getIdentifier(), 
+                interactionInitiatedBy, 
+                where);
     }
 
     @Override
-    public UsabilityContext<?> createUsableInteractionContext(
-            final ManagedObject targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
-            Where where) {
-        return new ActionUsabilityContext(targetObjectAdapter, this, getIdentifier(), interactionInitiatedBy, where);
+    public UsabilityContext createUsableInteractionContext(
+            final ManagedObject target, 
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where) {
+        return new ActionUsabilityContext(
+                headFor(target), 
+                this, 
+                getIdentifier(), 
+                interactionInitiatedBy, 
+                where);
     }
 
 
@@ -300,19 +315,21 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
     private void validateArgumentsIndividually(
-            final ManagedObject objectAdapter,
+            final ManagedObject target,
             final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy,
             final InteractionResultSet resultSet) {
         
+        val head = headFor(target);
+        
         val actionParameters = getParameters();
         if (proposedArguments != null) {
             for (int i = 0; i < proposedArguments.size(); i++) {
-                final ValidityContext<?> ic = actionParameters.getElseFail(i)
+                val validityContext = actionParameters.getElseFail(i)
                         .createProposedArgumentInteractionContext(
-                                objectAdapter, proposedArguments, i, interactionInitiatedBy);
+                                head, proposedArguments, i, interactionInitiatedBy);
                 
-                InteractionUtils.isValidResultSet(getParameter(i), ic, resultSet);
+                InteractionUtils.isValidResultSet(getParameter(i), validityContext, resultSet);
             }
         }
     }
@@ -348,17 +365,21 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
             final InteractionInitiatedBy interactionInitiatedBy,
             final InteractionResultSet resultSet) {
         
-        final ValidityContext<?> ic = createActionInvocationInteractionContext(
+        val validityContext = createActionInvocationInteractionContext(
                 objectAdapter, proposedArguments, interactionInitiatedBy);
-        InteractionUtils.isValidResultSet(this, ic, resultSet);
+        InteractionUtils.isValidResultSet(this, validityContext, resultSet);
     }
 
     ActionValidityContext createActionInvocationInteractionContext(
-            final ManagedObject targetObject,
+            final ManagedObject target,
             final Can<ManagedObject> proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        return new ActionValidityContext(targetObject, this, getIdentifier(), proposedArguments,
+        return new ActionValidityContext(
+                headFor(target), 
+                this, 
+                getIdentifier(), 
+                proposedArguments,
                 interactionInitiatedBy);
     }
 
@@ -368,12 +389,13 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     @Override
     public ManagedObject executeWithRuleChecking(
-            final ManagedObject target,
-            final ManagedObject mixedInAdapter,
+            final InteractionHead head,
             final Can<ManagedObject> arguments,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
 
+        val target = head.getOwner();
+        
         // see it?
         final Consent visibility = isVisible(target, interactionInitiatedBy, where);
         if (visibility.isVetoed()) {
@@ -392,7 +414,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
             throw new RecoverableException(validity.getReason());
         }
 
-        return execute(target, mixedInAdapter, arguments, interactionInitiatedBy);
+        return execute(head, arguments, interactionInitiatedBy);
     }
 
     /**
@@ -400,40 +422,37 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
      * {@link #executeInternal(ManagedObject, ManagedObject, List, InteractionInitiatedBy) executeInternal}
      * to invoke the {@link ActionInvocationFacet invocation facet}.
      *
-     * @param mixedInAdapter - will be null for regular actions, and for mixin actions.  When a mixin action invokes its underlying mixedIn action, then will be populated (so that the ActionDomainEvent can correctly provide the underlying mixin)
+     * @param mixedInAdapter - will be null for regular actions, and for mixin actions.  
+     * When a mixin action invokes its underlying mixedIn action, then will be populated 
+     * (so that the ActionDomainEvent can correctly provide the underlying mixin)
      */
     @Override
     public ManagedObject execute(
-            final ManagedObject targetAdapter,
-            final ManagedObject mixedInAdapter,
+            final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        setupCommand(targetAdapter, argumentAdapters);
-
-        return this.executeInternal(targetAdapter, mixedInAdapter, argumentAdapters, interactionInitiatedBy);
+        setupCommand(head.getTarget(), argumentAdapters);
+        
+        return this.executeInternal(head, argumentAdapters, interactionInitiatedBy);
     }
 
     /**
-     * private API, called by mixins and contributees.
+     * private API, called by mixins
      */
-    public ManagedObject executeInternal(
-            final ManagedObject targetAdapter,
-            final ManagedObject mixedInAdapter,
+    protected ManagedObject executeInternal(
+            final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         val actionInvocationFacet = getFacet(ActionInvocationFacet.class);
         return actionInvocationFacet
-                .invoke(this, targetAdapter, mixedInAdapter, argumentAdapters, interactionInitiatedBy);
+                .invoke(this, head, argumentAdapters, interactionInitiatedBy);
     }
 
     protected ActionInvocationFacet getActionInvocationFacet() {
         return getFacetedMethod().getFacet(ActionInvocationFacet.class);
     }
-
-
-
 
     // -- defaults
 
@@ -476,7 +495,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         
         // else use the new defaultNXxx approach for each param in turn
         // (the reflector will have made sure both aren't installed).
-        return newPendingParameterModelHead(target)
+        return interactionHead(target)
                 .defaults()
                 .getParamValues();
 

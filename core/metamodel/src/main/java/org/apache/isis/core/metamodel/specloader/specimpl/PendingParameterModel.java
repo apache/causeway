@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.core.commons.collections.Can;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.Getter;
@@ -34,13 +35,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(staticName = "of")
 public class PendingParameterModel {
 
-    @NonNull private final PendingParameterModelHead head;
+    @NonNull private final ActionInteractionHead head;
     @NonNull private final Can<ManagedObject> paramValues;
 
     // -- SHORTCUTS
     
     @NonNull public ManagedObject getActionTarget() {
-        return getHead().getActionTarget();
+        return getHead().getTarget();
     }
 
     @NonNull public ManagedObject getParamValue(int paramNum) {

@@ -54,11 +54,7 @@ final class ObjectMementoLegacy implements Serializable {
      * Factory method
      */
     public static ObjectMementoLegacy createOrNull(ManagedObject adapter) {
-        if (adapter == null) {
-            return null;
-        }
-        val pojo = adapter.getPojo();
-        if(pojo == null) {
+        if(ManagedObject.isNullOrUnspecifiedOrEmpty(adapter)) {
             return null;
         }
         return new ObjectMementoLegacy(adapter);

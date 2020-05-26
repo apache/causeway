@@ -18,8 +18,6 @@
  */
 package org.apache.isis.applib.services.userprof;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
 /**
  * Optional API providing details about the user.
  *

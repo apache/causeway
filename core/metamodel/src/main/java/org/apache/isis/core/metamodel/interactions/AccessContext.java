@@ -20,23 +20,25 @@
 package org.apache.isis.core.metamodel.interactions;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.AccessEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * See {@link InteractionContext} for overview; analogous to {@link AccessEvent}
  * .
  */
-public abstract class AccessContext<T extends AccessEvent> extends InteractionContext<T> {
+public abstract class AccessContext
+extends InteractionContext
+implements InteractionEventSupplier<AccessEvent> {
 
     public AccessContext(
             final InteractionContextType interactionType,
             final Identifier identifier,
-            final ManagedObject target,
+            final InteractionHead head,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        super(interactionType, interactionInitiatedBy, identifier, target);
+        super(interactionType, interactionInitiatedBy, identifier, head, Where.NOT_SPECIFIED);
     }
 
 }

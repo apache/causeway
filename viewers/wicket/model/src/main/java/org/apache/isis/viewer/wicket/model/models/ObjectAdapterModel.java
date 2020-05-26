@@ -24,22 +24,22 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
+import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
+import org.apache.isis.viewer.common.model.object.ObjectUiModel.RenderingHint;
 
-public interface ObjectAdapterModel extends IModel<ManagedObject> {
+public interface ObjectAdapterModel 
+extends HasRenderingHints, IModel<ManagedObject> {
 
+    /**
+     * Used as a hint when the {@link #getRenderingHint()} is {@link RenderingHint#PARENTED_TITLE_COLUMN},
+     * provides a context adapter to obtain the title.
+     */
     ObjectMemento getContextAdapterIfAny();
     void setContextAdapterIfAny(ObjectMemento contextAdapterIfAny);
 
-    EntityModel.RenderingHint getRenderingHint();
-    void setRenderingHint(EntityModel.RenderingHint renderingHint);
-
+    PageParameters getPageParameters();
     PageParameters getPageParametersWithoutUiHints();
 
     ObjectSpecification getTypeOfSpecification();
 
-    EntityModel.Mode getMode();
-
-    PageParameters getPageParameters();
-
-    boolean isInlinePrompt();
 }

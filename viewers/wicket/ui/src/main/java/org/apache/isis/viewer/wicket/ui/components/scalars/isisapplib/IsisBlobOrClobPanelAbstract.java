@@ -56,7 +56,8 @@ import lombok.val;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 
-public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> extends ScalarPanelAbstract2 {
+public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> 
+extends ScalarPanelAbstract2 {
 
 
     private static final long serialVersionUID = 1L;
@@ -268,13 +269,15 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
             final String disabledReason,
             final Optional<AjaxRequestTarget> target) {
 
-        MarkupContainer formComponent = (MarkupContainer) getComponentForRegular();
+        final MarkupContainer formComponent = (MarkupContainer) getComponentForRegular();
         sync(formComponent, visibility, editability, disabledReason, target);
 
+        // sonar-ignore-on (detects potential NPE, which is a false positive here) 
         final Component component = formComponent.get(ID_SCALAR_VALUE);
-        final InputFieldVisibility editingWidgetVisibility = editability == InputFieldEditability.EDITABLE ?
-                InputFieldVisibility.VISIBLE :
-                    InputFieldVisibility.NOT_VISIBLE;
+        // sonar-ignore-off
+        final InputFieldVisibility editingWidgetVisibility = editability == InputFieldEditability.EDITABLE 
+                ? InputFieldVisibility.VISIBLE
+                : InputFieldVisibility.NOT_VISIBLE;
         sync(component, editingWidgetVisibility, null, disabledReason, target);
 
         addAcceptFilterTo(component);
@@ -337,7 +340,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
 
     private void addAcceptFilterTo(Component component){
         final String filter = getAcceptFilter();
-        if(filter==null || filter.isEmpty())
+        if(component==null || filter==null || filter.isEmpty())
             return; // ignore
         class AcceptAttributeModel extends Model<String> {
             private static final long serialVersionUID = 1L;

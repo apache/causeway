@@ -52,10 +52,10 @@ public class Select2 implements Serializable {
                 ? new Select2(
                         null,
                         Select2MultiChoiceExt.create(id,
-                                ScalarModelWithMultiPending.Util.createModel(scalarModel), scalarModel))
+                                ScalarModelWithMultiPending.create(scalarModel), scalarModel))
                 : new Select2(
                         Select2ChoiceExt.create(id,
-                                ScalarModelWithPending.Util.createModel(scalarModel), scalarModel),
+                                ScalarModelWithPending.create(scalarModel), scalarModel),
                         null);
     }
 
@@ -66,7 +66,7 @@ public class Select2 implements Serializable {
         this.select2MultiChoice = select2MultiChoice;
     }
 
-    public AbstractSelect2Choice component() {
+    public AbstractSelect2Choice<ObjectMemento, ?> component() {
         return select2Choice != null
                 ? select2Choice
                 : select2MultiChoice;

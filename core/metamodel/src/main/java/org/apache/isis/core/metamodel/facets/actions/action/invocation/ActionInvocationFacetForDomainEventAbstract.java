@@ -61,6 +61,7 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
 import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -116,11 +117,13 @@ implements ImperativeFacet {
     @Override
     public ManagedObject invoke(
             final ObjectAction owningAction,
-            final ManagedObject targetAdapter,
-            final ManagedObject mixedInAdapter,
+            final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
+        val targetAdapter = head.getTarget();
+        val mixedInAdapter = head.getMixedIn().orElse(null);
+        
         final ManagedObject executionResult = 
                 getTransactionService().executeWithinTransaction(()->
                     doInvoke(owningAction, targetAdapter, mixedInAdapter, argumentAdapters, 
@@ -433,6 +436,8 @@ implements ImperativeFacet {
                 .asActionInvocationDto(owningAction, mixinElseRegularAdapter, argumentAdapters.toList());
                 
                 currentExecution.setDto(invocationDto);
+                
+                val head = InteractionHead.mixedIn(targetAdapter, mixedInAdapter);
 
 
                 // set the startedAt (and update command if this is the top-most member execution)
@@ -449,7 +454,7 @@ implements ImperativeFacet {
                         AbstractDomainEvent.Phase.EXECUTING,
                         getEventType(),
                         owningAction, owningAction,
-                        targetAdapter, mixedInAdapter, argumentAdapters,
+                        head, argumentAdapters,
                         null);
 
                 // set event onto the execution
@@ -465,7 +470,7 @@ implements ImperativeFacet {
                 domainEventHelper.postEventForAction(
                         AbstractDomainEvent.Phase.EXECUTED,
                         actionDomainEvent,
-                        owningAction, owningAction, targetAdapter, mixedInAdapter, argumentAdapters,
+                        owningAction, owningAction, head, argumentAdapters,
                         resultAdapterPossiblyCloned);
 
                 final Object returnValue = actionDomainEvent.getReturnValue();

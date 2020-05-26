@@ -24,6 +24,7 @@ import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
+import org.apache.isis.viewer.common.model.object.ObjectUiModel.Mode;
 
 import static org.apache.isis.viewer.wicket.model.models.EntityModel.createPageParameters;
 
@@ -92,6 +93,11 @@ public class EntityModelForReference implements ObjectAdapterModel {
     public EntityModel.Mode getMode() {
         return EntityModel.Mode.VIEW;
     }
+    
+    @Override
+    public void setMode(Mode mode) {
+        // no-op
+    }
 
     @Override
     public PageParameters getPageParameters() {
@@ -110,5 +116,5 @@ public class EntityModelForReference implements ObjectAdapterModel {
         return scalarModel.getPromptStyle().isInlineOrInlineAsIfEdit()
                 && scalarModel.isEnabled();
     }
-
+    
 }

@@ -110,7 +110,7 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ManagedOb
             public void onSubmit(AjaxRequestTarget target) {
                 
                 val entityModel = (EntityModel) rowModel;
-                val selectedAdapter = entityModel.load();
+                val selectedAdapter = entityModel.getManagedObject();
                 
                 if(onSelectionHandler != null) {
                     onSelectionHandler.onSelected(this, selectedAdapter, target);

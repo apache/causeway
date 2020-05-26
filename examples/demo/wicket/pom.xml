@@ -15,13 +15,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.app</groupId>
-		<artifactId>isis-app-starter-parent</artifactId>
+		<groupId>org.apache.isis.examples.apps</groupId>
+		<artifactId>demo-parent</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
-		<relativePath>../../../starters/pom.xml</relativePath>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.examples.apps</groupId>
 	<artifactId>demo-wicket</artifactId>
 
 	<name>Apache Isis App - Demo (Wicket)</name>
@@ -29,6 +28,7 @@
 	<packaging>${packaging.type}</packaging>
 
 	<properties>
+		<sonar.skip>true</sonar.skip>
 		<packaging.type>jar</packaging.type>
 
 		<maven-war-plugin.warName>${project.artifactId}</maven-war-plugin.warName>
@@ -64,8 +64,8 @@
 	
 		<dependency>
 			<groupId>org.apache.isis.examples.apps</groupId>
-			<artifactId>demo</artifactId>
-			<version>2.0.0-SNAPSHOT</version>
+			<artifactId>demo-domain</artifactId>
+			<version>${project.version}</version>
 			<type>jar</type>
 		</dependency>
 
@@ -85,68 +85,6 @@
 			<type>pom</type>
 		</dependency>
 
-		<!-- EXTENSIONS -->
-
-		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-asciidoc-ui-wkt</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.incubator</groupId>
-			<artifactId>isis-incubator-model</artifactId>
-			<!-- incubator version is not managed by app starter bundles -->
-			<version>2.0.0-SNAPSHOT</version> 
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-sse-ui</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-cors-impl</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-exceldownload-ui</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-secman-model</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-secman-encryption-jbcrypt</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-secman-persistence-jdo</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-secman-shiro-realm</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.testing</groupId>
-			<artifactId>isis-testing-h2console-ui</artifactId>
-		</dependency>
-		
-		<!-- OTHER DEPENDENCIES -->
-
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.hsqldb</groupId> -->
-<!-- 			<artifactId>hsqldb</artifactId> -->
-<!-- 		</dependency> -->
-
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<scope>provided</scope>
-		</dependency>
 
 	</dependencies>
 
@@ -210,7 +148,7 @@
 								<jvmFlags>
 									<jvmFlag>-Xmx512m</jvmFlag>
 								</jvmFlags>
-								<mainClass>demoapp.webapp.DemoApp</mainClass>
+								<mainClass>demoapp.webapp.wicket.DemoAppWicket</mainClass>
 								<ports>
 									<port>8080</port>
 								</ports>
@@ -260,7 +198,7 @@
 								<jvmFlags>
 									<jvmFlag>-Xmx512m</jvmFlag>
 								</jvmFlags>
-								<mainClass>demoapp.webapp.DemoApp</mainClass>
+								<mainClass>demoapp.webapp.wicket.DemoAppWicket</mainClass>
 								<ports>
 									<port>8080</port>
 								</ports>

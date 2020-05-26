@@ -46,22 +46,39 @@ echo "\$Docker Image Flavor: ${FLAVOR}"
 echo "\$Isis Version: ${ISIS_VERSION}"
 echo ""
 
-#
-# update version (but just for the modules we need to build)
-#
-if [ ! -z "$REVISION" ]; then
-  cd $PROJECT_ROOT_PATH/core-parent
-  mvn versions:set -DnewVersion=$REVISION -Ddemo-app-modules
-  cd $PROJECT_ROOT_PATH
-fi
+function chdir() {
+	local dir=${1}
+	cd $PROJECT_ROOT_PATH/${dir}
+}
+
+function setRevision() {
+	local dir=${1}
+
+	if [ ! -z "$REVISION" ]; then
+	  cd $PROJECT_ROOT_PATH/${dir}
+	  mvn versions:set -DnewVersion=$REVISION -DprocessAllModules=true -Ddemo-app-module
+	fi
+}
+
+function revertRevision() {
+	local dir=${1}
+	
+	if [ ! -z "$REVISION" ]; then
+	  cd $PROJECT_ROOT_PATH/${dir}
+	  mvn versions:revert -DnewVersion=$REVISION -DprocessAllModules=true -Ddemo-app-module
+	fi
+}
+
+setRevision core-parent
 
 #
 # now build the apps
 #
 for app in demo
 do
-  cd $PROJECT_ROOT_PATH/examples/$app
-
+  
+  chdir examples/$app
+ 
   mvn clean install \
       $BATCH_MODE \
       -Dskip.git \
@@ -70,30 +87,22 @@ do
 
   for variant in wicket
   do
-	cd $variant
+
+	chdir examples/$app/$variant
 	
 	mvn --batch-mode \
 	    compile jib:build \
+	    -Djib.httpTimeout=60000 \
 	    -Dflavor=$FLAVOR \
 	    -Dskip.git \
 	    -Dskip.arch \
 	    -DskipTests
 	
-	cd $PROJECT_ROOT_PATH/examples/$app
   done
+  
 
-
-  cd $PROJECT_ROOT_PATH
 done
 
+revertRevision core-parent
 
 
-
-#
-# finally, revert the version
-#
-if [ ! -z "$REVISION" ]; then
-  cd $PROJECT_ROOT_PATH/core-parent
-  mvn versions:revert -Dstarter-apps-modules
-  cd $PROJECT_ROOT_PATH
-fi

@@ -89,7 +89,7 @@ content:
 
 # examples
     - url: .
-      start_path: examples/demo/src/main/adoc # docs
+      start_path: examples/demo/domain/src/main/adoc # docs
       branches: HEAD
     - url: .
       start_path: examples/smoketests/src/main/adoc # core
@@ -100,6 +100,9 @@ content:
       start_path: extensions/adoc # extensions
       branches: HEAD
 
+    - url: .
+      start_path: extensions/core/model-annotation/src/main/adoc # extensions
+      branches: HEAD
     - url: .
       start_path: extensions/core/command-log/adoc # extensions
       branches: HEAD
@@ -139,9 +142,6 @@ content:
 # incubator
     - url: .
       start_path: incubator/adoc # incubator
-      branches: HEAD
-    - url: .
-      start_path: incubator/core/model/src/main/adoc # incubator
       branches: HEAD
     - url: .
       start_path: incubator/mappings/microprofile/src/main/adoc # incubator

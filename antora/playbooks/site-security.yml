@@ -34,7 +34,7 @@ content:
 
 # examples
     - url: .
-      start_path: examples/demo/src/main/adoc # docs
+      start_path: examples/demo/domain/src/main/adoc # docs
       branches: HEAD
 
 

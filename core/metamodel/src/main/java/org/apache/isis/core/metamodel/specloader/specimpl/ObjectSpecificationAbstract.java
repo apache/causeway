@@ -46,7 +46,6 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryHolder;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
-import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -95,8 +94,12 @@ import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Log4j2 @EqualsAndHashCode(of = "correspondingClass", callSuper = false)
-public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implements ObjectSpecification {
+@EqualsAndHashCode(of = "correspondingClass", callSuper = false)
+@lombok.ToString(of = {"correspondingClass", "fullName", "managedObjectSort"})
+@Log4j2 
+public abstract class ObjectSpecificationAbstract 
+extends FacetHolderImpl 
+implements ObjectSpecification {
 
     private static class Subclasses {
         private final Set<ObjectSpecification> classes = _Sets.newConcurrentHashSet();
@@ -114,7 +117,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
     }
 
-//XXX drop-in for the above, 
+//XXX drop-in for the above, rather a question which performs better 
 //    private static class Subclasses {
 //        private final List<ObjectSpecification> classes = new ArrayList<>();
 //
@@ -913,13 +916,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return containsFacet(ParentedCollectionFacet.class);
     }
 
-    @Override
-    public String toString() {
-        final ToString str = new ToString(this);
-        str.append("class", getFullIdentifier());
-        return str.toString();
-    }
-    
     // -- GUARDS
 
     private boolean contributeeAndMixedInAssociationsAdded;

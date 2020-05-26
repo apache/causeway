@@ -29,16 +29,13 @@ content:
       branches: HEAD
 # examples
     - url: .
-      start_path: examples/demo/src/main/adoc # docs
+      start_path: examples/demo/domain/src/main/adoc # docs
       branches: HEAD
 
 
 # incubator
     - url: .
       start_path: incubator/adoc # incubator
-      branches: HEAD
-    - url: .
-      start_path: incubator/core/model/src/main/adoc # incubator
       branches: HEAD
     - url: .
       start_path: incubator/mappings/microprofile/src/main/adoc # incubator

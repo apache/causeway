@@ -45,7 +45,7 @@ under the License.
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.2.6.RELEASE</version>
+		<version>2.3.0.RELEASE</version>
 		<relativePath/>
 	</parent>
 
@@ -952,8 +952,6 @@ under the License.
 			</activation>
 			<modules>
 				<module>../examples/demo</module>
-				<module>../examples/demo-wicket</module>
-				<module>../examples/demo-vaadin</module>
 			</modules>
 		</profile>
 

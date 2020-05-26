@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.security.authentication.MessageBroker;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.common.model.header.HeaderUiModel;
 import org.apache.isis.viewer.common.model.header.HeaderUiModelProvider;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
@@ -52,7 +53,9 @@ import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
  * Provides the <em>common context</em> for all implementing sub-classes.
  * @since 2.0
  */
-public class PanelBase<T> extends GenericPanel<T> implements IsisWebAppCommonContext.Delegating {
+public class PanelBase<T> 
+extends GenericPanel<T>
+implements HasCommonContext {
 
     private static final long serialVersionUID = 1L;
 

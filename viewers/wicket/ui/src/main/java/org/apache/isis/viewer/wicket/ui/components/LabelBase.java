@@ -18,13 +18,13 @@
  */
 package org.apache.isis.viewer.wicket.ui.components;
 
-import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 
 /**
@@ -33,7 +33,7 @@ import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
  */
 public abstract class LabelBase
 extends Label
-implements IsisWebAppCommonContext.Delegating {
+implements HasCommonContext {
 
     private static final long serialVersionUID = 1L;
 

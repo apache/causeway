@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
+import static org.apache.isis.core.metamodel.spec.ManagedObject.unwrapSingle;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.ObjectVisibilityEvent;
@@ -26,20 +28,23 @@ import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-import static org.apache.isis.core.metamodel.spec.ManagedObject.unwrapSingle;
-
 /**
  * See {@link InteractionContext} for overview; analogous to
  * {@link ObjectVisibilityEvent}.
  */
-public class ObjectVisibilityContext extends VisibilityContext<ObjectVisibilityEvent> implements ProposedHolder {
+public class ObjectVisibilityContext 
+extends VisibilityContext 
+implements ProposedHolder {
 
     public ObjectVisibilityContext(
             final ManagedObject targetAdapter,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
-        super(InteractionContextType.OBJECT_VISIBILITY, targetAdapter, identifier, interactionInitiatedBy, where);
+        
+        super(
+                InteractionContextType.OBJECT_VISIBILITY, 
+                InteractionHead.simple(targetAdapter), identifier, interactionInitiatedBy, where);
     }
 
     @Override

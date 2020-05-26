@@ -33,6 +33,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.commons.internal.base._Casts;
+import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
@@ -137,8 +138,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
             org.apache.isis.extensions.secman.api.role.ApplicationRole genericRole) {
         
         val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
-        return role.getUsers()
-                .stream()
+        return _NullSafe.stream(role.getUsers())
                 .collect(_Sets.toUnmodifiableSorted());
     }
     

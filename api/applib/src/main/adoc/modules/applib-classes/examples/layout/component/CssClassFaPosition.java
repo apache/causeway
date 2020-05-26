@@ -24,5 +24,9 @@ import javax.xml.bind.annotation.XmlType;
         namespace = "http://isis.apache.org/applib/layout/component"
         )
 public enum CssClassFaPosition {
-    LEFT, RIGHT
+    LEFT, RIGHT;
+
+    public static boolean isLeftOrUnspecified(final CssClassFaPosition posistion) {
+        return posistion!=RIGHT;
+    }
 }

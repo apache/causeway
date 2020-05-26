@@ -25,11 +25,12 @@ import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.interaction.ManagedAction;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
@@ -52,6 +53,7 @@ public class ObjectActionArgHelper {
         
         val action = managedAction.getAction();
         val owner = managedAction.getOwner();
+        val head = action.interactionHead(owner);
         
         final List<JsonRepresentation> argList = argListFor(action, arguments);
 
@@ -68,7 +70,7 @@ public class ObjectActionArgHelper {
                 // validate individual arg
                 final ObjectActionParameter parameter = parameters.getElseFail(i);
                 final Object argPojo = argAdapter!=null?argAdapter.getPojo():null;
-                final String reasonNotValid = parameter.isValid(owner, argPojo, InteractionInitiatedBy.USER);
+                final String reasonNotValid = parameter.isValid(head, argPojo, InteractionInitiatedBy.USER);
                 if (reasonNotValid != null) {
                     argRepr.mapPut("invalidReason", reasonNotValid);
                     valid = false;

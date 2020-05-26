@@ -24,31 +24,22 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
  * {@link VisibilityEvent}.
  */
-public abstract class VisibilityContext<T extends VisibilityEvent> extends InteractionContext<T> {
-
-    private Where where;
+public abstract class VisibilityContext 
+extends InteractionContext
+implements InteractionEventSupplier<VisibilityEvent> {
 
     public VisibilityContext(
             final InteractionContextType interactionType,
-            final ManagedObject targetAdapter,
+            final InteractionHead head,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
-        super(interactionType, interactionInitiatedBy, identifier, targetAdapter);
-        this.where = where;
-    }
-
-    /**
-     * Where the element is to be rendered.
-     */
-    public Where getWhere() {
-        return where;
+        super(interactionType, interactionInitiatedBy, identifier, head, where);
     }
 
 }

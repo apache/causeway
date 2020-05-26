@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
  * Corresponds to <tt>@Action(domainEvent=...)</tt> annotation in the Isis programming model.
  */
 public interface ActionDomainEventFacet
-extends SingleClassValueFacet, HidingInteractionAdvisor, DisablingInteractionAdvisor, ValidatingInteractionAdvisor {
+extends SingleClassValueFacet, HidingInteractionAdvisor, DisablingInteractionAdvisor, 
+ValidatingInteractionAdvisor {
 
 }

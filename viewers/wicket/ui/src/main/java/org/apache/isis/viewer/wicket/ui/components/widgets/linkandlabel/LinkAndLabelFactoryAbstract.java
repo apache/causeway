@@ -108,15 +108,13 @@ implements Serializable {
                 if(toggledMementosProviderIfAny != null) {
 
                     val selectedMementos = toggledMementosProviderIfAny.getToggles();
-                    val selectedPojos = selectedMementos
+                    val selectedPojosFromAssocCollection = selectedMementos
                             .map(super.getCommonContext()::reconstructObject)
                             .map(ManagedObject::getPojo);
                     
                     val actionPrompt = ActionParameterDefaultsFacetFromAssociatedCollection
                             .applyWithSelected(
-                                    selectedPojos,
-                                    // if this lambda still needs to be serializable uncomment the cast ... 
-                                    //(Function<AjaxRequestTarget, ActionPrompt>&Serializable) 
+                                    selectedPojosFromAssocCollection,
                                     this::performOnClick,
                                     target);
                     
@@ -160,7 +158,7 @@ implements Serializable {
 
         if(inlinePromptContext == null || promptStyle.isDialog()) {
             final ActionPromptProvider promptProvider = ActionPromptProvider.getFrom(actionLink.getPage());
-            val spec = actionModel.getTargetAdapter().getSpecification();
+            val spec = actionModel.getOwner().getSpecification();
 
             final ActionPrompt prompt = promptProvider.getActionPrompt(promptStyle, spec.getBeanSort());
 
@@ -182,7 +180,7 @@ implements Serializable {
                     private static final long serialVersionUID = 1L;
                     @Override
                     public String getObject() {
-                        final ObjectAction action = actionModel.getAction();
+                        final ObjectAction action = actionModel.getMetaModel();
                         return action.getName();
                     }
                 });
@@ -195,7 +193,7 @@ implements Serializable {
                     final ActionPromptWithExtraContent promptWithExtraContent =
                             (ActionPromptWithExtraContent) prompt;
 
-                    final ObjectAction action = actionModel.getAction();
+                    final ObjectAction action = actionModel.getMetaModel();
                     if(action instanceof ObjectActionMixedIn) {
                         final ObjectActionMixedIn actionMixedIn = (ObjectActionMixedIn) action;
                         final ObjectSpecification mixinSpec = actionMixedIn.getMixinType();
@@ -203,7 +201,7 @@ implements Serializable {
                         if(mixinSpec.isViewModel()) {
 
                             val commonContext = getCommonContext();
-                            final ManagedObject targetAdapterForMixin = action.realTargetAdapter(actionModel.getTargetAdapter());
+                            final ManagedObject targetAdapterForMixin = action.realTargetAdapter(actionModel.getOwner());
                             final EntityModel entityModelForMixin = 
                                     EntityModel.ofAdapter(commonContext, targetAdapterForMixin);
 
@@ -263,7 +261,7 @@ implements Serializable {
                     // (One way this can occur is if an event subscriber has a defect and throws an exception; in which case
                     // the EventBus' exception handler will automatically veto.  This results in a growl message rather than
                     // an error page, but is probably 'good enough').
-                    val targetAdapter = actionModel.getTargetAdapter();
+                    val targetAdapter = actionModel.getOwner();
 
                     final EntityPage entityPage = new EntityPage(getCommonContext(), targetAdapter);
 

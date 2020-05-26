@@ -26,8 +26,6 @@ import java.util.Map;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
-import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
@@ -69,13 +67,12 @@ implements ImperativeFacet {
      * The reason this object is disabled, or <tt>null</tt> otherwise.
      */
     @Override
-    public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
+    public String disables(final UsabilityContext ic) {
         final ManagedObject target = ic.getTarget();
         if (target == null) {
             return null;
         }
-        final Object returnValue = ManagedObject.InvokeUtil.invokeC(method, target, 
-                _NullSafe.streamNullable(ic.getContributeeWithParamIndex()));
+        final Object returnValue = ManagedObject.InvokeUtil.invokeC(method, target);
         if(returnValue instanceof String) {
             return (String) returnValue;
         }

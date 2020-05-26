@@ -33,6 +33,16 @@ public class ActionParameterDefaultsFacetFromAssociatedCollection extends Action
 
     private static ThreadLocal<Can<Object>> _selectedPojos = ThreadLocal.withInitial(Can::empty);
 
+    public ActionParameterDefaultsFacetFromAssociatedCollection(final FacetHolder holder) {
+        super(holder);
+    }
+
+    @Override
+    public Object getDefault(@NonNull PendingParameterModel pendingArgs) {
+        
+        return _selectedPojos.get();
+    }
+    
     public static <T, R> R applyWithSelected(
             final Can<Object> selectedPojos, 
             final Function<T, R> function,
@@ -48,14 +58,5 @@ public class ActionParameterDefaultsFacetFromAssociatedCollection extends Action
         }
     }
 
-    public ActionParameterDefaultsFacetFromAssociatedCollection(final FacetHolder holder) {
-        super(holder);
-    }
-
-    @Override
-    public Object getDefault(@NonNull PendingParameterModel pendingArgs) {
-        
-        return _selectedPojos.get();
-    }
 
 }

@@ -29,7 +29,7 @@ content:
       branches: HEAD
 # examples
     - url: .
-      start_path: examples/demo/src/main/adoc # docs
+      start_path: examples/demo/domain/src/main/adoc # docs
       branches: HEAD
 
 # extensions
@@ -37,6 +37,9 @@ content:
       start_path: extensions/adoc # extensions
       branches: HEAD
 
+    - url: .
+      start_path: extensions/core/model-annotation/src/main/adoc # extensions
+      branches: HEAD
     - url: .
       start_path: extensions/core/command-log/adoc # extensions
       branches: HEAD

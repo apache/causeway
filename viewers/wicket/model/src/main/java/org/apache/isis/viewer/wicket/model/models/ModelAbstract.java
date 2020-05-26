@@ -23,6 +23,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext.HasCommonContext;
 
 import lombok.NonNull;
 
@@ -32,7 +33,7 @@ import lombok.NonNull;
  */
 public abstract class ModelAbstract<T> 
 extends LoadableDetachableModel<T> 
-implements IsisWebAppCommonContext.Delegating {
+implements HasCommonContext {
 
     private static final long serialVersionUID = 1L;
 

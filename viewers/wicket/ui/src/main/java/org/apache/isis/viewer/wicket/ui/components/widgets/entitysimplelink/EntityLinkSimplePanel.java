@@ -24,7 +24,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.ManagedObjectModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
@@ -45,14 +45,14 @@ implements CancelHintRequired  {
     private static final String ID_ENTITY_ICON_AND_TITLE = "entityIconAndTitle";
     private static final String ID_ENTITY_TITLE_NULL = "entityTitleNull";
 
-    public EntityLinkSimplePanel(final String id, final EntityModel entityModel) {
+    public EntityLinkSimplePanel(final String id, final ManagedObjectModel entityModel) {
         super(id, entityModel);
         setType(ManagedObject.class);
         buildGui();
     }
 
-    public EntityModel getEntityModel() {
-        return (EntityModel) getModel();
+    public ManagedObjectModel getEntityModel() {
+        return (ManagedObjectModel) getModel();
     }
 
     private void buildGui() {
@@ -69,7 +69,7 @@ implements CancelHintRequired  {
         val adapter = getEntityModel().getObject(); // getPendingElseCurrentAdapter();
 
         if (adapter != null) {
-            final EntityModel entityModelForLink = getEntityModel();
+            final ManagedObjectModel entityModelForLink = getEntityModel();
 
             final ComponentFactory componentFactory = getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, entityModelForLink);
 

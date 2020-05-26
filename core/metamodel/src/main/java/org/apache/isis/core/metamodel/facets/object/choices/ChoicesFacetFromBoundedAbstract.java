@@ -21,8 +21,6 @@ package org.apache.isis.core.metamodel.facets.object.choices;
 
 import java.util.function.Predicate;
 
-import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
-import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -64,7 +62,7 @@ implements ChoicesFacet, DisablingInteractionAdvisor, ValidatingInteractionAdvis
     }
 
     @Override
-    public String invalidates(final ValidityContext<? extends ValidityEvent> context) {
+    public String invalidates(final ValidityContext context) {
         if (!(context instanceof ObjectValidityContext)) {
             return null;
         }
@@ -88,7 +86,7 @@ implements ChoicesFacet, DisablingInteractionAdvisor, ValidatingInteractionAdvis
     }
 
     @Override
-    public String disables(final UsabilityContext<? extends UsabilityEvent> context) {
+    public String disables(final UsabilityContext context) {
         final ManagedObject target = context.getTarget();
         return disabledReason(target);
     }

@@ -36,7 +36,7 @@ import lombok.Getter;
  * {@link ActionArgumentEvent}.
  */
 public class ActionArgUsabilityContext 
-extends UsabilityContext<ActionArgumentUsabilityEvent> 
+extends UsabilityContext 
 implements ActionInteractionContext {
 
     @Getter(onMethod = @__(@Override)) private final ObjectAction objectAction;
@@ -44,7 +44,7 @@ implements ActionInteractionContext {
     @Getter private final int position;
 
     public ActionArgUsabilityContext(
-            final ManagedObject targetAdapter,
+            final InteractionHead head,
             final ObjectAction objectAction,
             final Identifier id,
             final Can<ManagedObject> args,
@@ -52,13 +52,12 @@ implements ActionInteractionContext {
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         super(InteractionContextType.ACTION_PARAMETER_USABLE,
-                targetAdapter, 
+                head, 
                 id, 
                 interactionInitiatedBy, 
                 Where.OBJECT_FORMS);
         
         this.objectAction = objectAction;
-
         this.args = args;
         this.position = position;
     }

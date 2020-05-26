@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.fallback;
 
-import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
@@ -34,7 +33,7 @@ public class MaxLengthFacetUnlimited extends MaxLengthFacetAbstract {
      * No limit to maximum length.
      */
     @Override
-    public String invalidates(final ValidityContext<? extends ValidityEvent> context) {
+    public String invalidates(final ValidityContext context) {
         return null;
     }
 
