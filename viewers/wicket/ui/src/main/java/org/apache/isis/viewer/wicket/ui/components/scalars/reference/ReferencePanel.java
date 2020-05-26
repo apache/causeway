@@ -37,9 +37,7 @@ import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFac
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
-import org.apache.isis.viewer.wicket.model.models.EntityModelForReference;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelect2Abstract;
@@ -251,18 +249,13 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
 
         if(componentForRegular != null) {
 
-            final EntityModelForReference entityModelForLink = new EntityModelForReference(getModel());
-
-            //XXX assuming, that scalar models don't have a context adapter 
-            //entityModelForLink.setContextAdapterIfAny(model.getContextAdapterIfAny());    
-            entityModelForLink.setRenderingHint(getModel().getRenderingHint());
-
-            final ComponentFactory componentFactory =
-                    getComponentFactoryRegistry()
-                    .findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, entityModelForLink);
-            final Component component = componentFactory
-                    .createComponent(ComponentType.ENTITY_ICON_AND_TITLE.getWicketId(), entityModelForLink);
-
+            val scalarModel = getModel();
+            
+            val componentFactory = getComponentFactoryRegistry()
+                    .findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, scalarModel);
+            val component = componentFactory
+                    .createComponent(ComponentType.ENTITY_ICON_AND_TITLE.getWicketId(), scalarModel);
+            
             componentForRegular.addOrReplace(component);
 
             boolean inlinePrompt = scalarModel.isInlinePrompt();
