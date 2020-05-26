@@ -36,7 +36,6 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import lombok.Getter;
 import lombok.Setter;
 
-import demoapp.dom.actions.assoc.DemoItem;
 import demoapp.utils.DemoStub;
 
 @XmlRootElement(name = "Demo")
@@ -64,9 +63,9 @@ public class MixinDemo extends DemoStub {
         note = "Update me! The button below is contributed by one of my mixins.";
         
         collection = new ArrayList<>();
-        collection.add(DemoItem.of("first"));
-        collection.add(DemoItem.of("second"));
-        collection.add(DemoItem.of("third"));
+        collection.add(DemoItem.of("first", null));
+        collection.add(DemoItem.of("second", collection.get(0)));
+        collection.add(DemoItem.of("third", collection.get(1)));
 
     }
 

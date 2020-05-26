@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-import demoapp.dom.actions.assoc.DemoItem;
+import demoapp.dom.mixins.DemoItem;
 
 @Mixin(method="prop")
 @RequiredArgsConstructor
@@ -38,7 +38,7 @@ public class MixinLegacyDemo_mixedInProperty {
     @Action(semantics=SemanticsOf.SAFE)   // required
     @ActionLayout(contributed=Contributed.AS_ASSOCIATION)  // required
     public DemoItem prop() {
-        return DemoItem.of("A mixed-in Property");
+        return DemoItem.of("A mixed-in Property", null);
     }
     
 }

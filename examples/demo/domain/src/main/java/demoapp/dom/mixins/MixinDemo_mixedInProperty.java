@@ -22,8 +22,6 @@ import org.apache.isis.applib.annotation.Property;
 
 import lombok.RequiredArgsConstructor;
 
-import demoapp.dom.actions.assoc.DemoItem;
-
 @Property
 @RequiredArgsConstructor
 public class MixinDemo_mixedInProperty {
@@ -32,7 +30,7 @@ public class MixinDemo_mixedInProperty {
     private final MixinDemo holder;
     
     public DemoItem prop() {
-        return DemoItem.of("A mixed-in Property");
+        return DemoItem.of("A mixed-in Property", null);
     }
     
 }
