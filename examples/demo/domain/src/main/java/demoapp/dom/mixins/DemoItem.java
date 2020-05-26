@@ -18,21 +18,32 @@
  */
 package demoapp.dom.mixins;
 
-import java.util.List;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 
-import org.apache.isis.applib.annotation.Collection;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import lombok.RequiredArgsConstructor;
 
-@Collection
-@RequiredArgsConstructor
-public class MixinDemo_mixedInCollection {
-    
-    private final MixinDemo holder;
-    
-    public List<DemoItem> coll() {
-        return holder.collection;
+@DomainObject(nature=Nature.INMEMORY_ENTITY, objectType = "demo.MixinDemoItem")
+@NoArgsConstructor 
+@AllArgsConstructor(staticName="of")
+public class DemoItem {
+
+    public String title() {
+        return String.format("DemoItem '%s'", getName());
     }
+
+    @Property(editing = Editing.DISABLED)
+    @PropertyLayout(describedAs="The name of this 'DemoItem'.")
+    @Getter @Setter private String name;
     
+    @Property(editing = Editing.DISABLED)
+    @Getter @Setter private DemoItem friend;
+
 }
- 

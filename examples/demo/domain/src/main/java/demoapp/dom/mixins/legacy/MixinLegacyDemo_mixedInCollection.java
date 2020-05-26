@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-import demoapp.dom.actions.assoc.DemoItem;
+import demoapp.dom.mixins.DemoItem;
 
 @Mixin(method="coll")
 @RequiredArgsConstructor
