@@ -213,7 +213,7 @@ public class ObjectFormView extends VerticalLayout {
                 .ifPresent(managedCollection -> {
                     container.add(new H3(managedCollection.getName()));
                     
-                    val uiCollection = createCollectionComponent(managedCollection);
+                    val uiCollection = TableView.fromManagedCollection(managedCollection);
                     container.add(uiCollection);
                 });
                 
@@ -255,30 +255,6 @@ public class ObjectFormView extends VerticalLayout {
 
     }
 
-    // -- HELPER
-
-    private Component createCollectionComponent(
-            final ManagedCollection managedCollection) {
-
-        val labelLiteral = "Collection: " + managedCollection.getName();
-        val pojo = managedCollection.getCollectionValue().getPojo();
-        if (pojo instanceof Collection) {
-            return TableView.fromManagedCollection(managedCollection);
-        }
-
-        if (pojo == null) {
-            val textField = new TextField();
-            textField.setLabel(labelLiteral);
-
-            textField.setValue(NULL_LITERAL);
-            return textField;
-        }
-
-        val textField = new TextField();
-        textField.setLabel(labelLiteral);
-        textField.setValue("Unknown collection type: " + pojo.getClass());
-        return textField;
-    }
 
 
 }

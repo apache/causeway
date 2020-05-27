@@ -77,21 +77,12 @@ public class TableView extends VerticalLayout {
      */
     public static Component fromManagedCollection(ManagedCollection managedCollection) {
         
-        val assocObject = managedCollection.getOwner();
-        val assocObjectSpecification = assocObject.getSpecification();
-        val collectionFacet = assocObjectSpecification.getFacet(CollectionFacet.class);
-
-        val pojo = assocObject.getPojo();
-        if (pojo instanceof Collection) {
-            val objects = collectionFacet.stream(assocObject)
-                    .collect(Collectors.toList());
-            
-            return inferElementSpecification(objects)
-            .map(elementSpec->new TableView(elementSpec, objects))
-            .orElseGet(TableView::empty);
-        }
-        
-        return empty();
+        val elementSpec = managedCollection.getElementSpecification(); 
+        val elements = managedCollection.streamElements()
+                .collect(Collectors.toList());
+        return elements.isEmpty()
+                ? empty()
+                : new TableView(elementSpec, elements);
     }
     
     

@@ -31,17 +31,14 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.client.SuppressionType;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
@@ -159,7 +156,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
     @Override
     public Response.ResponseBuilder buildResponse(
             final IResourceContext resourceContext,
-            final ManagedCollection objectAndCollection) {
+            final ManagedCollection managedCollection) {
 
         if(!canAccept(resourceContext)) {
             return null;
@@ -169,10 +166,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
 
         final JsonRepresentation rootRepresentation = JsonRepresentation.newArray();
 
-        ManagedObject objectAdapter = objectAndCollection.getOwner();
-        OneToManyAssociation collection = objectAndCollection.getMember();
-
-        appendCollectionTo(resourceContext, objectAdapter, collection, rootRepresentation, suppression);
+        appendCollectionTo(resourceContext, managedCollection, rootRepresentation, suppression);
 
         final JsonRepresentation $$roRepresentation;
         if(!suppressRO) {
@@ -188,7 +182,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
 
         final Response.ResponseBuilder responseBuilder =
                 restfulObjectsV1_0.buildResponseTo(
-                        resourceContext, objectAndCollection, $$roRepresentation, rootRepresentation);
+                        resourceContext, managedCollection, $$roRepresentation, rootRepresentation);
 
         responseBuilder.type(CONTENT_TYPE_OAI_V1_OBJECT_COLLECTION);
 
@@ -225,7 +219,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
         final EnumSet<SuppressionType> suppression = suppress(resourceContext);
         final boolean suppressRO = suppression.contains(SuppressionType.RO);
 
-        JsonRepresentation rootRepresentation = null;
+        final JsonRepresentation rootRepresentation;
         final JsonRepresentation $$roRepresentation;
         if(!suppressRO) {
             $$roRepresentation = JsonRepresentation.newMap();
@@ -252,13 +246,10 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
         case LIST:
 
             rootRepresentation = JsonRepresentation.newArray();
-
-            //final CollectionFacet collectionFacet = returnType.getFacet(CollectionFacet.class);
-
-            final Stream<ManagedObject> collectionAdapters = 
-                    CollectionFacet.streamAdapters(returnedAdapter);
-
-            appendStreamTo(resourceContext, collectionAdapters, rootRepresentation, suppression);
+            
+            CollectionFacet.streamAdapters(returnedAdapter)
+            .forEach(element->
+                appendElementTo(resourceContext, element, rootRepresentation, suppression));
 
             // $$ro representation will be an object in the list with a single property named "$$ro"
             if(!suppressRO) {
@@ -274,6 +265,8 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
 
             // not supported
             return null;
+        default:
+            rootRepresentation = null; // unexpected code reach
         }
 
         final Response.ResponseBuilder responseBuilder =
@@ -310,28 +303,31 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
 
     private void appendObjectTo(
             final IResourceContext resourceContext,
-            final ManagedObject objectAdapter,
+            final ManagedObject owner,
             final JsonRepresentation rootRepresentation,
             final EnumSet<SuppressionType> suppression) {
 
-        appendPropertiesTo(resourceContext, objectAdapter, rootRepresentation, suppression);
+        appendPropertiesTo(resourceContext, owner, rootRepresentation, suppression);
 
-        final Where where = resourceContext.getWhere();
-        final Stream<OneToManyAssociation> collections = objectAdapter.getSpecification()
-                .streamCollections(Contributed.INCLUDED);
-
-        collections.forEach(collection->{
-            final JsonRepresentation collectionRepresentation = JsonRepresentation.newArray();
-
+        val where = resourceContext.getWhere();
+        
+        owner.getSpecification()
+        .streamCollections(Contributed.INCLUDED)
+        .forEach(collection->{
+            
+            val collectionRepresentation = JsonRepresentation.newArray();
             rootRepresentation.mapPut(collection.getId(), collectionRepresentation);
 
-            final InteractionInitiatedBy interactionInitiatedBy = determineInteractionInitiatedByFrom(resourceContext);
-            final Consent visibility = collection.isVisible(objectAdapter, interactionInitiatedBy, where);
-            if (!visibility.isAllowed()) {
+            val interactionInitiatedBy = resourceContext.getInteractionInitiatedBy();
+            val visibilityConsent = collection.isVisible(owner, interactionInitiatedBy, where);
+            if (!visibilityConsent.isAllowed()) {
                 return;
             }
 
-            appendCollectionTo(resourceContext, objectAdapter, collection, collectionRepresentation, suppression);
+            val managedCollection = ManagedCollection.of(owner, collection);
+            
+
+            appendCollectionTo(resourceContext, managedCollection, collectionRepresentation, suppression);
         });
 
     }
@@ -342,8 +338,8 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
             final JsonRepresentation rootRepresentation,
             final EnumSet<SuppressionType> suppression) {
         
-        final InteractionInitiatedBy interactionInitiatedBy = determineInteractionInitiatedByFrom(resourceContext);
-        final Where where = resourceContext.getWhere();
+        val interactionInitiatedBy = resourceContext.getInteractionInitiatedBy();
+        val where = resourceContext.getWhere();
         final Stream<OneToOneAssociation> properties = objectAdapter.getSpecification()
                 .streamProperties(Contributed.INCLUDED);
 
@@ -394,38 +390,25 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
 
     private void appendCollectionTo(
             final IResourceContext resourceContext,
-            final ManagedObject objectAdapter,
-            final OneToManyAssociation collection,
+            final ManagedCollection managedCollection,
             final JsonRepresentation representation, 
             final EnumSet<SuppressionType> suppression) {
 
-        val interactionInitiatedBy = determineInteractionInitiatedByFrom(resourceContext);
-        val valueAdapter = collection.get(objectAdapter, interactionInitiatedBy);
-        if (valueAdapter == null) {
-            return;
-        }
-
-        final Stream<ManagedObject> adapters = CollectionFacet.streamAdapters(valueAdapter);
-        appendStreamTo(resourceContext, adapters, representation, suppression);
+        managedCollection.streamElements(resourceContext.getInteractionInitiatedBy())
+        .forEach(element->
+            appendElementTo(resourceContext, element, representation, suppression));
     }
 
-    private void appendStreamTo(
+    private void appendElementTo(
             final IResourceContext resourceContext,
-            final Stream<ManagedObject> adapters,
+            final ManagedObject elementAdapter,
             final JsonRepresentation collectionRepresentation, 
             final EnumSet<SuppressionType> suppression) {
 
-        adapters.forEach(elementAdapter->{
-            JsonRepresentation elementRepresentation = JsonRepresentation.newMap();
-            appendPropertiesTo(resourceContext, elementAdapter, elementRepresentation, suppression);
-
-            collectionRepresentation.arrayAdd(elementRepresentation);
-        });
+        val elementRepresentation = JsonRepresentation.newMap();
+        appendPropertiesTo(resourceContext, elementAdapter, elementRepresentation, suppression);
+        collectionRepresentation.arrayAdd(elementRepresentation);
     }
 
-    private static InteractionInitiatedBy determineInteractionInitiatedByFrom(
-            final IResourceContext resourceContext) {
-        return resourceContext.getInteractionInitiatedBy();
-    }
 
 }

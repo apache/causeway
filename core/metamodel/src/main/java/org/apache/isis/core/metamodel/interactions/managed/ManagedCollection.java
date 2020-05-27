@@ -19,8 +19,12 @@
 package org.apache.isis.core.metamodel.interactions.managed;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 import lombok.Getter;
@@ -66,12 +70,36 @@ public final class ManagedCollection extends ManagedMember {
     public MemberType getMemberType() {
         return MemberType.COLLECTION;
     }
+    
+    public ObjectSpecification getElementSpecification() {
+        return getCollection().getSpecification();
+    }
 
     public ManagedObject getCollectionValue() {
-        val collection = getCollection();
-        
-        return Optional.ofNullable(collection.get(getOwner()))
-        .orElse(ManagedObject.of(collection.getSpecification(), null));
+        return Optional.ofNullable(getCollection().get(getOwner(), InteractionInitiatedBy.USER))
+                .orElse(ManagedObject.empty(getElementSpecification()));
     }
+
+    // -- INTERACTION
+    
+    /**
+     * If visibility is vetoed, returns an empty Stream.
+     * @param interactionInitiatedBy 
+     * @return Stream of this collection's element values as to be used by the UI for representation
+     */
+    public Stream<ManagedObject> streamElements(InteractionInitiatedBy interactionInitiatedBy) {
+        val valueAdapter = getCollection().get(getOwner(), interactionInitiatedBy);
+        return CollectionFacet.streamAdapters(valueAdapter);
+    }
+
+    /**
+     * If visibility is vetoed, returns an empty Stream.
+     * @return Stream of this collection's element values as to be used by the UI for representation
+     */
+    public Stream<ManagedObject> streamElements() {
+        return streamElements(InteractionInitiatedBy.USER);
+    }
+
+    
 
 }
