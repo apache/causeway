@@ -36,26 +36,6 @@
 
 	<packaging>pom</packaging>
 
-<!-- 	<build> -->
-
-<!-- 		<plugins> -->
-<!-- 			<plugin> -->
-<!-- 				<groupId>com.vaadin</groupId> -->
-<!-- 				<artifactId>vaadin-maven-plugin</artifactId> -->
-<!-- 				<version>${vaadin.version}</version> -->
-<!-- 				<executions> -->
-<!-- 					<execution> -->
-<!-- 						<goals> -->
-<!-- 							<goal>prepare-frontend</goal> -->
-<!-- 							<goal>build-frontend</goal> -->
-<!-- 						</goals> -->
-<!-- 					</execution> -->
-<!-- 				</executions> -->
-<!-- 			</plugin> -->
-<!-- 		</plugins> -->
-
-<!-- 	</build> -->
-
 	<dependencyManagement>
 		<dependencies>
 
