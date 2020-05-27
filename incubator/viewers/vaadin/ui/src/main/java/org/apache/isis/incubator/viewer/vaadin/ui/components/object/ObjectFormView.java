@@ -19,8 +19,7 @@
 package org.apache.isis.incubator.viewer.vaadin.ui.components.object;
 
 import com.vaadin.flow.component.HasComponents;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
 import com.vaadin.flow.component.html.H1;
@@ -47,6 +46,7 @@ import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
+import org.apache.isis.incubator.viewer.vaadin.ui.components.action.ActionButton;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableView;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
 import org.apache.isis.viewer.common.model.binding.interaction.ObjectBinding;
@@ -171,12 +171,8 @@ public class ObjectFormView extends VerticalLayout {
                 .checkVisibility(Where.OBJECT_FORMS)
                 .get()
                 .ifPresent(managedAction -> {
-                    // TODO yet not doing anything
-                    val uiAction = new Button(managedAction.getName());
+                    val uiAction = ActionButton.forManagedAction(managedAction);
                     container.add(uiAction);
-                    uiAction.getStyle().set("margin-left", "0.5em");
-                    uiAction.addThemeVariants(
-                            ButtonVariant.LUMO_SMALL);
                 });
             }
 
@@ -206,7 +202,7 @@ public class ObjectFormView extends VerticalLayout {
                 .ifPresent(managedCollection -> {
                     container.add(new H3(managedCollection.getName()));
                     
-                    val uiCollection = TableView.fromManagedCollection(managedCollection);
+                    val uiCollection = TableView.forManagedCollection(managedCollection);
                     container.add(uiCollection);
                 });
                 
@@ -216,35 +212,6 @@ public class ObjectFormView extends VerticalLayout {
 
         uiGridLayout.visit(gridVisistor);
         setWidthFull();
-
-        // -- populate actions
-
-        //        objectInteractor
-        //        .streamVisisbleActions()
-        //        .forEach(action -> {
-        //            
-        //            val button = new Button(action.getName());
-        //            actionsLayout.add(button);
-        //            
-        //            Dialog dialog = new Dialog();
-        //            dialog.add(new Label("Under Construction ... Close me with the esc-key or an outside click"));
-        //
-        //            dialog.setWidth("400px");
-        //            dialog.setHeight("150px");
-        //
-        //            button.addClickListener(e->{
-        //                dialog.open();
-        //            });
-        //
-        ////similar code in menu item ...            
-        ////            val actionModel = (ActionVaa)menuItemModel.getMenuActionUiModel();
-        ////            
-        ////            subMenu.addItem(
-        ////                    (Component)menuActionModel.getUiComponent(), 
-        ////                    e->subMenuEventHandler.accept(menuActionModel));
-        //            
-        //        });
-
 
     }
 

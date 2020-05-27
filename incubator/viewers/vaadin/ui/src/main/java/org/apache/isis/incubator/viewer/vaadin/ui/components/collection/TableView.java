@@ -75,7 +75,7 @@ public class TableView extends VerticalLayout {
      * Constructs a (page-able) {@link Grid} from given {@code managedCollection}   
      * @param managedCollection
      */
-    public static Component fromManagedCollection(ManagedCollection managedCollection) {
+    public static Component forManagedCollection(ManagedCollection managedCollection) {
         
         val elementSpec = managedCollection.getElementSpecification(); 
         val elements = managedCollection.streamElements()

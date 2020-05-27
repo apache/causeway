@@ -1,0 +1,64 @@
+[theme~="action-dialog"] flow-component-renderer > div {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* HEADER */
+[theme~="action-dialog"] header {
+  align-items: center;
+  display: flex;
+  padding: var(--lumo-space-xs) var(--lumo-space-m);
+}
+
+[theme~="action-dialog"] header .dialog-title {
+  font-size: var(--lumo-font-size-m);
+  margin: 0 auto 0 0;
+}
+
+[theme~="action-dialog"] header vaadin-button:not(:last-child) {
+  margin-right: var(--lumo-space-xs);
+}
+
+/* CONTENT */
+[theme~="action-dialog"] .dialog-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: auto;
+  padding: 0 var(--lumo-space-m) var(--lumo-space-l) var(--lumo-space-m);
+}
+
+[theme~="action-dialog"] vaadin-text-field,
+[theme~="action-dialog"] vaadin-text-area {
+  padding: var(--lumo-space-l) 0 0 0;
+}
+
+/* FOOTER */
+[theme~="action-dialog"] footer {
+  box-shadow: 0 -1px var(--lumo-contrast-20pct);
+  display: flex;
+  padding: var(--lumo-space-xs) var(--lumo-space-m);
+  z-index: 1;
+}
+
+[theme~="action-dialog"] footer vaadin-button:not(:last-child) {
+  margin-right: var(--lumo-space-xs);
+}
+
+[theme~="action-dialog"] footer vaadin-button:last-child {
+  margin-left: auto;
+}
+
+/* DRAGGABLE and RESIZABLE */
+[theme~="action-dialog"] header,
+[theme~="action-dialog"] .dialog-content,
+[theme~="action-dialog"] footer {
+  pointer-events: none;
+}
+
+[theme~="action-dialog"] header *,
+[theme~="action-dialog"] .dialog-content *,
+[theme~="action-dialog"] footer * {
+  pointer-events: auto;
+}
