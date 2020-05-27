@@ -47,7 +47,7 @@ import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-class PageParameterUtil {
+public class PageParameterUtil {
     
     public static ActionModel actionModelFor(IsisWebAppCommonContext commonContext, PageParameters pageParameters) {
         val entityModel = newEntityModelFrom(commonContext, pageParameters);
@@ -59,7 +59,29 @@ class PageParameterUtil {
         return actionModel;
     }
     
-    public static PageParameters createPageParameters(
+    // -- FACTORY METHODS FOR PAGE PARAMETERS
+
+    /**
+     * Factory method for creating {@link PageParameters} to represent an
+     * object.
+     */
+    public static PageParameters createPageParametersForObject(ManagedObject adapter) {
+
+        val pageParameters = PageParametersUtils.newPageParameters();
+        val isEntity = ManagedObject.isIdentifiable(adapter);
+
+        if (isEntity) {
+            ManagedObject.stringify(adapter)
+            .ifPresent(oidStr->PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr));
+        } else {
+            // don't do anything; instead the page should be redirected back to
+            // an EntityPage so that the underlying EntityModel that contains
+            // the memento for the transient ObjectAdapter can be accessed.
+        }
+        return pageParameters;
+    }
+    
+    public static PageParameters createPageParametersForAction(
             ManagedObject adapter, 
             ObjectAction objectAction,
             Can<ManagedObject> paramValues) {

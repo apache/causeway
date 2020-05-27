@@ -38,7 +38,6 @@ import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
-import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
@@ -64,28 +63,6 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
 
     private static final long serialVersionUID = 1L;
     
-    // -- FACTORY METHODS FOR PAGE PARAMETERS
-
-    /**
-     * Factory method for creating {@link PageParameters} to represent an
-     * entity.
-     */
-    public static PageParameters createPageParameters(ManagedObject adapter) {
-
-        val pageParameters = PageParametersUtils.newPageParameters();
-        val isEntity = ManagedObject.isIdentifiable(adapter);
-
-        if (isEntity) {
-            ManagedObject.stringify(adapter)
-            .ifPresent(oidStr->PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr));
-        } else {
-            // don't do anything; instead the page should be redirected back to
-            // an EntityPage so that the underlying EntityModel that contains
-            // the memento for the transient ObjectAdapter can be accessed.
-        }
-        return pageParameters;
-    }
-
     private final Map<PropertyMemento, ScalarModel> propertyScalarModels;
     
     private ObjectMemento contextAdapterIfAny;
@@ -184,19 +161,19 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
 
     @Override
     public PageParameters getPageParameters() {
-        PageParameters pageParameters = createPageParameters(getObject());
+        val pageParameters = getPageParametersWithoutUiHints();
         HintPageParameterSerializer.hintStoreToPageParameters(pageParameters, this);
         return pageParameters;
     }
 
     @Override
+    public PageParameters getPageParametersWithoutUiHints() {
+        return PageParameterUtil.createPageParametersForObject(getObject());
+    }
+    
+    @Override
     public boolean isInlinePrompt() {
         return false;
-    }
-
-    @Override
-    public PageParameters getPageParametersWithoutUiHints() {
-        return createPageParameters(getObject());
     }
 
     // //////////////////////////////////////////////////////////

@@ -97,7 +97,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     public PageParameters getPageParametersWithoutUiHints() {
         val adapter = getOwner();
         val objectAction = getMetaModel();
-        return PageParameterUtil.createPageParameters(adapter, objectAction, argCache().snapshot());
+        return PageParameterUtil.createPageParametersForAction(adapter, objectAction, argCache().snapshot());
     }
 
     @Override
