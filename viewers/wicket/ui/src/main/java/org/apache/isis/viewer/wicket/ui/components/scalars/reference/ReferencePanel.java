@@ -385,9 +385,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
 
             // flush changes to pending
             ObjectMemento convertedInput = select2.getConvertedInput();
-            if(select2 != null) {
-                select2.getModel().setObject(convertedInput);
-            }
+            select2.getModel().setObject(convertedInput);
 
             val adapter = super.getCommonContext().reconstructObject(convertedInput); 
             getModel().setObject(adapter);
