@@ -18,6 +18,8 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.ui.components.action;
 
+import java.util.stream.Stream;
+
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -26,12 +28,13 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Footer;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Header;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.theme.lumo.Lumo;
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
 
+import lombok.NonNull;
 import lombok.val;
 
 @CssImport(value = "./css/dialog-overlay.css", themeFor = "vaadin-dialog-overlay")
@@ -39,11 +42,8 @@ import lombok.val;
 public class ActionDialog extends Dialog {
 
     private static final long serialVersionUID = 1L;
-
-    private final transient ManagedAction managedAction;
-    
-    public String DOCK = "dock";
-    public String FULLSCREEN = "fullscreen";
+    private static final String DOCK = "dock";
+    private static final String FULLSCREEN = "fullscreen";
 
     private boolean isDocked = false;
     private boolean isFullScreen = false;
@@ -55,13 +55,18 @@ public class ActionDialog extends Dialog {
     private Div content;
     private Footer footer;
 
-    public static ActionDialog forManagedAction(final ManagedAction managedAction) {
-        val actionDialog = new ActionDialog(managedAction);
+    public static ActionDialog forManagedAction(
+            @NonNull final UiComponentFactoryVaa uiComponentFactory, 
+            @NonNull final ManagedAction managedAction) {
+        
+        val actionDialog = new ActionDialog(uiComponentFactory, managedAction);
         return actionDialog;
     }
 
-    protected ActionDialog(ManagedAction managedAction) {
-        this.managedAction = managedAction;
+    protected ActionDialog(
+            final UiComponentFactoryVaa uiComponentFactory,
+            final ManagedAction managedAction) {
+        
         setDraggable(true);
         setModal(false);
         setResizable(true);
@@ -75,44 +80,50 @@ public class ActionDialog extends Dialog {
         val title = new H2(managedAction.getName());
         title.addClassName("dialog-title");
 
-        min = new Button(VaadinIcon.DOWNLOAD_ALT.create());
+        min = new Button(VaadinIcon.ANGLE_DOWN.create());
         min.addClickListener(event -> minimise());
 
         max = new Button(VaadinIcon.EXPAND_SQUARE.create());
         max.addClickListener(event -> maximise());
 
-        Button close = new Button(VaadinIcon.CLOSE_SMALL.create());
-        close.addClickListener(event -> close());
+        val closeButton = new Button(VaadinIcon.CLOSE_SMALL.create());
 
-        header = new Header(title, min, max, close);
+        header = new Header(title, min, max, closeButton);
         header.getElement().getThemeList().add(Lumo.DARK);
         add(header);
 
         // Content
-        val stub = new Label("Under Construction ...");
+        val actionForm = ActionForm.forManagedAction(uiComponentFactory, managedAction);
         
-        content = new Div(stub);
+        content = new Div(actionForm);
         content.addClassName("dialog-content");
         add(content);
 
         // Footer
-        Button send = new Button("Send");
-        send.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-
-        Button attachFiles = new Button(VaadinIcon.PAPERCLIP.create());
-        Button discardDraft = new Button(VaadinIcon.TRASH.create());
-
-        footer = new Footer(send, attachFiles, discardDraft);
+        val okButton = new Button("Ok");
+        val cancelButton = new Button("Cancel");
+        footer = new Footer(okButton, cancelButton);
         add(footer);
 
-        // Button theming
-        for (Button button : new Button[] {min, max, close, attachFiles, discardDraft}) {
-            button.addThemeVariants(ButtonVariant.LUMO_CONTRAST, ButtonVariant.LUMO_TERTIARY);
-        }
+        // Button Themes
         
+        okButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        cancelButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        
+        Stream.of(min, max, closeButton)
+        .forEach(button->
+            button.addThemeVariants(ButtonVariant.LUMO_CONTRAST, ButtonVariant.LUMO_TERTIARY));
+        
+        // Button Events
+        
+        okButton.addClickListener(event -> close()); //TODO should invoke the action
+        cancelButton.addClickListener(event -> close());
+        closeButton.addClickListener(event -> close());
         
     }
 
+    // -- HELPER
+    
     private void minimise() {
         if (isDocked) {
             initialSize();
@@ -120,7 +131,7 @@ public class ActionDialog extends Dialog {
             if (isFullScreen) {
                 initialSize();
             }
-            min.setIcon(VaadinIcon.UPLOAD_ALT.create());
+            min.setIcon(VaadinIcon.ANGLE_UP.create());
             getElement().getThemeList().add(DOCK);
             setWidth("320px");
         }
@@ -131,7 +142,7 @@ public class ActionDialog extends Dialog {
     }
 
     private void initialSize() {
-        min.setIcon(VaadinIcon.DOWNLOAD_ALT.create());
+        min.setIcon(VaadinIcon.ANGLE_DOWN.create());
         getElement().getThemeList().remove(DOCK);
         max.setIcon(VaadinIcon.EXPAND_SQUARE.create());
         getElement().getThemeList().remove(FULLSCREEN);

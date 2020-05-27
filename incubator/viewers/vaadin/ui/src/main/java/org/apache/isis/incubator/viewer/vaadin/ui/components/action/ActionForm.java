@@ -18,8 +18,8 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.ui.components.action;
 
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.textfield.TextField;
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
@@ -27,33 +27,44 @@ import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryV
 import lombok.NonNull;
 import lombok.val;
 
-public class ActionButton extends Button {
+public class ActionForm extends FormLayout {
 
     private static final long serialVersionUID = 1L;
-
-    public static ActionButton forManagedAction(
+    
+    private final transient ManagedAction managedAction;
+    
+    public static ActionForm forManagedAction(
             @NonNull final UiComponentFactoryVaa uiComponentFactory,
             @NonNull final ManagedAction managedAction) {
         
-        val uiAction = new ActionButton(managedAction.getName());
+        val actionForm = new ActionForm(uiComponentFactory, managedAction);
+        return actionForm;
+    }
+
+    protected ActionForm(
+            final UiComponentFactoryVaa uiComponentFactory,
+            final ManagedAction managedAction) {
         
-        uiAction.getStyle().set("margin-left", "0.5em");
-        uiAction.addThemeVariants(
-                ButtonVariant.LUMO_SMALL);
+        this.managedAction = managedAction;
         
-        val actionDialog = ActionDialog.forManagedAction(uiComponentFactory, managedAction);
+        managedAction.getAction().getParameters()
+        .forEach(param->{
         
-        uiAction.addClickListener(e->{
-            actionDialog.open();
+            val paramField = new TextField();
+            paramField.setLabel(param.getName());
+            paramField.setPlaceholder("under construction");
+            
+            super.add(paramField);
+            
+            
+//            val uiParameter = uiComponentFactory
+//                    .componentFor(UiComponentFactory.Request.of(Where.ANYWHERE, param));
+            
         });
         
-        return uiAction;
+        
+        
+        
     }
     
-    protected ActionButton(String name) {
-        super(name);
-    }
-
-
-
 }

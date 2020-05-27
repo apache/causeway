@@ -19,7 +19,6 @@
 package org.apache.isis.incubator.viewer.vaadin.ui.components.object;
 
 import com.vaadin.flow.component.HasComponents;
-import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
 import com.vaadin.flow.component.html.H1;
@@ -171,7 +170,7 @@ public class ObjectFormView extends VerticalLayout {
                 .checkVisibility(Where.OBJECT_FORMS)
                 .get()
                 .ifPresent(managedAction -> {
-                    val uiAction = ActionButton.forManagedAction(managedAction);
+                    val uiAction = ActionButton.forManagedAction(uiComponentFactory, managedAction);
                     container.add(uiAction);
                 });
             }
