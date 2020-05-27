@@ -22,6 +22,7 @@ import java.io.Serializable;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 
@@ -38,20 +39,18 @@ class HintPageParameterSerializer implements Serializable {
             final PageParameters pageParameters,
             final ManagedObjectModel objectModel) {
         
-        objectModel.asHintingBookmarkIfSupported();
-        
+        val bookmark = objectModel.asHintingBookmarkIfSupported();
         val hintStore = objectModel.getCommonContext().lookupServiceElseFail(HintStore.class);
-        hintStoreToPageParameters(pageParameters, objectModel, hintStore);
+        hintStoreToPageParameters(pageParameters, bookmark, hintStore);
     }
     
     // -- HELPER
     
     private static void hintStoreToPageParameters(
             final PageParameters pageParameters,
-            final ManagedObjectModel objectModel,
+            final Bookmark bookmark,
             final HintStore hintStore) {
         
-        val bookmark = objectModel.asHintingBookmarkIfSupported();
         if(bookmark==null) {
             return;
         }

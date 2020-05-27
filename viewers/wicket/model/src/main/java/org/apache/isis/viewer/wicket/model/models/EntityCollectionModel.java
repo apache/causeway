@@ -364,12 +364,6 @@ implements LinksProvider, UiHintContainer {
         }
         
         val collectionId = collectionLayoutData.getId();
-
-//        final SpecificationLoader specificationLoader = entityModel.getSpecificationLoader();
-//        final ObjectMemento parentObjectAdapterMemento = entityModel.memento();
-//        final ObjectSpecId objectSpecId = parentObjectAdapterMemento.getObjectSpecId();
-//        final ObjectSpecification objectSpec = specificationLoader.lookupBySpecIdElseLoad(objectSpecId);
-        
         val spec = entityModel.getTypeOfSpecification();
         
         return (OneToManyAssociation) spec.getAssociationElseFail(collectionId);
