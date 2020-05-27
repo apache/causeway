@@ -23,7 +23,6 @@ import java.io.Serializable;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.services.hint.HintStore;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 
 import lombok.val;
@@ -39,22 +38,23 @@ class HintPageParameterSerializer implements Serializable {
             final PageParameters pageParameters,
             final ManagedObjectModel objectModel) {
         
+        objectModel.asHintingBookmarkIfSupported();
+        
         val hintStore = objectModel.getCommonContext().lookupServiceElseFail(HintStore.class);
-        val objectAdapterMemento = objectModel.memento();
-        hintStoreToPageParameters(pageParameters, objectAdapterMemento, hintStore);
+        hintStoreToPageParameters(pageParameters, objectModel, hintStore);
     }
     
     // -- HELPER
     
     private static void hintStoreToPageParameters(
             final PageParameters pageParameters,
-            final ObjectMemento objectAdapterMemento,
+            final ManagedObjectModel objectModel,
             final HintStore hintStore) {
         
-        if(objectAdapterMemento == null) {
+        val bookmark = objectModel.asHintingBookmarkIfSupported();
+        if(bookmark==null) {
             return;
         }
-        val bookmark = objectAdapterMemento.asHintingBookmarkIfSupported();
         for (val hintKey : hintStore.findHintKeys(bookmark)) {
             ComponentHintKey.create(hintStore, hintKey).hintTo(bookmark, pageParameters, PREFIX);
         }
