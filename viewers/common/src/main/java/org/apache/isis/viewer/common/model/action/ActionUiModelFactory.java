@@ -18,8 +18,7 @@
  */
 package org.apache.isis.viewer.common.model.action;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 /**
@@ -37,14 +36,13 @@ public interface ActionUiModelFactory<T> {
      * 
      * @param commonContext
      * @param named - used when explicitly named (eg. menu bar layout file), otherwise {@code null}
-     * @param actionHolder
-     * @param objectAction
+     * @param managedAction
      * @return
      */
     ActionUiModel<T> newAction(
             IsisWebAppCommonContext commonContext, 
             String named,
-            ManagedObject actionHolder,
-            ObjectAction objectAction);
+            ManagedAction managedAction);
+    
     
 }

@@ -29,8 +29,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.common.model.action.ActionUiModelFactory;
 import org.apache.isis.viewer.common.model.menu.MenuUiModel;
@@ -113,10 +112,9 @@ public final class ServiceActionUtil {
         public LinkAndLabel newAction(
                 IsisWebAppCommonContext commonContext, 
                 String named, 
-                ManagedObject actionHolder,
-                ObjectAction objectAction) {
+                ManagedAction managedAction) {
         
-            val serviceModel = EntityModel.ofAdapter(commonContext, actionHolder);
+            val serviceModel = EntityModel.ofAdapter(commonContext, managedAction.getOwner());
             
             val actionLinkFactory = new MenuActionLinkFactory(
                     PageAbstract.ID_MENU_LINK, 
@@ -126,7 +124,7 @@ public final class ServiceActionUtil {
                     model->actionLinkFactory.newActionLink(model.getObjectAction(), named).getUiComponent(),
                     named,
                     serviceModel,
-                    objectAction);
+                    managedAction.getAction());
         }
         
     }

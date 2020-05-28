@@ -21,8 +21,7 @@ package org.apache.isis.incubator.viewer.vaadin.model.action;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Label;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.decorator.Decorators;
 import org.apache.isis.incubator.viewer.vaadin.model.entity.ObjectVaa;
@@ -39,16 +38,15 @@ public class ActionFactoryVaa implements ActionUiModelFactory<Component> {
     public ActionUiModel<Component> newAction(
             IsisWebAppCommonContext commonContext, 
             String named,
-            ManagedObject actionHolder, 
-            ObjectAction objectAction) {
+            ManagedAction managedAction) {
         
-        val serviceModel = new ObjectVaa(commonContext, actionHolder);
+        val actionOwnerModel = new ObjectVaa(commonContext, managedAction.getOwner());
         
         val actionUiModel = new ActionVaa(
                 this::createUiComponent,
                 named,
-                serviceModel, 
-                objectAction);
+                actionOwnerModel, 
+                managedAction.getAction());
         
         return actionUiModel;
     }
