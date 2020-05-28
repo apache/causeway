@@ -27,6 +27,11 @@ import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryV
 import lombok.NonNull;
 import lombok.val;
 
+/**
+ * Button that when clicked opens an {@link ActionDialog}. 
+ * 
+ * @since May 28, 2020
+ */
 public class ActionButton extends Button {
 
     private static final long serialVersionUID = 1L;

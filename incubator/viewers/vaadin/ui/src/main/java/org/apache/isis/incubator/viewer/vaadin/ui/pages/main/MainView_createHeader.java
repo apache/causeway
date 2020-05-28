@@ -18,7 +18,6 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.ui.pages.main;
 
-import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -40,7 +39,6 @@ import org.apache.isis.incubator.viewer.vaadin.model.menu.MenuItemVaa;
 import org.apache.isis.viewer.common.model.branding.BrandingUiModel;
 import org.apache.isis.viewer.common.model.header.HeaderUiModel;
 import org.apache.isis.viewer.common.model.menu.MenuUiModel;
-import org.apache.isis.viewer.common.model.userprofile.UserProfileUiModelProvider;
 
 import lombok.val;
 
@@ -76,13 +74,10 @@ final class MainView_createHeader {
         // menu section handler, that creates and adds sub-menus to their parent top level menu   
         final BiConsumer<MenuBar, MenuItemVaa> menuSectionBuilder = (menuBar, menuSectionUiModel) -> {
             val menuItem = menuSectionUiModel.isTertiaryRoot() 
-                    ? menuBar.addItem(Decorators.getUser().decorate(
-                            new Label(),
-                            Optional.ofNullable(
-                                commonContext.lookupServiceElseFail(UserProfileUiModelProvider.class)
-                                .getUserProfile())
-                            ))
-                    : menuBar.addItem(menuSectionUiModel.getName());
+                    ? menuBar.addItem(Decorators.getUser()
+                            .decorateWithAvatar(new Label(), commonContext))
+                    : menuBar.addItem(Decorators.getMenu()
+                            .decorateTopLevel(new Label(menuSectionUiModel.getName())));
             val subMenu = menuItem.getSubMenu();
             menuSectionUiModel.getSubMenuItems().forEach(menuItemModel -> {
                 val menuActionModel = (ActionVaa)menuItemModel.getMenuActionUiModel();
