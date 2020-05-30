@@ -1,10 +1,13 @@
 package org.apache.isis.client.kroviz.ui.kv
 
 import org.apache.isis.client.kroviz.to.ValueType
-import org.apache.isis.client.kroviz.ui.*
-import org.apache.isis.client.kroviz.utils.Point
+import org.apache.isis.client.kroviz.ui.Command
+import org.apache.isis.client.kroviz.ui.Displayable
+import org.apache.isis.client.kroviz.ui.FormItem
+import org.apache.isis.client.kroviz.ui.ImageDialog
 import org.apache.isis.client.kroviz.utils.Direction
 import org.apache.isis.client.kroviz.utils.IconManager
+import org.apache.isis.client.kroviz.utils.Point
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.core.Widget
@@ -16,7 +19,6 @@ import pl.treksoft.kvision.panel.HPanel
 import pl.treksoft.kvision.panel.vPanel
 import pl.treksoft.kvision.utils.perc
 import pl.treksoft.kvision.utils.px
-import pl.treksoft.kvision.window.Window
 
 class RoDialog(
         caption: String,
@@ -25,7 +27,7 @@ class RoDialog(
         defaultAction: String = "OK",
         widthPerc: Int = 30,
         heightPerc: Int = 100) :
-        Displayable, Window(caption = caption, closeButton = true) {
+        Displayable, RoWindow(caption = caption, closeButton = true) {
 
     private val okButton = Button(
             text = defaultAction,
