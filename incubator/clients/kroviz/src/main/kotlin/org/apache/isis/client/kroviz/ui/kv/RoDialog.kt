@@ -16,6 +16,7 @@ import pl.treksoft.kvision.panel.HPanel
 import pl.treksoft.kvision.panel.vPanel
 import pl.treksoft.kvision.utils.perc
 import pl.treksoft.kvision.utils.px
+import pl.treksoft.kvision.window.Window
 
 class RoDialog(
         caption: String,
@@ -23,8 +24,8 @@ class RoDialog(
         val command: Command,
         defaultAction: String = "OK",
         widthPerc: Int = 30,
-        heightPerc: Int = 30) :
-        Displayable, RoWindow(caption = caption, closeButton = true) {
+        heightPerc: Int = 100) :
+        Displayable, Window(caption = caption, closeButton = true) {
 
     private val okButton = Button(
             text = defaultAction,
@@ -71,12 +72,12 @@ class RoDialog(
         vPanel(justify = FlexJustify.SPACEBETWEEN) {
             height = 100.perc
             formPanel = FormPanelFactory(items).panel
-            //formPanel?.height = 100.perc  -- omitted here, already set in creating function
 
             add(formPanel!!, grow = 2)
 
             val buttonBar = HPanel(spacing = 10) {
                 id = "button-bar"
+                marginTop = 20.px
                 marginLeft = 10.px
             }
             buttonBar.add(okButton)
