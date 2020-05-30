@@ -7,8 +7,10 @@ import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.core.Widget
 import pl.treksoft.kvision.form.FormPanel
+import pl.treksoft.kvision.form.formPanel
 import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.ButtonStyle
+import pl.treksoft.kvision.panel.FlexAlignItems
 import pl.treksoft.kvision.panel.FlexJustify
 import pl.treksoft.kvision.panel.HPanel
 import pl.treksoft.kvision.panel.vPanel
@@ -69,14 +71,13 @@ class RoDialog(
         vPanel(justify = FlexJustify.SPACEBETWEEN) {
             height = 100.perc
             formPanel = FormPanelFactory(items).panel
-            formPanel?.height = 100.perc
-            formPanel?.let {
-                add(it, grow = 2)
-            }
+            //formPanel?.height = 100.perc  -- omitted here, already set in creating function
+
+            add(formPanel!!, grow = 2)
 
             val buttonBar = HPanel(spacing = 10) {
                 id = "button-bar"
-                margin = 10.px
+                marginLeft = 10.px
             }
             buttonBar.add(okButton)
             buttonBar.add(cancelButton)

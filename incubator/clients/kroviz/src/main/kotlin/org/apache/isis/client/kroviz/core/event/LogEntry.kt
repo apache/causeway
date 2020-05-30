@@ -92,7 +92,7 @@ data class LogEntry(
 
     fun setSuccess() {
         calculate()
-        this.responseLength = response.length
+        responseLength = response.length
         state = EventState.SUCCESS
     }
 
@@ -141,9 +141,10 @@ data class LogEntry(
 
     private fun stripHostPort(url: String): String {
         var result = url
-        val protocolHostPort = UiManager.getUrl()
-        if (url.contains("restful/")) {
-            result = result.replace(protocolHostPort + "restful/", "")
+        val signature = "restful/"
+        if (url.contains(signature)) {
+            val protocolHostPort = UiManager.getUrl()
+            result = result.replace(protocolHostPort + signature, "")
             result = removeHexCode(result)
         }
         return result

@@ -19,6 +19,7 @@ import pl.treksoft.kvision.form.time.DateTime
 import pl.treksoft.kvision.form.time.dateTime
 import pl.treksoft.kvision.html.Div
 import pl.treksoft.kvision.panel.VPanel
+import pl.treksoft.kvision.panel.flexPanel
 import pl.treksoft.kvision.panel.vPanel
 import pl.treksoft.kvision.utils.perc
 import pl.treksoft.kvision.utils.px
@@ -29,6 +30,7 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
 
     init {
         panel = formPanel {
+            height = 100.perc
             margin = 10.px
             for (fi: FormItem in items) {
                 when (fi.type) {
