@@ -25,14 +25,17 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeDecorator;
 import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeUiModel;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipDecorator;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipUiModel;
 import org.apache.isis.viewer.common.model.userprofile.UserProfileUiModel;
+import org.apache.isis.viewer.common.model.userprofile.UserProfileUiModelProvider;
 
 import lombok.Getter;
 import lombok.val;
@@ -48,6 +51,7 @@ public class Decorators {
 
     @Getter(lazy = true) private final static Tooltip tooltip = new Tooltip();
     @Getter(lazy = true) private final static Icon icon = new Icon();
+    @Getter(lazy = true) private final static Menu menu = new Menu();
     @Getter(lazy = true) private final static User user = new User();
 
     // -- DECORATOR CLASSES
@@ -78,7 +82,7 @@ public class Decorators {
 
                 return CssClassFaPosition.isLeftOrUnspecified(fontAwesome.getPosition())
                         ? new HorizontalLayout(faIcon, uiComponent)
-                                : new HorizontalLayout(uiComponent, faIcon);
+                        : new HorizontalLayout(uiComponent, faIcon);
 
             })
             .orElseGet(()->{
@@ -94,10 +98,38 @@ public class Decorators {
         }
 
     }
+    
+    public final static class Menu {
+        
+        public Component decorateTopLevel(
+                final Label label) {
+            val icon = getTopLevelMenuIcon();
+            val layout =  new HorizontalLayout(label, icon);
+            layout.setVerticalComponentAlignment(Alignment.END, icon);
+            return (Component) layout;
+        }
+        
+        private Component getTopLevelMenuIcon() {
+            val menuIcon = new com.vaadin.flow.component.icon.Icon(VaadinIcon.CARET_DOWN);
+            menuIcon.setSize("1em");
+            menuIcon.getElement().getStyle().set("margin-left", "2px");
+            return menuIcon;
+        }
+        
+    }
 
     public final static class User {
 
-        public Component decorate( 
+        public Component decorateWithAvatar(
+                final Label label,
+                final IsisWebAppCommonContext commonContext) {
+            
+            val profileIfAny = commonContext.lookupServiceElseFail(UserProfileUiModelProvider.class)
+                    .getUserProfile(); 
+            return decorateWithAvatar(label, Optional.ofNullable(profileIfAny));
+        }
+        
+        public Component decorateWithAvatar( 
                 final Label label,
                 final Optional<UserProfileUiModel> userProfileUiModel) {
             
@@ -135,6 +167,8 @@ public class Decorators {
         
         
     }
+
+
 
 
 }

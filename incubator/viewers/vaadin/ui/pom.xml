@@ -29,13 +29,13 @@
 		<git-plugin.propertiesDir>org/apache/isis/incubator/viewer/vaadin/ui</git-plugin.propertiesDir>
 	</properties>
 
-<!-- IN CASE WE WANT TO USE VAADIN ADDONS -->
-<!-- 	<repositories> -->
-<!-- 		<repository> -->
-<!-- 			<id>vaadin-addons</id> -->
-<!-- 			<url>https://maven.vaadin.com/vaadin-addons</url> -->
-<!-- 		</repository> -->
-<!-- 	</repositories> -->
+	<!-- IN CASE WE WANT TO USE VAADIN ADDONS -->
+	<!-- <repositories> -->
+	<!-- <repository> -->
+	<!-- <id>vaadin-addons</id> -->
+	<!-- <url>https://maven.vaadin.com/vaadin-addons</url> -->
+	<!-- </repository> -->
+	<!-- </repositories> -->
 
 	<build>
 
@@ -67,6 +67,9 @@
 				<groupId>com.vaadin</groupId>
 				<artifactId>vaadin-maven-plugin</artifactId>
 				<version>${vaadin.version}</version>
+				<configuration>
+					<pnpmEnable>true</pnpmEnable>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>
@@ -116,12 +119,12 @@
 
 		<!-- VAADIN ADDONS -->
 
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.github.appreciated</groupId> -->
-<!-- 			<artifactId>vaadin-css-grid</artifactId> -->
-<!-- 			<version>2.0.0.beta3</version> -->
-<!-- 			<version>0.8.4</version> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.github.appreciated</groupId> -->
+		<!-- <artifactId>vaadin-css-grid</artifactId> -->
+		<!-- <version>2.0.0.beta3</version> -->
+		<!-- <version>0.8.4</version> -->
+		<!-- </dependency> -->
 
 	</dependencies>
 

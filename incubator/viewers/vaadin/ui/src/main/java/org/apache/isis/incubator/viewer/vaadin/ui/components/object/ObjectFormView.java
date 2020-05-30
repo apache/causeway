@@ -18,12 +18,7 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.ui.components.object;
 
-import java.util.Collection;
-
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
 import com.vaadin.flow.component.html.H1;
@@ -33,7 +28,6 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
-import com.vaadin.flow.component.textfield.TextField;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
@@ -48,10 +42,10 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
+import org.apache.isis.incubator.viewer.vaadin.ui.components.action.ActionButton;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableView;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
 import org.apache.isis.viewer.common.model.binding.interaction.ObjectBinding;
@@ -63,8 +57,6 @@ import lombok.val;
 public class ObjectFormView extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;
-
-    private static final String NULL_LITERAL = "<NULL>";
 
     /**
      * Constructs given domain object's view, with all its visible members and actions.
@@ -178,12 +170,8 @@ public class ObjectFormView extends VerticalLayout {
                 .checkVisibility(Where.OBJECT_FORMS)
                 .get()
                 .ifPresent(managedAction -> {
-                    // TODO yet not doing anything
-                    val uiAction = new Button(managedAction.getName());
+                    val uiAction = ActionButton.forManagedAction(uiComponentFactory, managedAction);
                     container.add(uiAction);
-                    uiAction.getStyle().set("margin-left", "0.5em");
-                    uiAction.addThemeVariants(
-                            ButtonVariant.LUMO_SMALL);
                 });
             }
 
@@ -213,7 +201,7 @@ public class ObjectFormView extends VerticalLayout {
                 .ifPresent(managedCollection -> {
                     container.add(new H3(managedCollection.getName()));
                     
-                    val uiCollection = createCollectionComponent(managedCollection);
+                    val uiCollection = TableView.forManagedCollection(managedCollection);
                     container.add(uiCollection);
                 });
                 
@@ -224,61 +212,8 @@ public class ObjectFormView extends VerticalLayout {
         uiGridLayout.visit(gridVisistor);
         setWidthFull();
 
-        // -- populate actions
-
-        //        objectInteractor
-        //        .streamVisisbleActions()
-        //        .forEach(action -> {
-        //            
-        //            val button = new Button(action.getName());
-        //            actionsLayout.add(button);
-        //            
-        //            Dialog dialog = new Dialog();
-        //            dialog.add(new Label("Under Construction ... Close me with the esc-key or an outside click"));
-        //
-        //            dialog.setWidth("400px");
-        //            dialog.setHeight("150px");
-        //
-        //            button.addClickListener(e->{
-        //                dialog.open();
-        //            });
-        //
-        ////similar code in menu item ...            
-        ////            val actionModel = (ActionVaa)menuItemModel.getMenuActionUiModel();
-        ////            
-        ////            subMenu.addItem(
-        ////                    (Component)menuActionModel.getUiComponent(), 
-        ////                    e->subMenuEventHandler.accept(menuActionModel));
-        //            
-        //        });
-
-
     }
 
-    // -- HELPER
-
-    private Component createCollectionComponent(
-            final ManagedCollection managedCollection) {
-
-        val labelLiteral = "Collection: " + managedCollection.getName();
-        val pojo = managedCollection.getCollectionValue().getPojo();
-        if (pojo instanceof Collection) {
-            return TableView.fromManagedCollection(managedCollection);
-        }
-
-        if (pojo == null) {
-            val textField = new TextField();
-            textField.setLabel(labelLiteral);
-
-            textField.setValue(NULL_LITERAL);
-            return textField;
-        }
-
-        val textField = new TextField();
-        textField.setLabel(labelLiteral);
-        textField.setValue("Unknown collection type: " + pojo.getClass());
-        return textField;
-    }
 
 
 }

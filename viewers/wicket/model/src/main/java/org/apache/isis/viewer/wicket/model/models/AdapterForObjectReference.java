@@ -20,27 +20,32 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.Mode;
+import org.apache.isis.viewer.common.model.object.ObjectUiModel.RenderingHint;
 
-import static org.apache.isis.viewer.wicket.model.models.EntityModel.createPageParameters;
-
+import lombok.Getter;
+import lombok.Setter;
 import lombok.val;
 
-public class EntityModelForReference implements ObjectAdapterModel {
+/**
+ * 
+ * Wraps a {@link ScalarModel} to act as an {@link ObjectAdapterModel}.
+ *
+ */
+public class AdapterForObjectReference implements ObjectAdapterModel {
 
     private static final long serialVersionUID = 1L;
 
     private final ScalarModel scalarModel;
 
+    @Getter(onMethod = @__(@Override)) 
+    @Setter(onMethod = @__(@Override))
     private ObjectMemento contextAdapterIfAny;
-    private EntityModel.RenderingHint renderingHint;
-
-
-    public EntityModelForReference(final ScalarModel scalarModel) {
+    
+    public AdapterForObjectReference(final ScalarModel scalarModel) {
         this.scalarModel = scalarModel;
     }
 
@@ -48,40 +53,15 @@ public class EntityModelForReference implements ObjectAdapterModel {
     public ManagedObject getObject() {
         return scalarModel.getPendingElseCurrentAdapter();
     }
-
+    
     @Override
-    public void setObject(final ManagedObject adapter) {
-        // no-op
+    public RenderingHint getRenderingHint() {
+        return scalarModel.getRenderingHint();
     }
-
+    
     @Override
-    public void detach() {
-        // no-op
-    }
-
-    @Override
-    public ObjectMemento getContextAdapterIfAny() {
-        return contextAdapterIfAny;
-    }
-
-    @Override
-    public void setContextAdapterIfAny(ObjectMemento contextAdapterIfAny) {
-        this.contextAdapterIfAny = contextAdapterIfAny;
-    }
-
-    @Override
-    public EntityModel.RenderingHint getRenderingHint() {
-        return renderingHint;
-    }
-
-    @Override
-    public void setRenderingHint(final EntityModel.RenderingHint renderingHint) {
-        this.renderingHint = renderingHint;
-    }
-
-    @Override
-    public PageParameters getPageParametersWithoutUiHints() {
-        return createPageParameters(getObject());
+    public void setRenderingHint(RenderingHint renderingHint) {
+        scalarModel.setRenderingHint(renderingHint);
     }
 
     @Override
@@ -98,17 +78,27 @@ public class EntityModelForReference implements ObjectAdapterModel {
     public void setMode(Mode mode) {
         // no-op
     }
+    
+    @Override
+    public void setObject(final ManagedObject adapter) {
+        // no-op
+    }
+
+    @Override
+    public void detach() {
+        // no-op
+    }
 
     @Override
     public PageParameters getPageParameters() {
-        val mementoService = scalarModel.getMementoService();
-        val hintStore = scalarModel.getCommonContext().lookupServiceElseFail(HintStore.class); 
-        
-        val pageParameters = createPageParameters(getObject());
-        val objectAdapterMemento = mementoService.mementoForObject(getObject()); 
-        
-        HintPageParameterSerializer.hintStoreToPageParameters(pageParameters, objectAdapterMemento, hintStore);
+        val pageParameters = getPageParametersWithoutUiHints();
+        HintPageParameterSerializer.hintStoreToPageParameters(pageParameters, scalarModel);
         return pageParameters;
+    }
+    
+    @Override
+    public PageParameters getPageParametersWithoutUiHints() {
+        return PageParameterUtil.createPageParametersForObject(getObject());
     }
 
     @Override

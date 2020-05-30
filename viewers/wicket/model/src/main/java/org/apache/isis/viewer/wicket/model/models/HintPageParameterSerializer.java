@@ -19,14 +19,12 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
-import java.util.Set;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 
 import lombok.val;
 
@@ -38,25 +36,25 @@ class HintPageParameterSerializer implements Serializable {
     private HintPageParameterSerializer() {}
 
     public static void hintStoreToPageParameters(
-            final PageParameters pageParameters, 
-            final EntityModel entityModel) {
-        
-        val hintStore = entityModel.getCommonContext().lookupServiceElseFail(HintStore.class);
-        val objectAdapterMemento = entityModel.memento();
-        hintStoreToPageParameters(pageParameters, objectAdapterMemento, hintStore);
-    }
-
-    static void hintStoreToPageParameters(
             final PageParameters pageParameters,
-            final ObjectMemento objectAdapterMemento,
+            final ManagedObjectModel objectModel) {
+        
+        val bookmark = objectModel.asHintingBookmarkIfSupported();
+        val hintStore = objectModel.getCommonContext().lookupServiceElseFail(HintStore.class);
+        hintStoreToPageParameters(pageParameters, bookmark, hintStore);
+    }
+    
+    // -- HELPER
+    
+    private static void hintStoreToPageParameters(
+            final PageParameters pageParameters,
+            final Bookmark bookmark,
             final HintStore hintStore) {
         
-        if(objectAdapterMemento == null) {
+        if(bookmark==null) {
             return;
         }
-        final Bookmark bookmark = objectAdapterMemento.asHintingBookmarkIfSupported();
-        Set<String> hintKeys = hintStore.findHintKeys(bookmark);
-        for (String hintKey : hintKeys) {
+        for (val hintKey : hintStore.findHintKeys(bookmark)) {
             ComponentHintKey.create(hintStore, hintKey).hintTo(bookmark, pageParameters, PREFIX);
         }
     }

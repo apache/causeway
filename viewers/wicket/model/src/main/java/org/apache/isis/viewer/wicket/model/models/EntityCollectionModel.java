@@ -42,7 +42,6 @@ import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -59,6 +58,7 @@ import org.apache.isis.viewer.wicket.model.models.Util.LowestCommonSuperclassFin
 import static org.apache.isis.core.commons.internal.base._NullSafe.stream;
 
 import lombok.Getter;
+import lombok.val;
 
 /**
  * Model representing a collection of entities, either {@link Variant#STANDALONE
@@ -358,18 +358,15 @@ implements LinksProvider, UiHintContainer {
 
     private static OneToManyAssociation collectionFor(EntityModel entityModel) {
 
-        final ObjectMemento parentObjectAdapterMemento = entityModel.memento();
-        final CollectionLayoutData collectionLayoutData = entityModel.getCollectionLayoutData();
-        final SpecificationLoader specificationLoader = entityModel.getSpecificationLoader();
-
+        val collectionLayoutData = entityModel.getCollectionLayoutData();
         if(collectionLayoutData == null) {
             throw new IllegalArgumentException("EntityModel must have a CollectionLayoutMetadata");
         }
-        final String collectionId = collectionLayoutData.getId();
-        final ObjectSpecId objectSpecId = parentObjectAdapterMemento.getObjectSpecId();
-        final ObjectSpecification objectSpec = specificationLoader.lookupBySpecIdElseLoad(objectSpecId);
-        final OneToManyAssociation otma = (OneToManyAssociation) objectSpec.getAssociationElseFail(collectionId);
-        return otma;
+        
+        val collectionId = collectionLayoutData.getId();
+        val spec = entityModel.getTypeOfSpecification();
+        
+        return (OneToManyAssociation) spec.getAssociationElseFail(collectionId);
     }
 
     private static Class<?> forName(final ObjectSpecification objectSpec) {
@@ -416,7 +413,7 @@ implements LinksProvider, UiHintContainer {
     public CollectionLayoutData getLayoutData() {
         return entityModel != null
                 ? entityModel.getCollectionLayoutData()
-                        : null;
+                : null;
     }
 
     @Override

@@ -115,6 +115,7 @@ spring:
     location: banner.txt
     
 vaadin:
+  compatibilityMode: false
   whitelisted-packages: com.vaadin
   urlMapping: "/vaadin/*"
   servlet:

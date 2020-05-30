@@ -33,27 +33,25 @@
 
 		<maven-war-plugin.warName>${project.artifactId}</maven-war-plugin.warName>
 
-		<!-- 
-			Versions of node/npm/vaadin not yet listed in isis-app-starter-parent 
-			still investigating whether there is a way to not require these 
-			with the web-application. Ideally these dependencies are just referenced
-			in module viewer-vaadin-ui. 
-			See https://nodejs.org/en/download/ for latest node and npm (lts) versions 
-			-->
-		<node.version>v12.14.0</node.version>
-		<npm.version>6.13.1</npm.version>
-		<vaadin.version>14.1.23</vaadin.version>
+		<!-- Versions of node/npm/vaadin not yet listed in isis-app-starter-parent 
+			still investigating whether there is a way to not require these with the 
+			web-application. Ideally these dependencies are just referenced in module 
+			viewer-vaadin-ui. See https://nodejs.org/en/download/ for latest node and 
+			npm (lts) versions -->
+		<node.version>v12.17.0</node.version>
+		<npm.version>6.14.4</npm.version>
+		<vaadin.version>14.2.0</vaadin.version>
 
 	</properties>
 
 	<build>
 
 		<plugins>
-			
+
 			<plugin>
 				<groupId>com.github.eirslett</groupId>
 				<artifactId>frontend-maven-plugin</artifactId>
-				<version>1.7.6</version>
+				<version>1.10.0</version>
 				<executions>
 
 					<execution>
@@ -71,12 +69,15 @@
 				</executions>
 
 			</plugin>
-			
-			
+
+
 			<plugin>
 				<groupId>com.vaadin</groupId>
 				<artifactId>vaadin-maven-plugin</artifactId>
 				<version>${vaadin.version}</version>
+				<configuration>
+					<pnpmEnable>true</pnpmEnable>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>
@@ -85,22 +86,22 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 		</plugins>
 
 	</build>
 
 	<dependencies>
-	
+
 		<!-- DEMO DOMAIN -->
-	
+
 		<dependency>
 			<groupId>org.apache.isis.examples.apps</groupId>
 			<artifactId>demo-domain</artifactId>
 			<version>${project.version}</version>
 			<type>jar</type>
 		</dependency>
-	
+
 		<!-- JDK11+ SUPPORT -->
 
 		<dependency>
@@ -119,7 +120,7 @@
 		</dependency>
 
 		<!-- EXTENSIONS -->
-		
+
 		<dependency>
 			<groupId>org.apache.isis.valuetypes</groupId>
 			<artifactId>isis-valuetypes-asciidoc-ui-vaa</artifactId>
@@ -132,7 +133,7 @@
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+
 	</dependencies>
 
 	<profiles>

@@ -25,6 +25,7 @@ import javax.annotation.Nullable;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.handler.ChainOfResponsibility;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
@@ -114,7 +115,9 @@ public interface UiComponentFactory<T> {
             val managedProperty = (ManagedProperty)getObjectFeature();
             //TODO do a type check before the cast, so we can throw a more detailed exception
             // that is, given type must be assignable from the actual pojo type 
-            return Optional.ofNullable(managedProperty.getPropertyValue(where).getPojo())
+            return Optional.ofNullable(managedProperty.getPropertyValue(where))
+                    .filter(_Predicates.not(ManagedObject::isNullOrUnspecifiedOrEmpty))
+                    .map(ManagedObject::getPojo)
                     .map(type::cast);
         }
 
