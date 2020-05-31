@@ -1,6 +1,7 @@
 package org.apache.isis.client.kroviz.ui.kv
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
+import org.apache.isis.client.kroviz.ui.EventLogDetail
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.html.Button
@@ -22,7 +23,7 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                     align = Align.CENTER,
                     formatterComponentFunction = { _, _, data ->
                         Button("", icon = "fa fa-ellipsis-v", style = data.state.style).onClick {
-                            org.apache.isis.client.kroviz.ui.EventLogDetail(data).open()
+                            EventLogDetail(data).open()
                         }.apply { margin = CssSize(-10, UNIT.px) }
                     }),
             ColumnDefinition<LogEntry>("Title", "title",

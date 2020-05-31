@@ -22,7 +22,7 @@ class ErrorDialog(val logEntry: LogEntry) : Command {
                 items = formItems,
                 command = this,
                 widthPerc = 80,
-                heightPerc = 80).open()
+                heightPerc = 100).open()
     }
 
     override fun execute() {

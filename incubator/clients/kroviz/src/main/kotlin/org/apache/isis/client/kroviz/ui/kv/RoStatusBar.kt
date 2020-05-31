@@ -6,6 +6,7 @@ import org.apache.isis.client.kroviz.core.model.DiagramDM
 import org.apache.isis.client.kroviz.ui.ClassDiagram
 import org.apache.isis.client.kroviz.ui.IconManager
 import org.apache.isis.client.kroviz.ui.ImageDialog
+import org.ro.view.NotificationDialog
 import pl.treksoft.kvision.core.*
 import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.ButtonStyle
@@ -24,6 +25,7 @@ object RoStatusBar {
     private val userBtn: Button = buildButton("", "Me", ButtonStyle.OUTLINEWARNING)
     private val umlDiagram = buildButton("", "Diagram", ButtonStyle.OUTLINEWARNING)
     private val lastError = buildButton("OK", "OK", ButtonStyle.OUTLINESUCCESS)
+    private val alert = buildButton("", "Notification", ButtonStyle.OUTLINESUCCESS)
 
     private fun buildButton(text: String, iconName: String, style: ButtonStyle): Button {
         return Button(
@@ -40,6 +42,7 @@ object RoStatusBar {
         nav.add(lastError)
         nav.add(umlDiagram)
         nav.add(userBtn)
+        nav.add(alert)
     }
 
     fun updateDiagram(dd: DiagramDM) {
@@ -54,6 +57,15 @@ object RoStatusBar {
     fun updateUser(user: String) {
         userBtn.setAttribute(name = "title", value = user)
         userBtn.style = ButtonStyle.OUTLINESUCCESS
+        notify(user)
+    }
+
+    fun notify(text: String) {
+        alert.setAttribute(name = "title", value = text)
+        alert.style = ButtonStyle.OUTLINEDANGER
+        alert.onClick {
+            NotificationDialog(text).open()
+        }
     }
 
     fun update(le: LogEntry?) {

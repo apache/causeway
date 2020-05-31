@@ -43,6 +43,7 @@ object IconManager {
             "Log" to "history",
             "Manager" to "manager",
             "Me" to "user",
+            "Notification" to "bell",
             "Objects" to "cubes",
             "OK" to "check",
             "Open" to "book",
