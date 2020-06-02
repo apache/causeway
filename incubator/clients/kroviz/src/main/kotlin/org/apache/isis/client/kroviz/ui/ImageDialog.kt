@@ -7,10 +7,9 @@ import org.apache.isis.client.kroviz.utils.DomHelper
 import org.apache.isis.client.kroviz.utils.ScalableVectorGraphic
 import org.apache.isis.client.kroviz.utils.UmlUtils
 
-@ExperimentalUnsignedTypes
 class ImageDialog(
         var label: String = defaultLabel,
-        private var pumlCode: String = defaultPumlCode) : Command {
+        private var pumlCode: String = defaultPumlCode) : Command() {
 
     companion object {
         const val defaultLabel = "UML Diagram Sample"
@@ -25,6 +24,7 @@ class ImageDialog(
     private var dialog: RoDialog
     private val formItems = mutableListOf<FormItem>()
 
+    @ExperimentalUnsignedTypes
     fun open() {
         dialog.open()
         UmlUtils.generateDiagram(pumlCode, uuid)
@@ -42,6 +42,7 @@ class ImageDialog(
                 heightPerc = 80)
     }
 
+    @ExperimentalUnsignedTypes
     fun scale(direction: Direction) {
         val oldElement = DomHelper.getById(uuid)
         val oldStr = oldElement!!.innerHTML

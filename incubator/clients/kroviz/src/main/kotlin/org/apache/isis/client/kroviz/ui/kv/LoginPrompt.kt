@@ -6,7 +6,7 @@ import org.apache.isis.client.kroviz.ui.FormItem
 import pl.treksoft.kvision.form.text.Password
 import pl.treksoft.kvision.form.text.Text
 
-class LoginPrompt : Command {
+class LoginPrompt : Command() {
 
     private lateinit var form: RoDialog
 

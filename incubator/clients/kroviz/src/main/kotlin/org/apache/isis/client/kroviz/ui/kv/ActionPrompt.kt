@@ -11,7 +11,7 @@ import pl.treksoft.kvision.core.StringPair
 import pl.treksoft.kvision.form.select.SimpleSelect
 import pl.treksoft.kvision.form.text.TextArea
 
-class ActionPrompt(val action: Action) : Command {
+class ActionPrompt(val action: Action) : Command() {
 
     private lateinit var form: RoDialog
 

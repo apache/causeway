@@ -4,7 +4,7 @@ import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.to.HttpError
 import org.apache.isis.client.kroviz.ui.kv.RoDialog
 
-class ErrorDialog(val logEntry: LogEntry) : Command {
+class ErrorDialog(val logEntry: LogEntry) : Command() {
 
     fun open() {
         val error = logEntry.getTransferObject() as HttpError
@@ -23,10 +23,6 @@ class ErrorDialog(val logEntry: LogEntry) : Command {
                 command = this,
                 widthPerc = 80,
                 heightPerc = 100).open()
-    }
-
-    override fun execute() {
-        //do nothing
     }
 
     private fun toString(stackTrace: List<String>): String {

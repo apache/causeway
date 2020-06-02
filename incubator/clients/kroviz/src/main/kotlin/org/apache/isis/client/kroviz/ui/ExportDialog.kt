@@ -7,7 +7,7 @@ import org.apache.isis.client.kroviz.ui.kv.RoDialog
 import org.apache.isis.client.kroviz.utils.DomHelper
 import org.apache.isis.client.kroviz.utils.Utils
 
-class ExportDialog() :Command {
+class ExportDialog() :Command() {
 
     private var jsonOutput: String = ""
 
