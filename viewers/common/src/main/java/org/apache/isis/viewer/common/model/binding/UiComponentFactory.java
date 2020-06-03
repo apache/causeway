@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
@@ -116,7 +117,7 @@ public interface UiComponentFactory<T> {
             //TODO do a type check before the cast, so we can throw a more detailed exception
             // that is, given type must be assignable from the actual pojo type 
             return Optional.ofNullable(managedProperty.getPropertyValue(where))
-                    .filter(_Predicates.not(ManagedObject::isNullOrUnspecifiedOrEmpty))
+                    .filter(_Predicates.not(ManagedObjects::isNullOrUnspecifiedOrEmpty))
                     .map(ManagedObject::getPojo)
                     .map(type::cast);
         }

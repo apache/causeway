@@ -25,6 +25,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.RenderingHint;
@@ -70,7 +71,7 @@ public class ObjectAdapterTitleColumn extends ColumnAbstract<ManagedObject> {
     private Component createComponent(final String id, final IModel<ManagedObject> rowModel) {
         val adapter = rowModel.getObject();
         
-        if(ManagedObject.isValue(adapter)) {
+        if(ManagedObjects.isValue(adapter)) {
             val valueModel = new ValueModel(super.getCommonContext(), adapter);
             
             val componentFactory = findComponentFactory(ComponentType.VALUE, valueModel);

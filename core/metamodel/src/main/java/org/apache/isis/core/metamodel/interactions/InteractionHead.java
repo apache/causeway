@@ -25,6 +25,7 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -51,11 +52,11 @@ public class InteractionHead {
     
     /** factory with consistency checks */
     public static InteractionHead of(@NonNull ManagedObject owner, @NonNull ManagedObject target) {
-        if(ManagedObject.isSpecified(owner) 
+        if(ManagedObjects.isSpecified(owner) 
                 && owner.getSpecification().getBeanSort().isMixin()) {
             throw _Exceptions.unrecoverableFormatted("unexpected: owner is a mixin %s", owner);
         }
-        if(ManagedObject.isSpecified(target)                    
+        if(ManagedObjects.isSpecified(target)                    
                 && target.getSpecification().getBeanSort().isMixin()
                 && target.getPojo()==null) {
             throw _Exceptions.unrecoverableFormatted("target not spec. %s", target);

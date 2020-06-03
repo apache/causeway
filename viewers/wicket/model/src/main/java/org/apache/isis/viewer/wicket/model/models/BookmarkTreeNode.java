@@ -31,7 +31,7 @@ import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
@@ -208,7 +208,7 @@ public class BookmarkTreeNode implements Serializable {
             })
             .filter(_NullSafe::isPresent)
             .map(parentAdapter->{
-                final Oid parentOid = ManagedObject.identify(parentAdapter).orElse(null);
+                final Oid parentOid = ManagedObjects.identify(parentAdapter).orElse(null);
                 return parentOid;
             })
             .filter(_NullSafe::isPresent)

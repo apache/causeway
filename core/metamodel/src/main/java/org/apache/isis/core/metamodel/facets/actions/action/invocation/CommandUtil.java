@@ -27,6 +27,7 @@ import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -84,7 +85,7 @@ public class CommandUtil {
     }
 
     public static Bookmark bookmarkFor(final ManagedObject adapter) {
-        return ManagedObject.bookmark(adapter)
+        return ManagedObjects.bookmark(adapter)
                 .orElse(null);
     }
 

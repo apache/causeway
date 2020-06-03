@@ -25,6 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 
 public abstract class BooleanValueSemanticsProviderAbstract
@@ -111,7 +112,7 @@ extends ValueSemanticsProviderAndFacetAbstract<Boolean> implements BooleanValueF
 
     @Override
     public boolean isSet(ManagedObject adapter) {
-        if (ManagedObject.isNullOrUnspecifiedOrEmpty(adapter)) {
+        if (ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
             return false;
         }
         final Object object = adapter.getPojo();

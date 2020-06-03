@@ -39,6 +39,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtime.context.RuntimeContextBase;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -218,7 +219,7 @@ public class ResourceContext extends RuntimeContextBase implements IResourceCont
     private Set<Oid> rendered = _Sets.newHashSet();
     @Override
     public boolean canEagerlyRender(ManagedObject objectAdapter) {
-        final Oid oid = ManagedObject.identify(objectAdapter).orElse(null);
+        final Oid oid = ManagedObjects.identify(objectAdapter).orElse(null);
         return (oid!=null) 
                 ? rendered.add(oid)
                 : true;

@@ -129,7 +129,7 @@ implements PropertyUiModel {
         val where = this.getRenderingHint().asWhere();
         val propertyValue = getManagedProperty().getPropertyValue(where);
         
-        val presentationValue = ManagedObject.isNullOrUnspecifiedOrEmpty(propertyValue)
+        val presentationValue = ManagedObjects.isNullOrUnspecifiedOrEmpty(propertyValue)
                 ? null
                 : propertyValue;
         

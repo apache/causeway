@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 import lombok.val;
 
@@ -69,12 +70,12 @@ public class ConverterForObjectAdapter implements IConverter<ManagedObject> {
     @Override
     public String convertToString(final ManagedObject adapter, final Locale locale) {
         
-        if(!ManagedObject.isIdentifiable(adapter)) {
+        if(!ManagedObjects.isIdentifiable(adapter)) {
             // eg. values don't have an Oid
             return null;
         }
         
-        return ManagedObject.stringify(adapter)
+        return ManagedObjects.stringify(adapter)
                 .orElse(null);
     }
     

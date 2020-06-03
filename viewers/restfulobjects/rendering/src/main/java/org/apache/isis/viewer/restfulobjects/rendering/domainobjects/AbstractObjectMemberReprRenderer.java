@@ -26,6 +26,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -258,7 +259,7 @@ extends ReprRendererAbstract<R, ManagedMember> {
     }
 
     private void addDetailsLinkIfPersistent() {
-        if (!ManagedObject.isIdentifiable(objectAdapter)) {
+        if (!ManagedObjects.isIdentifiable(objectAdapter)) {
             return;
         }
         final JsonRepresentation link = linkTo.memberBuilder(Rel.DETAILS, objectMemberType, objectMember).build();

@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -58,7 +59,7 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
      * hook method
      */
     protected StringBuilder linkRef(StringBuilder buf) {
-        String domainType = ManagedObject.getDomainType(objectAdapter);
+        String domainType = ManagedObjects.getDomainType(objectAdapter).orElse("?");
         String instanceId = ManagedObject._instanceId(objectAdapter);
         return buf.append("objects/").append(domainType).append("/").append(instanceId);
     }

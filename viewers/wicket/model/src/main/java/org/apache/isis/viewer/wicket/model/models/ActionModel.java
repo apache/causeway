@@ -52,6 +52,7 @@ import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolic
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -422,14 +423,14 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
             val paramValue = actionArgumentModel.getValue();
             val hasChoices = actionParameter.hasChoices();
             val hasAutoComplete = actionParameter.hasAutoComplete();
-            val isEmpty = ManagedObject.isNullOrUnspecifiedOrEmpty(paramValue);
+            val isEmpty = ManagedObjects.isNullOrUnspecifiedOrEmpty(paramValue);
             // if we have choices or autoSelect, don't override any param value, already chosen by the user
             val vetoDefaultsToBeSet = !isEmpty 
                     && (hasChoices||hasAutoComplete);
             
             if(!vetoDefaultsToBeSet) {
                 val paramDefaultValue = actionParameter.getDefault(pendingArgs);
-                if (ManagedObject.isNullOrUnspecifiedOrEmpty(paramDefaultValue)) {
+                if (ManagedObjects.isNullOrUnspecifiedOrEmpty(paramDefaultValue)) {
                     clearParameterValue(actionParameter);
                 } else {
                     setParameterValue(actionParameter, paramDefaultValue);

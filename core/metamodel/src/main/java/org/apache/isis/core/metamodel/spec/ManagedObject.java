@@ -35,7 +35,6 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.domain.DomainObjectList;
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Lazy;
@@ -53,6 +52,7 @@ import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -92,72 +92,17 @@ public interface ManagedObject {
      */
     Optional<RootOid> getRootOid();
     
-    // -- SHORTCUTS
-    
-    static Optional<RootOid> identify(@Nullable ManagedObject adapter) {
-        return isSpecified(adapter)  ? adapter.getRootOid() : Optional.empty(); 
-    }
-    
-    static RootOid identifyElseFail(@Nullable ManagedObject adapter) {
-        return identify(adapter)
-                .orElseThrow(()->_Exceptions.illegalArgument("cannot identify %s", adapter));
-    }
-    
-    static Optional<Bookmark> bookmark(@Nullable ManagedObject adapter) {
-        return identify(adapter)
-                .map(RootOid::asBookmark);
-    }
-    
-    static Bookmark bookmarkElseFail(@Nullable ManagedObject adapter) {
-        return bookmark(adapter)
-                .orElseThrow(()->_Exceptions.illegalArgument("cannot bookmark %s", adapter));
-    }
-    
-    static Optional<String> stringify(@Nullable ManagedObject adapter) {
-        return identify(adapter)
-                .map(RootOid::enString);
-    }
-    
-    static String stringifyElseFail(@Nullable ManagedObject adapter) {
-        return stringify(adapter)
-                .orElseThrow(()->_Exceptions.illegalArgument("cannot stringify %s", adapter));
-    }
-    
-    
     // -- EMPTY
-    
-    static class UnspecifiedHolder {
-        private static final ManagedObject UNSPECIFIED = new ManagedObject() {
-
-            @Override
-            public ObjectSpecification getSpecification() {
-                throw _Exceptions.unsupportedOperation();
-            }
-
-            @Override
-            public Object getPojo() {
-                return null;
-            }
-
-            @Override
-            public Optional<RootOid> getRootOid() {
-                return Optional.empty();
-            }
-            
-        };
-    }
     
     /** has no ObjectSpecification and no value */
     static ManagedObject unspecified() {
-        return UnspecifiedHolder.UNSPECIFIED;
+        return ManagedObjectInternalUtil.UNSPECIFIED;
     }
     
     /** has an ObjectSpecification, but no value */
     static ManagedObject empty(@NonNull final ObjectSpecification spec) {
         return ManagedObject.of(spec, null);
     }
-    
-
     
 
     // -- SIMPLE
@@ -185,10 +130,8 @@ public interface ManagedObject {
         }
         
         // -- LAZY ID HANDLING
-        private final _Lazy<Optional<RootOid>> rootOidLazy = _Lazy.threadSafe(this::identify);  
-        private Optional<RootOid> identify() {
-            return Optional.ofNullable(ManagedObjectInternalUtil._identify(this));
-        }
+        private final _Lazy<Optional<RootOid>> rootOidLazy = 
+                _Lazy.threadSafe(()->ManagedObjectInternalUtil.identify(this));  
 
         
     }
@@ -203,7 +146,7 @@ public interface ManagedObject {
         @Getter @NonNull private final Object pojo;
         
         @Getter(lazy=true, onMethod = @__(@Override)) 
-        private final Optional<RootOid> rootOid = Optional.ofNullable(ManagedObjectInternalUtil._identify(this));
+        private final Optional<RootOid> rootOid = ManagedObjectInternalUtil.identify(this);
 
         private final _Lazy<ObjectSpecification> specification = _Lazy.threadSafe(this::loadSpec);
 
@@ -242,72 +185,16 @@ public interface ManagedObject {
     }
 
     default String titleString(@Nullable ManagedObject contextAdapterIfAny) {
-        return TitleUtil.titleString(this, contextAdapterIfAny);
+        return ManagedObjectInternalUtil.titleString(this, contextAdapterIfAny);
     }
     
-    @Deprecated // move to ManagedObjects
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    static final class TitleUtil {
-
-        private static String titleString(@Nullable ManagedObject managedObject, @Nullable ManagedObject contextAdapterIfAny) {
-            
-            if(!ManagedObject.isSpecified(managedObject)) {
-                return "unspecified object";
-            }
-            
-            if (managedObject.getSpecification().isParentedOrFreeCollection()) {
-                final CollectionFacet facet = managedObject.getSpecification().getFacet(CollectionFacet.class);
-                return collectionTitleString(managedObject, facet);
-            } else {
-                return objectTitleString(managedObject, contextAdapterIfAny);
-            }
-        }
-
-        private static String objectTitleString(ManagedObject managedObject, ManagedObject contextAdapterIfAny) {
-            if (managedObject.getPojo() instanceof String) {
-                return (String) managedObject.getPojo();
-            }
-            final ObjectSpecification specification = managedObject.getSpecification();
-            String title = specification.getTitle(contextAdapterIfAny, managedObject);
-
-            if (title == null) {
-                title = getDefaultTitle(managedObject);
-            }
-            return title;
-        }
-
-        private static String collectionTitleString(ManagedObject managedObject, final CollectionFacet facet) {
-            final int size = facet.size(managedObject);
-            final ObjectSpecification elementSpecification = managedObject.getElementSpecification().orElse(null);
-            if (elementSpecification == null || elementSpecification.getFullIdentifier().equals(Object.class.getName())) {
-                switch (size) {
-                case -1:
-                    return "Objects";
-                case 0:
-                    return "No objects";
-                case 1:
-                    return "1 object";
-                default:
-                    return size + " objects";
-                }
-            } else {
-                switch (size) {
-                case -1:
-                    return elementSpecification.getPluralName();
-                case 0:
-                    return "No " + elementSpecification.getPluralName();
-                case 1:
-                    return "1 " + elementSpecification.getSingularName();
-                default:
-                    return size + " " + elementSpecification.getPluralName();
-                }
-            }
-        }
-
-        private static String getDefaultTitle(ManagedObject managedObject) {
-            return "A" + (" " + managedObject.getSpecification().getSingularName()).toLowerCase();
-        }
-
+    // -- SHORTCUT - OBJECT MANAGER
+    
+    default ObjectManager getObjectManager() {
+        return ManagedObjectInternalUtil.objectManager(this)
+                .orElseThrow(()->_Exceptions
+                        .illegalArgument("Can only retrieve ObjectManager from ManagedObjects "
+                                + "that are 'specified'."));
     }
 
     // -- SHORTCUT - ELEMENT SPECIFICATION
@@ -380,7 +267,7 @@ public interface ManagedObject {
 
     @Nullable
     public static Object unwrapSingle(@Nullable final ManagedObject adapter) {
-        return isSpecified(adapter)
+        return ManagedObjects.isSpecified(adapter)
                 ? adapter.getPojo() 
                 : null;
     }
@@ -458,56 +345,7 @@ public interface ManagedObject {
                 .collect(_Sets.toUnmodifiable());
     }
 
-    // -- SHORTCUTS
 
-    public static String getDomainType(ManagedObject adapter) {
-        if(!isSpecified(adapter)) {
-            return null;
-        }
-        return adapter.getSpecification().getSpecId().asString();
-    }
-
-    // -- BASIC PREDICATES
-
-    static boolean isEntity(ManagedObject adapter) {
-        if(!isSpecified(adapter)) {
-            return false;
-        }
-        return adapter.getSpecification().isEntity();
-    }
-
-    static boolean isValue(ManagedObject adapter) {
-        if(!isSpecified(adapter)) {
-            return false;
-        }
-        return adapter.getSpecification().isValue();
-    }
-
-    /**
-     * @return whether the corresponding type can be mapped onto a REFERENCE (schema) or an Oid,
-     * that is the type is 'identifiable' (aka 'referencable' or 'bookmarkable') 
-     */
-    static boolean isIdentifiable(@Nullable ManagedObject adapter) {
-        if(!isSpecified(adapter)) {
-            return false;
-        }
-        val spec = adapter.getSpecification();
-        return spec.isIdentifiable();
-    }
-
-    static boolean isNullOrUnspecifiedOrEmpty(@Nullable ManagedObject adapter) {
-        if(adapter==null || adapter==ManagedObject.unspecified()) {
-            return true;
-        }
-        return adapter.getPojo()==null;
-    }
-    
-    /** whether has at least a spec */
-    static boolean isSpecified(@Nullable ManagedObject adapter) {
-        return adapter!=null && adapter!=ManagedObject.unspecified();
-    }
-
-    
     // -- VISIBILITY UTILITIES
 
     @Deprecated // move to ManagedObjects
@@ -570,7 +408,7 @@ public interface ManagedObject {
                 ManagedObject adapter,
                 InteractionInitiatedBy interactionInitiatedBy) {
 
-            if(isNullOrUnspecifiedOrEmpty(adapter)) {
+            if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
                 // a choices list could include a null (eg example in ToDoItems#choices1Categorized()); want to show as "visible"
                 return true;
             }
@@ -745,7 +583,7 @@ public interface ManagedObject {
     // -- DEPRECATIONS (REFACTORING)
 
     static String _instanceId(ManagedObject adapter) {
-        val identifier = identifyElseFail(adapter).getIdentifier();
+        val identifier = ManagedObjects.identifyElseFail(adapter).getIdentifier();
         return identifier; 
     }
     
@@ -779,7 +617,7 @@ public interface ManagedObject {
             ManagedObject first,
             ManagedObject second) {
 
-        if(ManagedObject.isIdentifiable(first) && ManagedObject.isSpecified(second)) {
+        if(ManagedObjects.isIdentifiable(first) && ManagedObjects.isSpecified(second)) {
 
             val refSpec = second.getSpecification();
 
@@ -877,6 +715,8 @@ public interface ManagedObject {
         
         return adapter.getSpecification().getBeanSort().isCollection();
     }
+
+    
 
 
 

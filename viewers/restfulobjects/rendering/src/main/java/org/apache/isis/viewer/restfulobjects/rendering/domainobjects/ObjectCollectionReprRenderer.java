@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
@@ -68,7 +69,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         final LinkFollowSpecs followValue = getLinkFollowSpecs().follow("value");
         boolean eagerlyRender = resourceContext.honorUiHints() && renderEagerly() || !followValue.isTerminated();
 
-        if ((mode.isInline() && eagerlyRender) || mode.isStandalone() || mode.isMutated() || mode.isEventSerialization() || !ManagedObject.isIdentifiable(objectAdapter)) {
+        if ((mode.isInline() && eagerlyRender) || mode.isStandalone() || mode.isMutated() || mode.isEventSerialization() || !ManagedObjects.isIdentifiable(objectAdapter)) {
             addValue(followValue);
         }
         if(!mode.isEventSerialization()) {

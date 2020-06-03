@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -54,7 +55,7 @@ final class ObjectMementoLegacy implements Serializable {
      * Factory method
      */
     public static ObjectMementoLegacy createOrNull(ManagedObject adapter) {
-        if(ManagedObject.isNullOrUnspecifiedOrEmpty(adapter)) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
             return null;
         }
         return new ObjectMementoLegacy(adapter);
@@ -245,7 +246,7 @@ final class ObjectMementoLegacy implements Serializable {
                 //XXX REVIEW: this may be redundant because recreateAdapter also guarantees the version will be reset.
                 ManagedObject adapter = recreateObject(memento, specificationLoader);
 
-                memento.persistentOidStr = ManagedObject.stringifyElseFail(adapter);
+                memento.persistentOidStr = ManagedObjects.stringifyElseFail(adapter);
             }
 
             @Override
@@ -396,7 +397,7 @@ final class ObjectMementoLegacy implements Serializable {
             return;
         }
 
-        val rootOid = ManagedObject.identifyElseFail(adapter);
+        val rootOid = ManagedObjects.identifyElseFail(adapter);
         persistentOidStr = rootOid.enString();
         bookmark = rootOid.asBookmark();
         if(adapter.getPojo() instanceof HintStore.HintIdProvider) {
