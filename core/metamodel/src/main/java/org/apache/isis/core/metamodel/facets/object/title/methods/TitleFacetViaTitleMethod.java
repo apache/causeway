@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -65,7 +66,7 @@ public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements Impe
     @Override
     public String title(final ManagedObject owningAdapter) {
         try {
-            final Object returnValue = ManagedObject.InvokeUtil.invoke(method, owningAdapter);
+            final Object returnValue = ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
             if(returnValue instanceof String) {
                 return (String) returnValue;
             }

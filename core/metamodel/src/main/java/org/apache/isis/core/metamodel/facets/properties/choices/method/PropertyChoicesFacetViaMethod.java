@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 import lombok.val;
 
@@ -67,14 +68,14 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         
-        final Object options = ManagedObject.InvokeUtil.invoke(method, owningAdapter);
+        final Object options = ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
         if (options == null) {
             return null;
         }
 
         val collectionAdapter = getObjectManager().adapt(options);
 
-        val visiblePojos = ManagedObject.VisibilityUtil
+        val visiblePojos = ManagedObjects.VisibilityUtil
                 .visiblePojosAsArray(collectionAdapter, interactionInitiatedBy);
         
         return visiblePojos;

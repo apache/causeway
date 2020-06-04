@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.disable.ActionParameterDisabledFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 public class ActionParameterDisabledFacetViaMethod 
 extends ActionParameterDisabledFacetAbstract 
@@ -77,8 +78,8 @@ implements ImperativeFacet {
             final Can<ManagedObject> pendingArgs) {
         
         final Object returnValue = ppmFactory.isPresent()
-                ? ManagedObject.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, owningAdapter, pendingArgs)
-                : ManagedObject.InvokeUtil.invokeAutofit(method, owningAdapter, pendingArgs);
+                ? ManagedObjects.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, owningAdapter, pendingArgs)
+                : ManagedObjects.InvokeUtil.invokeAutofit(method, owningAdapter, pendingArgs);
                 
         if(returnValue instanceof String) {
             return (String) returnValue;

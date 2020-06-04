@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 public class HideForContextFacetViaMethod extends HideForContextFacetAbstract implements ImperativeFacet {
 
@@ -58,7 +59,7 @@ public class HideForContextFacetViaMethod extends HideForContextFacetAbstract im
         if (target == null) {
             return null;
         }
-        final Boolean isHidden = (Boolean) ManagedObject.InvokeUtil.invokeC(method, target);
+        final Boolean isHidden = (Boolean) ManagedObjects.InvokeUtil.invokeAutofit(method, target);
         return isHidden.booleanValue() ? "Hidden" : null;
     }
 

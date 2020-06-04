@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 import lombok.val;
 
@@ -77,15 +78,15 @@ implements ImperativeFacet {
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         final Object choices = ppmFactory.isPresent()
-                ? ManagedObject.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, owningAdapter, pendingArgs) 
-                : ManagedObject.InvokeUtil.invokeAutofit(method, owningAdapter, pendingArgs);
+                ? ManagedObjects.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, owningAdapter, pendingArgs) 
+                : ManagedObjects.InvokeUtil.invokeAutofit(method, owningAdapter, pendingArgs);
         if (choices == null) {
             return _Constants.emptyObjects;
         }
         
         val objectAdapter = getObjectManager().adapt(choices);
 
-        val visiblePojos = ManagedObject.VisibilityUtil
+        val visiblePojos = ManagedObjects.VisibilityUtil
                 .visiblePojosAsArray(objectAdapter, interactionInitiatedBy);
 
         return visiblePojos;

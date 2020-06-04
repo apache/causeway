@@ -28,6 +28,7 @@ import java.util.Map;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 public class PersistingCallbackFacetViaMethod extends PersistingCallbackFacetAbstract implements ImperativeFacet {
 
@@ -55,7 +56,7 @@ public class PersistingCallbackFacetViaMethod extends PersistingCallbackFacetAbs
 
     @Override
     public void invoke(final ManagedObject adapter) {
-        ManagedObject.InvokeUtil.invokeAll(methods, adapter);
+        ManagedObjects.InvokeUtil.invokeAll(methods, adapter);
     }
 
     @Override

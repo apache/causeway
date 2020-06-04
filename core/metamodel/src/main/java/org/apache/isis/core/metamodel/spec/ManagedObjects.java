@@ -18,20 +18,38 @@
  */
 package org.apache.isis.core.metamodel.spec;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.repository.EntityState;
+import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.assertions._Assert;
 import org.apache.isis.core.commons.internal.base._NullSafe;
+import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.commons.ClassExtensions;
+import org.apache.isis.core.metamodel.commons.MethodExtensions;
+import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.interactions.InteractionUtils;
+import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
@@ -254,5 +272,245 @@ public final class ManagedObjects {
         return managedObject.getObjectManager().loadObject(objectLoadRequest);
     }
 
+    // -- VISIBILITY UTIL
+    
+    @UtilityClass
+    public static final class VisibilityUtil {
+    
+        public static Predicate<? super ManagedObject> filterOn(InteractionInitiatedBy interactionInitiatedBy) {
+            return $->ManagedObjects.VisibilityUtil.isVisible($, interactionInitiatedBy);
+        }
+    
+        /**
+         * Filters a collection (an adapter around either a Collection or an Object[]) and returns a stream of
+         * {@link ManagedObject}s of those that are visible (as per any facet(s) installed on the element class
+         * of the collection).
+         * @param collectionAdapter - an adapter around a collection (as returned by a getter of a collection, or of an autoCompleteNXxx() or choicesNXxx() method, etc
+         * @param interactionInitiatedBy
+         */
+        public static Stream<ManagedObject> streamVisibleAdapters(
+                final ManagedObject collectionAdapter,
+                final InteractionInitiatedBy interactionInitiatedBy) {
+    
+            return CollectionFacet.streamAdapters(collectionAdapter)
+                    .filter(VisibilityUtil.filterOn(interactionInitiatedBy));
+        }
+        
+        private static Stream<Object> streamVisiblePojos(
+                final ManagedObject collectionAdapter,
+                final InteractionInitiatedBy interactionInitiatedBy) {
+    
+            return CollectionFacet.streamAdapters(collectionAdapter)
+                    .filter(VisibilityUtil.filterOn(interactionInitiatedBy))
+                    .map(ManagedObject::unwrapSingle);
+        }
+        
+        public static Object[] visiblePojosAsArray(
+                final ManagedObject collectionAdapter,
+                final InteractionInitiatedBy interactionInitiatedBy) {
+    
+            return streamVisiblePojos(collectionAdapter, interactionInitiatedBy)
+                    .collect(_Arrays.toArray(Object.class));
+        }
+        
+        public static Object visiblePojosAutofit(
+                final ManagedObject collectionAdapter,
+                final InteractionInitiatedBy interactionInitiatedBy,
+                final Class<?> requiredContainerType) {
+            
+            val visiblePojoStream = streamVisiblePojos(collectionAdapter, interactionInitiatedBy);
+            val autofittedObjectContainer = CollectionFacet.AutofitUtils
+                    .collect(visiblePojoStream, requiredContainerType);
+            return autofittedObjectContainer;
+        }
+        
+        
+        /**
+         * @param adapter - an adapter around the domain object whose visibility is being checked
+         * @param interactionInitiatedBy
+         */
+        public static boolean isVisible(
+                ManagedObject adapter,
+                InteractionInitiatedBy interactionInitiatedBy) {
+    
+            if(isNullOrUnspecifiedOrEmpty(adapter)) {
+                // a choices list could include a null (eg example in ToDoItems#choices1Categorized()); want to show as "visible"
+                return true;
+            }
+            val spec = adapter.getSpecification();
+            if(spec.isEntity()) {
+                if(ManagedObject._isDestroyed(adapter)) {
+                    return false;
+                }
+            }
+            if(interactionInitiatedBy == InteractionInitiatedBy.FRAMEWORK) { 
+                return true; 
+            }
+            val visibilityContext = createVisibleInteractionContext(
+                    adapter,
+                    InteractionInitiatedBy.USER,
+                    Where.OBJECT_FORMS);
+    
+            return InteractionUtils.isVisibleResult(spec, visibilityContext)
+                    .isNotVetoing();
+        }
+        
+        private static VisibilityContext createVisibleInteractionContext(
+                final ManagedObject adapter,
+                final InteractionInitiatedBy interactionInitiatedBy,
+                final Where where) {
+            
+            return new ObjectVisibilityContext(
+                    adapter,
+                    adapter.getSpecification().getIdentifier(),
+                    interactionInitiatedBy,
+                    where);
+        }
+    
+    }
+    
+    
+    // -- INVOCATION UTILITY
+    
+    @UtilityClass
+    public static final class InvokeUtil {
+    
+        public static Object invokeWithPPM(
+                final Constructor<?> ppmConstructor, 
+                final Method method, 
+                final ManagedObject adapter, 
+                final Can<ManagedObject> pendingArguments,
+                final List<Object> additionalArguments) {
+            
+            val ppmTuple = MethodExtensions.construct(ppmConstructor, ManagedObject.unwrapMultipleAsArray(pendingArguments));
+            val paramPojos = _Arrays.combineWithExplicitType(Object.class, ppmTuple, additionalArguments.toArray());
+            return MethodExtensions.invoke(method, ManagedObject.unwrapSingle(adapter), paramPojos);
+        }
+        
+        public static Object invokeWithPPM(
+                final Constructor<?> ppmConstructor, 
+                final Method method, 
+                final ManagedObject adapter, 
+                final Can<ManagedObject> argumentAdapters) {
+            return invokeWithPPM(ppmConstructor, method, adapter, argumentAdapters, Collections.emptyList());
+        }
+        
+        public static void invokeAll(Collection<Method> methods, final ManagedObject adapter) {
+            MethodUtil.invoke(methods, ManagedObject.unwrapSingle(adapter));
+        }
+    
+        public static Object invoke(Method method, ManagedObject adapter) {
+            return MethodExtensions.invoke(method, ManagedObject.unwrapSingle(adapter));
+        }
+    
+        public static Object invoke(Method method, ManagedObject adapter, Object arg0) {
+            return MethodExtensions.invoke(method, ManagedObject.unwrapSingle(adapter), new Object[] {arg0});
+        }
+    
+        public static Object invoke(Method method, ManagedObject adapter, Can<ManagedObject> argumentAdapters) {
+            return MethodExtensions.invoke(method, ManagedObject.unwrapSingle(adapter), ManagedObject.unwrapMultipleAsArray(argumentAdapters));
+        }
+    
+        public static Object invoke(Method method, ManagedObject adapter, ManagedObject arg0Adapter) {
+            return invoke(method, adapter, ManagedObject.unwrapSingle(arg0Adapter));
+        }
+    
+        public static Object invoke(Method method, ManagedObject adapter, ManagedObject[] argumentAdapters) {
+            return MethodExtensions.invoke(method, ManagedObject.unwrapSingle(adapter), ManagedObject.unwrapMultipleAsArray(argumentAdapters));
+        }
+
+        /**
+         * Invokes the method, adjusting arguments as required to make them fit the method's parameters.
+         * <p>
+         * That is:
+         * <ul>
+         * <li>if the method declares parameters but arguments are missing, then will provide 'null' defaults for these.</li>
+         * </ul>
+         */
+        public static Object invokeAutofit(Method method, ManagedObject adapter) {
+            return invoke(method, adapter, new ManagedObject[method.getParameterTypes().length]);
+        }
+    
+        /**
+         * Invokes the method, adjusting arguments as required to make them fit the method's parameters.
+         * <p>
+         * That is:
+         * <ul>
+         * <li>if the method declares parameters but arguments are missing, then will provide 'null' defaults for these.</li>
+         * <li>if the method does not declare all parameters for arguments, then truncates arguments.</li>
+         * <li>any {@code additionalArgValues} must also fit at the end of the resulting parameter list</li>
+         * </ul>
+         */
+        public static Object invokeAutofit(
+                final Method method, 
+                final ManagedObject target, 
+                final Can<? extends ManagedObject> pendingArgs,
+                final List<Object> additionalArgValues) {
+    
+            val argArray = adjust(method, pendingArgs, additionalArgValues);
+            
+            return MethodExtensions.invoke(method, ManagedObject.unwrapSingle(target), argArray);
+        }
+    
+        /**
+         * same as {@link #invokeAutofit(Method, ManagedObject, List, List)} w/o additionalArgValues
+         */
+        public static Object invokeAutofit(
+                final Method method, 
+                final ManagedObject target, 
+                final Can<? extends ManagedObject> pendingArgs) {
+            
+            return invokeAutofit(method, target, pendingArgs, Collections.emptyList());
+        }
+    
+        private static Object[] adjust(
+                final Method method, 
+                final Can<? extends ManagedObject> pendingArgs,
+                final List<Object> additionalArgValues) {
+            
+            val parameterTypes = method.getParameterTypes();
+            val paramCount = parameterTypes.length;
+            val additionalArgCount = additionalArgValues.size();
+            val pendingArgsToConsiderCount = paramCount - additionalArgCount;
+            
+            val argIterator = argIteratorFrom(pendingArgs);
+            val adjusted = new Object[paramCount];
+            for(int i=0; i<pendingArgsToConsiderCount; i++) {
+                
+                val paramType = parameterTypes[i];
+                val arg = argIterator.hasNext() ? ManagedObject.unwrapSingle(argIterator.next()) : null;
+                
+                adjusted[i] = honorPrimitiveDefaults(paramType, arg);
+            }
+            
+            // add the additional parameter values (if any)
+            int paramIndex = pendingArgsToConsiderCount;
+            for(val additionalArg : additionalArgValues) {
+                val paramType = parameterTypes[paramIndex];
+                adjusted[paramIndex] = honorPrimitiveDefaults(paramType, additionalArg);
+                ++paramIndex;
+            }
+            
+            return adjusted;
+    
+        }
+    
+        private static Iterator<? extends ManagedObject> argIteratorFrom(Can<? extends ManagedObject> pendingArgs) {
+            return pendingArgs!=null ? pendingArgs.iterator() : Collections.emptyIterator();
+        }
+    
+        private static Object honorPrimitiveDefaults(
+                final Class<?> expectedType, 
+                final @Nullable Object value) {
+            
+            if(value == null && expectedType.isPrimitive()) {
+                return ClassExtensions.toDefault(expectedType);
+            }
+            return value;
+        }
+        
+    
+    }
+    
 
 }

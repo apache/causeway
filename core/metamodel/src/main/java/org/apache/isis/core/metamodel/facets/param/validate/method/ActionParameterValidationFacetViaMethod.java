@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.validate.ActionParameterValidationFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 public class ActionParameterValidationFacetViaMethod 
 extends ActionParameterValidationFacetAbstract 
@@ -78,8 +79,8 @@ implements ImperativeFacet {
             final ManagedObject proposedArgument) {
         
         final Object returnValue = ppmFactory.isPresent()
-                ? ManagedObject.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, owningAdapter, pendingArgs)
-                : ManagedObject.InvokeUtil.invoke(method, owningAdapter, proposedArgument);
+                ? ManagedObjects.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, owningAdapter, pendingArgs)
+                : ManagedObjects.InvokeUtil.invoke(method, owningAdapter, proposedArgument);
         
         if(returnValue instanceof String) {
             return (String) returnValue;

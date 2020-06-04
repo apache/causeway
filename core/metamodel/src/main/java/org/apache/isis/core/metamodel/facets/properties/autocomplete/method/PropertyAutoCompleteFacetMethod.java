@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.isis.core.metamodel.facets.properties.autocomplete.PropertyAutoCompleteFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 import lombok.val;
 
@@ -74,14 +75,14 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final Object collectionOrArray = ManagedObject.InvokeUtil.invoke(method, owningAdapter, searchArg);
+        final Object collectionOrArray = ManagedObjects.InvokeUtil.invoke(method, owningAdapter, searchArg);
         if (collectionOrArray == null) {
             return null;
         }
 
         val collectionAdapter = getObjectManager().adapt(collectionOrArray);
         
-        val visiblePojos = ManagedObject.VisibilityUtil
+        val visiblePojos = ManagedObjects.VisibilityUtil
                 .visiblePojosAsArray(collectionAdapter, interactionInitiatedBy);
         
         return visiblePojos;

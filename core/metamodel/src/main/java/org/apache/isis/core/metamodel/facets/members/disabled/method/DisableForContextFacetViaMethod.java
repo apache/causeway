@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 public class DisableForContextFacetViaMethod 
 extends DisableForContextFacetAbstract 
@@ -41,7 +42,8 @@ implements ImperativeFacet {
 
     public DisableForContextFacetViaMethod(
             final Method method,
-            final TranslationService translationService, final String translationContext,
+            final TranslationService translationService, 
+            final String translationContext,
             final FacetHolder holder) {
         super(holder);
         this.method = method;
@@ -72,7 +74,7 @@ implements ImperativeFacet {
         if (target == null) {
             return null;
         }
-        final Object returnValue = ManagedObject.InvokeUtil.invokeC(method, target);
+        final Object returnValue = ManagedObjects.InvokeUtil.invokeAutofit(method, target);
         if(returnValue instanceof String) {
             return (String) returnValue;
         }

@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 public class CollectionAddToFacetViaMethod extends CollectionAddToFacetAbstract implements ImperativeFacet {
 
@@ -58,7 +59,7 @@ public class CollectionAddToFacetViaMethod extends CollectionAddToFacetAbstract 
             final ManagedObject elementAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        ManagedObject.InvokeUtil.invoke(method, owningAdapter, elementAdapter);
+        ManagedObjects.InvokeUtil.invoke(method, owningAdapter, elementAdapter);
     }
 
     @Override

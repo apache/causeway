@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacetAbstract;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 import lombok.val;
 
@@ -86,9 +87,9 @@ implements ImperativeFacet {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final Object collectionOrArray = ppmFactory.isPresent()
-                ? ManagedObject.InvokeUtil.invokeWithPPM(
+                ? ManagedObjects.InvokeUtil.invokeWithPPM(
                         ppmFactory.get(), method, owningAdapter, pendingArgs, Collections.singletonList(searchArg))
-                : ManagedObject.InvokeUtil.invokeAutofit(
+                : ManagedObjects.InvokeUtil.invokeAutofit(
                         method, owningAdapter, pendingArgs, Collections.singletonList(searchArg));
         
         if (collectionOrArray == null) {
@@ -96,7 +97,7 @@ implements ImperativeFacet {
         }
         val collectionAdapter = getObjectManager().adapt(collectionOrArray);
 
-        val visiblePojos = ManagedObject.VisibilityUtil
+        val visiblePojos = ManagedObjects.VisibilityUtil
                 .visiblePojosAsArray(collectionAdapter, interactionInitiatedBy);
         
         return visiblePojos;

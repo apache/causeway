@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionClearFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 public class CollectionClearFacetViaClearMethod extends CollectionClearFacetAbstract implements ImperativeFacet {
 
@@ -54,7 +55,7 @@ public class CollectionClearFacetViaClearMethod extends CollectionClearFacetAbst
 
     @Override
     public void clear(final ManagedObject owningAdapter) {
-        ManagedObject.InvokeUtil.invoke(method, owningAdapter);
+        ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
     }
 
     @Override

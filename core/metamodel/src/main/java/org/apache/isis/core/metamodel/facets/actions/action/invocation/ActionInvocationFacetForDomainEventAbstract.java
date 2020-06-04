@@ -366,7 +366,7 @@ implements ImperativeFacet {
 
             val requiredContainerType = method.getReturnType();
             
-            val autofittedObjectContainer = ManagedObject.VisibilityUtil
+            val autofittedObjectContainer = ManagedObjects.VisibilityUtil
                     .visiblePojosAutofit(resultAdapter, interactionInitiatedBy, requiredContainerType); 
 
             if (autofittedObjectContainer != null) {
@@ -379,7 +379,7 @@ implements ImperativeFacet {
             return resultAdapter;
 
         } else {
-            boolean visible = ManagedObject.VisibilityUtil.isVisible(resultAdapter, interactionInitiatedBy);
+            boolean visible = ManagedObjects.VisibilityUtil.isVisible(resultAdapter, interactionInitiatedBy);
             return visible ? resultAdapter : null;
         }
     }

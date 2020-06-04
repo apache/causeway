@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
@@ -108,7 +109,7 @@ implements ChoicesFacet, DisablingInteractionAdvisor, ValidatingInteractionAdvis
         val repository = context.getRepositoryService();
 
         final Predicate<ManagedObject> visibilityFilter = 
-                objectAdapter -> ManagedObject.VisibilityUtil.isVisible(objectAdapter, interactionInitiatedBy);
+                objectAdapter -> ManagedObjects.VisibilityUtil.isVisible(objectAdapter, interactionInitiatedBy);
 
         val query = new QueryFindAllChoices(getObjectSpecification().getFullIdentifier(), visibilityFilter, 0L, Long.MAX_VALUE);
         return repository.allMatches(query).toArray();

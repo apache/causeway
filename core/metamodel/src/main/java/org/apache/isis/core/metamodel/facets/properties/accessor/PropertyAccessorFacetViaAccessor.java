@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class PropertyAccessorFacetViaAccessor
@@ -65,7 +66,7 @@ implements ImperativeFacet {
     public Object getProperty(
             final ManagedObject owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final Object referencedObject = ManagedObject.InvokeUtil.invoke(method, owningAdapter);
+        final Object referencedObject = ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
 
         if(referencedObject == null) {
             return null;
@@ -74,7 +75,7 @@ implements ImperativeFacet {
         boolean filterForVisibility = super.getMetaModelContext().getConfiguration().getCore().getMetaModel().isFilterVisibility();
         if(filterForVisibility) {
             final ManagedObject referencedAdapter = getObjectManager().adapt(referencedObject);
-            final boolean visible = ManagedObject.VisibilityUtil
+            final boolean visible = ManagedObjects.VisibilityUtil
                     .isVisible(referencedAdapter, interactionInitiatedBy);
             if (!visible) {
                 return null;
