@@ -21,6 +21,7 @@ package org.apache.isis.core.runtime.persistence.transaction;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 import lombok.EqualsAndHashCode;
@@ -51,7 +52,7 @@ public class AdapterAndProperty {
         this.property = property;
         this.propertyId = property.getId();
 
-        this.bookmark = ManagedObject.bookmarkElseFail(adapter);
+        this.bookmark = ManagedObjects.bookmarkElseFail(adapter);
         this.bookmarkStr = bookmark.toString();
         
     }

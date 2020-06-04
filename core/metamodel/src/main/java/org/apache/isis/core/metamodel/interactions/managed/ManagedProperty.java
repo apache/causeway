@@ -59,7 +59,6 @@ public final class ManagedProperty extends ManagedMember {
     private ManagedProperty(
             final @NonNull ManagedObject owner, 
             final @NonNull OneToOneAssociation property) {
-        
         super(owner);
         this.property = property;
     }

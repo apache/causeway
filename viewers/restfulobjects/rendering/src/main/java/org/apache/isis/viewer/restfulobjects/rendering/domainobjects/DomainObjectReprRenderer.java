@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -58,7 +59,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             final Rel rel, 
             final ManagedObject objectAdapter) {
         
-        String domainType = ManagedObject.getDomainType(objectAdapter);
+        String domainType = ManagedObjects.getDomainType(objectAdapter).orElse("?");
         String instanceId = ManagedObject._instanceId(objectAdapter);
         final String url = "objects/" + domainType + "/" + instanceId;
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.DOMAIN_OBJECT, url).withTitle(objectAdapter.titleString(null));
@@ -69,7 +70,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             final ManagedObject objectAdapter) {
         
         final Rel rel = Rel.OBJECT_LAYOUT;
-        String domainType = ManagedObject.getDomainType(objectAdapter);
+        String domainType = ManagedObjects.getDomainType(objectAdapter).orElse("?");
         String instanceId = ManagedObject._instanceId(objectAdapter);
         final String url = "objects/" + domainType + "/" + instanceId + "/object-layout";
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.OBJECT_LAYOUT, url);
@@ -80,7 +81,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             final ManagedObject objectAdapter) {
         
         final Rel rel = Rel.OBJECT_ICON;
-        String domainType = ManagedObject.getDomainType(objectAdapter);
+        String domainType = ManagedObjects.getDomainType(objectAdapter).orElse("?");
         String instanceId = ManagedObject._instanceId(objectAdapter);
         final String url = "objects/" + domainType + "/" + instanceId + "/image";
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.OBJECT_IMAGE, url);
@@ -172,7 +173,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         if (!(mode.isArgs())) {
 
             // self, extensions.oid
-            if (ManagedObject.isIdentifiable(objectAdapter)) {
+            if (ManagedObjects.isIdentifiable(objectAdapter)) {
                 if (includesSelf) {
                     addLinkToSelf();
                 }
@@ -219,7 +220,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
             // extensions
             getExtensions().mapPut("isService", isService);
-            getExtensions().mapPut("isPersistent", ManagedObject.isIdentifiable(objectAdapter));
+            getExtensions().mapPut("isPersistent", ManagedObjects.isIdentifiable(objectAdapter));
             if(isService) {
                 final ObjectSpecification objectSpec = objectAdapter.getSpecification();
                 final DomainServiceLayoutFacet layoutFacet =
@@ -282,7 +283,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     private String getDomainType() {
-        return ManagedObject.getDomainType(objectAdapter);
+        return ManagedObjects.getDomainType(objectAdapter).orElse("?");
     }
 
     private String getInstanceId() {
@@ -290,7 +291,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     private String getOidStr() {
-        return ManagedObject.stringifyElseFail(objectAdapter);
+        return ManagedObjects.stringifyElseFail(objectAdapter);
     }
 
     private DomainObjectReprRenderer withMembers(final ManagedObject objectAdapter) {
@@ -409,7 +410,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     private void addPersistLinkIfTransientAndPersistable() {
-        if (ManagedObject.isIdentifiable(objectAdapter)) {
+        if (ManagedObjects.isIdentifiable(objectAdapter)) {
             return;
         }
         final DomainObjectReprRenderer renderer =
@@ -442,7 +443,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         if(mode.isEventSerialization()) {
             return;
         }
-        if (!ManagedObject.isIdentifiable(objectAdapter)) {
+        if (!ManagedObjects.isIdentifiable(objectAdapter)) {
             return;
         }
         final boolean isService = objectAdapter.getSpecification().isManagedBean();

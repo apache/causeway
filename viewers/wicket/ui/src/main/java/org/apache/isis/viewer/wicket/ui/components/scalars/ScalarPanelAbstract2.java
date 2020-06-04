@@ -47,7 +47,7 @@ import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.action.form.FormPendingParamUiModel;
@@ -170,7 +170,7 @@ implements ScalarModelSubscriber2 {
         val valueChanged = !Objects.equals(scalarModel.getObject(), paramValue); 
         
         if(valueChanged) {
-            if(ManagedObject.isNullOrUnspecifiedOrEmpty(paramValue)) {
+            if(ManagedObjects.isNullOrUnspecifiedOrEmpty(paramValue)) {
                 scalarModel.setObject(null);
             } else {
                 scalarModel.setObject(paramValue);

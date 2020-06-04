@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.util.snapshot;
 
-import java.io.StringWriter;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
@@ -32,12 +31,6 @@ import java.util.stream.Collectors;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -57,6 +50,7 @@ import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -857,7 +851,7 @@ public class XmlSnapshot implements Snapshot {
             }
             return fakeOid;
         } else {
-            return ManagedObject.stringifyElseFail(adapter);
+            return ManagedObjects.stringifyElseFail(adapter);
         }
     }
 

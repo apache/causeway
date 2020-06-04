@@ -43,7 +43,7 @@ import org.apache.isis.core.commons.internal.memento._Mementos.SerializingAdapte
 import org.apache.isis.core.metamodel.adapter.oid.ObjectNotFoundException;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
@@ -138,7 +138,7 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
             return null;
         }
         val adapter = objectManager.adapt(unwrapped(domainObject)); 
-        if(!ManagedObject.isIdentifiable(adapter)){
+        if(!ManagedObjects.isIdentifiable(adapter)){
             // eg values cannot be bookmarked
             return null;
         }

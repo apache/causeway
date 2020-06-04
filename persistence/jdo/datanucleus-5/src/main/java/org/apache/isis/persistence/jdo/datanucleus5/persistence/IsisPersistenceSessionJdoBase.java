@@ -40,6 +40,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.transaction.ChangedObjectsService;
 import org.apache.isis.persistence.jdo.applib.fixturestate.FixturesInstalledStateHolder;
@@ -221,7 +222,7 @@ abstract class IsisPersistenceSessionJdoBase implements IsisPersistenceSessionJd
             return null;
         }
         val adapter = ManagedObject.of(getSpecificationLoader().loadSpecification(pojo.getClass()), pojo);
-        return ManagedObject.identify(adapter).orElse(null);
+        return ManagedObjects.identify(adapter).orElse(null);
     }
 
     // -- HELPERS - SERVICE LOOKUP

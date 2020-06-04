@@ -37,6 +37,7 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
@@ -75,7 +76,7 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
         val mementoAdapter = ObjectMementoLegacy.createOrNull(adapter);
         if(mementoAdapter==null) {
             // sonar-ignore-on (fails to detect this as null guard) 
-            return ManagedObject.isSpecified(adapter)
+            return ManagedObjects.isSpecified(adapter)
                     ? new ObjectMementoForEmpty(adapter.getSpecification().getSpecId())
                     : null;
             // sonar-ignore-on

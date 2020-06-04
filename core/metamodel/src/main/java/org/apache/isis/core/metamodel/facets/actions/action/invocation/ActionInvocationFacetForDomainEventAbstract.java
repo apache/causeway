@@ -65,6 +65,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
 import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
@@ -313,7 +314,7 @@ implements ImperativeFacet {
             // don't trample over any existing result, eg subsequent mixins.
             return;
         }
-        if(ManagedObject.isNullOrUnspecifiedOrEmpty(resultAdapter)) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter)) {
             return;
         }
 
@@ -350,7 +351,7 @@ implements ImperativeFacet {
             final ManagedObject resultAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        if(ManagedObject.isNullOrUnspecifiedOrEmpty(resultAdapter)) { 
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter)) { 
             return null;
         }
 

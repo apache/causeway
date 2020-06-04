@@ -30,6 +30,7 @@ import org.apache.isis.core.commons.internal.collections._Collections;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
@@ -75,7 +76,7 @@ extends ModelAbstract<ManagedObject> {
     @Override
     public void setObject(final ManagedObject adapter) {
 
-        if(ManagedObject.isNullOrUnspecifiedOrEmpty(adapter)) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
             super.setObject(null);
             memento = null;
             return;
@@ -92,7 +93,7 @@ extends ModelAbstract<ManagedObject> {
     
     public void setObjectCollection(final ManagedObject adapter) {
         
-        if(ManagedObject.isNullOrUnspecifiedOrEmpty(adapter)) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
             super.setObject(null);
             memento = null;
             return;

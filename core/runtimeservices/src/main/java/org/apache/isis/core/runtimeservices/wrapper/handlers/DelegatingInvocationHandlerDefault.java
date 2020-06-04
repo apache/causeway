@@ -30,6 +30,7 @@ import org.apache.isis.core.commons.internal._Constants;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -86,7 +87,7 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
         if(adapter==null) {
             return;
         }
-        if(!ManagedObject.isEntity(adapter)) {
+        if(!ManagedObjects.isEntity(adapter)) {
             return;
         }
         

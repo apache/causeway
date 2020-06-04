@@ -19,12 +19,14 @@
 package demoapp.dom.events;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Property;
@@ -40,19 +42,40 @@ import demoapp.dom.events.EventsDemo.UiButtonEvent;
 @DomainObject
 public class EventLogEntry {
 
+    public static EventLogEntry of(UiButtonEvent even) {
+        val x = new EventLogEntry();
+        x.setEvent("Button clicked " + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_TIME));
+        return x;
+    }
+    
+    public String title() {
+        return getEvent();
+    }
+
     @javax.jdo.annotations.Column(allowsNull = "false")
     @Property(editing = Editing.DISABLED)
     @Getter @Setter
     private String event;
 
-    public static EventLogEntry of(UiButtonEvent even) {
-        val x = new EventLogEntry();
-        x.setEvent("Button clicked " + LocalDateTime.now().toString());
-        return x;
+    // demonstrating 2 methods of changing a property ...
+    // - inline edit
+    // - via action
+    
+    public static enum Acknowledge {
+        IGNORE,
+        CRITICAL
     }
-
-    public static String version() {
-        return "1.0.0";
+    
+    @javax.jdo.annotations.Column(allowsNull = "true")
+    @Property(editing = Editing.ENABLED)
+    @Getter @Setter
+    private Acknowledge acknowledge;
+    
+    @Action(associateWith = "acknowledge")
+    public EventLogEntry acknowledge(Acknowledge acknowledge) {
+        setAcknowledge(acknowledge);
+        return this;
     }
+    
 
 }

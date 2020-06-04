@@ -33,6 +33,7 @@ import org.joda.time.Interval;
 
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
@@ -108,7 +109,7 @@ public abstract class EventProviderAbstract implements EventProvider {
             final ObjectSpecification spec = specificationLoader.loadSpecification(dereferencedObject.getClass());
             final ManagedObject dereferencedManagedObject = ManagedObject.of(spec, dereferencedObject);
 
-            final RootOid rootOid = ManagedObject.identify(dereferencedManagedObject).orElse(null);
+            final RootOid rootOid = ManagedObjects.identify(dereferencedManagedObject).orElse(null);
             if(rootOid!=null) {
 
                 final String oidStr = rootOid.enString();

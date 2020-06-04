@@ -23,7 +23,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
@@ -59,7 +59,7 @@ public class UnknownModelPanel extends PanelAbstract<IModel<?>> {
             EntityModel entityModel = (EntityModel) model;
             val objectAdapter = entityModel.getObject();
             if(objectAdapter != null) {
-                buf.append("??? objectAdapter oid: " + ManagedObject.identify(objectAdapter).orElse(null));    
+                buf.append("??? objectAdapter oid: " + ManagedObjects.identify(objectAdapter).orElse(null));    
             } else {
                 buf.append("??? objectAdapter is NULL");
             }

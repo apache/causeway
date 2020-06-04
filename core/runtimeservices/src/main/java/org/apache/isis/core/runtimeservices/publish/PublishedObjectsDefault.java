@@ -35,6 +35,7 @@ import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 import org.apache.isis.schema.chg.v2.ObjectsDto;
 import org.apache.isis.schema.common.v2.OidsDto;
@@ -189,7 +190,7 @@ public class PublishedObjectsDefault implements PublishedObjects, RepresentsInte
 
         _NullSafe.stream(adaptersByChange.get().get(kind))
         .map((final ManagedObject adapter) -> 
-            ManagedObject.identify(adapter)
+            ManagedObjects.identify(adapter)
             .map(RootOid::asOidDto)
             .orElse(null)
         )

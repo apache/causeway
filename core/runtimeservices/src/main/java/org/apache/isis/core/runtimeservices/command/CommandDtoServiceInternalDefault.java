@@ -39,6 +39,7 @@ import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -107,7 +108,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
         dto.setTransactionId(transactionId);
 
         for (val targetAdapter : targetAdapters) {
-            final Bookmark bookmark = ManagedObject.bookmarkElseFail(targetAdapter);
+            final Bookmark bookmark = ManagedObjects.bookmarkElseFail(targetAdapter);
             final OidsDto targets = CommandDtoUtils.targetsFor(dto);
             targets.getOid().add(bookmark.toOidDto());
         }

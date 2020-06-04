@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -68,10 +69,10 @@ public class PageParameterUtil {
     public static PageParameters createPageParametersForObject(ManagedObject adapter) {
 
         val pageParameters = PageParametersUtils.newPageParameters();
-        val isEntity = ManagedObject.isIdentifiable(adapter);
+        val isEntity = ManagedObjects.isIdentifiable(adapter);
 
         if (isEntity) {
-            ManagedObject.stringify(adapter)
+            ManagedObjects.stringify(adapter)
             .ifPresent(oidStr->PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr));
         } else {
             // don't do anything; instead the page should be redirected back to
@@ -103,7 +104,7 @@ public class PageParameterUtil {
 
         val pageParameters = PageParametersUtils.newPageParameters();
 
-        ManagedObject.stringify(adapter)
+        ManagedObjects.stringify(adapter)
         .ifPresent(oidStr->
             PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr));
 
@@ -207,7 +208,7 @@ public class PageParameterUtil {
             return encodeable.toEncodedString(adapter);
         }
 
-        return ManagedObject.stringify(adapter).orElse(null);
+        return ManagedObjects.stringify(adapter).orElse(null);
     }
     
     private ManagedObject decodeArg(

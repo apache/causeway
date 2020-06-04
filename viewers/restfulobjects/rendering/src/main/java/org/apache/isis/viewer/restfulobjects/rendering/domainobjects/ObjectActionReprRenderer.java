@@ -29,7 +29,7 @@ import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -181,7 +181,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
                 .emptyModel();
         
         val defaultAdapter = param.getDefault(emptyPpm);
-        if (ManagedObject.isNullOrUnspecifiedOrEmpty(defaultAdapter)) {
+        if (ManagedObjects.isNullOrUnspecifiedOrEmpty(defaultAdapter)) {
             return null;
         }
         // REVIEW: previously was using the spec of the parameter, but think instead it should be the spec of the adapter itself
