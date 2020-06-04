@@ -2,6 +2,7 @@ package org.apache.isis.client.kroviz.utils
 
 import org.w3c.dom.Document
 import org.w3c.dom.parsing.DOMParser
+import org.w3c.dom.svg.SVGSVGElement
 
 enum class Direction(val id: String) {
     UP("UP"),
@@ -10,42 +11,49 @@ enum class Direction(val id: String) {
 
 class ScalableVectorGraphic(val data: String) {
 
-    private val tag = "viewBox"
-    var document: Document
-    var viewBox: ViewBox
+    var document: Document = DOMParser().parseFromString(data, "image/svg+xml")
+    private var root: SVGSVGElement
+    lateinit var viewBox: ViewBox
+    private var scale: Double = 1.0
+    private val defaultFactor = 0.1
 
     init {
-        val mimeType = "image/svg+xml"
-        document = DOMParser().parseFromString(data, mimeType)
+        root = document.rootElement!!
+        initViewBox()
+        initScale()
+    }
 
-        val root = document.rootElement!!
-        val raw = root.getAttribute(tag) as String
+    private fun initViewBox() {
+        val raw = root.getAttribute("viewBox") as String
         val arr = raw.split(" ")
         viewBox = ViewBox(arr[0].toInt(), arr[1].toInt(), arr[2].toInt(), arr[3].toInt())
     }
 
-    private fun setCorner(width: Int, height: Int) {
-        viewBox.width = width
-        viewBox.height = height
-        document.rootElement?.setAttribute(tag, viewBox.asArgs())
+    private fun initScale() {
+        if (root.hasAttribute("transform")) {
+            val scaleStr = root.getAttribute("transform")!!
+            val arr1 = scaleStr.split(")")
+            val arr2 = arr1[1].split("(")
+            scale = arr2[1].toDouble()
+        }
     }
 
-    fun scaleUp(factor: Double = 0.1) {
-        var f = factor
-        if (f < 1) f += 1
-        val newWidth = (viewBox.width * f).toInt()
-        val newHeight = (viewBox.height * f).toInt()
-        setCorner(newWidth, newHeight)
+    fun scaleUp(factor: Double = defaultFactor) {
+        val s = scale + factor
+        // the bigger img gets, the bigger x,y must be
+        val w2 = viewBox.width / 2
+        val h2 = viewBox.height / 2
+        val x = w2 * s - w2
+        val y = h2 * s - h2
+        // svg origin is center (50% 50%) - x,y adjust it to top left
+        // translate needs to 'set' be before scale
+        root.setAttribute("transform", "translate($x $y) scale($s)")
     }
 
-    fun scaleDown(factor: Double = 0.1) {
+    fun scaleDown(factor: Double = defaultFactor) {
         scaleUp(factor * -1)
     }
 
-    class ViewBox(val x: Int, val y: Int, var width: Int, var height: Int) {
-        fun asArgs(): String {
-            return "$x $y $width $height"
-        }
-    }
+    class ViewBox(val x: Int, val y: Int, var width: Int, var height: Int)
 
 }

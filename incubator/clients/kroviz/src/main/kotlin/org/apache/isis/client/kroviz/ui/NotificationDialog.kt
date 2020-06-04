@@ -1,7 +1,5 @@
-package org.ro.view
+package org.apache.isis.client.kroviz.ui
 
-import org.apache.isis.client.kroviz.ui.Command
-import org.apache.isis.client.kroviz.ui.FormItem
 import org.apache.isis.client.kroviz.ui.kv.RoDialog
 
 class NotificationDialog(val message: String) : Command() {
@@ -16,8 +14,7 @@ class NotificationDialog(val message: String) : Command() {
                 caption = label,
                 items = formItems,
                 command = this,
-                widthPerc = 80,
-                heightPerc = 100).open()
+                widthPerc = 80).open()
     }
 
 }

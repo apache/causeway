@@ -3,9 +3,7 @@ package org.apache.isis.client.kroviz.ui.kv
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.FormItem
 import org.apache.isis.client.kroviz.utils.DateHelper
-import pl.treksoft.kvision.core.Component
-import pl.treksoft.kvision.core.StringPair
-import pl.treksoft.kvision.core.onEvent
+import pl.treksoft.kvision.core.*
 import pl.treksoft.kvision.form.FormPanel
 import pl.treksoft.kvision.form.check.CheckBox
 import pl.treksoft.kvision.form.formPanel
@@ -19,7 +17,6 @@ import pl.treksoft.kvision.form.time.DateTime
 import pl.treksoft.kvision.form.time.dateTime
 import pl.treksoft.kvision.html.Div
 import pl.treksoft.kvision.panel.VPanel
-import pl.treksoft.kvision.panel.flexPanel
 import pl.treksoft.kvision.panel.vPanel
 import pl.treksoft.kvision.utils.perc
 import pl.treksoft.kvision.utils.px
@@ -135,6 +132,8 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
         }
         item.height = 100.perc
         item.width = 100.perc
+//        item.background = Background(color = Color.name(Col.LIGHTGRAY))
+        item.border = Border(width = 1.px, color = Color.name(Col.LIGHTGRAY), style = BorderStyle.DOTTED)
         return item
     }
 

@@ -21,8 +21,7 @@ class ErrorDialog(val logEntry: LogEntry) : Command() {
                 caption = label,
                 items = formItems,
                 command = this,
-                widthPerc = 80,
-                heightPerc = 100).open()
+                widthPerc = 80).open()
     }
 
     private fun toString(stackTrace: List<String>): String {

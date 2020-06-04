@@ -15,8 +15,11 @@ class EventLogDetail(val logEntry: LogEntry) : Command() {
         }
         formItems.add(FormItem("Text", "TextArea", jsonStr, 15))
         val label = logEntry.title
-        val rd = RoDialog(caption = label, items = formItems, command = this, defaultAction = "Visualize")
-        rd.open()
+        RoDialog(
+                caption = label,
+                items = formItems,
+                command = this,
+                defaultAction = "Visualize").open()
     }
 
 }

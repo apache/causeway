@@ -15,7 +15,10 @@ class FileDialog(val logEntry: LogEntry) : Command() {
         formItems.add(FormItem("URL", "Text", logEntry.url))
         formItems.add(FormItem("Blob", "TextArea", list[2], 15))
         val label = list[0] + "/" + list[1]
-        RoDialog(caption = label, items = formItems, command = this).open()
+        RoDialog(
+                caption = label,
+                items = formItems,
+                command = this).open()
     }
 
 }

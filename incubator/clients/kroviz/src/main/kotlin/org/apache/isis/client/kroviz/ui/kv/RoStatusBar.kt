@@ -6,7 +6,7 @@ import org.apache.isis.client.kroviz.core.model.DiagramDM
 import org.apache.isis.client.kroviz.ui.ClassDiagram
 import org.apache.isis.client.kroviz.ui.IconManager
 import org.apache.isis.client.kroviz.ui.ImageDialog
-import org.ro.view.NotificationDialog
+import org.apache.isis.client.kroviz.ui.NotificationDialog
 import pl.treksoft.kvision.core.*
 import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.ButtonStyle

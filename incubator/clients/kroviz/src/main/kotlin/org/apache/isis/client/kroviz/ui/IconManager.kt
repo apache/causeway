@@ -12,7 +12,7 @@ object IconManager {
     const val OK = "text-ok"
     const val WARN = "text-warn"
 
-    /* Recreate from configuration value*/
+    /* Merge with configuration values*/
     val word2Icon = mapOf<String, String>(
             "All" to "asterisk",
             "Actions" to "ellipsis-v",
@@ -44,6 +44,7 @@ object IconManager {
             "Manager" to "manager",
             "Me" to "user",
             "Notification" to "bell",
+            "Notifications" to "bell",
             "Objects" to "cubes",
             "OK" to "check",
             "Open" to "book",

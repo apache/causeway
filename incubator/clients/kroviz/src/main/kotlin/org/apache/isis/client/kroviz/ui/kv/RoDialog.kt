@@ -7,10 +7,8 @@ import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.core.Widget
 import pl.treksoft.kvision.form.FormPanel
-import pl.treksoft.kvision.form.formPanel
 import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.ButtonStyle
-import pl.treksoft.kvision.panel.FlexAlignItems
 import pl.treksoft.kvision.panel.FlexJustify
 import pl.treksoft.kvision.panel.HPanel
 import pl.treksoft.kvision.panel.vPanel
@@ -45,7 +43,7 @@ class RoDialog(
 
     private val scaleUpButton = Button(
             "",
-            "fas fa-minus",    // TODO fix brain twister
+            "fas fa-plus",
             ButtonStyle.OUTLINEINFO)
             .onClick {
                 (command as ImageDialog).scale(Direction.UP)
@@ -53,7 +51,7 @@ class RoDialog(
 
     private val scaleDownButton = Button(
             "",
-            "fas fa-plus",     // TODO fix brain twister
+            "fas fa-minus",
             ButtonStyle.OUTLINEINFO)
             .onClick {
                 (command as ImageDialog).scale(Direction.DOWN)
@@ -77,14 +75,15 @@ class RoDialog(
 
             val buttonBar = HPanel(spacing = 10) {
                 id = "button-bar"
-                marginTop = 20.px
+                marginTop = 10.px
                 marginLeft = 10.px
+                marginBottom = 12.px
             }
             buttonBar.add(okButton)
             buttonBar.add(cancelButton)
             if (items.isNotEmpty() && hasScalableContent()) {
-                buttonBar.add(scaleDownButton)
                 buttonBar.add(scaleUpButton)
+                buttonBar.add(scaleDownButton)
             }
             add(buttonBar)
         }

@@ -8,23 +8,13 @@ import org.apache.isis.client.kroviz.utils.ScalableVectorGraphic
 import org.apache.isis.client.kroviz.utils.UmlUtils
 
 class ImageDialog(
-        var label: String = defaultLabel,
-        private var pumlCode: String = defaultPumlCode) : Command() {
-
-    companion object {
-        const val defaultLabel = "UML Diagram Sample"
-        const val defaultPumlCode = "\"" +
-                "participant BOB [[https://en.wiktionary.org/wiki/best_of_breed]]\\n" +
-                "participant PITA [[https://en.wiktionary.org/wiki/PITA]]\\n" +
-                "BOB -> PITA: sometimes is a" +
-                "\""
-    }
+        var label: String,
+        private var pumlCode: String) : Command() {
 
     private val uuid: String = DomHelper.uuid()
     private var dialog: RoDialog
     private val formItems = mutableListOf<FormItem>()
 
-    @ExperimentalUnsignedTypes
     fun open() {
         dialog.open()
         UmlUtils.generateDiagram(pumlCode, uuid)
@@ -36,16 +26,14 @@ class ImageDialog(
 
         dialog = RoDialog(
                 widthPerc = 80,
-                caption = label,
+                caption = "Diagram",
                 items = formItems,
-                command = this,
-                heightPerc = 80)
+                command = this)
     }
 
-    @ExperimentalUnsignedTypes
     fun scale(direction: Direction) {
-        val oldElement = DomHelper.getById(uuid)
-        val oldStr = oldElement!!.innerHTML
+        val oldElement = DomHelper.getById(uuid)!!
+        val oldStr = oldElement.innerHTML
         val newImage = ScalableVectorGraphic(oldStr)
         when (direction) {
             Direction.UP -> newImage.scaleUp()
@@ -55,4 +43,3 @@ class ImageDialog(
     }
 
 }
-

@@ -24,7 +24,13 @@ object PlantumlPanel : VPanel() {
     private val okButton = Button("Create Diagram", "fas fa-check", ButtonStyle.SUCCESS).onClick {
         execute()
     }
-    val sampleCode: String = "\"Bob -> Pita : sometimes is a\""
+
+    const val sampleCode = "\"" +
+            "participant BOB [[https://en.wiktionary.org/wiki/best_of_breed]]\\n" +
+            "participant PITA [[https://en.wiktionary.org/wiki/PITA]]\\n" +
+            "BOB -> PITA: sometimes is a" +
+            "\""
+
     val codePanel = vPanel {
         width = CssSize(400, UNIT.px)
         textBox.value = sampleCode
