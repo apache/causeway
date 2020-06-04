@@ -32,11 +32,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.util.string.Strings;
 
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
@@ -173,7 +171,7 @@ public class EntityPage extends PageAbstract {
         }
 
         // check that the entity overall can be viewed.
-        if(!ManagedObjects.VisibilityUtil.isVisible(objectAdapter, InteractionInitiatedBy.USER)) {
+        if(!model.isVisible()) {
             throw new ObjectMember.AuthorizationException();
         }
 

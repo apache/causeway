@@ -19,11 +19,18 @@
 package org.apache.isis.viewer.common.model.object;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 public interface ObjectUiModel {
 
     ManagedObject getManagedObject();
+    
+    default boolean isVisible() {
+        return ManagedObjects.VisibilityUtil
+                .isVisible(getManagedObject(), InteractionInitiatedBy.USER);
+    }
 
     public enum Mode {
         VIEW, EDIT
