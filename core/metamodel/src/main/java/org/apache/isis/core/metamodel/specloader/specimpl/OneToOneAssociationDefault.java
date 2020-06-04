@@ -56,7 +56,9 @@ import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import lombok.val;
 
-public class OneToOneAssociationDefault extends ObjectAssociationAbstract implements OneToOneAssociation {
+public class OneToOneAssociationDefault 
+extends ObjectAssociationAbstract 
+implements OneToOneAssociation {
 
     public OneToOneAssociationDefault(final FacetedMethod facetedMethod) {
         this(facetedMethod, facetedMethod.getMetaModelContext()

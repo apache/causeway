@@ -347,6 +347,17 @@ public interface ManagedObject {
 
 
     // -- VISIBILITY UTILITIES
+    
+    default public VisibilityContext createVisibleInteractionContext(
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where) {
+        
+        return new ObjectVisibilityContext(
+                this,
+                this.getSpecification().getIdentifier(),
+                interactionInitiatedBy,
+                where);
+    }
 
     @Deprecated // move to ManagedObjects
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -425,21 +436,14 @@ public interface ManagedObject {
         }
 
         private static boolean isVisibleForUser(ManagedObject adapter) {
-            val visibilityContext = createVisibleInteractionContextForUser(adapter);
+            val visibilityContext = adapter.createVisibleInteractionContext(
+                    InteractionInitiatedBy.USER,
+                    Where.OBJECT_FORMS);
             val spec = adapter.getSpecification();
             return InteractionUtils.isVisibleResult(spec, visibilityContext)
                     .isNotVetoing();
         }
 
-        private static VisibilityContext createVisibleInteractionContextForUser(
-                ManagedObject adapter) {
-
-            return new ObjectVisibilityContext(
-                    adapter,
-                    adapter.getSpecification().getIdentifier(),
-                    InteractionInitiatedBy.USER,
-                    Where.OBJECT_FORMS);
-        }
     }
 
     // -- INVOCATION UTILITY

@@ -70,7 +70,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import lombok.NonNull;
 import lombok.val;
 
-public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectAction {
+public class ObjectActionDefault 
+extends ObjectMemberAbstract 
+implements ObjectAction {
 
     public static ActionType getType(final String typeStr) {
         final ActionType type = ActionType.valueOf(typeStr);
