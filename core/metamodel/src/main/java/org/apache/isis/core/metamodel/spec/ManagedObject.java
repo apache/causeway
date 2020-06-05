@@ -244,10 +244,6 @@ public interface ManagedObject {
         return identifier; 
     }
     
-    static boolean _isDestroyed(ManagedObject adapter) {
-        return EntityUtil.getEntityState(adapter) == EntityState.PERSISTABLE_DESTROYED;
-    }
-
     static void _whenFirstIsBookmarkable_ensureSecondIsAsWell(
             ManagedObject first,
             ManagedObject second) {

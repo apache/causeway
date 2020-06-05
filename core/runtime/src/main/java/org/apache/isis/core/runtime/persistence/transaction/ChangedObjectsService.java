@@ -38,6 +38,7 @@ import org.apache.isis.applib.services.TransactionScopeListener;
 import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -222,7 +223,7 @@ public class ChangedObjectsService implements TransactionScopeListener {
                 val preAndPostValues = changedObjectProperties.remove(adapterAndProperty);
 
                 ManagedObject adapter = adapterAndProperty.getAdapter();
-                if(ManagedObject._isDestroyed(adapter)) {
+                if(EntityUtil.isDestroyed(adapter)) {
                     // don't touch the object!!!
                     // JDO, for example, will complain otherwise...
                     preAndPostValues.setPost(IsisTransactionPlaceholder.DELETED);

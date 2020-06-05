@@ -234,6 +234,7 @@ public final class ManagedObjects {
     @UtilityClass
     public static final class EntityUtil {
         
+        @NonNull
         public static EntityState getEntityState(@Nullable ManagedObject adapter) {
             if(adapter==null) {
                 return EntityState.NOT_PERSISTABLE;
@@ -253,51 +254,58 @@ public final class ManagedObjects {
             return entityFacet.getEntityState(pojo);
         }
         
-    }
-    
-    /**
-     * @param managedObject
-     * @return managedObject
-     * @throws AssertionError if managedObject is a detached entity  
-     */
-    public static ManagedObject requiresAttached(@NonNull ManagedObject managedObject) {
-        val entityState = EntityUtil.getEntityState(managedObject);
-        if(entityState.isPersistable()) {
-            // ensure we have an attached entity
-            _Assert.assertEquals(
-                    EntityState.PERSISTABLE_ATTACHED, 
-                    entityState,
-                    ()-> String.format("entity %s is required to be attached (not detached) at this stage", 
-                            managedObject.getSpecification().getSpecId()));
-        }
-        return managedObject;
-    }
-    
-    @Nullable
-    public static ManagedObject reattach(@Nullable ManagedObject managedObject) {
-        if(isNullOrUnspecifiedOrEmpty(managedObject)) {
-            return managedObject;
-        }
-        val entityState = EntityUtil.getEntityState(managedObject);
-        if(!entityState.isPersistable()) {
-            return managedObject;
-        }
-        if(!entityState.isDetached()) {
+        /**
+         * @param managedObject
+         * @return managedObject
+         * @throws AssertionError if managedObject is a detached entity  
+         */
+        @NonNull
+        public static ManagedObject requiresAttached(@NonNull ManagedObject managedObject) {
+            val entityState = EntityUtil.getEntityState(managedObject);
+            if(entityState.isPersistable()) {
+                // ensure we have an attached entity
+                _Assert.assertEquals(
+                        EntityState.PERSISTABLE_ATTACHED, 
+                        entityState,
+                        ()-> String.format("entity %s is required to be attached (not detached) at this stage", 
+                                managedObject.getSpecification().getSpecId()));
+            }
             return managedObject;
         }
         
-        val objectIdentifier = identify(managedObject)
-                .map(RootOid::getIdentifier);
-                
-        if(!objectIdentifier.isPresent()) {
-            return managedObject;
+        @Nullable
+        public static ManagedObject reattach(@Nullable ManagedObject managedObject) {
+            if(isNullOrUnspecifiedOrEmpty(managedObject)) {
+                return managedObject;
+            }
+            val entityState = EntityUtil.getEntityState(managedObject);
+            if(!entityState.isPersistable()) {
+                return managedObject;
+            }
+            if(!entityState.isDetached()) {
+                return managedObject;
+            }
+            
+            val objectIdentifier = identify(managedObject)
+                    .map(RootOid::getIdentifier);
+                    
+            if(!objectIdentifier.isPresent()) {
+                return managedObject;
+            }
+            
+            val objectLoadRequest = ObjectLoader.Request.of(
+                    managedObject.getSpecification(), 
+                    objectIdentifier.get());
+            
+            return managedObject.getObjectManager().loadObject(objectLoadRequest);
         }
         
-        val objectLoadRequest = ObjectLoader.Request.of(
-                managedObject.getSpecification(), 
-                objectIdentifier.get());
+        // -- SHORTCUTS
         
-        return managedObject.getObjectManager().loadObject(objectLoadRequest);
+        public static boolean isDestroyed(@Nullable ManagedObject adapter) {
+            return EntityUtil.getEntityState(adapter).isDestroyed();
+        }
+        
     }
 
     // -- VISIBILITY UTIL
@@ -367,7 +375,7 @@ public final class ManagedObjects {
             }
             val spec = adapter.getSpecification();
             if(spec.isEntity()) {
-                if(ManagedObject._isDestroyed(adapter)) {
+                if(EntityUtil.isDestroyed(adapter)) {
                     return false;
                 }
             }

@@ -27,7 +27,7 @@ import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -90,7 +90,7 @@ public abstract class ManagedMember {
     
     @NonNull private ManagedObject owner;
     public ManagedObject getOwner() {
-        return owner = ManagedObjects.reattach(owner);
+        return owner = EntityUtil.reattach(owner);
     }
     
     public abstract ObjectMember getMember();
