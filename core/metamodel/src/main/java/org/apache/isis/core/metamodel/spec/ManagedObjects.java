@@ -524,6 +524,18 @@ public final class ManagedObjects {
                     : null;
         }
         
+        @Nullable
+        public static String singleAsStringOrElse(@Nullable final ManagedObject adapter, @Nullable String orElse) {
+            final Object obj = UnwrapUtil.single(adapter);
+            if (obj == null) {
+                return null;
+            }
+            if (obj instanceof String) {
+                return (String) obj;
+            }
+            return orElse;
+        }
+        
     }
     
 

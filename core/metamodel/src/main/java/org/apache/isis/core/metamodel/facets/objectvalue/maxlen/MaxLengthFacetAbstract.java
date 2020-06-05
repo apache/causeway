@@ -25,6 +25,7 @@ import org.apache.isis.core.metamodel.facets.SingleIntValueFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.ProposedHolder;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 
 import lombok.val;
 
@@ -44,7 +45,7 @@ public abstract class MaxLengthFacetAbstract extends SingleIntValueFacetAbstract
      */
     @Override
     public boolean exceeds(final ManagedObject adapter) {
-        final String str = ManagedObject.unwrapSingleAsStringOrElse(adapter, null);
+        final String str = UnwrapUtil.singleAsStringOrElse(adapter, null);
         if (str == null) {
             return false;
         }

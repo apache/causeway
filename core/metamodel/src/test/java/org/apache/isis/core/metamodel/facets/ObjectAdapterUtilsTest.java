@@ -55,21 +55,21 @@ public class ObjectAdapterUtilsTest {
 
     @Test
     public void testUnwrapStringWhenNull() {
-        assertNull(ManagedObject.unwrapSingleAsStringOrElse(null, null));
+        assertNull(UnwrapUtil.singleAsStringOrElse(null, null));
     }
 
     @Test
     public void testUnwrapStringWhenNotNullButNotString() {
         underlyingDomainObject = new Object(); 
         expectAdapterWillReturn(underlyingDomainObject);
-        assertNull(ManagedObject.unwrapSingleAsStringOrElse(mockObjectAdapter, null));
+        assertNull(UnwrapUtil.singleAsStringOrElse(mockObjectAdapter, null));
     }
 
     @Test
     public void testUnwrapStringWhenNotNullAndString() {
         underlyingDomainObject = "huzzah";
         expectAdapterWillReturn(underlyingDomainObject);
-        assertEquals("huzzah", ManagedObject.unwrapSingleAsStringOrElse(mockObjectAdapter, null));
+        assertEquals("huzzah", UnwrapUtil.singleAsStringOrElse(mockObjectAdapter, null));
     }
 
     private void expectAdapterWillReturn(final Object domainObject) {

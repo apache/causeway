@@ -268,17 +268,7 @@ public interface ManagedObject {
         return unwrappedObjects;
     }
 
-    @Nullable
-    public static String unwrapSingleAsStringOrElse(@Nullable final ManagedObject adapter, @Nullable String orElse) {
-        final Object obj = UnwrapUtil.single(adapter);
-        if (obj == null) {
-            return null;
-        }
-        if (!(obj instanceof String)) {
-            return orElse;
-        }
-        return (String) obj;
-    }
+
 
     /**
      * 
