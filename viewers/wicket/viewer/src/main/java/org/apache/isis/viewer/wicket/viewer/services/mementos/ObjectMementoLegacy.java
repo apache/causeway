@@ -225,7 +225,7 @@ final class ObjectMementoLegacy implements Serializable {
                 try {
 
                     log.debug("lookup by rootOid [{}]", rootOid);
-                    return ManagedObject._adapterOfRootOid(specificationLoader, rootOid);
+                    return rootOid.loadObject(specificationLoader);
 
                 } finally {
                     // possibly out-dated insight ...

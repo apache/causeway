@@ -139,7 +139,7 @@ public abstract class ResourceAbstract {
         final String oidStrUnencoded = Oid.marshaller().joinAsOid(domainType, instanceIdUnencoded);
         val rootOid = RootOid.deString(oidStrUnencoded);
         
-        return Optional.ofNullable(ManagedObject._adapterOfRootOid(getSpecificationLoader(), rootOid))
+        return Optional.ofNullable(rootOid.loadObject(getSpecificationLoader()))
                 .orElseThrow(()->RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND, 
                         "Could not determine adapter for OID: '%s:%s'", domainType, instanceIdUnencoded));
     }

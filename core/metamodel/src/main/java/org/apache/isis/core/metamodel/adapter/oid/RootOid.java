@@ -21,7 +21,13 @@ package org.apache.isis.core.metamodel.adapter.oid;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.internal.codec._UrlDecoderUtil;
+import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
 import org.apache.isis.schema.common.v2.OidDto;
+
+import lombok.val;
 
 public interface RootOid extends Oid {
 
@@ -40,6 +46,20 @@ public interface RootOid extends Oid {
 
     public static RootOid deString(final String oidStr) {
         return Oid.unmarshaller().unmarshal(oidStr, RootOid.class);
+    }
+
+    // -- OBJECT LOADING
+    
+    default public ManagedObject loadObject(SpecificationLoader specificationLoader) {
+        val mmc = ((SpecificationLoaderDefault)specificationLoader).getMetaModelContext();
+
+        val spec = specificationLoader.loadSpecification(this.getObjectSpecId());
+        val objectId = this.getIdentifier();
+
+        val objectLoadRequest = ObjectLoader.Request.of(spec, objectId);
+        val managedObject = mmc.getObjectManager().loadObject(objectLoadRequest);
+        
+        return managedObject;
     }
 
     

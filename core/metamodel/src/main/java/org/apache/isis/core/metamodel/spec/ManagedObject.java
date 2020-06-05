@@ -31,9 +31,7 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
-import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -236,21 +234,6 @@ public interface ManagedObject {
     }
 
     // -- DEPRECATIONS (REFACTORING)
-
-    // move this to ObjectManager?
-    static ManagedObject _adapterOfRootOid(SpecificationLoader specificationLoader, RootOid rootOid) {
-
-        val mmc = ((SpecificationLoaderDefault)specificationLoader).getMetaModelContext();
-
-        val spec = specificationLoader.loadSpecification(rootOid.getObjectSpecId());
-        val objectId = rootOid.getIdentifier();
-
-        val objectLoadRequest = ObjectLoader.Request.of(spec, objectId);
-        val managedObject = mmc.getObjectManager().loadObject(objectLoadRequest);
-
-        return managedObject;
-
-    }
 
     static ManagedObject _newTransientInstance(ObjectSpecification spec) {
 
