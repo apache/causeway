@@ -49,6 +49,7 @@ import org.apache.isis.core.metamodel.commons.MethodExtensions;
 import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
@@ -230,13 +231,37 @@ public final class ManagedObjects {
 
     // -- ENTITY UTILITIES
     
+    @UtilityClass
+    public static final class EntityUtil {
+        
+        public static EntityState getEntityState(@Nullable ManagedObject adapter) {
+            if(adapter==null) {
+                return EntityState.NOT_PERSISTABLE;
+            }
+            val spec = adapter.getSpecification();
+            val pojo = adapter.getPojo();
+            
+            if(spec==null || pojo==null || !spec.isEntity()) {
+                return EntityState.NOT_PERSISTABLE;
+            }
+
+            val entityFacet = spec.getFacet(EntityFacet.class);
+            if(entityFacet==null) {
+                throw _Exceptions.unrecoverable("Entity types must have an EntityFacet");
+            }
+
+            return entityFacet.getEntityState(pojo);
+        }
+        
+    }
+    
     /**
      * @param managedObject
      * @return managedObject
      * @throws AssertionError if managedObject is a detached entity  
      */
     public static ManagedObject requiresAttached(@NonNull ManagedObject managedObject) {
-        val entityState = ManagedObject._entityState(managedObject);
+        val entityState = EntityUtil.getEntityState(managedObject);
         if(entityState.isPersistable()) {
             // ensure we have an attached entity
             _Assert.assertEquals(
@@ -253,7 +278,7 @@ public final class ManagedObjects {
         if(isNullOrUnspecifiedOrEmpty(managedObject)) {
             return managedObject;
         }
-        val entityState = ManagedObject._entityState(managedObject);
+        val entityState = EntityUtil.getEntityState(managedObject);
         if(!entityState.isPersistable()) {
             return managedObject;
         }

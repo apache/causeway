@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
 
@@ -68,18 +69,100 @@ public interface ManagedObject {
      */
     Optional<RootOid> getRootOid();
     
+    // -- TITLE
+
+    public default String titleString() {
+        return titleString(null);
+    }
+
+    default String titleString(@Nullable ManagedObject contextAdapterIfAny) {
+        return ManagedObjectInternalUtil.titleString(this, contextAdapterIfAny);
+    }
+    
+    // -- SHORTCUT - OBJECT MANAGER
+    
+    default ObjectManager getObjectManager() {
+        return ManagedObjectInternalUtil.objectManager(this)
+                .orElseThrow(()->_Exceptions
+                        .illegalArgument("Can only retrieve ObjectManager from ManagedObjects "
+                                + "that are 'specified'."));
+    }
+
+    // -- SHORTCUT - ELEMENT SPECIFICATION
+
+    /**
+     * Used only for (standalone or parented) collections.
+     */
+    default public Optional<ObjectSpecification> getElementSpecification() {
+        return getSpecification().getElementSpecification();
+    }
+
+    // -- SHORTCUT - ICON NAME
+
+    /**
+     * Returns the name of an icon to use if this object is to be displayed
+     * graphically.
+     * <p>
+     * May return <code>null</code> if no icon is specified.
+     */
+    default public String getIconName() {
+        return getSpecification().getIconName(this);
+    }
+
+    // -- FACTORIES
+
+    /**
+     * Optimized for cases, when the pojo's specification is already available.
+     * @param specification
+     * @param pojo - might also be a collection of pojos
+     * @return
+     */
+    public static ManagedObject of(@NonNull ObjectSpecification specification, @Nullable Object pojo) {
+        
+        specification.assertPojoCompatible(pojo);
+        
+        return new SimpleManagedObject(specification, pojo);
+    }
+    
+    /**
+     * Optimized for cases, when the pojo's specification and rootOid are already available.
+     */
+    public static ManagedObject identified(ObjectSpecification specification, Object pojo, RootOid rootOid) {
+        if(!specification.getCorrespondingClass().isAssignableFrom(pojo.getClass())) {
+            throw _Exceptions.illegalArgument(
+                    "Pojo not compatible with ObjectSpecification, " +
+                    "objectSpec.correspondingClass = %s, " +
+                    "pojo.getClass() = %s, " +
+                    "pojo.toString() = %s",
+                    specification.getCorrespondingClass(), pojo.getClass(), pojo.toString());
+        }
+        return SimpleManagedObject.identified(specification, pojo, rootOid);
+    }
+
+    /**
+     * For cases, when the pojo's specification is not available and needs to be looked up. 
+     * @param specLoader
+     * @param pojo
+     * @return
+     */
+    public static ManagedObject of(
+            Function<Class<?>, ObjectSpecification> specLoader, 
+            Object pojo) {
+
+        return new LazyManagedObject(specLoader, pojo);
+    }
+    
     // -- EMPTY
     
-    /** has no ObjectSpecification and no value */
+    /** has no ObjectSpecification and no value (pojo) */
     static ManagedObject unspecified() {
         return ManagedObjectInternalUtil.UNSPECIFIED;
     }
     
-    /** has an ObjectSpecification, but no value */
+    /** has an ObjectSpecification, but no value (pojo) */
     static ManagedObject empty(@NonNull final ObjectSpecification spec) {
         return ManagedObject.of(spec, null);
     }
-    
 
     // -- SIMPLE
 
@@ -154,91 +237,6 @@ public interface ManagedObject {
 
     }
 
-    // -- TITLE
-
-    public default String titleString() {
-        return titleString(null);
-    }
-
-    default String titleString(@Nullable ManagedObject contextAdapterIfAny) {
-        return ManagedObjectInternalUtil.titleString(this, contextAdapterIfAny);
-    }
-    
-    // -- SHORTCUT - OBJECT MANAGER
-    
-    default ObjectManager getObjectManager() {
-        return ManagedObjectInternalUtil.objectManager(this)
-                .orElseThrow(()->_Exceptions
-                        .illegalArgument("Can only retrieve ObjectManager from ManagedObjects "
-                                + "that are 'specified'."));
-    }
-
-    // -- SHORTCUT - ELEMENT SPECIFICATION
-
-    /**
-     * Used only for (standalone or parented) collections.
-     */
-    default public Optional<ObjectSpecification> getElementSpecification() {
-        return getSpecification().getElementSpecification();
-    }
-
-    // -- SHORTCUT - ICON NAME
-
-    /**
-     * Returns the name of an icon to use if this object is to be displayed
-     * graphically.
-     * <p>
-     * May return <code>null</code> if no icon is specified.
-     */
-    default public String getIconName() {
-        return getSpecification().getIconName(this);
-    }
-
-    // -- FACTORIES
-
-    /**
-     * Optimized for cases, when the pojo's specification is already available.
-     * @param specification
-     * @param pojo - might also be a collection of pojos
-     * @return
-     */
-    public static ManagedObject of(@NonNull ObjectSpecification specification, @Nullable Object pojo) {
-        
-        specification.assertPojoCompatible(pojo);
-        
-        return new SimpleManagedObject(specification, pojo);
-    }
-    
-    
-    
-    /**
-     * Optimized for cases, when the pojo's specification and rootOid are already available.
-     */
-    public static ManagedObject identified(ObjectSpecification specification, Object pojo, RootOid rootOid) {
-        if(!specification.getCorrespondingClass().isAssignableFrom(pojo.getClass())) {
-            throw _Exceptions.illegalArgument(
-                    "Pojo not compatible with ObjectSpecification, " +
-                    "objectSpec.correspondingClass = %s, " +
-                    "pojo.getClass() = %s, " +
-                    "pojo.toString() = %s",
-                    specification.getCorrespondingClass(), pojo.getClass(), pojo.toString());
-        }
-        return SimpleManagedObject.identified(specification, pojo, rootOid);
-    }
-
-    /**
-     * For cases, when the pojo's specification is not available and needs to be looked up. 
-     * @param specLoader
-     * @param pojo
-     * @return
-     */
-    public static ManagedObject of(
-            Function<Class<?>, ObjectSpecification> specLoader, 
-            Object pojo) {
-
-        return new LazyManagedObject(specLoader, pojo);
-    }
-
     // -- DEPRECATIONS (REFACTORING)
 
     static String _instanceId(ManagedObject adapter) {
@@ -246,30 +244,8 @@ public interface ManagedObject {
         return identifier; 
     }
     
-    static EntityState _entityState(ManagedObject adapter) {
-        if(adapter==null) {
-            return EntityState.NOT_PERSISTABLE;
-        }
-        return _entityState(adapter.getSpecification(), adapter.getPojo());
-    }
-    
-    static EntityState _entityState(ObjectSpecification spec, Object pojo) {
-
-        if(spec==null || pojo==null || !spec.isEntity()) {
-            return EntityState.NOT_PERSISTABLE;
-        }
-
-        val entityFacet = spec.getFacet(EntityFacet.class);
-        if(entityFacet==null) {
-            throw _Exceptions.unrecoverable("Entity types must have an EntityFacet");
-        }
-
-        return entityFacet.getEntityState(pojo);
-    }
-    
-
     static boolean _isDestroyed(ManagedObject adapter) {
-        return _entityState(adapter) == EntityState.PERSISTABLE_DESTROYED;
+        return EntityUtil.getEntityState(adapter) == EntityState.PERSISTABLE_DESTROYED;
     }
 
     static void _whenFirstIsBookmarkable_ensureSecondIsAsWell(
@@ -284,7 +260,7 @@ public interface ManagedObject {
                 return;
             }
 
-            val entityState = _entityState(second);
+            val entityState = EntityUtil.getEntityState(second);
             if(entityState != EntityState.PERSISTABLE_ATTACHED) {
                 throw _Exceptions.illegalArgument(
                         "can't set a reference to a transient object [%s] from a persistent one [%s]",
@@ -374,12 +350,6 @@ public interface ManagedObject {
         
         return adapter.getSpecification().getBeanSort().isCollection();
     }
-
-    
-
-
-
-
 
 
 }

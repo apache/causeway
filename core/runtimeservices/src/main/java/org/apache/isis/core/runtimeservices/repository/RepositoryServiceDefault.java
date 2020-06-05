@@ -51,6 +51,7 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 
 import lombok.val;
@@ -80,7 +81,7 @@ public class RepositoryServiceDefault implements RepositoryService {
     @Override
     public EntityState getEntityState(@Nullable final Object object) {
         val adapter = objectManager.adapt(unwrapped(object));
-        val entityState = ManagedObject._entityState(adapter);
+        val entityState = EntityUtil.getEntityState(adapter);
         return entityState;
     }
     
@@ -96,7 +97,7 @@ public class RepositoryServiceDefault implements RepositoryService {
         if(adapter == null) {
             throw new PersistFailedException("Object not known to framework (unable to create/obtain an adapter)");
         }
-        val entityState = ManagedObject._entityState(adapter);
+        val entityState = EntityUtil.getEntityState(adapter);
         val skip = !entityState.isDetached(); // only persist detached entities, otherwise skip
         if(skip) {
             return domainObject;
@@ -119,7 +120,7 @@ public class RepositoryServiceDefault implements RepositoryService {
             return; // noop
         }
         val adapter = objectManager.adapt(unwrapped(domainObject));
-        val entityState = ManagedObject._entityState(adapter);
+        val entityState = EntityUtil.getEntityState(adapter);
         if(entityState.isAttached()) {
             ManagedObject._destroyObjectInTransaction(adapter);   
         }
