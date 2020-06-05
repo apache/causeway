@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
@@ -65,7 +66,7 @@ implements ImperativeFacet {
     public Object getProperty(
             final ManagedObject owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final Object collectionOrArray = ManagedObject.InvokeUtil.invoke(method, owningAdapter);
+        final Object collectionOrArray = ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
         if(collectionOrArray == null) {
             return null;
         }
@@ -75,7 +76,7 @@ implements ImperativeFacet {
         final boolean filterForVisibility = getConfiguration().getCore().getMetaModel().isFilterVisibility();
         if(filterForVisibility) {
             
-            val autofittedObjectContainer = ManagedObject.VisibilityUtil
+            val autofittedObjectContainer = ManagedObjects.VisibilityUtil
                     .visiblePojosAutofit(collectionAdapter, interactionInitiatedBy, method.getReturnType());
             
             if (autofittedObjectContainer != null) {

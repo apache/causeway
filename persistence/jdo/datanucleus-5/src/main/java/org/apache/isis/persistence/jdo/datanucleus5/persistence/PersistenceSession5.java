@@ -75,6 +75,7 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFa
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.persistence.jdo.applib.exceptions.NotPersistableException;
 import org.apache.isis.persistence.jdo.applib.exceptions.UnsupportedFindException;
@@ -570,14 +571,18 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         if (getEntityState(pojo).isAttached()) {
             throw new NotPersistableException("Object already persistent: " + adapter);
         }
-        if (ManagedObject._isParentedCollection(adapter)) {
-            //or should we just ignore this?
-            throw new NotPersistableException("Cannot persist parented collection: " + adapter);
-        }
         val spec = adapter.getSpecification();
         if (spec.isManagedBean()) {
             throw new NotPersistableException("Can only persist entity beans: "+ adapter);
         }
+        if (spec.getBeanSort().isCollection()) {
+            //(FIXME not a perfect match) 
+            //legacy of ... 
+            //getOid() instanceof ParentedOid;
+            //or should we just ignore this?
+            throw new NotPersistableException("Cannot persist parented collection: " + adapter);
+        }
+        
         transactionService.executeWithinTransaction(()->{
             log.debug("persist {}", adapter);               
             val createObjectCommand = newCreateObjectCommand(adapter);
@@ -745,9 +750,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     public void enlistCreatedAndRemapIfRequiredThenInvokeIsisInvokePersistingOrUpdatedCallback(final Persistable pojo) {
         val adapter = adapterFor(pojo);
         
-        val state = ManagedObject._entityState(adapter);
-
-        if (state.isAttached()) {
+        if (EntityUtil.isAttached(adapter)) {
             // updating;
             // the callback and transaction.enlist are done in the preDirty callback
             // (can't be done here, as the enlist requires to capture the 'before' values)

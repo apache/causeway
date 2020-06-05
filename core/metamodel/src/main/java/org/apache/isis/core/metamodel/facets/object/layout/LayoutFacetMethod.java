@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 public class LayoutFacetMethod extends LayoutFacetAbstract {
 
@@ -40,7 +41,7 @@ public class LayoutFacetMethod extends LayoutFacetAbstract {
             return null;
         }
         try {
-            return (String) ManagedObject.InvokeUtil.invoke(method, objectAdapterIfAny);
+            return (String) ManagedObjects.InvokeUtil.invoke(method, objectAdapterIfAny);
         } catch (final RuntimeException ex) {
             return null;
         }

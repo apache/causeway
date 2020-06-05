@@ -362,19 +362,13 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             return ManagedObject.unspecified();
         }
         if(pojo instanceof OidDto) {
-            return adapterFor((OidDto)pojo);
+            return adapterFor(Oid.Factory.ofDto((OidDto)pojo));
         }
         if(pojo instanceof RootOid) {
             return adapterFor((RootOid) pojo);
         }
         // value type
         return ManagedObject.of(getSpecificationLoader()::loadSpecification, pojo);
-    }
-
-    private ManagedObject adapterFor(final OidDto oid) {
-        val oidStr = Oid.marshaller().joinAsOid(oid.getType(), oid.getId());
-        val rootOid = Oid.unmarshaller().unmarshal(oidStr, RootOid.class);
-        return adapterFor(rootOid);
     }
 
     private ManagedObject adapterFor(final RootOid oid) {

@@ -226,7 +226,7 @@ public class PageParameterUtil {
 
         try {
             val rootOid = RootOid.deStringEncoded(encoded);
-            return ManagedObject._adapterOfRootOid(specificationLoader, rootOid);
+            return rootOid.loadObject(specificationLoader);
         } catch (final Exception e) {
             return null;
         }

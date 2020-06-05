@@ -38,8 +38,6 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
@@ -62,7 +60,6 @@ public class FactoryServiceDefault implements FactoryService {
     @Inject private SpecificationLoader specificationLoader;
     @Inject private ServiceInjector serviceInjector;
     @Inject private IsisSystemEnvironment isisSystemEnvironment; 
-    @Inject private ObjectManager objectManager;
 
     @Override
     public <T> T getOrCreate(@NonNull Class<T> requiredType) {
@@ -145,15 +142,11 @@ public class FactoryServiceDefault implements FactoryService {
         return _Casts.uncheckedCast(createObject(spec));
     }
     
-    // -- HELEPR    
+    // -- HELPER    
     
     private Object createObject(ObjectSpecification spec) {
-        val objectCreateRequest = ObjectCreator.Request.of(spec);
-        val managedObject = objectManager.createObject(objectCreateRequest);
-        return _Casts.uncheckedCast(managedObject.getPojo());
+        return spec.createObject().getPojo();
     }
-
-
 
 
 }

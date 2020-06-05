@@ -19,14 +19,13 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import static org.apache.isis.core.metamodel.spec.ManagedObject.unwrapSingle;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.ActionArgumentEvent;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
@@ -66,9 +65,9 @@ implements ProposedHolder, ActionInteractionContext {
     @Override
     public ActionArgumentEvent createInteractionEvent() {
         return new ActionArgumentEvent(
-                unwrapSingle(getTarget()), 
+                UnwrapUtil.single(getTarget()), 
                 getIdentifier(), 
-                ManagedObject.unwrapMultipleAsArray(getArgs().toList()), 
+                UnwrapUtil.multipleAsArray(getArgs().toList()), 
                 getPosition());
     }
 

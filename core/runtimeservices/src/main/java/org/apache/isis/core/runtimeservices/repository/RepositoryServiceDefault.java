@@ -50,7 +50,8 @@ import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 
 import lombok.val;
 
@@ -79,8 +80,7 @@ public class RepositoryServiceDefault implements RepositoryService {
     @Override
     public EntityState getEntityState(@Nullable final Object object) {
         val adapter = objectManager.adapt(unwrapped(object));
-        val entityState = ManagedObject._entityState(adapter);
-        return entityState;
+        return EntityUtil.getEntityState(adapter);
     }
     
     @Override
@@ -95,12 +95,11 @@ public class RepositoryServiceDefault implements RepositoryService {
         if(adapter == null) {
             throw new PersistFailedException("Object not known to framework (unable to create/obtain an adapter)");
         }
-        val entityState = ManagedObject._entityState(adapter);
-        val skip = !entityState.isDetached(); // only persist detached entities, otherwise skip
-        if(skip) {
+        // only persist detached entities, otherwise skip
+        if(!EntityUtil.isDetached(adapter)) {
             return domainObject;
         }
-        ManagedObject._makePersistentInTransaction(adapter);
+        EntityUtil.persistInTransaction(adapter);
         return domainObject;
     }
 
@@ -118,9 +117,8 @@ public class RepositoryServiceDefault implements RepositoryService {
             return; // noop
         }
         val adapter = objectManager.adapt(unwrapped(domainObject));
-        val entityState = ManagedObject._entityState(adapter);
-        if(entityState.isAttached()) {
-            ManagedObject._destroyObjectInTransaction(adapter);   
+        if(EntityUtil.isAttached(adapter)) {
+            EntityUtil.destroyInTransaction(adapter);   
         }
     }
 
@@ -172,7 +170,7 @@ public class RepositoryServiceDefault implements RepositoryService {
         
         val queryRequest = ObjectBulkLoader.Request.of(resultTypeSpec, query);
         val allMatching = objectManager.queryObjects(queryRequest);
-        return _Casts.uncheckedCast(ManagedObject.unwrapMultipleAsList(allMatching));
+        return _Casts.uncheckedCast(UnwrapUtil.multipleAsList(allMatching));
     }
 
     @Override

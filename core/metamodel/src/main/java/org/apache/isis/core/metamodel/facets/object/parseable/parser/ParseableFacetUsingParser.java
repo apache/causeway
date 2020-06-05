@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.interactions.ParseValueContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
@@ -85,7 +86,7 @@ implements ParseableFacet {
             validate(parseValueContext);
         }
 
-        final Object context = ManagedObject.unwrapSingle(contextAdapter);
+        final Object context = UnwrapUtil.single(contextAdapter);
 
         getServiceInjector().injectServicesInto(parser);
 
@@ -125,7 +126,7 @@ implements ParseableFacet {
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public String parseableTitle(final ManagedObject contextAdapter) {
-        final Object pojo = ManagedObject.unwrapSingle(contextAdapter);
+        final Object pojo = UnwrapUtil.single(contextAdapter);
 
         getServiceInjector().injectServicesInto(parser);
         return ((Parser)parser).parseableTitleOf(pojo);

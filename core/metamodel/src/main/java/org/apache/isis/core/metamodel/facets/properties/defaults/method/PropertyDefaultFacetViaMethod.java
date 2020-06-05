@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 import lombok.val;
 
@@ -59,7 +60,7 @@ public class PropertyDefaultFacetViaMethod extends PropertyDefaultFacetAbstract 
 
     @Override
     public ManagedObject getDefault(final ManagedObject owningAdapter) {
-        final Object result = ManagedObject.InvokeUtil.invoke(method, owningAdapter);
+        final Object result = ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
         if (result == null) {
             return null;
         }

@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToF
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 
 import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
 
@@ -73,7 +74,7 @@ implements CollectionAddToFacet {
             return;
         }
 
-        final Object referencedObject = ManagedObject.unwrapSingle(referencedObjectAdapter);
+        final Object referencedObject = UnwrapUtil.single(referencedObjectAdapter);
 
         // get hold of underlying collection
         final Object collection = getterFacet.getProperty(targetAdapter, interactionInitiatedBy);

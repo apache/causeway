@@ -19,13 +19,12 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import static org.apache.isis.core.metamodel.spec.ManagedObject.unwrapSingle;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.ParseValueEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -54,8 +53,8 @@ implements ProposedHolder {
 
     @Override
     public ParseValueEvent createInteractionEvent() {
-        final String proposedPojo = (String) unwrapSingle(getProposed());
-        return new ParseValueEvent(unwrapSingle(getTarget()), getIdentifier(), proposedPojo);
+        final String proposedPojo = (String) UnwrapUtil.single(getProposed());
+        return new ParseValueEvent(UnwrapUtil.single(getTarget()), getIdentifier(), proposedPojo);
     }
 
 }

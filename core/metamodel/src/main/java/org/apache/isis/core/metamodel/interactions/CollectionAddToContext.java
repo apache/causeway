@@ -24,6 +24,7 @@ import org.apache.isis.applib.services.wrapper.events.CollectionAddToEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -52,7 +53,10 @@ implements ProposedHolder {
 
     @Override
     public CollectionAddToEvent createInteractionEvent() {
-        return new CollectionAddToEvent(ManagedObject.unwrapSingle(getTarget()), getIdentifier(), ManagedObject.unwrapSingle(getProposed()));
+        return new CollectionAddToEvent(
+                UnwrapUtil.single(getTarget()), 
+                getIdentifier(), 
+                UnwrapUtil.single(getProposed()));
     }
 
 }

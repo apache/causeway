@@ -25,11 +25,10 @@ import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public final class InteractionUtils {
 
     public static InteractionResult isVisibleResult(FacetHolder facetHolder, VisibilityContext context) {

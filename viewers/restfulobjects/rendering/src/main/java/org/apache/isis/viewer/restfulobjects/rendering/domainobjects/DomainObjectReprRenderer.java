@@ -59,9 +59,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             final Rel rel, 
             final ManagedObject objectAdapter) {
         
-        String domainType = ManagedObjects.getDomainType(objectAdapter).orElse("?");
-        String instanceId = ManagedObject._instanceId(objectAdapter);
-        final String url = "objects/" + domainType + "/" + instanceId;
+        final String objectRef = ManagedObjects.stringifyElseFail(objectAdapter, "/");
+        final String url = "objects/" + objectRef;
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.DOMAIN_OBJECT, url).withTitle(objectAdapter.titleString(null));
     }
 
@@ -70,9 +69,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             final ManagedObject objectAdapter) {
         
         final Rel rel = Rel.OBJECT_LAYOUT;
-        String domainType = ManagedObjects.getDomainType(objectAdapter).orElse("?");
-        String instanceId = ManagedObject._instanceId(objectAdapter);
-        final String url = "objects/" + domainType + "/" + instanceId + "/object-layout";
+        final String objectRef = ManagedObjects.stringifyElseFail(objectAdapter, "/");
+        final String url = "objects/" + objectRef + "/object-layout";
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.OBJECT_LAYOUT, url);
     }
 
@@ -81,9 +79,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             final ManagedObject objectAdapter) {
         
         final Rel rel = Rel.OBJECT_ICON;
-        String domainType = ManagedObjects.getDomainType(objectAdapter).orElse("?");
-        String instanceId = ManagedObject._instanceId(objectAdapter);
-        final String url = "objects/" + domainType + "/" + instanceId + "/image";
+        final String objectRef = ManagedObjects.stringifyElseFail(objectAdapter, "/");
+        final String url = "objects/" + objectRef + "/image";
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.OBJECT_IMAGE, url);
     }
 
@@ -172,12 +169,17 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
         if (!(mode.isArgs())) {
 
+            val rootOidIfAny = objectAdapter.getRootOid();
+            
             // self, extensions.oid
             if (ManagedObjects.isIdentifiable(objectAdapter)) {
                 if (includesSelf) {
                     addLinkToSelf();
                 }
-                getExtensions().mapPut("oid", getOidStr());
+                rootOidIfAny.ifPresent(rootOid->{
+                    val oidStr = rootOid.enString();
+                    getExtensions().mapPut("oid", oidStr);
+                });
             }
 
             // title
@@ -188,13 +190,10 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             if (isService) {
                 representation.mapPut("serviceId", ServiceUtil.idOfAdapter(objectAdapter));
             } else {
-                final String domainType = getDomainType();
-                final String instanceId = getInstanceId();
-                if (domainType != null) {
-                    representation.mapPut("domainType", domainType);
-                    representation.mapPut("instanceId", instanceId);
-
-                }
+                rootOidIfAny.ifPresent(rootOid->{
+                    representation.mapPut("domainType", rootOid.getObjectSpecId().asString());
+                    representation.mapPut("instanceId", rootOid.getIdentifier());
+                });
             }
         }
 
@@ -280,18 +279,6 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     private void addLinkToUp() {
         final JsonRepresentation link = LinkBuilder.newBuilder(resourceContext, Rel.UP.getName(), RepresentationType.LIST, "services").build();
         getLinks().arrayAdd(link);
-    }
-
-    private String getDomainType() {
-        return ManagedObjects.getDomainType(objectAdapter).orElse("?");
-    }
-
-    private String getInstanceId() {
-        return ManagedObject._instanceId(objectAdapter);
-    }
-
-    private String getOidStr() {
-        return ManagedObjects.stringifyElseFail(objectAdapter);
     }
 
     private DomainObjectReprRenderer withMembers(final ManagedObject objectAdapter) {
@@ -456,7 +443,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         final JsonRepresentation domainObjectRepr = renderer.with(objectAdapter).asUpdatePropertiesLinkArguments().render();
 
         if(!getResourceContext().suppressUpdateLink()) {
-            final LinkBuilder updateLinkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.UPDATE.getName(), RepresentationType.DOMAIN_OBJECT, "objects/%s/%s", getDomainType(), getInstanceId()).withHttpMethod(RestfulHttpMethod.PUT).withArguments(domainObjectRepr);
+            val objectRef = ManagedObjects.stringifyElseFail(objectAdapter);
+            val updateLinkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.UPDATE.getName(), RepresentationType.DOMAIN_OBJECT, "objects/%s", objectRef).withHttpMethod(RestfulHttpMethod.PUT).withArguments(domainObjectRepr);
             getLinks().arrayAdd(updateLinkBuilder.build());
         }
     }

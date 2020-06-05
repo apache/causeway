@@ -19,13 +19,12 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import static org.apache.isis.core.metamodel.spec.ManagedObject.unwrapSingle;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.ObjectTitleEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -49,7 +48,7 @@ extends AccessContext {
 
     @Override
     public ObjectTitleEvent createInteractionEvent() {
-        return new ObjectTitleEvent(unwrapSingle(getTarget()), getIdentifier(), getTitle());
+        return new ObjectTitleEvent(UnwrapUtil.single(getTarget()), getIdentifier(), getTitle());
     }
 
     private String getTitle() {

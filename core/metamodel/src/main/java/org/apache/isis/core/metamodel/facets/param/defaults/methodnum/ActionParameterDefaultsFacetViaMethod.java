@@ -29,7 +29,7 @@ import java.util.Optional;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacetAbstract;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 
 import lombok.NonNull;
@@ -82,13 +82,13 @@ implements ImperativeFacet {
         
         if(ppmFactory.isPresent()) {
             // PPM programming model
-            return ManagedObject.InvokeUtil
+            return ManagedObjects.InvokeUtil
                     .invokeWithPPM(ppmFactory.get(), method, 
                             pendingArgs.getActionTarget(), pendingArgs.getParamValues());    
         }
         
         // else support legacy programming model, call any-arg defaultNAct(...)
-        return ManagedObject.InvokeUtil
+        return ManagedObjects.InvokeUtil
                 .invokeAutofit(method, 
                     pendingArgs.getActionTarget(), pendingArgs.getParamValues());
     }

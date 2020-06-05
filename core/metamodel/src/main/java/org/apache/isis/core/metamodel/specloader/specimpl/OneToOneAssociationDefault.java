@@ -50,13 +50,16 @@ import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import lombok.val;
 
-public class OneToOneAssociationDefault extends ObjectAssociationAbstract implements OneToOneAssociation {
+public class OneToOneAssociationDefault 
+extends ObjectAssociationAbstract 
+implements OneToOneAssociation {
 
     public OneToOneAssociationDefault(final FacetedMethod facetedMethod) {
         this(facetedMethod, facetedMethod.getMetaModelContext()
@@ -144,9 +147,9 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
             final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final PropertyOrCollectionAccessorFacet facet = getFacet(PropertyOrCollectionAccessorFacet.class);
-        final Object referencedPojo =
-                facet.getProperty(ownerAdapter, interactionInitiatedBy);
+        val propertyOrCollectionAccessorFacet = getFacet(PropertyOrCollectionAccessorFacet.class);
+        val referencedPojo =
+                propertyOrCollectionAccessorFacet.getProperty(ownerAdapter, interactionInitiatedBy);
 
         if (referencedPojo == null) {
             return null;
@@ -161,12 +164,6 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
     }
 
     // -- Set
-    @Override
-    public void set(
-            final ManagedObject ownerAdapter,
-            final ManagedObject newReferencedAdapter) {
-        set(ownerAdapter, newReferencedAdapter, InteractionInitiatedBy.USER);
-    }
 
     /**
      * Sets up the {@link Command}, then delegates to the appropriate facet
@@ -180,13 +177,6 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
 
         setupCommand(ownerAdapter, newReferencedAdapter);
 
-        setInternal(ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
-    }
-
-    private void setInternal(
-            final ManagedObject ownerAdapter,
-            final ManagedObject newReferencedAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy) {
         if (newReferencedAdapter != null) {
             setValue(ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
         } else {
@@ -204,7 +194,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
             return;
         }
         
-        ManagedObject._whenFirstIsBookmarkable_ensureSecondIsAsWell(ownerAdapter, newReferencedAdapter);
+        EntityUtil.requiresWhenFirstIsBookmarkableSecondIsAttached(ownerAdapter, newReferencedAdapter);
 
         propertySetterFacet.setProperty(this, ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
     }
@@ -213,8 +203,8 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
             final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
-        final PropertyClearFacet facet = getFacet(PropertyClearFacet.class);
-        facet.clearProperty(this, ownerAdapter, interactionInitiatedBy);
+        val propertyClearFacet = getFacet(PropertyClearFacet.class);
+        propertyClearFacet.clearProperty(this, ownerAdapter, interactionInitiatedBy);
     }
 
 

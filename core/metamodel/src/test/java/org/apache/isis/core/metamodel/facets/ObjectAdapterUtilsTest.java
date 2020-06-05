@@ -27,9 +27,10 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 
 public class ObjectAdapterUtilsTest {
 
@@ -42,33 +43,33 @@ public class ObjectAdapterUtilsTest {
 
     @Test
     public void testUnwrapObjectWhenNull() {
-        assertNull(ManagedObject.unwrapSingle((ManagedObject)null));
+        assertNull(UnwrapUtil.single((ManagedObject)null));
     }
 
     @Test
     public void testUnwrapObjectWhenNotNull() {
         underlyingDomainObject = new Object(); 
         expectAdapterWillReturn(underlyingDomainObject);
-        assertEquals(underlyingDomainObject, ManagedObject.unwrapSingle(mockObjectAdapter));
+        assertEquals(underlyingDomainObject, UnwrapUtil.single(mockObjectAdapter));
     }
 
     @Test
     public void testUnwrapStringWhenNull() {
-        assertNull(ManagedObject.unwrapSingleAsStringOrElse(null, null));
+        assertNull(UnwrapUtil.singleAsStringOrElse(null, null));
     }
 
     @Test
     public void testUnwrapStringWhenNotNullButNotString() {
         underlyingDomainObject = new Object(); 
         expectAdapterWillReturn(underlyingDomainObject);
-        assertNull(ManagedObject.unwrapSingleAsStringOrElse(mockObjectAdapter, null));
+        assertNull(UnwrapUtil.singleAsStringOrElse(mockObjectAdapter, null));
     }
 
     @Test
     public void testUnwrapStringWhenNotNullAndString() {
         underlyingDomainObject = "huzzah";
         expectAdapterWillReturn(underlyingDomainObject);
-        assertEquals("huzzah", ManagedObject.unwrapSingleAsStringOrElse(mockObjectAdapter, null));
+        assertEquals("huzzah", UnwrapUtil.singleAsStringOrElse(mockObjectAdapter, null));
     }
 
     private void expectAdapterWillReturn(final Object domainObject) {

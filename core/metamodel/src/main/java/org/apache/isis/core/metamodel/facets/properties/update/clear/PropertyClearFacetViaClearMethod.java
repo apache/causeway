@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 public class PropertyClearFacetViaClearMethod extends PropertyClearFacetAbstract implements ImperativeFacet {
@@ -58,7 +59,7 @@ public class PropertyClearFacetViaClearMethod extends PropertyClearFacetAbstract
             final OneToOneAssociation owningProperty,
             final ManagedObject targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        ManagedObject.InvokeUtil.invoke(method, targetAdapter);
+        ManagedObjects.InvokeUtil.invoke(method, targetAdapter);
     }
 
     @Override

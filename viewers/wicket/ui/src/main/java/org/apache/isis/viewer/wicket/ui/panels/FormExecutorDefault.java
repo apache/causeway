@@ -49,6 +49,7 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacet;
 import org.apache.isis.core.metamodel.facets.properties.renderunchanged.UnchangingFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.events.RuntimeEventService;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
@@ -156,7 +157,7 @@ implements FormExecutor {
 
             // update target, since version updated (concurrency checks)
             targetAdapter = targetEntityModel.getManagedObject();
-            if(!ManagedObject._isDestroyed(targetAdapter)) {
+            if(!EntityUtil.isDestroyed(targetAdapter)) {
                 targetEntityModel.resetPropertyModels();
             }
 
@@ -185,7 +186,7 @@ implements FormExecutor {
                     targetEntityModel.setObject(resultAdapter);
                     targetAdapter = targetEntityModel.getManagedObject();
                 }
-                if(!ManagedObject._isDestroyed(targetAdapter)) {
+                if(!EntityUtil.isDestroyed(targetAdapter)) {
                     targetEntityModel.resetPropertyModels();
                 }
 

@@ -66,6 +66,7 @@ import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal
 import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
@@ -187,10 +188,10 @@ implements ImperativeFacet {
             // otherwise, go ahead and execute action in the 'foreground'
             final ManagedObject mixinElseRegularAdapter = mixedInAdapter != null ? mixedInAdapter : targetAdapter;
 
-            final Object mixinElseRegularPojo = ManagedObject.unwrapSingle(mixinElseRegularAdapter);
+            final Object mixinElseRegularPojo = UnwrapUtil.single(mixinElseRegularAdapter);
 
             final List<Object> argumentPojos = argumentAdapters.stream()
-                    .map(ManagedObject::unwrapSingle)
+                    .map(UnwrapUtil::single)
                     .collect(_Lists.toUnmodifiable());
 
             final String targetMember = targetNameFor(owningAction, mixedInAdapter);
@@ -263,8 +264,8 @@ implements ImperativeFacet {
             final Can<ManagedObject> arguments)
                     throws IllegalAccessException, InvocationTargetException {
 
-        final Object[] executionParameters = ManagedObject.unwrapMultipleAsArray(arguments);
-        final Object targetPojo = ManagedObject.unwrapSingle(targetAdapter);
+        final Object[] executionParameters = UnwrapUtil.multipleAsArray(arguments);
+        final Object targetPojo = UnwrapUtil.single(targetAdapter);
 
         final ActionSemanticsFacet semanticsFacet = getFacetHolder().getFacet(ActionSemanticsFacet.class);
         final boolean cacheable = semanticsFacet != null && semanticsFacet.value().isSafeAndRequestCacheable();
@@ -366,7 +367,7 @@ implements ImperativeFacet {
 
             val requiredContainerType = method.getReturnType();
             
-            val autofittedObjectContainer = ManagedObject.VisibilityUtil
+            val autofittedObjectContainer = ManagedObjects.VisibilityUtil
                     .visiblePojosAutofit(resultAdapter, interactionInitiatedBy, requiredContainerType); 
 
             if (autofittedObjectContainer != null) {
@@ -379,7 +380,7 @@ implements ImperativeFacet {
             return resultAdapter;
 
         } else {
-            boolean visible = ManagedObject.VisibilityUtil.isVisible(resultAdapter, interactionInitiatedBy);
+            boolean visible = ManagedObjects.VisibilityUtil.isVisible(resultAdapter, interactionInitiatedBy);
             return visible ? resultAdapter : null;
         }
     }
@@ -479,7 +480,7 @@ implements ImperativeFacet {
                     resultAdapterPossiblyCloned = 
                             cloneIfViewModelCloneable(returnValue, mixinElseRegularAdapter);
                 }
-                return ManagedObject.unwrapSingle(resultAdapterPossiblyCloned);
+                return UnwrapUtil.single(resultAdapterPossiblyCloned);
 
             } catch (Exception e) {
 

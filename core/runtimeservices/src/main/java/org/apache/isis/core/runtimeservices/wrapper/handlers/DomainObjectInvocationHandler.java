@@ -51,9 +51,10 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
-import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -384,7 +385,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         val spec = targetAdapter.getSpecification();
         if(spec.isEntity()) {
             return runExecutionTask(()->{
-                ManagedObject._makePersistentInTransaction(targetAdapter);
+                EntityUtil.persistInTransaction(targetAdapter);
                 return null;
             }); 
         }
@@ -414,7 +415,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             val interactionInitiatedBy = getInteractionInitiatedBy();
             val currentReferencedAdapter = property.get(targetAdapter, interactionInitiatedBy);
 
-            val currentReferencedObj = ManagedObject.unwrapSingle(currentReferencedAdapter);
+            val currentReferencedObj = UnwrapUtil.single(currentReferencedAdapter);
 
             val propertyAccessEvent = new PropertyAccessEvent(
                     getDelegate(), property.getIdentifier(), currentReferencedObj);
@@ -486,7 +487,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             val interactionInitiatedBy = getInteractionInitiatedBy();
             val currentReferencedAdapter = collection.get(targetAdapter, interactionInitiatedBy);
 
-            val currentReferencedObj = ManagedObject.unwrapSingle(currentReferencedAdapter);
+            val currentReferencedObj = UnwrapUtil.single(currentReferencedAdapter);
 
             val collectionAccessEvent = new CollectionAccessEvent(getDelegate(), collection.getIdentifier());
 
@@ -650,7 +651,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             val returnedAdapter = objectAction.execute(
                     head, argAdapters,
                     interactionInitiatedBy);
-            return ManagedObject.unwrapSingle(returnedAdapter);
+            return UnwrapUtil.single(returnedAdapter);
             
         });
         

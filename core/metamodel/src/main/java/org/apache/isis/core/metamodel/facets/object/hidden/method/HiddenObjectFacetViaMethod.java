@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.object.hidden.HiddenObjectFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 public class HiddenObjectFacetViaMethod 
 extends HiddenObjectFacetAbstract {
@@ -49,7 +50,7 @@ extends HiddenObjectFacetAbstract {
         if (target == null) {
             return null;
         }
-        final Boolean isHidden = (Boolean) ManagedObject.InvokeUtil.invoke(method, target);
+        final Boolean isHidden = (Boolean) ManagedObjects.InvokeUtil.invoke(method, target);
         return isHidden.booleanValue() ? "Hidden" : null;
     }
 

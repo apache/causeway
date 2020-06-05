@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.hide.ActionParameterHiddenFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 public class ActionParameterHiddenFacetViaMethod extends ActionParameterHiddenFacetAbstract implements ImperativeFacet {
 
@@ -67,8 +68,8 @@ public class ActionParameterHiddenFacetViaMethod extends ActionParameterHiddenFa
             final Can<ManagedObject> argumentAdapters) {
         
         final Object returnValue = ppmFactory.isPresent()
-                ? ManagedObject.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, owningAdapter, argumentAdapters)
-                : ManagedObject.InvokeUtil.invokeAutofit(method, owningAdapter, argumentAdapters);
+                ? ManagedObjects.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, owningAdapter, argumentAdapters)
+                : ManagedObjects.InvokeUtil.invokeAutofit(method, owningAdapter, argumentAdapters);
         
         if(returnValue instanceof Boolean) {
             return (Boolean) returnValue;

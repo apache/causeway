@@ -32,7 +32,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.util.string.Strings;
 
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -41,8 +40,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.modelhelpers.WhereAmIHelper;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
@@ -51,13 +50,12 @@ import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * Web page representing an entity.
  */
 @AuthorizeInstantiation("org.apache.isis.viewer.wicket.roles.USER")
-@Log4j2
+//@Log4j2
 public class EntityPage extends PageAbstract {
 
     private static final long serialVersionUID = 144368606134796079L;
@@ -173,7 +171,7 @@ public class EntityPage extends PageAbstract {
         }
 
         // check that the entity overall can be viewed.
-        if(!ManagedObject.VisibilityUtil.isVisible(objectAdapter, InteractionInitiatedBy.USER)) {
+        if(!model.isVisible()) {
             throw new ObjectMember.AuthorizationException();
         }
 

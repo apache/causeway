@@ -19,14 +19,13 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import static org.apache.isis.core.metamodel.spec.ManagedObject.unwrapSingle;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.ObjectVisibilityEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -49,7 +48,7 @@ implements ProposedHolder {
 
     @Override
     public ObjectVisibilityEvent createInteractionEvent() {
-        return new ObjectVisibilityEvent(unwrapSingle(getTarget()), getIdentifier());
+        return new ObjectVisibilityEvent(UnwrapUtil.single(getTarget()), getIdentifier());
     }
 
     @Override

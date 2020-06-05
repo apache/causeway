@@ -29,11 +29,8 @@ import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LifecycleEventFacet;
-import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.RuntimeContextBase;
@@ -69,7 +66,6 @@ final public class ObjectAdapterContext {
     private final ServiceInjector serviceInjector;
     final ObjectAdapterContext_ObjectCreation objectCreationMixin;
     private final ObjectAdapterContext_LifecycleEventSupport lifecycleEventMixin;
-    private final ObjectManager objectManager;
 
     private ObjectAdapterContext(
             MetaModelContext mmc, 
@@ -82,8 +78,6 @@ final public class ObjectAdapterContext {
         this.objectCreationMixin = new ObjectAdapterContext_ObjectCreation(this, runtimeContext);
         this.lifecycleEventMixin = new ObjectAdapterContext_LifecycleEventSupport(runtimeContext);
 
-        this.objectManager = mmc.getObjectManager();
-        
         this.persistenceSession = persistenceSession;
         this.specificationLoader = mmc.getSpecificationLoader();
         this.serviceInjector = mmc.getServiceInjector();
@@ -115,18 +109,6 @@ final public class ObjectAdapterContext {
 
     public RootOid createPersistentOrViewModelOid(Object pojo) {
         return newIdentifierMixin.createPersistentOid(pojo);
-    }
-
-    // -- DEPENDENCY INJECTION
-
-    // package private
-    Object instantiateAndInjectServices(ObjectSpecification objectSpec) {
-        
-        val objectCreateRequest = ObjectCreator.Request.of(objectSpec);
-        return objectManager.createObject(objectCreateRequest);
-        
-        // legacy of
-        //return dependencyInjectionMixin.instantiateAndInjectServices(objectSpec);
     }
 
     // -- FACTORIES

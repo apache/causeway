@@ -34,6 +34,7 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -135,7 +136,7 @@ public class CollectionContentsAsSummary extends PanelAbstract<EntityCollectionM
                     values.add(null);
                     continue;
                 }
-                final Object valueObj = ManagedObject.unwrapSingle(valueAdapter);
+                final Object valueObj = ManagedObjects.UnwrapUtil.single(valueAdapter);
                 if (valueObj == null) {
                     values.add(null);
                     continue;

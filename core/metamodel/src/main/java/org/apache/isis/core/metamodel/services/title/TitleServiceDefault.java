@@ -31,6 +31,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.val;
@@ -60,7 +61,7 @@ public class TitleServiceDefault implements TitleService {
         
         val pojo = unwrapped(domainObject);
         val objectAdapter = ManagedObject.of(specificationLoader::loadSpecification, pojo);
-        val destroyed = ManagedObject._isDestroyed(objectAdapter);
+        val destroyed = EntityUtil.isDestroyed(objectAdapter);
         if(!destroyed) {
             return objectAdapter.getSpecification().getTitle(null, objectAdapter);
         } else {

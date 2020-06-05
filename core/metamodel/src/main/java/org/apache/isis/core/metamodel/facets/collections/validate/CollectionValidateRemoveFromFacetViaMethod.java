@@ -29,6 +29,7 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 public class CollectionValidateRemoveFromFacetViaMethod extends CollectionValidateRemoveFromFacetAbstract implements ImperativeFacet {
 
@@ -59,7 +60,7 @@ public class CollectionValidateRemoveFromFacetViaMethod extends CollectionValida
 
     @Override
     public String invalidReason(final ManagedObject owningAdapter, final ManagedObject proposedAdapter) {
-        final Object returnValue = ManagedObject.InvokeUtil.invoke(method, owningAdapter, proposedAdapter);
+        final Object returnValue = ManagedObjects.InvokeUtil.invoke(method, owningAdapter, proposedAdapter);
         if(returnValue instanceof String) {
             return (String) returnValue;
         }

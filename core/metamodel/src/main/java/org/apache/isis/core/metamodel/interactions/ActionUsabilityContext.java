@@ -19,13 +19,12 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import static org.apache.isis.core.metamodel.spec.ManagedObject.unwrapSingle;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.ActionUsabilityEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 /**
@@ -55,7 +54,7 @@ implements ActionInteractionContext {
 
     @Override
     public ActionUsabilityEvent createInteractionEvent() {
-        return new ActionUsabilityEvent(unwrapSingle(getTarget()), getIdentifier());
+        return new ActionUsabilityEvent(UnwrapUtil.single(getTarget()), getIdentifier());
     }
 
 }

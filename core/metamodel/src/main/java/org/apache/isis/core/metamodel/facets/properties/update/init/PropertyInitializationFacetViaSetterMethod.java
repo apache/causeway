@@ -27,6 +27,7 @@ import java.util.Map;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 public class PropertyInitializationFacetViaSetterMethod extends PropertyInitializationFacetAbstract implements ImperativeFacet {
 
@@ -55,7 +56,7 @@ public class PropertyInitializationFacetViaSetterMethod extends PropertyInitiali
 
     @Override
     public void initProperty(final ManagedObject owningAdapter, final ManagedObject initialAdapter) {
-        ManagedObject.InvokeUtil.invoke(method, owningAdapter, initialAdapter);
+        ManagedObjects.InvokeUtil.invoke(method, owningAdapter, initialAdapter);
     }
 
     @Override

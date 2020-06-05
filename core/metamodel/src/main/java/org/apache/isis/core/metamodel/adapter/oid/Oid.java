@@ -25,6 +25,7 @@ import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.schema.common.v2.OidDto;
 
 
 /**
@@ -90,13 +91,19 @@ public interface Oid extends Serializable {
             return Oid_Value.INSTANCE;
         }
 
-        public static RootOid ofBookmark(Bookmark bookmark) {
+        public static RootOid ofBookmark(final Bookmark bookmark) {
             return Oid_Root.of(
                     ObjectSpecId.of(bookmark.getObjectType()), 
                     bookmark.getIdentifier());
         }
+        
+        public static RootOid ofDto(final OidDto oid) {
+            return Oid_Root.of(
+                    ObjectSpecId.of(oid.getType()), 
+                    oid.getId());
+        }
 
-        public static RootOid root(ObjectSpecId objectSpecId, String identifier) {
+        public static RootOid root(final ObjectSpecId objectSpecId, final String identifier) {
             return Oid_Root.of(objectSpecId, identifier);
         }
         

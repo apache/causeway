@@ -90,7 +90,7 @@ public interface IResourceContext {
     default Optional<ManagedObject> getObjectAdapterForOidFromHref(String oidFromHref) {
         String oidStrUnencoded = UrlDecoderUtils.urlDecode(oidFromHref);
         val rootOid = RootOid.deString(oidStrUnencoded);
-        return Optional.ofNullable(ManagedObject._adapterOfRootOid(getSpecificationLoader(), rootOid));
+        return Optional.ofNullable(rootOid.loadObject(getSpecificationLoader()));
     }
 
 }

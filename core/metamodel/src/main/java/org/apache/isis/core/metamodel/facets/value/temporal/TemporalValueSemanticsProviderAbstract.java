@@ -39,6 +39,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -135,7 +136,7 @@ implements TemporalValueFacet<T> {
 
     @Override
     public final T temporalValue(final ManagedObject adapter) {
-        return _Casts.uncheckedCast(ManagedObject.unwrapSingle(adapter));
+        return _Casts.uncheckedCast(UnwrapUtil.single(adapter));
     }
 
     @Override

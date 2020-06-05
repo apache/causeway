@@ -57,8 +57,10 @@ public interface MutableCurrentHolder extends CurrentHolder {
      * @param owner
      * @param newValue
      */
-    void set(
+    default void set(
             final ManagedObject owner,
-            final ManagedObject newValue);
+            final ManagedObject newValue) {
+        set(owner, newValue, InteractionInitiatedBy.USER);
+    }
 
 }

@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 import lombok.val;
 
@@ -66,7 +67,7 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
     public Object[][] getChoices(
             final ManagedObject owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final Object objectOrCollection = ManagedObject.InvokeUtil.invoke(method, owningAdapter);
+        final Object objectOrCollection = ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
         if (!(objectOrCollection instanceof Object[])) {
             throw new DomainModelException(String.format(
                     "Expected an array of collections (Object[]) containing choices for all parameters, "
@@ -94,7 +95,7 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
         }
 
         val collectionAdapter = getObjectManager().adapt(collectionOrArray);
-        val visiblePojos = ManagedObject.VisibilityUtil
+        val visiblePojos = ManagedObjects.VisibilityUtil
                 .visiblePojosAsArray(collectionAdapter, interactionInitiatedBy);
         
         return visiblePojos;

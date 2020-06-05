@@ -25,6 +25,7 @@ import java.util.Map;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 public class IconFacetMethod extends IconFacetAbstract {
 
@@ -38,7 +39,7 @@ public class IconFacetMethod extends IconFacetAbstract {
     @Override
     public String iconName(final ManagedObject owningAdapter) {
         try {
-            return (String) ManagedObject.InvokeUtil.invoke(method, owningAdapter);
+            return (String) ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
         } catch (final RuntimeException ex) {
             return null;
         }

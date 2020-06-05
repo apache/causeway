@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 public abstract class AutoCompleteFacetAbstract 
 extends FacetAbstract 
@@ -87,7 +88,7 @@ implements AutoCompleteFacet {
                     }
                 });
 
-        return ManagedObject.VisibilityUtil.streamVisibleAdapters(resultAdapter, interactionInitiatedBy)
+        return ManagedObjects.VisibilityUtil.streamVisibleAdapters(resultAdapter, interactionInitiatedBy)
                 .collect(Can.toCan());
 
     }

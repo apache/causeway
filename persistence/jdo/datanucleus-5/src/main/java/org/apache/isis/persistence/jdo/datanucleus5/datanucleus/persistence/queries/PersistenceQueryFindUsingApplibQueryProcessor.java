@@ -30,6 +30,7 @@ import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.persistence.jdo.datanucleus5.datanucleus.metamodel.JdoPropertyUtils;
@@ -150,7 +151,7 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         final Map<String, Object> argumentsByParameterName = _Maps.newHashMap();
         for (final String parameterName : argumentAdaptersByParameterName.keySet()) {
             final ObjectAdapter argumentAdapter = argumentAdaptersByParameterName.get(parameterName);
-            final Object argument = ManagedObject.unwrapSingle(argumentAdapter);
+            final Object argument = ManagedObjects.UnwrapUtil.single(argumentAdapter);
             argumentsByParameterName.put(parameterName, argument);
         }
         return argumentsByParameterName;
