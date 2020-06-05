@@ -67,7 +67,7 @@ implements ProposedHolder, ActionInteractionContext {
         return new ActionArgumentEvent(
                 UnwrapUtil.single(getTarget()), 
                 getIdentifier(), 
-                ManagedObject.unwrapMultipleAsArray(getArgs().toList()), 
+                UnwrapUtil.multipleAsArray(getArgs().toList()), 
                 getPosition());
     }
 

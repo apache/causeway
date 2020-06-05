@@ -119,7 +119,7 @@ public class DomainEventHelper {
             } else {
                 // all other phases, create a new event
                 final S source = uncheckedCast(UnwrapUtil.single(head.getTarget()));
-                final Object[] arguments = ManagedObject.unwrapMultipleAsArray(argumentAdapters);
+                final Object[] arguments = UnwrapUtil.multipleAsArray(argumentAdapters);
                 final Identifier identifier = identified.getIdentifier();
                 event = newActionDomainEvent(eventType, identifier, source, arguments);
 

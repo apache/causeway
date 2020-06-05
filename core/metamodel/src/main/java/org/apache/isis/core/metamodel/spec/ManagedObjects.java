@@ -382,7 +382,7 @@ public final class ManagedObjects {
                 final Can<ManagedObject> pendingArguments,
                 final List<Object> additionalArguments) {
             
-            val ppmTuple = MethodExtensions.construct(ppmConstructor, ManagedObject.unwrapMultipleAsArray(pendingArguments));
+            val ppmTuple = MethodExtensions.construct(ppmConstructor, UnwrapUtil.multipleAsArray(pendingArguments));
             val paramPojos = _Arrays.combineWithExplicitType(Object.class, ppmTuple, additionalArguments.toArray());
             return MethodExtensions.invoke(method, UnwrapUtil.single(adapter), paramPojos);
         }
@@ -408,7 +408,7 @@ public final class ManagedObjects {
         }
     
         public static Object invoke(Method method, ManagedObject adapter, Can<ManagedObject> argumentAdapters) {
-            return MethodExtensions.invoke(method, UnwrapUtil.single(adapter), ManagedObject.unwrapMultipleAsArray(argumentAdapters));
+            return MethodExtensions.invoke(method, UnwrapUtil.single(adapter), UnwrapUtil.multipleAsArray(argumentAdapters));
         }
     
         public static Object invoke(Method method, ManagedObject adapter, ManagedObject arg0Adapter) {
@@ -416,7 +416,7 @@ public final class ManagedObjects {
         }
     
         public static Object invoke(Method method, ManagedObject adapter, ManagedObject[] argumentAdapters) {
-            return MethodExtensions.invoke(method, UnwrapUtil.single(adapter), ManagedObject.unwrapMultipleAsArray(argumentAdapters));
+            return MethodExtensions.invoke(method, UnwrapUtil.single(adapter), UnwrapUtil.multipleAsArray(argumentAdapters));
         }
 
         /**
@@ -534,6 +534,24 @@ public final class ManagedObjects {
                 return (String) obj;
             }
             return orElse;
+        }
+        
+        @Nullable
+        public static Object[] multipleAsArray(@NonNull final Can<ManagedObject> adapters) {
+            val unwrappedObjects = _Arrays.mapCollection(adapters.toList(), UnwrapUtil::single);
+            return unwrappedObjects;
+        }
+        
+        @Nullable
+        public static Object[] multipleAsArray(@Nullable final Collection<ManagedObject> adapters) {
+            val unwrappedObjects = _Arrays.mapCollection(adapters, UnwrapUtil::single);
+            return unwrappedObjects;
+        }
+
+        @Nullable
+        public static Object[] multipleAsArray(@Nullable final ManagedObject[] adapters) {
+            val unwrappedObjects = _Arrays.map(adapters, UnwrapUtil::single);
+            return unwrappedObjects;
         }
         
     }

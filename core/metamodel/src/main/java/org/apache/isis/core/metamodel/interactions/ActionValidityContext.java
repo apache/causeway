@@ -56,7 +56,7 @@ implements ActionInteractionContext {
     @Override
     public ActionInvocationEvent createInteractionEvent() {
         return new ActionInvocationEvent(
-                UnwrapUtil.single(getTarget()), getIdentifier(), ManagedObject.unwrapMultipleAsArray(getArgs().toList()));
+                UnwrapUtil.single(getTarget()), getIdentifier(), UnwrapUtil.multipleAsArray(getArgs().toList()));
     }
 
 }

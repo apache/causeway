@@ -264,7 +264,7 @@ implements ImperativeFacet {
             final Can<ManagedObject> arguments)
                     throws IllegalAccessException, InvocationTargetException {
 
-        final Object[] executionParameters = ManagedObject.unwrapMultipleAsArray(arguments);
+        final Object[] executionParameters = UnwrapUtil.multipleAsArray(arguments);
         final Object targetPojo = UnwrapUtil.single(targetAdapter);
 
         final ActionSemanticsFacet semanticsFacet = getFacetHolder().getFacet(ActionSemanticsFacet.class);

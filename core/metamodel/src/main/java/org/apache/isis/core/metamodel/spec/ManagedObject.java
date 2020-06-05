@@ -32,7 +32,6 @@ import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Lazy;
-import org.apache.isis.core.commons.internal.collections._Arrays;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
@@ -249,26 +248,6 @@ public interface ManagedObject {
     }
 
     // -- UNWRAPPING
-
-    @Nullable
-    public static Object[] unwrapMultipleAsArray(@NonNull final Can<ManagedObject> adapters) {
-        val unwrappedObjects = _Arrays.mapCollection(adapters.toList(), UnwrapUtil::single);
-        return unwrappedObjects;
-    }
-    
-    @Nullable
-    public static Object[] unwrapMultipleAsArray(@Nullable final Collection<ManagedObject> adapters) {
-        val unwrappedObjects = _Arrays.mapCollection(adapters, UnwrapUtil::single);
-        return unwrappedObjects;
-    }
-
-    @Nullable
-    public static Object[] unwrapMultipleAsArray(@Nullable final ManagedObject[] adapters) {
-        val unwrappedObjects = _Arrays.map(adapters, UnwrapUtil::single);
-        return unwrappedObjects;
-    }
-
-
 
     /**
      * 

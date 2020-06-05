@@ -68,7 +68,7 @@ implements ActionInteractionContext {
         return new ActionArgumentUsabilityEvent(
                 UnwrapUtil.single(getTarget()), 
                 getIdentifier(), 
-                ManagedObject.unwrapMultipleAsArray(getArgs().toList()), 
+                UnwrapUtil.multipleAsArray(getArgs().toList()), 
                 getPosition());
     }
 
