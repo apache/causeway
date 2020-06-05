@@ -27,7 +27,6 @@ import javax.annotation.Nullable;
 import org.apache.isis.core.commons.internal.base._Lazy;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 
 import lombok.EqualsAndHashCode;
@@ -231,33 +230,6 @@ public interface ManagedObject {
     }
 
     // -- DEPRECATIONS (REFACTORING)
-
-    static void _makePersistentInTransaction(ManagedObject adapter) {
-
-        val spec = adapter.getSpecification();
-        if(spec.isEntity()) {
-            val entityFacet = spec.getFacet(EntityFacet.class);
-            entityFacet.persist(spec, adapter.getPojo());
-            return;
-        }
-
-        throw _Exceptions.illegalArgument("not an entity type %s (sort=%s)", spec.getCorrespondingClass(), spec.getBeanSort());
-    }
-    
-    static void _destroyObjectInTransaction(ManagedObject adapter) {
-        // legacy of
-        //getPersistenceSession().destroyObjectInTransaction(adapter);
-        
-        val spec = adapter.getSpecification();
-        if(spec.isEntity()) {
-            val entityFacet = spec.getFacet(EntityFacet.class);
-            entityFacet.delete(spec, adapter.getPojo());
-            return;
-        }
-
-        throw _Exceptions.unexpectedCodeReach();
-    }
-
 
     static boolean _isParentedCollection(ManagedObject adapter) {
         

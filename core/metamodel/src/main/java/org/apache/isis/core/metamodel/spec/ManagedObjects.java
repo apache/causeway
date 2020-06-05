@@ -280,6 +280,32 @@ public final class ManagedObjects {
             return entityFacet.getEntityState(pojo);
         }
         
+        public static void persistInTransaction(ManagedObject managedObject) {
+            requiresEntity(managedObject);
+            val spec = managedObject.getSpecification();
+            val entityFacet = spec.getFacet(EntityFacet.class);
+            entityFacet.persist(spec, managedObject.getPojo());
+        }
+        
+        public static void destroyInTransaction(ManagedObject managedObject) {
+            requiresEntity(managedObject);
+            val spec = managedObject.getSpecification();
+            val entityFacet = spec.getFacet(EntityFacet.class);
+            entityFacet.delete(spec, managedObject.getPojo());
+        }
+        
+        public static void requiresEntity(ManagedObject managedObject) {
+            if(isNullOrUnspecifiedOrEmpty(managedObject)) {
+                throw _Exceptions.illegalArgument("requires an entity object but got null, unspecified or empty");
+            }
+            val spec = managedObject.getSpecification();
+            if(!spec.isEntity()) {
+                throw _Exceptions.illegalArgument("not an entity type %s (sort=%s)",
+                        spec.getCorrespondingClass(), 
+                        spec.getBeanSort());                
+            }
+        }
+        
         /**
          * @param managedObject
          * @return managedObject

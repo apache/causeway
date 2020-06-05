@@ -50,7 +50,6 @@ import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 
@@ -100,7 +99,7 @@ public class RepositoryServiceDefault implements RepositoryService {
         if(!EntityUtil.isDetached(adapter)) {
             return domainObject;
         }
-        ManagedObject._makePersistentInTransaction(adapter);
+        EntityUtil.persistInTransaction(adapter);
         return domainObject;
     }
 
@@ -119,7 +118,7 @@ public class RepositoryServiceDefault implements RepositoryService {
         }
         val adapter = objectManager.adapt(unwrapped(domainObject));
         if(EntityUtil.isAttached(adapter)) {
-            ManagedObject._destroyObjectInTransaction(adapter);   
+            EntityUtil.destroyInTransaction(adapter);   
         }
     }
 
