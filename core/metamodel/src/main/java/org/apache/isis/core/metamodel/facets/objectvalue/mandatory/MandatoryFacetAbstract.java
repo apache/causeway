@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
 import org.apache.isis.core.metamodel.interactions.ProposedHolder;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 
 import lombok.val;
 
@@ -62,7 +63,7 @@ public abstract class MandatoryFacetAbstract extends FacetAbstract implements Ma
     @Override
     public final boolean isRequiredButNull(final ManagedObject adapter) {
         if(!isInvertedSemantics()) {
-            val pojo = ManagedObject.unwrapSingle(adapter);
+            val pojo = UnwrapUtil.single(adapter);
             
             // special case string handling.
             if(pojo instanceof String) {

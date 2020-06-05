@@ -19,11 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets;
 
-import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
-import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramAssignableFrom;
-import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramAssignableFromValue;
-import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramCount;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -46,9 +41,15 @@ import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+
+import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
+import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramAssignableFrom;
+import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramAssignableFromValue;
+import static org.apache.isis.core.commons.internal.reflection._Reflect.Filter.paramCount;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -117,7 +118,7 @@ public class DomainEventHelper {
                 event = existingEvent;
             } else {
                 // all other phases, create a new event
-                final S source = uncheckedCast(ManagedObject.unwrapSingle(head.getTarget()));
+                final S source = uncheckedCast(UnwrapUtil.single(head.getTarget()));
                 final Object[] arguments = ManagedObject.unwrapMultipleAsArray(argumentAdapters);
                 final Identifier identifier = identified.getIdentifier();
                 event = newActionDomainEvent(eventType, identifier, source, arguments);
@@ -150,7 +151,7 @@ public class DomainEventHelper {
             event.setEventPhase(phase);
 
             if(phase.isExecuted()) {
-                event.setReturnValue(ManagedObject.unwrapSingle(resultAdapter));
+                event.setReturnValue(UnwrapUtil.single(resultAdapter));
             }
 
             metamodelEventService.fireActionDomainEvent(event);
@@ -222,7 +223,7 @@ public class DomainEventHelper {
 
         try {
             final PropertyDomainEvent<S, T> event;
-            final S source = uncheckedCast(ManagedObject.unwrapSingle(head.getTarget()));
+            final S source = uncheckedCast(UnwrapUtil.single(head.getTarget()));
             final Identifier identifier = identified.getIdentifier();
 
             if(existingEvent != null && phase.isExecuted()) {
@@ -315,7 +316,7 @@ public class DomainEventHelper {
                 event = existingEvent;
             } else {
                 // all other phases, create a new event
-                final S source = uncheckedCast(ManagedObject.unwrapSingle(head.getTarget()));
+                final S source = uncheckedCast(UnwrapUtil.single(head.getTarget()));
                 final Identifier identifier = identified.getIdentifier();
                 event = newCollectionDomainEvent(eventType, phase, identifier, source, of, reference);
 

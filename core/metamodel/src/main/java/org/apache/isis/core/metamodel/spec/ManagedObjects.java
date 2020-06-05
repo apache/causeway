@@ -169,8 +169,8 @@ public final class ManagedObjects {
         @SuppressWarnings({ "unchecked", "rawtypes" })
         @Override
         public int compare(@Nullable ManagedObject p, @Nullable ManagedObject q) {
-            val pPojo = ManagedObject.unwrapSingle(p);
-            val qPojo = ManagedObject.unwrapSingle(q);
+            val pPojo = UnwrapUtil.single(p);
+            val qPojo = UnwrapUtil.single(q);
             if(pPojo instanceof Comparable && qPojo instanceof Comparable) {
                 return _NullSafe.compareNullsFirst((Comparable)pPojo, (Comparable)qPojo);
             }
@@ -302,7 +302,7 @@ public final class ManagedObjects {
     
             return CollectionFacet.streamAdapters(collectionAdapter)
                     .filter(VisibilityUtil.filterOn(interactionInitiatedBy))
-                    .map(ManagedObject::unwrapSingle);
+                    .map(UnwrapUtil::single);
         }
         
         public static Object[] visiblePojosAsArray(
@@ -384,7 +384,7 @@ public final class ManagedObjects {
             
             val ppmTuple = MethodExtensions.construct(ppmConstructor, ManagedObject.unwrapMultipleAsArray(pendingArguments));
             val paramPojos = _Arrays.combineWithExplicitType(Object.class, ppmTuple, additionalArguments.toArray());
-            return MethodExtensions.invoke(method, ManagedObject.unwrapSingle(adapter), paramPojos);
+            return MethodExtensions.invoke(method, UnwrapUtil.single(adapter), paramPojos);
         }
         
         public static Object invokeWithPPM(
@@ -396,27 +396,27 @@ public final class ManagedObjects {
         }
         
         public static void invokeAll(Collection<Method> methods, final ManagedObject adapter) {
-            MethodUtil.invoke(methods, ManagedObject.unwrapSingle(adapter));
+            MethodUtil.invoke(methods, UnwrapUtil.single(adapter));
         }
     
         public static Object invoke(Method method, ManagedObject adapter) {
-            return MethodExtensions.invoke(method, ManagedObject.unwrapSingle(adapter));
+            return MethodExtensions.invoke(method, UnwrapUtil.single(adapter));
         }
     
         public static Object invoke(Method method, ManagedObject adapter, Object arg0) {
-            return MethodExtensions.invoke(method, ManagedObject.unwrapSingle(adapter), new Object[] {arg0});
+            return MethodExtensions.invoke(method, UnwrapUtil.single(adapter), new Object[] {arg0});
         }
     
         public static Object invoke(Method method, ManagedObject adapter, Can<ManagedObject> argumentAdapters) {
-            return MethodExtensions.invoke(method, ManagedObject.unwrapSingle(adapter), ManagedObject.unwrapMultipleAsArray(argumentAdapters));
+            return MethodExtensions.invoke(method, UnwrapUtil.single(adapter), ManagedObject.unwrapMultipleAsArray(argumentAdapters));
         }
     
         public static Object invoke(Method method, ManagedObject adapter, ManagedObject arg0Adapter) {
-            return invoke(method, adapter, ManagedObject.unwrapSingle(arg0Adapter));
+            return invoke(method, adapter, UnwrapUtil.single(arg0Adapter));
         }
     
         public static Object invoke(Method method, ManagedObject adapter, ManagedObject[] argumentAdapters) {
-            return MethodExtensions.invoke(method, ManagedObject.unwrapSingle(adapter), ManagedObject.unwrapMultipleAsArray(argumentAdapters));
+            return MethodExtensions.invoke(method, UnwrapUtil.single(adapter), ManagedObject.unwrapMultipleAsArray(argumentAdapters));
         }
 
         /**
@@ -449,7 +449,7 @@ public final class ManagedObjects {
     
             val argArray = adjust(method, pendingArgs, additionalArgValues);
             
-            return MethodExtensions.invoke(method, ManagedObject.unwrapSingle(target), argArray);
+            return MethodExtensions.invoke(method, UnwrapUtil.single(target), argArray);
         }
     
         /**
@@ -478,7 +478,7 @@ public final class ManagedObjects {
             for(int i=0; i<pendingArgsToConsiderCount; i++) {
                 
                 val paramType = parameterTypes[i];
-                val arg = argIterator.hasNext() ? ManagedObject.unwrapSingle(argIterator.next()) : null;
+                val arg = argIterator.hasNext() ? UnwrapUtil.single(argIterator.next()) : null;
                 
                 adjusted[i] = honorPrimitiveDefaults(paramType, arg);
             }
@@ -510,6 +510,20 @@ public final class ManagedObjects {
         }
         
     
+    }
+    
+    // -- UNWRAP UTILITY
+    
+    @UtilityClass
+    public static final class UnwrapUtil {
+        
+        @Nullable
+        public static Object single(@Nullable final ManagedObject adapter) {
+            return ManagedObjects.isSpecified(adapter)
+                    ? adapter.getPojo() 
+                    : null;
+        }
+        
     }
     
 

@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.collections.collection.modify;
 
-import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
-
 import java.util.Collection;
 import java.util.Map;
 
@@ -37,6 +35,9 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemove
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
+
+import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
 
 
 public abstract class CollectionRemoveFromFacetForDomainEventFromAbstract
@@ -76,7 +77,7 @@ implements CollectionRemoveFromFacet {
         }
 
 
-        final Object referencedObject = ManagedObject.unwrapSingle(referencedObjectAdapter);
+        final Object referencedObject = UnwrapUtil.single(referencedObjectAdapter);
 
         // get hold of underlying collection
         // passing null through for authenticationSession/deploymentType means to avoid any visibility filtering.

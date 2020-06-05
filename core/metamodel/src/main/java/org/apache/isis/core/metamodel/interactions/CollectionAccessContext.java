@@ -19,12 +19,11 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import static org.apache.isis.core.metamodel.spec.ManagedObject.unwrapSingle;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.CollectionAccessEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -41,7 +40,7 @@ public class CollectionAccessContext extends AccessContext {
 
     @Override
     public CollectionAccessEvent createInteractionEvent() {
-        return new CollectionAccessEvent(unwrapSingle(getTarget()), getIdentifier());
+        return new CollectionAccessEvent(UnwrapUtil.single(getTarget()), getIdentifier());
     }
 
 }

@@ -41,6 +41,7 @@ import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
 
@@ -250,33 +251,26 @@ public interface ManagedObject {
     // -- UNWRAPPING
 
     @Nullable
-    public static Object unwrapSingle(@Nullable final ManagedObject adapter) {
-        return ManagedObjects.isSpecified(adapter)
-                ? adapter.getPojo() 
-                : null;
-    }
-    
-    @Nullable
     public static Object[] unwrapMultipleAsArray(@NonNull final Can<ManagedObject> adapters) {
-        val unwrappedObjects = _Arrays.mapCollection(adapters.toList(), ManagedObject::unwrapSingle);
+        val unwrappedObjects = _Arrays.mapCollection(adapters.toList(), UnwrapUtil::single);
         return unwrappedObjects;
     }
     
     @Nullable
     public static Object[] unwrapMultipleAsArray(@Nullable final Collection<ManagedObject> adapters) {
-        val unwrappedObjects = _Arrays.mapCollection(adapters, ManagedObject::unwrapSingle);
+        val unwrappedObjects = _Arrays.mapCollection(adapters, UnwrapUtil::single);
         return unwrappedObjects;
     }
 
     @Nullable
     public static Object[] unwrapMultipleAsArray(@Nullable final ManagedObject[] adapters) {
-        val unwrappedObjects = _Arrays.map(adapters, ManagedObject::unwrapSingle);
+        val unwrappedObjects = _Arrays.map(adapters, UnwrapUtil::single);
         return unwrappedObjects;
     }
 
     @Nullable
     public static String unwrapSingleAsStringOrElse(@Nullable final ManagedObject adapter, @Nullable String orElse) {
-        final Object obj = ManagedObject.unwrapSingle(adapter);
+        final Object obj = UnwrapUtil.single(adapter);
         if (obj == null) {
             return null;
         }
@@ -296,7 +290,7 @@ public interface ManagedObject {
             return Collections.emptyList();
         }
         return adapters.stream()
-                .map(ManagedObject::unwrapSingle)
+                .map(UnwrapUtil::single)
                 .collect(_Lists.toUnmodifiable());
     }
     
@@ -310,7 +304,7 @@ public interface ManagedObject {
             return Collections.emptyList();
         }
         return adapters.stream()
-                .map(ManagedObject::unwrapSingle)
+                .map(UnwrapUtil::single)
                 .collect(_Lists.toUnmodifiable());
     }
 
@@ -325,7 +319,7 @@ public interface ManagedObject {
             return Collections.emptySet();
         }
         return adapters.stream()
-                .map(ManagedObject::unwrapSingle)
+                .map(UnwrapUtil::single)
                 .collect(_Sets.toUnmodifiable());
     }
 

@@ -40,6 +40,7 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUt
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -170,7 +171,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
         final Class<?> valueType = valueSpec.getCorrespondingClass();
 
         final ValueWithTypeDto newValue = CommonDtoUtils.newValueWithTypeDto(
-                valueType, ManagedObject.unwrapSingle(valueAdapter), bookmarkService);
+                valueType, UnwrapUtil.single(valueAdapter), bookmarkService);
         propertyDto.setNewValue(newValue);
     }
 

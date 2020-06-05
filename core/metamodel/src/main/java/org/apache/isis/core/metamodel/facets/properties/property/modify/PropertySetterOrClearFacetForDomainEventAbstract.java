@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.properties.property.modify;
 
-import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
-
 import java.util.Map;
 import java.util.Objects;
 
@@ -48,8 +46,11 @@ import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
 import org.apache.isis.core.metamodel.services.publishing.PublisherDispatchService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.ixn.v2.PropertyEditDto;
+
+import static org.apache.isis.core.commons.internal.base._Casts.uncheckedCast;
 
 import lombok.val;
 
@@ -201,8 +202,8 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
         } else {
 
             val targetAdapter = head.getTarget();
-            final Object target = ManagedObject.unwrapSingle(targetAdapter);
-            final Object argValue = ManagedObject.unwrapSingle(newValueAdapter);
+            final Object target = UnwrapUtil.single(targetAdapter);
+            final Object argValue = UnwrapUtil.single(newValueAdapter);
 
             final String targetMember = CommandUtil.targetMemberNameFor(owningProperty);
             final String targetClass = CommandUtil.targetClassNameFor(targetAdapter);
@@ -233,7 +234,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
 
                         // ... post the executing event
                         final Object oldValue = getterFacet.getProperty(targetAdapter, interactionInitiatedBy);
-                        final Object newValue = ManagedObject.unwrapSingle(newValueAdapter);
+                        final Object newValue = UnwrapUtil.single(newValueAdapter);
 
                         final PropertyDomainEvent<?, ?> event =
                                 domainEventHelper.postEventForProperty(

@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 
 public class CollectionRemoveFromFacetViaAccessor extends CollectionRemoveFromFacetAbstract implements ImperativeFacet {
 
@@ -64,7 +65,7 @@ public class CollectionRemoveFromFacetViaAccessor extends CollectionRemoveFromFa
         
         @SuppressWarnings("unchecked")
         final Collection<? super Object> collection = (Collection<? super Object>) ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
-        collection.remove(ManagedObject.unwrapSingle(elementAdapter));
+        collection.remove(UnwrapUtil.single(elementAdapter));
     }
 
     @Override
