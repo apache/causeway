@@ -85,65 +85,91 @@ public final class ManagedObjects {
     
     /**
      * @return whether the corresponding type can be mapped onto a REFERENCE (schema) or an Oid,
-     * that is the type is 'identifiable' (aka 'referencable' or 'bookmarkable') 
+     * that is, the type is 'identifiable' (aka 'referencable' or 'bookmarkable') 
      */
-    public static boolean isIdentifiable(@Nullable ManagedObject adapter) {
-        return spec(adapter)
+    public static boolean isIdentifiable(@Nullable ManagedObject managedObject) {
+        return spec(managedObject)
                 .map(ObjectSpecification::isIdentifiable)
                 .orElse(false);
     }
     
-    public static boolean isEntity(ManagedObject adapter) {
-        return spec(adapter)
+    public static boolean isEntity(ManagedObject managedObject) {
+        return spec(managedObject)
                 .map(ObjectSpecification::isEntity)
                 .orElse(false);
     }
 
-    public static boolean isValue(ManagedObject adapter) {
-        return spec(adapter)
+    public static boolean isValue(ManagedObject managedObject) {
+        return spec(managedObject)
                 .map(ObjectSpecification::isValue)
                 .orElse(false);
     }
     
-    public static Optional<String> getDomainType(ManagedObject adapter) {
-        return spec(adapter)
+    public static Optional<String> getDomainType(ManagedObject managedObject) {
+        return spec(managedObject)
                 .map(ObjectSpecification::getSpecId)
                 .map(ObjectSpecId::asString);
     }
     
     // -- IDENTIFICATION
     
-    public static Optional<ObjectSpecification> spec(@Nullable ManagedObject adapter) {
-        return isSpecified(adapter) ? Optional.of(adapter.getSpecification()) : Optional.empty(); 
+    public static Optional<ObjectSpecification> spec(@Nullable ManagedObject managedObject) {
+        return isSpecified(managedObject) ? Optional.of(managedObject.getSpecification()) : Optional.empty(); 
     }
     
-    public static Optional<RootOid> identify(@Nullable ManagedObject adapter) {
-        return isSpecified(adapter) ? adapter.getRootOid() : Optional.empty(); 
+    public static Optional<RootOid> identify(@Nullable ManagedObject managedObject) {
+        return isSpecified(managedObject) ? managedObject.getRootOid() : Optional.empty(); 
     }
     
-    public static RootOid identifyElseFail(@Nullable ManagedObject adapter) {
-        return identify(adapter)
-                .orElseThrow(()->_Exceptions.illegalArgument("cannot identify %s", adapter));
+    public static RootOid identifyElseFail(@Nullable ManagedObject managedObject) {
+        return identify(managedObject)
+                .orElseThrow(()->_Exceptions.illegalArgument("cannot identify %s", managedObject));
     }
     
-    public static Optional<Bookmark> bookmark(@Nullable ManagedObject adapter) {
-        return identify(adapter)
+    public static Optional<Bookmark> bookmark(@Nullable ManagedObject managedObject) {
+        return identify(managedObject)
                 .map(RootOid::asBookmark);
     }
     
-    public static Bookmark bookmarkElseFail(@Nullable ManagedObject adapter) {
-        return bookmark(adapter)
-                .orElseThrow(()->_Exceptions.illegalArgument("cannot bookmark %s", adapter));
+    public static Bookmark bookmarkElseFail(@Nullable ManagedObject managedObject) {
+        return bookmark(managedObject)
+                .orElseThrow(()->_Exceptions.illegalArgument("cannot bookmark %s", managedObject));
     }
     
-    public static Optional<String> stringify(@Nullable ManagedObject adapter) {
-        return identify(adapter)
+    /**
+     * @param managedObject
+     * @return optionally a String representing a reference to the <em>identifiable</em> 
+     * {@code managedObject}, usually made up of the object's type and its ID.
+     */
+    public static Optional<String> stringify(@Nullable ManagedObject managedObject) {
+        return identify(managedObject)
                 .map(RootOid::enString);
     }
     
-    public static String stringifyElseFail(@Nullable ManagedObject adapter) {
-        return stringify(adapter)
-                .orElseThrow(()->_Exceptions.illegalArgument("cannot stringify %s", adapter));
+    public static String stringifyElseFail(@Nullable ManagedObject managedObject) {
+        return stringify(managedObject)
+                .orElseThrow(()->_Exceptions.illegalArgument("cannot stringify %s", managedObject));
+    }
+    
+    /**
+     * 
+     * @param managedObject
+     * @param separator custom separator
+     * @return optionally a String representing a reference to the <em>identifiable</em> 
+     * {@code managedObject}, made of the form &lt;object-type&gt; &lt;separator&gt; &lt;object-id&gt;.
+     */
+    public static Optional<String> stringify(
+            @Nullable ManagedObject managedObject, 
+            @NonNull final String separator) {
+        return identify(managedObject)
+                .map(rootOid->rootOid.getObjectSpecId() + separator + rootOid.getIdentifier());
+    }
+
+    public static String stringifyElseFail(
+            @Nullable ManagedObject managedObject, 
+            @NonNull final String separator) {
+        return stringify(managedObject, separator)
+                .orElseThrow(()->_Exceptions.illegalArgument("cannot stringify %s", managedObject));
     }
 
 

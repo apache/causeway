@@ -239,11 +239,6 @@ public interface ManagedObject {
 
     // -- DEPRECATIONS (REFACTORING)
 
-    static String _instanceId(ManagedObject adapter) {
-        val identifier = ManagedObjects.identifyElseFail(adapter).getIdentifier();
-        return identifier; 
-    }
-    
     static void _whenFirstIsBookmarkable_ensureSecondIsAsWell(
             ManagedObject first,
             ManagedObject second) {
