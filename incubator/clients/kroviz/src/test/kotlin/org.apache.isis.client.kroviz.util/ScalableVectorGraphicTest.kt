@@ -2,10 +2,12 @@ package org.apache.isis.client.kroviz.util
 
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.PUML_SVG
 import org.apache.isis.client.kroviz.utils.ScalableVectorGraphic
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ScalableVectorGraphicTest {
 
+    @Test
     fun testViewBox() {
         //given
         val response = PUML_SVG.str
@@ -19,6 +21,7 @@ class ScalableVectorGraphicTest {
         assertEquals(203, viewBox.height)
     }
 
+    @Test
     fun testScaleUp() {
         //given
         val response = PUML_SVG.str
@@ -27,9 +30,14 @@ class ScalableVectorGraphicTest {
         svg.scaleUp()
 
         // then
-        //TODO extract transform/translate x,y and compare against values calculated
-        // assertEquals((203 * 1.1).toInt(), svg.viewBox.height)
-        //assertEquals((309 * 1.1).toInt(), svg.viewBox.width)
+        val w2 = svg.viewBox.width / 2
+        val h2 = svg.viewBox.height / 2
+        val s = 1.1
+        val x = w2 * s - w2
+        val y = h2 * s - h2
+
+        assertEquals(x, svg.x)
+        assertEquals(y, svg.y)
     }
 
 }

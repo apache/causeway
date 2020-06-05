@@ -15,10 +15,11 @@ import pl.treksoft.kvision.html.ButtonStyle
 import pl.treksoft.kvision.navbar.*
 import pl.treksoft.kvision.panel.SimplePanel
 import pl.treksoft.kvision.panel.vPanel
+import kotlin.browser.window
 
 object RoMenuBar : SimplePanel() {
     lateinit var navbar: Navbar
-    lateinit var nav: Nav
+    private lateinit var nav: Nav
 
     init {
         vPanel {
@@ -72,7 +73,6 @@ object RoMenuBar : SimplePanel() {
         menuBars.primary.menu.forEach { m ->
             nav.add(MenuFactory.buildFor(m))
         }
-        //TODO handle secondary / tertiary as well
         nav.add(MenuFactory.buildFor(menuBars.secondary.menu.first()))
         nav.add(MenuFactory.buildFor(menuBars.tertiary.menu.first()))
     }
@@ -80,6 +80,9 @@ object RoMenuBar : SimplePanel() {
     private fun logoButton() {
         val classes = setOf("logo-button-image", "logo-button")
         val logo = Button("", style = ButtonStyle.LINK, classes = classes)
+                .onClick {
+                    window.open("https://isis.apache.org")
+                }
         nav.add(logo)
     }
 

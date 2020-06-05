@@ -25,7 +25,7 @@ object RoStatusBar {
     private val userBtn: Button = buildButton("", "Me", ButtonStyle.OUTLINEWARNING)
     private val umlDiagram = buildButton("", "Diagram", ButtonStyle.OUTLINEWARNING)
     private val lastError = buildButton("OK", "OK", ButtonStyle.OUTLINESUCCESS)
-    private val alert = buildButton("", "Notification", ButtonStyle.OUTLINESUCCESS)
+    private val alert = buildButton("", "Notification", ButtonStyle.OUTLINEINFO)
 
     private fun buildButton(text: String, iconName: String, style: ButtonStyle): Button {
         return Button(
@@ -57,15 +57,19 @@ object RoStatusBar {
     fun updateUser(user: String) {
         userBtn.setAttribute(name = "title", value = user)
         userBtn.style = ButtonStyle.OUTLINESUCCESS
-        notify(user)
     }
 
-    fun notify(text: String) {
+    private fun notify(text: String) {
         alert.setAttribute(name = "title", value = text)
         alert.style = ButtonStyle.OUTLINEDANGER
         alert.onClick {
             NotificationDialog(text).open()
         }
+    }
+
+    fun acknowledge() {
+        alert.setAttribute(name = "title", value = "no new notifications")
+        alert.style = ButtonStyle.OUTLINELIGHT
     }
 
     fun update(le: LogEntry?) {
@@ -89,6 +93,7 @@ object RoStatusBar {
         lastError.text = text
         lastError.style = ButtonStyle.OUTLINEDANGER
         lastError.icon = IconManager.find("Error")
+        notify(text)
     }
 
 }

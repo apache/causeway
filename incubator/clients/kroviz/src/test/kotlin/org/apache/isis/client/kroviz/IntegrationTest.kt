@@ -8,6 +8,7 @@ import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
+import org.apache.isis.client.kroviz.handler.ResponseHandler
 import org.apache.isis.client.kroviz.snapshots.Response
 import org.apache.isis.client.kroviz.to.Method
 import org.apache.isis.client.kroviz.ui.kv.UiManager
@@ -35,6 +36,8 @@ open class IntegrationTest {
             xhr.send() // there will be a 'pause' here until the response comes.
         } catch (e: Throwable) {
             return false
+        }  finally {
+
         }
         val answer = xhr.status.equals(200)
         return answer
@@ -54,7 +57,7 @@ open class IntegrationTest {
                 "",
                 aggregator)
         val le = EventStore.end(reSpec, str)!!
-        org.apache.isis.client.kroviz.handler.ResponseHandler.handle(le)
+        ResponseHandler.handle(le)
         wait(100)
         return le
     }

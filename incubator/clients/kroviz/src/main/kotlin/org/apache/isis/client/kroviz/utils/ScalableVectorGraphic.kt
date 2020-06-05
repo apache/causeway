@@ -16,6 +16,8 @@ class ScalableVectorGraphic(val data: String) {
     lateinit var viewBox: ViewBox
     private var scale: Double = 1.0
     private val defaultFactor = 0.1
+    var x: Double = 0.0
+    var y: Double = 0.0
 
     init {
         root = document.rootElement!!
@@ -43,8 +45,8 @@ class ScalableVectorGraphic(val data: String) {
         // the bigger img gets, the bigger x,y must be
         val w2 = viewBox.width / 2
         val h2 = viewBox.height / 2
-        val x = w2 * s - w2
-        val y = h2 * s - h2
+        x = w2 * s - w2
+        y = h2 * s - h2
         // svg origin is center (50% 50%) - x,y adjust it to top left
         // translate needs to 'set' be before scale
         root.setAttribute("transform", "translate($x $y) scale($s)")
