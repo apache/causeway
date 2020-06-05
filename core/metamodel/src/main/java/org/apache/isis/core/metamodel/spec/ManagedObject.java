@@ -229,15 +229,4 @@ public interface ManagedObject {
 
     }
 
-    // -- DEPRECATIONS (REFACTORING)
-
-    static boolean _isParentedCollection(ManagedObject adapter) {
-        
-        //legacy of (FIXME not a perfect match)
-        //getOid() instanceof ParentedOid;
-        
-        return adapter.getSpecification().getBeanSort().isCollection();
-    }
-
-
 }

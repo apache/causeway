@@ -571,14 +571,18 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         if (getEntityState(pojo).isAttached()) {
             throw new NotPersistableException("Object already persistent: " + adapter);
         }
-        if (ManagedObject._isParentedCollection(adapter)) {
-            //or should we just ignore this?
-            throw new NotPersistableException("Cannot persist parented collection: " + adapter);
-        }
         val spec = adapter.getSpecification();
         if (spec.isManagedBean()) {
             throw new NotPersistableException("Can only persist entity beans: "+ adapter);
         }
+        if (spec.getBeanSort().isCollection()) {
+            //(FIXME not a perfect match) 
+            //legacy of ... 
+            //getOid() instanceof ParentedOid;
+            //or should we just ignore this?
+            throw new NotPersistableException("Cannot persist parented collection: " + adapter);
+        }
+        
         transactionService.executeWithinTransaction(()->{
             log.debug("persist {}", adapter);               
             val createObjectCommand = newCreateObjectCommand(adapter);
