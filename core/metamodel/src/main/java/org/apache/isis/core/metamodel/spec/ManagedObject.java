@@ -24,13 +24,11 @@ import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.core.commons.internal.base._Lazy;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -233,27 +231,6 @@ public interface ManagedObject {
     }
 
     // -- DEPRECATIONS (REFACTORING)
-
-    static ManagedObject _newTransientInstance(ObjectSpecification spec) {
-        if(spec == null) {
-            return null;
-        }
-        return spec.createObject();
-    }
-
-    @Deprecated
-    static ManagedObject _adapterOfList(SpecificationLoader specificationLoader, DomainObjectList list) {
-
-        if(list == null) {
-            return null;
-        }
-
-        val spec = specificationLoader.loadSpecification(list.getClass());
-        return ManagedObject.of(spec, list);
-
-        // legacy of
-        // resourceContext.adapterOfPojo(list);
-    }
 
     static void _makePersistentInTransaction(ManagedObject adapter) {
 
