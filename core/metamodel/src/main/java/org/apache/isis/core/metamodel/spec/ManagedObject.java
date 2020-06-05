@@ -30,7 +30,6 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.EqualsAndHashCode;
@@ -236,18 +235,10 @@ public interface ManagedObject {
     // -- DEPRECATIONS (REFACTORING)
 
     static ManagedObject _newTransientInstance(ObjectSpecification spec) {
-
         if(spec == null) {
             return null;
         }
-
-        val mmc = spec.getMetaModelContext();
-
-        val objectCreateRequest = ObjectCreator.Request.of(spec);
-        val managedObject = mmc.getObjectManager().createObject(objectCreateRequest);
-
-        return managedObject;
-
+        return spec.createObject();
     }
 
     @Deprecated

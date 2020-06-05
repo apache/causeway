@@ -82,7 +82,7 @@ class ObjectAdapterContext_ObjectCreation {
         if(variant == Variant.VIEW_MODEL) {
             pojo = recreateViewModel(spec, memento);
         } else {
-            pojo = objectAdapterContext.instantiateAndInjectServices(spec);
+            pojo = spec.createObject();
 
         }
 
@@ -98,7 +98,7 @@ class ObjectAdapterContext_ObjectCreation {
 
         final Object viewModelPojo;
         if(facet.getRecreationMechanism().isInitializes()) {
-            viewModelPojo = objectAdapterContext.instantiateAndInjectServices(spec);
+            viewModelPojo = spec.createObject();
             facet.initialize(viewModelPojo, memento);
         } else {
             viewModelPojo = facet.instantiate(spec.getCorrespondingClass(), memento);

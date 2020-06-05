@@ -57,6 +57,8 @@ import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer;
@@ -449,6 +451,17 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
         return isManagedBean() || isViewModel() || isEntity();
     }
     
+    /**
+     * Delegates to {@link ObjectManager#createObject(org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator.Request)}
+     * @since 2.0
+     */
+    default ManagedObject createObject() {
+        val mmc = getMetaModelContext();
+        val objectCreateRequest = ObjectCreator.Request.of(this);
+        val managedObject = mmc.getObjectManager().createObject(objectCreateRequest);
+        return managedObject;
+    }
+    
     // -- TYPE COMPATIBILITY UTILITIES
     
     default public void assertPojoCompatible(@Nullable Object pojo) {
@@ -487,6 +500,8 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
                 .filter(element->!Objects.equals(element, pojo)) // to prevent infinite recursion depth
                 .allMatch(elementSpec::isPojoCompatible);
     }
+
+    
     
 
 }
