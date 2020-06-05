@@ -51,6 +51,7 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 
 import lombok.val;
 
@@ -172,7 +173,7 @@ public class RepositoryServiceDefault implements RepositoryService {
         
         val queryRequest = ObjectBulkLoader.Request.of(resultTypeSpec, query);
         val allMatching = objectManager.queryObjects(queryRequest);
-        return _Casts.uncheckedCast(ManagedObject.unwrapMultipleAsList(allMatching));
+        return _Casts.uncheckedCast(UnwrapUtil.multipleAsList(allMatching));
     }
 
     @Override

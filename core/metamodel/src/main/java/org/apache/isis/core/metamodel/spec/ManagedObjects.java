@@ -27,6 +27,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -39,6 +40,8 @@ import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.assertions._Assert;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Arrays;
+import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
@@ -517,6 +520,8 @@ public final class ManagedObjects {
     @UtilityClass
     public static final class UnwrapUtil {
         
+        // -- SINGLE
+        
         @Nullable
         public static Object single(@Nullable final ManagedObject adapter) {
             return ManagedObjects.isSpecified(adapter)
@@ -536,6 +541,8 @@ public final class ManagedObjects {
             return orElse;
         }
         
+        // -- AS ARRAY
+        
         @Nullable
         public static Object[] multipleAsArray(@NonNull final Can<ManagedObject> adapters) {
             val unwrappedObjects = _Arrays.mapCollection(adapters.toList(), UnwrapUtil::single);
@@ -552,6 +559,51 @@ public final class ManagedObjects {
         public static Object[] multipleAsArray(@Nullable final ManagedObject[] adapters) {
             val unwrappedObjects = _Arrays.map(adapters, UnwrapUtil::single);
             return unwrappedObjects;
+        }
+        
+        // -- AS LIST
+
+        /**
+         * 
+         * @param adapters
+         * @return non-null, unmodifiable
+         */
+        public static List<Object> multipleAsList(@Nullable final Collection<? extends ManagedObject> adapters) {
+            if (adapters == null) {
+                return Collections.emptyList();
+            }
+            return adapters.stream()
+                    .map(UnwrapUtil::single)
+                    .collect(_Lists.toUnmodifiable());
+        }
+        
+        /**
+         * 
+         * @param adapters
+         * @return non-null, unmodifiable
+         */
+        public static List<Object> multipleAsList(@Nullable final Can<? extends ManagedObject> adapters) {
+            if (adapters == null) {
+                return Collections.emptyList();
+            }
+            return adapters.stream()
+                    .map(UnwrapUtil::single)
+                    .collect(_Lists.toUnmodifiable());
+        }
+
+
+        /**
+         * 
+         * @param adapters
+         * @return non-null, unmodifiable
+         */
+        public static Set<Object> multipleAsSet(@Nullable final Collection<? extends ManagedObject> adapters) {
+            if (adapters == null) {
+                return Collections.emptySet();
+            }
+            return adapters.stream()
+                    .map(UnwrapUtil::single)
+                    .collect(_Sets.toUnmodifiable());
         }
         
     }

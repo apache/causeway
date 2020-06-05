@@ -19,28 +19,20 @@
 
 package org.apache.isis.core.metamodel.spec;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.applib.services.repository.EntityState;
-import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Lazy;
-import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
-import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
 
@@ -245,51 +237,6 @@ public interface ManagedObject {
             Object pojo) {
 
         return new LazyManagedObject(specLoader, pojo);
-    }
-
-    // -- UNWRAPPING
-
-    /**
-     * 
-     * @param adapters
-     * @return non-null, unmodifiable
-     */
-    public static List<Object> unwrapMultipleAsList(@Nullable final Collection<? extends ManagedObject> adapters) {
-        if (adapters == null) {
-            return Collections.emptyList();
-        }
-        return adapters.stream()
-                .map(UnwrapUtil::single)
-                .collect(_Lists.toUnmodifiable());
-    }
-    
-    /**
-     * 
-     * @param adapters
-     * @return non-null, unmodifiable
-     */
-    public static List<Object> unwrapMultipleAsList(@Nullable final Can<? extends ManagedObject> adapters) {
-        if (adapters == null) {
-            return Collections.emptyList();
-        }
-        return adapters.stream()
-                .map(UnwrapUtil::single)
-                .collect(_Lists.toUnmodifiable());
-    }
-
-
-    /**
-     * 
-     * @param adapters
-     * @return non-null, unmodifiable
-     */
-    public static Set<Object> unwrapMultipleAsSet(@Nullable final Collection<? extends ManagedObject> adapters) {
-        if (adapters == null) {
-            return Collections.emptySet();
-        }
-        return adapters.stream()
-                .map(UnwrapUtil::single)
-                .collect(_Sets.toUnmodifiable());
     }
 
     // -- DEPRECATIONS (REFACTORING)
