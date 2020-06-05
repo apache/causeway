@@ -293,7 +293,7 @@ public final class ManagedObjects {
                 _Assert.assertEquals(
                         EntityState.PERSISTABLE_ATTACHED, 
                         entityState,
-                        ()-> String.format("entity %s is required to be attached (not detached) at this stage", 
+                        ()-> String.format("entity %s is required to be attached (not detached)", 
                                 managedObject.getSpecification().getSpecId()));
             }
             return managedObject;
@@ -324,6 +324,26 @@ public final class ManagedObjects {
                     objectIdentifier.get());
             
             return managedObject.getObjectManager().loadObject(objectLoadRequest);
+        }
+        
+        public static void requiresWhenFirstIsBookmarkableSecondIsAttached(
+                ManagedObject first,
+                ManagedObject second) {
+
+            if(!ManagedObjects.isIdentifiable(first) || !ManagedObjects.isSpecified(second)) {
+                return;
+            }
+            val secondSpec = second.getSpecification();
+            if(secondSpec.isParented() || !secondSpec.isEntity()) {
+                return;
+            }
+
+            if(!EntityUtil.getEntityState(second).isAttached()) {
+                throw _Exceptions.illegalArgument(
+                        "can't set a reference to a transient object [%s] from a persistent one [%s]",
+                        second,
+                        first.titleString(null));
+            }
         }
         
         // -- SHORTCUTS

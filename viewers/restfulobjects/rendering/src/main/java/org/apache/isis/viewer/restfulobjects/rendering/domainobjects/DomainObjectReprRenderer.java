@@ -281,18 +281,6 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         getLinks().arrayAdd(link);
     }
 
-//    private String getDomainType() {
-//        return ManagedObjects.getDomainType(objectAdapter).orElse("?");
-//    }
-//
-//    private String getInstanceId() {
-//        return ManagedObject._instanceId(objectAdapter);
-//    }
-
-//    private String getOidStr() {
-//        return ManagedObjects.stringifyElseFail(objectAdapter);
-//    }
-
     private DomainObjectReprRenderer withMembers(final ManagedObject objectAdapter) {
         final JsonRepresentation appendTo =
                 mode.isUpdatePropertiesLinkArgs() ? representation : JsonRepresentation.newMap();

@@ -43,6 +43,7 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
@@ -196,7 +197,7 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
         }
         if (readWrite()) {
             
-            ManagedObject._whenFirstIsBookmarkable_ensureSecondIsAsWell(
+            EntityUtil.requiresWhenFirstIsBookmarkableSecondIsAttached(
                     ownerAdapter, 
                     referencedAdapter);
                     

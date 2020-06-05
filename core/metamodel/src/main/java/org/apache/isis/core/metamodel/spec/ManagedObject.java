@@ -25,7 +25,6 @@ import java.util.function.Function;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.domain.DomainObjectList;
-import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.core.commons.internal.base._Lazy;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -33,7 +32,6 @@ import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
-import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
 
@@ -238,30 +236,6 @@ public interface ManagedObject {
     }
 
     // -- DEPRECATIONS (REFACTORING)
-
-    static void _whenFirstIsBookmarkable_ensureSecondIsAsWell(
-            ManagedObject first,
-            ManagedObject second) {
-
-        if(ManagedObjects.isIdentifiable(first) && ManagedObjects.isSpecified(second)) {
-
-            val refSpec = second.getSpecification();
-
-            if(refSpec.isParented() || !refSpec.isEntity()) {
-                return;
-            }
-
-            val entityState = EntityUtil.getEntityState(second);
-            if(entityState != EntityState.PERSISTABLE_ATTACHED) {
-                throw _Exceptions.illegalArgument(
-                        "can't set a reference to a transient object [%s] from a persistent one [%s]",
-                        second,
-                        first.titleString(null));
-            }
-            
-        }
-
-    }
 
     // move this to ObjectManager?
     static ManagedObject _adapterOfRootOid(SpecificationLoader specificationLoader, RootOid rootOid) {
