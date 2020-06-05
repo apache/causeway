@@ -746,9 +746,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     public void enlistCreatedAndRemapIfRequiredThenInvokeIsisInvokePersistingOrUpdatedCallback(final Persistable pojo) {
         val adapter = adapterFor(pojo);
         
-        val state = EntityUtil.getEntityState(adapter);
-
-        if (state.isAttached()) {
+        if (EntityUtil.isAttached(adapter)) {
             // updating;
             // the callback and transaction.enlist are done in the preDirty callback
             // (can't be done here, as the enlist requires to capture the 'before' values)

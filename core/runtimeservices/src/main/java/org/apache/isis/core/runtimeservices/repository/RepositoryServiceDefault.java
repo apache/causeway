@@ -81,8 +81,7 @@ public class RepositoryServiceDefault implements RepositoryService {
     @Override
     public EntityState getEntityState(@Nullable final Object object) {
         val adapter = objectManager.adapt(unwrapped(object));
-        val entityState = EntityUtil.getEntityState(adapter);
-        return entityState;
+        return EntityUtil.getEntityState(adapter);
     }
     
     @Override
@@ -97,9 +96,8 @@ public class RepositoryServiceDefault implements RepositoryService {
         if(adapter == null) {
             throw new PersistFailedException("Object not known to framework (unable to create/obtain an adapter)");
         }
-        val entityState = EntityUtil.getEntityState(adapter);
-        val skip = !entityState.isDetached(); // only persist detached entities, otherwise skip
-        if(skip) {
+        // only persist detached entities, otherwise skip
+        if(!EntityUtil.isDetached(adapter)) {
             return domainObject;
         }
         ManagedObject._makePersistentInTransaction(adapter);
@@ -120,8 +118,7 @@ public class RepositoryServiceDefault implements RepositoryService {
             return; // noop
         }
         val adapter = objectManager.adapt(unwrapped(domainObject));
-        val entityState = EntityUtil.getEntityState(adapter);
-        if(entityState.isAttached()) {
+        if(EntityUtil.isAttached(adapter)) {
             ManagedObject._destroyObjectInTransaction(adapter);   
         }
     }

@@ -338,7 +338,7 @@ public final class ManagedObjects {
                 return;
             }
 
-            if(!EntityUtil.getEntityState(second).isAttached()) {
+            if(!EntityUtil.isAttached(second)) {
                 throw _Exceptions.illegalArgument(
                         "can't set a reference to a transient object [%s] from a persistent one [%s]",
                         second,
@@ -347,6 +347,14 @@ public final class ManagedObjects {
         }
         
         // -- SHORTCUTS
+        
+        public static boolean isAttached(@Nullable ManagedObject adapter) {
+            return EntityUtil.getEntityState(adapter).isAttached();
+        }
+        
+        public static boolean isDetached(@Nullable ManagedObject adapter) {
+            return EntityUtil.getEntityState(adapter).isDetached();
+        }
         
         public static boolean isDestroyed(@Nullable ManagedObject adapter) {
             return EntityUtil.getEntityState(adapter).isDestroyed();
