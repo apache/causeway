@@ -1,6 +1,4 @@
-package org.apache.isis.client.kroviz.ui
-
-import org.apache.isis.client.kroviz.utils.Utils
+package org.apache.isis.client.kroviz.utils
 
 object IconManager {
     val PREFIX = "fas fa-"

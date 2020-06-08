@@ -5,7 +5,7 @@ import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Member
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.mb.Menu
-import org.apache.isis.client.kroviz.ui.IconManager
+import org.apache.isis.client.kroviz.utils.IconManager
 import org.apache.isis.client.kroviz.utils.Utils
 import pl.treksoft.kvision.core.Component
 import pl.treksoft.kvision.dropdown.Direction

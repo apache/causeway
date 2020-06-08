@@ -21,18 +21,18 @@ data class TObject(val links: List<Link> = emptyList(),
 
     private fun getMembersOfType(type: String): MutableList<Member> {
         val result = mutableListOf<Member>()
-        for (m in members) {
-            if (m.value.memberType == type) {
-                result.add(m.value)
+        members.forEach {
+            if (it.value.memberType == type) {
+                result.add(it.value)
             }
         }
         return result
     }
 
     fun getProperty(key: String): Member? {
-        for (m in members) {
-            if (m.key == key) {
-                return m.value
+        members.forEach {
+            if (it.key == key) {
+                return it.value
             }
         }
         return null

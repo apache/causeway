@@ -2,7 +2,9 @@ package org.apache.isis.client.kroviz.ui.kv
 
 import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.*
+import org.apache.isis.client.kroviz.utils.Point
 import org.apache.isis.client.kroviz.utils.Direction
+import org.apache.isis.client.kroviz.utils.IconManager
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.core.Widget

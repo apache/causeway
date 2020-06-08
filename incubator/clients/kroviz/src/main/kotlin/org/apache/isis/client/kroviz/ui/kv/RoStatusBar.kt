@@ -4,7 +4,7 @@ import org.apache.isis.client.kroviz.core.event.EventState
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.model.DiagramDM
 import org.apache.isis.client.kroviz.ui.ClassDiagram
-import org.apache.isis.client.kroviz.ui.IconManager
+import org.apache.isis.client.kroviz.utils.IconManager
 import org.apache.isis.client.kroviz.ui.ImageDialog
 import org.apache.isis.client.kroviz.ui.NotificationDialog
 import pl.treksoft.kvision.core.*

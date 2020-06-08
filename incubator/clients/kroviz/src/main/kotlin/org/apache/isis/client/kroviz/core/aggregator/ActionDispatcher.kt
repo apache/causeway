@@ -4,7 +4,7 @@ import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.to.Action
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Method
-import org.apache.isis.client.kroviz.ui.Point
+import org.apache.isis.client.kroviz.utils.Point
 import org.apache.isis.client.kroviz.ui.kv.ActionPrompt
 import org.apache.isis.client.kroviz.utils.Utils
 

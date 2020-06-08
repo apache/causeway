@@ -3,8 +3,8 @@ package org.apache.isis.client.kroviz.ui.kv
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.ExportDialog
-import org.apache.isis.client.kroviz.ui.IconManager
-import org.apache.isis.client.kroviz.ui.Point
+import org.apache.isis.client.kroviz.utils.IconManager
+import org.apache.isis.client.kroviz.utils.Point
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.dropdown.DropDown

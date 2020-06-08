@@ -3,6 +3,7 @@ package org.apache.isis.client.kroviz.ui.kv
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.ui.Command
 import org.apache.isis.client.kroviz.ui.FormItem
+import org.apache.isis.client.kroviz.utils.Point
 import pl.treksoft.kvision.form.text.Password
 import pl.treksoft.kvision.form.text.Text
 
@@ -15,7 +16,7 @@ class LoginPrompt : Command() {
     private var username = "sven"
     private var password = "pass"
 
-    fun open(at: org.apache.isis.client.kroviz.ui.Point) {
+    fun open(at: Point) {
         val formItems = mutableListOf<FormItem>()
         formItems.add(FormItem("Url", "Text", url))
         formItems.add(FormItem("User", "Text", username))

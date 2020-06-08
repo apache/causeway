@@ -1,6 +1,6 @@
 package org.apache.isis.client.kroviz.ui.kv
 
-import org.apache.isis.client.kroviz.ui.IconManager
+import org.apache.isis.client.kroviz.utils.IconManager
 import pl.treksoft.kvision.core.Component
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT

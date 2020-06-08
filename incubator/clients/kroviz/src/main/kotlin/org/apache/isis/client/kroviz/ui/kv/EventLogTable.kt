@@ -67,7 +67,7 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
         val options = TabulatorOptions(
                 movableColumns = true,
                 height = "calc(100vh - 128px)",
-                layout = Layout.FITDATAFILL,
+                layout = Layout.FITCOLUMNS,
                 columns = columns,
                 persistenceMode = false
         )

@@ -1,8 +1,10 @@
 package org.apache.isis.client.kroviz.ui.kv
 
+import org.apache.isis.client.kroviz.core.model.Exposer
+import org.apache.isis.client.kroviz.handler.TObjectHandler
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.BrowserWindow
-import org.apache.isis.client.kroviz.ui.IconManager
+import org.apache.isis.client.kroviz.utils.IconManager
 import pl.treksoft.kvision.core.*
 import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.ButtonStyle
@@ -12,44 +14,38 @@ import pl.treksoft.kvision.panel.VPanel
 object RoToolPanel : SimplePanel() {
 
     val panel = VPanel()
-    val buttons = mutableListOf<Button>()
+    private val buttons = mutableListOf<Button>()
 
     init {
         panel.marginTop = CssSize(40, UNIT.px)
         panel.width = CssSize(40, UNIT.px)
         panel.height = CssSize(100, UNIT.perc)
         panel.background = Background(color = Color.name(Col.LIGHTBLUE))
-        panel.setDragDropData("text/plain", "element")
+        panel.setDropTarget("text/plain") { data ->
+            console.log("[RoToolPanel] panel")
+            console.log(data)
+            val jsonStr = CFG.str
+            val to = TObjectHandler().parse(jsonStr) as TObject
+            val exp= Exposer(to)
+            addButton(exp)
+        }
+
         initButtons()
         panel.addAll(buttons)
     }
 
     private fun initButtons() {
-        val drop: Button = Button(
-                text = "",
-                icon = IconManager.find("Toolbox"),
-                style = ButtonStyle.LIGHT).apply {
-            padding = CssSize(-16, UNIT.px)
-            margin = CssSize(0, UNIT.px)
-            title = "Sample drop target"
-            setDropTarget("text/plain") { data ->
-                console.log("[RoToolPanel]")
-                console.log(data)
-                val obj = data.dataTransfer?.getData("text/plain")!!
-                BrowserWindow("http://isis.apache.org").open()
-            }
+        val drop: Button = buildButton("Toolbox", "Sample drop target")
+        drop.setDropTarget("text/plain") { data ->
+            console.log("[RoToolPanel]")
+            console.log(data)
+            val obj = data.dataTransfer?.getData("text/plain")!!
+            BrowserWindow("http://isis.apache.org").open()
         }
         buttons.add(drop)
         //
-        val drag = Button(
-                text = "",
-                icon = IconManager.find("Object"),
-                style = ButtonStyle.LIGHT).apply {
-            padding = CssSize(-16, UNIT.px)
-            margin = CssSize(0, UNIT.px)
-            title = "Sample drag object"
-            setDragDropData("text/plain", "element")
-        }
+        val drag = buildButton("Object", "Sample drag object")
+        drag.setDragDropData("text/plain", "element")
         buttons.add(drag)
     }
 
@@ -69,8 +65,21 @@ object RoToolPanel : SimplePanel() {
         return super.show()
     }
 
-    fun addButton(obj: TObject) {
+    private fun addButton(exp: Exposer) {
+        val b = buildButton(exp.iconName, "dynamic sample")
+        buttons.add(b)
+        panel.add(b)
+    }
 
+    private fun buildButton(iconName: String, toolTip: String): Button {
+        return Button(
+                text = "",
+                icon = IconManager.find(iconName),
+                style = ButtonStyle.LIGHT).apply {
+            padding = CssSize(-16, UNIT.px)
+            margin = CssSize(0, UNIT.px)
+            title = toolTip
+        }
     }
 
 }

@@ -5,7 +5,7 @@ import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Parameter
 import org.apache.isis.client.kroviz.ui.Command
 import org.apache.isis.client.kroviz.ui.FormItem
-import org.apache.isis.client.kroviz.ui.Point
+import org.apache.isis.client.kroviz.utils.Point
 import org.apache.isis.client.kroviz.utils.Utils
 import pl.treksoft.kvision.core.StringPair
 import pl.treksoft.kvision.form.select.SimpleSelect

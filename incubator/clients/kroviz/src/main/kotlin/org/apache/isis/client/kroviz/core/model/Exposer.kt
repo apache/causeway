@@ -3,7 +3,7 @@ package org.apache.isis.client.kroviz.core.model
 import kotlinx.serialization.Serializable
 import org.apache.isis.client.kroviz.to.MemberType
 import org.apache.isis.client.kroviz.to.TObject
-import org.apache.isis.client.kroviz.ui.IconManager
+import org.apache.isis.client.kroviz.utils.IconManager
 
 /**
  * Makes properties of delegate available for display in Lists.
