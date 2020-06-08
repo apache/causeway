@@ -25,9 +25,7 @@ object RoStatusBar {
     private val userBtn: Button = buildButton("", "Me", ButtonStyle.OUTLINEWARNING)
     private val umlDiagram = buildButton("", "Diagram", ButtonStyle.OUTLINEWARNING)
     private val lastError = buildButton("OK", "OK", ButtonStyle.OUTLINESUCCESS)
-    private val alert = buildButton("", "Notification", ButtonStyle.OUTLINEINFO)
-    private val drag = buildButton("", "Objects", ButtonStyle.OUTLINEINFO)
-    private val drop = buildButton("", "Wikipedia", ButtonStyle.OUTLINEINFO)
+    private val alert = buildButton("", "Notification", ButtonStyle.OUTLINESUCCESS)
 
     private fun buildButton(text: String, iconName: String, style: ButtonStyle): Button {
         return Button(
@@ -45,15 +43,6 @@ object RoStatusBar {
         nav.add(umlDiagram)
         nav.add(userBtn)
         nav.add(alert)
-        drag.setDragDropData("text/plain", "element")
-        nav.add(drag)
-        drop.setDropTarget("text/plain") { data ->
-            console.log("[RoStatsbar.drop]" )
-            if (data.target.asDynamic().textContent == "element") {
-                console.log("[RoStatsbar.drop]" )
-            }
-        }
-        nav.add(drop)
     }
 
     fun updateDiagram(dd: DiagramDM) {

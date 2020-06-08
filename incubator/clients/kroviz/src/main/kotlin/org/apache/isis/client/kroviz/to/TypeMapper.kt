@@ -13,7 +13,8 @@ enum class ValueType(val type: String) {
     TEXT_AREA("TextArea"),
     TIME("Time"),
     SIMPLE_SELECT("SimpleSelect"),
-    SLIDER("Slider")
+    SLIDER("Slider"),
+    IFRAME("IFrame")
 }
 
 class TypeMapper {

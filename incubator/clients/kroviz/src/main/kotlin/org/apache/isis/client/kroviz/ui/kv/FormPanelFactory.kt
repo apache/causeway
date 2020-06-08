@@ -4,6 +4,7 @@ import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.FormItem
 import org.apache.isis.client.kroviz.utils.DateHelper
 import pl.treksoft.kvision.core.Component
+import pl.treksoft.kvision.core.Overflow
 import pl.treksoft.kvision.core.StringPair
 import pl.treksoft.kvision.core.onEvent
 import pl.treksoft.kvision.form.FormPanel
@@ -18,6 +19,7 @@ import pl.treksoft.kvision.form.text.TextArea
 import pl.treksoft.kvision.form.time.DateTime
 import pl.treksoft.kvision.form.time.dateTime
 import pl.treksoft.kvision.html.Div
+import pl.treksoft.kvision.html.Iframe
 import pl.treksoft.kvision.panel.VPanel
 import pl.treksoft.kvision.panel.vPanel
 import pl.treksoft.kvision.utils.auto
@@ -30,7 +32,7 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
 
     init {
         panel = formPanel {
-            height = 100.perc
+            height = auto
             margin = 10.px
             for (fi: FormItem in items) {
                 when (fi.type) {
@@ -45,6 +47,7 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
                     ValueType.BOOLEAN.type -> add(createBoolean(fi))
                     ValueType.IMAGE.type -> add(createImage(fi))
                     ValueType.SLIDER.type -> add(createSlider(fi))
+                    ValueType.IFRAME.type -> add(createIFrame(fi))
                 }
             }
         }
@@ -147,6 +150,21 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
                 it.stopPropagation()
             }
         }
+        return item
+    }
+
+    private fun createIFrame(fi: FormItem): VPanel {
+        val item = VPanel {
+            val url = fi.content as String
+            val iframe = Iframe(url)
+            iframe.height = 100.perc
+            iframe.width = 100.perc
+            iframe.overflow = Overflow.INHERIT
+            add(iframe)
+        }
+        item.height = 100.perc
+        item.width = 100.perc
+        item.overflow = Overflow.INHERIT
         return item
     }
 

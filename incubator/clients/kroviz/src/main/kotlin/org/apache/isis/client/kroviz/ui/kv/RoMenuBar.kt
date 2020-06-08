@@ -51,6 +51,13 @@ object RoMenuBar : SimplePanel() {
                 LoginPrompt().open(at)
             }
 
+            val toolTitle = "Toolbox"
+            ddLink(toolTitle,
+                    icon = IconManager.find(toolTitle)
+            ).onClick {
+                RoToolPanel.toggle()
+            }
+
             val sampleTitle = "History"
             ddLink(sampleTitle,
                     icon = IconManager.find(sampleTitle)
