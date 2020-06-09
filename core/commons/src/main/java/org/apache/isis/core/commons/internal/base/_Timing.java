@@ -50,15 +50,10 @@ public final class _Timing {
     /**
      * 
      * @param startedAtNanos
-     * @return a new {@code startedAtSystemNanos} instance of {@link StopWatch}
+     * @return a new {@code startedAtSystemMillis} instance of {@link StopWatch}
      */
-    public static StopWatch atSystemNanos(long startedAtSystemNanos) {
-        return new StopWatch(startedAtSystemNanos);
-    }
-
-
     public static StopWatch atSystemMillis(long startedAtSystemMillis) {
-        return atSystemNanos(startedAtSystemMillis * 1_000_000L);
+        return new StopWatch(startedAtSystemMillis);
     }
     
 
@@ -81,36 +76,28 @@ public final class _Timing {
         }
 
         public StopWatch start() {
-            t0 = System.nanoTime();
+            t0 = System.currentTimeMillis();
             stopped = false;
             return this;
         }
 
         public StopWatch stop() {
-            t1 = System.nanoTime();
+            t1 = System.currentTimeMillis();
             stopped  = true;
             return this;
         }
 
         public double getSeconds() {
-            return 0.000_000_001 * getNanos();
+            return 0.001 * getMillis();
         }
 
-        public double getMillis() {
-            return 0.000_001 * getNanos();
-        }
-
-        public double getMicros() {
-            return 0.001 * getNanos();
-        }
-
-        public long getNanos() {
-            return stopped ? t1 - t0 : System.nanoTime() - t0 ;
+        public long getMillis() {
+            return stopped ? t1 - t0 : System.currentTimeMillis() - t0 ;
         }
         
         @Override
         public String toString() {
-            return String.format(Locale.US, "%.2f ms", getMillis());
+            return String.format(Locale.US, "%d ms", getMillis());
         }
 
     }
@@ -123,14 +110,14 @@ public final class _Timing {
 
     public static void runVerbose(Logger log, String label, Runnable runnable) {
         final StopWatch watch = run(runnable);
-        log.info(String.format(Locale.US, "Running '%s' took %.2f ms", label, watch.getMillis()));
+        log.info(String.format(Locale.US, "Running '%s' took %d ms", label, watch.getMillis()));
     }
 
     public static <T> T callVerbose(Logger log, String label, Supplier<T> callable) {
         final StopWatch watch = now();
         T result = callable.get();
         watch.stop();
-        log.info(String.format(Locale.US, "Calling '%s' took %.2f ms", label, watch.getMillis()));
+        log.info(String.format(Locale.US, "Calling '%s' took %d ms", label, watch.getMillis()));
         return result;
     }
 
