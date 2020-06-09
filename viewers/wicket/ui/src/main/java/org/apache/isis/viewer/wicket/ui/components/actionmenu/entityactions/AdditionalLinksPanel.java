@@ -143,7 +143,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                                 ? _Strings.isNotEmpty(((ActionLink)link).getReasonDisabledIfAny()) 
                                 : false;
                         if (!hasDisabledReason) {
-                            val confirmUiModel = ConfirmUiModel.ofAreYouSure(getTranslationService(), Placement.RIGHT);
+                            val confirmUiModel = ConfirmUiModel.ofAreYouSure(getTranslationService(), Placement.BOTTOM);
                             Decorators.getConfirm().decorate(link, confirmUiModel);
                         }
                     }
