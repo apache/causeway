@@ -2,6 +2,7 @@ package org.apache.isis.client.kroviz.ui.kv
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.ui.EventLogDetail
+import pl.treksoft.kvision.core.Border
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.html.Button
@@ -16,8 +17,11 @@ import pl.treksoft.kvision.utils.px
 
 class EventLogTable(val model: List<LogEntry>) : VPanel() {
 
+    private val calcHeight = "calc(100vh - 128px)"
+
     private val columns = listOf(
-            ColumnDefinition(title = "",
+            ColumnDefinition(
+                    title = "",
                     field = "state",
                     width = "50",
                     align = Align.CENTER,
@@ -26,13 +30,13 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                             EventLogDetail(data).open()
                         }.apply { margin = CssSize(-10, UNIT.px) }
                     }),
-            ColumnDefinition<LogEntry>("Title", "title",
+            ColumnDefinition<LogEntry>(
+                    title ="Title",
+                    field ="title",
                     headerFilter = Editor.INPUT,
                     width = "450",
                     formatterComponentFunction = { _, _, data ->
-                        Button(data.title, icon = data.state.iconName, style = ButtonStyle.LINK).onClick {
-                            console.log(data)
-                        }
+                        buildButton(data)
                     }),
             ColumnDefinition("State", "state", width = "100", headerFilter = Editor.INPUT),
             ColumnDefinition("Method", "method", width = "100", headerFilter = Editor.INPUT),
@@ -56,25 +60,30 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                     width = "100")
     )
 
+    private fun buildButton(data: LogEntry): Button {
+        val b = Button(data.title, icon = data.state.iconName, style = ButtonStyle.LINK).onClick {
+            console.log(data)
+        }
+        b.setDragDropData(RoToolPanel.format, "element")
+        return b
+    }
+
     init {
         hPanel(FlexWrap.NOWRAP,
                 alignItems = FlexAlignItems.CENTER,
                 spacing = 20) {
-            padding = 10.px
-            paddingTop = 0.px
+            border = Border(width = 1.px)
         }
 
         val options = TabulatorOptions(
                 movableColumns = true,
-                height = "calc(100vh - 128px)",
+                height = calcHeight,
                 layout = Layout.FITCOLUMNS,
                 columns = columns,
                 persistenceMode = false
         )
 
         tabulator(model, options = options) {
-            marginTop = 0.px
-            marginBottom = 0.px
             setEventListener<Tabulator<LogEntry>> {
                 tabulatorRowClick = {
                 }

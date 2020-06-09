@@ -72,12 +72,19 @@ class ColumnFactory {
                 align = Align.CENTER,
                 width = "40",
                 formatterComponentFunction = { _, _, data ->
-                    Button(text = "", icon = data["iconName"] as? String, style = ButtonStyle.LINK).onClick {
-                        val tObject = (data as Exposer).delegate
-                        UiManager.displayModel(tObject)
-                    }
+                    buildButton(data, data["iconName"] as? String)
                 })
     }
+
+    private fun buildButton(data: Exposer, iconName: String?): Button {
+        val b = Button(text = "", icon = iconName, style = ButtonStyle.LINK).onClick {
+            val tObject = (data as Exposer).delegate
+            UiManager.displayModel(tObject)
+        }
+        b.setDragDropData(RoToolPanel.format, "element")
+        return b
+    }
+
 
     private fun buildLink(): ColumnDefinition<Exposer> {
         return ColumnDefinition<dynamic>(
@@ -86,7 +93,7 @@ class ColumnFactory {
                 headerFilter = Editor.INPUT,
                 formatterComponentFunction = { _, _, data ->
                     Button(text = data["object"].title as String, icon = "fas fa-star-o", style = ButtonStyle.LINK).onClick {
-                       console.log(data)
+                        console.log(data)
                     }
                 })
     }

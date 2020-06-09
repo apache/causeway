@@ -19,21 +19,25 @@ import pl.treksoft.kvision.tabulator.tabulator
  */
 class RoTable(displayList: ListDM) : SimplePanel() {
 
+    private val calcHeight = "calc(100vh - 128px)"
+
     init {
         title = displayList.extractTitle()
         width = CssSize(100, UNIT.perc)
         val model = displayList.data
-        val columns = ColumnFactory().buildColumns(displayList, true)
+        val columns = ColumnFactory().buildColumns(
+                displayList,
+                true)
         val options = TabulatorOptions(
                 movableColumns = true,
-                height = "calc(100vh - 128px)",
+                height = calcHeight,
                 layout = Layout.FITCOLUMNS,
                 columns = columns,
                 persistenceMode = false//,
                 //selectable = true
         )
 
-        val tableTypes = setOf(/*TableType.BORDERED,*/ TableType.STRIPED, TableType.HOVER)
+        val tableTypes = setOf(TableType.STRIPED, TableType.HOVER)
 
         tabulator(model, options = options, types = tableTypes) {
             setEventListener<Tabulator<Exposer>> {

@@ -1,5 +1,6 @@
 package org.apache.isis.client.kroviz.ui.kv
 
+import kotlinx.serialization.UnstableDefault
 import org.apache.isis.client.kroviz.core.model.Exposer
 import org.apache.isis.client.kroviz.handler.TObjectHandler
 import org.apache.isis.client.kroviz.to.TObject
@@ -11,8 +12,10 @@ import pl.treksoft.kvision.html.ButtonStyle
 import pl.treksoft.kvision.panel.SimplePanel
 import pl.treksoft.kvision.panel.VPanel
 
+@OptIn(UnstableDefault::class)
 object RoToolPanel : SimplePanel() {
 
+    const val format = "object/model"
     val panel = VPanel()
     private val buttons = mutableListOf<Button>()
 
@@ -20,10 +23,11 @@ object RoToolPanel : SimplePanel() {
         panel.marginTop = CssSize(40, UNIT.px)
         panel.width = CssSize(40, UNIT.px)
         panel.height = CssSize(100, UNIT.perc)
-        panel.background = Background(color = Color.name(Col.LIGHTBLUE))
-        panel.setDropTarget("text/plain") { data ->
+        panel.background = Background(color = Color.name(Col.GHOSTWHITE))
+        panel.setDropTarget(format) { data ->
             console.log("[RoToolPanel] panel")
             console.log(data)
+            //TODO extract Exposer/TO from data
             val jsonStr = CFG.str
             val to = TObjectHandler().parse(jsonStr) as TObject
             val exp= Exposer(to)
@@ -36,16 +40,16 @@ object RoToolPanel : SimplePanel() {
 
     private fun initButtons() {
         val drop: Button = buildButton("Toolbox", "Sample drop target")
-        drop.setDropTarget("text/plain") { data ->
+        drop.setDropTarget(format) { data ->
             console.log("[RoToolPanel]")
             console.log(data)
-            val obj = data.dataTransfer?.getData("text/plain")!!
+            val obj = data.dataTransfer?.getData(format)!!
             BrowserWindow("http://isis.apache.org").open()
         }
         buttons.add(drop)
         //
         val drag = buildButton("Object", "Sample drag object")
-        drag.setDragDropData("text/plain", "element")
+        drag.setDragDropData(format, "element")
         buttons.add(drag)
     }
 
