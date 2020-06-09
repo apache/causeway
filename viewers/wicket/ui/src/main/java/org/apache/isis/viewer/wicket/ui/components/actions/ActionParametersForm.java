@@ -143,7 +143,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
         val action = actionModel.getMetaModel();
         
         if (action.getSemantics().isAreYouSure()) {
-            val confirmUiModel = ConfirmUiModel.ofAreYouSure(getTranslationService(), Placement.RIGHT);
+            val confirmUiModel = ConfirmUiModel.ofAreYouSure(getTranslationService(), Placement.BOTTOM);
             Decorators.getConfirm().decorate(button, confirmUiModel);
         }
     }
