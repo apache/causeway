@@ -1,0 +1,16 @@
+group = 'org.apache.isis.extensions'
+description = 'Apache Isis Ext - Wicket Viewer - Excel Download (ui)'
+apply plugin: 'war'
+dependencies {
+    compile(group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.1') {
+        exclude(module: 'commons-collections4')
+    }
+    compile group: 'org.apache.poi', name: 'poi-ooxml-schemas', version: '4.1.1'
+    providedCompile project(':isis-parent:isis:isis-viewer-wicket:isis-viewer-wicket-ui')
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

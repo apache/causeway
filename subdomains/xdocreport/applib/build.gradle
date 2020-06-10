@@ -1,0 +1,18 @@
+group = 'org.apache.isis.subdomains'
+description = 'Apache Isis Sub - XdocReport (applib)'
+dependencies {
+    compile project(':isis-parent:isis-applib')
+    compile group: 'fr.opensagres.xdocreport', name: 'fr.opensagres.xdocreport.document.docx', version: '1.0.6'
+    compile group: 'fr.opensagres.xdocreport', name: 'fr.opensagres.xdocreport.template.freemarker', version: '1.0.6'
+    compile group: 'fr.opensagres.xdocreport', name: 'fr.opensagres.xdocreport.converter.docx.xwpf', version: '1.0.6'
+    compile group: 'fr.opensagres.xdocreport', name: 'org.apache.poi.xwpf.converter.pdf', version: '1.0.6'
+    compile group: 'fr.opensagres.xdocreport', name: 'org.apache.poi.xwpf.converter.core', version: '1.0.6'
+    testCompile project(':isis-parent:isis:isis-testing:isis-testing-unittestsupport:isis-testing-unittestsupport-applib')
+    testCompile group: 'com.google.guava', name: 'guava', version: '28.1-jre'
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

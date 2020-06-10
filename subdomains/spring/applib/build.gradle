@@ -1,0 +1,13 @@
+group = 'org.apache.isis.subdomains'
+description = 'Apache Isis Sub - Spring (applib)'
+apply plugin: 'war'
+dependencies {
+    compile project(':isis-parent:isis-applib')
+    providedCompile project(':isis-parent:isis:isis-core-runtime')
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

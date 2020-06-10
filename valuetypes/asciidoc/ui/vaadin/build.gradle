@@ -1,0 +1,12 @@
+group = 'org.apache.isis.valuetypes'
+description = 'Apache Isis Val - Asciidoctor (ui vaadin)'
+apply plugin: 'war'
+dependencies {
+    providedCompile project(':isis-parent:isis:isis-incubator:isis-viewer-vaadin:isis-viewer-vaadin-ui')
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

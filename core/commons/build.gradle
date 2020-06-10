@@ -1,0 +1,26 @@
+description = 'Apache Isis Core - Commons'
+dependencies {
+    compile group: 'javax', name: 'javaee-api', version: '8.0'
+    compile group: 'com.google.code.findbugs', name: 'annotations', version: '2.0.1'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.4'
+    compile group: 'org.springframework', name: 'spring-context', version: '5.2.6.RELEASE'
+    compile group: 'org.springframework', name: 'spring-tx', version: '5.2.6.RELEASE'
+    compile(group: 'org.springframework.boot', name: 'spring-boot-starter', version: '2.2.7.RELEASE') {
+        exclude(module: 'validation-api')
+        exclude(module: 'spring-boot-starter-logging')
+    }
+    compile(group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: '2.2.7.RELEASE') {
+        exclude(module: 'slf4j-api')
+    }
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.26'
+    compile group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.5.2'
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.5.2'
+    testCompile group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.5.2'
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

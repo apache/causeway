@@ -1,0 +1,12 @@
+group = 'org.apache.isis.valuetypes'
+description = 'Apache Isis Val - Server Sent Events (metamodel)'
+dependencies {
+    compile project(':isis-parent:isis:isis-valuetypes:isis-valuetypes-sse-applib')
+    compile project(':isis-parent:isis:isis-core-metamodel')
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

@@ -1,0 +1,24 @@
+description = 'Apache Isis Core - AppLib'
+apply plugin: 'war'
+dependencies {
+    compile project(':isis-parent:isis-schema')
+    compile group: 'javax', name: 'javaee-api', version: '8.0'
+    compile group: 'com.google.code.findbugs', name: 'annotations', version: '2.0.1'
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.5.2'
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.5.2'
+    testCompile group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.5.2'
+    testCompile group: 'org.jmock', name: 'jmock', version: '2.11.0'
+    testCompile(group: 'org.jmock', name: 'jmock-junit4', version: '2.11.0') {
+        exclude(module: 'junit-dep')
+        exclude(module: 'byte-buddy')
+    }
+    testCompile group: 'org.assertj', name: 'assertj-core', version: '3.13.2'
+    providedCompile project(':isis-parent:isis:isis-core-commons')
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

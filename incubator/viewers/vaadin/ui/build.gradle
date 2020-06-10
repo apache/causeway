@@ -1,0 +1,17 @@
+group = 'org.apache.isis.incubator.viewer'
+description = 'Apache Isis Inc - Viewer Vaadin (UI Components)'
+dependencies {
+    compile project(':isis-parent:isis:isis-incubator:isis-viewer-vaadin:isis-viewer-vaadin-model')
+    compile project(':isis-parent:isis:isis-core-runtimeservices')
+    compile group: 'com.vaadin', name: 'vaadin', version: '14.2.0'
+    compile(group: 'com.vaadin', name: 'vaadin-spring', version: '12.2.0') {
+        exclude(module: 'commons-fileupload')
+    }
+    compile group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4'
+}
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+artifacts.archives packageTests

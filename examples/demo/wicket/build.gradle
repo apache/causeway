@@ -1,0 +1,5 @@
+group = 'org.apache.isis.examples.apps'
+description = 'Apache Isis App - Demo (Wicket)'
+dependencies {
+  compile project(':isis-app-starter-parent:demo-parent:demo-domain')
+}
