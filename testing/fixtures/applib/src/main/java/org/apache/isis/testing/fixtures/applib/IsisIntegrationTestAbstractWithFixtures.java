@@ -21,6 +21,8 @@ package org.apache.isis.testing.fixtures.applib;
 import javax.inject.Inject;
 
 import org.joda.time.LocalDate;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.clock.ClockService;
@@ -30,6 +32,7 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testing.fixtures.applib.clock.FixtureClock;
 import org.apache.isis.testing.fixtures.applib.clock.TickingFixtureClock;
+import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixturesService;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 public abstract class IsisIntegrationTestAbstractWithFixtures extends IsisIntegrationTestAbstract {
@@ -85,6 +88,18 @@ public abstract class IsisIntegrationTestAbstractWithFixtures extends IsisIntegr
     }
 
     // -- DEPENDENCIES
+
+    @BeforeEach
+    protected void setupRefDataFixtures() {
+        fixtureScripts.run(moduleWithFixturesService.getRefDataSetupFixture());
+    }
+
+    @AfterEach
+    protected void tearDownFixtures() {
+        fixtureScripts.run(moduleWithFixturesService.getTeardownFixture());
+    }
+
+    @Inject protected ModuleWithFixturesService moduleWithFixturesService;
 
     @Inject protected FixtureScripts fixtureScripts;
 
