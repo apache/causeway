@@ -1,8 +1,9 @@
 package org.apache.isis.client.kroviz.ui.kv
 
 import kotlinx.serialization.UnstableDefault
+import org.apache.isis.client.kroviz.core.event.EventStore
+import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.core.model.Exposer
-import org.apache.isis.client.kroviz.handler.TObjectHandler
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.BrowserWindow
 import org.apache.isis.client.kroviz.utils.IconManager
@@ -15,7 +16,7 @@ import pl.treksoft.kvision.panel.VPanel
 @OptIn(UnstableDefault::class)
 object RoToolPanel : SimplePanel() {
 
-    const val format = "object/model"
+    const val format = "text/plain"
     val panel = VPanel()
     private val buttons = mutableListOf<Button>()
 
@@ -24,14 +25,14 @@ object RoToolPanel : SimplePanel() {
         panel.width = CssSize(40, UNIT.px)
         panel.height = CssSize(100, UNIT.perc)
         panel.background = Background(color = Color.name(Col.GHOSTWHITE))
-        panel.setDropTarget(format) { data ->
-            console.log("[RoToolPanel] panel")
-            console.log(data)
-            //TODO extract Exposer/TO from data
-            val jsonStr = CFG.str
-            val to = TObjectHandler().parse(jsonStr) as TObject
-            val exp= Exposer(to)
-            addButton(exp)
+        panel.setDropTargetData(format) { url ->
+            val reSpec = ResourceSpecification(url!!)
+            val logEntry = EventStore.find(reSpec)!!
+            val obj = logEntry.obj!!
+            if (obj is TObject) {
+                val exp = Exposer(obj)
+                addButton(exp)
+            }
         }
 
         initButtons()
@@ -40,10 +41,8 @@ object RoToolPanel : SimplePanel() {
 
     private fun initButtons() {
         val drop: Button = buildButton("Toolbox", "Sample drop target")
-        drop.setDropTarget(format) { data ->
-            console.log("[RoToolPanel]")
-            console.log(data)
-            val obj = data.dataTransfer?.getData(format)!!
+        drop.setDropTarget(format) {
+            //IMPROVE use string for wikipedia search
             BrowserWindow("http://isis.apache.org").open()
         }
         buttons.add(drop)
@@ -65,12 +64,14 @@ object RoToolPanel : SimplePanel() {
 
     override fun show(): Widget {
         panel.width = CssSize(40, UNIT.px)
-        buttons.forEach { it -> panel.add(it) }
+        buttons.forEach { panel.add(it) }
         return super.show()
     }
 
     private fun addButton(exp: Exposer) {
-        val b = buildButton(exp.iconName, "dynamic sample")
+        val b = buildButton(exp.iconName, "dynamic sample").onClick {
+
+        }
         buttons.add(b)
         panel.add(b)
     }

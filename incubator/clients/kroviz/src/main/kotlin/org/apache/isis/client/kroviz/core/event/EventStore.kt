@@ -11,8 +11,8 @@ import pl.treksoft.kvision.state.observableListOf
  * Subsequent invocations are served from this cache.
  * UI events (Dialogs, Windows, etc.) are logged here as well.
  *
- * @see https://en.wikipedia.org/wiki/Proxy_pattern
- * @see https://martinfowler.com/eaaDev/EventSourcing.html
+ * @see "https://en.wikipedia.org/wiki/Proxy_pattern"
+ * @see "https://martinfowler.com/eaaDev/EventSourcing.html"
  */
 object EventStore {
     var log = observableListOf<LogEntry>()

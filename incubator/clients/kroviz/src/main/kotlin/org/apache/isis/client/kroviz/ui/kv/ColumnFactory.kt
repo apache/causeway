@@ -1,5 +1,6 @@
 package org.apache.isis.client.kroviz.ui.kv
 
+import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.model.Exposer
 import org.apache.isis.client.kroviz.core.model.ListDM
 import pl.treksoft.kvision.html.Button
@@ -77,11 +78,12 @@ class ColumnFactory {
     }
 
     private fun buildButton(data: Exposer, iconName: String?): Button {
+        val tObject = data.delegate
         val b = Button(text = "", icon = iconName, style = ButtonStyle.LINK).onClick {
-            val tObject = (data as Exposer).delegate
             UiManager.displayModel(tObject)
         }
-        b.setDragDropData(RoToolPanel.format, "element")
+        val logEntry = EventStore.find(tObject)!!
+        b.setDragDropData(RoToolPanel.format, logEntry.url)
         return b
     }
 

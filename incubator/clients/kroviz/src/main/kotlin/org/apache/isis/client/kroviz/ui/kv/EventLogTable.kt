@@ -61,10 +61,13 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
     )
 
     private fun buildButton(data: LogEntry): Button {
-        val b = Button(data.title, icon = data.state.iconName, style = ButtonStyle.LINK).onClick {
+        val b = Button(
+                data.title,
+                icon = data.state.iconName,
+                style = ButtonStyle.LINK).onClick {
             console.log(data)
         }
-        b.setDragDropData(RoToolPanel.format, "element")
+        b.setDragDropData(RoToolPanel.format, data.url)
         return b
     }
 
