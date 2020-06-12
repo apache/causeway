@@ -25,7 +25,7 @@
 	<groupId>org.apache.isis.examples.apps</groupId>
 	<artifactId>demo-parent</artifactId>
 
-	<name>Apache Isis App - Demo (Parent)</name>
+	<name>Apache Isis Demo - Parent</name>
 
 	<packaging>pom</packaging>
 

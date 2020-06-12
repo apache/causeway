@@ -23,7 +23,7 @@
 
 	<artifactId>demo-vaadin</artifactId>
 
-	<name>Apache Isis App - Demo (Vaadin)</name>
+	<name>Apache Isis Demo - Vaadin</name>
 
 	<packaging>${packaging.type}</packaging>
 

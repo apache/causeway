@@ -1,0 +1,31 @@
+Apache Isis applications can nominate a view model to act as the home page, using the link:https://isis.apache.org/refguide/2.0.0-M3/applib-ant/HomePage.html[`@HomePage`] annotation:
+
+[source,java]
+----
+@DomainObject(
+    nature=Nature.VIEW_MODEL,
+    objectType = "demoapp.Homepage"
+)
+@HomePage                                                       // <.>
+public class DemoHomePage {
+
+    public String title() {                                     // <.>
+        return "Hello, " + userService.getUser().getName();
+    }
+
+    @Inject
+    UserService userService;                                    // <.>
+}
+----
+
+<.> declares this view-model class to be used as the viewer's homepage, there can be only one
+<.> as displayed
+<.> to determine the current user
+
+This application's home page is pretty simple, not much more than a couple of hard-coded text fields that you're reading right now.
+
+A more common implementation of a home page is as a dashboard, displaying the most useful current information to the user (perhaps a task list, or alerts).
+Such a home page would have a number of repository services injected into it, in order to query and render those tasks or alerts.
+
+It would probably also have the framework's link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/UserService.html[`UserService`] injected, in order that the information displayed is relevant to the current user.
+As you can see, this app's home page does actually do this, in order to "personalise" the title.

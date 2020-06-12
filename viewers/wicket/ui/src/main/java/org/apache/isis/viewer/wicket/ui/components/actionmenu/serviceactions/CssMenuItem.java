@@ -186,7 +186,7 @@ implements Serializable {
             menuItem.setFirstInSection(firstInSection);
             menuItem.setTertiaryRoot(tertiaryRoot);
             menuItem.setMenuActionUiModel(menuActionUiModel);
-            children.forEach(menuItem::addSubMenuItem);
+            for (CssMenuItem child : children) menuItem.addSubMenuItem(child);
             return menuItem;
         }
     }

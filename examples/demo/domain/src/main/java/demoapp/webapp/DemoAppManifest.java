@@ -51,8 +51,9 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom.DemoModule;
+import demoapp.dom._infra.AsciiDocReaderService;
 import demoapp.utils.DemoRequestScopedBean;
-import demoapp.utils.LibraryPreloadingService;
+import demoapp.dom._infra.LibraryPreloadingService;
 
 /**
  * Makes the integral parts of the 'demo' web application.
@@ -89,6 +90,7 @@ import demoapp.utils.LibraryPreloadingService;
     IsisModuleExtExcelDownloadUi.class, // allows for collection download as excel
 
     LibraryPreloadingService.class, // just a performance enhancement
+    AsciiDocReaderService.class,
 
     DemoRequestScopedBean.class // demo @RequestScope logging
 
@@ -106,6 +108,7 @@ public class DemoAppManifest {
         return SecurityModuleConfig.builder()
                 .adminUserName("sven")
                 .adminAdditionalPackagePermission("demoapp.dom")
+                .adminAdditionalPackagePermission("demoapp.utils")
                 .adminAdditionalPackagePermission("org.apache.isis")
                 .build();
     }

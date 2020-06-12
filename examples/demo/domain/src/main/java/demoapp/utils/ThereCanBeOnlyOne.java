@@ -19,13 +19,13 @@ public class ThereCanBeOnlyOne {
 
     public static void remoteShutdownOthersIfAny() {
         try {
-            invokeReomteShutdown();
+            invokeRemoteShutdown();
         } catch (Exception e) {
             // ignore them all
         }
     }
     
-    private static void invokeReomteShutdown() throws IOException {
+    private static void invokeRemoteShutdown() throws IOException {
         
         val targetHost = new HttpHost("localhost", 8080, "http");
         val credsProvider = new BasicCredentialsProvider();

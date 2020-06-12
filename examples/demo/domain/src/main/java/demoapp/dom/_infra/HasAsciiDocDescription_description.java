@@ -16,29 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.utils;
+package demoapp.dom._infra;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Named;
+import javax.inject.Inject;
 
-import org.springframework.stereotype.Service;
-
-import org.apache.isis.core.commons.internal.concurrent._ConcurrentContext;
-import org.apache.isis.core.commons.internal.concurrent._ConcurrentTaskList;
+import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
-import lombok.val;
+import lombok.RequiredArgsConstructor;
 
-@Service
-@Named("demoapp.LibraryPreloadingService")
-public class LibraryPreloadingService {
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
+@Property
+@RequiredArgsConstructor
+public class HasAsciiDocDescription_description {
 
-    @PostConstruct
-    public void preloadLibraries() {
-        val tasks = _ConcurrentTaskList.named("LibraryPreloading")
-        .addRunnable("Preload JRuby for AsciiDoc", ()-> AsciiDoc.valueOfAdoc("Dummy"));
-        
-        tasks.submit(_ConcurrentContext.forkJoin());
+    private final HasAsciiDocDescription hasAsciiDocDescription;
+
+    @PropertyLayout(labelPosition = LabelPosition.NONE)
+    @MemberOrder(name = "description", sequence = "1")
+    public AsciiDoc prop() {
+        return asciiDocReaderService.readFor(hasAsciiDocDescription, "description");
     }
-    
+
+    @Inject
+    AsciiDocReaderService asciiDocReaderService;
+
 }
