@@ -69,22 +69,47 @@ object RoToolPanel : SimplePanel() {
     }
 
     private fun addButton(exp: Exposer) {
-        val b = buildButton(exp.iconName, "dynamic sample").onClick {
-
+        var iconName = ""
+        val ed = exp.dynamise()
+        if (ed.hasOwnProperty("iconName") as Boolean) {
+            iconName = ed["iconName"] as String
+        }
+        val b = buildButton(iconName, "dynamic sample")
+        val tObject = exp.delegate
+        val m = MenuFactory.buildFor(
+                tObject,
+                false,
+                ButtonStyle.LINK)
+        console.log("[RoToolPanel.addButton]")
+        console.log(exp)
+        console.log(m)
+        b.apply {
+            onEvent {
+                dblclick = {
+                    console.log("dblclick")
+                    m.toggle()
+                    m.show()
+                }
+            }
         }
         buttons.add(b)
         panel.add(b)
     }
 
     private fun buildButton(iconName: String, toolTip: String): Button {
-        return Button(
+        val icon =
+                if (iconName.startsWith("fa")) iconName else {
+                    IconManager.find(iconName)
+                }
+        val b = Button(
                 text = "",
-                icon = IconManager.find(iconName),
-                style = ButtonStyle.LIGHT).apply {
+                icon = icon,
+                style = ButtonStyle.LINK).apply {
             padding = CssSize(-16, UNIT.px)
             margin = CssSize(0, UNIT.px)
             title = toolTip
         }
+        return b
     }
 
 }
