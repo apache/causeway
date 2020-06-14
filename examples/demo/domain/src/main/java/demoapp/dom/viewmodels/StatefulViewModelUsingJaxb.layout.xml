@@ -18,15 +18,16 @@
 	</bs3:row>
 	<bs3:row>
         <bs3:col span="6">
-            <cpt:fieldSet name="" id="general">
-                <cpt:property id="welcome" labelPosition="NONE"/>
+            <cpt:fieldSet name="General" id="general">
+                <cpt:property id="message" labelPosition="TOP"/>
             </cpt:fieldSet>
 			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
         </bs3:col>
 		<bs3:col span="6">
 			<cpt:fieldSet name="Description" id="description" />
 		</bs3:col>
-		<bs3:col span="6" unreferencedCollections="true">
-		</bs3:col>
+	</bs3:row>
+	<bs3:row>
+		<bs3:col span="12" unreferencedCollections="true"/>
 	</bs3:row>
 </bs3:grid>

@@ -20,7 +20,7 @@ public class MarkupVariableResolverService {
         "SOURCES_ISIS", "https://github.com/apache/isis/blob/master/core/applib/src/main/java",
         "SOURCES_DEMO", "https://github.com/apache/isis/tree/master/examples/demo/domain/src/main/java",
         "ISSUES_DEMO", "https://issues.apache.org/jira/",
-        "ISIS_WEBSITE", "https://isis.apache.org/docs/2.0.0-M3/"
+        "ISIS_VERSION", "2.0.0-M3"
     );
 
     /**
