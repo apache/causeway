@@ -27,6 +27,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Property;
@@ -37,6 +38,8 @@ import lombok.Setter;
 import lombok.val;
 
 import demoapp.dom._infra.HasAsciiDocDescription;
+import demoapp.dom.viewmodels.jaxbrefentity.StatefulViewModelJaxbRefsEntity;
+import demoapp.dom.viewmodels.usingjaxb.StatefulViewModelUsingJaxb;
 
 @DomainService(
         objectType = "demoapp.ViewModels"
@@ -50,6 +53,16 @@ public class ViewModels {
         return viewModel;
     }
     public String default0OpenStateful() {
+        return "Some initial state";
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public StatefulViewModelJaxbRefsEntity openStatefulRefsEntity(final String message) {
+        val viewModel = new StatefulViewModelJaxbRefsEntity();
+        viewModel.setMessage(message);
+        return viewModel;
+    }
+    public String default0OpenStatefulRefsEntity() {
         return "Some initial state";
     }
 
