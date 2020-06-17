@@ -22,13 +22,4 @@ abstract class DisplayModel {
         // subclass responsibility
     }
 
-    fun extractTitle(): String {
-        val strList = this.title.split("/")
-        val len = strList.size
-        var answer = ""
-        if (len > 2) answer =
-                strList[len - 2]
-        return answer
-    }
-
 }

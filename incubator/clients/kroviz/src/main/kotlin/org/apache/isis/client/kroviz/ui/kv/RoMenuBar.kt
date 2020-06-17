@@ -36,10 +36,9 @@ object RoMenuBar : SimplePanel() {
     }
 
     private fun buildMainMenu(): DropDown {
-        val iconName = IconManager.find("Burger")
         return dropDown(
                 "",
-                icon = iconName,
+                icon = IconManager.find("Burger"),
                 forNavbar = false,
                 style = ButtonStyle.LIGHT)
         {
@@ -51,11 +50,11 @@ object RoMenuBar : SimplePanel() {
                 LoginPrompt().open(at)
             }
 
-            val toolTitle = "Toolbox"
+            val toolTitle = "Toolbar"
             ddLink(toolTitle,
                     icon = IconManager.find(toolTitle)
             ).onClick {
-                RoToolPanel.toggle()
+                RoIconBar.toggle()
             }
 
             val sampleTitle = "History"
@@ -72,13 +71,21 @@ object RoMenuBar : SimplePanel() {
             ).onClick {
                 ExportDialog().open()
             }
+
+            val chartTitle = "Sample Chart"
+            ddLink(chartTitle,
+                    icon = IconManager.find("Chart")
+            ).onClick {
+                UiManager.add(chartTitle, ChartTab())
+            }
         }
     }
 
     fun amendMenu(menuBars: Menubars) {
         logoButton()
         menuBars.primary.menu.forEach { m ->
-            nav.add(MenuFactory.buildFor(m))
+            val dd = MenuFactory.buildFor(m)
+            if (dd.getChildren().isNotEmpty()) nav.add(dd)
         }
         nav.add(MenuFactory.buildFor(menuBars.secondary.menu.first()))
         nav.add(MenuFactory.buildFor(menuBars.tertiary.menu.first()))

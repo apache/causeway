@@ -2,6 +2,7 @@ package org.apache.isis.client.kroviz.ui.kv
 
 import org.apache.isis.client.kroviz.core.model.Exposer
 import org.apache.isis.client.kroviz.core.model.ListDM
+import org.apache.isis.client.kroviz.utils.Utils
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.panel.SimplePanel
@@ -19,10 +20,8 @@ import pl.treksoft.kvision.tabulator.tabulator
  */
 class RoTable(displayList: ListDM) : SimplePanel() {
 
-    private val calcHeight = "calc(100vh - 128px)"
-
     init {
-        title = displayList.extractTitle()
+        title = Utils.extractTitle(displayList.title)
         width = CssSize(100, UNIT.perc)
         val model = displayList.data
         val columns = ColumnFactory().buildColumns(
@@ -30,7 +29,7 @@ class RoTable(displayList: ListDM) : SimplePanel() {
                 true)
         val options = TabulatorOptions(
                 movableColumns = true,
-                height = calcHeight,
+                height = Constants.calcHeight,
                 layout = Layout.FITCOLUMNS,
                 columns = columns,
                 persistenceMode = false//,

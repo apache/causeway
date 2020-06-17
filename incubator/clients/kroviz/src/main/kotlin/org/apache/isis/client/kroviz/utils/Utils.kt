@@ -10,7 +10,7 @@ object Utils {
         var output = ""
         val words = input.split(" ")
         for (w in words) {
-            output = output + w.capitalize()
+            output += w.capitalize()
         }
         return decapitalize(output)
     }
@@ -22,26 +22,18 @@ object Utils {
 
     fun deCamel(input: String): String {
         var output = ""
-        var i = 0
-        for (c in input) {
+        for ((i, c) in input.withIndex()) {
+            val cuc = c.toUpperCase()
             if (i == 0) {
-                output += c.toUpperCase()
+                output += cuc
             } else {
-                val o = if (c.toUpperCase() == c) {
-                    " $c"
-                } else {
-                    c.toString()
-                }
+                val o = if (cuc == c) " $c" else c.toString()
                 output += o
             }
-            i++
         }
         // Skip acronyms like OK, USA
         val outputWithoutWhiteSpace = output.replace("\\s".toRegex(), "")
-        if (input.equals(outputWithoutWhiteSpace)) {
-            return input
-        }
-        return output
+        return if (input == outputWithoutWhiteSpace) input else output
     }
 
     fun removeHexCode(input: String): String {
@@ -50,11 +42,7 @@ object Utils {
         //split string by "/" and remove parts longer than 40chars
         list.forEach { s ->
             output += "/"
-            output += if (s.length > 40) {
-                "..."
-            } else {
-                s
-            }
+            output += if (s.length > 40) "..." else s
         }
         return output
     }
@@ -102,9 +90,7 @@ object Utils {
             start: String,
             sep: String,
             end: String): String {
-        if (args.isNullOrEmpty()) {
-            return ""
-        } else {
+        return if (args.isNullOrEmpty()) "" else {
             var answer = start
             args.forEach { kv ->
                 val arg = kv.value!!
@@ -112,7 +98,7 @@ object Utils {
             }
             val len = answer.length
             answer = answer.replaceRange(len - 1, len, end)
-            return answer
+            answer
         }
     }
 
@@ -121,9 +107,7 @@ object Utils {
             start: String,
             sep: String,
             end: String): String {
-        if (args.isNullOrEmpty()) {
-            return ""
-        } else {
+        return if (args.isNullOrEmpty()) "" else {
             var answer = start
             args.forEach { kv ->
                 val arg = kv.value!!
@@ -131,18 +115,22 @@ object Utils {
             }
             val len = answer.length
             answer = answer.replaceRange(len - 1, len, end)
-            return answer
+            answer
         }
     }
 
     internal fun asBody(arg: Argument): String {
         var v = arg.value!!
-        val isHttp = v.startsWith("http")
+        val isHttp = isUrl(v)
         v = quote(v)
         if (isHttp) {
             v = enbrace("href", v)
         }
         return quote(arg.key) + ": " + enbrace("value", v)
+    }
+
+    fun isUrl(s: String): Boolean {
+        return s.startsWith("http")
     }
 
     private fun enbrace(k: String, v: String): String {
@@ -156,6 +144,12 @@ object Utils {
     fun format(jsonStr: String): String {
         val s1 = JSON.parse<String>(jsonStr)
         return JSON.stringify(s1, null, 2)
+    }
+
+    fun extractTitle(title: String): String {
+        val strList = title.split("/")
+        val len = strList.size
+        return if (len > 2) strList[len - 2] else ""
     }
 
 }

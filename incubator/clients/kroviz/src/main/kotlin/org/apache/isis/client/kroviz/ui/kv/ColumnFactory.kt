@@ -70,7 +70,7 @@ class ColumnFactory {
         return ColumnDefinition<dynamic>(
                 "",
                 field = "iconName",
-                align = Align.CENTER,
+                hozAlign = Align.CENTER,
                 width = "40",
                 formatterComponentFunction = { _, _, data ->
                     buildButton(data, data["iconName"] as? String)
@@ -83,7 +83,7 @@ class ColumnFactory {
             UiManager.displayModel(tObject)
         }
         val logEntry = EventStore.find(tObject)!!
-        b.setDragDropData(RoToolPanel.format, logEntry.url)
+        b.setDragDropData(Constants.format, logEntry.url)
         return b
     }
 
@@ -113,7 +113,7 @@ class ColumnFactory {
                                        obj {"<i class='fa fa-square-o'></i>"}
                                    }
                                }, */
-                align = Align.CENTER,
+                hozAlign = Align.CENTER,
                 width = "40",
                 headerSort = false,
                 cellClick = { evt, cell ->
@@ -127,7 +127,7 @@ class ColumnFactory {
                 field = "iconName", // any existing field can be used
                 formatter = Formatter.TICKCROSS,
                 formatterParams = menuFormatterParams,
-                align = Align.CENTER,
+                hozAlign = Align.CENTER,
                 width = "60",
                 headerSort = false,
                 formatterComponentFunction = { _, _, data ->
@@ -135,7 +135,7 @@ class ColumnFactory {
                     MenuFactory.buildFor(
                             tObject,
                             false,
-                            ButtonStyle.LINK)
+                            style = ButtonStyle.LINK)
                 })
     }
 

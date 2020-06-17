@@ -17,8 +17,6 @@ import pl.treksoft.kvision.utils.px
 
 class EventLogTable(val model: List<LogEntry>) : VPanel() {
 
-    private val calcHeight = "calc(100vh - 128px)"
-
     private val columns = listOf(
             ColumnDefinition(
                     title = "",
@@ -67,7 +65,7 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                 style = ButtonStyle.LINK).onClick {
             console.log(data)
         }
-        b.setDragDropData(RoToolPanel.format, data.url)
+        b.setDragDropData(Constants.format, data.url)
         return b
     }
 
@@ -80,7 +78,7 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
 
         val options = TabulatorOptions(
                 movableColumns = true,
-                height = calcHeight,
+                height = Constants.calcHeight,
                 layout = Layout.FITCOLUMNS,
                 columns = columns,
                 persistenceMode = false

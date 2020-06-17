@@ -11,6 +11,7 @@ import org.apache.isis.client.kroviz.core.model.ListDM
 import org.apache.isis.client.kroviz.core.model.ObjectDM
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.mb.Menubars
+import org.apache.isis.client.kroviz.utils.Utils
 import org.w3c.dom.events.KeyboardEvent
 import pl.treksoft.kvision.core.Component
 import pl.treksoft.kvision.core.Widget
@@ -82,7 +83,7 @@ object UiManager {
 
     fun openListView(aggregator: BaseAggregator) {
         val displayable = aggregator.dsp
-        val title: String = displayable.extractTitle()
+        val title: String = Utils.extractTitle(displayable.title)
         val panel = RoTable(displayable as ListDM)
         add(title, panel, aggregator)
         displayable.isRendered = true
@@ -90,7 +91,7 @@ object UiManager {
 
     fun openObjectView(aggregator: ObjectAggregator) {
         val dm = aggregator.dsp as ObjectDM
-        var title: String = dm.extractTitle()
+        var title: String = Utils.extractTitle(dm.title)
         if (title.isEmpty()) {
             title = aggregator.actionTitle
         }
