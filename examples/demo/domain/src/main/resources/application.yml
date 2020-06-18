@@ -80,8 +80,8 @@ isis:
       development-utilities:
         enable: false
       bookmarked-pages:
-        show-chooser: false
-        show-drop-down-on-footer: false
+        show-chooser: true
+        show-drop-down-on-footer: true
       dialog-mode: sidebar
       dialog-mode-for-menu: modal
 

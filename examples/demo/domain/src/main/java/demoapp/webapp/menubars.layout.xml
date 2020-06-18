@@ -33,20 +33,23 @@
         </mb3:menu>
         
         <mb3:menu>
-            <mb3:named>Tooltips</mb3:named>
+            <mb3:named>View Models</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="demo.TooltipMenu" id="tooltipDemo">
-                    <cpt:named>Tooltip Demo</cpt:named>
-                </mb3:serviceAction>
+                <mb3:serviceAction objectType="demoapp.ViewModels" id="openStateful"/>
             </mb3:section>
         </mb3:menu>
         
         <mb3:menu>
+            <mb3:named>Tooltips</mb3:named>
+            <mb3:section>
+                <mb3:serviceAction objectType="demo.TooltipMenu" id="tooltipDemo"/>
+            </mb3:section>
+        </mb3:menu>
+
+        <mb3:menu>
             <mb3:named>Trees</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="demo.TreeDemoMenu" id="fileSystemTree">
-                    <cpt:named>File System Tree</cpt:named>
-                </mb3:serviceAction>
+                <mb3:serviceAction objectType="demo.TreeDemoMenu" id="fileSystemTree"/>
             </mb3:section>
         </mb3:menu>
         

@@ -1,0 +1,47 @@
+= E2E Notes
+
+== Installation
+
+* in `src/test/e2e`
+
+* per link:https://basarat.gitbook.io/typescript/intro-1/cypress[this blog post] and also link:https://docs.cypress.io/guides/getting-started/installing-cypress.html[Cypress getting started docs]:
++
+[source,bash]
+----
+mkdir e2e
+cd e2e
+npm init -y
+npm install cypress typescript
+npx tsc --init --types cypress --lib dom,es6
+echo {} > cypress.json
+----
+
+* add some scripts to the `e2e/package.json` file:
++
+[source,json]
+----
+"scripts": {
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
+  },
+----
+
+* run for the first time (creates scaffolding):
++
+[source,bash]
+----
+npm run cypress:open
+----
+
+* moved the scaffolding to `cypress-scaffolding` for reference
++
+NOTE: it uses javascript rather than typescript.
+
+== Tab support (plugin)
+
+* as per link:https://github.com/Bkucera/cypress-plugin-tab[Bkucera/cypress-plugin-tab]:
++
+[source,bash]
+----
+npm install -D cypress-plugin-tab
+----

@@ -21,6 +21,7 @@ package demoapp.dom.homepage;
 import java.time.LocalDateTime;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -32,39 +33,35 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.JaxbAdapters.MarkupAdapter;
 import org.apache.isis.applib.value.Markup;
+import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import demoapp.utils.DemoStub;
+import demoapp.dom._infra.AsciiDocReaderService;
+import demoapp.dom._infra.HasAsciiDocDescription;
 
-@XmlRootElement(name = "Demo")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.Homepage")
+@DomainObject(
+        nature=Nature.VIEW_MODEL
+        , objectType = "demoapp.Homepage"
+)
 @HomePage
-public class DemoHomePage extends DemoStub {
+public class DemoHomePage implements HasAsciiDocDescription {
 
-    @Override
     public String title() {
-        return "Demo Home Page";
+        return "Hello, " + userService.getUser().getName();
     }
 
-    @XmlElement @XmlJavaTypeAdapter(MarkupAdapter.class)
-    @Getter @Setter 
-    private Markup greetings; 
-
-    @XmlTransient
-    public Markup getTime() {
-        return new Markup("<i>" + LocalDateTime.now() + "</i>");
+    public AsciiDoc getWelcome() {
+        return asciiDocReaderService.readFor(this, "welcome");
     }
 
-    @Override @Programmatic @PostConstruct
-    public void initDefaults() {
-        greetings = new Markup("Greetings! This is the Apache Isis Demo App.");
-    }
+    @Inject
+    UserService userService;
 
+    @Inject
+    AsciiDocReaderService asciiDocReaderService;
 }

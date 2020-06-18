@@ -1,0 +1,30 @@
+This is an link:https://isis.apache.org[Apache Isis] application to demonstrate the programming model for the various features provided by the framework.
+
+On the left hand side of each web page you'll find the feature, and on the right hand side you'll find an explanation of the feature with code examples.
+
+== Page Layout
+
+This is probably as good place as any to explain the page layout of an Apache Isis webapp:
+
+* At the top is the menu bar.
++
+This consists of a *primary menu* (on the left) containing the actions provided by the app's domain service, a *secondary menu* (on the right) which typically contains supporting services provided by the framework itself (eg "Prototyping") or extensions, and the *tertiary menu* for login/logout and inspecting the configuration.
+
+* In the centre (where you're looking now) is the domain object being displayed.
++
+This will have an *icon* and *title*, for identification by the user.
+A typical web page for a domain objects will show scalar fields for each of the object's *properties*, table grids for each of the object's *collections*, and buttons to represent the *actions*.
+Properties and collections are the object's state, actions are the object's behaviour.
++
+If running in prototype mode then there are a number of actions contributed by the framework (their label is in _italics_) so you can dig into the internal implementation.
+
+* At the bottom is a menu bar with credits, and to allow the user to *switch theme*.
+
+Click into the application and try things out.
+
+NOTE: The demo app uses an in-memory database, so any changes made will be lost when the app is stopped.
+
+== Getting Help and Assistance
+
+There is plenty of documentation on our link:https://isis.apache.org/docs/${ISIS_VERSION}/about.html[website].
+Also subscribe to our link:https://isis.apache.org/docs/${ISIS_VERSION}/support/mailing-list.html[mailing list] or join our link:https://isis.apache.org/docs/${ISIS_VERSION}/support/slack-channel.html[Slack channel].

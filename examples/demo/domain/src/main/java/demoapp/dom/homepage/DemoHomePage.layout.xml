@@ -4,27 +4,29 @@
         xmlns:cpt="http://isis.apache.org/applib/layout/component"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<bs3:row>
-		<bs3:col span="12" unreferencedActions="true">
+		<bs3:col span="10" unreferencedActions="true">
 			<cpt:domainObject />
 			<cpt:action id="clearHints" />
 			<cpt:action id="downloadLayoutXml" />
 			<cpt:action id="openRestApi" />
 			<cpt:action id="rebuildMetamodel" />
 			<cpt:action id="initDefaults" />
-
+		</bs3:col>
+		<bs3:col span="2">
+			<cpt:fieldSet name="" id="sources" />
 		</bs3:col>
 	</bs3:row>
 	<bs3:row>
         <bs3:col span="6">
-            <cpt:fieldSet name="General" id="general" unreferencedProperties="true">
-                <cpt:property id="greetings"/>
+            <cpt:fieldSet name="" id="general">
+                <cpt:property id="welcome" labelPosition="NONE"/>
             </cpt:fieldSet>
+			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
         </bs3:col>
+		<bs3:col span="6">
+			<cpt:fieldSet name="Description" id="description" />
+		</bs3:col>
 		<bs3:col span="6" unreferencedCollections="true">
-			<cpt:fieldSet name="Description" id="description"
-				unreferencedProperties="true">
-				<cpt:property id="description" labelPosition="NONE" />
-			</cpt:fieldSet>
 		</bs3:col>
 	</bs3:row>
 </bs3:grid>
