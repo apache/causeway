@@ -1,6 +1,7 @@
 # IDEA
 .idea
 .idea/gradle.xml
+.idea/jarRepositories.xnl
 .idea/modules.xml
 .idea/vcs.xml
 *.iml
@@ -66,3 +67,4 @@ _commit.sh
 # The following files are generated/updated by vaadin-maven-plugin
 node_modules/
 
+/incubator/clients/kroviz/package.json
