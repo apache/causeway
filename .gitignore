@@ -1,8 +1,5 @@
 # IDEA
 .idea
-.idea/gradle.xml
-.idea/modules.xml
-.idea/vcs.xml
 *.iml
 
 # MacOS
