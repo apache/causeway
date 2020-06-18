@@ -21,8 +21,8 @@ class ChartTab : SimplePanel() {
                             ChartType.SCATTER,
                             listOf(
                                     DataSets(
-                                            pointBorderColor = listOf(Color.name(Col.RED)),
-                                            backgroundColor = listOf(Color.name(Col.LIGHTGREEN)),
+                                            pointBorderColor = listOf(Color.hex(0xC0504D)),
+                                            backgroundColor = listOf(Color.hex(0x9BBB59)),
                                             data = (-60..60).map {
                                                 obj {
                                                     x = it.toDouble() / 10
