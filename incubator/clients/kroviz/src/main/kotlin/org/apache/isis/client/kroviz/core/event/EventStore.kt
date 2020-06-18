@@ -2,6 +2,7 @@ package org.apache.isis.client.kroviz.core.event
 
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.to.TObject
+import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.kv.UiManager
 import pl.treksoft.kvision.panel.SimplePanel
 import pl.treksoft.kvision.state.observableListOf
@@ -102,6 +103,14 @@ object EventStore {
             val obj = it.obj
             if (obj is TObject
                     && obj.instanceId == tObject.instanceId)
+                return it
+        }
+        return null
+    }
+
+    fun findMenuBars(): LogEntry? {
+        this.log.forEach {
+           if (it.obj is Menubars)
                 return it
         }
         return null

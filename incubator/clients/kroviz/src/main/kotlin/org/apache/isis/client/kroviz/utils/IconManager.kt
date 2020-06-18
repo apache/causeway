@@ -1,21 +1,22 @@
 package org.apache.isis.client.kroviz.utils
 
 object IconManager {
-    val PREFIX = "fas fa-"
-    val DEFAULT_ICON = PREFIX + "bolt"
+    private const val PREFIX = "fas fa-"
+    const val DEFAULT_ICON = PREFIX + "bolt"
 
     const val DANGER = "text-danger"
     const val DISABLED = "text-disabled"
-    const val NORMAL = "text-normal"
+    private const val NORMAL = "text-normal"
     const val OK = "text-ok"
     const val WARN = "text-warn"
 
     /* Merge with configuration values*/
-    val word2Icon = mapOf<String, String>(
+    private val word2Icon = mapOf(
             "All" to "asterisk",
             "Actions" to "ellipsis-v",
             "Blobs" to "cloud",
             "Burger" to "bars",
+            "Chart" to "magic",
             "Close" to "times",
             "Configuration" to "wrench",
             "Connect" to "plug",
@@ -59,7 +60,7 @@ object IconManager {
             "Target" to "bullseye",
             "Text" to "font",
             "Toast" to "bread-slice", //comment-alt-plus/minus/exclamation
-            "Toolbox" to "magic",
+            "Toolbar" to "step-backward",
             "Tooltips" to "comment-alt",
             "Temporals" to "clock",
             "Trees" to "tree",
@@ -69,10 +70,11 @@ object IconManager {
             "Wikipedia" to "wikipedia-w")
 
     fun find(query: String): String {
+        if (query.startsWith("fa")) return query
         val actionTitle = Utils.deCamel(query)
         val mixedCaseList = actionTitle.split(" ")
         for (w in mixedCaseList) {
-            val hit = word2Icon.get(w)
+            val hit = word2Icon[w]
             if (hit != null) {
                 return PREFIX + hit
             }
@@ -81,11 +83,11 @@ object IconManager {
     }
 
     fun findStyleFor(actionName: String): Set<String> {
-        when {
-            actionName == "delete" -> return setOf(DANGER)
-            actionName == "undo" -> return setOf(WARN)
-            actionName == "save" -> return setOf(OK)
-            else -> return setOf(NORMAL)
+        return when (actionName) {
+            "delete" -> setOf(DANGER)
+            "undo" -> setOf(WARN)
+            "save" -> setOf(OK)
+            else -> setOf(NORMAL)
         }
     }
 

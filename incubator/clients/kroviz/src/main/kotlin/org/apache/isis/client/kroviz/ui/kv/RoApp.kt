@@ -8,7 +8,7 @@ object RoApp : SimplePanel() {
         this.add(RoMenuBar.navbar)
 
         val view = HPanel()
-        view.add(RoToolPanel.panel)
+        view.add(RoIconBar.panel)
         view.add(RoView.tabPanel)
         this.add(view)
 

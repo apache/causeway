@@ -71,7 +71,7 @@ label.control-label {
 }
 
 pre.highlight {
-    margin: 7px 0px;
+    margin: 7px 0;
     padding: 14px;
     background: #FDF6E3;
 }
@@ -118,7 +118,7 @@ textarea {
 }
 
 div {
-   /* font-family: Chicago, sans-serif;*/
+    /* font-family: Chicago, sans-serif;*/
 }
 
 .logo-button-image:before {
@@ -128,10 +128,10 @@ div {
     display: inline-block;
     vertical-align: text-top;
     background-color: transparent;
-    background-position : center center;
-    background-repeat:no-repeat;
+    background-position: center center;
+    background-repeat: no-repeat;
     background-size: contain, cover;
-    background-image : url("https://svn.apache.org/repos/asf/comdev/project-logos/originals/isis.svg");
+    background-image: url("https://svn.apache.org/repos/asf/comdev/project-logos/originals/isis.svg");
 }
 
 /*background-image: url("https://www.apache.org/img/ASF20thAnniversary.jpg");*/
@@ -142,5 +142,27 @@ https://svn.apache.org/repos/asf/comdev/project-logos/originals/isis.svg
 */
 
 .kv-window {
-  /* background-color: rgba(255,255,255, 0) !important;*/
+    /* background-color: rgba(255,255,255, 0) !important;*/
+}
+
+.icon-bar-object > .btn {
+    color: #007bff;
+}
+
+.icon-bar-factory > .btn {
+    color: green;
+}
+
+.icon-bar-action {
+    color: orange !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+}
+
+.icon-bar {
+    margin-top: 40px;
+    width: 40px;
+    height: calc(100vh - 80px);
+    scroll-behavior: auto;
+    background: GHOSTWHITE;
 }
