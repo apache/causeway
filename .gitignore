@@ -10,6 +10,13 @@
 .classpath
 .project
 
+# Node
+package-lock.json
+package.json
+webpack.config.js
+webpack.generated.js
+
+*.exe
 *~
 *.swp
 *.class
