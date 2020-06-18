@@ -167,8 +167,8 @@
 		<cors-filter.version>1.0.1</cors-filter.version>
 		<simpleslackapi.version>1.2.0</simpleslackapi.version>
 		<slf4j-api.version>1.7.26</slf4j-api.version> <!-- as provided by spring-boot, needed to solve convergence issues -->
-		<spring-framework.version>5.2.6.RELEASE</spring-framework.version>
-		<spring-boot.version>2.2.7.RELEASE</spring-boot.version> <!--  has no effect here, needs to be set in core-parent/pom.xml -->
+		<spring-framework.version>5.2.7.RELEASE</spring-framework.version>
+		<spring-boot.version>2.3.1.RELEASE</spring-boot.version> <!--  has no effect here, needs to be set in core-parent/pom.xml -->
 		<summernote.version>0.8.11</summernote.version>
 		<swagger-core.version>1.6.0</swagger-core.version>
 
