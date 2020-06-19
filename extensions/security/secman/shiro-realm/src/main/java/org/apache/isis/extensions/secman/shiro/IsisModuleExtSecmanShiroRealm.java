@@ -116,12 +116,13 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements S
 
             _Assert.assertNotNull(newPrincipal);
             
-            Boolean enableDelegatedUsers =  isisConfiguration.getExtensions().getSecman().getEnableDelegatedUsers();
-            if(!enableDelegatedUsers) {
-				_Assert.assertTrue(newPrincipal.isDisabled(), "As configured in " + SECMAN_ENABLE_DELEGATED_USERS + ", Auto-created user accounts must be initially disabled!");
-				throw disabledAccountException(username); // default behavior after user auto-creation
+            val shiroConf = isisConfiguration.getSecurity().getShiro();
+            
+            if(shiroConf.isAutoEnableIfDelegatedAndAuthenticated()) {
+                principal = newPrincipal;
             } else {
-				principal = newPrincipal;
+                _Assert.assertTrue(newPrincipal.isDisabled(), "As configured in " + SECMAN_ENABLE_DELEGATED_USERS + ", Auto-created user accounts must be initially disabled!");
+                throw disabledAccountException(username); // default behavior after user auto-creation
             }
         }
 

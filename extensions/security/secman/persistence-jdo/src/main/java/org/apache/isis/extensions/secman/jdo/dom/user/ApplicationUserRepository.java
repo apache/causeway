@@ -204,8 +204,10 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
         if(user.getAccountType().equals(AccountType.LOCAL)) {
         	// keep null that is set for status in accept() call above
         } else {
-            Boolean enableDelegatedUsers =  isisConfiguration.getExtensions().getSecman().getEnableDelegatedUsers();
-			user.setStatus(enableDelegatedUsers ?  ApplicationUserStatus.ENABLED : ApplicationUserStatus.DISABLED);
+            val shiroConf = isisConfiguration.getSecurity().getShiro();
+			user.setStatus(shiroConf.isAutoEnableIfDelegatedAndAuthenticated() 
+			        ?  ApplicationUserStatus.ENABLED 
+	                :  ApplicationUserStatus.DISABLED);
         }
         repository.persistAndFlush(user);
         return user;

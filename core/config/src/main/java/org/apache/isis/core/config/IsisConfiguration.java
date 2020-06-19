@@ -126,6 +126,14 @@ public class IsisConfiguration {
              * </p>
              */
             private boolean autoLogoutIfAlreadyAuthenticated = false;
+            /**
+             * Delegated users, on first successful logon, are auto-created but disabled (by default).
+             * <p> 
+             * This option allows to override this behavior, such that authenticated 
+             * users are also auto-enabled. 
+             *
+             */
+            private boolean autoEnableIfDelegatedAndAuthenticated = false;
         }
     }
 
@@ -2973,8 +2981,8 @@ public class IsisConfiguration {
     private final Extensions extensions = new Extensions();
     @Data
     public static class Extensions {
+        
         private final Cors cors = new Cors();
-        private final Secman secman = new Secman();
         @Data
         public static class Cors {
             /**
@@ -3030,10 +3038,7 @@ public class IsisConfiguration {
              */
             private List<String> exposedHeaders = listOf("Authorization");
         }
-        @Data
-        public static class Secman {
-        	private Boolean enableDelegatedUsers = false;
-		}
+        
     }
 
     private static List<String> listOf(final String ...values) {
