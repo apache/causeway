@@ -2974,6 +2974,7 @@ public class IsisConfiguration {
     @Data
     public static class Extensions {
         private final Cors cors = new Cors();
+        private final Secman secman = new Secman();
         @Data
         public static class Cors {
             /**
@@ -3029,6 +3030,10 @@ public class IsisConfiguration {
              */
             private List<String> exposedHeaders = listOf("Authorization");
         }
+        @Data
+        public static class Secman {
+        	private Boolean enableDelegatedUsers = false;
+		}
     }
 
     private static List<String> listOf(final String ...values) {

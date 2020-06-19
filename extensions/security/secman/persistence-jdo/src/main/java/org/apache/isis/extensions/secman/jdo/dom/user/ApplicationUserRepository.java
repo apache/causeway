@@ -199,8 +199,12 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
         val user = newApplicationUser();
         user.setUsername(username);
         user.setAccountType(accountType);
-        user.setStatus(ApplicationUserStatus.DISABLED);
         beforePersist.accept(user);
+        if(user.getAccountType().equals(AccountType.LOCAL)) {
+        	// keep null that is set for status in accept() call above
+        } else {
+			user.setStatus(ApplicationUserStatus.ENABLED);
+        }
         repository.persistAndFlush(user);
         return user;
     }
