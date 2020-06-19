@@ -26,8 +26,6 @@ import java.util.function.Consumer;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.stereotype.Repository;
-
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
@@ -36,6 +34,7 @@ import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.api.user.AccountType;
@@ -43,6 +42,7 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_lock;
 import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_unlock;
+import org.springframework.stereotype.Repository;
 
 import lombok.NonNull;
 import lombok.val;
@@ -56,6 +56,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
     @Inject private RepositoryService repository;
     @Inject private SecurityModuleConfig configBean;
     @Inject private Optional<PasswordEncryptionService> passwordEncryptionService; // empty if no candidate is available
+	@Inject protected IsisConfiguration isisConfiguration;
     
     @Inject private javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
     
@@ -203,7 +204,8 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
         if(user.getAccountType().equals(AccountType.LOCAL)) {
         	// keep null that is set for status in accept() call above
         } else {
-			user.setStatus(ApplicationUserStatus.ENABLED);
+            Boolean enableDelegatedUsers =  isisConfiguration.getExtensions().getSecman().getEnableDelegatedUsers();
+			user.setStatus(enableDelegatedUsers ?  ApplicationUserStatus.ENABLED : ApplicationUserStatus.DISABLED);
         }
         repository.persistAndFlush(user);
         return user;
