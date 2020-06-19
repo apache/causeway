@@ -18,8 +18,6 @@
  */
 package demoapp.dom.types.clob;
 
-import java.nio.charset.StandardCharsets;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -34,37 +32,20 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.util.JaxbAdapters;
 import org.apache.isis.applib.value.Clob;
-import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.commons.internal.resources._Resources;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-import demoapp.utils.DemoStub;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.Clob", editing=Editing.ENABLED)
 @Log4j2
-public class ClobDemo extends DemoStub {
+public class ClobDemo implements HasAsciiDocDescription {
 
-    @Override
-    public void initDefaults() {
-
-        log.info("ClobDemo::initDefaults");
-
-        try {
-            val text = _Strings.read(_Resources.load(ClobDemo.class, "document.txt"), StandardCharsets.UTF_8);
-            document = Clob.of("document", CommonMimeType.TXT, text);
-        } catch (Exception e) {
-            log.error("failed to create Clob from text resource", e);
-        }
-
-    }
 
     // -- EDITABLE
 

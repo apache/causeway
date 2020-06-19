@@ -17,7 +17,7 @@ import lombok.val;
 
 
 @Service
-@Named("demoapp.AsciiDocDescriptionService")
+@Named("demoapp.AsciiDocReaderService")
 public class AsciiDocReaderService {
 
     public AsciiDoc readFor(Object anObject) {

@@ -37,7 +37,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
 
-import demoapp.dom._infra.HasAsciiDocDescription;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.viewmodels.jaxbrefentity.StatefulViewModelJaxbRefsEntity;
 import demoapp.dom.viewmodels.usingjaxb.StatefulViewModelUsingJaxb;
 

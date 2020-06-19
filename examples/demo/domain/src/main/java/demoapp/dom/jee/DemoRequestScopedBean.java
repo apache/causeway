@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.utils;
+package demoapp.dom.jee;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;

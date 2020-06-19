@@ -27,8 +27,6 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.factory.FactoryService;
 
-import lombok.val;
-
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.AssociatedActionMenu")
 @DomainObjectLayout(named="Associated Action")
 public class AssociatedActionMenu {
@@ -38,9 +36,19 @@ public class AssociatedActionMenu {
     @Action
     @ActionLayout(cssClassFa="fa-bolt")
     public AssociatedActionDemo associatedActions(){
-        val demo = factoryService.viewModel(AssociatedActionDemo.class);
-        demo.initDefaults();
-        return demo;
+        return AssociatedActionDemo.createWithDemoData();
     }
+
+//    @Action
+//    @ActionLayout(cssClassFa="fa-bolt")
+//    public AssociatedActionDemo associatedActions(){
+//        val demo = factoryService.viewModel(AssociatedActionDemo.class);
+//        demo.getItems().clear();
+//        demo.getItems().add(DemoItem.of("first"));
+//        demo.getItems().add(DemoItem.of("second"));
+//        demo.getItems().add(DemoItem.of("third"));
+//        demo.getItems().add(DemoItem.of("last"));
+//        return demo;
+//    }
 
 }

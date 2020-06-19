@@ -27,10 +27,6 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.factory.FactoryService;
 
-import lombok.val;
-
-import demoapp.utils.DemoStub;
-
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.TreeDemoMenu")
 @DomainObjectLayout(named="Tree Demo")
 public class TreeDemoMenu {
@@ -39,10 +35,8 @@ public class TreeDemoMenu {
 
     @Action
     @ActionLayout(cssClassFa="fa-tree")
-    public DemoStub fileSystemTree(){
-        val demo = factoryService.viewModel(TreeDemo.class);
-        demo.initDefaults();  
-        return demo;
+    public TreeDemo fileSystemTree(){
+        return factoryService.viewModel(TreeDemo.class);
     }
 
 }

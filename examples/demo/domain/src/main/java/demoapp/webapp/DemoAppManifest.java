@@ -52,7 +52,6 @@ import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom.DemoModule;
 import demoapp.dom._infra.AsciiDocReaderService;
-import demoapp.utils.DemoRequestScopedBean;
 import demoapp.dom._infra.LibraryPreloadingService;
 
 /**
@@ -92,14 +91,11 @@ import demoapp.dom._infra.LibraryPreloadingService;
     LibraryPreloadingService.class, // just a performance enhancement
     AsciiDocReaderService.class,
 
-    DemoRequestScopedBean.class // demo @RequestScope logging
-
 })
 @ComponentScan(
         basePackageClasses= {
                 DemoModule.class
-        }
-        )
+        })
 @Log4j2
 public class DemoAppManifest {
 

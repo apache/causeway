@@ -18,8 +18,6 @@
  */
 package demoapp.dom.types.markup;
 
-import java.nio.charset.StandardCharsets;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -35,37 +33,21 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.util.JaxbAdapters;
 import org.apache.isis.applib.value.Markup;
-import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.core.commons.internal.resources._Resources;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-import demoapp.utils.DemoStub;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType="demo.Markup", editing=Editing.DISABLED)
 @Log4j2
-public class MarkupDemo extends DemoStub {
+public class MarkupDemo implements HasAsciiDocDescription {
 
-    @Override
-    public void initDefaults() {
 
-        log.info("MarkupDemo::initDefaults");
-
-        try {
-            val htmlSource = _Strings.read(_Resources.load(MarkupDemo.class, "markup-embedded.html"), StandardCharsets.UTF_8);
-            markup = new Markup(htmlSource);
-        } catch (Exception e) {
-            log.error("failed to create Markup from file resource", e);
-        }
-        
-    }
-    
     @Property
     @PropertyLayout(labelPosition = LabelPosition.NONE)
     @XmlElement @XmlJavaTypeAdapter(JaxbAdapters.MarkupAdapter.class)

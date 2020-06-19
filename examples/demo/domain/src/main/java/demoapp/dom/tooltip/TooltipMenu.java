@@ -18,6 +18,8 @@
  */
 package demoapp.dom.tooltip;
 
+import java.util.ArrayList;
+
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
@@ -27,6 +29,8 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.factory.FactoryService;
 
 import lombok.val;
+
+import demoapp.dom.actions.assoc.DemoItem;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.TooltipMenu")
 public class TooltipMenu {
@@ -39,7 +43,11 @@ public class TooltipMenu {
             describedAs="Opens the Tooltip-Demo page.")
     public TooltipDemo tooltipDemo(){
         val demo = factoryService.viewModel(TooltipDemo.class);
-        demo.initDefaults();
+
+        demo.getCollection().add(DemoItem.of("first"));
+        demo.getCollection().add(DemoItem.of("second"));
+        demo.getCollection().add(DemoItem.of("third"));
+
         return demo;
     }
 

@@ -16,21 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.webapp;
 
-import lombok.Getter;
-import lombok.Setter;
+package demoapp.dom._infra.utils;
 
-public class Notification {
+import lombok.experimental.UtilityClass;
 
-    @Getter @Setter private int id;
-    @Getter @Setter private String text;
-    @Getter @Setter private String username;
+@UtilityClass
+public class HtmlUtils {
 
-    public Notification(int id, String text, String username) {
-        this.id = id;
-        this.text = text;
-        this.username = username;
+    public static String link(String name, String href) {
+        return String.format("<a target=\"%s\" href=\"%s\">%s</a>", "blank", href, name);
+    }
+
+    public static String p(String content) {
+        return String.format("<p>%s</p>", content);
     }
 
 }

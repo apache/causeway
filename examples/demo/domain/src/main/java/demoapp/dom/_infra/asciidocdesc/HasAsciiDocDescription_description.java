@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom._infra;
+package demoapp.dom._infra.asciidocdesc;
 
 import javax.inject.Inject;
 
@@ -27,25 +27,23 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
+import demoapp.dom._infra.AsciiDocReaderService;
+
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @Property
-@RequiredArgsConstructor @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
-public class HasAsciiDocDescription_sources {
+@RequiredArgsConstructor
+public class HasAsciiDocDescription_description {
 
     private final HasAsciiDocDescription hasAsciiDocDescription;
 
     @PropertyLayout(labelPosition = LabelPosition.NONE)
-    @MemberOrder(name = "sources", sequence = "1")
+    @MemberOrder(name = "description", sequence = "1")
     public AsciiDoc prop() {
-        val packageName = hasAsciiDocDescription.getClass().getPackage().getName();
-        val sourceLocation = packageName.replace('.', '/');
-        return AsciiDoc.valueOfAdoc(
-                markupVariableResolverService.resolveVariables(
-                        String.format("link:${SOURCES_DEMO}/%s[Sources] for this demo", sourceLocation)));
+        return asciiDocReaderService.readFor(hasAsciiDocDescription, "description");
     }
 
     @Inject
-    MarkupVariableResolverService markupVariableResolverService;
+    AsciiDocReaderService asciiDocReaderService;
 
 }

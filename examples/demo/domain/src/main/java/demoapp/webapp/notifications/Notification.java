@@ -16,17 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package demoapp.webapp.notifications;
 
-package demoapp.utils;
+import lombok.Getter;
+import lombok.Setter;
 
-public class DemoUtils {
+public class Notification {
 
-    public static String emphasize(String string) {
-        return new StringBuilder()
-                .append("\n====================================================\n")
-                .append(string)
-                .append("\n====================================================\n")
-                .toString();
+    @Getter @Setter private int id;
+    @Getter @Setter private String text;
+    @Getter @Setter private String username;
+
+    public Notification(int id, String text, String username) {
+        this.id = id;
+        this.text = text;
+        this.username = username;
     }
 
 }

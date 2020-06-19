@@ -30,24 +30,18 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 
-import demoapp.utils.DemoStub;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.Events")
-public class EventsDemo extends DemoStub {
+public class EventsDemo implements HasAsciiDocDescription {
 
     @Inject private EventLogRepository eventLog;
     @Inject private EventBusService eventBusService;
     
-    @Override
     public String title() {
         return "Event Demo";
     }
     
-    @Override
-    public void initDefaults() {
-
-    }
-
     @Collection
     public List<EventLogEntry> getAllEvents(){
         return eventLog.listAll();

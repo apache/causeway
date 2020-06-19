@@ -29,15 +29,14 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
 
-import demoapp.utils.DemoStub;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.Errors", editing=Editing.ENABLED)
-public class ErrorDemo extends DemoStub {
+public class ErrorDemo implements HasAsciiDocDescription {
 
-    @Override
     public String title() {
         return "Error Handling Demo";
     }
@@ -46,11 +45,6 @@ public class ErrorDemo extends DemoStub {
     @ActionLayout(cssClassFa="fa-bolt")
     public Object triggerAnError(){
         throw new IllegalArgumentException("This is a demo Exception.");
-    }
-
-    @Override
-    public void initDefaults() {
-
     }
 
 }

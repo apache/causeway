@@ -42,7 +42,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
 
-import demoapp.dom._infra.HasAsciiDocDescription;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "demoapp.StatefulViewModelUsingJaxb")
 @XmlType(

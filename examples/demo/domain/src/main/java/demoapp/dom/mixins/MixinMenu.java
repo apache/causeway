@@ -18,6 +18,8 @@
  */
 package demoapp.dom.mixins;
 
+import java.util.ArrayList;
+
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
@@ -39,7 +41,13 @@ public class MixinMenu {
             describedAs="Opens the Mixin-Demo page.")
     public MixinDemo mixinDemo(){
         val demo = factoryService.viewModel(MixinDemo.class);
-        demo.initDefaults();
+        demo.setNote("Update me! The button below is contributed by one of my mixins.");
+
+        demo.collection = new ArrayList<>();
+        demo.collection.add(DemoItem.of("first", null));
+        demo.collection.add(DemoItem.of("second", demo.collection.get(0)));
+        demo.collection.add(DemoItem.of("third", demo.collection.get(1)));
+
         return demo;
     }
 

@@ -1,4 +1,4 @@
-package demoapp.utils;
+package demoapp.webapp.wicket.utils;
 
 import java.io.IOException;
 

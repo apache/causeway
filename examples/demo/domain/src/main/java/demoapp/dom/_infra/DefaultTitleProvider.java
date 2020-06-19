@@ -18,30 +18,28 @@
  */
 package demoapp.dom._infra;
 
-import javax.inject.Inject;
+import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
+import org.apache.isis.applib.events.ui.TitleUiEvent;
+import org.apache.isis.core.commons.internal.base._Strings;
 
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
-@Property
-@RequiredArgsConstructor
-public class HasAsciiDocDescription_description {
+import lombok.val;
 
-    private final HasAsciiDocDescription hasAsciiDocDescription;
 
-    @PropertyLayout(labelPosition = LabelPosition.NONE)
-    @MemberOrder(name = "description", sequence = "1")
-    public AsciiDoc prop() {
-        return asciiDocReaderService.readFor(hasAsciiDocDescription, "description");
+@Service
+@Named("demoapp.DefaultTitleProvider")
+public class DefaultTitleProvider {
+
+    @EventListener(TitleUiEvent.class)
+    public void on(TitleUiEvent<?> event) {
+        val source = event.getSource();
+        val simpleName = source.getClass().getSimpleName();
+        val title = _Strings.asNaturalName2.apply(simpleName);
+
+        event.setTitle(title);
     }
-
-    @Inject
-    AsciiDocReaderService asciiDocReaderService;
 
 }

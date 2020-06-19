@@ -37,7 +37,7 @@ import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom.events.EventsDemo.UiButtonEvent;
 
-import static demoapp.utils.DemoUtils.emphasize;
+import static demoapp.dom._infra.utils.LogUtils.emphasize;
 
 @Service
 @Named("demoapp.eventSubscriber")

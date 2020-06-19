@@ -16,29 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.error;
 
-import javax.inject.Inject;
+package demoapp.dom._infra.utils;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.services.factory.FactoryService;
+import lombok.experimental.UtilityClass;
 
-import lombok.val;
+@UtilityClass
+public class LogUtils {
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.ErrorMenu")
-@DomainObjectLayout(named="Error Handling")
-public class ErrorMenu {
-
-    @Inject private FactoryService factoryService;
-
-    @Action
-    @ActionLayout(cssClassFa="fa-bolt")
-    public ErrorDemo errorHandling(){
-        return factoryService.viewModel(ErrorDemo.class);
+    public static String emphasize(String string) {
+        return new StringBuilder()
+                .append("\n====================================================\n")
+                .append(string)
+                .append("\n====================================================\n")
+                .toString();
     }
 
 }
