@@ -35,24 +35,15 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
-import demoapp.utils.DemoStub;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType="demo.Uuid", editing=Editing.ENABLED)
 @Log4j2
-public class UuidDemo extends DemoStub {
+public class UuidDemo implements HasAsciiDocDescription {
 
-    @Override
-    public void initDefaults() {
-
-        log.info("UuidDemo::initDefaults");
-
-        uuid = UUID.randomUUID();
-    }
-
-    // -- EDITABLE
 
     @Property
     @XmlElement @Getter @Setter private UUID uuid;

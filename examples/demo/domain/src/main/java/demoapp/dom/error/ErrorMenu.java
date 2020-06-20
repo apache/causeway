@@ -38,9 +38,7 @@ public class ErrorMenu {
     @Action
     @ActionLayout(cssClassFa="fa-bolt")
     public ErrorDemo errorHandling(){
-        val demo = factoryService.viewModel(ErrorDemo.class);
-        demo.initDefaults();
-        return demo;
+        return factoryService.viewModel(ErrorDemo.class);
     }
 
 }

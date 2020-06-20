@@ -34,13 +34,19 @@ import lombok.val;
 public class TupleDemoMenu {
 
     @Inject private FactoryService factoryService;
+    @Inject private NumberConstantRepository numberConstantRepo;
 
     @Action
     @ActionLayout(cssClassFa="fa-bolt")
     public TupleDemo tupleDemo(){
-        val demo = factoryService.viewModel(TupleDemo.class);
-        demo.initDefaults();
-        return demo;
+
+        if(numberConstantRepo.listAll().size() == 0) {
+            numberConstantRepo.add("Pi", ComplexNumber.of(Math.PI, 0.));
+            numberConstantRepo.add("Euler's Constant", ComplexNumber.of(Math.E, 0.));
+            numberConstantRepo.add("Imaginary Unit", ComplexNumber.of(0, 1.));
+        }
+
+        return factoryService.viewModel(TupleDemo.class);
     }
     
     

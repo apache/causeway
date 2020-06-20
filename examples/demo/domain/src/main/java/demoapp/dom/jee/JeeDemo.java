@@ -29,21 +29,19 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 
-import demoapp.utils.DemoRequestScopedBean;
-import demoapp.utils.DemoStub;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.Jee")
-public class JeeDemo extends DemoStub {
+public class JeeDemo implements HasAsciiDocDescription {
 
     @Inject private JeeDemoService jeeDemoService;
     
     //@Resource(name = "demoapp.DemoRequestScopedBean")
     @Inject private DemoRequestScopedBean demoRequestScopedBean;
 
-    @Override
     public String title() {
         return "JEE Demo";
     }
@@ -60,11 +58,6 @@ public class JeeDemo extends DemoStub {
         demoRequestScopedBean.debug();
         
         return jeeDemoService.getMessage();
-    }
-
-    @Override
-    public void initDefaults() {
-
     }
 
 }

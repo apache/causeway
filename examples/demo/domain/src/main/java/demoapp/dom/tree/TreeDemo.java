@@ -27,10 +27,10 @@ import org.apache.isis.applib.graph.tree.TreePath;
 
 import lombok.val;
 
-import demoapp.utils.DemoStub;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @DomainObject(nature = Nature.VIEW_MODEL, objectType = "demo.Tree")
-public class TreeDemo extends DemoStub {
+public class TreeDemo implements HasAsciiDocDescription {
 
     // this is the actual view model rendered by the framework
     private static final TreeNode<FileNode> createTree() {
@@ -58,9 +58,5 @@ public class TreeDemo extends DemoStub {
         return createTree();
     }
 
-    @Override
-    public void initDefaults() {
-
-    }
 
 }

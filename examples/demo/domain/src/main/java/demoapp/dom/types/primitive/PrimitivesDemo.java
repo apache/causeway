@@ -38,16 +38,15 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
-import demoapp.utils.DemoStub;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.Primitives", editing=Editing.ENABLED)
 @Log4j2
-public class PrimitivesDemo extends DemoStub {
+public class PrimitivesDemo implements HasAsciiDocDescription {
 
-    @Override
     public String title() {
         return "Primitives Demo";
     }
@@ -224,22 +223,6 @@ public class PrimitivesDemo extends DemoStub {
         return _Lists.of(Double.MIN_VALUE, Double.MAX_VALUE);
     }
 
-    // --
-
-    @Override
-    public void initDefaults() {
-
-        log.info("PrimitivesDemo::initDefaults");
-
-        javaLangByte = Byte.MAX_VALUE;
-        javaLangShort = Short.MAX_VALUE;
-        javaLangInteger = Integer.MAX_VALUE;
-        javaLangLong = Long.MAX_VALUE;
-        
-        javaLangFloat = Float.MAX_VALUE;
-        javaLangDouble = Double.MAX_VALUE;
-        
-    }
 
 
 }

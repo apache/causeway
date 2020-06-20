@@ -38,13 +38,13 @@ import org.apache.isis.applib.value.Markup;
 import lombok.Getter;
 import lombok.Setter;
 
-import demoapp.utils.DemoStub;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.DependentArgs", editing=Editing.ENABLED)
-public class DependentArgsActionDemo extends DemoStub {
+public class DependentArgsActionDemo implements HasAsciiDocDescription {
 
     @Property
     @PropertyLayout(describedAs = "Default for first dialog paramater in 'Choices', 'Auto Complete' and 'Default'")
@@ -82,14 +82,6 @@ public class DependentArgsActionDemo extends DemoStub {
     private final Set<DemoItem> items = new LinkedHashSet<>();
     
 
-    @Override
-    public void initDefaults() {
-        items.clear();
-        items.add(DemoItem.of("first", Parity.ODD));
-        items.add(DemoItem.of("second", Parity.EVEN));
-        items.add(DemoItem.of("third", Parity.ODD));
-        items.add(DemoItem.of("last", Parity.EVEN));
-    }
 
 }
 

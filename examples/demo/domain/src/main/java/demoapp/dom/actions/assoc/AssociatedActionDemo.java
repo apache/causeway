@@ -37,14 +37,27 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.message.MessageService;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.val;
 
-import demoapp.utils.DemoStub;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.AssociatedAction", editing=Editing.ENABLED)
-public class AssociatedActionDemo extends DemoStub {
+@NoArgsConstructor
+public class AssociatedActionDemo implements HasAsciiDocDescription {
+
+    public static AssociatedActionDemo createWithDemoData() {
+        val demo = new AssociatedActionDemo();
+        demo.getItems().clear();
+        demo.getItems().add(DemoItem.of("first"));
+        demo.getItems().add(DemoItem.of("second"));
+        demo.getItems().add(DemoItem.of("third"));
+        demo.getItems().add(DemoItem.of("last"));
+        return demo;
+    }
 
     @XmlTransient
     @Inject MessageService messageService;
@@ -64,13 +77,5 @@ public class AssociatedActionDemo extends DemoStub {
         return this;
     }
 
-    @Override
-    public void initDefaults() {
-        items.clear();
-        items.add(DemoItem.of("first"));
-        items.add(DemoItem.of("second"));
-        items.add(DemoItem.of("third"));
-        items.add(DemoItem.of("last"));
-    }
-    
+
 }

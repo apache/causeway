@@ -26,26 +26,17 @@ import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 
-import demoapp.utils.DemoStub;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.TupleDemo")
-public class TupleDemo extends DemoStub {
+public class TupleDemo implements HasAsciiDocDescription {
 
     @Inject private NumberConstantRepository numberConstantRepo;
     
-    @Override
     public String title() {
         return "Tuple Demo";
     }
     
-    @Override
-    public void initDefaults() {
-        if(numberConstantRepo.listAll().size() == 0) {
-            numberConstantRepo.add("Pi", ComplexNumber.of(Math.PI, 0.));    
-            numberConstantRepo.add("Euler's Constant", ComplexNumber.of(Math.E, 0.));
-            numberConstantRepo.add("Imaginary Unit", ComplexNumber.of(0, 1.));
-        }
-    }
 
     @Collection
     public List<NumberConstant> getAllConstants(){

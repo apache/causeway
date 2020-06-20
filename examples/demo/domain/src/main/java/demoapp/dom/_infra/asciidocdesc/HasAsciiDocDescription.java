@@ -1,4 +1,4 @@
-package demoapp.dom._infra;
+package demoapp.dom._infra.asciidocdesc;
 
 public interface HasAsciiDocDescription {
 }

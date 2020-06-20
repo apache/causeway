@@ -29,7 +29,6 @@
 
 	<properties>
 		<sonar.skip>true</sonar.skip>
-		<maven-war-plugin.warName>${project.artifactId}</maven-war-plugin.warName>
 	</properties>
 
 	<build>
@@ -50,12 +49,44 @@
 			</resource>
 		</resources>
 
+		<plugins>
+
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<warName>${project.artifactId}</warName>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<archive>
+						<manifest>
+							<addClasspath>false</addClasspath>
+						</manifest>
+						<manifestEntries>
+							<Build-Time>${maven.build.timestamp}</Build-Time>
+							<Build-Host>${agent.name}</Build-Host>
+							<Build-User>${user.name}</Build-User>
+							<Build-Maven>Maven ${maven.version}</Build-Maven>
+							<Build-Java>${java.version}</Build-Java>
+							<Build-OS>${os.name}</Build-OS>
+							<Build-Label>${project.version}</Build-Label>
+						</manifestEntries>
+					</archive>
+
+					<!-- SKINNY WAR -->
+					<packagingIncludes>
+						WEB-INF/lib/demo-*.jar,
+					</packagingIncludes>
+
+				</configuration>
+			</plugin>
+
+		</plugins>
+
 	</build>
 
 	<dependencies>
-	
+
 		<!-- DEMO DOMAIN -->
-	
+
 		<dependency>
 			<groupId>org.apache.isis.examples.apps</groupId>
 			<artifactId>demo-domain</artifactId>
@@ -77,6 +108,19 @@
 			<groupId>org.apache.isis.mavendeps</groupId>
 			<artifactId>isis-mavendeps-jdk11</artifactId>
 			<type>pom</type>
+		</dependency>
+
+		<!-- JEE SUPPORT -->
+
+		<dependency>
+			<groupId>org.apache.isis.incubator</groupId>
+			<artifactId>isis-incubator-microprofile</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-jul</artifactId>
 		</dependency>
 
 	</dependencies>

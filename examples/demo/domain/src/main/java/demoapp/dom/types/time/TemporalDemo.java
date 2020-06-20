@@ -48,16 +48,15 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
-import demoapp.utils.DemoStub;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.Temporal", editing=Editing.ENABLED)
 @Log4j2
-public class TemporalDemo extends DemoStub {
+public class TemporalDemo implements HasAsciiDocDescription {
 
-    @Override
     public String title() {
         return "Temporal Demo";
     }
@@ -117,19 +116,6 @@ public class TemporalDemo extends DemoStub {
 
     // --
 
-    @Override
-    public void initDefaults() {
-
-        log.info("TemporalDemo::initDefaults");
-
-        javaUtilDate = new Date();
-        javaSqlDate = new java.sql.Date(System.currentTimeMillis());
-        javaSqlTimestamp = new java.sql.Timestamp(System.currentTimeMillis());
-
-        javaLocalDate = LocalDate.now();
-        javaLocalDateTime = LocalDateTime.now();
-        javaOffsetDateTime = OffsetDateTime.now();
-    }
 
 
 }

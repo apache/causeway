@@ -26,20 +26,18 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Programmatic;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import demoapp.utils.DemoStub;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.Tab")
-public class TabDemo extends DemoStub {
+public class TabDemo implements HasAsciiDocDescription {
 
-    @Override
     public String title() {
         return "Tab Demo";
     }
@@ -74,9 +72,5 @@ public class TabDemo extends DemoStub {
 
     private boolean hidden = false;
 
-    @Override @Programmatic
-    public void initDefaults() {
-        hidden = false;
-    }
 
 }

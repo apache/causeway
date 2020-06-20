@@ -37,7 +37,6 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -48,16 +47,15 @@ import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 import lombok.Getter;
 import lombok.Setter;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.actions.assoc.DemoItem;
-import demoapp.utils.DemoStub;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.Tooltip")
-public class TooltipDemo extends DemoStub {
+public class TooltipDemo implements HasAsciiDocDescription {
 
-    @Override
     public String title() {
         return "Tooltip Demo";
     }
@@ -185,7 +183,7 @@ public class TooltipDemo extends DemoStub {
             describedAs="This is a collection with a tooltip. Also note, you can mouse-over the "
                     + "'Name' column's head label.")
     @PropertyLayout(labelPosition=LabelPosition.TOP)
-    @Getter private List<DemoItem> collection;
+    @Getter private List<DemoItem> collection = new ArrayList<>();
 
     // -- FIELDSET CONTENT
 
@@ -215,14 +213,5 @@ public class TooltipDemo extends DemoStub {
 
     // ---
 
-    @Override @Programmatic
-    public void initDefaults() {
-
-        collection = new ArrayList<>();
-        collection.add(DemoItem.of("first"));
-        collection.add(DemoItem.of("second"));
-        collection.add(DemoItem.of("third"));
-
-    }
 
 }

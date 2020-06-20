@@ -42,7 +42,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.AsciiDocReaderService;
-import demoapp.dom._infra.HasAsciiDocDescription;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @DomainObject(
         nature=Nature.VIEW_MODEL

@@ -37,7 +37,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 
-import demoapp.utils.DemoStub;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "Demo")
 @XmlType
@@ -45,19 +45,8 @@ import demoapp.utils.DemoStub;
 @DomainObject(nature=Nature.VIEW_MODEL, objectType="demo.Text", editing=Editing.ENABLED)
 @ToString
 @Log4j2
-public class TextDemo extends DemoStub {
+public class TextDemo implements HasAsciiDocDescription {
 
-    @Override
-    public void initDefaults() {
-
-        log.info("TextDemo::initDefaults");
-
-        string = "a string (click me)";
-        stringMultiline = "A multiline string\nspanning\n3 lines. (click me)";
-
-        stringReadonly = "a readonly string (but allows text select)";
-        stringMultilineReadonly = "A readonly string\nspanning\n3 lines. (but allows text select)";
-    }
 
     // -- EDITABLE
 

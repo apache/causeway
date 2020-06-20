@@ -42,13 +42,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
 
-import demoapp.utils.DemoStub;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.AsyncAction", editing=Editing.DISABLED)
-public class AsyncActionDemo extends DemoStub {
+public class AsyncActionDemo implements HasAsciiDocDescription {
 
     @XmlTransient
     @Inject SseService eventStreamService;
@@ -76,9 +76,5 @@ public class AsyncActionDemo extends DemoStub {
         return this;
     }
 
-    @Override
-    public void initDefaults() {
-        progressView = ListeningMarkup.valueOfHtml("Please start a task!");
-    }
 
 }

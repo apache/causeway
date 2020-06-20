@@ -6,6 +6,14 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <mb3:primary>
         <mb3:menu>
+            <mb3:named>View Models</mb3:named>
+            <mb3:section>
+                <mb3:serviceAction objectType="demoapp.ViewModels" id="openStateful"/>
+                <mb3:serviceAction objectType="demoapp.ViewModels" id="openStatefulRefsEntity"/>
+            </mb3:section>
+        </mb3:menu>
+
+        <mb3:menu>
             <mb3:named>Featured Types</mb3:named>
             <mb3:section>
                 <mb3:serviceAction objectType="demo.FeaturedTypesMenu" id="text">
@@ -31,14 +39,7 @@
                 </mb3:serviceAction>
             </mb3:section>
         </mb3:menu>
-        
-        <mb3:menu>
-            <mb3:named>View Models</mb3:named>
-            <mb3:section>
-                <mb3:serviceAction objectType="demoapp.ViewModels" id="openStateful"/>
-            </mb3:section>
-        </mb3:menu>
-        
+
         <mb3:menu>
             <mb3:named>Tooltips</mb3:named>
             <mb3:section>

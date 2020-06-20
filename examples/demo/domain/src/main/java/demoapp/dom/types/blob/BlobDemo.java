@@ -32,37 +32,20 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.util.JaxbAdapters;
 import org.apache.isis.applib.value.Blob;
-import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.isis.core.commons.internal.base._Bytes;
-import org.apache.isis.core.commons.internal.resources._Resources;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-import demoapp.utils.DemoStub;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.Blob", editing=Editing.ENABLED)
 @Log4j2
-public class BlobDemo extends DemoStub {
+public class BlobDemo implements HasAsciiDocDescription {
 
-    @Override
-    public void initDefaults() {
-
-        log.info("BlobDemo::initDefaults");
-
-        try {
-            val bytes = _Bytes.of(_Resources.load(BlobDemo.class, "isis-logo-568x286.png"));
-            logo = Blob.of("isis-logo-568x286", CommonMimeType.PNG, bytes);
-        } catch (Exception e) {
-            log.error("failed to create Blob from image resource", e);
-        }
-
-    }
 
     // -- EDITABLE
 

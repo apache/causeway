@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.runtimeservices.i18n.po;
 
+import java.util.Optional;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
@@ -37,6 +39,8 @@ import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Lazy;
 import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.IsisConfiguration;
+
+import lombok.val;
 
 @Service
 @Named("isisRuntimeServices.TranslationServicePo")
@@ -116,13 +120,13 @@ public class TranslationServicePo implements TranslationService {
     /**
      * Not API
      */
-    public String toPot() {
+    public Optional<String> toPot() {
         if (!getMode().isWrite()) {
-            return null;
+            return Optional.empty();
         }
-        StringBuilder buf = new StringBuilder();
+        val buf = new StringBuilder();
         ((PoWriter)po).toPot(buf);
-        return buf.toString();
+        return Optional.of(buf.toString());
     }
 
 

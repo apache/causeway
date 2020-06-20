@@ -40,6 +40,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.commons.internal.assertions._Assert;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
 import org.apache.isis.extensions.secman.api.SecurityRealm;
@@ -56,9 +57,11 @@ import lombok.val;
 
 public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements SecurityRealm {
 
-    @Inject protected ServiceInjector serviceInjector;
+    private static final String SECMAN_ENABLE_DELEGATED_USERS = "secman.enableDelegatedUsers";
+	@Inject protected ServiceInjector serviceInjector;
     @Inject protected IsisInteractionFactory isisInteractionFactory;
     @Inject protected PlatformTransactionManager txMan;
+	@Inject protected IsisConfiguration isisConfiguration;
     
     @Getter @Setter private AuthenticatingRealm delegateAuthenticationRealm;
     @Getter @Setter private boolean autoCreateUser = true;
@@ -80,7 +83,6 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements S
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-
         if (!(token instanceof UsernamePasswordToken)) {
             throw new AuthenticationException();
         }
@@ -102,20 +104,26 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements S
         }
         
         // lookup from database, for roles/perms
-        val principal = lookupPrincipal_inApplicationUserRepository(username);
+        PrincipalForApplicationUser principal = lookupPrincipal_inApplicationUserRepository(username);
 
         val autoCreateUserWhenDelegatedAuthentication = hasDelegateAuthenticationRealm() && isAutoCreateUser();
         if (principal == null && autoCreateUserWhenDelegatedAuthentication) {
             // When using delegated authentication, desired behavior is to auto-create user accounts in the 
-            // DB only if these do successfully authenticate with the delegated authentication mechanism,
+            // DB only if these do successfully authenticate with the delegated authentication mechanism
             // while the newly created user will be disabled by default
             authenticateElseThrow_usingDelegatedMechanism(token);
             val newPrincipal = createPrincipal_inApplicationUserRepository(username);
 
             _Assert.assertNotNull(newPrincipal);
-            _Assert.assertTrue(newPrincipal.isDisabled(), "Auto-created user accounts must be initially disabled!");
-
-            throw disabledAccountException(username); // default behavior after user auto-creation
+            
+            val shiroConf = isisConfiguration.getSecurity().getShiro();
+            
+            if(shiroConf.isAutoEnableIfDelegatedAndAuthenticated()) {
+                principal = newPrincipal;
+            } else {
+                _Assert.assertTrue(newPrincipal.isDisabled(), "As configured in " + SECMAN_ENABLE_DELEGATED_USERS + ", Auto-created user accounts must be initially disabled!");
+                throw disabledAccountException(username); // default behavior after user auto-creation
+            }
         }
 
         if (principal == null) {

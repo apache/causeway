@@ -13,5 +13,9 @@
 		<class name="NumberConstant" />
 	</package>
 
+	<package name="demoapp.dom.viewmodels.jaxbrefentity">
+		<class name="ChildEntity" />
+	</package>
+
 </jdo>
 

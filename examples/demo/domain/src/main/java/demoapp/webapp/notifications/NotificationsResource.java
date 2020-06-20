@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.webapp;
+package demoapp.webapp.notifications;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -29,6 +29,7 @@ import javax.ws.rs.core.Response;
 
 @Path("/notifications")
 public class NotificationsResource {
+
     @GET
     @Path("/ping")
     public Response ping() {

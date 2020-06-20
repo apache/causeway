@@ -18,7 +18,6 @@
  */
 package demoapp.dom.mixins;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -29,22 +28,20 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import demoapp.utils.DemoStub;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.MixinDemo")
-public class MixinDemo extends DemoStub {
+public class MixinDemo implements HasAsciiDocDescription {
 
-    @Override
     public String title() {
         return "Mixin Demo";
     }
@@ -57,16 +54,5 @@ public class MixinDemo extends DemoStub {
 
     List<DemoItem> collection;
     
-    @Override @Programmatic
-    public void initDefaults() {
-
-        note = "Update me! The button below is contributed by one of my mixins.";
-        
-        collection = new ArrayList<>();
-        collection.add(DemoItem.of("first", null));
-        collection.add(DemoItem.of("second", collection.get(0)));
-        collection.add(DemoItem.of("third", collection.get(1)));
-
-    }
 
 }
