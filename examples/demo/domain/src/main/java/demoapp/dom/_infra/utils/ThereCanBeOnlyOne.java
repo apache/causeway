@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.webapp.vaadin.utils;
+package demoapp.dom._infra.utils;
 
 import java.io.IOException;
 
