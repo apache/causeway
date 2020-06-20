@@ -40,6 +40,8 @@ import org.apache.isis.applib.value.Clob;
 )
 public class TranslationServicePoMenu {
 
+    @Inject private TranslationServicePo translationService;
+    
     public static abstract class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<TranslationServicePoMenu> {}
 
     // //////////////////////////////////////
@@ -83,9 +85,12 @@ public class TranslationServicePoMenu {
     public void resetTranslationCache() {
         translationService.clearCache();
     }
-    public boolean hideResetTranslationCache() {
-        return translationService.getMode().isWrite();
+    public String disableResetTranslationCache() {
+        return !translationService.getMode().isRead()
+                ? notAvailableForCurrentMode()
+                : null;
     }
+    
 
     // //////////////////////////////////////
 
@@ -103,8 +108,10 @@ public class TranslationServicePoMenu {
     public void switchToReadingTranslations() {
         translationService.toggleMode();
     }
-    public boolean hideSwitchToReadingTranslations() {
-        return translationService.getMode().isRead();
+    public String disableSwitchToReadingTranslations() {
+        return !translationService.getMode().isWrite()
+                ? notAvailableForCurrentMode()
+                : null;
     }
 
     // //////////////////////////////////////
@@ -123,12 +130,17 @@ public class TranslationServicePoMenu {
     public void switchToWritingTranslations() {
         translationService.toggleMode();
     }
-    public boolean hideSwitchToWritingTranslations() {
-        return translationService.getMode().isWrite();
+    public String disableSwitchToWritingTranslations() {
+        return !translationService.getMode().isRead()
+                ? notAvailableForCurrentMode()
+                : null;
     }
 
-    // //////////////////////////////////////
+    // -- HELPER
 
-    @Inject private TranslationServicePo translationService;
+    private String notAvailableForCurrentMode() {
+        return String.format("Not available for Translation Mode '%s'.", 
+                translationService.getMode().name().toLowerCase());
+    }
 
 }
