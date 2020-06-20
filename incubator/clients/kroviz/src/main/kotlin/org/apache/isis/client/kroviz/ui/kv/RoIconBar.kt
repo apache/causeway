@@ -3,10 +3,7 @@ package org.apache.isis.client.kroviz.ui.kv
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.core.model.Exposer
-import org.apache.isis.client.kroviz.to.Action
-import org.apache.isis.client.kroviz.to.Property
 import org.apache.isis.client.kroviz.to.TObject
-import org.apache.isis.client.kroviz.to.TransferObject
 import org.apache.isis.client.kroviz.ui.kv.MenuFactory.buildForTitle
 import org.apache.isis.client.kroviz.utils.IconManager
 import org.apache.isis.client.kroviz.utils.Utils
@@ -14,7 +11,6 @@ import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.core.Widget
 import pl.treksoft.kvision.dropdown.DropDown
-import pl.treksoft.kvision.dropdown.dropDown
 import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.ButtonStyle
 import pl.treksoft.kvision.panel.SimplePanel
@@ -89,7 +85,7 @@ object RoIconBar : SimplePanel() {
         val reSpec = ResourceSpecification(url)
         val logEntry = EventStore.find(reSpec)!!
         return when (val obj = logEntry.obj) {
-            (obj == null)  -> null
+            (obj == null) -> null
             is TObject -> {
                 val exp = Exposer(obj)
                 val ed = exp.dynamise()
@@ -102,15 +98,6 @@ object RoIconBar : SimplePanel() {
                         withText = false)
                 var title = Utils.extractTitle(logEntry.title)
                 title += "\n${obj.title}"
-                initIcon(icon, url, title, "icon-bar-object", icon.buttonId()!!)
-                icon
-            }
-            is TransferObject -> {
-                val icon = DropDown(
-                        text = "",
-                        icon = IconManager.find("Unknown"),
-                        style = ButtonStyle.LIGHT)
-                val title = "Generic TransferObject"
                 initIcon(icon, url, title, "icon-bar-object", icon.buttonId()!!)
                 icon
             }

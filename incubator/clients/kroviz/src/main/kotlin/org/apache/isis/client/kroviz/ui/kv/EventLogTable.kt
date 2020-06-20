@@ -1,6 +1,7 @@
 package org.apache.isis.client.kroviz.ui.kv
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
+import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.EventLogDetail
 import pl.treksoft.kvision.core.Border
 import pl.treksoft.kvision.core.CssSize
@@ -29,8 +30,8 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                         }.apply { margin = CssSize(-10, UNIT.px) }
                     }),
             ColumnDefinition<LogEntry>(
-                    title ="Title",
-                    field ="title",
+                    title = "Title",
+                    field = "title",
                     headerFilter = Editor.INPUT,
                     width = "450",
                     formatterComponentFunction = { _, _, data ->
@@ -65,7 +66,7 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                 style = ButtonStyle.LINK).onClick {
             console.log(data)
         }
-        b.setDragDropData(Constants.format, data.url)
+        if (data.obj is TObject) b.setDragDropData(Constants.format, data.url)
         return b
     }
 
