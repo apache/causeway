@@ -1,6 +1,7 @@
 package org.apache.isis.client.kroviz.ui
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
+import org.apache.isis.client.kroviz.ui.kv.Constants
 import org.apache.isis.client.kroviz.ui.kv.RoDialog
 import org.apache.isis.client.kroviz.utils.Utils
 
@@ -10,7 +11,7 @@ class EventLogDetail(val logEntry: LogEntry) : Command() {
         val formItems = mutableListOf<FormItem>()
         formItems.add(FormItem("Url", "Response", logEntry.url))
         var jsonStr = logEntry.response
-        if (jsonStr.isNotEmpty()) {
+        if (jsonStr.isNotEmpty() && logEntry.subType == Constants.subTypeJson) {
             jsonStr = Utils.format(jsonStr)
         }
         formItems.add(FormItem("Text", "TextArea", jsonStr, 15))

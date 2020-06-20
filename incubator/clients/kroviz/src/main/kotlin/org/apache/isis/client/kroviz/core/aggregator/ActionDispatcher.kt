@@ -4,8 +4,8 @@ import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.to.Action
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Method
-import org.apache.isis.client.kroviz.utils.Point
 import org.apache.isis.client.kroviz.ui.kv.ActionPrompt
+import org.apache.isis.client.kroviz.utils.Point
 import org.apache.isis.client.kroviz.utils.Utils
 
 class ActionDispatcher(private val at: Point = Point(100, 100)) : BaseAggregator() {
@@ -15,9 +15,12 @@ class ActionDispatcher(private val at: Point = Point(100, 100)) : BaseAggregator
         action.links.forEach { link ->
             if (link.isInvokeAction()) {
                 when (link.method) {
-                    Method.GET.name -> processGet(action, link)
-                    Method.POST.name -> processPost(action, link)
-                    Method.PUT.name -> invoke(link)
+                    Method.GET.name -> process(action, link)
+                    Method.POST.name -> {
+                        val title = Utils.deCamel(action.id)
+                        process(action, link, ObjectAggregator(title))
+                    }
+                    Method.PUT.name -> process(action, link)
                 }
             }
         }
@@ -30,20 +33,11 @@ class ActionDispatcher(private val at: Point = Point(100, 100)) : BaseAggregator
         return rel.contains("invoke") && rel.contains("action")
     }
 
-    private fun processGet(action: Action, link: Link) {
+    private fun process(action: Action, link: Link, aggregator: BaseAggregator = this) {
         if (link.hasArguments()) {
-            ActionPrompt(action).open(at)
+            ActionPrompt(action = action).open(at)
         } else {
-            link.invokeWith(this)
-        }
-    }
-
-    private fun processPost(action: Action, link: Link) {
-        val title = Utils.deCamel(action.id)
-        if (link.hasArguments()) {
-            ActionPrompt(action).open(at)
-        } else {
-            link.invokeWith(ObjectAggregator(title))
+            link.invokeWith(aggregator)
         }
     }
 

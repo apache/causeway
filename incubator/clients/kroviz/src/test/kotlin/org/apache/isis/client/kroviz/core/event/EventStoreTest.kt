@@ -6,6 +6,7 @@ import org.apache.isis.client.kroviz.core.aggregator.ListAggregator
 import org.apache.isis.client.kroviz.core.aggregator.ObjectAggregator
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.*
 import org.apache.isis.client.kroviz.to.Method
+import org.apache.isis.client.kroviz.ui.kv.Constants
 import org.apache.isis.client.kroviz.utils.XmlHelper
 import pl.treksoft.kvision.panel.VPanel
 import kotlin.test.*
@@ -29,18 +30,18 @@ class EventStoreTest : IntegrationTest() {
             val rsJson = ResourceSpecification(SO_LAYOUT_JSON.url)
             mockResponse(SO_LAYOUT_JSON, obs)
 
-            val rsXml = ResourceSpecification(SO_LAYOUT_XML.url, "xml")
+            val rsXml = ResourceSpecification(SO_LAYOUT_XML.url, Constants.subTypeXml)
             mockResponse(SO_LAYOUT_XML, obs)
 
             // then
             val soListLe = EventStore.find(soList)!!
-            assertEquals("json", soListLe.subType) // 1
+            assertEquals(Constants.subTypeJson, soListLe.subType) // 1
 
             val leJson = EventStore.find(rsJson)!!
-            assertEquals("json", leJson.subType) // 2
+            assertEquals(Constants.subTypeJson, leJson.subType) // 2
 
             val leXml = EventStore.find(rsXml)!!
-            assertEquals("xml", leXml.subType) // 3
+            assertEquals(Constants.subTypeXml, leXml.subType) // 3
             assertTrue(XmlHelper.isXml(leXml.response)) // 4
 
             assertTrue(EventStore.log.size > 3)

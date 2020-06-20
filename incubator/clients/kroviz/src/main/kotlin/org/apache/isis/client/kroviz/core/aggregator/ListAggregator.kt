@@ -6,6 +6,7 @@ import org.apache.isis.client.kroviz.core.model.ListDM
 import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.to.*
 import org.apache.isis.client.kroviz.to.bs3.Grid
+import org.apache.isis.client.kroviz.ui.kv.Constants
 import org.apache.isis.client.kroviz.ui.kv.UiManager
 
 /** sequence of operations:
@@ -42,9 +43,11 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
     }
 
     private fun handleList(resultList: ResultList) {
-        val result = resultList.result!!
-        result.value.forEach {
-            it.invokeWith(this)
+        if (resultList.resulttype != "void") {
+            val result = resultList.result!!
+            result.value.forEach {
+                it.invokeWith(this)
+            }
         }
     }
 
@@ -54,7 +57,7 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
         // Json.Layout is invoked first
         l.invokeWith(this)
         // then Xml.Layout is to be invoked as well
-        l.invokeWith(this, "xml")
+        l.invokeWith(this, Constants.subTypeXml)
     }
 
     //TODO same code in ObjectAggregator? -> pullup refactoring to be applied
@@ -67,11 +70,10 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
             dm.propertyLayoutList.forEach { p ->
                 val l = p.link!!
                 val isDn = l.href.contains("datanucleus")
-                if (isDn) {
+                val id = p.id!!
+                dm.addPropertyDescription(id, id)
+                if (!isDn) {
                     //invoking DN links leads to an error
-                    val id = p.id!!
-                    dm.addPropertyDescription(id, id)
-                } else {
                     l.invokeWith(this)
                 }
             }
@@ -83,11 +85,11 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
     }
 
     private fun handleProperty(p: Property) {
-        val dspl = dsp as ListDM
+        val dm = dsp as ListDM
         if (p.isPropertyDescription()) {
-            dspl.addPropertyDescription(p)
+            dm.addPropertyDescription(p)
         } else {
-            dspl.addProperty(p)
+            dm.addProperty(p)
             p.descriptionLink()?.invokeWith(this)
         }
     }
@@ -109,8 +111,7 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
      * FR_PROPERTY_DESCRIPTION
      * FR_OBJECT_PROPERTY_
      */
-    private fun Property.isPropertyDescription(): Boolean
-    {
+    private fun Property.isPropertyDescription(): Boolean {
         val hasExtensions = extensions != null
         if (!hasExtensions) {
             return false

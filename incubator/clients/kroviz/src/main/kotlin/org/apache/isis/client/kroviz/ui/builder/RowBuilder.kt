@@ -31,7 +31,7 @@ class RowBuilder {
         result.width = CssSize(100, UNIT.perc)
         result.height = CssSize(100, UNIT.perc)
 
-        val dd = MenuFactory.buildFor(tObject)
+        val dd = MenuFactory.buildForObject(tObject)
         dd.marginTop = CssSize(10, UNIT.px)
         dd.marginBottom = CssSize(10, UNIT.px)
         MenuFactory.amendWithSaveUndo(dd, tObject)

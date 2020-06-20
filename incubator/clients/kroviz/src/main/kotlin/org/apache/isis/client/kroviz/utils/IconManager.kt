@@ -66,6 +66,7 @@ object IconManager {
             "Trees" to "tree",
             "Types" to "typewriter",
             "Undo" to "undo",
+            "Unknown" to "question",
             "Visualize" to "eye",
             "Wikipedia" to "wikipedia-w")
 

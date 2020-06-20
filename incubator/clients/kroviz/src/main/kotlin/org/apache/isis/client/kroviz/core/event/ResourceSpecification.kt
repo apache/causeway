@@ -1,10 +1,11 @@
 package org.apache.isis.client.kroviz.core.event
 
+import org.apache.isis.client.kroviz.ui.kv.Constants
 import org.apache.isis.client.kroviz.utils.Utils
 
 class ResourceSpecification(
         val url: String,
-        val subType: String = "json") {
+        val subType: String = Constants.subTypeJson) {
 
     fun isRedundant(): Boolean {
         return when {

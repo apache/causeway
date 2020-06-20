@@ -22,7 +22,7 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                     title = "",
                     field = "state",
                     width = "50",
-                    align = Align.CENTER,
+                    hozAlign = Align.CENTER,
                     formatterComponentFunction = { _, _, data ->
                         Button("", icon = "fa fa-ellipsis-v", style = data.state.style).onClick {
                             EventLogDetail(data).open()
@@ -38,10 +38,10 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
                     }),
             ColumnDefinition("State", "state", width = "100", headerFilter = Editor.INPUT),
             ColumnDefinition("Method", "method", width = "100", headerFilter = Editor.INPUT),
-            ColumnDefinition("req.len", field = "requestLength", width = "100", align = Align.RIGHT),
-            ColumnDefinition("resp.len", field = "responseLength", width = "100", align = Align.RIGHT),
-            ColumnDefinition("cacheHits", field = "cacheHits", width = "100", align = Align.RIGHT),
-            ColumnDefinition("duration", field = "duration", width = "100", align = Align.RIGHT),
+            ColumnDefinition("req.len", field = "requestLength", width = "100", hozAlign = Align.RIGHT),
+            ColumnDefinition("resp.len", field = "responseLength", width = "100", hozAlign = Align.RIGHT),
+            ColumnDefinition("cacheHits", field = "cacheHits", width = "100", hozAlign = Align.RIGHT),
+            ColumnDefinition("duration", field = "duration", width = "100", hozAlign = Align.RIGHT),
             ColumnDefinition(
                     title = "Created",
                     field = "createdAt",

@@ -4,6 +4,7 @@ import kotlinx.serialization.ContextualSerialization
 import kotlinx.serialization.Serializable
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.to.TransferObject
+import org.apache.isis.client.kroviz.ui.kv.Constants
 import org.apache.isis.client.kroviz.ui.kv.UiManager
 import org.apache.isis.client.kroviz.utils.Utils.removeHexCode
 import pl.treksoft.kvision.html.ButtonStyle
@@ -15,9 +16,9 @@ enum class EventState(val id: String, val iconName: String, val style: ButtonSty
     RUNNING("RUNNING", "fas fa-play-circle", ButtonStyle.WARNING),
     ERROR("ERROR", "fas fa-exclamation-circle", ButtonStyle.DANGER),
     SUCCESS("SUCCESS", "fas fa-check-circle", ButtonStyle.SUCCESS),
-    VIEW("VIEW", "fas fa-info-circle", ButtonStyle.INFO),
+    VIEW("VIEW", "fas fa-eye", ButtonStyle.INFO),
     DUPLICATE("DUPLICATE", "fas fa-link", ButtonStyle.OUTLINESUCCESS),
-    CLOSED("CLOSED", "fas fa-times-circle", ButtonStyle.OUTLINEINFO),
+    CLOSED("CLOSED", "fas fa-eye-slash", ButtonStyle.OUTLINEINFO),
     RELOAD("RELOAD", "fas fa-retweet", ButtonStyle.OUTLINEWARNING),
     MISSING("MISSING", "fas fa-bug", ButtonStyle.OUTLINEDANGER)
     // IMPROVE multiple aspects intermangled: req/resp, view, as well as cache
@@ -29,7 +30,7 @@ data class LogEntry(
         val url: String,
         val method: String? = "",
         val request: String = "",
-        val subType: String = "json",
+        val subType: String = Constants.subTypeJson,
         @ContextualSerialization val createdAt: Date = Date()) {
     var state = EventState.INITIAL
     var title: String = ""

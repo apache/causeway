@@ -108,9 +108,13 @@ object EventStore {
         return null
     }
 
+    fun findBy(aggregator: BaseAggregator): LogEntry? {
+        return log.firstOrNull { it.getAggregator() == aggregator }
+    }
+
     fun findMenuBars(): LogEntry? {
         this.log.forEach {
-           if (it.obj is Menubars)
+            if (it.obj is Menubars)
                 return it
         }
         return null

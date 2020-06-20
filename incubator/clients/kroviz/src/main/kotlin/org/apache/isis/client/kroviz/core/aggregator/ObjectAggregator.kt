@@ -9,6 +9,7 @@ import org.apache.isis.client.kroviz.to.ResultObject
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.bs3.Grid
 import org.apache.isis.client.kroviz.ui.ErrorDialog
+import org.apache.isis.client.kroviz.ui.kv.Constants
 import org.apache.isis.client.kroviz.ui.kv.UiManager
 
 class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
@@ -40,7 +41,7 @@ class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
         // Json.Layout is invoked first
         l.invokeWith(this)
         // then Xml.Layout is to be invoked as well
-        l.invokeWith(this, "xml")
+        l.invokeWith(this, Constants.subTypeXml)
     }
 
     fun handleResultObject(obj: ResultObject) {
@@ -73,7 +74,6 @@ class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
     private fun handleGrid(grid: Grid) {
         (dsp as ObjectDM).grid = grid
     }
-
 
     override fun reset(): ObjectAggregator {
         dsp.isRendered = false

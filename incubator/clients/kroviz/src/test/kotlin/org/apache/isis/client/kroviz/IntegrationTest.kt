@@ -11,6 +11,7 @@ import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.handler.ResponseHandler
 import org.apache.isis.client.kroviz.snapshots.Response
 import org.apache.isis.client.kroviz.to.Method
+import org.apache.isis.client.kroviz.ui.kv.Constants
 import org.apache.isis.client.kroviz.ui.kv.UiManager
 import org.apache.isis.client.kroviz.utils.XmlHelper
 import org.w3c.xhr.XMLHttpRequest
@@ -46,9 +47,9 @@ open class IntegrationTest {
     fun mockResponse(response: Response, aggregator: BaseAggregator?): LogEntry {
         val str = response.str
         val subType = if (XmlHelper.isXml(response.str)) {
-            "xml"
+            Constants.subTypeXml
         } else {
-            "json"
+            Constants.subTypeJson
         }
         val reSpec = ResourceSpecification(response.url, subType)
         EventStore.start(

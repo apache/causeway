@@ -72,7 +72,7 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
         }
     }
 
-    fun DomainType.isPrimitiveOrService(): Boolean {
+    private fun DomainType.isPrimitiveOrService(): Boolean {
         val primitives = arrayOf("void", "boolean", "double", "byte", "long", "char", "float", "short", "int")
         return (primitives.contains(canonicalName) || extensions.isService)
     }

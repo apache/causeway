@@ -105,7 +105,7 @@ object UiManager {
         linkLayout(tObject, aggregator)
         val logEntry = EventStore.find(tObject)!!
         logEntry.addAggregator(aggregator)
-        aggregator.update(logEntry, "json")
+        aggregator.update(logEntry, Constants.subTypeJson)
         aggregator.handleObject(tObject)
     }
 

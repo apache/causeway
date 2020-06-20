@@ -132,10 +132,9 @@ class ColumnFactory {
                 headerSort = false,
                 formatterComponentFunction = { _, _, data ->
                     val tObject = data.delegate
-                    MenuFactory.buildFor(
+                    MenuFactory.buildForObject(
                             tObject,
-                            false,
-                            style = ButtonStyle.LINK)
+                            false)
                 })
     }
 

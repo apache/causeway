@@ -76,7 +76,7 @@ object RoMenuBar : SimplePanel() {
             ddLink(chartTitle,
                     icon = IconManager.find("Chart")
             ).onClick {
-                UiManager.add(chartTitle, ChartTab())
+                UiManager.add(chartTitle, ChartFactory().build())
             }
         }
     }
@@ -84,11 +84,11 @@ object RoMenuBar : SimplePanel() {
     fun amendMenu(menuBars: Menubars) {
         logoButton()
         menuBars.primary.menu.forEach { m ->
-            val dd = MenuFactory.buildFor(m)
+            val dd = MenuFactory.buildForMenu(m)
             if (dd.getChildren().isNotEmpty()) nav.add(dd)
         }
-        nav.add(MenuFactory.buildFor(menuBars.secondary.menu.first()))
-        nav.add(MenuFactory.buildFor(menuBars.tertiary.menu.first()))
+        nav.add(MenuFactory.buildForMenu(menuBars.secondary.menu.first()))
+        nav.add(MenuFactory.buildForMenu(menuBars.tertiary.menu.first()))
     }
 
     private fun logoButton() {

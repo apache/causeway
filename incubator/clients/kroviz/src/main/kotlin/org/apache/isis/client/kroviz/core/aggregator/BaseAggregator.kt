@@ -39,9 +39,7 @@ abstract class BaseAggregator {
     }
 
     fun TObject.getLayoutLink(): Link? {
-        return links.firstOrNull { l ->
-            l.isLayout()
-        }
+        return links.firstOrNull { it.isLayout() }
     }
 
     private fun Link.isLayout(): Boolean {

@@ -4,6 +4,8 @@ import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.handler.ResponseHandler
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Method
+import org.apache.isis.client.kroviz.to.TObject
+import org.apache.isis.client.kroviz.ui.kv.Constants
 import org.apache.isis.client.kroviz.ui.kv.UiManager
 import org.apache.isis.client.kroviz.utils.Utils
 import org.w3c.xhr.XMLHttpRequest
@@ -13,12 +15,11 @@ import org.w3c.xhr.XMLHttpRequest
  */
 class RoXmlHttpRequest {
 
-    fun invoke(link: Link, aggregator: BaseAggregator?, subType: String = "json") {
+    fun invoke(link: Link, aggregator: BaseAggregator?, subType: String = Constants.subTypeJson) {
         val reSpec = ResourceSpecification(link.href)
-        if (EventStore.isCached(reSpec, link.method)) {
-            processCached(reSpec)
-        } else {
-            process(link, aggregator, subType)
+        when {
+            EventStore.isCached(reSpec, link.method) -> processCached(reSpec)
+            else -> process(link, aggregator, subType)
         }
     }
 
@@ -50,19 +51,22 @@ class RoXmlHttpRequest {
 
         var body = ""
         when {
-            link.hasArguments()
-            -> body = Utils.argumentsAsBody(link)
+            link.hasArguments() -> body = Utils.argumentsAsBody(link)
             link.method == Method.PUT.operation -> {
-                val tObject = aggregator?.getObject()!!
-                body = Utils.propertiesAsBody(tObject)
+                val logEntry = EventStore.findBy(aggregator!!)
+                val obj = logEntry?.obj
+                when (obj) {
+                    is TObject -> body = Utils.propertiesAsBody(obj)
+                    else -> {
+                    }
+                }
             }
             else -> {
             }
         }
-        if (body.isEmpty()) {
-            xhr.send()
-        } else {
-            xhr.send(body)
+        when {
+            body.isEmpty() -> xhr.send()
+            else -> xhr.send(body)
         }
         EventStore.start(reSpec, method, body, aggregator)
     }
@@ -73,10 +77,10 @@ class RoXmlHttpRequest {
 
         val xhr = XMLHttpRequest()
         xhr.open(method, url, true)
-        xhr.setRequestHeader("Content-Type", "text/plain")
+        xhr.setRequestHeader("Content-Type", Constants.format)
         xhr.setRequestHeader("Accept", "image/svg+xml")
 
-        val reSpec = ResourceSpecification(url, "xml")
+        val reSpec = ResourceSpecification(url, Constants.subTypeXml)
         xhr.onload = { _ -> resultHandler(reSpec, xhr.responseText) }
         xhr.onerror = { _ -> errorHandler(reSpec, xhr.responseText) }
         xhr.ontimeout = { _ -> errorHandler(reSpec, xhr.responseText) }
@@ -88,9 +92,7 @@ class RoXmlHttpRequest {
 
     private fun resultHandler(reSpec: ResourceSpecification, responseText: String) {
         val logEntry: LogEntry? = EventStore.end(reSpec, responseText)
-        if (logEntry != null) {
-            ResponseHandler.handle(logEntry)
-        }
+        if (logEntry != null) ResponseHandler.handle(logEntry)
     }
 
     private fun errorHandler(reSpec: ResourceSpecification, responseText: String) {
