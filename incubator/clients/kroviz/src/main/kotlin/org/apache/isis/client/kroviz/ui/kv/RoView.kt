@@ -1,9 +1,7 @@
 package org.apache.isis.client.kroviz.ui.kv
 
 import org.apache.isis.client.kroviz.utils.IconManager
-import pl.treksoft.kvision.core.Component
-import pl.treksoft.kvision.core.CssSize
-import pl.treksoft.kvision.core.UNIT
+import pl.treksoft.kvision.core.*
 import pl.treksoft.kvision.panel.SimplePanel
 
 /**
@@ -22,7 +20,7 @@ object RoView {
     fun addTab(
             title: String,
             panel: Component) {
-
+        panel.addBsBorder(BsBorder.BORDER)
         val index = tabPanel.findTab(title)
         if (index != null) {
             val tab = tabPanel.getChildComponent(index) as SimplePanel
