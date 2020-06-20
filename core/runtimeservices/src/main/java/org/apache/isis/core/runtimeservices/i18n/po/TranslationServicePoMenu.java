@@ -60,12 +60,18 @@ public class TranslationServicePoMenu {
     public Clob downloadTranslations(
             @ParameterLayout(named = ".pot file name")
             final String potFileName) {
-        final String chars = translationService.toPot();
-        return new Clob(Util.withSuffix(potFileName, "pot"), "text/plain", chars);
+        
+        return translationService.toPot()
+                .map(chars->new Clob(Util.withSuffix(potFileName, "pot"), "text/plain", chars))
+                .orElse(null);
     }
-
     public String default0DownloadTranslations() {
         return "translations.pot";
+    }
+    public String disableDownloadTranslations() {
+        return !translationService.getMode().isWrite()
+                ? notAvailableForCurrentMode()
+                : null;
     }
 
     // //////////////////////////////////////
