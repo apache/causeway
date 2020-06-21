@@ -78,6 +78,13 @@ object RoMenuBar : SimplePanel() {
             ).onClick {
                 UiManager.add(chartTitle, ChartFactory().build())
             }
+
+            val mapTitle = "Sample Map"
+            ddLink(mapTitle,
+                    icon = IconManager.find("Map")
+            ).onClick {
+                UiManager.add(mapTitle, GeoMap())
+            }
         }
     }
 

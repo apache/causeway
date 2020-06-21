@@ -20,8 +20,6 @@ data class Link(val rel: String = "",
     : TransferObject {
 
     fun argMap(): Map<String, Argument?>? {
-        console.log("[Link.argMap]")
-        console.log(this)
         return when {
             arguments.isNotEmpty() -> arguments
             args.isNotEmpty() -> args

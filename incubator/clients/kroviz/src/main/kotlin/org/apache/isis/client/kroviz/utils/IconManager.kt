@@ -41,6 +41,7 @@ object IconManager {
             "List" to "list",
             "Log" to "history",
             "Manager" to "manager",
+            "Map" to "map",
             "Me" to "user",
             "Notification" to "bell",
             "Notifications" to "bell",

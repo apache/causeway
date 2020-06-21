@@ -24,8 +24,6 @@ abstract class DisplayModelWithLayout : DisplayModel() {
                 val pls = propertyLayoutList.size
                 val pds = propertyDescriptionList.size
                 val descriptionsComplete = pds >= pls
-                console.log("[DMWL.canBeDisplayed] $descriptionsComplete")
-                console.log(this)
                 descriptionsComplete
             }
         }

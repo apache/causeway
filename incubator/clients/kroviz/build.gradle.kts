@@ -56,21 +56,18 @@ kotlin {
             runTask {
                 outputFileName = "main.bundle.js"
                 devServer = KotlinWebpackConfig.DevServer(
-                    open = false,
-                    port = 3000,
-                    proxy = mapOf(
-                        "/kv/*" to "http://localhost:8080",
-                        "/kvws/*" to mapOf("target" to "ws://localhost:8080", "ws" to true)
-                    ),
-                    contentBase = listOf("$buildDir/processedResources/Js/main")
+                        open = false,
+                        port = 3000,
+                        proxy = mapOf(
+                                "/kv/*" to "http://localhost:8080",
+                                "/kvws/*" to mapOf("target" to "ws://localhost:8080", "ws" to true)
+                        ),
+                        contentBase = listOf("$buildDir/processedResources/Js/main")
                 )
             }
             testTask {
-//                enabled = true
                 useKarma {
                     useChromeHeadless()
-//                    useCoverage(true, true, true, true, true, true, true, true) // works
-//                    useConfigDirectory("$projectDir/karma.config.d")
                 }
             }
         }
@@ -98,6 +95,7 @@ kotlin {
         implementation("pl.treksoft:kvision-tabulator:$kvisionVersion")
         implementation("pl.treksoft:kvision-pace:$kvisionVersion")
         implementation("pl.treksoft:kvision-moment:$kvisionVersion")
+        implementation("pl.treksoft:kvision-maps:$kvisionVersion")
     }
     sourceSets["test"].dependencies {
         implementation(kotlin("test-js"))
@@ -138,7 +136,7 @@ tasks {
         doLast {
             file("$buildDir/js/Gruntfile.js").run {
                 writeText(
-                    """
+                        """
                     module.exports = function (grunt) {
                         grunt.initConfig({
                             pot: {
@@ -182,11 +180,11 @@ afterEvaluate {
                     exec {
                         executable = getNodeJsBinaryExecutable()
                         args(
-                            "$buildDir/js/node_modules/po2json/bin/po2json",
-                            it.absolutePath,
-                            "${it.parent}/${it.nameWithoutExtension}.json",
-                            "-f",
-                            "jed1.x"
+                                "$buildDir/js/node_modules/po2json/bin/po2json",
+                                it.absolutePath,
+                                "${it.parent}/${it.nameWithoutExtension}.json",
+                                "-f",
+                                "jed1.x"
                         )
                         println("Converted ${it.name} to ${it.nameWithoutExtension}.json")
                     }
@@ -217,7 +215,7 @@ afterEvaluate {
             group = "package"
             destinationDirectory.set(file("$buildDir/libs"))
             val distribution =
-                project.tasks.getByName("browserProductionWebpack", KotlinWebpack::class).destinationDirectory!!
+                    project.tasks.getByName("browserProductionWebpack", KotlinWebpack::class).destinationDirectory!!
             from(distribution) {
                 include("*.*")
             }
