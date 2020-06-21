@@ -1,3 +1,19 @@
-== char datatype
+== Entity with primitive `char` datatype
 
-TODO
+[source,java]
+----
+@PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
+@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
+@DomainObject(bounding = Bounding.BOUNDED)
+public class PrimitiveCharJdoEntity {
+
+    @Getter @Setter
+    @Title
+    private char readOnlyProperty;
+
+    @Getter @Setter
+    @Property(editing = Editing.ENABLED)
+    private char readWriteProperty;
+
+}
+----

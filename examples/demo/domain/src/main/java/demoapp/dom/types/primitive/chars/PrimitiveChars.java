@@ -62,9 +62,10 @@ public class PrimitiveChars implements HasAsciiDocDescription {
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
     public PrimitiveCharViewModel openViewModel(char initialValue) {
-        val viewModel = factoryService.viewModel(PrimitiveCharViewModel.class);
-        viewModel.setReadWriteProperty(initialValue);
-        return viewModel;
+        return new PrimitiveCharViewModel(initialValue);
+    }
+    public char default0OpenViewModel() {
+        return 'a';
     }
 
     @Collection
@@ -75,10 +76,6 @@ public class PrimitiveChars implements HasAsciiDocDescription {
     @Inject
     @XmlTransient
     PrimitiveCharJdoEntities entities;
-
-    @Inject
-    @XmlTransient
-    FactoryService factoryService;
 
 
 }

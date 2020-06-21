@@ -18,23 +18,16 @@
  */
 package demoapp.dom.types.primitive.chars.jdo;
 
-import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Title;
@@ -44,39 +37,28 @@ import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.types.primitive.chars.holder.PrimitiveCharHolder;
 
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(bounding = Bounding.BOUNDED)
-@Log4j2
-public class PrimitiveCharJdoEntity implements HasAsciiDocDescription {
+@DomainObject(
+        nature = Nature.JDO_ENTITY,
+        objectType = "demoapp.PrimitiveCharJdoEntity",
+        bounding = Bounding.BOUNDED
+)
+public class PrimitiveCharJdoEntity implements HasAsciiDocDescription, PrimitiveCharHolder {
 
     public PrimitiveCharJdoEntity(char initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
-    @Getter
+    @Getter @Setter
     @Title
-    private char readOnlyProperty = 'c';
+    private char readOnlyProperty;
 
     @Getter @Setter
     @Property(editing = Editing.ENABLED)
     private char readWriteProperty;
-
-    @Action(
-            semantics = SemanticsOf.IDEMPOTENT,
-            associateWith = "readOnlyProperty",
-            associateWithSequence = "1"
-    )
-    public PrimitiveCharJdoEntity updateReadOnlyProperty(char newValue) {
-        this.readOnlyProperty = newValue;
-        return this;
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    public char actionReturning() {
-        return readOnlyProperty;
-    }
 
 }
