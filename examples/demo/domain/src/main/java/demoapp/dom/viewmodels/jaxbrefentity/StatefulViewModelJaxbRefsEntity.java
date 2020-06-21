@@ -39,7 +39,6 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
@@ -66,15 +65,15 @@ public class StatefulViewModelJaxbRefsEntity implements HasAsciiDocDescription {
     @Getter @Setter
     @Property(editing = Editing.DISABLED, optionality = Optionality.OPTIONAL)
     @XmlElement(required = false)
-    private ChildEntity favoriteChild = null;
+    private ChildJdoEntity favoriteChild = null;
 
     @Action(semantics = SemanticsOf.IDEMPOTENT, associateWith = "favoriteChild", associateWithSequence = "1")
-    public StatefulViewModelJaxbRefsEntity changeFavoriteChild(ChildEntity newFavorite) {
+    public StatefulViewModelJaxbRefsEntity changeFavoriteChild(ChildJdoEntity newFavorite) {
         favoriteChild = newFavorite;
         return this;
     }
-    public List<ChildEntity> choices0ChangeFavoriteChild() {
-        ArrayList<ChildEntity> children = new ArrayList<>(getChildren());
+    public List<ChildJdoEntity> choices0ChangeFavoriteChild() {
+        ArrayList<ChildJdoEntity> children = new ArrayList<>(getChildren());
         children.remove(getFavoriteChild());
         return children;
     }
@@ -98,10 +97,10 @@ public class StatefulViewModelJaxbRefsEntity implements HasAsciiDocDescription {
     @Collection
     @XmlElementWrapper(name = "children")
     @XmlElement(name = "child")
-    private List<ChildEntity> children = new ArrayList<>();
+    private List<ChildJdoEntity> children = new ArrayList<>();
 
     @Action(associateWith = "children", associateWithSequence = "1", semantics = SemanticsOf.NON_IDEMPOTENT)
-    public StatefulViewModelJaxbRefsEntity addChild(final ChildEntity child) {
+    public StatefulViewModelJaxbRefsEntity addChild(final ChildJdoEntity child) {
         children.add(child);
         if(children.size() == 1) {
             setFavoriteChild(child);
@@ -110,11 +109,11 @@ public class StatefulViewModelJaxbRefsEntity implements HasAsciiDocDescription {
     }
 
     @Action(associateWith = "children", associateWithSequence = "2", semantics = SemanticsOf.IDEMPOTENT)
-    public StatefulViewModelJaxbRefsEntity removeChild(final ChildEntity child) {
+    public StatefulViewModelJaxbRefsEntity removeChild(final ChildJdoEntity child) {
         children.remove(child);
         return this;
     }
-    public List<ChildEntity> choices0RemoveChild() { return getChildren(); }
+    public List<ChildJdoEntity> choices0RemoveChild() { return getChildren(); }
     public String disableRemoveChild() {
         return choices0RemoveChild().isEmpty()? "No children to remove" : null;
     }

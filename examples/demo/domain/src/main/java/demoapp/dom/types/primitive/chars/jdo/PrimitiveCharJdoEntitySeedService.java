@@ -1,4 +1,4 @@
-package demoapp.dom.viewmodels.jaxbrefentity.fixtures;
+package demoapp.dom.types.primitive.chars.jdo;
 
 import java.util.stream.Stream;
 
@@ -12,28 +12,28 @@ import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
-import demoapp.dom.viewmodels.jaxbrefentity.ChildEntity;
+import demoapp.dom.viewmodels.jaxbrefentity.ChildJdoEntity;
 
 @Service
-public class ChildEntitySeedService {
+public class PrimitiveCharJdoEntitySeedService {
 
     @EventListener(AppLifecycleEvent.class)
     public void onAppLifecycleEvent(AppLifecycleEvent event) {
 
         if (event.getEventType() == AppLifecycleEvent.EventType.appPostMetamodel) {
-            fixtureScripts.run(new ChildEntityFixture());
+            fixtureScripts.run(new PrimitiveCharJdoEntityFixture());
         }
     }
 
     @Inject
     FixtureScripts fixtureScripts;
 
-    static class ChildEntityFixture extends FixtureScript {
+    static class PrimitiveCharJdoEntityFixture extends FixtureScript {
 
         @Override
         protected void execute(ExecutionContext executionContext) {
-            Stream.of("Fred", "Mary", "Joe")
-                    .map(ChildEntity::new)
+            Stream.of('a', 'b', 'c')
+                    .map(PrimitiveCharJdoEntity::new)
                     .forEach(repositoryService::persist);
         }
 
