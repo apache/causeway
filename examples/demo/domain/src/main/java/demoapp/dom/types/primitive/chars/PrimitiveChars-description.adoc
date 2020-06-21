@@ -1,10 +1,56 @@
 The framework has built-in support for all of the primitive data types, including `char`.
 
-From this page you can:
+From here you can:
 
 * open a view model that uses the `char` datatype
 * navigate to an entity that uses the `char` datatype
 
-These pages also have actions that demonstrate the use of `char` as a parameter and as a return type.
+Because `char` is a primitive value, the properties on these domain objects are mandatory.
 
-Because `char` is a primitive value, the properties are mandatory.
+These objects also have actions that demonstrate the use of `char` as a parameter and as a return type.
+These are mixins to a common interface implemented by both view model and entity:
+
+* the `updateReadOnlyProperty` action is:
++
+[source,java]
+----
+@Action(
+        semantics = SemanticsOf.IDEMPOTENT,
+        associateWith = "readOnlyProperty",
+        associateWithSequence = "1"
+)
+@RequiredArgsConstructor
+public class PrimitiveCharHolder_updateReadOnlyProperty {
+
+    private final PrimitiveCharHolder primitiveCharHolder;
+
+    public PrimitiveCharHolder act(char newValue) {
+        primitiveCharHolder.setReadOnlyProperty(newValue);
+        return primitiveCharHolder;
+    }
+    public char default0Act() {
+        return primitiveCharHolder.getReadOnlyProperty();
+    }
+}
+----
+
+* and the `actionReturning` action is:
++
+[source,java]
+----
+@Action(
+        semantics = SemanticsOf.SAFE,
+        associateWith = "readOnlyProperty",
+        associateWithSequence = "3"
+)
+@RequiredArgsConstructor
+public class PrimitiveCharHolder_actionReturning {
+
+    private final PrimitiveCharHolder primitiveCharHolder;
+
+    public char act() {
+        return primitiveCharHolder.getReadOnlyProperty();
+    }
+}
+----
+

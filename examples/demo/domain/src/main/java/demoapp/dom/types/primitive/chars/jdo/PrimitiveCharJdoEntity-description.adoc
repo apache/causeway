@@ -1,11 +1,19 @@
-== Entity with primitive `char` datatype
+JDO supports `char` out-of-the-box, so no special annotations are required.
 
 [source,java]
 ----
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(bounding = Bounding.BOUNDED)
-public class PrimitiveCharJdoEntity {
+@DomainObject(
+        objectType = "demoapp.PrimitiveCharJdoEntity"
+)
+public class PrimitiveCharJdoEntity
+    implements HasAsciiDocDescription,   PrimitiveCharHolder {          // <.>
+
+    public PrimitiveCharJdoEntity(char initialValue) {                  // <.>
+        this.readOnlyProperty = initialValue;
+        this.readWriteProperty = initialValue;
+    }
 
     @Getter @Setter
     @Title
@@ -17,3 +25,5 @@ public class PrimitiveCharJdoEntity {
 
 }
 ----
+<.> a no-arg constructor is introduced by JDO enhnancer
+<.> as a convenience

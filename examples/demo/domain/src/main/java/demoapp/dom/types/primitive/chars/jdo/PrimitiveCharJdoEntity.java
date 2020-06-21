@@ -42,9 +42,7 @@ import demoapp.dom.types.primitive.chars.holder.PrimitiveCharHolder;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        nature = Nature.JDO_ENTITY,
-        objectType = "demoapp.PrimitiveCharJdoEntity",
-        bounding = Bounding.BOUNDED
+        objectType = "demoapp.PrimitiveCharJdoEntity"
 )
 public class PrimitiveCharJdoEntity implements HasAsciiDocDescription, PrimitiveCharHolder {
 

@@ -43,7 +43,7 @@ import lombok.extern.log4j.Log4j2;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.primitive.chars.holder.PrimitiveCharHolder;
 
-@XmlRootElement(name = "Demo")
+@XmlRootElement(name = "demoapp.PrimitiveCharViewModel")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
