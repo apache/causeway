@@ -95,12 +95,10 @@ object MenuFactory {
     fun buildForAction(
             menuTitle: String,
             actionTitle: String): KvisionHtmlLink? {
-        console.log("[MF.buildForAction] $menuTitle / $actionTitle")
         val menu = findMenuByTitle(menuTitle)!!
         menu.section.forEachIndexed { _, section ->
             section.serviceAction.forEach { sa ->
                 val saTitle = Utils.deCamel(sa.id!!)
-                console.log(saTitle)
                 if (saTitle == actionTitle) {
                     val action = buildActionLink(sa.id, menuTitle)
                     action.label = ""
