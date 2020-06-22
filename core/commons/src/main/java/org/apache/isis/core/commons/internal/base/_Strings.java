@@ -515,7 +515,7 @@ public final class _Strings {
         if(input==null) {
             return Collections.emptyList();
         }
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(input))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(input, charset))) {
             List<String> result = new ArrayList<>();
             for (;;) {
                 String line = reader.readLine();
