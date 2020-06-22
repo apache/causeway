@@ -120,12 +120,16 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
 
     @Override
     public String title(ManagedObject contextAdapter, ManagedObject targetAdapter) {
+        val pojo = targetAdapter.getPojo();
+        if(pojo==null) {
+            return "";
+        }
         val stringBuilder = new StringBuilder();
         val objectManager = getObjectManager();
-
+        
         try {
             for (final TitleComponent component : this.components) {
-                final Object titlePart = component.getTitleEvaluator().value(targetAdapter.getPojo());
+                final Object titlePart = component.getTitleEvaluator().value(pojo);
                 if (titlePart == null) {
                     continue;
                 }
