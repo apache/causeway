@@ -80,24 +80,29 @@ object MenuFactory {
                     withText = false)
     }
 
-    private fun findMenuByTitle(title: String): Menu? {
+    private fun findMenuByTitle(menuTitle: String): Menu? {
         val menuBars = EventStore.findMenuBars()!!.obj as Menubars
-        var menu = findMenu(menuBars.primary, title)
-        if (menu == null) menu = findMenu(menuBars.secondary, title)
-        if (menu == null) menu = findMenu(menuBars.tertiary, title)
+        var menu = findMenu(menuBars.primary, menuTitle)
+        if (menu == null) menu = findMenu(menuBars.secondary, menuTitle)
+        if (menu == null) menu = findMenu(menuBars.tertiary, menuTitle)
         return menu
     }
 
-    private fun findMenu(menuEntry: MenuEntry, title: String): Menu? {
-        return menuEntry.menu.firstOrNull { it.named == title }
+    private fun findMenu(menuEntry: MenuEntry, menuTitle: String): Menu? {
+        return menuEntry.menu.firstOrNull { it.named == menuTitle }
     }
 
-    fun buildForAction(menuTitle: String, actionTitle: String): KvisionHtmlLink? {
+    fun buildForAction(
+            menuTitle: String,
+            actionTitle: String): KvisionHtmlLink? {
+        console.log("[MF.buildForAction] $menuTitle / $actionTitle")
         val menu = findMenuByTitle(menuTitle)!!
         menu.section.forEachIndexed { _, section ->
             section.serviceAction.forEach { sa ->
-                if (actionTitle == sa.named) {
-                    val action = buildActionLink(sa.id!!, menuTitle)
+                val saTitle = Utils.deCamel(sa.id!!)
+                console.log(saTitle)
+                if (saTitle == actionTitle) {
+                    val action = buildActionLink(sa.id, menuTitle)
                     action.label = ""
                     action.onClick {
                         ActionDispatcher().invoke(sa.link!!)
@@ -109,15 +114,17 @@ object MenuFactory {
         return null
     }
 
-    private fun buildActionLink(label: String, menuTitle: String): KvisionHtmlLink {
+    private fun buildActionLink(
+            label: String,
+            menuTitle: String): KvisionHtmlLink {
         val actionTitle = Utils.deCamel(label)
         val actionLink: KvisionHtmlLink = ddLink(
                 label = actionTitle,
                 icon = IconManager.find(label),
                 classes = IconManager.findStyleFor(label))
-        val title = "$menuTitle${Constants.actionSeparator}$actionTitle"
-        actionLink.setDragDropData(Constants.format, title)
-        actionLink.id = title
+        val id = "$menuTitle${Constants.actionSeparator}$actionTitle"
+        actionLink.setDragDropData(Constants.format, id)
+        actionLink.id = id
         return actionLink
     }
 
@@ -140,7 +147,9 @@ object MenuFactory {
     }
 
     // initially added items will be enabled
-    fun amendWithSaveUndo(dd: DropDown, tObject: TObject) {
+    fun amendWithSaveUndo(
+            dd: DropDown,
+            tObject: TObject) {
         dd.separator()
 
         val saveLink = tObject.links.first()
