@@ -65,6 +65,6 @@ implements CollectionContentsAsFactory {
 
     @Override
     public IModel<String> getCssClass() {
-        return Model.of("fa fa-file-excel-o");
+        return Model.of("fa fa-file-excel");
     }
 }
