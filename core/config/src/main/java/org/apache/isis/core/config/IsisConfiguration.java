@@ -778,7 +778,7 @@ public class IsisConfiguration {
                             "delete.*:fa-trash",
                             "discard.*:fa-trash-o",
                             "download.*:fa-download",
-                            "edit.*:fa-pencil-square-o",
+                            "edit.*:fa-edit",
                             "execute.*:fa-bolt",
                             "export.*:fa-download",
                             "first.*:fa-star",
