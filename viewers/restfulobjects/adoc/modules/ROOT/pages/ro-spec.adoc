@@ -128,7 +128,7 @@ For example, using this feature one can load a grid of data in a single call.
 (That said, the xref:vro:ROOT:simplified-representations.adoc[simplified representations]
 supported by Restful Objects viewer also support this use case, albeit in way that deviates from the RO spec).
 
-This link:https://www.youtube.com/watch?v=hSKnqqBQ7Zo[screencast] demonstrates the Restful Object viewer's support for `x-ro-follow-links` parameter, using the link:http://github.com/apache/isis-app-kitchensink[Isis addons' kitchensink] app as the example, This app contains three entities, `Grandparent`, `Parent` and `ChildEntity` that define a hierarchy of 1:m relationships.
+This link:https://www.youtube.com/watch?v=hSKnqqBQ7Zo[screencast] demonstrates the Restful Object viewer's support for `x-ro-follow-links` parameter, using the link:http://github.com/apache/isis-app-kitchensink[Isis addons' kitchensink] app as the example, This app contains three entities, `Grandparent`, `Parent` and `ChildJdoEntity` that define a hierarchy of 1:m relationships.
 
 The queries that are shown in the screencast include:
 

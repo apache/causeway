@@ -10,7 +10,6 @@
 			<cpt:action id="downloadLayoutXml" />
 			<cpt:action id="openRestApi" />
 			<cpt:action id="rebuildMetamodel" />
-			<cpt:action id="initDefaults" />
 
 		</bs3:col>
 	</bs3:row>

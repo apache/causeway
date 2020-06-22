@@ -1,0 +1,29 @@
+JDO supports `char` out-of-the-box, so no special annotations are required.
+
+[source,java]
+----
+@PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
+@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
+@DomainObject(
+        objectType = "demoapp.PrimitiveCharJdoEntity"
+)
+public class PrimitiveCharJdoEntity
+    implements HasAsciiDocDescription,   PrimitiveCharHolder {          // <.>
+
+    public PrimitiveCharJdoEntity(char initialValue) {                  // <.>
+        this.readOnlyProperty = initialValue;
+        this.readWriteProperty = initialValue;
+    }
+
+    @Getter @Setter
+    @Title
+    private char readOnlyProperty;
+
+    @Getter @Setter
+    @Property(editing = Editing.ENABLED)
+    private char readWriteProperty;
+
+}
+----
+<.> a no-arg constructor is introduced by JDO enhnancer
+<.> as a convenience

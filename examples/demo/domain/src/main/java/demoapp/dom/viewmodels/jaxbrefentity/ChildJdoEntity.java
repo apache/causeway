@@ -23,9 +23,9 @@ import lombok.Setter;
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(bounding = Bounding.BOUNDED)
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
-public class ChildEntity {
+public class ChildJdoEntity {
 
-    public ChildEntity(String name) {
+    public ChildJdoEntity(String name) {
         this.name = name;
     }
 

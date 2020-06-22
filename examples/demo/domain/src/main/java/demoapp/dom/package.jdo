@@ -14,7 +14,11 @@
 	</package>
 
 	<package name="demoapp.dom.viewmodels.jaxbrefentity">
-		<class name="ChildEntity" />
+		<class name="ChildJdoEntity" />
+	</package>
+
+	<package name="demoapp.dom.types.primitive.chars.jdo">
+		<class name="PrimitiveCharJdoEntity" />
 	</package>
 
 </jdo>

@@ -49,6 +49,7 @@ import demoapp.dom.types.blob.BlobDemo;
 import demoapp.dom.types.clob.ClobDemo;
 import demoapp.dom.types.markup.MarkupDemo;
 import demoapp.dom.types.primitive.PrimitivesDemo;
+import demoapp.dom.types.primitive.chars.PrimitiveChars;
 import demoapp.dom.types.text.TextDemo;
 import demoapp.dom.types.time.TemporalDemo;
 import demoapp.dom.types.uuid.UuidDemo;
@@ -157,6 +158,12 @@ public class FeaturedTypesMenu {
         }
 
         return demo;
+    }
+
+    @Action
+    @ActionLayout(cssClassFa="fa-code")
+    public PrimitiveChars primitiveChars(){
+        return factoryService.viewModel(PrimitiveChars.class);
     }
 
 }

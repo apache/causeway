@@ -16,6 +16,9 @@
         <mb3:menu>
             <mb3:named>Featured Types</mb3:named>
             <mb3:section>
+                <mb3:serviceAction objectType="demo.FeaturedTypesMenu" id="primitiveChars"/>
+            </mb3:section>
+            <mb3:section>
                 <mb3:serviceAction objectType="demo.FeaturedTypesMenu" id="text">
                     <cpt:named>Text</cpt:named>
                 </mb3:serviceAction>
