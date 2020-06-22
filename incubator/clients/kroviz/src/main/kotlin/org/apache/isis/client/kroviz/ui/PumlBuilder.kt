@@ -74,10 +74,10 @@ class PumlBuilder {
                 "class $cls$NL"
         domainType.members.forEach { m ->
             val memberName = m.name()
-            when {
-                m.isProperty() -> pumlCode += "$cls : $memberName$NL"
+            pumlCode += when {
+                m.isProperty() -> "$cls : $memberName$NL"
                 else -> {
-                    pumlCode += "$cls : $memberName()$NL"
+                    "$cls : $memberName()$NL"
                 }
             }
         }
