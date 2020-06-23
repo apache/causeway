@@ -16,14 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars;
+package org.apache.isis.extensions.viewer.wicket.pdfjs.ui.components;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
-public interface ScalarModelSubscriber {
+public interface ScalarModelSubscriberLegacy {
 
-    void onUpdate(AjaxRequestTarget target, ScalarPanelAbstract scalarPanel);
+    void onUpdate(AjaxRequestTarget target, ScalarPanelAbstractLegacy scalarPanel);
 
-    void onError(AjaxRequestTarget target, ScalarPanelAbstract scalarPanel);
+    void onError(AjaxRequestTarget target, ScalarPanelAbstractLegacy scalarPanel);
 
 }

@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.scalars;
+package org.apache.isis.extensions.viewer.wicket.pdfjs.ui.components;
 
 import java.util.List;
 
@@ -41,6 +41,7 @@ import org.apache.isis.viewer.common.model.object.ObjectUiModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -60,7 +61,7 @@ import lombok.val;
  *     It is however still used by some wicket addons (specifically, pdfjs).
  * </p>
  */
-public abstract class ScalarPanelAbstract<T extends ScalarModel> 
+abstract class ScalarPanelAbstractLegacy<T extends ScalarModel> 
 extends PanelAbstract<T> 
 implements ScalarModelProvider {
 
@@ -91,7 +92,7 @@ implements ScalarModelProvider {
             }
 
             @Override
-            public void buildGui(final ScalarPanelAbstract panel) {
+            public void buildGui(final ScalarPanelAbstractLegacy panel) {
                 panel.getComponentForRegular().setVisible(false);
             }
 
@@ -110,7 +111,7 @@ implements ScalarModelProvider {
             }
 
             @Override
-            public void buildGui(final ScalarPanelAbstract panel) {
+            public void buildGui(final ScalarPanelAbstractLegacy panel) {
                 panel.getLabelForCompact().setVisible(false);
             }
 
@@ -122,7 +123,7 @@ implements ScalarModelProvider {
 
         public abstract String getLabelCaption(LabeledWebMarkupContainer labeledContainer);
 
-        public abstract void buildGui(ScalarPanelAbstract panel);
+        public abstract void buildGui(ScalarPanelAbstractLegacy panel);
 
         public abstract Where getWhere();
 
@@ -136,7 +137,7 @@ implements ScalarModelProvider {
     protected final ScalarModel scalarModel;
 
 
-    public ScalarPanelAbstract(final String id, final ScalarModel scalarModel) {
+    public ScalarPanelAbstractLegacy(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
         this.scalarModel = scalarModel;
     }
@@ -145,11 +146,11 @@ implements ScalarModelProvider {
         Fragment compactFragment;
         switch (type) {
         case INPUT_CHECKBOX:
-            compactFragment = new Fragment("scalarIfCompact", "compactAsInputCheckbox", ScalarPanelAbstract.this);
+            compactFragment = new Fragment("scalarIfCompact", "compactAsInputCheckbox", ScalarPanelAbstractLegacy.this);
             break;
         case SPAN:
         default:
-            compactFragment = new Fragment("scalarIfCompact", "compactAsSpan", ScalarPanelAbstract.this);
+            compactFragment = new Fragment("scalarIfCompact", "compactAsSpan", ScalarPanelAbstractLegacy.this);
             break;
         }
         return compactFragment;
@@ -237,8 +238,8 @@ implements ScalarModelProvider {
 
         @Override
         protected void onUpdate(AjaxRequestTarget target) {
-            for (ScalarModelSubscriber subscriber : subscribers) {
-                subscriber.onUpdate(target, ScalarPanelAbstract.this);
+            for (ScalarModelSubscriberLegacy subscriber : subscribers) {
+                subscriber.onUpdate(target, ScalarPanelAbstractLegacy.this);
             }
 
             // hmmm... this doesn't seem to be picked up...
@@ -249,8 +250,8 @@ implements ScalarModelProvider {
         @Override
         protected void onError(AjaxRequestTarget target, RuntimeException e) {
             super.onError(target, e);
-            for (ScalarModelSubscriber subscriber : subscribers) {
-                subscriber.onError(target, ScalarPanelAbstract.this);
+            for (ScalarModelSubscriberLegacy subscriber : subscribers) {
+                subscriber.onError(target, ScalarPanelAbstractLegacy.this);
             }
         }
     }
@@ -358,9 +359,9 @@ implements ScalarModelProvider {
 
     // //////////////////////////////////////
 
-    private final List<ScalarModelSubscriber> subscribers = _Lists.newArrayList();
+    private final List<ScalarModelSubscriberLegacy> subscribers = _Lists.newArrayList();
 
-    public void notifyOnChange(final ScalarModelSubscriber subscriber) {
+    public void notifyOnChange(final ScalarModelSubscriberLegacy subscriber) {
         subscribers.add(subscriber);
     }
 
