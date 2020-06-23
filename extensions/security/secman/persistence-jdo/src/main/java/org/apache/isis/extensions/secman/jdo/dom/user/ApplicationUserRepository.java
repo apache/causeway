@@ -27,6 +27,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.isis.applib.query.QueryDefault;
+import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -39,6 +40,7 @@ import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.api.user.AccountType;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
+import org.apache.isis.extensions.secman.events.UserCreatedEvent;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_lock;
 import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_unlock;
@@ -57,7 +59,8 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
     @Inject private SecurityModuleConfig configBean;
     @Inject private Optional<PasswordEncryptionService> passwordEncryptionService; // empty if no candidate is available
 	@Inject protected IsisConfiguration isisConfiguration;
-    
+    @Inject private EventBusService eventBusService;  
+ 
     @Inject private javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
     
     @Override
@@ -210,6 +213,13 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
 	                :  ApplicationUserStatus.DISABLED);
         }
         repository.persistAndFlush(user);
+        eventBusService.post(UserCreatedEvent.of(
+        		user.getAccountType().equals(AccountType.LOCAL) ? 
+        				UserCreatedEvent.EventType.localUser : 
+        					UserCreatedEvent.EventType.delegateUser, username)
+        		);
+
+
         return user;
     }
     
