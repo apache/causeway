@@ -39,8 +39,8 @@ import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelect2Abstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
@@ -57,7 +57,7 @@ import lombok.val;
  * Panel for rendering scalars which of are of reference type (as opposed to
  * value types).
  */
-public class ReferencePanel extends ScalarPanelSelect2Abstract {
+public class ReferencePanel extends ScalarPanelSelectAbstract {
 
     private static final long serialVersionUID = 1L;
 
@@ -402,7 +402,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
 
     @Override
     public void onUpdate(
-            final AjaxRequestTarget target, final ScalarPanelAbstract2 scalarPanel) {
+            final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
 
         super.onUpdate(target, scalarPanel);
 

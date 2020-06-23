@@ -79,9 +79,9 @@ import lombok.val;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 
-public abstract class ScalarPanelAbstract2 
+public abstract class ScalarPanelAbstract 
 extends PanelAbstract<ScalarModel> 
-implements ScalarModelSubscriber2 {
+implements ScalarModelSubscriber {
 
     private static final long serialVersionUID = 1L;
 
@@ -236,13 +236,13 @@ implements ScalarModelSubscriber2 {
 
     /**
      * Populated
-     * Used by most subclasses ({@link ScalarPanelAbstract2}, {@link ReferencePanel}, {@link ValueChoicesSelect2Panel}) but not all ({@link IsisBlobOrClobPanelAbstract}, {@link BooleanPanel})
+     * Used by most subclasses ({@link ScalarPanelAbstract}, {@link ReferencePanel}, {@link ValueChoicesSelect2Panel}) but not all ({@link IsisBlobOrClobPanelAbstract}, {@link BooleanPanel})
      */
     private WebMarkupContainer scalarIfRegularInlinePromptForm;
 
     WebMarkupContainer inlinePromptLink;
 
-    public ScalarPanelAbstract2(final String id, final ScalarModel scalarModel) {
+    public ScalarPanelAbstract(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
         this.scalarModel = scalarModel;
     }
@@ -309,7 +309,7 @@ implements ScalarModelSubscriber2 {
      * </p>
      *
      * <p>
-     *     Implementations that support inline prompts are: ({@link ScalarPanelAbstract2}, {@link ReferencePanel} and
+     *     Implementations that support inline prompts are: ({@link ScalarPanelAbstract}, {@link ReferencePanel} and
      *     {@link ValueChoicesSelect2Panel}; those that don't are {@link IsisBlobOrClobPanelAbstract} and {@link BooleanPanel}.
      * </p>
      *
@@ -497,16 +497,16 @@ implements ScalarModelSubscriber2 {
     static class ScalarUpdatingBehavior extends AjaxFormComponentUpdatingBehavior {
         private static final long serialVersionUID = 1L;
 
-        private final ScalarPanelAbstract2 scalarPanel;
+        private final ScalarPanelAbstract scalarPanel;
 
-        private ScalarUpdatingBehavior(final ScalarPanelAbstract2 scalarPanel) {
+        private ScalarUpdatingBehavior(final ScalarPanelAbstract scalarPanel) {
             super("change");
             this.scalarPanel = scalarPanel;
         }
 
         @Override
         protected void onUpdate(AjaxRequestTarget target) {
-            for (ScalarModelSubscriber2 subscriber : scalarPanel.subscribers) {
+            for (ScalarModelSubscriber subscriber : scalarPanel.subscribers) {
                 subscriber.onUpdate(target, scalarPanel);
             }
         }
@@ -514,15 +514,15 @@ implements ScalarModelSubscriber2 {
         @Override
         protected void onError(AjaxRequestTarget target, RuntimeException e) {
             super.onError(target, e);
-            for (ScalarModelSubscriber2 subscriber : scalarPanel.subscribers) {
+            for (ScalarModelSubscriber subscriber : scalarPanel.subscribers) {
                 subscriber.onError(target, scalarPanel);
             }
         }
     }
 
-    private final List<ScalarModelSubscriber2> subscribers = _Lists.newArrayList();
+    private final List<ScalarModelSubscriber> subscribers = _Lists.newArrayList();
 
-    public void notifyOnChange(final ScalarModelSubscriber2 subscriber) {
+    public void notifyOnChange(final ScalarModelSubscriber subscriber) {
         subscribers.add(subscriber);
     }
 
@@ -541,7 +541,7 @@ implements ScalarModelSubscriber2 {
 
     @Override
     public void onUpdate(
-            final AjaxRequestTarget target, final ScalarPanelAbstract2 scalarPanel) {
+            final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
 
         if(getModel().isParameter()) {
             target.appendJavaScript(
@@ -552,7 +552,7 @@ implements ScalarModelSubscriber2 {
 
     @Override
     public void onError(
-            final AjaxRequestTarget target, final ScalarPanelAbstract2 scalarPanel) {
+            final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
 
     }
 
@@ -571,7 +571,7 @@ implements ScalarModelSubscriber2 {
             }
 
             @Override
-            public void buildGui(final ScalarPanelAbstract2 panel) {
+            public void buildGui(final ScalarPanelAbstract panel) {
                 panel.getComponentForRegular().setVisible(false);
             }
 
@@ -586,7 +586,7 @@ implements ScalarModelSubscriber2 {
             }
 
             @Override
-            public void buildGui(final ScalarPanelAbstract2 panel) {
+            public void buildGui(final ScalarPanelAbstract panel) {
                 panel.scalarIfCompact.setVisible(false);
             }
 
@@ -594,7 +594,7 @@ implements ScalarModelSubscriber2 {
 
         public abstract String getLabelCaption(LabeledWebMarkupContainer labeledContainer);
 
-        public abstract void buildGui(ScalarPanelAbstract2 panel);
+        public abstract void buildGui(ScalarPanelAbstract panel);
 
         private static Rendering renderingFor(EntityModel.RenderingHint renderingHint) {
             return renderingHint.isRegular()? Rendering.REGULAR :Rendering.COMPACT;
@@ -811,16 +811,16 @@ implements ScalarModelSubscriber2 {
                     final BeanSort sort = metaModelService.sortOf(specification.getCorrespondingClass(), MetaModelService.Mode.RELAXED);
 
                     final ActionPrompt prompt = ActionPromptProvider
-                            .getFrom(ScalarPanelAbstract2.this).getActionPrompt(promptStyle, sort);
+                            .getFrom(ScalarPanelAbstract.this).getActionPrompt(promptStyle, sort);
 
                     PropertyEditPromptHeaderPanel titlePanel = new PropertyEditPromptHeaderPanel(
                             prompt.getTitleId(),
-                            (ScalarPropertyModel)ScalarPanelAbstract2.this.scalarModel);
+                            (ScalarPropertyModel)ScalarPanelAbstract.this.scalarModel);
 
                     final PropertyEditPanel propertyEditPanel =
                             (PropertyEditPanel) getComponentFactoryRegistry().createComponent(
                                     ComponentType.PROPERTY_EDIT_PROMPT, prompt.getContentId(),
-                                    ScalarPanelAbstract2.this.scalarModel);
+                                    ScalarPanelAbstract.this.scalarModel);
 
                     propertyEditPanel.setShowHeader(false);
 

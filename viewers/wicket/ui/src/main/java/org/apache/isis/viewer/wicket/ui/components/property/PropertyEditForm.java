@@ -30,7 +30,7 @@ import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorStrategy;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
 
@@ -62,13 +62,13 @@ class PropertyEditForm extends PromptFormAbstract<ScalarPropertyModel> {
         newParamPanel(container, scalarModel);
     }
 
-    private ScalarPanelAbstract2 newParamPanel(final WebMarkupContainer container, final IModel<?> model) {
+    private ScalarPanelAbstract newParamPanel(final WebMarkupContainer container, final IModel<?> model) {
 
         final Component component = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE, model);
-        final ScalarPanelAbstract2 paramPanel =
-                component instanceof ScalarPanelAbstract2
-                ? (ScalarPanelAbstract2) component
+        final ScalarPanelAbstract paramPanel =
+                component instanceof ScalarPanelAbstract
+                ? (ScalarPanelAbstract) component
                         : null;
                 if (paramPanel != null) {
                     paramPanel.setOutputMarkupId(true);
@@ -84,7 +84,7 @@ class PropertyEditForm extends PromptFormAbstract<ScalarPropertyModel> {
 
     @Override
     public void onUpdate(
-            final AjaxRequestTarget target, final ScalarPanelAbstract2 scalarPanel) {
+            final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
 
     }
 

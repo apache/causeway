@@ -41,7 +41,7 @@ import org.apache.isis.viewer.common.model.object.ObjectUiModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -57,7 +57,7 @@ import lombok.val;
  * {@link Rendering#REGULAR regular} (eg within a form).
  *
  * <p>
- *     REVIEW: this has been replaced by {@link ScalarPanelAbstract2} and is unused by the core framework.
+ *     REVIEW: this has been replaced by {@link ScalarPanelAbstract} and is unused by the core framework.
  *     It is however still used by some wicket addons (specifically, pdfjs).
  * </p>
  */

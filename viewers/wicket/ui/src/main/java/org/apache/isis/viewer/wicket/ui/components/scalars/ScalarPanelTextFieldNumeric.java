@@ -25,12 +25,10 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.IConverter;
 
+import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-
-import lombok.val;
 
 /**
  * Panel for rendering numeric scalars.
@@ -61,7 +59,7 @@ public abstract class ScalarPanelTextFieldNumeric<T extends Serializable> extend
 
             @Override
             public <C> IConverter<C> getConverter(Class<C> type) {
-                return (IConverter<C>) converter;
+                return _Casts.uncheckedCast(converter);
             }
         };
 
@@ -73,21 +71,7 @@ public abstract class ScalarPanelTextFieldNumeric<T extends Serializable> extend
 
     @Override
     protected IModel<String> obtainInlinePromptModel() {
-        return new Model<String>(){
-
-            private static final long serialVersionUID = 1L;
-
-            @Override public String getObject() {
-                val adapter = scalarModel.getObject();
-                final T value = adapter != null ? (T) adapter.getPojo() : null;
-                final String str =
-                        value != null
-                        ? converter.convertToString(value, getLocaleProvider().getLocale())
-                                : null;
-                        return str;
-            }
-        };
-
+        return super.toStringConvertingModelOf(converter);
     }
 
 }

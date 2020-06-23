@@ -20,10 +20,10 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
-public interface ScalarModelSubscriber2 {
+public interface ScalarModelSubscriber {
 
-    void onUpdate(AjaxRequestTarget target, ScalarPanelAbstract2 scalarPanel);
+    void onUpdate(AjaxRequestTarget target, ScalarPanelAbstract scalarPanel);
 
-    void onError(AjaxRequestTarget target, ScalarPanelAbstract2 scalarPanel);
+    void onError(AjaxRequestTarget target, ScalarPanelAbstract scalarPanel);
 
 }

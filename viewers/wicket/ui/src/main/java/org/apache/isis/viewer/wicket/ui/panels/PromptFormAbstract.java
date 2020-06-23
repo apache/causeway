@@ -46,8 +46,8 @@ import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber2;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormFeedbackPanel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
@@ -58,7 +58,7 @@ public abstract class PromptFormAbstract<T extends
     FormExecutorContext 
     & IModel<ManagedObject>>
 extends FormAbstract<ManagedObject>
-implements ScalarModelSubscriber2 {
+implements ScalarModelSubscriber {
 
     private static final long serialVersionUID = 1L;
 
@@ -67,7 +67,7 @@ implements ScalarModelSubscriber2 {
 
     private static final String ID_FEEDBACK = "feedback";
 
-    protected final List<ScalarPanelAbstract2> paramPanels = _Lists.newArrayList();
+    protected final List<ScalarPanelAbstract> paramPanels = _Lists.newArrayList();
 
     private final Component parentPanel;
     private final WicketViewerSettings settings;
@@ -270,7 +270,7 @@ implements ScalarModelSubscriber2 {
             final Form<?> form);
 
     @Override
-    public void onError(AjaxRequestTarget target, ScalarPanelAbstract2 scalarPanel) {
+    public void onError(AjaxRequestTarget target, ScalarPanelAbstract scalarPanel) {
         if (scalarPanel != null) {
             // ensure that any feedback error associated with the providing component is shown.
             target.add(scalarPanel);

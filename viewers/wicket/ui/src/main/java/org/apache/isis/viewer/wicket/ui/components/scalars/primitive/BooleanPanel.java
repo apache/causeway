@@ -34,7 +34,7 @@ import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
@@ -48,7 +48,7 @@ import de.agilecoders.wicket.jquery.Key;
 /**
  * Panel for rendering scalars of type {@link Boolean} or <tt>boolean</tt>.
  */
-public class BooleanPanel extends ScalarPanelAbstract2 {
+public class BooleanPanel extends ScalarPanelAbstract {
 
     private static final long serialVersionUID = 1L;
 

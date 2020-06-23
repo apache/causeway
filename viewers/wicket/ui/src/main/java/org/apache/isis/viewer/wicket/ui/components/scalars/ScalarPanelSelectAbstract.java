@@ -45,13 +45,13 @@ import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import lombok.NonNull;
 import lombok.val;
 
-public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
+public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
 
     private static final long serialVersionUID = 1L;
 
     protected Select2 select2;
 
-    public ScalarPanelSelect2Abstract(final String id, final ScalarModel scalarModel) {
+    public ScalarPanelSelectAbstract(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
     }
 

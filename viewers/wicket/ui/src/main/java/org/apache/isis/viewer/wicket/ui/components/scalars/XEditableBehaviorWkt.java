@@ -28,8 +28,9 @@ import org.apache.wicket.util.string.StringValue;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.xeditable.XEditableBehavior;
 
-public class XEditableBehavior2 extends XEditableBehavior {
+public class XEditableBehaviorWkt extends XEditableBehavior {
 
+    private static final long serialVersionUID = 1L;
     private AjaxEventBehavior validateListener;
 
     /**
@@ -38,7 +39,6 @@ public class XEditableBehavior2 extends XEditableBehavior {
     protected void onValidate(AjaxRequestTarget target, String value) {
 
     }
-
 
     @Override
     public void bind(Component component) {
@@ -57,6 +57,8 @@ public class XEditableBehavior2 extends XEditableBehavior {
 
     protected AjaxEventBehavior newValidateListener() {
         return new AjaxEventBehavior("validate") {
+
+            private static final long serialVersionUID = 1L;
 
             /**
              * what's bound to "validate" event in Javascript, and sent to the server
