@@ -16,32 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.security.shiro;
+package org.apache.isis.incubator.viewer.javafx.ui;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.isis.security.shiro.authentication.AuthenticatorShiro;
-import org.apache.isis.security.shiro.authorization.AuthorizorShiro;
-import org.apache.isis.security.shiro.webmodule.WebModuleShiro;
+import org.apache.isis.incubator.viewer.javafx.model.events.IsisModuleIncViewerJavaFxModel;
+import org.apache.isis.incubator.viewer.javafx.ui.main.PrimaryStageListener;
 
 /**
- * Configuration Bean to support Isis Security using Shiro.
- *  
+ * 
  * @since 2.0
  */
 @Configuration
 @Import({
         // modules
-        IsisModuleCoreRuntimeServices.class,
-
+    
+        IsisModuleIncViewerJavaFxModel.class,
+        
+        // @Components's
+        PrimaryStageListener.class,
+        
         // @Service's
-        AuthenticatorShiro.class,
-        AuthorizorShiro.class,
-        WebModuleShiro.class,
 
+        // @Mixin's
 })
-public class IsisModuleSecurityShiro {
+
+public class IsisModuleIncViewerJavaFxUi {
 
 }

@@ -56,11 +56,6 @@
 
 		<!-- WEB APPLICATION DEPENDENCY BUNDLE -->
 
-		<dependency>
-			<groupId>org.apache.isis.mavendeps</groupId>
-			<artifactId>isis-mavendeps-webapp</artifactId>
-			<type>pom</type>
-		</dependency>
 
 		<!-- JDK11+ SUPPORT -->
 
@@ -107,10 +102,6 @@
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-secman-shiro-realm</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.testing</groupId>
-			<artifactId>isis-testing-h2console-ui</artifactId>
 		</dependency>
 		
 		<!-- OTHER DEPENDENCIES -->

@@ -26,23 +26,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 
-import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.isis.extensions.modelannotation.metamodel.IsisModuleExtModelAnnotation;
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
-import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
-import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationServiceAllowBeatsVeto;
-import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleExtSecmanEncryptionJbcrypt;
-import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
-import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
-import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanRealmShiro;
 import org.apache.isis.extensions.viewer.wicket.exceldownload.ui.IsisModuleExtExcelDownloadUi;
-import org.apache.isis.persistence.jdo.datanucleus5.IsisModuleJdoDataNucleus5;
-import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
-import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 import org.apache.isis.testing.h2console.ui.IsisModuleTestingH2ConsoleUi;
 import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRestfulObjectsJaxrsResteasy4;
 import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleViewerRestfulObjectsViewer;
@@ -58,34 +43,17 @@ import demoapp.dom._infra.LibraryPreloadingService;
  * Makes the integral parts of the 'demo' web application.
  */
 @Configuration
-@PropertySources({
-    @PropertySource(IsisPresets.H2InMemory),
-    @PropertySource(IsisPresets.NoTranslations),
-    @PropertySource(IsisPresets.SilenceWicket),
-    @PropertySource(IsisPresets.DataNucleusAutoCreate),
-})
 @Import({
-    IsisModuleCoreRuntimeServices.class,
-    IsisModuleSecurityShiro.class,
-    IsisModuleJdoDataNucleus5.class,
-    
+    DemoModule.class, // shared demo core module
+
     // REST
     IsisModuleViewerRestfulObjectsViewer.class,
     IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,
 
     // CORS
-    //IsisModuleExtCorsImpl.class,
-
-    // Security Manager Extension (secman)
-    IsisModuleExtSecmanModel.class,
-    IsisModuleExtSecmanRealmShiro.class,
-    IsisModuleExtSecmanPersistenceJdo.class,
-    IsisModuleExtSecmanEncryptionJbcrypt.class,
-
-    IsisModuleTestingFixturesApplib.class,
+    //IsisModuleExtCorsImpl.class, // currently breaks Wicket
+    
     IsisModuleTestingH2ConsoleUi.class,
-
-    IsisModuleExtModelAnnotation.class, // @Model support
     IsisModuleExtExcelDownloadUi.class, // allows for collection download as excel
 
     LibraryPreloadingService.class, // just a performance enhancement
@@ -98,21 +66,6 @@ import demoapp.dom._infra.LibraryPreloadingService;
         })
 @Log4j2
 public class DemoAppManifest {
-
-    @Bean
-    public SecurityModuleConfig securityModuleConfigBean() {
-        return SecurityModuleConfig.builder()
-                .adminUserName("sven")
-                .adminAdditionalPackagePermission("demoapp.dom")
-                .adminAdditionalPackagePermission("demoapp.utils")
-                .adminAdditionalPackagePermission("org.apache.isis")
-                .build();
-    }
-
-    @Bean
-    public PermissionsEvaluationService permissionsEvaluationService() {
-        return new PermissionsEvaluationServiceAllowBeatsVeto();
-    }
 
     /**
      * If available from {@code System.getProperty("ContextPath")}
