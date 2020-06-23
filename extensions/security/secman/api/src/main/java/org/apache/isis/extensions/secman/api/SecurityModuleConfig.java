@@ -62,6 +62,18 @@ public class SecurityModuleConfig {
     
     @Getter @Singular 
     final Set<String> adminAdditionalPackagePermissions;
+    
+    /**
+     * Delegated users, on first successful logon, are auto-created but disabled (by default).
+     * <p> 
+     * This option allows to override this behavior, such that authenticated 
+     * users are also auto-enabled.
+     * <p>
+     * default: false 
+     *
+     */
+    @Getter @Builder.Default 
+    final boolean autoEnableIfDelegatedAndAuthenticated = false;
 
     // -- UTILITIES
     

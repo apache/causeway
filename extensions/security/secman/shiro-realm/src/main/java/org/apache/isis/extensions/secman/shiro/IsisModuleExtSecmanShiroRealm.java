@@ -43,6 +43,7 @@ import org.apache.isis.core.commons.internal.assertions._Assert;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
+import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.SecurityRealm;
 import org.apache.isis.extensions.secman.api.SecurityRealmCharacteristic;
 import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
@@ -61,6 +62,7 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements S
 	@Inject protected ServiceInjector serviceInjector;
     @Inject protected IsisInteractionFactory isisInteractionFactory;
     @Inject protected PlatformTransactionManager txMan;
+    @Inject private SecurityModuleConfig configBean;
 	@Inject protected IsisConfiguration isisConfiguration;
     
     @Getter @Setter private AuthenticatingRealm delegateAuthenticationRealm;
@@ -116,9 +118,7 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements S
 
             _Assert.assertNotNull(newPrincipal);
             
-            val shiroConf = isisConfiguration.getSecurity().getShiro();
-            
-            if(shiroConf.isAutoEnableIfDelegatedAndAuthenticated()) {
+            if(configBean.isAutoEnableIfDelegatedAndAuthenticated()) {
                 principal = newPrincipal;
             } else {
                 _Assert.assertTrue(newPrincipal.isDisabled(), "As configured in " + SECMAN_ENABLE_DELEGATED_USERS + ", Auto-created user accounts must be initially disabled!");

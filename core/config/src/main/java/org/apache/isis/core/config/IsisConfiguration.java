@@ -126,14 +126,7 @@ public class IsisConfiguration {
              * </p>
              */
             private boolean autoLogoutIfAlreadyAuthenticated = false;
-            /**
-             * Delegated users, on first successful logon, are auto-created but disabled (by default).
-             * <p> 
-             * This option allows to override this behavior, such that authenticated 
-             * users are also auto-enabled. 
-             *
-             */
-            private boolean autoEnableIfDelegatedAndAuthenticated = false;
+            
         }
     }
 
