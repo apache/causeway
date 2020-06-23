@@ -44,6 +44,8 @@ import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.debug._Probe;
+import org.apache.isis.core.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
@@ -506,6 +508,11 @@ implements ScalarModelSubscriber {
 
         @Override
         protected void onUpdate(AjaxRequestTarget target) {
+            
+            _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
+                    + "originating from User either having changed a Property value during inline editing "
+                    + "or having changed a Parameter value within an open ActionPrompt.");
+            
             for (ScalarModelSubscriber subscriber : scalarPanel.subscribers) {
                 subscriber.onUpdate(target, scalarPanel);
             }
@@ -725,6 +732,9 @@ implements ScalarModelSubscriber {
 
             @Override
             protected void onEvent(final AjaxRequestTarget target) {
+                
+                _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
+                        + "originating from User clicking on an editable Property to start inline editing.");
 
                 scalarModel.toEditMode();
 

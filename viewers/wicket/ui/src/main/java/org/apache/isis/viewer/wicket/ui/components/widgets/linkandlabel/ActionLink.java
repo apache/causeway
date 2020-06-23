@@ -32,6 +32,8 @@ import org.apache.wicket.util.time.Duration;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.isis.core.commons.internal.debug._Probe;
+import org.apache.isis.core.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
@@ -90,6 +92,9 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
 
     @Override
     public void onClick(AjaxRequestTarget target) {
+        
+        _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
+                + "originating from User clicking an Action Link.");
 
         if (ajaxDeferredBehaviourIfAny != null) {
             ajaxDeferredBehaviourIfAny.initiate(target);

@@ -30,6 +30,7 @@ import org.apache.isis.core.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * <h1>- internal use only -</h1>
@@ -49,6 +50,7 @@ import lombok.val;
  * </p>
  * @since 2.0
  */
+@Log4j2
 public class _Probe {
 
     public static enum MaxCallsReachedAction {
@@ -186,6 +188,19 @@ public class _Probe {
         println("total runtime %d ms", nanoCounter.longValue()/1000_000);
     }
 
+    // -- DEBUG ENTRY POINTS
+    
+    public static enum EntryPoint {
+        USER_INTERACTION
+    }
+    
+    /** idea is to keep these for reuse (so these are not just for temporary troubleshooting) */
+    public static void entryPoint(EntryPoint entryPoint, String description) {
+        if(log.isDebugEnabled()) {
+            log.debug("entering {}: {}", entryPoint.name(), description);
+        }
+    }
+    
     // -- CONVENIENT DEBUG TOOLS (STATIC)
     
     public static String currentThreadId() {
@@ -234,6 +249,8 @@ public class _Probe {
         final String message = "["+label+" "+counterValue+"] "+chars; 
         out.println(String.format(emphasisFormat, message));
     }
+
+   
 
     
 

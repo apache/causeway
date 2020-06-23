@@ -39,6 +39,8 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.string.AppendingStringBuffer;
 
 import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.internal.debug._Probe;
+import org.apache.isis.core.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -118,6 +120,10 @@ implements ScalarModelSubscriber {
 
             @Override
             public void onSubmit(AjaxRequestTarget target) {
+                
+                _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
+                        + "originating from User clicking OK on an inline editing form.");
+                
                 onOkSubmittedOf(target, getForm(), this);
             }
 

@@ -170,8 +170,9 @@ implements Serializable {
             //
             if(actionModel.hasParameters()) {
 
-                final ActionParametersPanel actionParametersPanel =
-                        (ActionParametersPanel) getComponentFactoryRegistry().createComponent(
+                val actionParametersPanel = (ActionParametersPanel)
+                        getComponentFactoryRegistry()
+                        .createComponent(
                                 ComponentType.ACTION_PROMPT, prompt.getContentId(), actionModel);
 
                 actionParametersPanel.setShowHeader(false);
@@ -294,7 +295,7 @@ implements Serializable {
     private InlinePromptContext determineInlinePromptContext() {
         return scalarModelForAssociationIfAny != null
                 ? scalarModelForAssociationIfAny.getInlinePromptContext()
-                        : null;
+                : null;
     }
 
 
