@@ -16,13 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.javafx.ui;
+package org.apache.isis.incubator.viewer.javafx.viewer;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.incubator.viewer.javafx.model.events.IsisModuleIncViewerJavaFxModel;
-import org.apache.isis.incubator.viewer.javafx.ui.main.PrimaryStageListener;
+import org.apache.isis.incubator.viewer.javafx.ui.IsisModuleIncViewerJavaFxUi;
 
 /**
  * 
@@ -32,21 +31,13 @@ import org.apache.isis.incubator.viewer.javafx.ui.main.PrimaryStageListener;
 @Import({
         // modules
     
-        IsisModuleIncViewerJavaFxModel.class,
-        
-        // @Components's
-        PrimaryStageListener.class,
+        IsisModuleIncViewerJavaFxUi.class,
         
         // @Service's
 
         // @Mixin's
 })
 
-public class IsisModuleIncViewerJavaFxUi {
+public class IsisModuleIncViewerJavaFxViewer {
 
-//    @Bean(name="uiMainLayout")
-//    public Resource uiMainLayout() {
-//        return new ClassPathResource("/ui.fxml");
-//    }
-    
 }

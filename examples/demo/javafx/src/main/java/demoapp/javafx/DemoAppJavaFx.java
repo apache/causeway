@@ -19,12 +19,14 @@
 package demoapp.javafx;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.core.commons.internal.debug._Probe;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault;
-import org.apache.isis.incubator.viewer.javafx.ui.IsisModuleIncViewerJavaFxUi;
+import org.apache.isis.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
+import org.apache.isis.incubator.viewer.javafx.viewer.IsisModuleIncViewerJavaFxViewer;
 import org.apache.isis.incubator.viewer.javafx.viewer.JavafxViewer;
 
 import demoapp.dom.DemoModule;
@@ -36,12 +38,18 @@ import demoapp.dom.DemoModule;
 @Import({
     DemoModule.class,
     
-    IsisModuleIncViewerJavaFxUi.class,
-    
     // INCUBATING
+    IsisModuleIncViewerJavaFxViewer.class,
   
 })
 public class DemoAppJavaFx {
+
+    @Bean
+    public JavaFxViewerConfig viewerConfig() {
+        return JavaFxViewerConfig.builder()
+                .applicationTitle("Apache Isis Demo")
+                .build();
+    }
 
     public static void main(String[] args) {
         IsisPresets.logging(IsisInteractionFactoryDefault.class, "debug");

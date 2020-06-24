@@ -16,37 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.javafx.ui;
+package org.apache.isis.incubator.viewer.javafx.model.events;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
-import org.apache.isis.incubator.viewer.javafx.model.events.IsisModuleIncViewerJavaFxModel;
-import org.apache.isis.incubator.viewer.javafx.ui.main.PrimaryStageListener;
+import lombok.Builder;
+import lombok.Getter;
 
-/**
- * 
- * @since 2.0
- */
-@Configuration
-@Import({
-        // modules
+@Getter @Builder
+public class JavaFxViewerConfig {
+
+    private String applicationTitle;
     
-        IsisModuleIncViewerJavaFxModel.class,
-        
-        // @Components's
-        PrimaryStageListener.class,
-        
-        // @Service's
-
-        // @Mixin's
-})
-
-public class IsisModuleIncViewerJavaFxUi {
-
-//    @Bean(name="uiMainLayout")
-//    public Resource uiMainLayout() {
-//        return new ClassPathResource("/ui.fxml");
-//    }
+    @Builder.Default
+    private Resource uiLayout = new ClassPathResource("/ui.fxml");
     
 }

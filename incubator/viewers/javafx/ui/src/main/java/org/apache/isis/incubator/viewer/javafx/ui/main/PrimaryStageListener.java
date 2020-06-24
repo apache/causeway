@@ -20,12 +20,11 @@ package org.apache.isis.incubator.viewer.javafx.ui.main;
 
 import javax.inject.Inject;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.EventListener;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
 import org.apache.isis.incubator.viewer.javafx.model.events.PrimaryStageReadyEvent;
 
 import lombok.SneakyThrows;
@@ -40,17 +39,15 @@ import javafx.scene.Scene;
 @Log4j2
 public class PrimaryStageListener {
     
-    private final String applicationTitle;
-    private final Resource fxml;
     private final ApplicationContext springContext;
+    private final JavaFxViewerConfig viewerConfig;
     
     @Inject
     public PrimaryStageListener(
-            @Value("isis.viewer.javafx.application.title") String applicationTitle,
-            @Value("classpath:/ui.fxml") Resource fxml,
-            ApplicationContext springContext) {
-        this.applicationTitle = applicationTitle;
-        this.fxml = fxml;
+            ApplicationContext springContext,
+            JavaFxViewerConfig viewerConfig) {
+        
+        this.viewerConfig = viewerConfig;
         this.springContext = springContext;
     }
 
@@ -58,14 +55,14 @@ public class PrimaryStageListener {
     @SneakyThrows
     public void onStageReady(PrimaryStageReadyEvent event) {
         log.info("JavaFX primary stage is ready");
-        val layoutUrl = this.fxml.getURL();
+        val layoutUrl = this.viewerConfig.getUiLayout().getURL();
         val fxmlLoader = new FXMLLoader(layoutUrl);
         fxmlLoader.setControllerFactory(springContext::getBean);
         val uiRoot = (Parent)fxmlLoader.load();
         val scene = new Scene(uiRoot, 800, 600);
         val stage = event.getStage();
         stage.setScene(scene);
-        stage.setTitle(applicationTitle);
+        stage.setTitle(viewerConfig.getApplicationTitle());
         stage.show();
     }
 
