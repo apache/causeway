@@ -30,6 +30,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.decorator.disable.DisableUiModel;
@@ -64,6 +65,11 @@ public class ActionUiMetaModel implements Serializable {
      */
     @Getter private final boolean requiresImmediateConfirmation;
 
+    public static <T> ActionUiMetaModel of(
+            final ManagedAction managedAction) {
+        return new ActionUiMetaModel(managedAction.getOwner(), managedAction.getAction());
+    }
+    
     public static <T> ActionUiMetaModel of(
             final ManagedObject actionHolder,
             final ObjectAction objectAction) {

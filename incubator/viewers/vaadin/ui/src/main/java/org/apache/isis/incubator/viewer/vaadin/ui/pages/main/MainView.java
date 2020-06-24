@@ -32,11 +32,9 @@ import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.interactions.InteractionHead;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.incubator.viewer.vaadin.model.action.ActionLinkVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableView;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.object.ObjectFormView;
@@ -97,19 +95,23 @@ implements BeforeEnterObserver {
         setDrawerOpened(false);
     }
 
-    private void onMenuAction(ActionLinkVaa menuActionModel) {
+    private void onMenuAction(ManagedAction managedAction) {
         
         pageContent.removeAll();
 
-        val objectAction = menuActionModel.getObjectAction();
-        val actionOwner = menuActionModel.getActionHolder().getManagedObject();
-
-        val result = objectAction
-                .execute(
-                        InteractionHead.simple(actionOwner),
-                        Can.empty(),
-                        InteractionInitiatedBy.USER
-                        );
+        val resultOrVeto = managedAction.invoke(Can.empty());
+        
+        val result = resultOrVeto.leftIfAny(); 
+        
+//        val objectAction = menuActionModel.getObjectAction();
+//        val actionOwner = menuActionModel.getActionHolder().getManagedObject();
+//
+//        val result = objectAction
+//                .execute(
+//                        InteractionHead.simple(actionOwner),
+//                        Can.empty(),
+//                        InteractionInitiatedBy.USER
+//                        );
 
         if (result.getSpecification().isParentedOrFreeCollection()) {
             pageContent.add(TableView.fromCollection(result));

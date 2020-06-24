@@ -18,10 +18,9 @@
  */
 package org.apache.isis.incubator.viewer.javafx.ui.main;
 
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3Menu;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.incubator.viewer.javafx.model.action.ActionLinkFactoryFx;
-import org.apache.isis.viewer.common.model.menu.MenuBuilder;
+import org.apache.isis.viewer.common.model.menu.MenuItemDto;
+import org.apache.isis.viewer.common.model.menu.MenuVisitor;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -32,35 +31,35 @@ import javafx.scene.control.MenuBar;
 
 @RequiredArgsConstructor(staticName = "of")
 @Log4j2
-public class MenuBuilderFx implements MenuBuilder {
+public class MenuBuilderFx implements MenuVisitor {
     
     private final MenuBar menuBar;
     
     private Menu currentTopLevelMenu = null;
     private ActionLinkFactoryFx actionLinkFactory = new ActionLinkFactoryFx();
 
-    
     @Override
-    public void addTopLevel(BS3Menu menu) {
-        log.info("top level menu {}", menu.getNamed());
+    public void addTopLevel(MenuItemDto menu) {
+        log.info("top level menu {}", menu.getName());
         
         menuBar.getMenus()
-        .add(currentTopLevelMenu = new Menu(menu.getNamed()));
+        .add(currentTopLevelMenu = new Menu(menu.getName()));
+    }
+
+    @Override
+    public void addSubMenu(MenuItemDto menu) {
+        val managedAction = menu.getManagedAction();
         
+        log.info("sub menu {}", menu.getName());
+        
+        val actionLink = actionLinkFactory.newActionLink(menu.getName(), managedAction);
+        currentTopLevelMenu.getItems().add(actionLink.getUiMenuItem());
     }
     
     @Override
     public void addSectionSpacer() {
         // TODO Auto-generated method stub
         log.info("spacer");
-    }
-    
-    @Override
-    public void addSubMenu(String named, ManagedAction managedAction) {
-        log.info("top level menu {}", managedAction.getName());
-        
-        val actionLink = actionLinkFactory.newActionLink(named, managedAction);
-        currentTopLevelMenu.getItems().add(actionLink.getUiMenuItem());
     }
     
 }

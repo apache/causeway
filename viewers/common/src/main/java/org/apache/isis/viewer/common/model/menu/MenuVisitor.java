@@ -18,13 +18,10 @@
  */
 package org.apache.isis.viewer.common.model.menu;
 
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3Menu;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
+public interface MenuVisitor {
 
-public interface MenuBuilder {
-
-    void addTopLevel(BS3Menu menu);
+    void addTopLevel(MenuItemDto menu);
     void addSectionSpacer();
-    void addSubMenu(String named, ManagedAction managedAction);
+    void addSubMenu(MenuItemDto menu);
     
 }

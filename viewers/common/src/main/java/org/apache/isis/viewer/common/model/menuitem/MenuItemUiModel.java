@@ -24,9 +24,12 @@ import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.collections._Lists;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.viewer.common.model.action.ActionLinkUiModel;
+import org.apache.isis.viewer.common.model.action.ActionUiMetaModel;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -93,22 +96,16 @@ public abstract class MenuItemUiModel<T, U extends MenuItemUiModel<T, U>> {
      * {@link MenuActionWkt action model}, based on visibility and usability.
      */
     public void addSubMenuItemFor(
-            @NonNull final ActionLinkUiModel<T> actionModel,
+            @NonNull final ManagedAction managedAction,
             final boolean isFirstInSection,
             @Nullable final Consumer<U> onNewSubMenuItem) {
 
-        val objectAction = actionModel.getObjectAction();
-        if(!actionModel.isVisible()) {
-            log.debug("not visible {}", objectAction.getName());
+        if(managedAction.checkUsability(Where.EVERYWHERE).isPresent()) {
+            log.debug("not visible {}", managedAction.getName());
             return;
         }
-
-        // build the link
-        val actionMeta = actionModel.getActionUiMetaModel();
-        if (actionMeta == null) {
-            // can only get a null if invisible, so this should not happen given the visibility guard above
-            return;
-        }
+        
+        val actionMeta = ActionUiMetaModel.of(managedAction);
 
         val menutIem = newSubMenuItem(actionMeta.getLabel())
                 .setFirstInSection(isFirstInSection);

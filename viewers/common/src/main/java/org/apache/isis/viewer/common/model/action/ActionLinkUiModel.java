@@ -41,6 +41,7 @@ import lombok.RequiredArgsConstructor;
  * @param <T> - link component type, native to the viewer
  */
 @RequiredArgsConstructor
+@Deprecated// instead use the ActionUiMetaModel directly
 public abstract class ActionLinkUiModel<T> implements HasUiComponent<T> {
 
     protected final ActionLinkUiComponentFactory<T> uiComponentFactory;
