@@ -41,7 +41,7 @@
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-webapp</artifactId>
+            <artifactId>isis-core-runtime</artifactId>
         </dependency>
         
 		<dependency>
