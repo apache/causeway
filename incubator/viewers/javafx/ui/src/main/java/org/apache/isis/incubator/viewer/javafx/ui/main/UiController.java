@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.viewer.common.model.header.HeaderUiModelProvider;
@@ -33,6 +34,8 @@ import lombok.extern.log4j.Log4j2;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -45,6 +48,10 @@ public class UiController {
 
     @FXML private MenuBar menuBarLeft;
     @FXML private MenuBar menuBarRight;
+    @FXML private ScrollPane contentView;
+    @FXML private TextArea sampleTextArea;
+    
+    
     
     @FXML
     public void initialize() {
@@ -57,13 +64,18 @@ public class UiController {
         
         val commonContext = IsisAppCommonContext.of(metaModelContext);
         
-        val leftMenuBuilder = MenuBuilderFx.of(menuBarLeft);
-        val rightMenuBuilder = MenuBuilderFx.of(menuBarRight);
+        val leftMenuBuilder = MenuBuilderFx.of(menuBarLeft, this::onMenuAction);
+        val rightMenuBuilder = MenuBuilderFx.of(menuBarRight, this::onMenuAction);
         
         header.getPrimary().buildMenuItems(commonContext, leftMenuBuilder);
         header.getSecondary().buildMenuItems(commonContext, rightMenuBuilder);
         header.getTertiary().buildMenuItems(commonContext, rightMenuBuilder);
     }
 
+    private void onMenuAction(ManagedAction managedAction) {
+        log.info("about to invoke action {}", managedAction.getIdentifier());
+        // TODO get an ActionPrompt, then on invocation show the result in the contentView
+        sampleTextArea.setText(String.format("action result to be rendered here\nfor %s", managedAction.getIdentifier()));
+    }
     
 }

@@ -41,7 +41,7 @@ final class MainView_createHeader {
     static Component createHeader(
             final IsisAppCommonContext commonContext, 
             final HeaderUiModel headerUiModel,
-            final Consumer<ManagedAction> subMenuEventHandler) {
+            final Consumer<ManagedAction> menuActionEventHandler) {
 
         val titleOrLogo = createTitleOrLogo(commonContext, headerUiModel.getBranding());
         val leftMenuBar = new MenuBar();
@@ -64,8 +64,8 @@ final class MainView_createHeader {
 
         menuBarContainer.setWidthFull();
 
-        val leftMenuBuilder = MenuBuilderVaa.of(commonContext, subMenuEventHandler, leftMenuBar);
-        val rightMenuBuilder = MenuBuilderVaa.of(commonContext, subMenuEventHandler, rightMenuBar);
+        val leftMenuBuilder = MenuBuilderVaa.of(commonContext, menuActionEventHandler, leftMenuBar);
+        val rightMenuBuilder = MenuBuilderVaa.of(commonContext, menuActionEventHandler, rightMenuBar);
 
         headerUiModel.getPrimary().buildMenuItems(commonContext, leftMenuBuilder);
         headerUiModel.getSecondary().buildMenuItems(commonContext, rightMenuBuilder);
