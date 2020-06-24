@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 
 import org.apache.isis.core.metamodel.util.pchain.ParentChain;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 
 import lombok.val;
 
@@ -41,7 +41,7 @@ public class WhereAmIHelper {
 
     private final LinkedList<Object> reversedChainOfParents = new LinkedList<>();
     private final EntityModel startOfChain;
-    private final IsisWebAppCommonContext commonContext;
+    private final IsisAppCommonContext commonContext;
 
     private final boolean isWhereAmIEnabled;
 

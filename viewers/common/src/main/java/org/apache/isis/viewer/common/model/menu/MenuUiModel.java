@@ -28,7 +28,7 @@ import java.util.function.Function;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.action.ActionLinkUiModelFactory;
 import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModel;
 
@@ -54,7 +54,7 @@ public class MenuUiModel implements Serializable {
     
     public <T, M extends MenuItemUiModel<T, M>> 
     void buildMenuItems(
-            final IsisWebAppCommonContext commonContext,
+            final IsisAppCommonContext commonContext,
             final ActionLinkUiModelFactory<T> menuActionFactory,
             final Function<String, M> menuItemFactory,
             final Consumer<M> onNewMenuItem) {
@@ -74,7 +74,7 @@ public class MenuUiModel implements Serializable {
     }
     
     public void buildMenuItems(
-            final IsisWebAppCommonContext commonContext,
+            final IsisAppCommonContext commonContext,
             final MenuBuilder menuBuilder) {
         
         val menuBars = commonContext.getMenuBarsService().menuBars();

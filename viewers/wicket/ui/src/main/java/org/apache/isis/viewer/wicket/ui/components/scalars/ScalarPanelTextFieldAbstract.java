@@ -46,7 +46,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengt
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
@@ -222,7 +222,7 @@ implements TextFieldValueModel.ScalarModelProvider {
 
         textField.add(new IValidator<T>() {
             private static final long serialVersionUID = 1L;
-            private transient IsisWebAppCommonContext commonContext;
+            private transient IsisAppCommonContext commonContext;
 
             @Override
             public void validate(final IValidatable<T> validatable) {
@@ -240,7 +240,7 @@ implements TextFieldValueModel.ScalarModelProvider {
                 return getCommonContext().getObjectManager();
             }
             
-            private IsisWebAppCommonContext getCommonContext() {
+            private IsisAppCommonContext getCommonContext() {
                 return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
             }
             

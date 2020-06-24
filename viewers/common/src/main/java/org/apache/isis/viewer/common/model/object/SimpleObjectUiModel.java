@@ -19,7 +19,7 @@
 package org.apache.isis.viewer.common.model.object;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SimpleObjectUiModel implements ObjectUiModel {
 
-    private final IsisWebAppCommonContext commonContext;
+    private final IsisAppCommonContext commonContext;
     
     @NonNull @Getter(onMethod = @__(@Override))
     private final ManagedObject managedObject;

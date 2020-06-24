@@ -20,7 +20,7 @@ package org.apache.isis.viewer.wicket.ui.validation;
 
 import org.apache.wicket.validation.IValidator;
 
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 
 import lombok.Getter;
 
@@ -33,9 +33,9 @@ public abstract class ValidatorBase<T> implements IValidator<T> {
 
     private static final long serialVersionUID = 1L;
     
-    @Getter protected final transient IsisWebAppCommonContext commonContext;
+    @Getter protected final transient IsisAppCommonContext commonContext;
     
-    protected ValidatorBase(IsisWebAppCommonContext commonContext) {
+    protected ValidatorBase(IsisAppCommonContext commonContext) {
         this.commonContext = commonContext;
     }
     

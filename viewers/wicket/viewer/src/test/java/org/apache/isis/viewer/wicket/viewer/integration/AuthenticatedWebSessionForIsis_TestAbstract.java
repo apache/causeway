@@ -35,7 +35,7 @@ import org.apache.isis.core.runtime.session.init.InitialisationSession;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 
 public abstract class AuthenticatedWebSessionForIsis_TestAbstract {
 
@@ -44,7 +44,7 @@ public abstract class AuthenticatedWebSessionForIsis_TestAbstract {
     
     @Mock protected Request mockRequest;
     @Mock protected AuthenticationManager mockAuthMgr;
-    @Mock protected IsisWebAppCommonContext mockCommonContext;
+    @Mock protected IsisAppCommonContext mockCommonContext;
     @Mock protected IsisInteractionFactory mockIsisInteractionFactory;
     @Mock protected ServiceRegistry mockServiceRegistry;
     

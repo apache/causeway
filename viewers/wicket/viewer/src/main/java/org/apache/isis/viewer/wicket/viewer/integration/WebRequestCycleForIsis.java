@@ -56,7 +56,7 @@ import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.runtime.session.IsisRequestCycle;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.MessageBroker;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
@@ -83,7 +83,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
             new MetaDataKey<IsisRequestCycle>() {private static final long serialVersionUID = 1L; };
     
     private PageClassRegistry pageClassRegistry;
-    private IsisWebAppCommonContext commonContext;
+    private IsisAppCommonContext commonContext;
     
     @Override
     public synchronized void onBeginRequest(RequestCycle requestCycle) {
@@ -383,7 +383,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
 
     // -- DEPENDENCIES
     
-    public IsisWebAppCommonContext getCommonContext() {
+    public IsisAppCommonContext getCommonContext() {
         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
     

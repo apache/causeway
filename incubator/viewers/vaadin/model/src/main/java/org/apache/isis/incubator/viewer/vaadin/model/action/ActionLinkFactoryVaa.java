@@ -22,7 +22,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Label;
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.decorator.Decorators;
 import org.apache.isis.viewer.common.model.action.ActionLinkUiModel;
 import org.apache.isis.viewer.common.model.action.ActionLinkUiModelFactory;
@@ -36,7 +36,7 @@ public class ActionLinkFactoryVaa implements ActionLinkUiModelFactory<Component>
 
     @Override
     public ActionLinkUiModel<Component> newAction(
-            IsisWebAppCommonContext commonContext, 
+            IsisAppCommonContext commonContext, 
             String named,
             ManagedAction managedAction) {
         

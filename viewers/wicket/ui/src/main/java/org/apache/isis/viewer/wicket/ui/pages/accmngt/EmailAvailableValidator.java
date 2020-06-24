@@ -24,7 +24,7 @@ import org.apache.wicket.validation.ValidationError;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.viewer.wicket.ui.validation.ValidatorBase;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 
 import lombok.val;
 
@@ -35,11 +35,11 @@ public class EmailAvailableValidator extends ValidatorBase<String> {
 
     private static final long serialVersionUID = 1L;
 
-    public static EmailAvailableValidator exists(IsisWebAppCommonContext commonContext) { 
+    public static EmailAvailableValidator exists(IsisAppCommonContext commonContext) { 
         return new EmailAvailableValidator(commonContext, true, "noSuchUserByEmail");
     }
     
-    public static EmailAvailableValidator doesntExist(IsisWebAppCommonContext commonContext) { 
+    public static EmailAvailableValidator doesntExist(IsisAppCommonContext commonContext) { 
         return new EmailAvailableValidator(commonContext, false, "emailIsNotAvailable");
     }
 
@@ -47,7 +47,7 @@ public class EmailAvailableValidator extends ValidatorBase<String> {
     private final String resourceKey;
 
     private EmailAvailableValidator(
-            IsisWebAppCommonContext commonContext, 
+            IsisAppCommonContext commonContext, 
             boolean emailExists, 
             String resourceKey) {
         

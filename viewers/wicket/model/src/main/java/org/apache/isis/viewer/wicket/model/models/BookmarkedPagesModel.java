@@ -28,7 +28,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 
 import lombok.val;
 
@@ -41,7 +41,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
 
     private transient PageParameters current;
     
-    public BookmarkedPagesModel(IsisWebAppCommonContext commonContext) {
+    public BookmarkedPagesModel(IsisAppCommonContext commonContext) {
         super(commonContext);
     }
 

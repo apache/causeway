@@ -51,13 +51,13 @@ import lombok.extern.log4j.Log4j2;
  *
  */
 @Log4j2
-public class IsisWebAppCommonContext implements MetaModelContext.Delegating {
+public class IsisAppCommonContext implements MetaModelContext.Delegating {
 
     /**
      * Can be bootstrapped from a {@link MetaModelContext}
      */
-    public static IsisWebAppCommonContext of(MetaModelContext metaModelContext) {
-        val webAppCommonContext = new IsisWebAppCommonContext();
+    public static IsisAppCommonContext of(MetaModelContext metaModelContext) {
+        val webAppCommonContext = new IsisAppCommonContext();
         webAppCommonContext.metaModelContext = metaModelContext;
         return webAppCommonContext;
     }
@@ -131,14 +131,14 @@ public class IsisWebAppCommonContext implements MetaModelContext.Delegating {
     // -- COMMON CONTEXT PROVIDER INTERFACE
     
     public static interface Provider {
-        IsisWebAppCommonContext getCommonContext();
+        IsisAppCommonContext getCommonContext();
     }
     
     // -- FOR THOSE THAT IMPLEMENT BY DELEGATION
     
     public static interface HasCommonContext {
         
-        IsisWebAppCommonContext getCommonContext();
+        IsisAppCommonContext getCommonContext();
         
         default IsisConfiguration getConfiguration() {
             return getCommonContext().getConfiguration();

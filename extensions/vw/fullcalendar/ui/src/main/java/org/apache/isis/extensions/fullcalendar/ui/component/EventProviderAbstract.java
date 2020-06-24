@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 import org.apache.isis.extensions.fullcalendar.applib.spi.CalendarableDereferencingService;
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -69,7 +69,7 @@ public abstract class EventProviderAbstract implements EventProvider {
         }
     }
 
-    private Object dereference(final IsisWebAppCommonContext commonContext, final Object domainObject) {
+    private Object dereference(final IsisAppCommonContext commonContext, final Object domainObject) {
         val serviceRegistry = commonContext.getServiceRegistry();
         val services = serviceRegistry.select(CalendarableDereferencingService.class);
         for (final CalendarableDereferencingService dereferencingService : services) {
@@ -84,7 +84,7 @@ public abstract class EventProviderAbstract implements EventProvider {
     protected abstract CalendarEvent calendarEventFor(final Object domainObject, final String calendarName);
 
     private Function<ManagedObject, Event> newEvent(
-            final IsisWebAppCommonContext commonContext, 
+            final IsisAppCommonContext commonContext, 
             final String calendarName) {
         
         return input -> {

@@ -55,7 +55,7 @@ import org.apache.isis.core.runtime.events.RuntimeEventService;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.MessageBroker;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
@@ -456,7 +456,7 @@ implements FormExecutor {
 
     // -- DEPENDENCIES 
 
-    private IsisWebAppCommonContext getCommonContext() {
+    private IsisAppCommonContext getCommonContext() {
         return model.getCommonContext();
     }
 

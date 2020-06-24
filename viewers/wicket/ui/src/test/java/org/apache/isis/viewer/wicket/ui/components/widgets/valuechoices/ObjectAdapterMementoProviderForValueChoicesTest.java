@@ -35,7 +35,7 @@ import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -55,7 +55,7 @@ public class ObjectAdapterMementoProviderForValueChoicesTest {
     @Mock private SpecificationLoader mockSpecificationLoader;
     @Mock private ObjectSpecification mockSpec;
     @Mock private ScalarModel mockScalarModel;
-    @Mock private IsisWebAppCommonContext mockCommonContext;
+    @Mock private IsisAppCommonContext mockCommonContext;
     @Mock private WicketViewerSettings mockWicketViewerSettings;
 
     @Before

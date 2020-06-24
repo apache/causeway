@@ -20,7 +20,7 @@ package org.apache.isis.incubator.viewer.javafx.ui.main;
 
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3Menu;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 import org.apache.isis.incubator.viewer.javafx.model.action.ActionLinkFactoryFx;
 import org.apache.isis.viewer.common.model.menu.MenuBuilder;
 
@@ -35,7 +35,7 @@ import javafx.scene.control.MenuBar;
 @Log4j2
 public class MenuBuilderFx implements MenuBuilder {
     
-    private final IsisWebAppCommonContext commonContext;
+    private final IsisAppCommonContext commonContext;
     private final MenuBar menuBar;
     
     private Menu currentTopLevelMenu = null;

@@ -27,7 +27,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 
@@ -42,11 +42,11 @@ public class ComponentHintKey implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static ComponentHintKey create(IsisWebAppCommonContext commonContext, Provider<Component> pathProvider, String key) {
+    public static ComponentHintKey create(IsisAppCommonContext commonContext, Provider<Component> pathProvider, String key) {
         return new ComponentHintKey(commonContext.lookupServiceElseFail(HintStore.class), pathProvider, null, key, null);
     }
 
-    public static ComponentHintKey create(IsisWebAppCommonContext commonContext, Component path, String key) {
+    public static ComponentHintKey create(IsisAppCommonContext commonContext, Component path, String key) {
         return new ComponentHintKey(commonContext.lookupServiceElseFail(HintStore.class), null, path, key, null);
     }
 

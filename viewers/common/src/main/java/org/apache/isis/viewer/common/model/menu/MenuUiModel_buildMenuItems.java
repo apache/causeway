@@ -26,7 +26,7 @@ import org.apache.isis.applib.layout.menubars.bootstrap3.BS3Menu;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
 import org.apache.isis.core.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.action.ActionLinkUiModelFactory;
 import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModel;
 import org.apache.isis.viewer.common.model.userprofile.UserProfileUiModelProvider;
@@ -39,7 +39,7 @@ final class MenuUiModel_buildMenuItems {
 
     public static <T, M extends MenuItemUiModel<T, M>> 
     void buildMenuItems(
-            final IsisWebAppCommonContext commonContext,
+            final IsisAppCommonContext commonContext,
             final BS3MenuBar menuBar,
             final ActionLinkUiModelFactory<T> menuActionFactory,
             final Function<String, M> menuItemFactory,
@@ -108,7 +108,7 @@ final class MenuUiModel_buildMenuItems {
      */
     private static <T, M extends MenuItemUiModel<T, M>>  
     M processTopLevel(
-            final IsisWebAppCommonContext commonContext,
+            final IsisAppCommonContext commonContext,
             final Function<String, M> menuItemFactory, 
             final BS3Menu menu) {
         
@@ -129,7 +129,7 @@ final class MenuUiModel_buildMenuItems {
     }
 
     private static String userProfileName(
-            final IsisWebAppCommonContext commonContext) {
+            final IsisAppCommonContext commonContext) {
         val userProfile = commonContext
                 .lookupServiceElseFail(UserProfileUiModelProvider.class)
                 .getUserProfile();

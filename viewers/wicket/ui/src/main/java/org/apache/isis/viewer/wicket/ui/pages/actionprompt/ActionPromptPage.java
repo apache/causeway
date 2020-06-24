@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.ui.pages.actionprompt;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
@@ -56,7 +56,7 @@ public class ActionPromptPage extends PageAbstract {
 //        this(pageParameters, IsisContext.getSpecificationLoader());
 //    }
 
-    public ActionPromptPage(IsisWebAppCommonContext commonContext, PageParameters pageParameters) {
+    public ActionPromptPage(IsisAppCommonContext commonContext, PageParameters pageParameters) {
         this(pageParameters, buildModel(commonContext, pageParameters));
     }
 
@@ -69,7 +69,7 @@ public class ActionPromptPage extends PageAbstract {
     }
 
     private static ActionModel buildModel(
-            IsisWebAppCommonContext commonContext,
+            IsisAppCommonContext commonContext,
             PageParameters pageParameters) {
         
         return ActionModel.ofPageParameters(commonContext, pageParameters);

@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.header.HeaderUiModelProvider;
 
 import lombok.RequiredArgsConstructor;
@@ -55,7 +55,7 @@ public class UiController {
     private void buildMenu() {
         val header = headerUiModelProvider.getHeader();
         
-        val commonContext = IsisWebAppCommonContext.of(metaModelContext);
+        val commonContext = IsisAppCommonContext.of(metaModelContext);
         
         val leftMenuBuilder = MenuBuilderFx.of(commonContext, menuBarLeft);
         val rightMenuBuilder = MenuBuilderFx.of(commonContext, menuBarRight);

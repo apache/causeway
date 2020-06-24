@@ -57,7 +57,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.action.form.FormPendingParamUiModel;
 import org.apache.isis.viewer.common.model.action.form.FormUiModel;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
@@ -85,7 +85,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     }
 
     public static ActionModel ofPageParameters(
-            IsisWebAppCommonContext commonContext, 
+            IsisAppCommonContext commonContext, 
             PageParameters pageParameters) {
         
         return PageParameterUtil.actionModelFor(commonContext, pageParameters);

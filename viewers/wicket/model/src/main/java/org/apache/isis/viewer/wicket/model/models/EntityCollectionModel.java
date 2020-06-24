@@ -46,7 +46,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.core.webapp.context.memento.ObjectMementoService;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
@@ -341,7 +341,7 @@ implements LinksProvider, UiHintContainer {
     private ActionModel actionModelHint;
 
     private EntityCollectionModel(
-            IsisWebAppCommonContext commonContext,
+            IsisAppCommonContext commonContext,
             Variant type, 
             EntityModel entityModel, 
             Class<?> typeOf, 

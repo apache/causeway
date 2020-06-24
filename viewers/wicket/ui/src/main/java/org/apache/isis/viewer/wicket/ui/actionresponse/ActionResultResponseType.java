@@ -39,7 +39,7 @@ import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
 import org.apache.isis.viewer.wicket.ui.pages.value.ValuePage;
 import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 
 import lombok.val;
 
@@ -132,7 +132,7 @@ public enum ActionResultResponseType {
     }
 
     private static ManagedObject determineActualAdapter(
-            IsisWebAppCommonContext commonContext, 
+            IsisAppCommonContext commonContext, 
             ManagedObject resultAdapter) {
 
         if (resultAdapter.getSpecification().isNotCollection()) {

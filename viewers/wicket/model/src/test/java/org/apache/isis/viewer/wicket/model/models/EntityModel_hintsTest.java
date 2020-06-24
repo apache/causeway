@@ -34,7 +34,7 @@ import static org.junit.Assert.assertThat;
 import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 
 import lombok.val;
 
@@ -54,7 +54,7 @@ public class EntityModel_hintsTest {
     public void setUp() throws Exception {
         
         metaModelContext = MetaModelContext_forTesting.buildDefault();
-        val commonContext = IsisWebAppCommonContext.of(metaModelContext);
+        val commonContext = IsisAppCommonContext.of(metaModelContext);
         
         target = new EntityModel(commonContext, EntityModel.Mode.VIEW, EntityModel.RenderingHint.REGULAR);
 

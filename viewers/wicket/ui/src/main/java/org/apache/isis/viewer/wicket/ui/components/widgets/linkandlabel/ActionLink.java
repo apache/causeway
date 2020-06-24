@@ -36,7 +36,7 @@ import org.apache.isis.core.commons.internal.debug._Probe;
 import org.apache.isis.core.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
@@ -55,13 +55,13 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
 
     final AjaxDeferredBehaviour ajaxDeferredBehaviourIfAny;
 
-    @Getter protected final transient IsisWebAppCommonContext commonContext;
+    @Getter protected final transient IsisAppCommonContext commonContext;
 
 //    public ActionLink(String id, ActionModel model) {
 //        this(id, model, null);
 //    }
     
-    ActionLink(IsisWebAppCommonContext commonContext, String id, ActionModel model, ObjectAction action) {
+    ActionLink(IsisAppCommonContext commonContext, String id, ActionModel model, ObjectAction action) {
         super(id, model);
 
         this.commonContext = commonContext;

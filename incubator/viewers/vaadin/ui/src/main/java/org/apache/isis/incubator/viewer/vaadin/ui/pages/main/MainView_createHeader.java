@@ -31,7 +31,7 @@ import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.action.ActionLinkFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.model.action.ActionLinkVaa;
 import org.apache.isis.incubator.viewer.vaadin.model.decorator.Decorators;
@@ -46,7 +46,7 @@ import lombok.val;
 final class MainView_createHeader {
 
     static Component createHeader(
-            final IsisWebAppCommonContext commonContext, 
+            final IsisAppCommonContext commonContext, 
             final HeaderUiModel headerUiModel,
             final Consumer<ActionLinkVaa> subMenuEventHandler) {
         
@@ -115,7 +115,7 @@ final class MainView_createHeader {
     // -- HELPER
 
     private static Component createTitleOrLogo(
-            final IsisWebAppCommonContext commonContext, 
+            final IsisAppCommonContext commonContext, 
             final BrandingUiModel brandingUiModel) {
         
         
@@ -136,7 +136,7 @@ final class MainView_createHeader {
     }
     
     private static void buildMenuModel(
-            final IsisWebAppCommonContext commonContext,
+            final IsisAppCommonContext commonContext,
             final MenuUiModel menuUiModel,
             final Consumer<MenuItemVaa> onNewMenuItem) {
         

@@ -30,7 +30,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.action.ActionLinkUiModelFactory;
 import org.apache.isis.viewer.common.model.menu.MenuUiModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -47,7 +47,7 @@ import lombok.experimental.UtilityClass;
 public final class ServiceActionUtil {
 
     static void addLeafItem(
-            IsisWebAppCommonContext commonContext, 
+            IsisAppCommonContext commonContext, 
             CssMenuItem menuItem,
             ListItem<CssMenuItem> listItem,
             MarkupContainer parent) {
@@ -75,7 +75,7 @@ public final class ServiceActionUtil {
     }
 
     static void addFolderItem(
-            IsisWebAppCommonContext commonContext,
+            IsisAppCommonContext commonContext,
             CssMenuItem subMenuItem,
             ListItem<CssMenuItem> listItem,
             MarkupContainer parent) {
@@ -110,7 +110,7 @@ public final class ServiceActionUtil {
 
         @Override
         public LinkAndLabel newAction(
-                IsisWebAppCommonContext commonContext, 
+                IsisAppCommonContext commonContext, 
                 String named, 
                 ManagedAction managedAction) {
         
@@ -131,7 +131,7 @@ public final class ServiceActionUtil {
 
 
     public static void buildMenu(
-            final IsisWebAppCommonContext commonContext,
+            final IsisAppCommonContext commonContext,
             final MenuUiModel menuUiModel,
             final Consumer<CssMenuItem> onNewMenuItem) {
         

@@ -70,7 +70,7 @@ import org.apache.isis.core.commons.internal.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
@@ -133,7 +133,7 @@ import net.ftlines.wicketsource.WicketSource;
 public class IsisWicketApplication
 extends AuthenticatedWebApplication
 implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketViewerSettingsAccessor,
-IsisWebAppCommonContext.Provider {
+IsisAppCommonContext.Provider {
 
     private static final long serialVersionUID = 1L;
 
@@ -146,7 +146,7 @@ IsisWebAppCommonContext.Provider {
 
     @Inject private MetaModelContext metaModelContext;
     
-    @Getter(onMethod = @__(@Override)) private IsisWebAppCommonContext commonContext; // shared
+    @Getter(onMethod = @__(@Override)) private IsisAppCommonContext commonContext; // shared
 
     // injected manually
     @Getter(onMethod = @__(@Override)) private ComponentFactoryRegistry componentFactoryRegistry;
@@ -220,7 +220,7 @@ IsisWebAppCommonContext.Provider {
             
             requires(metaModelContext, "metaModelContext");
             
-            commonContext = IsisWebAppCommonContext.of(metaModelContext);
+            commonContext = IsisAppCommonContext.of(metaModelContext);
             configuration = commonContext.lookupServiceElseFail(IsisConfiguration.class);
             componentFactoryRegistry = commonContext.lookupServiceElseFail(ComponentFactoryRegistry.class);
             pageClassRegistry = commonContext.lookupServiceElseFail(PageClassRegistry.class);

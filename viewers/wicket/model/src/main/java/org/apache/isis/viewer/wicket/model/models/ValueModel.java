@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 
 /**
@@ -33,7 +33,7 @@ public class ValueModel extends ModelAbstract<ManagedObject> {
 
     private final ObjectMemento adapterMemento;
 
-    public ValueModel(IsisWebAppCommonContext commonContext, ManagedObject adapter) {
+    public ValueModel(IsisAppCommonContext commonContext, ManagedObject adapter) {
         super(commonContext);
         adapterMemento = super.getMementoService().mementoForObject(adapter);
     }

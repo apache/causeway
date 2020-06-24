@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.security.authentication.logout.LogoutMenu.LoginRedirect;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -321,7 +321,7 @@ implements Serializable {
         return getCommonContext().getSpecificationLoader();
     }
 
-    protected IsisWebAppCommonContext getCommonContext() {
+    protected IsisAppCommonContext getCommonContext() {
         return targetEntityModel.getCommonContext();
     }
 

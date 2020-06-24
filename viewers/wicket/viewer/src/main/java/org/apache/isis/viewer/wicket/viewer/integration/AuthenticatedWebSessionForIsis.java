@@ -38,8 +38,8 @@ import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext.HasCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
@@ -66,7 +66,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         return (AuthenticatedWebSessionForIsis) Session.get();
     }
 
-    @Getter protected transient IsisWebAppCommonContext commonContext; 
+    @Getter protected transient IsisAppCommonContext commonContext; 
     
     private BreadcrumbModel breadcrumbModel;
     private BookmarkedPagesModel bookmarkedPagesModel;
@@ -85,7 +85,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         super(request);
     }
 
-    public void init(IsisWebAppCommonContext commonContext) {
+    public void init(IsisAppCommonContext commonContext) {
         this.commonContext = commonContext;
         bookmarkedPagesModel = new BookmarkedPagesModel(commonContext);
         breadcrumbModel = new BreadcrumbModel(commonContext);

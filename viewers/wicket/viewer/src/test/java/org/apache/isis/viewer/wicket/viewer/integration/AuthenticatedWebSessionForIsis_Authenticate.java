@@ -49,7 +49,7 @@ import org.apache.isis.core.security.authentication.manager.AuthenticationManage
 import org.apache.isis.core.security.authentication.standard.Authenticator;
 import org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault;
 import org.apache.isis.core.security.authentication.standard.SimpleSession;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 
 public class AuthenticatedWebSessionForIsis_Authenticate {
 
@@ -62,7 +62,7 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
     protected Request mockRequest;
     private AuthenticationManager authMgr;
     @Mock protected Authenticator mockAuthenticator;
-    @Mock protected IsisWebAppCommonContext mockCommonContext;
+    @Mock protected IsisAppCommonContext mockCommonContext;
     @Mock protected IsisInteractionFactory mockIsisInteractionFactory;
     @Mock protected IsisInteractionTracker mockIsisInteractionTracker;
     @Mock protected ServiceRegistry mockServiceRegistry;

@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 
 import lombok.val;
 
@@ -47,9 +47,9 @@ public class BreadcrumbModel implements Serializable {
     private final Map<Bookmark, String> oidStrByBookmark = _Maps.newHashMap();
     private final List<Bookmark> list = _Lists.newArrayList();
     
-    private final transient IsisWebAppCommonContext commonContext;
+    private final transient IsisAppCommonContext commonContext;
     
-    public BreadcrumbModel(IsisWebAppCommonContext commonContext) {
+    public BreadcrumbModel(IsisAppCommonContext commonContext) {
         super();
         this.commonContext = commonContext;
     }

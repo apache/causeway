@@ -33,13 +33,13 @@ import org.apache.wicket.util.time.Duration;
 
 import org.apache.isis.viewer.wicket.model.models.VoidModel;
 import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 
 public enum ActionResultResponseHandlingStrategy {
     REDIRECT_TO_VOID {
         @Override
         public void handleResults(
-                IsisWebAppCommonContext commonContext,
+                IsisAppCommonContext commonContext,
                 ActionResultResponse resultResponse) {
             
             final RequestCycle requestCycle = RequestCycle.get();
@@ -49,7 +49,7 @@ public enum ActionResultResponseHandlingStrategy {
     REDIRECT_TO_PAGE {
         @Override
         public void handleResults(
-                IsisWebAppCommonContext commonContext,
+                IsisAppCommonContext commonContext,
                 ActionResultResponse resultResponse) {
             
             // force any changes in state etc to happen now prior to the redirect;
@@ -66,7 +66,7 @@ public enum ActionResultResponseHandlingStrategy {
     SCHEDULE_HANDLER {
         @Override
         public void handleResults(
-                IsisWebAppCommonContext commonContext,
+                IsisAppCommonContext commonContext,
                 ActionResultResponse resultResponse) {
             
             final RequestCycle requestCycle = RequestCycle.get();
@@ -92,7 +92,7 @@ public enum ActionResultResponseHandlingStrategy {
     OPEN_URL_IN_BROWSER {
         @Override
         public void handleResults(
-                IsisWebAppCommonContext commonContext,
+                IsisAppCommonContext commonContext,
                 ActionResultResponse resultResponse) {
             
             final AjaxRequestTarget target = resultResponse.getTarget();
@@ -107,7 +107,7 @@ public enum ActionResultResponseHandlingStrategy {
     };
 
     public abstract void handleResults(
-            IsisWebAppCommonContext commonContext,
+            IsisAppCommonContext commonContext,
             ActionResultResponse resultResponse);
 
     /**

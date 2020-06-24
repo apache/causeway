@@ -20,7 +20,7 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 
 
 /**
@@ -30,7 +30,7 @@ public class VoidModel extends ModelAbstract<Void> {
 
     private static final long serialVersionUID = 1L;
 
-    public VoidModel(IsisWebAppCommonContext commonContext) {
+    public VoidModel(IsisAppCommonContext commonContext) {
         super(commonContext);
     }
 

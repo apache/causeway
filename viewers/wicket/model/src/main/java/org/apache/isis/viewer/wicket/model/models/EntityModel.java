@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
@@ -78,14 +78,14 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
     // -- FACTORIES
 
     public static EntityModel ofParameters(
-            IsisWebAppCommonContext commonContext, 
+            IsisAppCommonContext commonContext, 
             PageParameters pageParameters) {
 
         return ofMemento(commonContext, commonContext.mementoFor(rootOidFrom(pageParameters)));
     }
     
     public static EntityModel ofAdapter(
-            IsisWebAppCommonContext commonContext,
+            IsisAppCommonContext commonContext,
             ManagedObject adapter) {
         
         val adapterMemento = commonContext.mementoFor(adapter);
@@ -93,14 +93,14 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
     }
 
     public static EntityModel ofMemento(
-            IsisWebAppCommonContext commonContext,
+            IsisAppCommonContext commonContext,
             ObjectMemento adapterMemento) {
         
         return ofMemento(commonContext, adapterMemento, /*propertyScalarModels*/null);
     }
 
     private static EntityModel ofMemento(
-            IsisWebAppCommonContext commonContext,
+            IsisAppCommonContext commonContext,
             ObjectMemento adapterMemento,
             @Nullable Map<PropertyMemento, ScalarModel> propertyScalarModels) {
         
@@ -109,10 +109,10 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
     }
     
     /**
-     * As used by TreeModel (same as {@link #ofAdapter(IsisWebAppCommonContext, ManagedObject)}
+     * As used by TreeModel (same as {@link #ofAdapter(IsisAppCommonContext, ManagedObject)}
      */
     protected EntityModel(
-            IsisWebAppCommonContext commonContext,
+            IsisAppCommonContext commonContext,
             ManagedObject adapter) {
         
         this(commonContext, 
@@ -124,13 +124,13 @@ implements HasRenderingHints, ObjectAdapterModel, UiHintContainer, ObjectUiModel
     /**
      * As used by ScalarModel
      */
-    protected EntityModel(IsisWebAppCommonContext commonContext, Mode mode, RenderingHint renderingHint) {
+    protected EntityModel(IsisAppCommonContext commonContext, Mode mode, RenderingHint renderingHint) {
         this(commonContext, null, _Maps.<PropertyMemento, ScalarModel>newHashMap(), 
                 mode, renderingHint);
     }
 
     private EntityModel(
-            IsisWebAppCommonContext commonContext,
+            IsisAppCommonContext commonContext,
             ObjectMemento adapterMemento,
             @Nullable Map<PropertyMemento, ScalarModel> propertyScalarModels,
             Mode mode,

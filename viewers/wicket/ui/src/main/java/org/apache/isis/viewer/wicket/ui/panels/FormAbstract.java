@@ -31,7 +31,7 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 
 public abstract class FormAbstract<T> extends Form<T>
 implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor {
@@ -40,7 +40,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor {
 
     private transient ComponentFactoryRegistry componentFactoryRegistry;
     private transient PageClassRegistry pageClassRegistry;
-    private transient IsisWebAppCommonContext commonContext;
+    private transient IsisAppCommonContext commonContext;
     
     public FormAbstract(final String id) {
         super(id);
@@ -50,7 +50,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor {
         super(id, model);
     }
 
-    public IsisWebAppCommonContext getCommonContext() {
+    public IsisAppCommonContext getCommonContext() {
         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
     

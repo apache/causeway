@@ -29,7 +29,7 @@ import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 
 import lombok.val;
@@ -48,7 +48,7 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
     private final String mainMessage;
 
     public static ExceptionModel create(
-            IsisWebAppCommonContext commonContext, 
+            IsisAppCommonContext commonContext, 
             Optional<Recognition> recognition, 
             Exception ex) {
         
@@ -64,7 +64,7 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
      * @param recognizedMessageIfAny
      * @param ex
      */
-    private ExceptionModel(IsisWebAppCommonContext commonContext, String recognizedMessageIfAny, Exception ex) {
+    private ExceptionModel(IsisAppCommonContext commonContext, String recognizedMessageIfAny, Exception ex) {
         
         super(commonContext);
 

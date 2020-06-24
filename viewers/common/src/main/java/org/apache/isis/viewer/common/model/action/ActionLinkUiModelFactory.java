@@ -19,7 +19,7 @@
 package org.apache.isis.viewer.common.model.action;
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
+import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 
 /**
  * Creates an {@link ActionLinkUiModel}, a holder of the <em>Action's</em> meta-model 
@@ -40,7 +40,7 @@ public interface ActionLinkUiModelFactory<T> {
      * @return
      */
     ActionLinkUiModel<T> newAction(
-            IsisWebAppCommonContext commonContext, 
+            IsisAppCommonContext commonContext, 
             String named,
             ManagedAction managedAction);
     
