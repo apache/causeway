@@ -102,9 +102,9 @@ public final class ActionUiMetaModel implements Serializable {
                 );
     }
     
-    public static <R, T extends ActionUiMetaModel> Predicate<R> positioned(
+    public static <R> Predicate<R> positioned(
             final ActionLayout.Position position,
-            final Function<R, T> posAccessor) {
+            final Function<R, ActionUiMetaModel> posAccessor) {
         return x -> posAccessor.apply(x).getPosition() == position;
     }
     

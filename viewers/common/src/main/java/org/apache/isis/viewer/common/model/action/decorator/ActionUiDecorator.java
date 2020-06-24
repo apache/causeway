@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.common.model.action.link;
+package org.apache.isis.viewer.common.model.action.decorator;
 
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmDecorator;
 import org.apache.isis.viewer.common.model.decorator.disable.DisableDecorator;
@@ -37,7 +37,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Getter
 @RequiredArgsConstructor
-public class ActionLinkUiComponentDecorator<T> {
+public class ActionUiDecorator<T> {
     
     private final TooltipDecorator<T> tooltipDecorator;
     private final DisableDecorator<T> disableDecorator;

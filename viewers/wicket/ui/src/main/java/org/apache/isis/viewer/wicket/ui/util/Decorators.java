@@ -25,7 +25,7 @@ import org.apache.wicket.markup.html.form.Button;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.internal.base._Strings;
-import org.apache.isis.viewer.common.model.action.link.ActionLinkUiComponentDecorator;
+import org.apache.isis.viewer.common.model.action.decorator.ActionUiDecorator;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmDecorator;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
 import org.apache.isis.viewer.common.model.decorator.danger.DangerDecorator;
@@ -153,7 +153,7 @@ public class Decorators {
     
     // -- ADVANCED DECORATOR CLASSES
     
-    public final static class ActionLink extends ActionLinkUiComponentDecorator<Component> {
+    public final static class ActionLink extends ActionUiDecorator<Component> {
 
         public ActionLink() {
             super(getTooltip(), getDisable(), getConfirm(), getPrototyping(), getIcon());

@@ -22,9 +22,9 @@ import java.io.Serializable;
 
 import org.apache.wicket.markup.html.link.AbstractLink;
 
-import org.apache.isis.viewer.common.model.action.link.ActionLinkUiComponentFactory;
+import org.apache.isis.viewer.common.model.action.ActionUiMetaModel;
 
 public interface ActionLinkUiComponentFactoryWkt 
-extends ActionLinkUiComponentFactory<AbstractLink>, Serializable {
-
+extends Serializable {
+    AbstractLink newActionLinkUiComponent(ActionUiMetaModel actionUiMetaModel);
 }
