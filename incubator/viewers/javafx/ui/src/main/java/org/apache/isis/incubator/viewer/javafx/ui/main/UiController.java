@@ -57,8 +57,8 @@ public class UiController {
         
         val commonContext = IsisAppCommonContext.of(metaModelContext);
         
-        val leftMenuBuilder = MenuBuilderFx.of(commonContext, menuBarLeft);
-        val rightMenuBuilder = MenuBuilderFx.of(commonContext, menuBarRight);
+        val leftMenuBuilder = MenuBuilderFx.of(menuBarLeft);
+        val rightMenuBuilder = MenuBuilderFx.of(menuBarRight);
         
         header.getPrimary().buildMenuItems(commonContext, leftMenuBuilder);
         header.getSecondary().buildMenuItems(commonContext, rightMenuBuilder);

@@ -20,50 +20,22 @@ package org.apache.isis.incubator.viewer.javafx.model.action;
 
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.common.model.action.ActionLinkUiModel;
 import org.apache.isis.viewer.common.model.action.ActionLinkUiModelFactory;
-import org.apache.isis.viewer.common.model.object.SimpleObjectUiModel;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 
 @RequiredArgsConstructor
 public class ActionLinkFactoryFx implements ActionLinkUiModelFactory<Node> {
 
     @Override
-    public ActionLinkFx newAction(
-            IsisAppCommonContext commonContext, 
+    public ActionLinkFx newActionLink(
             String named,
             ManagedAction managedAction) {
         
-        val actionOwnerModel = new SimpleObjectUiModel(commonContext, managedAction.getOwner());
-        
-        val actionUiModel = new ActionLinkFx(
-                this::createUiComponent,
-                named,
-                actionOwnerModel, 
-                managedAction.getAction());
-        
-        return actionUiModel;
+        return ActionLinkFx.of(named, managedAction);
     }
-    
-    // -- HELPER
-    
-    private Node createUiComponent(
-            final ActionLinkUiModel<Node> actionUiModel) {
-        
-        val actionMeta = actionUiModel.getActionUiMetaModel();
-        val uiLabel = new Label(actionMeta.getLabel());
-        
-        return uiLabel;
-        //return Decorators.getIcon().decorate(uiLabel, actionMeta.getFontAwesomeUiModel());
-                
-    }
-
 
     
 }

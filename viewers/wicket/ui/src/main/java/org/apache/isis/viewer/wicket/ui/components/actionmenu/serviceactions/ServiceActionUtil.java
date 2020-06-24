@@ -39,6 +39,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Decorators;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
@@ -105,12 +106,13 @@ public final class ServiceActionUtil {
         folderItem.add(subMenuItemsView);
     }
 
-
+    @RequiredArgsConstructor
     private static class MenuActionFactoryWkt implements ActionLinkUiModelFactory<AbstractLink> {
 
+        private final IsisAppCommonContext commonContext;
+        
         @Override
-        public LinkAndLabel newAction(
-                IsisAppCommonContext commonContext, 
+        public LinkAndLabel newActionLink(
                 String named, 
                 ManagedAction managedAction) {
         
@@ -137,7 +139,7 @@ public final class ServiceActionUtil {
         
         menuUiModel.buildMenuItems(
                 commonContext, 
-                new MenuActionFactoryWkt(),
+                new MenuActionFactoryWkt(commonContext),
                 CssMenuItem::newMenuItem,
                 onNewMenuItem);
     }

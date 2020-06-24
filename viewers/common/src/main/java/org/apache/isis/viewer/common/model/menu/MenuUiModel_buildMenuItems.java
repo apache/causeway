@@ -76,8 +76,7 @@ final class MenuUiModel_buildMenuItems {
                     
                     val isFirstInSection = itemsPerSectionCounter.intValue()==0; 
                     
-                    val menuActionUiModel = menuActionFactory.newAction(
-                            commonContext,
+                    val menuActionUiModel = menuActionFactory.newActionLink(
                             actionLayoutData.getNamed(),
                             managedAction);
 

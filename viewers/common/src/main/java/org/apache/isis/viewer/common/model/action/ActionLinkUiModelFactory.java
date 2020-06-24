@@ -19,7 +19,6 @@
 package org.apache.isis.viewer.common.model.action;
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 
 /**
  * Creates an {@link ActionLinkUiModel}, a holder of the <em>Action's</em> meta-model 
@@ -33,14 +32,10 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 public interface ActionLinkUiModelFactory<T> {
     
     /**
-     * 
-     * @param commonContext
      * @param named - used when explicitly named (eg. menu bar layout file), otherwise {@code null}
      * @param managedAction
-     * @return
      */
-    ActionLinkUiModel<T> newAction(
-            IsisAppCommonContext commonContext, 
+    ActionLinkUiModel<T> newActionLink(
             String named,
             ManagedAction managedAction);
     

@@ -22,7 +22,6 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Label;
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.decorator.Decorators;
 import org.apache.isis.viewer.common.model.action.ActionLinkUiModel;
 import org.apache.isis.viewer.common.model.action.ActionLinkUiModelFactory;
@@ -35,12 +34,11 @@ import lombok.val;
 public class ActionLinkFactoryVaa implements ActionLinkUiModelFactory<Component> {
 
     @Override
-    public ActionLinkUiModel<Component> newAction(
-            IsisAppCommonContext commonContext, 
+    public ActionLinkUiModel<Component> newActionLink(
             String named,
             ManagedAction managedAction) {
         
-        val actionOwnerModel = new SimpleObjectUiModel(commonContext, managedAction.getOwner());
+        val actionOwnerModel = new SimpleObjectUiModel(managedAction.getOwner());
         
         val actionUiModel = new ActionLinkVaa(
                 this::createUiComponent,

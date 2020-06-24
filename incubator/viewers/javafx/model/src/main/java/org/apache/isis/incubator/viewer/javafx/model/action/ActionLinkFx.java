@@ -18,18 +18,33 @@
  */
 package org.apache.isis.incubator.viewer.javafx.model.action;
 
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.HasUiMenuItem;
 import org.apache.isis.viewer.common.model.action.ActionLinkUiComponentFactory;
 import org.apache.isis.viewer.common.model.action.ActionLinkUiModel;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
+import org.apache.isis.viewer.common.model.object.SimpleObjectUiModel;
+
+import lombok.val;
 
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 
-public class ActionLinkFx extends ActionLinkUiModel<Node> implements HasUiMenuItem<Menu>{
+public class ActionLinkFx 
+extends ActionLinkUiModel<Node> 
+implements HasUiMenuItem<Menu>{
 
-    public ActionLinkFx(
+    public static ActionLinkFx of(
+            final String named,
+            final ManagedAction managedAction) {
+        
+        val actionOwnerModel = new SimpleObjectUiModel(managedAction.getOwner());
+        return new ActionLinkFx(ActionLinkFx::createUiComponent, named, actionOwnerModel, managedAction.getAction());
+    }
+    
+    protected ActionLinkFx(
             final ActionLinkUiComponentFactory<Node> uiComponentFactory,
             final String named,
             final ObjectUiModel actionHolder,
@@ -38,6 +53,18 @@ public class ActionLinkFx extends ActionLinkUiModel<Node> implements HasUiMenuIt
         super(uiComponentFactory, named, actionHolder, objectAction);
     }
 
+
+    private static Node createUiComponent(
+            final ActionLinkUiModel<Node> actionUiModel) {
+        
+        val actionMeta = actionUiModel.getActionUiMetaModel();
+        val uiLabel = new Label(actionMeta.getLabel());
+        
+        return uiLabel;
+        //return Decorators.getIcon().decorate(uiLabel, actionMeta.getFontAwesomeUiModel());
+                
+    }
+    
     @Override
     public Menu getUiMenuItem() {
         return new Menu(super.getLabel());
