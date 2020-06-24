@@ -53,8 +53,8 @@ public class MenuBuilderFx implements MenuVisitor {
         
         log.info("sub menu {}", menu.getName());
         
-        val actionLink = actionUiModelFactory.newActionUiModel(managedAction);
-        currentTopLevelMenu.getItems().add(actionLink.createMenuUiComponent());
+        val actionUiModel = actionUiModelFactory.newActionUiModel(managedAction);
+        currentTopLevelMenu.getItems().add(actionUiModel.createMenuUiComponent());
     }
     
     @Override

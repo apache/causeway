@@ -9,7 +9,6 @@ import com.vaadin.flow.component.menubar.MenuBar;
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.incubator.viewer.vaadin.model.action.ActionLinkFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.model.decorator.Decorators;
 import org.apache.isis.viewer.common.model.menu.MenuItemDto;
 import org.apache.isis.viewer.common.model.menu.MenuVisitor;
@@ -25,7 +24,7 @@ class MenuBuilderVaa implements MenuVisitor {
     private final MenuBar menuBar;
 
     private MenuItem currentTopLevelMenu = null;
-    private ActionLinkFactoryVaa actionLinkFactory = new ActionLinkFactoryVaa();
+    private org.apache.isis.incubator.viewer.vaadin.model.action.ActionUiModelFactoryVaa actionUiModelFactory = new org.apache.isis.incubator.viewer.vaadin.model.action.ActionUiModelFactoryVaa();
 
     @Override
     public void addTopLevel(MenuItemDto menuDto) {
@@ -42,9 +41,10 @@ class MenuBuilderVaa implements MenuVisitor {
     @Override
     public void addSubMenu(MenuItemDto menu) {
         val managedAction = menu.getManagedAction();
-        val actionLink = actionLinkFactory.newActionLink(menu.getName(), managedAction);
+                
+        val actionUiModel = actionUiModelFactory.newActionUiModel(managedAction);
         currentTopLevelMenu.getSubMenu()
-        .addItem(actionLink.getUiComponent(), e->subMenuEventHandler.accept(managedAction));
+        .addItem(actionUiModel.createMenuUiComponent(), e->subMenuEventHandler.accept(managedAction));
     }
 
     @Override
