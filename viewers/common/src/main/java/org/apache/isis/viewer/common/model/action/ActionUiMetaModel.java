@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -33,8 +34,10 @@ import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.viewer.common.model.decorator.disable.DisableUiModel;
 import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeUiModel;
+import org.apache.isis.viewer.common.model.mementos.ActionMemento;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -43,10 +46,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class ActionUiMetaModel implements Serializable {
+public final class ActionUiMetaModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
+    @Getter private final ActionMemento actionMemento;
     @Getter private final String label;
     @Getter private final String description;
     @Getter private final boolean blobOrClob;
@@ -76,10 +80,12 @@ public class ActionUiMetaModel implements Serializable {
         return new ActionUiMetaModel(actionHolder, objectAction);
     };
     
-    protected ActionUiMetaModel(
+    private ActionUiMetaModel(
             final ManagedObject actionHolder,
             final ObjectAction objectAction) {
-        this(   ObjectAction.Util.nameFor(objectAction),
+        
+        this(   new ActionMemento(objectAction),
+                ObjectAction.Util.nameFor(objectAction),
                 getDescription(objectAction).orElse(ObjectAction.Util.descriptionOf(objectAction)),
                 ObjectAction.Util.returnsBlobOrClob(objectAction),
                 objectAction.isPrototype(),
@@ -100,6 +106,10 @@ public class ActionUiMetaModel implements Serializable {
             final ActionLayout.Position position,
             final Function<R, T> posAccessor) {
         return x -> posAccessor.apply(x).getPosition() == position;
+    }
+    
+    public ObjectAction getObjectAction(Supplier<SpecificationLoader> specLoader) { 
+        return actionMemento.getAction(specLoader);
     }
     
     // -- PARAMETERS

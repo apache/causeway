@@ -20,11 +20,13 @@
 package org.apache.isis.viewer.wicket.model.mementos;
 
 import java.io.Serializable;
+import java.util.function.Supplier;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.viewer.common.model.mementos.ActionMemento;
 
 /**
  * {@link Serializable} representation of a {@link ObjectActionParameter parameter}
@@ -62,9 +64,9 @@ public class ActionParameterMemento implements Serializable {
         return number;
     }
 
-    public ObjectActionParameter getActionParameter(final SpecificationLoader specificationLoader) {
+    public ObjectActionParameter getActionParameter(final Supplier<SpecificationLoader> specLoader) {
         if (actionParameter == null) {
-            this.actionParameter = actionParameterFor(actionMemento, number, specificationLoader);
+            this.actionParameter = actionParameterFor(actionMemento, number, specLoader);
         }
         return actionParameter;
     }
@@ -72,8 +74,8 @@ public class ActionParameterMemento implements Serializable {
     private static ObjectActionParameter actionParameterFor(
             final ActionMemento actionMemento,
             final int paramIndex,
-            final SpecificationLoader specificationLoader) {
-        final ObjectAction action = actionMemento.getAction(specificationLoader);
+            final Supplier<SpecificationLoader> specLoader) {
+        final ObjectAction action = actionMemento.getAction(specLoader);
         return action.getParameters().getElseFail(paramIndex);
     }
 
@@ -81,8 +83,8 @@ public class ActionParameterMemento implements Serializable {
      * Convenience.
      * @param specificationLoader
      */
-    public ObjectSpecification getSpecification(final SpecificationLoader specificationLoader) {
-        return getActionParameter(specificationLoader).getSpecification();
+    public ObjectSpecification getSpecification(final Supplier<SpecificationLoader> specLoader) {
+        return getActionParameter(specLoader).getSpecification();
     }
 
     @Override

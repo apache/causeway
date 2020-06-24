@@ -17,15 +17,17 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.model.mementos;
+package org.apache.isis.viewer.common.model.mementos;
 
 import java.io.Serializable;
+import java.util.function.Supplier;
 
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+
+import lombok.val;
 
 /**
  * {@link Serializable} represention of a {@link ObjectAction}
@@ -75,9 +77,9 @@ public class ActionMemento implements Serializable {
         return nameParmsId;
     }
 
-    public ObjectAction getAction(final SpecificationLoader specificationLoader) {
+    public ObjectAction getAction(final Supplier<SpecificationLoader> specificationLoaderSupplier) {
         if (action == null) {
-            action = actionFor(owningType, actionType, nameParmsId, specificationLoader);
+            action = actionFor(owningType, actionType, nameParmsId, specificationLoaderSupplier.get());
         }
         return action;
     }
@@ -86,8 +88,9 @@ public class ActionMemento implements Serializable {
             ObjectSpecId owningType,
             ActionType actionType,
             String nameParmsId,
-            final SpecificationLoader specificationLoader) {
-        final ObjectSpecification objectSpec = specificationLoader.lookupBySpecIdElseLoad(owningType);
+            SpecificationLoader specificationLoader) {
+        
+        val objectSpec = specificationLoader.lookupBySpecIdElseLoad(owningType);
         return objectSpec.getObjectActionElseFail(actionType, nameParmsId);
     }
 

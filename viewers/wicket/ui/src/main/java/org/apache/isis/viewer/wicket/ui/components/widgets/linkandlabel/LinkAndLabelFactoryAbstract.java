@@ -92,13 +92,13 @@ implements Serializable {
     public abstract LinkAndLabel newActionLink(ObjectAction action, String named);
     
     protected ActionLink newLinkComponent(
-            final ObjectAction action,
+            final ObjectAction objectAction,
             final ToggledMementosProvider toggledMementosProviderIfAny) {
 
-        val actionModel = ActionModel.of(this.targetEntityModel, action);
+        val actionModel = ActionModel.of(this.targetEntityModel, objectAction);
         val commonContext = actionModel.getCommonContext();
 
-        final ActionLink link = new ActionLink(commonContext, linkId, actionModel, action) {
+        final ActionLink link = new ActionLink(commonContext, linkId, actionModel) {
             
             private static final long serialVersionUID = 1L;
 

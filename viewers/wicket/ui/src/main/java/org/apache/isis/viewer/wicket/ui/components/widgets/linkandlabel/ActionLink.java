@@ -57,11 +57,7 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
 
     @Getter protected final transient IsisAppCommonContext commonContext;
 
-//    public ActionLink(String id, ActionModel model) {
-//        this(id, model, null);
-//    }
-    
-    ActionLink(IsisAppCommonContext commonContext, String id, ActionModel model, ObjectAction action) {
+    ActionLink(IsisAppCommonContext commonContext, String id, ActionModel model) {
         super(id, model);
 
         this.commonContext = commonContext;
@@ -77,7 +73,7 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
                 }
 
                 // trivial optimization; also store the objectAction if it is available (saves looking it up)
-                objectAction = action;
+                objectAction = model.getMetaModel();
 
                 // this returns non-null if the action is no-arg and returns a URL or a Blob or a Clob.
                 // Otherwise can use default handling
@@ -116,7 +112,7 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
     public ObjectAction getObjectAction() {
         return objectAction != null
                 ? objectAction
-                        : (objectAction = getActionModel().getMetaModel());
+                : (objectAction = getActionModel().getMetaModel());
     }
 
 

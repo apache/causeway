@@ -25,6 +25,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.incubator.viewer.vaadin.model.decorator.Decorators;
 import org.apache.isis.viewer.common.model.action.ActionLinkUiModel;
 import org.apache.isis.viewer.common.model.action.ActionLinkUiModelFactory;
+import org.apache.isis.viewer.common.model.action.ActionUiMetaModel;
 import org.apache.isis.viewer.common.model.object.SimpleObjectUiModel;
 
 import lombok.RequiredArgsConstructor;
@@ -51,14 +52,11 @@ public class ActionLinkFactoryVaa implements ActionLinkUiModelFactory<Component>
     
     // -- HELPER
     
-    private Component createUiComponent(
-            final ActionLinkUiModel<Component> actionUiModel) {
+    private Component createUiComponent(final ActionUiMetaModel actionMeta) {
         
-        val actionMeta = actionUiModel.getActionUiMetaModel();
         val uiLabel = new Label(actionMeta.getLabel());
         
         return Decorators.getIcon().decorate(uiLabel, actionMeta.getFontAwesomeUiModel());
-                
     }
 
 

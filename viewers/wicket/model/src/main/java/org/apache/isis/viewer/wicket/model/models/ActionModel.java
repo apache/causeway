@@ -60,7 +60,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.action.form.FormPendingParamUiModel;
 import org.apache.isis.viewer.common.model.action.form.FormUiModel;
-import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
+import org.apache.isis.viewer.common.model.mementos.ActionMemento;
 
 import lombok.val;
 
@@ -112,7 +112,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
     @Override
     public ObjectAction getMetaModel() {
         if(objectAction==null) {
-            objectAction = actionMemento.getAction(getSpecificationLoader()); 
+            objectAction = actionMemento.getAction(this::getSpecificationLoader); 
         }
         return objectAction;
     }

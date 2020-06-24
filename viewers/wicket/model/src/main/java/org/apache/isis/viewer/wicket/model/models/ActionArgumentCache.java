@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.common.model.action.form.PendingParameterManager;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
-import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
+import org.apache.isis.viewer.common.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 
 import lombok.NonNull;

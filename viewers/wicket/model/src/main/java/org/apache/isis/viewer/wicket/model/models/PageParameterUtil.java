@@ -39,8 +39,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.viewer.common.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
-import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 
 import lombok.Value;

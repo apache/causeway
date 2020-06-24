@@ -62,7 +62,7 @@ implements ParameterUiModel {
     @Override
     public ObjectActionParameter getMetaModel() {
         if(actionParameter==null) {
-            actionParameter = paramMemento.getActionParameter(getSpecificationLoader()); 
+            actionParameter = paramMemento.getActionParameter(this::getSpecificationLoader); 
         }
         return actionParameter;  
     }

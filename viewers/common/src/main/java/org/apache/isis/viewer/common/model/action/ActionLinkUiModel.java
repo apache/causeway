@@ -63,7 +63,7 @@ public abstract class ActionLinkUiModel<T> implements HasUiComponent<T> {
     
     // implements HasUiComponent<T>
     @Getter(onMethod = @__(@Override), lazy = true) 
-    private final T uiComponent = uiComponentFactory.newActionLinkUiComponent(this);
+    private final T uiComponent = uiComponentFactory.newActionLinkUiComponent(getActionUiMetaModel());
     
     public ActionUiMetaModel getActionUiMetaModel() {
         return actionUiMetaModel.get();

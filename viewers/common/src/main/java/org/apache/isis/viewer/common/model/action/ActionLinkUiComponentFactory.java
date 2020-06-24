@@ -29,6 +29,6 @@ package org.apache.isis.viewer.common.model.action;
  */
 public interface ActionLinkUiComponentFactory<T> {
 
-    T newActionLinkUiComponent(ActionLinkUiModel<T> actionUiModel);
+    T newActionLinkUiComponent(ActionUiMetaModel actionUiMetaModel);
    
 }

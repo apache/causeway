@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.action.ActionLinkUiModelFactory;
 import org.apache.isis.viewer.common.model.menu.MenuUiModel;
+import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
@@ -113,8 +114,8 @@ public final class ServiceActionUtil {
         
         @Override
         public LinkAndLabel newActionLink(
-                String named, 
-                ManagedAction managedAction) {
+                final String named, 
+                final ManagedAction managedAction) {
         
             val serviceModel = EntityModel.ofAdapter(commonContext, managedAction.getOwner());
             
@@ -123,7 +124,10 @@ public final class ServiceActionUtil {
                     serviceModel);
             
             return LinkAndLabel.of(
-                    model->actionLinkFactory.newActionLink(model.getObjectAction(), named).getUiComponent(),
+                    model->actionLinkFactory.newActionLink(
+                            model.getObjectAction(()->CommonContextUtils.getCommonContext().getSpecificationLoader()),
+                            named)
+                            .getUiComponent(),
                     named,
                     serviceModel,
                     managedAction.getAction());
