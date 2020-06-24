@@ -23,9 +23,9 @@ import com.vaadin.flow.component.html.Label;
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.incubator.viewer.vaadin.model.decorator.Decorators;
-import org.apache.isis.viewer.common.model.action.ActionLinkUiModel;
-import org.apache.isis.viewer.common.model.action.ActionLinkUiModelFactory;
 import org.apache.isis.viewer.common.model.action.ActionUiMetaModel;
+import org.apache.isis.viewer.common.model.action.link.ActionLinkUiModel;
+import org.apache.isis.viewer.common.model.action.link.ActionLinkUiModelFactory;
 import org.apache.isis.viewer.common.model.object.SimpleObjectUiModel;
 
 import lombok.RequiredArgsConstructor;

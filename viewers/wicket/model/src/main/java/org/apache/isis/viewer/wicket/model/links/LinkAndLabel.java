@@ -34,7 +34,7 @@ import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.action.ActionUiMetaModel;
-import org.apache.isis.viewer.common.model.action.ActionLinkUiModel;
+import org.apache.isis.viewer.common.model.action.link.ActionLinkUiModel;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 

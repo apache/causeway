@@ -20,24 +20,12 @@ package org.apache.isis.viewer.common.model.action;
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 
-/**
- * Creates an {@link ActionLinkUiModel}, a holder of the <em>Action's</em> meta-model 
- * and a click-able UI action component; eg. link, button, menu-items.
- * 
- * @see ActionLinkUiModel
- * 
- * @since 2.0.0
- * @param <T> - link component type, native to the viewer
- */
-public interface ActionLinkUiModelFactory<T> {
+public interface ActionUiModel<M, R> {
     
-    /**
-     * @param named - used when explicitly named (eg. menu bar layout file), otherwise {@code null}
-     * @param managedAction
-     */
-    ActionLinkUiModel<T> newActionLink(
-            String named,
-            ManagedAction managedAction);
+    ActionUiMetaModel getActionUiMetaModel();
+    ManagedAction getManagedAction();
     
-    
+    M createMenuUiComponent();    
+    R createRegularUiComponent();
+
 }

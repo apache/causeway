@@ -18,24 +18,12 @@
  */
 package org.apache.isis.incubator.viewer.javafx.model.action;
 
-
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.viewer.common.model.action.link.ActionLinkUiModelFactory;
 
-import lombok.RequiredArgsConstructor;
+public class ActionUiModelFactoryFx {
 
-import javafx.scene.Node;
-
-@RequiredArgsConstructor
-public class ActionLinkFactoryFx implements ActionLinkUiModelFactory<Node> {
-
-    @Override
-    public ActionLinkFx newActionLink(
-            String named,
-            ManagedAction managedAction) {
-        
-        return ActionLinkFx.of(named, managedAction);
+    public ActionUiModelFx newActionUiModel(ManagedAction managedAction) {
+        return ActionUiModelFx.of(managedAction);
     }
-
     
 }

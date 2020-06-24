@@ -16,26 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.javafx.model.action;
+package org.apache.isis.viewer.common.model.action.link;
 
+import org.apache.isis.viewer.common.model.action.ActionUiMetaModel;
 
-import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.viewer.common.model.action.link.ActionLinkUiModelFactory;
+/**
+ * Creates a click-able UI component of type {@code <T>} based on an {@link ActionLinkUiModel}.
+ * eg. link, button, menu-item
+ * 
+ * @see ActionLinkUiModel
+ * 
+ * @since 2.0.0
+ * @param <T> - link component type, native to the viewer
+ */
+public interface ActionLinkUiComponentFactory<T> {
 
-import lombok.RequiredArgsConstructor;
-
-import javafx.scene.Node;
-
-@RequiredArgsConstructor
-public class ActionLinkFactoryFx implements ActionLinkUiModelFactory<Node> {
-
-    @Override
-    public ActionLinkFx newActionLink(
-            String named,
-            ManagedAction managedAction) {
-        
-        return ActionLinkFx.of(named, managedAction);
-    }
-
-    
+    T newActionLinkUiComponent(ActionUiMetaModel actionUiMetaModel);
+   
 }

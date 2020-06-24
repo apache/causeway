@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.common.model.action;
+package org.apache.isis.viewer.common.model.action.link;
 
 import java.util.Optional;
 
@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.HasUiComponent;
+import org.apache.isis.viewer.common.model.action.ActionUiMetaModel;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 
 import lombok.Getter;

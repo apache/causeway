@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.common.model.action;
+package org.apache.isis.viewer.common.model.action.link;
 
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmDecorator;
 import org.apache.isis.viewer.common.model.decorator.disable.DisableDecorator;

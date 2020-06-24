@@ -16,19 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.common.model.action;
+package org.apache.isis.viewer.common.model.action.link;
+
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 
 /**
- * Creates a click-able UI component of type {@code <T>} based on an {@link ActionLinkUiModel}.
- * eg. link, button, menu-item
+ * Creates an {@link ActionLinkUiModel}, a holder of the <em>Action's</em> meta-model 
+ * and a click-able UI action component; eg. link, button, menu-items.
  * 
  * @see ActionLinkUiModel
  * 
  * @since 2.0.0
  * @param <T> - link component type, native to the viewer
  */
-public interface ActionLinkUiComponentFactory<T> {
-
-    T newActionLinkUiComponent(ActionUiMetaModel actionUiMetaModel);
-   
+public interface ActionLinkUiModelFactory<T> {
+    
+    /**
+     * @param named - used when explicitly named (eg. menu bar layout file), otherwise {@code null}
+     * @param managedAction
+     */
+    ActionLinkUiModel<T> newActionLink(
+            String named,
+            ManagedAction managedAction);
+    
+    
 }

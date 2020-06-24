@@ -18,7 +18,7 @@
  */
 package org.apache.isis.incubator.viewer.javafx.ui.main;
 
-import org.apache.isis.incubator.viewer.javafx.model.action.ActionLinkFactoryFx;
+import org.apache.isis.incubator.viewer.javafx.model.action.ActionUiModelFactoryFx;
 import org.apache.isis.viewer.common.model.menu.MenuItemDto;
 import org.apache.isis.viewer.common.model.menu.MenuVisitor;
 
@@ -28,6 +28,7 @@ import lombok.extern.log4j.Log4j2;
 
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.SeparatorMenuItem;
 
 @RequiredArgsConstructor(staticName = "of")
 @Log4j2
@@ -36,7 +37,7 @@ public class MenuBuilderFx implements MenuVisitor {
     private final MenuBar menuBar;
     
     private Menu currentTopLevelMenu = null;
-    private ActionLinkFactoryFx actionLinkFactory = new ActionLinkFactoryFx();
+    private ActionUiModelFactoryFx actionUiModelFactory = new ActionUiModelFactoryFx();
 
     @Override
     public void addTopLevel(MenuItemDto menu) {
@@ -52,14 +53,15 @@ public class MenuBuilderFx implements MenuVisitor {
         
         log.info("sub menu {}", menu.getName());
         
-        val actionLink = actionLinkFactory.newActionLink(menu.getName(), managedAction);
-        currentTopLevelMenu.getItems().add(actionLink.getUiMenuItem());
+        val actionLink = actionUiModelFactory.newActionUiModel(managedAction);
+        currentTopLevelMenu.getItems().add(actionLink.createMenuUiComponent());
     }
     
     @Override
     public void addSectionSpacer() {
-        // TODO Auto-generated method stub
         log.info("spacer");
+        currentTopLevelMenu.getItems()
+        .add(new SeparatorMenuItem());
     }
     
 }

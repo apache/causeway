@@ -21,8 +21,8 @@ package org.apache.isis.incubator.viewer.vaadin.model.action;
 import com.vaadin.flow.component.Component;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.action.ActionLinkUiComponentFactory;
-import org.apache.isis.viewer.common.model.action.ActionLinkUiModel;
+import org.apache.isis.viewer.common.model.action.link.ActionLinkUiComponentFactory;
+import org.apache.isis.viewer.common.model.action.link.ActionLinkUiModel;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 
 public class ActionLinkVaa extends ActionLinkUiModel<Component> {

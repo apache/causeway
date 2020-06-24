@@ -28,8 +28,8 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.viewer.common.model.action.ActionLinkUiModel;
 import org.apache.isis.viewer.common.model.action.ActionUiMetaModel;
+import org.apache.isis.viewer.common.model.action.link.ActionLinkUiModel;
 
 import lombok.Getter;
 import lombok.NonNull;

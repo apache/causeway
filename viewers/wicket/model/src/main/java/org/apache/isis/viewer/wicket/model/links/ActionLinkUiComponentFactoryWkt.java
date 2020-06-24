@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 import org.apache.wicket.markup.html.link.AbstractLink;
 
-import org.apache.isis.viewer.common.model.action.ActionLinkUiComponentFactory;
+import org.apache.isis.viewer.common.model.action.link.ActionLinkUiComponentFactory;
 
 public interface ActionLinkUiComponentFactoryWkt 
 extends ActionLinkUiComponentFactory<AbstractLink>, Serializable {
