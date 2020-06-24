@@ -21,14 +21,10 @@ package org.apache.isis.viewer.common.model.menu;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.common.model.action.link.ActionLinkUiModelFactory;
-import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModel;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -49,28 +45,6 @@ public class MenuUiModel implements Serializable {
         return menuBarSelect.name().toLowerCase(Locale.ENGLISH);
     }
     
-    @Deprecated//use MenuVisitor instead
-    public <T, M extends MenuItemUiModel<T, M>> 
-    void buildMenuItems(
-            final IsisAppCommonContext commonContext,
-            final ActionLinkUiModelFactory<T> menuActionFactory,
-            final Function<String, M> menuItemFactory,
-            final Consumer<M> onNewMenuItem) {
-        
-        val menuBars = commonContext.getMenuBarsService().menuBars();
-
-        // TODO: remove hard-coded dependency on BS3
-        final BS3MenuBar menuBar = (BS3MenuBar) menuBars.menuBarFor(getMenuBarSelect());
-        
-        MenuUiModel_buildMenuItems.buildMenuItems(
-                commonContext, 
-                menuBar,
-                menuActionFactory,
-                menuItemFactory,
-                onNewMenuItem);
-        
-    }
-    
     public void buildMenuItems(
             final IsisAppCommonContext commonContext,
             final MenuVisitor menuBuilder) {
@@ -78,7 +52,7 @@ public class MenuUiModel implements Serializable {
         val menuBars = commonContext.getMenuBarsService().menuBars();
         val menuBar = (BS3MenuBar) menuBars.menuBarFor(getMenuBarSelect());
         
-        MenuUiModel_buildMenuItems2.buildMenuItems(
+        MenuUiModel_buildMenuItems.buildMenuItems(
                 commonContext, 
                 menuBar,
                 menuBuilder);

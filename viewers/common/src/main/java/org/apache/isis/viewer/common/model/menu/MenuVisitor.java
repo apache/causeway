@@ -20,8 +20,8 @@ package org.apache.isis.viewer.common.model.menu;
 
 public interface MenuVisitor {
 
-    void addTopLevel(MenuItemDto menu);
+    void addTopLevel(MenuItemDto menuDto);
     void addSectionSpacer();
-    void addSubMenu(MenuItemDto menu);
+    void addSubMenu(MenuItemDto menuDto);
     
 }
