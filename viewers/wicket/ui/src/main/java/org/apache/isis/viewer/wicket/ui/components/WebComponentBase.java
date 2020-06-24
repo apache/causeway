@@ -23,8 +23,8 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
-import org.apache.isis.core.webapp.context.IsisAppCommonContext;
-import org.apache.isis.core.webapp.context.IsisAppCommonContext.HasCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 
 /**

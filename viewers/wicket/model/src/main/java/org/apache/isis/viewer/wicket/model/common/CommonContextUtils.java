@@ -20,7 +20,7 @@ package org.apache.isis.viewer.wicket.model.common;
 
 import org.apache.wicket.Session;
 
-import org.apache.isis.core.webapp.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 
 import lombok.val;
 

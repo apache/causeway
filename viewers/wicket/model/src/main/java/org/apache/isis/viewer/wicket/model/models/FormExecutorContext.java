@@ -20,7 +20,7 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.core.webapp.context.IsisAppCommonContext.HasCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.common.model.HasParentUiModel;
 
 public interface FormExecutorContext 

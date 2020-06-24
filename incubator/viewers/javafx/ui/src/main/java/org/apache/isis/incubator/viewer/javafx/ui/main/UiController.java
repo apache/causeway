@@ -23,8 +23,8 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.header.HeaderUiModelProvider;
 
 import lombok.RequiredArgsConstructor;

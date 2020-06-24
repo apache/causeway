@@ -20,7 +20,7 @@ package org.apache.isis.incubator.viewer.javafx.model.action;
 
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.core.webapp.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.action.ActionLinkUiModel;
 import org.apache.isis.viewer.common.model.action.ActionLinkUiModelFactory;
 import org.apache.isis.viewer.common.model.object.SimpleObjectUiModel;

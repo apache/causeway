@@ -19,7 +19,7 @@
 package org.apache.isis.viewer.common.model.action;
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.core.webapp.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 
 /**
  * Creates an {@link ActionLinkUiModel}, a holder of the <em>Action's</em> meta-model 

@@ -21,9 +21,9 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.wicket.model.LoadableDetachableModel;
 
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
-import org.apache.isis.core.webapp.context.IsisAppCommonContext;
-import org.apache.isis.core.webapp.context.IsisAppCommonContext.HasCommonContext;
 
 import lombok.NonNull;
 

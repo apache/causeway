@@ -19,7 +19,7 @@
 package org.apache.isis.viewer.common.model.object;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.webapp.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 
 import lombok.Getter;
 import lombok.NonNull;

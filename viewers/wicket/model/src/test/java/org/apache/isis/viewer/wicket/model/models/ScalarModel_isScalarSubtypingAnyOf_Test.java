@@ -32,9 +32,9 @@ import org.apache.isis.core.metamodel.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.memento.ObjectMementoService;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.webapp.context.IsisAppCommonContext;
-import org.apache.isis.core.webapp.context.memento.ObjectMementoService;
 
 import lombok.val;
 

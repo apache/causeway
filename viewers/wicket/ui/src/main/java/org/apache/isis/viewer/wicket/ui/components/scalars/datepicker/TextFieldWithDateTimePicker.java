@@ -31,8 +31,8 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.convert.IConverter;
 
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.ui.components.scalars.DateConverter;
-import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 
 import de.agilecoders.wicket.core.util.Attributes;
 

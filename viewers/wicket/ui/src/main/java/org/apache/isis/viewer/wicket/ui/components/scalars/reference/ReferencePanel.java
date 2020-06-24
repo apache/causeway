@@ -35,7 +35,7 @@ import org.wicketstuff.select2.Settings;
 
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
+import org.apache.isis.core.runtime.context.memento.ObjectMemento;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;

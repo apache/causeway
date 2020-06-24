@@ -57,7 +57,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
-import org.apache.isis.core.webapp.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.action.form.FormPendingParamUiModel;
 import org.apache.isis.viewer.common.model.action.form.FormUiModel;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;

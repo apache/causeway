@@ -23,7 +23,7 @@ import java.io.Serializable;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
 import org.apache.isis.core.commons.collections.Can;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
+import org.apache.isis.core.runtime.context.memento.ObjectMemento;
 
 public interface ToggledMementosProvider extends Serializable {
     

@@ -31,7 +31,7 @@ import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 
-import org.apache.isis.core.webapp.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.action.ActionLinkFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.model.action.ActionLinkVaa;
 import org.apache.isis.incubator.viewer.vaadin.model.decorator.Decorators;

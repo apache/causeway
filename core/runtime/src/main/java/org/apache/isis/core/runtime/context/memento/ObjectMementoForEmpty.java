@@ -16,32 +16,37 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.webapp.context.memento;
+package org.apache.isis.core.runtime.context.memento;
 
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
-/**
- * @since 2.0
- * 
- *
- */
-public interface ObjectMementoService {
+@RequiredArgsConstructor
+public class ObjectMementoForEmpty implements ObjectMemento {
 
-    ObjectMemento mementoForRootOid(RootOid rootOid);
-
-    ObjectMemento mementoForObject(ManagedObject adapter);
-
-    ObjectMemento mementoForPojo(Object pojo);
+    private static final long serialVersionUID = 1L;
     
-    ObjectMemento mementoForPojos(Iterable<Object> iterablePojos, ObjectSpecId specId);
+    @Getter(onMethod = @__(@Override))
+    @NonNull private ObjectSpecId objectSpecId;
 
-    ManagedObject reconstructObject(ObjectMemento memento);
+    @Override
+    public String asString() {
+        return getObjectSpecId().asString();
+    }
 
-    ObjectMemento mementoForParameter(@NonNull ManagedObject paramAdapter);
-    
+    @Override
+    public Bookmark asBookmarkIfSupported() {
+        return null;
+    }
+
+    @Override
+    public Bookmark asHintingBookmarkIfSupported() {
+        return null;
+    }
+
 
 }

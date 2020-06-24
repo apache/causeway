@@ -40,10 +40,10 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
-import org.apache.isis.core.webapp.context.memento.ObjectMementoCollection;
-import org.apache.isis.core.webapp.context.memento.ObjectMementoForEmpty;
-import org.apache.isis.core.webapp.context.memento.ObjectMementoService;
+import org.apache.isis.core.runtime.context.memento.ObjectMemento;
+import org.apache.isis.core.runtime.context.memento.ObjectMementoCollection;
+import org.apache.isis.core.runtime.context.memento.ObjectMementoForEmpty;
+import org.apache.isis.core.runtime.context.memento.ObjectMementoService;
 
 import lombok.Getter;
 import lombok.NonNull;

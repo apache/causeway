@@ -30,7 +30,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.core.webapp.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.action.ActionLinkUiModelFactory;
 import org.apache.isis.viewer.common.model.menu.MenuUiModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;

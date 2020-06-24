@@ -28,7 +28,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.webapp.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 
 import lombok.val;
 

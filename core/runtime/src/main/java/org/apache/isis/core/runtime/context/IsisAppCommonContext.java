@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.webapp.context;
+package org.apache.isis.core.runtime.context;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -34,10 +34,10 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.context.memento.ObjectMemento;
+import org.apache.isis.core.runtime.context.memento.ObjectMementoService;
 import org.apache.isis.core.runtime.iactn.IsisInteractionTracker;
 import org.apache.isis.core.security.authentication.MessageBroker;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
-import org.apache.isis.core.webapp.context.memento.ObjectMementoService;
 
 import lombok.AccessLevel;
 import lombok.Getter;

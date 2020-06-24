@@ -29,7 +29,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
-import org.apache.isis.core.webapp.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeDecorator;
 import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeUiModel;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipDecorator;

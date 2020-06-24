@@ -33,10 +33,10 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.runtime.context.memento.ObjectMemento;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.viewer.wicket.viewer.integration.AuthenticatedWebSessionForIsis;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 
 public class IsisWicketApplication_Defaults {
 

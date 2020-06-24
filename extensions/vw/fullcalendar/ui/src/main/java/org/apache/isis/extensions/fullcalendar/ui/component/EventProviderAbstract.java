@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.webapp.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.extensions.fullcalendar.applib.spi.CalendarableDereferencingService;
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;

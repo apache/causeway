@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.webapp.context.memento;
+package org.apache.isis.core.runtime.context.memento;
 
 import java.util.ArrayList;
 

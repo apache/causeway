@@ -28,7 +28,7 @@ import java.util.function.Function;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.core.webapp.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.action.ActionLinkUiModelFactory;
 import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModel;
 

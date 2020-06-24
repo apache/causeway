@@ -31,6 +31,7 @@ import org.apache.isis.core.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
@@ -39,7 +40,6 @@ import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
 import org.apache.isis.viewer.wicket.ui.pages.value.ValuePage;
 import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
-import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 
 import lombok.val;
 

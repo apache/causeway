@@ -51,12 +51,12 @@ import org.apache.isis.core.metamodel.facets.properties.renderunchanged.Unchangi
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.memento.ObjectMemento;
 import org.apache.isis.core.runtime.events.RuntimeEventService;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.MessageBroker;
-import org.apache.isis.core.webapp.context.IsisAppCommonContext;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;

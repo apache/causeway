@@ -23,8 +23,8 @@ import java.util.LinkedList;
 import java.util.stream.Stream;
 
 import org.apache.isis.core.metamodel.util.pchain.ParentChain;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 
 import lombok.val;
 

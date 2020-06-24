@@ -23,8 +23,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
-import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 
 import lombok.Getter;
 import lombok.Setter;

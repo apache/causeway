@@ -22,7 +22,7 @@ import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.specimpl.PendingParameterModel;
-import org.apache.isis.core.webapp.context.memento.ObjectMemento;
+import org.apache.isis.core.runtime.context.memento.ObjectMemento;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 

@@ -20,7 +20,7 @@ package org.apache.isis.incubator.viewer.javafx.ui.main;
 
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3Menu;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.core.webapp.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.incubator.viewer.javafx.model.action.ActionLinkFactoryFx;
 import org.apache.isis.viewer.common.model.menu.MenuBuilder;
 

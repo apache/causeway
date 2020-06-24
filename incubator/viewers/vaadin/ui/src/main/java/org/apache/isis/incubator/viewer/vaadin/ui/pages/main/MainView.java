@@ -35,7 +35,7 @@ import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
-import org.apache.isis.core.webapp.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.action.ActionLinkVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableView;

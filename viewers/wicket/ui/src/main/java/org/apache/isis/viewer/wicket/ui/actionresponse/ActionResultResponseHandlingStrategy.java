@@ -31,9 +31,9 @@ import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.time.Duration;
 
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.VoidModel;
 import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
-import org.apache.isis.core.webapp.context.IsisAppCommonContext;
 
 public enum ActionResultResponseHandlingStrategy {
     REDIRECT_TO_VOID {

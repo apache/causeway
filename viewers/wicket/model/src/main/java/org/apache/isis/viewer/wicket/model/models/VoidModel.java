@@ -20,7 +20,7 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.webapp.context.IsisAppCommonContext;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 
 
 /**
