@@ -36,12 +36,12 @@ import lombok.RequiredArgsConstructor;
 /**
  * Holder of the <em>Action's</em> meta-model and a click-able UI action component; eg. link, button, menu-items.
  * 
- * @see ActionUiModelFactory
+ * @see ActionLinkUiModelFactory
  * @since 2.0.0
  * @param <T> - link component type, native to the viewer
  */
 @RequiredArgsConstructor
-public abstract class ActionUiModel<T> implements HasUiComponent<T> {
+public abstract class ActionLinkUiModel<T> implements HasUiComponent<T> {
 
     protected final ActionLinkUiComponentFactory<T> uiComponentFactory;
     

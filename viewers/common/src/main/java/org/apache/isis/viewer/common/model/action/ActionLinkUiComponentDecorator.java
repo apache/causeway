@@ -28,9 +28,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Decorates a click-able UI component of type {@code <T>} based on an {@link ActionUiModel}.
+ * Decorates a click-able UI component of type {@code <T>} based on an {@link ActionLinkUiModel}.
  * 
- * @see ActionUiModel
+ * @see ActionLinkUiModel
  * 
  * @since 2.0.0
  * @param <T> - link component type, native to the viewer

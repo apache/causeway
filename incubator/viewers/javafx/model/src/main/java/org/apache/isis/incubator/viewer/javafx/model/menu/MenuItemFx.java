@@ -16,36 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.javafx.ui;
+package org.apache.isis.incubator.viewer.javafx.model.menu;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.apache.isis.viewer.common.model.menuitem.MenuItemUiModel;
 
-import org.apache.isis.incubator.viewer.javafx.model.events.IsisModuleIncViewerJavaFxModel;
-import org.apache.isis.incubator.viewer.javafx.ui.main.UiBuilder;
-import org.apache.isis.incubator.viewer.javafx.ui.main.UiController;
-import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
+import lombok.val;
 
 /**
- * 
- * @since 2.0
+ * @since 2.0.0
  */
-@Configuration
-@Import({
-        // modules
-        IsisModuleViewerCommon.class,
-        IsisModuleIncViewerJavaFxModel.class,
-        
-        
-        // @Components's
-        UiBuilder.class,
-        UiController.class,
-        
-        // @Service's
+//@Log4j2
+public class MenuItemFx 
+extends MenuItemUiModel<javafx.scene.Node, MenuItemFx> {
 
-        // @Mixin's
-})
+    public static MenuItemFx newMenuItem(final String label) {
+        return new MenuItemFx(label);
+    }
 
-public class IsisModuleIncViewerJavaFxUi {
+    private MenuItemFx(final String label) {
+        super(label);
+    }
+    
+    @Override
+    protected MenuItemFx newSubMenuItem(final String label) {
+        val subMenuItem = newMenuItem(label);
+        subMenuItem.setParent(this);
+        return subMenuItem;
+    }
 
 }

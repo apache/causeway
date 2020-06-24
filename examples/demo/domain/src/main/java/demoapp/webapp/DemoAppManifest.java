@@ -23,11 +23,15 @@ import java.util.Optional;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleExtSecmanEncryptionJbcrypt;
+import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
+import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
+import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanRealmShiro;
 import org.apache.isis.extensions.viewer.wicket.exceldownload.ui.IsisModuleExtExcelDownloadUi;
+import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
 import org.apache.isis.testing.h2console.ui.IsisModuleTestingH2ConsoleUi;
 import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRestfulObjectsJaxrsResteasy4;
 import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleViewerRestfulObjectsViewer;
@@ -45,7 +49,16 @@ import demoapp.dom._infra.LibraryPreloadingService;
 @Configuration
 @Import({
     DemoModule.class, // shared demo core module
+    
+    // SECURITY
+    IsisModuleSecurityShiro.class,
 
+    // Security Manager Extension (secman)
+    IsisModuleExtSecmanModel.class,
+    IsisModuleExtSecmanRealmShiro.class,
+    IsisModuleExtSecmanPersistenceJdo.class,
+    IsisModuleExtSecmanEncryptionJbcrypt.class,
+    
     // REST
     IsisModuleViewerRestfulObjectsViewer.class,
     IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,
@@ -60,10 +73,6 @@ import demoapp.dom._infra.LibraryPreloadingService;
     AsciiDocReaderService.class,
 
 })
-@ComponentScan(
-        basePackageClasses= {
-                DemoModule.class
-        })
 @Log4j2
 public class DemoAppManifest {
 

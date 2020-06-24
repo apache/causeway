@@ -16,36 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.javafx.ui;
+package org.apache.isis.viewer.common.model.menu;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.apache.isis.applib.layout.menubars.bootstrap3.BS3Menu;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 
-import org.apache.isis.incubator.viewer.javafx.model.events.IsisModuleIncViewerJavaFxModel;
-import org.apache.isis.incubator.viewer.javafx.ui.main.UiBuilder;
-import org.apache.isis.incubator.viewer.javafx.ui.main.UiController;
-import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
+public interface MenuBuilder {
 
-/**
- * 
- * @since 2.0
- */
-@Configuration
-@Import({
-        // modules
-        IsisModuleViewerCommon.class,
-        IsisModuleIncViewerJavaFxModel.class,
-        
-        
-        // @Components's
-        UiBuilder.class,
-        UiController.class,
-        
-        // @Service's
-
-        // @Mixin's
-})
-
-public class IsisModuleIncViewerJavaFxUi {
-
+    void addTopLevel(BS3Menu menu);
+    void addSectionSpacer();
+    void addSubMenu(String named, ManagedAction managedAction);
+    
 }

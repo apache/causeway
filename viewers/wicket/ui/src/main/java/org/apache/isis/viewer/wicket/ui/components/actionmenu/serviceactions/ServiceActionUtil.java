@@ -31,7 +31,7 @@ import org.apache.wicket.markup.html.panel.Fragment;
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.viewer.common.model.action.ActionUiModelFactory;
+import org.apache.isis.viewer.common.model.action.ActionLinkUiModelFactory;
 import org.apache.isis.viewer.common.model.menu.MenuUiModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -106,7 +106,7 @@ public final class ServiceActionUtil {
     }
 
 
-    private static class MenuActionFactoryWkt implements ActionUiModelFactory<AbstractLink> {
+    private static class MenuActionFactoryWkt implements ActionLinkUiModelFactory<AbstractLink> {
 
         @Override
         public LinkAndLabel newAction(

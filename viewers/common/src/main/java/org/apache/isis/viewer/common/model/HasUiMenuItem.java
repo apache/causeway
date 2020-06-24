@@ -16,22 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.vaadin.model.entity;
+package org.apache.isis.viewer.common.model;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.viewer.common.model.object.ObjectUiModel;
+public interface HasUiMenuItem<T> {
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
-public class ObjectVaa implements ObjectUiModel {
-
-    private final IsisWebAppCommonContext commonContext;
+    T getUiMenuItem();
     
-    @NonNull @Getter(onMethod = @__(@Override))
-    private final ManagedObject managedObject;
-
 }

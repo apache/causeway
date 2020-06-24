@@ -24,25 +24,25 @@ import com.vaadin.flow.component.html.Label;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.decorator.Decorators;
-import org.apache.isis.incubator.viewer.vaadin.model.entity.ObjectVaa;
-import org.apache.isis.viewer.common.model.action.ActionUiModel;
-import org.apache.isis.viewer.common.model.action.ActionUiModelFactory;
+import org.apache.isis.viewer.common.model.action.ActionLinkUiModel;
+import org.apache.isis.viewer.common.model.action.ActionLinkUiModelFactory;
+import org.apache.isis.viewer.common.model.object.SimpleObjectUiModel;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @RequiredArgsConstructor
-public class ActionFactoryVaa implements ActionUiModelFactory<Component> {
+public class ActionLinkFactoryVaa implements ActionLinkUiModelFactory<Component> {
 
     @Override
-    public ActionUiModel<Component> newAction(
+    public ActionLinkUiModel<Component> newAction(
             IsisWebAppCommonContext commonContext, 
             String named,
             ManagedAction managedAction) {
         
-        val actionOwnerModel = new ObjectVaa(commonContext, managedAction.getOwner());
+        val actionOwnerModel = new SimpleObjectUiModel(commonContext, managedAction.getOwner());
         
-        val actionUiModel = new ActionVaa(
+        val actionUiModel = new ActionLinkVaa(
                 this::createUiComponent,
                 named,
                 actionOwnerModel, 
@@ -54,7 +54,7 @@ public class ActionFactoryVaa implements ActionUiModelFactory<Component> {
     // -- HELPER
     
     private Component createUiComponent(
-            final ActionUiModel<Component> actionUiModel) {
+            final ActionLinkUiModel<Component> actionUiModel) {
         
         val actionMeta = actionUiModel.getActionUiMetaModel();
         val uiLabel = new Label(actionMeta.getLabel());

@@ -22,12 +22,12 @@ import com.vaadin.flow.component.Component;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.action.ActionLinkUiComponentFactory;
-import org.apache.isis.viewer.common.model.action.ActionUiModel;
+import org.apache.isis.viewer.common.model.action.ActionLinkUiModel;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 
-public class ActionVaa extends ActionUiModel<Component> {
+public class ActionLinkVaa extends ActionLinkUiModel<Component> {
 
-    public ActionVaa(
+    public ActionLinkVaa(
             final ActionLinkUiComponentFactory<Component> uiComponentFactory,
             final String named,
             final ObjectUiModel actionHolder,

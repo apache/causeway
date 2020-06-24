@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.incubator.viewer.vaadin.model.action.ActionVaa;
+import org.apache.isis.incubator.viewer.vaadin.model.action.ActionLinkVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableView;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.object.ObjectFormView;
@@ -97,7 +97,7 @@ implements BeforeEnterObserver {
         setDrawerOpened(false);
     }
 
-    private void onMenuAction(ActionVaa menuActionModel) {
+    private void onMenuAction(ActionLinkVaa menuActionModel) {
         
         pageContent.removeAll();
 

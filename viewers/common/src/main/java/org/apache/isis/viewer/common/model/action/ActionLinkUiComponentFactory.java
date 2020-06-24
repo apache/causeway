@@ -19,16 +19,16 @@
 package org.apache.isis.viewer.common.model.action;
 
 /**
- * Creates a click-able UI component of type {@code <T>} based on an {@link ActionUiModel}.
+ * Creates a click-able UI component of type {@code <T>} based on an {@link ActionLinkUiModel}.
  * eg. link, button, menu-item
  * 
- * @see ActionUiModel
+ * @see ActionLinkUiModel
  * 
  * @since 2.0.0
  * @param <T> - link component type, native to the viewer
  */
 public interface ActionLinkUiComponentFactory<T> {
 
-    T newActionLinkUiComponent(ActionUiModel<T> actionUiModel);
+    T newActionLinkUiComponent(ActionLinkUiModel<T> actionUiModel);
    
 }

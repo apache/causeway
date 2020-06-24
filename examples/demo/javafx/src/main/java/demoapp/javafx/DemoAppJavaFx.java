@@ -28,6 +28,7 @@ import org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefaul
 import org.apache.isis.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
 import org.apache.isis.incubator.viewer.javafx.viewer.IsisModuleIncViewerJavaFxViewer;
 import org.apache.isis.incubator.viewer.javafx.viewer.JavafxViewer;
+import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 
 import demoapp.dom.DemoModule;
 
@@ -39,6 +40,7 @@ import demoapp.dom.DemoModule;
     DemoModule.class,
     
     // INCUBATING
+    IsisModuleSecurityBypass.class,
     IsisModuleIncViewerJavaFxViewer.class,
   
 })

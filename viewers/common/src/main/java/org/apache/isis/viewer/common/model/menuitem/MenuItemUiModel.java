@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.core.commons.internal.base._Casts;
 import org.apache.isis.core.commons.internal.collections._Lists;
-import org.apache.isis.viewer.common.model.action.ActionUiModel;
+import org.apache.isis.viewer.common.model.action.ActionLinkUiModel;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -56,7 +56,7 @@ public abstract class MenuItemUiModel<T, U extends MenuItemUiModel<T, U>> {
     
     @Getter @Setter private boolean isTertiaryRoot = false; // unless set otherwise
 
-    @Getter @Setter private ActionUiModel<T> menuActionUiModel;
+    @Getter @Setter private ActionLinkUiModel<T> menuActionUiModel;
     
     private final List<U> subMenuItems = _Lists.newArrayList();
     protected void addSubMenuItem(final U cssMenuItem) {
@@ -93,7 +93,7 @@ public abstract class MenuItemUiModel<T, U extends MenuItemUiModel<T, U>> {
      * {@link MenuActionWkt action model}, based on visibility and usability.
      */
     public void addSubMenuItemFor(
-            @NonNull final ActionUiModel<T> actionModel,
+            @NonNull final ActionLinkUiModel<T> actionModel,
             final boolean isFirstInSection,
             @Nullable final Consumer<U> onNewSubMenuItem) {
 

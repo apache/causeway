@@ -22,15 +22,15 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
 /**
- * Creates an {@link ActionUiModel}, a holder of the <em>Action's</em> meta-model 
+ * Creates an {@link ActionLinkUiModel}, a holder of the <em>Action's</em> meta-model 
  * and a click-able UI action component; eg. link, button, menu-items.
  * 
- * @see ActionUiModel
+ * @see ActionLinkUiModel
  * 
  * @since 2.0.0
  * @param <T> - link component type, native to the viewer
  */
-public interface ActionUiModelFactory<T> {
+public interface ActionLinkUiModelFactory<T> {
     
     /**
      * 
@@ -39,7 +39,7 @@ public interface ActionUiModelFactory<T> {
      * @param managedAction
      * @return
      */
-    ActionUiModel<T> newAction(
+    ActionLinkUiModel<T> newAction(
             IsisWebAppCommonContext commonContext, 
             String named,
             ManagedAction managedAction);

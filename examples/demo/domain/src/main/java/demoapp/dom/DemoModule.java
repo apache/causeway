@@ -19,6 +19,7 @@
 package demoapp.dom;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
@@ -30,26 +31,14 @@ import org.apache.isis.extensions.modelannotation.metamodel.IsisModuleExtModelAn
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationServiceAllowBeatsVeto;
-import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleExtSecmanEncryptionJbcrypt;
-import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
-import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
-import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanRealmShiro;
 import org.apache.isis.persistence.jdo.datanucleus5.IsisModuleJdoDataNucleus5;
-import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 @Configuration
 @Import({
     IsisModuleCoreRuntimeServices.class,
-    IsisModuleSecurityShiro.class,
     IsisModuleJdoDataNucleus5.class,
     
-    // Security Manager Extension (secman)
-    IsisModuleExtSecmanModel.class,
-    IsisModuleExtSecmanRealmShiro.class,
-    IsisModuleExtSecmanPersistenceJdo.class,
-    IsisModuleExtSecmanEncryptionJbcrypt.class,
-
     IsisModuleTestingFixturesApplib.class,
 
     IsisModuleExtModelAnnotation.class, // @Model support
@@ -61,6 +50,10 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
     @PropertySource(IsisPresets.SilenceWicket),
     @PropertySource(IsisPresets.DataNucleusAutoCreate),
 })
+@ComponentScan(
+        basePackageClasses= {
+                DemoModule.class
+        })
 public class DemoModule {
     
     @Bean

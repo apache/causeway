@@ -16,36 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.javafx.ui;
+package org.apache.isis.viewer.common.model.object;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
 
-import org.apache.isis.incubator.viewer.javafx.model.events.IsisModuleIncViewerJavaFxModel;
-import org.apache.isis.incubator.viewer.javafx.ui.main.UiBuilder;
-import org.apache.isis.incubator.viewer.javafx.ui.main.UiController;
-import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
-/**
- * 
- * @since 2.0
- */
-@Configuration
-@Import({
-        // modules
-        IsisModuleViewerCommon.class,
-        IsisModuleIncViewerJavaFxModel.class,
-        
-        
-        // @Components's
-        UiBuilder.class,
-        UiController.class,
-        
-        // @Service's
+@RequiredArgsConstructor
+public class SimpleObjectUiModel implements ObjectUiModel {
 
-        // @Mixin's
-})
-
-public class IsisModuleIncViewerJavaFxUi {
+    private final IsisWebAppCommonContext commonContext;
+    
+    @NonNull @Getter(onMethod = @__(@Override))
+    private final ManagedObject managedObject;
 
 }

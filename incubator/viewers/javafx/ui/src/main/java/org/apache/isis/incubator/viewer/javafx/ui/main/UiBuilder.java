@@ -37,13 +37,13 @@ import javafx.scene.Scene;
 
 @Component
 @Log4j2
-public class PrimaryStageListener {
+public class UiBuilder {
     
     private final ApplicationContext springContext;
     private final JavaFxViewerConfig viewerConfig;
     
     @Inject
-    public PrimaryStageListener(
+    public UiBuilder(
             ApplicationContext springContext,
             JavaFxViewerConfig viewerConfig) {
         
@@ -59,7 +59,7 @@ public class PrimaryStageListener {
         val fxmlLoader = new FXMLLoader(layoutUrl);
         fxmlLoader.setControllerFactory(springContext::getBean);
         val uiRoot = (Parent)fxmlLoader.load();
-        val scene = new Scene(uiRoot, 800, 600);
+        val scene = new Scene(uiRoot);
         val stage = event.getStage();
         stage.setScene(scene);
         stage.setTitle(viewerConfig.getApplicationTitle());

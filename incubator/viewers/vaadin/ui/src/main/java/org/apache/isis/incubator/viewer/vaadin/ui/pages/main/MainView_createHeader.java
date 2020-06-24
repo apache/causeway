@@ -32,8 +32,8 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 
 import org.apache.isis.core.webapp.context.IsisWebAppCommonContext;
-import org.apache.isis.incubator.viewer.vaadin.model.action.ActionFactoryVaa;
-import org.apache.isis.incubator.viewer.vaadin.model.action.ActionVaa;
+import org.apache.isis.incubator.viewer.vaadin.model.action.ActionLinkFactoryVaa;
+import org.apache.isis.incubator.viewer.vaadin.model.action.ActionLinkVaa;
 import org.apache.isis.incubator.viewer.vaadin.model.decorator.Decorators;
 import org.apache.isis.incubator.viewer.vaadin.model.menu.MenuItemVaa;
 import org.apache.isis.viewer.common.model.branding.BrandingUiModel;
@@ -48,7 +48,7 @@ final class MainView_createHeader {
     static Component createHeader(
             final IsisWebAppCommonContext commonContext, 
             final HeaderUiModel headerUiModel,
-            final Consumer<ActionVaa> subMenuEventHandler) {
+            final Consumer<ActionLinkVaa> subMenuEventHandler) {
         
         val titleOrLogo = createTitleOrLogo(commonContext, headerUiModel.getBranding());
         val leftMenuBar = new MenuBar();
@@ -80,7 +80,7 @@ final class MainView_createHeader {
                             .decorateTopLevel(new Label(menuSectionUiModel.getName())));
             val subMenu = menuItem.getSubMenu();
             menuSectionUiModel.getSubMenuItems().forEach(menuItemModel -> {
-                val menuActionModel = (ActionVaa)menuItemModel.getMenuActionUiModel();
+                val menuActionModel = (ActionLinkVaa)menuItemModel.getMenuActionUiModel();
                 
                 if(menuItemModel.isFirstInSection() 
                         && subMenu.getItems().size()>0) {
@@ -142,7 +142,7 @@ final class MainView_createHeader {
         
         menuUiModel.buildMenuItems(
                 commonContext, 
-                new ActionFactoryVaa(),
+                new ActionLinkFactoryVaa(),
                 MenuItemVaa::newMenuItem,
                 onNewMenuItem);
     }
