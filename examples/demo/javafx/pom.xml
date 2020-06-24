@@ -113,18 +113,6 @@
 		<dependency>
 			<groupId>org.apache.isis.security</groupId>
 			<artifactId>isis-security-shiro</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>
-						spring-boot-starter-thymeleaf
-					</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-web</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 
 		<!-- JDK11+ SUPPORT -->
@@ -142,18 +130,6 @@
 			<artifactId>isis-viewer-javafx-viewer</artifactId>
 			<!-- incubator version is not managed by app starter bundles -->
 			<version>${project.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.isis.core</groupId>
-					<artifactId>isis-core-webapp</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>
-						spring-boot-starter-thymeleaf
-					</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 
 		<!-- EXTENSIONS -->

@@ -58,24 +58,27 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-runtimeservices</artifactId>
         </dependency>
-
+        
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-webapp</artifactId>
+            <!-- don't make these transitive, so that we can make headless use 
+                 of the isis-security-shiro module (without bringing in spring-boot-web) -->
+            <exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>
+						spring-boot-starter-thymeleaf
+					</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-web</artifactId>
+				</exclusion>
+			</exclusions>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime</artifactId>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-internaltestsupport</artifactId>
-            <scope>test</scope>
-        </dependency>
+        <!-- SHIRO -->
 
         <dependency>
             <groupId>org.apache.shiro</groupId>
@@ -87,9 +90,25 @@
             	</exclusion>
             </exclusions>
         </dependency>
+        
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-web</artifactId>
+        </dependency>
+        
+        <!-- TESTING -->
+        
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-internaltestsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-runtime</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
