@@ -31,8 +31,7 @@ import lombok.RequiredArgsConstructor;
         associateWith = "readOnlyProperty2",
         associateWithSequence = "1"
 )
-@ActionLayout(promptStyle = PromptStyle.INLINE_AS_IF_EDIT) // broken
-//@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Inline as if edit (broken)")
+@ActionLayout(promptStyle = PromptStyle.INLINE_AS_IF_EDIT)
 @RequiredArgsConstructor
 public class PrimitiveCharHolder_updateReadOnlyProperty2InlineAsIfEdit {
 
