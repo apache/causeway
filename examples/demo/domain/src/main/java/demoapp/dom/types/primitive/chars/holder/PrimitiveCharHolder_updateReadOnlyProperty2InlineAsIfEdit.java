@@ -18,10 +18,6 @@
  */
 package demoapp.dom.types.primitive.chars.holder;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -32,27 +28,23 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty",
-        associateWithSequence = "4"
+        associateWith = "readOnlyProperty2",
+        associateWithSequence = "1"
 )
-@ActionLayout(promptStyle = PromptStyle.AS_CONFIGURED, named = "with choices")
+//@ActionLayout(promptStyle = PromptStyle.INLINE_AS_IF_EDIT) // broken
+@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Inline as if edit (broken)")
 @RequiredArgsConstructor
-public class PrimitiveCharHolder_updateReadOnlyPropertyWithChoices {
+public class PrimitiveCharHolder_updateReadOnlyProperty2InlineAsIfEdit {
 
     private final PrimitiveCharHolder primitiveCharHolder;
 
     public PrimitiveCharHolder act(char newValue) {
-        primitiveCharHolder.setReadOnlyProperty(newValue);
+        primitiveCharHolder.setReadOnlyProperty2(newValue);
         return primitiveCharHolder;
     }
     public char default0Act() {
         return primitiveCharHolder.getReadOnlyProperty();
     }
-    public List<Character> choices0Act() {
-        return Stream.of('a', 'b', 'c').collect(Collectors.toList());
-    }
-    public String disableAct() {
-        return "Not yet supported";
-    }
+
 
 }

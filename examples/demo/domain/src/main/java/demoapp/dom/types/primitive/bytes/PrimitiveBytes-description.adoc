@@ -1,0 +1,56 @@
+The framework has built-in support for all of the primitive data types, including `byte`.
+
+From here you can:
+
+* open a view model that uses the `byte` datatype
+* navigate to an entity that uses the `byte` datatype
+
+Because `byte` is a primitive value, the properties on these domain objects are mandatory.
+
+These objects also have actions that demonstrate the use of `byte` as a parameter and as a return type.
+These are mixins to a common interface implemented by both view model and entity:
+
+* the `updateReadOnlyProperty` action is:
++
+[source,java]
+----
+@Action(
+        semantics = SemanticsOf.IDEMPOTENT,
+        associateWith = "readOnlyProperty",
+        associateWithSequence = "1"
+)
+@RequiredArgsConstructor
+public class PrimitiveByteHolder_updateReadOnlyProperty {
+
+    private final PrimitiveByteHolder primitiveByteHolder;
+
+    public PrimitiveByteHolder act(char newValue) {
+        primitiveByteHolder.setReadOnlyProperty(newValue);
+        return primitiveByteHolder;
+    }
+    public char default0Act() {
+        return primitiveByteHolder.getReadOnlyProperty();
+    }
+}
+----
+
+* and the `actionReturning` action is:
++
+[source,java]
+----
+@Action(
+        semantics = SemanticsOf.SAFE,
+        associateWith = "readOnlyProperty",
+        associateWithSequence = "3"
+)
+@RequiredArgsConstructor
+public class PrimitiveByteHolder_actionReturning {
+
+    private final PrimitiveByteHolder primitiveCharHolder;
+
+    public char act() {
+        return primitiveByteHolder.getReadOnlyProperty();
+    }
+}
+----
+

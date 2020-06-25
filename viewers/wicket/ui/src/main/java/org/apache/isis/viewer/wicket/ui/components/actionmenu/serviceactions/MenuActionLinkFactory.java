@@ -41,8 +41,8 @@ class MenuActionLinkFactory extends LinkAndLabelFactoryAbstract {
 
         return LinkAndLabel.of(
                 model->super.newLinkComponent(
-                        model.getObjectAction(super::getSpecificationLoader), 
-                        toggledMementosProviderIfAny), 
+                        model.getObjectAction(() -> getCommonContext().getSpecificationLoader()),
+                        toggledMementosProviderIfAny),
                 named, 
                 this.targetEntityModel, 
                 objectAction);

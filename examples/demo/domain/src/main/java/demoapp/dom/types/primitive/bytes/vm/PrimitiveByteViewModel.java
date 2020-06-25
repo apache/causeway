@@ -16,39 +16,48 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.primitive.chars.holder;
+package demoapp.dom.types.primitive.bytes.vm;
 
-import javax.jdo.annotations.DatastoreIdentity;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Title;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.types.primitive.bytes.holder.PrimitiveByteHolder;
 
-public interface PrimitiveCharHolder {
+@XmlRootElement(name = "demoapp.PrimitiveByteViewModel")
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
+@DomainObject(
+        nature=Nature.VIEW_MODEL,
+        objectType = "demoapp.PrimitiveByteViewModel"
+)
+@lombok.NoArgsConstructor
+public class PrimitiveByteViewModel
+        implements HasAsciiDocDescription,
+        PrimitiveByteHolder {
 
-    char getReadOnlyProperty();
-    void setReadOnlyProperty(char c);
+    public PrimitiveByteViewModel(byte initialValue) {
+        this.readOnlyProperty = initialValue;
+        this.readWriteProperty = initialValue;
+    }
 
-    default char getReadOnlyPropertyDerived() { return getReadOnlyProperty(); }
-    default char getReadOnlyPropertyDerived2() { return getReadOnlyProperty(); }
+    @Title
+    @Getter @Setter
+    private byte readOnlyProperty;
 
-    char getReadWriteProperty();
-    void setReadWriteProperty(char c);
-
-    char getReadOnlyProperty2();
-    void setReadOnlyProperty2(char c);
+    @Getter @Setter
+    @Property(editing = Editing.ENABLED)
+    private byte readWriteProperty;
 
 }

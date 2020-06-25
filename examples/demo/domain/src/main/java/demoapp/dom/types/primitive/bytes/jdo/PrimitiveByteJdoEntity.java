@@ -16,39 +16,42 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.primitive.chars.holder;
+package demoapp.dom.types.primitive.bytes.jdo;
 
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Title;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.types.primitive.bytes.holder.PrimitiveByteHolder;
 
-public interface PrimitiveCharHolder {
+@PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
+@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
+@DomainObject(
+        objectType = "demoapp.PrimitiveByteJdoEntity"
+)
+public class PrimitiveByteJdoEntity implements HasAsciiDocDescription, PrimitiveByteHolder {
 
-    char getReadOnlyProperty();
-    void setReadOnlyProperty(char c);
+    public PrimitiveByteJdoEntity(byte initialValue) {
+        this.readOnlyProperty = initialValue;
+        this.readWriteProperty = initialValue;
+    }
 
-    default char getReadOnlyPropertyDerived() { return getReadOnlyProperty(); }
-    default char getReadOnlyPropertyDerived2() { return getReadOnlyProperty(); }
+    @Getter @Setter
+    @Title
+    private byte readOnlyProperty;
 
-    char getReadWriteProperty();
-    void setReadWriteProperty(char c);
-
-    char getReadOnlyProperty2();
-    void setReadOnlyProperty2(char c);
+    @Getter @Setter
+    @Property(editing = Editing.ENABLED)
+    private byte readWriteProperty;
 
 }

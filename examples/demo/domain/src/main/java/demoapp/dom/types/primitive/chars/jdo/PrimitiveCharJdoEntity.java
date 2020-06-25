@@ -48,12 +48,16 @@ public class PrimitiveCharJdoEntity implements HasAsciiDocDescription, Primitive
 
     public PrimitiveCharJdoEntity(char initialValue) {
         this.readOnlyProperty = initialValue;
+        this.readOnlyProperty2 = initialValue;
         this.readWriteProperty = initialValue;
     }
 
     @Getter @Setter
     @Title
     private char readOnlyProperty;
+
+    @Getter @Setter
+    private char readOnlyProperty2;
 
     @Getter @Setter
     @Property(editing = Editing.ENABLED)

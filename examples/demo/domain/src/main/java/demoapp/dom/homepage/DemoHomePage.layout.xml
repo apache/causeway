@@ -6,6 +6,7 @@
 	<bs3:row>
 		<bs3:col span="10" unreferencedActions="true">
 			<cpt:domainObject />
+			<cpt:action id="rebuildMetamodel"/>
 		</bs3:col>
 		<bs3:col span="2">
 			<cpt:fieldSet name="" id="sources" />

@@ -16,61 +16,61 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.primitive.chars.vm;
+package demoapp.dom.types.primitive.bytes;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.Title;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.primitive.chars.holder.PrimitiveCharHolder;
+import demoapp.dom.types.primitive.bytes.jdo.PrimitiveByteJdoEntities;
+import demoapp.dom.types.primitive.bytes.jdo.PrimitiveByteJdoEntity;
+import demoapp.dom.types.primitive.bytes.vm.PrimitiveByteViewModel;
 
-@XmlRootElement(name = "demoapp.PrimitiveCharViewModel")
+@XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(
-        nature=Nature.VIEW_MODEL,
-        objectType = "demoapp.PrimitiveCharViewModel"
-)
-@lombok.NoArgsConstructor
-public class PrimitiveCharViewModel
-        implements HasAsciiDocDescription,
-                   PrimitiveCharHolder {
+@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demoapp.PrimitiveBytes", editing=Editing.ENABLED)
+@Log4j2
+public class PrimitiveBytes implements HasAsciiDocDescription {
 
-    public PrimitiveCharViewModel(char initialValue) {
-        this.readOnlyProperty = initialValue;
-        this.readOnlyProperty2 = initialValue;
-        this.readWriteProperty = initialValue;
+    public String title() {
+        return "byte (primitive) data type";
     }
 
-    @Title
-    @Getter @Setter
-    private char readOnlyProperty;
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
+    public PrimitiveByteViewModel openViewModel(byte initialValue) {
+        return new PrimitiveByteViewModel(initialValue);
+    }
+    public byte default0OpenViewModel() {
+        return (byte)1;
+    }
 
-    @Title
-    @Getter @Setter
-    private char readOnlyProperty2;
+    @Collection
+    public List<PrimitiveByteJdoEntity> getEntities() {
+        return entities.all();
+    }
 
-    @Getter @Setter
-    @Property(editing = Editing.ENABLED)
-    private char readWriteProperty;
+    @Inject
+    @XmlTransient
+    PrimitiveByteJdoEntities entities;
+
 
 }

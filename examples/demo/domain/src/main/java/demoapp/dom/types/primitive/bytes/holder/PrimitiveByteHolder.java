@@ -16,31 +16,33 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.primitive.chars.holder;
+package demoapp.dom.types.primitive.bytes.holder;
+
+import javax.jdo.annotations.DatastoreIdentity;
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Bounding;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Title;
 
-import lombok.RequiredArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
-@Action(
-        semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty",
-        associateWithSequence = "1"
-)
-@RequiredArgsConstructor
-public class PrimitiveCharHolder_updateReadOnlyProperty {
+public interface PrimitiveByteHolder {
 
-    private final PrimitiveCharHolder primitiveCharHolder;
+    byte getReadOnlyProperty();
+    void setReadOnlyProperty(byte b);
 
-    public PrimitiveCharHolder act(char newValue) {
-        primitiveCharHolder.setReadOnlyProperty(newValue);
-        return primitiveCharHolder;
-    }
-    public char default0Act() {
-        return primitiveCharHolder.getReadOnlyProperty();
-    }
-
+    byte getReadWriteProperty();
+    void setReadWriteProperty(byte b);
 
 }
