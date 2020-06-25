@@ -127,6 +127,13 @@ final class Can_Multiple<T> implements Can<T> {
     }
     
     @Override
+    public Can<T> remove(T element) {
+        val newElements = new ArrayList<T>(elements);
+        newElements.remove(element);
+        return Can.ofCollection(newElements);
+    }
+    
+    @Override
     public int indexOf(@NonNull T element) {
         return this.elements.indexOf(element);
     }

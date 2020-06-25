@@ -107,6 +107,11 @@ final class Can_Empty<T> implements Can<T> {
     }
     
     @Override
+    public Can<T> remove(T element) {
+        return this; // on an empty can this is a no-op
+    }
+    
+    @Override
     public int indexOf(T element) {
         return -1;
     }

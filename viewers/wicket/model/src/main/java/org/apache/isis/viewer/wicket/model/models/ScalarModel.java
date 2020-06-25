@@ -294,12 +294,10 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         private final List<ObjectAction> remainingAssociated;
 
         AssociatedActions(final Can<ObjectAction> allAssociated) {
-            final List<ObjectAction> temp = allAssociated.toList();
-            this.firstAssociatedWithInlineAsIfEdit = firstAssociatedActionWithInlineAsIfEdit(allAssociated);
-            if(this.firstAssociatedWithInlineAsIfEdit != null) {
-                temp.remove(firstAssociatedWithInlineAsIfEdit);
-            }
-            remainingAssociated = Collections.unmodifiableList(temp);
+            firstAssociatedWithInlineAsIfEdit = firstAssociatedActionWithInlineAsIfEdit(allAssociated);
+            remainingAssociated = (firstAssociatedWithInlineAsIfEdit != null)
+                    ? allAssociated.remove(firstAssociatedWithInlineAsIfEdit).toList()
+                    : allAssociated.toList();
         }
 
         public List<ObjectAction> getRemainingAssociated() {

@@ -436,6 +436,8 @@ public interface Can<T> extends Iterable<T>, Serializable {
      */
     Can<T> remove(int index);
     
+    Can<T> remove(T element);
+    
     // -- SEARCH
     
     /**
@@ -546,7 +548,5 @@ public interface Can<T> extends Iterable<T>, Serializable {
      * @return a non-null array, containing the elements of this Can
      */
     T[] toArray(Class<T> elementType);
-
-    
     
 }
