@@ -7,8 +7,32 @@ From here you can:
 
 Because `char` is a primitive value, the properties on these domain objects are mandatory.
 
-These objects also have actions that demonstrate the use of `char` as a parameter and as a return type.
-These are mixins to a common interface implemented by both view model and entity:
+== Common interface
+
+These objects both implement a common interface, `PrimitiveCharHolder`:
+
+[source,java]
+----
+public interface PrimitiveCharHolder {
+
+    char getReadOnlyProperty();
+    void setReadOnlyProperty(char c);
+
+    char getReadOnlyProperty2();
+    void setReadOnlyProperty2(char c);
+
+    char getReadWriteProperty();
+    void setReadWriteProperty(char c);
+
+    default char getReadOnlyPropertyDerived() { return getReadOnlyProperty(); }
+    default char getReadOnlyPropertyDerived2() { return getReadOnlyProperty(); }
+}
+----
+
+== Mixin actions
+
+A number of mixin actions contribute through this interface, demonstrate the use of `char` as a parameter and as a return type.
+For example:
 
 * the `updateReadOnlyProperty` action is:
 +
@@ -33,6 +57,8 @@ public class PrimitiveCharHolder_updateReadOnlyProperty {
     }
 }
 ----
++
+There are a number of variants of this action, to demonstrate different prompt layouts.
 
 * and the `actionReturning` action is:
 +

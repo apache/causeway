@@ -42,13 +42,13 @@ public interface PrimitiveCharHolder {
     char getReadOnlyProperty();
     void setReadOnlyProperty(char c);
 
-    default char getReadOnlyPropertyDerived() { return getReadOnlyProperty(); }
-    default char getReadOnlyPropertyDerived2() { return getReadOnlyProperty(); }
+    char getReadOnlyProperty2();
+    void setReadOnlyProperty2(char c);
 
     char getReadWriteProperty();
     void setReadWriteProperty(char c);
 
-    char getReadOnlyProperty2();
-    void setReadOnlyProperty2(char c);
+    default char getReadOnlyPropertyDerived() { return getReadOnlyProperty(); }
+    default char getReadOnlyPropertyDerived2() { return getReadOnlyProperty(); }
 
 }

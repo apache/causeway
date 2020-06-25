@@ -15,13 +15,15 @@ public class PrimitiveCharViewModel
                    PrimitiveCharHolder {
 
     public PrimitiveCharViewModel(char initialValue) {  // <.>
-        this.readOnlyProperty = initialValue;
-        this.readWriteProperty = initialValue;
+        // ...
     }
 
     @Title
     @Getter @Setter
     private char readOnlyProperty;
+
+    @Getter @Setter
+    private char readOnlyProperty2;
 
     @Getter @Setter
     @Property(editing = Editing.ENABLED)
