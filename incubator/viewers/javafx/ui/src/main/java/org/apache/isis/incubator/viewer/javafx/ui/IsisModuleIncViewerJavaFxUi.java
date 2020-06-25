@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.incubator.viewer.javafx.model.events.IsisModuleIncViewerJavaFxModel;
+import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentFactoryFx;
 import org.apache.isis.incubator.viewer.javafx.ui.main.UiBuilder;
 import org.apache.isis.incubator.viewer.javafx.ui.main.UiController;
 import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
@@ -42,6 +43,7 @@ import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
         UiController.class,
         
         // @Service's
+        UiComponentFactoryFx.class
 
         // @Mixin's
 })
