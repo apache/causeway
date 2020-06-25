@@ -56,7 +56,6 @@ class RestServiceTest {
     @Test
     void bookOfTheWeek_viaRestEndpoint() {
 
-        assertNotNull(restService.getPort());
         assertTrue(restService.getPort()>0);
 
         val useRequestDebugLogging = false;
@@ -78,7 +77,6 @@ class RestServiceTest {
     @Test
     void addNewBook_viaRestEndpoint() throws JAXBException {
 
-        assertNotNull(restService.getPort());
         assertTrue(restService.getPort()>0);
 
         val useRequestDebugLogging = false;
@@ -103,7 +101,6 @@ class RestServiceTest {
     @Test
     void multipleBooks_viaRestEndpoint() throws JAXBException {
 
-        assertNotNull(restService.getPort());
         assertTrue(restService.getPort()>0);
 
         val useRequestDebugLogging = false; 
@@ -128,7 +125,6 @@ class RestServiceTest {
     @Test
     void bookOfTheWeek_asDto_viaRestEndpoint() {
 
-        assertNotNull(restService.getPort());
         assertTrue(restService.getPort()>0);
 
         val useRequestDebugLogging = false;
@@ -150,7 +146,6 @@ class RestServiceTest {
     @Test
     void multipleBooks_asDto_viaRestEndpoint() throws JAXBException {
 
-        assertNotNull(restService.getPort());
         assertTrue(restService.getPort()>0);
 
         val useRequestDebugLogging = false; 

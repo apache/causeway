@@ -102,16 +102,6 @@ implements BeforeEnterObserver {
         val resultOrVeto = managedAction.invoke(Can.empty());
         
         val result = resultOrVeto.leftIfAny(); 
-        
-//        val objectAction = menuActionModel.getObjectAction();
-//        val actionOwner = menuActionModel.getActionHolder().getManagedObject();
-//
-//        val result = objectAction
-//                .execute(
-//                        InteractionHead.simple(actionOwner),
-//                        Can.empty(),
-//                        InteractionInitiatedBy.USER
-//                        );
 
         if (result.getSpecification().isParentedOrFreeCollection()) {
             pageContent.add(TableView.fromCollection(result));
