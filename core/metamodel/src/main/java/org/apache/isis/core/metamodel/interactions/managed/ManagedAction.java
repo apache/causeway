@@ -25,6 +25,7 @@ import org.apache.isis.core.commons.internal.base._Either;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
@@ -85,9 +86,16 @@ public final class ManagedAction extends ManagedMember {
         val actionResult = action
                 .execute(InteractionHead.simple(getOwner()) , actionParameters, InteractionInitiatedBy.USER);
         
-        if(actionResult==null) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(actionResult)) {
             return _Either.left(ManagedObject.empty(action.getReturnType()));
         }
+        
+        actionResult
+        .getSpecification()
+        .getMetaModelContext()
+        .getServiceInjector()
+        .injectServicesInto(actionResult.getPojo());
+        
         return _Either.left(actionResult);
         
     }

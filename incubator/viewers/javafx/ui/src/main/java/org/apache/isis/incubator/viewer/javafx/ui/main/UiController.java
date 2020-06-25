@@ -36,6 +36,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.MenuBar;
@@ -83,8 +84,8 @@ public class UiController {
 
         // TODO get an ActionPrompt, then on invocation show the result in the content view
         
-        isisInteractionFactory.runAnonymous(()->{
-            
+        Platform.runLater(()->isisInteractionFactory.runAnonymous(()->{
+        
             val resultOrVeto = managedAction.invoke(Can.empty());
             
             val result = resultOrVeto.leftIfAny();
@@ -94,8 +95,11 @@ public class UiController {
             } else {
                 replaceContent(ObjectViewFx.fromObject(uiComponentFactory, this::onActionLinkClicked, result));
             }
-        });
+            
+        }));
+
     }
+    
     
     private void replaceContent(Node node) {
         pageContent.getChildren().clear();

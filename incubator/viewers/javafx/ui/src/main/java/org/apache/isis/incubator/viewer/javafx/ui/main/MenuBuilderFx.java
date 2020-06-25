@@ -60,7 +60,6 @@ public class MenuBuilderFx implements MenuVisitor {
         val actionUiModel = actionUiModelFactory.newActionUiModel(managedAction);
         val menuItem = actionUiModel.createMenuUiComponent();
         menuItem.setOnAction(e->menuActionEventHandler.accept(managedAction));
-        
         currentTopLevelMenu.getItems().add(menuItem);
     }
     

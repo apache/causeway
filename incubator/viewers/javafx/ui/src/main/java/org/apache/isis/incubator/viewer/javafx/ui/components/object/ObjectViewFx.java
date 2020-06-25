@@ -45,12 +45,14 @@ import org.apache.isis.viewer.common.model.gridlayout.UiGridLayout;
 
 import lombok.NonNull;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
+@Log4j2
 public class ObjectViewFx extends VBox {
     
     public static ObjectViewFx fromObject(
@@ -69,6 +71,7 @@ public class ObjectViewFx extends VBox {
             final Consumer<ManagedAction> actionEventHandler,
             final ManagedObject managedObject) {
 
+        log.info("binding object interaction to owner {}", managedObject.getSpecification().getIdentifier());
 
         val objectInteractor = ObjectBinding.bind(managedObject);
 

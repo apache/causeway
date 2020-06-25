@@ -33,7 +33,6 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
 import org.apache.isis.core.commons.internal.base._Lazy;
 import org.apache.isis.core.commons.internal.base._NullSafe;
-import org.apache.isis.core.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
@@ -129,9 +128,6 @@ public class UiGridLayout {
         }
         
         if(hasRows) {
-            // columns having rows seems not permitted by XML schema            
-//          throw _Exceptions.unrecoverableFormatted("columns having rows seems not permitted by XML schema"
-//                  + ", col(id=%s) has %d rows", bS3Col.getId(), _NullSafe.size(bS3Col.getRows()));
             for(val bs3Row: bS3Col.getRows()) { 
                 visitRow(bs3Row, uiCol, visitor);         
             }    
