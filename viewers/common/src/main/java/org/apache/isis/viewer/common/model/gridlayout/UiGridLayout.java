@@ -105,7 +105,8 @@ public class UiGridLayout {
         val uiCol = visitor.newCol(container, bS3Col);
         
         val hasDomainObject = bS3Col.getDomainObject()!=null; 
-        val hasActions = bS3Col.getActions().size()>0;
+        val hasActions = _NullSafe.size(bS3Col.getActions())>0;
+        val hasRows = _NullSafe.size(bS3Col.getRows())>0;
         
         if(hasDomainObject || hasActions) {
             val uiActionPanel = visitor.newActionPanel(uiCol);
@@ -127,14 +128,14 @@ public class UiGridLayout {
             visitTabGroup(tabGroup, uiCol, visitor);
         }
         
-        // columns having rows seems not permitted by XML schema
-        if(_NullSafe.size(bS3Col.getRows())>0) {
-            throw _Exceptions.unsupportedOperation();
+        if(hasRows) {
+            // columns having rows seems not permitted by XML schema            
+//          throw _Exceptions.unrecoverableFormatted("columns having rows seems not permitted by XML schema"
+//                  + ", col(id=%s) has %d rows", bS3Col.getId(), _NullSafe.size(bS3Col.getRows()));
+            for(val bs3Row: bS3Col.getRows()) { 
+                visitRow(bs3Row, uiCol, visitor);         
+            }    
         }
-        
-//        for(val bs3Row: bS3Col.getRows()) { 
-//            visitRow(bs3Row, uiCol, visitor);         
-//        }
         
         for(val collectionData : bS3Col.getCollections()) {
             visitor.onCollection(uiCol, collectionData);    

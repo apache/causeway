@@ -4,8 +4,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -23,37 +21,22 @@
     		<MenuBar fx:id="menuBarRight" />
    	  </children>
     </HBox>
-    <SplitPane dividerPositions="0.2505567928730512, 0.7505567928730512" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
-      <items>
-        <AnchorPane>
-          <children>
-            <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Master" textAlignment="CENTER" wrapText="false">
-              <font>
+  <ScrollPane fx:id="contentView" prefHeight="-1.0" prefWidth="-1.0">
+    <content>
+      <AnchorPane id="Content" fx:id="pageContent" minHeight="-1.0" minWidth="-1.0" prefHeight="772.0" prefWidth="592.0">
+        <children>
+          <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" style="&#10;" text="View" textAlignment="CENTER" wrapText="false">
+                     <font>
                 <Font size="18.0" fx:id="x1" />
-              </font>
-              <textFill>
+                     </font>
+                     <textFill>
                 <Color blue="0.624" green="0.624" red="0.624" fx:id="x2" />
-              </textFill>
-            </Label>
-          </children>
-        </AnchorPane>
-        <ScrollPane fx:id="contentView" prefHeight="-1.0" prefWidth="-1.0">
-          <content>
-            <AnchorPane id="Content" fx:id="pageContent" minHeight="-1.0" minWidth="-1.0" prefHeight="772.0" prefWidth="592.0">
-              <children>
-                <Label alignment="CENTER" font="$x1" layoutX="14.0" layoutY="14.0" style="&#10;" text="View" textAlignment="CENTER" textFill="$x2" wrapText="false" />
-                        <TextArea fx:id="sampleTextArea" layoutX="26.0" layoutY="81.0" prefHeight="678.0" prefWidth="549.0" />
-              </children>
-            </AnchorPane>
-          </content>
-        </ScrollPane>
-        <AnchorPane>
-          <children>
-            <Label alignment="CENTER" font="$x1" layoutX="14.0" layoutY="14.0" style="&#10;" text="Details" textAlignment="CENTER" textFill="$x2" wrapText="false" />
-          </children>
-        </AnchorPane>
-      </items>
-    </SplitPane>
+                     </textFill>
+                  </Label>
+        </children>
+      </AnchorPane>
+    </content>
+  </ScrollPane>
     <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
       <children>
         <Label maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Left status" HBox.hgrow="ALWAYS">
