@@ -20,25 +20,30 @@ package demoapp.dom.types.primitive.chars.holder;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
 
 @Action(
-        semantics = SemanticsOf.SAFE,
+        semantics = SemanticsOf.IDEMPOTENT,
         associateWith = "readOnlyProperty",
-        associateWithSequence = "1"
+        associateWithSequence = "2"
 )
 @ActionLayout(position = ActionLayout.Position.PANEL)
 @RequiredArgsConstructor
-public class PrimitiveCharHolder_actionReturning {
+public class PrimitiveCharHolder_updateReadOnlyPropertyPanel {
 
     private final PrimitiveCharHolder primitiveCharHolder;
 
-    public char act() {
+    public PrimitiveCharHolder act(char newValue) {
+        primitiveCharHolder.setReadOnlyProperty(newValue);
+        return primitiveCharHolder;
+    }
+    public char default0Act() {
         return primitiveCharHolder.getReadOnlyProperty();
     }
+
 
 }

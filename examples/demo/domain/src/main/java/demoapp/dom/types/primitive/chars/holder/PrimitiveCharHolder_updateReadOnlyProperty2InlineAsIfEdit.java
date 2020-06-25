@@ -42,7 +42,7 @@ public class PrimitiveCharHolder_updateReadOnlyProperty2InlineAsIfEdit {
         return primitiveCharHolder;
     }
     public char default0Act() {
-        return primitiveCharHolder.getReadOnlyProperty();
+        return primitiveCharHolder.getReadOnlyProperty2();
     }
 
 
