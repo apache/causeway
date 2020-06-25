@@ -36,7 +36,7 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.incubator.viewer.vaadin.ui.auth.VaadinAuthenticationHandler;
-import org.apache.isis.incubator.viewer.vaadin.ui.pages.main.MainView;
+import org.apache.isis.incubator.viewer.vaadin.ui.pages.main.MainViewVaa;
 
 import lombok.val;
 
@@ -91,7 +91,7 @@ public class VaadinLoginView extends VerticalLayout {
     private void doLogin(String userName, String secret) {
         val authenticationRequest = new AuthenticationRequestPassword(userName, secret);
         if(vaadinAuthenticationHandler.loginToSession(authenticationRequest)) {
-            getUI().ifPresent(ui->ui.navigate(MainView.class));    
+            getUI().ifPresent(ui->ui.navigate(MainViewVaa.class));    
         } else {
             // TODO indicate to the user: login failed
         }

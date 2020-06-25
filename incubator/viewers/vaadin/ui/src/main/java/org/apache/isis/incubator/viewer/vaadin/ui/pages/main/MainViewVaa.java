@@ -36,8 +36,8 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
-import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableView;
-import org.apache.isis.incubator.viewer.vaadin.ui.components.object.ObjectFormView;
+import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableViewVaa;
+import org.apache.isis.incubator.viewer.vaadin.ui.components.object.ObjectViewVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.util.LocalResourceUtil;
 import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeDecorator;
 import org.apache.isis.viewer.common.model.header.HeaderUiModelProvider;
@@ -53,7 +53,7 @@ import lombok.val;
 @PWA(name = "Example Project", shortName = "Example Project")
 //@Theme(value = Material.class, variant = Material.DARK)
 @Theme(value = Lumo.class, variant = Lumo.LIGHT)
-public class MainView extends AppLayout 
+public class MainViewVaa extends AppLayout 
 implements BeforeEnterObserver {
 
     private static final long serialVersionUID = 1L;
@@ -67,7 +67,7 @@ implements BeforeEnterObserver {
      * Constructs the main view of the web-application, with the menu-bar and page content. 
      */
     @Inject
-    public MainView(
+    public MainViewVaa(
             final MetaModelContext metaModelContext,
             final UiComponentFactoryVaa uiComponentFactory,
             final HeaderUiModelProvider headerUiModelProvider) {
@@ -104,10 +104,10 @@ implements BeforeEnterObserver {
         val result = resultOrVeto.leftIfAny(); 
 
         if (result.getSpecification().isParentedOrFreeCollection()) {
-            pageContent.add(TableView.fromCollection(result));
+            pageContent.add(TableViewVaa.fromCollection(result));
         } else {
-            pageContent.add(new ObjectFormView(uiComponentFactory, result));
-        };
+            pageContent.add(ObjectViewVaa.from(uiComponentFactory, result));
+        }
     }
 
 

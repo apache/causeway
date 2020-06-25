@@ -46,7 +46,7 @@ import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.action.ActionButton;
-import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableView;
+import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableViewVaa;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
 import org.apache.isis.viewer.common.model.binding.interaction.ObjectBinding;
 import org.apache.isis.viewer.common.model.gridlayout.UiGridLayout;
@@ -54,17 +54,23 @@ import org.apache.isis.viewer.common.model.gridlayout.UiGridLayout;
 import lombok.NonNull;
 import lombok.val;
 
-public class ObjectFormView extends VerticalLayout {
+public class ObjectViewVaa extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;
 
+    public static ObjectViewVaa from(
+            @NonNull final UiComponentFactoryVaa uiComponentFactory,
+            @NonNull final ManagedObject managedObject) {
+        return new ObjectViewVaa(uiComponentFactory, managedObject);
+    }
+    
     /**
      * Constructs given domain object's view, with all its visible members and actions.
      * @param managedObject - domain object
      */
-    public ObjectFormView(
-            @NonNull final UiComponentFactoryVaa uiComponentFactory,
-            @NonNull final ManagedObject managedObject) {
+    protected ObjectViewVaa(
+            final UiComponentFactoryVaa uiComponentFactory,
+            final ManagedObject managedObject) {
 
 
         val objectInteractor = ObjectBinding.bind(managedObject);
@@ -201,7 +207,7 @@ public class ObjectFormView extends VerticalLayout {
                 .ifPresent(managedCollection -> {
                     container.add(new H3(managedCollection.getName()));
                     
-                    val uiCollection = TableView.forManagedCollection(managedCollection);
+                    val uiCollection = TableViewVaa.forManagedCollection(managedCollection);
                     container.add(uiCollection);
                 });
                 
