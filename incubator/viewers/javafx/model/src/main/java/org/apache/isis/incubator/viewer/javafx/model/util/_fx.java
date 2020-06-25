@@ -23,28 +23,46 @@ import lombok.experimental.UtilityClass;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Accordion;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TitledPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 @UtilityClass
-public class _fx {
+public final class _fx {
 
     // -- OBSERVABLES
-    
+
     public static ObservableValue<String> newStringReadonly(String value) {
         val string = new ReadOnlyStringWrapper(value);
         return string;
     }
-    
+
     // -- COMPONENT FACTORIES
-    
+
     public static Label newLabel(Pane container, String label) {
         val component = new Label(label);
         container.getChildren().add(component);
+        return component;
+    }
+    
+    public static Button newButton(Pane container, String label, EventHandler<ActionEvent> eventHandler) {
+        val component = new Button(label);
+        container.getChildren().add(component);
+        component.setOnAction(eventHandler);
         return component;
     }
     
@@ -53,13 +71,57 @@ public class _fx {
         container.getChildren().add(component);
         return component;
     }
-    
+
     public static VBox newVBox(Pane container) {
         val component = new VBox();
         container.getChildren().add(component);
         return component;
     }
+
+    public static GridPane newGrid(Pane container) {
+        val component = new GridPane();
+        container.getChildren().add(component);
+        return component;
+    }
     
+    public static GridPane newGrid(TitledPane container) {
+        val component = new GridPane();
+        container.setContent(component);
+        return component;
+    }
+    
+    public static <T extends Node> T addGridCell(GridPane container, T cellNode, int column, int row) {
+        container.add(cellNode, column, row);
+        return cellNode;
+    }
+
+    public static TabPane newTabGroup(Pane container) {
+        val component = new TabPane();
+        container.getChildren().add(component);
+        return component;
+    }
+
+    public static Tab newTab(TabPane container, String label) {
+        val component = new Tab(label);
+        container.getTabs().add(component);
+        return component;
+    }
+    
+    public static Accordion newAccordion(Pane container) {
+        val component = new Accordion();
+        container.getChildren().add(component);
+        return component;
+    }
+
+    public static TitledPane newTitledPane(Accordion container, String label) {
+        val component = new TitledPane();
+        container.getPanes().add(component);
+        component.setText(label);
+        component.setAnimated(true);
+        return component;
+    }
+    
+
     /**
      * @param <S> The type of the TableView generic type (i.e. S == TableView&lt;S&gt;)
      * @param <T> The type of the content in all cells in this TableColumn.
@@ -73,9 +135,16 @@ public class _fx {
         tableView.getColumns().add(column);
         return column;
     }
+
+    // -- LAYOUTS
     
-    
-    
-    
+    public static GridPane formLayout(GridPane component) {
+        component.setAlignment(Pos.CENTER);
+        component.setHgap(10);
+        component.setVgap(10);
+        component.setPadding(new Insets(25, 25, 25, 25));    
+        return component;
+    }
+
 
 }

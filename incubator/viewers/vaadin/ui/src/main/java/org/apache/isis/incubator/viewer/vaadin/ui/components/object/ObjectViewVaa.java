@@ -80,7 +80,7 @@ public class ObjectViewVaa extends VerticalLayout {
         // force new row
         //formLayout.getElement().appendChild(ElementFactory.createBr());
 
-        val gridVisistor = new UiGridLayout.Visitor<HasComponents>(this) {
+        val gridVisistor = new UiGridLayout.Visitor<HasComponents, Tabs>(this) {
 
             @Override
             protected void onObjectTitle(HasComponents container, DomainObjectLayoutData domainObjectData) {
@@ -134,7 +134,7 @@ public class ObjectViewVaa extends VerticalLayout {
             }
 
             @Override
-            protected HasComponents newTabGroup(HasComponents container, BS3TabGroup tabGroupData) {
+            protected Tabs newTabGroup(HasComponents container, BS3TabGroup tabGroupData) {
                 val uiTabGroup = new Tabs();
                 container.add(uiTabGroup);
                 uiTabGroup.setOrientation(Tabs.Orientation.HORIZONTAL);
@@ -142,7 +142,7 @@ public class ObjectViewVaa extends VerticalLayout {
             }
 
             @Override
-            protected HasComponents newTab(HasComponents container, BS3Tab tabData) {
+            protected HasComponents newTab(Tabs container, BS3Tab tabData) {
                 val uiTab = new Tab(tabData.getName());
                 container.add(uiTab);
                 return uiTab;

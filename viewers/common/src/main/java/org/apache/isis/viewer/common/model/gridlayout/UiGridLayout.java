@@ -45,26 +45,26 @@ import lombok.val;
 public class UiGridLayout {
 
     @RequiredArgsConstructor
-    public static abstract class Visitor<T> {
-        private final T rootContainer;
-        protected abstract T newActionPanel(T container);
-        protected abstract T newRow(T container, BS3Row rowData);
-        protected abstract T newCol(T container, BS3Col colData);
-        protected abstract T newTabGroup(T container, BS3TabGroup tabGroupData);
-        protected abstract T newTab(T container, BS3Tab tabData);
-        protected abstract T newFieldSet(T container, FieldSet fieldSetData);
-        protected abstract void onObjectTitle(T container, DomainObjectLayoutData domainObjectData);
-        protected abstract void onClearfix(T container, BS3ClearFix clearFixData);
-        protected abstract void onAction(T container, ActionLayoutData actionData);
-        protected abstract void onProperty(T container, PropertyLayoutData propertyData);
-        protected abstract void onCollection(T container, CollectionLayoutData collectionData);
+    public static abstract class Visitor<C, T> {
+        private final C rootContainer;
+        protected abstract C newActionPanel(C container);
+        protected abstract C newRow(C container, BS3Row rowData);
+        protected abstract C newCol(C container, BS3Col colData);
+        protected abstract T newTabGroup(C container, BS3TabGroup tabGroupData);
+        protected abstract C newTab(T tabGroup, BS3Tab tabData);
+        protected abstract C newFieldSet(C container, FieldSet fieldSetData);
+        protected abstract void onObjectTitle(C container, DomainObjectLayoutData domainObjectData);
+        protected abstract void onClearfix(C container, BS3ClearFix clearFixData);
+        protected abstract void onAction(C container, ActionLayoutData actionData);
+        protected abstract void onProperty(C container, PropertyLayoutData propertyData);
+        protected abstract void onCollection(C container, CollectionLayoutData collectionData);
         
     }
     
     @NonNull private final ManagedObject managedObject;
     private _Lazy<Optional<BS3Grid>> gridData = _Lazy.threadSafe(this::initGridData);
     
-    public <T> void visit(Visitor<T> visitor) {
+    public <C, T> void visit(Visitor<C, T> visitor) {
         
         // recursively visit the grid
         gridData.get()
@@ -84,7 +84,7 @@ public class UiGridLayout {
         .map(BS3Grid.class::cast);
     }
 
-    private <T> void visitRow(BS3Row bs3Row, T container, Visitor<T> visitor) {
+    private <C, T> void visitRow(BS3Row bs3Row, C container, Visitor<C, T> visitor) {
         
         val uiRow = visitor.newRow(container, bs3Row);
         
@@ -101,7 +101,7 @@ public class UiGridLayout {
         }
     }
     
-    private <T> void visitCol(BS3Col bS3Col, T container, Visitor<T> visitor) {
+    private <C, T> void visitCol(BS3Col bS3Col, C container, Visitor<C, T> visitor) {
         val uiCol = visitor.newCol(container, bS3Col);
         
         val hasDomainObject = bS3Col.getDomainObject()!=null; 
@@ -142,21 +142,21 @@ public class UiGridLayout {
         
     }
     
-    private <T> void visitTabGroup(BS3TabGroup bS3ColTabGroup, T container, Visitor<T> visitor) {
+    private <C, T> void visitTabGroup(BS3TabGroup bS3ColTabGroup, C container, Visitor<C, T> visitor) {
         val uiTabGroup = visitor.newTabGroup(container, bS3ColTabGroup);
         for(val bs3Tab: bS3ColTabGroup.getTabs()) { 
             visitTab(bs3Tab, uiTabGroup, visitor);
         }
     }
     
-    private <T> void visitTab(BS3Tab bS3Tab, T container, Visitor<T> visitor) {
+    private <C, T> void visitTab(BS3Tab bS3Tab, T container, Visitor<C, T> visitor) {
         val uiTab = visitor.newTab(container, bS3Tab);
         for(val bs3Row: bS3Tab.getRows()) { 
             visitRow(bs3Row, uiTab, visitor);         
         }
     }
     
-    private <T> void visitFieldSet(FieldSet cptFieldSet, T container, Visitor<T> visitor) {
+    private <C, T> void visitFieldSet(FieldSet cptFieldSet, C container, Visitor<C, T> visitor) {
         val uiFieldSet = visitor.newFieldSet(container, cptFieldSet);
         for(val propertyData: cptFieldSet.getProperties()) { 
             visitor.onProperty(uiFieldSet, propertyData);         

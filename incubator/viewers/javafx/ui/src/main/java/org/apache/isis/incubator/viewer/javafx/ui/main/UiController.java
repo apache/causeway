@@ -70,29 +70,31 @@ public class UiController {
         
         val commonContext = IsisAppCommonContext.of(metaModelContext);
         
-        val leftMenuBuilder = MenuBuilderFx.of(menuBarLeft, this::onMenuAction);
-        val rightMenuBuilder = MenuBuilderFx.of(menuBarRight, this::onMenuAction);
+        val leftMenuBuilder = MenuBuilderFx.of(menuBarLeft, this::onActionLinkClicked);
+        val rightMenuBuilder = MenuBuilderFx.of(menuBarRight, this::onActionLinkClicked);
         
         header.getPrimary().buildMenuItems(commonContext, leftMenuBuilder);
         header.getSecondary().buildMenuItems(commonContext, rightMenuBuilder);
         header.getTertiary().buildMenuItems(commonContext, rightMenuBuilder);
     }
 
-    private void onMenuAction(ManagedAction managedAction) {
-        log.info("about to invoke action {}", managedAction.getIdentifier());
-        
-        val resultOrVeto = managedAction.invoke(Can.empty());
-        
-        val result = resultOrVeto.leftIfAny();
+    private void onActionLinkClicked(ManagedAction managedAction) {
+        log.info("about to build an action prompt for {}", managedAction.getIdentifier());
 
-        if (result.getSpecification().isParentedOrFreeCollection()) {
-            replaceContent(TableViewFx.fromCollection(result));
-        } else {
-            replaceContent(ObjectViewFx.fromObject(uiComponentFactory, result));
-        }
+        // TODO get an ActionPrompt, then on invocation show the result in the content view
         
-        // TODO get an ActionPrompt, then on invocation show the result in the contentView
-        sampleTextArea.setText(String.format("action result to be rendered here\nfor %s", managedAction.getIdentifier()));
+        isisInteractionFactory.runAnonymous(()->{
+            
+            val resultOrVeto = managedAction.invoke(Can.empty());
+            
+            val result = resultOrVeto.leftIfAny();
+
+            if (result.getSpecification().isParentedOrFreeCollection()) {
+                replaceContent(TableViewFx.fromCollection(result));
+            } else {
+                replaceContent(ObjectViewFx.fromObject(uiComponentFactory, this::onActionLinkClicked, result));
+            }
+        });
     }
     
     private void replaceContent(Node node) {

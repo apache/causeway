@@ -18,6 +18,8 @@
  */
 package org.apache.isis.incubator.viewer.javafx.ui.components.object;
 
+import java.util.function.Consumer;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
@@ -31,10 +33,12 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentFactoryFx;
+import org.apache.isis.incubator.viewer.javafx.ui.components.collections.TableViewFx;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
 import org.apache.isis.viewer.common.model.binding.interaction.ObjectBinding;
 import org.apache.isis.viewer.common.model.gridlayout.UiGridLayout;
@@ -42,10 +46,8 @@ import org.apache.isis.viewer.common.model.gridlayout.UiGridLayout;
 import lombok.NonNull;
 import lombok.val;
 
-import javafx.scene.Parent;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.layout.HBox;
+import javafx.geometry.Insets;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
@@ -53,8 +55,9 @@ public class ObjectViewFx extends VBox {
     
     public static ObjectViewFx fromObject(
             @NonNull final UiComponentFactoryFx uiComponentFactory,
+            @NonNull final Consumer<ManagedAction> actionEventHandler,
             @NonNull final ManagedObject managedObject) {
-        return new ObjectViewFx(uiComponentFactory, managedObject);
+        return new ObjectViewFx(uiComponentFactory, actionEventHandler, managedObject);
     }
     
     /**
@@ -63,6 +66,7 @@ public class ObjectViewFx extends VBox {
      */
     protected ObjectViewFx(
             final UiComponentFactoryFx uiComponentFactory,
+            final Consumer<ManagedAction> actionEventHandler,
             final ManagedObject managedObject) {
 
 
@@ -70,135 +74,130 @@ public class ObjectViewFx extends VBox {
 
         val uiGridLayout = UiGridLayout.bind(managedObject);
 
-        // force new row
-        //formLayout.getElement().appendChild(ElementFactory.createBr());
+        val gridVisistor = new UiGridLayout.Visitor<Pane, TabPane>(this) {
 
-//        val gridVisistor = new UiGridLayout.Visitor<Pane>(this) {
-//
-//            @Override
-//            protected void onObjectTitle(Pane container, DomainObjectLayoutData domainObjectData) {
-//                _fx.newLabel(container, objectInteractor.getTitle());
-//            }
-//
-//            @Override
-//            protected Pane newRow(Pane container, BS3Row bs3Row) {
-//                val uiRow = _fx.newHBox(container);
-//                //uiRow.setWidthFull();
-//                //uiRow.setWrapMode(FlexLayout.WrapMode.WRAP); // allow line breaking
-//                return uiRow;
-//            }
-//
-//            @Override
-//            protected Parent newCol(Parent container, BS3Col bs3col) {
-//
-//                val uiCol = _fx.newVBox(container);
-//                
-//                val uiCol = new VerticalLayout();
-//                container.add(uiCol);
-//
+            @Override
+            protected void onObjectTitle(Pane container, DomainObjectLayoutData domainObjectData) {
+                _fx.newLabel(container, objectInteractor.getTitle());
+            }
+
+            @Override
+            protected Pane newRow(Pane container, BS3Row bs3Row) {
+                val uiRow = _fx.newHBox(container);
+                //uiRow.setWidthFull();
+                //uiRow.setWrapMode(FlexLayout.WrapMode.WRAP); // allow line breaking
+                return uiRow;
+            }
+
+            @Override
+            protected Pane newCol(Pane container, BS3Col bs3col) {
+
+                val uiCol = _fx.newVBox(container);
+                
+                uiCol.setOpaqueInsets(new Insets(10, 10, 10, 10));
+                
+
 //                final int span = bs3col.getSpan();
 //                ((FlexLayout)container).setFlexGrow(span, uiCol);
 //                val widthEm = String.format("%dem", span * 3); // 1em ~ 16px
 //                uiCol.setWidth(null); // clear preset width style
 //                uiCol.setMinWidth(widthEm);
-//
-//                return uiCol;
-//            }
-//
-//            @Override
-//            protected Pane newActionPanel(Pane container) {
-//                val uiActionPanel = new FlexLayout();
-//                container.add(uiActionPanel);
-//
-//                uiActionPanel.setWrapMode(FlexLayout.WrapMode.WRAP); // allow line breaking
-//                uiActionPanel.setAlignItems(Alignment.BASELINE);
-//                return uiActionPanel;
-//            }
-//
-//            @Override
-//            protected Pane newTabGroup(Pane container, BS3TabGroup tabGroupData) {
-//                val uiTabGroup = new Tabs();
-//                container.add(uiTabGroup);
-//                uiTabGroup.setOrientation(Tabs.Orientation.HORIZONTAL);
-//                return uiTabGroup;
-//            }
-//
-//            @Override
-//            protected Pane newTab(Pane container, BS3Tab tabData) {
-//                val uiTab = new Tab(tabData.getName());
-//                container.add(uiTab);
-//                return uiTab;
-//            }
-//
-//            @Override
-//            protected Pane newFieldSet(Pane container, FieldSet fieldSetData) {
-//
-//                container.add(new H2(fieldSetData.getName()));
-//
-//                val uiFieldSet = new FormLayout();
-//                container.add(uiFieldSet);
-//
-//                uiFieldSet.setResponsiveSteps(
-//                        new ResponsiveStep("0", 1)); // single column only
-//
-//                return uiFieldSet;
-//            }
-//
-//
-//            @Override
-//            protected void onClearfix(Pane container, BS3ClearFix clearFixData) {
-//                // TODO Auto-generated method stub
-//            }
-//
-//            @Override
-//            protected void onAction(Pane container, ActionLayoutData actionData) {
-//                
-//                val owner = objectInteractor.getManagedObject();
-//                ActionInteraction.start(owner, actionData.getId())
-//                .checkVisibility(Where.OBJECT_FORMS)
-//                .get()
-//                .ifPresent(managedAction -> {
-//                    val uiAction = ActionButton.forManagedAction(uiComponentFactory, managedAction);
-//                    container.add(uiAction);
-//                });
-//            }
-//
-//            @Override
-//            protected void onProperty(Pane container, PropertyLayoutData propertyData) {
-//                
-//                val owner = objectInteractor.getManagedObject();
-//                
-//                PropertyInteraction.start(owner, propertyData.getId())
-//                .checkVisibility(Where.OBJECT_FORMS)
-//                .get()
-//                .ifPresent(managedProperty -> {
-//                    val uiProperty = uiComponentFactory
-//                            .componentFor(UiComponentFactory.Request.of(Where.OBJECT_FORMS, managedProperty));
-//                    container.add(uiProperty);
-//                });
-//            }
-//
-//            @Override
-//            protected void onCollection(Pane container, CollectionLayoutData collectionData) {
-//                
-//                val owner = objectInteractor.getManagedObject();
-//                
-//                CollectionInteraction.start(owner, collectionData.getId())
-//                .checkVisibility(Where.OBJECT_FORMS)
-//                .get()
-//                .ifPresent(managedCollection -> {
-//                    container.add(new H3(managedCollection.getName()));
-//                    
-//                    val uiCollection = TableViewVaa.forManagedCollection(managedCollection);
-//                    container.add(uiCollection);
-//                });
-//                
-//            }
-//
-//        };
-//
-//        uiGridLayout.visit(gridVisistor);
-//        setWidthFull();
+
+                return uiCol;
+            }
+
+            @Override
+            protected Pane newActionPanel(Pane container) {
+                val uiActionPanel = _fx.newHBox(container);
+                
+                //uiActionPanel.setWrapMode(FlexLayout.WrapMode.WRAP); // allow line breaking
+                //uiActionPanel.setAlignItems(Alignment.BASELINE);
+                return uiActionPanel;
+            }
+
+            @Override
+            protected TabPane newTabGroup(Pane container, BS3TabGroup tabGroupData) {
+                val uiTabGroup = _fx.newTabGroup(container);
+                return uiTabGroup;
+            }
+
+            @Override
+            protected Pane newTab(TabPane container, BS3Tab tabData) {
+                val uiTab = _fx.newTab(container, tabData.getName());
+                val uiTabContentPane = new VBox();
+                uiTab.setContent(uiTabContentPane);
+                return uiTabContentPane; 
+            }
+
+            @Override
+            protected Pane newFieldSet(Pane container, FieldSet fieldSetData) {
+
+                _fx.newLabel(container, fieldSetData.getName())
+                .setStyle("isis-field-set-label"); // corresponds to H2 (html)
+                
+                val uiFieldSet = _fx.newGrid(container);
+                return uiFieldSet;
+            }
+
+
+            @Override
+            protected void onClearfix(Pane container, BS3ClearFix clearFixData) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            protected void onAction(Pane container, ActionLayoutData actionData) {
+                
+                val owner = objectInteractor.getManagedObject();
+                ActionInteraction.start(owner, actionData.getId())
+                .checkVisibility(Where.OBJECT_FORMS)
+                .get()
+                .ifPresent(managedAction -> {
+                    _fx.newButton(
+                            container, 
+                            actionData.getNamed(), 
+                            event->actionEventHandler.accept(managedAction));
+                });
+            }
+
+            @Override
+            protected void onProperty(Pane container, PropertyLayoutData propertyData) {
+                
+                val owner = objectInteractor.getManagedObject();
+                
+                PropertyInteraction.start(owner, propertyData.getId())
+                .checkVisibility(Where.OBJECT_FORMS)
+                .get()
+                .ifPresent(managedProperty -> {
+                    val uiProperty = uiComponentFactory
+                            .componentFor(UiComponentFactory.Request.of(Where.OBJECT_FORMS, managedProperty));
+                    container.getChildren().add(uiProperty);
+                });
+            }
+
+            @Override
+            protected void onCollection(Pane container, CollectionLayoutData collectionData) {
+                
+                val owner = objectInteractor.getManagedObject();
+                
+                CollectionInteraction.start(owner, collectionData.getId())
+                .checkVisibility(Where.OBJECT_FORMS)
+                .get()
+                .ifPresent(managedCollection -> {
+                    
+                    _fx.newLabel(container, managedCollection.getName())
+                    .setStyle("isis-collection-label"); // corresponds to H3 (html)
+                    
+                    val uiCollection = TableViewFx.forManagedCollection(managedCollection);
+                    container.getChildren().add(uiCollection);
+                });
+                
+            }
+
+        };
+
+        uiGridLayout.visit(gridVisistor);
+        //setWidthFull();
 
     }
 

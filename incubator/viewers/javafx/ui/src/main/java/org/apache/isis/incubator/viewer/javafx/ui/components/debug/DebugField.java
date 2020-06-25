@@ -16,35 +16,36 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.vaadin.ui.components.debug;
+package org.apache.isis.incubator.viewer.javafx.ui.components.debug;
 
-import com.vaadin.flow.component.customfield.CustomField;
-import com.vaadin.flow.component.details.Details;
-import com.vaadin.flow.component.details.DetailsVariant;
-import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.textfield.TextArea;
+import java.util.concurrent.atomic.LongAdder;
 
+import org.apache.isis.incubator.viewer.javafx.model.util._fx;
+import org.apache.isis.incubator.viewer.javafx.ui.components.field.CustomFieldFx;
 import org.apache.isis.viewer.common.model.debug.DebugUiModel;
 
 import lombok.val;
 
-public class DebugField extends CustomField<DebugUiModel> {
+import javafx.scene.control.Accordion;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TitledPane;
+import javafx.scene.layout.GridPane;
 
-    private static final long serialVersionUID = 1L;
-    
-    private final Details details = new Details();
+public class DebugField extends CustomFieldFx<DebugUiModel> {
+
     private DebugUiModel model;
+    private final GridPane detailGrid;
+    private final TitledPane detailPane;
 
     public DebugField(String label) {
         super();
         setLabel(label);
-        add(details);
-
-        val formLayout = new FormLayout();
-        details.addContent(formLayout);
-        details.setSummaryText("Debug");
-        details.addThemeVariants(DetailsVariant.SMALL);
+        val accordion = add(new Accordion());
+        detailPane = _fx.newTitledPane(accordion, "Debug");
+        detailGrid = _fx.formLayout(_fx.newGrid(detailPane));
     }
+
 
     @Override
     protected DebugUiModel generateModelValue() {
@@ -55,23 +56,20 @@ public class DebugField extends CustomField<DebugUiModel> {
     protected void setPresentationValue(DebugUiModel model) {
         this.model = model;
         
-        details.setSummaryText(model.getSummaryText());
-
-        details.getContent().findFirst()
-        .map(FormLayout.class::cast)
-        .ifPresent(formLayout->{
+        detailPane.setText(model.getSummaryText());
         
-            formLayout.removeAll();
+        val rowIndex = new LongAdder();
+        
+        model.getKeyValuePairs().forEach((k, v)->{
             
-            model.getKeyValuePairs().forEach((k, v)->{
-                val textArea = new TextArea();
-                textArea.setLabel(k);
-                textArea.setValue(v);
-                textArea.setInvalid(true);
-                formLayout.add(textArea);
-            });
+            val row = rowIndex.intValue();
             
+            _fx.addGridCell(detailGrid, new Label(k), 0, row);
+            _fx.addGridCell(detailGrid, new TextArea(v), 1, row);
+            
+            rowIndex.increment();
         });
+        
         
     }
 
