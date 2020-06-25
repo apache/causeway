@@ -20,7 +20,7 @@ public class PrimitiveCharViewModel
 
     @Title
     @Getter @Setter
-    private char readOnlyProperty;
+    private char readOnlyProperty;                      // <.>
 
     @Getter @Setter
     private char readOnlyProperty2;
@@ -33,3 +33,4 @@ public class PrimitiveCharViewModel
 ----
 <.> a no-arg constructor is required by JAXB
 <.> as a convenience
+<.> no additional annotations required.

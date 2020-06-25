@@ -2,8 +2,8 @@ The framework has built-in support for all of the primitive data types, includin
 
 From here you can:
 
-* open a view model that uses the `char` datatype
 * navigate to an entity that uses the `char` datatype
+* open a view model that uses the `char` datatype
 
 Because `char` is a primitive value, the properties on these domain objects are mandatory.
 
@@ -24,10 +24,32 @@ public interface PrimitiveCharHolder {
     char getReadWriteProperty();
     void setReadWriteProperty(char c);
 
-    default char getReadOnlyPropertyDerived() { return getReadOnlyProperty(); }
-    default char getReadOnlyPropertyDerived2() { return getReadOnlyProperty(); }
+    @MemberOrder(name = "label-positions", sequence = "1")
+    @Property
+    @PropertyLayout(labelPosition = LabelPosition.LEFT, describedAs = "labelPosition=LEFT", hidden = Where.ALL_TABLES)
+    default char getReadOnlyPropertyDerivedLabelPositionLeft() { return getReadOnlyProperty(); }
+
+    @MemberOrder(name = "label-positions", sequence = "2")
+    @Property
+    @PropertyLayout(labelPosition = LabelPosition.TOP, describedAs = "labelPosition=TOP", hidden = Where.ALL_TABLES)
+    default char getReadOnlyPropertyDerivedLabelPositionTop() { return getReadOnlyProperty(); }
+
+    @MemberOrder(name = "label-positions", sequence = "3")
+    @Property
+    @PropertyLayout(labelPosition = LabelPosition.RIGHT, describedAs = "labelPosition=RIGHT", hidden = Where.ALL_TABLES)
+    default char getReadOnlyPropertyDerivedLabelPositionRight() { return getReadOnlyProperty(); }
+
+    @MemberOrder(name = "label-positions", sequence = "4")
+    @Property
+    @PropertyLayout(labelPosition = LabelPosition.NONE, describedAs = "labelPosition=NONE", hidden = Where.ALL_TABLES)
+    default char getReadOnlyPropertyDerivedLabelPositionNone() { return getReadOnlyProperty(); }
+
 }
 ----
+
+The default methods have annotations that automatically inherited.
+Using `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
+
 
 == Mixin actions
 
@@ -60,7 +82,7 @@ public class PrimitiveCharHolder_updateReadOnlyProperty {
 +
 There are a number of variants of this action, to demonstrate different prompt layouts.
 
-* and the `actionReturning` action is:
+* the `actionReturning` action is:
 +
 [source,java]
 ----
@@ -79,4 +101,29 @@ public class PrimitiveCharHolder_actionReturning {
     }
 }
 ----
+
+== Mixin properties
+
+We also use the interface to contribute a number of mixin properties:
+
+* the `mixinPropertyWithCssClass` property:
++
+[source,java]
+----
+@Property()
+@PropertyLayout(cssClass = "red", describedAs = "cssClass = \"red\" ")
+@RequiredArgsConstructor
+public class PrimitiveCharHolder_mixinPropertyWithCssClass {
+
+    private final PrimitiveCharHolder primitiveCharHolder;
+
+    @MemberOrder(name = "contributed", sequence = "1")
+    public char prop() {
+        return primitiveCharHolder.getReadOnlyProperty();
+    }
+}
+----
++
+TIP: the styling is provided from the `application.css` static resource.
+
 

@@ -18,30 +18,23 @@
  */
 package demoapp.dom.types.primitive.chars.holder;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Navigable;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 
 import lombok.RequiredArgsConstructor;
 
 
-@Action(
-        semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty",
-        associateWithSequence = "1"
-)
-@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Inline")
+//@Property()
+//@PropertyLayout( navigable = Navigable.PARENT, describedAs = "navigable=PARENT") // TODO: doesn't seem to do anything
 @RequiredArgsConstructor
-public class PrimitiveCharHolder_updateReadOnlyPropertyInline {
+public class PrimitiveCharHolder_mixinPropertyNavigable {
 
     private final PrimitiveCharHolder primitiveCharHolder;
 
-    public PrimitiveCharHolder act(char newValue) {
-        primitiveCharHolder.setReadOnlyProperty(newValue);
-        return primitiveCharHolder;
-    }
-    public char default0Act() {
+    @MemberOrder(name = "contributed", sequence = "1")
+    public char prop() {
         return primitiveCharHolder.getReadOnlyProperty();
     }
 

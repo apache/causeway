@@ -31,9 +31,9 @@ import lombok.RequiredArgsConstructor;
         associateWith = "readOnlyProperty",
         associateWithSequence = "2"
 )
-@ActionLayout(position = ActionLayout.Position.PANEL)
+@ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL, named = "Modal", describedAs = "promptStyle = MODAL")
 @RequiredArgsConstructor
-public class PrimitiveCharHolder_updateReadOnlyPropertyPanel {
+public class PrimitiveCharHolder_updateReadOnlyPropertyPromptStyleModal {
 
     private final PrimitiveCharHolder primitiveCharHolder;
 

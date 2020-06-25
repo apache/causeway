@@ -10,14 +10,14 @@ JDO supports `char` out-of-the-box, so no special annotations are required.
 public class PrimitiveCharJdoEntity
     implements HasAsciiDocDescription,   PrimitiveCharHolder {          // <.>
 
-    public PrimitiveCharJdoEntity(char initialValue) {                  // <.>
-        this.readOnlyProperty = initialValue;
-        this.readWriteProperty = initialValue;
-    }
+    public PrimitiveCharJdoEntity(char initialValue) { ... }            // <.>
+
+    @Title
+    @Getter @Setter
+    private char readOnlyProperty;                                      // <.>
 
     @Getter @Setter
-    @Title
-    private char readOnlyProperty;
+    private char readOnlyProperty2;
 
     @Getter @Setter
     @Property(editing = Editing.ENABLED)
@@ -25,5 +25,6 @@ public class PrimitiveCharJdoEntity
 
 }
 ----
-<.> a no-arg constructor is introduced by JDO enhnancer
+<.> a no-arg constructor is introduced by JDO enhancer
 <.> as a convenience
+<.> no additional annotations required.

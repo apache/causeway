@@ -18,30 +18,22 @@
  */
 package demoapp.dom.types.primitive.chars.holder;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 
 import lombok.RequiredArgsConstructor;
 
 
-@Action(
-        semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty",
-        associateWithSequence = "3"
-)
-@ActionLayout(position = ActionLayout.Position.PANEL_DROPDOWN)
+//@Property()
+//@PropertyLayout(named = "<i>Named<i/> <b>not</b> escaped property", namedEscaped = false, describedAs = "named = \"(some markup)\", namedEscaped = false") // TODO: this doesn't render, and causes bootlint issues
 @RequiredArgsConstructor
-public class PrimitiveCharHolder_updateReadOnlyPropertyPanelDropDown {
+public class PrimitiveCharHolder_mixinPropertyNamedNotEscaped {
 
     private final PrimitiveCharHolder primitiveCharHolder;
 
-    public PrimitiveCharHolder act(char newValue) {
-        primitiveCharHolder.setReadOnlyProperty(newValue);
-        return primitiveCharHolder;
-    }
-    public char default0Act() {
+    @MemberOrder(name = "contributed", sequence = "3")
+    public char prop() {
         return primitiveCharHolder.getReadOnlyProperty();
     }
 

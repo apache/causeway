@@ -8,6 +8,7 @@
 	<bs3:row>
 		<bs3:col span="10" unreferencedActions="true">
 			<cpt:domainObject />
+			<cpt:action id="actionReturning"/>
 			<cpt:action id="rebuildMetamodel"/>
 		</bs3:col>
 		<bs3:col span="2">
@@ -17,39 +18,19 @@
 
 	<bs3:row>
 		<bs3:col span="6">
-			<cpt:fieldSet name="Demo" id="general">
-				<cpt:action id="actionReturning" position="PANEL"/>
-				<cpt:property id="readOnlyProperty" labelPosition="DEFAULT">
+			<cpt:fieldSet name="Action Prompt Styles" id="action-prompt-styles">
+				<cpt:property id="readOnlyProperty" />
+				<cpt:property id="readOnlyProperty2" >
 					<cpt:describedAs>
-						labelPosition=DEFAULT
-					</cpt:describedAs>
-				</cpt:property>
-				<cpt:property id="readOnlyProperty2" labelPosition="TOP" hidden="ALL_TABLES">
-					<cpt:describedAs>
-						labelPosition=TOP
-						hidden=ALL_TABLES
-					</cpt:describedAs>
-				</cpt:property>
-				<cpt:property id="readWriteProperty" labelPosition="LEFT">
-					<cpt:describedAs>
-						labelPosition=LEFT
+						Associated action uses promptStyle=INLINE_AS_IF_EDIT
 					</cpt:describedAs>
 				</cpt:property>
 			</cpt:fieldSet>
-			<cpt:fieldSet name="Derived Properties" id="derivedProperties">
-				<cpt:property id="readOnlyPropertyDerived" labelPosition="NONE" hidden="ALL_TABLES">
-					<cpt:describedAs>
-						labelPosition=NONE
-						hidden=ALL_TABLES
-					</cpt:describedAs>
-				</cpt:property>
-				<cpt:property id="readOnlyPropertyDerived2" labelPosition="RIGHT" hidden="ALL_TABLES">
-					<cpt:describedAs>
-						labelPosition=RIGHT
-						hidden=ALL_TABLES
-					</cpt:describedAs>
-				</cpt:property>
+			<cpt:fieldSet name="Editable Properties" id="editable-properties">
+				<cpt:property id="readWriteProperty" />
 			</cpt:fieldSet>
+			<cpt:fieldSet name="Label Positions" id="label-positions"/>
+			<cpt:fieldSet name="Contributed by Mixins" id="contributed"/>
 			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
 		</bs3:col>
 		<bs3:col span="6">
@@ -59,6 +40,7 @@
 				<cpt:action id="rebuildMetamodel"  position="PANEL"/>
 				<cpt:action id="downloadMetamodelXml"  position="PANEL_DROPDOWN"/>
 				<cpt:action id="inspectMetamodel"  position="PANEL_DROPDOWN"/>
+				<cpt:action id="downloadJdoMetadata"  position="PANEL_DROPDOWN"/>
 				<cpt:action id="openRestApi" position="PANEL_DROPDOWN" />
 				<cpt:property id="description"/>
 			</cpt:fieldSet>

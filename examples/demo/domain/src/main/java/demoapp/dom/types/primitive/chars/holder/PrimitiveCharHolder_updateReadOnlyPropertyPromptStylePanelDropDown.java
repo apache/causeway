@@ -18,10 +18,6 @@
  */
 package demoapp.dom.types.primitive.chars.holder;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -33,11 +29,11 @@ import lombok.RequiredArgsConstructor;
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
         associateWith = "readOnlyProperty",
-        associateWithSequence = "4"
+        associateWithSequence = "3"
 )
-@ActionLayout(promptStyle = PromptStyle.AS_CONFIGURED, named = "with choices")
+@ActionLayout(position = ActionLayout.Position.PANEL_DROPDOWN, named = "Panel Dropdown", describedAs = "position = PANEL_DROPDOWN")
 @RequiredArgsConstructor
-public class PrimitiveCharHolder_updateReadOnlyPropertyWithChoices {
+public class PrimitiveCharHolder_updateReadOnlyPropertyPromptStylePanelDropDown {
 
     private final PrimitiveCharHolder primitiveCharHolder;
 
@@ -48,11 +44,6 @@ public class PrimitiveCharHolder_updateReadOnlyPropertyWithChoices {
     public char default0Act() {
         return primitiveCharHolder.getReadOnlyProperty();
     }
-    public List<Character> choices0Act() {
-        return Stream.of('a', 'b', 'c').collect(Collectors.toList());
-    }
-    public boolean hideAct() {
-        return true;
-    } // TODO: choices doesn't seem to work for this datatype
+
 
 }

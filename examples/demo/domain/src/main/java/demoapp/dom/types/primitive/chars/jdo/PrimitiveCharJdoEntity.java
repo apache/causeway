@@ -23,18 +23,15 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.annotation.Where;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.primitive.chars.holder.PrimitiveCharHolder;
@@ -44,7 +41,9 @@ import demoapp.dom.types.primitive.chars.holder.PrimitiveCharHolder;
 @DomainObject(
         objectType = "demoapp.PrimitiveCharJdoEntity"
 )
-public class PrimitiveCharJdoEntity implements HasAsciiDocDescription, PrimitiveCharHolder {
+public class PrimitiveCharJdoEntity
+        implements HasAsciiDocDescription,
+                   PrimitiveCharHolder {
 
     public PrimitiveCharJdoEntity(char initialValue) {
         this.readOnlyProperty = initialValue;
@@ -52,10 +51,12 @@ public class PrimitiveCharJdoEntity implements HasAsciiDocDescription, Primitive
         this.readWriteProperty = initialValue;
     }
 
-    @Getter @Setter
     @Title
+    @Getter @Setter
     private char readOnlyProperty;
 
+    @Property
+    @PropertyLayout(hidden = Where.ALL_TABLES)
     @Getter @Setter
     private char readOnlyProperty2;
 

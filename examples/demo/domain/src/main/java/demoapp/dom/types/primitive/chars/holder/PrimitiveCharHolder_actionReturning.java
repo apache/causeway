@@ -27,11 +27,8 @@ import lombok.RequiredArgsConstructor;
 
 
 @Action(
-        semantics = SemanticsOf.SAFE,
-        associateWith = "readOnlyProperty",
-        associateWithSequence = "1"
+        semantics = SemanticsOf.SAFE
 )
-@ActionLayout(position = ActionLayout.Position.PANEL)
 @RequiredArgsConstructor
 public class PrimitiveCharHolder_actionReturning {
 

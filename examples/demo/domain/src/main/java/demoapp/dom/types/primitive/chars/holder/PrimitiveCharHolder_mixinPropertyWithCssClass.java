@@ -18,32 +18,24 @@
  */
 package demoapp.dom.types.primitive.chars.holder;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Navigable;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 
 
-@Action(
-        semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty2",
-        associateWithSequence = "1"
-)
-@ActionLayout(promptStyle = PromptStyle.INLINE_AS_IF_EDIT)
+@Property()
+@PropertyLayout(cssClass = "red", describedAs = "cssClass = \"red\" ", hidden = Where.ALL_TABLES)
 @RequiredArgsConstructor
-public class PrimitiveCharHolder_updateReadOnlyProperty2InlineAsIfEdit {
+public class PrimitiveCharHolder_mixinPropertyWithCssClass {
 
     private final PrimitiveCharHolder primitiveCharHolder;
 
-    public PrimitiveCharHolder act(char newValue) {
-        primitiveCharHolder.setReadOnlyProperty2(newValue);
-        return primitiveCharHolder;
+    @MemberOrder(name = "contributed", sequence = "1")
+    public char prop() {
+        return primitiveCharHolder.getReadOnlyProperty();
     }
-    public char default0Act() {
-        return primitiveCharHolder.getReadOnlyProperty2();
-    }
-
-
 }
