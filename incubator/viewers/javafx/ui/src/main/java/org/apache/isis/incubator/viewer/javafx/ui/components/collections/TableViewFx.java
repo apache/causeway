@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 
 import lombok.AccessLevel;
@@ -59,7 +60,7 @@ public class TableViewFx extends VBox {
      * Constructs a (page-able) {@link Grid} from given {@code collection}  
      * @param collection - of (wrapped) domain objects
      */
-    public static TableViewFx fromCollection(final ManagedObject collection) {
+    public static TableViewFx fromCollection(UiContext uiContext, ManagedObject collection) {
         val collectionFacet = collection.getSpecification()
                 .getFacet(CollectionFacet.class);
         
@@ -67,7 +68,7 @@ public class TableViewFx extends VBox {
                 .collect(Collectors.toList());
         
         return inferElementSpecification(objects)
-                .map(elementSpec->new TableViewFx(elementSpec, objects))
+                .map(elementSpec->new TableViewFx(uiContext, elementSpec, objects))
                 .orElseGet(TableViewFx::empty);
     }
     
@@ -75,14 +76,14 @@ public class TableViewFx extends VBox {
      * Constructs a (page-able) {@link Grid} from given {@code managedCollection}   
      * @param managedCollection
      */
-    public static TableViewFx forManagedCollection(ManagedCollection managedCollection) {
+    public static TableViewFx forManagedCollection(UiContext uiContext, ManagedCollection managedCollection) {
         
         val elementSpec = managedCollection.getElementSpecification(); 
         val elements = managedCollection.streamElements()
                 .collect(Collectors.toList());
         return elements.isEmpty()
                 ? empty()
-                : new TableViewFx(elementSpec, elements);
+                : new TableViewFx(uiContext, elementSpec, elements);
     }
     
     
@@ -92,6 +93,7 @@ public class TableViewFx extends VBox {
      * @param objects - (wrapped) domain objects to be rendered by this table
      */
     private TableViewFx(
+            @NonNull final UiContext uiContext,
             @NonNull final ObjectSpecification elementSpec, 
             @Nullable final Collection<ManagedObject> objects) {
         
@@ -122,10 +124,13 @@ public class TableViewFx extends VBox {
             column.setCellValueFactory(cellDataFeatures -> {
                 log.debug("about to get property value for property {}", property.getId());                
                 val targetObject = cellDataFeatures.getValue();
-                return _fx.newStringReadonly(stringifyPropertyValue(property, targetObject));
+                return _fx.newStringReadonly(stringifyPropertyValue(uiContext, property, targetObject));
             });
         });
+        
+        // populate the model        
         objectGrid.getItems().addAll(objects);
+        
         //objectGrid.recalculateColumnWidths();
         //objectGrid.setColumnReorderingAllowed(true);
         
@@ -140,16 +145,24 @@ public class TableViewFx extends VBox {
     }
     
     private String stringifyPropertyValue(
+            UiContext uiContext,
             ObjectAssociation property, 
             ManagedObject targetObject) {
-        try {
-            val propertyValue = property.get(targetObject);
-            return propertyValue == null 
-                    ? NULL_LITERAL
-                    : propertyValue.titleString();
-        } catch (Exception e) {
-            return Optional.ofNullable(e.getMessage()).orElse(e.getClass().getName());
-        }
+        
+        return uiContext.getIsisInteractionFactory().callAnonymous(()->{
+            
+            try {
+                val propertyValue = property.get(targetObject);
+                return propertyValue == null 
+                        ? NULL_LITERAL
+                        : propertyValue.titleString();
+            } catch (Exception e) {
+                return Optional.ofNullable(e.getMessage()).orElse(e.getClass().getName());
+            }
+            
+        });
+        
+        
     }
     
 }

@@ -21,7 +21,7 @@ package org.apache.isis.incubator.viewer.javafx.ui.main;
 import java.util.function.Consumer;
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.incubator.viewer.javafx.ui.services.UiContexDefault;
+import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
 import org.apache.isis.viewer.common.model.menu.MenuItemDto;
 import org.apache.isis.viewer.common.model.menu.MenuVisitor;
 
@@ -37,7 +37,7 @@ import javafx.scene.control.SeparatorMenuItem;
 @Log4j2
 public class MenuBuilderFx implements MenuVisitor {
     
-    private final UiContexDefault uiContext;
+    private final UiContext uiContext;
     private final MenuBar menuBar;
     private final Consumer<ManagedAction> menuActionEventHandler;
     

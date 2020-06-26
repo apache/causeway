@@ -22,11 +22,10 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.incubator.viewer.javafx.model.action.ActionUiModelFactoryFx;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
 import org.apache.isis.incubator.viewer.javafx.model.decorator.DecoratorService;
-import org.apache.isis.incubator.viewer.javafx.model.icon.IconService;
-import org.apache.isis.incubator.viewer.javafx.ui.main.UiActionHandler;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -36,9 +35,10 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class UiContexDefault implements UiContext {
     
-    private final IconService iconService;
+    //private final IconService iconService;
     private final DecoratorService decoratorService;
-    private final UiActionHandler uiActionHandler;
+    //private final UiActionHandler uiActionHandler;
+    private final IsisInteractionFactory isisInteractionFactory;
     
     private final ActionUiModelFactoryFx actionUiModelFactory = new ActionUiModelFactoryFx();
 

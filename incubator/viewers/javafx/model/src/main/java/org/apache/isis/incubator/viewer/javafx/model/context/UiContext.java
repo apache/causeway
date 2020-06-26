@@ -18,10 +18,14 @@
  */
 package org.apache.isis.incubator.viewer.javafx.model.context;
 
+import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.incubator.viewer.javafx.model.action.ActionUiModelFactoryFx;
 import org.apache.isis.incubator.viewer.javafx.model.decorator.DecoratorService;
 
 public interface UiContext {
 
     DecoratorService getDecoratorService();
+    IsisInteractionFactory getIsisInteractionFactory();
+    ActionUiModelFactoryFx getActionUiModelFactory();
     
 }

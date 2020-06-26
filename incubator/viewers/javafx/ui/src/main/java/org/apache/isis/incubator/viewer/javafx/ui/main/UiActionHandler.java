@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentFactoryFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.collections.TableViewFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.dialog.Dialogs;
@@ -44,7 +44,7 @@ import javafx.scene.Node;
 @Log4j2
 public class UiActionHandler {
 
-    private final IsisInteractionFactory isisInteractionFactory;
+    private final UiContext uiContext;
     private final UiComponentFactoryFx uiComponentFactory;
 
     public void handleActionLinkClicked(ManagedAction managedAction, Consumer<Node> onNewPageContent) {
@@ -59,7 +59,7 @@ public class UiActionHandler {
             return;
         }
         
-        isisInteractionFactory.runAnonymous(()->{
+        uiContext.getIsisInteractionFactory().runAnonymous(()->{
 
             //Thread.sleep(1000); // simulate long running
 
@@ -75,9 +75,10 @@ public class UiActionHandler {
     
     private Node uiComponentForActionResult(ManagedObject actionResult, Consumer<Node> onNewPageContent) {
         if (actionResult.getSpecification().isParentedOrFreeCollection()) {
-            return TableViewFx.fromCollection(actionResult);
+            return TableViewFx.fromCollection(uiContext, actionResult);
         } else {
             return ObjectViewFx.fromObject(
+                    uiContext,
                     uiComponentFactory, 
                     action->handleActionLinkClicked(action, onNewPageContent), 
                     actionResult);

@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
-import org.apache.isis.incubator.viewer.javafx.ui.services.UiContexDefault;
+import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
 import org.apache.isis.viewer.common.model.header.HeaderUiModelProvider;
 
 import lombok.RequiredArgsConstructor;
@@ -48,7 +48,8 @@ public class UiController {
     private final MetaModelContext metaModelContext;
     private final HeaderUiModelProvider headerUiModelProvider;
     private final IsisInteractionFactory isisInteractionFactory;
-    private final UiContexDefault uiContext;
+    private final UiContext uiContext;
+    private final UiActionHandler uiActionHandler; 
 
     @FXML private MenuBar menuBarLeft;
     @FXML private MenuBar menuBarRight;
@@ -76,7 +77,7 @@ public class UiController {
     }
 
     private void onActionLinkClicked(ManagedAction managedAction) {
-        uiContext.getUiActionHandler().handleActionLinkClicked(managedAction, this::replaceContent);
+        uiActionHandler.handleActionLinkClicked(managedAction, this::replaceContent);
     }
     
     private void replaceContent(Node node) {

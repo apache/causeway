@@ -36,6 +36,7 @@ import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentFactoryFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.collections.TableViewFx;
@@ -56,10 +57,11 @@ import javafx.scene.layout.VBox;
 public class ObjectViewFx extends VBox {
     
     public static ObjectViewFx fromObject(
+            @NonNull final UiContext uiContext,
             @NonNull final UiComponentFactoryFx uiComponentFactory,
             @NonNull final Consumer<ManagedAction> actionEventHandler,
             @NonNull final ManagedObject managedObject) {
-        return new ObjectViewFx(uiComponentFactory, actionEventHandler, managedObject);
+        return new ObjectViewFx(uiContext, uiComponentFactory, actionEventHandler, managedObject);
     }
     
     /**
@@ -67,6 +69,7 @@ public class ObjectViewFx extends VBox {
      * @param managedObject - domain object
      */
     protected ObjectViewFx(
+            final UiContext uiContext, 
             final UiComponentFactoryFx uiComponentFactory,
             final Consumer<ManagedAction> actionEventHandler,
             final ManagedObject managedObject) {
@@ -191,7 +194,7 @@ public class ObjectViewFx extends VBox {
                     _fx.newLabel(container, managedCollection.getName())
                     .setStyle("isis-collection-label"); // corresponds to H3 (html)
                     
-                    val uiCollection = TableViewFx.forManagedCollection(managedCollection);
+                    val uiCollection = TableViewFx.forManagedCollection(uiContext, managedCollection);
                     container.getChildren().add(uiCollection);
                 });
                 
