@@ -18,6 +18,8 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.ui.components.object;
 
+import java.util.function.Consumer;
+
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
@@ -42,10 +44,11 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.incubator.viewer.vaadin.model.util._vaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
-import org.apache.isis.incubator.viewer.vaadin.ui.components.action.ActionButton;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableViewVaa;
 import org.apache.isis.viewer.common.model.binding.UiComponentFactory;
 import org.apache.isis.viewer.common.model.binding.interaction.ObjectBinding;
@@ -60,8 +63,9 @@ public class ObjectViewVaa extends VerticalLayout {
 
     public static ObjectViewVaa from(
             @NonNull final UiComponentFactoryVaa uiComponentFactory,
+            @NonNull final Consumer<ManagedAction> actionEventHandler,
             @NonNull final ManagedObject managedObject) {
-        return new ObjectViewVaa(uiComponentFactory, managedObject);
+        return new ObjectViewVaa(uiComponentFactory, actionEventHandler, managedObject);
     }
     
     /**
@@ -70,6 +74,7 @@ public class ObjectViewVaa extends VerticalLayout {
      */
     protected ObjectViewVaa(
             final UiComponentFactoryVaa uiComponentFactory,
+            final Consumer<ManagedAction> actionEventHandler,
             final ManagedObject managedObject) {
 
 
@@ -84,17 +89,16 @@ public class ObjectViewVaa extends VerticalLayout {
 
             @Override
             protected void onObjectTitle(HasComponents container, DomainObjectLayoutData domainObjectData) {
-                val uiTitle = new H1(objectInteractor.getTitle());
+                val uiTitle = _vaa.add(container, new H1(objectInteractor.getTitle()));
                 //                uiTitle.addThemeVariants(
                 //                        ButtonVariant.LUMO_LARGE,
                 //                        ButtonVariant.LUMO_TERTIARY_INLINE);
-                container.add(uiTitle);     
             }
 
             @Override
             protected HasComponents newRow(HasComponents container, BS3Row bs3Row) {
-                val uiRow = new FlexLayout();
-                container.add(uiRow);
+                val uiRow = _vaa.add(container, new FlexLayout());
+                
                 uiRow.setWidthFull();
                 uiRow.setWrapMode(FlexLayout.WrapMode.WRAP); // allow line breaking
 
@@ -111,8 +115,7 @@ public class ObjectViewVaa extends VerticalLayout {
             @Override
             protected HasComponents newCol(HasComponents container, BS3Col bs3col) {
 
-                val uiCol = new VerticalLayout();
-                container.add(uiCol);
+                val uiCol = _vaa.add(container, new VerticalLayout());
 
                 final int span = bs3col.getSpan();
                 ((FlexLayout)container).setFlexGrow(span, uiCol);
@@ -125,8 +128,7 @@ public class ObjectViewVaa extends VerticalLayout {
 
             @Override
             protected HasComponents newActionPanel(HasComponents container) {
-                val uiActionPanel = new FlexLayout();
-                container.add(uiActionPanel);
+                val uiActionPanel = _vaa.add(container, new FlexLayout());
 
                 uiActionPanel.setWrapMode(FlexLayout.WrapMode.WRAP); // allow line breaking
                 uiActionPanel.setAlignItems(Alignment.BASELINE);
@@ -135,23 +137,22 @@ public class ObjectViewVaa extends VerticalLayout {
 
             @Override
             protected Tabs newTabGroup(HasComponents container, BS3TabGroup tabGroupData) {
-                val uiTabGroup = new Tabs();
-                container.add(uiTabGroup);
+                val uiTabGroup = _vaa.add(container, new Tabs());
+
                 uiTabGroup.setOrientation(Tabs.Orientation.HORIZONTAL);
                 return uiTabGroup;
             }
 
             @Override
             protected HasComponents newTab(Tabs container, BS3Tab tabData) {
-                val uiTab = new Tab(tabData.getName());
-                container.add(uiTab);
+                val uiTab = _vaa.add(container, new Tab(tabData.getName()));
                 return uiTab;
             }
 
             @Override
             protected HasComponents newFieldSet(HasComponents container, FieldSet fieldSetData) {
 
-                container.add(new H2(fieldSetData.getName()));
+                _vaa.add(container, new H2(fieldSetData.getName()));
                 
                 // handle associated actions
                 val actionBar = newActionPanel(container);
@@ -159,8 +160,7 @@ public class ObjectViewVaa extends VerticalLayout {
                     onAction(actionBar, actionData);
                 }
 
-                val uiFieldSet = new FormLayout();
-                container.add(uiFieldSet);
+                val uiFieldSet = _vaa.add(container, new FormLayout());
 
                 uiFieldSet.setResponsiveSteps(
                         new ResponsiveStep("0", 1)); // single column only
@@ -182,8 +182,10 @@ public class ObjectViewVaa extends VerticalLayout {
                 .checkVisibility(Where.OBJECT_FORMS)
                 .getManagedAction()
                 .ifPresent(managedAction -> {
-                    val uiAction = ActionButton.forManagedAction(uiComponentFactory, managedAction);
-                    container.add(uiAction);
+                    val uiButton = _vaa.newButton(
+                            container, 
+                            managedAction.getName(), 
+                            event->actionEventHandler.accept(managedAction));
                 });
             }
 
@@ -196,9 +198,11 @@ public class ObjectViewVaa extends VerticalLayout {
                 .checkVisibility(Where.OBJECT_FORMS)
                 .getManagedProperty()
                 .ifPresent(managedProperty -> {
-                    val uiProperty = uiComponentFactory
-                            .componentFor(UiComponentFactory.Request.of(Where.OBJECT_FORMS, managedProperty));
-                    container.add(uiProperty);
+                    val uiProperty = _vaa.add(container, 
+                            uiComponentFactory.componentFor(
+                                    UiComponentFactory.Request.of(
+                                            Where.OBJECT_FORMS,
+                                            managedProperty)));
                     
                     // handle associated actions
                     val actionBar = newActionPanel(container);
@@ -218,7 +222,7 @@ public class ObjectViewVaa extends VerticalLayout {
                 .checkVisibility(Where.OBJECT_FORMS)
                 .getManagedCollection()
                 .ifPresent(managedCollection -> {
-                    container.add(new H3(managedCollection.getName()));
+                    _vaa.add(container, new H3(managedCollection.getName()));
                     
                     // handle associated actions
                     val actionBar = newActionPanel(container);
@@ -226,8 +230,9 @@ public class ObjectViewVaa extends VerticalLayout {
                         onAction(actionBar, actionData);
                     }
                     
-                    val uiCollection = TableViewVaa.forManagedCollection(managedCollection);
-                    container.add(uiCollection);
+                    val uiCollection = _vaa.add(container, 
+                            TableViewVaa.forManagedCollection(managedCollection));
+                    
                 });
                 
             }

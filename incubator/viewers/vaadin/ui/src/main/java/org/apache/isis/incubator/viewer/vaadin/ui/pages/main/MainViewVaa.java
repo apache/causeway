@@ -20,6 +20,7 @@ package org.apache.isis.incubator.viewer.vaadin.ui.pages.main;
 
 import javax.inject.Inject;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Div;
@@ -31,13 +32,9 @@ import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 
-import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
-import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableViewVaa;
-import org.apache.isis.incubator.viewer.vaadin.ui.components.object.ObjectViewVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.util.LocalResourceUtil;
 import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeDecorator;
 import org.apache.isis.viewer.common.model.header.HeaderUiModelProvider;
@@ -59,7 +56,7 @@ implements BeforeEnterObserver {
     private static final long serialVersionUID = 1L;
     
     private final transient IsisAppCommonContext commonContext;
-    private final transient UiComponentFactoryVaa uiComponentFactory;
+    private final transient UiActionHandler uiActionHandler;
     private final transient HeaderUiModelProvider headerUiModelProvider;
     private Div pageContent = new Div();
     
@@ -69,11 +66,11 @@ implements BeforeEnterObserver {
     @Inject
     public MainViewVaa(
             final MetaModelContext metaModelContext,
-            final UiComponentFactoryVaa uiComponentFactory,
+            final UiActionHandler uiActionHandler,
             final HeaderUiModelProvider headerUiModelProvider) {
 
         this.commonContext = IsisAppCommonContext.of(metaModelContext);
-        this.uiComponentFactory = uiComponentFactory;
+        this.uiActionHandler = uiActionHandler;
         this.headerUiModelProvider = headerUiModelProvider;
     }
     
@@ -88,26 +85,20 @@ implements BeforeEnterObserver {
         val menuBarContainer = MainView_createHeader.createHeader(
                 commonContext, 
                 headerUiModelProvider.getHeader(), 
-                this::onMenuAction);
+                this::onActionLinkClicked);
         
         addToNavbar(menuBarContainer);
         setContent(pageContent = new Div());
         setDrawerOpened(false);
     }
 
-    private void onMenuAction(ManagedAction managedAction) {
-        
+    private void onActionLinkClicked(ManagedAction managedAction) {
+        uiActionHandler.handleActionLinkClicked(managedAction, this::replaceContent);
+    }
+    
+    private void replaceContent(Component component) {
         pageContent.removeAll();
-
-        val resultOrVeto = managedAction.invoke(Can.empty());
-        
-        val result = resultOrVeto.leftIfAny(); 
-
-        if (result.getSpecification().isParentedOrFreeCollection()) {
-            pageContent.add(TableViewVaa.fromCollection(result));
-        } else {
-            pageContent.add(ObjectViewVaa.from(uiComponentFactory, result));
-        }
+        pageContent.add(component);
     }
 
 

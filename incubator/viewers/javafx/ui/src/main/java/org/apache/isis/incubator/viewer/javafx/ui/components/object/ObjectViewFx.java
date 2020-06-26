@@ -188,7 +188,9 @@ public class ObjectViewFx extends VBox {
                     
                     val uiProperty = _fx.add(container, 
                             uiComponentFactory.componentFor(
-                                    UiComponentFactory.Request.of(Where.OBJECT_FORMS, managedProperty)));
+                                    UiComponentFactory.Request.of(
+                                            Where.OBJECT_FORMS, 
+                                            managedProperty)));
                     
                     // handle associated actions
                     for(val actionData : propertyData.getActions()) {
