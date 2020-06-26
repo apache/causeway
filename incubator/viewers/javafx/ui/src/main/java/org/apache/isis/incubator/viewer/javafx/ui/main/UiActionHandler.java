@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentFactoryFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.collections.TableViewFx;
+import org.apache.isis.incubator.viewer.javafx.ui.components.dialog.Dialogs;
 import org.apache.isis.incubator.viewer.javafx.ui.components.object.ObjectViewFx;
 
 import lombok.RequiredArgsConstructor;
@@ -50,9 +51,14 @@ public class UiActionHandler {
 
         log.info("about to build an action prompt for {}", managedAction.getIdentifier());
         
-        // TODO get an ActionPrompt, then on invocation show the result in the content view
+        if(managedAction.getAction().getParameterCount()>0) {
+            // TODO get an ActionPrompt, then on invocation show the result in the content view
+            
+            Dialogs.message("Warn", "ActionPrompt not supported yet!", null);
+            
+            return;
+        }
         
-
         isisInteractionFactory.runAnonymous(()->{
 
             //Thread.sleep(1000); // simulate long running
