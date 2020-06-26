@@ -31,6 +31,7 @@ import org.apache.isis.incubator.viewer.javafx.viewer.JavafxViewer;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 
 import demoapp.dom.DemoModule;
+import javafx.scene.image.Image;
 
 /**
  * Bootstrap the application.
@@ -50,6 +51,7 @@ public class DemoAppJavaFx {
     public JavaFxViewerConfig viewerConfig() {
         return JavaFxViewerConfig.builder()
                 .applicationTitle("Apache Isis Demo")
+                .applicationIcon(new Image(DemoAppJavaFx.class.getResourceAsStream("icon.png")))
                 .build();
     }
 

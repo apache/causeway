@@ -18,6 +18,8 @@
  */
 package org.apache.isis.incubator.viewer.javafx.ui.main;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 
 import org.springframework.context.ApplicationContext;
@@ -37,6 +39,7 @@ import lombok.extern.log4j.Log4j2;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -45,7 +48,6 @@ public class UiBuilder {
     
     private final ApplicationContext springContext;
     private final JavaFxViewerConfig viewerConfig;
-    private Scene scene;
 
     @EventListener(PrimaryStageReadyEvent.class)
     @SneakyThrows
@@ -58,17 +60,14 @@ public class UiBuilder {
         val scene = new Scene(uiRoot);
         val stage = event.getStage();
         stage.setScene(scene);
-        stage.setTitle(viewerConfig.getApplicationTitle());
-        stage.show();
+        setupTitle(stage);
+        setupIcon(stage);
         
-        this.scene = scene;
+        stage.show();
     }
-    
+
     @EventListener(IsisInteractionLifecycleEvent.class)
     public void onIsisInteractionLifecycleEvent(IsisInteractionLifecycleEvent event) {
-        if(scene==null) {
-            return;
-        }
         switch(event.getEventType()) {
         case HAS_STARTED:
             //TODO this would be the place to indicate to the user, that a long running task has started  
@@ -84,6 +83,22 @@ public class UiBuilder {
             break;
         }
         
+    }
+    
+    // -- HELPER
+        
+    private void setupTitle(Stage stage) {
+        val title = Optional.ofNullable(viewerConfig.getApplicationTitle())
+                .orElse("Unknonw Title");
+        stage.setTitle(title);
+    }
+    
+    private void setupIcon(Stage stage) {
+        val icon = viewerConfig.getApplicationIcon();
+        if(icon==null) {
+            return; 
+        }
+        stage.getIcons().add(icon);
     }
     
     

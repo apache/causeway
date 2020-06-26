@@ -24,12 +24,16 @@ import org.springframework.core.io.Resource;
 import lombok.Builder;
 import lombok.Getter;
 
+import javafx.scene.image.Image;
+
 @Getter @Builder
 public class JavaFxViewerConfig {
 
     private String applicationTitle;
+    private Image applicationIcon;
     
     @Builder.Default
     private Resource uiLayout = new ClassPathResource("/ui.fxml");
+    
     
 }
