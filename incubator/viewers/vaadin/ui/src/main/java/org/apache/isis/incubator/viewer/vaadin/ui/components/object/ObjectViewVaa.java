@@ -174,7 +174,7 @@ public class ObjectViewVaa extends VerticalLayout {
                 val owner = objectInteractor.getManagedObject();
                 ActionInteraction.start(owner, actionData.getId())
                 .checkVisibility(Where.OBJECT_FORMS)
-                .get()
+                .getManagedAction()
                 .ifPresent(managedAction -> {
                     val uiAction = ActionButton.forManagedAction(uiComponentFactory, managedAction);
                     container.add(uiAction);
@@ -188,7 +188,7 @@ public class ObjectViewVaa extends VerticalLayout {
                 
                 PropertyInteraction.start(owner, propertyData.getId())
                 .checkVisibility(Where.OBJECT_FORMS)
-                .get()
+                .getManagedProperty()
                 .ifPresent(managedProperty -> {
                     val uiProperty = uiComponentFactory
                             .componentFor(UiComponentFactory.Request.of(Where.OBJECT_FORMS, managedProperty));
@@ -203,7 +203,7 @@ public class ObjectViewVaa extends VerticalLayout {
                 
                 CollectionInteraction.start(owner, collectionData.getId())
                 .checkVisibility(Where.OBJECT_FORMS)
-                .get()
+                .getManagedCollection()
                 .ifPresent(managedCollection -> {
                     container.add(new H3(managedCollection.getName()));
                     

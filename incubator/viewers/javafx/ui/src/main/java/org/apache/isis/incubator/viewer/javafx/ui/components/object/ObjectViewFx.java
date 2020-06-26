@@ -167,7 +167,7 @@ public class ObjectViewFx extends VBox {
                 val owner = objectInteractor.getManagedObject();
                 ActionInteraction.start(owner, actionData.getId())
                 .checkVisibility(Where.OBJECT_FORMS)
-                .get()
+                .getManagedAction()
                 .ifPresent(managedAction -> {
                     val uiButton = _fx.newButton(
                             container, 
@@ -183,7 +183,7 @@ public class ObjectViewFx extends VBox {
                 
                 PropertyInteraction.start(owner, propertyData.getId())
                 .checkVisibility(Where.OBJECT_FORMS)
-                .get()
+                .getManagedProperty()
                 .ifPresent(managedProperty -> {
                     
                     val uiProperty = _fx.add(container, 
@@ -205,7 +205,7 @@ public class ObjectViewFx extends VBox {
                 
                 CollectionInteraction.start(owner, collectionData.getId())
                 .checkVisibility(Where.OBJECT_FORMS)
-                .get()
+                .getManagedCollection()
                 .ifPresent(managedCollection -> {
                     
                     val titledPanel = _fx.add(container, new TitledPanel(managedCollection.getName()));
