@@ -27,7 +27,9 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.annotation.Where;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -49,12 +51,18 @@ public class PrimitiveByteViewModel
 
     public PrimitiveByteViewModel(byte initialValue) {
         this.readOnlyProperty = initialValue;
+        this.readOnlyProperty2 = initialValue;
         this.readWriteProperty = initialValue;
     }
 
     @Title
     @Getter @Setter
     private byte readOnlyProperty;
+
+    @Property
+    @PropertyLayout(hidden = Where.ALL_TABLES)
+    @Getter @Setter
+    private byte readOnlyProperty2;
 
     @Getter @Setter
     @Property(editing = Editing.ENABLED)

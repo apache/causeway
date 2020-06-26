@@ -18,22 +18,23 @@
  */
 package demoapp.dom.types.primitive.bytes.holder;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 
 
-@Action(
-        semantics = SemanticsOf.SAFE
-)
+@Property()
+@PropertyLayout(cssClass = "red", describedAs = "cssClass = \"red\" ", hidden = Where.ALL_TABLES)
 @RequiredArgsConstructor
-public class PrimitiveByteHolder_actionReturning {
+public class PrimitiveByteHolder_mixinPropertyWithCssClass {
 
     private final PrimitiveByteHolder primitiveByteHolder;
 
-    public byte act() {
+    @MemberOrder(name = "contributed", sequence = "1")
+    public byte prop() {
         return primitiveByteHolder.getReadOnlyProperty();
     }
-
 }

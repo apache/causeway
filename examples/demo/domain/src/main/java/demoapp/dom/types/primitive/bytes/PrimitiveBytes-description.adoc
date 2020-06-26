@@ -2,13 +2,59 @@ The framework has built-in support for all of the primitive data types, includin
 
 From here you can:
 
-* open a view model that uses the `byte` datatype
 * navigate to an entity that uses the `byte` datatype
+* open a view model that uses the `byte` datatype
 
 Because `byte` is a primitive value, the properties on these domain objects are mandatory.
 
-These objects also have actions that demonstrate the use of `byte` as a parameter and as a return type.
-These are mixins to a common interface implemented by both view model and entity:
+== Common interface
+
+These objects both implement a common interface, `PrimitiveByteHolder`:
+
+[source,java]
+----
+public interface PrimitiveByteHolder {
+
+    byte getReadOnlyProperty();
+    void setReadOnlyProperty(byte c);
+
+    byte getReadOnlyProperty2();
+    void setReadOnlyProperty2(byte c);
+
+    byte getReadWriteProperty();
+    void setReadWriteProperty(byte c);
+
+    @MemberOrder(name = "label-positions", sequence = "1")
+    @Property
+    @PropertyLayout(labelPosition = LabelPosition.LEFT, describedAs = "labelPosition=LEFT", hidden = Where.ALL_TABLES)
+    default byte getReadOnlyPropertyDerivedLabelPositionLeft() { return getReadOnlyProperty(); }
+
+    @MemberOrder(name = "label-positions", sequence = "2")
+    @Property
+    @PropertyLayout(labelPosition = LabelPosition.TOP, describedAs = "labelPosition=TOP", hidden = Where.ALL_TABLES)
+    default byte getReadOnlyPropertyDerivedLabelPositionTop() { return getReadOnlyProperty(); }
+
+    @MemberOrder(name = "label-positions", sequence = "3")
+    @Property
+    @PropertyLayout(labelPosition = LabelPosition.RIGHT, describedAs = "labelPosition=RIGHT", hidden = Where.ALL_TABLES)
+    default byte getReadOnlyPropertyDerivedLabelPositionRight() { return getReadOnlyProperty(); }
+
+    @MemberOrder(name = "label-positions", sequence = "4")
+    @Property
+    @PropertyLayout(labelPosition = LabelPosition.NONE, describedAs = "labelPosition=NONE", hidden = Where.ALL_TABLES)
+    default byte getReadOnlyPropertyDerivedLabelPositionNone() { return getReadOnlyProperty(); }
+
+}
+----
+
+The default methods have annotations that automatically inherited.
+Using `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
+
+
+== Mixin actions
+
+A number of mixin actions contribute through this interface, demonstrate the use of `byte` as a parameter and as a return type.
+For example:
 
 * the `updateReadOnlyProperty` action is:
 +
@@ -24,17 +70,19 @@ public class PrimitiveByteHolder_updateReadOnlyProperty {
 
     private final PrimitiveByteHolder primitiveByteHolder;
 
-    public PrimitiveByteHolder act(char newValue) {
+    public PrimitiveByteHolder act(byte newValue) {
         primitiveByteHolder.setReadOnlyProperty(newValue);
         return primitiveByteHolder;
     }
-    public char default0Act() {
+    public byte default0Act() {
         return primitiveByteHolder.getReadOnlyProperty();
     }
 }
 ----
++
+There are a number of variants of this action, to demonstrate different prompt layouts.
 
-* and the `actionReturning` action is:
+* the `actionReturning` action is:
 +
 [source,java]
 ----
@@ -46,11 +94,36 @@ public class PrimitiveByteHolder_updateReadOnlyProperty {
 @RequiredArgsConstructor
 public class PrimitiveByteHolder_actionReturning {
 
-    private final PrimitiveByteHolder primitiveCharHolder;
+    private final PrimitiveByteHolder primitiveByteHolder;
 
-    public char act() {
+    public byte act() {
         return primitiveByteHolder.getReadOnlyProperty();
     }
 }
 ----
+
+== Mixin properties
+
+We also use the interface to contribute a number of mixin properties:
+
+* the `mixinPropertyWithCssClass` property:
++
+[source,java]
+----
+@Property()
+@PropertyLayout(cssClass = "red", describedAs = "cssClass = \"red\" ")
+@RequiredArgsConstructor
+public class PrimitiveByteHolder_mixinPropertyWithCssClass {
+
+    private final PrimitiveByteHolder primitiveByteHolder;
+
+    @MemberOrder(name = "contributed", sequence = "1")
+    public byte prop() {
+        return primitiveByteHolder.getReadOnlyProperty();
+    }
+}
+----
++
+TIP: the styling is provided from the `application.css` static resource.
+
 

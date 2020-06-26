@@ -19,21 +19,32 @@
 package demoapp.dom.types.primitive.bytes.holder;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
+import demoapp.dom.types.primitive.bytes.holder.PrimitiveByteHolder;
+
 
 @Action(
-        semantics = SemanticsOf.SAFE
+        semantics = SemanticsOf.IDEMPOTENT,
+        associateWith = "readOnlyProperty",
+        associateWithSequence = "3"
 )
+@ActionLayout(position = ActionLayout.Position.PANEL_DROPDOWN, named = "Panel Dropdown", describedAs = "position = PANEL_DROPDOWN")
 @RequiredArgsConstructor
-public class PrimitiveByteHolder_actionReturning {
+public class PrimitiveByteHolder_updateReadOnlyPropertyPromptStylePanelDropDown {
 
     private final PrimitiveByteHolder primitiveByteHolder;
 
-    public byte act() {
+    public PrimitiveByteHolder act(byte newValue) {
+        primitiveByteHolder.setReadOnlyProperty(newValue);
+        return primitiveByteHolder;
+    }
+    public byte default0Act() {
         return primitiveByteHolder.getReadOnlyProperty();
     }
+
 
 }

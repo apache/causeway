@@ -12,8 +12,6 @@ import org.apache.isis.core.runtime.events.app.AppLifecycleEvent;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
-import demoapp.dom.viewmodels.jaxbrefentity.ChildJdoEntity;
-
 @Service
 public class PrimitiveCharJdoEntitySeedService {
 

@@ -8,16 +8,16 @@ JDO supports `byte` out-of-the-box, so no special annotations are required.
         objectType = "demoapp.PrimitiveByteJdoEntity"
 )
 public class PrimitiveByteJdoEntity
-    implements HasAsciiDocDescription, PrimitiveByteHolder {          // <.>
+    implements HasAsciiDocDescription,   PrimitiveByteHolder {          // <.>
 
-    public PrimitiveByteJdoEntity(byte initialValue) {                  // <.>
-        this.readOnlyProperty = initialValue;
-        this.readWriteProperty = initialValue;
-    }
+    public PrimitiveByteJdoEntity(byte initialValue) { ... }            // <.>
+
+    @Title
+    @Getter @Setter
+    private byte readOnlyProperty;                                      // <.>
 
     @Getter @Setter
-    @Title
-    private byte readOnlyProperty;
+    private byte readOnlyProperty2;
 
     @Getter @Setter
     @Property(editing = Editing.ENABLED)
@@ -27,3 +27,4 @@ public class PrimitiveByteJdoEntity
 ----
 <.> a no-arg constructor is introduced by JDO enhancer
 <.> as a convenience
+<.> no additional annotations required.

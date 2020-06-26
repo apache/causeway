@@ -18,27 +18,20 @@
  */
 package demoapp.dom.types.primitive.bytes.holder;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.MemberOrder;
 
 import lombok.RequiredArgsConstructor;
 
 
-@Action(
-        semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty",
-        associateWithSequence = "1"
-)
+//@Property()
+//@PropertyLayout(named = "<i>Named<i/> <b>not</b> escaped property", namedEscaped = false, describedAs = "named = \"(some markup)\", namedEscaped = false") // TODO: this doesn't render, and causes bootlint issues
 @RequiredArgsConstructor
-public class PrimitiveByteHolder_updateReadOnlyProperty {
+public class PrimitiveByteHolder_mixinPropertyNamedNotEscaped {
 
     private final PrimitiveByteHolder primitiveByteHolder;
 
-    public PrimitiveByteHolder act(byte newValue) {
-        primitiveByteHolder.setReadOnlyProperty(newValue);
-        return primitiveByteHolder;
-    }
-    public byte default0Act() {
+    @MemberOrder(name = "contributed", sequence = "3")
+    public byte prop() {
         return primitiveByteHolder.getReadOnlyProperty();
     }
 

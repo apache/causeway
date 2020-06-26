@@ -27,9 +27,13 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.annotation.Where;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -39,10 +43,42 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 public interface PrimitiveByteHolder {
 
+    @MemberOrder(name = "action-prompt-styles", sequence = "1") // TODO: doesn't seem to get picked up
+    @Property
+    @PropertyLayout
     byte getReadOnlyProperty();
-    void setReadOnlyProperty(byte b);
+    void setReadOnlyProperty(byte c);
 
+    @MemberOrder(name = "action-prompt-styles", sequence = "1") // TODO: doesn't seem to get picked up
+    @Property
+    @PropertyLayout(describedAs = "associated action uses promptStyle=INLINE_AS_IF_EDIT", hidden = Where.ALL_TABLES) // TODO: doesn't seem to get picked up
+    byte getReadOnlyProperty2();
+    void setReadOnlyProperty2(byte c);
+
+    @MemberOrder(name = "editable-properties", sequence = "1") // TODO: doesn't seem to get picked up
+    @Property
+    @PropertyLayout
     byte getReadWriteProperty();
-    void setReadWriteProperty(byte b);
+    void setReadWriteProperty(byte c);
+
+    @MemberOrder(name = "label-positions", sequence = "1")
+    @Property
+    @PropertyLayout(labelPosition = LabelPosition.LEFT, describedAs = "labelPosition=LEFT", hidden = Where.ALL_TABLES)
+    default byte getReadOnlyPropertyDerivedLabelPositionLeft() { return getReadOnlyProperty(); }
+
+    @MemberOrder(name = "label-positions", sequence = "2")
+    @Property
+    @PropertyLayout(labelPosition = LabelPosition.TOP, describedAs = "labelPosition=TOP", hidden = Where.ALL_TABLES)
+    default byte getReadOnlyPropertyDerivedLabelPositionTop() { return getReadOnlyProperty(); }
+
+    @MemberOrder(name = "label-positions", sequence = "3")
+    @Property
+    @PropertyLayout(labelPosition = LabelPosition.RIGHT, describedAs = "labelPosition=RIGHT", hidden = Where.ALL_TABLES)
+    default byte getReadOnlyPropertyDerivedLabelPositionRight() { return getReadOnlyProperty(); }
+
+    @MemberOrder(name = "label-positions", sequence = "4")
+    @Property
+    @PropertyLayout(labelPosition = LabelPosition.NONE, describedAs = "labelPosition=NONE", hidden = Where.ALL_TABLES)
+    default byte getReadOnlyPropertyDerivedLabelPositionNone() { return getReadOnlyProperty(); }
 
 }

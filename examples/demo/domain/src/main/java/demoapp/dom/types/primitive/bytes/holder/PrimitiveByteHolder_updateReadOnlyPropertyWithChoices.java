@@ -23,6 +23,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
@@ -31,8 +33,9 @@ import lombok.RequiredArgsConstructor;
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
         associateWith = "readOnlyProperty",
-        associateWithSequence = "2"
+        associateWithSequence = "4"
 )
+@ActionLayout(promptStyle = PromptStyle.AS_CONFIGURED, named = "with choices")
 @RequiredArgsConstructor
 public class PrimitiveByteHolder_updateReadOnlyPropertyWithChoices {
 
@@ -50,9 +53,9 @@ public class PrimitiveByteHolder_updateReadOnlyPropertyWithChoices {
                 .map(x -> byteOf(x))
                 .collect(Collectors.toList());
     }
-    public String disableAct() {
-        return "Not yet supported";
-    }
+    public boolean hideAct() {
+        return true;
+    } // TODO: choices doesn't seem to work for this datatype
 
     private static Byte byteOf(int x) {
         return (byte)x;

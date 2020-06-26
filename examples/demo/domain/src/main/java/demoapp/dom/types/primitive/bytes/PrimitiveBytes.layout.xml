@@ -21,6 +21,9 @@
 				<bs3:col span="12">
 					<cpt:collection id="entities"/>
 				</bs3:col>
+				<bs3:col span="12">
+					<cpt:action id="openViewModel"/>
+				</bs3:col>
 			</bs3:row>
 			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
 		</bs3:col>

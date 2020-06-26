@@ -18,22 +18,22 @@
  */
 package demoapp.dom.types.primitive.bytes.holder;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.MemberOrder;
 
 import lombok.RequiredArgsConstructor;
 
 
-@Action(
-        semantics = SemanticsOf.SAFE
-)
+//@Property()
+//@PropertyLayout( navigable = Navigable.PARENT, describedAs = "navigable=PARENT") // TODO: doesn't seem to do anything
 @RequiredArgsConstructor
-public class PrimitiveByteHolder_actionReturning {
+public class PrimitiveByteHolder_mixinPropertyNavigable {
 
     private final PrimitiveByteHolder primitiveByteHolder;
 
-    public byte act() {
+    @MemberOrder(name = "contributed", sequence = "1")
+    public byte prop() {
         return primitiveByteHolder.getReadOnlyProperty();
     }
+
 
 }
