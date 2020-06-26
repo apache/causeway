@@ -20,9 +20,15 @@ package org.apache.isis.core.metamodel.interactions.managed;
 
 import java.util.Optional;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.applib.services.routing.RoutingService;
 import org.apache.isis.core.commons.collections.Can;
 import org.apache.isis.core.commons.internal.base._Either;
+import org.apache.isis.core.commons.internal.base._Lazy;
+import org.apache.isis.core.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -90,15 +96,57 @@ public final class ManagedAction extends ManagedMember {
             return _Either.left(ManagedObject.empty(action.getReturnType()));
         }
         
-        actionResult
-        .getSpecification()
-        .getMetaModelContext()
-        .getServiceInjector()
-        .injectServicesInto(actionResult.getPojo());
+        val resultPojo = actionResult.getPojo();
+
+        //TODO same logic is in wkt's ActionModel, ultimately we want wkt to use this (common) one 
+        val resultAdapter = getRoutingServices().stream()
+                .filter(routingService->routingService.canRoute(resultPojo))
+                .map(routingService->routingService.route(resultPojo))
+                .filter(_NullSafe::isPresent)
+                .map(this::toManagedObject)
+                .filter(_NullSafe::isPresent)
+                .findFirst()
+                .orElse(actionResult);
         
-        return _Either.left(actionResult);
+        // resolve injection-points for the result
+        getServiceInjector().injectServicesInto(resultAdapter.getPojo());
+        
+        //XXX are we sure in case of entities, that these are attached?
+        
+        return _Either.left(resultAdapter);
         
     }
+    
+    // -- POJO WRAPPING
+    
+    private ManagedObject toManagedObject(Object pojo) {
+        return ManagedObject.of(mmc().getSpecificationLoader()::loadSpecification, pojo); 
+    }
+    
+    // -- ACTION RESULT ROUTING
+    
+    private Can<RoutingService> getRoutingServices() {
+        return routingServices.get();
+    }
 
+    private final _Lazy<Can<RoutingService>> routingServices = _Lazy.threadSafe(this::lookupRoutingServices);
+    
+    private Can<RoutingService> lookupRoutingServices() {
+        return getServiceRegistry().select(RoutingService.class);
+    }
+    
+    // -- SERVICES
+    
+    private MetaModelContext mmc() {
+        return getAction().getMetaModelContext();
+    }
+    
+    private ServiceInjector getServiceInjector() {
+        return mmc().getServiceInjector();
+    }
+    
+    private ServiceRegistry getServiceRegistry() {
+        return mmc().getServiceRegistry();
+    }
 
 }
