@@ -134,7 +134,7 @@ public class UiGridLayout {
         }
         
         for(val collectionData : bS3Col.getCollections()) {
-            visitor.onCollection(uiCol, collectionData);    
+            visitor.onCollection(uiCol, collectionData);
         }
         
     }
@@ -156,7 +156,7 @@ public class UiGridLayout {
     private <C, T> void visitFieldSet(FieldSet cptFieldSet, C container, Visitor<C, T> visitor) {
         val uiFieldSet = visitor.newFieldSet(container, cptFieldSet);
         for(val propertyData: cptFieldSet.getProperties()) { 
-            visitor.onProperty(uiFieldSet, propertyData);         
+            visitor.onProperty(uiFieldSet, propertyData);    
         }
     }
     

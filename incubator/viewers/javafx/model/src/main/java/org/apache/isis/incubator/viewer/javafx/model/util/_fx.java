@@ -32,6 +32,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -43,6 +44,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 @UtilityClass
 public final class _fx {
@@ -55,6 +58,11 @@ public final class _fx {
     }
 
     // -- COMPONENT FACTORIES
+    
+    public static <T extends Node> T add(Pane container, T component) {
+        container.getChildren().add(component);
+        return component;
+    }
 
     public static Label newLabel(Pane container, String label) {
         val component = new Label(label);
@@ -161,6 +169,23 @@ public final class _fx {
         component.setVgap(10);
         component.setPadding(new Insets(25, 25, 25, 25));    
         return component;
+    }
+    
+    public static void toolbarLayout(HBox component) {
+        component.setPadding(new Insets(15, 12, 15, 12));
+        component.setSpacing(10);
+    }
+    
+    public static void h1(Labeled component) {
+        component.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+    }
+    
+    public static void h2(Labeled component) {
+        component.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+    }
+    
+    public static void h3(Labeled component) {
+        component.setFont(Font.font("Verdana", FontWeight.NORMAL, 17));
     }
     
 
