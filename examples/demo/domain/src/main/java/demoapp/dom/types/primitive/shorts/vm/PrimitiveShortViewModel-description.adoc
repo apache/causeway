@@ -1,0 +1,36 @@
+JAXB supports `short` out-of-the-box, so no special annotations are required.
+
+[source,java]
+----
+@XmlRootElement(name = "demo.PrimitiveShortViewModel")
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
+@DomainObject(
+        nature=Nature.VIEW_MODEL,
+        objectType = "demo.PrimitiveShortViewModel"
+)
+@lombok.NoArgsConstructor                               // <.>
+public class PrimitiveShortViewModel
+        implements HasAsciiDocDescription,
+                   PrimitiveShortHolder {
+
+    public PrimitiveShortViewModel(short initialValue) {  // <.>
+        // ...
+    }
+
+    @Title(prepend = "short (primitive) view model: ")
+    @Getter @Setter
+    private short readOnlyProperty;                      // <.>
+
+    @Getter @Setter
+    private short readOnlyProperty2;
+
+    @Getter @Setter
+    @Property(editing = Editing.ENABLED)
+    private short readWriteProperty;
+
+}
+----
+<.> a no-arg constructor is required by JAXB
+<.> as a convenience
+<.> no additional annotations required.

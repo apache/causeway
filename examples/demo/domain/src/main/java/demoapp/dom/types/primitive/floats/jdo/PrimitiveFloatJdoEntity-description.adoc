@@ -1,0 +1,30 @@
+JDO supports `float` out-of-the-box, so no special annotations are required.
+
+[source,java]
+----
+@PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
+@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
+@DomainObject(
+        objectType = "demo.PrimitiveFloatJdoEntity"
+)
+public class PrimitiveFloatJdoEntity
+    implements HasAsciiDocDescription,   PrimitiveFloatHolder {          // <.>
+
+    public PrimitiveFloatJdoEntity(float initialValue) { ... }            // <.>
+
+    @Title(prepend = "float (primitive) JDO entity: ")
+    @Getter @Setter
+    private float readOnlyProperty;                                      // <.>
+
+    @Getter @Setter
+    private float readOnlyProperty2;
+
+    @Getter @Setter
+    @Property(editing = Editing.ENABLED)
+    private float readWriteProperty;
+
+}
+----
+<.> a no-arg constructor is introduced by JDO enhancer
+<.> as a convenience
+<.> no additional annotations required.

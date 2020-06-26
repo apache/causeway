@@ -1,0 +1,36 @@
+JAXB supports `float` out-of-the-box, so no special annotations are required.
+
+[source,java]
+----
+@XmlRootElement(name = "demo.PrimitiveFloatViewModel")
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
+@DomainObject(
+        nature=Nature.VIEW_MODEL,
+        objectType = "demo.PrimitiveFloatViewModel"
+)
+@lombok.NoArgsConstructor                               // <.>
+public class PrimitiveFloatViewModel
+        implements HasAsciiDocDescription,
+                   PrimitiveFloatHolder {
+
+    public PrimitiveFloatViewModel(float initialValue) {  // <.>
+        // ...
+    }
+
+    @Title(prepend = "float (primitive) view model: ")
+    @Getter @Setter
+    private float readOnlyProperty;                      // <.>
+
+    @Getter @Setter
+    private float readOnlyProperty2;
+
+    @Getter @Setter
+    @Property(editing = Editing.ENABLED)
+    private float readWriteProperty;
+
+}
+----
+<.> a no-arg constructor is required by JAXB
+<.> as a convenience
+<.> no additional annotations required.

@@ -1,0 +1,31 @@
+JDO package demoapp.dom.types.primitive.booleans
+`boolean` out-of-the-box, so no special annotations are required.
+
+[source,java]
+----
+@PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
+@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
+@DomainObject(
+        objectType = "demo.PrimitiveBooleanJdoEntity"
+)
+public class PrimitiveBooleanJdoEntity
+    implements HasAsciiDocDescription,   PrimitiveBooleanHolder {          // <.>
+
+    public PrimitiveBooleanJdoEntity(boolean initialValue) { ... }            // <.>
+
+    @Title(prepend = "boolean (primitive) JDO entity: ")
+    @Getter @Setter
+    private boolean readOnlyProperty;                                      // <.>
+
+    @Getter @Setter
+    private boolean readOnlyProperty2;
+
+    @Getter @Setter
+    @Property(editing = Editing.ENABLED)
+    private boolean readWriteProperty;
+
+}
+----
+<.> a no-arg constructor is introduced by JDO enhancer
+<.> as a convenience
+<.> no additional annotations required.

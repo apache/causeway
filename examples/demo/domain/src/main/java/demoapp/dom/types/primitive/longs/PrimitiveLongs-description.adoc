@@ -1,0 +1,129 @@
+The framework has built-in support for all of the primitive data types, including `long`.
+
+From here you can:
+
+* navigate to an entity that uses the `long` datatype
+* open a view model that uses the `long` datatype
+
+Because `long` is a primitive value, the properties on these domain objects are mandatory.
+
+== Common interface
+
+These objects both implement a common interface, `PrimitiveLongHolder`:
+
+[source,java]
+----
+public interface PrimitiveLongHolder {
+
+    long getReadOnlyProperty();
+    void setReadOnlyProperty(long c);
+
+    long getReadOnlyProperty2();
+    void setReadOnlyProperty2(long c);
+
+    long getReadWriteProperty();
+    void setReadWriteProperty(long c);
+
+    @MemberOrder(name = "label-positions", sequence = "1")
+    @Property
+    @PropertyLayout(labelPosition = LabelPosition.LEFT, describedAs = "labelPosition=LEFT", hidden = Where.ALL_TABLES)
+    default long getReadOnlyPropertyDerivedLabelPositionLeft() { return getReadOnlyProperty(); }
+
+    @MemberOrder(name = "label-positions", sequence = "2")
+    @Property
+    @PropertyLayout(labelPosition = LabelPosition.TOP, describedAs = "labelPosition=TOP", hidden = Where.ALL_TABLES)
+    default long getReadOnlyPropertyDerivedLabelPositionTop() { return getReadOnlyProperty(); }
+
+    @MemberOrder(name = "label-positions", sequence = "3")
+    @Property
+    @PropertyLayout(labelPosition = LabelPosition.RIGHT, describedAs = "labelPosition=RIGHT", hidden = Where.ALL_TABLES)
+    default long getReadOnlyPropertyDerivedLabelPositionRight() { return getReadOnlyProperty(); }
+
+    @MemberOrder(name = "label-positions", sequence = "4")
+    @Property
+    @PropertyLayout(labelPosition = LabelPosition.NONE, describedAs = "labelPosition=NONE", hidden = Where.ALL_TABLES)
+    default long getReadOnlyPropertyDerivedLabelPositionNone() { return getReadOnlyProperty(); }
+
+}
+----
+
+The default methods have annotations that automatically inherited.
+Using `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
+
+
+== Mixin actions
+
+A number of mixin actions contribute through this interface, demonstrate the use of `long` as a parameter and as a return type.
+For example:
+
+* the `updateReadOnlyProperty` action is:
++
+[source,java]
+----
+@Action(
+        semantics = SemanticsOf.IDEMPOTENT,
+        associateWith = "readOnlyProperty",
+        associateWithSequence = "1"
+)
+@RequiredArgsConstructor
+public class PrimitiveLongHolder_updateReadOnlyProperty {
+
+    private final PrimitiveLongHolder primitiveLongHolder;
+
+    public PrimitiveLongHolder act(long newValue) {
+        primitiveLongHolder.setReadOnlyProperty(newValue);
+        return primitiveLongHolder;
+    }
+    public long default0Act() {
+        return primitiveLongHolder.getReadOnlyProperty();
+    }
+}
+----
++
+There are a number of variants of this action, to demonstrate different prompt layouts.
+
+* the `actionReturning` action is:
++
+[source,java]
+----
+@Action(
+        semantics = SemanticsOf.SAFE,
+        associateWith = "readOnlyProperty",
+        associateWithSequence = "3"
+)
+@RequiredArgsConstructor
+public class PrimitiveLongHolder_actionReturning {
+
+    private final PrimitiveLongHolder primitiveLongHolder;
+
+    public long act() {
+        return primitiveLongHolder.getReadOnlyProperty();
+    }
+}
+----
+
+== Mixin properties
+
+We also use the interface to contribute a number of mixin properties:
+
+* the `mixinPropertyWithCssClass` property:
++
+[source,java]
+----
+@Property()
+@PropertyLayout(cssClass = "red", describedAs = "cssClass = \"red\" ")
+@RequiredArgsConstructor
+public class PrimitiveLongHolder_mixinPropertyWithCssClass {
+
+    private final PrimitiveLongHolder primitiveLongHolder;
+
+    @MemberOrder(name = "contributed", sequence = "1")
+    public long prop() {
+        return primitiveLongHolder.getReadOnlyProperty();
+    }
+}
+----
++
+TIP: the styling is provided from the `application.css` static resource.
+
+

@@ -1,0 +1,129 @@
+The framework has built-in support for all of the primitive data types, including `short`.
+
+From here you can:
+
+* navigate to an entity that uses the `short` datatype
+* open a view model that uses the `short` datatype
+
+Because `short` is a primitive value, the properties on these domain objects are mandatory.
+
+== Common interface
+
+These objects both implement a common interface, `PrimitiveShortHolder`:
+
+[source,java]
+----
+public interface PrimitiveShortHolder {
+
+    short getReadOnlyProperty();
+    void setReadOnlyProperty(short c);
+
+    short getReadOnlyProperty2();
+    void setReadOnlyProperty2(short c);
+
+    short getReadWriteProperty();
+    void setReadWriteProperty(short c);
+
+    @MemberOrder(name = "label-positions", sequence = "1")
+    @Property
+    @PropertyLayout(labelPosition = LabelPosition.LEFT, describedAs = "labelPosition=LEFT", hidden = Where.ALL_TABLES)
+    default short getReadOnlyPropertyDerivedLabelPositionLeft() { return getReadOnlyProperty(); }
+
+    @MemberOrder(name = "label-positions", sequence = "2")
+    @Property
+    @PropertyLayout(labelPosition = LabelPosition.TOP, describedAs = "labelPosition=TOP", hidden = Where.ALL_TABLES)
+    default short getReadOnlyPropertyDerivedLabelPositionTop() { return getReadOnlyProperty(); }
+
+    @MemberOrder(name = "label-positions", sequence = "3")
+    @Property
+    @PropertyLayout(labelPosition = LabelPosition.RIGHT, describedAs = "labelPosition=RIGHT", hidden = Where.ALL_TABLES)
+    default short getReadOnlyPropertyDerivedLabelPositionRight() { return getReadOnlyProperty(); }
+
+    @MemberOrder(name = "label-positions", sequence = "4")
+    @Property
+    @PropertyLayout(labelPosition = LabelPosition.NONE, describedAs = "labelPosition=NONE", hidden = Where.ALL_TABLES)
+    default short getReadOnlyPropertyDerivedLabelPositionNone() { return getReadOnlyProperty(); }
+
+}
+----
+
+The default methods have annotations that automatically inherited.
+Using `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
+
+
+== Mixin actions
+
+A number of mixin actions contribute through this interface, demonstrate the use of `short` as a parameter and as a return type.
+For example:
+
+* the `updateReadOnlyProperty` action is:
++
+[source,java]
+----
+@Action(
+        semantics = SemanticsOf.IDEMPOTENT,
+        associateWith = "readOnlyProperty",
+        associateWithSequence = "1"
+)
+@RequiredArgsConstructor
+public class PrimitiveShortHolder_updateReadOnlyProperty {
+
+    private final PrimitiveShortHolder primitiveShortHolder;
+
+    public PrimitiveShortHolder act(short newValue) {
+        primitiveShortHolder.setReadOnlyProperty(newValue);
+        return primitiveShortHolder;
+    }
+    public short default0Act() {
+        return primitiveShortHolder.getReadOnlyProperty();
+    }
+}
+----
++
+There are a number of variants of this action, to demonstrate different prompt layouts.
+
+* the `actionReturning` action is:
++
+[source,java]
+----
+@Action(
+        semantics = SemanticsOf.SAFE,
+        associateWith = "readOnlyProperty",
+        associateWithSequence = "3"
+)
+@RequiredArgsConstructor
+public class PrimitiveShortHolder_actionReturning {
+
+    private final PrimitiveShortHolder primitiveShortHolder;
+
+    public short act() {
+        return primitiveShortHolder.getReadOnlyProperty();
+    }
+}
+----
+
+== Mixin properties
+
+We also use the interface to contribute a number of mixin properties:
+
+* the `mixinPropertyWithCssClass` property:
++
+[source,java]
+----
+@Property()
+@PropertyLayout(cssClass = "red", describedAs = "cssClass = \"red\" ")
+@RequiredArgsConstructor
+public class PrimitiveShortHolder_mixinPropertyWithCssClass {
+
+    private final PrimitiveShortHolder primitiveShortHolder;
+
+    @MemberOrder(name = "contributed", sequence = "1")
+    public short prop() {
+        return primitiveShortHolder.getReadOnlyProperty();
+    }
+}
+----
++
+TIP: the styling is provided from the `application.css` static resource.
+
+

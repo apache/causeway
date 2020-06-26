@@ -1,0 +1,129 @@
+The framework has built-in support for all of the primitive data types, including `int`.
+
+From here you can:
+
+* navigate to an entity that uses the `int` datatype
+* open a view model that uses the `int` datatype
+
+Because `int` is a primitive value, the properties on these domain objects are mandatory.
+
+== Common interface
+
+These objects both implement a common interface, `PrimitiveIntHolder`:
+
+[source,java]
+----
+public interface PrimitiveIntHolder {
+
+    int getReadOnlyProperty();
+    void setReadOnlyProperty(int c);
+
+    int getReadOnlyProperty2();
+    void setReadOnlyProperty2(int c);
+
+    int getReadWriteProperty();
+    void setReadWriteProperty(int c);
+
+    @MemberOrder(name = "label-positions", sequence = "1")
+    @Property
+    @PropertyLayout(labelPosition = LabelPosition.LEFT, describedAs = "labelPosition=LEFT", hidden = Where.ALL_TABLES)
+    default int getReadOnlyPropertyDerivedLabelPositionLeft() { return getReadOnlyProperty(); }
+
+    @MemberOrder(name = "label-positions", sequence = "2")
+    @Property
+    @PropertyLayout(labelPosition = LabelPosition.TOP, describedAs = "labelPosition=TOP", hidden = Where.ALL_TABLES)
+    default int getReadOnlyPropertyDerivedLabelPositionTop() { return getReadOnlyProperty(); }
+
+    @MemberOrder(name = "label-positions", sequence = "3")
+    @Property
+    @PropertyLayout(labelPosition = LabelPosition.RIGHT, describedAs = "labelPosition=RIGHT", hidden = Where.ALL_TABLES)
+    default int getReadOnlyPropertyDerivedLabelPositionRight() { return getReadOnlyProperty(); }
+
+    @MemberOrder(name = "label-positions", sequence = "4")
+    @Property
+    @PropertyLayout(labelPosition = LabelPosition.NONE, describedAs = "labelPosition=NONE", hidden = Where.ALL_TABLES)
+    default int getReadOnlyPropertyDerivedLabelPositionNone() { return getReadOnlyProperty(); }
+
+}
+----
+
+The default methods have annotations that automatically inherited.
+Using `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
+
+
+== Mixin actions
+
+A number of mixin actions contribute through this interface, demonstrate the use of `int` as a parameter and as a return type.
+For example:
+
+* the `updateReadOnlyProperty` action is:
++
+[source,java]
+----
+@Action(
+        semantics = SemanticsOf.IDEMPOTENT,
+        associateWith = "readOnlyProperty",
+        associateWithSequence = "1"
+)
+@RequiredArgsConstructor
+public class PrimitiveIntHolder_updateReadOnlyProperty {
+
+    private final PrimitiveIntHolder primitiveIntHolder;
+
+    public PrimitiveIntHolder act(int newValue) {
+        primitiveIntHolder.setReadOnlyProperty(newValue);
+        return primitiveIntHolder;
+    }
+    public int default0Act() {
+        return primitiveIntHolder.getReadOnlyProperty();
+    }
+}
+----
++
+There are a number of variants of this action, to demonstrate different prompt layouts.
+
+* the `actionReturning` action is:
++
+[source,java]
+----
+@Action(
+        semantics = SemanticsOf.SAFE,
+        associateWith = "readOnlyProperty",
+        associateWithSequence = "3"
+)
+@RequiredArgsConstructor
+public class PrimitiveIntHolder_actionReturning {
+
+    private final PrimitiveIntHolder primitiveIntHolder;
+
+    public int act() {
+        return primitiveIntHolder.getReadOnlyProperty();
+    }
+}
+----
+
+== Mixin properties
+
+We also use the interface to contribute a number of mixin properties:
+
+* the `mixinPropertyWithCssClass` property:
++
+[source,java]
+----
+@Property()
+@PropertyLayout(cssClass = "red", describedAs = "cssClass = \"red\" ")
+@RequiredArgsConstructor
+public class PrimitiveIntHolder_mixinPropertyWithCssClass {
+
+    private final PrimitiveIntHolder primitiveIntHolder;
+
+    @MemberOrder(name = "contributed", sequence = "1")
+    public int prop() {
+        return primitiveIntHolder.getReadOnlyProperty();
+    }
+}
+----
++
+TIP: the styling is provided from the `application.css` static resource.
+
+

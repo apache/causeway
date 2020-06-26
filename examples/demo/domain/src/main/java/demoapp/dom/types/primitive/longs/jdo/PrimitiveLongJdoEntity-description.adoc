@@ -1,0 +1,30 @@
+JDO supports `long` out-of-the-box, so no special annotations are required.
+
+[source,java]
+----
+@PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
+@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
+@DomainObject(
+        objectType = "demo.PrimitiveLongJdoEntity"
+)
+public class PrimitiveLongJdoEntity
+    implements HasAsciiDocDescription,   PrimitiveLongHolder {          // <.>
+
+    public PrimitiveLongJdoEntity(long initialValue) { ... }            // <.>
+
+    @Title(prepend = "long (primitive) JDO entity: ")
+    @Getter @Setter
+    private long readOnlyProperty;                                      // <.>
+
+    @Getter @Setter
+    private long readOnlyProperty2;
+
+    @Getter @Setter
+    @Property(editing = Editing.ENABLED)
+    private long readWriteProperty;
+
+}
+----
+<.> a no-arg constructor is introduced by JDO enhancer
+<.> as a convenience
+<.> no additional annotations required.
