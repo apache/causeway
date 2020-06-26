@@ -8,19 +8,19 @@
         <mb3:menu>
             <mb3:named>View Models</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="demoapp.ViewModels" id="openStateful"/>
-                <mb3:serviceAction objectType="demoapp.ViewModels" id="openStatefulRefsEntity"/>
+                <mb3:serviceAction objectType="demo.ViewModels" id="openStateful"/>
+                <mb3:serviceAction objectType="demo.ViewModels" id="openStatefulRefsEntity"/>
             </mb3:section>
         </mb3:menu>
 
         <mb3:menu>
-            <mb3:named>Featured Types</mb3:named>
+            <mb3:named>Data Types</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="demo.FeaturedTypesMenu" id="primitiveBytes"/>
-                <mb3:serviceAction objectType="demo.FeaturedTypesMenu" id="primitiveChars"/>
+                <mb3:serviceAction objectType="demo.DataTypesMenu" id="primitiveBytes"/>
+                <mb3:serviceAction objectType="demo.DataTypesMenu" id="primitiveChars"/>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="demo.FeaturedTypesMenu" id="text">
+                <mb3:serviceAction objectType="demo.DataTypesMenu" id="text">
                     <cpt:named>Text</cpt:named>
                 </mb3:serviceAction>
                 <mb3:serviceAction objectType="demo.FeaturedTypesMenu" id="primitives">

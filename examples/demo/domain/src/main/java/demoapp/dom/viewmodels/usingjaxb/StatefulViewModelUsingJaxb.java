@@ -44,13 +44,13 @@ import lombok.val;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
-@XmlRootElement(name = "demoapp.StatefulViewModelUsingJaxb")
+@XmlRootElement(name = "demo.StatefulViewModelUsingJaxb")
 @XmlType(
 )
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL
-        , objectType = "demoapp.StatefulViewModelUsingJaxb"
+        , objectType = "demo.StatefulViewModelUsingJaxb"
 )
 public class StatefulViewModelUsingJaxb implements HasAsciiDocDescription {
 
@@ -63,7 +63,7 @@ public class StatefulViewModelUsingJaxb implements HasAsciiDocDescription {
     @XmlElement
     private String message;
 
-    @XmlRootElement(name = "child")
+    @XmlRootElement(name = "demo.StatefulViewModelUsingJaxb.Child")
     @XmlType
     @XmlAccessorType(XmlAccessType.FIELD)
     @Data

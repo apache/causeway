@@ -37,12 +37,12 @@ import lombok.Setter;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.primitive.bytes.holder.PrimitiveByteHolder;
 
-@XmlRootElement(name = "demoapp.PrimitiveByteViewModel")
+@XmlRootElement(name = "demo.PrimitiveByteViewModel")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demoapp.PrimitiveByteViewModel"
+        objectType = "demo.PrimitiveByteViewModel"
 )
 @lombok.NoArgsConstructor
 public class PrimitiveByteViewModel

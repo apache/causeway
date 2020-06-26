@@ -42,14 +42,14 @@ import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
-@XmlRootElement(name = "demoapp.StatefulViewModelJaxbRefsEntity")
+@XmlRootElement(name = "demo.StatefulViewModelJaxbRefsEntity")
 @XmlType(
         propOrder = {"message", "favoriteChild", "children"}
 )
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL
-        , objectType = "demoapp.StatefulViewModelJaxbRefsEntity"
+        , objectType = "demo.StatefulViewModelJaxbRefsEntity"
 )
 public class StatefulViewModelJaxbRefsEntity implements HasAsciiDocDescription {
 

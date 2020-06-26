@@ -2,12 +2,12 @@ JAXB supports `char` out-of-the-box, so no special annotations are required.
 
 [source,java]
 ----
-@XmlRootElement(name = "demoapp.PrimitiveCharViewModel")
+@XmlRootElement(name = "demo.PrimitiveCharViewModel")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demoapp.PrimitiveCharViewModel"
+        objectType = "demo.PrimitiveCharViewModel"
 )
 @lombok.NoArgsConstructor                               // <.>
 public class PrimitiveCharViewModel

@@ -2,12 +2,12 @@ JAXB supports `byte` out-of-the-box, so no special annotations are required.
 
 [source,java]
 ----
-@XmlRootElement(name = "demoapp.PrimitiveByteViewModel")
+@XmlRootElement(name = "demo.PrimitiveByteViewModel")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demoapp.PrimitiveByteViewModel"
+        objectType = "demo.PrimitiveByteViewModel"
 )
 @lombok.NoArgsConstructor                               // <.>
 public class PrimitiveByteViewModel

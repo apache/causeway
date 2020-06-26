@@ -46,7 +46,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @DomainObject(
         nature=Nature.VIEW_MODEL
-        , objectType = "demoapp.Homepage"
+        , objectType = "demo.Homepage"
 )
 @HomePage
 public class DemoHomePage implements HasAsciiDocDescription {

@@ -5,7 +5,7 @@ JDO supports `byte` out-of-the-box, so no special annotations are required.
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demoapp.PrimitiveByteJdoEntity"
+        objectType = "demo.PrimitiveByteJdoEntity"
 )
 public class PrimitiveByteJdoEntity
     implements HasAsciiDocDescription,   PrimitiveByteHolder {          // <.>

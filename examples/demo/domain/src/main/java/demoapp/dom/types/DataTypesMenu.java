@@ -55,10 +55,10 @@ import demoapp.dom.types.text.TextDemo;
 import demoapp.dom.types.time.TemporalDemo;
 import demoapp.dom.types.uuid.UuidDemo;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.FeaturedTypesMenu")
-@DomainObjectLayout(named="Featured Types")
+@DomainService(nature=NatureOfService.VIEW, objectType = "demo.DataTypesMenu")
+@DomainObjectLayout(named="DataTypes")
 @Log4j2
-public class FeaturedTypesMenu {
+public class DataTypesMenu {
 
     @Inject private FactoryService factoryService;
 

@@ -39,7 +39,7 @@ import demoapp.dom.types.primitive.bytes.holder.PrimitiveByteHolder;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        objectType = "demoapp.PrimitiveByteJdoEntity"
+        objectType = "demo.PrimitiveByteJdoEntity"
 )
 public class PrimitiveByteJdoEntity
         implements HasAsciiDocDescription,

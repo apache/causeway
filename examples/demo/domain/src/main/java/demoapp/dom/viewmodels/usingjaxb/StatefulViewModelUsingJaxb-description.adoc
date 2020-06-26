@@ -7,12 +7,12 @@ The framework provides a number of ways to serialize this state, but the most fl
 
 [source,java]
 ----
-@XmlRootElement(name = "demoapp.DemoStatefulViewModel")     // <.>
+@XmlRootElement(name = "demo.DemoStatefulViewModel")     // <.>
 @XmlType                                                    // <.>
 @XmlAccessorType(XmlAccessType.FIELD)                       // <.>
 @DomainObject(
         nature=Nature.VIEW_MODEL
-        , objectType = "demoapp.DemoStatefulViewModel"
+        , objectType = "demo.DemoStatefulViewModel"
 )
 public class StatefulViewModelUsingJaxb implements HasAsciiDocDescription {
 

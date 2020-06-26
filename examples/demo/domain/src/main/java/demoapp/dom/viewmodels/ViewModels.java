@@ -28,7 +28,7 @@ import demoapp.dom.viewmodels.jaxbrefentity.StatefulViewModelJaxbRefsEntity;
 import demoapp.dom.viewmodels.usingjaxb.StatefulViewModelUsingJaxb;
 
 @DomainService(
-        objectType = "demoapp.ViewModels"
+        objectType = "demo.ViewModels"
 )
 public class ViewModels {
 

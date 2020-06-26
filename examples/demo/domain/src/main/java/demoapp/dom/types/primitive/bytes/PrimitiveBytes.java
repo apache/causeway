@@ -46,7 +46,7 @@ import demoapp.dom.types.primitive.bytes.vm.PrimitiveByteViewModel;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demoapp.PrimitiveBytes", editing=Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.PrimitiveBytes", editing=Editing.ENABLED)
 @Log4j2
 public class PrimitiveBytes implements HasAsciiDocDescription {
 

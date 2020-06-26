@@ -4,7 +4,7 @@ Apache Isis applications can nominate a view model to act as the home page, usin
 ----
 @DomainObject(
     nature=Nature.VIEW_MODEL,
-    objectType = "demoapp.Homepage"
+    objectType = "demo.Homepage"
 )
 @HomePage                                                       // <.>
 public class DemoHomePage {
