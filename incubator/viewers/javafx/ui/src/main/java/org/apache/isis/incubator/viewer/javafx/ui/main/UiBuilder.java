@@ -24,9 +24,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.core.commons.internal.debug._Probe;
+import org.apache.isis.core.runtime.events.iactn.IsisInteractionLifecycleEvent;
 import org.apache.isis.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
 import org.apache.isis.incubator.viewer.javafx.model.events.PrimaryStageReadyEvent;
 
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -36,20 +39,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 
 @Component
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class UiBuilder {
     
     private final ApplicationContext springContext;
     private final JavaFxViewerConfig viewerConfig;
-    
-    @Inject
-    public UiBuilder(
-            ApplicationContext springContext,
-            JavaFxViewerConfig viewerConfig) {
-        
-        this.viewerConfig = viewerConfig;
-        this.springContext = springContext;
-    }
+    private Scene scene;
 
     @EventListener(PrimaryStageReadyEvent.class)
     @SneakyThrows
@@ -64,6 +60,32 @@ public class UiBuilder {
         stage.setScene(scene);
         stage.setTitle(viewerConfig.getApplicationTitle());
         stage.show();
+        
+        this.scene = scene;
     }
+    
+    @EventListener(IsisInteractionLifecycleEvent.class)
+    public void onIsisInteractionLifecycleEvent(IsisInteractionLifecycleEvent event) {
+        if(scene==null) {
+            return;
+        }
+        switch(event.getEventType()) {
+        case HAS_STARTED:
+            //TODO this would be the place to indicate to the user, that a long running task has started  
+            _Probe.errOut("Interaction HAS_STARTED conversationId=%s", event.getConversationId());
+            //scene.getRoot().cursorProperty().set(Cursor.WAIT);
+            break;
+        case IS_ENDING:
+            //TODO this would be the place to indicate to the user, that a long running task has ended
+            _Probe.errOut("Interaction IS_ENDING conversationId=%s", event.getConversationId());
+            //scene.getRoot().cursorProperty().set(Cursor.DEFAULT);
+            break;
+        default:
+            break;
+        }
+        
+    }
+    
+    
 
 }

@@ -10,7 +10,6 @@ import lombok.val;
 
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 
 @RequiredArgsConstructor(staticName = "of")
@@ -26,7 +25,7 @@ public class ActionUiModelFx implements ActionUiModel<MenuItem, Node> {
     @Override
     public MenuItem createMenuUiComponent() {
         val actionMeta = getActionUiMetaModel();
-        return new Menu(actionMeta.getLabel());
+        return new MenuItem(actionMeta.getLabel());
         
     }
 

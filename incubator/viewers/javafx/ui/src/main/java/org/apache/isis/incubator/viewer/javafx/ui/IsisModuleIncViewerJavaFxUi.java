@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.incubator.viewer.javafx.model.events.IsisModuleIncViewerJavaFxModel;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentFactoryFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.other.FallbackFieldFactory;
+import org.apache.isis.incubator.viewer.javafx.ui.main.UiActionHandler;
 import org.apache.isis.incubator.viewer.javafx.ui.main.UiBuilder;
 import org.apache.isis.incubator.viewer.javafx.ui.main.UiController;
 import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
@@ -46,7 +47,8 @@ import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
         FallbackFieldFactory.class,
         
         // @Service's
-        UiComponentFactoryFx.class
+        UiComponentFactoryFx.class,
+        UiActionHandler.class,
 
         // @Mixin's
 })

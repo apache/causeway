@@ -114,6 +114,7 @@ public final class _fx {
     }
 
     public static TitledPane newTitledPane(Accordion container, String label) {
+        
         val component = new TitledPane();
         container.getPanes().add(component);
         component.setText(label);
@@ -145,6 +146,6 @@ public final class _fx {
         component.setPadding(new Insets(25, 25, 25, 25));    
         return component;
     }
-
+    
 
 }

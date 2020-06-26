@@ -33,6 +33,7 @@ public class IsisInteractionLifecycleEvent {
         FLUSH_REQUEST
     }
 
+    @Getter String conversationId;
     @Getter IsisInteraction isisInteraction;
     @Getter EventType eventType;
 
