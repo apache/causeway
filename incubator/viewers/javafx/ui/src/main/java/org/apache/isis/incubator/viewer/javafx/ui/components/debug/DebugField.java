@@ -55,7 +55,6 @@ public class DebugField extends CustomFieldFx<DebugUiModel> {
     @Override
     protected void setPresentationValue(DebugUiModel model) {
         this.model = model;
-        
         detailPane.setText(model.getSummaryText());
         
         val rowIndex = new LongAdder();

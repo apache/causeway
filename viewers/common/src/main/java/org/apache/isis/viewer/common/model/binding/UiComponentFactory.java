@@ -82,6 +82,12 @@ public interface UiComponentFactory<T> {
                     : false;
         }
         
+        public boolean isFeatureTypeInstanceOf(@Nullable Class<?> type) {
+            return type!=null
+                    ? type.isAssignableFrom(getFeatureType())
+                    : false;
+        }
+        
         /**
          * @param facetType
          * @return Whether there exists a facet for this feature, that is of the 

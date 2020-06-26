@@ -54,8 +54,7 @@ public class FallbackFieldFactory implements UiComponentHandlerFx {
     public Node handle(Request request) {
         
         val spec = request.getObjectFeature().getSpecification();
-        
-        val debugUiModel = DebugUiModel.of("type not handled")
+        val debugUiModel = DebugUiModel.of(spec.getCorrespondingClass().getSimpleName() + " type not handled")
         .withProperty("ObjectFeature.specification.fullIdentifier",  spec.getFullIdentifier())
         .withProperty("ObjectFeature.identifier",  request.getObjectFeature().getIdentifier().toString());
         
