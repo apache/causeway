@@ -152,6 +152,12 @@ public class ObjectViewVaa extends VerticalLayout {
             protected HasComponents newFieldSet(HasComponents container, FieldSet fieldSetData) {
 
                 container.add(new H2(fieldSetData.getName()));
+                
+                // handle associated actions
+                val actionBar = newActionPanel(container);
+                for(val actionData : fieldSetData.getActions()) {
+                    onAction(actionBar, actionData);
+                }
 
                 val uiFieldSet = new FormLayout();
                 container.add(uiFieldSet);
@@ -193,6 +199,13 @@ public class ObjectViewVaa extends VerticalLayout {
                     val uiProperty = uiComponentFactory
                             .componentFor(UiComponentFactory.Request.of(Where.OBJECT_FORMS, managedProperty));
                     container.add(uiProperty);
+                    
+                    // handle associated actions
+                    val actionBar = newActionPanel(container);
+                    for(val actionData : propertyData.getActions()) {
+                        onAction(actionBar, actionData);
+                    }
+                    
                 });
             }
 
@@ -206,6 +219,12 @@ public class ObjectViewVaa extends VerticalLayout {
                 .getManagedCollection()
                 .ifPresent(managedCollection -> {
                     container.add(new H3(managedCollection.getName()));
+                    
+                    // handle associated actions
+                    val actionBar = newActionPanel(container);
+                    for(val actionData : collectionData.getActions()) {
+                        onAction(actionBar, actionData);
+                    }
                     
                     val uiCollection = TableViewVaa.forManagedCollection(managedCollection);
                     container.add(uiCollection);
