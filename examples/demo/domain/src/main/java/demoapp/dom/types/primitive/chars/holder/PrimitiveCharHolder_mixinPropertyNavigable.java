@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PrimitiveCharHolder_mixinPropertyNavigable {
 
-    private final PrimitiveCharHolder primitiveCharHolder;
+    private final demoapp.dom.types.primitive.chars.holder.PrimitiveCharHolder primitiveCharHolder;
 
     @MemberOrder(name = "contributed", sequence = "1")
     public char prop() {

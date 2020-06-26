@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PrimitiveCharHolder_mixinPropertyNamedNotEscaped {
 
-    private final PrimitiveCharHolder primitiveCharHolder;
+    private final demoapp.dom.types.primitive.chars.holder.PrimitiveCharHolder primitiveCharHolder;
 
     @MemberOrder(name = "contributed", sequence = "3")
     public char prop() {

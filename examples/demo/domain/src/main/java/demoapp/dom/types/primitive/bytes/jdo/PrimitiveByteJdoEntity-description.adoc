@@ -12,7 +12,7 @@ public class PrimitiveByteJdoEntity
 
     public PrimitiveByteJdoEntity(byte initialValue) { ... }            // <.>
 
-    @Title
+    @Title(prepend = "byte (primitive) JDO entity: ")
     @Getter @Setter
     private byte readOnlyProperty;                                      // <.>
 

@@ -17,28 +17,34 @@
             <mb3:named>Data Types</mb3:named>
             <mb3:section>
                 <mb3:serviceAction objectType="demo.DataTypesMenu" id="primitiveBytes"/>
+                <mb3:serviceAction objectType="demo.DataTypesMenu" id="primitiveShorts"/>
+                <mb3:serviceAction objectType="demo.DataTypesMenu" id="primitiveInts"/>
+                <mb3:serviceAction objectType="demo.DataTypesMenu" id="primitiveLongs"/>
+                <mb3:serviceAction objectType="demo.DataTypesMenu" id="primitiveFloats"/>
+                <mb3:serviceAction objectType="demo.DataTypesMenu" id="primitiveDoubles"/>
                 <mb3:serviceAction objectType="demo.DataTypesMenu" id="primitiveChars"/>
+                <mb3:serviceAction objectType="demo.DataTypesMenu" id="primitiveBooleans"/>
             </mb3:section>
             <mb3:section>
                 <mb3:serviceAction objectType="demo.DataTypesMenu" id="text">
                     <cpt:named>Text</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="demo.FeaturedTypesMenu" id="primitives">
+                <mb3:serviceAction objectType="demo.DataTypesMenu" id="primitives">
                     <cpt:named>Primitives</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="demo.FeaturedTypesMenu" id="temporals">
+                <mb3:serviceAction objectType="demo.DataTypesMenu" id="temporals">
                     <cpt:named>Temporal Types</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="demo.FeaturedTypesMenu" id="uuid">
+                <mb3:serviceAction objectType="demo.DataTypesMenu" id="uuid">
                     <cpt:named>UUID Type</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="demo.FeaturedTypesMenu" id="blobs">
+                <mb3:serviceAction objectType="demo.DataTypesMenu" id="blobs">
                     <cpt:named>Blob Type</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="demo.FeaturedTypesMenu" id="clobs">
+                <mb3:serviceAction objectType="demo.DataTypesMenu" id="clobs">
                     <cpt:named>Clob Type</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="demo.FeaturedTypesMenu" id="markup">
+                <mb3:serviceAction objectType="demo.DataTypesMenu" id="markup">
                     <cpt:named>Markup Type (HTML)</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>

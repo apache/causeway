@@ -18,7 +18,7 @@ public class PrimitiveByteViewModel
         // ...
     }
 
-    @Title
+    @Title(prepend = "byte (primitive) view model: ")
     @Getter @Setter
     private byte readOnlyProperty;                      // <.>
 

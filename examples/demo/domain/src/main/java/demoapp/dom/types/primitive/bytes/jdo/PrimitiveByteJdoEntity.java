@@ -51,7 +51,7 @@ public class PrimitiveByteJdoEntity
         this.readWriteProperty = initialValue;
     }
 
-    @Title
+    @Title(prepend = "byte (primitive) JDO entity: ")
     @Getter @Setter
     private byte readOnlyProperty;
 

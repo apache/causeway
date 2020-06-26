@@ -12,7 +12,7 @@ public class PrimitiveCharJdoEntity
 
     public PrimitiveCharJdoEntity(char initialValue) { ... }            // <.>
 
-    @Title
+    @Title(prepend = "char (primitive) JDO entity: ")
     @Getter @Setter
     private char readOnlyProperty;                                      // <.>
 

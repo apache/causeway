@@ -49,8 +49,14 @@ import demoapp.dom.types.blob.BlobDemo;
 import demoapp.dom.types.clob.ClobDemo;
 import demoapp.dom.types.markup.MarkupDemo;
 import demoapp.dom.types.primitive.PrimitivesDemo;
+import demoapp.dom.types.primitive.booleans.PrimitiveBooleans;
 import demoapp.dom.types.primitive.bytes.PrimitiveBytes;
 import demoapp.dom.types.primitive.chars.PrimitiveChars;
+import demoapp.dom.types.primitive.doubles.PrimitiveDoubles;
+import demoapp.dom.types.primitive.floats.PrimitiveFloats;
+import demoapp.dom.types.primitive.ints.PrimitiveInts;
+import demoapp.dom.types.primitive.longs.PrimitiveLongs;
+import demoapp.dom.types.primitive.shorts.PrimitiveShorts;
 import demoapp.dom.types.text.TextDemo;
 import demoapp.dom.types.time.TemporalDemo;
 import demoapp.dom.types.uuid.UuidDemo;
@@ -161,6 +167,43 @@ public class DataTypesMenu {
         return demo;
     }
 
+
+    @Action
+    @ActionLayout(cssClassFa="fa-hashtag")
+    public PrimitiveBytes primitiveBytes(){
+        return new PrimitiveBytes();
+    }
+
+    @Action
+    @ActionLayout(cssClassFa="fa-hashtag")
+    public PrimitiveShorts primitiveShorts(){
+        return new PrimitiveShorts();
+    }
+
+    @Action
+    @ActionLayout(cssClassFa="fa-hashtag")
+    public PrimitiveInts primitiveInts(){
+        return new PrimitiveInts();
+    }
+
+    @Action
+    @ActionLayout(cssClassFa="fa-hashtag")
+    public PrimitiveLongs primitiveLongs(){
+        return new PrimitiveLongs();
+    }
+
+    @Action
+    @ActionLayout(cssClassFa="fa-hashtag")
+    public PrimitiveFloats primitiveFloats(){
+        return new PrimitiveFloats();
+    }
+
+    @Action
+    @ActionLayout(cssClassFa="fa-hashtag")
+    public PrimitiveDoubles primitiveDoubles(){
+        return new PrimitiveDoubles();
+    }
+
     @Action
     @ActionLayout(cssClassFa="fa-hashtag")
     public PrimitiveChars primitiveChars(){
@@ -169,8 +212,9 @@ public class DataTypesMenu {
 
     @Action
     @ActionLayout(cssClassFa="fa-hashtag")
-    public PrimitiveBytes primitiveBytes(){
-        return new PrimitiveBytes();
+    public PrimitiveBooleans primitiveBooleans(){
+        return new PrimitiveBooleans();
     }
+
 
 }

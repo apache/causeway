@@ -55,7 +55,7 @@ public class PrimitiveByteViewModel
         this.readWriteProperty = initialValue;
     }
 
-    @Title
+    @Title(prepend = "byte (primitive) view model: ")
     @Getter @Setter
     private byte readOnlyProperty;
 

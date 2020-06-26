@@ -47,7 +47,7 @@ import demoapp.dom.types.primitive.chars.holder.PrimitiveCharHolder;
 @lombok.NoArgsConstructor
 public class PrimitiveCharViewModel
         implements HasAsciiDocDescription,
-                   PrimitiveCharHolder {
+        PrimitiveCharHolder {
 
     public PrimitiveCharViewModel(char initialValue) {
         this.readOnlyProperty = initialValue;
@@ -55,7 +55,7 @@ public class PrimitiveCharViewModel
         this.readWriteProperty = initialValue;
     }
 
-    @Title
+    @Title(prepend = "char (primitive) view model: ")
     @Getter @Setter
     private char readOnlyProperty;
 

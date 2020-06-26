@@ -60,7 +60,7 @@ public class PrimitiveBytes implements HasAsciiDocDescription {
         return new PrimitiveByteViewModel(initialValue);
     }
     public byte default0OpenViewModel() {
-        return (byte)1;
+        return (byte)123;
     }
 
     @Collection

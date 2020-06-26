@@ -43,7 +43,7 @@ import demoapp.dom.types.primitive.chars.holder.PrimitiveCharHolder;
 )
 public class PrimitiveCharJdoEntity
         implements HasAsciiDocDescription,
-                   PrimitiveCharHolder {
+        PrimitiveCharHolder {
 
     public PrimitiveCharJdoEntity(char initialValue) {
         this.readOnlyProperty = initialValue;
@@ -51,7 +51,7 @@ public class PrimitiveCharJdoEntity
         this.readWriteProperty = initialValue;
     }
 
-    @Title
+    @Title(prepend = "char (primitive) JDO entity: ")
     @Getter @Setter
     private char readOnlyProperty;
 

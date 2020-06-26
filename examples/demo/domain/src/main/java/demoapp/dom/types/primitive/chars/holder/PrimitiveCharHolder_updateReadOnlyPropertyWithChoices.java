@@ -39,9 +39,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PrimitiveCharHolder_updateReadOnlyPropertyWithChoices {
 
-    private final PrimitiveCharHolder primitiveCharHolder;
+    private final demoapp.dom.types.primitive.chars.holder.PrimitiveCharHolder primitiveCharHolder;
 
-    public PrimitiveCharHolder act(char newValue) {
+    public demoapp.dom.types.primitive.chars.holder.PrimitiveCharHolder act(char newValue) {
         primitiveCharHolder.setReadOnlyProperty(newValue);
         return primitiveCharHolder;
     }
