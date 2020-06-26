@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.primitive;
+package demoapp.dom.types.wrapper;
 
 import java.util.List;
 
@@ -45,7 +45,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.Primitives", editing=Editing.ENABLED)
 @Log4j2
-public class PrimitivesDemo implements HasAsciiDocDescription {
+public class WrapperDemo implements HasAsciiDocDescription {
 
     public String title() {
         return "Primitives Demo";
@@ -63,7 +63,7 @@ public class PrimitivesDemo implements HasAsciiDocDescription {
     }
     
     @Action
-    public PrimitivesDemo calculateNull() {
+    public WrapperDemo calculateNull() {
         return null;
     }
     

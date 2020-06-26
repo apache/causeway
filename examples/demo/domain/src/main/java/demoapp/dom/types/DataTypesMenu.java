@@ -32,6 +32,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
@@ -48,7 +49,7 @@ import lombok.extern.log4j.Log4j2;
 import demoapp.dom.types.blob.BlobDemo;
 import demoapp.dom.types.clob.ClobDemo;
 import demoapp.dom.types.markup.MarkupDemo;
-import demoapp.dom.types.primitive.PrimitivesDemo;
+import demoapp.dom.types.wrapper.WrapperDemo;
 import demoapp.dom.types.primitive.booleans.PrimitiveBooleans;
 import demoapp.dom.types.primitive.bytes.PrimitiveBytes;
 import demoapp.dom.types.primitive.chars.PrimitiveChars;
@@ -82,10 +83,10 @@ public class DataTypesMenu {
         return demo;
     }
     
-    @Action
+    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-hashtag")
-    public PrimitivesDemo primitives(){
-        val demo = factoryService.viewModel(PrimitivesDemo.class);
+    public WrapperDemo wrappers(){
+        val demo = factoryService.viewModel(WrapperDemo.class);
 
         demo.setJavaLangByte(Byte.MAX_VALUE);
         demo.setJavaLangShort(Short.MAX_VALUE);
@@ -98,7 +99,7 @@ public class DataTypesMenu {
         return demo;
     }
 
-    @Action
+    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-clock")
     public TemporalDemo temporals(){
         val demo = factoryService.viewModel(TemporalDemo.class);
@@ -114,7 +115,7 @@ public class DataTypesMenu {
         return demo;
     }
 
-    @Action
+    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-at")
     public UuidDemo uuid(){
         val demo = factoryService.viewModel(UuidDemo.class);
@@ -122,7 +123,7 @@ public class DataTypesMenu {
         return demo;
     }
 
-    @Action
+    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-cloud")
     public BlobDemo blobs(){
         val demo = factoryService.viewModel(BlobDemo.class);
@@ -136,8 +137,8 @@ public class DataTypesMenu {
 
         return demo;
     }
-    
-    @Action
+
+    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-cloud")
     public ClobDemo clobs(){
         val demo = factoryService.viewModel(ClobDemo.class);
@@ -151,8 +152,8 @@ public class DataTypesMenu {
 
         return demo;
     }
-    
-    @Action
+
+    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-code")
     public MarkupDemo markup(){
         val demo = factoryService.viewModel(MarkupDemo.class);
@@ -168,49 +169,49 @@ public class DataTypesMenu {
     }
 
 
-    @Action
+    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-hashtag")
     public PrimitiveBytes primitiveBytes(){
         return new PrimitiveBytes();
     }
 
-    @Action
+    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-hashtag")
     public PrimitiveShorts primitiveShorts(){
         return new PrimitiveShorts();
     }
 
-    @Action
+    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-hashtag")
     public PrimitiveInts primitiveInts(){
         return new PrimitiveInts();
     }
 
-    @Action
+    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-hashtag")
     public PrimitiveLongs primitiveLongs(){
         return new PrimitiveLongs();
     }
 
-    @Action
+    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-hashtag")
     public PrimitiveFloats primitiveFloats(){
         return new PrimitiveFloats();
     }
 
-    @Action
+    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-hashtag")
     public PrimitiveDoubles primitiveDoubles(){
         return new PrimitiveDoubles();
     }
 
-    @Action
+    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-hashtag")
     public PrimitiveChars primitiveChars(){
         return new PrimitiveChars();
     }
 
-    @Action
+    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-hashtag")
     public PrimitiveBooleans primitiveBooleans(){
         return new PrimitiveBooleans();
