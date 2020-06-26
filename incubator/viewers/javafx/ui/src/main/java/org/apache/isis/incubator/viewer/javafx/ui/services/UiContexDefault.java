@@ -16,15 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.javafx.model.action;
+package org.apache.isis.incubator.viewer.javafx.ui.services;
 
-import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
+import org.apache.isis.incubator.viewer.javafx.model.action.ActionUiModelFactoryFx;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
+import org.apache.isis.incubator.viewer.javafx.model.decorator.DecoratorService;
+import org.apache.isis.incubator.viewer.javafx.model.icon.IconService;
+import org.apache.isis.incubator.viewer.javafx.ui.main.UiActionHandler;
 
-public class ActionUiModelFactoryFx {
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-    public ActionUiModelFx newActionUiModel(UiContext uiContext, ManagedAction managedAction) {
-        return ActionUiModelFx.of(uiContext, managedAction);
-    }
+@Service
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+@Getter
+public class UiContexDefault implements UiContext {
+    
+    private final IconService iconService;
+    private final DecoratorService decoratorService;
+    private final UiActionHandler uiActionHandler;
+    
+    private final ActionUiModelFactoryFx actionUiModelFactory = new ActionUiModelFactoryFx();
+
     
 }

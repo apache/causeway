@@ -16,15 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.incubator.viewer.javafx.model.action;
+package org.apache.isis.incubator.viewer.javafx.model.decorator;
 
-import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.incubator.viewer.javafx.model.context.UiContext;
+import java.util.Optional;
 
-public class ActionUiModelFactoryFx {
+import org.apache.isis.viewer.common.model.decorator.fa.FontAwesomeUiModel;
 
-    public ActionUiModelFx newActionUiModel(UiContext uiContext, ManagedAction managedAction) {
-        return ActionUiModelFx.of(uiContext, managedAction);
-    }
-    
+import javafx.scene.Node;
+import javafx.scene.control.Labeled;
+import javafx.scene.control.MenuItem;
+
+public interface DecoratorService {
+
+    MenuItem decorateMenuItem(MenuItem menuItem, Optional<FontAwesomeUiModel> fontAwesomeUiModel);
+    Node decorateLabeled(Labeled labeled, Optional<FontAwesomeUiModel> fontAwesomeUiModel);
+
 }

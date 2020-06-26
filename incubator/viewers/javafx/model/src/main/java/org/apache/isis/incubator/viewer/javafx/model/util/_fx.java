@@ -18,6 +18,7 @@
  */
 package org.apache.isis.incubator.viewer.javafx.model.util;
 
+import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
@@ -36,6 +37,8 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TitledPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -137,6 +140,19 @@ public final class _fx {
         return column;
     }
 
+    // -- ICONS
+    
+    public static Image imageFromClassPath(@NonNull Class<?> cls, String resourceName) {
+        return new Image(cls.getResourceAsStream(resourceName));
+    }
+    
+    public static ImageView iconForImage(Image image, int width, int height) {
+        val icon = new ImageView(image);
+        icon.setFitWidth(width);
+        icon.setFitHeight(height);
+        return icon;
+    }
+    
     // -- LAYOUTS
     
     public static GridPane formLayout(GridPane component) {

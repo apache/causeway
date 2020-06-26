@@ -27,6 +27,9 @@ import org.apache.isis.incubator.viewer.javafx.ui.components.other.FallbackField
 import org.apache.isis.incubator.viewer.javafx.ui.main.UiActionHandler;
 import org.apache.isis.incubator.viewer.javafx.ui.main.UiBuilder;
 import org.apache.isis.incubator.viewer.javafx.ui.main.UiController;
+import org.apache.isis.incubator.viewer.javafx.ui.services.DecoratorServiceDefault;
+import org.apache.isis.incubator.viewer.javafx.ui.services.IconServiceDefault;
+import org.apache.isis.incubator.viewer.javafx.ui.services.UiContexDefault;
 import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
 
 /**
@@ -49,6 +52,10 @@ import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
         // @Service's
         UiComponentFactoryFx.class,
         UiActionHandler.class,
+        
+        UiContexDefault.class,
+        IconServiceDefault.class,
+        DecoratorServiceDefault.class,
 
         // @Mixin's
 })

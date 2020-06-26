@@ -26,12 +26,12 @@ import org.apache.isis.core.commons.internal.debug._Probe;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault;
 import org.apache.isis.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
+import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 import org.apache.isis.incubator.viewer.javafx.viewer.IsisModuleIncViewerJavaFxViewer;
 import org.apache.isis.incubator.viewer.javafx.viewer.JavafxViewer;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 
 import demoapp.dom.DemoModule;
-import javafx.scene.image.Image;
 
 /**
  * Bootstrap the application.
@@ -51,7 +51,7 @@ public class DemoAppJavaFx {
     public JavaFxViewerConfig viewerConfig() {
         return JavaFxViewerConfig.builder()
                 .applicationTitle("Apache Isis Demo")
-                .applicationIcon(new Image(DemoAppJavaFx.class.getResourceAsStream("icon.png")))
+                .applicationIcon(_fx.imageFromClassPath(DemoAppJavaFx.class, "icon.png"))
                 .build();
     }
 

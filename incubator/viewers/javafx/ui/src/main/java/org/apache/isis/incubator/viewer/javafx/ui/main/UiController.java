@@ -26,6 +26,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.iactn.IsisInteractionFactory;
+import org.apache.isis.incubator.viewer.javafx.ui.services.UiContexDefault;
 import org.apache.isis.viewer.common.model.header.HeaderUiModelProvider;
 
 import lombok.RequiredArgsConstructor;
@@ -47,7 +48,7 @@ public class UiController {
     private final MetaModelContext metaModelContext;
     private final HeaderUiModelProvider headerUiModelProvider;
     private final IsisInteractionFactory isisInteractionFactory;
-    private final UiActionHandler uiActionHandler;
+    private final UiContexDefault uiContext;
 
     @FXML private MenuBar menuBarLeft;
     @FXML private MenuBar menuBarRight;
@@ -66,8 +67,8 @@ public class UiController {
         
         val commonContext = IsisAppCommonContext.of(metaModelContext);
         
-        val leftMenuBuilder = MenuBuilderFx.of(menuBarLeft, this::onActionLinkClicked);
-        val rightMenuBuilder = MenuBuilderFx.of(menuBarRight, this::onActionLinkClicked);
+        val leftMenuBuilder = MenuBuilderFx.of(uiContext, menuBarLeft, this::onActionLinkClicked);
+        val rightMenuBuilder = MenuBuilderFx.of(uiContext, menuBarRight, this::onActionLinkClicked);
         
         header.getPrimary().buildMenuItems(commonContext, leftMenuBuilder);
         header.getSecondary().buildMenuItems(commonContext, rightMenuBuilder);
@@ -75,7 +76,7 @@ public class UiController {
     }
 
     private void onActionLinkClicked(ManagedAction managedAction) {
-        uiActionHandler.handleActionLinkClicked(managedAction, this::replaceContent);
+        uiContext.getUiActionHandler().handleActionLinkClicked(managedAction, this::replaceContent);
     }
     
     private void replaceContent(Node node) {
