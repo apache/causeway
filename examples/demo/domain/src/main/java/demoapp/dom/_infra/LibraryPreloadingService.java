@@ -30,7 +30,7 @@ import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 import lombok.val;
 
 @Service
-@Named("demoapp.LibraryPreloadingService")
+@Named("demo.LibraryPreloadingService")
 public class LibraryPreloadingService {
 
     @PostConstruct

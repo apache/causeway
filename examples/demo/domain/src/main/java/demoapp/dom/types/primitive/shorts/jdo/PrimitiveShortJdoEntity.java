@@ -60,8 +60,8 @@ public class PrimitiveShortJdoEntity
     @Getter @Setter
     private short readOnlyProperty2;
 
-    @Getter @Setter
     @Property(editing = Editing.ENABLED)
+    @Getter @Setter
     private short readWriteProperty;
 
 }

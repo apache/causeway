@@ -2,20 +2,7 @@ Apache Isis applications can nominate a view model to act as the home page, usin
 
 [source,java]
 ----
-@DomainObject(
-    nature=Nature.VIEW_MODEL,
-    objectType = "demo.Homepage"
-)
-@HomePage                                                       // <.>
-public class DemoHomePage {
-
-    public String title() {                                     // <.>
-        return "Hello, " + userService.getUser().getName();
-    }
-
-    @Inject
-    UserService userService;                                    // <.>
-}
+include::DemoHomePage.java[tags="class"]
 ----
 
 <.> declares this view-model class to be used as the viewer's homepage, there can be only one

@@ -64,8 +64,8 @@ public class PrimitiveBooleanViewModel
     @Getter @Setter
     private boolean readOnlyProperty2;
 
-    @Getter @Setter
     @Property(editing = Editing.ENABLED)
+    @Getter @Setter
     private boolean readWriteProperty;
 
 }

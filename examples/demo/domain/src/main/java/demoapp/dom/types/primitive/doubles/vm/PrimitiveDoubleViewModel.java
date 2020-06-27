@@ -64,8 +64,8 @@ public class PrimitiveDoubleViewModel
     @Getter @Setter
     private double readOnlyProperty2;
 
-    @Getter @Setter
     @Property(editing = Editing.ENABLED)
+    @Getter @Setter
     private double readWriteProperty;
 
 }

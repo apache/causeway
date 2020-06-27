@@ -1,0 +1,12 @@
+JAXB supports `Character` out-of-the-box, so no special annotations are required.
+
+[source,java]
+----
+include::WrapperCharacterViewModel.java[tag="class"]
+----
+<.> a no-arg constructor is required by JAXB
+<.> as a convenience
+<.> no additional annotations required.
+<.> optional property as defined to Apache Isis
+<.> optional property as defined to JAXB
+

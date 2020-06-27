@@ -64,8 +64,8 @@ public class PrimitiveByteViewModel
     @Getter @Setter
     private byte readOnlyProperty2;
 
-    @Getter @Setter
     @Property(editing = Editing.ENABLED)
+    @Getter @Setter
     private byte readWriteProperty;
 
 }

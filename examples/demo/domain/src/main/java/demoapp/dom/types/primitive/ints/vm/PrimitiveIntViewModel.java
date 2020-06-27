@@ -64,8 +64,8 @@ public class PrimitiveIntViewModel
     @Getter @Setter
     private int readOnlyProperty2;
 
-    @Getter @Setter
     @Property(editing = Editing.ENABLED)
+    @Getter @Setter
     private int readWriteProperty;
 
 }

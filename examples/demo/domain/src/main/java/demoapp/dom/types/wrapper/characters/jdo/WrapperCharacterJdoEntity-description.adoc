@@ -1,0 +1,38 @@
+JDO supports `Character` out-of-the-box, so no special annotations are required.
+
+[source,java]
+----
+@PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
+@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
+@DomainObject(
+        objectType = "demo.WrapperCharacterJdoEntity"
+)
+public class WrapperCharacterJdoEntity
+    implements HasAsciiDocDescription, WrapperCharacterHolder {              // <.>
+
+    public WrapperCharacterJdoEntity(Character initialValue) { ... }         // <.>
+
+    @Title(prepend = "Character (wrapper) JDO entity: ")
+    @Getter @Setter
+    private Character readOnlyProperty;                                      // <.>
+
+    @Getter @Setter
+    private Character readOnlyProperty2;
+
+    @Property(editing = Editing.ENABLED)
+    @Getter @Setter
+    private Character readWriteProperty;
+
+    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL) // <.>
+    @Column(allowsNull = "true")                                             // <.>
+    @Getter @Setter
+    private Character readWriteOptionalProperty;
+
+}
+----
+<.> a no-arg constructor is introduced by JDO enhancer
+<.> as a convenience
+<.> no additional annotations required.
+<.> optional property as defined to Apache Isis
+<.> optional property as defined to JDO/DataNucleus
+

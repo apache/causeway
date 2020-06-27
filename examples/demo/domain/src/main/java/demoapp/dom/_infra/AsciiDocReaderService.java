@@ -17,7 +17,7 @@ import lombok.val;
 
 
 @Service
-@Named("demoapp.AsciiDocReaderService")
+@Named("demo.AsciiDocReaderService")
 public class AsciiDocReaderService {
 
     public AsciiDoc readFor(Object anObject) {
@@ -30,44 +30,21 @@ public class AsciiDocReaderService {
 
     public AsciiDoc readFor(Class<?> aClass) {
         val adocResourceName = String.format("%s.adoc", aClass.getSimpleName());
-        val asciiDoc = readAsciiDoc(aClass, adocResourceName);
-        return AsciiDoc.valueOfAdoc(asciiDoc);
+        val asciiDoc = resourceReaderService.readResource(aClass, adocResourceName);
+        return AsciiDoc.valueOfHtml(asciiDocConverterService.adocToHtml(aClass, asciiDoc));
     }
 
     public AsciiDoc readFor(Class<?> aClass, final String member) {
         val adocResourceName = String.format("%s-%s.adoc", aClass.getSimpleName(), member);
-        val asciiDoc = readAsciiDoc(aClass, adocResourceName);
-        return AsciiDoc.valueOfAdoc(asciiDoc);
+        val asciiDoc = resourceReaderService.readResource(aClass, adocResourceName);
+        return AsciiDoc.valueOfHtml(asciiDocConverterService.adocToHtml(aClass, asciiDoc));
     }
 
-    private String readAsciiDoc(Class<?> aClass, String adocResourceName) {
-        val adocResource = aClass.getResourceAsStream(adocResourceName);
-        if(adocResource==null) {
-            return String.format("AsciiDoc resource '%s' not found.", adocResourceName);
-        }
-        try {
-            return read(adocResource);
-        } catch (IOException e) {
-            return String.format("Failed to read from adoc resource '%s': '%s': ", adocResourceName, e.getMessage());
-        }
-    }
-
-    /**
-     * Read the given {@code input} into a String, while also pre-processing placeholders.
-     *
-     * @param input
-     * @return
-     * @throws IOException
-     */
-    private String read(InputStream input) throws IOException {
-        try (BufferedReader buffer = new BufferedReader(new InputStreamReader(input))) {
-            return buffer.lines()
-                    .map(markupVariableResolverService::resolveVariables)
-                    .collect(Collectors.joining("\n"));
-        }
-    }
 
     @Inject
-    MarkupVariableResolverService markupVariableResolverService;
+    AsciiDocConverterService asciiDocConverterService;
+
+    @Inject
+    ResourceReaderService resourceReaderService;
 
 }

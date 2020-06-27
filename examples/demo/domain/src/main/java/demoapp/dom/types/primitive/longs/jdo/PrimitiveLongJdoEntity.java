@@ -60,8 +60,8 @@ public class PrimitiveLongJdoEntity
     @Getter @Setter
     private long readOnlyProperty2;
 
-    @Getter @Setter
     @Property(editing = Editing.ENABLED)
+    @Getter @Setter
     private long readWriteProperty;
 
 }

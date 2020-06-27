@@ -60,8 +60,8 @@ public class PrimitiveFloatJdoEntity
     @Getter @Setter
     private float readOnlyProperty2;
 
-    @Getter @Setter
     @Property(editing = Editing.ENABLED)
+    @Getter @Setter
     private float readWriteProperty;
 
 }

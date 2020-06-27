@@ -61,6 +61,7 @@ import demoapp.dom.types.primitive.shorts.PrimitiveShorts;
 import demoapp.dom.types.text.TextDemo;
 import demoapp.dom.types.time.TemporalDemo;
 import demoapp.dom.types.uuid.UuidDemo;
+import demoapp.dom.types.wrapper.characters.WrapperCharacters;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.DataTypesMenu")
 @DomainObjectLayout(named="DataTypes")
@@ -215,6 +216,12 @@ public class DataTypesMenu {
     @ActionLayout(cssClassFa="fa-hashtag")
     public PrimitiveBooleans primitiveBooleans(){
         return new PrimitiveBooleans();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-hashtag")
+    public WrapperCharacters wrapperCharacters(){
+        return new WrapperCharacters();
     }
 
 

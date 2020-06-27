@@ -26,6 +26,9 @@
                 <mb3:serviceAction objectType="demo.DataTypesMenu" id="primitiveBooleans"/>
             </mb3:section>
             <mb3:section>
+                <mb3:serviceAction objectType="demo.DataTypesMenu" id="wrapperCharacters"/>
+            </mb3:section>
+            <mb3:section>
                 <mb3:serviceAction objectType="demo.DataTypesMenu" id="text"/>
                 <mb3:serviceAction objectType="demo.DataTypesMenu" id="wrappers"/>
                 <mb3:serviceAction objectType="demo.DataTypesMenu" id="temporals">

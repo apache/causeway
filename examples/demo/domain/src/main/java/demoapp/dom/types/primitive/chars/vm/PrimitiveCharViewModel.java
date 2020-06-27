@@ -64,8 +64,8 @@ public class PrimitiveCharViewModel
     @Getter @Setter
     private char readOnlyProperty2;
 
-    @Getter @Setter
     @Property(editing = Editing.ENABLED)
+    @Getter @Setter
     private char readWriteProperty;
 
 }

@@ -40,11 +40,9 @@
 				<filtering>false</filtering>
 				<directory>src/main/java</directory>
 				<includes>
+					<!-- we include all .java too, so that we can reference it from the descriptions -->
 					<include>**</include>
 				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
 			</resource>
 		</resources>
 
@@ -127,6 +125,13 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>3.16.1</version>
+			<scope>test</scope>
 		</dependency>
 
 	</dependencies>
